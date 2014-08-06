@@ -2,17 +2,17 @@ extends ./_base_account
 block sections
   section.profil-info.scrollbar-custom.text-gray
     .section-content
-      form(action="")
+      form#change-photo(action="")
         h2 Informations personnelles
         .row
           //- change photo
           .block_with_thumbnail.form-control.col-sm-12
             .col-thumbnail
-              //- важно чтобы у img стояли атрибуты with & height, в противном случае при переполнении контента в .col-exposirion миниатюра сожмётся
-              .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo", width="120", height="120")
+              .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo")
             .col-exposition
-              label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifier mon image
+              label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white.indent-md-v Modifier mon image
                 input(type="file")#change-img
+      form#profile-information(action="")
         //- proffessional radio btns
         .row
           .col-sm-5
@@ -35,9 +35,10 @@ block sections
         //- gender, first-name, name
         .row
           .col-sm-2.without-search
-            select.form-control
-              option(value="male") M.
-              option(value="female") F.
+            .form-control
+              select
+                option(value="male") M.
+                option(value="female") F.
           .col-sm-5
             input#first-name.form-control(type="text", name="first-name", placeholder="Prénom *", required)
           .col-sm-5
@@ -48,22 +49,25 @@ block sections
             p.text-uppercase: b: small adresse par défaut
             select
               option(value="#{tenant.address}") #{tenant.address}
-            h4.text-right.text-success-hover: a(href="#") Ajouter ou modifier une adresse
+            h4.indent-sm-v.text-right.text-success-hover: a(href="#") Ajouter ou modifier une adresse
         //- telephone
         .row
           .col-sm-12.select-gradient.without-search.form-control
             p.text-uppercase: b: small téléphone par défaut
             select
-              option(value="#{tenant.telephone}") #{tenant.telephone}
-            h4.text-right.text-success-hover: a(href="#") Téléphone par défaut
+              -each telefone in tenant.telephones
+                option(value="#{telefone}") #{telefone}
+            h4.indent-sm-v.text-right.text-success-hover: a(href="#") Téléphone par défaut
         //- about myself
         .row
           .col-sm-12
             textarea#about-myself.form-control(name="about-myself", tabindex="1", rows="6" placeholder="A propos de vous...")
         //- languages
         .row
-          .col-sm-12
-            input#languages.form-control(type="text", name="languages", placeholder="Langues parlées")
+          .col-sm-12.without-search.form-control
+            select(multiple="", data-placeholder="Langues parlées")
+              -each language in tenant.languages
+                option(value="#{language.ID}") #{language.self}
         //- newsletter
         .row
           .col-sm-8
@@ -103,7 +107,7 @@ block sections
               br
               | Ajouter une photo de votre permis
               input(type="file")#change-img
-            h4.text-right.text-success-hover: a(href="#") Modifier la photo du permis
+            h4.indent-sm-v.text-right.text-success-hover: a(href="#") Modifier la photo du permis
         //- btn submit
         .row
           .col-sm-6.col-sm-offset-3

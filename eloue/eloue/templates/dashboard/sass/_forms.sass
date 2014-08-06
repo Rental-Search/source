@@ -91,10 +91,12 @@ label.rad-btn
 .chosen-container
   font-weight: inherit
   &.chosen-with-drop
-    .chosen-single 
+    .chosen-choices,
+    .chosen-single
       background: white
       border-color: $gray-medium
       +border-radius($bdrs $bdrs 0 0 !important)
+    .chosen-single
       span:after
         content: "\f0d8"
   font-size: inherit
@@ -120,6 +122,32 @@ label.rad-btn
         position: absolute
         right: 1em
         font-family: $font-family-icon
+  &.chosen-container-multi
+    height: auto
+    .chosen-choices
+      padding: 0
+      min-height: 0 !important
+      height: auto !important
+      padding: .5em
+      +clearfix()
+      .search-choice
+        padding: .5em
+        margin: .5em
+        background: none
+        color: $gray-medium
+        .search-choice-close
+          background: none
+          top: 0
+          left: 0
+          width: 100%
+          height: 100%
+          z-index: 100
+      .search-field
+        input
+          color: $gray-medium !important
+          margin: 0 !important
+          padding: 0 0 0 .5em !important
+          height: .5em !important
   .chosen-drop
     background-color: white
     border-color: $gray-medium
@@ -151,10 +179,11 @@ label.rad-btn
 
 // .universal-picker
 .select-gradient .chosen-container
+  .chosen-choices,
   .chosen-single
     border: none
     border-bottom: $bd-lighter
-    background-color: $gray-lighter
+    background-color: $gray-lighter !important
     +linear-gradient((to bottom, white, darken($gray-lite,2%)))
   .chosen-drop
     border-color: $gray-lighter
@@ -163,24 +192,25 @@ label.rad-btn
 .without-search .chosen-search
   display: none
 
-
-
 // custom areas
 textarea,
 input[type="text"],
 input[type="email"],
+.chosen-container .chosen-choices,
 .chosen-container .chosen-single
   font-size: inherit
   +placeholder($gray-medium)
   background: white
-  font-weight: inherit
-  color: $gray-medium
-  height: $form-height
+  font-family: inherit !important
+  font-weight: $fw-semibold 
+  color: $gray-medium !important
+  min-height: $form-height !important
   padding: 0 1em
   padding-top: .8em\9
   border: $bd-light
   box-shadow: none
   transition: border-color $trns-fast
+  overflow: visible
   +border-radius($bdrs)
   &:hover,
   &:focus
@@ -190,9 +220,26 @@ input[type="email"],
   &:invalid:focus,
   &:invalid:hover
     border-color: $brand-danger
+
+// custom textarea
 textarea
   resize: none
   height: auto
-  padding: 1em
-  padding-bottom: 0
+  padding: 1em 1em 0
+  width: 100%
   font-family: inherit
+.send-dialog-message
+  background: white
+  width: 100%
+  max-height: 50%
+  // overflow: scroll
+  position: absolute
+  z-index: 1000
+  border-top: $bd-lighter
+  bottom: 0
+  padding: $indent-sm*$indent-vertical $indent-sm
+  +box-shadow(0 -5px 5px rgba(0,0,0,.05))
+  textarea
+    border: none
+    padding: 0
+

@@ -1,14 +1,10 @@
 .block_with_thumbnail
-  display: table
-  > div
-    display: table-cell
-    padding-left: 2em
-    &:first-child
-      padding-left: 0
+  +clearfix()
   .col-thumbnail
-    vertical-align: top
+    float: left
   .col-exposition
-    vertical-align: middle
+    overflow: hidden
+    padding-left: (15%/2)
   .thumbnail
     overflow: hidden
     &.round

@@ -40,7 +40,8 @@ $(document).ready(function() {
     theme: 'dark-thin',
     scrollbarPosition: 'outside',
     advanced:{
-      autoScrollOnFocus: false
+      autoScrollOnFocus: false,
+      updateOnContentResize: true
     }
   });
   $('.scrollbar-custom').mCustomScrollbar({
@@ -48,10 +49,19 @@ $(document).ready(function() {
     autoHideScrollbar: true,
     theme: 'dark-thin',
     advanced:{
+      updateOnContentResize: true,
       autoScrollOnFocus: false
+    },
+    setHeight: "100%"
+  });
+  $('.send-dialog-message').mCustomScrollbar({
+    scrollInertia: '200',
+    autoHideScrollbar: true,
+    theme: 'dark-thin',
+    mouseWheel:{ 
+      disableOver: false
     }
   });
-
 
   // autoewsize textarea's
   $('textarea').autosize();

@@ -21,13 +21,22 @@ a
 .clearfix
   +clearfix()
 
-@each $selector, $color in (success: $brand-success, primary: $brand-primary, gray: $gray-medium, white: white)
+@each $selector, $color in (success: $brand-success, primary: $brand-primary, gray: $gray-medium, white: white, gray-stronger: $gray-stronger, gray-light: $gray-light)
   +make-colors($selector, $color)
 
 // text
 @each $align in left, center, right, justify
   .text-#{$align}
     text-align: #{$align}
+
+// indent
+@each $class, $indent in (md: $indent-md, sm: $indent-sm, xs: $indent-xs)
+  .indent-#{$class}-h
+    margin-left: $indent
+    margin-right: $indent
+  .indent-#{$class}-v
+    margin-bottom: $indent-vertical*$indent
+    margin-top: $indent-vertical*$indent
 
 .text-nowrap
   white-space: nowrap
@@ -53,15 +62,34 @@ a
 .text-underline-hover:hover
   @extend .text-underline
 
+.centred-abs
+  +centred-abs()
+
+.pull-left
+  float: left !important
+
+.pull-right
+  float: right !important
+
+.clear-both
+  clear: both !important
+
 .mCSB_outside + .mCSB_scrollTools
   right: -$grid-gutter-width
+
+.mCSB_container
+  min-height: 100%
+
+.time-badge
+  font-size: $font-size-smaller - 2
+  font-weight: $fw-semibold
+  color: $gray-light
 
 header
   height: 120px
 
 article.dashboard
   position: relative
-  // top: -35px\9
   +clearfix()
   @import nav_dashboard
   > *
@@ -79,18 +107,27 @@ article.dashboard
     color: $gray-dark
     font-size: $font-size-base
     font-weight: $fw-semibold
+    &.small
+      font-size: $font-size-base - 1
 
   h4
     font-size: $font-size-smaller
     font-weight: $fw-bold
-    margin: $indent-xs 0
+    &.small
+      font-size: $font-size-smaller - 2
 
   h5
-    font-size: $font-size-smaller - 1
+    font-size: $font-size-smaller
     font-weight: $fw-semibold
+    &.small
+      font-size: $font-size-smaller - 2
 
   p
     margin-bottom: .5em
+    font-size: $font-size-small
+    &.small
+      font-size: $font-size-smaller - 2
+
 
   small
     font-size: $font-size-little

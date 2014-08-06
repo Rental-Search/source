@@ -1,12 +1,15 @@
 .tabs-vertical-static,
 .tabs-vertical-active
+  position: relative
   background-color: white
   &.sm
     width: $tabs-vertical-sm-width
+  &.md
+    width: $tabs-vertical-md-width
+  ul
+    height: 100%
   li
-    cursor: pointer
     border-bottom: $bd-lighter
-    border-right: 4px solid transparent
     padding: $indent-sm*$indent-vertical $indent-sm
     display: block
     transition: border-color $trns-fast
@@ -20,7 +23,10 @@
   top: 0
 
 .tabs-vertical-active li
-  &:hover
+  border-right: 4px solid transparent
+  cursor: pointer
+  &:hover,
+  &.current
     background-color: $gray-lite
     border-right-color: $brand-success
     h1, h2, h3, h4, h5, h6

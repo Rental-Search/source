@@ -5,15 +5,31 @@ block variables
   -var src_img = "dashboard/messages"
 
 block content
-  section.tabs-vertical-active.sm.scrollbar-custom
-    ul
-      -each dialog in dialogs_tabs
-        li: .block_with_thumbnail
+  section.tabs-vertical-active.sm.scrollbar-custom: ul
+    -each dialog in dialogs_tabs
+      li.block_with_thumbnail
+        .col-thumbnail
+          .thumbnail.round: a(href="#{dialog.tenant.account_link}")
+            img(src="#{STATIC_URL}#{dialog.tenant.thumbnail_small}", alt="#{dialog.tenant.name} photo", width="20", height="20")
+        .col-exposition
+          a(href="#{dialog.tenant.account_link}").text-underline-hover.pull-left
+            h3.small #{dialog.tenant.first_name}
+          span.time-badge.pull-right #{dialog.time}
+          h5.text-overflow.small.text-gray-stronger.clear-both #{dialog.topic}
+          p.text-gray.text-overflow.small #{dialog.last_message}
+
+  section.tabs-vertical-static.md
+    ul.scrollbar-custom
+      -each message in messages
+        li.block_with_thumbnail
           .col-thumbnail
-            //- важно чтобы у img стояли атрибуты with & height, в противном случае при переполнении контента в .col-exposirion миниатюра сожмётся
-            .thumbnail.round: a(href="#{dialog.tenant.account_link}")
-              img(src="#{STATIC_URL}#{dialog.tenant.thumbnail_small}", alt="#{tenant.name} photo", width="20", height="20")
+            .thumbnail.round: a(href="#{message.autor.account_link}")
+              img(src="#{STATIC_URL}#{message.autor.thumbnail_small}", alt="#{message.autor.name} photo")
           .col-exposition
-             a(href="#{dialog.tenant.account_link}").text-underline-hover: h3 #{dialog.tenant.first_name}
-             h5.text-overflow #{dialog.topic}
-             p.text-gray.text-overflow #{dialog.last_message}
+            a(href="#{message.autor.account_link}").text-underline-hover
+              h3 #{message.autor.first_name}
+            p.small.text-gray-light #{message.date} #{message.time}
+            p.text-gray.text-justify #{message.text}
+    form(action="send-message").send-dialog-message.clearfix
+      textarea#message-text(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...")
+      button(type="submit").btn.bg-success-hover.text-white.pull-right Envoyez

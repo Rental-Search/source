@@ -33,8 +33,6 @@
 </head>
 <body>
   <div class="container-full-screen">
-    <input type="checkbox" id="sourse">
-    <lable for="#sourse" id="sourse-img"><img src="../../../static/img/src/dashboard/account_profil.jpg"></lable>
     <header>header</header>
     <article class="dashboard">
       <nav class="bg-success">
@@ -73,20 +71,22 @@
       </section>
       <section class="profil-info scrollbar-custom text-gray">
         <div class="section-content">
-          <form action="">
+          <form id="change-photo" action="">
             <h2>Informations personnelles</h2>
             <div class="row">
               <div class="block_with_thumbnail form-control col-sm-12">
                 <div class="col-thumbnail">
-                  <div class="thumbnail round"><img src="../../../static/img/home-products/tenant.png" alt="Kroutchev photo" width="120" height="120"></div>
+                  <div class="thumbnail round"><img src="../../../static/img/home-products/tenant.png" alt="Kroutchev photo"></div>
                 </div>
                 <div class="col-exposition">
-                  <label for="change-img" class="file-input-btn btn bg-gray-hover text-white">Modifier mon image
+                  <label for="change-img" class="file-input-btn btn bg-gray-hover text-white indent-md-v">Modifier mon image
                     <input type="file" id="change-img">
                   </label>
                 </div>
               </div>
             </div>
+          </form>
+          <form id="profile-information" action="">
             <div class="row">
               <div class="col-sm-5">
                 <h3>Je suis un professionnel ?</h3>
@@ -114,10 +114,12 @@
             </div>
             <div class="row">
               <div class="col-sm-2 without-search">
-                <select class="form-control">
-                  <option value="male">M.</option>
-                  <option value="female">F.</option>
-                </select>
+                <div class="form-control">
+                  <select>
+                    <option value="male">M.</option>
+                    <option value="female">F.</option>
+                  </select>
+                </div>
               </div>
               <div class="col-sm-5">
                 <input id="first-name" type="text" name="first-name" placeholder="Prénom *" required class="form-control">
@@ -132,7 +134,7 @@
                 <select>
                   <option value="94 avenue félix faure, 75015 Paris">94 avenue félix faure, 75015 Paris</option>
                 </select>
-                <h4 class="text-right text-success-hover"><a href="#">Ajouter ou modifier une adresse</a></h4>
+                <h4 class="indent-sm-v text-right text-success-hover"><a href="#">Ajouter ou modifier une adresse</a></h4>
               </div>
             </div>
             <div class="row">
@@ -141,7 +143,7 @@
                 <select>
                   <option value="01 45 97 34 56">01 45 97 34 56</option>
                 </select>
-                <h4 class="text-right text-success-hover"><a href="#">Téléphone par défaut</a></h4>
+                <h4 class="indent-sm-v text-right text-success-hover"><a href="#">Téléphone par défaut</a></h4>
               </div>
             </div>
             <div class="row">
@@ -150,8 +152,22 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-12">
-                <input id="languages" type="text" name="languages" placeholder="Langues parlées" class="form-control">
+              <div class="col-sm-12 without-search form-control">
+                <select multiple="" data-placeholder="Langues parlées">
+                  <option value="4">Azərbaycan</option>
+                  <option value="5">English</option>
+                  <option value="6">Беларуская</option>
+                  <option value="7">Български</option>
+                  <option value="8">עִבְרִית</option>
+                  <option value="9">Español</option>
+                  <option value="10">Italiano</option>
+                  <option value="11">Қазақ</option>
+                  <option value="12">한국어</option>
+                  <option value="13">Latviešu</option>
+                  <option value="14">Lietuvių</option>
+                  <option value="15">Moldovenească</option>
+                  <option value="16">Deutsch</option>
+                </select>
               </div>
             </div>
             <div class="row">
@@ -349,7 +365,7 @@
                 <label for="change-img" class="file-input-drag"><i class="fa fa-plus fa-4x"></i><br>Ajouter une photo de votre permis
                   <input type="file" id="change-img">
                 </label>
-                <h4 class="text-right text-success-hover"><a href="#">Modifier la photo du permis</a></h4>
+                <h4 class="indent-sm-v text-right text-success-hover"><a href="#">Modifier la photo du permis</a></h4>
               </div>
             </div>
             <div class="row">

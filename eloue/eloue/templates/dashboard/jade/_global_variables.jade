@@ -14,6 +14,9 @@
 -account_tabs[5] = {title: "Mot de passe", href: "password"}
 -account_tabs[6] = {title: "Parainage",    href: "broker"}
 
+-var languages = {Azerbaijan: {ID: 4, self: "Azərbaycan"}, English: {ID: 5, self: "English"}, Byelorussian: {ID: 6, self: "Беларуская"}, Bulgarian: {ID: 7, self: "Български"}, Hebrew: {ID: 8, self: "עִבְרִית"}, Spanish: {ID: 9, self: "Español"}, Italian: {ID: 10, self: "Italiano"}, Kazakh: {ID: 11, self: "Қазақ"}, Korean: {ID: 12, self: "한국어"}, Latvian: {ID: 13, self: "Latviešu"}, Lithuanian: {ID: 14, self: "Lietuvių"}, Moldavian: {ID: 15, self: "Moldovenească"}, German: {ID: 16, self: "Deutsch"}, Turkish: {ID: 18, self: "Türkçe"}, Ukrainian: {ID: 19, self: "Українська"}, French: {ID: 20, self: "Français"}, Estonian: {ID: 21, self: "Eesti"}, Japanese: {ID: 22, self: "日本語"}, Czech: {ID: 25, self: "Česky"}, Georgian: {ID: 26, self: "ქართული"}, Hindi: {ID: 28, self: "हिन्दी"}, Icelandic: {ID: 29, self: "Íslenska"}, Portuguese: {ID: 30, self: "Português"}, Thai: {ID: 31, self: "ภาษาไทย"}, Арабский: {ID: 36, self: "اللغة"}, Kurdish: {ID: 38, self: "كوردی"}, Slovakian: {ID: 41, self: "Slovenčina"}, Polish: {ID: 43, self: "Polski"}, Chines: {ID: 45, self: "Chines"}, Hungarian: {ID: 46, self: "Magyar"}, Bosnien: {ID: 47, self: "Bosanski"}, Tata: {ID: 54, self: "Татар"}, Albanian: {ID: 62, self: "Shqip"}, Bashkir: {ID: 63, self: "Башҡорт"}, Armenian: {ID: 64, self: "Հայոց"}, Lezginsky: {ID: 70, self: "Лезги"}, Romanian: {ID: 78, self: "Română"}, Greek: {ID: 80, self: "Ελληνικά"}, Norwegian: {ID: 82, self: "Norsk"}, Gypsy: {ID: 84, self: "Romani"}, Denmark: {ID: 88, self: "Dansk"}, Chechensky: {ID: 90, self: "Nohçijn"}}
+
+-var lot_BMW = {name: "BMW 520 Touring Luxe", location: "Nice, 02200", rate: 4, rate_count: 32, comments_count: 12, owner: owner}
 
 -var tenant = {}
 -tenant.first_name = "Gaspard"
@@ -22,14 +25,19 @@
 -tenant.thumbnail = "img/home-products/tenant.png"
 -tenant.thumbnail_small = "img/home-products/tenant_small.png"
 -tenant.address = "94 avenue félix faure, 75015 Paris"
--tenant.telephone = "01 45 97 34 56"
+-tenant.telephones = ["01 45 97 34 56"]
+-tenant.languages = [languages.Azerbaijan, languages.English, languages.Byelorussian, languages.Bulgarian, languages.Hebrew, languages.Spanish, languages.Italian, languages.Kazakh, languages.Korean, languages.Latvian, languages.Lithuanian, languages.Moldavian, languages.German]
 -tenant.account_link = "#gaspard_kroutchev_homepage"
 
 -var owner = {}
--owner.name = "Julien Dupré"
+-owner.first_name = "Julien"
+-owner.name = "Dupré"
+-owner.rate = 4
+-owner.thumbnail = "img/home-products/owner.png"
+-owner.thumbnail_small = "img/home-products/owner_small.png"
+-owner.account_link = "#julien_dupré_homepage"
 -owner.lots = [lot_BMW]
 
--var lot_BMW = {name: "BMW 520 Touring Luxe", location: "Nice, 02200", rate: 4, rate_count: 32, comments_count: 12, owner: owner}
 
 -var timing = ["01.00", "02.00", "03.00", "04.00", "05.00", "06.00", "07.00", "08.00", "09.00", "10.00", "11.00", "12.00", "13.00", "14.00", "15.00", "16.00", "17.00", "18.00", "19.00", "20.00", "21.00", "22.00", "23.00"]
 -var days = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]
@@ -43,3 +51,14 @@
 -dialogs_tabs[3] = {tenant: tenant, time: "15h42", topic: "Location BMW - 520 Touring", last_message: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
 -dialogs_tabs[4] = {tenant: tenant, time: "15h42", topic: "Location BMW - 520 Touring", last_message: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
 -dialogs_tabs[5] = {tenant: tenant, time: "15h42", topic: "Location BMW - 520 Touring", last_message: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+
+-var messages =[]
+-messages[0] = {autor: tenant, date: "28.05.2014", time: "15h42", text: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+-messages[1] = {autor: owner, date: "28.05.2014", time: "15h42", text: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+//- -messages[2] = {autor: tenant, date: "28.05.2014", time: "15h42", text: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+//- -messages[3] = {autor: owner, date: "28.05.2014", time: "15h42", text: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+//- -messages[4] = {autor: tenant, date: "28.05.2014", time: "15h42", text: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+//- -messages[5] = {autor: owner, date: "28.05.2014", time: "15h42", text: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+//- -messages[6] = {autor: tenant, date: "28.05.2014", time: "15h42", text: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+//- -messages[7] = {autor: owner, date: "28.05.2014", time: "15h42", text: "Bonjour, je voulais savoir si la voiture possède un toit ouvrant car nous pensions partir au soleil pour les vacances et si on ne peut pas profiter du soleil c’est pas top... Merci d’avance"}
+
