@@ -1013,7 +1013,7 @@ from rest_framework.response import Response
 
 from accounts import serializers, models, search
 from accounts.utils import viva_check_phone
-from eloue.api import filters, permissions, views
+from eloue.api import filters, views, permissions
 
 NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
 

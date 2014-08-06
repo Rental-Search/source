@@ -36,6 +36,8 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
 
         if search_index is not None and query_string:
             sqs = search_index.auto_query(query_string)
-            queryset = queryset.filter(pk__in=[int(pk) for pk in sqs])
+            pks = [obj.pk for obj in sqs]
+            if pks:
+                queryset = queryset.filter(pk__in=pks)
 
         return queryset
