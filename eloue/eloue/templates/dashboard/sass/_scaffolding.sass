@@ -21,7 +21,7 @@ a
 .clearfix
   +clearfix()
 
-@each $selector, $color in (success: $brand-success, primary: $brand-primary, gray: $gray-medium, white: white, gray-stronger: $gray-stronger, gray-light: $gray-light)
+@each $selector, $color in (success: $brand-success, primary: $brand-primary, gray: $gray-medium, white: white, gray-strong: $gray-strong, gray-stronger: $gray-stronger, gray-light: $gray-light)
   +make-colors($selector, $color)
 
 // text
@@ -32,11 +32,11 @@ a
 // indent
 @each $class, $indent in (md: $indent-md, sm: $indent-sm, xs: $indent-xs)
   .indent-#{$class}-h
-    margin-left: $indent
-    margin-right: $indent
+    margin-left: $indent !important
+    margin-right: $indent !important
   .indent-#{$class}-v
-    margin-bottom: $indent-vertical*$indent
-    margin-top: $indent-vertical*$indent
+    margin-bottom: $indent-vertical*$indent !important
+    margin-top: $indent-vertical*$indent !important
 
 .text-nowrap
   white-space: nowrap
@@ -89,13 +89,6 @@ header
   height: 120px
 
 article.dashboard
-  position: relative
-  +clearfix()
-  @import nav_dashboard
-  > *
-    float: left
-    height: 100%
-    overflow: auto
 
   h2
     color: $gray-dark
@@ -124,7 +117,8 @@ article.dashboard
 
   p
     margin-bottom: .5em
-    font-size: $font-size-small
+    &.normal
+      font-size: $font-size-base - 2
     &.small
       font-size: $font-size-smaller - 2
 

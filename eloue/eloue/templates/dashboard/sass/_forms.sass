@@ -3,6 +3,12 @@
   border-collapse: separate
   position: relative
   width: 100%
+  > *
+    display: table-cell
+    vertical-align: middle
+  .input-group-addon
+    padding-left: $indent-xs
+    padding-right: $indent-xs
 
 .form-control
   margin-bottom: $indent-sm
@@ -204,7 +210,7 @@ input[type="email"],
   font-family: inherit !important
   font-weight: $fw-semibold 
   color: $gray-medium !important
-  min-height: $form-height !important
+  min-height: $form-height
   padding: 0 1em
   padding-top: .8em\9
   border: $bd-light
@@ -228,10 +234,12 @@ textarea
   padding: 1em 1em 0
   width: 100%
   font-family: inherit
+  .autosizejs
+    line-height: 20px
 .send-dialog-message
   background: white
   width: 100%
-  max-height: 50%
+  height: $form-message-area-height
   // overflow: scroll
   position: absolute
   z-index: 1000
@@ -239,7 +247,44 @@ textarea
   bottom: 0
   padding: $indent-sm*$indent-vertical $indent-sm
   +box-shadow(0 -5px 5px rgba(0,0,0,.05))
+  .textarea-wrapper
+    padding-bottom: $form-height + 1
+    height: 100%
+  button
+    position: absolute
+    bottom: 0
+    right: 0
+    margin: $indent-sm*$indent-vertical $indent-sm
   textarea
     border: none
     padding: 0
 
+
+// date picker
+.date-picker
+  display: table
+  width: $date-picker-max-width
+  > *
+    display: table-cell
+    width: auto !important
+    height: $date-picker-height
+    vertical-align: top
+  .input-group
+    height: 100%
+  input
+    font-family: inherit !important
+    +placeholder($gray-medium)
+    color: inherit
+    font-weight: $fw-semibold !important
+    line-height: $date-picker-height
+    padding: 0 .5em
+    width: 100%
+    border: none
+  .chosen-container
+    margin-left: $indent-xs
+    height: $date-picker-height
+  .chosen-single
+    min-height: 0 !important
+    height: 100%
+    padding-left: $indent-sm !important
+    padding-right: $indent-sm !important

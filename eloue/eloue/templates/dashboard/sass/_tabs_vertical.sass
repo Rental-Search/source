@@ -8,21 +8,23 @@
     width: $tabs-vertical-md-width
   ul
     height: 100%
-  li
+  .tab-vertical
     border-bottom: $bd-lighter
     padding: $indent-sm*$indent-vertical $indent-sm
     display: block
     transition: border-color $trns-fast
     position: relative
+    > img
+      width: 100%
 
-.tabs-vertical-active li > a
+.tabs-vertical-active .tab-vertical > a
   position: absolute
   width: 100%
   height: 100%
   left: 0
   top: 0
 
-.tabs-vertical-active li
+.tabs-vertical-active .tab-vertical
   border-right: 4px solid transparent
   cursor: pointer
   &:hover,
@@ -33,3 +35,6 @@
       font-weight: bolder
   &:active
     border-color: transparent
+
+.messages-container
+  padding-bottom: $form-message-area-height

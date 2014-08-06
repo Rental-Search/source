@@ -1,12 +1,12 @@
 extends ./_base_account
 block sections
-  section.profil-info.scrollbar-custom.text-gray
+  aside.profil-info.scrollbar-custom.text-gray
     .section-content
       form#change-photo(action="")
         h2 Informations personnelles
         .row
           //- change photo
-          .block_with_thumbnail.form-control.col-sm-12
+          .block-with-thumbnail.form-control.col-sm-12
             .col-thumbnail
               .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo")
             .col-exposition
@@ -61,7 +61,7 @@ block sections
         //- about myself
         .row
           .col-sm-12
-            textarea#about-myself.form-control(name="about-myself", tabindex="1", rows="6" placeholder="A propos de vous...")
+            textarea#about-myself.expand.form-control(name="about-myself", tabindex="1", rows="6" placeholder="A propos de vous...")
         //- languages
         .row
           .col-sm-12.without-search.form-control

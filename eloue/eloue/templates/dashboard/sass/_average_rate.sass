@@ -1,0 +1,20 @@
+.average-rate
+  margin-right: 1.5em
+  .star
+    display: inline-block
+    +clearfix()
+    &:hover > i
+      color: $brand-gold !important
+    > i
+      color: $brand-gold
+      float: left
+      padding-right: .25em
+      cursor: pointer
+      line-height: .5em
+      &.current ~ i
+        color: $gray-lighter
+      &:hover ~ i
+        color: $gray-lighter !important
+  .rate-counter
+    color: inherit
+    margin-left: .5em

@@ -6,8 +6,8 @@ block variables
 
 block content
   section.tabs-vertical-active.sm.scrollbar-custom: ul
-    -each dialog in dialogs_tabs
-      li.block_with_thumbnail
+    each dialog in dialogs_tabs
+      li.tab-vertical.block-with-thumbnail
         .col-thumbnail
           .thumbnail.round: a(href="#{dialog.tenant.account_link}")
             img(src="#{STATIC_URL}#{dialog.tenant.thumbnail_small}", alt="#{dialog.tenant.name} photo", width="20", height="20")
@@ -19,9 +19,9 @@ block content
           p.text-gray.text-overflow.small #{dialog.last_message}
 
   section.tabs-vertical-static.md
-    ul.scrollbar-custom
-      -each message in messages
-        li.block_with_thumbnail
+    ul.scrollbar-custom.messages-container
+      each message in messages
+        li.tab-vertical.block-with-thumbnail
           .col-thumbnail
             .thumbnail.round: a(href="#{message.autor.account_link}")
               img(src="#{STATIC_URL}#{message.autor.thumbnail_small}", alt="#{message.autor.name} photo")
@@ -29,7 +29,67 @@ block content
             a(href="#{message.autor.account_link}").text-underline-hover
               h3 #{message.autor.first_name}
             p.small.text-gray-light #{message.date} #{message.time}
-            p.text-gray.text-justify #{message.text}
+            p.normal.text-gray.text-justify #{message.text}
+
     form(action="send-message").send-dialog-message.clearfix
-      textarea#message-text(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...")
-      button(type="submit").btn.bg-success-hover.text-white.pull-right Envoyez
+      .textarea-wrapper
+        textarea#message-text.expand(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...")
+      button(type="submit").btn.bg-success-hover.text-white Envoyez
+
+  aside.tabs-vertical-static
+    .section-header: h4.text-center Réservation associé à :
+    ul.scrollbar-custom
+      li.tab-vertical
+        img(src="#{STATIC_URL}img/#{lot_BMW.thumbnail}", alt="")
+        h3.indent-xs-v: a(href="#").text-underline-hover: b #{lot_BMW.name}
+        p.text-gray
+          i.fa.fa-map-marker.fa-lg &nbsp;
+          | #{lot_BMW.location},&nbsp;
+          | #{lot_BMW.index}
+        p.text-gray.indent-sm-v
+          +average-rate(lot_BMW.rate, lot_BMW.rate_count)
+          +number-of-comments(lot_BMW.comments_count)
+
+        .block-with-thumbnail
+          .col-thumbnail
+            .thumbnail.round: a(href="#{lot_BMW.owner.account_link}")
+              img(src="#{STATIC_URL}#{lot_BMW.owner.thumbnail_small}", alt="#{lot_BMW.owner.name} photo", width="40", height="40")
+          .col-exposition
+            a(href="#{lot_BMW.owner.account_link}").text-underline-hover.text-gray
+              h4 #{lot_BMW.owner.first_name} #{lot_BMW.owner.name}
+
+      li.tab-vertical
+        form(action="")
+          .row
+            .col-md-8.col-lg-6
+              each type in ["DU", "AU"]
+                .indent-sm-v.select-gradient.without-search.date-picker
+                  .form-group
+                    .input-group
+                      span.input-group-addon #{type}
+                      input(type="date", placeholder = "dd/mm/yyyy")
+                      span.input-group-addon
+                        i.fa.fa-calendar.fa-lg.text-gray
+                  .form-group
+                    select
+                      each time in timing
+                        option(value="#{time}") #{time}
+
+            ul.zebra-list.col-md-12.col-lg-6
+              li
+                .col-xs-5 Durée
+                .col-xs-7 4 jours et 3 heures
+              li
+                .col-xs-5 Prix
+                .col-xs-7.text-success 350€
+              li
+                .col-xs-5 Caution
+                .col-xs-7 400€
+          .row
+            p.text-gray.indent-sm-v.text-center Assurance incluse
+            button(type="submit").btn.text-white.bg-success-hover.col-md-12.col-lg-6.col-lg-offset-3 Procédez à la réservation
+
+
+
+
+

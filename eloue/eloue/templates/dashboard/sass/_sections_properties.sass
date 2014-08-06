@@ -1,16 +1,37 @@
 article.dashboard
-  > section
+  position: relative
+  +clearfix()
+  @import nav_dashboard
+  > section,
+  > nav
+    float: left
+  > aside
+    float: none
+  > *
+    height: 100%
+    overflow: auto
+  > section,
+  > aside
     border-top: $bd-lighter
     border-left: $bd-lighter
     &:first-child
       border-left-width: 0
     // .section-header
-    .section-content
-      max-width: $section-content-max-width
-      padding: $indent-md*$indent-vertical $indent-md
-
-.profil-info
-  float: none !important
-  background-color: $gray-lite
-  // .mCSB_container
-  //   overflow: visible
+  .section-content
+    max-width: $section-content-max-width
+    padding: $indent-md*$indent-vertical $indent-md
+  .section-header
+    background-color: $gray-lite
+    border-bottom: $bd-lighter
+    height: $form-height
+    padding: 0 $indent-sm
+    width: 100%
+    display: table
+    position: absolute
+    top: 0
+    left: 0
+    > *
+      vertical-align: middle
+      display: table-cell
+    + *
+      padding-top: 3em

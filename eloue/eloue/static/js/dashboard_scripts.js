@@ -35,7 +35,7 @@ $(document).ready(function() {
 
   // custom scrollbar
   $('.chosen-drop').mCustomScrollbar({
-    scrollInertia: '200',
+    scrollInertia: '100',
     autoHideScrollbar: true,
     theme: 'dark-thin',
     scrollbarPosition: 'outside',
@@ -45,17 +45,18 @@ $(document).ready(function() {
     }
   });
   $('.scrollbar-custom').mCustomScrollbar({
-    scrollInertia: '200',
+    scrollInertia: '100',
     autoHideScrollbar: true,
     theme: 'dark-thin',
     advanced:{
       updateOnContentResize: true,
       autoScrollOnFocus: false
     },
-    setHeight: "100%"
+    // setHeight: "100%"
   });
-  $('.send-dialog-message').mCustomScrollbar({
-    scrollInertia: '200',
+  $('.textarea-wrapper').mCustomScrollbar({
+    // scrollbarPosition: 'outside',
+    scrollInertia: '100',
     autoHideScrollbar: true,
     theme: 'dark-thin',
     mouseWheel:{ 
@@ -63,6 +64,14 @@ $(document).ready(function() {
     }
   });
 
+  // $('.textarea-wrapper').find('textarea').keypress(function() {
+  //   console.log('focus');
+  // });
+
   // autoewsize textarea's
-  $('textarea').autosize();
+  $('textarea.expand').autosize({
+    // callback: function() {
+    //   $(this).parent('.textarea-wrapper').mCustomScrollbar("scrollTo","bottom");
+    // }
+  });
 });
