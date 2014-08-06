@@ -745,7 +745,7 @@ from rest_framework import viewsets, response
 from rest_framework.decorators import link
 
 from products import serializers, models
-from eloue.api import filters
+from eloue.api import filters, views
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
@@ -827,20 +827,23 @@ class CuriosityViewSet(viewsets.ModelViewSet):
     queryset = models.Curiosity.on_site.all()
     serializer_class = serializers.CuriositySerializer
 
-class MessageThreadViewSet(viewsets.ModelViewSet):
+class MessageThreadViewSet(views.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows message threads to be viewed or edited.
     """
     model = models.MessageThread
+    queryset = models.MessageThread.objects.select_related('messages')
     serializer_class = serializers.MessageThreadSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend, filters.OwnerFilter)
     filter_fields = ('product',)
+    owner_field = 'sender'
 
-class ProductRelatedMessageViewSet(viewsets.ModelViewSet):
+class ProductRelatedMessageViewSet(views.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
     """
     model = models.ProductRelatedMessage
     serializer_class = serializers.ProductRelatedMessageSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend, filters.OwnerFilter)
     filter_fields = ('thread',)
+    owner_field = 'sender'

@@ -66,7 +66,13 @@ class LocationHeaderMixin(object):
 
 
 class SetOwnerMixin(object):
+    owner_field = 'patron'
+
     def pre_save(self, obj):
         user = self.request.user
-        if not obj.patron_id and not user.is_anonymous():
-            obj.patron = user
+        if not user.is_anonymous():
+            owner_field = self.owner_field
+            owner_field_attname = obj._meta.get_field(owner_field).attname
+            if not getattr(obj, owner_field_attname):
+                setattr(obj, owner_field, user)
+        return super(SetOwnerMixin, self).pre_save(obj)

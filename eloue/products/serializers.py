@@ -94,10 +94,10 @@ class MessageThreadSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.MessageThread
         fields = ('id', 'sender', 'recipient', 'product', 'last_message', 'subject', 'sender_archived', 'recipient_archived', 'messages')
-        read_only_fields = ('id', 'last_message', 'messages')
+        read_only_fields = ('id', 'last_message', 'messages', 'sender')
 
 class ProductRelatedMessageSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.ProductRelatedMessage
         fields = ('id', 'thread', 'sender', 'recipient', 'body', 'sent_at', 'offer')
-        read_only_fields = ('id', 'sent_at')
+        read_only_fields = ('id', 'sent_at', 'sender')
