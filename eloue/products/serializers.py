@@ -71,27 +71,18 @@ class PriceSerializer(HyperlinkedModelSerializer):
         read_only_fields = ('id', 'product')
 
 class PictureSerializer(HyperlinkedModelSerializer):
-    image = EncodedImageField(write_only=True)
-    thumbnail = ImageField(source='image', read_only=True)
-    profile = ImageField(source='image', read_only=True)
-    home = ImageField(source='image', read_only=True)
-    display = ImageField(source='image', read_only=True)
+    image = EncodedImageField()
 
-    def transform_thumbnail(self, obj, value):
-        return obj.thumbnail.url if obj and value else value
-
-    def transform_profile(self, obj, value):
-        return obj.profile.url if obj and value else value
-
-    def transform_home(self, obj, value):
-        return obj.home.url if obj and value else value
-
-    def transform_display(self, obj, value):
-        return obj.display.url if obj and value else value
+    def transform_image(self, obj, value):
+        image = {
+            k: getattr(obj, k).url if value else ''
+            for k in ('thumbnail', 'profile', 'home', 'display')
+        }
+        return image
 
     class Meta:
         model = models.Picture
-        fields = ('id', 'product', 'image', 'created_at', 'thumbnail', 'profile', 'home', 'display')
+        fields = ('id', 'product', 'image', 'created_at')
         read_only_fields = ('id', 'product', 'created_at')
 
 class CuriositySerializer(HyperlinkedModelSerializer):

@@ -29,11 +29,11 @@ class PictureTest(APITestCase):
                 'image': image,
             }, format='multipart')
             self.assertEquals(response.status_code, 201, response.data)
-            self.assertIn('thumbnail', response.data)
-            self.assertIn('profile', response.data)
-            self.assertIn('home', response.data)
-            self.assertIn('display', response.data)
             self.assertIn('created_at', response.data)
+            self.assertIn('image', response.data, response.data)
+            for k in ('thumbnail', 'profile', 'home', 'display'):
+                self.assertIn(k, response.data['image'], response.data)
+                self.assertTrue(response.data['image'][k], response.data)
 
     def test_picture_create_base64(self):
         with open(IMAGE_FILE, 'rb') as image:
@@ -46,11 +46,11 @@ class PictureTest(APITestCase):
                 }
             })
             self.assertEquals(response.status_code, 201, response.data)
-            self.assertIn('thumbnail', response.data)
-            self.assertIn('profile', response.data)
-            self.assertIn('home', response.data)
-            self.assertIn('display', response.data)
             self.assertIn('created_at', response.data)
+            self.assertIn('image', response.data, response.data)
+            for k in ('thumbnail', 'profile', 'home', 'display'):
+                self.assertIn(k, response.data['image'], response.data)
+                self.assertTrue(response.data['image'][k], response.data)
 
     def test_picture_create_url(self):
         response = self.client.post(_location('picture-list'), {
@@ -61,11 +61,11 @@ class PictureTest(APITestCase):
             }
         })
         self.assertEquals(response.status_code, 201, response.data)
-        self.assertIn('thumbnail', response.data)
-        self.assertIn('profile', response.data)
-        self.assertIn('home', response.data)
-        self.assertIn('display', response.data)
         self.assertIn('created_at', response.data)
+        self.assertIn('image', response.data, response.data)
+        for k in ('thumbnail', 'profile', 'home', 'display'):
+            self.assertIn(k, response.data['image'], response.data)
+            self.assertTrue(response.data['image'][k], response.data)
 
     def test_picture_edit_multipart(self):
         with open(IMAGE_FILE, 'rb') as image:
@@ -121,15 +121,8 @@ class PictureTest(APITestCase):
         # check retrieved resource detail format
         self.assertIn('product', response.data)
         self.assertIn('created_at', response.data)
-        self.assertIn('thumbnail', response.data)
-        self.assertIn('profile', response.data)
-        self.assertIn('home', response.data)
-        self.assertIn('display', response.data)
-        # 'image' is a write-only field, we should not receive the original image here
-        self.assertNotIn('image', response.data)
-        # check retrieved data
+        self.assertIn('image', response.data, response.data)
         self.assertEquals(response.data['product'], None, response.data)
-        self.assertTrue(response.data['thumbnail'], response.data)
-        self.assertTrue(response.data['profile'], response.data)
-        self.assertTrue(response.data['home'], response.data)
-        self.assertTrue(response.data['display'], response.data)
+        for k in ('thumbnail', 'profile', 'home', 'display'):
+            self.assertIn(k, response.data['image'], response.data)
+            self.assertTrue(response.data['image'][k], response.data)
