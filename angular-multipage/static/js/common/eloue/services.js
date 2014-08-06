@@ -5,30 +5,24 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for uploading forms.
          */
-        EloueCommon.factory("FormDataService", [function () {
-            var formDataService = {};
+        EloueCommon.factory("FormService", [function () {
+            var formService = {};
 
-            formDataService.send = function (action, textFields, fileFields, completeCallback) {
-                $.ajax(action, {
-                    data: textFields.serializeArray(),
-                    files: fileFields,
-                    iframe: true,
-                    processData: false
-                }).complete(function (data) {
-                    if (!!completeCallback) {
-                        completeCallback(data);
-                    }
+            formService.send = function (method, url, $form) {
+                $form.ajaxSubmit({
+                    type: method,
+                    url: url
                 });
             };
 
-            return formDataService;
+            return formService;
         }]);
 
         /**
          * Service for managing users.
          */
-        EloueCommon.factory("UsersService", ["Users", "FormDataService", "Endpoints",
-            function (Users, FormDataService, Endpoints) {
+        EloueCommon.factory("UsersService", ["Users", "FormService", "Endpoints",
+            function (Users, FormService, Endpoints) {
                 var usersService = {};
 
                 usersService.get = function (userId, successCallback, errorCallback) {
@@ -39,10 +33,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     Users.getMe({}, successCallback, errorCallback);
                 };
 
-                usersService.sendFormData = function (userId, textFields, fileFields, completeCallback) {
+                usersService.sendForm = function (userId, form) {
+                    // Calculate current user url
                     var currentUserUrl = Endpoints.api_url + "users/" + userId + "/";
 
-                    FormDataService.send(currentUserUrl, textFields, fileFields, completeCallback);
+                    // Send form to the current user url
+                    FormService.send("POST", currentUserUrl, form);
                 };
 
                 return usersService;

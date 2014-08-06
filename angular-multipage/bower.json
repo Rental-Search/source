@@ -25,7 +25,7 @@
         "angular-chosen-localytics":null,
         "angular-ui-router": "~0.2.10",
         "angular-filereader": "1.0.0",
-        "jquery.iframe-transport": "cmlenz/jquery-iframe-transport#~1.0.0"
+        "jquery-form": "https://github.com/malsup/form.git#~3.46.0"
     },
     "devDependencies": {
         "angular-mocks": "1.2.11",

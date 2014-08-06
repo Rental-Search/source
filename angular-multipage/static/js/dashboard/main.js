@@ -11,7 +11,7 @@ require.config({
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "angular-file-reader": "../../bower_components/angular-filereader/src/filereader.service",
-        "jquery.iframe-transport": "../../bower_components/jquery.iframe-transport/jquery.iframe-transport",
+        "jquery-form": "../../bower_components/jquery-form/jquery.form",
         "vars": "../vars"
     },
     shim: {
@@ -27,7 +27,7 @@ require.config({
         },
         "jQuery": {exports: "jQuery"},
         "bootstrap": ["jQuery"],
-        "jquery.iframe-transport": ["jQuery"]
+        "jquery-form": ["jQuery"]
     }
 });
 

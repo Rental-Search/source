@@ -8,17 +8,15 @@ define(["angular", "eloue/app", "../../../../common/eloue/services"], function (
     angular.module("EloueDashboardApp").controller("AccountProfileCtrl", [
         "$scope",
         "UsersService",
-        function ($scope, UsersService) {
+        "Endpoints",
+        function ($scope, UsersService, Endpoints) {
             UsersService.getMe(function (currentUser) {
+                // Save current user in the scope
                 $scope.currentUser = currentUser;
 
+                // Send form by submit
                 $scope.submit = function () {
-                    var context = $("#profile_form");
-
-                    var textFields = $(":text", context);
-                    var fileFields = $(":file", context);
-
-                    UsersService.sendFormData($scope.currentUser.id, textFields, fileFields);
+                    UsersService.sendForm($scope.currentUser.id, $("#profile_form"));
                 };
             });
         }
