@@ -32,7 +32,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 usersService.getMe = function (successCallback, errorCallback) {
-                    Users.getMe({}, successCallback, errorCallback);
+                    Users.getMe({_cache: new Date().getTime()}, successCallback, errorCallback);
                 };
 
                 usersService.sendForm = function (userId, form, successCallback, errorCallback) {
