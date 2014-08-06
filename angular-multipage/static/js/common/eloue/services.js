@@ -8,10 +8,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("FormService", [function () {
             var formService = {};
 
-            formService.send = function (method, url, $form) {
+            formService.send = function (method, url, $form, successCallback, errorCallback) {
                 $form.ajaxSubmit({
                     type: method,
-                    url: url
+                    url: url,
+                    success: successCallback,
+                    error: errorCallback
                 });
             };
 
@@ -33,12 +35,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     Users.getMe({}, successCallback, errorCallback);
                 };
 
-                usersService.sendForm = function (userId, form) {
+                usersService.sendForm = function (userId, form, successCallback, errorCallback) {
                     // Calculate current user url
                     var currentUserUrl = Endpoints.api_url + "users/" + userId + "/";
 
                     // Send form to the current user url
-                    FormService.send("POST", currentUserUrl, form);
+                    FormService.send("POST", currentUserUrl, form, successCallback, errorCallback);
                 };
 
                 return usersService;

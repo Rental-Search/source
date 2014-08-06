@@ -16,7 +16,9 @@ define(["angular", "eloue/app", "../../../../common/eloue/services"], function (
 
                 // Send form by submit
                 $scope.submit = function () {
-                    UsersService.sendForm($scope.currentUser.id, $("#profile_form"));
+                    UsersService.sendForm($scope.currentUser.id, $("#profile_form"), function (data) {
+                        $scope.currentUser = data;
+                    });
                 };
             });
         }
