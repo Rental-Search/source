@@ -4,12 +4,10 @@ define(["angular",
         "angular-resource",
         "angular-route",
         "angular-ui-router",
-        "angular-file-reader",
         "jquery-form",
         "../../common/eloue/commonApp"],
     function (angular) {
         // Create dashboard application
-        return angular.module("EloueDashboardApp", ["EloueCommon", "ngCookies", "ngResource", "ngRoute", "ui.router",
-            "filereader"]);
+        return angular.module("EloueDashboardApp", ["EloueCommon", "ngCookies", "ngResource", "ngRoute", "ui.router"]);
     }
 );
