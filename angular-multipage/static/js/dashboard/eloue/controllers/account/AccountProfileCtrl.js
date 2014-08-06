@@ -15,11 +15,16 @@ define(["angular", "eloue/app", "../../../../common/eloue/services"], function (
 
                 // Send form when a file changes
                 $scope.onFileChanged = function () {
-                    UsersService.sendForm($scope.currentUser.id, $("#profile_form"), function (data) {
+                    UsersService.sendForm($scope.currentUser.id, $("#profile_avatar_form"), function (data) {
                         $scope.$apply(function () {
                             $scope.currentUser = data;
                         });
                     });
+                };
+
+                // Send form with data by submit
+                $scope.dataFormSubmit = function () {
+                    UsersService.sendForm($scope.currentUser.id, $("#profile_data_form"));
                 };
             });
         }

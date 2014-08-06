@@ -1,6 +1,13 @@
-<h3>{{title}}</h3>
-<form id="profile_form">
+<form id="profile_avatar_form">
     <img ng-src="{{currentUser.profile}}" style="width: 200px;" /><br />
     <input type="file" name="avatar" file-chooser on-change="onFileChanged()"/><br />
     <input type="hidden" name="_method" value="PUT" />
+</form>
+
+<br />
+
+<form id="profile_data_form" ng-submit="dataFormSubmit()">
+    <input type="text" name="company_name" ng-model="currentUser.company_name" /><br />
+    <input type="hidden" name="_method" value="PUT" />
+    <input type="submit" value="Submit"/>
 </form>
