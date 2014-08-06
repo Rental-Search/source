@@ -32,7 +32,11 @@ class UserSerializer(HyperlinkedModelSerializer):
         return user
 
     def transform_avatar(self, obj, value):
-        return obj.avatar.url if obj and value else value
+        image = {
+            k: getattr(obj, k).url if value else ''
+            for k in ('thumbnail', 'profil', 'display', 'product_page')
+        }
+        return image
 
     class Meta:
         model = models.Patron

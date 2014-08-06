@@ -121,6 +121,10 @@ class UsersTest(APITestCase):
             }, format='multipart')
             self.assertEquals(response.status_code, 200, response.data)
             self.assertTrue(User.objects.get(pk=1).avatar)
+            self.assertIn('avatar', response.data, response.data)
+            for k in ('thumbnail', 'profil', 'display', 'product_page'):
+                self.assertIn(k, response.data['avatar'], response.data)
+                self.assertTrue(response.data['avatar'][k], response.data)
 
     def test_account_avatar_upload_base64(self):
         self.assertFalse(User.objects.get(pk=1).avatar)
@@ -134,6 +138,10 @@ class UsersTest(APITestCase):
             })
             self.assertEquals(response.status_code, 200, response.data)
             self.assertTrue(User.objects.get(pk=1).avatar)
+            self.assertIn('avatar', response.data, response.data)
+            for k in ('thumbnail', 'profil', 'display', 'product_page'):
+                self.assertIn(k, response.data['avatar'], response.data)
+                self.assertTrue(response.data['avatar'][k], response.data)
 
     def test_account_avatar_upload_url(self):
         self.assertFalse(User.objects.get(pk=1).avatar)
@@ -145,6 +153,10 @@ class UsersTest(APITestCase):
         })
         self.assertEquals(response.status_code, 200, response.data)
         self.assertTrue(User.objects.get(pk=1).avatar)
+        self.assertIn('avatar', response.data, response.data)
+        for k in ('thumbnail', 'profil', 'display', 'product_page'):
+            self.assertIn(k, response.data['avatar'], response.data)
+            self.assertTrue(response.data['avatar'][k], response.data)
 
     def test_account_get_me(self):
         self.assertFalse(User.objects.get(pk=1).avatar)
