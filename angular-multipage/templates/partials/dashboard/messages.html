@@ -1,1 +1,9 @@
 <h3>{{title}}</h3>
+
+<ul>
+    <li ng-repeat="thread in message_threads track by thread.id">
+        <a ui-sref="messages.detail({id: thread.id})">{{thread.id}}</a><br />
+    </li>
+</ul>
+
+<div ui-view></div>

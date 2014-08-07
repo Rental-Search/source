@@ -46,4 +46,17 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return usersService;
             }
         ]);
+
+        /**
+         * Service for managing message threads.
+         */
+        EloueCommon.factory("MessageThreadsService", ["MessageThreads", function (MessageThreads) {
+            var messageThreadsService = {};
+
+            messageThreadsService.getMessageThreads = function (successCallback, errorCallback) {
+                MessageThreads.get({}, successCallback, errorCallback);
+            };
+
+            return messageThreadsService;
+        }]);
     });

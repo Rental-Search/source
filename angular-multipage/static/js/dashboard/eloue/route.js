@@ -14,6 +14,7 @@ define(["eloue/app",
         "eloue/controllers/account/AccountPaymentsCtrl",
         "eloue/controllers/account/AccountPasswordCtrl",
         "eloue/controllers/account/AccountInvitationCtrl",
+        "eloue/controllers/messages/MessageDetailCtrl",
         "eloue/directives/FileChooserDirective"],
     function (EloueApp) {
 
@@ -87,6 +88,11 @@ define(["eloue/app",
                         url: "/invitation",
                         templateUrl: "partials/dashboard/account/invitation.html",
                         controller: "AccountInvitationCtrl"
+                    })
+                    .state("messages.detail", {
+                        url: "/:id",
+                        templateUrl: "partials/dashboard/messages/message_detail.html",
+                        controller: "MessageDetailCtrl"
                     });
             }
         ]);
