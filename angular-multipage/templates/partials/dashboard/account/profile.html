@@ -1,5 +1,5 @@
 <form id="profile_avatar_form">
-    <img ng-src="{{currentUser.profile}}" style="width: 200px;" /><br />
+    <img ng-src="{{currentUser.avatar.profil}}" style="width: 200px;" /><br />
     <input type="file" name="avatar" file-chooser on-change="onFileChanged()"/><br />
     <input type="hidden" name="_method" value="PUT" />
 </form>
