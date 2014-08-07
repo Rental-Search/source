@@ -14,15 +14,32 @@
 -account_tabs[5] = {title: "Mot de passe", href: "password"}
 -account_tabs[6] = {title: "Parainage",    href: "broker"}
 
+-var booking_bages = {}
+-booking_bages.soon = {classname: "soon", text: "a venir"}
+-booking_bages.in_progress = {classname: "in-progress", text: "en cours"}
+-booking_bages.completed = {classname: "completed", text: "terminé"}
+
 -var languages = {Azerbaijan: {ID: 4, self: "Azərbaycan"}, English: {ID: 5, self: "English"}, Byelorussian: {ID: 6, self: "Беларуская"}, Bulgarian: {ID: 7, self: "Български"}, Hebrew: {ID: 8, self: "עִבְרִית"}, Spanish: {ID: 9, self: "Español"}, Italian: {ID: 10, self: "Italiano"}, Kazakh: {ID: 11, self: "Қазақ"}, Korean: {ID: 12, self: "한국어"}, Latvian: {ID: 13, self: "Latviešu"}, Lithuanian: {ID: 14, self: "Lietuvių"}, Moldavian: {ID: 15, self: "Moldovenească"}, German: {ID: 16, self: "Deutsch"}, Turkish: {ID: 18, self: "Türkçe"}, Ukrainian: {ID: 19, self: "Українська"}, French: {ID: 20, self: "Français"}, Estonian: {ID: 21, self: "Eesti"}, Japanese: {ID: 22, self: "日本語"}, Czech: {ID: 25, self: "Česky"}, Georgian: {ID: 26, self: "ქართული"}, Hindi: {ID: 28, self: "हिन्दी"}, Icelandic: {ID: 29, self: "Íslenska"}, Portuguese: {ID: 30, self: "Português"}, Thai: {ID: 31, self: "ภาษาไทย"}, Арабский: {ID: 36, self: "اللغة"}, Kurdish: {ID: 38, self: "كوردی"}, Slovakian: {ID: 41, self: "Slovenčina"}, Polish: {ID: 43, self: "Polski"}, Chines: {ID: 45, self: "Chines"}, Hungarian: {ID: 46, self: "Magyar"}, Bosnien: {ID: 47, self: "Bosanski"}, Tata: {ID: 54, self: "Татар"}, Albanian: {ID: 62, self: "Shqip"}, Bashkir: {ID: 63, self: "Башҡорт"}, Armenian: {ID: 64, self: "Հայոց"}, Lezginsky: {ID: 70, self: "Лезги"}, Romanian: {ID: 78, self: "Română"}, Greek: {ID: 80, self: "Ελληνικά"}, Norwegian: {ID: 82, self: "Norsk"}, Gypsy: {ID: 84, self: "Romani"}, Denmark: {ID: 88, self: "Dansk"}, Chechensky: {ID: 90, self: "Nohçijn"}}
 
 -var owner = {}
 -var tenant = {}
--var lot_BMW = {name: "BMW 520 Touring Luxe", location: "Nice", index: "02200", thumbnail: "carousel-product/2.jpg", rate: 4, rate_count: 32, comments_count: 12, owner: owner}
+-var lot_BMW = {}
+
+-lot_BMW.name = "BMW 520 Touring Luxe"
+-lot_BMW.price = 168
+-lot_BMW.location = "Nice"
+-lot_BMW.address = "Avenue Félix Faure"
+-lot_BMW.index = "02200"
+-lot_BMW.thumbnail = "carousel-product/2.jpg"
+-lot_BMW.rate = 4
+-lot_BMW.rate_count = 32
+-lot_BMW.comments_count = 12
+-lot_BMW.owner = owner
 
 -tenant.first_name = "Gaspard"
 -tenant.name = "Kroutchev"
 -tenant.rate = 4
+-tenant.stats = {ads: 7, booking: 12, rating: 16, response: "98%", time_to_answer: "6h"}
 -tenant.thumbnail = "img/home-products/tenant.png"
 -tenant.thumbnail_small = "img/home-products/tenant_small.png"
 -tenant.address = "94 avenue félix faure, 75015 Paris"
@@ -33,6 +50,7 @@
 -owner.first_name = "Julien"
 -owner.name = "Dupré"
 -owner.rate = 4
+-owner.comments_count = 12
 -owner.thumbnail = "img/home-products/owner.png"
 -owner.thumbnail_small = "img/home-products/owner_small.png"
 -owner.account_link = "#julien_dupré_homepage"
@@ -64,20 +82,10 @@
 -messages[8] = messages[0]
 -messages[9] = messages[1]
 
+-var bookings = []
+-bookings[0] = {lot: lot_BMW, bage: booking_bages.soon, date_of:" 24 Juin 2014", date_to: "26 Juin 2014"}
+-bookings[1] = {lot: lot_BMW, bage: booking_bages.in_progress, date_of:" 24 Juin 2014", date_to: "26 Juin 2014"}
+-bookings[2] = {lot: lot_BMW, bage: booking_bages.completed, date_of:" 24 Juin 2014", date_to: "26 Juin 2014"}
 
-mixin average-rate(rating, counter)
-  span.average-rate
-    span.star
-      each star in [1, 2, 3, 4, 5]
-        if star === rating
-          i.current.fa.fa-lg.fa-star
-        else
-          i.fa.fa-lg.fa-star
-    if counter
-      span.rate-counter
-        | #{counter}
-
-mixin number-of-comments(counter)
-  span.number-of-comments
-    i.fa.fa-lg.fa-comments-o
-    span #{counter}
+-var booking_detail = {}
+-booking_detail.lot = lot_BMW

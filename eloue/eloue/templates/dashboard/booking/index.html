@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr"></html>
+<head>
+  <title>e-loue</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+  <link rel="stylesheet" href="../../../static/css/jquery.mCustomScrollbar.css">
+  <link rel="stylesheet" href="../../../static/css/chosen.min.css">
+  <link rel="stylesheet" href="../../../static/css/styles.css">
+  <link rel="shortcut icon" href="../../../static/img/favicon.ico">
+  <!-- jQuery-->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <!-- for IE < 9 -->
+  <!-- html5 tags supported-->
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+  <!-- palceholder supported-->
+  <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
+  <!-- selectivizr-->
+  <script src="../../../static/js/selectivizr.js"></script>
+  <!-- custom scrollbar -->
+  <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
+  <script src="../../../static/js/jquery.mCustomScrollbar.js"></script>
+  <!-- textarea autoresize -->
+  <!-- http://www.jacklmoore.com/autosize/-->
+  <script src="../../../static/js/jquery.autosize.js"></script>
+  <!-- custom select -->
+  <!-- http://harvesthq.github.io/chosen/-->
+  <script src="../../../static/js/chosen.jquery.min.js"></script>
+  <!-- my script-->
+  <script src="../../../static/js/dashboard_scripts.js"></script>
+</head>
+<body>
+  <div class="container-full-screen">
+    <input type="checkbox" id="sourse">
+    <lable for="#sourse" id="sourse-img"><img src="../../../static/img/src/dashboard/booking.jpg"></lable>
+    <header>header</header>
+    <article class="dashboard">
+      <nav class="bg-success">
+        <ul>
+          <li><a href="../dashboard" class="text-success-dark"><i class="fa fa-home"></i>Dashboard</a></li>
+          <li><a href="../messages" class="text-success-dark"><i class="fa fa-envelope-o"></i>Messages</a></li>
+          <li><a href="../booking" class="text-success-dark"><i class="fa fa-shield"></i>Booking</a></li>
+          <li><a href="../items" class="text-success-dark"><i class="fa fa-th-list"></i>Items</a></li>
+          <li><a href="../account/profil.html" class="text-success-dark"><i class="fa fa-user"></i>Account</a></li>
+        </ul>
+      </nav>
+      <section class="tabs-vertical-active lg">
+        <div class="section-header">
+          <div class="row indent-xs-v">
+            <div class="col-xs-9 tabs-horisontal-active">
+              <ul class="list-without-spaces">
+                <li class="divider"></li>
+                <li class="tab-horisontal">
+                  <h3 class="small">Tous</h3>
+                </li>
+                <li class="divider"></li>
+                <li class="tab-horisontal">
+                  <h3 class="small">Propriétaires</h3>
+                </li>
+                <li class="divider"></li>
+                <li class="tab-horisontal">
+                  <h3 class="small">Emprunteurs</h3>
+                </li>
+              </ul>
+            </div>
+            <div class="col-xs-3">
+              <div class="select-gradient without-search date-picker">
+                <select>
+                  <option value="statut">Statut</option>
+                  <option value="statut">Statut</option>
+                  <option value="statut">Statut</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="scrollbar-custom">
+          <li class="tab-vertical block-with-thumbnail soon">
+            <div class="col-thumbnail">
+              <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a><span class="booking-bage">a venir</span></div>
+            </div>
+            <div class="col-exposition indent-xs-v">
+              <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
+              <p class="normal text-gray">
+                <big class="text-primary">168€</big><br>Du  24 Juin 2014 au 26 Juin 2014
+              </p>
+            </div>
+          </li>
+          <li class="tab-vertical block-with-thumbnail in-progress">
+            <div class="col-thumbnail">
+              <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a><span class="booking-bage">en cours</span></div>
+            </div>
+            <div class="col-exposition indent-xs-v">
+              <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
+              <p class="normal text-gray">
+                <big class="text-primary">168€</big><br>Du  24 Juin 2014 au 26 Juin 2014
+              </p>
+            </div>
+          </li>
+          <li class="tab-vertical block-with-thumbnail completed">
+            <div class="col-thumbnail">
+              <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a><span class="booking-bage">terminé</span></div>
+            </div>
+            <div class="col-exposition indent-xs-v">
+              <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
+              <p class="normal text-gray">
+                <big class="text-primary">168€</big><br>Du  24 Juin 2014 au 26 Juin 2014
+              </p>
+            </div>
+          </li>
+        </ul>
+      </section>
+      <aside class="booking-detail scrollbar-custom">
+        <div class="section-content">
+          <div class="block-with-thumbnail">
+            <div class="col-thumbnail">
+              <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="200"></a></div>
+            </div>
+            <div class="col-exposition">
+              <h3><b>BMW 520 Touring Luxe</b></h3>
+              <p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>Avenue Félix Faure, 02200<br>Nice
+                <div class="block-with-thumbnail indent-sm-v">
+                  <div class="col-thumbnail">
+                    <div class="thumbnail"><a href="#"><img src="../../../static//img/home-products/owner.png" alt="Dupré photo" width="40" height="40"></a></div>
+                  </div>
+                  <div class="col-exposition text-gray">
+                    <h3 class="small">Julien Dupré</h3>
+                    <p><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span>
+                    </p>
+                    <p><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span>
+                    </p>
+                  </div>
+                </div>
+              </p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </article>
+  </div>
+</body>

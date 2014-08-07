@@ -33,6 +33,8 @@
 </head>
 <body>
   <div class="container-full-screen">
+    <input type="checkbox" id="sourse">
+    <lable for="#sourse" id="sourse-img"><img src="../../../static/img/src/dashboard/messages.jpg"></lable>
     <header>header</header>
     <article class="dashboard">
       <nav class="bg-success">
@@ -230,7 +232,7 @@
       </section>
       <aside class="tabs-vertical-static">
         <div class="section-header">
-          <h4 class="text-center">Réservation associé à :</h4>
+          <h4 class="text-center indent-xs-v">Réservation associé à :</h4>
         </div>
         <ul class="scrollbar-custom">
           <li class="tab-vertical"><img src="../../../static/img/carousel-product/2.jpg" alt="">
@@ -251,11 +253,11 @@
           <li class="tab-vertical">
             <form action="">
               <div class="row">
-                <div class="col-md-8 col-lg-6">
+                <div class="col-md-10 col-lg-7">
                   <div class="indent-sm-v select-gradient without-search date-picker">
                     <div class="form-group">
                       <div class="input-group"><span class="input-group-addon">DU</span>
-                        <input type="date" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
+                        <input type="text" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
                       </div>
                     </div>
                     <div class="form-group">
@@ -289,7 +291,7 @@
                   <div class="indent-sm-v select-gradient without-search date-picker">
                     <div class="form-group">
                       <div class="input-group"><span class="input-group-addon">AU</span>
-                        <input type="date" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
+                        <input type="text" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
                       </div>
                     </div>
                     <div class="form-group">
@@ -321,18 +323,18 @@
                     </div>
                   </div>
                 </div>
-                <ul class="zebra-list col-md-12 col-lg-6">
+                <ul class="zebra-list col-md-12 col-lg-5">
                   <li>
-                    <div class="col-xs-5">Durée</div>
-                    <div class="col-xs-7">4 jours et 3 heures</div>
+                    <div class="col-xs-4">Durée</div>
+                    <div class="col-xs-8">4 jours et 3 heures</div>
                   </li>
                   <li>
-                    <div class="col-xs-5">Prix</div>
-                    <div class="col-xs-7 text-success">350€</div>
+                    <div class="col-xs-4">Prix</div>
+                    <div class="col-xs-8 text-success">350€</div>
                   </li>
                   <li>
-                    <div class="col-xs-5">Caution</div>
-                    <div class="col-xs-7">400€</div>
+                    <div class="col-xs-4">Caution</div>
+                    <div class="col-xs-8">400€</div>
                   </li>
                 </ul>
               </div>

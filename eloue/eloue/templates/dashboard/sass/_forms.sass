@@ -239,17 +239,16 @@ textarea
 .send-dialog-message
   background: white
   width: 100%
-  height: $form-message-area-height
-  // overflow: scroll
   position: absolute
   z-index: 1000
+  min-height: $form-message-area-height
   border-top: $bd-lighter
   bottom: 0
   padding: $indent-sm*$indent-vertical $indent-sm
   +box-shadow(0 -5px 5px rgba(0,0,0,.05))
   .textarea-wrapper
     padding-bottom: $form-height + 1
-    height: 100%
+    min-height: 100%
   button
     position: absolute
     bottom: 0
@@ -263,12 +262,12 @@ textarea
 // date picker
 .date-picker
   display: table
-  width: $date-picker-max-width
+  width: 100%
   > *
     display: table-cell
     width: auto !important
     height: $date-picker-height
-    vertical-align: top
+    vertical-align: middle
   .input-group
     height: 100%
   input
@@ -276,7 +275,7 @@ textarea
     +placeholder($gray-medium)
     color: inherit
     font-weight: $fw-semibold !important
-    line-height: $date-picker-height
+    height: $date-picker-height
     padding: 0 .5em
     width: 100%
     border: none

@@ -70,8 +70,8 @@ $(document).ready(function() {
 
   // autoewsize textarea's
   $('textarea.expand').autosize({
-    // callback: function() {
-    //   $(this).parent('.textarea-wrapper').mCustomScrollbar("scrollTo","bottom");
-    // }
+    callback: function() {
+      // $(this).parent('.textarea-wrapper').mCustomScrollbar("scrollTo","bottom");
+    }
   });
 });

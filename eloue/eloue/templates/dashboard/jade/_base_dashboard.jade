@@ -1,12 +1,13 @@
 doctype
 html(lang="fr")
 include ./_global_variables
+include ./_mixins
 block variables
 head
   include ./section/_head
 body
   .container-full-screen
-    //- include ./_src
+    include ./_src
     header header
     article.dashboard
       nav.bg-success

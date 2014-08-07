@@ -1,0 +1,16 @@
+mixin average-rate(rating, counter)
+  span.average-rate
+    span.star
+      each star in [1, 2, 3, 4, 5]
+        if star === rating
+          i.current.fa.fa-lg.fa-star
+        else
+          i.fa.fa-lg.fa-star
+    if counter
+      span.rate-counter
+        | #{counter}
+
+mixin number-of-comments(counter)
+  span.number-of-comments
+    i.fa.fa-lg.fa-comments-o
+    span #{counter}

@@ -1,3 +1,6 @@
+///////////////////
+// tabs vertical //
+///////////////////
 .tabs-vertical-static,
 .tabs-vertical-active
   position: relative
@@ -6,8 +9,11 @@
     width: $tabs-vertical-sm-width
   &.md
     width: $tabs-vertical-md-width
-  ul
+  &.lg
+    width: $tabs-vertical-lg-width
+  > ul
     height: 100%
+    position: relative
   .tab-vertical
     border-bottom: $bd-lighter
     padding: $indent-sm*$indent-vertical $indent-sm
@@ -35,6 +41,26 @@
       font-weight: bolder
   &:active
     border-color: transparent
+
+/////////////////////
+// tabs horisontal //
+/////////////////////
+.tabs-horisontal-active
+  position: relative
+  padding-top: $indent-xs/2
+  > ul
+    position: relative
+
+.tabs-horisontal-active .tab-horisontal
+  cursor: pointer
+  color: $brand-success
+  padding: .25em .5em
+  &:hover,
+  &.current
+    background-color: lighten($brand-success, 20%)
+    color: $gray-dark
+    h1, h2, h3, h4, h5, h6
+      font-weight: bolder
 
 .messages-container
   padding-bottom: $form-message-area-height
