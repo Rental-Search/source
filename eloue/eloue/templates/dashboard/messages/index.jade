@@ -12,11 +12,11 @@ block content
           .thumbnail.round: a(href="#{dialog.tenant.account_link}")
             img(src="#{STATIC_URL}#{dialog.tenant.thumbnail_small}", alt="#{dialog.tenant.name} photo", width="20", height="20")
         .col-exposition
-          a(href="#{dialog.tenant.account_link}").text-underline-hover.pull-left
-            h3.small #{dialog.tenant.first_name}
-          span.time-badge.pull-right #{dialog.time}
-          h5.text-overflow.small.text-gray-stronger.clear-both #{dialog.topic}
-          p.text-gray.text-overflow.small #{dialog.last_message}
+            a(href="#{dialog.tenant.account_link}").text-underline-hover.pull-left
+              h3.small #{dialog.tenant.first_name}
+            span.time-badge.pull-right #{dialog.time}
+            h5.text-overflow.small.text-gray-stronger.clear-both #{dialog.topic}
+            p.text-overflow.text-gray.small #{dialog.last_message}
 
   section.tabs-vertical-static.md
     ul.scrollbar-custom.messages-container
@@ -40,50 +40,49 @@ block content
     .section-header: h4.text-center.indent-xs-v Réservation associé à :
     ul.scrollbar-custom
       li.tab-vertical
-        img(src="#{STATIC_URL}img/#{lot_BMW.thumbnail}", alt="")
-        h3.indent-xs-v: a(href="#").text-underline-hover: b #{lot_BMW.name}
-        p.text-gray
-          i.fa.fa-map-marker.fa-lg &nbsp;
-          | #{lot_BMW.location},&nbsp;
-          | #{lot_BMW.index}
-        p.text-gray.indent-sm-v
-          +average-rate(lot_BMW.rate, lot_BMW.rate_count)
-          +number-of-comments(lot_BMW.comments_count)
+        .section-content
+          img(src="#{STATIC_URL}img/#{lot_BMW.thumbnail}", alt="", width="300")
+          h3.indent-xs-v: a(href="#").text-underline-hover: b #{lot_BMW.name}
+          p.text-gray
+            i.fa.fa-map-marker.fa-lg &nbsp;
+            | #{lot_BMW.location},&nbsp;
+            | #{lot_BMW.index}
+          p.text-gray.indent-sm-v
+            +average-rate(lot_BMW.rate, lot_BMW.rate_count)
+            +number-of-comments(lot_BMW.comments_count)
 
-        .block-with-thumbnail
-          .col-thumbnail
-            .thumbnail.round: a(href="#{lot_BMW.owner.account_link}")
-              img(src="#{STATIC_URL}#{lot_BMW.owner.thumbnail_small}", alt="#{lot_BMW.owner.name} photo", width="40", height="40")
-          .col-exposition
-            a(href="#{lot_BMW.owner.account_link}").text-underline-hover.text-gray
-              h4 #{lot_BMW.owner.first_name} #{lot_BMW.owner.name}
+          .block-with-thumbnail
+            .col-thumbnail
+              .thumbnail.round: a(href="#{lot_BMW.owner.account_link}")
+                img(src="#{STATIC_URL}#{lot_BMW.owner.thumbnail_small}", alt="#{lot_BMW.owner.name} photo", width="40", height="40")
+            .col-exposition
+              a(href="#{lot_BMW.owner.account_link}").text-underline-hover.text-gray
+                h4.indent-xs-h #{lot_BMW.owner.first_name} #{lot_BMW.owner.name}
 
-      li.tab-vertical: form(action="")
-        .row
-          .col-md-10.col-lg-7
-            each type in ["DU", "AU"]
-              .indent-sm-v.select-gradient.without-search.date-picker
-                .form-group
-                  .input-group
-                    span.input-group-addon #{type}
-                    input(type="text", placeholder = "dd/mm/yyyy")
-                    span.input-group-addon
-                      i.fa.fa-calendar.fa-lg.text-gray
-                .form-group
-                  select
-                    each time in timing
-                      option(value="#{time}") #{time}
+      li.tab-vertical: .section-content: form(action="")
+        each type in ["DU", "AU"]
+          .indent-sm-v.select-gradient.without-search.date-picker
+            .form-group
+              .input-group
+                span.input-group-addon #{type}
+                input(type="text", placeholder = "dd/mm/yyyy")
+                span.input-group-addon
+                  i.fa.fa-calendar.fa-lg.text-gray
+            .form-group
+              select
+                each time in timing
+                  option(value="#{time}") #{time}
 
-          ul.zebra-list.col-md-12.col-lg-5
-            li
-              .col-xs-4 Durée
-              .col-xs-8 4 jours et 3 heures
-            li
-              .col-xs-4 Prix
-              .col-xs-8.text-success 350€
-            li
-              .col-xs-4 Caution
-              .col-xs-8 400€
+        ul.zebra-list
+          li
+            .col-xs-4 Durée
+            .col-xs-8 4 jours et 3 heures
+          li
+            .col-xs-4 Prix
+            .col-xs-8.text-success 350€
+          li
+            .col-xs-4 Caution
+            .col-xs-8 400€
         .row
           p.text-gray.indent-sm-v.text-center Assurance incluse
           button(type="submit").btn.text-white.bg-success-hover.col-md-12.col-lg-6.col-lg-offset-3 Procédez à la réservation

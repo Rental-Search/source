@@ -21,7 +21,7 @@ a
 .clearfix
   +clearfix()
 
-@each $selector, $color in (success: $brand-success, primary: $brand-primary, gray: $gray-medium, white: white, gray-strong: $gray-strong, gray-stronger: $gray-stronger, gray-light: $gray-light)
+@each $selector, $color in (success: $brand-success, primary: $brand-primary, gray: $gray-medium, white: white, gray-strong: $gray-strong, gray-stronger: $gray-stronger, gray-light: $gray-light, black: $gray-dark)
   +make-colors($selector, $color)
 
 // text
@@ -37,6 +37,29 @@ a
   .indent-#{$class}-v
     margin-bottom: $indent-vertical*$indent !important
     margin-top: $indent-vertical*$indent !important
+  .indent-#{$class}-t
+    margin-top: $indent-vertical*$indent !important
+  .indent-#{$class}-r
+    margin-right: $indent !important
+  .indent-#{$class}-b
+    margin-bottom: $indent-vertical*$indent !important
+  .indent-#{$class}-l
+    margin-right: $indent !important
+
+.text-justify-force
+  text-align: justify
+  width: 100%
+  margin-bottom: $line-height-base
+  &:after
+    display: inline-block
+    content: ""
+    width: 100%
+    height: 0
+    overflow: hidden
+  > *
+    display: inline-block
+    text-align: center
+    white-space: nowrap
 
 .text-nowrap
   white-space: nowrap
@@ -85,6 +108,19 @@ a
   font-weight: $fw-semibold
   color: $gray-light
 
+.bd-rad
+  border-radius: $bdrs
+  padding: $indent-xs
+  display: inline-block
+
+.v-align:before
+  $height: 10em
+  display: inline-block
+  padding: ($height/2) 0
+  content: "`"
+  width: 0
+  color: transparent
+
 header
   height: 120px
 
@@ -120,6 +156,8 @@ article.dashboard
     position: relative
     &.normal
       font-size: $font-size-base - 2
+    &.norm
+      font-size: $font-size-base - 1
     &.small
       font-size: $font-size-smaller - 2
 

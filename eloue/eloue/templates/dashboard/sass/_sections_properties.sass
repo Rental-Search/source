@@ -16,8 +16,8 @@ article.dashboard
     border-left: $bd-lighter
     &:first-child
       border-left-width: 0
-    // .section-header
   .section-content
+    position: relative
     max-width: $section-content-max-width
     padding: $indent-md*$indent-vertical $indent-md
   .section-header
@@ -33,3 +33,9 @@ article.dashboard
     z-index: 10
     + *
       padding-top: 3em
+  > aside
+    background-color: white
+
+  .booking-activity-feed
+    background: $gray-lite url(../img/feed-line.png) repeat-y 4em
+    background-size: 3px 1px

@@ -17,18 +17,26 @@
   +clearfix()
 
 // custom buttons for anchor, buttons and input[type="file"] tags
-.btn
-  display: table-cell
-  vertical-align: middle
+.btn,
+.btn-inline
   +border-radius($bdrs)
   white-space: nowrap
   cursor: pointer
-  height: $form-height
   font-weight: $fw-bold
   text-align: center
-  padding: 0 2em
-  font-size: $font-size-base
   border: 1px solid transparent
+
+.btn
+  font-size: $font-size-base
+  display: table-cell
+  vertical-align: middle
+  padding: 0 2em
+  height: $form-height
+.btn-inline
+  font-size: $font-size-base - 1
+  display: inline-block
+  line-height: 1
+  padding: .75em 1em
 
 // custom file input button
 label.file-input-btn,

@@ -1,14 +1,66 @@
 .block-with-thumbnail
-  +clearfix()
+  display: table
+  width: 100%
   .col-thumbnail
-    float: left
-  .col-exposition
-    overflow: hidden
-    padding-left: (7.5%)
+    display: table-cell
+    width: auto
   .thumbnail
+    text-align: center
     overflow: hidden
     position: relative
     &.round
       +border-radius(50%)
     img
       display: block
+  .col-exposition
+    display: table-cell
+    overflow: hidden
+    padding-left: inherit
+    vertical-align: middle
+    max-width: 0
+    width: 100%
+    position: relative
+  
+  &.notification
+    > .col-thumbnail .thumbnail
+      margin-right: $indent-md
+      overflow: visible
+      width: 4em
+      height: 4em
+    .icon-action
+      color: $brand-success
+      border-radius: 50%
+      width: 100%
+      height: 100%
+      position: relative
+      i
+        width: 1em
+        height: 1em
+        vertical-align: 0
+        line-height: 1
+        +centred-abs()
+    .col-exposition
+      border: none
+    .text-action
+      border-radius: $bdrs
+      padding: $indent-sm
+      overflow: visible
+      &:before,
+      &:after
+        position: absolute
+        content: ""
+        border-width: .8em 1em
+        border-style: solid
+        border-color: transparent
+        left: -2em
+        top: 1em
+      &:before
+        border-right-color: $gray-lighter
+      &:after
+        border-right-color: white
+        margin-left: 1.5px
+    .icon-action,
+    .text-action
+      background-color: white
+      border: $bd-lighter
+      +box-shadow(0 1px $gray-light)

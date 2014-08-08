@@ -50,6 +50,13 @@
     &:hover
       color: darken($color, 10%)
 
+  .text-#{$selector}-dark
+    color: darken($color, 20%)
+
+  .text-#{$selector}-light
+    color: lighten($color, 20%)
+
+
   .bg-#{$selector}
     background: $color
 
@@ -60,9 +67,9 @@
     &:hover
       background: darken($color, 10%)
 
+  .bg-#{$selector}-dark
+    background-color: darken($color, 40%)
 
-  .text-#{$selector}-dark
-    color: darken($color, 20%)
+  .bg-#{$selector}-light
+    background-color: lighten($color, 40%)
 
-  .text-#{$selector}-light
-    color: lighten($color, 20%)

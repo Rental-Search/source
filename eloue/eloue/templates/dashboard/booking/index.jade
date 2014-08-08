@@ -29,7 +29,7 @@ block content
             .thumbnail
               a(href="#"): img(src="#{STATIC_URL}img/#{booking.lot.thumbnail}", alt="#{booking.lot.name} photo", width="130")
               span.booking-bage #{booking.bage.text}
-          .col-exposition.indent-xs-v
+          .col-exposition
             h3.small
               | Location 
               a(href="#").text-underline-hover #{booking.lot.name}
@@ -44,19 +44,130 @@ block content
           .thumbnail: a(href="#")
             img(src="#{STATIC_URL}img/#{booking_detail.lot.thumbnail}", alt="#{booking_detail.lot.name} photo", width="200")
         .col-exposition
-          h3: b #{booking_detail.lot.name}
-          p.text-gray.indent-sm-h.indent-xs-v
-            i.fa.fa-map-marker.fa-lg.fa-li
-            | #{booking_detail.lot.address}, #{booking_detail.lot.index}
-            br
-            | #{booking_detail.lot.location}
-            .block-with-thumbnail.indent-sm-v
+          .indent-sm-h
+            h3: b #{booking_detail.lot.name}
+            p.text-gray.indent-sm-h.indent-xs-v
+              i.fa.fa-map-marker.fa-lg.fa-li
+              | #{booking_detail.lot.address}, #{booking_detail.lot.index}
+              br
+              | #{booking_detail.lot.location}
+              .block-with-thumbnail.indent-sm-v.indent-sm-
+                .col-thumbnail
+                  .thumbnail: a(href="#")
+                    img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                .col-exposition.text-gray
+                  .indent-xs-h
+                    h3.small #{booking_detail.lot.owner.first_name} #{booking_detail.lot.owner.name}
+                    p.indent-xs-v
+                      +average-rate(booking_detail.lot.owner.rate)
+                    p
+                      +number-of-comments(booking_detail.lot.owner.comments_count)
+                      +number-of-bookings(booking_detail.lot.owner.booking_count)
+
+      .bg-success-light.text-success.bd-rad
+        i.fa.fa-phone.fa-lg.indent-xs-h
+        span.indent-sm-h
+          | Joignable au 
+          b 01 47 00 00 00 
+          | ou
+        a(href="").btn-inline.text-white.bg-success-hover Envoyez un message
+
+      .block-with-thumbnail.notification.indent-md-v
+        .col-thumbnail
+          .thumbnail: .icon-action: i.fa.fa-check-circle-o.fa-lg
+        .col-exposition.text-action
+          h3: b Réservation acceptée par 
+            a(href="").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+          ul.zebra-list.indent-md-v
+            each info in booking_detail.informations
+              li.clearfix
+                .col-xs-3 #{info.title}
+                if info.allocate
+                  .col-xs-9.text-success #{info.value}
+                else
+                  .col-xs-9 #{info.value}
+          .text-right
+            a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
+            a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
+
+      .block-with-thumbnail.text-gray.notification
+        .col-thumbnail
+          .thumbnail: i.fa.fa-pencil.fa-3x
+        .col-exposition
+          form(action="")
+            textarea.expand(name="msg", rows="4", placeholder="Écrire un commentaire...")
+            p.text-justify-force.indent-sm-v
+              span
+                | Notes :&nbsp;&nbsp;
+                +average-rate(0)
+              button(type="submit").btn-inline.bg-success.text-white Envoyer
+
+    section.booking-activity-feed.text-gray-strong
+      ul.section-content
+        li.reply-to-message: a(href="#").text-success.text-underline-hover 
+          i.fa.fa-mail-reply &nbsp;&nbsp;
+          | Répondre au message
+        li.feed-date-bage: span 11/05
+
+        li.block-with-thumbnail.notification.indent-md-v
+          .col-thumbnail
+            .thumbnail: .icon-action: i.fa.fa-envelope-o.fa-lg
+          .col-exposition.text-action
+            .block-with-thumbnail
               .col-thumbnail
-                .thumbnail: a(href="#")
+                .thumbnail.indent-sm-r.round: a(href="#")
                   img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
-              .col-exposition.text-gray
-                h3.small #{booking_detail.lot.owner.first_name} #{booking_detail.lot.owner.name}
-                p
-                  +average-rate(booking_detail.lot.owner.rate)
-                p
-                  +number-of-comments(booking_detail.lot.owner.comments_count)
+              .col-exposition
+                h3.text-black.indent-xs-b: b Message envoyé par 
+                  a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                p.norm Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée
+
+        li.block-with-thumbnail.notification.indent-md-v
+          .col-thumbnail
+            .thumbnail: .icon-action: i.fa.fa-dollar.fa-lg
+          .col-exposition.text-action
+            .block-with-thumbnail
+              .col-thumbnail
+                .thumbnail.indent-sm-r
+                  img(src="#{STATIC_URL}/img/money.png", alt="", width="40", height="40")
+              .col-exposition
+                p.norm Prix de la location débitée avec succès !
+
+        li.block-with-thumbnail.notification.indent-md-v
+          .col-thumbnail
+            .thumbnail: .icon-action: i.fa.fa-shield.fa-lg
+          .col-exposition.text-action
+            .block-with-thumbnail
+              .col-thumbnail
+                .thumbnail.indent-sm-r.round
+                  img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="", width="40", height="40")
+              .col-exposition
+                p.norm Demande acceptée par 
+                  a(href="#").text-success.text-underline-hover #{tenant.first_name}
+
+        li.block-with-thumbnail.notification.indent-md-v
+          .col-thumbnail
+            .thumbnail: .icon-action: i.fa.fa-history.fa-lg.fa-flip-horizontal
+          .col-exposition.text-action
+            .block-with-thumbnail
+              .col-thumbnail
+                .thumbnail.indent-sm-r.round
+                  img(src="#{STATIC_URL}#{booking_detail.lot.owner.thumbnail}", alt="", width="40", height="40")
+              .col-exposition
+                p.norm Demande de réservation par 
+                  a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+
+        li.feed-date-bage: span 09/05
+
+        li.block-with-thumbnail.notification.indent-md-v
+          .col-thumbnail
+            .thumbnail: .icon-action: i.fa.fa-envelope-o.fa-lg
+          .col-exposition.text-action
+            .block-with-thumbnail
+              .col-thumbnail
+                .thumbnail.indent-sm-r.round: a(href="#")
+                  img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+              .col-exposition
+                h3.text-black.indent-xs-b: b Message envoyé par 
+                  a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                p.norm Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée
