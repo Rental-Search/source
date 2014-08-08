@@ -10,12 +10,9 @@ block content
       .row.indent-xs-v
         .col-xs-9.tabs-horisontal-active
           ul.list-without-spaces
-            li.divider
-            li.tab-horisontal: h3.small Tous
-            li.divider
-            li.tab-horisontal: h3.small Propriétaires
-            li.divider
-            li.tab-horisontal: h3.small Emprunteurs
+            each tab in booking_detail.horisontal_tabs
+              li.divider
+              li.tab-horisontal: h3.small #{tab}
         .col-xs-3
           .select-gradient.without-search.date-picker
             select
@@ -57,7 +54,7 @@ block content
                     img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
                 .col-exposition.text-gray
                   .indent-xs-h
-                    h3.small #{booking_detail.lot.owner.first_name} #{booking_detail.lot.owner.name}
+                    h3.small: a(href="#").text-underline-hover #{booking_detail.lot.owner.first_name} #{booking_detail.lot.owner.name}
                     p.indent-xs-v
                       +average-rate(booking_detail.lot.owner.rate)
                     p
