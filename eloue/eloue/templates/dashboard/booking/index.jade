@@ -96,7 +96,7 @@ block content
         .col-exposition
           form(action="")
             textarea.expand(name="msg", rows="4", placeholder="Écrire un commentaire...")
-            p.text-justify-force.indent-sm-v
+            p.text-justify-force.indent-sm-t
               span
                 | Notes :&nbsp;&nbsp;
                 +average-rate(0)
@@ -107,67 +107,42 @@ block content
         li.reply-to-message: a(href="#").text-success.text-underline-hover 
           i.fa.fa-mail-reply &nbsp;&nbsp;
           | Répondre au message
-        li.feed-date-bage: span 11/05
 
-        li.block-with-thumbnail.notification.indent-md-v
-          .col-thumbnail
-            .thumbnail: .icon-action: i.fa.fa-envelope-o.fa-lg
-          .col-exposition.text-action
-            .block-with-thumbnail
+        each item in booking_detail.feed
+          if item.type == "date"
+            li.feed-date-bage: span #{item.value}
+          else
+            li.block-with-thumbnail.notification.indent-md-v
               .col-thumbnail
-                .thumbnail.indent-sm-r.round: a(href="#")
-                  img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
-              .col-exposition
-                h3.text-black.indent-xs-b: b Message envoyé par 
-                  a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
-                p.norm Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée
+                .thumbnail: .icon-action: i.fa.fa-lg(class="fa-#{item.icon}")
+              .col-exposition.text-action
+                .block-with-thumbnail
 
-        li.block-with-thumbnail.notification.indent-md-v
-          .col-thumbnail
-            .thumbnail: .icon-action: i.fa.fa-dollar.fa-lg
-          .col-exposition.text-action
-            .block-with-thumbnail
-              .col-thumbnail
-                .thumbnail.indent-sm-r
-                  img(src="#{STATIC_URL}/img/money.png", alt="", width="40", height="40")
-              .col-exposition
-                p.norm Prix de la location débitée avec succès !
+                  .col-thumbnail
+                    if item.type == "amount"
+                      .thumbnail.indent-sm-r
+                        img(src="#{STATIC_URL}/img/money.png", alt="", width="40", height="40")
+                    else
+                      .thumbnail.indent-sm-r.round: a(href="#")
+                        case item.type
+                          when "message"
+                            img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                          when "booking"
+                            img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="", width="40", height="40")
+                          when "request"
+                            img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
 
-        li.block-with-thumbnail.notification.indent-md-v
-          .col-thumbnail
-            .thumbnail: .icon-action: i.fa.fa-shield.fa-lg
-          .col-exposition.text-action
-            .block-with-thumbnail
-              .col-thumbnail
-                .thumbnail.indent-sm-r.round
-                  img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="", width="40", height="40")
-              .col-exposition
-                p.norm Demande acceptée par 
-                  a(href="#").text-success.text-underline-hover #{tenant.first_name}
-
-        li.block-with-thumbnail.notification.indent-md-v
-          .col-thumbnail
-            .thumbnail: .icon-action: i.fa.fa-history.fa-lg.fa-flip-horizontal
-          .col-exposition.text-action
-            .block-with-thumbnail
-              .col-thumbnail
-                .thumbnail.indent-sm-r.round
-                  img(src="#{STATIC_URL}#{booking_detail.lot.owner.thumbnail}", alt="", width="40", height="40")
-              .col-exposition
-                p.norm Demande de réservation par 
-                  a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
-
-        li.feed-date-bage: span 09/05
-
-        li.block-with-thumbnail.notification.indent-md-v
-          .col-thumbnail
-            .thumbnail: .icon-action: i.fa.fa-envelope-o.fa-lg
-          .col-exposition.text-action
-            .block-with-thumbnail
-              .col-thumbnail
-                .thumbnail.indent-sm-r.round: a(href="#")
-                  img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
-              .col-exposition
-                h3.text-black.indent-xs-b: b Message envoyé par 
-                  a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
-                p.norm Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée
+                  .col-exposition
+                    case item.type
+                      when "message"
+                        h3.text-black.indent-xs-b: b Message envoyé par 
+                          a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                        p.norm #{item.value}
+                      when "booking"
+                        p.norm Demande acceptée par 
+                          a(href="#").text-success.text-underline-hover #{tenant.first_name}
+                      when "request"
+                        p.norm Demande de réservation par 
+                          a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                      when "amount"
+                        p.norm Prix de la location débitée avec succès !
