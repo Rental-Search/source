@@ -8,6 +8,7 @@ define(["angular",
         "selectivizr",
         "custom-scrollbar",
         "jquery-autosize",
+        "jquery-chosen",
         "../../common/eloue/commonApp"],
     function (angular) {
         // Create dashboard application
