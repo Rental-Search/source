@@ -14,6 +14,7 @@ require.config({
         "selectivizr": "../../bower_components/selectivizr/selectivizr",
         "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
+        "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "vars": "../vars"
     },
     shim: {
@@ -32,7 +33,8 @@ require.config({
         "jquery-form": ["jQuery"],
         "selectivizr": ["jQuery"],
         "jquery-mousewheel": ["jQuery"],
-        "custom-scrollbar": ["jQuery", "jquery-mousewheel"]
+        "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
+        "jquery-autosize": ["jQuery"]
     }
 });
 
