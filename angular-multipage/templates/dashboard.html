@@ -1,24 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <title>e-loue</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300" rel="stylesheet">
-    <link href="../static/css/styles.css" rel="stylesheet">
-    <link href="../static/css/chosen.min.css" rel="stylesheet">
-    <link href="../static/img/favicon.ico" rel="shortcut icon">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="../static/css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="../static/css/chosen.min.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="shortcut icon" href="../static/img/favicon.ico">
+    <!-- jQuery-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!-- for IE < 9 -->
+    <!-- html5 tags supported-->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <!-- palceholder supported-->
+    <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
+    <!-- selectivizr-->
+    <script src="../static/js/selectivizr.js"></script>
+    <!-- custom scrollbar -->
+    <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
+    <script src="../static/js/jquery.mCustomScrollbar.js"></script>
+    <!-- textarea autoresize-->
+    <!-- http://www.jacklmoore.com/autosize/-->
+    <script src="../static/js/jquery.autosize.js"></script>
+    <!-- custom select -->
+    <!-- http://harvesthq.github.io/chosen/-->
+    <script src="../static/js/chosen.jquery.min.js"></script>
+    <!-- my script-->
+    <script src="../static/js/dashboard_scripts.js"></script>
 </head>
 <body>
-<div ng-controller="DashboardRootCtrl">
-    <!-- TODO remove temporary menu -->
-    <a ui-sref="dashboard">Dashboard</a><br />
-    <a ui-sref="messages">Messages</a><br />
-    <a ui-sref="bookings">Bookings</a><br />
-    <a ui-sref="items">Items</a><br />
-    <a ui-sref="account">Account</a><br />
-    <!-- end of temporary menu -->
-    <div ui-view></div>
+<div class="container-full-screen" data-ng-controller="DashboardRootCtrl">
+    <header>header</header>
+    <article class="dashboard">
+        <nav class="bg-success">
+            <ul>
+                <li><a ui-sref="dashboard" class="text-success-dark"><i class="fa fa-home"></i>Dashboard</a></li>
+                <li><a ui-sref="messages" class="text-success-dark"><i class="fa fa-envelope-o"></i>Messages</a></li>
+                <li><a ui-sref="bookings" class="text-success-dark"><i class="fa fa-shield"></i>Booking</a></li>
+                <li><a ui-sref="items" class="text-success-dark"><i class="fa fa-th-list"></i>Items</a></li>
+                <li><a ui-sref="account" class="text-success-dark"><i class="fa fa-user"></i>Account</a></li>
+            </ul>
+        </nav>
+        <div ui-view></div>
+    </article>
 </div>
 <script src="../static/bower_components/requirejs/require.js" data-main="../static/js/dashboard/main.js"></script>
 </body>
