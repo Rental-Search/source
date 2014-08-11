@@ -60,6 +60,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, $filter, MessageThreads, ProductRelatedMessagesService, UsersService, UtilsService) {
                 var messageThreadsService = {};
 
+                /**
+                 * Retrieves list of message threads.
+                 *
+                 * @returns list of message threads
+                 */
                 messageThreadsService.getMessageThreads = function () {
                     var self = this;
                     var deferred = $q.defer();
@@ -107,6 +112,51 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 threadDeferred.resolve(result);
                             });
                             promises.push(threadDeferred.promise);
+                        });
+
+                        $q.all(promises).then(function (results) {
+                            deferred.resolve(results);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                /**
+                  * Retrieves list messages for a specific thread.
+                 *
+                  * @param threadId identifier of a thread
+                 */
+                messageThreadsService.getMessages = function (threadId) {
+                    var self = this;
+                    var deferred = $q.defer();
+
+                    MessageThreads.get({id: threadId}).$promise.then(function (thread) {
+                        var promises = [];
+
+                        // For each message
+                        angular.forEach(thread.messages, function (value, key) {
+                            var messageDeferred = $q.defer();
+
+                            // Get message
+                            var messageId = self.getIdFromUrl(value);
+                            ProductRelatedMessagesService.getMessage(messageId).$promise.then(function (data) {
+                                var result = {
+                                    id: data.id,
+                                    body: data.body,
+                                    date: data.sent_at
+                                };
+
+                                // Get sender
+                                var senderId = self.getIdFromUrl(data.sender);
+                                UsersService.get(senderId).$promise.then(function (sender) {
+                                    result.username = sender.slug;
+                                    result.icon = sender.avatar.thumbnail;
+                                    messageDeferred.resolve(result);
+                                });
+                            });
+
+                            promises.push(messageDeferred.promise);
                         });
 
                         $q.all(promises).then(function (results) {
