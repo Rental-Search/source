@@ -16,7 +16,8 @@ require.config({
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../bower_components/chosen/chosen.jquery.min",
-        "vars": "../vars"
+        "vars": "../vars",
+        "dashboard_scripts": "../dashboard_scripts"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -36,7 +37,8 @@ require.config({
         "jquery-mousewheel": ["jQuery"],
         "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
         "jquery-autosize": ["jQuery"],
-        "jquery-chosen": ["jQuery"]
+        "jquery-chosen": ["jQuery"],
+        "dashboard_scripts": ["jQuery"]
     }
 });
 
