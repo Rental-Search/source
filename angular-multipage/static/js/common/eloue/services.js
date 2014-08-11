@@ -90,7 +90,19 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 result.message = threadResults[0].body;
                                 result.icon = threadResults[1].avatar.thumbnail;
                                 result.username = threadResults[1].slug;
-                                result.date = UtilsService.formatDate(threadResults[0].sent_at, "dd.mm.yyyy HH'h'mm");
+
+                                // Set date
+                                var sentDate = new Date(threadResults[0].sent_at);
+                                var nowDate = new Date();
+                                var dateFormat;
+
+                                // If date is today
+                                if (sentDate.setHours(0,0,0,0) === nowDate.setHours(0,0,0,0)) {
+                                    dateFormat = "HH'h'mm";
+                                } else {
+                                    dateFormat = "dd.mm.yyyy HH'h'mm";
+                                }
+                                result.date = UtilsService.formatDate(threadResults[0].sent_at, dateFormat);
 
                                 threadDeferred.resolve(result);
                             });
