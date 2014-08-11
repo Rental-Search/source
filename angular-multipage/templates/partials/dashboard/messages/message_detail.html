@@ -1,1 +1,10 @@
-<h3>{{title}}</h3>
+<h3>DETAIL PAGE:</h3>
+<ul>
+    <li ng-repeat="message in messages track by message.id">
+        <p>{{message.username}}</p>
+        <img ng-src="{{message.icon}}">
+        <p>{{message.date}}</p>
+        <p>{{message.body}}</p>
+        <br />
+    </li>
+</ul>

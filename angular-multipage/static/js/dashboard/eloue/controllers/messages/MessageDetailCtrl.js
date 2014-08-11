@@ -8,8 +8,11 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("MessageDetailCtrl", [
         "$scope",
         "$stateParams",
-        function ($scope, $stateParams) {
-            $scope.title = "Message detail title: " + $stateParams.id;
+        "MessageThreadsService",
+        function ($scope, $stateParams, MessageThreadsService) {
+            MessageThreadsService.getMessages($stateParams.id).then(function (data) {
+                $scope.messages = data;
+            });
         }
     ]);
 });

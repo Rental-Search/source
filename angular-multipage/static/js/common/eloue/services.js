@@ -95,19 +95,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 result.message = threadResults[0].body;
                                 result.icon = threadResults[1].avatar.thumbnail;
                                 result.username = threadResults[1].slug;
-
-                                // Set date
-                                var sentDate = new Date(threadResults[0].sent_at);
-                                var nowDate = new Date();
-                                var dateFormat;
-
-                                // If date is today
-                                if (sentDate.setHours(0,0,0,0) === nowDate.setHours(0,0,0,0)) {
-                                    dateFormat = "HH'h'mm";
-                                } else {
-                                    dateFormat = "dd.mm.yyyy HH'h'mm";
-                                }
-                                result.date = UtilsService.formatDate(threadResults[0].sent_at, dateFormat);
+                                result.date = UtilsService.formatMessageDate(threadResults[0].sent_at,
+                                    "HH'h'mm", "dd.mm.yyyy HH'h'mm");
 
                                 threadDeferred.resolve(result);
                             });
@@ -123,9 +112,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 /**
-                  * Retrieves list messages for a specific thread.
+                 * Retrieves list messages for a specific thread.
                  *
-                  * @param threadId identifier of a thread
+                 * @param threadId identifier of a thread
                  */
                 messageThreadsService.getMessages = function (threadId) {
                     var self = this;
@@ -144,7 +133,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 var result = {
                                     id: data.id,
                                     body: data.body,
-                                    date: data.sent_at
+                                    date: UtilsService.formatMessageDate(data.sent_at,
+                                        "HH'h'mm", "dd.mm.yyyy HH'h'mm")
                                 };
 
                                 // Get sender
@@ -202,6 +192,20 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
             utilsService.formatDate = function (date, format) {
                 return $filter("date")(date, format);
+            };
+
+            utilsService.formatMessageDate = function (dateString, shortFormat, fullFormat) {
+                var sentDate = new Date(dateString);
+                var nowDate = new Date();
+                var dateFormat;
+
+                // If date is today
+                if (sentDate.setHours(0, 0, 0, 0) === nowDate.setHours(0, 0, 0, 0)) {
+                    dateFormat = shortFormat;
+                } else {
+                    dateFormat = fullFormat;
+                }
+                return this.formatDate(dateString, dateFormat);
             };
 
             return utilsService;
