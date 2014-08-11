@@ -80,23 +80,31 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             };
 
                             var threadDeferred = $q.defer();
-                            var threadPromises = [];
+                            var threadPromises = {};
 
-                            // Get last message
-                            var messageId = self.getIdFromUrl(value.last_message);
-                            threadPromises.push(ProductRelatedMessagesService.getMessage(messageId).$promise);
+                            if (!value.last_message) {
+                                result.message = "";
+                                result.date = "";
+                            } else {
+                                // Get last message
+                                var messageId = self.getIdFromUrl(value.last_message);
+                                threadPromises.lastMessage = ProductRelatedMessagesService.getMessage(messageId).$promise;
+                            }
 
                             // Get sender
+                            // TODO probably the field needs to be changed
                             var senderId = self.getIdFromUrl(value.sender);
-                            threadPromises.push(UsersService.get(senderId).$promise);
+                            threadPromises.sender = UsersService.get(senderId).$promise;
 
                             // Set information in the result object
                             $q.all(threadPromises).then(function (threadResults) {
-                                result.message = threadResults[0].body;
-                                result.icon = threadResults[1].avatar.thumbnail;
-                                result.username = threadResults[1].slug;
-                                result.date = UtilsService.formatMessageDate(threadResults[0].sent_at,
-                                    "HH'h'mm", "dd.mm.yyyy HH'h'mm");
+                                if (!!threadResults.lastMessage) {
+                                    result.message = threadResults.lastMessage.body;
+                                    result.date = UtilsService.formatMessageDate(threadResults.lastMessage.sent_at,
+                                        "HH'h'mm", "dd.mm.yyyy HH'h'mm");
+                                }
+                                result.icon = threadResults.sender.avatar.thumbnail;
+                                result.username = threadResults.sender.username;
 
                                 threadDeferred.resolve(result);
                             });
