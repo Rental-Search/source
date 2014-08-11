@@ -11,6 +11,7 @@ require.config({
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
+        "selectivizr": "../../bower_components/selectivizr/selectivizr",
         "vars": "../vars"
     },
     shim: {
@@ -26,7 +27,8 @@ require.config({
         },
         "jQuery": {exports: "jQuery"},
         "bootstrap": ["jQuery"],
-        "jquery-form": ["jQuery"]
+        "jquery-form": ["jQuery"],
+        "selectivizr": ["jQuery"]
     }
 });
 
