@@ -6,6 +6,7 @@ define(["angular",
         "angular-ui-router",
         "jquery-form",
         "selectivizr",
+        "custom-scrollbar",
         "../../common/eloue/commonApp"],
     function (angular) {
         // Create dashboard application

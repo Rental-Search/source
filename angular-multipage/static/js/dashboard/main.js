@@ -12,6 +12,8 @@ require.config({
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
         "selectivizr": "../../bower_components/selectivizr/selectivizr",
+        "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
+        "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "vars": "../vars"
     },
     shim: {
@@ -28,7 +30,9 @@ require.config({
         "jQuery": {exports: "jQuery"},
         "bootstrap": ["jQuery"],
         "jquery-form": ["jQuery"],
-        "selectivizr": ["jQuery"]
+        "selectivizr": ["jQuery"],
+        "jquery-mousewheel": ["jQuery"],
+        "custom-scrollbar": ["jQuery", "jquery-mousewheel"]
     }
 });
 
