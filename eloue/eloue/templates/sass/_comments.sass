@@ -1,0 +1,73 @@
+.float-comments
+	$pad: 1em
+	height: $comments-height
+	overflow: hidden
+	position: relative
+	> .container,
+	> .container > .row
+		height: 100%
+
+	.decorated-houses
+		background: url(../img/houses.png) repeat-x
+		background-position: -20% 100%
+		width: 100%
+		height: px(130)
+		position: absolute
+		bottom: 0
+		left: 0
+
+	ul
+		position: relative
+		height: 100%
+		li
+			padding: 0
+			position: absolute
+			bottom: 20px
+			&.test
+				top: 10px
+			&.test2
+				top: -50px
+				right: 0
+			a
+				$height: px(40)
+				padding: $pad $pad $pad ($pad * 5.5) !important
+				color: white
+				background-color: $brand-primary
+				font-weight: $fw-semibold
+				+border-top-radius(px(5))
+				+border-bottom-radius(px(5))
+				&:before
+					content: ''
+					position: absolute
+					width: 0
+					height: 0
+					border-style: solid
+					border-color: $brand-primary transparent transparent
+					border-width: $pad
+					left: $pad*1.5
+					top: 100%
+				&:focus,
+				&:hover
+					background-color: darken($brand-primary,10%) !important
+					&:before
+						border-top-color: darken($brand-primary,10%)
+				img
+					+border-top-radius(50%)
+					+border-bottom-radius(50%)
+					position: absolute
+					left: 0
+					top: 0
+					width: $height
+					margin: $pad * $line-height-base
+				p
+					color: inherit
+					margin-bottom: .5em
+					line-height: 1.4em
+					&.text
+						font-size: px(13)
+					&.info
+						font-size: px(11)
+				h6
+					z-index: px(12)
+					margin-bottom: .5em
+					font-weight: $fw-bold

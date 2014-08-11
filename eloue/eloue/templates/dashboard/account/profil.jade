@@ -1,0 +1,114 @@
+extends ./_base_account
+block sections
+  aside.profil-info.scrollbar-custom.text-gray
+    .section-content
+      form#change-photo(action="")
+        h2 Informations personnelles
+        .row
+          //- change photo
+          .block-with-thumbnail.form-control.col-sm-12
+            .col-thumbnail
+              .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo")
+            .col-exposition
+              label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white.indent-md-v Modifier mon image
+                input(type="file")#change-img
+      form#profile-information(action="")
+        //- proffessional radio btns
+        .row
+          .col-sm-5
+            h3 Je suis un professionnel ?
+          .col-sm-2
+            label.rad-btn.form-control Oui
+              input#newsletter(type="radio", name="is-pro")
+              i
+          .col-sm-2
+            label.rad-btn.form-control Non
+              input#is-pro(type="radio", name="is-pro", checked)
+              i
+        //- nackname & email
+        .row
+          .col-sm-12
+            input#nickname.form-control(type="text", name="nickname", placeholder="Pseudo *", required, autofocus)
+        .row
+          .col-sm-12
+            input#email.form-control(type="email", name="email", placeholder="Email *", required)
+        //- gender, first-name, name
+        .row
+          .col-sm-2.without-search
+            .form-control
+              select
+                option(value="male") M.
+                option(value="female") F.
+          .col-sm-5
+            input#first-name.form-control(type="text", name="first-name", placeholder="Prénom *", required)
+          .col-sm-5
+            input#name.form-control(type="text", name="name", placeholder="Nom *", required)
+        //- address
+        .row
+          .col-sm-12.select-gradient.without-search.form-control
+            p.text-uppercase: b: small adresse par défaut
+            select
+              option(value="#{tenant.address}") #{tenant.address}
+            h4.indent-sm-v.text-right.text-success-hover: a(href="#") Ajouter ou modifier une adresse
+        //- telephone
+        .row
+          .col-sm-12.select-gradient.without-search.form-control
+            p.text-uppercase: b: small téléphone par défaut
+            select
+              -each telefone in tenant.telephones
+                option(value="#{telefone}") #{telefone}
+            h4.indent-sm-v.text-right.text-success-hover: a(href="#") Téléphone par défaut
+        //- about myself
+        .row
+          .col-sm-12
+            textarea#about-myself.expand.form-control(name="about-myself", tabindex="1", rows="6" placeholder="A propos de vous...")
+        //- languages
+        .row
+          .col-sm-12.without-search.form-control
+            select(multiple="", data-placeholder="Langues parlées")
+              -each language in tenant.languages
+                option(value="#{language.ID}") #{language.self}
+        //- newsletter
+        .row
+          .col-sm-8
+            h3 J’accepte de recevoir la newsletter e-loue
+          .col-sm-2
+            label.rad-btn.form-control Oui
+              input#newsletter(type="radio", name="newsletter")
+              i
+          .col-sm-2
+            label.rad-btn.form-control Non
+              input#newsletter(type="radio", name="newsletter", checked)
+              i
+        h2 Informations sur le permis
+        //- date birthday
+        .row.form-control
+          .col-sm-2
+            select#select-day(name="select-day", data-placeholder="Jour")
+              -each day in days
+                option(value="#{day}") #{day}
+          .col-sm-4
+            select#select-month(name="select-month", data-placeholder="Mois")
+              -each month in months
+                option(value="#{month}") #{month}
+          .col-sm-3
+            select#select-year(name="select-year", data-placeholder="Année")
+              -each year in years
+                option(value="#{year}") #{year}
+        //- license-number
+        .row
+          .col-sm-12
+            input#license-number.form-control(type="text", name="license-number *", placeholder="Numéro de permis *", required)
+        //- drag photo
+        .row
+          .col-sm-12.form-control
+            label(for="change-img").file-input-drag
+              i.fa.fa-plus.fa-4x
+              br
+              | Ajouter une photo de votre permis
+              input(type="file")#change-img
+            h4.indent-sm-v.text-right.text-success-hover: a(href="#") Modifier la photo du permis
+        //- btn submit
+        .row
+          .col-sm-6.col-sm-offset-3
+            button(type="submit").btn.bg-success-hover.text-white Enregistrez les informations

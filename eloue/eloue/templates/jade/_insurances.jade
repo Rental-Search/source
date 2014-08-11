@@ -1,0 +1,12 @@
+.container
+  ul.nav.nav-justified
+    -each insurance in insurances
+      li.divide
+      li
+        .insurances-img
+          span( class = insurance[0])
+        h5 #{insurance[1]}
+        p 
+          | #{insurance[2]}
+          br
+          | #{insurance[3]}

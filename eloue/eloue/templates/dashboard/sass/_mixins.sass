@@ -1,0 +1,75 @@
+=indented-text($variant: black)
+  color: rgba($variant, .6)
+  text-shadow: .1em .05em 0 rgba(invert($variant), .3)
+
+=text-shadow($attr)
+  text-shadow: $attr
+  // PIE
+
+=linear-gradient($attr)
+  background: linear-gradient($attr)
+  // PIE
+
+=border-radius($attr)
+  border-radius: $attr
+  // PIE
+
+=box-shadow($attr)
+  box-shadow: $attr
+  // PIE
+
+=centred-abs()
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  position: absolute
+  margin: auto
+
+=text-hide()
+  font: #{0/0} a
+  color: transparent
+  text-shadow: none
+  background-color: transparent
+  border: 0
+
+=text-overflow()
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+// создание цветовой палитры для элементов
+=make-colors($selector, $color)
+  .text-#{$selector}
+    color: $color
+
+  .text-#{$selector}-hover
+    color: $color
+    cursor: pointer
+    transition: color $trns-fast
+    &:hover
+      color: darken($color, 10%)
+
+  .text-#{$selector}-dark
+    color: darken($color, 20%)
+
+  .text-#{$selector}-light
+    color: lighten($color, 20%)
+
+
+  .bg-#{$selector}
+    background: $color
+
+  .bg-#{$selector}-hover
+    background: $color
+    cursor: pointer
+    transition: background-color $trns-fast
+    &:hover
+      background: darken($color, 10%)
+
+  .bg-#{$selector}-dark
+    background-color: darken($color, 40%)
+
+  .bg-#{$selector}-light
+    background-color: lighten($color, 40%)
+

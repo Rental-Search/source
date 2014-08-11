@@ -1,0 +1,40 @@
+extends ./base
+
+block variables
+  -var STATIC_URL = "../static/"
+  -var STYLESHEET_NAME = "homepage_styles"
+
+block content
+  include ./jade/_src
+  header.header-site
+    include ./jade/_header_site
+  nav.nav-home.container
+    include ./jade/_nav_home
+
+  article
+    section.banner
+      include ./jade/_banner
+    section.insurances.framing
+      include ./jade/_insurances
+    section.product-list
+      include ./jade/_product_list
+    section.float-comments.framing
+      include ./jade/_comments
+    section.location-list
+      include ./jade/_location_list
+
+  main
+    section.download-mobile-apps.framing
+      include ./jade/_download_mobile_apps
+    section.watch-video
+      include ./jade/_watch_video
+    section.professional-renter-content.framing
+      include ./jade/_professional_renter_content
+    section.talk-about-us
+      include ./jade/_talk_about_us
+
+  footer
+    section.footer-links.framing
+      include ./jade/_footer_links
+    section.rss
+      include ./jade/_rss

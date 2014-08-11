@@ -1,0 +1,19 @@
+.modal.fade#pop-up-send-message(tabindex="-1", role="dialog", aria-hidden="true")
+	.modal-dialog.large
+		.modal-content
+			.modal-header
+				button(type="button", data-dismiss="modal").close
+					span(aria-hidden="true")&times;
+					span.sr-only Close
+				h4.modal-title Message
+			.modal-body.table-cell
+				.static-part.table-cell
+					section.product-info
+						include ./pop_up_sections/_product_info
+					section.terms
+						include ./pop_up_sections/_terms
+				.change-part.table-cell
+					section.dialogs
+						include ./pop_up_sections/_dialogs
+					section.input-message
+						include ./pop_up_sections/_input_message

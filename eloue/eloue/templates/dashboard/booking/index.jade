@@ -1,0 +1,145 @@
+extends ../jade/_base_dashboard
+
+block variables
+  -var STATIC_URL = "../../../static/"
+  -var src_img = "dashboard/booking"
+
+block content
+  section.tabs-vertical-active.lg
+    .section-header
+      .row.indent-xs-v
+        .col-xs-9.tabs-horisontal-active
+          ul.list-without-spaces
+            each tab in booking_detail.horisontal_tabs
+              li.divider
+              li.tab-horisontal: h3.small #{tab}
+        .col-xs-3
+          .select-gradient.without-search.date-picker
+            select
+              option(value="statut") Statut
+              option(value="statut") Statut
+              option(value="statut") Statut
+    ul.scrollbar-custom
+      each booking in bookings
+        li.tab-vertical.block-with-thumbnail(class="#{booking.bage.classname}")
+          .col-thumbnail
+            .thumbnail
+              a(href="#"): img(src="#{STATIC_URL}img/#{booking.lot.thumbnail}", alt="#{booking.lot.name} photo", width="130")
+              span.booking-bage #{booking.bage.text}
+          .col-exposition
+            h3.small
+              | Location 
+              a(href="#").text-underline-hover #{booking.lot.name}
+            p.normal.text-gray
+              big.text-primary #{booking.lot.price}€
+              br
+              | Du #{booking.date_of} au #{booking.date_to}
+  aside.booking-detail.scrollbar-custom
+    .section-content
+      .block-with-thumbnail
+        .col-thumbnail
+          .thumbnail: a(href="#")
+            img(src="#{STATIC_URL}img/#{booking_detail.lot.thumbnail}", alt="#{booking_detail.lot.name} photo", width="200")
+        .col-exposition
+          .indent-sm-h
+            h3: b #{booking_detail.lot.name}
+            p.text-gray.indent-sm-h.indent-xs-v
+              i.fa.fa-map-marker.fa-lg.fa-li
+              | #{booking_detail.lot.address}, #{booking_detail.lot.index}
+              br
+              | #{booking_detail.lot.location}
+              .block-with-thumbnail.indent-sm-v.indent-sm-
+                .col-thumbnail
+                  .thumbnail: a(href="#")
+                    img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                .col-exposition.text-gray
+                  .indent-xs-h
+                    h3.small: a(href="#").text-underline-hover #{booking_detail.lot.owner.first_name} #{booking_detail.lot.owner.name}
+                    p.indent-xs-v
+                      +average-rate(booking_detail.lot.owner.rate)
+                    p
+                      +number-of-comments(booking_detail.lot.owner.comments_count)
+                      +number-of-bookings(booking_detail.lot.owner.booking_count)
+
+      .bg-success-light.text-success.bd-rad
+        i.fa.fa-phone.fa-lg.indent-xs-h
+        span.indent-sm-h
+          | Joignable au 
+          b 01 47 00 00 00 
+          | ou
+        a(href="").btn-inline.text-white.bg-success-hover Envoyez un message
+
+      .block-with-thumbnail.notification.indent-md-v
+        .col-thumbnail
+          .thumbnail: .icon-action: i.fa.fa-check-circle-o.fa-lg
+        .col-exposition.text-action
+          h3: b Réservation acceptée par 
+            a(href="").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+          ul.zebra-list.indent-md-v
+            each info in booking_detail.informations
+              li.clearfix
+                .col-xs-3 #{info.title}
+                if info.allocate
+                  .col-xs-9.text-success #{info.value}
+                else
+                  .col-xs-9 #{info.value}
+          .text-right
+            a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
+            a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
+
+      .block-with-thumbnail.text-gray.notification
+        .col-thumbnail
+          .thumbnail: i.fa.fa-pencil.fa-3x
+        .col-exposition
+          form(action="")
+            textarea.expand(name="msg", rows="4", placeholder="Écrire un commentaire...")
+            p.text-justify-force.indent-sm-t
+              span
+                | Notes :&nbsp;&nbsp;
+                +average-rate(0)
+              button(type="submit").btn-inline.bg-success.text-white Envoyer
+
+    section.booking-activity-feed.text-gray-strong
+      ul.section-content
+        li.reply-to-message: a(href="#").text-success.text-underline-hover 
+          i.fa.fa-mail-reply &nbsp;&nbsp;
+          | Répondre au message
+
+        each item in booking_detail.feed
+          if item.type == "date"
+            li.feed-date-bage: span #{item.value}
+          else
+            li.block-with-thumbnail.notification.indent-md-v
+              .col-thumbnail
+                .thumbnail: .icon-action: i.fa.fa-lg(class="fa-#{item.icon}")
+              .col-exposition.text-action
+                .block-with-thumbnail
+
+                  .col-thumbnail
+                    if item.type == "amount"
+                      .thumbnail.indent-sm-r
+                        img(src="#{STATIC_URL}/img/money.png", alt="", width="40", height="40")
+                    else
+                      .thumbnail.indent-sm-r.round: a(href="#")
+                        case item.type
+                          when "message"
+                            img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                          when "booking"
+                            img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="", width="40", height="40")
+                          when "request"
+                            img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+
+                  .col-exposition
+                    case item.type
+                      when "message"
+                        h3.text-black.indent-xs-b: b Message envoyé par 
+                          a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                        p.norm #{item.value}
+                      when "booking"
+                        p.norm Demande acceptée par 
+                          a(href="#").text-success.text-underline-hover #{tenant.first_name}
+                      when "request"
+                        p.norm Demande de réservation par 
+                          a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                      when "amount"
+                        p.norm Prix de la location débitée avec succès !

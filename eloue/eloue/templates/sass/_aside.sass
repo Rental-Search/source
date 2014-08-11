@@ -1,0 +1,112 @@
+aside
+  color: $gray-strong
+  padding-top: $section-pad
+
+  .booking-form
+    p
+      margin: 0 0 .5em 
+    .available
+      padding-top: 1em
+      color: $brand-success
+      &:before
+        font-family: "FontAwesome"
+        content: "\f00c"
+        font-size: .7em
+        display: inline-block
+        text-align: center
+        width: 2em
+        height: 2em
+        line-height: 2em
+        margin-right: 1em
+        +border-top-radius(50%)
+        +border-bottom-radius(50%)
+        background-color: $brand-success
+        color: white
+      &.unavailable
+        color: $brand-danger
+        &:before
+          background-color: $brand-danger
+          content: "\f00d"
+
+  .btn
+    +btn(px(14,$section-fz))
+    margin-bottom: $section-pad/2
+    color: white !important
+    span
+      display: inline-block
+      margin-right: 1em
+      vertical-align: middle
+    &.calendar-ok
+      span
+        +sprite($s-calendar-ok)
+    &.call
+      span
+        +sprite($s-call)
+    &.send-message
+      span
+        +sprite($s-mail)
+  .add-to-wishlist a
+    margin: 0
+
+  .owner-information
+    .block-thumbnail
+      +block-with-thumbnail(px(80, $section-fz), 50%)
+      .rate
+        margin: .5em 0
+    .connection
+      > div
+        padding: 0
+        p
+          margin: 0
+
+    .connection
+      .friend-photo-wrapper
+        display: inline-block
+        *display: inline
+        *zoom: 1
+        margin-right: .5em
+        margin-bottom: .5em
+        width: px(30, $section-fz)
+        height: px(30, $section-fz)
+        line-height: px(30, $section-fz)
+        img
+          height: 100%
+          width: 100%
+      p
+        display: inline-block
+        *display: inline
+        *zoom: 1
+        a
+          color: lighten($brand-info, 15%)
+          font-weight: bolder
+  .similar-listing
+    li
+      +block-with-thumbnail(px(80, $section-fz), $bd-rad)
+      h6
+        color: $gray-dark
+        font-weight: $fw-semibold
+        font-size: px(13)
+        margin: .5em 0 0
+      p
+        margin: .25em 0 .5em !important
+  .connected-with-owner
+    p
+      margin: 1em 0 0
+    .facebook-box
+      background-color: $brand-info
+      color: $brand-info
+      display: inline-block
+      *display: inline
+      *zoom: 1
+      margin-bottom: $section-pad
+      +border-top-radius($bd-rad)
+      +border-bottom-radius($bd-rad)
+      span
+        display: inline-block
+        *display: inline
+        *zoom: 1
+        background-color: white
+        line-height: 1.1em
+        width: 1.1em
+        margin: .2em
+        font-size: px(45)

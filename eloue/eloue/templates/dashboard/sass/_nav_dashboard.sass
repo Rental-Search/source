@@ -1,0 +1,23 @@
+nav
+  overflow: hidden
+  ul
+    font-weight: $fw-bold
+    text-align: center
+    padding: 1em
+    font-size: $font-size-small
+  i
+    display: block
+    font-size: 3em
+    margin-bottom: .2em
+  a
+    display: block
+    padding: 1em 1em
+    margin: 1em 0
+    transition: color $trns-fast ease-out
+    +indented-text()
+    &:hover,
+    &.current
+      color: white
+      text-shadow: none
+    &:active
+      +indented-text()

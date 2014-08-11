@@ -1,0 +1,297 @@
+.input-group
+  display: table
+  border-collapse: separate
+  position: relative
+  width: 100%
+  > *
+    display: table-cell
+    vertical-align: middle
+  .input-group-addon
+    padding-left: $indent-xs
+    padding-right: $indent-xs
+
+.form-control
+  margin-bottom: $indent-sm
+  width: 100%
+  display: block
+  +clearfix()
+
+// custom buttons for anchor, buttons and input[type="file"] tags
+.btn,
+.btn-inline
+  +border-radius($bdrs)
+  white-space: nowrap
+  cursor: pointer
+  font-weight: $fw-bold
+  text-align: center
+  border: 1px solid transparent
+
+.btn
+  font-size: $font-size-base
+  display: table-cell
+  vertical-align: middle
+  padding: 0 2em
+  height: $form-height
+.btn-inline
+  font-size: $font-size-base - 1
+  display: inline-block
+  line-height: 1
+  padding: .75em 1em
+
+// custom file input button
+label.file-input-btn,
+label.file-input-drag
+  cursor: pointer
+  input
+    display: table-column
+    display: inline\9
+    height: 0
+    overflow: hidden
+    font-size: 0
+    width: 0
+    padding: 0
+
+label.file-input-drag
+  width: 100%
+  border-radius: $bdrs
+  border: 3px dashed $gray-light
+  display: block
+  text-align: center
+  padding: $indent-md
+  transition-property: border-color, color
+  transition-duration: $trns-fast
+  &:hover
+    border-color: $gray-medium
+    color: $gray-strong
+
+// custom radio
+label.rad-btn
+  cursor: pointer
+  input
+    display: none
+    display: inline\9
+    height: 0
+    overflow: hidden
+    font-size: 0
+    width: 0
+    padding: 0
+    &:checked + i:before
+      width: 40%
+      height: 40%
+  i
+    display: inline-block
+    width: $check-box-size
+    height: $check-box-size
+    margin: 0 .5em (-$check-box-size +1)
+    border: $bd-lighter
+    position: relative
+    background-color: white
+    +border-radius(50%)
+    &:before
+      background-color: $gray-strong
+      width: 0
+      height: 0
+      transition-property: width, height
+      transition-duration: $trns-flash
+      content: ""
+      +centred-abs()
+      +border-radius(50%)
+  &:hover i
+    border-color: $gray-medium
+
+// custom checkbox
+
+// custom select
+.chosen-container
+  font-weight: inherit
+  &.chosen-with-drop
+    .chosen-choices,
+    .chosen-single
+      background: white
+      border-color: $gray-medium
+      +border-radius($bdrs $bdrs 0 0 !important)
+    .chosen-single
+      span:after
+        content: "\f0d8"
+  font-size: inherit
+  height: $form-height
+  text-align: center
+  width: 100% !important
+  display: block
+  font-weight: $fw-semibold
+  .chosen-single
+    display: table
+    box-shadow: none
+    width: 100%
+    padding: 0 !important
+    div
+      display: none
+    span
+      vertical-align: middle
+      display: table-cell
+      margin: 0
+      padding-right: 1em
+      &:after
+        content: "\f0d7"
+        position: absolute
+        right: 1em
+        font-family: $font-family-icon
+  &.chosen-container-multi
+    height: auto
+    .chosen-choices
+      padding: 0
+      min-height: 0 !important
+      height: auto !important
+      padding: .5em
+      +clearfix()
+      .search-choice
+        padding: .5em
+        margin: .5em
+        background: none
+        color: $gray-medium
+        .search-choice-close
+          background: none
+          top: 0
+          left: 0
+          width: 100%
+          height: 100%
+          z-index: 100
+      .search-field
+        input
+          color: $gray-medium !important
+          margin: 0 !important
+          padding: 0 0 0 .5em !important
+          height: .5em !important
+  .chosen-drop
+    background-color: white
+    border-color: $gray-medium
+    border-width: px(1)
+    border-top-width: 0
+    max-height: 240px
+    margin-top: 0
+  .chosen-search
+    padding: 0
+    margin: 0
+    input
+      border-width: 0 0 1px !important
+      font-weight: $fw-regular
+  .chosen-results
+    padding: 0
+    margin: 0
+    overflow: hidden
+    max-height: none !important
+    li
+      color: $gray-medium
+      &.highlighted
+        background: $gray-lighter
+        &:hover
+          color: $gray-medium
+      &.result-selected
+        background: $gray-light
+        &:hover
+          color: white
+
+// .universal-picker
+.select-gradient .chosen-container
+  .chosen-choices,
+  .chosen-single
+    border: none
+    border-bottom: $bd-lighter
+    background-color: $gray-lighter !important
+    +linear-gradient((to bottom, white, darken($gray-lite,2%)))
+  .chosen-drop
+    border-color: $gray-lighter
+
+// without searc
+.without-search .chosen-search
+  display: none
+
+// custom areas
+textarea,
+input[type="text"],
+input[type="email"],
+.chosen-container .chosen-choices,
+.chosen-container .chosen-single
+  font-size: inherit
+  +placeholder($gray-medium)
+  background: white
+  font-family: inherit !important
+  font-weight: $fw-semibold 
+  color: $gray-medium !important
+  min-height: $form-height
+  padding: 0 1em
+  padding-top: .8em\9
+  border: $bd-light
+  box-shadow: none
+  transition: border-color $trns-fast
+  overflow: visible
+  +border-radius($bdrs)
+  &:hover,
+  &:focus
+    border-color: $gray-medium
+  &:invalid
+    border-color: lighten($brand-danger, 20%)
+  &:invalid:focus,
+  &:invalid:hover
+    border-color: $brand-danger
+
+// custom textarea
+textarea
+  resize: none
+  height: auto
+  padding: 1em 1em 0
+  width: 100%
+  font-family: inherit
+  .autosizejs
+    line-height: 20px
+.send-dialog-message
+  background: white
+  width: 100%
+  position: absolute
+  z-index: 1000
+  min-height: $form-message-area-height
+  border-top: $bd-lighter
+  bottom: 0
+  padding: $indent-sm*$indent-vertical $indent-sm
+  +box-shadow(0 -5px 5px rgba(0,0,0,.05))
+  .textarea-wrapper
+    padding-bottom: $form-height + 1
+    min-height: 100%
+  button
+    position: absolute
+    bottom: 0
+    right: 0
+    margin: $indent-sm*$indent-vertical $indent-sm
+  textarea
+    border: none
+    padding: 0
+
+
+// date picker
+.date-picker
+  display: table
+  width: 100%
+  > *
+    display: table-cell
+    width: auto !important
+    height: $date-picker-height
+    vertical-align: middle
+  .input-group
+    height: 100%
+  input
+    font-family: inherit !important
+    +placeholder($gray-medium)
+    color: inherit
+    font-weight: $fw-semibold !important
+    height: $date-picker-height
+    padding: 0 .5em
+    width: 100%
+    border: none
+  .chosen-container
+    margin-left: $indent-xs
+    height: $date-picker-height
+  .chosen-single
+    min-height: 0 !important
+    height: 100%
+    padding-left: $indent-sm !important
+    padding-right: $indent-sm !important

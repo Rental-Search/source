@@ -1,0 +1,41 @@
+.section-header
+	h4 Contactez-moi
+.section-body
+	.part
+		.block-thumbnail
+			.thumbnail-img
+				a(href="#")
+					img(src=STATIC_URL+"img/home-products/declare2r.png", alt="")
+			.thumbnail-content
+				h5 
+					a(href="#") Gaspard Kroutchev
+				include ../../_rate
+				p
+					| Membre depuis le
+					br
+					span 12 Juillet 2013
+	.part
+		a(href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up-send-message").btn.bg-success.send-message
+			span
+			| Envoyez un message
+		a(href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up-call").btn.bg-success.call
+			span
+			| Appelez
+		ul.nav.stats
+			-each stat in stats
+				li
+					span
+						big.text-success #{stat[0]} 
+					span #{stat[1]}
+	.part.connection.clearfix
+		.col-sm-4
+			a(href="#").friend-photo-wrapper
+				img(src=STATIC_URL+"img/home-products/friend1.png", alt="")
+			a(href="#").friend-photo-wrapper
+				img(src=STATIC_URL+"img/home-products/friend2.png", alt="")
+		.col-sm-8
+			p: small
+				a(href="#") Philippe Dupré 
+				| et 
+				a(href="#") Tony Finn 
+				| sont amis avec le propriétaire.

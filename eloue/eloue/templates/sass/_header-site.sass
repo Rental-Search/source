@@ -1,0 +1,53 @@
+.header-site
+  .signs-links
+    color: $gray-light
+    font-weight: $fw-semibold
+    font-size: px(12)
+    padding-top: 1em
+    padding-bottom: 1em
+    a
+      color: $brand-primary
+
+  .search-form
+    padding-top: 1.5em
+    padding-bottom: 1.5em
+    font-size: px(14)
+    font-weight: $fw-bold
+    form
+      width: 100%
+      padding: 0 2em
+    .what-field
+      color: $brand-success
+      border-right-width: 0
+      border-color: $gray-medium
+      +placeholder($brand-success)
+    .where-field
+      width: 40%
+      .sprite-location
+        +sprite($s-location-pin)
+        +centred-abs()
+        z-index: 50
+        right: auto
+        left: 1em
+      input
+        width: 100%
+        padding-left: 2.5em
+        border-radius: 0
+        color: $gray-strong
+        border-color: $gray-medium $gray-lighter
+        font-weight: $fw-semibold
+        +placeholder($gray-strong)
+    .btn-search
+      border-left-width: 0
+      .icon-search
+        color: $gray-strong
+        font-size: 1.2em
+
+    .btn-advertise
+      color: white
+      font-weight: inherit
+      padding: 0 1.5em
+
+    .form-control,
+    .btn
+      height: 3em

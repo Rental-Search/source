@@ -1,0 +1,18 @@
+.thumbnail-img
+  a(href="#"): img(src="#{STATIC_URL}#{pop_up.product_info.thumbnail_product}", alt="")
+.thumbnail-content
+  h3 #{pop_up.product_info.header}
+  p.location
+    i.sprite-location
+    | #{pop_up.product_info.location}, #{pop_up.product_info.index}
+  p.stats
+    include ../_rate
+    span.rate-count #{pop_up.product_info.rate_count}
+    span.comments-count
+      i.sprite-comment
+      | #{pop_up.product_info.comments_count}
+  .declarer
+    .thumbnail-img
+      a(href="#"): img(src="#{STATIC_URL}#{pop_up.product_info.thumbnail_declarer}", alt="")
+    .thumbnail-content
+      p #{pop_up.product_info.name_declarer}

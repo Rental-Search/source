@@ -1,0 +1,80 @@
+section.picture-tab
+	.section-body
+		.part
+			ul.nav.without-spaces
+				-var items = [ "Photos", "Tarifs", "Localisation", "Disponibilité", "Assurance" ]
+				-each item in items
+					li
+						a( href = "#" + item ).pad-v-2 #{item}
+			.carousel-wrapper
+				.thumbnail-inner
+					-for(var i = 1; i<=3; i++)
+						.thumbnail-img
+							img(src="img/carousel-product/"+i+".jpg", alt="")
+				#carousel-product.carousel.slide(data-ride="carousel")
+					.carousel-inner
+						-for(var i = 1; i<=3; i++)
+							-if(i===1)
+								.item.active
+									img(src="img/carousel-product/"+i+".jpg", alt="")
+							-else
+								.item
+									img(src="img/carousel-product/"+i+".jpg", alt="")
+					a(href="#carousel-product" role="button" data-slide="prev").left.carousel-control
+						i.icon-chevron-left
+					a(href="#carousel-product" role="button" data-slide="next").right.carousel-control
+						i.icon-chevron-right
+		.part.description
+			h3 Déscription
+			.row
+				.col-sm-6.text
+					p Donec ullamcorper nulla non metus auctor fringilla. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+					p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+				.col-sm-6.properties
+					ul.list-group
+						-if(!properties)
+							-var properties = []
+						-properties.push({"name": "Notation", "value": "32"})
+						-properties.push({"name": "Date d’achat", "value": "2008"})
+						-properties.push({"name": "Marque", "value": "BMW"})
+						-properties.push({"name": "Modèle", "value": "520 Touring"})
+						-properties.push({"name": "Consommation", "value": "4,5 l/100km"})
+						-properties.push({"name": "Prix neuf", "value": "38 000€"})
+						-properties.push({"name": "Puissance", "value": "130 CV"})
+						-each prop in properties
+							li.list-group-item.clearfix
+								span.col-sm-5 #{prop.name}
+								b.col-sm-7 #{prop.value}&nbsp;&nbsp;
+									-if(prop.name==="Notation")
+										include _rate
+		.part.comments.comments-ad
+			h3 Commentaires liés à cette annonce
+			ul.list-group
+				-each i in [1,2,3,4]
+					li.list-group-item.thumbnail
+						.thumbnail-img
+							a(href="#")
+								img(src="img/home-products/comentator.png", alt="")
+						.thumbnail-content
+							h5 
+								a(href="#") Jonathan Moreira
+							p 
+								| Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+								| est non commodo luctus, nisi erat porttitor ligula, eget.
+							small Le 12 Mai 2014
+
+		.part.comments.comments-owner
+			h3 Commentaire liés au propriétaire
+			ul.list-group
+				-each i in [1,2,3,4]
+					li.list-group-item.thumbnail
+						.thumbnail-img
+							a(href="#")
+								img(src="img/home-products/comentator.png", alt="")
+						.thumbnail-content
+							h5 
+								a(href="#") Jonathan Moreira
+							p 
+								| Integer posuere erat a ante venenatis dapibus posuere velit aliquet.
+								| est non commodo luctus, nisi erat porttitor ligula, eget.
+							small Le 12 Mai 2014

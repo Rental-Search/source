@@ -1,0 +1,41 @@
+article.dashboard
+  position: relative
+  +clearfix()
+  @import nav_dashboard
+  > section,
+  > nav
+    float: left
+  > aside
+    float: none
+  > *
+    height: 100%
+    overflow: auto
+  > section,
+  > aside
+    border-top: $bd-lighter
+    border-left: $bd-lighter
+    &:first-child
+      border-left-width: 0
+  .section-content
+    position: relative
+    max-width: $section-content-max-width
+    padding: $indent-md*$indent-vertical $indent-md
+  .section-header
+    background-color: $gray-lite
+    border-bottom: $bd-lighter
+    height: $form-height
+    padding: 0 $indent-sm
+    width: 100%
+    display: table
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 10
+    + *
+      padding-top: 3em
+  > aside
+    background-color: white
+
+  .booking-activity-feed
+    background: $gray-lite url(../img/feed-line.png) repeat-y 4em
+    background-size: 3px 1px

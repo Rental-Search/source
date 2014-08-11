@@ -1,0 +1,16 @@
+.section-header
+	h4 Annonces similaires
+.section-body
+	.part
+		ul.nav
+			-each similar_ad in similar_ads
+				li
+					.thumbnail-img
+						a(href="#")
+							img(src=STATIC_URL+similar_ad.thumbnail, alt="")
+					.thumbnail-content
+						h6 
+							a(href="#") #{similar_ad.header}
+						p
+							small #{similar_ad.place}
+						span.badge.price #{similar_ad.price}€ /jour
