@@ -69,7 +69,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var self = this;
                     var deferred = $q.defer();
 
-                    MessageThreads.get({}).$promise.then(function (threads) {
+                    MessageThreads.get({_cache: new Date().getTime()}).$promise.then(function (threads) {
                         var promises = [];
 
                         // For each message thread
@@ -128,7 +128,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var self = this;
                     var deferred = $q.defer();
 
-                    MessageThreads.get({id: threadId}).$promise.then(function (thread) {
+                    MessageThreads.get({id: threadId, _cache: new Date().getTime()}).$promise.then(function (thread) {
                         var promises = [];
 
                         // For each message
@@ -148,7 +148,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 // Get sender
                                 var senderId = self.getIdFromUrl(data.sender);
                                 UsersService.get(senderId).$promise.then(function (sender) {
-                                    result.username = sender.slug;
+                                    result.username = sender.username;
                                     result.icon = sender.avatar.thumbnail;
                                     messageDeferred.resolve(result);
                                 });
@@ -158,7 +158,18 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         });
 
                         $q.all(promises).then(function (results) {
-                            deferred.resolve(results);
+                            var result = {
+                                users: [],
+                                messages: results
+                            };
+
+                            // Push ids of users from a conversation
+                            result.users.push(self.getIdFromUrl(thread.sender));
+                            if (!!thread.recipient) {
+                                result.users.push(self.getIdFromUrl(thread.recipient));
+                            }
+
+                            deferred.resolve(result);
                         });
                     });
 
@@ -182,15 +193,30 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for managing product related messages.
          */
-        EloueCommon.factory("ProductRelatedMessagesService", ["ProductRelatedMessages", function (ProductRelatedMessages) {
-            var productRelatedMessagesService = {};
+        EloueCommon.factory("ProductRelatedMessagesService", [
+            "ProductRelatedMessages",
+            "Endpoints",
+            function (ProductRelatedMessages, Endpoints) {
+                var productRelatedMessagesService = {};
 
-            productRelatedMessagesService.getMessage = function (id) {
-                return ProductRelatedMessages.get({id: id});
-            };
+                productRelatedMessagesService.getMessage = function (id) {
+                    return ProductRelatedMessages.get({id: id, _cache: new Date().getTime()});
+                };
 
-            return productRelatedMessagesService;
-        }]);
+                productRelatedMessagesService.postMessage = function (threadId, recipientId, text, offerid) {
+                    var message = {
+                        thread: Endpoints.api_url + "messagethreads/" + threadId + "/",
+                        recipient: Endpoints.api_url + "users/" + recipientId + "/",
+                        body: (!!text) ? text : "",
+                        offer: (!!offerid) ? Endpoints.api_url + "bookings/" + offerid + "/" : null
+                    };
+
+                    return new ProductRelatedMessages(message).$save();
+                };
+
+                return productRelatedMessagesService;
+            }
+        ]);
 
         /**
          * Utils service.
