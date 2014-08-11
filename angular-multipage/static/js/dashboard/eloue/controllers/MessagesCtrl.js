@@ -9,11 +9,9 @@ define(["angular", "eloue/app", "../../../common/eloue/services"], function (ang
         "$scope",
         "MessageThreadsService",
         function ($scope, MessageThreadsService) {
-            $scope.title = "Messages title";
-
             // Get all message threads
-            MessageThreadsService.getMessageThreads(function (data) {
-                $scope.message_threads = data.results;
+            MessageThreadsService.getMessageThreads().then(function (data) {
+                $scope.message_threads = data;
             });
         }
     ]);
