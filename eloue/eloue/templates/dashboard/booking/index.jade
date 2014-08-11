@@ -19,7 +19,8 @@ block content
               option(value="statut") Statut
               option(value="statut") Statut
               option(value="statut") Statut
-    ul.scrollbar-custom
+    ul.scrollbar-custom.block-with-thumbnail
+
       each booking in bookings
         li.tab-vertical.block-with-thumbnail(class="#{booking.bage.classname}")
           .col-thumbnail
@@ -97,7 +98,7 @@ block content
               span
                 | Notes :&nbsp;&nbsp;
                 +average-rate(0)
-              button(type="submit").btn-inline.bg-success.text-white Envoyer
+              button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
 
     section.booking-activity-feed.text-gray-strong
       ul.section-content

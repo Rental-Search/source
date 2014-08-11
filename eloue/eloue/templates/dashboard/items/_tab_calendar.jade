@@ -1,0 +1,23 @@
+.section-content
+  form(action="itmes")
+    .row
+      .col-xs-7
+        h2 Sélectionner le mois
+      .col-xs-5
+        .form-control.without-search.select-gradient
+          select
+            each month in months
+              option(value="#{month}") #{month} 2014
+    .row
+      .col-xs-12
+        table.text-center
+          thead
+            tr
+              each day in days_of_week
+                td #{day}
+          tbody
+            each day, count in days
+              if count % 7 == 0
+                tr
+              td #{day}
+

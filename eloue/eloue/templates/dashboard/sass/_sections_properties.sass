@@ -7,6 +7,7 @@ article.dashboard
     float: left
   > aside
     float: none
+    position: relative
   > *
     height: 100%
     overflow: auto
@@ -16,25 +17,29 @@ article.dashboard
     border-left: $bd-lighter
     &:first-child
       border-left-width: 0
-  .section-content
-    position: relative
-    max-width: $section-content-max-width
-    padding: $indent-md*$indent-vertical $indent-md
-  .section-header
-    background-color: $gray-lite
-    border-bottom: $bd-lighter
-    height: $form-height
-    padding: 0 $indent-sm
-    width: 100%
-    display: table
-    position: absolute
-    top: 0
-    left: 0
-    z-index: 10
-    + *
-      padding-top: 3em
   > aside
     background-color: white
+    section
+      height: 100%
+.section-content
+  position: relative
+  max-width: $section-content-max-width
+  padding: $indent-md*$indent-vertical $indent-md
+  .tab-vertical &
+    padding: 0
+.section-header
+  background-color: $gray-lite
+  border-bottom: $bd-lighter
+  height: $form-height
+  padding: 0 $indent-sm
+  width: 100%
+  display: table
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 10
+  + *
+    padding-top: 3em !important
 
   .booking-activity-feed
     background: $gray-lite url(../img/feed-line.png) repeat-y 4em

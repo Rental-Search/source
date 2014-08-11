@@ -21,6 +21,10 @@
     transition: border-color $trns-fast
     position: relative
 
+.tabs-vertical-active .mCSB_scrollTools
+  right: auto
+  left: 0
+
 .tabs-vertical-active .tab-vertical > a
   position: absolute
   width: 100%
@@ -46,6 +50,7 @@
 .tabs-horisontal-active
   position: relative
   padding-top: $indent-xs/2
+  overflow: hidden
   > ul
     position: relative
 

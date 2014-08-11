@@ -3557,6 +3557,10 @@ a {
   float: right !important;
 }
 
+.pull-nothing {
+  float: none !important;
+}
+
 .clear-both {
   clear: both !important;
 }
@@ -3567,6 +3571,7 @@ a {
 
 .mCSB_container {
   min-height: 100%;
+  margin-right: 0 !important;
 }
 
 .time-badge {
@@ -3589,12 +3594,26 @@ a {
   color: transparent;
 }
 
+.notification-empty {
+  display: table;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: #acacac;
+}
+.notification-empty .notification-container {
+  display: table-cell;
+  vertical-align: middle;
+}
+.notification-empty i {
+  font-size: 10em;
+}
+
 header {
   height: 120px;
 }
 
 article.dashboard h2 {
-  color: #2c2c2c;
   font-size: 26px;
   font-weight: 400;
   margin-bottom: 20px;
@@ -3687,6 +3706,7 @@ article.dashboard > nav {
 }
 article.dashboard > aside {
   float: none;
+  position: relative;
 }
 article.dashboard > * {
   height: 100%;
@@ -3701,12 +3721,23 @@ article.dashboard > section:first-child,
 article.dashboard > aside:first-child {
   border-left-width: 0;
 }
-article.dashboard .section-content {
+article.dashboard > aside {
+  background-color: white;
+}
+article.dashboard > aside section {
+  height: 100%;
+}
+
+.section-content {
   position: relative;
   max-width: 550px;
   padding: 22.5px 30px;
 }
-article.dashboard .section-header {
+.tab-vertical .section-content {
+  padding: 0;
+}
+
+.section-header {
   background-color: #fcfcfc;
   border-bottom: 1px solid #eaeaea;
   height: 3em;
@@ -3718,13 +3749,10 @@ article.dashboard .section-header {
   left: 0;
   z-index: 10;
 }
-article.dashboard .section-header + * {
-  padding-top: 3em;
+.section-header + * {
+  padding-top: 3em !important;
 }
-article.dashboard > aside {
-  background-color: white;
-}
-article.dashboard .booking-activity-feed {
+.section-header .booking-activity-feed {
   background: #fcfcfc url(../img/feed-line.png) repeat-y 4em;
   -webkit-background-size: 3px 1px;
   background-size: 3px 1px;
@@ -3762,6 +3790,11 @@ article.dashboard .booking-activity-feed {
   position: relative;
 }
 
+.tabs-vertical-active .mCSB_scrollTools {
+  right: auto;
+  left: 0;
+}
+
 .tabs-vertical-active .tab-vertical > a {
   position: absolute;
   width: 100%;
@@ -3788,6 +3821,7 @@ article.dashboard .booking-activity-feed {
 .tabs-horisontal-active {
   position: relative;
   padding-top: 5px;
+  overflow: hidden;
 }
 .tabs-horisontal-active > ul {
   position: relative;
@@ -3893,6 +3927,49 @@ article.dashboard .booking-activity-feed {
   border: 1px solid #eaeaea;
   -webkit-box-shadow: 0 1px lightgray;
   box-shadow: 0 1px lightgray;
+}
+
+.container-with-square-thumbnail {
+  margin: -2%;
+}
+.container-with-square-thumbnail:before, .container-with-square-thumbnail:after {
+  content: " ";
+  display: table;
+}
+.container-with-square-thumbnail:after {
+  clear: both;
+}
+.container-with-square-thumbnail > li {
+  width: 21%;
+  padding-top: 21%;
+  margin: 2%;
+  overflow: hidden;
+  position: relative;
+  float: left;
+}
+.container-with-square-thumbnail > li > .file-input-drag {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0;
+}
+.container-with-square-thumbnail > li > .file-input-drag > i {
+  width: 1em;
+  height: 1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  margin: auto;
+}
+.container-with-square-thumbnail > li > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
 }
 
 .average-rate {
@@ -4454,4 +4531,8 @@ textarea .autosizejs {
   height: 100%;
   padding-left: 20px !important;
   padding-right: 20px !important;
+}
+
+article.dashboard table {
+  width: 100%;
 }
