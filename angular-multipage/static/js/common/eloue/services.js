@@ -343,7 +343,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     Bookings.get({page: page}).$promise.then(function (data) {
-                        console.log(data);
                         var promises = [];
 
                         angular.forEach(data.results, function (value, key) {
@@ -351,8 +350,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var booking = {
                                 state: value.state,
                                 total_amount: value.total_amount,
-                                started_date: value.started_at,
-                                ended_date: value.ended_at
+                                uuid: value.uuid,
+                                start_date: UtilsService.formatDate(value.started_at, "dd MMMM yyyy"),
+                                end_date: UtilsService.formatDate(value.ended_at, "dd MMMM yyyy")
                             };
 
                             // Get product id

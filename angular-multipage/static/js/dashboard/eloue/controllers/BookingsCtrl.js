@@ -9,11 +9,8 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "BookingsService",
         function ($scope, BookingsService) {
-            $scope.title = "Bookings title";
-
-            BookingsService.getBookings().then(function (results) {
-                console.log("results:");
-                console.log(results);
+            BookingsService.getBookings().then(function (bookings) {
+                $scope.bookings = bookings;
             });
         }
     ]);
