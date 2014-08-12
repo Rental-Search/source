@@ -11,10 +11,9 @@ define(["angular", "eloue/app"], function (angular) {
         function ($scope, BookingsService) {
             $scope.title = "Bookings title";
 
-            BookingsService.getBookings().$promise.then(function (bookings) {
-                // TODO change the behavior
-                console.log("bookings");
-                console.log(bookings);
+            BookingsService.getBookings().then(function (results) {
+                console.log("results:");
+                console.log(results);
             });
         }
     ]);

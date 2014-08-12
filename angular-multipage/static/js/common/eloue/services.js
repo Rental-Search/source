@@ -319,19 +319,84 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return this.formatDate(dateString, dateFormat);
             };
 
+            utilsService.getIdFromUrl = function (url) {
+                var trimmedUrl = url.slice(0, url.length - 1);
+                return trimmedUrl.substring(trimmedUrl.lastIndexOf("/") + 1, url.length);
+            };
+
             return utilsService;
         }]);
 
         /**
          * Service for managing bookings.
          */
-        EloueCommon.factory("BookingsService", ["Bookings", function (Bookings) {
-            var bookingsService = {};
+        EloueCommon.factory("BookingsService", [
+            "$q",
+            "Bookings",
+            "ProductsService",
+            "PicturesService",
+            "UtilsService",
+            function ($q, Bookings, ProductsService, PicturesService, UtilsService) {
+                var bookingsService = {};
 
-            bookingsService.getBookings = function (page) {
-                return Bookings.get({page: page});
+                bookingsService.getBookings = function (page) {
+                    var deferred = $q.defer();
+
+                    Bookings.get({page: page}).$promise.then(function (data) {
+                        console.log(data);
+                        var promises = [];
+
+                        angular.forEach(data.results, function (value, key) {
+                            var bookingDeferred = $q.defer();
+                            var booking = {
+                                state: value.state,
+                                total_amount: value.total_amount,
+                                started_date: value.started_at,
+                                ended_date: value.ended_at
+                            };
+
+                            // Get product id
+                            var productId = UtilsService.getIdFromUrl(value.product);
+                            var bookingPromises = {};
+
+                            // Get product
+                            bookingPromises.product = ProductsService.getProduct(productId).$promise;
+
+                            // Get picture
+                            bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+
+                            $q.all(bookingPromises).then(function (results) {
+                                booking.title = results.product.summary;
+                                if (jQuery(results.pictures.results).size() > 0) {
+                                    booking.picture = results.pictures.results[0].image.display;
+                                }
+                                bookingDeferred.resolve(booking);
+                            });
+                            promises.push(bookingDeferred.promise);
+                        });
+
+                        $q.all(promises).then(function (results) {
+                            deferred.resolve(results);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                return bookingsService;
+            }
+        ]);
+
+        /**
+         * Service for managing pictures.
+         */
+        EloueCommon.factory("PicturesService", ["Pictures", function (Pictures) {
+            var picturesService = {};
+
+            picturesService.getPicturesByProduct = function (productId) {
+                return Pictures.get({product: productId});
             };
 
-            return bookingsService;
+            return picturesService;
         }]);
     });

@@ -112,4 +112,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Bookings", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "bookings\\/");
     }]);
+
+    /**
+     * Factory for managing pictures.
+     */
+    EloueCommon.factory("Pictures", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "pictures\\/");
+    }]);
 });
