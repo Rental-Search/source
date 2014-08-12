@@ -10,6 +10,7 @@ define(["angular",
         "jquery-autosize",
         "jquery-chosen",
         "dashboard_scripts",
+        "bootstrap_modal",
         "../../common/eloue/commonApp"],
     function (angular) {
         // Create dashboard application

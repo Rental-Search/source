@@ -17,7 +17,8 @@ require.config({
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../bower_components/chosen/chosen.jquery.min",
         "vars": "../vars",
-        "dashboard_scripts": "../dashboard_scripts"
+        "dashboard_scripts": "../dashboard_scripts",
+        "bootstrap_modal": "../bootstrap/modal"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -38,7 +39,8 @@ require.config({
         "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
         "jquery-autosize": ["jQuery"],
         "jquery-chosen": ["jQuery"],
-        "dashboard_scripts": ["jQuery"]
+        "dashboard_scripts": ["jQuery"],
+        "bootstrap_modal":  ["jQuery"]
     }
 });
 
