@@ -4,10 +4,10 @@ block append variables
   -STATIC_URL = "../../../static/"
 
 block content-view
-  section.tabs-vertical-active.sm.scrollbar-custom.scrollbar-left: ul
+  section.tabs-vertical-active.sm.scrollbar-custom: ul
     each tab in account_tabs
       li.tab-vertical
         a(href="#{tab.href}.html")
         h3 #{tab.title}
-
-  block sections
+  .content-view
+    block sections

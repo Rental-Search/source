@@ -812,6 +812,9 @@ article.dashboard .content-view > aside {
   border-top: 1px solid #eaeaea;
   border-left: 1px solid #eaeaea;
 }
+article.dashboard .content-view section {
+  border-top: 1px solid #eaeaea;
+}
 
 .section-content {
   position: relative;
@@ -879,7 +882,8 @@ article.dashboard .content-view > aside {
   position: relative;
 }
 
-.tabs-vertical-active .mCSB_scrollTools {
+.tabs-vertical-active .mCSB_scrollTools,
+.scrollbar-left .mCSB_scrollTools {
   right: auto;
   left: 0;
 }
@@ -896,6 +900,9 @@ article.dashboard .content-view > aside {
   border-right: 4px solid transparent;
   cursor: pointer;
 }
+.tabs-vertical-active .tab-vertical .fa-check {
+  color: transparent;
+}
 .tabs-vertical-active .tab-vertical:hover, .tabs-vertical-active .tab-vertical.current {
   background-color: #fcfcfc;
   border-right-color: #24bd77;
@@ -905,6 +912,9 @@ article.dashboard .content-view > aside {
 }
 .tabs-vertical-active .tab-vertical:active {
   border-color: transparent;
+}
+.tabs-vertical-active .tab-vertical.default .fa-check {
+  color: #24bd77;
 }
 
 .tabs-horisontal-active {

@@ -21,7 +21,8 @@
     transition: border-color $trns-fast
     position: relative
 
-.tabs-vertical-active .mCSB_scrollTools
+.tabs-vertical-active .mCSB_scrollTools,
+.scrollbar-left .mCSB_scrollTools
   right: auto
   left: 0
 
@@ -35,6 +36,8 @@
 .tabs-vertical-active .tab-vertical
   border-right: 4px solid transparent
   cursor: pointer
+  .fa-check
+    color: transparent
   &:hover,
   &.current
     background-color: $gray-lite
@@ -43,6 +46,9 @@
       font-weight: bolder
   &:active
     border-color: transparent
+  &.default
+    .fa-check
+      color: $brand-success
 
 /////////////////////
 // tabs horisontal //
