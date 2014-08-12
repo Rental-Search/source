@@ -56,8 +56,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "MessageThreads",
             "ProductRelatedMessagesService",
             "UsersService",
+            "ProductsService",
             "UtilsService",
-            function ($q, $filter, MessageThreads, ProductRelatedMessagesService, UsersService, UtilsService) {
+            function ($q, $filter, MessageThreads, ProductRelatedMessagesService, UsersService, ProductsService,
+                      UtilsService) {
                 var messageThreadsService = {};
 
                 /**
@@ -112,6 +114,68 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         });
 
                         $q.all(promises).then(function (results) {
+                            deferred.resolve(results);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                /**
+                 * Retrieves thread's data.
+                 *
+                 * @param threadId identifier of a thread
+                 */
+                messageThreadsService.getThread = function (threadId) {
+                    var self = this;
+                    var deferred = $q.defer();
+
+                    // Send a request for a thread
+                    MessageThreads.get({id: threadId, _cache: new Date().getTime()}).$promise.then(function (thread) {
+                        var rootPromises = {};
+
+                        // Get message list
+                        var messagePromises = [];
+                        angular.forEach(thread.messages, function (value, key) {
+                            var messageDeferred = $q.defer();
+
+                            // Get message
+                            var messageId = self.getIdFromUrl(value);
+                            ProductRelatedMessagesService.getMessage(messageId).$promise.then(function (data) {
+                                var result = {
+                                    id: data.id,
+                                    body: data.body,
+                                    date: UtilsService.formatMessageDate(data.sent_at,
+                                        "HH'h'mm", "dd.mm.yyyy HH'h'mm")
+                                };
+
+                                // Get sender
+                                var senderId = self.getIdFromUrl(data.sender);
+                                UsersService.get(senderId).$promise.then(function (sender) {
+                                    result.username = sender.username;
+                                    result.icon = sender.avatar.thumbnail;
+                                    messageDeferred.resolve(result);
+                                });
+                            });
+
+                            messagePromises.push(messageDeferred.promise);
+                        });
+                        rootPromises.messages = $q.all(messagePromises);
+
+                        // Get product
+                        if (!!thread.product) {
+                            var productDeferred = $q.defer();
+
+                            var productId = self.getIdFromUrl(thread.product);
+                            ProductsService.getProduct(productId).$promise.then(function (product) {
+                                // TODO load rest of the fields
+                                productDeferred.resolve(product);
+                            });
+
+                            rootPromises.product = productDeferred.promise;
+                        }
+
+                        $q.all(rootPromises).then(function (results) {
                             deferred.resolve(results);
                         });
                     });
@@ -217,6 +281,19 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return productRelatedMessagesService;
             }
         ]);
+
+        /**
+         * Service for managing products.
+         */
+        EloueCommon.factory("ProductsService", ["Products", function (Products) {
+            var productsService = {};
+
+            productsService.getProduct = function (id) {
+                return Products.get({id: id});
+            };
+
+            return productsService;
+        }]);
 
         /**
          * Utils service.
