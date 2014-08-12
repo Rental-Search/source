@@ -1,139 +1,637 @@
 <!DOCTYPE html>
 <html lang="fr"></html>
 <head>
+  <title>e-loue</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-  <link rel="stylesheet" href="../../static/css/bootstrap.css">
   <link rel="stylesheet" href="../../static/css/chosen.min.css">
-  <link rel="stylesheet" href="../../static/css/product_detail_styles.css">
   <link rel="shortcut icon" href="../../static/img/favicon.ico">
+  <link rel="stylesheet" href="../../static/css/bootstrap.css">
+  <link rel="stylesheet" href="../../static/css/product_detail_styles.css">
+  <!-- jQuery-->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <!-- for IE < 9 -->
+  <!-- html5 tags supported-->
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
   <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+  <!-- palceholder supported-->
   <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
+  <!-- selectivizr-->
+  <script src="../../static/js/selectivizr.js"></script>
+  <!-- geolocation by Google-->
   <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <!-- custom select -->
+  <!-- http://harvesthq.github.io/chosen/-->
   <script src="../../static/js/chosen.jquery.min.js"></script>
+  <!-- custom scrollbar -->
+  <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
+  <script src="../../static/js/jquery.mCustomScrollbar.js"></script>
+  <!-- textarea autoresize-->
+  <!-- http://www.jacklmoore.com/autosize/-->
+  <script src="../../static/js/jquery.autosize.js"></script>
   <script src="../../static/js/formmapper.js"></script>
   <script src="../../static/js/bootstrap/modal.js"></script>
   <script src="../../static/js/bootstrap/dropdown.js"></script>
   <script src="../../static/js/bootstrap/carousel.js"></script>
   <script src="../../static/js/scripts.js"></script>
-  <title>e-loue</title>
 </head>
 <body>
   <div id="fb-root"></div>
-  <script>
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-    
-    window.___gcfg = {lang: 'fr'};
-      (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/platform.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
-      
-    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-    
-  </script>
-  <div class="container-flex">
-    <div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Inscription</h4>
-          </div>
-          <div class="modal-body">
-            <h3>Inscrivez-vous en 2 secondes</h3>
-            <div class="form-group"><a href="#" class="btn bg-info"><i class="icon-facebook"></i>Inscription via Facebook</a></div>
-            <div class="form-group"><a href="#" class="btn bg-danger"><i class="icon-google-plus"></i>Inscription via Google</a></div>
-            <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
-            <h3>Inscrivez-vous en 30 secondes</h3>
-            <form>
-              <div class="classic-form">
-                <div class="form-group">
-                  <input type="text" placeholder="Nom *" required class="form-control">
+  <div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Inscription</h4>
+        </div>
+        <div class="modal-body">
+          <h3>Inscrivez-vous en 2 secondes</h3>
+          <div class="form-group"><a href="#" class="btn bg-info"><i class="icon-facebook"></i>Inscription via Facebook</a></div>
+          <div class="form-group"><a href="#" class="btn bg-danger"><i class="icon-google-plus"></i>Inscription via Google</a></div>
+          <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+          <h3>Inscrivez-vous en 30 secondes</h3>
+          <form>
+            <div class="classic-form">
+              <div class="form-group">
+                <input type="text" placeholder="Nom *" required class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="text" placeholder="Prénom *" required class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="text" placeholder="Code postal *" required class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="email" placeholder="E-mail *" required class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Mot de passe *" required class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Confirmation *" required class="form-control">
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn bg-success">Inscription</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn bg-success registration">Inscription via Email</button>
+            </div>
+            <div class="checkbox">
+              <label for="inform">
+                <input type="checkbox" checked id="inform"><span class="icon-ok"></span>
+              </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
+            </div>
+          </form>
+          <p>En créant un compte e-loue, vous acceptez les Conditions Générales<br>et la Politique de Confidentialité de notre site</p><span class="or"></span>
+          <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal" class="modal-fotter-link connexion">Connexion</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="log-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Connexion</h4>
+        </div>
+        <div class="modal-body">
+          <h3>Connectez-vous à votre compte</h3>
+          <div class="form-group"><a href="#" class="btn bg-info"><i class="icon-facebook"></i>Connexion via Facebook</a></div>
+          <div class="form-group"><a href="#" class="btn bg-danger"><i class="icon-google-plus"></i>Connexion via Google</a></div>
+          <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+          <form>
+            <div class="form-group">
+              <input type="email" placeholder="E-mail" required class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Mot de passe" required class="form-control">
+            </div>
+            <div class="form-group clearfix">
+              <div class="checkbox pull-left">
+                <label for="remember-me">
+                  <input type="checkbox" checked id="remember-me"><i class="icon-ok"></i>
+                </label>Se souvenir de moi
+              </div>
+              <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn bg-success">Connexion</button>
+            </div>
+          </form><span class="or"></span>
+          <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="pop-up-send-message" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog large">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Message</h4>
+        </div>
+        <div class="modal-body table-cell">
+          <div class="static-part table-cell">
+            <section class="product-info">
+              <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi.jpg" alt=""></a></div>
+              <div class="thumbnail-content">
+                <h3>BMW 520 Touring Luxe</h3>
+                <p class="location"><i class="sprite-location"></i>Nice, 02200</p>
+                <p class="stats">
+                  <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                  </div><span class="rate-count">32</span><span class="comments-count"><i class="sprite-comment"></i>12</span>
+                </p>
+                <div class="declarer">
+                  <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
+                  <div class="thumbnail-content">
+                    <p>Julien Dupré</p>
+                  </div>
                 </div>
-                <div class="form-group">
+              </div>
+            </section>
+            <section class="terms">
+              <div class="row date-picker">
+                <div class="table-cell main-cell">
+                  <div class="input-group">
+                    <div class="input-group-addon">Du</div>
+                    <input type="text" placeholder="" class="form-control">
+                    <div class="input-group-addon calendar"><span></span></div>
+                  </div>
+                </div>
+                <div class="table-cell">
+                  <select class="form-control">
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row date-picker">
+                <div class="table-cell main-cell">
+                  <div class="input-group">
+                    <div class="input-group-addon">Au</div>
+                    <input type="text" placeholder="" class="form-control">
+                    <div class="input-group-addon calendar"><span></span></div>
+                  </div>
+                </div>
+                <div class="table-cell">
+                  <select class="form-control">
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                  </select>
+                </div>
+              </div>
+              <ul class="list-group">
+                <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
+                </li>
+                <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
+                </li>
+                <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
+                </li>
+              </ul>
+              <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
+              <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
+            </section>
+          </div>
+          <div class="change-part table-cell">
+            <section class="dialogs">
+              <div class="dialog-scroll-container">
+                <div class="dialog-container">
+                  <div class="message from-declarer">
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
+                    <div class="thumbnail-content">
+                      <div class="thumbnail-frame">
+                        <h4>Julien Dupré</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, consequuntur ut quae quisquam eaque minus quod dignissimos aliquid adipisci sint!</p>
+                      </div>
+                      <p class="time">Le 23.06.2014 à 09h25</p>
+                    </div>
+                  </div>
+                  <div class="message from-customer">
+                    <div class="thumbnail-content">
+                      <div class="thumbnail-frame">
+                        <h4>Julien Dupré</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, consequuntur ut quae quisquam eaque minus quod dignissimos aliquid adipisci sint!</p>
+                      </div>
+                      <p class="time">Le 23.06.2014 à 09h25</p>
+                    </div>
+                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="input-message">
+              <div class="table-cell main-cell">
+                <textarea name="" rows="4" placeholder="Rédigez votre message ici..."></textarea>
+              </div>
+              <div class="table-cell">
+                <button class="btn bg-success">Envoyez</button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="pop-up-call" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog large">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Appel</h4>
+        </div>
+        <div class="modal-body table-cell">
+          <div class="static-part table-cell">
+            <section class="product-info">
+              <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi.jpg" alt=""></a></div>
+              <div class="thumbnail-content">
+                <h3>BMW 520 Touring Luxe</h3>
+                <p class="location"><i class="sprite-location"></i>Nice, 02200</p>
+                <p class="stats">
+                  <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                  </div><span class="rate-count">32</span><span class="comments-count"><i class="sprite-comment"></i>12</span>
+                </p>
+                <div class="declarer">
+                  <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
+                  <div class="thumbnail-content">
+                    <p>Julien Dupré</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="terms">
+              <div class="row date-picker">
+                <div class="table-cell main-cell">
+                  <div class="input-group">
+                    <div class="input-group-addon">Du</div>
+                    <input type="text" placeholder="" class="form-control">
+                    <div class="input-group-addon calendar"><span></span></div>
+                  </div>
+                </div>
+                <div class="table-cell">
+                  <select class="form-control">
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row date-picker">
+                <div class="table-cell main-cell">
+                  <div class="input-group">
+                    <div class="input-group-addon">Au</div>
+                    <input type="text" placeholder="" class="form-control">
+                    <div class="input-group-addon calendar"><span></span></div>
+                  </div>
+                </div>
+                <div class="table-cell">
+                  <select class="form-control">
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                  </select>
+                </div>
+              </div>
+              <ul class="list-group">
+                <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
+                </li>
+                <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
+                </li>
+                <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
+                </li>
+              </ul>
+              <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
+              <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
+            </section>
+          </div>
+          <div class="change-part table-cell">
+            <section class="table variant-call">
+              <ul class="table">
+                <li class="table-row">
+                  <div class="table-cell">
+                    <div class="text">
+                      <div class="thumbnail-img text-primary"></div>
+                      <div class="thumbnail-content">
+                        <h3>Appelez le propriétaire</h3><a href="#" class="btn bg-primary">08.99.45.65.43<br><small>(0,15€ /min)</small></a>
+                        <p>Après 21h, afin de respecter la tranquillité des membres e-loue, nous vous remercions  de  poser vos questions par <a href="#" class="text-success">messagerie. </a>Et oui, tout le monde a le droit de se reposer.</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="table-row">
+                  <div class="table-cell">
+                    <div class="text">
+                      <div class="thumbnail-img text-gray"></div>
+                      <div class="thumbnail-content">
+                        <h3>Posez lui toutes vos questions</h3>
+                        <p>Besoin de détails  supplémentaires sur l’objet à louer ?  Des questions sur les modalités de locations ? Sur le  lieu et l’horaire du RDV ? N’ayez pas peur, les membres e-loue  sont très  serviables, et vous répondront...</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="table-row">
+                  <div class="table-cell">
+                    <div class="text">
+                      <div class="thumbnail-img text-success"></div>
+                      <div class="thumbnail-content">
+                        <h3>Réservez en ligne</h3>
+                        <p>En réservant sur e-loue, vous avez l’assurance de ne pas avoir de mauvaise surprise : le paiement  est sécurisé, la caution est automatiquement débloquée dès que vous restituez le produit.</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="pop-up-reserve" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog large">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Réservation</h4>
+        </div>
+        <div class="modal-body table-cell">
+          <div class="static-part table-cell">
+            <section class="product-info">
+              <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi.jpg" alt=""></a></div>
+              <div class="thumbnail-content">
+                <h3>BMW 520 Touring Luxe</h3>
+                <p class="location"><i class="sprite-location"></i>Nice, 02200</p>
+                <p class="stats">
+                  <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                  </div><span class="rate-count">32</span><span class="comments-count"><i class="sprite-comment"></i>12</span>
+                </p>
+                <div class="declarer">
+                  <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
+                  <div class="thumbnail-content">
+                    <p>Julien Dupré</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="terms">
+              <div class="row date-picker">
+                <div class="table-cell main-cell">
+                  <div class="input-group">
+                    <div class="input-group-addon">Du</div>
+                    <input type="text" placeholder="" class="form-control">
+                    <div class="input-group-addon calendar"><span></span></div>
+                  </div>
+                </div>
+                <div class="table-cell">
+                  <select class="form-control">
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row date-picker">
+                <div class="table-cell main-cell">
+                  <div class="input-group">
+                    <div class="input-group-addon">Au</div>
+                    <input type="text" placeholder="" class="form-control">
+                    <div class="input-group-addon calendar"><span></span></div>
+                  </div>
+                </div>
+                <div class="table-cell">
+                  <select class="form-control">
+                    <option value="00:00">00:00</option>
+                    <option value="01:00">01:00</option>
+                    <option value="02:00">02:00</option>
+                    <option value="03:00">03:00</option>
+                    <option value="04:00">04:00</option>
+                    <option value="05:00">05:00</option>
+                    <option value="06:00">06:00</option>
+                    <option value="07:00">07:00</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                  </select>
+                </div>
+              </div>
+              <ul class="list-group">
+                <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
+                </li>
+                <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
+                </li>
+                <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
+                </li>
+              </ul>
+              <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
+              <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
+            </section>
+          </div>
+          <form action="" class="input-group change-part table-cell">
+            <section class="table form-wrapper personal-information">
+              <h2>Vos informations personnelles</h2>
+              <div class="row">
+                <div class="col-sm-2">
+                  <select class="form-control">
+                    <option value="male">M.</option>
+                    <option value="female">F.</option>
+                  </select>
+                </div>
+                <div class="col-sm-5">
                   <input type="text" placeholder="Prénom *" required class="form-control">
                 </div>
-                <div class="form-group">
+                <div class="col-sm-5">
+                  <input type="text" placeholder="Nom *" required class="form-control">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <input type="text" placeholder="Adresse *" required class="form-control">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
                   <input type="text" placeholder="Code postal *" required class="form-control">
                 </div>
-                <div class="form-group">
-                  <input type="email" placeholder="E-mail *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <input type="password" placeholder="Mot de passe *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <input type="password" placeholder="Confirmation *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <button type="submit" class="btn bg-success">Inscription</button>
+                <div class="col-sm-6">
+                  <input type="text" placeholder="Ville *" required class="form-control">
                 </div>
               </div>
-              <div class="form-group">
-                <button class="btn bg-success registration">Inscription via Email</button>
+              <div class="row">
+                <div class="col-sm-6">
+                  <input type="text" placeholder="Date de naissance *" required class="form-control">
+                </div>
+                <div class="col-sm-6">
+                  <input type="text" placeholder="Lieu de naissance *" required class="form-control">
+                </div>
               </div>
-              <div class="checkbox">
-                <label for="inform">
-                  <input type="checkbox" checked id="inform"><span class="icon-ok"></span>
-                </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
+              <div class="row">
+                <div class="col-sm-12">
+                  <input type="text" placeholder="Numéro de permis *" required class="form-control">
+                </div>
               </div>
-            </form>
-            <p>En créant un compte e-loue, vous acceptez les Conditions Générales<br>et la Politique de Confidentialité de notre site</p><span class="or"></span>
-            <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal" class="modal-fotter-link connexion">Connexion</a>
-          </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <input type="text" placeholder="Date d’obtention du permis" class="form-control">
+                </div>
+                <div class="col-sm-6">
+                  <label for="photo" class="table-cell btn bg-gray">Photo scan de votre permis
+                    <input type="file" id="photo" class="form-control">
+                  </label>
+                </div>
+              </div>
+              <p class="info">Ces informations seront reproduites sur le contrat de location. Le propriétaire les vérifiera au début de la location. Si elles sont incorrectes, il ne pourra pas vous remettre les clés. Les champs marqués d'une étoile (*) sont obligatoires.</p>
+            </section>
+            <section class="table form-wrapper bank-information">
+              <h2>Vos bank-information</h2>
+              <div class="row">
+                <div class="col-sm-9 card">
+                  <input type="text" placeholder="Numéro de carte *" required class="form-control"><i class="card"></i>
+                </div>
+                <div class="col-sm-3">
+                  <input type="text" placeholder="MM/AA *" required class="form-control"><i class="calendar"></i>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5">
+                  <input type="text" placeholder="Code de sécurité *" required class="form-control"><i class="block"></i>
+                </div>
+                <div class="col-sm-7">
+                  <input type="text" placeholder="Nom et prénom du titulaire *" required class="form-control"><i class="user"></i>
+                </div>
+              </div>
+              <p class="info">Vous devez payer avec votre propre carte bancaire, que vous devrez présenter au propriétaire pour vérification.<br>Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire devra refuser la location.</p>
+              <div class="col-sm-8 col-sm-offset-2">
+                <button type="submit" class="btn bg-success">Réservez</button>
+              </div>
+            </section>
+          </form>
         </div>
       </div>
     </div>
-    <div id="log-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Connexion</h4>
-          </div>
-          <div class="modal-body">
-            <h3>Connectez-vous à votre compte</h3>
-            <div class="form-group"><a href="#" class="btn bg-info"><i class="icon-facebook"></i>Connexion via Facebook</a></div>
-            <div class="form-group"><a href="#" class="btn bg-danger"><i class="icon-google-plus"></i>Connexion via Google</a></div>
-            <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
-            <form>
-              <div class="form-group">
-                <input type="email" placeholder="E-mail" required class="form-control">
-              </div>
-              <div class="form-group">
-                <input type="password" placeholder="Mot de passe" required class="form-control">
-              </div>
-              <div class="form-group clearfix">
-                <div class="checkbox pull-left">
-                  <label for="remember-me">
-                    <input type="checkbox" checked id="remember-me"><i class="icon-ok"></i>
-                  </label>Se souvenir de moi
-                </div>
-                <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
-              </div>
-              <div class="form-group">
-                <button type="submit" class="btn bg-success">Connexion</button>
-              </div>
-            </form><span class="or"></span>
-            <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <input type="checkbox" id="sourse">
-    <lable for="#sourse" id="sourse-img"><img src="../../static/img/src/pop_up_reservation_V2_eloue.jpg"></lable>
+  </div>
+  <div class="container-flex">
     <header class="header-site">
       <section class="container signs-links">
         <ul role="tablist" class="nav without-spaces">
@@ -659,510 +1157,5 @@
         </div>
       </section>
     </footer>
-    <div id="pop-up-send-message" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-      <div class="modal-dialog large">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Message</h4>
-          </div>
-          <div class="modal-body table-cell">
-            <div class="static-part table-cell">
-              <section class="product-info">
-                <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi.jpg" alt=""></a></div>
-                <div class="thumbnail-content">
-                  <h3>BMW 520 Touring Luxe</h3>
-                  <p class="location"><i class="sprite-location"></i>Nice, 02200</p>
-                  <p class="stats">
-                    <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div><span class="rate-count">32</span><span class="comments-count"><i class="sprite-comment"></i>12</span>
-                  </p>
-                  <div class="declarer">
-                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
-                    <div class="thumbnail-content">
-                      <p>Julien Dupré</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <section class="terms">
-                <div class="row date-picker">
-                  <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Du</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span></span></div>
-                    </div>
-                  </div>
-                  <div class="table-cell">
-                    <select class="form-control">
-                      <option value="00:00">00:00</option>
-                      <option value="01:00">01:00</option>
-                      <option value="02:00">02:00</option>
-                      <option value="03:00">03:00</option>
-                      <option value="04:00">04:00</option>
-                      <option value="05:00">05:00</option>
-                      <option value="06:00">06:00</option>
-                      <option value="07:00">07:00</option>
-                      <option value="08:00">08:00</option>
-                      <option value="09:00">09:00</option>
-                      <option value="10:00">10:00</option>
-                      <option value="11:00">11:00</option>
-                      <option value="12:00">12:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="14:00">14:00</option>
-                      <option value="15:00">15:00</option>
-                      <option value="16:00">16:00</option>
-                      <option value="17:00">17:00</option>
-                      <option value="18:00">18:00</option>
-                      <option value="19:00">19:00</option>
-                      <option value="20:00">20:00</option>
-                      <option value="21:00">21:00</option>
-                      <option value="22:00">22:00</option>
-                      <option value="23:00">23:00</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row date-picker">
-                  <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Au</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span></span></div>
-                    </div>
-                  </div>
-                  <div class="table-cell">
-                    <select class="form-control">
-                      <option value="00:00">00:00</option>
-                      <option value="01:00">01:00</option>
-                      <option value="02:00">02:00</option>
-                      <option value="03:00">03:00</option>
-                      <option value="04:00">04:00</option>
-                      <option value="05:00">05:00</option>
-                      <option value="06:00">06:00</option>
-                      <option value="07:00">07:00</option>
-                      <option value="08:00">08:00</option>
-                      <option value="09:00">09:00</option>
-                      <option value="10:00">10:00</option>
-                      <option value="11:00">11:00</option>
-                      <option value="12:00">12:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="14:00">14:00</option>
-                      <option value="15:00">15:00</option>
-                      <option value="16:00">16:00</option>
-                      <option value="17:00">17:00</option>
-                      <option value="18:00">18:00</option>
-                      <option value="19:00">19:00</option>
-                      <option value="20:00">20:00</option>
-                      <option value="21:00">21:00</option>
-                      <option value="22:00">22:00</option>
-                      <option value="23:00">23:00</option>
-                    </select>
-                  </div>
-                </div>
-                <ul class="list-group">
-                  <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
-                  </li>
-                </ul>
-                <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
-                <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
-              </section>
-            </div>
-            <div class="change-part table-cell">
-              <section class="dialogs">
-                <div class="dialog-scroll-container">
-                  <div class="dialog-container">
-                    <div class="message from-declarer">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <div class="thumbnail-frame">
-                          <h4>Julien Dupré</h4>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, consequuntur ut quae quisquam eaque minus quod dignissimos aliquid adipisci sint!</p>
-                        </div>
-                        <p class="time">Le 23.06.2014 à 09h25</p>
-                      </div>
-                    </div>
-                    <div class="message from-customer">
-                      <div class="thumbnail-content">
-                        <div class="thumbnail-frame">
-                          <h4>Julien Dupré</h4>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, consequuntur ut quae quisquam eaque minus quod dignissimos aliquid adipisci sint!</p>
-                        </div>
-                        <p class="time">Le 23.06.2014 à 09h25</p>
-                      </div>
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <section class="input-message">
-                <div class="table-cell main-cell">
-                  <textarea name="" rows="4" placeholder="Rédigez votre message ici..."></textarea>
-                </div>
-                <div class="table-cell">
-                  <button class="btn bg-success">Envoyez</button>
-                </div>
-              </section>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="pop-up-call" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-      <div class="modal-dialog large">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Appel</h4>
-          </div>
-          <div class="modal-body table-cell">
-            <div class="static-part table-cell">
-              <section class="product-info">
-                <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi.jpg" alt=""></a></div>
-                <div class="thumbnail-content">
-                  <h3>BMW 520 Touring Luxe</h3>
-                  <p class="location"><i class="sprite-location"></i>Nice, 02200</p>
-                  <p class="stats">
-                    <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div><span class="rate-count">32</span><span class="comments-count"><i class="sprite-comment"></i>12</span>
-                  </p>
-                  <div class="declarer">
-                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
-                    <div class="thumbnail-content">
-                      <p>Julien Dupré</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <section class="terms">
-                <div class="row date-picker">
-                  <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Du</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span></span></div>
-                    </div>
-                  </div>
-                  <div class="table-cell">
-                    <select class="form-control">
-                      <option value="00:00">00:00</option>
-                      <option value="01:00">01:00</option>
-                      <option value="02:00">02:00</option>
-                      <option value="03:00">03:00</option>
-                      <option value="04:00">04:00</option>
-                      <option value="05:00">05:00</option>
-                      <option value="06:00">06:00</option>
-                      <option value="07:00">07:00</option>
-                      <option value="08:00">08:00</option>
-                      <option value="09:00">09:00</option>
-                      <option value="10:00">10:00</option>
-                      <option value="11:00">11:00</option>
-                      <option value="12:00">12:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="14:00">14:00</option>
-                      <option value="15:00">15:00</option>
-                      <option value="16:00">16:00</option>
-                      <option value="17:00">17:00</option>
-                      <option value="18:00">18:00</option>
-                      <option value="19:00">19:00</option>
-                      <option value="20:00">20:00</option>
-                      <option value="21:00">21:00</option>
-                      <option value="22:00">22:00</option>
-                      <option value="23:00">23:00</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row date-picker">
-                  <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Au</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span></span></div>
-                    </div>
-                  </div>
-                  <div class="table-cell">
-                    <select class="form-control">
-                      <option value="00:00">00:00</option>
-                      <option value="01:00">01:00</option>
-                      <option value="02:00">02:00</option>
-                      <option value="03:00">03:00</option>
-                      <option value="04:00">04:00</option>
-                      <option value="05:00">05:00</option>
-                      <option value="06:00">06:00</option>
-                      <option value="07:00">07:00</option>
-                      <option value="08:00">08:00</option>
-                      <option value="09:00">09:00</option>
-                      <option value="10:00">10:00</option>
-                      <option value="11:00">11:00</option>
-                      <option value="12:00">12:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="14:00">14:00</option>
-                      <option value="15:00">15:00</option>
-                      <option value="16:00">16:00</option>
-                      <option value="17:00">17:00</option>
-                      <option value="18:00">18:00</option>
-                      <option value="19:00">19:00</option>
-                      <option value="20:00">20:00</option>
-                      <option value="21:00">21:00</option>
-                      <option value="22:00">22:00</option>
-                      <option value="23:00">23:00</option>
-                    </select>
-                  </div>
-                </div>
-                <ul class="list-group">
-                  <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
-                  </li>
-                </ul>
-                <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
-                <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
-              </section>
-            </div>
-            <div class="change-part table-cell">
-              <section class="table variant-call">
-                <ul class="table">
-                  <li class="table-row">
-                    <div class="table-cell">
-                      <div class="text">
-                        <div class="thumbnail-img text-primary"></div>
-                        <div class="thumbnail-content">
-                          <h3>Appelez le propriétaire</h3><a href="#" class="btn bg-primary">08.99.45.65.43<br><small>(0,15€ /min)</small></a>
-                          <p>Après 21h, afin de respecter la tranquillité des membres e-loue, nous vous remercions  de  poser vos questions par <a href="#" class="text-success">messagerie. </a>Et oui, tout le monde a le droit de se reposer.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="table-row">
-                    <div class="table-cell">
-                      <div class="text">
-                        <div class="thumbnail-img text-gray"></div>
-                        <div class="thumbnail-content">
-                          <h3>Posez lui toutes vos questions</h3>
-                          <p>Besoin de détails  supplémentaires sur l’objet à louer ?  Des questions sur les modalités de locations ? Sur le  lieu et l’horaire du RDV ? N’ayez pas peur, les membres e-loue  sont très  serviables, et vous répondront...</p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="table-row">
-                    <div class="table-cell">
-                      <div class="text">
-                        <div class="thumbnail-img text-success"></div>
-                        <div class="thumbnail-content">
-                          <h3>Réservez en ligne</h3>
-                          <p>En réservant sur e-loue, vous avez l’assurance de ne pas avoir de mauvaise surprise : le paiement  est sécurisé, la caution est automatiquement débloquée dès que vous restituez le produit.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </section>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="pop-up-reserve" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-      <div class="modal-dialog large">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Réservation</h4>
-          </div>
-          <div class="modal-body table-cell">
-            <div class="static-part table-cell">
-              <section class="product-info">
-                <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi.jpg" alt=""></a></div>
-                <div class="thumbnail-content">
-                  <h3>BMW 520 Touring Luxe</h3>
-                  <p class="location"><i class="sprite-location"></i>Nice, 02200</p>
-                  <p class="stats">
-                    <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div><span class="rate-count">32</span><span class="comments-count"><i class="sprite-comment"></i>12</span>
-                  </p>
-                  <div class="declarer">
-                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declarer.png" alt=""></a></div>
-                    <div class="thumbnail-content">
-                      <p>Julien Dupré</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <section class="terms">
-                <div class="row date-picker">
-                  <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Du</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span></span></div>
-                    </div>
-                  </div>
-                  <div class="table-cell">
-                    <select class="form-control">
-                      <option value="00:00">00:00</option>
-                      <option value="01:00">01:00</option>
-                      <option value="02:00">02:00</option>
-                      <option value="03:00">03:00</option>
-                      <option value="04:00">04:00</option>
-                      <option value="05:00">05:00</option>
-                      <option value="06:00">06:00</option>
-                      <option value="07:00">07:00</option>
-                      <option value="08:00">08:00</option>
-                      <option value="09:00">09:00</option>
-                      <option value="10:00">10:00</option>
-                      <option value="11:00">11:00</option>
-                      <option value="12:00">12:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="14:00">14:00</option>
-                      <option value="15:00">15:00</option>
-                      <option value="16:00">16:00</option>
-                      <option value="17:00">17:00</option>
-                      <option value="18:00">18:00</option>
-                      <option value="19:00">19:00</option>
-                      <option value="20:00">20:00</option>
-                      <option value="21:00">21:00</option>
-                      <option value="22:00">22:00</option>
-                      <option value="23:00">23:00</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row date-picker">
-                  <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Au</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span></span></div>
-                    </div>
-                  </div>
-                  <div class="table-cell">
-                    <select class="form-control">
-                      <option value="00:00">00:00</option>
-                      <option value="01:00">01:00</option>
-                      <option value="02:00">02:00</option>
-                      <option value="03:00">03:00</option>
-                      <option value="04:00">04:00</option>
-                      <option value="05:00">05:00</option>
-                      <option value="06:00">06:00</option>
-                      <option value="07:00">07:00</option>
-                      <option value="08:00">08:00</option>
-                      <option value="09:00">09:00</option>
-                      <option value="10:00">10:00</option>
-                      <option value="11:00">11:00</option>
-                      <option value="12:00">12:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="14:00">14:00</option>
-                      <option value="15:00">15:00</option>
-                      <option value="16:00">16:00</option>
-                      <option value="17:00">17:00</option>
-                      <option value="18:00">18:00</option>
-                      <option value="19:00">19:00</option>
-                      <option value="20:00">20:00</option>
-                      <option value="21:00">21:00</option>
-                      <option value="22:00">22:00</option>
-                      <option value="23:00">23:00</option>
-                    </select>
-                  </div>
-                </div>
-                <ul class="list-group">
-                  <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
-                  </li>
-                </ul>
-                <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
-                <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
-              </section>
-            </div>
-            <form action="" class="input-group change-part table-cell">
-              <section class="table form-wrapper personal-information">
-                <h2>Vos informations personnelles</h2>
-                <div class="row">
-                  <div class="col-sm-2">
-                    <select class="form-control">
-                      <option value="male">M.</option>
-                      <option value="female">F.</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-5">
-                    <input type="text" placeholder="Prénom *" required class="form-control">
-                  </div>
-                  <div class="col-sm-5">
-                    <input type="text" placeholder="Nom *" required class="form-control">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <input type="text" placeholder="Adresse *" required class="form-control">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <input type="text" placeholder="Code postal *" required class="form-control">
-                  </div>
-                  <div class="col-sm-6">
-                    <input type="text" placeholder="Ville *" required class="form-control">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <input type="text" placeholder="Date de naissance *" required class="form-control">
-                  </div>
-                  <div class="col-sm-6">
-                    <input type="text" placeholder="Lieu de naissance *" required class="form-control">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <input type="text" placeholder="Numéro de permis *" required class="form-control">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <input type="text" placeholder="Date d’obtention du permis" class="form-control">
-                  </div>
-                  <div class="col-sm-6">
-                    <label for="photo" class="table-cell btn bg-gray">Photo scan de votre permis
-                      <input type="file" id="photo" class="form-control">
-                    </label>
-                  </div>
-                </div>
-                <p class="info">Ces informations seront reproduites sur le contrat de location. Le propriétaire les vérifiera au début de la location. Si elles sont incorrectes, il ne pourra pas vous remettre les clés. Les champs marqués d'une étoile (*) sont obligatoires.</p>
-              </section>
-              <section class="table form-wrapper bank-information">
-                <h2>Vos bank-information</h2>
-                <div class="row">
-                  <div class="col-sm-9 card">
-                    <input type="text" placeholder="Numéro de carte *" required class="form-control"><i class="card"></i>
-                  </div>
-                  <div class="col-sm-3">
-                    <input type="text" placeholder="MM/AA *" required class="form-control"><i class="calendar"></i>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-5">
-                    <input type="text" placeholder="Code de sécurité *" required class="form-control"><i class="block"></i>
-                  </div>
-                  <div class="col-sm-7">
-                    <input type="text" placeholder="Nom et prénom du titulaire *" required class="form-control"><i class="user"></i>
-                  </div>
-                </div>
-                <p class="info">Vous devez payer avec votre propre carte bancaire, que vous devrez présenter au propriétaire pour vérification.<br>Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire devra refuser la location.</p>
-                <div class="col-sm-8 col-sm-offset-2">
-                  <button type="submit" class="btn bg-success">Réservez</button>
-                </div>
-              </section>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </body>
