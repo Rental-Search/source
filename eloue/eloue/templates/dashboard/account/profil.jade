@@ -55,7 +55,7 @@ block sections
           .col-sm-12.select-gradient.without-search.form-control
             p.text-uppercase: b: small téléphone par défaut
             select
-              -each telefone in tenant.telephones
+              each telefone in tenant.telephones
                 option(value="#{telefone}") #{telefone}
             h4.indent-sm-v.text-right.text-success-hover: a(href="#") Téléphone par défaut
         //- about myself
@@ -66,7 +66,7 @@ block sections
         .row
           .col-sm-12.without-search.form-control
             select(multiple="", data-placeholder="Langues parlées")
-              -each language in tenant.languages
+              each language in tenant.languages
                 option(value="#{language.ID}") #{language.self}
         //- newsletter
         .row
@@ -85,15 +85,15 @@ block sections
         .row.form-control
           .col-sm-2
             select#select-day(name="select-day", data-placeholder="Jour")
-              -each day in days
+              each day in days
                 option(value="#{day}") #{day}
           .col-sm-4
             select#select-month(name="select-month", data-placeholder="Mois")
-              -each month in months
+              each month in months
                 option(value="#{month}") #{month}
           .col-sm-3
             select#select-year(name="select-year", data-placeholder="Année")
-              -each year in years
+              each year in years
                 option(value="#{year}") #{year}
         //- license-number
         .row

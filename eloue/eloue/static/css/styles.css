@@ -818,6 +818,9 @@ article.dashboard .content-view > aside {
   max-width: 550px;
   padding: 22.5px 30px;
 }
+.section-content.full-width {
+  max-width: none;
+}
 .tab-vertical .section-content {
   padding: 0;
 }
@@ -1574,6 +1577,20 @@ input[type="email"]:invalid:hover,
 .chosen-container .chosen-single:invalid:hover {
   border-color: #e45647;
 }
+textarea.table-form,
+input[type="text"].table-form,
+input[type="email"].table-form,
+.chosen-container .chosen-choices.table-form,
+.chosen-container .chosen-single.table-form {
+  background-color: transparent;
+  text-align: right;
+  border: none;
+  min-height: 0;
+  padding: 0;
+  margin-right: 0.5em;
+  width: 5em;
+  color: #2c2c2c !important;
+}
 
 textarea {
   resize: none;
@@ -1672,6 +1689,7 @@ article.dashboard table.calendar tr:nth-of-type(2n) {
 article.dashboard table.calendar td {
   padding: 10px;
   border-left: 1px solid #acacac;
+  width: 1%;
 }
 article.dashboard table.calendar td:first-child {
   border-left: none;

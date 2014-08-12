@@ -129,152 +129,52 @@
           </div>
           <section class="scrollbar-custom bg-lite">
             <div class="section-content">
-              <form action="itmes">
-                <div class="row">
-                  <div class="col-xs-7">
-                    <h2>Sélectionner le mois</h2>
-                  </div>
-                  <div class="col-xs-5">
-                    <div class="form-control without-search select-gradient">
-                      <select>
-                        <option value="Janvier">Janvier 2014</option>
-                        <option value="Février">Février 2014</option>
-                        <option value="Mars">Mars 2014</option>
-                        <option value="Avril">Avril 2014</option>
-                        <option value="Mai">Mai 2014</option>
-                        <option value="juin">juin 2014</option>
-                        <option value="juillet">juillet 2014</option>
-                        <option value="Août">Août 2014</option>
-                        <option value="Septembre">Septembre 2014</option>
-                        <option value="Octobre">Octobre 2014</option>
-                        <option value="Novembre">Novembre 2014</option>
-                        <option value="Décembre">Décembre 2014</option>
-                      </select>
-                    </div>
-                  </div>
+              <h2>Grille tarifaire</h2>
+              <div class="row">
+                <div class="col-lg-8">
+                  <table class="calendar text-center form-control">
+                    <thead>
+                      <tr>
+                        <td>Durée</td>
+                        <td>Prix </td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1 heure</td>
+                        <td>
+                          <input type="text" placeholder="Prix..." class="table-form">€
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>1 jours</td>
+                        <td>
+                          <input type="text" placeholder="Prix..." class="table-form">€
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>3 jours</td>
+                        <td>
+                          <input type="text" placeholder="Prix..." class="table-form">€
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>7 jours</td>
+                        <td>
+                          <input type="text" placeholder="Prix..." class="table-form">€
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>15 jours</td>
+                        <td>
+                          <input type="text" placeholder="Prix..." class="table-form">€
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <div class="row">
-                  <div class="col-xs-12 indent-sm-b">
-                    <table class="calendar text-center">
-                      <thead>
-                        <tr>
-                          <td>Lun</td>
-                          <td>Mar</td>
-                          <td>Mer</td>
-                          <td>Jeu</td>
-                          <td>ven</td>
-                          <td>Sam</td>
-                          <td>Dim</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td class="outages">1</td>
-                          <td>2</td>
-                          <td>3</td>
-                          <td>4</td>
-                          <td class="booking">5</td>
-                          <td>6</td>
-                          <td>7</td>
-                        </tr>
-                        <tr>
-                          <td class="outages">8</td>
-                          <td>9</td>
-                          <td>10</td>
-                          <td>11</td>
-                          <td class="booking">12</td>
-                          <td>13</td>
-                          <td>14</td>
-                        </tr>
-                        <tr>
-                          <td class="outages">15</td>
-                          <td>16</td>
-                          <td>17</td>
-                          <td>18</td>
-                          <td class="booking">19</td>
-                          <td>20</td>
-                          <td>21</td>
-                        </tr>
-                        <tr>
-                          <td class="outages">22</td>
-                          <td>23</td>
-                          <td>24</td>
-                          <td>25</td>
-                          <td class="booking">26</td>
-                          <td>27</td>
-                          <td>28</td>
-                        </tr>
-                        <tr>
-                          <td class="outages">29</td>
-                          <td>30</td>
-                          <td>31</td>
-                          <td>32</td>
-                          <td class="booking">33</td>
-                          <td>34</td>
-                          <td>35</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-4">
-                    <label class="check-btn form-control text-danger-light">
-                      <input type="checkbox" checked><span><i class="fa fa-check"></i></span>Indisponiblités
-                    </label>
-                  </div>
-                  <div class="col-xs-4">
-                    <label class="check-btn form-control text-success-light">
-                      <input type="checkbox" checked><span><i class="fa fa-check"></i></span>Réservations
-                    </label>
-                  </div>
-                </div>
-                <div class="row indent-xs-b">
-                  <div class="col-xs-12 indent-sm-b">
-                    <table class="calendar bg-light text-center">
-                      <thead>
-                        <tr>
-                          <td>Date de début</td>
-                          <td>Date de fin</td>
-                          <td>Motifs</td>
-                          <td>Action </td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>12/06/2014</td>
-                          <td>12/06/2014</td>
-                          <td class="text-success-light">Réservé</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>12/06/2014</td>
-                          <td>12/06/2014</td>
-                          <td class="text-danger-light">Indisponible</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>12/06/2014</td>
-                          <td>12/06/2014</td>
-                          <td class="text-danger-light">Indisponible</td>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>12/06/2014</td>
-                          <td>12/06/2014</td>
-                          <td class="text-success-light">Réservé</td>
-                          <td></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-8 col-xs-offset-2">
-                    <button type="submit" class="btn bg-success-hover text-white">Ajoutez une nouvelle disponibilité</button>
-                  </div>
-                </div>
-              </form>
+                <div class="col-lg-8"></div>
+              </div>
             </div>
           </section>
         </aside>

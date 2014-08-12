@@ -1,9 +1,9 @@
 .container
   ul.nav.nav-justified
-    -each group in footer_links
+    each group in footer_links
       li.divide
       li.ul-wrapper: .centering
         h4.text-nowrap #{group.header}
         ul.nav
-          -each link in group.links
+          each link in group.links
             li.link-wrapper: a(href = "#") #{link}
