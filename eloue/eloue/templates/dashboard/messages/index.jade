@@ -13,8 +13,9 @@ block content
   else
     include ./_section_dialogs
 
-    if conversations_is_selected
-      include ./_notification_no_selected_dialog
-    else
-      include ./_aside_product_detail
-      include ./_section_communication
+    .content-view
+      if conversations_is_selected
+        include ./_notification_no_selected_dialog
+      else
+        include ./_aside_product_detail
+        include ./_section_communication

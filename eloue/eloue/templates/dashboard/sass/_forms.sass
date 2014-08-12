@@ -100,6 +100,32 @@ label.rad-btn
     border-color: $gray-medium
 
 // custom checkbox
+label.check-btn
+  cursor: pointer
+  input
+    display: none
+    display: inline\9
+    height: 0
+    overflow: hidden
+    font-size: 0
+    width: 0
+    padding: 0
+    &:checked + span > i
+      color: $gray-strong
+  span
+    display: inline-block
+    margin-right: $indent-xs
+    border: $bd-lighter
+    width: 1.4em
+    height: 1.4em
+    vertical-align: -.4em
+    position: relative
+    +border-radius($bdrs)
+    i
+      color: transparent
+      width: 1em
+      height: 1em
+      +centred-abs()
 
 // custom select
 .chosen-container

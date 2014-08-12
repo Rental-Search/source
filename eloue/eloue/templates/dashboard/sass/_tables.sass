@@ -3,7 +3,7 @@ article.dashboard
     width: 100%
     border-collapse: collapse
     &.calendar
-      thead
+      thead tr
         background-color: $gray-lighter
       tbody
         background-color: darken($gray-lite, 2%)
@@ -15,3 +15,9 @@ article.dashboard
         &:first-child
           border-left: none
         &.outages
+          background-color: lighten($brand-danger, 35%)
+        &.booking
+          background-color: lighten($brand-success, 45%)
+    &.bg-light
+      tbody
+        background-color: #fff
