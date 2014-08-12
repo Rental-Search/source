@@ -1,5 +1,6 @@
 form(action="")
-  each type in ["DU", "AU"]
+  -var types = ["DU", "AU"]
+  each type in types
     .indent-sm-v.select-gradient.without-search.date-picker
       .form-group
         .input-group

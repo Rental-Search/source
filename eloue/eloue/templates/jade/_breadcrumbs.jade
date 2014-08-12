@@ -1,6 +1,7 @@
 .row-fluid.bd-b
-	.container
-		ol.breadcrumb
-			-each crumb in ["Accueil", "Location Voiture", "Nice", "BMW - 520 Touring luxe"]
-				li
-					a(href="#") #{crumb}
+  .container
+    ol.breadcrumb
+      -var crumbs = ["Accueil", "Location Voiture", "Nice", "BMW - 520 Touring luxe"]
+      -each crumb in crumbs
+        li
+          a(href="#") #{crumb}
