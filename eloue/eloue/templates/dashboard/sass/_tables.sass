@@ -1,3 +1,17 @@
 article.dashboard
   table
     width: 100%
+    border-collapse: collapse
+    &.calendar
+      thead
+        background-color: $gray-lighter
+      tbody
+        background-color: darken($gray-lite, 2%)
+      tr:nth-of-type(2n)
+        background-color: $gray-lite
+      td
+        padding: $indent-xs
+        border-left: 1px solid $gray-medium
+        &:first-child
+          border-left: none
+        &.outages

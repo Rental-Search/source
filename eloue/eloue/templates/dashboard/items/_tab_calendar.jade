@@ -10,7 +10,7 @@
               option(value="#{month}") #{month} 2014
     .row
       .col-xs-12
-        table.text-center
+        table.calendar.text-center
           thead
             tr
               each day in days_of_week
@@ -19,5 +19,11 @@
             each day, count in days
               if count % 7 == 0
                 tr
-              td #{day}
+                  td #{+day}
+                  td #{+day+1}
+                  td #{+day+2}
+                  td #{+day+3}
+                  td #{+day+4}
+                  td #{+day+5}
+                  td #{+day+6}
 
