@@ -2,9 +2,10 @@
     <li data-ng-repeat="booking in bookings track by booking.uuid">
         <img data-ng-src="{{booking.picture}}" />
         <p>{{booking.state}}</p>
-        <p>{{booking.title}}</p>
+        <a ui-sref="bookings.detail({uuid: booking.uuid})">{{booking.title}}</a>
         <p>{{booking.total_amount}}&#8364;</p>
         <p>Du {{booking.start_date}} au {{booking.end_date}}</p>
         <br />
     </li>
 </ul>
+<div ui-view></div>
