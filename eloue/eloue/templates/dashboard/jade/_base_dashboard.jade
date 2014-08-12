@@ -1,11 +1,18 @@
-doctype
-html(lang="fr")
-include ./_global_variables
-include ./_mixins
+extends ../../base
+
 block variables
-head
-  include ./section/_head
-body
+  include ./_global_variables
+  include ./_mixins
+  -var STATIC_URL
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/base.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/styles.css")
+
+block append scripts
+  script(src="#{STATIC_URL}js/dashboard_scripts.js")
+
+block content-body
   .container-full-screen
     //- include ./_src
     header header
@@ -17,4 +24,4 @@ body
               i(class="fa fa-#{item.icon}")
               | #{item.title}
       .content-view
-        block content
+        block content-view

@@ -8,10 +8,12 @@ head
     title e-loue
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
   block styles
     link(rel="stylesheet",    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700")
     link(rel="stylesheet",    href="#{STATIC_URL}css/chosen.min.css")
     link(rel="shortcut icon", href="#{STATIC_URL}img/favicon.ico")
+
   block scripts
     // jQuery
     script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
@@ -36,6 +38,10 @@ head
     // textarea autoresize
     // http://www.jacklmoore.com/autosize/
     script(src="#{STATIC_URL}js/jquery.autosize.js")
+    // modal window bootstrap
+    script(src="#{STATIC_URL}js/bootstrap/modal.js")
 
 body
   block content-body
+    include ./jade/_sign_in
+    include ./jade/_log_in
