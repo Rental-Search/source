@@ -321,4 +321,17 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
             return utilsService;
         }]);
+
+        /**
+         * Service for managing bookings.
+         */
+        EloueCommon.factory("BookingsService", ["Bookings", function (Bookings) {
+            var bookingsService = {};
+
+            bookingsService.getBookings = function (page) {
+                return Bookings.get({page: page});
+            };
+
+            return bookingsService;
+        }]);
     });

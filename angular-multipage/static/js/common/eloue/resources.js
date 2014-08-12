@@ -105,4 +105,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
                 "get": { method: "GET", params: {id: ":id"}}
             });
     }]);
+
+    /**
+     * Factory for managing bookings.
+     */
+    EloueCommon.factory("Bookings", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "bookings\\/");
+    }]);
 });
