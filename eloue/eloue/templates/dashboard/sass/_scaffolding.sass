@@ -136,47 +136,42 @@ a
   i
     font-size: 10em
 
-header
-  height: 120px
+h2
+  font-size: $font-size-large
+  font-weight: $fw-regular
+  margin-bottom: $indent-sm
 
-article.dashboard
+h3
+  // color: $gray-dark
+  font-size: $font-size-base
+  font-weight: $fw-semibold
+  &.small
+    font-size: $font-size-base - 1
 
-  h2
-    font-size: $font-size-large
-    font-weight: $fw-regular
-    margin-bottom: $indent-sm
+h4
+  font-size: $font-size-smaller
+  font-weight: $fw-bold
+  &.small
+    font-size: $font-size-smaller - 2
 
-  h3
-    // color: $gray-dark
-    font-size: $font-size-base
-    font-weight: $fw-semibold
-    &.small
-      font-size: $font-size-base - 1
+h5
+  font-size: $font-size-smaller
+  font-weight: $fw-semibold
+  &.small
+    font-size: $font-size-smaller - 2
 
-  h4
-    font-size: $font-size-smaller
-    font-weight: $fw-bold
-    &.small
-      font-size: $font-size-smaller - 2
+p
+  margin-bottom: .5em
+  position: relative
+  &.normal
+    font-size: $font-size-base - 2
+  &.norm
+    font-size: $font-size-base - 1
+  &.small
+    font-size: $font-size-smaller - 2
 
-  h5
-    font-size: $font-size-smaller
-    font-weight: $fw-semibold
-    &.small
-      font-size: $font-size-smaller - 2
+small
+  font-size: $font-size-little
 
-  p
-    margin-bottom: .5em
-    position: relative
-    &.normal
-      font-size: $font-size-base - 2
-    &.norm
-      font-size: $font-size-base - 1
-    &.small
-      font-size: $font-size-smaller - 2
-
-  small
-    font-size: $font-size-little
-  
-  big
-    font-size: $font-size-bigger
+big
+  font-size: $font-size-bigger

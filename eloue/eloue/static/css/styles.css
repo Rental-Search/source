@@ -58,13 +58,13 @@ a {
   background: #24bd77;
 }
 
-.bg-success-hover {
+.bg-success-hover, header .btn-advertise {
   background: #24bd77;
   cursor: pointer;
   -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
-.bg-success-hover:hover {
+.bg-success-hover:hover, header .btn-advertise:hover {
   background: #1c925c;
 }
 
@@ -800,53 +800,55 @@ a {
   font-size: 10em;
 }
 
-header {
-  height: 120px;
-}
-
-article.dashboard h2 {
+h2 {
   font-size: 26px;
   font-weight: 400;
   margin-bottom: 20px;
 }
-article.dashboard h3 {
+
+h3 {
   font-size: 14px;
   font-weight: 600;
 }
-article.dashboard h3.small {
+h3.small {
   font-size: 13px;
 }
-article.dashboard h4 {
+
+h4 {
   font-size: 13px;
   font-weight: 700;
 }
-article.dashboard h4.small {
+h4.small {
   font-size: 11px;
 }
-article.dashboard h5 {
+
+h5 {
   font-size: 13px;
   font-weight: 600;
 }
-article.dashboard h5.small {
+h5.small {
   font-size: 11px;
 }
-article.dashboard p {
+
+p {
   margin-bottom: 0.5em;
   position: relative;
 }
-article.dashboard p.normal {
+p.normal {
   font-size: 12px;
 }
-article.dashboard p.norm {
+p.norm {
   font-size: 13px;
 }
-article.dashboard p.small {
+p.small {
   font-size: 11px;
 }
-article.dashboard small {
+
+small {
   font-size: 10px;
 }
-article.dashboard big {
+
+big {
   font-size: 21px;
 }
 
@@ -892,8 +894,12 @@ article.dashboard nav a:active {
   text-shadow: 0.1em 0.05em 0 rgba(255, 255, 255, 0.3);
 }
 article.dashboard > nav {
+  background-color: #24bd77;
   float: left;
   height: 100%;
+}
+article.dashboard > nav a {
+  text-decoration: none;
 }
 article.dashboard .content-view {
   overflow: hidden;
@@ -1193,6 +1199,139 @@ article.dashboard .content-view section {
   height: 100%;
 }
 
+header {
+  background-color: white;
+}
+header i {
+  display: inline-block;
+  font-family: "FontAwesome";
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+header .nav.without-spaces {
+  font-weight: 600;
+  font-size: 12px;
+  color: dimgray;
+  margin: 15px 0 5px;
+  overflow: hidden;
+}
+header .nav.without-spaces a {
+  color: #f27e36;
+}
+header .nav.without-spaces a:hover {
+  text-decoration: underline;
+}
+header .btn-advertise {
+  color: white;
+}
+header .framing {
+  border-top: 1px solid #eaeaea;
+}
+header .search-form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: table;
+}
+header .search-form form {
+  padding: 0 2em;
+  width: 100%;
+}
+header .table-cell {
+  display: table-cell;
+  width: 1%;
+  vertical-align: middle;
+}
+header .table-cell.main-cell {
+  width: 100%;
+}
+header .form-control {
+  height: 3em;
+  margin: 0;
+}
+header .what-field {
+  color: #24bd77 !important;
+  position: relative;
+  right: -1px;
+  border-color: lightgray !important;
+  font-weight: 700 !important;
+  border-radius: 4px 0 0 4px !important;
+}
+header .what-field::-moz-placeholder {
+  color: #24bd77 !important;
+  opacity: 1;
+}
+header .what-field:-ms-input-placeholder {
+  color: #24bd77 !important;
+}
+header .what-field::-webkit-input-placeholder {
+  color: #24bd77 !important;
+}
+header .what-field:hover {
+  border-color: #acacac !important;
+}
+header .where-field {
+  position: relative;
+  width: 40%;
+  z-index: 2;
+}
+header .where-field input {
+  width: 100%;
+  padding-left: 2.5em;
+  font-weight: 600;
+  border-radius: 0;
+  border-color: lightgray #eaeaea !important;
+}
+header .where-field input:hover {
+  border-color: #acacac !important;
+}
+header .where-field i {
+  font-size: 1.4em;
+  color: #acacac;
+}
+header .where-field i:before {
+  content: "\f041";
+  width: 1em;
+  height: 1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  margin: auto;
+  right: auto;
+  left: 0.75em;
+}
+header .btn-search {
+  position: relative;
+  left: -1px;
+  background-color: white;
+  border-color: lightgray;
+  border-radius: 0 4px 4px 0 !important;
+  width: 0;
+  padding: 0 3em 0 0;
+}
+header .btn-search i {
+  font-size: 1.4em;
+  color: #acacac;
+}
+header .btn-search i:before {
+  content: "\f002";
+  width: 1em;
+  height: 1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  margin: auto;
+}
+header .btn-search:hover {
+  background-color: #eaeaea;
+}
+
 .average-rate {
   margin-right: 1.5em;
 }
@@ -1303,28 +1442,35 @@ article.dashboard .content-view section {
   margin: 11.25px 30px;
 }
 
-.list-without-spaces {
+.list-without-spaces,
+.without-spaces {
   text-align: justify;
   width: 100%;
   line-height: 1;
   margin-bottom: -1em;
   overflow-y: hidden;
 }
-.list-without-spaces:after {
+.list-without-spaces:after,
+.without-spaces:after {
   display: inline-block;
   width: 100%;
   height: 0;
   overflow: hidden;
   content: "";
 }
-.list-without-spaces li {
+.list-without-spaces li,
+.without-spaces li {
   white-space: nowrap;
   display: inline-block;
 }
-.list-without-spaces li.divider {
+.list-without-spaces li.divide, .list-without-spaces li.divider,
+.without-spaces li.divide,
+.without-spaces li.divider {
   position: relative;
 }
-.list-without-spaces li.divider:before {
+.list-without-spaces li.divide:before, .list-without-spaces li.divider:before,
+.without-spaces li.divide:before,
+.without-spaces li.divider:before {
   position: absolute;
   background-color: #cccccc;
   width: 1px;
@@ -1333,7 +1479,9 @@ article.dashboard .content-view section {
   left: 0;
   content: "";
 }
-.list-without-spaces li.divider:first-child {
+.list-without-spaces li.divide:first-child, .list-without-spaces li.divider:first-child,
+.without-spaces li.divide:first-child,
+.without-spaces li.divider:first-child {
   display: none;
 }
 
@@ -1646,7 +1794,7 @@ input[type="email"],
   background: white;
   font-family: inherit !important;
   font-weight: 600;
-  color: #acacac !important;
+  color: #acacac;
   min-height: 3em;
   padding: 0 1em;
   padding-top: 0.8em \9;
@@ -1690,6 +1838,7 @@ input[type="email"]:focus,
 .chosen-container .chosen-single:hover,
 .chosen-container .chosen-single:focus {
   border-color: #acacac;
+  z-index: 5;
 }
 textarea:invalid,
 input[type="text"]:invalid,

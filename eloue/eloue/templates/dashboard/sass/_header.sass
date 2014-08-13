@@ -1,0 +1,95 @@
+header
+  background-color: white
+  i
+    display: inline-block
+    font-family:  $font-family-icon
+    font-style: normal
+    font-weight: normal
+    line-height: 1
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+  .nav.without-spaces
+    font-weight: $fw-semibold
+    font-size: $font-size-small
+    color: $gray-stronger
+    margin: 15px 0 5px
+    overflow: hidden
+    a
+      color: $brand-primary
+      &:hover
+        text-decoration: underline
+  .btn-advertise
+    color: white
+    @extend .bg-success-hover
+
+  .framing
+    border-top: $bd-lighter
+  .search-form
+    margin-top: $indent-sm
+    margin-bottom: $indent-sm
+    display: table
+    form
+      padding: 0 2em
+      width: 100%
+  .table-cell
+    display: table-cell
+    width: 1%
+    vertical-align: middle
+    &.main-cell
+      width: 100%
+  .form-control
+    height: $form-height
+    margin: 0
+  .what-field
+    color: $brand-success !important
+    position: relative
+    right: -1px
+    border-color: $gray-light !important
+    font-weight: $fw-bold !important
+    +border-radius($bdrs 0 0 $bdrs !important)
+    +placeholder($brand-success !important)
+    &:hover
+      border-color: $gray-medium !important
+  .where-field
+    position: relative
+    width: 40%
+    z-index: 2
+    input
+      width: 100%
+      padding-left: 2.5em
+      font-weight: $fw-semibold
+      +border-radius(0)
+      border-color: $gray-light $gray-lighter !important
+      &:hover
+        border-color: $gray-medium !important
+    i
+      font-size: 1.4em
+      color: $gray-medium
+      &:before
+        content: "\f041"
+        width: 1em
+        height: 1em
+        +centred-abs()
+        right: auto
+        left: .75em
+  .btn-search
+    position: relative
+    left: -1px
+    background-color: white
+    border-color: $gray-light
+    +border-radius(0 $bdrs $bdrs 0 !important)
+    width: 0
+    padding: 0 $form-height 0 0
+    i
+      font-size: 1.4em
+      color: $gray-medium
+      &:before
+        content: "\f002"
+        width: 1em
+        height: 1em
+        +centred-abs()
+      
+
+    &:hover
+      background-color: $gray-lighter
+      

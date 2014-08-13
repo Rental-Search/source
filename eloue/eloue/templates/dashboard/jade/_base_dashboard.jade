@@ -15,9 +15,10 @@ block append scripts
 block content-body
   .container-full-screen
     //- include ./_src
-    header header
+    header.header-site
+      include ../../jade/_header_site
     article.dashboard
-      nav.bg-success
+      nav
         ul
           each item in dashboard_nav_links
             li: a(href="../#{item.href}").text-success-dark
