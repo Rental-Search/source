@@ -355,9 +355,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 end_date: UtilsService.formatDate(value.ended_at, "dd MMMM yyyy")
                             };
 
+                            var bookingPromises = {};
+
                             // Get product id
                             var productId = UtilsService.getIdFromUrl(value.product);
-                            var bookingPromises = {};
 
                             // Get product
                             bookingPromises.product = ProductsService.getProduct(productId).$promise;
@@ -377,6 +378,35 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                         $q.all(promises).then(function (results) {
                             deferred.resolve(results);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                bookingsService.getBookingDetail = function (uuid) {
+                    var deferred = $q.defer();
+
+                    Bookings.get({uuid: uuid}).$promise.then(function (value) {
+                        var bookingPromises = {};
+
+                        // Get product id
+                        var productId = UtilsService.getIdFromUrl(value.product);
+
+                        // Get product
+                        bookingPromises.product = ProductsService.getProduct(productId).$promise;
+
+                        // Get picture
+                        bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+
+                        $q.all(bookingPromises).then(function (results) {
+                            var booking = {};
+
+                            booking.title = results.product.summary;
+                            if (jQuery(results.pictures.results).size() > 0) {
+                                booking.picture = results.pictures.results[0].image.thumbnail;
+                            }
+                            deferred.resolve(booking);
                         });
                     });
 

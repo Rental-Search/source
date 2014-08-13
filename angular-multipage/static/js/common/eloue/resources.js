@@ -110,7 +110,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing bookings.
      */
     EloueCommon.factory("Bookings", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "bookings\\/");
+        return $resource(Endpoints.api_url + "bookings/:uuid/?");
     }]);
 
     /**

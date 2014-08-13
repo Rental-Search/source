@@ -8,7 +8,11 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("BookingDetailCtrl", [
         "$scope",
         "$stateParams",
-        function ($scope, $stateParams) {
+        "BookingsService",
+        function ($scope, $stateParams, BookingsService) {
+            BookingsService.getBookingDetail($stateParams.uuid).then(function (booking) {
+                $scope.booking = booking;
+            });
         }
     ]);
 });
