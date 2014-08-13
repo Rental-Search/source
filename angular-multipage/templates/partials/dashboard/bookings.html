@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <ul class="scrollbar-custom block-with-thumbnail">
+    <ul class="scrollbar-custom">
         <!-- TODO change 'soon' class -->
         <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="booking in bookings track by booking.uuid">
             <div class="col-thumbnail">
@@ -49,4 +49,4 @@
         </li>
     </ul>
 </section>
-<div ui-view></div>
+<aside ui-view class="booking-detail scrollbar-custom"></aside>
