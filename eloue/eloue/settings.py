@@ -117,18 +117,16 @@ MEDIA_URL = local.MEDIA_URL
 SECRET_KEY = '0j7jp$u!5n00s7=e@evlo0%ng&xm%zv^3-vn6gyy$&nbdd7p*('
 
 # List of callables that know how to import templates from various sources.
-if not DEBUG:
-    TEMPLATE_LOADERS = (
-        ('django.template.loaders.cached.Loader', (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-            )
-        ),
-    )
-else:
-    TEMPLATE_LOADERS = (
+TEMPLATE_LOADERS = (
+    ('eloue.compat.pyjade.loader.Loader', (
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader',
+        )
+     ),
+)
+if not DEBUG:
+    TEMPLATE_LOADERS = (
+        ('django.template.loaders.cached.Loader', TEMPLATE_LOADERS),
     )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -248,15 +246,27 @@ IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash
 IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOnDownload'
 
 #pipeline configuration
-PIPELINE = getattr(local, 'PIPELINE', not DEBUG)
+PIPELINE_ENABLED = getattr(local, 'PIPELINE', not DEBUG)
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
-  'pipeline.compilers.less.LessCompiler',
+    'pipeline.compilers.less.LessCompiler',
+    'pipeline.compilers.sass.SASSCompiler',
 )
 PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
+PIPELINE_SASS_BINARY = getattr(local, 'PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 PIPELINE_CSS = {
+    'homepage_styles': {
+        'source_filenames': (
+            'sass/homepage_styles.sass',
+            #'css/chosen.min.css'
+        ),
+        'output_filename': 'css/homepage_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'master': {
         'source_filenames': (
             'less/styles.less',
@@ -512,7 +522,13 @@ AWS_HEADERS = {
 STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
 STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
 STATICFILES_DIRS = ['eloue/static/', ]
+# Pipeline uses staticfiles app as the backend
 STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
+STATICFILES_FINDERS = (
+    'pipeline.finders.FileSystemFinder',
+    'pipeline.finders.AppDirectoriesFinder',
+    'eloue.compat.pipeline.finders.TemplatesFileSystemFinder',
+)
 
 
 #API KEYS

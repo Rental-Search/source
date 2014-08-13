@@ -76,6 +76,48 @@ router.register(r'bookings', rent_api.BookingViewSet, base_name='booking')
 router.register(r'comments', rent_api.CommentViewSet, base_name='comment')
 router.register(r'sinisters', rent_api.SinisterViewSet, base_name='sinister')
 
+class ExtraContextTemplateView(TemplateView):
+    extra_context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(ExtraContextTemplateView, self).get_context_data(**kwargs)
+        context.update(self.extra_context)
+        return context
+
+partials_urlpatterns = patterns('',
+    url(r'^homepage/login-form.html$', TemplateView.as_view(
+        template_name='jade/_log_in.jade',
+        ), name='new_ui_homepage_login',
+    ),
+    url(r'^homepage/registration-form.html$', TemplateView.as_view(
+        template_name='jade/_sign_in.jade',
+        ), name='new_ui_homepage_registration',
+    ),
+)
+
+city_list = [
+    {"name": "paris", "actives": 123254},
+    {"name": "lyon", "actives": 98453},
+    {"name": "toulouse", "actives": 90657},
+    {"name": "nantes", "actives": 123254},
+    {"name": "rennes", "actives": 98453},
+    {"name": "bordeaux", "actives": 90657},
+    {"name": "lille", "actives": 123254},
+    {"name": "montpelier", "actives": 98453},
+    {"name": "rouen", "actives": 90657},
+]
+
+newui_urlpatterns = patterns('',
+    url(r'^$', ExtraContextTemplateView.as_view(
+        template_name='index.jade',
+        extra_context={
+            'cities': city_list,
+        }),
+        name='new_ui_index',
+    ),
+    url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_partials')),
+)
+
 urlpatterns = patterns('',
     url(r'^invitation_sent/$', TemplateView.as_view(template_name='accounts/invitation_sent.html'), name='invitation_sent'),
     url(r'^user_geolocation/$', 'accounts.views.user_geolocation', name='user_geolocation'),
@@ -149,6 +191,11 @@ urlpatterns = patterns('',
     url(r'^api/2.0/users/me/$', UserMeViewSet.as_view({'get': 'retrieve_me', 'put': 'update_me'})),
     url(r'^api/2.0/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # UI v3
+    url(r'^new_ui/', include(newui_urlpatterns, namespace='ui3')),
+    # social: support for sign-in by Google and/or Facebook
+#    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 )
 
 handler404 = 'eloue.views.custom404'
