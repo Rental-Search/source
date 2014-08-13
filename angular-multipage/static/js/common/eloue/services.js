@@ -337,8 +337,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "PicturesService",
             "AddressesService",
             "UsersService",
+            "PhoneNumbersService",
             "UtilsService",
-            function ($q, Bookings, ProductsService, PicturesService, AddressesService, UsersService, UtilsService) {
+            function ($q, Bookings, ProductsService, PicturesService, AddressesService, UsersService,
+                      PhoneNumbersService, UtilsService) {
                 var bookingsService = {};
 
                 bookingsService.getBookings = function (page) {
@@ -411,6 +413,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var ownerId = UtilsService.getIdFromUrl(product.owner);
                             productPromises.owner = UsersService.get(ownerId).$promise;
 
+                            // Get phone
+                            var phoneId = UtilsService.getIdFromUrl(product.phone);
+                            productPromises.phone = PhoneNumbersService.getPhoneNumber(phoneId).$promise;
+
                             $q.all(productPromises).then(function (results) {
                                 var address = results.address;
                                 booking.address = {};
@@ -422,6 +428,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 booking.owner = {};
                                 booking.owner.username = owner.username;
                                 booking.owner.avatar = owner.avatar.thumbnail;
+
+                                var phone = results.phone;
+                                booking.owner.phone = phone.number;
 
                                 productDeferred.resolve(booking);
                             });
@@ -470,5 +479,18 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             };
 
             return addressesService;
+        }]);
+
+        /**
+         * Service for managing phone numbers.
+         */
+        EloueCommon.factory("PhoneNumbersService", ["PhoneNumbers", function (PhoneNumbers) {
+            var phoneNumbersService = {};
+
+            phoneNumbersService.getPhoneNumber = function (phoneNumbersId) {
+                return PhoneNumbers.get({id: phoneNumbersId});
+            };
+
+            return phoneNumbersService;
         }]);
     });
