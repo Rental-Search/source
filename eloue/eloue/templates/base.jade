@@ -27,9 +27,11 @@ head
     script(src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js")
     // selectivizr
     script(src="#{STATIC_URL}js/selectivizr.js")
+    // end scripts for IE < 9
+      
     // geolocation by Google
     script(src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places")
-    // end scripts for IE < 9
+    script(src="#{STATIC_URL}js/formmapper.js")
 
     // custom select 
     // http://harvesthq.github.io/chosen/
