@@ -17,12 +17,12 @@
       li.divide
       li: ul.nav
         each city, index in cities
-          -var indx = index % 3
+          -var indx = (index + 1) % 3
           if indx == 0
             +list(city.name, city.actives)
       li.divide
       li: ul.nav
         each city, index in cities
-          -var indx = index % 3
+          -var indx = (index + 2) % 3
           if indx == 0
             +list(city.name, city.actives)
