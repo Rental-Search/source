@@ -767,8 +767,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = models.Product.on_site.all()
-    serializer_class = serializers.ProductSerializer
+    queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct')
     filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter)
     owner_field = 'owner'
     search_index = product_search
@@ -787,23 +786,27 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         return response.Response(res)
 
-class CarProductViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows car products to be viewed or edited.
-    """
-    queryset = models.CarProduct.on_site.all()
-    serializer_class = serializers.CarProductSerializer
-    filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
-
-class RealEstateProductViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows real estate products to be viewed or edited.
-    """
-    queryset = models.RealEstateProduct.on_site.all()
-    serializer_class = serializers.RealEstateProductSerializer
-    filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
+    def get_serializer(self, instance=None, **kwargs):
+        """
+        Return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        
+        We should use different Seializer classes for instances of
+        Product, CarProduct and RealEstateProduct models
+        """
+        if getattr(instance, 'carproduct', None):
+            # we have CarProduct here
+            serializer_class = serializers.CarProductSerializer
+            instance = instance.carproduct
+        elif getattr(instance, 'realestateproduct', None):
+            # we have RealEstateProduct here
+            serializer_class = serializers.RealEstateProductSerializer
+            instance = instance.realestateproduct
+        else:
+            # we have generic Product here
+            serializer_class = serializers.ProductSerializer
+        context = self.get_serializer_context()
+        return serializer_class(instance, context=context, **kwargs)
 
 class PriceViewSet(viewsets.ModelViewSet):
     """

@@ -1,5 +1,5 @@
 
-from rest_framework.serializers import HyperlinkedModelSerializer, ImageField
+from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework import fields
 
 from products import models
