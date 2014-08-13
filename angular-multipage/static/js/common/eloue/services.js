@@ -368,7 +368,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             $q.all(bookingPromises).then(function (results) {
                                 booking.title = results.product.summary;
                                 if (jQuery(results.pictures.results).size() > 0) {
-                                    booking.picture = results.pictures.results[0].image.display;
+                                    booking.picture = results.pictures.results[0].image.thumbnail;
                                 }
                                 bookingDeferred.resolve(booking);
                             });
