@@ -1,11 +1,52 @@
-<ul>
-    <li data-ng-repeat="booking in bookings track by booking.uuid">
-        <img data-ng-src="{{booking.picture}}" />
-        <p>{{booking.state}}</p>
-        <a ui-sref="bookings.detail({uuid: booking.uuid})">{{booking.title}}</a>
-        <p>{{booking.total_amount}}&#8364;</p>
-        <p>Du {{booking.start_date}} au {{booking.end_date}}</p>
-        <br />
-    </li>
-</ul>
+<section class="tabs-vertical-active lg">
+    <div class="section-header">
+        <div class="row indent-xs-v">
+            <div class="col-xs-9 tabs-horisontal-active">
+                <ul class="list-without-spaces">
+                    <li class="divider"></li>
+                    <li class="tab-horisontal">
+                        <h3 class="small">Tous</h3>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="tab-horisontal">
+                        <h3 class="small">Propriétaires</h3>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="tab-horisontal">
+                        <h3 class="small">Emprunteurs</h3>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-3">
+                <div class="select-gradient without-search date-picker">
+                    <select>
+                        <option value="statut">Statut</option>
+                        <option value="statut">Statut</option>
+                        <option value="statut">Statut</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul class="scrollbar-custom block-with-thumbnail">
+        <!-- TODO change 'soon' class -->
+        <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="booking in bookings track by booking.uuid">
+            <div class="col-thumbnail">
+                <!-- TODO change 'a venir' title -->
+                <div class="thumbnail"><a href="#"><img src="{{booking.picture}}"
+                                                        alt="{{booking.title}}" width="130"></a><span
+                        class="booking-bage">a venir</span></div>
+            </div>
+            <div class="col-exposition">
+                <h3 class="small">Location <a ui-sref="bookings.detail({uuid: booking.uuid})"
+                                              class="text-underline-hover">{{booking.title}}</a></h3>
+
+                <p class="normal text-gray">
+                    <big class="text-primary">{{booking.total_amount}}€</big>
+                    <br>Du {{booking.start_date}} au {{booking.end_date}}
+                </p>
+            </div>
+        </li>
+    </ul>
+</section>
 <div ui-view></div>
