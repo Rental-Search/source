@@ -1,3 +1,15 @@
 extends ./_base_items
 
 block details
+  case tabs[1]
+    when "photos"
+      include ./_tab_photos
+    when "pricing"
+      include ./_tab_tarifs
+    when "calendar"
+      include ./_tab_calendar
+    when "terms"
+      //- include ./
+    when "profits"
+      //- include ./
+

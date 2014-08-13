@@ -1,7 +1,8 @@
 mixin average-rate(rating, counter)
   span.average-rate
     span.star
-      each star in [1, 2, 3, 4, 5]
+      -var stars = [1, 2, 3, 4, 5]
+      each star in stars
         if star === rating
           i.current.fa.fa-lg.fa-star
         else

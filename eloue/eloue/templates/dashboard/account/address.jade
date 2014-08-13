@@ -1,0 +1,54 @@
+extends ./_base_account
+block sections
+  section.tabs-vertical-active.md.scrollbar-custom
+    ul.block-with-thumbnail
+      each address in addresses
+        li.tab-vertical.block-with-thumbnail(class="#{address.def}")
+          .col-thumbnail
+            .thumbnail
+              img(src="#{STATIC_URL}img/#{address.thumbnail}", width="70")
+          .col-exposition
+            h3.indent-xs-b
+              | #{address.street}
+              i.fa.fa-check.fa-lg.pull-right
+            p.normal.text-gray #{address.zip_code} #{address.city}
+
+  aside.address-detail.pull-nothing.scrollbar-custom.scrollbar-left
+    .section-content
+      form(action="address-add").indent-md-b
+        .row
+          .col-sm-12
+            input#street.form-control(type="text", name="street", placeholder="Rue *", required, autofocus)
+        .row
+          .col-sm-6
+            input#zip-code.form-control(type="text", name="zip-code", placeholder="Code postal *", required, autofocus)
+          .col-sm-6
+            input#city.form-control(type="text", name="city", placeholder="Ville *", required, autofocus)
+        .row
+          .col-xs-12
+            label.check-btn.form-control
+              input(type="checkbox", checked)
+              span: i.fa.fa-check
+              | Addresse par défaut
+        .row
+          .col-xs-12.text-right
+            a(href="#").text-danger.text-underline-hover.indent-sm-h Supprimer
+            button(type="submit").btn-inline.bg-success-hover.text-white Enregistrer
+      h3 Annonces associées à cette adresse
+    section.tabs-vertical-active
+      ul.block-with-thumbnail
+        each item in bookings
+          li.tab-vertical.block-with-thumbnail(class="#{item.bage.classname}")
+            .col-thumbnail
+              .thumbnail
+                a(href="#"): img(src="#{STATIC_URL}img/#{item.lot.thumbnail}", alt="#{item.lot.name} photo", width="130")
+            .col-exposition
+              h3.small
+                | Location 
+                a(href="#").text-underline-hover #{item.lot.name}
+              p.normal.text-gray
+                big.text-primary #{item.lot.price}€ / jour
+                br
+                +average-rate(booking_detail.lot.rate)
+                +number-of-comments(booking_detail.lot.comments_count)
+                +number-of-bookings(booking_detail.lot.booking_count)

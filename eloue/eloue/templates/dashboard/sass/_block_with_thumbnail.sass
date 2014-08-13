@@ -64,3 +64,29 @@
       background-color: white
       border: $bd-lighter
       +box-shadow(0 1px $gray-light)
+
+.container-with-square-thumbnail
+  +clearfix()
+  margin: -2%
+  > li
+    width: 21%
+    padding-top: 21%
+    margin: 2%
+    overflow: hidden
+    position: relative
+    float: left
+    > .file-input-drag
+      width: 100%
+      height: 100%
+      position: absolute
+      left: 0
+      top: 0
+      padding: 0
+      > i
+        +square(1em)
+        +centred-abs()
+    > img
+      position: absolute
+      top: 0
+      left: 0
+      height: 100%

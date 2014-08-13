@@ -1,4 +1,5 @@
--each item in ["Du", "Au"]
+-var items = ["Du", "Au"]
+each item in items
 	.row.date-picker
 		.table-cell.main-cell
 			.input-group
@@ -8,6 +9,5 @@
 					span
 		.table-cell
 			select.form-control
-				-for(var i=0;i<24;i++)
-					-var n = i>9? i + ":00" : "0" + i + ":00"
-					option(value=n) #{n}
+				each interval in timing
+					option(value="#{interval}") #{interval}

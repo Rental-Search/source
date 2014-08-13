@@ -1,0 +1,12 @@
+section.tabs-vertical-active.sm.scrollbar-custom: ul
+  each dialog in dialogs_tabs
+    li.tab-vertical.block-with-thumbnail
+      .col-thumbnail
+        .thumbnail.round: a(href="#{dialog.tenant.account_link}")
+          img(src="#{STATIC_URL}#{dialog.tenant.thumbnail_small}", alt="#{dialog.tenant.name} photo", width="20", height="20")
+      .col-exposition
+          a(href="#{dialog.tenant.account_link}").text-underline-hover.pull-left
+            h3.small #{dialog.tenant.first_name}
+          span.time-badge.pull-right #{dialog.time}
+          h5.text-overflow.small.text-gray-stronger.clear-both #{dialog.topic}
+          p.text-overflow.text-gray.small #{dialog.last_message}

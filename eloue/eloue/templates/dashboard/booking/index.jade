@@ -1,10 +1,9 @@
 extends ../jade/_base_dashboard
 
-block variables
-  -var STATIC_URL = "../../../static/"
-  -var src_img = "dashboard/booking"
+block append variables
+  -STATIC_URL = "../../../static/"
 
-block content
+block content-view
   section.tabs-vertical-active.lg
     .section-header
       .row.indent-xs-v
@@ -19,7 +18,8 @@ block content
               option(value="statut") Statut
               option(value="statut") Statut
               option(value="statut") Statut
-    ul.scrollbar-custom
+
+    ul.scrollbar-custom.block-with-thumbnail
       each booking in bookings
         li.tab-vertical.block-with-thumbnail(class="#{booking.bage.classname}")
           .col-thumbnail
@@ -97,7 +97,7 @@ block content
               span
                 | Notes :&nbsp;&nbsp;
                 +average-rate(0)
-              button(type="submit").btn-inline.bg-success.text-white Envoyer
+              button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
 
     section.booking-activity-feed.text-gray-strong
       ul.section-content

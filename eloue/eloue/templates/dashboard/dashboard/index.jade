@@ -1,0 +1,17 @@
+extends ../../base
+
+block variables
+  include ../jade/_global_variables
+  include ../jade/_mixins
+  -var STATIC_URL = "../../../static/"
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/base.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/styles.css")
+
+block append scripts
+  script(src="#{STATIC_URL}js/dashboard_scripts.js")
+
+block content-body
+  article.dashboard
+    .content-view

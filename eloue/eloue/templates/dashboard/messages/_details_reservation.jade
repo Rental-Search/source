@@ -1,0 +1,11 @@
+ul.zebra-list.indent-md-b
+  each info in booking_detail.informations
+    li.clearfix
+      .col-xs-3 #{info.title}
+      if info.allocate
+        .col-xs-9.text-success #{info.value}
+      else
+        .col-xs-9 #{info.value}
+.text-right
+  a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
+  a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat

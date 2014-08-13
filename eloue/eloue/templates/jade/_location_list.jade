@@ -10,16 +10,19 @@
     ul.nav.nav-justified
       li.divide
       li: ul.nav
-        -each city, index in cities
-          -if(index%3===0)
+        each city, index in cities
+          -var indx = index % 3
+          if indx == 0
             +list(city.name, city.actives)
       li.divide
       li: ul.nav
-        -each city, index in cities
-          -if((index-1)%3===0)
+        each city, index in cities
+          -var indx = index % 3
+          if indx == 0
             +list(city.name, city.actives)
       li.divide
       li: ul.nav
-        -each city, index in cities
-          -if((index-2)%3===0)
+        each city, index in cities
+          -var indx = index % 3
+          if indx == 0
             +list(city.name, city.actives)
