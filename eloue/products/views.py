@@ -794,14 +794,14 @@ class ProductViewSet(viewsets.ModelViewSet):
         We should use different Seializer classes for instances of
         Product, CarProduct and RealEstateProduct models
         """
-        if getattr(instance, 'carproduct', None):
+        if hasattr(instance, 'carproduct'):
             # we have CarProduct here
             serializer_class = serializers.CarProductSerializer
-            instance = instance.carproduct
-        elif getattr(instance, 'realestateproduct', None):
+            self.object = instance = instance.carproduct
+        elif hasattr(instance, 'realestateproduct'):
             # we have RealEstateProduct here
             serializer_class = serializers.RealEstateProductSerializer
-            instance = instance.realestateproduct
+            self.object = instance = instance.realestateproduct
         else:
             # we have generic Product here
             serializer_class = serializers.ProductSerializer

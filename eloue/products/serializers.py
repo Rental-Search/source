@@ -22,8 +22,7 @@ class ProductSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
-                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies',
-                  'carproduct', 'realestateproduct')
+                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies')
         read_only_fields = ('id', 'owner', 'address', 'phone', 'quantity')
 
 class CarProductSerializer(HyperlinkedModelSerializer):
@@ -37,6 +36,7 @@ class CarProductSerializer(HyperlinkedModelSerializer):
                   'cruise_control', 'gps', 'baby_seat', 'roof_box', 'bike_rack', 'snow_tires', 'snow_chains',
                   'ski_rack', 'cd_player', 'audio_input', 'tax_horsepower', 'licence_plate', 'first_registration_date')
         read_only_fields = ('id', 'owner', 'address', 'phone', 'quantity')
+        view_name = 'product-detail'
 
 class RealEstateProductSerializer(HyperlinkedModelSerializer):
     class Meta:
@@ -49,6 +49,7 @@ class RealEstateProductSerializer(HyperlinkedModelSerializer):
                   'chimney', 'internet_access', 'kitchen', 'smoking_accepted', 'ideal_for_events', 'tv',
                   'washing_machine', 'tumble_dryer', 'computer_with_internet')
         read_only_fields = ('id', 'owner', 'address', 'phone', 'quantity')
+        view_name = 'product-detail'
 
 class PriceSerializer(HyperlinkedModelSerializer):
     amount = fields.DecimalField(source='local_currency_amount', max_digits=10, decimal_places=2)
