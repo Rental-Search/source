@@ -393,7 +393,26 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                     Bookings.get({uuid: uuid}).$promise.then(function (value) {
                         var bookingPromises = {};
-                        var booking = {};
+                        var booking = {
+                            total_amount: value.total_amount,
+                            deposit_amount: value.deposit_amount,
+                            start_date: UtilsService.formatDate(value.started_at, "EEEE dd MMMM yyyy"),
+                            end_date: UtilsService.formatDate(value.ended_at, "EEEE dd MMMM yyyy"),
+                            start_time: UtilsService.formatDate(value.started_at, "HH'h'mm"),
+                            end_time: UtilsService.formatDate(value.ended_at, "HH'h'mm")
+                        };
+
+                        // Set period
+                        var hourTime = 60 * 60 * 1000;
+                        var dayTime = 24 * hourTime;
+
+                        var startTime = Date.parse(value.started_at);
+                        var endTime = Date.parse(value.ended_at);
+
+                        var diffTime = endTime - startTime;
+
+                        booking.period_days = Math.round(diffTime / dayTime);
+                        booking.period_hours = Math.round((diffTime - dayTime *  booking.period_days) / hourTime);
 
                         // Get product id
                         var productId = UtilsService.getIdFromUrl(value.product);

@@ -38,23 +38,23 @@
             <ul class="zebra-list indent-md-v">
                 <li class="clearfix">
                     <div class="col-xs-3">Début</div>
-                    <div class="col-xs-9">Mardi 24 Juin 2014 à 09h00</div>
+                    <div class="col-xs-9">{{booking.start_date}} à {{booking.start_time}}</div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Fin</div>
-                    <div class="col-xs-9">Jeudi 26 Juin 2014 à 09h00</div>
+                    <div class="col-xs-9">{{booking.end_date}} à {{booking.end_time}}</div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Période</div>
-                    <div class="col-xs-9">3 jours et 9 heures</div>
+                    <div class="col-xs-9">{{booking.period_days}} jours et {{booking.period_hours}} heures</div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Prix</div>
-                    <div class="col-xs-9 text-success">168€</div>
+                    <div class="col-xs-9 text-success">{{booking.total_amount}}€</div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Caution</div>
-                    <div class="col-xs-9">250€</div>
+                    <div class="col-xs-9">{{booking.deposit_amount}}€</div>
                 </li>
             </ul>
             <div class="text-right"><a href="#" class="text-success text-underline-hover indent-sm-h">Annulation</a><a href="#" class="btn-inline bg-success-hover text-white">Télécharger le contrat</a></div>
