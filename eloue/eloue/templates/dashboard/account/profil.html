@@ -48,7 +48,7 @@
           <ul>
             <li><a href="../dashboard" class="text-success-dark"><i class="fa fa-home"></i>Dashboard</a></li>
             <li><a href="../messages" class="text-success-dark"><i class="fa fa-envelope-o"></i>Messages</a></li>
-            <li><a href="../booking" class="text-success-dark"><i class="fa fa-shield"></i>Booking</a></li>
+            <li><a href="../booking" class="text-success-dark"><i class="fa fa-table"></i>Booking</a></li>
             <li><a href="../items" class="text-success-dark"><i class="fa fa-th-list"></i>Items</a></li>
             <li><a href="../account/profil.html" class="text-success-dark"><i class="fa fa-user"></i>Account</a></li>
           </ul>
@@ -80,27 +80,27 @@
             </ul>
           </section>
           <div class="content-view">
-            <aside class="profil-info scrollbar-custom text-gray">
-              <div class="section-content">
-                <form id="change-photo" action="">
-                  <h2>Informations personnelles</h2>
+            <aside class="profil-info scrollbar-custom">
+              <div class="section-content text-gray">
+                <form id="change-photo" action="change-photo">
+                  <h2 class="text-black">Informations personnelles</h2>
                   <div class="row">
                     <div class="block-with-thumbnail form-control col-sm-12">
                       <div class="col-thumbnail">
-                        <div class="thumbnail round"><img src="../../../static/img/home-products/tenant.png" alt="Kroutchev photo"></div>
+                        <div class="thumbnail round indent-sm-r"><img src="../../../static/img/home-products/tenant.png" alt="Kroutchev photo"></div>
                       </div>
                       <div class="col-exposition">
-                        <label for="change-img" class="file-input-btn btn bg-gray-hover text-white indent-md-v">Modifier mon image
+                        <label for="change-img" class="file-input-btn btn bg-gray-hover text-white">Modifier mon image
                           <input type="file" id="change-img">
                         </label>
                       </div>
                     </div>
                   </div>
                 </form>
-                <form id="profile-information" action="">
+                <form id="profile-information" action="profil-info">
                   <div class="row">
                     <div class="col-sm-5">
-                      <h3>Je suis un professionnel ?</h3>
+                      <h3 class="text-black">Je suis un professionnel ?</h3>
                     </div>
                     <div class="col-sm-2">
                       <label class="rad-btn form-control">Oui
@@ -183,7 +183,7 @@
                   </div>
                   <div class="row">
                     <div class="col-sm-8">
-                      <h3>J’accepte de recevoir la newsletter e-loue</h3>
+                      <h3 class="text-black">J’accepte de recevoir la newsletter e-loue</h3>
                     </div>
                     <div class="col-sm-2">
                       <label class="rad-btn form-control">Oui
@@ -196,7 +196,7 @@
                       </label>
                     </div>
                   </div>
-                  <h2>Informations sur le permis</h2>
+                  <h2 class="text-black">Informations sur le permis</h2>
                   <div class="row form-control">
                     <div class="col-sm-2">
                       <select id="select-day" name="select-day" data-placeholder="Jour">

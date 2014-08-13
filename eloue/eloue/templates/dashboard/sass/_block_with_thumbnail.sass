@@ -65,6 +65,15 @@
       border: $bd-lighter
       +box-shadow(0 1px $gray-light)
 
+  &.disable
+    i, p
+      color: $gray-medium
+    a
+      background-color: $gray-medium
+      pointer-events: none
+      cursor: default
+
+
 .container-with-square-thumbnail
   +clearfix()
   margin: -2%

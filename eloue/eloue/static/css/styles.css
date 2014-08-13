@@ -164,6 +164,50 @@ a {
   background-color: #fef9f6;
 }
 
+.text-info {
+  color: #3959a8;
+}
+
+.text-info-hover {
+  color: #3959a8;
+  cursor: pointer;
+  -webkit-transition: color 0.2s;
+  transition: color 0.2s;
+}
+.text-info-hover:hover {
+  color: #2c4582;
+}
+
+.text-info-dark {
+  color: #1f315c;
+}
+
+.text-info-light {
+  color: #7690d1;
+}
+
+.bg-info {
+  background: #3959a8;
+}
+
+.bg-info-hover {
+  background: #3959a8;
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+.bg-info-hover:hover {
+  background: #2c4582;
+}
+
+.bg-info-dark {
+  background-color: #050810;
+}
+
+.bg-info-light {
+  background-color: #c3ceea;
+}
+
 .text-gray {
   color: #acacac;
 }
@@ -472,6 +516,50 @@ a {
   background-color: white;
 }
 
+.text-blue {
+  color: #007bb6;
+}
+
+.text-blue-hover {
+  color: #007bb6;
+  cursor: pointer;
+  -webkit-transition: color 0.2s;
+  transition: color 0.2s;
+}
+.text-blue-hover:hover {
+  color: #005983;
+}
+
+.text-blue-dark {
+  color: #003650;
+}
+
+.text-blue-light {
+  color: #1db6ff;
+}
+
+.bg-blue {
+  background: #007bb6;
+}
+
+.bg-blue-hover {
+  background: #007bb6;
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+.bg-blue-hover:hover {
+  background: #005983;
+}
+
+.bg-blue-dark {
+  background-color: black;
+}
+
+.bg-blue-light {
+  background-color: #83d7ff;
+}
+
 .text-left {
   text-align: left;
 }
@@ -564,6 +652,32 @@ a {
 
 .indent-xs-l {
   margin-right: 10px !important;
+}
+
+.indent-lg-h {
+  margin-left: 60px !important;
+  margin-right: 60px !important;
+}
+
+.indent-lg-v {
+  margin-bottom: 45px !important;
+  margin-top: 45px !important;
+}
+
+.indent-lg-t {
+  margin-top: 45px !important;
+}
+
+.indent-lg-r {
+  margin-right: 60px !important;
+}
+
+.indent-lg-b {
+  margin-bottom: 45px !important;
+}
+
+.indent-lg-l {
+  margin-right: 60px !important;
 }
 
 .text-justify-force {
@@ -1026,6 +1140,14 @@ article.dashboard .content-view section {
   border: 1px solid #eaeaea;
   -webkit-box-shadow: 0 1px lightgray;
   box-shadow: 0 1px lightgray;
+}
+.block-with-thumbnail.disable i, .block-with-thumbnail.disable p {
+  color: #acacac;
+}
+.block-with-thumbnail.disable a {
+  background-color: #acacac;
+  pointer-events: none;
+  cursor: default;
 }
 
 .container-with-square-thumbnail {

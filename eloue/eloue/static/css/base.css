@@ -127,6 +127,14 @@ input[type="reset"]::-moz-focus-inner {
   font-size: 5em;
 }
 
+.fa-6x {
+  font-size: 6em;
+}
+
+.fa-7x {
+  font-size: 7em;
+}
+
 .fa-fw {
   width: 1.28571em;
   text-align: center;

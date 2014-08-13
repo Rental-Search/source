@@ -1,22 +1,22 @@
 extends ./_base_account
 block sections
-  aside.profil-info.scrollbar-custom.text-gray
-    .section-content
-      form#change-photo(action="")
-        h2 Informations personnelles
+  aside.profil-info.scrollbar-custom
+    .section-content.text-gray
+      form#change-photo(action="change-photo")
+        h2.text-black Informations personnelles
         .row
           //- change photo
           .block-with-thumbnail.form-control.col-sm-12
             .col-thumbnail
-              .thumbnail.round: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo")
+              .thumbnail.round.indent-sm-r: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo")
             .col-exposition
-              label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white.indent-md-v Modifier mon image
+              label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifier mon image
                 input(type="file")#change-img
-      form#profile-information(action="")
+      form#profile-information(action="profil-info")
         //- proffessional radio btns
         .row
           .col-sm-5
-            h3 Je suis un professionnel ?
+            h3.text-black Je suis un professionnel ?
           .col-sm-2
             label.rad-btn.form-control Oui
               input#newsletter(type="radio", name="is-pro")
@@ -71,7 +71,7 @@ block sections
         //- newsletter
         .row
           .col-sm-8
-            h3 J’accepte de recevoir la newsletter e-loue
+            h3.text-black J’accepte de recevoir la newsletter e-loue
           .col-sm-2
             label.rad-btn.form-control Oui
               input#newsletter(type="radio", name="newsletter")
@@ -80,7 +80,7 @@ block sections
             label.rad-btn.form-control Non
               input#newsletter(type="radio", name="newsletter", checked)
               i
-        h2 Informations sur le permis
+        h2.text-black Informations sur le permis
         //- date birthday
         .row.form-control
           .col-sm-2
