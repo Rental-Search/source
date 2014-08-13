@@ -1,0 +1,61 @@
+extends ./_base_account
+block sections
+  aside.address-detail.pull-nothing.scrollbar-custom
+    .section-content.full-width
+      h2.text-gray.indent-md-b Locataire (débits)
+      p.indent-sm-b
+        span.indent-xs-r
+          | Carte de crédit : 
+          b #{payments.debit.card.number} 
+        span.indent-xs-r
+          | Expiratiion : 
+          b #{payments.debit.card.expiration} 
+        span.indent-xs-r
+          | (
+          a(href="").text-success.text-underline-hover Editer la carte de crédit
+          | )
+
+      table.calendar.text-center
+        thead
+          tr
+            each td in payments.debit.thead_tds
+              td #{td}
+        tbody
+          each lot in payments.debit.lots
+            tr
+              td #{lot.date}
+              td.text-left
+                a(href="").text-success.text-underline-hover #{lot.lot.name}
+                br
+                | Do #{lot.date_of} au #{lot.date_to}
+              td #{lot.account.number}
+              td: a(href="").text-success.text-underline-hover Reçu
+              td #{lot.lot.price}€
+
+    .section-content.full-width
+      h2.text-gray.indent-md-b Propriétaire (crédit)
+      p.indent-sm-b
+        span.indent-xs-r
+          | IBAN : 
+          b #{payments.credit.card.number} 
+        span.indent-xs-r
+          | (
+          a(href="").text-success.text-underline-hover Editer le IBAN
+          | )
+
+      table.calendar.text-center
+        thead
+          tr
+            each td in payments.credit.thead_tds
+              td #{td}
+        tbody
+          each lot in payments.credit.lots
+            tr
+              td #{lot.date}
+              td.text-left
+                a(href="").text-success.text-underline-hover #{lot.lot.name}
+                br
+                | Do #{lot.date_of} au #{lot.date_to}
+              td #{lot.account.number}
+              td: a(href="").text-success.text-underline-hover Orde
+              td #{lot.lot.price}€

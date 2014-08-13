@@ -112,3 +112,20 @@
 -addresses[0] = {thumbnail: "map.png", street: "94 avenue Felix Faure", zip_code: "84393", city: "Paris", def: "default"}
 -addresses[1] = {thumbnail: "map.png", street: "94 avenue Felix Faure", zip_code: "84393", city: "Paris", def: ""}
 -addresses[2] = {thumbnail: "map.png", street: "94 avenue Felix Faure", zip_code: "84393", city: "Paris", def: ""}
+
+-var visa = {number: "4*** **** **** 2767", expiration: "3/2016"}
+-var IBAN = {number: "FR76000000000000"}
+
+-var payments ={debit: {}, credit: {}}
+
+-payments.debit.card = visa
+-payments.debit.thead_tds = ["Date", "Réservation", "Compte", "Paiement", "Débit"]
+-payments.debit.lots = [{date: "12/06/2014", lot: lot_BMW, date_of:" 24 Juin 2014", date_to: "26 Juin 2014", account: visa}]
+-payments.debit.lots[1] = payments.debit.lots[0]
+-payments.debit.lots[2] = payments.debit.lots[0]
+
+-payments.credit.card = IBAN
+-payments.credit.thead_tds = ["Date", "Réservation", "Compte", "Paiement", "Crédit"]
+-payments.credit.lots = [{date: "12/06/2014", lot: lot_BMW, date_of:" 24 Juin 2014", date_to: "26 Juin 2014", account: IBAN}]
+-payments.credit.lots[1] = payments.credit.lots[0]
+-payments.credit.lots[2] = payments.credit.lots[0]

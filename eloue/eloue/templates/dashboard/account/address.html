@@ -1,184 +1,188 @@
 <!DOCTYPE html>
-<html lang="fr"></html>
-<head>
-  <title>e-loue</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-  <link rel="stylesheet" href="../../../static/css/chosen.min.css">
-  <link rel="stylesheet" href="../../../static/css/jquery.mCustomScrollbar.css">
-  <link rel="shortcut icon" href="../../../static/img/favicon.ico">
-  <link rel="stylesheet" href="../../../static/css/base.css">
-  <link rel="stylesheet" href="../../../static/css/styles.css">
-  <!-- jQuery-->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <!-- for IE < 9 -->
-  <!-- html5 tags supported-->
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-  <!-- palceholder supported-->
-  <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
-  <!-- selectivizr-->
-  <script src="../../../static/js/selectivizr.js"></script>
-  <!-- end scripts for IE < 9-->
-  <!-- geolocation by Google-->
-  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
-  <script src="../../../static/js/formmapper.js"></script>
-  <!-- custom select -->
-  <!-- http://harvesthq.github.io/chosen/-->
-  <script src="../../../static/js/chosen.jquery.min.js"></script>
-  <!-- textarea autoresize-->
-  <!-- http://www.jacklmoore.com/autosize/-->
-  <script src="../../../static/js/jquery.autosize.js"></script>
-  <!-- modal window bootstrap-->
-  <script src="../../../static/js/bootstrap/modal.js"></script>
-  <!-- custom scrollbar -->
-  <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
-  <script src="../../../static/js/jquery.mCustomScrollbar.js"></script>
-  <script src="../../../static/js/dashboard_scripts.js"></script>
-</head>
-<body>
-  <div class="container-full-screen">
-    <header>header</header>
-    <article class="dashboard">
-      <nav class="bg-success">
-        <ul>
-          <li><a href="../dashboard" class="text-success-dark"><i class="fa fa-home"></i>Dashboard</a></li>
-          <li><a href="../messages" class="text-success-dark"><i class="fa fa-envelope-o"></i>Messages</a></li>
-          <li><a href="../booking" class="text-success-dark"><i class="fa fa-shield"></i>Booking</a></li>
-          <li><a href="../items" class="text-success-dark"><i class="fa fa-th-list"></i>Items</a></li>
-          <li><a href="../account/profil.html" class="text-success-dark"><i class="fa fa-user"></i>Account</a></li>
-        </ul>
-      </nav>
-      <div class="content-view">
-        <section class="tabs-vertical-active sm scrollbar-custom">
+<html lang="fr">
+  <head>
+    <title>e-loue</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../../static/img/favicon.ico">
+    <!-- include font "Open Sans"-->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <!-- custom select.css-->
+    <!-- http://harvesthq.github.io/chosen/-->
+    <link rel="stylesheet" href="../../../static/css/chosen.min.css">
+    <!-- custom scrollbar.css-->
+    <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
+    <link rel="stylesheet" href="../../../static/css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="../../../static/css/base.css">
+    <link rel="stylesheet" href="../../../static/css/styles.css">
+    <!-- jQuery-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!-- for IE < 9 -->
+    <!-- html5 tags supported-->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <!-- palceholder supported-->
+    <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
+    <!-- selectivizr-->
+    <script src="../../../static/js/selectivizr.js"></script>
+    <!-- end scripts for IE < 9-->
+    <!-- geolocation by Google-->
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+    <script src="../../../static/js/formmapper.js"></script>
+    <!-- custom select.js-->
+    <script src="../../../static/js/chosen.jquery.min.js"></script>
+    <!-- textarea autoresize-->
+    <!-- http://www.jacklmoore.com/autosize/-->
+    <script src="../../../static/js/jquery.autosize.js"></script>
+    <!-- modal window bootstrap-->
+    <script src="../../../static/js/bootstrap/modal.js"></script>
+    <!-- custom scrollbar.js-->
+    <script src="../../../static/js/jquery.mCustomScrollbar.js"></script>
+    <script src="../../../static/js/dashboard_scripts.js"></script>
+  </head>
+  <body>
+    <div class="container-full-screen">
+      <header>header</header>
+      <article class="dashboard">
+        <nav class="bg-success">
           <ul>
-            <li class="tab-vertical"><a href="profil.html"></a>
-              <h3>Profil</h3>
-            </li>
-            <li class="tab-vertical"><a href="verification.html"></a>
-              <h3>Vérification</h3>
-            </li>
-            <li class="tab-vertical"><a href="address.html"></a>
-              <h3>Adresses</h3>
-            </li>
-            <li class="tab-vertical"><a href="telephones.html"></a>
-              <h3>Téléphones</h3>
-            </li>
-            <li class="tab-vertical"><a href="payments.html"></a>
-              <h3>Paiements</h3>
-            </li>
-            <li class="tab-vertical"><a href="password.html"></a>
-              <h3>Mot de passe</h3>
-            </li>
-            <li class="tab-vertical"><a href="broker.html"></a>
-              <h3>Parainage</h3>
-            </li>
+            <li><a href="../dashboard" class="text-success-dark"><i class="fa fa-home"></i>Dashboard</a></li>
+            <li><a href="../messages" class="text-success-dark"><i class="fa fa-envelope-o"></i>Messages</a></li>
+            <li><a href="../booking" class="text-success-dark"><i class="fa fa-shield"></i>Booking</a></li>
+            <li><a href="../items" class="text-success-dark"><i class="fa fa-th-list"></i>Items</a></li>
+            <li><a href="../account/profil.html" class="text-success-dark"><i class="fa fa-user"></i>Account</a></li>
           </ul>
-        </section>
+        </nav>
         <div class="content-view">
-          <section class="tabs-vertical-active md scrollbar-custom">
-            <ul class="block-with-thumbnail">
-              <li class="tab-vertical block-with-thumbnail default">
-                <div class="col-thumbnail">
-                  <div class="thumbnail"><img src="../../../static/img/map.png" width="70"></div>
-                </div>
-                <div class="col-exposition">
-                  <h3 class="indent-xs-b">94 avenue Felix Faure<i class="fa fa-check fa-lg pull-right"></i></h3>
-                  <p class="normal text-gray">84393 Paris</p>
-                </div>
+          <section class="tabs-vertical-active sm scrollbar-custom">
+            <ul>
+              <li class="tab-vertical"><a href="profil.html"></a>
+                <h3>Profil</h3>
               </li>
-              <li class="tab-vertical block-with-thumbnail">
-                <div class="col-thumbnail">
-                  <div class="thumbnail"><img src="../../../static/img/map.png" width="70"></div>
-                </div>
-                <div class="col-exposition">
-                  <h3 class="indent-xs-b">94 avenue Felix Faure<i class="fa fa-check fa-lg pull-right"></i></h3>
-                  <p class="normal text-gray">84393 Paris</p>
-                </div>
+              <li class="tab-vertical"><a href="verification.html"></a>
+                <h3>Vérification</h3>
               </li>
-              <li class="tab-vertical block-with-thumbnail">
-                <div class="col-thumbnail">
-                  <div class="thumbnail"><img src="../../../static/img/map.png" width="70"></div>
-                </div>
-                <div class="col-exposition">
-                  <h3 class="indent-xs-b">94 avenue Felix Faure<i class="fa fa-check fa-lg pull-right"></i></h3>
-                  <p class="normal text-gray">84393 Paris</p>
-                </div>
+              <li class="tab-vertical"><a href="address.html"></a>
+                <h3>Adresses</h3>
+              </li>
+              <li class="tab-vertical"><a href="telephones.html"></a>
+                <h3>Téléphones</h3>
+              </li>
+              <li class="tab-vertical"><a href="payments.html"></a>
+                <h3>Paiements</h3>
+              </li>
+              <li class="tab-vertical"><a href="password.html"></a>
+                <h3>Mot de passe</h3>
+              </li>
+              <li class="tab-vertical"><a href="broker.html"></a>
+                <h3>Parainage</h3>
               </li>
             </ul>
           </section>
-          <aside class="address-detail pull-nothing scrollbar-custom scrollbar-left">
-            <div class="section-content">
-              <form action="address-add" class="indent-md-b">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <input id="street" type="text" name="street" placeholder="Rue *" required autofocus class="form-control">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <input id="zip-code" type="text" name="zip-code" placeholder="Code postal *" required autofocus class="form-control">
-                  </div>
-                  <div class="col-sm-6">
-                    <input id="city" type="text" name="city" placeholder="Ville *" required autofocus class="form-control">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-12">
-                    <label class="check-btn form-control">
-                      <input type="checkbox" checked><span><i class="fa fa-check"></i></span>Addresse par défaut
-                    </label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-12 text-right"><a href="#" class="text-danger text-underline-hover indent-sm-h">Supprimer</a>
-                    <button type="submit" class="btn-inline bg-success-hover text-white">Enregistrer</button>
-                  </div>
-                </div>
-              </form>
-              <h3>Annonces associées à cette adresse</h3>
-            </div>
-            <section class="tabs-vertical-active">
+          <div class="content-view">
+            <section class="tabs-vertical-active md scrollbar-custom">
               <ul class="block-with-thumbnail">
-                <li class="tab-vertical block-with-thumbnail soon">
+                <li class="tab-vertical block-with-thumbnail default">
                   <div class="col-thumbnail">
-                    <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
+                    <div class="thumbnail"><img src="../../../static/img/map.png" width="70"></div>
                   </div>
                   <div class="col-exposition">
-                    <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
-                    <p class="normal text-gray">
-                      <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
-                    </p>
+                    <h3 class="indent-xs-b">94 avenue Felix Faure<i class="fa fa-check fa-lg pull-right"></i></h3>
+                    <p class="normal text-gray">84393 Paris</p>
                   </div>
                 </li>
-                <li class="tab-vertical block-with-thumbnail in-progress">
+                <li class="tab-vertical block-with-thumbnail">
                   <div class="col-thumbnail">
-                    <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
+                    <div class="thumbnail"><img src="../../../static/img/map.png" width="70"></div>
                   </div>
                   <div class="col-exposition">
-                    <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
-                    <p class="normal text-gray">
-                      <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
-                    </p>
+                    <h3 class="indent-xs-b">94 avenue Felix Faure<i class="fa fa-check fa-lg pull-right"></i></h3>
+                    <p class="normal text-gray">84393 Paris</p>
                   </div>
                 </li>
-                <li class="tab-vertical block-with-thumbnail completed">
+                <li class="tab-vertical block-with-thumbnail">
                   <div class="col-thumbnail">
-                    <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
+                    <div class="thumbnail"><img src="../../../static/img/map.png" width="70"></div>
                   </div>
                   <div class="col-exposition">
-                    <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
-                    <p class="normal text-gray">
-                      <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
-                    </p>
+                    <h3 class="indent-xs-b">94 avenue Felix Faure<i class="fa fa-check fa-lg pull-right"></i></h3>
+                    <p class="normal text-gray">84393 Paris</p>
                   </div>
                 </li>
               </ul>
             </section>
-          </aside>
+            <aside class="address-detail pull-nothing scrollbar-custom scrollbar-left">
+              <div class="section-content">
+                <form action="address-add" class="indent-md-b">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <input id="street" type="text" name="street" placeholder="Rue *" required autofocus class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <input id="zip-code" type="text" name="zip-code" placeholder="Code postal *" required autofocus class="form-control">
+                    </div>
+                    <div class="col-sm-6">
+                      <input id="city" type="text" name="city" placeholder="Ville *" required autofocus class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <label class="check-btn form-control">
+                        <input type="checkbox" checked><span><i class="fa fa-check"></i></span>Addresse par défaut
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12 text-right"><a href="#" class="text-danger text-underline-hover indent-sm-h">Supprimer</a>
+                      <button type="submit" class="btn-inline bg-success-hover text-white">Enregistrer</button>
+                    </div>
+                  </div>
+                </form>
+                <h3>Annonces associées à cette adresse</h3>
+              </div>
+              <section class="tabs-vertical-active">
+                <ul class="block-with-thumbnail">
+                  <li class="tab-vertical block-with-thumbnail soon">
+                    <div class="col-thumbnail">
+                      <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
+                    </div>
+                    <div class="col-exposition">
+                      <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
+                      <p class="normal text-gray">
+                        <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
+                      </p>
+                    </div>
+                  </li>
+                  <li class="tab-vertical block-with-thumbnail in-progress">
+                    <div class="col-thumbnail">
+                      <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
+                    </div>
+                    <div class="col-exposition">
+                      <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
+                      <p class="normal text-gray">
+                        <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
+                      </p>
+                    </div>
+                  </li>
+                  <li class="tab-vertical block-with-thumbnail completed">
+                    <div class="col-thumbnail">
+                      <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
+                    </div>
+                    <div class="col-exposition">
+                      <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
+                      <p class="normal text-gray">
+                        <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </section>
+            </aside>
+          </div>
         </div>
-      </div>
-    </article>
-  </div>
-</body>
+      </article>
+    </div>
+  </body>
+</html>

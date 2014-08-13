@@ -3,6 +3,7 @@ article.dashboard
     width: 100%
     border-collapse: collapse
     &.calendar
+      font-size: $font-size-smaller
       thead tr
         background-color: $gray-lighter
       tbody
@@ -11,8 +12,8 @@ article.dashboard
         background-color: $gray-lite
       td
         padding: $indent-xs
+        vertical-align: middle
         border-left: 1px solid $gray-medium
-        width: 1%
         &:first-child
           border-left: none
         &.outages
