@@ -336,8 +336,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "ProductsService",
             "PicturesService",
             "AddressesService",
+            "UsersService",
             "UtilsService",
-            function ($q, Bookings, ProductsService, PicturesService, AddressesService, UtilsService) {
+            function ($q, Bookings, ProductsService, PicturesService, AddressesService, UsersService, UtilsService) {
                 var bookingsService = {};
 
                 bookingsService.getBookings = function (page) {
@@ -406,12 +407,22 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var addressId = UtilsService.getIdFromUrl(product.address);
                             productPromises.address = AddressesService.getAddress(addressId).$promise;
 
+                            // Get owner
+                            var ownerId = UtilsService.getIdFromUrl(product.owner);
+                            productPromises.owner = UsersService.get(ownerId).$promise;
+
                             $q.all(productPromises).then(function (results) {
                                 var address = results.address;
                                 booking.address = {};
                                 booking.address.street = address.street;
                                 booking.address.zipcode = address.zipcode;
                                 booking.address.city = address.city;
+
+                                var owner = results.owner;
+                                booking.owner = {};
+                                booking.owner.username = owner.username;
+                                booking.owner.avatar = owner.avatar.thumbnail;
+
                                 productDeferred.resolve(booking);
                             });
                         });
