@@ -6,7 +6,8 @@
         <div class="col-exposition">
             <div class="indent-sm-h">
                 <h3><b>{{booking.title}}</b></h3>
-                <p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>Avenue Félix Faure, 02200<br>Nice
+                <p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>{{booking.address.street}}, {{booking.address.zipcode}}
+                    <br>{{booking.address.city}}
                 <div class="block-with-thumbnail indent-sm-v indent-sm-">
                     <div class="col-thumbnail">
                         <div class="thumbnail"><a href="#"><img src="../../../static//img/home-products/owner.png" alt="Dupré photo" width="40" height="40"></a></div>
