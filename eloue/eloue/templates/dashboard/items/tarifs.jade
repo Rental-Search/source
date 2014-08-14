@@ -1,0 +1,40 @@
+extends ./_base_items
+
+block details
+  .section-content
+    h2 Grille tarifaire
+    .row
+      .col-lg-8
+        table.calendar.text-center.form-control
+          thead
+            tr
+              td Durée
+              td Prix 
+          tbody
+            tr
+              td 1 heure
+              td 
+                input(type="text", placeholder="Prix...").table-form
+                | €
+            tr
+              td 1 jours
+              td 
+                input(type="text", placeholder="Prix...").table-form
+                | €
+            tr
+              td 3 jours
+              td 
+                input(type="text", placeholder="Prix...").table-form
+                | €
+            tr
+              td 7 jours
+              td 
+                input(type="text", placeholder="Prix...").table-form
+                | €
+            tr
+              td 15 jours
+              td 
+                input(type="text", placeholder="Prix...").table-form
+                | €
+      .col-lg-8
+        

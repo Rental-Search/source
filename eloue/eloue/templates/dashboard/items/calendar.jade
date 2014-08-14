@@ -1,0 +1,75 @@
+extends ./_base_items
+
+block details
+  .section-content
+    form(action="itmes")
+      .row
+        .col-xs-7
+          h2 Sélectionner le mois
+        .col-xs-5
+          .form-control.without-search.select-gradient
+            select
+              each month in months
+                option(value="#{month}") #{month} 2014
+      .row
+        .col-xs-12.indent-sm-b
+          table.calendar.text-center
+            thead
+              tr
+                each day in days_of_week
+                  td #{day}
+            tbody
+              each day, count in days
+                if count % 7 == 0
+                  tr
+                    td.outages #{+day}
+                    td #{+day+1}
+                    td #{+day+2}
+                    td #{+day+3}
+                    td.booking #{+day+4}
+                    td #{+day+5}
+                    td #{+day+6}
+      .row
+        .col-xs-4
+          label.check-btn.form-control.text-danger-light
+            input(type="checkbox", checked)
+            span: i.fa.fa-check
+            | Indisponiblités
+        .col-xs-4
+          label.check-btn.form-control.text-success-light
+            input(type="checkbox", checked)
+            span: i.fa.fa-check
+            | Réservations
+      .row.indent-xs-b
+        .col-xs-12.indent-sm-b
+          table.calendar.bg-light.text-center
+            thead
+              tr
+                td Date de début
+                td Date de fin
+                td Motifs
+                td Action 
+            tbody
+              tr
+                td 12/06/2014
+                td 12/06/2014
+                td.text-success-light Réservé
+                td
+              tr
+                td 12/06/2014
+                td 12/06/2014
+                td.text-danger-light Indisponible
+                td
+              tr
+                td 12/06/2014
+                td 12/06/2014
+                td.text-danger-light Indisponible
+                td
+              tr
+                td 12/06/2014
+                td 12/06/2014
+                td.text-success-light Réservé
+                td
+      .row
+        .col-xs-8.col-xs-offset-2
+          button(type="submit").btn.bg-success-hover.text-white Ajoutez une nouvelle disponibilité

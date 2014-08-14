@@ -56,20 +56,42 @@
 .tabs-horisontal-active
   position: relative
   padding-top: $indent-xs/2
-  overflow: hidden
+  overflow-y: hidden
   > ul
     position: relative
+    padding: 0 1em
+    margin-left: -1em
+    margin-right: -1em
 
 .tabs-horisontal-active .tab-horisontal
   cursor: pointer
   color: $brand-success
   padding: .25em .5em
+  position: relative
+  &:before,
+  &:after
+    position: absolute
+    top: 0
+    line-height: $line-height-base
+    color: transparent
+    transition: all $trns-fast
+    pointer-events: none
+  &:before
+    content: "["
+    left: 0
+  &:after
+    content: "]"
+    right: 0
   &:hover,
   &.current
-    background-color: lighten($brand-success, 20%)
     color: $gray-dark
-    h1, h2, h3, h4, h5, h6
-      font-weight: bolder
+    &:before,
+    &:after
+      color: $brand-primary
+    &:before
+      left: -.5em
+    &:after
+      right: -.5em
 
 .messages-container
   padding-bottom: $form-message-area-height

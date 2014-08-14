@@ -25,9 +25,11 @@ header
   .framing
     border-top: $bd-lighter
   .search-form
-    margin-top: $indent-sm
-    margin-bottom: $indent-sm
+    padding: $indent-sm 0
     display: table
+    img
+      top: 5px
+      position: relative
     form
       padding: 0 2em
       width: 100%
@@ -53,7 +55,7 @@ header
   .where-field
     position: relative
     width: 40%
-    z-index: 2
+    z-index: 3
     input
       width: 100%
       padding-left: 2.5em
@@ -88,7 +90,8 @@ header
         width: 1em
         height: 1em
         +centred-abs()
-      
+        top: 1em\9
+
 
     &:hover
       background-color: $gray-lighter

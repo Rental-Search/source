@@ -1040,23 +1040,49 @@ article.dashboard .content-view section {
 .tabs-horisontal-active {
   position: relative;
   padding-top: 5px;
-  overflow: hidden;
+  overflow-y: hidden;
 }
 .tabs-horisontal-active > ul {
   position: relative;
+  padding: 0 1em;
+  margin-left: -1em;
+  margin-right: -1em;
 }
 
 .tabs-horisontal-active .tab-horisontal {
   cursor: pointer;
   color: #24bd77;
   padding: 0.25em 0.5em;
+  position: relative;
+}
+.tabs-horisontal-active .tab-horisontal:before, .tabs-horisontal-active .tab-horisontal:after {
+  position: absolute;
+  top: 0;
+  line-height: 1.42857;
+  color: transparent;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  pointer-events: none;
+}
+.tabs-horisontal-active .tab-horisontal:before {
+  content: "[";
+  left: 0;
+}
+.tabs-horisontal-active .tab-horisontal:after {
+  content: "]";
+  right: 0;
 }
 .tabs-horisontal-active .tab-horisontal:hover, .tabs-horisontal-active .tab-horisontal.current {
-  background-color: #65e2a9;
   color: #2c2c2c;
 }
-.tabs-horisontal-active .tab-horisontal:hover h1, .tabs-horisontal-active .tab-horisontal:hover h2, .tabs-horisontal-active .tab-horisontal:hover h3, .tabs-horisontal-active .tab-horisontal:hover h4, .tabs-horisontal-active .tab-horisontal:hover h5, .tabs-horisontal-active .tab-horisontal:hover h6, .tabs-horisontal-active .tab-horisontal.current h1, .tabs-horisontal-active .tab-horisontal.current h2, .tabs-horisontal-active .tab-horisontal.current h3, .tabs-horisontal-active .tab-horisontal.current h4, .tabs-horisontal-active .tab-horisontal.current h5, .tabs-horisontal-active .tab-horisontal.current h6 {
-  font-weight: bolder;
+.tabs-horisontal-active .tab-horisontal:hover:before, .tabs-horisontal-active .tab-horisontal:hover:after, .tabs-horisontal-active .tab-horisontal.current:before, .tabs-horisontal-active .tab-horisontal.current:after {
+  color: #f27e36;
+}
+.tabs-horisontal-active .tab-horisontal:hover:before, .tabs-horisontal-active .tab-horisontal.current:before {
+  left: -0.5em;
+}
+.tabs-horisontal-active .tab-horisontal:hover:after, .tabs-horisontal-active .tab-horisontal.current:after {
+  right: -0.5em;
 }
 
 .messages-container {
@@ -1231,9 +1257,12 @@ header .framing {
   border-top: 1px solid #eaeaea;
 }
 header .search-form {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  padding: 20px 0;
   display: table;
+}
+header .search-form img {
+  top: 5px;
+  position: relative;
 }
 header .search-form form {
   padding: 0 2em;
@@ -1275,7 +1304,7 @@ header .what-field:hover {
 header .where-field {
   position: relative;
   width: 40%;
-  z-index: 2;
+  z-index: 3;
 }
 header .where-field input {
   width: 100%;
@@ -1327,6 +1356,7 @@ header .btn-search i:before {
   left: 0;
   position: absolute;
   margin: auto;
+  top: 1em \9;
 }
 header .btn-search:hover {
   background-color: #eaeaea;
@@ -1471,8 +1501,8 @@ header .btn-search:hover {
 .list-without-spaces li.divide:before, .list-without-spaces li.divider:before,
 .without-spaces li.divide:before,
 .without-spaces li.divider:before {
-  position: absolute;
   background-color: #cccccc;
+  position: absolute;
   width: 1px;
   height: 10000px;
   bottom: -0.42857em;
@@ -1483,6 +1513,10 @@ header .btn-search:hover {
 .without-spaces li.divide:first-child,
 .without-spaces li.divider:first-child {
   display: none;
+}
+.list-without-spaces li.divide:before,
+.without-spaces li.divide:before {
+  background-color: #eaeaea;
 }
 
 .input-group {

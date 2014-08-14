@@ -18,8 +18,8 @@
     &.divider
       position: relative
       &:before
-        position: absolute
         background-color: #ccc
+        position: absolute
         width: 1px
         height: 10000px
         bottom: ( 1em - $line-height-base)
@@ -27,3 +27,5 @@
         content: ''
       &:first-child
         display: none
+    &.divide:before
+      background-color: $gray-lighter

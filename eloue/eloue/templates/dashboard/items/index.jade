@@ -1,15 +1,46 @@
 extends ./_base_items
 
 block details
-  case tabs[2]
-    when "photos"
-      include ./_tab_photos
-    when "pricing"
-      include ./_tab_tarifs
-    when "calendar"
-      include ./_tab_calendar
-    when "terms"
-      //- include ./
-    when "profits"
-      //- include ./
+  .section-content
+    form(action="itmes")
+      h2 Catégories
+      .row
+        .col-md-4
+          .form-control
+            select
+              option(value="high-tech") High-Tech
+              option(value="high-tech2") High-Tech2
+        .col-md-4
+          .form-control
+            select
+              option(value="photo_video") Photo / Vidéo
+              option(value="photo_video") Photo / Vidéo2
+        .col-md-4
+          .form-control
+            select
+              option(value="reflex") Reflex numériq
+              option(value="reflex2") Reflex numériq2
+      h2 Titre
+      .row
+        .col-xs-12
+          input#title.form-control(type="text", name="title", placeholder="Titre")
+      h2 Photos
+      ul.text-gray.container-with-square-thumbnail.indent-xs-b
+        li
+          label(for="change-img").file-input-drag
+            i.fa.fa-plus.fa-3x
+            input(type="file")#change-img
+        li
+          img(src="#{STATIC_URL}img/#{lot_BMW.thumbnail}", alt="#{lot_BMW.thumbnail}")
+        li
+          img(src="#{STATIC_URL}img/#{lot_BMW.thumbnail}", alt="#{lot_BMW.thumbnail}")
+        li
+          img(src="#{STATIC_URL}img/#{lot_BMW.thumbnail}", alt="#{lot_BMW.thumbnail}")
+      h2 Caractéristiques
+      h2 Informations complémentaires
+      .row.indent-md-b
+        .col-sm-12
+          textarea#description.expand(name="description", tabindex="1", rows="6", placeholder="")
+      .row
+        button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
 
