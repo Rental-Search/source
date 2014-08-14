@@ -23,6 +23,8 @@ block content-body
           each item in dashboard_nav_links
             li: a(href="../#{item.href}").text-success-dark
               i(class="fa fa-#{item.icon}")
+                if item.badge > 0
+                  span.badge-count-action 1
               | #{item.title}
       .content-view
         block content-view

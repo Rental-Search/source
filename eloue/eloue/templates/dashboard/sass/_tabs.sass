@@ -55,39 +55,22 @@
 /////////////////////
 .tabs-horisontal-active
   position: relative
-  padding-top: $indent-xs/2
+  margin-bottom: -3em !important
+  // padding-top: $indent-xs/2
   > ul
     position: relative
+    height: 100%
 
 .tabs-horisontal-active .tab-horisontal
   cursor: pointer
   color: $brand-success
-  padding: .25em .5em
+  padding: .25em .5em 1em
   position: relative
-  &:before,
-  &:after
-    position: absolute
-    top: 0
-    line-height: $line-height-base
-    color: transparent
-    transition: all $trns-fast
-    pointer-events: none
-  &:before
-    content: "["
-    left: -.5em
-  &:after
-    content: "]"
-    right: -.5em
+  border-bottom: 4px solid transparent
+  transition: border-color $trns-fast
   &:hover,
   &.current
-    color: $gray-dark
-    &:before,
-    &:after
-      color: $brand-primary
-    &:before
-      left: 0
-    &:after
-      right: 0
+    border-color: $brand-success
 
 .messages-container
   padding-bottom: $form-message-area-height

@@ -900,6 +900,10 @@ article.dashboard > nav {
 }
 article.dashboard > nav a {
   text-decoration: none;
+  position: relative;
+}
+article.dashboard > nav a i {
+  position: relative;
 }
 article.dashboard .content-view {
   overflow: hidden;
@@ -1041,46 +1045,24 @@ article.dashboard .content-view section {
 
 .tabs-horisontal-active {
   position: relative;
-  padding-top: 5px;
+  margin-bottom: -3em !important;
 }
 .tabs-horisontal-active > ul {
   position: relative;
+  height: 100%;
 }
 
 .tabs-horisontal-active .tab-horisontal {
   cursor: pointer;
   color: #24bd77;
-  padding: 0.25em 0.5em;
+  padding: 0.25em 0.5em 1em;
   position: relative;
-}
-.tabs-horisontal-active .tab-horisontal:before, .tabs-horisontal-active .tab-horisontal:after {
-  position: absolute;
-  top: 0;
-  line-height: 1.42857;
-  color: transparent;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s;
-  pointer-events: none;
-}
-.tabs-horisontal-active .tab-horisontal:before {
-  content: "[";
-  left: -0.5em;
-}
-.tabs-horisontal-active .tab-horisontal:after {
-  content: "]";
-  right: -0.5em;
+  border-bottom: 4px solid transparent;
+  -webkit-transition: border-color 0.2s;
+  transition: border-color 0.2s;
 }
 .tabs-horisontal-active .tab-horisontal:hover, .tabs-horisontal-active .tab-horisontal.current {
-  color: #2c2c2c;
-}
-.tabs-horisontal-active .tab-horisontal:hover:before, .tabs-horisontal-active .tab-horisontal:hover:after, .tabs-horisontal-active .tab-horisontal.current:before, .tabs-horisontal-active .tab-horisontal.current:after {
-  color: #f27e36;
-}
-.tabs-horisontal-active .tab-horisontal:hover:before, .tabs-horisontal-active .tab-horisontal.current:before {
-  left: 0;
-}
-.tabs-horisontal-active .tab-horisontal:hover:after, .tabs-horisontal-active .tab-horisontal.current:after {
-  right: 0;
+  border-color: #24bd77;
 }
 
 .messages-container {
@@ -1507,15 +1489,23 @@ header .btn-search:hover {
   bottom: -0.42857em;
   left: 0;
   content: "";
+  background-color: #eaeaea;
 }
 .list-without-spaces li.divide:first-child, .list-without-spaces li.divider:first-child,
 .without-spaces li.divide:first-child,
 .without-spaces li.divider:first-child {
   display: none;
 }
-.list-without-spaces li.divide:before,
-.without-spaces li.divide:before {
-  background-color: #eaeaea;
+.list-without-spaces.fixed,
+.without-spaces.fixed {
+  overflow: visible;
+}
+.list-without-spaces.fixed .divide:before,
+.list-without-spaces.fixed .divider:before,
+.without-spaces.fixed .divide:before,
+.without-spaces.fixed .divider:before {
+  bottom: 0;
+  height: 1em;
 }
 
 .input-group {
@@ -2035,4 +2025,17 @@ article.dashboard table.calendar td.booking {
 }
 article.dashboard table.bg-light tbody {
   background-color: white;
+}
+
+.badge-count-action {
+  position: absolute;
+  top: -0.5em;
+  right: 0;
+  background-color: #f27e36;
+  width: 2em;
+  line-height: 1.8em;
+  border-radius: 8px;
+  color: white;
+  font-weight: 700;
+  font-size: 12px;
 }

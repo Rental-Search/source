@@ -25,7 +25,12 @@
         bottom: ( 1em - $line-height-base)
         left: 0
         content: ''
+        background-color: $gray-lighter
       &:first-child
         display: none
-    &.divide:before
-      background-color: $gray-lighter
+  &.fixed
+    overflow: visible
+    .divide:before,
+    .divider:before
+      bottom: 0
+      height: 1em
