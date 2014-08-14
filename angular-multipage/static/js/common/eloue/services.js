@@ -102,8 +102,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             $q.all(threadPromises).then(function (threadResults) {
                                 if (!!threadResults.lastMessage) {
                                     result.message = threadResults.lastMessage.body;
-                                    result.date = UtilsService.formatMessageDate(threadResults.lastMessage.sent_at,
-                                        "HH'h'mm", "dd.mm.yyyy HH'h'mm");
+                                    result.date = UtilsService.formatDate(threadResults.lastMessage.sent_at, "HH'h'mm");
                                 }
                                 result.icon = threadResults.sender.avatar.thumbnail;
                                 result.username = threadResults.sender.username;

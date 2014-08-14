@@ -1,13 +1,16 @@
-<br />
-<ul>
-    <li ng-repeat="thread in message_threads track by thread.id">
-        <a ui-sref="messages.detail({id: thread.id})">{{thread.username}}</a><br />
-        <h3>{{thread.subject}}</h3>
-        <p>{{thread.message}}</p>
-        <p>{{thread.date}}</p>
-        <img ng-src="{{thread.icon}}">
-        <br />
-    </li>
-</ul>
+<section class="tabs-vertical-active sm scrollbar-custom">
+    <ul>
+        <li class="tab-vertical block-with-thumbnail" data-ng-repeat="thread in message_threads track by thread.id">
+            <div class="col-thumbnail">
+                <div class="thumbnail round"><a ui-sref="messages.detail({id: thread.id})"><img data-ng-src="{{thread.icon}}" alt="{{thread.username}}" width="20" height="20"></a></div>
+            </div>
+            <div class="col-exposition"><a ui-sref="messages.detail({id: thread.id})" class="text-underline-hover pull-left">
+                <h3 class="small">{{thread.username}}</h3></a><span class="time-badge pull-right">{{thread.date}}</span>
+                <h5 class="text-overflow small text-gray-stronger clear-both">{{thread.subject}}</h5>
+                <p class="text-overflow text-gray small">{{thread.message}}</p>
+            </div>
+        </li>
+    </ul>
+</section>
 
-<div ui-view></div>
+<div ui-view class="content-view"></div>
