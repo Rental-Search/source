@@ -1,13 +1,92 @@
-<h3>DETAIL PAGE:</h3>
-<ul>
-    <li ng-repeat="message in messages track by message.id">
-        <p>{{message.username}}</p>
-        <img ng-src="{{message.icon}}">
-        <p>{{message.date}}</p>
-        <p>{{message.body}}</p>
-        <br />
-    </li>
-</ul>
-<textarea data-ng-model="message"></textarea>
-<br />
-<button data-ng-click="postNewMessage()">Post new message</button>
+<aside class="tabs-vertical-static pull-right lg">
+    <div class="section-header">
+        <h4 class="text-center indent-xs-v">Réservation associé à :</h4>
+    </div>
+    <ul class="scrollbar-custom">
+        <li class="tab-vertical">
+            <div class="section-content"><img src="../../../static/img/carousel-product/2.jpg" alt="" width="100%">
+
+                <h3 class="indent-xs-v"><a href="#" class="text-underline-hover"><b>BMW 520 Touring Luxe</b></a></h3>
+
+                <p class="text-gray"><i class="fa fa-map-marker fa-lg">&nbsp;</i>Nice,&nbsp;
+                    02200
+                </p>
+
+                <p class="text-gray indent-sm-v"><span class="average-rate"><span class="star"><i
+                        class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i
+                        class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span><span
+                        class="rate-counter">32</span></span><span class="number-of-comments"><i
+                        class="fa fa-lg fa-comments-o"></i><span>12</span></span>
+                </p>
+
+                <div class="block-with-thumbnail">
+                    <div class="col-thumbnail">
+                        <div class="thumbnail round"><a href="#julien_dupré_homepage"><img
+                                src="../../../static/img/home-products/owner_small.png" alt="Dupré photo" width="40"
+                                height="40"></a></div>
+                    </div>
+                    <div class="col-exposition"><a href="#julien_dupré_homepage" class="text-underline-hover text-gray">
+                        <h4 class="indent-xs-h">Julien Dupré</h4></a></div>
+                </div>
+            </div>
+        </li>
+        <li class="tab-vertical">
+            <div class="section-content">
+                <ul class="zebra-list indent-md-b">
+                    <li class="clearfix">
+                        <div class="col-xs-3">Début</div>
+                        <div class="col-xs-9">Mardi 24 Juin 2014 à 09h00</div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="col-xs-3">Fin</div>
+                        <div class="col-xs-9">Jeudi 26 Juin 2014 à 09h00</div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="col-xs-3">Période</div>
+                        <div class="col-xs-9">3 jours et 9 heures</div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="col-xs-3">Prix</div>
+                        <div class="col-xs-9 text-success">168€</div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="col-xs-3">Caution</div>
+                        <div class="col-xs-9">250€</div>
+                    </li>
+                </ul>
+                <div class="text-right"><a href="#" class="text-success text-underline-hover indent-sm-h">Annulation</a><a
+                        href="#" class="btn-inline bg-success-hover text-white">Télécharger le contrat</a></div>
+            </div>
+        </li>
+    </ul>
+</aside>
+<section class="tabs-vertical-static pull-nothing">
+    <ul class="scrollbar-custom messages-container">
+        <li class="tab-vertical block-with-thumbnail" data-ng-repeat="message in messages track by message.id">
+            <div class="col-thumbnail">
+                <div class="thumbnail round"><a><img
+                        src="{{message.icon}}" alt="{{message.username}}"></a></div>
+            </div>
+            <div class="col-exposition">
+                <h3><a class="text-underline-hover">{{message.username}}</a></h3>
+
+                <p class="small text-gray-light">{{message.date}}</p>
+
+                <p class="normal text-gray text-justify">{{message.body}}</p>
+            </div>
+        </li>
+    </ul>
+    <form class="send-dialog-message clearfix" data-ng-submit="postNewMessage()">
+        <div class="textarea-wrapper">
+            <textarea
+                    id="message-text"
+                    name="message-text"
+                    data-ng-model="message"
+                    tabindex="1"
+                    placeholder="Rédigez votre message ici..."
+                    class="expand">
+            </textarea>
+        </div>
+        <button type="submit" class="btn bg-success-hover text-white">Envoyez</button>
+    </form>
+</section>

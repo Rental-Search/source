@@ -144,8 +144,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 var result = {
                                     id: data.id,
                                     body: data.body,
-                                    date: UtilsService.formatMessageDate(data.sent_at,
-                                        "HH'h'mm", "dd.mm.yyyy HH'h'mm")
+                                    date: UtilsService.formatDate(data.sent_at, "dd.mm.yyyy HH'h'mm")
                                 };
 
                                 // Get sender
