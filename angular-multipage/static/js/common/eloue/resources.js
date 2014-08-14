@@ -28,7 +28,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing message threads.
      */
     EloueCommon.factory("MessageThreads", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "messagethreads/:id/", {},
+        return $resource(Endpoints.api_url + "messagethreads/:id/?", {},
             {
                 "list": { method: "GET", params: {product: ":productId"}},
                 "save": {method: "POST"}
