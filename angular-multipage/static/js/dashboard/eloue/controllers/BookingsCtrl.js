@@ -11,6 +11,9 @@ define(["angular", "eloue/app"], function (angular) {
         function ($scope, BookingsService) {
             BookingsService.getBookings().then(function (bookings) {
                 $scope.bookings = bookings;
+
+                // Initiate custom scrollbars
+                $scope.initCustomScrollbars();
             });
         }
     ]);

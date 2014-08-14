@@ -12,7 +12,9 @@ define(["angular", "eloue/app"], function (angular) {
         function ($scope, $stateParams, BookingsService) {
             BookingsService.getBookingDetail($stateParams.uuid).then(function (booking) {
                 $scope.booking = booking;
-                console.log(booking);
+
+                // Initiate custom scrollbars
+                $scope.initCustomScrollbars();
             });
         }
     ]);
