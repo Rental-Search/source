@@ -1,9 +1,15 @@
 
 import operator
+import re
 
-from django.db.models import Q
+from django.db.models import Q, ForeignKey
+from django.utils.encoding import smart_unicode
+from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
+from django import forms
 
 from rest_framework import filters
+import django_filters
 
 DjangoFilterBackend = filters.DjangoFilterBackend
 
@@ -51,3 +57,41 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
                 queryset = queryset.filter(pk__in=pks)
 
         return queryset
+
+class MultiValueFormField(forms.CharField):
+    default_error_messages = {
+        'invalid': _(u'Enter valid primary keys separated by commas.'),
+        'invalid_value_type': _(u'This value must be a list, a string or None.'),
+    }
+
+    def to_python(self, value):
+        """Normalize data to a list of strings."""
+        if not value:
+            return None
+        elif isinstance(value, basestring):
+            res = re.findall(r'([\d\w]+)', smart_unicode(value), re.U)
+            if value and not res:
+                raise ValidationError(self.error_messages['invalid'])
+            return res
+        elif isinstance(value, list):
+            return value
+        raise ValidationError(self.error_messages['invalid_value_type'])
+
+class MultiValueForeignKeyFilter(django_filters.Filter):
+    field_class = MultiValueFormField
+
+    def filter(self, qs, value):
+        if not value:
+            return qs
+        lookup = 'in' if len(value) > 1 else self.lookup_type
+        qs = qs.filter(**{'__'.join([self.name, lookup]): value})
+        if self.distinct:
+            qs = qs.distinct()
+        return qs
+
+class FilterSet(django_filters.FilterSet):
+    filter_overrides = {
+        ForeignKey: {
+            'filter_class': MultiValueForeignKeyFilter,
+        },
+    }

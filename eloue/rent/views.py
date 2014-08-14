@@ -361,14 +361,20 @@ from eloue.api import filters
 
 NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
 
+class BookingFilterSet(filters.FilterSet):
+    class Meta:
+        model = models.Booking
+        fields = ('state', 'owner', 'borrower', 'product')
+
 class BookingViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
     queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
-    filter_backends = (filters.OwnerFilter, )
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
     owner_field = ('owner', 'borrower')
+    filter_class = BookingFilterSet
 
 class CommentViewSet(viewsets.ModelViewSet):
     """
