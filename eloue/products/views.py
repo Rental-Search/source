@@ -767,6 +767,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
+    serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct')
     filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter)
     owner_field = 'owner'
@@ -804,7 +805,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             self.object = instance = instance.realestateproduct
         else:
             # we have generic Product here
-            serializer_class = serializers.ProductSerializer
+            serializer_class = self.get_serializer_class()
         context = self.get_serializer_context()
         return serializer_class(instance, context=context, **kwargs)
 
