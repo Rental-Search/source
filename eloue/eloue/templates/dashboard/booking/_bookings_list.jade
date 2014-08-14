@@ -1,0 +1,30 @@
+section.tabs-vertical-active.lg
+  .section-header
+    .row.indent-xs-v
+      .col-xs-9.tabs-horisontal-active
+        ul.list-without-spaces
+          each tab in booking_detail.horisontal_tabs
+            li.divider
+            li.tab-horisontal: h3.small #{tab}
+      .col-xs-3
+        .select-gradient.without-search.date-picker
+          select
+            option(value="statut") Statut
+            option(value="statut") Statut
+            option(value="statut") Statut
+
+  ul.scrollbar-custom
+    each booking in bookings
+      li.tab-vertical.block-with-thumbnail(class="#{booking.bage.classname}")
+        .col-thumbnail
+          .thumbnail
+            a(href="#"): img(src="#{STATIC_URL}img/#{booking.lot.thumbnail}", alt="#{booking.lot.name} photo", width="130")
+            span.booking-bage #{booking.bage.text}
+        .col-exposition
+          h3.small
+            | Location 
+            a(href="#").text-underline-hover #{booking.lot.name}
+          p.normal.text-gray
+            big.text-primary #{booking.lot.price}€
+            br
+            | Du #{booking.date_of} au #{booking.date_to}

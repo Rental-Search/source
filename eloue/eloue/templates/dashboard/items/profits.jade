@@ -1,0 +1,28 @@
+extends ./_base_items
+
+block details
+  .section-content
+    h2.pull-right.clear-both Total des revenus générés : #{profits.sum}€
+    h3.pull-right.clear-both.indent-sm-b Nombre de réservation : #{profits.count_of_bookings}
+    .row: .col-xs-12
+      table.calendar.text-center
+        thead: tr
+          each td in profits.theads
+            td #{td}
+        tbody
+          each transfer in profits.transfers
+            tr
+              td.text-left
+                a(href="#").text-success.text-underline-hover Du #{transfer.date_of} au #{transfer.date_to}
+                br
+                | Montant : #{transfer.total_amount}€/J
+                br
+                | Locataire : #{transfer.borrower.first_name} #{transfer.borrower.name}
+              td #{transfer.date}
+              td
+                span.text-uppercase #{transfer.bank.name} 
+                | #{transfer.bank.code}
+                br
+                | #{transfer.bank.account}
+              td
+                | #{transfer.transferred_amount}€

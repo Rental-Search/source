@@ -938,7 +938,9 @@ article.dashboard .content-view section {
 
 .section-content {
   position: relative;
-  max-width: 550px;
+  max-width: 100%;
+  min-width: 60%;
+  width: 650px;
   padding: 22.5px 30px;
 }
 .section-content.full-width {
@@ -1040,13 +1042,9 @@ article.dashboard .content-view section {
 .tabs-horisontal-active {
   position: relative;
   padding-top: 5px;
-  overflow-y: hidden;
 }
 .tabs-horisontal-active > ul {
   position: relative;
-  padding: 0 1em;
-  margin-left: -1em;
-  margin-right: -1em;
 }
 
 .tabs-horisontal-active .tab-horisontal {
@@ -1066,11 +1064,11 @@ article.dashboard .content-view section {
 }
 .tabs-horisontal-active .tab-horisontal:before {
   content: "[";
-  left: 0;
+  left: -0.5em;
 }
 .tabs-horisontal-active .tab-horisontal:after {
   content: "]";
-  right: 0;
+  right: -0.5em;
 }
 .tabs-horisontal-active .tab-horisontal:hover, .tabs-horisontal-active .tab-horisontal.current {
   color: #2c2c2c;
@@ -1079,10 +1077,10 @@ article.dashboard .content-view section {
   color: #f27e36;
 }
 .tabs-horisontal-active .tab-horisontal:hover:before, .tabs-horisontal-active .tab-horisontal.current:before {
-  left: -0.5em;
+  left: 0;
 }
 .tabs-horisontal-active .tab-horisontal:hover:after, .tabs-horisontal-active .tab-horisontal.current:after {
-  right: -0.5em;
+  right: 0;
 }
 
 .messages-container {
@@ -1257,7 +1255,8 @@ header .framing {
   border-top: 1px solid #eaeaea;
 }
 header .search-form {
-  padding: 20px 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
   display: table;
 }
 header .search-form img {
@@ -1478,7 +1477,7 @@ header .btn-search:hover {
   width: 100%;
   line-height: 1;
   margin-bottom: -1em;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 .list-without-spaces:after,
 .without-spaces:after {
@@ -1986,6 +1985,22 @@ textarea .autosizejs {
   height: 100%;
   padding-left: 20px !important;
   padding-right: 20px !important;
+}
+
+ul.not-ordered {
+  padding-left: 20px;
+}
+ul.not-ordered li {
+  margin: 20px 0;
+  padding-left: 20px;
+  position: relative;
+}
+ul.not-ordered li:before {
+  position: absolute;
+  content: ".";
+  left: 0;
+  line-height: 1;
+  top: 0;
 }
 
 article.dashboard table {

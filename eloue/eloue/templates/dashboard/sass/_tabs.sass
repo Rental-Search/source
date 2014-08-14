@@ -56,12 +56,8 @@
 .tabs-horisontal-active
   position: relative
   padding-top: $indent-xs/2
-  overflow-y: hidden
   > ul
     position: relative
-    padding: 0 1em
-    margin-left: -1em
-    margin-right: -1em
 
 .tabs-horisontal-active .tab-horisontal
   cursor: pointer
@@ -78,10 +74,10 @@
     pointer-events: none
   &:before
     content: "["
-    left: 0
+    left: -.5em
   &:after
     content: "]"
-    right: 0
+    right: -.5em
   &:hover,
   &.current
     color: $gray-dark
@@ -89,9 +85,9 @@
     &:after
       color: $brand-primary
     &:before
-      left: -.5em
+      left: 0
     &:after
-      right: -.5em
+      right: 0
 
 .messages-container
   padding-bottom: $form-message-area-height

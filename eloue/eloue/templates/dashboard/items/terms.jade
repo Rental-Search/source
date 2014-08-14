@@ -1,0 +1,30 @@
+extends ./_base_items
+
+block details
+  .section-content
+    p: a(href="#").pull-right.text-underline-hover.text-success
+      i.fa.fa-download.indent-xs-r.text-gray-strong
+      span
+        | Voir le contrat de location
+    h2.indent-lg-t Assuarence
+    ul.not-ordered.text-gray-strong
+      li Casse accidientele (vol exclu) pour un montant maximum de 750€.
+      li Pour les réparations n'excédant pas 750€ : franchise de 15% du mountant des réparations.
+      li Pour les réparations supérieures à 750€ : franchise de 112,5€ plus le mountant des réparations excédant 750€.
+
+    h2.indent-lg-t Conditioins de location
+    ul.not-ordered.text-gray-strong
+      li Le locataire doit être un particulier.
+      li Le locataire doit payer sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location.
+      li La location doit see faire en France métropolitaine.
+      li La durée de la location ne peut pas excéder 90 jours.
+
+    h2.indent-lg-t Vos propres conditions
+    p.text-gray-strong Il possible d'ajouter ses propres conditions de location.
+
+    form(action="terms").indent-sm-t
+      .row
+        .col-sm-12
+          textarea.expand.form-control(name="", tabindex="1", rows="6", placeholder="")
+        .col-sm-12
+          button(type="submit").btn.bg-success-hover.text-white.pull-right Enregister les nouvelles conditions
