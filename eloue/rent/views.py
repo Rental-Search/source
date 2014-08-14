@@ -368,7 +368,7 @@ class BookingViewSet(viewsets.ModelViewSet):
     queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
     filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
+    owner_field = ('owner', 'borrower')
 
 class CommentViewSet(viewsets.ModelViewSet):
     """

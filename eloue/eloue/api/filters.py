@@ -1,4 +1,8 @@
 
+import operator
+
+from django.db.models import Q
+
 from rest_framework import filters
 
 DjangoFilterBackend = filters.DjangoFilterBackend
@@ -16,7 +20,13 @@ class OwnerFilter(filters.BaseFilterBackend):
         elif user.is_staff or user.is_superuser:
             return queryset
         owner_field = getattr(view, 'owner_field', self.owner_field)
-        return queryset.filter(**{owner_field: user.pk})
+        if isinstance(owner_field, basestring):
+            queryset = queryset.filter(**{owner_field: user.pk})
+        else:
+            or_queries = [Q(**{owner_field: user.pk})
+                          for owner_field in owner_field]
+            queryset = queryset.filter(reduce(operator.or_, or_queries))
+        return queryset
 
 class HaystackSearchFilter(filters.BaseFilterBackend):
     # The URL query parameter used for the search.
