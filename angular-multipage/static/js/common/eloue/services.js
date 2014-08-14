@@ -388,84 +388,92 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 bookingsService.getBookingDetail = function (uuid) {
                     var deferred = $q.defer();
+                    var self = this;
 
                     Bookings.get({uuid: uuid}).$promise.then(function (value) {
-                        var bookingPromises = {};
-                        var booking = {
-                            total_amount: value.total_amount,
-                            deposit_amount: value.deposit_amount,
-                            start_date: UtilsService.formatDate(value.started_at, "EEEE dd MMMM yyyy"),
-                            end_date: UtilsService.formatDate(value.ended_at, "EEEE dd MMMM yyyy"),
-                            start_time: UtilsService.formatDate(value.started_at, "HH'h'mm"),
-                            end_time: UtilsService.formatDate(value.ended_at, "HH'h'mm")
-                        };
-
-                        // Set period
-                        var hourTime = 60 * 60 * 1000;
-                        var dayTime = 24 * hourTime;
-
-                        var startTime = Date.parse(value.started_at);
-                        var endTime = Date.parse(value.ended_at);
-
-                        var diffTime = endTime - startTime;
-
-                        booking.period_days = Math.round(diffTime / dayTime);
-                        booking.period_hours = Math.round((diffTime - dayTime *  booking.period_days) / hourTime);
-
-                        // Get product id
-                        var productId = UtilsService.getIdFromUrl(value.product);
-
-                        // Get product
-                        var productDeferred = $q.defer();
-                        ProductsService.getProduct(productId).$promise.then(function (product) {
-                            booking.title = product.summary;
-
-                            var productPromises = {};
-
-                            // Get address
-                            var addressId = UtilsService.getIdFromUrl(product.address);
-                            productPromises.address = AddressesService.getAddress(addressId).$promise;
-
-                            // Get owner
-                            var ownerId = UtilsService.getIdFromUrl(product.owner);
-                            productPromises.owner = UsersService.get(ownerId).$promise;
-
-                            // Get phone
-                            var phoneId = UtilsService.getIdFromUrl(product.phone);
-                            productPromises.phone = PhoneNumbersService.getPhoneNumber(phoneId).$promise;
-
-                            $q.all(productPromises).then(function (results) {
-                                var address = results.address;
-                                booking.address = {};
-                                booking.address.street = address.street;
-                                booking.address.zipcode = address.zipcode;
-                                booking.address.city = address.city;
-
-                                var owner = results.owner;
-                                booking.owner = {};
-                                booking.owner.username = owner.username;
-                                booking.owner.avatar = owner.avatar.thumbnail;
-
-                                var phone = results.phone;
-                                booking.owner.phone = phone.number;
-
-                                productDeferred.resolve(booking);
-                            });
-                        });
-                        bookingPromises.product = productDeferred.promise;
-
-                        // Get picture
-                        bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
-
-                        $q.all(bookingPromises).then(function (results) {
-                            if (jQuery(results.pictures.results).size() > 0) {
-                                booking.picture = results.pictures.results[0].image.thumbnail;
-                            }
+                        self.parseBookingDetail(value, function (booking) {
                             deferred.resolve(booking);
                         });
                     });
 
                     return deferred.promise;
+                };
+
+                bookingsService.parseBookingDetail = function (bookingData, parsedCallback) {
+                    var bookingPromises = {};
+                    var booking = {
+                        total_amount: bookingData.total_amount,
+                        deposit_amount: bookingData.deposit_amount,
+                        start_date: UtilsService.formatDate(bookingData.started_at, "EEEE dd MMMM yyyy"),
+                        end_date: UtilsService.formatDate(bookingData.ended_at, "EEEE dd MMMM yyyy"),
+                        start_time: UtilsService.formatDate(bookingData.started_at, "HH'h'mm"),
+                        end_time: UtilsService.formatDate(bookingData.ended_at, "HH'h'mm")
+                    };
+
+                    // Set period
+                    var hourTime = 60 * 60 * 1000;
+                    var dayTime = 24 * hourTime;
+
+                    var startTime = Date.parse(bookingData.started_at);
+                    var endTime = Date.parse(bookingData.ended_at);
+
+                    var diffTime = endTime - startTime;
+
+                    booking.period_days = Math.round(diffTime / dayTime);
+                    booking.period_hours = Math.round((diffTime - dayTime *  booking.period_days) / hourTime);
+
+                    // Get product id
+                    var productId = UtilsService.getIdFromUrl(bookingData.product);
+
+                    // Get product
+                    var productDeferred = $q.defer();
+                    ProductsService.getProduct(productId).$promise.then(function (product) {
+                        booking.title = product.summary;
+
+                        var productPromises = {};
+
+                        // Get address
+                        var addressId = UtilsService.getIdFromUrl(product.address);
+                        productPromises.address = AddressesService.getAddress(addressId).$promise;
+
+                        // Get owner
+                        var ownerId = UtilsService.getIdFromUrl(product.owner);
+                        productPromises.owner = UsersService.get(ownerId).$promise;
+
+                        // Get phone
+                        var phoneId = UtilsService.getIdFromUrl(product.phone);
+                        productPromises.phone = PhoneNumbersService.getPhoneNumber(phoneId).$promise;
+
+                        $q.all(productPromises).then(function (results) {
+                            var address = results.address;
+                            booking.address = {};
+                            booking.address.street = address.street;
+                            booking.address.zipcode = address.zipcode;
+                            booking.address.city = address.city;
+
+                            var owner = results.owner;
+                            booking.owner = {};
+                            booking.owner.username = owner.username;
+                            booking.owner.avatar = owner.avatar.thumbnail;
+
+                            var phone = results.phone;
+                            booking.owner.phone = phone.number;
+
+                            productDeferred.resolve(booking);
+                        });
+                    });
+                    bookingPromises.product = productDeferred.promise;
+
+                    // Get picture
+                    bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+
+                    $q.all(bookingPromises).then(function (results) {
+                        if (jQuery(results.pictures.results).size() > 0) {
+                            booking.picture = results.pictures.results[0].image.thumbnail;
+                        }
+
+                        parsedCallback(booking);
+                    });
                 };
 
                 return bookingsService;
