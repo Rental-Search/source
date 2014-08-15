@@ -12,7 +12,7 @@ aside.booking-detail.scrollbar-custom
             | #{booking_detail.lot.address}, #{booking_detail.lot.index}
             br
             | #{booking_detail.lot.location}
-            .block-with-thumbnail.indent-sm-v.indent-sm-
+            .block-with-thumbnail.indent-sm-v
               .col-thumbnail
                 .thumbnail: a(href="#")
                   img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
@@ -43,10 +43,7 @@ aside.booking-detail.scrollbar-custom
           each info in booking_detail.informations
             li.clearfix
               .col-xs-3 #{info.title}
-              if info.allocate
-                .col-xs-9.text-success #{info.value}
-              else
-                .col-xs-9 #{info.value}
+              .col-xs-9(class="text-#{info.color}") #{info.value}
         .text-right
           a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
           a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
@@ -63,8 +60,8 @@ aside.booking-detail.scrollbar-custom
               +average-rate(0)
             button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
 
-  section.booking-activity-feed.text-gray-strong
-    ul.section-content
+  section.text-gray-strong.bg-lite
+    ul.section-content.booking-activity-feed
       li.reply-to-message: a(href="#").text-success.text-underline-hover 
         i.fa.fa-mail-reply &nbsp;&nbsp;
         | Répondre au message

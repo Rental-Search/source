@@ -51,15 +51,20 @@
     .fa-check
       color: $brand-success
 
+
 /////////////////////
 // tabs horisontal //
 /////////////////////
 .tabs-horisontal-active
   position: relative
-  margin-bottom: -2em
+  margin-bottom: -2em !important
   > ul
     position: relative
     height: 100%
+    > li
+      h4,
+      p
+        padding-top: .4em
 
 .tabs-horisontal-active .tab-horisontal
   cursor: pointer
@@ -68,6 +73,7 @@
   position: relative
   border-bottom: 4px solid transparent
   transition: border-color $trns-fast
+  margin-top: 0.3em
   &:hover,
   &.current
     border-color: $brand-success

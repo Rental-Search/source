@@ -1,6 +1,8 @@
 *,
 *:before,
 *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -37,6 +39,7 @@ a {
 .text-success-hover {
   color: #24bd77;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-success-hover:hover {
@@ -58,6 +61,7 @@ a {
 .bg-success-hover, header .btn-advertise {
   background: #24bd77;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-success-hover:hover, header .btn-advertise:hover {
@@ -79,6 +83,7 @@ a {
 .text-danger-hover {
   color: #e45647;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-danger-hover:hover {
@@ -100,6 +105,7 @@ a {
 .bg-danger-hover {
   background: #e45647;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-danger-hover:hover {
@@ -121,6 +127,7 @@ a {
 .text-primary-hover {
   color: #f27e36;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-primary-hover:hover {
@@ -142,6 +149,7 @@ a {
 .bg-primary-hover {
   background: #f27e36;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-primary-hover:hover {
@@ -163,6 +171,7 @@ a {
 .text-info-hover {
   color: #3959a8;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-info-hover:hover {
@@ -184,6 +193,7 @@ a {
 .bg-info-hover {
   background: #3959a8;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-info-hover:hover {
@@ -205,6 +215,7 @@ a {
 .text-gray-hover {
   color: #acacac;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-gray-hover:hover {
@@ -226,6 +237,7 @@ a {
 .bg-gray-hover {
   background: #acacac;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-gray-hover:hover {
@@ -247,6 +259,7 @@ a {
 .text-white-hover {
   color: white;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-white-hover:hover {
@@ -268,6 +281,7 @@ a {
 .bg-white-hover {
   background: white;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-white-hover:hover {
@@ -289,6 +303,7 @@ a {
 .text-gray-strong-hover {
   color: #878787;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-gray-strong-hover:hover {
@@ -310,6 +325,7 @@ a {
 .bg-gray-strong-hover {
   background: #878787;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-gray-strong-hover:hover {
@@ -331,6 +347,7 @@ a {
 .text-gray-stronger-hover {
   color: dimgray;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-gray-stronger-hover:hover {
@@ -352,6 +369,7 @@ a {
 .bg-gray-stronger-hover {
   background: dimgray;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-gray-stronger-hover:hover {
@@ -373,6 +391,7 @@ a {
 .text-gray-light-hover {
   color: lightgray;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-gray-light-hover:hover {
@@ -394,6 +413,7 @@ a {
 .bg-gray-light-hover {
   background: lightgray;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-gray-light-hover:hover {
@@ -415,6 +435,7 @@ a {
 .text-black-hover {
   color: #2c2c2c;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-black-hover:hover {
@@ -436,6 +457,7 @@ a {
 .bg-black-hover {
   background: #2c2c2c;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-black-hover:hover {
@@ -457,6 +479,7 @@ a {
 .text-lite-hover {
   color: #fcfcfc;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-lite-hover:hover {
@@ -478,6 +501,7 @@ a {
 .bg-lite-hover {
   background: #fcfcfc;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-lite-hover:hover {
@@ -499,6 +523,7 @@ a {
 .text-blue-hover {
   color: #007bb6;
   cursor: pointer;
+  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-blue-hover:hover {
@@ -520,6 +545,7 @@ a {
 .bg-blue-hover {
   background: #007bb6;
   cursor: pointer;
+  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-blue-hover:hover {
@@ -843,6 +869,8 @@ small {
 
 big {
   font-size: 21px;
+}
+big.large {
   font-size: 26px;
 }
 
@@ -874,6 +902,7 @@ article.dashboard nav a {
   display: block;
   padding: 1em 1em;
   margin: 1em 0;
+  -webkit-transition: color 0.2s ease-out;
   transition: color 0.2s ease-out;
   color: rgba(0, 0, 0, 0.6);
   text-shadow: 0.1em 0.05em 0 rgba(255, 255, 255, 0.3);
@@ -971,8 +1000,14 @@ article.dashboard .content-view section {
 }
 
 .booking-activity-feed {
-  background: #fcfcfc url(../img/feed-line.png) repeat-y 4em;
+  background: url(../img/feed-line.png) repeat-y 4em;
+  -webkit-background-size: 3px 1px;
   background-size: 3px 1px;
+}
+.booking-activity-feed.line-fix {
+  margin-top: 22.5px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .tabs-vertical-static,
@@ -1002,6 +1037,7 @@ article.dashboard .content-view section {
   border-bottom: 1px solid #eaeaea;
   padding: 15px 20px;
   display: block;
+  -webkit-transition: border-color 0.2s;
   transition: border-color 0.2s;
   position: relative;
 }
@@ -1053,11 +1089,15 @@ article.dashboard .content-view section {
 
 .tabs-horisontal-active {
   position: relative;
-  margin-bottom: -2em;
+  margin-bottom: -2em !important;
 }
 .tabs-horisontal-active > ul {
   position: relative;
   height: 100%;
+}
+.tabs-horisontal-active > ul > li h4,
+.tabs-horisontal-active > ul > li p {
+  padding-top: 0.4em;
 }
 
 .tabs-horisontal-active .tab-horisontal {
@@ -1066,7 +1106,9 @@ article.dashboard .content-view section {
   padding: 0.25em 0.5em 1em;
   position: relative;
   border-bottom: 4px solid transparent;
+  -webkit-transition: border-color 0.2s;
   transition: border-color 0.2s;
+  margin-top: 0.3em;
 }
 .tabs-horisontal-active .tab-horisontal:hover, .tabs-horisontal-active .tab-horisontal.current {
   border-color: #24bd77;
@@ -1131,6 +1173,7 @@ article.dashboard .content-view section {
 }
 .block-with-thumbnail.notification .col-exposition {
   border: none;
+  overflow: visible;
 }
 .block-with-thumbnail.notification .text-action {
   border-radius: 4px;
@@ -1160,13 +1203,9 @@ article.dashboard .content-view section {
   -webkit-box-shadow: 0 1px lightgray;
   box-shadow: 0 1px lightgray;
 }
-.block-with-thumbnail.disable i, .block-with-thumbnail.disable p {
+.block-with-thumbnail.notification p.action {
+  line-height: 3em;
   color: #acacac;
-}
-.block-with-thumbnail.disable a {
-  background-color: #acacac;
-  pointer-events: none;
-  cursor: default;
 }
 
 .container-with-square-thumbnail {
@@ -1590,7 +1629,9 @@ label.file-input-drag {
   display: block;
   text-align: center;
   padding: 30px;
+  -webkit-transition-property: border-color, color;
   transition-property: border-color, color;
+  -webkit-transition-duration: 0.2s;
   transition-duration: 0.2s;
 }
 label.file-input-drag:hover {
@@ -1628,7 +1669,9 @@ label.rad-btn i:before {
   background-color: #878787;
   width: 0;
   height: 0;
+  -webkit-transition-property: width, height;
   transition-property: width, height;
+  -webkit-transition-duration: 0.1s;
   transition-duration: 0.1s;
   content: "";
   top: 0;
@@ -1700,6 +1743,7 @@ label.check-btn span i {
 }
 .chosen-container .chosen-single {
   display: table;
+  -webkit-box-shadow: none;
   box-shadow: none;
   width: 100%;
   padding: 0 !important;
@@ -1798,6 +1842,8 @@ label.check-btn span i {
   border: none;
   border-bottom: 1px solid #eaeaea;
   background-color: #eaeaea !important;
+  background: -webkit-gradient(linear, left top, left bottom, from(white), to(#f7f7f7));
+  background: -webkit-linear-gradient(top, white, #f7f7f7);
   background: linear-gradient(to bottom, white, #f7f7f7);
 }
 .select-gradient .chosen-container .chosen-drop {
@@ -1822,7 +1868,9 @@ input[type="email"],
   padding: 0 1em;
   padding-top: 0.8em \9;
   border: 1px solid lightgray;
+  -webkit-box-shadow: none;
   box-shadow: none;
+  -webkit-transition: border-color 0.2s;
   transition: border-color 0.2s;
   overflow: visible;
   border-radius: 4px;
@@ -2029,11 +2077,17 @@ article.dashboard table.bg-light tbody {
   position: absolute;
   top: -0.5em;
   right: 0;
-  background-color: #f27e36;
   width: 2em;
   line-height: 1.8em;
   border-radius: 8px;
   color: white;
   font-weight: 700;
   font-size: 12px;
+  background-color: #f27e36;
+  text-align: center;
+}
+.fa-lg .badge-count-action {
+  font-size: 10px;
+  top: -1em;
+  right: -1em;
 }
