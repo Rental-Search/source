@@ -16,7 +16,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             var promises = {
                 currentUser: UsersService.getMe().$promise,
-                data: MessageThreadsService.getMessages($stateParams.id)
+                data: MessageThreadsService.getThread($stateParams.id)
             };
 
             $q.all(promises).then(function (results) {
@@ -45,6 +45,9 @@ define(["angular", "eloue/app"], function (angular) {
                             });
                         });
                 };
+
+                // Initiate custom scrollbars
+                $scope.initCustomScrollbars();
             });
         }
     ]);

@@ -12,6 +12,9 @@ define(["angular", "eloue/app", "../../../common/eloue/services"], function (ang
             // Get all message threads
             MessageThreadsService.getMessageThreads().then(function (data) {
                 $scope.message_threads = data;
+
+                // Initiate custom scrollbars
+                $scope.initCustomScrollbars();
             });
         }
     ]);

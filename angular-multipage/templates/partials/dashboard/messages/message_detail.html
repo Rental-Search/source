@@ -65,7 +65,7 @@
         <li class="tab-vertical block-with-thumbnail" data-ng-repeat="message in messages track by message.id">
             <div class="col-thumbnail">
                 <div class="thumbnail round"><a><img
-                        src="{{message.icon}}" alt="{{message.username}}"></a></div>
+                        data-ng-src="{{message.icon}}" alt="{{message.username}}"></a></div>
             </div>
             <div class="col-exposition">
                 <h3><a class="text-underline-hover">{{message.username}}</a></h3>

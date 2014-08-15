@@ -54,12 +54,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "$q",
             "$filter",
             "MessageThreads",
+            "Bookings",
             "ProductRelatedMessagesService",
             "UsersService",
             "ProductsService",
+            "BookingsService",
             "UtilsService",
-            function ($q, $filter, MessageThreads, ProductRelatedMessagesService, UsersService, ProductsService,
-                      UtilsService) {
+            function ($q, $filter, MessageThreads, Bookings, ProductRelatedMessagesService, UsersService,
+                      ProductsService, BookingsService, UtilsService) {
                 var messageThreadsService = {};
 
                 /**
@@ -126,7 +128,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * @param threadId identifier of a thread
                  */
                 messageThreadsService.getThread = function (threadId) {
-                    var self = this;
                     var deferred = $q.defer();
 
                     // Send a request for a thread
@@ -139,7 +140,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var messageDeferred = $q.defer();
 
                             // Get message
-                            var messageId = self.getIdFromUrl(value);
+                            var messageId = UtilsService.getIdFromUrl(value);
                             ProductRelatedMessagesService.getMessage(messageId).$promise.then(function (data) {
                                 var result = {
                                     id: data.id,
@@ -148,7 +149,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 };
 
                                 // Get sender
-                                var senderId = self.getIdFromUrl(data.sender);
+                                var senderId = UtilsService.getIdFromUrl(data.sender);
                                 UsersService.get(senderId).$promise.then(function (sender) {
                                     result.username = sender.username;
                                     result.icon = sender.avatar.thumbnail;
@@ -164,17 +165,33 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         if (!!thread.product) {
                             var productDeferred = $q.defer();
 
-                            var productId = self.getIdFromUrl(thread.product);
-                            ProductsService.getProduct(productId).$promise.then(function (product) {
-                                // TODO load rest of the fields
-                                productDeferred.resolve(product);
+                            var productId = UtilsService.getIdFromUrl(thread.product);
+                            Bookings.get({product: productId}).$promise.then(function (data) {
+                                if ($.isArray(data.results) && (data.results.length > 0)) {
+                                    var bookingData = data.results[0];
+                                    BookingsService.parseBookingDetail(bookingData, function (booking) {
+                                        productDeferred.resolve(booking);
+                                    });
+                                }
                             });
 
                             rootPromises.product = productDeferred.promise;
                         }
 
                         $q.all(rootPromises).then(function (results) {
-                            deferred.resolve(results);
+                            var result = {
+                                users: [],
+                                messages: results.messages,
+                                product: results.product
+                            };
+
+                            // Push ids of users from a conversation
+                            result.users.push(UtilsService.getIdFromUrl(thread.sender));
+                            if (!!thread.recipient) {
+                                result.users.push(UtilsService.getIdFromUrl(thread.recipient));
+                            }
+
+                            deferred.resolve(result);
                         });
                     });
 
