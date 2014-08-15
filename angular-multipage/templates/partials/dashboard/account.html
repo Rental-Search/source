@@ -1,11 +1,26 @@
-<h3>{{title}}</h3>
-<!-- TODO remove temporary menu -->
-<a ui-sref="account.profile">Profile</a><br />
-<a ui-sref="account.verification">Verify status</a><br />
-<a ui-sref="account.addresses">Addresses</a><br />
-<a ui-sref="account.phones">Phones</a><br />
-<a ui-sref="account.payments">Payments</a><br />
-<a ui-sref="account.password">Change password</a><br />
-<a ui-sref="account.invitation">Invite friends</a><br />
-<!-- end of temporary menu -->
-<div ui-view></div>
+<section class="tabs-vertical-active sm scrollbar-custom">
+    <ul>
+        <li class="tab-vertical"><a ui-sref="account.profile"></a>
+            <h3>Profil</h3>
+        </li>
+        <li class="tab-vertical"><a ui-sref="account.verification"></a>
+            <h3>Vérification</h3>
+        </li>
+        <li class="tab-vertical"><a ui-sref="account.addresses"></a>
+            <h3>Adresses</h3>
+        </li>
+        <li class="tab-vertical"><a ui-sref="account.phones"></a>
+            <h3>Téléphones</h3>
+        </li>
+        <li class="tab-vertical"><a ui-sref="account.payments"></a>
+            <h3>Paiements</h3>
+        </li>
+        <li class="tab-vertical"><a ui-sref="account.password"></a>
+            <h3>Mot de passe</h3>
+        </li>
+        <li class="tab-vertical"><a ui-sref="account.invitation"></a>
+            <h3>Parainage</h3>
+        </li>
+    </ul>
+</section>
+<div ui-view class="content-view"></div>
