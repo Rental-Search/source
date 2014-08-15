@@ -1,0 +1,122 @@
+.clear-selector
+  .chosen-container
+    font-weight: inherit
+    padding: 0
+    &.chosen-with-drop
+      .chosen-choices,
+      .chosen-single
+        background: white
+        border-color: $gray-medium !important
+        // +border-radius($bdrs $bdrs 0 0 !important)
+    font-size: inherit
+    text-align: center
+    width: 100% !important
+    display: block
+    font-weight: $fw-semibold
+    .chosen-single
+      display: table
+      box-shadow: none
+      width: 100%
+      padding: 0 !important
+      div
+        display: table-cell
+        vertical-align: middle
+        width: 2.5em
+        b
+          width: 1em
+          height: 1.5em
+          +centred_abs()
+      span
+        vertical-align: middle
+        display: table-cell
+        margin: 0
+        padding-right: 1em
+    &.chosen-container-multi
+      height: auto
+      .chosen-choices
+        padding: 0
+        min-height: 0 !important
+        height: auto !important
+        padding: .5em
+        +clearfix()
+        .search-choice
+          padding: .5em
+          margin: .5em
+          background: none
+          color: $gray-medium
+          .search-choice-close
+            background: none
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            z-index: 100
+        .search-field
+          input
+            color: $gray-medium !important
+            margin: 0 !important
+            padding: 0 0 0 .5em !important
+            height: .5em !important
+    .chosen-drop
+      background-color: white
+      border-color: $gray-medium
+      border-width: px(1)
+      border-top-width: 0
+      max-height: 240px
+      margin-top: 0
+    .chosen-search
+      padding: 0
+      margin: 0
+      input
+        border-width: 0 0 1px !important
+        font-weight: $fw-regular
+    .chosen-results
+      padding: 0
+      margin: 0
+      overflow: hidden
+      max-height: none !important
+      li
+        color: $gray-medium
+        &.highlighted
+          background: $gray-lighter
+          &:hover
+            color: $gray-medium
+        &.result-selected
+          background: $gray-light
+          &:hover
+            color: white
+
+
+  .chosen-container .chosen-choices,
+  .chosen-container .chosen-single
+    font-size: inherit
+    +placeholder($gray-medium)
+    background: white
+    font-family: inherit !important
+    font-weight: $fw-semibold 
+    color: $gray-medium
+    height: 2.5em !important
+    padding-top: .8em\9
+    border: 1px solid $gray-lighter !important
+    box-shadow: none
+    transition: border-color .2s
+    overflow: visible
+    // +border-radius($bdrs)
+    &:hover,
+    &:focus
+      border-color: $gray-medium
+      z-index: 5
+    &:invalid
+      border-color: lighten($brand-danger, 20%)
+    &:invalid:focus,
+    &:invalid:hover
+      border-color: $brand-danger
+    &.table-form
+      background-color: transparent
+      text-align: right
+      border: none
+      min-height: 0
+      padding: 0
+      margin-right: .5em
+      width: 5em
+      color: $gray-dark !important

@@ -1,0 +1,31 @@
+extends ../base
+
+block prepend variables
+  -var STATIC_URL = "../../static/"
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/product_list_styles.css")
+
+block append scripts
+  script(src="#{STATIC_URL}js/scripts.js")
+
+block append content-body
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+     nav
+      include ../jade/_breadcrumbs
+    article.container
+      section
+        include ../jade/_product_list_article_head
+      .row
+        aside.col-xs-3 654
+        main.col-xs-9 654
+    footer
+      section.download-mobile-apps.framing
+        include ../jade/_download_mobile_apps
+      section.footer-links
+        include ../jade/_footer_links
+      section.rss
+        include ../jade/_rss

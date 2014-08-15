@@ -43,7 +43,7 @@ aside.booking-detail.scrollbar-custom
           each info in booking_detail.informations
             li.clearfix
               .col-xs-3 #{info.title}
-              .col-xs-9(class="text-#{info.color}") #{info.value}
+              .col-xs-9(class="#{info.color}") #{info.value}
         .text-right
           a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
           a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat

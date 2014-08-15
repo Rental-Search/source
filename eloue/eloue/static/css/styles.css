@@ -2077,7 +2077,7 @@ article.dashboard table.bg-light tbody {
   position: absolute;
   top: -0.5em;
   right: 0;
-  width: 2em;
+  padding: 0 0.75em;
   line-height: 1.8em;
   border-radius: 8px;
   color: white;

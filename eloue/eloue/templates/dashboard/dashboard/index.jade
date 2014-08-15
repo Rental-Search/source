@@ -56,14 +56,16 @@ block content-view
           li.col-sm-8.text-center
             h4 Votre activité sur e-loue
           li.col-sm-2.text-success.text-right: p
-            i.fa.fa-envelope-o.fa-lg.indent-sm-r
-              span.badge-count-action 1
-            i.fa.fa-table.fa-lg
+            a(href="#")
+              i.fa.fa-envelope-o.fa-lg.indent-sm-r
+                span.badge-count-action 1
+            a(href="#c")
+              i.fa.fa-table.fa-lg
 
 
     section.scrollbar-custom.bg-lite
       ul.section-content.booking-activity-feed.line-fix
-        li.block-with-thumbnail.notification.indent-md-b
+        li.block-with-thumbnail.notification.indent-sm-b
           .col-thumbnail
             .thumbnail: .icon-action: i.fa.fa-check-circle-o.fa-lg
           .col-exposition
@@ -100,14 +102,14 @@ block content-view
                 each info in booking_detail.informations
                   li.clearfix
                     .col-xs-3 #{info.title}
-                    .col-xs-9(class="text-#{info.color}") #{info.value}
+                    .col-xs-9(class="#{info.color}") #{info.value}
             p.action.norm.indent-sm-t
               | Il y a 12 min
               span.pull-right: a(href="#").btn.bg-success-hover.text-white Accepter
               span.pull-right.indent-sm-h: a(href="#").text-success.text-underline-hover Refuser
 
           each item in dashboard_feed
-            li.block-with-thumbnail.notification.indent-md-b
+            li.block-with-thumbnail.notification.indent-sm-b
               .col-thumbnail
                 .thumbnail: .icon-action: i.fa.fa-lg(class="fa-#{item.icon}")
               .col-exposition
