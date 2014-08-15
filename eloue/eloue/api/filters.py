@@ -83,7 +83,11 @@ class MultiValueForeignKeyFilter(django_filters.Filter):
     def filter(self, qs, value):
         if not value:
             return qs
-        lookup = 'in' if len(value) > 1 else self.lookup_type
+        if len(value) > 1:
+            lookup = 'in'
+        else:
+            lookup = self.lookup_type
+            value = value[0]
         qs = qs.filter(**{'__'.join([self.name, lookup]): value})
         if self.distinct:
             qs = qs.distinct()
