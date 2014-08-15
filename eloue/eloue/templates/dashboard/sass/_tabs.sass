@@ -20,6 +20,7 @@
     display: block
     transition: border-color $trns-fast
     position: relative
+    +clearfix()
 
 .tabs-vertical-active .mCSB_scrollTools,
 .scrollbar-left .mCSB_scrollTools
@@ -55,8 +56,7 @@
 /////////////////////
 .tabs-horisontal-active
   position: relative
-  margin-bottom: -3em !important
-  // padding-top: $indent-xs/2
+  margin-bottom: -2em
   > ul
     position: relative
     height: 100%

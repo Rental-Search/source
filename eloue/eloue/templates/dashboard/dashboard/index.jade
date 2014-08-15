@@ -1,17 +1,49 @@
-extends ../../base
+extends ../jade/_base_dashboard
 
-block variables
-  include ../jade/_global_variables
-  include ../jade/_mixins
-  -var STATIC_URL = "../../../static/"
+block append variables
+  -STATIC_URL = "../../../static/"
+  -var src_img = "dashboard/dashboard"
 
-block append styles
-  link(rel="stylesheet", href="#{STATIC_URL}css/base.css")
-  link(rel="stylesheet", href="#{STATIC_URL}css/styles.css")
+block content-view
+  section.tabs-vertical-static.lg.scrollbar-custom
+    ul.text-gray
+      li.tab-vertical
+         .block-with-thumbnail.indent-xs
+          .col-thumbnail
+            .thumbnail.round.indent-sm-r: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo")
+          .col-exposition
+            h2.small.text-black.indent-xs-b #{tenant.first_name} #{tenant.name}
+            +average-rate(tenant.rate)
+            p.indent-sm-v Membre depus le #{tenant.date_registred}
+            a(href="#").btn.bg-success-hover.text-white Mettre à jour mes infos
 
-block append scripts
-  script(src="#{STATIC_URL}js/dashboard_scripts.js")
+      li.tab-vertical
+        .indent-xs
+          h2.text-black.indent-xs-b Statistiquess
+          ul
+            each stat in tenant.stats
+              li
+                big.large.text-success #{stat.value} 
+                | #{stat.text}
 
-block content-body
-  article.dashboard
-    .content-view
+      li.tab-vertical
+        .indent-xs
+          h2.text-black.indent-xs-b Vérifications
+          ul
+            each verify in tenant.verification
+              li.indent-xs-v
+                case verify
+                  when "facebook"
+                   +verify-type("facebook", "Facebook", "info")
+                  when "email"
+                   +verify-type("inbox", "Adresse email", "primary")
+                  when "phone"
+                   +verify-type("phone", "Téléphone", "success")
+                  when "google"
+                   +verify-type("google", "Téléphone", "danger")
+                  when "linkedin"
+                   +verify-type("linkedin-square", "Linkedin", "blue")
+
+
+
+

@@ -42,8 +42,137 @@
     <script src="../../../static/js/dashboard_scripts.js"></script>
   </head>
   <body>
-    <article class="dashboard">
-      <div class="content-view"></div>
-    </article>
+    <div class="container-full-screen">
+      <input type="checkbox" id="sourse">
+      <lable for="#sourse" id="sourse-img"><img src="../../../static/img/src/dashboard/dashboard.jpg"></lable>
+      <header class="header-site">
+        <section class="container signs-links">
+          <ul role="tablist" class="nav without-spaces">
+            <li class="divide"></li>
+            <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
+            <li class="divide"></li>
+            <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
+            <li class="divide"></li>
+            <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
+          </ul>
+        </section>
+        <div class="framing">
+          <section class="container search-form">
+            <div class="table-cell"><a href="/templates"><img src="../../../static/img/logo.png" alt="logo"></a></div>
+            <div class="table-cell main-cell">
+              <form action="" class="input-group">
+                <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="table-cell main-cell form-control what-field">
+                <div class="table-cell input-group where-field"><i class="sprite-location"></i>
+                  <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control">
+                </div>
+                <div class="table-cell input-group-btn">
+                  <button type="button" class="btn btn-default btn-search"><i class="icon-search"></i></button>
+                </div>
+              </form>
+            </div>
+            <div class="table-cell">
+              <button type="button" class="btn bg-success btn-advertise">Déposez une annonce</button>
+            </div>
+          </section>
+        </div>
+      </header>
+      <article class="dashboard">
+        <nav>
+          <ul>
+            <li><a href="../dashboard" class="text-success-dark"><i class="fa fa-home"></i>Dashboard</a></li>
+            <li><a href="../messages" class="text-success-dark"><i class="fa fa-envelope-o"><span class="badge-count-action">1</span></i>Messages</a></li>
+            <li><a href="../booking" class="text-success-dark"><i class="fa fa-table"></i>Booking</a></li>
+            <li><a href="../items" class="text-success-dark"><i class="fa fa-th-list"></i>Items</a></li>
+            <li><a href="../account/profil.html" class="text-success-dark"><i class="fa fa-user"></i>Account</a></li>
+          </ul>
+        </nav>
+        <div class="content-view">
+          <section class="tabs-vertical-static lg scrollbar-custom">
+            <ul class="text-gray">
+              <li class="tab-vertical">
+                <div class="block-with-thumbnail indent-xs">
+                  <div class="col-thumbnail">
+                    <div class="thumbnail round indent-sm-r"><img src="../../../static/img/home-products/tenant.png" alt="Kroutchev photo"></div>
+                  </div>
+                  <div class="col-exposition">
+                    <h2 class="small text-black indent-xs-b">Gaspard Kroutchev</h2><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span>
+                    <p class="indent-sm-v">Membre depus le 12.07.2014</p><a href="#" class="btn bg-success-hover text-white">Mettre à jour mes infos</a>
+                  </div>
+                </div>
+              </li>
+              <li class="tab-vertical">
+                <div class="indent-xs">
+                  <h2 class="text-black indent-xs-b">Statistiquess</h2>
+                  <ul>
+                    <li>
+                      <big class="large text-success">7 </big>annonces publiées
+                    </li>
+                    <li>
+                      <big class="large text-success">12 </big>locations effectués
+                    </li>
+                    <li>
+                      <big class="large text-success">16 </big>évalutations
+                    </li>
+                    <li>
+                      <big class="large text-success">98% </big>de taux de réponse
+                    </li>
+                    <li>
+                      <big class="large text-success">6h </big>de temps de réponse en moyenne
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="tab-vertical">
+                <div class="indent-xs">
+                  <h2 class="text-black indent-xs-b">Vérifications</h2>
+                  <ul>
+                    <li class="indent-xs-v">
+                          <div class="block-with-thumbnail">
+                            <div class="col-thumbnail">
+                              <div class="thumbnail"><i class="fa fa-fw fa-3x fa-facebook text-info"></i></div>
+                            </div>
+                            <div class="col-exposition">Facebook verifié<i class="fa fa-check-circle fa-lg indent-xs-l text-success"></i></div>
+                          </div>
+                    </li>
+                    <li class="indent-xs-v">
+                          <div class="block-with-thumbnail">
+                            <div class="col-thumbnail">
+                              <div class="thumbnail"><i class="fa fa-fw fa-3x fa-inbox text-primary"></i></div>
+                            </div>
+                            <div class="col-exposition">Adresse email verifié<i class="fa fa-check-circle fa-lg indent-xs-l text-success"></i></div>
+                          </div>
+                    </li>
+                    <li class="indent-xs-v">
+                          <div class="block-with-thumbnail">
+                            <div class="col-thumbnail">
+                              <div class="thumbnail"><i class="fa fa-fw fa-3x fa-phone text-success"></i></div>
+                            </div>
+                            <div class="col-exposition">Téléphone verifié<i class="fa fa-check-circle fa-lg indent-xs-l text-success"></i></div>
+                          </div>
+                    </li>
+                    <li class="indent-xs-v">
+                          <div class="block-with-thumbnail">
+                            <div class="col-thumbnail">
+                              <div class="thumbnail"><i class="fa fa-fw fa-3x fa-google text-danger"></i></div>
+                            </div>
+                            <div class="col-exposition">Téléphone verifié<i class="fa fa-check-circle fa-lg indent-xs-l text-success"></i></div>
+                          </div>
+                    </li>
+                    <li class="indent-xs-v">
+                          <div class="block-with-thumbnail">
+                            <div class="col-thumbnail">
+                              <div class="thumbnail"><i class="fa fa-fw fa-3x fa-linkedin-square text-blue"></i></div>
+                            </div>
+                            <div class="col-exposition">Linkedin verifié<i class="fa fa-check-circle fa-lg indent-xs-l text-success"></i></div>
+                          </div>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </article>
+    </div>
   </body>
 </html>

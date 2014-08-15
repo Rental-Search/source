@@ -1,8 +1,6 @@
 *,
 *:before,
 *:after {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -39,7 +37,6 @@ a {
 .text-success-hover {
   color: #24bd77;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-success-hover:hover {
@@ -61,7 +58,6 @@ a {
 .bg-success-hover, header .btn-advertise {
   background: #24bd77;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-success-hover:hover, header .btn-advertise:hover {
@@ -83,7 +79,6 @@ a {
 .text-danger-hover {
   color: #e45647;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-danger-hover:hover {
@@ -105,7 +100,6 @@ a {
 .bg-danger-hover {
   background: #e45647;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-danger-hover:hover {
@@ -127,7 +121,6 @@ a {
 .text-primary-hover {
   color: #f27e36;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-primary-hover:hover {
@@ -149,7 +142,6 @@ a {
 .bg-primary-hover {
   background: #f27e36;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-primary-hover:hover {
@@ -171,7 +163,6 @@ a {
 .text-info-hover {
   color: #3959a8;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-info-hover:hover {
@@ -193,7 +184,6 @@ a {
 .bg-info-hover {
   background: #3959a8;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-info-hover:hover {
@@ -215,7 +205,6 @@ a {
 .text-gray-hover {
   color: #acacac;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-gray-hover:hover {
@@ -237,7 +226,6 @@ a {
 .bg-gray-hover {
   background: #acacac;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-gray-hover:hover {
@@ -259,7 +247,6 @@ a {
 .text-white-hover {
   color: white;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-white-hover:hover {
@@ -281,7 +268,6 @@ a {
 .bg-white-hover {
   background: white;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-white-hover:hover {
@@ -303,7 +289,6 @@ a {
 .text-gray-strong-hover {
   color: #878787;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-gray-strong-hover:hover {
@@ -325,7 +310,6 @@ a {
 .bg-gray-strong-hover {
   background: #878787;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-gray-strong-hover:hover {
@@ -347,7 +331,6 @@ a {
 .text-gray-stronger-hover {
   color: dimgray;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-gray-stronger-hover:hover {
@@ -369,7 +352,6 @@ a {
 .bg-gray-stronger-hover {
   background: dimgray;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-gray-stronger-hover:hover {
@@ -391,7 +373,6 @@ a {
 .text-gray-light-hover {
   color: lightgray;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-gray-light-hover:hover {
@@ -413,7 +394,6 @@ a {
 .bg-gray-light-hover {
   background: lightgray;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-gray-light-hover:hover {
@@ -435,7 +415,6 @@ a {
 .text-black-hover {
   color: #2c2c2c;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-black-hover:hover {
@@ -457,7 +436,6 @@ a {
 .bg-black-hover {
   background: #2c2c2c;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-black-hover:hover {
@@ -479,7 +457,6 @@ a {
 .text-lite-hover {
   color: #fcfcfc;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-lite-hover:hover {
@@ -501,7 +478,6 @@ a {
 .bg-lite-hover {
   background: #fcfcfc;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-lite-hover:hover {
@@ -523,7 +499,6 @@ a {
 .text-blue-hover {
   color: #007bb6;
   cursor: pointer;
-  -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
 .text-blue-hover:hover {
@@ -545,7 +520,6 @@ a {
 .bg-blue-hover {
   background: #007bb6;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
 .bg-blue-hover:hover {
@@ -599,7 +573,11 @@ a {
 }
 
 .indent-md-l {
-  margin-right: 30px !important;
+  margin-left: 30px !important;
+}
+
+.indent-md {
+  margin: 30px !important;
 }
 
 .indent-sm-h {
@@ -625,7 +603,11 @@ a {
 }
 
 .indent-sm-l {
-  margin-right: 20px !important;
+  margin-left: 20px !important;
+}
+
+.indent-sm {
+  margin: 20px !important;
 }
 
 .indent-xs-h {
@@ -651,7 +633,11 @@ a {
 }
 
 .indent-xs-l {
-  margin-right: 10px !important;
+  margin-left: 10px !important;
+}
+
+.indent-xs {
+  margin: 10px !important;
 }
 
 .indent-lg-h {
@@ -677,7 +663,11 @@ a {
 }
 
 .indent-lg-l {
-  margin-right: 60px !important;
+  margin-left: 60px !important;
+}
+
+.indent-lg {
+  margin: 60px !important;
 }
 
 .text-justify-force {
@@ -805,6 +795,9 @@ h2 {
   font-weight: 400;
   margin-bottom: 20px;
 }
+h2.small {
+  font-size: 18px;
+}
 
 h3 {
   font-size: 14px;
@@ -850,6 +843,7 @@ small {
 
 big {
   font-size: 21px;
+  font-size: 26px;
 }
 
 article.dashboard {
@@ -880,7 +874,6 @@ article.dashboard nav a {
   display: block;
   padding: 1em 1em;
   margin: 1em 0;
-  -webkit-transition: color 0.2s ease-out;
   transition: color 0.2s ease-out;
   color: rgba(0, 0, 0, 0.6);
   text-shadow: 0.1em 0.05em 0 rgba(255, 255, 255, 0.3);
@@ -947,6 +940,13 @@ article.dashboard .content-view section {
   width: 650px;
   padding: 22.5px 30px;
 }
+.section-content:before, .section-content:after {
+  content: " ";
+  display: table;
+}
+.section-content:after {
+  clear: both;
+}
 .section-content.full-width {
   max-width: none;
 }
@@ -972,7 +972,6 @@ article.dashboard .content-view section {
 
 .booking-activity-feed {
   background: #fcfcfc url(../img/feed-line.png) repeat-y 4em;
-  -webkit-background-size: 3px 1px;
   background-size: 3px 1px;
 }
 
@@ -1003,9 +1002,18 @@ article.dashboard .content-view section {
   border-bottom: 1px solid #eaeaea;
   padding: 15px 20px;
   display: block;
-  -webkit-transition: border-color 0.2s;
   transition: border-color 0.2s;
   position: relative;
+}
+.tabs-vertical-static .tab-vertical:before, .tabs-vertical-static .tab-vertical:after,
+.tabs-vertical-active .tab-vertical:before,
+.tabs-vertical-active .tab-vertical:after {
+  content: " ";
+  display: table;
+}
+.tabs-vertical-static .tab-vertical:after,
+.tabs-vertical-active .tab-vertical:after {
+  clear: both;
 }
 
 .tabs-vertical-active .mCSB_scrollTools,
@@ -1045,7 +1053,7 @@ article.dashboard .content-view section {
 
 .tabs-horisontal-active {
   position: relative;
-  margin-bottom: -3em !important;
+  margin-bottom: -2em;
 }
 .tabs-horisontal-active > ul {
   position: relative;
@@ -1058,7 +1066,6 @@ article.dashboard .content-view section {
   padding: 0.25em 0.5em 1em;
   position: relative;
   border-bottom: 4px solid transparent;
-  -webkit-transition: border-color 0.2s;
   transition: border-color 0.2s;
 }
 .tabs-horisontal-active .tab-horisontal:hover, .tabs-horisontal-active .tab-horisontal.current {
@@ -1583,9 +1590,7 @@ label.file-input-drag {
   display: block;
   text-align: center;
   padding: 30px;
-  -webkit-transition-property: border-color, color;
   transition-property: border-color, color;
-  -webkit-transition-duration: 0.2s;
   transition-duration: 0.2s;
 }
 label.file-input-drag:hover {
@@ -1623,9 +1628,7 @@ label.rad-btn i:before {
   background-color: #878787;
   width: 0;
   height: 0;
-  -webkit-transition-property: width, height;
   transition-property: width, height;
-  -webkit-transition-duration: 0.1s;
   transition-duration: 0.1s;
   content: "";
   top: 0;
@@ -1697,7 +1700,6 @@ label.check-btn span i {
 }
 .chosen-container .chosen-single {
   display: table;
-  -webkit-box-shadow: none;
   box-shadow: none;
   width: 100%;
   padding: 0 !important;
@@ -1796,8 +1798,6 @@ label.check-btn span i {
   border: none;
   border-bottom: 1px solid #eaeaea;
   background-color: #eaeaea !important;
-  background: -webkit-gradient(linear, left top, left bottom, from(white), to(#f7f7f7));
-  background: -webkit-linear-gradient(top, white, #f7f7f7);
   background: linear-gradient(to bottom, white, #f7f7f7);
 }
 .select-gradient .chosen-container .chosen-drop {
@@ -1822,9 +1822,7 @@ input[type="email"],
   padding: 0 1em;
   padding-top: 0.8em \9;
   border: 1px solid lightgray;
-  -webkit-box-shadow: none;
   box-shadow: none;
-  -webkit-transition: border-color 0.2s;
   transition: border-color 0.2s;
   overflow: visible;
   border-radius: 4px;

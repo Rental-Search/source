@@ -43,7 +43,9 @@ a
   .indent-#{$class}-b
     margin-bottom: $indent-vertical*$indent !important
   .indent-#{$class}-l
-    margin-right: $indent !important
+    margin-left: $indent !important
+  .indent-#{$class}
+    margin: $indent !important
 
 .text-justify-force
   text-align: justify
@@ -139,6 +141,8 @@ h2
   font-size: $font-size-large
   font-weight: $fw-regular
   margin-bottom: $indent-sm
+  &.small
+    font-size: $font-size-base + 4
 
 h3
   // color: $gray-dark
@@ -174,3 +178,5 @@ small
 
 big
   font-size: $font-size-bigger
+  &.large
+  font-size: $font-size-large
