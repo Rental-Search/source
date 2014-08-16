@@ -49,3 +49,13 @@ class BookingManager(Manager):
 
 class CurrentSiteBookingManager(CurrentSiteManager, BookingManager):
     pass
+
+
+class CommentManager(Manager):
+    def __init__(self, comment_type):
+        super(CommentManager, self).__init__()
+        self.comment_type = comment_type
+
+    def get_query_set(self):
+        qs = super(CommentManager, self).get_query_set()
+        return qs.filter(type=self.comment_type)

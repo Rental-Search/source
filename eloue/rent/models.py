@@ -29,10 +29,10 @@ from accounts.models import Patron
 from products.models import Product
 from products.choices import CURRENCY
 from products.signals import post_save_to_update_product
-from rent.choices import BOOKING_STATE, PACKAGES_UNIT, PACKAGES
+from rent.choices import BOOKING_STATE, PACKAGES_UNIT, PACKAGES, COMMENT_TYPE_CHOICES
 from rent.decorators import incr_sequence
 from rent.fields import UUIDField, IntegerAutoField
-from rent.manager import BookingManager, CurrentSiteBookingManager
+from rent.manager import BookingManager, CurrentSiteBookingManager, CommentManager
 from payments.paypal_payment import AdaptivePapalPayments
 from payments.non_payment import NonPayments
 
@@ -432,13 +432,18 @@ def state_logger(sender, instance, name, source, target, **kwargs):
         BookingLog.objects.create(booking=instance, source_state=source, target_state=target)
 
 class Comment(models.Model):
-    booking = models.OneToOneField(Booking)
+    booking = models.ForeignKey(Booking, related_name='comments')
     comment = models.TextField(_(u'Commentaire'))
     note = models.PositiveSmallIntegerField(_(u'Note'),
         choices=enumerate(xrange(6)),
         validators=[MaxValueValidator(5)]
     )
     created_at = models.DateTimeField(editable=False, auto_now_add=True)
+    type = models.PositiveSmallIntegerField(_(u'Type'),
+        choices=COMMENT_TYPE_CHOICES,
+        default=COMMENT_TYPE_CHOICES.OWNER,
+        db_index=True
+    )
 
     @property
     def response(self):
@@ -461,13 +466,18 @@ class Comment(models.Model):
         return self.comment
 
     class Meta:
-        abstract = True
         ordering = ['-created_at']
     
 class OwnerComment(Comment):
+    objects = CommentManager(COMMENT_TYPE_CHOICES.OWNER)
+
+    class Meta:
+        proxy = True
+
     @property
     def response(self):
         return self.booking.borrowercomment
+
     @property
     def writer(self):
         return self.booking.owner
@@ -478,9 +488,15 @@ class OwnerComment(Comment):
         message.send()
     
 class BorrowerComment(Comment):
+    objects = CommentManager(COMMENT_TYPE_CHOICES.BORROWER)
+
+    class Meta:
+        proxy = True
+
     @property
     def response(self):
         return self.booking.ownercomment
+
     @property
     def writer(self):
         return self.booking.borrower

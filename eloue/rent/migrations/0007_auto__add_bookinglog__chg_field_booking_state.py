@@ -4,6 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+try:
+    from django_fsm import FSMField
+    FSMField = 'django_fsm.FSMField'
+except ImportError:
+    from django_fsm.db.fields.fsmfield import FSMField
+    FSMField = 'django_fsm.db.fields.fsmfield.FSMField'
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
@@ -13,13 +20,13 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('booking', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['rent.Booking'])),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, null=True, blank=True)),
-            ('source_state', self.gf('django_fsm.db.fields.fsmfield.FSMField')(max_length=50)),
-            ('target_state', self.gf('django_fsm.db.fields.fsmfield.FSMField')(max_length=50)),
+            ('source_state', self.gf(FSMField)(max_length=50)),
+            ('target_state', self.gf(FSMField)(max_length=50)),
         ))
         db.send_create_signal('rent', ['BookingLog'])
 
         # Changing field 'Booking.state'
-        db.alter_column('rent_booking', 'state', self.gf('django_fsm.db.fields.fsmfield.FSMField')(max_length=50))
+        db.alter_column('rent_booking', 'state', self.gf(FSMField)(max_length=50))
 
 
     def backwards(self, orm):
@@ -191,7 +198,7 @@ class Migration(SchemaMigration):
             'quantity': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'bookings'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'started_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'state': ('django_fsm.db.fields.fsmfield.FSMField', [], {'default': "'authorizing'", 'max_length': '50'}),
+            'state': (FSMField, [], {'default': "'authorizing'", 'max_length': '50'}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
         },
@@ -200,8 +207,8 @@ class Migration(SchemaMigration):
             'booking': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['rent.Booking']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'source_state': ('django_fsm.db.fields.fsmfield.FSMField', [], {'max_length': '50'}),
-            'target_state': ('django_fsm.db.fields.fsmfield.FSMField', [], {'max_length': '50'})
+            'source_state': (FSMField, [], {'max_length': '50'}),
+            'target_state': (FSMField, [], {'max_length': '50'})
         },
         'rent.borrowercomment': {
             'Meta': {'ordering': "['-created_at']", 'object_name': 'BorrowerComment'},
