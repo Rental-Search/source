@@ -15,7 +15,7 @@ require.config({
         "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
-        "jquery-chosen": "../../bower_components/chosen/chosen.jquery.min",
+        "jquery-chosen": "../../js/chosen.jquery.min",
         "vars": "../vars",
         "bootstrap_modal": "../bootstrap/modal"
     },
