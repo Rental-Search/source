@@ -10,6 +10,7 @@ require.config({
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
+        "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
         "selectivizr": "../../bower_components/selectivizr/selectivizr",
         "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
@@ -26,6 +27,7 @@ require.config({
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],
         "angular-ui-router": ["angular"],
+        "angular-translate": ["angular"],
         "angular-mocks": {
             deps: ["angular"],
             "exports": "angular.mock"
@@ -48,7 +50,8 @@ require([
     "angular",
     "bootstrap",
     "vars",
-    "eloue/route"
+    "eloue/route",
+    "eloue/i18n"
 ], function ($, _, angular, bootstrap, vars, route) {
     "use strict";
     $(function () {

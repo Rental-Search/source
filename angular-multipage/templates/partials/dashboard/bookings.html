@@ -42,8 +42,15 @@
                                               class="text-underline-hover">{{booking.title}}</a></h3>
 
                 <p class="normal text-gray">
-                    <big class="text-primary">{{booking.total_amount}}€</big>
-                    <br>Du {{booking.start_date}} au {{booking.end_date}}
+                    <big class="text-primary">{{booking.total_amount}}€</big><br>
+                    <span translate="Since">Du</span>
+                    <span> {{booking.start_date.day}} </span>
+                    <span translate="{{booking.start_date.month}}"></span>
+                    <span> {{booking.start_date.year}} </span>
+                    <span translate="to">au</span>
+                    <span> {{booking.end_date.day}} </span>
+                    <span translate="{{booking.end_date.month}}"></span>
+                    <span> {{booking.end_date.year}} </span>
                 </p>
             </div>
         </li>

@@ -38,11 +38,25 @@
             <ul class="zebra-list indent-md-v">
                 <li class="clearfix">
                     <div class="col-xs-3">Début</div>
-                    <div class="col-xs-9">{{booking.start_date}} à {{booking.start_time}}</div>
+                    <div class="col-xs-9">
+                        <span translate="{{booking.start_date.week_day}}"></span>
+                        <span> {{booking.start_date.day}} </span>
+                        <span translate="{{booking.start_date.month}}"></span>
+                        <span> {{booking.start_date.year}} </span>
+                        <span translate="at"></span>
+                        <span> {{booking.start_time}}</span>
+                    </div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Fin</div>
-                    <div class="col-xs-9">{{booking.end_date}} à {{booking.end_time}}</div>
+                    <div class="col-xs-9">
+                        <span translate="{{booking.end_date.week_day}}"></span>
+                        <span> {{booking.end_date.day}} </span>
+                        <span translate="{{booking.end_date.month}}"></span>
+                        <span> {{booking.end_date.year}} </span>
+                        <span translate="at"></span>
+                        <span> {{booking.end_time}}</span>
+                    </div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Période</div>

@@ -4,6 +4,7 @@ define(["angular",
         "angular-resource",
         "angular-route",
         "angular-ui-router",
+        "angular-translate",
         "jquery-form",
         "selectivizr",
         "custom-scrollbar",
@@ -13,6 +14,7 @@ define(["angular",
         "../../common/eloue/commonApp"],
     function (angular) {
         // Create dashboard application
-        return angular.module("EloueDashboardApp", ["EloueCommon", "ngCookies", "ngResource", "ngRoute", "ui.router"]);
+        return angular.module("EloueDashboardApp", ["EloueCommon", "ngCookies", "ngResource", "ngRoute", "ui.router",
+            "pascalprecht.translate"]);
     }
 );

@@ -383,8 +383,16 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 state: value.state,
                                 total_amount: value.total_amount,
                                 uuid: value.uuid,
-                                start_date: UtilsService.formatDate(value.started_at, "dd MMMM yyyy"),
-                                end_date: UtilsService.formatDate(value.ended_at, "dd MMMM yyyy")
+                                start_date: {
+                                    day: UtilsService.formatDate(value.started_at, "dd"),
+                                    month: UtilsService.formatDate(value.started_at, "MMMM"),
+                                    year: UtilsService.formatDate(value.started_at, "yyyy")
+                                },
+                                end_date: {
+                                    day: UtilsService.formatDate(value.ended_at, "dd"),
+                                    month: UtilsService.formatDate(value.ended_at, "MMMM"),
+                                    year: UtilsService.formatDate(value.ended_at, "yyyy")
+                                }
                             };
 
                             var bookingPromises = {};
@@ -431,11 +439,22 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 bookingsService.parseBookingDetail = function (bookingData, parsedCallback) {
                     var bookingPromises = {};
+
                     var booking = {
                         total_amount: bookingData.total_amount,
                         deposit_amount: bookingData.deposit_amount,
-                        start_date: UtilsService.formatDate(bookingData.started_at, "EEEE dd MMMM yyyy"),
-                        end_date: UtilsService.formatDate(bookingData.ended_at, "EEEE dd MMMM yyyy"),
+                        start_date: {
+                            week_day: UtilsService.formatDate(bookingData.started_at, "EEEE"),
+                            day: UtilsService.formatDate(bookingData.started_at, "dd"),
+                            month: UtilsService.formatDate(bookingData.started_at, "MMMM"),
+                            year: UtilsService.formatDate(bookingData.started_at, "yyyy")
+                        },
+                        end_date: {
+                            week_day: UtilsService.formatDate(bookingData.ended_at, "EEEE"),
+                            day: UtilsService.formatDate(bookingData.ended_at, "dd"),
+                            month: UtilsService.formatDate(bookingData.ended_at, "MMMM"),
+                            year: UtilsService.formatDate(bookingData.ended_at, "yyyy")
+                        },
                         start_time: UtilsService.formatDate(bookingData.started_at, "HH'h'mm"),
                         end_time: UtilsService.formatDate(bookingData.ended_at, "HH'h'mm")
                     };
