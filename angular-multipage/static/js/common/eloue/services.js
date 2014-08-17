@@ -23,8 +23,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for managing users.
          */
-        EloueCommon.factory("UsersService", ["Users", "FormService", "Endpoints",
-            function (Users, FormService, Endpoints) {
+        EloueCommon.factory("UsersService", ["$q", "Users", "FormService", "Endpoints",
+            function ($q, Users, FormService, Endpoints) {
                 var usersService = {};
 
                 usersService.get = function (userId, successCallback, errorCallback) {
@@ -41,6 +41,21 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                     // Send form to the current user url
                     FormService.send("POST", currentUserUrl, form, successCallback, errorCallback);
+                };
+
+                usersService.resetPassword = function (form) {
+                    var resetPasswordUrl = Endpoints.api_url + "users/reset_password/";
+                    var deferred = $q.defer();
+
+                    FormService.send("POST", resetPasswordUrl, form,
+                        function (data) {
+                            deferred.resolve(data);
+                        },
+                        function (reason) {
+                            deferred.reject(reason);
+                        });
+
+                    return deferred.promise;
                 };
 
                 return usersService;
@@ -60,8 +75,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "ProductsService",
             "BookingsService",
             "UtilsService",
-            function ($q, $filter, MessageThreads, Bookings, ProductRelatedMessagesService, UsersService,
-                      ProductsService, BookingsService, UtilsService) {
+            function ($q, $filter, MessageThreads, Bookings, ProductRelatedMessagesService, UsersService, ProductsService, BookingsService, UtilsService) {
                 var messageThreadsService = {};
 
                 /**
@@ -354,8 +368,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "UsersService",
             "PhoneNumbersService",
             "UtilsService",
-            function ($q, Bookings, ProductsService, PicturesService, AddressesService, UsersService,
-                      PhoneNumbersService, UtilsService) {
+            function ($q, Bookings, ProductsService, PicturesService, AddressesService, UsersService, PhoneNumbersService, UtilsService) {
                 var bookingsService = {};
 
                 bookingsService.getBookings = function (page) {
@@ -437,7 +450,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var diffTime = endTime - startTime;
 
                     booking.period_days = Math.round(diffTime / dayTime);
-                    booking.period_hours = Math.round((diffTime - dayTime *  booking.period_days) / hourTime);
+                    booking.period_hours = Math.round((diffTime - dayTime * booking.period_days) / hourTime);
 
                     // Get product id
                     var productId = UtilsService.getIdFromUrl(bookingData.product);
