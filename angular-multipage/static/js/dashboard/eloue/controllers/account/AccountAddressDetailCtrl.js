@@ -21,7 +21,12 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.submitAddress = function () {
                     var form = $("#address_detail_form");
                     AddressesService.updateAddress($scope.address.id, form);
-                }
+                };
+
+                // Delete address
+                $scope.deleteAddress = function () {
+                    AddressesService.deleteAddress($scope.address.id);
+                };
             });
         }
     ]);

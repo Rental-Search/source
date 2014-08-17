@@ -576,6 +576,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                addressesService.deleteAddress = function (addressId) {
+                    return Addresses.delete({id: addressId});
+                };
+
                 return addressesService;
             }
         ]);
