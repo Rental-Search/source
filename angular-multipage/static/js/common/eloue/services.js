@@ -314,19 +314,63 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for managing products.
          */
-        EloueCommon.factory("ProductsService", ["Products", function (Products) {
-            var productsService = {};
+        EloueCommon.factory("ProductsService", [
+            "$q",
+            "Products",
+            "PicturesService",
+            function ($q, Products, PicturesService) {
+                var productsService = {};
 
-            productsService.getProduct = function (id) {
-                return Products.get({id: id});
-            };
+                productsService.getProduct = function (id) {
+                    return Products.get({id: id});
+                };
 
-            productsService.getProductsByAddress = function (addressId) {
-                return Products.get({address: addressId});
-            };
+                productsService.getProductsByAddress = function (addressId) {
+                    var deferred = $q.defer();
 
-            return productsService;
-        }]);
+                    Products.get({address: addressId}).$promise.then(function (data) {
+                        var promises = [];
+
+                        angular.forEach(data.results, function (value, key) {
+                            var productDeferred = $q.defer();
+
+                            var product = {
+                                id: value.id,
+                                summary: value.summary,
+                                deposit_amount: value.deposit_amount
+                            };
+
+                            PicturesService.getPicturesByProduct(value.id).$promise.then(
+                                function (pictures) {
+                                    if ($.isArray(pictures.results) && (pictures.results.length > 0)) {
+                                        product.picture = pictures.results[0].image.thumbnail;
+                                    }
+                                    productDeferred.resolve(product);
+                                },
+                                function (reason) {
+                                    productDeferred.reject(reason);
+                                }
+                            );
+
+                            promises.push(productDeferred.promise);
+                        });
+
+                        $q.all(promises).then(
+                            function (results) {
+                                deferred.resolve(results);
+                            },
+                            function (reasons) {
+                                deferred.reject(reasons);
+                            }
+                        );
+                    });
+
+                    return deferred.promise;
+                };
+
+                return productsService;
+            }
+        ]);
 
         /**
          * Utils service.

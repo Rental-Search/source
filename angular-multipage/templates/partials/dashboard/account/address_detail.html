@@ -39,7 +39,7 @@
     <ul class="block-with-thumbnail">
         <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="product in productList track by product.id">
             <div class="col-thumbnail">
-                <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="{{product.summary}}" width="130"></a></div>
+                <div class="thumbnail"><a href="#"><img data-ng-src="{{product.picture}}" alt="{{product.summary}}" width="130"></a></div>
             </div>
             <div class="col-exposition">
                 <h3 class="small">Location <a href="#" class="text-underline-hover">{{product.summary}}</a></h3>

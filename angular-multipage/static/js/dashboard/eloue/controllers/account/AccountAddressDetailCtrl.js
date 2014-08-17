@@ -11,6 +11,7 @@ define(["angular", "eloue/app"], function (angular) {
         "AddressesService",
         "ProductsService",
         function ($scope, $stateParams, AddressesService, ProductsService) {
+            // Get
             AddressesService.getAddress($stateParams.id).$promise.then(function (address) {
                 // List of addresses
                 $scope.address = address;
@@ -30,9 +31,8 @@ define(["angular", "eloue/app"], function (angular) {
                 };
             });
 
-            ProductsService.getProductsByAddress($stateParams.id).$promise.then(function (products) {
-                $scope.productList = products.results;
-                console.log($scope.productList);
+            ProductsService.getProductsByAddress($stateParams.id).then(function (products) {
+                $scope.productList = products;
             });
         }
     ]);
