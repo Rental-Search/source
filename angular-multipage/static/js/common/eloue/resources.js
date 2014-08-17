@@ -90,10 +90,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing addresses.
      */
     EloueCommon.factory("Addresses", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "addresses/:id\\/", {},
-            {
-                "get": { method: "GET", params: {id: ":id"}}
-            });
+        return $resource(Endpoints.api_url + "addresses/:id/?");
     }]);
 
     /**

@@ -552,6 +552,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return Addresses.get({id: addressId});
             };
 
+            addressesService.getAddressesByPatron = function (patronId) {
+                return Addresses.get({patron: patronId});
+            };
+
             return addressesService;
         }]);
 
