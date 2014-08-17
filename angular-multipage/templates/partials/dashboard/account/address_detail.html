@@ -1,5 +1,5 @@
 <div class="section-content">
-    <form action="address-add" class="indent-md-b">
+    <form id="address_detail_form" class="indent-md-b" data-ng-submit="submitAddress()">
         <div class="row">
             <div class="col-sm-12">
                 <input id="street" type="text" name="street" placeholder="Rue *"
@@ -28,6 +28,9 @@
                 <button type="submit" class="btn-inline bg-success-hover text-white">Enregistrer</button>
             </div>
         </div>
+        <input type="hidden" name="country" value="{{address.country}}" />
+        <input type="hidden" name="zipcode" value="{{address.zipcode}}" />
+        <input type="hidden" name="_method" value="PUT" />
     </form>
     <h3>Annonces associées à cette adresse</h3>
 </div>

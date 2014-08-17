@@ -16,6 +16,12 @@ define(["angular", "eloue/app"], function (angular) {
 
                 // Is this address default
                 $scope.isDefaultAddress = address.id === $scope.defaultAddressId;
+
+                // Submit form
+                $scope.submitAddress = function () {
+                    var form = $("#address_detail_form");
+                    AddressesService.updateAddress($scope.address.id, form);
+                }
             });
         }
     ]);

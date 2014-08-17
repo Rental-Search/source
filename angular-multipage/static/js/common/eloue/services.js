@@ -545,19 +545,40 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for managing addresses.
          */
-        EloueCommon.factory("AddressesService", ["Addresses", function (Addresses) {
-            var addressesService = {};
+        EloueCommon.factory("AddressesService", [
+            "$q",
+            "Addresses",
+            "Endpoints",
+            "FormService",
+            function ($q, Addresses, Endpoints, FormService) {
+                var addressesService = {};
 
-            addressesService.getAddress = function (addressId) {
-                return Addresses.get({id: addressId});
-            };
+                addressesService.getAddress = function (addressId) {
+                    return Addresses.get({id: addressId});
+                };
 
-            addressesService.getAddressesByPatron = function (patronId) {
-                return Addresses.get({patron: patronId});
-            };
+                addressesService.getAddressesByPatron = function (patronId) {
+                    return Addresses.get({patron: patronId});
+                };
 
-            return addressesService;
-        }]);
+                addressesService.updateAddress = function (addressId, formData) {
+                    var deferred = $q.defer();
+
+                    var currentAddressUrl = Endpoints.api_url + "addresses/" + addressId + "/";
+                    FormService.send("POST", currentAddressUrl, formData,
+                        function (data) {
+                            deferred.resolve(data);
+                        },
+                        function (reason) {
+                            deferred.reject(reason);
+                        });
+
+                    return deferred.promise;
+                };
+
+                return addressesService;
+            }
+        ]);
 
         /**
          * Service for managing phone numbers.
