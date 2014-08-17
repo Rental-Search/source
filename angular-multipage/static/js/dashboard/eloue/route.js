@@ -10,6 +10,7 @@ define(["eloue/app",
         "eloue/controllers/account/AccountProfileCtrl",
         "eloue/controllers/account/AccountVerificationCtrl",
         "eloue/controllers/account/AccountAddressesCtrl",
+        "eloue/controllers/account/AccountAddressDetailCtrl",
         "eloue/controllers/account/AccountPhonesCtrl",
         "eloue/controllers/account/AccountPaymentsCtrl",
         "eloue/controllers/account/AccountPasswordCtrl",
@@ -40,10 +41,20 @@ define(["eloue/app",
                         templateUrl: "partials/dashboard/messages.html",
                         controller: "MessagesCtrl"
                     })
+                    .state("messages.detail", {
+                        url: "/:id",
+                        templateUrl: "partials/dashboard/messages/message_detail.html",
+                        controller: "MessageDetailCtrl"
+                    })
                     .state("bookings", {
                         url: "/bookings",
                         templateUrl: "partials/dashboard/bookings.html",
                         controller: "BookingsCtrl"
+                    })
+                    .state("bookings.detail", {
+                        url: "/:uuid",
+                        templateUrl: "partials/dashboard/bookings/booking_detail.html",
+                        controller: "BookingDetailCtrl"
                     })
                     .state("items", {
                         url: "/items",
@@ -70,6 +81,11 @@ define(["eloue/app",
                         templateUrl: "partials/dashboard/account/addresses.html",
                         controller: "AccountAddressesCtrl"
                     })
+                    .state("account.addresses.detail", {
+                        url: "/:id",
+                        templateUrl: "partials/dashboard/account/address_detail.html",
+                        controller: "AccountAddressDetailCtrl"
+                    })
                     .state("account.phones", {
                         url: "/phones",
                         templateUrl: "partials/dashboard/account/phones.html",
@@ -89,16 +105,6 @@ define(["eloue/app",
                         url: "/invitation",
                         templateUrl: "partials/dashboard/account/invitation.html",
                         controller: "AccountInvitationCtrl"
-                    })
-                    .state("messages.detail", {
-                        url: "/:id",
-                        templateUrl: "partials/dashboard/messages/message_detail.html",
-                        controller: "MessageDetailCtrl"
-                    })
-                    .state("bookings.detail", {
-                        url: "/:uuid",
-                        templateUrl: "partials/dashboard/bookings/booking_detail.html",
-                        controller: "BookingDetailCtrl"
                     });
             }
         ]);
