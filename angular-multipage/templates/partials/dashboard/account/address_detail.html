@@ -37,36 +37,14 @@
 </div>
 <section class="tabs-vertical-active">
     <ul class="block-with-thumbnail">
-        <li class="tab-vertical block-with-thumbnail soon">
+        <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="product in productList track by product.id">
             <div class="col-thumbnail">
-                <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
+                <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="{{product.summary}}" width="130"></a></div>
             </div>
             <div class="col-exposition">
-                <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
+                <h3 class="small">Location <a href="#" class="text-underline-hover">{{product.summary}}</a></h3>
                 <p class="normal text-gray">
-                    <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-table"></i><span>7</span></span>
-                </p>
-            </div>
-        </li>
-        <li class="tab-vertical block-with-thumbnail in-progress">
-            <div class="col-thumbnail">
-                <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
-            </div>
-            <div class="col-exposition">
-                <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
-                <p class="normal text-gray">
-                    <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-table"></i><span>7</span></span>
-                </p>
-            </div>
-        </li>
-        <li class="tab-vertical block-with-thumbnail completed">
-            <div class="col-thumbnail">
-                <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="130"></a></div>
-            </div>
-            <div class="col-exposition">
-                <h3 class="small">Location <a href="#" class="text-underline-hover">BMW 520 Touring Luxe</a></h3>
-                <p class="normal text-gray">
-                    <big class="text-primary">168€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-table"></i><span>7</span></span>
+                    <big class="text-primary">{{product.deposit_amount}}€ / jour</big><br><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-table"></i><span>7</span></span>
                 </p>
             </div>
         </li>

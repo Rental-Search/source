@@ -60,10 +60,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing products.
      */
     EloueCommon.factory("Products", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "products/:id\\/", {},
-            {
-                "get": { method: "GET", params: {id: ":id"}}
-            });
+        return $resource(Endpoints.api_url + "products/:id/?");
     }]);
 
     /**

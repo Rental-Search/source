@@ -321,6 +321,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return Products.get({id: id});
             };
 
+            productsService.getProductsByAddress = function (addressId) {
+                return Products.get({address: addressId});
+            };
+
             return productsService;
         }]);
 

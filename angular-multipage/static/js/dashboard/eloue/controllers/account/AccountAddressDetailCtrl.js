@@ -9,7 +9,8 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "$stateParams",
         "AddressesService",
-        function ($scope, $stateParams, AddressesService) {
+        "ProductsService",
+        function ($scope, $stateParams, AddressesService, ProductsService) {
             AddressesService.getAddress($stateParams.id).$promise.then(function (address) {
                 // List of addresses
                 $scope.address = address;
@@ -27,6 +28,11 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.deleteAddress = function () {
                     AddressesService.deleteAddress($scope.address.id);
                 };
+            });
+
+            ProductsService.getProductsByAddress($stateParams.id).$promise.then(function (products) {
+                $scope.productList = products.results;
+                console.log($scope.productList);
             });
         }
     ]);
