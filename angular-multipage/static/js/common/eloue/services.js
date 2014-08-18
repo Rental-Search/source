@@ -43,8 +43,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     FormService.send("POST", currentUserUrl, form, successCallback, errorCallback);
                 };
 
-                usersService.resetPassword = function (form) {
-                    var resetPasswordUrl = Endpoints.api_url + "users/reset_password/";
+                usersService.resetPassword = function (userId, form) {
+                    var resetPasswordUrl = Endpoints.api_url + "users/" + userId + "/reset_password/";
                     var deferred = $q.defer();
 
                     FormService.send("POST", resetPasswordUrl, form,

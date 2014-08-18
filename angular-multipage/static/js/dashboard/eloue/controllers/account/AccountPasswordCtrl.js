@@ -10,7 +10,9 @@ define(["angular", "eloue/app"], function (angular) {
         "UsersService",
         function ($scope, UsersService) {
             $scope.resetPassword = function () {
-                UsersService.resetPassword($("#reset-password-form"));
+                if (!!$scope.currentUser) {
+                    UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form"));
+                }
             };
         }
     ]);
