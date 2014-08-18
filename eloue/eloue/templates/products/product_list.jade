@@ -13,7 +13,7 @@ block append scripts
   // custom input:range
   // http://jqueryui.com/slider/#rangemin
   script(src="#{STATIC_URL}js/jquery-ui.min.js")
-    
+
   script(src="#{STATIC_URL}js/scripts.js")
 
 block append content-body
@@ -28,7 +28,8 @@ block append content-body
       .row
         aside.col-xs-3.section-body
           include ../jade/_product_list_aside
-        main.col-xs-9 654
+        main.col-xs-9
+          include ../jade/_product_list_main
     footer
       section.download-mobile-apps.framing
         include ../jade/_download_mobile_apps

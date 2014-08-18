@@ -1,0 +1,23 @@
+ol.nav
+  each product in products
+    li
+      .section-body
+        .thumbnail-img
+          a(href="products/product_detail.html").img-wrapper
+            img( src = "#{STATIC_URL}#{product.img_link}" )
+            span.fog
+            span.badge.price #{product.price}&euro; /jour
+        .info
+          h6
+            a(href="#") #{product.title}
+            span.badge-pro pro
+          .rate
+            -var stars = [1,2,3,4,5]
+            each s in stars
+              if s == 1
+                span.icon-star.current-rate
+              else
+                span.icon-star
+          p #{product.description}
+          a(href="#").declarer: img(src="#{STATIC_URL}#{product.declarer_img_link}" alt="")
+
