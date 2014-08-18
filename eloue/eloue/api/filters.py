@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from django import forms
 
 from rest_framework import filters
+from mptt.fields import TreeNodeChoiceField
 import django_filters
 
 DjangoFilterBackend = filters.DjangoFilterBackend
@@ -87,14 +88,24 @@ class MultiValueForeignKeyFilter(django_filters.Filter):
     field_class = MultiValueFormField
 
     def filter(self, qs, value):
+        if value:
+            value = (value, 'in') if len(value) > 1 else value[0]
+        return super(MultiValueForeignKeyFilter, self).filter(qs, value)
+
+class MPTTFilter(django_filters.ModelChoiceFilter):
+    field_class = TreeNodeChoiceField
+
+    def filter(self, qs, value):
         if not value:
-            return qs
-        if len(value) > 1:
-            lookup = 'in'
-        else:
-            lookup = self.lookup_type
-            value = value[0]
-        qs = qs.filter(**{'__'.join([self.name, lookup]): value})
+            return qs.none()
+        name = self.name
+        opts = value._mptt_meta
+        qs = qs.filter(**{
+            # MPTT descendants
+            '__'.join([name, opts.tree_id_attr]): getattr(value, opts.tree_id_attr),
+            '__'.join([name, opts.left_attr, 'gt']): getattr(value, opts.left_attr),
+            '__'.join([name, opts.right_attr, 'lt']): getattr(value, opts.right_attr),
+            })
         if self.distinct:
             qs = qs.distinct()
         return qs

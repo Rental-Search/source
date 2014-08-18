@@ -786,6 +786,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return response.Response(res)
 
 class ProductFilterSet(filters.FilterSet):
+    category__isdescendant = filters.MPTTFilter(name='category', queryset=models.Category.objects.all())
+
     class Meta:
         model = models.Product
         fields = ('address', 'category')
@@ -795,7 +797,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     API endpoint that allows products to be viewed or edited.
     """
     serializer_class = serializers.ProductSerializer
-    queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct')
+    queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
     filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend)
     owner_field = 'owner'
     search_index = product_search
