@@ -110,6 +110,18 @@ class MPTTFilter(django_filters.ModelChoiceFilter):
             qs = qs.distinct()
         return qs
 
+class MultiFieldFilter(django_filters.Filter):
+    def __init__(self, op=None, **kwargs):
+        super(MultiFieldFilter, self).__init__(**kwargs)
+        self.op = operator.or_ if op is None else op
+
+    def filter(self, qs, value):
+        if not value:
+            return qs.none()
+        or_queries = [Q(**{field: value}) for field in self.name]
+        qs = qs.filter(reduce(self.op, or_queries))
+        return qs
+
 class FilterSet(django_filters.FilterSet):
     filter_overrides = {
         ForeignKey: {
