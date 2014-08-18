@@ -362,7 +362,7 @@ from eloue.api import filters
 NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
 
 class BookingFilterSet(filters.FilterSet):
-    author__in = filters.MultiFieldFilter(name=('owner', 'borrower'))
+    author = filters.MultiFieldFilter(name=('owner', 'borrower'))
 
     class Meta:
         model = models.Booking
