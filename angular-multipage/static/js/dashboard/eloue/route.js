@@ -61,6 +61,31 @@ define(["eloue/app",
                         templateUrl: "partials/dashboard/items.html",
                         controller: "ItemsCtrl"
                     })
+                    .state("items.info", {
+                        url: "/:id",
+                        templateUrl: "partials/dashboard/items/info.html",
+                        controller: "ItemsInfoCtrl"
+                    })
+                    .state("items.calendar", {
+                        url: "/:id",
+                        templateUrl: "partials/dashboard/items/calendar.html",
+                        controller: "ItemsCalendarCtrl"
+                    })
+                    .state("items.tariffs", {
+                        url: "/:id",
+                        templateUrl: "partials/dashboard/items/tariffs.html",
+                        controller: "ItemsTariffsCtrl"
+                    })
+                    .state("items.terms", {
+                        url: "/:id",
+                        templateUrl: "partials/dashboard/items/terms.html",
+                        controller: "ItemsTermsCtrl"
+                    })
+                    .state("items.profits", {
+                        url: "/:id",
+                        templateUrl: "partials/dashboard/items/profits.html",
+                        controller: "ItemsProfitsCtrl"
+                    })
                     .state("account", {
                         url: "/account",
                         templateUrl: "partials/dashboard/account.html",
