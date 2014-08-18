@@ -63,7 +63,6 @@ router.register(r'subscriptions', accounts_api.SubscriptionViewSet, base_name='s
 router.register(r'billings', accounts_api.BillingViewSet, base_name='billing')
 router.register(r'billingsubscriptions', accounts_api.BillingSubscriptionViewSet, base_name='billingsubscription')
 router.register(r'categories', products_api.CategoryViewSet, base_name='category')
-router.register(r'categorydescriptions', products_api.CategoryDescriptionViewSet, base_name='categorydescription')
 router.register(r'products', products_api.ProductViewSet, base_name='product')
 router.register(r'prices', products_api.PriceViewSet, base_name='price')
 router.register(r'pictures', products_api.PictureViewSet, base_name='picture')

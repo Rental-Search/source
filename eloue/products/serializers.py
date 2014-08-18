@@ -1,22 +1,35 @@
 
-from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework.serializers import HyperlinkedModelSerializer, BooleanField
 from rest_framework import fields
 
 from products import models
 from products.choices import UNIT
 from eloue.api.serializers import EncodedImageField
 
-class CategorySerializer(HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Category
-        fields = ('id', 'parent', 'name', 'need_insurance')
-        read_only_fields = ('id', 'parent')
-
 class CategoryDescriptionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.CategoryDescription
-        fields = ('id', 'category', 'title', 'description', 'header', 'footer')
-        read_only_fields = ('id', 'category')
+        fields = ('title', 'description', 'header', 'footer')
+
+class CategorySerializer(HyperlinkedModelSerializer):
+    description = CategoryDescriptionSerializer()
+    is_child_node = BooleanField(read_only=True)
+    is_leaf_node = BooleanField(read_only=True)
+    is_root_node = BooleanField(read_only=True)
+
+    def transform_is_child_node(self, obj, value):
+        return bool(obj and obj.is_child_node())
+
+    def transform_is_leaf_node(self, obj, value):
+        return bool(obj and obj.is_leaf_node())
+
+    def transform_is_root_node(self, obj, value):
+        return bool(obj and obj.is_root_node())
+
+    class Meta:
+        model = models.Category
+        fields = ('id', 'parent', 'name', 'need_insurance', 'description', 'is_child_node', 'is_leaf_node', 'is_root_node')
+        read_only_fields = ('id', 'parent')
 
 class ProductSerializer(HyperlinkedModelSerializer):
     class Meta:

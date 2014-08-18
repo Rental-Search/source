@@ -743,25 +743,52 @@ def suggestion(request):
 
 from rest_framework import viewsets, response
 from rest_framework.decorators import link
+import django_filters
 
 from products import serializers, models
 from eloue.api import filters, views
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
+class CategoryFilterSet(filters.FilterSet):
+    parent__isnull = django_filters.Filter(name='parent', lookup_type='isnull')
+
+    class Meta:
+        model = models.Category
+        fields = ('parent', 'need_insurance')
+
 class CategoryViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows product categories to be viewed or edited.
     """
-    queryset = models.Category.on_site.all()
+    queryset = models.Category.on_site.select_related('description__title')
     serializer_class = serializers.CategorySerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_class = CategoryFilterSet
+    ordering_fields = ('name',)
 
-class CategoryDescriptionViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows product category descriptions to be viewed or edited.
-    """
-    model = models.CategoryDescription
-    serializer_class = serializers.CategoryDescriptionSerializer
+    @link()
+    def ancestors(self, request, *args, **kwargs):
+        obj = self.get_object()
+        res = obj.get_ancestors().values_list('id', flat=True)
+        return response.Response(res)
+
+    @link()
+    def children(self, request, *args, **kwargs):
+        obj = self.get_object()
+        res = obj.get_children().values_list('id', flat=True)
+        return response.Response(res)
+
+    @link()
+    def descendants(self, request, *args, **kwargs):
+        obj = self.get_object()
+        res = obj.get_descendants().values_list('id', flat=True)
+        return response.Response(res)
+
+class ProductFilterSet(filters.FilterSet):
+    class Meta:
+        model = models.Product
+        fields = ('address', 'category')
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
@@ -772,7 +799,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend)
     owner_field = 'owner'
     search_index = product_search
-    filter_fields = ('address',)
+    filter_class = ProductFilterSet
 
     @link()
     def is_available(self, request, *args, **kwargs):
