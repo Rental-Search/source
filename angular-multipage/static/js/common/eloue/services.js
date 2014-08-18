@@ -410,13 +410,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("BookingsService", [
             "$q",
             "Bookings",
+            "Products",
             "ProductsService",
             "PicturesService",
             "AddressesService",
             "UsersService",
             "PhoneNumbersService",
             "UtilsService",
-            function ($q, Bookings, ProductsService, PicturesService, AddressesService, UsersService, PhoneNumbersService, UtilsService) {
+            function ($q, Bookings, Products, ProductsService, PicturesService, AddressesService, UsersService, PhoneNumbersService, UtilsService) {
                 var bookingsService = {};
 
                 bookingsService.getBookings = function (page) {
@@ -472,105 +473,147 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                bookingsService.getBookingDetail = function (uuid) {
+                bookingsService.getBooking = function (uuid) {
                     var deferred = $q.defer();
-                    var self = this;
 
-                    Bookings.get({uuid: uuid}).$promise.then(function (value) {
-                        self.parseBookingDetail(value, function (booking) {
-                            deferred.resolve(booking);
-                        });
-                    });
+                    Bookings.get({uuid: uuid}).$promise.then(
+                        function (booking) {
+                            var resultBooking = {
+                                total_amount: booking.total_amount,
+                                deposit_amount: booking.deposit_amount,
+                                start_date: {
+                                    week_day: UtilsService.formatDate(booking.started_at, "EEEE"),
+                                    day: UtilsService.formatDate(booking.started_at, "dd"),
+                                    month: UtilsService.formatDate(booking.started_at, "MMMM"),
+                                    year: UtilsService.formatDate(booking.started_at, "yyyy")
+                                },
+                                end_date: {
+                                    week_day: UtilsService.formatDate(booking.ended_at, "EEEE"),
+                                    day: UtilsService.formatDate(booking.ended_at, "dd"),
+                                    month: UtilsService.formatDate(booking.ended_at, "MMMM"),
+                                    year: UtilsService.formatDate(booking.ended_at, "yyyy")
+                                },
+                                start_time: UtilsService.formatDate(booking.started_at, "HH'h'mm"),
+                                end_time: UtilsService.formatDate(booking.ended_at, "HH'h'mm")
+                            };
+
+                            // Set period
+                            var hourTime = 60 * 60 * 1000;
+                            var dayTime = 24 * hourTime;
+
+                            var startTime = Date.parse(booking.started_at);
+                            var endTime = Date.parse(booking.ended_at);
+
+                            var diffTime = endTime - startTime;
+
+                            resultBooking.period_days = Math.round(diffTime / dayTime);
+                            resultBooking.period_hours = Math.round((diffTime - dayTime * resultBooking.period_days) / hourTime);
+
+                            // Set product id
+                            resultBooking.productId = UtilsService.getIdFromUrl(booking.product);
+
+                            deferred.resolve(resultBooking);
+                        },
+                        function (reason) {
+                            deferred.reject(reason);
+                        }
+                    );
 
                     return deferred.promise;
                 };
 
-                bookingsService.parseBookingDetail = function (bookingData, parsedCallback) {
-                    var bookingPromises = {};
-
-                    var booking = {
-                        total_amount: bookingData.total_amount,
-                        deposit_amount: bookingData.deposit_amount,
-                        start_date: {
-                            week_day: UtilsService.formatDate(bookingData.started_at, "EEEE"),
-                            day: UtilsService.formatDate(bookingData.started_at, "dd"),
-                            month: UtilsService.formatDate(bookingData.started_at, "MMMM"),
-                            year: UtilsService.formatDate(bookingData.started_at, "yyyy")
-                        },
-                        end_date: {
-                            week_day: UtilsService.formatDate(bookingData.ended_at, "EEEE"),
-                            day: UtilsService.formatDate(bookingData.ended_at, "dd"),
-                            month: UtilsService.formatDate(bookingData.ended_at, "MMMM"),
-                            year: UtilsService.formatDate(bookingData.ended_at, "yyyy")
-                        },
-                        start_time: UtilsService.formatDate(bookingData.started_at, "HH'h'mm"),
-                        end_time: UtilsService.formatDate(bookingData.ended_at, "HH'h'mm")
-                    };
-
-                    // Set period
-                    var hourTime = 60 * 60 * 1000;
-                    var dayTime = 24 * hourTime;
-
-                    var startTime = Date.parse(bookingData.started_at);
-                    var endTime = Date.parse(bookingData.ended_at);
-
-                    var diffTime = endTime - startTime;
-
-                    booking.period_days = Math.round(diffTime / dayTime);
-                    booking.period_hours = Math.round((diffTime - dayTime * booking.period_days) / hourTime);
-
-                    // Get product id
-                    var productId = UtilsService.getIdFromUrl(bookingData.product);
-
-                    // Get product
+                bookingsService.getBookingDetailProduct = function (productId) {
                     var productDeferred = $q.defer();
-                    ProductsService.getProduct(productId).$promise.then(function (product) {
-                        booking.title = product.summary;
 
-                        var productPromises = {};
+                    Products.get({id: productId}).$promise.then(
+                        function (product) {
+                            var resultProduct = {
+                                summary: product.summary
+                            };
 
-                        // Get address
-                        var addressId = UtilsService.getIdFromUrl(product.address);
-                        productPromises.address = AddressesService.getAddress(addressId).$promise;
+                            var productPromises = {};
 
-                        // Get owner
-                        var ownerId = UtilsService.getIdFromUrl(product.owner);
-                        productPromises.owner = UsersService.get(ownerId).$promise;
+                            // Get address
+                            var addressId = UtilsService.getIdFromUrl(product.address);
+                            productPromises.address = AddressesService.getAddress(addressId).$promise;
 
-                        // Get phone
-                        var phoneId = UtilsService.getIdFromUrl(product.phone);
-                        productPromises.phone = PhoneNumbersService.getPhoneNumber(phoneId).$promise;
+                            // Get owner
+                            var ownerId = UtilsService.getIdFromUrl(product.owner);
+                            productPromises.owner = UsersService.get(ownerId).$promise;
 
-                        $q.all(productPromises).then(function (results) {
-                            var address = results.address;
-                            booking.address = {};
-                            booking.address.street = address.street;
-                            booking.address.zipcode = address.zipcode;
-                            booking.address.city = address.city;
+                            // Get picture
+                            productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
 
-                            var owner = results.owner;
-                            booking.owner = {};
-                            booking.owner.username = owner.username;
-                            booking.owner.avatar = owner.avatar.thumbnail;
+                            // Get phone id
+                            resultProduct.phoneId = UtilsService.getIdFromUrl(product.phone);
 
-                            var phone = results.phone;
-                            booking.owner.phone = phone.number;
+                            $q.all(productPromises).then(
+                                function (results) {
+                                    // Set address
+                                    resultProduct.address = {};
+                                    resultProduct.address.street = results.address.street;
+                                    resultProduct.address.zipcode = results.address.zipcode;
+                                    resultProduct.address.city = results.address.city;
 
-                            productDeferred.resolve(booking);
+                                    // Set owner
+                                    resultProduct.owner = {};
+                                    resultProduct.owner.username = results.owner.username;
+                                    resultProduct.owner.avatar = results.owner.avatar.thumbnail;
+
+                                    // Set picture
+                                    if ($.isArray(results.pictures.results) && $(results.pictures.results).size() > 0) {
+                                        resultProduct.picture = results.pictures.results[0].image.thumbnail;
+                                    }
+
+                                    productDeferred.resolve(resultProduct);
+                                },
+                                function (reason) {
+                                    productDeferred.reject(reason);
+                                }
+                            );
+                        },
+                        function (reason) {
+                            productDeferred.reject(reason);
                         });
-                    });
-                    bookingPromises.product = productDeferred.promise;
 
-                    // Get picture
-                    bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+                    return productDeferred.promise;
+                };
 
-                    $q.all(bookingPromises).then(function (results) {
-                        if (jQuery(results.pictures.results).size() > 0) {
-                            booking.picture = results.pictures.results[0].image.thumbnail;
+                bookingsService.getBookingDetailInformation = function (uuid) {
+                    var deferred = $q.defer();
+                    var self = this;
+
+                    self.getBooking(uuid).then(
+                        function (booking) {
+                            var bookingDetail = {
+                                booking: booking
+                            };
+
+                            self.getBookingDetailProduct(booking.productId).then(
+                                function (product) {
+                                    bookingDetail.product = product;
+
+                                    PhoneNumbersService.getPhoneNumber(product.phoneId).$promise.then(
+                                        function (phone) {
+                                            bookingDetail.phone = phone.number;
+                                            deferred.resolve(bookingDetail);
+                                        },
+                                        function (reason) {
+                                            deferred.reject(reason);
+                                        }
+                                    );
+                                },
+                                function (reason) {
+                                    deferred.reject(reason);
+                                }
+                            );
+                        },
+                        function (reason) {
+                            deferred.reject(reason);
                         }
+                    );
 
-                        parsedCallback(booking);
-                    });
+                    return deferred.promise;
                 };
 
                 return bookingsService;

@@ -1,20 +1,20 @@
 <div class="section-content">
     <div class="block-with-thumbnail">
         <div class="col-thumbnail">
-            <div class="thumbnail"><a href="#"><img data-ng-src="{{booking.picture}}" alt="BMW 520 Touring Luxe photo" width="200"></a></div>
+            <div class="thumbnail"><a href="#"><img data-ng-src="{{bookingDetail.product.picture}}" alt="{{bookingDetail.product.summary}}" width="200"></a></div>
         </div>
         <div class="col-exposition">
             <div class="indent-sm-h">
-                <h3><b>{{booking.title}}</b></h3>
-                <p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>{{booking.address.street}}, {{booking.address.zipcode}}
-                    <br>{{booking.address.city}}
+                <h3><b>{{bookingDetail.product.summary}}</b></h3>
+                <p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>{{bookingDetail.product.address.street}}, {{bookingDetail.product.address.zipcode}}
+                    <br>{{bookingDetail.product.address.city}}
                 <div class="block-with-thumbnail indent-sm-v indent-sm-">
                     <div class="col-thumbnail">
-                        <div class="thumbnail"><a href="#"><img data-ng-src="{{booking.owner.avatar}}" alt="{{booking.owner.username}}" width="40" height="40"></a></div>
+                        <div class="thumbnail"><a href="#"><img data-ng-src="{{bookingDetail.product.owner.avatar}}" alt="{{bookingDetail.product.owner.username}}" width="40" height="40"></a></div>
                     </div>
                     <div class="col-exposition text-gray">
                         <div class="indent-xs-h">
-                            <h3 class="small"><a href="#" class="text-underline-hover">{{booking.owner.username}}</a></h3>
+                            <h3 class="small"><a href="#" class="text-underline-hover">{{bookingDetail.product.owner.username}}</a></h3>
                             <p class="indent-xs-v"><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span>
                             </p>
                             <p><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div class="bg-success-light text-success bd-rad"><i class="fa fa-phone fa-lg indent-xs-h"></i><span class="indent-sm-h">Joignable au <b>{{booking.owner.phone}}</b> ou</span><a href="" class="btn-inline text-white bg-success-hover">Envoyez un message</a></div>
+    <div class="bg-success-light text-success bd-rad"><i class="fa fa-phone fa-lg indent-xs-h"></i><span class="indent-sm-h">Joignable au <b>{{bookingDetail.phone}}</b> ou</span><a href="" class="btn-inline text-white bg-success-hover">Envoyez un message</a></div>
     <div class="block-with-thumbnail notification indent-md-v">
         <div class="col-thumbnail">
             <div class="thumbnail">
@@ -39,36 +39,36 @@
                 <li class="clearfix">
                     <div class="col-xs-3">Début</div>
                     <div class="col-xs-9">
-                        <span translate="{{booking.start_date.week_day}}"></span>
-                        <span> {{booking.start_date.day}} </span>
-                        <span translate="{{booking.start_date.month}}"></span>
-                        <span> {{booking.start_date.year}} </span>
+                        <span translate="{{bookingDetail.booking.start_date.week_day}}"></span>
+                        <span> {{bookingDetail.booking.start_date.day}} </span>
+                        <span translate="{{bookingDetail.booking.start_date.month}}"></span>
+                        <span> {{bookingDetail.booking.start_date.year}} </span>
                         <span translate="at"></span>
-                        <span> {{booking.start_time}}</span>
+                        <span> {{bookingDetail.booking.start_time}}</span>
                     </div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Fin</div>
                     <div class="col-xs-9">
-                        <span translate="{{booking.end_date.week_day}}"></span>
-                        <span> {{booking.end_date.day}} </span>
-                        <span translate="{{booking.end_date.month}}"></span>
-                        <span> {{booking.end_date.year}} </span>
+                        <span translate="{{bookingDetail.booking.end_date.week_day}}"></span>
+                        <span> {{bookingDetail.booking.end_date.day}} </span>
+                        <span translate="{{bookingDetail.booking.end_date.month}}"></span>
+                        <span> {{bookingDetail.booking.end_date.year}} </span>
                         <span translate="at"></span>
-                        <span> {{booking.end_time}}</span>
+                        <span> {{bookingDetail.booking.end_time}}</span>
                     </div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Période</div>
-                    <div class="col-xs-9">{{booking.period_days}} jours et {{booking.period_hours}} heures</div>
+                    <div class="col-xs-9">{{bookingDetail.booking.period_days}} jours et {{bookingDetail.booking.period_hours}} heures</div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Prix</div>
-                    <div class="col-xs-9 text-success">{{booking.total_amount}}€</div>
+                    <div class="col-xs-9 text-success">{{bookingDetail.booking.total_amount}}€</div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Caution</div>
-                    <div class="col-xs-9">{{booking.deposit_amount}}€</div>
+                    <div class="col-xs-9">{{bookingDetail.booking.deposit_amount}}€</div>
                 </li>
             </ul>
             <div class="text-right"><a href="#" class="text-success text-underline-hover indent-sm-h">Annulation</a><a href="#" class="btn-inline bg-success-hover text-white">Télécharger le contrat</a></div>
