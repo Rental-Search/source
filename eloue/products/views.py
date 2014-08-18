@@ -769,9 +769,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct')
-    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter)
+    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend)
     owner_field = 'owner'
     search_index = product_search
+    filter_fields = ('address',)
 
     @link()
     def is_available(self, request, *args, **kwargs):
