@@ -381,7 +381,10 @@ class CommentViewSet(viewsets.ModelViewSet):
     API endpoint that allows transaction comments to be viewed or edited.
     """
     model = models.Comment
+    queryset = models.Comment.objects.select_related('booking__owner_id', 'booking__borrower_id')
     serializer_class = serializers.CommentSerializer
+    filter_backends = (filters.DjangoFilterBackend, )
+    filter_fields = ('booking', )
 
 class SinisterViewSet(viewsets.ModelViewSet):
     """
