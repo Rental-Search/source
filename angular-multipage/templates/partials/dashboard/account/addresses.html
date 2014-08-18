@@ -2,7 +2,10 @@
     <ul class="block-with-thumbnail">
         <li class="tab-vertical block-with-thumbnail default" data-ng-repeat="address in addressList track by address.id">
             <div class="col-thumbnail">
-                <div class="thumbnail"><img src="../../../static/img/map.png" width="70"></div>
+                <div class="thumbnail">
+                    <img data-ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{address.position.coordinates[0]}},{{address.position.coordinates[1]}}&zoom=14&size=70x70&language=fr"
+                         width="70">
+                </div>
             </div>
             <div class="col-exposition">
                 <a ui-sref="account.addresses.detail({id: address.id})"><h3 class="indent-xs-b">{{address.street}}<i data-ng-if="address.id === defaultAddressId" class="fa fa-check fa-lg pull-right"></i></h3></a>

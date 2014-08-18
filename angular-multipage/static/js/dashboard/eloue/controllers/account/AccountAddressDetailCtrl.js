@@ -13,7 +13,7 @@ define(["angular", "eloue/app"], function (angular) {
         function ($scope, $stateParams, AddressesService, ProductsService) {
             // Get
             AddressesService.getAddress($stateParams.id).$promise.then(function (address) {
-                // List of addresses
+                // Current address
                 $scope.address = address;
 
                 // Is this address default
