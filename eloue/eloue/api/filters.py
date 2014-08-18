@@ -12,6 +12,7 @@ from rest_framework import filters
 import django_filters
 
 DjangoFilterBackend = filters.DjangoFilterBackend
+OrderingFilter = filters.OrderingFilter
 
 class OwnerFilter(filters.BaseFilterBackend):
     """
@@ -33,6 +34,11 @@ class OwnerFilter(filters.BaseFilterBackend):
                           for owner_field in owner_field]
             queryset = queryset.filter(reduce(operator.or_, or_queries))
         return queryset
+
+class StaffEditableFilter(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        user = request.user
+        return queryset if request.method == 'get' or user.is_staff else queryset.none()
 
 class HaystackSearchFilter(filters.BaseFilterBackend):
     # The URL query parameter used for the search.

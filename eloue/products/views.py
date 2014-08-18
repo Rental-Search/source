@@ -763,7 +763,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     """
     queryset = models.Category.on_site.select_related('description__title')
     serializer_class = serializers.CategorySerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (filters.StaffEditableFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
 
