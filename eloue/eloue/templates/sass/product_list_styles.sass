@@ -17,13 +17,62 @@
 @import ../dashboard/sass/mixins
 @import customs
 @import atticle_header
+@import spinner
+@import product-details-article
 
-section
+article
   h3
     font-size: px(26)
     font-weight: $fw-light
     color: $gray-dark
     margin: 0 0 .5em
+
+section
   p
     line-height: 2em
     text-align: justify
+    &.little
+      font-size: px(10)
+
+.map-container
+  width: 100%
+  height: $product-list-aside-map-height
+  background-color: $gray-lighter
+  position: relative
+  margin: $indent-sm 0 $indent-xs
+  .whirly
+    +centred-abs()
+    z-index: 1
+  .map
+    +centred-abs()
+    z-index: 2
+#district,
+#price
+  display: none
+
+.caption
+  color: $gray-strong !important
+  text-transform: uppercase
+  font-size: px(10)
+  font-weight: $fw-bold !important
+  margin: $indent-xs 0
+
+aside
+  padding: $indent-xs 0 $indent-sm
+  input[type="text"]
+    color: $gray-dark
+    font-weight: $fw-semibold
+
+  .checkbox
+    font-weight: $fw-semibold
+    span
+      margin-left: .2em
+
+  .date-picker
+    border: 1px solid $gray-medium
+    border-radius: $bd-rad
+    input
+      &:hover,
+      &:active,
+      &:focus
+        box-shadow: none !important

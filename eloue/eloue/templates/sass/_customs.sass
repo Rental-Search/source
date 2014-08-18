@@ -7,7 +7,6 @@
       .chosen-single
         background: white
         border-color: $gray-medium !important
-        // +border-radius($bdrs $bdrs 0 0 !important)
     font-size: inherit
     text-align: center
     width: 100% !important
@@ -94,14 +93,13 @@
     background: white
     font-family: inherit !important
     font-weight: $fw-semibold 
-    color: $gray-medium
+    color: $gray-dark
     height: 2.5em !important
     padding-top: .8em\9
-    border: 1px solid $gray-lighter !important
+    border: 1px solid $gray-medium !important
     box-shadow: none
     transition: border-color .2s
     overflow: visible
-    // +border-radius($bdrs)
     &:hover,
     &:focus
       border-color: $gray-medium
@@ -120,3 +118,15 @@
       margin-right: .5em
       width: 5em
       color: $gray-dark !important
+
+  &.select-gradient .chosen-container
+    .chosen-choices,
+    .chosen-single
+      color: $gray-dark
+      border: none
+      border-bottom: 1px solid $gray-lighter
+      background-color: $gray-lighter !important
+      +linear-gradient((to bottom, white, darken($gray-lite,2%)))
+      border-color: transparent !important
+    .chosen-drop
+      border-color: transparent !important

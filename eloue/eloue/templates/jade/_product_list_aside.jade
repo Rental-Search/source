@@ -1,0 +1,78 @@
+form(action="detail-search")
+  label.caption(for="what") quoi
+  input#what(type="text", placeholder="", autofocus).form-control
+
+  p.caption catégories
+  .clear-selector
+    select.form-control
+      option(value="male") Tous les catigories
+      option(value="female") Du - cher au + cher
+      option(value="female") Du - cher au + cher
+      option(value="female") Du - cher au + cher
+
+  label.caption(for="where") où
+  input#where(type="text", placeholder="").form-control
+
+  .map-container
+    .whirly
+    .map
+      // место для карты!
+
+  //- .slider
+  label.caption(for="district") rayon
+  input#district(type="range", name="district", min="5", max="100", step="1")
+  #district-fake
+
+  label.caption(for="start-date") date de début
+  .date-picker
+    .input-group
+      input#start-date(type="text" placeholder="").form-control
+      .input-group-addon.calendar
+        span
+
+  label.caption(for="end-date") date de fin
+  .date-picker
+    .input-group
+      input#end-date(type="text" placeholder="").form-control
+      .input-group-addon.calendar
+        span
+
+  label.caption(for="price") prix
+  input#price(type="range", name="price", min="5", max="100", step="1")
+  #price-fake
+
+  p.caption loueur
+  .checkbox
+    label(for="particular")
+      input(type="checkbox")#particular
+      span.icon-ok
+    | Particulier
+  .checkbox
+    label(for="professional")
+      input(type="checkbox")#professional
+      span.icon-ok
+    | Professionel
+
+  p.caption champ 1
+ .clear-selector
+  select.form-control
+    option(value="male") Tous types
+    option(value="female") Du - cher au + cher
+    option(value="female") Du - cher au + cher
+    option(value="female") Du - cher au + cher
+
+  p.caption champ 2
+ .clear-selector
+  select.form-control
+    option(value="male") Tous types
+    option(value="female") Du - cher au + cher
+    option(value="female") Du - cher au + cher
+    option(value="female") Du - cher au + cher
+
+  p.caption champ 3
+ .clear-selector
+  select.form-control
+    option(value="male") Tous types
+    option(value="female") Du - cher au + cher
+    option(value="female") Du - cher au + cher
+    option(value="female") Du - cher au + cher

@@ -743,6 +743,14 @@ a {
   white-space: nowrap;
 }
 
+.text {
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+}
+
 .text-underline, .text-underline-hover:hover {
   text-decoration: underline;
 }
@@ -1089,26 +1097,22 @@ article.dashboard .content-view section {
 
 .tabs-horisontal-active {
   position: relative;
-  margin-bottom: -2em !important;
+  padding-top: 0.8em;
+  margin-bottom: -1.5em;
 }
 .tabs-horisontal-active > ul {
   position: relative;
   height: 100%;
 }
-.tabs-horisontal-active > ul > li h4,
-.tabs-horisontal-active > ul > li p {
-  padding-top: 0.4em;
-}
 
 .tabs-horisontal-active .tab-horisontal {
   cursor: pointer;
   color: #24bd77;
-  padding: 0.25em 0.5em 1em;
+  padding: 0.25em 0.5em 0.75em;
   position: relative;
   border-bottom: 4px solid transparent;
   -webkit-transition: border-color 0.2s;
   transition: border-color 0.2s;
-  margin-top: 0.3em;
 }
 .tabs-horisontal-active .tab-horisontal:hover, .tabs-horisontal-active .tab-horisontal.current {
   border-color: #24bd77;
@@ -1856,6 +1860,7 @@ label.check-btn span i {
 
 textarea,
 input[type="text"],
+input[type="password"],
 input[type="email"],
 .chosen-container .chosen-choices,
 .chosen-container .chosen-single {
@@ -1877,6 +1882,7 @@ input[type="email"],
 }
 textarea::-moz-placeholder,
 input[type="text"]::-moz-placeholder,
+input[type="password"]::-moz-placeholder,
 input[type="email"]::-moz-placeholder,
 .chosen-container .chosen-choices::-moz-placeholder,
 .chosen-container .chosen-single::-moz-placeholder {
@@ -1885,6 +1891,7 @@ input[type="email"]::-moz-placeholder,
 }
 textarea:-ms-input-placeholder,
 input[type="text"]:-ms-input-placeholder,
+input[type="password"]:-ms-input-placeholder,
 input[type="email"]:-ms-input-placeholder,
 .chosen-container .chosen-choices:-ms-input-placeholder,
 .chosen-container .chosen-single:-ms-input-placeholder {
@@ -1892,6 +1899,7 @@ input[type="email"]:-ms-input-placeholder,
 }
 textarea::-webkit-input-placeholder,
 input[type="text"]::-webkit-input-placeholder,
+input[type="password"]::-webkit-input-placeholder,
 input[type="email"]::-webkit-input-placeholder,
 .chosen-container .chosen-choices::-webkit-input-placeholder,
 .chosen-container .chosen-single::-webkit-input-placeholder {
@@ -1900,6 +1908,8 @@ input[type="email"]::-webkit-input-placeholder,
 textarea:hover, textarea:focus,
 input[type="text"]:hover,
 input[type="text"]:focus,
+input[type="password"]:hover,
+input[type="password"]:focus,
 input[type="email"]:hover,
 input[type="email"]:focus,
 .chosen-container .chosen-choices:hover,
@@ -1911,6 +1921,7 @@ input[type="email"]:focus,
 }
 textarea:invalid,
 input[type="text"]:invalid,
+input[type="password"]:invalid,
 input[type="email"]:invalid,
 .chosen-container .chosen-choices:invalid,
 .chosen-container .chosen-single:invalid {
@@ -1919,6 +1930,8 @@ input[type="email"]:invalid,
 textarea:invalid:focus, textarea:invalid:hover,
 input[type="text"]:invalid:focus,
 input[type="text"]:invalid:hover,
+input[type="password"]:invalid:focus,
+input[type="password"]:invalid:hover,
 input[type="email"]:invalid:focus,
 input[type="email"]:invalid:hover,
 .chosen-container .chosen-choices:invalid:focus,
@@ -1929,6 +1942,7 @@ input[type="email"]:invalid:hover,
 }
 textarea.table-form,
 input[type="text"].table-form,
+input[type="password"].table-form,
 input[type="email"].table-form,
 .chosen-container .chosen-choices.table-form,
 .chosen-container .chosen-single.table-form {

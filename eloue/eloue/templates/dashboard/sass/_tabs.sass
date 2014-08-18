@@ -57,23 +57,21 @@
 /////////////////////
 .tabs-horisontal-active
   position: relative
-  margin-bottom: -2em !important
+  // background-color: #339
+  padding-top: .8em
+  margin-bottom: -1.5em
+  // margin-bottom: -2em !important
   > ul
     position: relative
     height: 100%
-    > li
-      h4,
-      p
-        padding-top: .4em
 
 .tabs-horisontal-active .tab-horisontal
   cursor: pointer
   color: $brand-success
-  padding: .25em .5em 1em
+  padding: .25em .5em .75em
   position: relative
   border-bottom: 4px solid transparent
   transition: border-color $trns-fast
-  margin-top: 0.3em
   &:hover,
   &.current
     border-color: $brand-success

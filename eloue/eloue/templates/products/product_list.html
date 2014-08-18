@@ -14,6 +14,8 @@
     <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
     <link rel="stylesheet" href="../../static/css/jquery.mCustomScrollbar.css">
     <link rel="stylesheet" href="../../static/css/bootstrap.css">
+    <!-- custom input:range-->
+    <link rel="stylesheet" href="../../static/css/jquery-ui.css">
     <link rel="stylesheet" href="../../static/css/product_list_styles.css">
     <!-- jQuery-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -39,6 +41,9 @@
     <!-- custom scrollbar.js-->
     <script src="../../static/js/jquery.mCustomScrollbar.js"></script>
     <script src="../../static/js/scripts.js"></script>
+    <!-- custom input:range-->
+    <!-- http://jqueryui.com/slider/#rangemin-->
+    <script src="../../static/js/jquery-ui.min.js"></script>
     <script src="../../static/js/scripts.js"></script>
   </head>
   <body>
@@ -174,23 +179,101 @@
           </div>
         </div>
       </nav>
-      <article class="container">
-        <section>
-          <div class="row">
-            <h3 class="col-xs-8">603 annonces correspondant à vos critères</h3>
-            <div class="col-xs-3 clear-selector text-success">
+      <article class="container grid-layout">
+        <div class="row">
+          <h3 class="col-md-7">603 annonces correspondant à vos critères</h3>
+          <div class="col-xs-6 col-md-5 layout-switcher clear-selector"><i class="sprite-list"></i><i class="sprite-grid"></i>
+            <select class="form-control">
+              <option value="male">Du - cher au + cher</option>
+              <option value="female">Du - cher au + cher</option>
+              <option value="female">Du - cher au + cher</option>
+              <option value="female">Du - cher au + cher</option>
+            </select>
+          </div>
+          <div class="col-xs-2 col-md-2"></div>
+        </div>
+        <div class="row">
+          <aside class="col-xs-3 section-body">
+            <form action="detail-search">
+              <label for="what" class="caption">quoi</label>
+              <input id="what" type="text" placeholder="" autofocus class="form-control">
+              <p class="caption">catégories</p>
+              <div class="clear-selector">
+                <select class="form-control">
+                  <option value="male">Tous les catigories</option>
+                  <option value="female">Du - cher au + cher</option>
+                  <option value="female">Du - cher au + cher</option>
+                  <option value="female">Du - cher au + cher</option>
+                </select>
+              </div>
+              <label for="where" class="caption">où</label>
+              <input id="where" type="text" placeholder="" class="form-control">
+              <div class="map-container">
+                <div class="whirly"></div>
+                <div class="map">
+                  <!-- место для карты!-->
+                </div>
+              </div>
+              <label for="district" class="caption">rayon</label>
+              <input id="district" type="range" name="district" min="5" max="100" step="1">
+              <div id="district-fake"></div>
+              <label for="start-date" class="caption">date de début</label>
+              <div class="date-picker">
+                <div class="input-group">
+                  <input id="start-date" type="text" placeholder="" class="form-control">
+                  <div class="input-group-addon calendar"><span></span></div>
+                </div>
+              </div>
+              <label for="end-date" class="caption">date de fin</label>
+              <div class="date-picker">
+                <div class="input-group">
+                  <input id="end-date" type="text" placeholder="" class="form-control">
+                  <div class="input-group-addon calendar"><span></span></div>
+                </div>
+              </div>
+              <label for="price" class="caption">prix</label>
+              <input id="price" type="range" name="price" min="5" max="100" step="1">
+              <div id="price-fake"></div>
+              <p class="caption">loueur</p>
+              <div class="checkbox">
+                <label for="particular">
+                  <input type="checkbox" id="particular"><span class="icon-ok"></span>
+                </label>Particulier
+              </div>
+              <div class="checkbox">
+                <label for="professional">
+                  <input type="checkbox" id="professional"><span class="icon-ok"></span>
+                </label>Professionel
+              </div>
+              <p class="caption">champ 1</p>
+            </form>
+            <div class="clear-selector">
               <select class="form-control">
-                <option value="male">Du - cher au + cher</option>
+                <option value="male">Tous types</option>
+                <option value="female">Du - cher au + cher</option>
+                <option value="female">Du - cher au + cher</option>
+                <option value="female">Du - cher au + cher</option>
+              </select>
+              <p class="caption">champ 2</p>
+            </div>
+            <div class="clear-selector">
+              <select class="form-control">
+                <option value="male">Tous types</option>
+                <option value="female">Du - cher au + cher</option>
+                <option value="female">Du - cher au + cher</option>
+                <option value="female">Du - cher au + cher</option>
+              </select>
+              <p class="caption">champ 3</p>
+            </div>
+            <div class="clear-selector">
+              <select class="form-control">
+                <option value="male">Tous types</option>
                 <option value="female">Du - cher au + cher</option>
                 <option value="female">Du - cher au + cher</option>
                 <option value="female">Du - cher au + cher</option>
               </select>
             </div>
-            <div class="col-xs-1"><i class="sprite-grid"></i><i class="sprite-list"></i></div>
-          </div>
-        </section>
-        <div class="row">
-          <aside class="col-xs-3">654</aside>
+          </aside>
           <main class="col-xs-9">654</main>
         </div>
       </article>

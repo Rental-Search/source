@@ -5,9 +5,15 @@ block prepend variables
 
 block append styles
   link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  // custom input:range
+  link(rel="stylesheet", href="#{STATIC_URL}css/jquery-ui.css")
   link(rel="stylesheet", href="#{STATIC_URL}css/product_list_styles.css")
 
 block append scripts
+  // custom input:range
+  // http://jqueryui.com/slider/#rangemin
+  script(src="#{STATIC_URL}js/jquery-ui.min.js")
+    
   script(src="#{STATIC_URL}js/scripts.js")
 
 block append content-body
@@ -16,11 +22,12 @@ block append content-body
       include ../jade/_header_site
      nav
       include ../jade/_breadcrumbs
-    article.container
-      section
+    article.container.grid-layout
+      .row
         include ../jade/_product_list_article_head
       .row
-        aside.col-xs-3 654
+        aside.col-xs-3.section-body
+          include ../jade/_product_list_aside
         main.col-xs-9 654
     footer
       section.download-mobile-apps.framing
