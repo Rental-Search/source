@@ -13,7 +13,37 @@
 </head>
 <body>
 <div class="container-full-screen" data-ng-controller="DashboardRootCtrl">
-    <header>header</header>
+    <header class="header-site">
+        <section class="container signs-links">
+            <ul role="tablist" class="nav without-spaces">
+                <li class="divide"></li>
+                <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
+                <li class="divide"></li>
+                <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
+                <li class="divide"></li>
+                <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
+            </ul>
+        </section>
+        <div class="framing">
+            <section class="container search-form">
+                <div class="table-cell"><a href="/templates"><img src="../../../static/img/logo.png" alt="logo"></a></div>
+                <div class="table-cell main-cell">
+                    <form action="" class="input-group">
+                        <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="table-cell main-cell form-control what-field">
+                        <div class="table-cell input-group where-field"><i class="sprite-location"></i>
+                            <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control">
+                        </div>
+                        <div class="table-cell input-group-btn">
+                            <button type="button" class="btn btn-default btn-search"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-cell">
+                    <button type="button" class="btn bg-success btn-advertise">Déposez une annonce</button>
+                </div>
+            </section>
+        </div>
+    </header>
     <article class="dashboard">
         <nav class="bg-success">
             <ul>
