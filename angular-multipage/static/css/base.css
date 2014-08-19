@@ -102,6 +102,7 @@ input[type="reset"]::-moz-focus-inner {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
 
 /* makes the font 33% larger relative to the icon container */
@@ -125,6 +126,14 @@ input[type="reset"]::-moz-focus-inner {
 
 .fa-5x {
   font-size: 5em;
+}
+
+.fa-6x {
+  font-size: 6em;
+}
+
+.fa-7x {
+  font-size: 7em;
 }
 
 .fa-fw {
