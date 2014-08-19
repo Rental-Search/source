@@ -113,4 +113,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Pictures", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "pictures\\/");
     }]);
+
+    /**
+     * Factory for managing comments.
+     */
+    EloueCommon.factory("Comments", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "comments/:id/?");
+    }]);
 });

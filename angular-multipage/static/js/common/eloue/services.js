@@ -416,8 +416,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "AddressesService",
             "UsersService",
             "PhoneNumbersService",
+            "CommentsService",
             "UtilsService",
-            function ($q, Bookings, Products, ProductsService, PicturesService, AddressesService, UsersService, PhoneNumbersService, UtilsService) {
+            function ($q, Bookings, Products, ProductsService, PicturesService, AddressesService, UsersService, PhoneNumbersService, CommentsService, UtilsService) {
                 var bookingsService = {};
 
                 bookingsService.getBookings = function (page) {
@@ -599,6 +600,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 booking: booking
                             };
 
+                            var promises = {};
+
+                            // Get product
+                            var productDeferred = $q.defer();
                             self.getBookingDetailProduct(booking.productId).then(
                                 function (product) {
                                     bookingDetail.product = product;
@@ -606,15 +611,47 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                     PhoneNumbersService.getPhoneNumber(product.phoneId).$promise.then(
                                         function (phone) {
                                             bookingDetail.phone = phone.number;
-                                            deferred.resolve(bookingDetail);
+                                            productDeferred.resolve(bookingDetail);
                                         },
                                         function (reason) {
-                                            deferred.reject(reason);
+                                            productDeferred.reject(reason);
                                         }
                                     );
                                 },
                                 function (reason) {
-                                    deferred.reject(reason);
+                                    productDeferred.reject(reason);
+                                }
+                            );
+                            promises.product = productDeferred.promise;
+
+                            // Get comments
+                            var commentsDeferred = $q.defer();
+
+                            CommentsService.getCommentList(uuid).then(
+                                function (comments) {
+                                    var commentList = comments.results;
+
+                                    angular.forEach(commentList, function (value, key) {
+                                        var author = (value.type == 0) ? booking.owner : booking.borrower;
+                                        value.author = author
+                                    });
+
+                                    bookingDetail.comments = commentList;
+                                    commentsDeferred.resolve(bookingDetail);
+                                },
+                                function (reason) {
+                                    commentsDeferred.reject(reason);
+                                }
+                            );
+
+                            promises.comments = commentsDeferred.promise;
+
+                            $q.all(promises).then(
+                                function () {
+                                    deferred.resolve(bookingDetail);
+                                },
+                                function (reasons) {
+                                    deferred.reject(reasons);
                                 }
                             );
                         },
@@ -696,5 +733,18 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             };
 
             return phoneNumbersService;
+        }]);
+
+        /**
+         * Service for managing comments.
+         */
+        EloueCommon.factory("CommentsService", ["Comments", function (Comments) {
+            var commentsService = {};
+
+            commentsService.getCommentList = function (bookingUUID) {
+                return Comments.get({booking: bookingUUID}).$promise;
+            };
+
+            return commentsService;
         }]);
     });
