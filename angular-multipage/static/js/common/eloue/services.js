@@ -512,7 +512,26 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             // Set product id
                             resultBooking.productId = UtilsService.getIdFromUrl(booking.product);
 
-                            deferred.resolve(resultBooking);
+                            // Get owner and borrower
+                            var promises = {};
+                            // Get owner
+                            var ownerId = UtilsService.getIdFromUrl(booking.owner);
+                            promises.owner = UsersService.get(ownerId).$promise;
+
+                            // Get borrower
+                            var borrowerId = UtilsService.getIdFromUrl(booking.borrower);
+                            promises.borrower = UsersService.get(borrowerId).$promise;
+
+                            $q.all(promises).then(
+                                function (data) {
+                                    resultBooking.owner = data.owner;
+                                    resultBooking.borrower = data.borrower;
+                                    deferred.resolve(resultBooking);
+                                },
+                                function (reason) {
+                                    deferred.reject(reason);
+                                }
+                            );
                         },
                         function (reason) {
                             deferred.reject(reason);
@@ -537,10 +556,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var addressId = UtilsService.getIdFromUrl(product.address);
                             productPromises.address = AddressesService.getAddress(addressId).$promise;
 
-                            // Get owner
-                            var ownerId = UtilsService.getIdFromUrl(product.owner);
-                            productPromises.owner = UsersService.get(ownerId).$promise;
-
                             // Get picture
                             productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
 
@@ -554,11 +569,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                     resultProduct.address.street = results.address.street;
                                     resultProduct.address.zipcode = results.address.zipcode;
                                     resultProduct.address.city = results.address.city;
-
-                                    // Set owner
-                                    resultProduct.owner = {};
-                                    resultProduct.owner.username = results.owner.username;
-                                    resultProduct.owner.avatar = results.owner.avatar.thumbnail;
 
                                     // Set picture
                                     if ($.isArray(results.pictures.results) && $(results.pictures.results).size() > 0) {
