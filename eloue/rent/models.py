@@ -493,6 +493,10 @@ class BorrowerComment(Comment):
     class Meta:
         proxy = True
 
+    def __init__(self, *args, **kwargs):
+        self._meta.get_field('type').default = COMMENT_TYPE_CHOICES.BORROWER
+        super(BorrowerComment, self).__init__(*args, **kwargs)
+
     @property
     def response(self):
         return self.booking.ownercomment
