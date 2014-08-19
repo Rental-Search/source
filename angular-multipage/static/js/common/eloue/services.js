@@ -738,13 +738,26 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for managing comments.
          */
-        EloueCommon.factory("CommentsService", ["Comments", function (Comments) {
-            var commentsService = {};
+        EloueCommon.factory("CommentsService", [
+            "Comments",
+            "Endpoints",
+            function (Comments, Endpoints) {
+                var commentsService = {};
 
-            commentsService.getCommentList = function (bookingUUID) {
-                return Comments.get({booking: bookingUUID}).$promise;
-            };
+                commentsService.getCommentList = function (bookingUUID) {
+                    return Comments.get({_cache: new Date().getTime(), booking: bookingUUID}).$promise;
+                };
 
-            return commentsService;
-        }]);
+                commentsService.postComment = function (bookingUUID, comment, rate) {
+                    var bookingUrl = Endpoints.api_url + "bookings/" + bookingUUID + "/";
+                    return Comments.save({
+                        booking: bookingUrl,
+                        comment: comment,
+                        rate: rate
+                    });
+                };
+
+                return commentsService;
+            }
+        ]);
     });

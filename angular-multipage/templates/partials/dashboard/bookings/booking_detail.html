@@ -79,8 +79,8 @@
             <div class="thumbnail"><i class="fa fa-pencil fa-3x"></i></div>
         </div>
         <div class="col-exposition">
-            <form action="">
-                <textarea name="msg" rows="4" placeholder="Écrire un commentaire..." class="expand"></textarea>
+            <form data-ng-submit="postComment()">
+                <textarea name="comment" data-ng-model="comment" rows="4" placeholder="Écrire un commentaire..." class="expand"></textarea>
                 <p class="text-justify-force indent-sm-t"><span>Notes :&nbsp;&nbsp;<span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span></span>
                     <button type="submit" class="btn-inline bg-success-hover text-white">Envoyer</button>
                 </p>
