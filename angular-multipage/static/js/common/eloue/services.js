@@ -664,6 +664,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return Categories.get({parent__isnull : true});
             };
 
+            categoriesService.getChildCategories = function (parentId) {
+                return Categories.getChildren({id : parentId});
+            };
+
             return categoriesService;
         }]);
 

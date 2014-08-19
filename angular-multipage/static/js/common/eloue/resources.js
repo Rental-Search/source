@@ -60,7 +60,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing categories.
      */
     EloueCommon.factory("Categories", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "categories/:id/?");
+        return $resource(Endpoints.api_url + "categories/:id/?", {},
+            {
+                "getChildren": { method: "GET", url: Endpoints.api_url + "categories/:id/children\\/"}
+            });
     }]);
 
     /**
