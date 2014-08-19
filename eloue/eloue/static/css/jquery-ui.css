@@ -177,7 +177,7 @@
 	color: #333333;
 }
 .ui-widget-header {
-	border: 1px solid #e78f08;
+	/*border: 1px solid #e78f08;*/
 	background: rgb(36,189,119);
 	color: #ffffff;
 	font-weight: bold;
@@ -320,17 +320,3 @@
 	border-bottom-right-radius: 4px;
 }
 
-/* Overlays */
-.ui-widget-overlay {
-	background: #666666;
-	opacity: .5;
-	filter: Alpha(Opacity=50); /* support: IE8 */
-}
-.ui-widget-shadow {
-	margin: -5px 0 0 -5px;
-	padding: 5px;
-	background: #000000;
-	opacity: .2;
-	filter: Alpha(Opacity=20); /* support: IE8 */
-	border-radius: 5px;
-}

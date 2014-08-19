@@ -84,7 +84,7 @@ input#sourse:checked + #sourse-img {
 }
 .header-site .search-form .where-field .sprite-location {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -949px -67px;
+  background-position: -967px -67px;
   width: 14px;
   height: 16px;
   position: absolute;
@@ -428,19 +428,19 @@ aside .btn span {
 }
 aside .btn.calendar-ok span {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -999px -67px;
+  background-position: -1035px -67px;
   width: 16px;
   height: 16px;
 }
 aside .btn.call span {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -1053px -67px;
+  background-position: -949px -67px;
   width: 16px;
   height: 16px;
 }
 aside .btn.send-message span {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -1089px -67px;
+  background-position: -1107px -67px;
   width: 16px;
   height: 14px;
 }
@@ -990,7 +990,7 @@ aside .connected-with-owner .facebook-box span {
   display: inline-block;
   margin: 0 0.5em -0.2em 0;
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -949px -67px;
+  background-position: -967px -67px;
   width: 14px;
   height: 16px;
 }
@@ -1007,7 +1007,7 @@ aside .connected-with-owner .facebook-box span {
   display: inline-block;
   margin: 0 0.5em -0.2em 1em;
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -981px -67px;
+  background-position: -1017px -67px;
   width: 16px;
   height: 16px;
 }
@@ -1388,25 +1388,25 @@ aside .connected-with-owner .facebook-box span {
 }
 .modal .large .bank-information i.card {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -1107px -67px;
+  background-position: -1125px -67px;
   width: 16px;
   height: 13px;
 }
 .modal .large .bank-information i.calendar {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -1035px -67px;
+  background-position: -1071px -67px;
   width: 16px;
   height: 16px;
 }
 .modal .large .bank-information i.block {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -965px -67px;
+  background-position: -983px -67px;
   width: 14px;
   height: 16px;
 }
 .modal .large .bank-information i.user {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -1071px -67px;
+  background-position: -1089px -67px;
   width: 16px;
   height: 16px;
 }

@@ -1,4 +1,4 @@
-ol.nav
+ol.nav.row
   each product in products
     li
       .section-body
@@ -7,17 +7,40 @@ ol.nav
             img( src = "#{STATIC_URL}#{product.img_link}" )
             span.fog
             span.badge.price #{product.price}&euro; /jour
+            span.badge-order #{product.order}
         .info
           h6
             a(href="#") #{product.title}
-            span.badge-pro pro
+            if product.ispro
+              span.badge-pro pro
+          p #{product.description}
+            span.zip-code ,&nbsp;#{product.zip_code}
           .rate
             -var stars = [1,2,3,4,5]
             each s in stars
-              if s == 1
+              if s == product.rate
                 span.icon-star.current-rate
               else
                 span.icon-star
-          p #{product.description}
-          a(href="#").declarer: img(src="#{STATIC_URL}#{product.declarer_img_link}" alt="")
-
+          if product.comments > 0
+            span.sprite-comment
+              i
+              | #{product.comments}
+          p.full_description #{product.full_description}
+        .declarer-container
+          .declarer
+            span.declarer-name Alfred Cardinal
+            a(href="#").declarer-thumbnail: img(src="#{STATIC_URL}#{product.declarer_img_link}" alt="")
+          .btns
+            a(href="#").sprite-message.btn.bg-success: i
+            a(href="#").sprite-calendar-ok.btn.bg-success: i
+.text-center
+  ul.pagination
+    li: a(href="#").chevron: i.icon-chevron-left
+    li: a(href="#").active 1
+    li: a(href="#") 2
+    li: a(href="#") 3
+    li: a(href="#") 4
+    li: a(href="#") 5
+    li: a(href="#") 6
+    li: a(href="#").chevron: i.icon-chevron-right

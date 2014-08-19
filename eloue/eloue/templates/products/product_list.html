@@ -180,9 +180,9 @@
         </div>
       </nav>
       <article class="container grid-layout">
-        <div class="row">
+        <div class="row article-head">
           <h3 class="col-md-7">603 annonces correspondant à vos critères</h3>
-          <div class="col-xs-6 col-md-5 layout-switcher clear-selector"><i class="sprite-list"></i><i class="sprite-grid"></i>
+          <div class="col-xs-5 col-md-3 clear-selector">
             <select class="form-control">
               <option value="male">Du - cher au + cher</option>
               <option value="female">Du - cher au + cher</option>
@@ -190,11 +190,11 @@
               <option value="female">Du - cher au + cher</option>
             </select>
           </div>
-          <div class="col-xs-2 col-md-2"></div>
+          <div class="col-xs-2 col-md-2 layout-switcher"><i class="sprite-list"></i><i class="sprite-grid"></i></div>
         </div>
         <div class="row">
-          <aside class="col-xs-3 section-body">
-            <form action="detail-search">
+          <aside class="col-xs-3">
+            <form action="detail-search" class="section-body">
               <label for="what" class="caption">quoi</label>
               <input id="what" type="text" placeholder="" autofocus class="form-control">
               <p class="caption">catégories</p>
@@ -246,125 +246,185 @@
                 </label>Professionel
               </div>
               <p class="caption">champ 1</p>
-            </form>
-            <div class="clear-selector">
-              <select class="form-control">
-                <option value="male">Tous types</option>
-                <option value="female">Du - cher au + cher</option>
-                <option value="female">Du - cher au + cher</option>
-                <option value="female">Du - cher au + cher</option>
-              </select>
+              <div class="clear-selector">
+                <select class="form-control">
+                  <option value="male">Tous types</option>
+                  <option value="female">Du - cher au + cher</option>
+                  <option value="female">Du - cher au + cher</option>
+                  <option value="female">Du - cher au + cher</option>
+                </select>
+              </div>
               <p class="caption">champ 2</p>
-            </div>
-            <div class="clear-selector">
-              <select class="form-control">
-                <option value="male">Tous types</option>
-                <option value="female">Du - cher au + cher</option>
-                <option value="female">Du - cher au + cher</option>
-                <option value="female">Du - cher au + cher</option>
-              </select>
+              <div class="clear-selector">
+                <select class="form-control">
+                  <option value="male">Tous types</option>
+                  <option value="female">Du - cher au + cher</option>
+                  <option value="female">Du - cher au + cher</option>
+                  <option value="female">Du - cher au + cher</option>
+                </select>
+              </div>
               <p class="caption">champ 3</p>
-            </div>
-            <div class="clear-selector">
-              <select class="form-control">
-                <option value="male">Tous types</option>
-                <option value="female">Du - cher au + cher</option>
-                <option value="female">Du - cher au + cher</option>
-                <option value="female">Du - cher au + cher</option>
-              </select>
-            </div>
+              <div class="clear-selector">
+                <select class="form-control">
+                  <option value="male">Tous types</option>
+                  <option value="female">Du - cher au + cher</option>
+                  <option value="female">Du - cher au + cher</option>
+                  <option value="female">Du - cher au + cher</option>
+                </select>
+              </div>
+            </form>
           </aside>
           <main class="col-xs-9">
-            <ol class="nav">
+            <ol class="nav row">
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/bike.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/bike.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">1</span></a></div>
                   <div class="info">
-                    <h6><a href="#">Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike </a><span class="badge-pro">pro</span></h6>
-                    <div class="rate"><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div>
-                    <p>Aubervillies</p><a href="#" class="declarer"><img src="../../static/img/home-products/tenant_small.png" alt=""></a>
+                    <h6><a href="#">Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike </a>
+                    </h6>
+                    <p>Aubervillies<span class="zip-code">,&nbsp;12432</span></p>
+                    <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                    </div><span class="sprite-comment"><i></i>3</span>
+                    <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque consequatur, nihil odit natus, dolores tempore.</p>
+                  </div>
+                  <div class="declarer-container">
+                    <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
+                    <div class="btns"><a href="#" class="sprite-message btn bg-success"><i></i></a><a href="#" class="sprite-calendar-ok btn bg-success"><i></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/audi.jpg"><span class="fog"></span><span class="badge price">100&euro; /jour</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/audi.jpg"><span class="fog"></span><span class="badge price">100&euro; /jour</span><span class="badge-order">2</span></a></div>
                   <div class="info">
-                    <h6><a href="#">Audi - A3</a><span class="badge-pro">pro</span></h6>
-                    <div class="rate"><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div>
-                    <p>Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris </p><a href="#" class="declarer"><img src="../../static/img/home-products/tenant_small.png" alt=""></a>
+                    <h6><a href="#">Audi - A3</a><span class="badge-pro">pro</span>
+                    </h6>
+                    <p>Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris <span class="zip-code">,&nbsp;12432</span></p>
+                    <div class="rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span>
+                    </div><span class="sprite-comment"><i></i>1</span>
+                    <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima debitis labore, ad sequi nostrum officiis!</p>
+                  </div>
+                  <div class="declarer-container">
+                    <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
+                    <div class="btns"><a href="#" class="sprite-message btn bg-success"><i></i></a><a href="#" class="sprite-calendar-ok btn bg-success"><i></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">3</span></a></div>
                   <div class="info">
-                    <h6><a href="#">Tante tip indien</a><span class="badge-pro">pro</span></h6>
+                    <h6><a href="#">Tante tip indien</a>
+                    </h6>
+                    <p>Nantes<span class="zip-code">,&nbsp;12432</span></p>
                     <div class="rate"><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
                     </div>
-                    <p>Nantes</p><a href="#" class="declarer"><img src="../../static/img/home-products/tenant_small.png" alt=""></a>
+                    <p class="full_description">Lorem ipsum dolor sit amet, o ea adipisci?</p>
+                  </div>
+                  <div class="declarer-container">
+                    <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
+                    <div class="btns"><a href="#" class="sprite-message btn bg-success"><i></i></a><a href="#" class="sprite-calendar-ok btn bg-success"><i></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">4</span></a></div>
                   <div class="info">
-                    <h6><a href="#">Tante tip indien</a><span class="badge-pro">pro</span></h6>
-                    <div class="rate"><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div>
-                    <p>Nantes</p><a href="#" class="declarer"><img src="../../static/img/home-products/tenant_small.png" alt=""></a>
+                    <h6><a href="#">Tante tip indien</a>
+                    </h6>
+                    <p>Nantes<span class="zip-code">,&nbsp;12432</span></p>
+                    <div class="rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star current-rate"></span>
+                    </div><span class="sprite-comment"><i></i>6</span>
+                    <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea impedit vero natus quos praesentium eaque!</p>
+                  </div>
+                  <div class="declarer-container">
+                    <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
+                    <div class="btns"><a href="#" class="sprite-message btn bg-success"><i></i></a><a href="#" class="sprite-calendar-ok btn bg-success"><i></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">5</span></a></div>
                   <div class="info">
-                    <h6><a href="#">Tante tip indien</a><span class="badge-pro">pro</span></h6>
-                    <div class="rate"><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div>
-                    <p>Nantes</p><a href="#" class="declarer"><img src="../../static/img/home-products/tenant_small.png" alt=""></a>
+                    <h6><a href="#">Tante tip indien</a>
+                    </h6>
+                    <p>Nantes<span class="zip-code">,&nbsp;12432</span></p>
+                    <div class="rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span>
+                    </div><span class="sprite-comment"><i></i>31</span>
+                    <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores officiis eos similique nihil velit laudantium.</p>
+                  </div>
+                  <div class="declarer-container">
+                    <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
+                    <div class="btns"><a href="#" class="sprite-message btn bg-success"><i></i></a><a href="#" class="sprite-calendar-ok btn bg-success"><i></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">6</span></a></div>
                   <div class="info">
-                    <h6><a href="#">Tante tip indien</a><span class="badge-pro">pro</span></h6>
-                    <div class="rate"><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div>
-                    <p>Nantes</p><a href="#" class="declarer"><img src="../../static/img/home-products/tenant_small.png" alt=""></a>
+                    <h6><a href="#">Tante tip indien</a>
+                    </h6>
+                    <p>Nantes<span class="zip-code">,&nbsp;12432</span></p>
+                    <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                    </div><span class="sprite-comment"><i></i>312</span>
+                    <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi laborum vitae, maxime dicta modi eligendi.</p>
+                  </div>
+                  <div class="declarer-container">
+                    <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
+                    <div class="btns"><a href="#" class="sprite-message btn bg-success"><i></i></a><a href="#" class="sprite-calendar-ok btn bg-success"><i></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">7</span></a></div>
                   <div class="info">
-                    <h6><a href="#">Tante tip indien</a><span class="badge-pro">pro</span></h6>
-                    <div class="rate"><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div>
-                    <p>Nantes</p><a href="#" class="declarer"><img src="../../static/img/home-products/tenant_small.png" alt=""></a>
+                    <h6><a href="#">Tante tip indien</a>
+                    </h6>
+                    <p>Nantes<span class="zip-code">,&nbsp;12432</span></p>
+                    <div class="rate"><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
+                    </div><span class="sprite-comment"><i></i>3</span>
+                    <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, ipsam sed tempora, optio labore ullam.</p>
+                  </div>
+                  <div class="declarer-container">
+                    <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
+                    <div class="btns"><a href="#" class="sprite-message btn bg-success"><i></i></a><a href="#" class="sprite-calendar-ok btn bg-success"><i></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">8</span></a></div>
                   <div class="info">
-                    <h6><a href="#">Tante tip indien</a><span class="badge-pro">pro</span></h6>
-                    <div class="rate"><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span>
-                    </div>
-                    <p>Nantes</p><a href="#" class="declarer"><img src="../../static/img/home-products/tenant_small.png" alt=""></a>
+                    <h6><a href="#">Tante tip indien</a>
+                    </h6>
+                    <p>Nantes<span class="zip-code">,&nbsp;12432</span></p>
+                    <div class="rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star current-rate"></span><span class="icon-star"></span><span class="icon-star"></span>
+                    </div><span class="sprite-comment"><i></i>3</span>
+                    <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio possimus obcaecati eligendi maxime, debitis numquam?</p>
+                  </div>
+                  <div class="declarer-container">
+                    <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
+                    <div class="btns"><a href="#" class="sprite-message btn bg-success"><i></i></a><a href="#" class="sprite-calendar-ok btn bg-success"><i></i></a></div>
                   </div>
                 </div>
               </li>
             </ol>
+            <div class="text-center">
+              <ul class="pagination">
+                <li><a href="#" class="chevron"><i class="icon-chevron-left"></i></a></li>
+                <li><a href="#" class="active">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">6</a></li>
+                <li><a href="#" class="chevron"><i class="icon-chevron-right"></i></a></li>
+              </ul>
+            </div>
           </main>
         </div>
       </article>
