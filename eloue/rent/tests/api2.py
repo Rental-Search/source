@@ -11,7 +11,7 @@ def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
 
 class CommentTest(APITestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'booking']
+    fixtures = ['patron', 'address', 'category', 'product', 'booking', 'comment']
 
     def setUp(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -53,3 +53,29 @@ class CommentTest(APITestCase):
         Comment = get_model('rent', 'comment')
         c = Comment.objects.get(pk=response.data['id'])
         self.assertEquals(c.type, COMMENT_TYPE_CHOICES.BORROWER)
+
+    def test_comment_list(self):
+        response = self.client.get(_location('comment-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 2, # we should get 2 comments
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
+    def test_comment_get_author_owner(self):
+        response = self.client.get(_location('comment-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('author', response.data, response.data)
+        self.assertTrue(response.data['author'].endswith(_location('patron-detail', pk=2)))
+
+    def test_comment_get_author_borrower(self):
+        response = self.client.get(_location('comment-detail', pk=2))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('author', response.data, response.data)
+        self.assertTrue(response.data['author'].endswith(_location('patron-detail', pk=1)))

@@ -37,7 +37,7 @@ class CommentAuthorField(HyperlinkedRelatedField):
         """
         if obj is not None:
             # override field name according to 'type'
-            self.source = self.booking_field_names[getattr(obj, self.source)]
+            self.source = self.booking_field_names[obj.type]
         return super(CommentAuthorField, self).field_to_native(obj, field_name)
 
     def field_from_native(self, data, files, field_name, into):
