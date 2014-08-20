@@ -8,9 +8,13 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("DashboardRootCtrl", [
         "$scope",
         "$cookies",
-        function ($scope, $cookies) {
+        "UsersService",
+        function ($scope, $cookies, UsersService) {
             // Read authorization token
             $scope.currentUserToken = $cookies.user_token;
+
+            // Get current user
+            $scope.currentUserPromise = UsersService.getMe().$promise;
 
             // Set jQuery ajax interceptors
             $.ajaxSetup({

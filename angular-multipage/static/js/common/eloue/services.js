@@ -178,18 +178,32 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Get product
                         if (!!thread.product) {
                             var productDeferred = $q.defer();
-
                             var productId = UtilsService.getIdFromUrl(thread.product);
-                            Bookings.get({product: productId}).$promise.then(function (data) {
+
+                            BookingsService.getBookingDetailProduct(productId).then(
+                                function (product) {
+                                    productDeferred.resolve(product);
+                                },
+                                function (reason) {
+                                    productDeferred.reject(reason);
+                                }
+                            );
+                            rootPromises.product = productDeferred.promise;
+
+                            /*Bookings.get({product: productId}).$promise.then(function (data) {
                                 if ($.isArray(data.results) && (data.results.length > 0)) {
-                                    var bookingData = data.results[0];
+                                    // If booking exists
+                                    var bookingData = data.results[data.results.length - 1];
                                     BookingsService.parseBookingDetail(bookingData, function (booking) {
                                         productDeferred.resolve(booking);
                                     });
+                                    productDeferred.resolve("Booking");
+                                } else {
+                                    // If no booking
+                                    // TODO no booking
+                                    productDeferred.resolve();
                                 }
-                            });
-
-                            rootPromises.product = productDeferred.promise;
+                            });*/
                         }
 
                         $q.all(rootPromises).then(function (results) {

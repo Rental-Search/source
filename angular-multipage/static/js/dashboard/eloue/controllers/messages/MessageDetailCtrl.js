@@ -11,11 +11,10 @@ define(["angular", "eloue/app"], function (angular) {
         "$q",
         "MessageThreadsService",
         "ProductRelatedMessagesService",
-        "UsersService",
-        function ($scope, $stateParams, $q, MessageThreadsService, ProductRelatedMessagesService, UsersService) {
+        function ($scope, $stateParams, $q, MessageThreadsService, ProductRelatedMessagesService) {
 
             var promises = {
-                currentUser: UsersService.getMe().$promise,
+                currentUser: $scope.currentUserPromise,
                 data: MessageThreadsService.getThread($stateParams.id)
             };
 
@@ -23,11 +22,12 @@ define(["angular", "eloue/app"], function (angular) {
                 // Set messages
                 $scope.messages = results.data.messages;
 
+                // Set product
+                $scope.product = results.data.product;
+
                 // Find recipient id
                 $scope.recipientId = null;
-
                 var stopped = false;
-
                 angular.forEach(results.data.users, function (value) {
                     if ((!stopped) && (value != results.currentUser.id)) {
                         $scope.recipientId = value;
@@ -37,13 +37,15 @@ define(["angular", "eloue/app"], function (angular) {
 
                 $scope.postNewMessage = function () {
                     // TODO change offer param
-                    ProductRelatedMessagesService.postMessage($stateParams.id, $scope.recipientId, $scope.message, null)
-                        .then(function () {
-                            $scope.message = "";
-                            MessageThreadsService.getMessages($stateParams.id).then(function (data) {
-                                $scope.messages = data.messages;
+                    if (!!$scope.recipientId) {
+                        ProductRelatedMessagesService.postMessage($stateParams.id, $scope.recipientId, $scope.message, null)
+                            .then(function () {
+                                $scope.message = "";
+                                MessageThreadsService.getMessages($stateParams.id).then(function (data) {
+                                    $scope.messages = data.messages;
+                                });
                             });
-                        });
+                    }
                 };
 
                 // Initiate custom scrollbars

@@ -4,12 +4,12 @@
     </div>
     <ul class="scrollbar-custom">
         <li class="tab-vertical">
-            <div class="section-content"><img src="../../../static/img/carousel-product/2.jpg" alt="" width="100%">
+            <div class="section-content"><img data-ng-src="{{product.picture}}" alt="" width="100%">
 
-                <h3 class="indent-xs-v"><a href="#" class="text-underline-hover"><b>BMW 520 Touring Luxe</b></a></h3>
+                <h3 class="indent-xs-v"><a href="#" class="text-underline-hover"><b>{{product.summary}}</b></a></h3>
 
-                <p class="text-gray"><i class="fa fa-map-marker fa-lg">&nbsp;</i>Nice,&nbsp;
-                    02200
+                <p class="text-gray"><i class="fa fa-map-marker fa-lg">&nbsp;</i>{{product.address.city}},&nbsp;
+                    {{product.address.zipcode}}
                 </p>
 
                 <p class="text-gray indent-sm-v"><span class="average-rate"><span class="star"><i
