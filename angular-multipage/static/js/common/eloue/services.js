@@ -867,6 +867,41 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         ]);
 
         /**
+         * Service for parsing products.
+         */
+        EloueCommon.factory("ProductsParseService", [function () {
+            var productsParseService = {};
+
+            productsParseService.parseProduct = function (productData, addressData, ownerData, phoneData, picturesDataArray) {
+                var productResult = angular.copy(productData);
+
+                // Parse address
+                if (!!addressData) {
+                    productResult.address = addressData;
+                }
+
+                // Parse owner
+                if (!!ownerData) {
+                    productResult.owner = ownerData;
+                }
+
+                // Parse phone
+                if (!!phoneData) {
+                    productResult.phone = phoneData;
+                }
+
+                // Parse pictures
+                if (angular.isArray(picturesDataArray) && picturesDataArray.length > 0) {
+                    productResult.picture = picturesDataArray[0].image.thumbnail;
+                }
+
+                return productResult;
+            };
+
+            return productsParseService;
+        }]);
+
+        /**
          * Service for managins bookings.
          */
         EloueCommon.factory("BookingsLoadService", [
@@ -918,6 +953,62 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 return bookingsLoadService;
+            }
+        ]);
+
+        /**
+         * Service for managins bookings.
+         */
+        EloueCommon.factory("ProductsLoadService", [
+            "$q",
+            "Products",
+            "AddressesService",
+            "UsersService",
+            "PicturesService",
+            "PhoneNumbersService",
+            "UtilsService",
+            "ProductsParseService",
+            function ($q, Products, AddressesService, UsersService, PicturesService, PhoneNumbersService,
+                      UtilsService, ProductsParseService) {
+                var productLoadService = {};
+
+                productLoadService.getProduct = function (productId) {
+                    var deferred = $q.defer();
+
+                    // Load product
+                    Products.get({id: productId}).$promise.then(function (productData) {
+                        var productPromises = {};
+
+                        // Get address id
+                        var addressId = UtilsService.getIdFromUrl(productData.address);
+                        // Load address
+                        productPromises.address = AddressesService.getAddress(addressId).$promise;
+
+                        // Get owner id
+                        var ownerId = UtilsService.getIdFromUrl(productData.owner);
+                        // Load owner
+                        productPromises.owner = UsersService.get(ownerId).$promise;
+
+                        // Get phone id
+                        var phoneId = UtilsService.getIdFromUrl(productData.phone);
+                        // Load phone
+                        productPromises.phone = PhoneNumbersService.getPhoneNumber(phoneId).$promise;
+
+                        // Load pictures
+                        productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+
+                        // When all data loaded
+                        $q.all(productPromises).then(function (results) {
+                            var product = ProductsParseService.parseProduct(productData, results.address, results.owner,
+                                results.phone, results.pictures.results);
+                            deferred.resolve(product);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                return productLoadService;
             }
         ]);
     });
