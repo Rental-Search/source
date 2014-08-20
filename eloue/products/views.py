@@ -770,20 +770,20 @@ class CategoryViewSet(viewsets.ModelViewSet):
     @link()
     def ancestors(self, request, *args, **kwargs):
         obj = self.get_object()
-        res = obj.get_ancestors().values_list('id', flat=True)
-        return response.Response(res)
+        serializer = self.get_serializer(obj.get_ancestors(), many=True)
+        return response.Response(serializer.data)
 
     @link()
     def children(self, request, *args, **kwargs):
         obj = self.get_object()
-        res = obj.get_children().values_list('id', flat=True)
-        return response.Response(res)
+        serializer = self.get_serializer(obj.get_children(), many=True)
+        return response.Response(serializer.data)
 
     @link()
     def descendants(self, request, *args, **kwargs):
         obj = self.get_object()
-        res = obj.get_descendants().values_list('id', flat=True)
-        return response.Response(res)
+        serializer = self.get_serializer(obj.get_descendants(), many=True)
+        return response.Response(serializer.data)
 
 class ProductFilterSet(filters.FilterSet):
     category__isdescendant = filters.MPTTFilter(name='category', queryset=models.Category.objects.all())
