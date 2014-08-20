@@ -911,7 +911,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "PicturesService",
             "UtilsService",
             "BookingsParseService",
-            function ($q, Bookings, ProductsService, PicturesService, UtilsService, BookingsParseService) {
+            "ProductsLoadService",
+            function ($q, Bookings, ProductsService, PicturesService, UtilsService, BookingsParseService, ProductsLoadService) {
                 var bookingsLoadService = {};
 
                 bookingsLoadService.getBookingList = function (page) {
@@ -946,6 +947,35 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                         $q.all(bookingListPromises).then(function (bookingList) {
                             deferred.resolve(bookingList);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                bookingsLoadService.getBooking = function (bookingUUID) {
+                    var deferred = $q.defer();
+
+                    // Load booking
+                    Bookings.get({uuid: bookingUUID}).$promise.then(function (bookingData) {
+                        var booking = BookingsParseService.parseBooking(bookingData);
+                        deferred.resolve(booking);
+                    });
+
+                    return deferred.promise;
+                };
+
+                bookingsLoadService.getBookingDetails = function (bookingUUID) {
+                    var deferred = $q.defer();
+
+                    // Load booking
+                    this.getBooking(bookingUUID).then(function (booking) {
+                        // Get product id
+                        var productId = UtilsService.getIdFromUrl(booking.product);
+                        // Load product
+                        ProductsLoadService.getProduct(productId).then(function (product) {
+                            booking.product = product;
+                            deferred.resolve(booking);
                         });
                     });
 

@@ -8,13 +8,14 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("BookingDetailCtrl", [
         "$scope",
         "$stateParams",
-        "BookingsService",
+        "BookingsLoadService",
         "CommentsService",
-        function ($scope, $stateParams, BookingsService, CommentsService) {
-            BookingsService.getBookingDetailInformation($stateParams.uuid).then(function (bookingDetail) {
-                $scope.bookingDetail = bookingDetail;
+        function ($scope, $stateParams, BookingsLoadService, CommentsService) {
+            BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
+                $scope.bookingDetails = bookingDetails;
 
                 $scope.postComment = function () {
+                    // TODO change rate
                     CommentsService.postComment($stateParams.uuid, $scope.comment, 4);
                 };
 
