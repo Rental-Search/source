@@ -203,19 +203,19 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             rootPromises.owner = ownerDeferred.promise;
 
                             /*Bookings.get({product: productId}).$promise.then(function (data) {
-                                if ($.isArray(data.results) && (data.results.length > 0)) {
-                                    // If booking exists
-                                    var bookingData = data.results[data.results.length - 1];
-                                    BookingsService.parseBookingDetail(bookingData, function (booking) {
-                                        productDeferred.resolve(booking);
-                                    });
-                                    productDeferred.resolve("Booking");
-                                } else {
-                                    // If no booking
-                                    // TODO no booking
-                                    productDeferred.resolve();
-                                }
-                            });*/
+                             if ($.isArray(data.results) && (data.results.length > 0)) {
+                             // If booking exists
+                             var bookingData = data.results[data.results.length - 1];
+                             BookingsService.parseBookingDetail(bookingData, function (booking) {
+                             productDeferred.resolve(booking);
+                             });
+                             productDeferred.resolve("Booking");
+                             } else {
+                             // If no booking
+                             // TODO no booking
+                             productDeferred.resolve();
+                             }
+                             });*/
                         }
 
                         $q.all(rootPromises).then(function (results) {
@@ -788,6 +788,100 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 return commentsService;
+            }
+        ]);
+
+        /**
+         * Service for parsing bookings.
+         */
+        EloueCommon.factory("BookingsParseService", [
+            "UtilsService",
+            function (UtilsService) {
+                var bookingsParseService = {};
+
+                bookingsParseService.parseBookingListItem = function (bookingData, productData, picturesDataArray) {
+                    var bookingResult = angular.copy(bookingData);
+
+                    // Parse dates
+                    bookingResult.start_date = {
+                        day: UtilsService.formatDate(bookingResult.started_at, "dd"),
+                        month: UtilsService.formatDate(bookingResult.started_at, "MMMM"),
+                        year: UtilsService.formatDate(bookingResult.started_at, "yyyy")
+                    };
+
+                    bookingResult.end_date = {
+                        day: UtilsService.formatDate(bookingResult.ended_at, "dd"),
+                        month: UtilsService.formatDate(bookingResult.ended_at, "MMMM"),
+                        year: UtilsService.formatDate(bookingResult.ended_at, "yyyy")
+                    };
+
+                    // Parse product
+                    bookingResult.product = productData;
+
+                    // Parse pictures
+                    if (angular.isArray(picturesDataArray) && picturesDataArray.length > 0) {
+                        bookingResult.picture = picturesDataArray[0].image.thumbnail;
+                    }
+
+                    return bookingResult;
+                };
+
+                return bookingsParseService;
+            }
+        ]);
+
+        /**
+         * Service for managins bookings.
+         */
+        EloueCommon.factory("BookingsLoadService", [
+            "$q",
+            "Bookings",
+            "ProductsService",
+            "PicturesService",
+            "UtilsService",
+            "BookingsParseService",
+            function ($q, Bookings, ProductsService, PicturesService, UtilsService, BookingsParseService) {
+                var bookingsLoadService = {};
+
+                bookingsLoadService.getBookingList = function (page) {
+                    var deferred = $q.defer();
+
+                    // Load bookings
+                    Bookings.get({page: page}).$promise.then(function (bookingListData) {
+                        var bookingListPromises = [];
+
+                        // For each booking
+                        angular.forEach(bookingListData.results, function (bookingData, key) {
+                            var bookingDeferred = $q.defer();
+                            var bookingPromises = {};
+
+                            // Get product id
+                            var productId = UtilsService.getIdFromUrl(bookingData.product);
+
+                            // Load product
+                            bookingPromises.product = ProductsService.getProduct(productId).$promise;
+
+                            // Load pictures
+                            bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+
+                            // When all data loaded
+                            $q.all(bookingPromises).then(function (bookingResults) {
+                                var booking = BookingsParseService.parseBookingListItem(bookingData, bookingResults.product, bookingResults.pictures.results);
+                                bookingDeferred.resolve(booking);
+                            });
+
+                            bookingListPromises.push(bookingDeferred.promise);
+                        });
+
+                        $q.all(bookingListPromises).then(function (bookingList) {
+                            deferred.resolve(bookingList);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                return bookingsLoadService;
             }
         ]);
     });
