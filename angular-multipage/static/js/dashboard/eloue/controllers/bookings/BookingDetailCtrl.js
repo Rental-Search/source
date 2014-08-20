@@ -9,19 +9,28 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "$stateParams",
         "BookingsLoadService",
-        "CommentsService",
-        function ($scope, $stateParams, BookingsLoadService, CommentsService) {
+        "CommentsLoadService",
+        function ($scope, $stateParams, BookingsLoadService, CommentsLoadService) {
+
+            // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
-
-                $scope.postComment = function () {
-                    // TODO change rate
-                    CommentsService.postComment($stateParams.uuid, $scope.comment, 4);
-                };
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
             });
+
+            // Load comments
+            CommentsLoadService.getCommentList($stateParams.uuid).then(function (commentList) {
+                $scope.commentList = commentList;
+            });
+
+            // Method to post new comment
+            $scope.postComment = function () {
+                // TODO change rate
+                CommentsLoadService.postComment($stateParams.uuid, $scope.comment, 4);
+            };
+
         }
     ]);
 });
