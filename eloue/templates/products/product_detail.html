@@ -283,8 +283,11 @@
                 })();
             </script>
             <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6012641161301&amp;value=0.01&amp;currency=EUR" /></noscript>
-            <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}&tt=javascript&sc=1859"></script>
             <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}%&tt=javascript&sc=1860"></script>
+            <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}&tt=javascript&sc=1859"></script>
+            <noscript>
+                <img src="https://lead.pdltracking.com/?lead_id=%lead_id%&lead_email=%lead_email%&tt=pixel&sc=1859" width="1" height="1" border="0" />
+            </noscript>
             {% endif %}
         {% endfor %}
     {% endif %}
