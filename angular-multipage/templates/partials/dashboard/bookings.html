@@ -30,16 +30,19 @@
     </div>
     <ul class="scrollbar-custom">
         <!-- TODO change 'soon' class -->
-        <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="booking in bookings track by booking.uuid">
+        <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="booking in bookingList track by booking.uuid">
             <div class="col-thumbnail">
-                <!-- TODO change 'a venir' title -->
-                <div class="thumbnail"><a href="#"><img data-ng-src="{{booking.picture}}"
-                                                        alt="{{booking.title}}" width="130"></a><span
-                        class="booking-bage">a venir</span></div>
+                <div class="thumbnail">
+                    <a href="#">
+                        <img data-ng-src="{{booking.picture}}" alt="{{booking.product.summary}}" width="130">
+                    </a>
+                    <!-- TODO change 'a venir' title -->
+                    <span class="booking-bage">a venir</span>
+                </div>
             </div>
             <div class="col-exposition">
                 <h3 class="small">Location <a ui-sref="bookings.detail({uuid: booking.uuid})"
-                                              class="text-underline-hover">{{booking.title}}</a></h3>
+                                              class="text-underline-hover">{{booking.product.summary}}</a></h3>
 
                 <p class="normal text-gray">
                     <big class="text-primary">{{booking.total_amount}}€</big><br>

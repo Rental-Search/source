@@ -7,13 +7,10 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("BookingsCtrl", [
         "$scope",
-        "BookingsService",
-        function ($scope, BookingsService) {
-            BookingsService.getBookings().then(function (bookings) {
-                $scope.bookings = bookings;
-
-                // Initiate custom scrollbars
-                $scope.initCustomScrollbars();
+        "BookingsLoadService",
+        function ($scope, BookingsLoadService) {
+            BookingsLoadService.getBookingList().then(function (bookingList) {
+                $scope.bookingList = bookingList;
             });
         }
     ]);
