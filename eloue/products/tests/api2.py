@@ -28,12 +28,26 @@ class PictureTest(APITestCase):
                 'product' : _location('product-detail', pk=1),
                 'image': image,
             }, format='multipart')
+
+            # check HTTP response code must be 201 CREATED
             self.assertEquals(response.status_code, 201, response.data)
-            self.assertIn('created_at', response.data)
-            self.assertIn('image', response.data, response.data)
+
+            # Location header must be properly set to redirect to the resource have just been created
+            self.assertIn('Location', response)
+            self.assertTrue(response['Location'].endswith(_location('picture-detail', pk=response.data['id'])))
+
+            # check returned attributes
+            for k in ('id', 'created_at', 'image', 'product'):
+                self.assertIn(k, response.data, response.data)
+                self.assertTrue(response.data[k], response.data)
+
+            # check processed images
             for k in ('thumbnail', 'profile', 'home', 'display'):
                 self.assertIn(k, response.data['image'], response.data)
                 self.assertTrue(response.data['image'][k], response.data)
+
+            # check product has been applied properly
+            self.assertTrue(response.data['product'].endswith(_location('product-detail', pk=1)))
 
     def test_picture_create_base64(self):
         with open(IMAGE_FILE, 'rb') as image:
@@ -45,12 +59,26 @@ class PictureTest(APITestCase):
                     #'encoding': 'base64',
                 }
             })
+
+            # check HTTP response code must be 201 CREATED
             self.assertEquals(response.status_code, 201, response.data)
-            self.assertIn('created_at', response.data)
-            self.assertIn('image', response.data, response.data)
+
+            # Location header must be properly set to redirect to the resource have just been created
+            self.assertIn('Location', response)
+            self.assertTrue(response['Location'].endswith(_location('picture-detail', pk=response.data['id'])))
+
+            # check returned attributes
+            for k in ('id', 'created_at', 'image', 'product'):
+                self.assertIn(k, response.data, response.data)
+                self.assertTrue(response.data[k], response.data)
+
+            # check processed images
             for k in ('thumbnail', 'profile', 'home', 'display'):
                 self.assertIn(k, response.data['image'], response.data)
                 self.assertTrue(response.data['image'][k], response.data)
+
+            # check product has been applied properly
+            self.assertTrue(response.data['product'].endswith(_location('product-detail', pk=1)))
 
     def test_picture_create_url(self):
         response = self.client.post(_location('picture-list'), {
@@ -60,12 +88,26 @@ class PictureTest(APITestCase):
                 'encoding': 'url',
             }
         })
+
+        # check HTTP response code must be 201 CREATED
         self.assertEquals(response.status_code, 201, response.data)
-        self.assertIn('created_at', response.data)
-        self.assertIn('image', response.data, response.data)
+
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('picture-detail', pk=response.data['id'])))
+
+        # check returned attributes
+        for k in ('id', 'created_at', 'image', 'product'):
+            self.assertIn(k, response.data, response.data)
+            self.assertTrue(response.data[k], response.data)
+
+        # check processed images
         for k in ('thumbnail', 'profile', 'home', 'display'):
             self.assertIn(k, response.data['image'], response.data)
             self.assertTrue(response.data['image'][k], response.data)
+
+        # check product has been applied properly
+        self.assertTrue(response.data['product'].endswith(_location('product-detail', pk=1)))
 
     def test_picture_edit_multipart(self):
         with open(IMAGE_FILE, 'rb') as image:

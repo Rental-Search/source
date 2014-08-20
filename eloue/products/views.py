@@ -847,7 +847,7 @@ class PriceViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.PriceSerializer
     filter_fields = ('product', 'unit')
 
-class PictureViewSet(viewsets.ModelViewSet):
+class PictureViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product images to be viewed or edited.
     """

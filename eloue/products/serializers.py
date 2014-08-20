@@ -97,7 +97,7 @@ class PictureSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Picture
         fields = ('id', 'product', 'image', 'created_at')
-        read_only_fields = ('id', 'product', 'created_at')
+        read_only_fields = ('id', 'created_at')
 
 class CuriositySerializer(HyperlinkedModelSerializer):
     class Meta:
