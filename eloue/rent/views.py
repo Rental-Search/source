@@ -366,17 +366,21 @@ class BookingFilterSet(filters.FilterSet):
 
     class Meta:
         model = models.Booking
-        fields = ('state', 'owner', 'borrower', 'product')
+        fields = (
+            'state', 'owner', 'borrower', 'product',
+            'started_at', 'ended_at', 'total_amount', 'created_at', 'canceled_at'
+        )
 
-class BookingViewSet(viewsets.ModelViewSet):
+class BookingViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
     queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
-    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = ('owner', 'borrower')
     filter_class = BookingFilterSet
+    ordering_fields = ('started_at', 'ended_at', 'state', 'total_amount', 'created_at', 'canceled_at')
 
 class CommentViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
@@ -385,14 +389,16 @@ class CommentViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     model = models.Comment
     queryset = models.Comment.objects.select_related('booking__owner', 'booking__borrower')
     serializer_class = serializers.CommentSerializer
-    filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('booking', )
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('booking',) # TODO: , 'note') # TODO: 'author'
+    ordering_fields = ('note', 'created_at')
 
-class SinisterViewSet(viewsets.ModelViewSet):
+class SinisterViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows sinisters to be viewed or edited.
     """
     model = models.Sinister
     serializer_class = serializers.SinisterSerializer
-    filter_backends = (filters.OwnerFilter, )
+    filter_backends = (filters.OwnerFilter, filters.OrderingFilter)
     http_method_names = NON_DELETABLE
+    filter_fields = ('patron', 'booking', 'product')

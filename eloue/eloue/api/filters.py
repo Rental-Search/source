@@ -5,7 +5,7 @@ import re
 from django.db.models import Q, ForeignKey
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django import forms
 
 from rest_framework import filters
@@ -13,7 +13,33 @@ from mptt.fields import TreeNodeChoiceField
 import django_filters
 
 DjangoFilterBackend = filters.DjangoFilterBackend
-OrderingFilter = filters.OrderingFilter
+
+class OrderingFilter(filters.OrderingFilter):
+    def remove_invalid_fields(self, queryset, ordering, view):
+        valid_fields = getattr(view, 'ordering_fields', self.ordering_fields)
+
+        serializer_class = getattr(view, 'serializer_class', None)
+        if serializer_class is None:
+            msg = ("Cannot use %s on a view which does not have either a "
+                   "'serializer_class' or 'ordering_fields' attribute.")
+            raise ImproperlyConfigured(msg % self.__class__.__name__)
+
+        # preapre a dict to map resource attributes to model fields
+        trans = {
+            field_name: field.source or field_name
+            for field_name, field in serializer_class().fields.items()
+            if not getattr(field, 'write_only', False) and (valid_fields == '__all__' or (field.source or field_name) in valid_fields)
+        }
+
+        # validate provided ordering list and replace resource attributes with corresponding model fields
+        ordering = [
+            minus + trans[field]
+            for term in ordering
+            for minus, field in (('-' if term.startswith('-') else '', term.lstrip('-')),)
+            if field in trans
+        ]
+
+        return ordering
 
 class OwnerFilter(filters.BaseFilterBackend):
     """
