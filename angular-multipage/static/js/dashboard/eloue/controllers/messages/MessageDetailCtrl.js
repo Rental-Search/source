@@ -19,11 +19,15 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $q.all(promises).then(function (results) {
+
                 // Set messages
                 $scope.messages = results.data.messages;
 
                 // Set product
                 $scope.product = results.data.product;
+
+                // Set owner
+                $scope.owner = results.data.owner;
 
                 // Find recipient id
                 $scope.recipientId = null;

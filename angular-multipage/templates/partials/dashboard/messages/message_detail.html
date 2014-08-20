@@ -21,12 +21,15 @@
 
                 <div class="block-with-thumbnail">
                     <div class="col-thumbnail">
-                        <div class="thumbnail round"><a href="#julien_dupré_homepage"><img
-                                src="../../../static/img/home-products/owner_small.png" alt="Dupré photo" width="40"
-                                height="40"></a></div>
+                        <div class="thumbnail round">
+                            <a href="#julien_dupré_homepage">
+                                <img data-ng-src="{{owner.avatar.thumbnail}}"
+                                     alt="{{owner.username}}" width="40" height="40">
+                            </a>
+                        </div>
                     </div>
                     <div class="col-exposition"><a href="#julien_dupré_homepage" class="text-underline-hover text-gray">
-                        <h4 class="indent-xs-h">Julien Dupré</h4></a></div>
+                        <h4 class="indent-xs-h">{{owner.username}}</h4></a></div>
                 </div>
             </div>
         </li>

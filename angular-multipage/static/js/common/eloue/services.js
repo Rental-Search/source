@@ -175,13 +175,24 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         });
                         rootPromises.messages = $q.all(messagePromises);
 
-                        // Get product
+                        // If product exists
                         if (!!thread.product) {
                             var productDeferred = $q.defer();
+                            var ownerDeferred = $q.defer();
+
                             var productId = UtilsService.getIdFromUrl(thread.product);
 
+                            // Get product
                             BookingsService.getBookingDetailProduct(productId).then(
                                 function (product) {
+                                    UsersService.get(product.ownerId).$promise.then(
+                                        function (owner) {
+                                            ownerDeferred.resolve(owner);
+                                        },
+                                        function (reason) {
+                                            ownerDeferred.reject(reason);
+                                        }
+                                    );
                                     productDeferred.resolve(product);
                                 },
                                 function (reason) {
@@ -189,6 +200,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 }
                             );
                             rootPromises.product = productDeferred.promise;
+                            rootPromises.owner = ownerDeferred.promise;
 
                             /*Bookings.get({product: productId}).$promise.then(function (data) {
                                 if ($.isArray(data.results) && (data.results.length > 0)) {
@@ -210,7 +222,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var result = {
                                 users: [],
                                 messages: results.messages,
-                                product: results.product
+                                product: results.product,
+                                owner: results.owner
                             };
 
                             // Push ids of users from a conversation
@@ -576,6 +589,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                             // Get phone id
                             resultProduct.phoneId = UtilsService.getIdFromUrl(product.phone);
+
+                            // Get owner id
+                            resultProduct.ownerId = UtilsService.getIdFromUrl(product.owner);
 
                             $q.all(productPromises).then(
                                 function (results) {
