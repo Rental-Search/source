@@ -7,3 +7,4 @@ from rent.tests.commands import *
 from rent.tests.pricing import *
 from rent.tests.views import *
 from rent.tests.wizard import *
+from rent.tests.api2 import *

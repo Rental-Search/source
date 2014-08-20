@@ -357,7 +357,7 @@ def booking_incident(request, booking_id):
 from rest_framework import viewsets
 
 from rent import serializers, models
-from eloue.api import filters
+from eloue.api import filters, views
 
 NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
 
@@ -378,12 +378,12 @@ class BookingViewSet(viewsets.ModelViewSet):
     owner_field = ('owner', 'borrower')
     filter_class = BookingFilterSet
 
-class CommentViewSet(viewsets.ModelViewSet):
+class CommentViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.
     """
     model = models.Comment
-    queryset = models.Comment.objects.select_related('booking__owner_id', 'booking__borrower_id')
+    queryset = models.Comment.objects.select_related('booking__owner', 'booking__borrower')
     serializer_class = serializers.CommentSerializer
     filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('booking', )

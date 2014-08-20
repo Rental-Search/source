@@ -1,6 +1,9 @@
 
-from rest_framework.serializers import HyperlinkedModelSerializer, ChoiceField, CharField #HyperlinkedRelatedField
-from rest_framework.reverse import reverse
+from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
+
+from rest_framework.serializers import HyperlinkedModelSerializer, HyperlinkedRelatedField, RelatedField, get_component
+from rest_framework import fields
 
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
@@ -12,21 +15,93 @@ class BookingSerializer(HyperlinkedModelSerializer):
                   'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at')
         read_only_fields = fields
 
-class CommentSerializer(HyperlinkedModelSerializer):
-    #author = HyperlinkedRelatedField(source='type', view_name='patron-detail', read_only=True)
-    author = CharField(source='type', read_only=True)
-    rate = ChoiceField(source='note', choices=models.Comment._meta.get_field('note').choices)
+class CommentAuthorField(HyperlinkedRelatedField):
+    default_error_messages = {
+        'invalid_author': _('Author of the comment must be either owner or borrower of the related booking record'),
+    }
 
-    def transform_author(self, obj, value):
-        obj_id = obj.booking.owner_id if value == COMMENT_TYPE_CHOICES.OWNER else obj.booking.borrower_id
-        return reverse('patron-detail', args=(obj_id,),
-            request=self.context['request'], format=self.context.get('format', None)
-        )
+    booking_field_names = {
+        COMMENT_TYPE_CHOICES.OWNER: 'booking.owner',
+        COMMENT_TYPE_CHOICES.BORROWER: 'booking.borrower',
+    }
+
+    def __init__(self, source='type', required=False, view_name='patron-detail', *args, **kwargs):
+        super(CommentAuthorField, self).__init__(*args, source=source, required=required, view_name=view_name, **kwargs)
+
+    def field_to_native(self, obj, field_name):
+        """
+        Given an object and a field name, returns the value that should be
+        serialized for that field.
+
+        Returns either 'owner' or 'borrower' from the related booking record.
+        """
+        if obj is not None:
+            # override field name according to 'type'
+            self.source = self.booking_field_names[getattr(obj, self.source)]
+        return super(CommentAuthorField, self).field_to_native(obj, field_name)
+
+    def field_from_native(self, data, files, field_name, into):
+        reverted_data = {}
+
+        super(CommentAuthorField, self).field_from_native(data, files, field_name, reverted_data)
+        author = reverted_data[self.source]
+
+        user = self.parent.context['request'].user
+        # force current user as the author if 'author' has not been provided,
+        # or current user is not a team staff
+        if not(user.is_staff and author is not None):
+            author = user
+
+        # safely auto-resolve 'booking' if not done yet
+        if 'booking' in into:
+            booking = into['booking']
+        else:
+            field = self.parent.fields['booking']
+            field.initialize(parent=self.parent, field_name='booking')
+            field.field_from_native(data, files, 'booking', reverted_data)
+            booking = reverted_data['booking']
+
+        author_id = author.pk
+        if author_id == booking.owner_id:
+            comment_type = COMMENT_TYPE_CHOICES.OWNER
+        elif author_id == booking.borrower_id:
+            comment_type = COMMENT_TYPE_CHOICES.BORROWER
+        else:
+            raise ValidationError(self.error_messages['invalid_author'])
+
+        into[self.source] = comment_type
+
+    def initialize(self, parent, field_name):
+        """
+        Called to set up a field prior to field_to_native or field_from_native.
+
+        parent - The parent serializer.
+        field_name - The name of the field being initialized.
+
+        Prepares a queryset for the model field by using the default manager.
+        Properly supports dot-separated field names (e.g. 'booking.owner')
+        """
+        field_name = 'booking.owner'
+        # TODO: the code below should be provided upstream to fix the multi-component field names
+        super(RelatedField, self).initialize(parent, field_name)
+        if self.queryset is None and not self.read_only:
+            model = self.parent.opts.model
+            for component in field_name.split('.'):
+                field = get_component(model, component)
+                if hasattr(field, 'related'):  # Forward
+                    model = field.related.model
+                else:  # Reverse
+                    model = field.field.rel.to
+            self.queryset = model._default_manager.all()
+
+class CommentSerializer(HyperlinkedModelSerializer):
+    rate = fields.ChoiceField(source='note', choices=models.Comment._meta.get_field('note').choices)
+    author = CommentAuthorField()
 
     class Meta:
         model = models.Comment
-        fields = ('id', 'author', 'booking', 'comment', 'rate', 'created_at', 'type')
-        read_only_fields = ('id', 'created_at', 'type')
+        fields = ('id', 'booking', 'comment', 'rate', 'created_at', 'author') # 'author' must follow after the 'booking'
+        read_only_fields = ('id', 'created_at')
 
 class SinisterSerializer(HyperlinkedModelSerializer):
     class Meta:
