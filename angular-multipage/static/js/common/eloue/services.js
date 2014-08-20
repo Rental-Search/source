@@ -826,6 +826,42 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return bookingResult;
                 };
 
+                bookingsParseService.parseBooking = function (bookingData) {
+                    var bookingResult = angular.copy(bookingData);
+
+                    // Parse dates
+                    bookingResult.start_date = {
+                        week_day: UtilsService.formatDate(bookingResult.started_at, "EEEE"),
+                        day: UtilsService.formatDate(bookingResult.started_at, "dd"),
+                        month: UtilsService.formatDate(bookingResult.started_at, "MMMM"),
+                        year: UtilsService.formatDate(bookingResult.started_at, "yyyy")
+                    };
+
+                    bookingResult.end_date = {
+                        week_day: UtilsService.formatDate(bookingResult.ended_at, "EEEE"),
+                        day: UtilsService.formatDate(bookingResult.ended_at, "dd"),
+                        month: UtilsService.formatDate(bookingResult.ended_at, "MMMM"),
+                        year: UtilsService.formatDate(bookingResult.ended_at, "yyyy")
+                    };
+
+                    bookingResult.start_time = UtilsService.formatDate(bookingResult.started_at, "HH'h'mm");
+                    bookingResult.end_time = UtilsService.formatDate(bookingResult.ended_at, "HH'h'mm");
+
+                    // Parse period
+                    var hourTime = 60 * 60 * 1000;
+                    var dayTime = 24 * hourTime;
+
+                    var startTime = Date.parse(bookingResult.started_at);
+                    var endTime = Date.parse(bookingResult.ended_at);
+
+                    var diffTime = endTime - startTime;
+
+                    bookingResult.period_days = Math.round(diffTime / dayTime);
+                    bookingResult.period_hours = Math.round((diffTime - dayTime * bookingResult.period_days) / hourTime);
+
+                    return bookingResult;
+                };
+
                 return bookingsParseService;
             }
         ]);
