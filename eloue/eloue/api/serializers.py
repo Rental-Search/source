@@ -37,6 +37,19 @@ class EncodedImageField(serializers.ImageField):
             value = ContentFile(content, name=filename)
         return super(EncodedImageField, self).from_native(value)
 
+class ObjectMethodBooleanField(serializers.BooleanField):
+    """
+    A field that gets its value by calling a method on the object.
+    """
+
+    def __init__(self, method_name, *args, **kwargs):
+        self.method_name = method_name
+        super(ObjectMethodBooleanField, self).__init__(*args, **kwargs)
+
+    def field_to_native(self, obj, field_name):
+        value = getattr(obj, self.method_name)() if obj else None
+        return self.to_native(value)
+
 class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
     """
     Meta class options for ModelSerializer

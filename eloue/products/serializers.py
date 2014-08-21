@@ -1,9 +1,8 @@
 
-from rest_framework.serializers import BooleanField
 from rest_framework import fields
 
 from products import models
-from eloue.api.serializers import EncodedImageField, ModelSerializer
+from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
 
 class CategoryDescriptionSerializer(ModelSerializer):
     class Meta:
@@ -12,18 +11,9 @@ class CategoryDescriptionSerializer(ModelSerializer):
 
 class CategorySerializer(ModelSerializer):
     description = CategoryDescriptionSerializer()
-    is_child_node = BooleanField(read_only=True)
-    is_leaf_node = BooleanField(read_only=True)
-    is_root_node = BooleanField(read_only=True)
-
-    def transform_is_child_node(self, obj, value):
-        return bool(obj and obj.is_child_node())
-
-    def transform_is_leaf_node(self, obj, value):
-        return bool(obj and obj.is_leaf_node())
-
-    def transform_is_root_node(self, obj, value):
-        return bool(obj and obj.is_root_node())
+    is_child_node = ObjectMethodBooleanField('is_child_node', read_only=True)
+    is_leaf_node = ObjectMethodBooleanField('is_leaf_node', read_only=True)
+    is_root_node = ObjectMethodBooleanField('is_root_node', read_only=True)
 
     class Meta:
         model = models.Category
