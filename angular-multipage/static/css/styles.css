@@ -1504,6 +1504,7 @@ label.check-btn span i {
 
 textarea,
 input[type="text"],
+input[type="number"],
 input[type="email"],
 .chosen-container .chosen-choices,
 .chosen-container .chosen-single {

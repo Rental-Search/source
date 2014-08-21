@@ -316,16 +316,44 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("ProductsService", [
             "$q",
+            "AddressesService",
             "Bookings",
             "Products",
+            "CategoriesService",
+            "PhoneNumbersService",
             "PicturesService",
             "PricesService",
+            "UtilsService",
             "MessageThreads",
-            function ($q, Bookings, Products, PicturesService, PricesService, MessageThreads) {
+            function ($q, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, MessageThreads) {
                 var productsService = {};
 
                 productsService.getProduct = function (id) {
                     return Products.get({id: id});
+                };
+
+                productsService.getProductDetails = function(id) {
+                    var deferred = $q.defer();
+                    var self = this;
+                    Products.get({id: id}).$promise.then(function (result) {
+                        var promises = [];
+                        promises.push(PicturesService.getPicturesByProduct(id).$promise);
+                        var addressId = UtilsService.getIdFromUrl(result.address);
+                        promises.push(AddressesService.getAddress(addressId).$promise);
+                        var phoneId = UtilsService.getIdFromUrl(result.phone);
+                        promises.push(PhoneNumbersService.getPhoneNumber(phoneId).$promise);
+                        var categoryId = UtilsService.getIdFromUrl(result.category);
+                        promises.push(CategoriesService.getCategory(categoryId).$promise);
+
+                        $q.all(promises).then(function success(results) {
+                            result.pictures = results[0].results;
+                            result.addressDetails = results[1];
+                            result.phoneDetails = results[2];
+                            result.categoryDetails = results[3];
+                            deferred.resolve(result);
+                        });
+                    });
+                    return deferred.promise;
                 };
 
                 productsService.getProductsByAddress = function (addressId) {
@@ -439,6 +467,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     });
 
                     return deferred.promise;
+                };
+
+                productsService.updateProduct = function (product) {
+                    return Products.update({id: product.id}, product);
                 };
 
                 return productsService;
@@ -653,11 +685,16 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for managing categories.
          */
-        EloueCommon.factory("CategoriesService", ["Categories", function (Categories) {
+        EloueCommon.factory("CategoriesService", ["$q", "Categories", "UtilsService", function ($q, Categories, UtilsService) {
             var categoriesService = {};
 
             categoriesService.getCategory = function (categoryId) {
                 return Categories.get({id: categoryId});
+            };
+
+            categoriesService.getParentCategory = function (category) {
+                var parentCategoryId = UtilsService.getIdFromUrl(category.parent);
+                return categoriesService.getCategory(parentCategoryId);
             };
 
             categoriesService.getRootCategories = function () {
@@ -665,7 +702,15 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             };
 
             categoriesService.getChildCategories = function (parentId) {
-                return Categories.getChildren({id : parentId});
+                var deferred = $q.defer();
+                Categories.getChildren({id: parentId}).$promise.then(function (categories) {
+                    var categoryList = [];
+                    angular.forEach(categories, function (value, key) {
+                        categoryList.push({id: value.id, name: value.name});
+                    });
+                    deferred.resolve(categoryList);
+                });
+                return deferred.promise;
             };
 
             return categoriesService;
@@ -687,11 +732,19 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for managing pictures.
          */
-        EloueCommon.factory("PicturesService", ["Pictures", function (Pictures) {
+        EloueCommon.factory("PicturesService", ["Pictures", "Endpoints", "FormService", function (Pictures, Endpoints, FormService) {
             var picturesService = {};
 
             picturesService.getPicturesByProduct = function (productId) {
                 return Pictures.get({product: productId});
+            };
+
+            picturesService.savePicture = function (productId, form, successCallback, errorCallback) {
+                // Calculate current user url
+                var url = Endpoints.api_url + "pictures/";
+
+                // Send form to the url
+                FormService.send("POST", url, form, successCallback, errorCallback);
             };
 
             return picturesService;
@@ -731,6 +784,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                //TODO: leave only 1 update method for addresses
+                addressesService.update = function (address) {
+                    return Addresses.update({id: address.id}, address);
+                };
+
                 addressesService.deleteAddress = function (addressId) {
                     return Addresses.delete({id: addressId});
                 };
@@ -749,6 +807,27 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return PhoneNumbers.get({id: phoneNumbersId});
             };
 
+            phoneNumbersService.updatePhoneNumber = function (phoneNumber) {
+                return PhoneNumbers.update({id: phoneNumber.id}, phoneNumber);
+            };
+
             return phoneNumbersService;
+        }]);
+
+        /**
+         * Service for managing professional agencies.
+         */
+        EloueCommon.factory("ProAgenciesService", ["ProAgencies", function (ProAgencies) {
+            var proAgenciesService = {};
+
+            proAgenciesService.getProAgencies = function () {
+                return ProAgencies.get();
+            };
+
+            proAgenciesService.updateProAgency = function (proAgency) {
+                return ProAgencies.update({id: proAgency.id}, proAgency);
+            };
+
+            return proAgenciesService;
         }]);
     });
