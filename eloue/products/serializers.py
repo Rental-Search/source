@@ -66,14 +66,7 @@ class PriceSerializer(ModelSerializer):
         immutable_fields = ('product', 'currency')
 
 class PictureSerializer(ModelSerializer):
-    image = EncodedImageField()
-
-    def transform_image(self, obj, value):
-        image = {
-            k: getattr(obj, k).url if value else ''
-            for k in ('thumbnail', 'profile', 'home', 'display')
-        }
-        return image
+    image = EncodedImageField(('thumbnail', 'profile', 'home', 'display'))
 
     class Meta:
         model = models.Picture

@@ -18,7 +18,7 @@ class UserSerializer(ModelSerializer):
     password = CharField(required=False, write_only=True, max_length=128)
     email = EmailField(required=False)
     is_professional = NullBooleanField(required=False)
-    avatar = EncodedImageField(required=False)
+    avatar = EncodedImageField(('thumbnail', 'profil', 'display', 'product_page'), required=False)
     languages = PrimaryKeyRelatedField(many=True, required=False) # TODO: remove if we got to expose language resource
 
     def restore_object(self, attrs, instance=None):
@@ -28,13 +28,6 @@ class UserSerializer(ModelSerializer):
         if not instance and password:
             user.set_password(password)
         return user
-
-    def transform_avatar(self, obj, value):
-        image = {
-            k: getattr(obj, k).url if value else ''
-            for k in ('thumbnail', 'profil', 'display', 'product_page')
-        }
-        return image
 
     class Meta:
         model = models.Patron

@@ -12,15 +12,19 @@ from django.utils.datastructures import SortedDict
 from rest_framework import serializers, status
 
 class NullBooleanField(serializers.BooleanField):
-    def field_from_native(self, data, files, field_name, into):
-        return super(NullBooleanField, self).field_from_native(
-            data, files, field_name, into
-        )
-
     def from_native(self, value):
         return value if value is None else super(NullBooleanField, self).from_native(value)
 
 class EncodedImageField(serializers.ImageField):
+    _generated_image_names = None
+
+    def __init__(self, generated_image_names=None, *args, **kwargs):
+        if generated_image_names:
+            # Ensure that 'generated_image_names' is an iterable
+            assert isinstance(generated_image_names, (list, tuple)), '`generated_image_names` must be a list or tuple'
+        self._generated_image_names = generated_image_names
+        super(EncodedImageField, self).__init__(*args, **kwargs)
+
     def from_native(self, value):
         if type(value) is dict:
             encoding = value.get('encoding', 'base64')
@@ -37,22 +41,38 @@ class EncodedImageField(serializers.ImageField):
             value = ContentFile(content, name=filename)
         return super(EncodedImageField, self).from_native(value)
 
+    def field_to_native(self, obj, field_name):
+        value = super(EncodedImageField, self).field_to_native(obj, field_name)
+        if value and self._generated_image_names:
+            value = {
+                k: self.to_native(getattr(obj, k))
+                for k in self._generated_image_names
+            }
+        return value
+
+    def to_native(self, value):
+        return value.url
+
 class ObjectMethodBooleanField(serializers.BooleanField):
     """
     A field that gets its value by calling a method on the object.
     """
+    _method_name = None
 
     def __init__(self, method_name, *args, **kwargs):
-        self.method_name = method_name
+        assert isinstance(method_name, basestring) and method_name, '`method_name` must be a non-empty string'
+        self._method_name = method_name
         super(ObjectMethodBooleanField, self).__init__(*args, **kwargs)
 
     def field_to_native(self, obj, field_name):
-        value = getattr(obj, self.method_name)() if obj else None
+        if obj is None:
+            return self.empty
+        value = getattr(obj, self._method_name)()
         return self.to_native(value)
 
 class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
     """
-    Meta class options for ModelSerializer
+    Meta class options for ModelSerializer which supports `immutable_fields`
     """
     def __init__(self, meta):
         super(ModelSerializerOptions, self).__init__(meta)
@@ -60,7 +80,8 @@ class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
 
 class ModelSerializer(serializers.HyperlinkedModelSerializer):
     """
-    A serializer that deals with model instances and querysets.
+    A serializer that deals with model instances and querysets, and
+    supports `immutable_fields`
     """
     _options_class = ModelSerializerOptions
 
