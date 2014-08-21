@@ -922,35 +922,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         }]);
 
         /**
-         * Service for parsing message threads.
-         */
-        EloueCommon.factory("MessageThreadsParseService", [
-            "UtilsService",
-            function (UtilsService) {
-                var messageThreadsParseService = {};
-
-                messageThreadsParseService.parseMessageThreadListItem = function (messageThreadData, senderData, lastMessageData) {
-                    var messageThreadResult = angular.copy(messageThreadData);
-
-                    // Parse sender
-                    if (!!senderData) {
-                        messageThreadResult.sender = senderData;
-                    }
-
-                    // Parse last message
-                    if (!!lastMessageData) {
-                        messageThreadResult.last_message = lastMessageData;
-                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "HH'h'mm");
-                    }
-
-                    return messageThreadResult;
-                };
-
-                return messageThreadsParseService;
-            }
-        ]);
-
-        /**
          * Service for managing bookings.
          */
         EloueCommon.factory("BookingsLoadService", [
@@ -1161,8 +1132,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "ProductRelatedMessagesService",
             "UtilsService",
             "MessageThreadsParseService",
+            "ProductRelatedMessagesLoadService",
+            "ProductsLoadService",
             function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService,
-                      MessageThreadsParseService) {
+                      MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
                 var messageThreadsLoadService = {};
 
                 messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage) {
@@ -1209,7 +1182,154 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                messageThreadsLoadService.getMessageThread = function (threadId) {
+                    var deferred = $q.defer();
+
+                    // Load message thread
+                    MessageThreads.get({id: threadId, _cache: new Date().getTime()}).$promise.then(function (messageThreadData) {
+                        var messageThreadPromises = {};
+
+                        // Load messages
+                        var messagesPromises = [];
+                        angular.forEach(messageThreadData.messages, function (messageUrl, key) {
+                            // Get message id
+                            var messageId = UtilsService.getIdFromUrl(messageUrl);
+                            // Load message
+                            messagesPromises.push(ProductRelatedMessagesLoadService.getMessageListItem(messageId));
+                        });
+                        // When all messages loaded
+                        messageThreadPromises.messages = $q.all(messagesPromises);
+
+                        // Get product id
+                        var productId = UtilsService.getIdFromUrl(messageThreadData.product);
+                        messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true, false, true);
+
+                        $q.all(messageThreadPromises).then(function (results) {
+                            var messageThread = MessageThreadsParseService.parseMessageThread(messageThreadData, results.messages, results.product);
+                            deferred.resolve(messageThread);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
                 return messageThreadsLoadService;
             }
         ]);
+
+        /**
+         * Service for parsing message threads.
+         */
+        EloueCommon.factory("MessageThreadsParseService", [
+            "UtilsService",
+            function (UtilsService) {
+                var messageThreadsParseService = {};
+
+                messageThreadsParseService.parseMessageThreadListItem = function (messageThreadData, senderData, lastMessageData) {
+                    var messageThreadResult = angular.copy(messageThreadData);
+
+                    // Parse sender
+                    if (!!senderData) {
+                        messageThreadResult.sender = senderData;
+                    }
+
+                    // Parse last message
+                    if (!!lastMessageData) {
+                        messageThreadResult.last_message = lastMessageData;
+                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "HH'h'mm");
+                    }
+
+                    return messageThreadResult;
+                };
+
+                messageThreadsParseService.parseMessageThread = function (messageThreadData, messagesDataArray, productData) {
+                    var messageThreadResult = angular.copy(messageThreadData);
+
+                    // Parse messages
+                    if (!!messagesDataArray) {
+                        messageThreadResult.messages = messagesDataArray;
+                        angular.forEach(messageThreadResult.messages, function (message, key) {
+                            message.sent_at = UtilsService.formatDate(message.sent_at, "dd.mm.yyyy HH'h'mm");
+                        });
+                    }
+
+                    // Parse product
+                    if (!!productData) {
+                        messageThreadResult.product = productData;
+                    }
+
+                    return messageThreadResult;
+                };
+                return messageThreadsParseService;
+            }
+        ]);
+
+        /**
+         * Service for managing product related messages.
+         */
+        EloueCommon.factory("ProductRelatedMessagesLoadService", [
+            "$q",
+            "ProductRelatedMessages",
+            "Endpoints",
+            "UsersService",
+            "UtilsService",
+            "ProductRelatedMessagesParseService",
+            function ($q, ProductRelatedMessages, Endpoints, UsersService, UtilsService, ProductRelatedMessagesParseService) {
+                var productRelatedMessagesLoadService = {};
+
+                productRelatedMessagesLoadService.getMessage = function (messageId) {
+                    return ProductRelatedMessages.get({id: messageId, _cache: new Date().getTime()}).$promise;
+                };
+
+                productRelatedMessagesLoadService.getMessageListItem = function (messageId) {
+                    var deferred = $q.defer();
+
+                    this.getMessage(messageId).then(function (messageData) {
+                        // Get sender id
+                        var senderId = UtilsService.getIdFromUrl(messageData.sender);
+                        // Load sender
+                        UsersService.get(senderId).$promise.then(function (senderData) {
+                            var message = ProductRelatedMessagesParseService.parseMessage(messageData, senderData);
+                            deferred.resolve(message);
+                        });
+
+                    });
+
+                    return deferred.promise;
+                };
+
+                productRelatedMessagesLoadService.postMessage = function (threadId, recipientId, text, offerid) {
+                    var message = {
+                        thread: Endpoints.api_url + "messagethreads/" + threadId + "/",
+                        recipient: Endpoints.api_url + "users/" + recipientId + "/",
+                        body: (!!text) ? text : "",
+                        offer: (!!offerid) ? Endpoints.api_url + "bookings/" + offerid + "/" : null
+                    };
+
+                    return new ProductRelatedMessages(message).$save();
+                };
+
+                return productRelatedMessagesLoadService;
+            }
+        ]);
+
+        /**
+         * Service for parsing product related messages.
+         */
+        EloueCommon.factory("ProductRelatedMessagesParseService", [function () {
+            var productRelatedMessagesParseService = {};
+
+            productRelatedMessagesParseService.parseMessage = function (messageData, senderData) {
+                var messageResults = angular.copy(messageData);
+
+                // Parse sender
+                if (!!senderData) {
+                    messageResults.sender = senderData;
+                }
+
+                return messageResults;
+            };
+
+            return productRelatedMessagesParseService;
+        }]);
     });

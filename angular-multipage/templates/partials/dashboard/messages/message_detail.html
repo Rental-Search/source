@@ -4,12 +4,12 @@
     </div>
     <ul class="scrollbar-custom">
         <li class="tab-vertical">
-            <div class="section-content"><img data-ng-src="{{product.picture}}" alt="" width="100%">
+            <div class="section-content"><img data-ng-src="{{messageThread.product.picture}}" alt="" width="100%">
 
-                <h3 class="indent-xs-v"><a href="#" class="text-underline-hover"><b>{{product.summary}}</b></a></h3>
+                <h3 class="indent-xs-v"><a href="#" class="text-underline-hover"><b>{{messageThread.product.summary}}</b></a></h3>
 
-                <p class="text-gray"><i class="fa fa-map-marker fa-lg">&nbsp;</i>{{product.address.city}},&nbsp;
-                    {{product.address.zipcode}}
+                <p class="text-gray"><i class="fa fa-map-marker fa-lg">&nbsp;</i>{{messageThread.product.address.city}},&nbsp;
+                    {{messageThread.product.address.zipcode}}
                 </p>
 
                 <p class="text-gray indent-sm-v"><span class="average-rate"><span class="star"><i
@@ -23,13 +23,13 @@
                     <div class="col-thumbnail">
                         <div class="thumbnail round">
                             <a href="#julien_dupré_homepage">
-                                <img data-ng-src="{{owner.avatar.thumbnail}}"
-                                     alt="{{owner.username}}" width="40" height="40">
+                                <img data-ng-src="{{messageThread.product.owner.avatar.thumbnail}}"
+                                     alt="{{messageThread.product.owner.username}}" width="40" height="40">
                             </a>
                         </div>
                     </div>
                     <div class="col-exposition"><a href="#julien_dupré_homepage" class="text-underline-hover text-gray">
-                        <h4 class="indent-xs-h">{{owner.username}}</h4></a></div>
+                        <h4 class="indent-xs-h">{{messageThread.product.owner.username}}</h4></a></div>
                 </div>
             </div>
         </li>
@@ -65,15 +65,15 @@
 </aside>
 <section class="tabs-vertical-static pull-nothing">
     <ul class="scrollbar-custom messages-container">
-        <li class="tab-vertical block-with-thumbnail" data-ng-repeat="message in messages track by message.id">
+        <li class="tab-vertical block-with-thumbnail" data-ng-repeat="message in messageThread.messages track by message.id">
             <div class="col-thumbnail">
                 <div class="thumbnail round"><a><img
-                        data-ng-src="{{message.icon}}" alt="{{message.username}}"></a></div>
+                        data-ng-src="{{message.sender.avatar.thumbnail}}" alt="{{message.sender.username}}"></a></div>
             </div>
             <div class="col-exposition">
-                <h3><a class="text-underline-hover">{{message.username}}</a></h3>
+                <h3><a class="text-underline-hover">{{message.sender.username}}</a></h3>
 
-                <p class="small text-gray-light">{{message.date}}</p>
+                <p class="small text-gray-light">{{message.sent_at}}</p>
 
                 <p class="normal text-gray text-justify">{{message.body}}</p>
             </div>

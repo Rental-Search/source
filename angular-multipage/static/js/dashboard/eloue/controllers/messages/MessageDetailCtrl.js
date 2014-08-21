@@ -11,9 +11,10 @@ define(["angular", "eloue/app"], function (angular) {
         "$q",
         "MessageThreadsService",
         "ProductRelatedMessagesService",
-        function ($scope, $stateParams, $q, MessageThreadsService, ProductRelatedMessagesService) {
+        "MessageThreadsLoadService",
+        function ($scope, $stateParams, $q, MessageThreadsService, ProductRelatedMessagesService, MessageThreadsLoadService) {
 
-            var promises = {
+            /*var promises = {
                 currentUser: $scope.currentUserPromise,
                 data: MessageThreadsService.getThread($stateParams.id)
             };
@@ -51,6 +52,13 @@ define(["angular", "eloue/app"], function (angular) {
                             });
                     }
                 };
+
+                // Initiate custom scrollbars
+                $scope.initCustomScrollbars();
+            });*/
+
+            MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
+                $scope.messageThread = messageThread;
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
