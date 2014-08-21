@@ -12,7 +12,9 @@ define(["angular", "eloue/app"], function (angular) {
         "MessageThreadsService",
         "ProductRelatedMessagesService",
         "MessageThreadsLoadService",
-        function ($scope, $stateParams, $q, MessageThreadsService, ProductRelatedMessagesService, MessageThreadsLoadService) {
+        "BookingsLoadService",
+        function ($scope, $stateParams, $q, MessageThreadsService, ProductRelatedMessagesService,
+                  MessageThreadsLoadService, BookingsLoadService) {
 
             /*var promises = {
                 currentUser: $scope.currentUserPromise,
@@ -59,6 +61,10 @@ define(["angular", "eloue/app"], function (angular) {
 
             MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
                 $scope.messageThread = messageThread;
+
+                BookingsLoadService.getBookingByProduct(messageThread.product.id).then(function (booking) {
+                    $scope.booking = booking;
+                });
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();

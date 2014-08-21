@@ -1001,6 +1001,25 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                bookingsLoadService.getBookingByProduct = function (productId) {
+                    var deferred = $q.defer();
+
+                    // Load all bookings for this product
+                    Bookings.get({product: productId, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
+                        var bookingsCount = bookingListData.results.length;
+                        var booking;
+
+                        if(bookingsCount > 0) {
+                            var bookingData = bookingListData.results[bookingsCount - 1];
+                            booking = BookingsParseService.parseBooking(bookingData);
+                        }
+
+                        deferred.resolve(booking);
+                    });
+
+                    return deferred.promise;
+                };
+
                 return bookingsLoadService;
             }
         ]);
