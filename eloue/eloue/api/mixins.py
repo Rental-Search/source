@@ -12,7 +12,6 @@ class LocationHeaderMixin(object):
         obj = self.object
         return reverse('%s-detail' % obj._meta.model_name, args=(obj.pk,))
 
-
 class SetOwnerMixin(object):
     owner_field = 'patron'
 

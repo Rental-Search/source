@@ -2,13 +2,14 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from rest_framework.serializers import HyperlinkedModelSerializer, HyperlinkedRelatedField, RelatedField, get_component
+from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
 from rest_framework import fields
 
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
+from eloue.api.serializers import ModelSerializer
 
-class BookingSerializer(HyperlinkedModelSerializer):
+class BookingSerializer(ModelSerializer):
     class Meta:
         model = models.Booking
         fields = (
@@ -16,9 +17,10 @@ class BookingSerializer(HyperlinkedModelSerializer):
             'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at',
         )
         read_only_fields = (
-            'uuid', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
+            'state', 'deposit_amount', 'state', 'insurance_amount', 'total_amount',
             'currency', 'owner', 'contract_id', 'created_at', 'canceled_at',
         )
+        immutable_fields = ('started_at', 'ended_at', 'owner', 'borrower', 'product')
 
 class CommentAuthorField(HyperlinkedRelatedField):
     default_error_messages = {
@@ -99,17 +101,19 @@ class CommentAuthorField(HyperlinkedRelatedField):
                     model = field.field.rel.to
             self.queryset = model._default_manager.all()
 
-class CommentSerializer(HyperlinkedModelSerializer):
+class CommentSerializer(ModelSerializer):
     rate = fields.ChoiceField(source='note', choices=models.Comment._meta.get_field('note').choices)
     author = CommentAuthorField()
 
     class Meta:
         model = models.Comment
         fields = ('id', 'booking', 'comment', 'rate', 'created_at', 'author') # 'author' must follow after the 'booking'
-        read_only_fields = ('id', 'created_at')
+        read_only_fields = ('created_at',)
+        immutable_fields = ('booking', 'author')
 
-class SinisterSerializer(HyperlinkedModelSerializer):
+class SinisterSerializer(ModelSerializer):
     class Meta:
         model = models.Sinister
         fields = ('uuid', 'sinister_id', 'description', 'patron', 'booking', 'product') # TBD: do we need sinister_id to be exposed? How it's going to be used?
-        read_only_fields = ('uuid', 'sinister_id', 'patron', 'booking', 'product')
+        read_only_fields = ('sinister_id',)
+        immutable_fields = ('patron', 'booking', 'product')

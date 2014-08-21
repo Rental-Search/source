@@ -867,8 +867,8 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     queryset = models.Curiosity.on_site.all()
     serializer_class = serializers.CuriositySerializer
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields = ('product', 'city', 'price')
-    ordering_fields = ('price',)
+    filter_fields = ('product',) # TODO: 'city', 'price')
+    # TODO: ordering_fields = ('price',)
 
 class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
