@@ -9,62 +9,40 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "$stateParams",
         "$q",
-        "MessageThreadsService",
-        "ProductRelatedMessagesService",
         "MessageThreadsLoadService",
         "BookingsLoadService",
-        function ($scope, $stateParams, $q, MessageThreadsService, ProductRelatedMessagesService,
-                  MessageThreadsLoadService, BookingsLoadService) {
+        "ProductRelatedMessagesLoadService",
+        function ($scope, $stateParams, $q, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService) {
 
-            /*var promises = {
+            var promises = {
                 currentUser: $scope.currentUserPromise,
-                data: MessageThreadsService.getThread($stateParams.id)
+                messageThread: MessageThreadsLoadService.getMessageThread($stateParams.id)
             };
 
             $q.all(promises).then(function (results) {
+                $scope.messageThread = results.messageThread;
 
-                // Set messages
-                $scope.messages = results.data.messages;
-
-                // Set product
-                $scope.product = results.data.product;
-
-                // Set owner
-                $scope.owner = results.data.owner;
-
-                // Find recipient id
-                $scope.recipientId = null;
-                var stopped = false;
-                angular.forEach(results.data.users, function (value) {
-                    if ((!stopped) && (value != results.currentUser.id)) {
-                        $scope.recipientId = value;
-                        stopped = true;
-                    }
-                });
-
-                $scope.postNewMessage = function () {
-                    // TODO change offer param
-                    if (!!$scope.recipientId) {
-                        ProductRelatedMessagesService.postMessage($stateParams.id, $scope.recipientId, $scope.message, null)
-                            .then(function () {
-                                $scope.message = "";
-                                MessageThreadsService.getMessages($stateParams.id).then(function (data) {
-                                    $scope.messages = data.messages;
-                                });
-                            });
-                    }
-                };
-
-                // Initiate custom scrollbars
-                $scope.initCustomScrollbars();
-            });*/
-
-            MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
-                $scope.messageThread = messageThread;
-
-                BookingsLoadService.getBookingByProduct(messageThread.product.id).then(function (booking) {
+                // Get booking product
+                BookingsLoadService.getBookingByProduct($scope.messageThread.product.id).then(function (booking) {
                     $scope.booking = booking;
                 });
+
+                // Get users' roles
+                var usersRoles = MessageThreadsLoadService.getUsersRoles($scope.messageThread, results.currentUser.id);
+
+                // Post new message
+                $scope.postNewMessage = function () {
+                    ProductRelatedMessagesLoadService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
+                        $scope.message, null).then(function () {
+                            // Clear message field
+                            $scope.message = "";
+
+                            // Reload data
+                            MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
+                                $scope.messageThread.messages = messageThread.messages;
+                            });
+                        });
+                };
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();

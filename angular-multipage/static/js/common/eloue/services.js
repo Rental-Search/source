@@ -1232,6 +1232,23 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                messageThreadsLoadService.getUsersRoles = function(messageThread, currentUserId) {
+                    var senderId = UtilsService.getIdFromUrl(messageThread.sender);
+                    var recipientId = UtilsService.getIdFromUrl(messageThread.recipient);
+
+                    var result = {
+                        senderId: currentUserId
+                    };
+
+                    if (senderId == currentUserId) {
+                        result.recipientId = recipientId;
+                    } else {
+                        result.recipientId = senderId;
+                    }
+
+                    return result;
+                };
+
                 return messageThreadsLoadService;
             }
         ]);
@@ -1317,12 +1334,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                productRelatedMessagesLoadService.postMessage = function (threadId, recipientId, text, offerid) {
+                productRelatedMessagesLoadService.postMessage = function (threadId, senderId, recipientId, text, offerId) {
                     var message = {
                         thread: Endpoints.api_url + "messagethreads/" + threadId + "/",
+                        sender: Endpoints.api_url + "users/" + senderId + "/",
                         recipient: Endpoints.api_url + "users/" + recipientId + "/",
                         body: (!!text) ? text : "",
-                        offer: (!!offerid) ? Endpoints.api_url + "bookings/" + offerid + "/" : null
+                        offer: (!!offerId) ? Endpoints.api_url + "bookings/" + offerId + "/" : null
                     };
 
                     return new ProductRelatedMessages(message).$save();
