@@ -922,6 +922,35 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         }]);
 
         /**
+         * Service for parsing message threads.
+         */
+        EloueCommon.factory("MessageThreadsParseService", [
+            "UtilsService",
+            function (UtilsService) {
+                var messageThreadsParseService = {};
+
+                messageThreadsParseService.parseMessageThreadListItem = function (messageThreadData, senderData, lastMessageData) {
+                    var messageThreadResult = angular.copy(messageThreadData);
+
+                    // Parse sender
+                    if (!!senderData) {
+                        messageThreadResult.sender = senderData;
+                    }
+
+                    // Parse last message
+                    if (!!lastMessageData) {
+                        messageThreadResult.last_message = lastMessageData;
+                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "HH'h'mm");
+                    }
+
+                    return messageThreadResult;
+                };
+
+                return messageThreadsParseService;
+            }
+        ]);
+
+        /**
          * Service for managing bookings.
          */
         EloueCommon.factory("BookingsLoadService", [
@@ -1119,6 +1148,68 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 return commentsLoadService;
+            }
+        ]);
+
+        /**
+         * Service for managing message threads.
+         */
+        EloueCommon.factory("MessageThreadsLoadService", [
+            "$q",
+            "MessageThreads",
+            "UsersService",
+            "ProductRelatedMessagesService",
+            "UtilsService",
+            "MessageThreadsParseService",
+            function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService,
+                      MessageThreadsParseService) {
+                var messageThreadsLoadService = {};
+
+                messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage) {
+                    var deferred = $q.defer();
+
+                    // Load message threads
+                    MessageThreads.get({_cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
+                        var messageThreadListPromises = [];
+
+                        // For each message thread
+                        angular.forEach(messageThreadListData.results, function (messageThreadData, key) {
+                            var messageThreadDeferred = $q.defer();
+                            var messageThreadPromises = {};
+
+                            // Get sender id
+                            if (loadSender) {
+                                var senderId = UtilsService.getIdFromUrl(messageThreadData.sender);
+                                // Load sender
+                                messageThreadPromises.sender = UsersService.get(senderId).$promise;
+                            }
+
+                            // Get last message id
+                            if (loadLastMessage && !!messageThreadData.last_message) {
+                                var lastMessageId = UtilsService.getIdFromUrl(messageThreadData.last_message);
+                                // Load last message
+                                messageThreadPromises.last_message = ProductRelatedMessagesService.getMessage(lastMessageId).$promise;
+                            }
+
+                            // When all data loaded
+                            $q.all(messageThreadPromises).then(function (messageThreadResults) {
+                                var messageThread = MessageThreadsParseService.parseMessageThreadListItem(messageThreadData,
+                                    messageThreadResults.sender, messageThreadResults.last_message);
+                                messageThreadDeferred.resolve(messageThread);
+                            });
+
+                            messageThreadListPromises.push(messageThreadDeferred.promise);
+                        });
+
+                        $q.all(messageThreadListPromises).then(function (bookingList) {
+                            deferred.resolve(bookingList);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
+                return messageThreadsLoadService;
             }
         ]);
     });
