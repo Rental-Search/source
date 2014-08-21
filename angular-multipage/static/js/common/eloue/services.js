@@ -967,7 +967,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load bookings
-                    Bookings.get({page: page}).$promise.then(function (bookingListData) {
+                    Bookings.get({page: page, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
                         var bookingListPromises = [];
 
                         // For each booking
@@ -1005,7 +1005,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load booking
-                    Bookings.get({uuid: bookingUUID}).$promise.then(function (bookingData) {
+                    Bookings.get({uuid: bookingUUID, _cache: new Date().getTime()}).$promise.then(function (bookingData) {
                         var booking = BookingsParseService.parseBooking(bookingData);
                         deferred.resolve(booking);
                     });
@@ -1053,7 +1053,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load product
-                    Products.get({id: productId}).$promise.then(function (productData) {
+                    Products.get({id: productId, _cache: new Date().getTime()}).$promise.then(function (productData) {
                         var productPromises = {};
 
                         if (loadAddress) {
