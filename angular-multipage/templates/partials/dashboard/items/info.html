@@ -90,27 +90,51 @@
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>Nombre de place</td>
-                    <td><input type="number" class="table-form" data-ng-model="product.seat_number"></td>
+                    <td>
+                        <select data-ng-model="product.seat_number" class="form-control">
+                            <option data-ng-repeat="item in seatNumberOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>Nombre de porte</td>
-                    <td><input type="number" class="table-form" data-ng-model="product.door_number"></td>
+                    <td>
+                        <select data-ng-model="product.door_number" class="form-control">
+                            <option data-ng-repeat="item in doorNumberOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>Énergie</td>
-                    <td><input type="text" class="table-form" data-ng-model="product.fuel"></td>
+                    <td>
+                        <select data-ng-model="product.fuel" class="form-control">
+                            <option data-ng-repeat="item in fuelOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>Boite de vitesse</td>
-                    <td><input type="text" class="table-form" data-ng-model="product.transmission"></td>
+                    <td>
+                        <select data-ng-model="product.transmission" class="form-control">
+                            <option data-ng-repeat="item in transmissionOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>Kilométrage</td>
-                    <td><input type="number" class="table-form" data-ng-model="product.mileage"></td>
+                    <td>
+                        <select data-ng-model="product.mileage" class="form-control">
+                            <option data-ng-repeat="item in mileageOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>Consommation</td>
-                    <td><input type="number" class="table-form" data-ng-model="product.consumption"></td>
+                    <td>
+                        <select data-ng-model="product.consumption" class="form-control">
+                            <option data-ng-repeat="item in consumptionOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>Kilomètres inclus/jour</td>
@@ -170,7 +194,11 @@
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>CV fiscaux</td>
-                    <td><input type="checkbox" class="table-form" data-ng-model="product.tax_horsepower"></td>
+                    <td>
+                        <select data-ng-model="product.tax_horsepower" class="form-control">
+                            <option data-ng-repeat="item in capacityOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isAuto">
                     <td>N° d'immatriculation</td>
@@ -185,11 +213,19 @@
                 <!-- Real-estate Product fields -->
                 <tr data-ng-show="isRealEstate">
                     <td>Capacité</td>
-                    <td><input type="number" class="table-form" data-ng-model="product.capacity"></td>
+                    <td>
+                        <select data-ng-model="product.capacity" class="form-control">
+                            <option data-ng-repeat="item in capacityOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isRealEstate">
                     <td>Type de logement</td>
-                    <td><input type="checkbox" class="table-form" data-ng-model="product.private_life"></td>
+                    <td>
+                        <select data-ng-model="product.private_life" class="form-control">
+                            <option data-ng-repeat="item in privateLifeOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr data-ng-show="isRealEstate">
                     <td>Nombre de chambre</td>

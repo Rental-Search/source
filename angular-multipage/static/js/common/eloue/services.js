@@ -422,7 +422,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var subPromises = [];
 
                             subPromises.push(PicturesService.getPicturesByProduct(product.id).$promise);
-                            subPromises.push(PricesService.getPricePerDay(product.id).$promise);
+                            subPromises.push(PricesService.getPricesByProduct(product.id).$promise);
                             subPromises.push(Bookings.get({product: product.id}).$promise);
                             subPromises.push(MessageThreads.list({product: product.id}).$promise);
                             $q.all(subPromises).then(
@@ -722,7 +722,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("PricesService", ["Prices", function (Prices) {
             var pricesService = {};
 
-            pricesService.getPricePerDay = function (productId) {
+            pricesService.getPricesByProduct = function (productId) {
                 return Prices.get({product: productId});
             };
 

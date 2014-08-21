@@ -9,12 +9,20 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "$stateParams",
         "Endpoints",
+        "PrivateLife",
+        "SeatNumber",
+        "DoorNumber",
+        "Fuel",
+        "Transmission",
+        "Mileage",
+        "Consumption",
+        "Capacity",
         "AddressesService",
         "CategoriesService",
         "PicturesService",
         "ProductsService",
         "PhoneNumbersService",
-        function ($scope, $stateParams, Endpoints, AddressesService, CategoriesService, PicturesService, ProductsService, PhoneNumbersService) {
+        function ($scope, $stateParams, Endpoints, PrivateLife, SeatNumber, DoorNumber, Fuel, Transmission, Mileage, Consumption, Capacity, AddressesService, CategoriesService, PicturesService, ProductsService, PhoneNumbersService) {
 
             $scope.rootCategories = {};
             $scope.nodeCategories = {};
@@ -24,6 +32,14 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
             $scope.isAuto = false;
             $scope.isRealEstate = false;
+            $scope.privateLifeOptions = PrivateLife;
+            $scope.seatNumberOptions = SeatNumber;
+            $scope.doorNumberOptions = DoorNumber;
+            $scope.fuelOptions = Fuel;
+            $scope.transmissionOptions = Transmission;
+            $scope.mileageOptions = Mileage;
+            $scope.consumptionOptions = Consumption;
+            $scope.capacityOptions = Capacity;
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 console.log(product);
