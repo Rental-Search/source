@@ -43,7 +43,7 @@ class UserSerializer(HyperlinkedModelSerializer):
         fields = ('id', 'email', 'password', 'username', 'company_name', 'is_professional', 'slug', 'avatar',
                   'default_address', 'default_number', 'about', 'work', 'school', 'hobby', 'languages',
                   'drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth', 'rib', 'url')
-        read_only_fields = ('id', 'slug', 'default_address', 'default_number', 'rib', 'url')
+        read_only_fields = ('id', 'slug', 'default_address', 'default_number', 'rib', 'url', 'date_joined')
 
 class PasswordChangeSerializer(ModelSerializer):
     current_password = CharField(write_only=True, max_length=128)
@@ -78,14 +78,14 @@ class AddressSerializer(HyperlinkedGeoModelSerializer):
     class Meta:
         model = models.Address
         fields = ('id', 'patron', 'street', 'zipcode', 'position', 'city', 'country')
-        read_only_fields = ('id', 'patron', 'position')
+        read_only_fields = ('id', 'position')
         geo_field = 'position'
 
 class PhoneNumberSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.PhoneNumber
         fields = ('id', 'patron', 'number')
-        read_only_fields = ('id', 'patron')
+        read_only_fields = ('id',)
 
 class ProAgencySerializer(HyperlinkedGeoModelSerializer):
     address = CharField(source='address1')
@@ -96,26 +96,26 @@ class ProAgencySerializer(HyperlinkedGeoModelSerializer):
     class Meta:
         model = models.ProAgency
         fields = ('id', 'patron', 'name', 'phone_number', 'address', 'zipcode', 'city', 'country', 'position')
-        read_only_fields = ('id', 'patron', 'position')
+        read_only_fields = ('id', 'position')
         geo_field = 'position'
 
 class ProPackageSerializer(ModelSerializer):
     class Meta:
         model = models.ProPackage
         fields = ('id', 'name', 'maximum_items', 'price', 'valid_from', 'valid_until')
-        read_only_fields = ('id', )
+        read_only_fields = ('id',)
 
 class SubscriptionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Subscription
         fields = ('id', 'patron', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type')
-        read_only_fields = ('id', 'patron', 'propackage')
+        read_only_fields = ('id', 'propackage')
 
 class BillingSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Billing
         fields = ('id', 'patron', 'created_at')
-        read_only_fields = ('id', 'patron', 'created_at')
+        read_only_fields = ('id', 'created_at')
 
 class BillingSubscriptionSerializer(HyperlinkedModelSerializer):
     class Meta:
