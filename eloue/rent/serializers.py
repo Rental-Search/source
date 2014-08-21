@@ -11,9 +11,14 @@ from rent.choices import COMMENT_TYPE_CHOICES
 class BookingSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Booking
-        fields = ('uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
-                  'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at')
-        read_only_fields = fields
+        fields = (
+            'uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
+            'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at',
+        )
+        read_only_fields = (
+            'uuid', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
+            'currency', 'owner', 'contract_id', 'created_at', 'canceled_at',
+        )
 
 class CommentAuthorField(HyperlinkedRelatedField):
     default_error_messages = {

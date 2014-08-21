@@ -354,12 +354,8 @@ def booking_incident(request, booking_id):
 
 # REST API 2.0
 
-from rest_framework import viewsets
-
 from rent import serializers, models
-from eloue.api import filters, views
-
-NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
+from eloue.api import filters, views, viewsets
 
 class BookingFilterSet(filters.FilterSet):
     author = filters.MultiFieldFilter(name=('owner', 'borrower'))
@@ -371,7 +367,7 @@ class BookingFilterSet(filters.FilterSet):
             'started_at', 'ended_at', 'total_amount', 'created_at', 'canceled_at'
         )
 
-class BookingViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
+class BookingViewSet(views.LocationHeaderMixin, viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
@@ -382,7 +378,7 @@ class BookingViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     filter_class = BookingFilterSet
     ordering_fields = ('started_at', 'ended_at', 'state', 'total_amount', 'created_at', 'canceled_at')
 
-class CommentViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
+class CommentViewSet(views.LocationHeaderMixin, viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.
     """
@@ -393,12 +389,11 @@ class CommentViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
     filter_fields = ('booking',) # TODO: , 'note') # TODO: 'author'
     ordering_fields = ('note', 'created_at')
 
-class SinisterViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
+class SinisterViewSet(views.LocationHeaderMixin, viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows sinisters to be viewed or edited.
     """
     model = models.Sinister
     serializer_class = serializers.SinisterSerializer
     filter_backends = (filters.OwnerFilter, filters.OrderingFilter)
-    http_method_names = NON_DELETABLE
     filter_fields = ('patron', 'booking', 'product')
