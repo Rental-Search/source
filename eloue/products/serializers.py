@@ -29,40 +29,35 @@ class CategorySerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Category
         fields = ('id', 'parent', 'name', 'need_insurance', 'description', 'is_child_node', 'is_leaf_node', 'is_root_node')
-        read_only_fields = ('id', 'parent')
+        read_only_fields = ('id',)
 
 class ProductSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
                   'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies')
-        read_only_fields = ('id', 'owner', 'address', 'phone', 'quantity')
+        read_only_fields = ('id',)
+        view_name = 'product-detail'
 
 class CarProductSerializer(HyperlinkedModelSerializer):
-    class Meta:
+    class Meta(ProductSerializer.Meta):
         model = models.CarProduct
-        fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
-                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies',
+        fields = ProductSerializer.Meta.fields + (
                   # CarProduct extended fields
                   'brand', 'model', 'seat_number', 'door_number', 'fuel', 'transmission', 'mileage',
                   'consumption', 'km_included', 'costs_per_km', 'air_conditioning', 'power_steering',
                   'cruise_control', 'gps', 'baby_seat', 'roof_box', 'bike_rack', 'snow_tires', 'snow_chains',
                   'ski_rack', 'cd_player', 'audio_input', 'tax_horsepower', 'licence_plate', 'first_registration_date')
-        read_only_fields = ('id', 'owner', 'address', 'phone', 'quantity')
-        view_name = 'product-detail'
 
 class RealEstateProductSerializer(HyperlinkedModelSerializer):
-    class Meta:
+    class Meta(ProductSerializer.Meta):
         model = models.RealEstateProduct
-        fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
-                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies',
+        fields = ProductSerializer.Meta.fields + (
                   # RealEstateProduct extended fields
                   'capacity', 'private_life', 'chamber_number', 'rules', 'air_conditioning', 'breakfast', 'balcony',
                   'lockable_chamber', 'towel', 'lift', 'family_friendly', 'gym', 'accessible', 'heating', 'jacuzzi',
                   'chimney', 'internet_access', 'kitchen', 'smoking_accepted', 'ideal_for_events', 'tv',
                   'washing_machine', 'tumble_dryer', 'computer_with_internet')
-        read_only_fields = ('id', 'owner', 'address', 'phone', 'quantity')
-        view_name = 'product-detail'
 
 class PriceSerializer(HyperlinkedModelSerializer):
     amount = fields.DecimalField(source='local_currency_amount', max_digits=10, decimal_places=2)
@@ -103,15 +98,16 @@ class CuriositySerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Curiosity
         fields = ('id', 'product')
+        read_only_fields = ('id',)
 
 class MessageThreadSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.MessageThread
         fields = ('id', 'sender', 'recipient', 'product', 'last_message', 'subject', 'sender_archived', 'recipient_archived', 'messages')
-        read_only_fields = ('id', 'last_message', 'messages', 'sender')
+        read_only_fields = ('id', 'last_message', 'messages')
 
 class ProductRelatedMessageSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.ProductRelatedMessage
         fields = ('id', 'thread', 'sender', 'recipient', 'body', 'sent_at', 'offer')
-        read_only_fields = ('id', 'sent_at', 'sender')
+        read_only_fields = ('id', 'sent_at')

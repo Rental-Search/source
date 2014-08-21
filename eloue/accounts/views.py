@@ -1013,7 +1013,7 @@ from rest_framework.response import Response
 
 from accounts import serializers, models, search
 from accounts.utils import viva_check_phone
-from eloue.api import filters, views, viewsets, permissions
+from eloue.api import viewsets, filters, mixins, permissions
 
 class UserPermission(permissions.TeamStaffDjangoModelPermissions):
     def has_permission(self, request, view):
@@ -1023,7 +1023,7 @@ class UserPermission(permissions.TeamStaffDjangoModelPermissions):
         # pass to parent by default
         return super(UserPermission, self).has_permission(request, view)
 
-class UserViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
@@ -1045,7 +1045,7 @@ class UserViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
             return Response({'detail': _(u"Votre mot de passe à bien été modifié")})
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-class AddressViewSet(views.SetOwnerMixin, views.LocationHeaderMixin, viewsets.ModelViewSet):
+class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows addresses to be viewed or edited.
     """
@@ -1055,7 +1055,7 @@ class AddressViewSet(views.SetOwnerMixin, views.LocationHeaderMixin, viewsets.Mo
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
 
-class PhoneNumberViewSet(views.SetOwnerMixin, views.LocationHeaderMixin, viewsets.ModelViewSet):
+class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows phone numbers to be viewed or edited.
     Phone numbers are sent to the borrower and to the owner for each booking.

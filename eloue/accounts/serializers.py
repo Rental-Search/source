@@ -109,7 +109,7 @@ class SubscriptionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.Subscription
         fields = ('id', 'patron', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type')
-        read_only_fields = ('id', 'propackage')
+        read_only_fields = ('id',)
 
 class BillingSerializer(HyperlinkedModelSerializer):
     class Meta:
@@ -121,4 +121,4 @@ class BillingSubscriptionSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = models.BillingSubscription
         fields = ('id', 'subscription', 'billing', 'price')
-        read_only_fields = ('id', 'subscription', 'billing')
+        read_only_fields = ('id',)

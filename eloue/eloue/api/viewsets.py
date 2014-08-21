@@ -2,10 +2,15 @@
 
 from rest_framework import viewsets, mixins
 
-ModelViewSet = viewsets.ModelViewSet
+from .mixins import LocationHeaderMixin
+
+class ModelViewSet(LocationHeaderMixin, viewsets.ModelViewSet):
+    pass
+
 ReadOnlyModelViewSet = viewsets.ReadOnlyModelViewSet
 
 class ImmutableModelViewSet(
+    LocationHeaderMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,

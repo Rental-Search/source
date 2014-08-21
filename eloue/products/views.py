@@ -741,12 +741,12 @@ def suggestion(request):
 
 # REST API 2.0
 
-from rest_framework import viewsets, response
+from rest_framework import response
 from rest_framework.decorators import link
 import django_filters
 
 from products import serializers, models
-from eloue.api import filters, views
+from eloue.api import viewsets, filters, mixins
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
@@ -755,9 +755,9 @@ class CategoryFilterSet(filters.FilterSet):
 
     class Meta:
         model = models.Category
-        fields = ('parent', 'need_insurance')
+        fields = ('parent', 'need_insurance') # TODO: is_child_node, is_leaf_node, is_root_node
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product categories to be viewed or edited.
     """
@@ -790,18 +790,19 @@ class ProductFilterSet(filters.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ('address', 'category')
+        fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
-    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend)
+    filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet
+    ordering_fields = ('quantity', 'is_archived', 'category')
 
     @link()
     def is_available(self, request, *args, **kwargs):
@@ -839,45 +840,54 @@ class ProductViewSet(viewsets.ModelViewSet):
         context = self.get_serializer_context()
         return serializer_class(instance, context=context, **kwargs)
 
-class PriceViewSet(viewsets.ModelViewSet):
+class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product prices to be viewed or edited.
     """
     model = models.Price
     serializer_class = serializers.PriceSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('product', 'unit')
+    ordering_fields = ('name',) # TODO:  'amount'
 
-class PictureViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
+class PictureViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows product images to be viewed or edited.
     """
     model = models.Picture
     serializer_class = serializers.PictureSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('product', 'created_at')
+    ordering_fields = ('created_at',)
 
-class CuriosityViewSet(viewsets.ModelViewSet):
+class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product curiosities to be viewed or edited.
     """
     queryset = models.Curiosity.on_site.all()
     serializer_class = serializers.CuriositySerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('product', 'city', 'price')
+    ordering_fields = ('price',)
 
-class MessageThreadViewSet(views.SetOwnerMixin, viewsets.ModelViewSet):
+class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows message threads to be viewed or edited.
     """
     model = models.MessageThread
     queryset = models.MessageThread.objects.select_related('messages')
     serializer_class = serializers.MessageThreadSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OwnerFilter)
-    filter_fields = ('product',)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
     owner_field = 'sender'
+    filter_fields = ('sender', 'recipient', 'product')
 
-class ProductRelatedMessageViewSet(views.SetOwnerMixin, viewsets.ModelViewSet):
+class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
     """
     model = models.ProductRelatedMessage
     serializer_class = serializers.ProductRelatedMessageSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OwnerFilter)
-    filter_fields = ('thread',)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'sender'
+    filter_fields = ('thread', 'sender', 'recipient', 'offer')
+    ordering_fields = ('sent_at',)

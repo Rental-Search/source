@@ -355,7 +355,7 @@ def booking_incident(request, booking_id):
 # REST API 2.0
 
 from rent import serializers, models
-from eloue.api import filters, views, viewsets
+from eloue.api import viewsets, filters
 
 class BookingFilterSet(filters.FilterSet):
     author = filters.MultiFieldFilter(name=('owner', 'borrower'))
@@ -367,7 +367,7 @@ class BookingFilterSet(filters.FilterSet):
             'started_at', 'ended_at', 'total_amount', 'created_at', 'canceled_at'
         )
 
-class BookingViewSet(views.LocationHeaderMixin, viewsets.ImmutableModelViewSet):
+class BookingViewSet(viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
@@ -378,7 +378,7 @@ class BookingViewSet(views.LocationHeaderMixin, viewsets.ImmutableModelViewSet):
     filter_class = BookingFilterSet
     ordering_fields = ('started_at', 'ended_at', 'state', 'total_amount', 'created_at', 'canceled_at')
 
-class CommentViewSet(views.LocationHeaderMixin, viewsets.NonEditableModelViewSet):
+class CommentViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.
     """
@@ -389,7 +389,7 @@ class CommentViewSet(views.LocationHeaderMixin, viewsets.NonEditableModelViewSet
     filter_fields = ('booking',) # TODO: , 'note') # TODO: 'author'
     ordering_fields = ('note', 'created_at')
 
-class SinisterViewSet(views.LocationHeaderMixin, viewsets.ImmutableModelViewSet):
+class SinisterViewSet(viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows sinisters to be viewed or edited.
     """
