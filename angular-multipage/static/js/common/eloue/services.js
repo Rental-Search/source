@@ -927,12 +927,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("BookingsLoadService", [
             "$q",
             "Bookings",
-            "ProductsService",
             "PicturesService",
             "UtilsService",
             "BookingsParseService",
             "ProductsLoadService",
-            function ($q, Bookings, ProductsService, PicturesService, UtilsService, BookingsParseService, ProductsLoadService) {
+            function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService) {
                 var bookingsLoadService = {};
 
                 bookingsLoadService.getBookingList = function (page) {
@@ -951,7 +950,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var productId = UtilsService.getIdFromUrl(bookingData.product);
 
                             // Load product
-                            bookingPromises.product = ProductsService.getProduct(productId).$promise;
+                            bookingPromises.product = ProductsLoadService.getProduct(productId);
 
                             // Load pictures
                             bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
@@ -993,7 +992,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Get product id
                         var productId = UtilsService.getIdFromUrl(booking.product);
                         // Load product
-                        ProductsLoadService.getProduct(productId).then(function (product) {
+                        ProductsLoadService.getProduct(productId, true, true, true, true).then(function (product) {
                             booking.product = product;
                             deferred.resolve(booking);
                         });
@@ -1018,39 +1017,46 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "PhoneNumbersService",
             "UtilsService",
             "ProductsParseService",
-            function ($q, Products, AddressesService, UsersService, PicturesService, PhoneNumbersService,
-                      UtilsService, ProductsParseService) {
+            function ($q, Products, AddressesService, UsersService, PicturesService, PhoneNumbersService, UtilsService, ProductsParseService) {
                 var productLoadService = {};
 
-                productLoadService.getProduct = function (productId) {
+                productLoadService.getProduct = function (productId, loadAddress, loadOwner, loadPhone, loadPictures) {
                     var deferred = $q.defer();
 
                     // Load product
                     Products.get({id: productId}).$promise.then(function (productData) {
                         var productPromises = {};
 
-                        // Get address id
-                        var addressId = UtilsService.getIdFromUrl(productData.address);
-                        // Load address
-                        productPromises.address = AddressesService.getAddress(addressId).$promise;
+                        if (loadAddress) {
+                            // Get address id
+                            var addressId = UtilsService.getIdFromUrl(productData.address);
+                            // Load address
+                            productPromises.address = AddressesService.getAddress(addressId).$promise;
+                        }
 
-                        // Get owner id
-                        var ownerId = UtilsService.getIdFromUrl(productData.owner);
-                        // Load owner
-                        productPromises.owner = UsersService.get(ownerId).$promise;
+                        if (loadOwner) {
+                            // Get owner id
+                            var ownerId = UtilsService.getIdFromUrl(productData.owner);
+                            // Load owner
+                            productPromises.owner = UsersService.get(ownerId).$promise;
+                        }
 
-                        // Get phone id
-                        var phoneId = UtilsService.getIdFromUrl(productData.phone);
-                        // Load phone
-                        productPromises.phone = PhoneNumbersService.getPhoneNumber(phoneId).$promise;
+                        if (loadPhone) {
+                            // Get phone id
+                            var phoneId = UtilsService.getIdFromUrl(productData.phone);
+                            // Load phone
+                            productPromises.phone = PhoneNumbersService.getPhoneNumber(phoneId).$promise;
+                        }
 
-                        // Load pictures
-                        productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+                        if (loadPictures) {
+                            // Load pictures
+                            productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+                        }
 
                         // When all data loaded
                         $q.all(productPromises).then(function (results) {
                             var product = ProductsParseService.parseProduct(productData, results.address, results.owner,
-                                results.phone, results.pictures.results);
+                                results.phone, (!!results.pictures) ? results.pictures.results : null);
                             deferred.resolve(product);
                         });
                     });
