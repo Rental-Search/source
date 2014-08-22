@@ -284,6 +284,16 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'dashboard_styles': {
+        'source_filenames': (
+            'dashboard/sass/base.sass',
+            'dashboard/sass/styles.sass',
+        ),
+        'output_filename': 'css/dashboard_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'master': {
         'source_filenames': (
             'less/styles.less',

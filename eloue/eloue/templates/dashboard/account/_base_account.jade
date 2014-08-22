@@ -1,8 +1,5 @@
 extends ../jade/_base_dashboard
 
-block append variables
-  -STATIC_URL = "../../../static/"
-
 block content-view
   section.tabs-vertical-active.sm.scrollbar-custom: ul
     each tab in account_tabs

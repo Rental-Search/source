@@ -3,7 +3,7 @@ mixin average-rate(rating, counter)
     span.star
       -var stars = [1, 2, 3, 4, 5]
       each star in stars
-        if star === rating
+        if star == rating
           i.current.fa.fa-lg.fa-star
         else
           i.fa.fa-lg.fa-star

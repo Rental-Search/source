@@ -1,16 +1,15 @@
 extends ../../base
+-load compressed
 
 block variables
   include ./_global_variables
   include ./_mixins
-  -var STATIC_URL
 
 block append styles
-  link(rel="stylesheet", href="#{STATIC_URL}css/base.css")
-  link(rel="stylesheet", href="#{STATIC_URL}css/styles.css")
+  {% compressed_css "dashboard_styles" %}
 
-block append scripts
-  script(src="#{STATIC_URL}js/dashboard_scripts.js")
+block scripts
+  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/dashboard/main.js")
 
 block content-body
   .container-full-screen
