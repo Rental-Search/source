@@ -25,7 +25,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.initCustomScrollbars = function () {
                 // custom select
                 //TODO: fix problem with select options model update
-//                $('select').chosen();
+                $('select').chosen();
 
                 // custom scrollbar
                 $('.chosen-drop').mCustomScrollbar({

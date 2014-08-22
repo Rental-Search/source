@@ -577,6 +577,59 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                bookingsService.getBookingsByProduct = function (productId) {
+                    var deferred = $q.defer();
+
+                    Bookings.get({product: productId}).$promise.then(function (data) {
+                        var promises = [];
+
+                        angular.forEach(data.results, function (value, key) {
+                            var bookingDeferred = $q.defer();
+                            var booking = {
+                                state: value.state,
+                                total_amount: value.total_amount,
+                                uuid: value.uuid,
+                                start_date: {
+                                    day: UtilsService.formatDate(value.started_at, "dd"),
+                                    month: UtilsService.formatDate(value.started_at, "MMMM"),
+                                    year: UtilsService.formatDate(value.started_at, "yyyy")
+                                },
+                                end_date: {
+                                    day: UtilsService.formatDate(value.ended_at, "dd"),
+                                    month: UtilsService.formatDate(value.ended_at, "MMMM"),
+                                    year: UtilsService.formatDate(value.ended_at, "yyyy")
+                                }
+                            };
+
+                            var bookingPromises = {};
+
+                            // Get product id
+                            var productId = UtilsService.getIdFromUrl(value.product);
+
+                            // Get product
+                            bookingPromises.product = ProductsService.getProduct(productId).$promise;
+
+                            // Get picture
+                            bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+
+                            $q.all(bookingPromises).then(function (results) {
+                                booking.title = results.product.summary;
+                                if (jQuery(results.pictures.results).size() > 0) {
+                                    booking.picture = results.pictures.results[0].image.thumbnail;
+                                }
+                                bookingDeferred.resolve(booking);
+                            });
+                            promises.push(bookingDeferred.promise);
+                        });
+
+                        $q.all(promises).then(function (results) {
+                            deferred.resolve(results);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
                 bookingsService.getBookingDetail = function (uuid) {
                     var deferred = $q.defer();
                     var self = this;

@@ -6,19 +6,8 @@
             </div>
             <div class="col-xs-5">
                 <div class="form-control without-search select-gradient">
-                    <select>
-                        <option value="Janvier">Janvier 2014</option>
-                        <option value="Février">Février 2014</option>
-                        <option value="Mars">Mars 2014</option>
-                        <option value="Avril">Avril 2014</option>
-                        <option value="Mai">Mai 2014</option>
-                        <option value="juin">juin 2014</option>
-                        <option value="juillet">juillet 2014</option>
-                        <option value="Août">Août 2014</option>
-                        <option value="Septembre">Septembre 2014</option>
-                        <option value="Octobre">Octobre 2014</option>
-                        <option value="Novembre">Novembre 2014</option>
-                        <option value="Décembre">Décembre 2014</option>
+                    <select data-ng-model="selectedMonthAndYear" data-ng-change="updateCalendar()">
+                        <option data-ng-repeat="month in monthOptions" value="{{month.value}}">{{month.name}}</option>
                     </select>
                 </div>
             </div>
@@ -39,7 +28,7 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td class="outages">1</td>
+                        <td>1</td>
                         <td>2</td>
                         <td>3</td>
                         <td>4</td>
@@ -48,7 +37,7 @@
                         <td>7</td>
                     </tr>
                     <tr>
-                        <td class="outages">8</td>
+                        <td>8</td>
                         <td>9</td>
                         <td>10</td>
                         <td>11</td>
@@ -57,7 +46,7 @@
                         <td>14</td>
                     </tr>
                     <tr>
-                        <td class="outages">15</td>
+                        <td>15</td>
                         <td>16</td>
                         <td>17</td>
                         <td>18</td>
@@ -66,7 +55,7 @@
                         <td>21</td>
                     </tr>
                     <tr>
-                        <td class="outages">22</td>
+                        <td>22</td>
                         <td>23</td>
                         <td>24</td>
                         <td>25</td>
@@ -75,7 +64,7 @@
                         <td>28</td>
                     </tr>
                     <tr>
-                        <td class="outages">29</td>
+                        <td>29</td>
                         <td>30</td>
                         <td>31</td>
                         <td>32</td>
@@ -90,12 +79,12 @@
         <div class="row">
             <div class="col-xs-4">
                 <label class="check-btn form-control text-danger-light">
-                    <input type="checkbox" checked><span><i class="fa fa-check"></i></span>Indisponiblités
+                    <input type="checkbox" data-ng-model="showUnavailable" data-ng-change="onShowUnavailable()"><span><i class="fa fa-check"></i></span>Indisponiblités
                 </label>
             </div>
             <div class="col-xs-4">
                 <label class="check-btn form-control text-success-light">
-                    <input type="checkbox" checked><span><i class="fa fa-check"></i></span>Réservations
+                    <input type="checkbox" data-ng-model="showBookings" data-ng-change="onShowBookings()"><span><i class="fa fa-check"></i></span>Réservations
                 </label>
             </div>
         </div>

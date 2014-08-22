@@ -19,7 +19,8 @@ require.config({
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../js/chosen.jquery.min",
         "vars": "../vars",
-        "bootstrap_modal": "../bootstrap/modal"
+        "bootstrap_modal": "../bootstrap/modal",
+        "datejs": "../../bower_components/datejs/build/production/date.min"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -52,6 +53,7 @@ require([
     "angular",
     "bootstrap",
     "vars",
+    "datejs",
     "eloue/route",
     "eloue/i18n"
 ], function ($, _, angular, bootstrap, vars, route) {
