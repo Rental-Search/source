@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import uuid
+
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework.serializers import (
-    PrimaryKeyRelatedField, CharField, EmailField,
+    PrimaryKeyRelatedField, CharField, EmailField, BooleanField,
     ValidationError
 )
 from rest_framework_gis.serializers import MapGeometryField
@@ -86,6 +88,7 @@ class CreditCardSerializer(ModelSerializer):
         label=_(u'Cryptogramme de sécurité'),
         help_text=_(u'Les 3 derniers chiffres au dos de la carte.'),
     )
+    keep = BooleanField(default=False, write_only=True)
 
     def validate_expires(self, attrs, source):
         try:
@@ -96,21 +99,30 @@ class CreditCardSerializer(ModelSerializer):
         return attrs
 
     def validate(self, attrs):
+        keep = attrs['keep']
+        if not keep:
+            attrs.pop('holder', None)
         self.form = form = CreditCardForm(attrs)
         if not form.is_valid():
-            raise ValidationError('Form errors: %s' % form.errors)
-        return form.clean()
+            raise ValidationError('Form errors: %s' % dict(form.errors))
+        new_attrs = form.clean()
+        new_attrs['keep'] = keep
+        return new_attrs
 
     def save_object(self, obj, **kwargs):
+        if not obj.pk:
+            obj.subscriber_reference = uuid.uuid4().hex
+        elif not obj.keep and obj.holder:
+            obj.holder = None
         self.form.instance = obj
         self.form.save(commit=True)
 
     class Meta:
         model = models.CreditCard
-        fields = ('id', 'masked_number', 'expires', 'holder_name', 'card_number', 'cvv', 'holder')
+        fields = ('id', 'masked_number', 'expires', 'holder_name', 'card_number', 'cvv', 'holder', 'keep')
         read_only_fields = ('masked_number',)
         write_only_fields = ('card_number',)
-        immutable_fields = ('expires', 'holder_name', 'holder')
+        immutable_fields = ('expires', 'holder_name', 'holder', 'card_number', 'cvv')
 
 class ProAgencySerializer(GeoModelSerializer):
     address = CharField(source='address1')
