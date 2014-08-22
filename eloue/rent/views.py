@@ -354,34 +354,46 @@ def booking_incident(request, booking_id):
 
 # REST API 2.0
 
-from rest_framework import viewsets
-
 from rent import serializers, models
-from eloue.api import filters
+from eloue.api import viewsets, filters
 
-NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
+class BookingFilterSet(filters.FilterSet):
+    author = filters.MultiFieldFilter(name=('owner', 'borrower'))
 
-class BookingViewSet(viewsets.ModelViewSet):
+    class Meta:
+        model = models.Booking
+        fields = (
+            'state', 'owner', 'borrower', 'product',
+            'started_at', 'ended_at', 'total_amount', 'created_at', 'canceled_at'
+        )
+
+class BookingViewSet(viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
     queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
-    filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = ('owner', 'borrower')
+    filter_class = BookingFilterSet
+    ordering_fields = ('started_at', 'ended_at', 'state', 'total_amount', 'created_at', 'canceled_at')
 
-class CommentViewSet(viewsets.ModelViewSet):
+class CommentViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.
     """
     model = models.Comment
+    queryset = models.Comment.objects.select_related('booking__owner', 'booking__borrower')
     serializer_class = serializers.CommentSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('booking',) # TODO: , 'note') # TODO: 'author'
+    ordering_fields = ('note', 'created_at')
 
-class SinisterViewSet(viewsets.ModelViewSet):
+class SinisterViewSet(viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows sinisters to be viewed or edited.
     """
     model = models.Sinister
     serializer_class = serializers.SinisterSerializer
-    filter_backends = (filters.OwnerFilter, )
-    http_method_names = NON_DELETABLE
+    filter_backends = (filters.OwnerFilter, filters.OrderingFilter)
+    filter_fields = ('patron', 'booking', 'product')

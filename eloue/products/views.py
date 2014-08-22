@@ -741,37 +741,68 @@ def suggestion(request):
 
 # REST API 2.0
 
-from rest_framework import viewsets, response
+from rest_framework import response
 from rest_framework.decorators import link
+import django_filters
 
 from products import serializers, models
-from eloue.api import filters, views
+from eloue.api import viewsets, filters, mixins
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryFilterSet(filters.FilterSet):
+    parent__isnull = django_filters.Filter(name='parent', lookup_type='isnull')
+
+    class Meta:
+        model = models.Category
+        fields = ('parent', 'need_insurance') # TODO: is_child_node, is_leaf_node, is_root_node
+
+class CategoryViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product categories to be viewed or edited.
     """
-    queryset = models.Category.on_site.all()
+    queryset = models.Category.on_site.select_related('description__title')
     serializer_class = serializers.CategorySerializer
+    filter_backends = (filters.StaffEditableFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_class = CategoryFilterSet
+    ordering_fields = ('name',)
 
-class CategoryDescriptionViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows product category descriptions to be viewed or edited.
-    """
-    model = models.CategoryDescription
-    serializer_class = serializers.CategoryDescriptionSerializer
+    @link()
+    def ancestors(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.get_serializer(obj.get_ancestors(), many=True)
+        return response.Response(serializer.data)
 
-class ProductViewSet(viewsets.ModelViewSet):
+    @link()
+    def children(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.get_serializer(obj.get_children(), many=True)
+        return response.Response(serializer.data)
+
+    @link()
+    def descendants(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.get_serializer(obj.get_descendants(), many=True)
+        return response.Response(serializer.data)
+
+class ProductFilterSet(filters.FilterSet):
+    category__isdescendant = filters.MPTTFilter(name='category', queryset=models.Category.objects.all())
+
+    class Meta:
+        model = models.Product
+        fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
+
+class ProductViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = models.Product.on_site.all()
     serializer_class = serializers.ProductSerializer
-    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter)
+    queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
+    filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
     search_index = product_search
+    filter_class = ProductFilterSet
+    ordering_fields = ('quantity', 'is_archived', 'category')
 
     @link()
     def is_available(self, request, *args, **kwargs):
@@ -787,31 +818,37 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         return response.Response(res)
 
-class CarProductViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows car products to be viewed or edited.
-    """
-    queryset = models.CarProduct.on_site.all()
-    serializer_class = serializers.CarProductSerializer
-    filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
+    def get_serializer(self, instance=None, **kwargs):
+        """
+        Return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        
+        We should use different Seializer classes for instances of
+        Product, CarProduct and RealEstateProduct models
+        """
+        if hasattr(instance, 'carproduct'):
+            # we have CarProduct here
+            serializer_class = serializers.CarProductSerializer
+            self.object = instance = instance.carproduct
+        elif hasattr(instance, 'realestateproduct'):
+            # we have RealEstateProduct here
+            serializer_class = serializers.RealEstateProductSerializer
+            self.object = instance = instance.realestateproduct
+        else:
+            # we have generic Product here
+            serializer_class = self.get_serializer_class()
+        context = self.get_serializer_context()
+        return serializer_class(instance, context=context, **kwargs)
 
-class RealEstateProductViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows real estate products to be viewed or edited.
-    """
-    queryset = models.RealEstateProduct.on_site.all()
-    serializer_class = serializers.RealEstateProductSerializer
-    filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
-
-class PriceViewSet(viewsets.ModelViewSet):
+class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product prices to be viewed or edited.
     """
     model = models.Price
     serializer_class = serializers.PriceSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('product', 'unit')
+    ordering_fields = ('name',) # TODO:  'amount'
 
 class PictureViewSet(viewsets.ModelViewSet):
     """
@@ -819,31 +856,38 @@ class PictureViewSet(viewsets.ModelViewSet):
     """
     model = models.Picture
     serializer_class = serializers.PictureSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('product', 'created_at')
+    ordering_fields = ('created_at',)
 
-class CuriosityViewSet(viewsets.ModelViewSet):
+class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product curiosities to be viewed or edited.
     """
     queryset = models.Curiosity.on_site.all()
     serializer_class = serializers.CuriositySerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('product',) # TODO: 'city', 'price')
+    # TODO: ordering_fields = ('price',)
 
-class MessageThreadViewSet(views.SetOwnerMixin, viewsets.ModelViewSet):
+class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows message threads to be viewed or edited.
     """
     model = models.MessageThread
     queryset = models.MessageThread.objects.select_related('messages')
     serializer_class = serializers.MessageThreadSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OwnerFilter)
-    filter_fields = ('product',)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
     owner_field = 'sender'
+    filter_fields = ('sender', 'recipient', 'product')
 
-class ProductRelatedMessageViewSet(views.SetOwnerMixin, viewsets.ModelViewSet):
+class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
     """
     model = models.ProductRelatedMessage
     serializer_class = serializers.ProductRelatedMessageSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OwnerFilter)
-    filter_fields = ('thread',)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'sender'
+    filter_fields = ('thread', 'sender', 'recipient', 'offer')
+    ordering_fields = ('sent_at',)

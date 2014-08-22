@@ -1007,15 +1007,13 @@ def patron_delete_idn_connect(request):
 
 # REST API 2.0
 
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.decorators import link, action
 from rest_framework.response import Response
 
 from accounts import serializers, models, search
 from accounts.utils import viva_check_phone
-from eloue.api import filters, views, permissions
-
-NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
+from eloue.api import viewsets, filters, mixins, permissions
 
 class UserPermission(permissions.TeamStaffDjangoModelPermissions):
     def has_permission(self, request, view):
@@ -1025,17 +1023,18 @@ class UserPermission(permissions.TeamStaffDjangoModelPermissions):
         # pass to parent by default
         return super(UserPermission, self).has_permission(request, view)
 
-class UserViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
     model = models.Patron
     serializer_class = serializers.UserSerializer
     permission_classes = (UserPermission,)
-    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend)
+    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'id'
     search_index = search.patron_search
-    filter_fields = ('slug',)
+    filter_fields = ('is_professional', 'is_active')
+    ordering_fields = ('username', 'first_name', 'last_name')
 
     @action(methods=['post', 'put'])
     def reset_password(self, request, *args, **kwargs):
@@ -1046,22 +1045,25 @@ class UserViewSet(views.LocationHeaderMixin, viewsets.ModelViewSet):
             return Response({'detail': _(u"Votre mot de passe à bien été modifié")})
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-class AddressViewSet(views.SetOwnerMixin, views.LocationHeaderMixin, viewsets.ModelViewSet):
+class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows addresses to be viewed or edited.
     """
     model = models.Address
     serializer_class = serializers.AddressSerializer
-    filter_backends = (filters.OwnerFilter,)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('patron', 'zipcode', 'city', 'country')
+    ordering_fields = ('city', 'country')
 
-class PhoneNumberViewSet(views.SetOwnerMixin, views.LocationHeaderMixin, viewsets.ModelViewSet):
+class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows phone numbers to be viewed or edited.
     Phone numbers are sent to the borrower and to the owner for each booking.
     """
     model = models.PhoneNumber
     serializer_class = serializers.PhoneNumberSerializer
-    filter_backends = (filters.OwnerFilter,)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
+    filter_fields = ('patron',)
 
     @link()
     def premium_rate_number(self, request, *args, **kwargs):
@@ -1087,26 +1089,31 @@ class ProAgencyViewSet(viewsets.ModelViewSet):
     """
     model = models.ProAgency
     serializer_class = serializers.ProAgencySerializer
-    filter_backends = (filters.OwnerFilter,)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('patron', 'zipcode', 'city', 'country')
+    ordering_fields = ('city', 'country')
 
-class ProPackageViewSet(viewsets.ModelViewSet):
+class ProPackageViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows professional packages to be viewed or edited.
     ProPackage is subscribed by pro renter to access to e-loue and publish their goods online.
     """
     model = models.ProPackage
     serializer_class = serializers.ProPackageSerializer
-    http_method_names = NON_DELETABLE
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('maximum_items', 'price', 'valid_from', 'valid_until')
+    ordering_fields = ('name', 'maximum_items', 'price', 'valid_from', 'valid_until')
 
-class SubscriptionViewSet(viewsets.ModelViewSet):
+class SubscriptionViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows subscriptions to be viewed or edited.
     Subcriptions are the means through what pro renters subscribe for ProPackages.
     """
     model = models.Subscription
     serializer_class = serializers.SubscriptionSerializer
-    filter_backends = (filters.OwnerFilter,)
-    http_method_names = NON_DELETABLE
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('patron', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type')
+    ordering_fields = ('subscription_started', 'subscription_ended', 'payment_type')
 
 class BillingViewSet(viewsets.ModelViewSet):
     """
@@ -1114,12 +1121,16 @@ class BillingViewSet(viewsets.ModelViewSet):
     """
     model = models.Billing
     serializer_class = serializers.BillingSerializer
-    filter_backends = (filters.OwnerFilter,)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('patron',)
+    ordering_fields = ('created_at',)
 
-class BillingSubscriptionViewSet(viewsets.ModelViewSet):
+class BillingSubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows sbilling ubscriptions to be viewed or edited.
     """
     model = models.BillingSubscription
     serializer_class = serializers.BillingSubscriptionSerializer
-    http_method_names = NON_DELETABLE
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('subscription', 'billing', 'price')
+    ordering_fields = ('price',)
