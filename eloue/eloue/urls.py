@@ -112,6 +112,13 @@ newui_urlpatterns = patterns('',
         }),
         name='new_ui_index',
     ),
+    url(r'^lists/$', ExtraContextTemplateView.as_view(
+        template_name='products/product_list.jade',
+        extra_context={
+#            'cities': city_list,
+        }),
+        name='new_ui_product_list',
+    ),
     url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_partials')),
 )
 

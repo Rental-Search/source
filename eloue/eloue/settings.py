@@ -269,9 +269,17 @@ PIPELINE_CSS = {
     'homepage_styles': {
         'source_filenames': (
             'sass/homepage_styles.sass',
-            #'css/chosen.min.css'
         ),
         'output_filename': 'css/homepage_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
+    'product_list_styles': {
+        'source_filenames': (
+            'sass/product_list_styles.sass',
+        ),
+        'output_filename': 'css/product_list_styles.css',
         'extra_context': {
             'media': 'screen',
         },
