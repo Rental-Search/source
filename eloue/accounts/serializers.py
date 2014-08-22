@@ -80,6 +80,19 @@ class PhoneNumberSerializer(ModelSerializer):
         fields = ('id', 'patron', 'number')
         immutable_fields = ('patron',)
 
+class CreditCardSerializer(ModelSerializer):
+    cvv = CharField(max_length=4, min_length=3, write_only=True,
+        label=_(u'Cryptogramme de sécurité'),
+        help_text=_(u'Les 3 derniers chiffres au dos de la carte.'),
+    )
+
+    class Meta:
+        model = models.CreditCard
+        fields = ('id', 'masked_number', 'expires', 'holder_name', 'card_number', 'cvv', 'holder')
+        read_only_fields = ('masked_number',)
+        write_only_fields = ('card_number',)
+        immutable_fields = ('expires', 'holder_name', 'holder')
+
 class ProAgencySerializer(GeoModelSerializer):
     address = CharField(source='address1')
 

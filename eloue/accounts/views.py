@@ -1082,6 +1082,17 @@ class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
             )
         return Response(tags)
 
+class CreditCardViewSet(mixins.SetOwnerMixin, viewsets.NonEditableModelViewSet):
+    """
+    API endpoint that allows credit cards to be viewed or edited.
+    Credit card is used to pay the booking. During the booking request pre-approval payment is done.
+    After if the owner accept the booking we make the payment.
+    """
+    model = models.CreditCard
+    serializer_class = serializers.CreditCardSerializer
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
+    filter_fields = ('patron',)
+
 class ProAgencyViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows professional agencies to be viewed or edited.
