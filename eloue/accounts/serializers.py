@@ -7,6 +7,7 @@ from rest_framework.serializers import (
 )
 from rest_framework_gis.serializers import MapGeometryField
 
+from accounts.forms import CreditCardForm
 from accounts import models
 from eloue.api.serializers import NullBooleanField, EncodedImageField, ModelSerializer
 
@@ -85,6 +86,24 @@ class CreditCardSerializer(ModelSerializer):
         label=_(u'Cryptogramme de sécurité'),
         help_text=_(u'Les 3 derniers chiffres au dos de la carte.'),
     )
+
+    def validate_expires(self, attrs, source):
+        try:
+            expires = attrs.pop(source)
+            attrs.update(dict(zip(('expires_0', 'expires_1'), (expires[:2], expires[2:4]))))
+        except (KeyError, IndexError):
+            raise ValidationError("Attribute missed or invalid: 'expires'")
+        return attrs
+
+    def validate(self, attrs):
+        self.form = form = CreditCardForm(attrs)
+        if not form.is_valid():
+            raise ValidationError('Form errors: %s' % form.errors)
+        return form.clean()
+
+    def save_object(self, obj, **kwargs):
+        self.form.instance = obj
+        self.form.save(commit=True)
 
     class Meta:
         model = models.CreditCard

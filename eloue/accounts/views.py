@@ -1091,7 +1091,8 @@ class CreditCardViewSet(mixins.SetOwnerMixin, viewsets.NonEditableModelViewSet):
     model = models.CreditCard
     serializer_class = serializers.CreditCardSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
-    filter_fields = ('patron',)
+    owner_field = 'holder'
+    filter_fields = ('holder',)
 
 class ProAgencyViewSet(viewsets.ModelViewSet):
     """
