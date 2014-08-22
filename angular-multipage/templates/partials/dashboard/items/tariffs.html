@@ -17,31 +17,31 @@
                     <tr>
                         <td>1 heure</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form">€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.hour.amount">€
                         </td>
                     </tr>
                     <tr>
                         <td>1 jours*</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form" required>€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.day.amount" required>€
                         </td>
                     </tr>
                     <tr>
                         <td>3 jours</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form">€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.three_days.amount">€
                         </td>
                     </tr>
                     <tr>
                         <td>7 jours</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form">€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.seven_days.amount">€
                         </td>
                     </tr>
                     <tr>
                         <td>15 jours</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form">€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.fifteen_days.amount">€
                         </td>
                     </tr>
                     </tbody>
@@ -59,7 +59,7 @@
                     <tr>
                         <td>1 jours*</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form" required>€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.day.amount" required>€
                         </td>
                     </tr>
                     </tbody>
@@ -89,25 +89,25 @@
                     <tr>
                         <td>1 nuit*</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form" required>€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.day.amount" required>€
                         </td>
                     </tr>
                     <tr>
                         <td>3 nuits</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form">€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.three_days.amount">€
                         </td>
                     </tr>
                     <tr>
                         <td>7 nuits</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form">€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.seven_days.amount">€
                         </td>
                     </tr>
                     <tr>
                         <td>15 nuits</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form">€
+                            <input type="text" placeholder="Prix..." class="table-form" data-ng-model="prices.fifteen_days.amount">€
                         </td>
                     </tr>
                     </tbody>
@@ -119,8 +119,7 @@
                     <tr>
                         <td>Caution</td>
                         <td>
-                            <input type="text" placeholder="Prix..." class="table-form"
-                                   data-ng-model="product.deposit_amount">€
+                            <input id="amount" type="text" class="table-form" data-ng-model="product.deposit_amount" money>€
                         </td>
                     </tr>
                     </tbody>

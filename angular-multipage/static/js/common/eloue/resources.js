@@ -90,9 +90,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing prices.
      */
     EloueCommon.factory("Prices", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "prices\\/", {},
+        return $resource(Endpoints.api_url + "prices/:id/?", {},
             {
-                "get": { method: "GET", params: {product: ":productId", unit: "1"}}
+                "getProductPricesPerDay": { method: "GET", params: {product: ":productId", unit: "1"}},
+                "update": { method: "PUT" }
             });
     }]);
 

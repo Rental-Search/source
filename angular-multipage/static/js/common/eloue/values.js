@@ -10,6 +10,14 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         api_url: "http://10.0.5.47:8200/api/2.0/"
     });
 
+    EloueCommon.constant("Currency", {
+        "EUR": {name: "EUR", symbol: "€"},
+        "USD": {name: "USD", symbol: "$"},
+        "GBP": {name: "GPB", symbol: "£"},
+        "JPY": {name: "YEN", symbol: "¥"},
+        "XPF": {name: "XPF", symbol: "F"}
+    });
+
     EloueCommon.constant("Unit", {
         "HOUR": {id: 0, name: "heure", description: "1 heure"},
         "DAY": {id: 1, name: "", description: ""},
