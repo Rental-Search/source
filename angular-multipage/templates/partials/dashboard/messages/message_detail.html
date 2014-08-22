@@ -80,7 +80,8 @@
                     <div class="indent-sm-v select-gradient without-search date-picker">
                         <div class="form-group">
                             <div class="input-group"><span class="input-group-addon">DU</span>
-                                <input type="text" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
+                                <input type="text" placeholder="dd/mm/yyyy" data-ng-model="newBooking.start_date" data-date-format="dd/mm/yyyy" eloue-datepicker>
+                                <span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -114,7 +115,8 @@
                     <div class="indent-sm-v select-gradient without-search date-picker">
                         <div class="form-group">
                             <div class="input-group"><span class="input-group-addon">AU</span>
-                                <input type="text" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
+                                <input type="text" placeholder="dd/mm/yyyy" data-ng-model="newBooking.end_date" data-date-format="dd/mm/yyyy" eloue-datepicker>
+                                <span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
                             </div>
                         </div>
                         <div class="form-group">

@@ -1,6 +1,6 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define(["angular", "eloue/app", "../../../common/eloue/directives"], function (angular) {
 
     /**
      * Root controller for the dashboard app.
