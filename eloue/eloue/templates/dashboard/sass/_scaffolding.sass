@@ -6,7 +6,6 @@
 html, body
   min-height: 100%
   height: 100%
-
 body
   font-family: $font-family-base
   font-size: $font-size-base
@@ -21,7 +20,7 @@ a
 .clearfix
   +clearfix()
 
-@each $selector, $color in (success: $brand-success, danger: $brand-danger, primary: $brand-primary, gray: $gray-medium, white: white, gray-strong: $gray-strong, gray-stronger: $gray-stronger, gray-light: $gray-light, black: $gray-dark, lite: $gray-lite)
+@each $selector, $color in (success: $brand-success, danger: $brand-danger, primary: $brand-primary, info: $brand-info, gray: $gray-medium, white: white, gray-strong: $gray-strong, gray-stronger: $gray-stronger, gray-light: $gray-light, black: $gray-dark, lite: $gray-lite, blue: $brand-blue)
   +make-colors($selector, $color)
 
 // text
@@ -30,7 +29,7 @@ a
     text-align: #{$align}
 
 // indent
-@each $class, $indent in (md: $indent-md, sm: $indent-sm, xs: $indent-xs)
+@each $class, $indent in (md: $indent-md, sm: $indent-sm, xs: $indent-xs, lg: $indent-lg)
   .indent-#{$class}-h
     margin-left: $indent !important
     margin-right: $indent !important
@@ -44,7 +43,9 @@ a
   .indent-#{$class}-b
     margin-bottom: $indent-vertical*$indent !important
   .indent-#{$class}-l
-    margin-right: $indent !important
+    margin-left: $indent !important
+  .indent-#{$class}
+    margin: $indent !important
 
 .text-justify-force
   text-align: justify
@@ -78,6 +79,13 @@ a
 
 .text-overflow
   +text-overflow()
+
+.text
+  cursor: pointer
+  font-weight: $fw-semibold
+  border: none
+  background-color: transparent
+  font-size: $font-size-base
 
 .text-underline
   text-decoration: underline
@@ -136,47 +144,46 @@ a
   i
     font-size: 10em
 
-header
-  height: 120px
+h2
+  font-size: $font-size-large
+  font-weight: $fw-regular
+  margin-bottom: $indent-sm
+  &.small
+    font-size: $font-size-base + 4
 
-article.dashboard
+h3
+  // color: $gray-dark
+  font-size: $font-size-base
+  font-weight: $fw-semibold
+  &.small
+    font-size: $font-size-base - 1
 
-  h2
+h4
+  font-size: $font-size-smaller
+  font-weight: $fw-bold
+  &.small
+    font-size: $font-size-smaller - 2
+
+h5
+  font-size: $font-size-smaller
+  font-weight: $fw-semibold
+  &.small
+    font-size: $font-size-smaller - 2
+
+p
+  margin-bottom: .5em
+  position: relative
+  &.normal
+    font-size: $font-size-base - 2
+  &.norm
+    font-size: $font-size-base - 1
+  &.small
+    font-size: $font-size-smaller - 2
+
+small
+  font-size: $font-size-little
+
+big
+  font-size: $font-size-bigger
+  &.large
     font-size: $font-size-large
-    font-weight: $fw-regular
-    margin-bottom: $indent-sm
-
-  h3
-    // color: $gray-dark
-    font-size: $font-size-base
-    font-weight: $fw-semibold
-    &.small
-      font-size: $font-size-base - 1
-
-  h4
-    font-size: $font-size-smaller
-    font-weight: $fw-bold
-    &.small
-      font-size: $font-size-smaller - 2
-
-  h5
-    font-size: $font-size-smaller
-    font-weight: $fw-semibold
-    &.small
-      font-size: $font-size-smaller - 2
-
-  p
-    margin-bottom: .5em
-    position: relative
-    &.normal
-      font-size: $font-size-base - 2
-    &.norm
-      font-size: $font-size-base - 1
-    &.small
-      font-size: $font-size-smaller - 2
-
-  small
-    font-size: $font-size-little
-  
-  big
-    font-size: $font-size-bigger

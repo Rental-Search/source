@@ -41,6 +41,7 @@
         +centred-abs()
     .col-exposition
       border: none
+      overflow: visible
     .text-action
       border-radius: $bdrs
       padding: $indent-sm
@@ -58,12 +59,16 @@
         border-right-color: $gray-lighter
       &:after
         border-right-color: white
+        // border-right-color: red
         margin-left: 1.5px
     .icon-action,
     .text-action
       background-color: white
       border: $bd-lighter
       +box-shadow(0 1px $gray-light)
+    p.action
+      line-height: 3em
+      color: $gray-medium
 
 .container-with-square-thumbnail
   +clearfix()

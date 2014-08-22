@@ -1,9 +1,9 @@
 -var dashboard_nav_links = []
--dashboard_nav_links[0] = {title: "Dashboard", icon: "home",       href: "dashboard"}
--dashboard_nav_links[1] = {title: "Messages",  icon: "envelope-o", href: "messages"}
--dashboard_nav_links[2] = {title: "Booking",   icon: "shield",     href: "booking"}
--dashboard_nav_links[3] = {title: "Items",     icon: "th-list",    href: "items"}
--dashboard_nav_links[4] = {title: "Account",   icon: "user",       href: "account/profil.html"}
+-dashboard_nav_links[0] = {title: "Dashboard", icon: "home",       href: "dashboard", badge: 0}
+-dashboard_nav_links[1] = {title: "Messages",  icon: "envelope-o", href: "messages", badge: 1}
+-dashboard_nav_links[2] = {title: "Booking",   icon: "table",     href: "booking", badge: 0}
+-dashboard_nav_links[3] = {title: "Items",     icon: "th-list",    href: "items", badge: 0}
+-dashboard_nav_links[4] = {title: "Account",   icon: "user",       href: "account/profil.html", badge: 0}
 
 -var account_tabs = []
 -account_tabs[0] = {title: "Profil",       href: "profil"}
@@ -40,7 +40,9 @@
 -tenant.first_name = "Gaspard"
 -tenant.name = "Kroutchev"
 -tenant.rate = 4
--tenant.stats = {ads: 7, booking: 12, rating: 16, response: "98%", time_to_answer: "6h"}
+-tenant.date_registred = "12.07.2014"
+-tenant.stats = [{value: "7", text: "annonces publiées"}, {value: "12", text: "locations effectués"}, {value: "16", text: "évalutations"}, {value: "98%", text: "de taux de réponse"}, {value: "6h", text: "de temps de réponse en moyenne"}]
+-tenant.verification = ["facebook", "email", "phone", "google", "linkedin"]
 -tenant.thumbnail = "img/home-products/tenant.png"
 -tenant.thumbnail_small = "img/home-products/tenant_small.png"
 -tenant.address = "94 avenue félix faure, 75015 Paris"
@@ -94,21 +96,52 @@
 -booking_detail.horisontal_tabs = ["Tous","Propriétaires","Emprunteurs"]
 -booking_detail.lot = lot_BMW
 -booking_detail.tenant = tenant
--booking_detail.informations = [{title: "Début", value: "Mardi 24 Juin 2014 à 09h00"}, {title: "Fin", value: "Jeudi 26 Juin 2014 à 09h00"}, {title: "Période", value: "3 jours et 9 heures"}, {title: "Prix", value: "168€", allocate: true}, {title: "Caution", value: "250€"}]
+-booking_detail.informations =[{title: "Début", value: "Mardi 24 Juin 2014 à 09h00", color: ""}, {title: "Fin", value: "Jeudi 26 Juin 2014 à 09h00", color: ""}, {title: "Période", value: "3 jours et 9 heures", color: ""}, {title: "Prix", value: "168€", color: "text-success"}, {title: "Caution", value: "250€", color: ""}]
 
 -booking_detail.feed = []
 -booking_detail.feed[0] = {type: "date", value: "11/05"}, 
 -booking_detail.feed[1] = {type: "message", icon: "envelope-o", value: "Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée"}, 
 -booking_detail.feed[2] = {type: "amount", icon: "dollar"}, 
--booking_detail.feed[3] = {type: "booking", icon: "shield"}, 
+-booking_detail.feed[3] = {type: "booking", icon: "table"}, 
 -booking_detail.feed[4] = {type: "request", icon: "history"}, 
 -booking_detail.feed[5] = {type: "date", value: "09/05"}, 
 -booking_detail.feed[6] = {type: "message", icon: "envelope-o", value: "Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée"},
 
--var items_detail = {}
--items_detail.horisontal_tabs = ["Photos et infos ", "Tarifs", "Calendrier", "Conditions", "Revenus"]
+-var dashboard_feed = []
+-dashboard_feed[0] = booking_detail.feed[1]
+-dashboard_feed[1] = booking_detail.feed[2]
+-dashboard_feed[2] = booking_detail.feed[3]
+-dashboard_feed[3] = booking_detail.feed[6]
 
+-var items_detail = {}
+-items_detail.horisontal_tabs = [{text: "Photos et infos", link: "index.html"}, {text: "Tarifs", link: "tarifs.html"}, {text: "Calendrier", link: "calendar.html"}, {text: "Conditions", link: "terms.html"}, {text: "Revenus", link: "profits.html"}]
 -addresses = []
 -addresses[0] = {thumbnail: "map.png", street: "94 avenue Felix Faure", zip_code: "84393", city: "Paris", def: "default"}
 -addresses[1] = {thumbnail: "map.png", street: "94 avenue Felix Faure", zip_code: "84393", city: "Paris", def: ""}
 -addresses[2] = {thumbnail: "map.png", street: "94 avenue Felix Faure", zip_code: "84393", city: "Paris", def: ""}
+
+-var visa = {number: "4*** **** **** 2767", expiration: "3/2016"}
+-var IBAN = {number: "FR76000000000000"}
+
+-var payments ={debit: {}, credit: {}}
+
+-payments.debit.card = visa
+-payments.debit.thead_tds = ["Date", "Réservation", "Compte", "Paiement", "Débit"]
+-payments.debit.lots = [{date: "12/06/2014", lot: lot_BMW, date_of:" 24 Juin 2014", date_to: "26 Juin 2014", account: visa}]
+-payments.debit.lots[1] = payments.debit.lots[0]
+-payments.debit.lots[2] = payments.debit.lots[0]
+
+-payments.credit.card = IBAN
+-payments.credit.thead_tds = ["Date", "Réservation", "Compte", "Paiement", "Crédit"]
+-payments.credit.lots = [{date: "12/06/2014", lot: lot_BMW, date_of:" 24 Juin 2014", date_to: "26 Juin 2014", account: visa}]
+-payments.credit.lots[1] = payments.credit.lots[0]
+-payments.credit.lots[2] = payments.credit.lots[0]
+
+-profits = {}
+-profits.sum = 672
+-profits.count_of_bookings = "5 en 6 mois et 11 jours"
+-profits.theads = ["Réservation", "Date de virement", "Compte crédité", "Montant"]
+-profits.transfers = [{date: "25/04/2014", date_of:" 24 Juin 2014", date_to: "26 Juin 2014", borrower: owner, total_amount: 168, bank: {name: "s generale", code: "000323294210312", account: "Albert Ledru"}, transferred_amount: "134.40"}]
+-profits.transfers[1] = profits.transfers[0]
+-profits.transfers[2] = profits.transfers[0]
+-profits.transfers[3] = profits.transfers[0]

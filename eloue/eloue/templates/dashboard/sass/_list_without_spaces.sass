@@ -1,9 +1,10 @@
-.list-without-spaces
+.list-without-spaces,
+.without-spaces
   text-align: justify
   width: 100%
   line-height: 1
   margin-bottom: -1em
-  overflow-y: hidden
+  overflow: hidden
   &:after
     display: inline-block
     width: 100%
@@ -13,15 +14,23 @@
   li
     white-space: nowrap
     display: inline-block
+    &.divide,
     &.divider
       position: relative
       &:before
-        position: absolute
         background-color: #ccc
+        position: absolute
         width: 1px
         height: 10000px
         bottom: ( 1em - $line-height-base)
         left: 0
         content: ''
+        background-color: $gray-lighter
       &:first-child
         display: none
+  &.fixed
+    overflow: visible
+    .divide:before,
+    .divider:before
+      bottom: 0
+      height: 1em

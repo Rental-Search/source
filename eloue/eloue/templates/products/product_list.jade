@@ -1,0 +1,39 @@
+extends ../base
+
+block prepend variables
+  -var STATIC_URL = "../../static/"
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  // custom input:range
+  link(rel="stylesheet", href="#{STATIC_URL}css/jquery-ui.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/product_list_styles.css")
+
+block append scripts
+  // custom input:range
+  // http://jqueryui.com/slider/#rangemin
+  script(src="#{STATIC_URL}js/jquery-ui.min.js")
+
+  script(src="#{STATIC_URL}js/scripts.js")
+
+block append content-body
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+     nav
+      include ../jade/_breadcrumbs
+    article.container.grid-layout
+      .row.article-head
+        include ../jade/_product_list_article_head
+      .row
+        aside.col-xs-3
+          include ../jade/_product_list_aside
+        main.col-xs-9
+          include ../jade/_product_list_main
+    footer
+      section.download-mobile-apps.framing
+        include ../jade/_download_mobile_apps
+      section.footer-links
+        include ../jade/_footer_links
+      section.rss
+        include ../jade/_rss

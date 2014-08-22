@@ -3,8 +3,14 @@ article.dashboard
   +clearfix()
   @import nav_dashboard
   > nav
+    background-color: $brand-success
     float: left
     height: 100%
+    a
+      text-decoration: none
+      position: relative
+      i
+        position: relative
   .content-view
     overflow: hidden
     height: 100%
@@ -28,8 +34,11 @@ article.dashboard
       border-top: $bd-lighter
 .section-content
   position: relative
-  max-width: $section-content-max-width
+  max-width: 100%
+  min-width: 60%
+  width: $section-content-max-width
   padding: $indent-md*$indent-vertical $indent-md
+  +clearfix()
   &.full-width
     max-width: none
   .tab-vertical &
@@ -48,5 +57,10 @@ article.dashboard
   + *
     padding-top: 3em !important
 .booking-activity-feed
-  background: $gray-lite url(../img/feed-line.png) repeat-y 4em
+  background: url(../img/feed-line.png) repeat-y 4em
   background-size: 3px 1px
+  &.line-fix
+    margin-top: $indent-md*$indent-vertical
+    padding-top: 0
+    padding-bottom: 0
+

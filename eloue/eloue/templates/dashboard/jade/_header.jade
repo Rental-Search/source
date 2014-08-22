@@ -1,0 +1,32 @@
+section.container
+  ul.list-without-spaces.indent-sm-t
+    li.divider
+    li
+      | Bonjour, 
+      a( href = "#inscrivez-vous", data-toggle="modal", data-target="#sign-in") inscrivez-vous 
+      | ou 
+      a( href = "#connectez-vous", data-toggle="modal", data-target="#log-in") connectez-vous
+    li.divider
+    li
+      | Vous êtes un loueur professionnel, découvrez les 
+      a( href ="#") offers e-loue Pro
+    li.divider
+    li
+      | Appelez-nous au 
+      b 0826.800.200 
+      | (0,15&euro; / min)
+
+.framing
+  section.container.search-form
+    .table-cell
+      a(href = "/templates"): img(src = "#{STATIC_URL}img/logo.png", alt = "logo")
+    .table-cell.main-cell
+      form(action="").input-group
+        input(type = "text", placeholder = "Que voulez-vous louer ?", title = "Que voulez-vous louer ?").table-cell.main-cell.form-control.what-field
+        .table-cell.input-group.where-field
+          i.sprite-location
+          input(type = "text", placeholder = "Où ça ?", title = "Où ça ?").form-control#geolocate
+        .table-cell.input-group-btn
+          button(type = "button").btn.btn-default.btn-search: i.fa.fa-search.fa-lg
+    .table-cell
+      button(type = "button").btn.bg-success-hover.text-white Déposez une annonce

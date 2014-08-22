@@ -235,6 +235,7 @@ label.check-btn
 // custom areas
 textarea,
 input[type="text"],
+input[type="password"],
 input[type="email"],
 .chosen-container .chosen-choices,
 .chosen-container .chosen-single
@@ -243,7 +244,7 @@ input[type="email"],
   background: white
   font-family: inherit !important
   font-weight: $fw-semibold 
-  color: $gray-medium !important
+  color: $gray-medium
   min-height: $form-height
   padding: 0 1em
   padding-top: .8em\9
@@ -255,6 +256,7 @@ input[type="email"],
   &:hover,
   &:focus
     border-color: $gray-medium
+    z-index: 5
   &:invalid
     border-color: lighten($brand-danger, 20%)
   &:invalid:focus,
@@ -296,7 +298,7 @@ textarea
     position: absolute
     bottom: 0
     right: 0
-    margin: $indent-sm*$indent-vertical $indent-sm
+    margin: ($indent-vertical*$indent-sm) $indent-sm
   textarea
     border: none
     padding: 0

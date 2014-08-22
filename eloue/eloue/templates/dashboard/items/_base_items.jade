@@ -2,40 +2,26 @@ extends ../jade/_base_dashboard
 
 block append variables
   -STATIC_URL = "../../../static/"
-  -var tabs = ["photos", "pricing", "calendar", "terms", "profits"]
+  -var items_is_empty = false
+  -var items_is_not_selected = false
 
 block content-view
-  section.tabs-vertical-active.lg
-    .section-header
-      .row
-        .indent-xs-t.col-xs-4.col-xs-offset-8
-          .select-gradient.without-search.date-picker
-            select
-              option(value="catigories") Catégories
-              option(value="catigories") CatégoriesPpa
-              option(value="catigories") Catégories
-    ul.scrollbar-custom
-      each item in bookings
-        li.tab-vertical.block-with-thumbnail(class="#{item.bage.classname}")
-          .col-thumbnail
-            .thumbnail
-              a(href="#"): img(src="#{STATIC_URL}img/#{item.lot.thumbnail}", alt="#{item.lot.name} photo", width="130")
-          .col-exposition
-            h3.small
-              | Location 
-              a(href="#").text-underline-hover #{item.lot.name}
-            p.normal.text-gray
-              big.text-primary #{item.lot.price}€ / jour
-              br
-              +average-rate(booking_detail.lot.rate)
-              +number-of-comments(booking_detail.lot.comments_count)
-              +number-of-bookings(booking_detail.lot.booking_count)
-  aside
-    .section-header
-     .tabs-horisontal-active.indent-xs-v.col-lg-10.col-lg-offset-1
-        ul.list-without-spaces
-          each tab in items_detail.horisontal_tabs
-            li.divider
-            li.tab-horisontal: h3.small #{tab}
-    section.scrollbar-custom.bg-lite
-      block details
+  if items_is_empty
+    include _notification_empty_items
+  else
+    include _items_list
+
+    if items_is_not_selected
+      include _notification_not_selected_item
+    else
+      aside
+        .section-header
+          .tabs-horisontal-active
+            ul.list-without-spaces.fixed
+              each tab in items_detail.horisontal_tabs
+                li.divider
+                li.tab-horisontal: h3.small 
+                  a(href="#{tab.link}") #{tab.text}
+
+        section.scrollbar-custom.bg-lite
+          block details

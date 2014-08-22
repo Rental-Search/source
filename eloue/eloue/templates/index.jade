@@ -3,12 +3,8 @@ extends ./base
 
 block append styles
   link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
-  //link(rel="stylesheet", href="#{STATIC_URL}css/homepage_styles.css")
   {% compressed_css "homepage_styles" %}
 
-//block append scripts
-//  script(src="#{STATIC_URL}js/bootstrap/dropdown.js")
-//  script(src="#{STATIC_URL}js/scripts.js")
 block scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 

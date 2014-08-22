@@ -20,6 +20,7 @@
     display: block
     transition: border-color $trns-fast
     position: relative
+    +clearfix()
 
 .tabs-vertical-active .mCSB_scrollTools,
 .scrollbar-left .mCSB_scrollTools
@@ -50,26 +51,30 @@
     .fa-check
       color: $brand-success
 
+
 /////////////////////
 // tabs horisontal //
 /////////////////////
 .tabs-horisontal-active
   position: relative
-  padding-top: $indent-xs/2
-  overflow: hidden
+  // background-color: #339
+  padding-top: .8em
+  margin-bottom: -1.5em
+  // margin-bottom: -2em !important
   > ul
     position: relative
+    height: 100%
 
 .tabs-horisontal-active .tab-horisontal
   cursor: pointer
   color: $brand-success
-  padding: .25em .5em
+  padding: .25em .5em .75em
+  position: relative
+  border-bottom: 4px solid transparent
+  transition: border-color $trns-fast
   &:hover,
   &.current
-    background-color: lighten($brand-success, 20%)
-    color: $gray-dark
-    h1, h2, h3, h4, h5, h6
-      font-weight: bolder
+    border-color: $brand-success
 
 .messages-container
   padding-bottom: $form-message-area-height

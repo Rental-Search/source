@@ -6,8 +6,7 @@ block append variables
 block content-view
   section.tabs-vertical-active.sm.scrollbar-custom: ul
     each tab in account_tabs
-      li.tab-vertical
-        a(href="#{tab.href}.html")
+      li: a.tab-vertical(href="#{tab.href}.html")
         h3 #{tab.title}
   .content-view
     block sections

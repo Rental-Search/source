@@ -1,52 +1,61 @@
 doctype
 html(lang="fr")
-head
-  block variables
-    include jade/variables
+  head
+    block variables
+      include jade/variables
 
-  block head
-    title e-loue
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    block head
+      title e-loue
+      meta(charset="UTF-8")
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      link(rel="shortcut icon", href="#{STATIC_URL}img/favicon.ico")
 
-  block styles
-    link(rel="stylesheet",    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700")
-    link(rel="stylesheet",    href="#{STATIC_URL}css/chosen.min.css")
-    link(rel="stylesheet",    href="#{STATIC_URL}css/jquery.mCustomScrollbar.css")
-    link(rel="shortcut icon", href="#{STATIC_URL}img/favicon.ico")
+    block styles
+      // include font "Open Sans"
+      link(rel="stylesheet",    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700")
 
-  block scripts
-    // jQuery
-    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+      // custom select.css
+      // http://harvesthq.github.io/chosen/
+      link(rel="stylesheet",    href="#{STATIC_URL}css/chosen.min.css")
 
-    // for IE < 9 
-    // html5 tags supported
-    script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
-    script(src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js")
-    // palceholder supported
-    script(src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js")
-    // selectivizr
-    script(src="#{STATIC_URL}js/selectivizr.js")
-    // geolocation by Google
-    script(src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places")
-    // end scripts for IE < 9
+      // custom scrollbar.css
+      // http://manos.malihu.gr/jquery-custom-content-scroller/
+      link(rel="stylesheet",    href="#{STATIC_URL}css/jquery.mCustomScrollbar.css")
 
-    // custom select 
-    // http://harvesthq.github.io/chosen/
-    script(src="#{STATIC_URL}js/chosen.jquery.min.js")
+    block scripts
+      // jQuery
+      script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
 
-    // textarea autoresize
-    // http://www.jacklmoore.com/autosize/
-    script(src="#{STATIC_URL}js/jquery.autosize.js")
+      // for IE < 9 
+      // html5 tags supported
+      script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
+      script(src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js")
+      // palceholder supported
+      script(src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js")
+      // selectivizr
+      script(src="#{STATIC_URL}js/selectivizr.js")
+      // end scripts for IE < 9
 
-    // modal window bootstrap
-    script(src="#{STATIC_URL}js/bootstrap/modal.js")
+      // geolocation by Google
+      script(src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places")
+      script(src="#{STATIC_URL}js/formmapper.js")
 
-    // custom scrollbar 
-    // http://manos.malihu.gr/jquery-custom-content-scroller/
-    script(src="#{STATIC_URL}js/jquery.mCustomScrollbar.js")
+      // custom select.js
+      script(src="#{STATIC_URL}js/chosen.jquery.min.js")
 
-body
-  block content-body
-    include ./jade/_sign_in
-    include ./jade/_log_in
+      // textarea autoresize
+      // http://www.jacklmoore.com/autosize/
+      script(src="#{STATIC_URL}js/jquery.autosize.js")
+
+      // modal window bootstrap
+      script(src="#{STATIC_URL}js/bootstrap/modal.js")
+
+      // custom scrollbar.js
+      script(src="#{STATIC_URL}js/jquery.mCustomScrollbar.js")
+
+      script(src="#{STATIC_URL}js/scripts.js")
+
+  body
+    block content-body
+      include ./jade/_sign_in
+      include ./jade/_log_in

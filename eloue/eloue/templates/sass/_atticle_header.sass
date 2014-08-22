@@ -1,0 +1,18 @@
+.layout-switcher
+  i[class^="sprite-"]
+    cursor: pointer
+    margin-left: 1em
+    float: right
+    &.sprite-grid
+      +sprite($s-grid)
+      &:hover,
+      article.grid-layout &
+        +sprite($s-grid-hover)
+    &.sprite-list
+      +sprite($s-list)
+      &:hover,
+      article.list-layout &
+        +sprite($s-list-hover)
+  .chosen-container
+    width: auto !important
+    // overflow-x: hidden
