@@ -2,7 +2,7 @@ extends ./base
 -load compressed
 
 block append styles
-  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  {% compressed_css "bootstrap" %}
   {% compressed_css "homepage_styles" %}
 
 block scripts

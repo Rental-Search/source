@@ -257,6 +257,15 @@ PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/nod
 PIPELINE_SASS_BINARY = getattr(local, 'PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 PIPELINE_CSS = {
+    'bootstrap': {
+        'source_filenames': (
+            'sass/bootstrap.scss',
+        ),
+        'output_filename': 'css/bootstrap.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'homepage_styles': {
         'source_filenames': (
             'sass/homepage_styles.sass',
