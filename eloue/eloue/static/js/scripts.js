@@ -1,7 +1,7 @@
 $(document).ready(function(){
   var classic_form = $('.classic-form'),
-      article = $('article'),
-      layout_switcher = $('.layout-switcher');
+      article = $('article');
+      
   classic_form.hide();
   $('#geolocate').formmapper({
     details: 'form',
@@ -40,31 +40,7 @@ $(document).ready(function(){
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
     })();
 
-  // switch grid/list layouts
-  $(layout_switcher).on('click', 'i', function(){
-    if($(this).hasClass('sprite-grid')) {
-      article.removeClass('list-layout')
-      article.addClass('grid-layout')
-    } else {
-      article.removeClass('grid-layout')
-      article.addClass('list-layout')
-      
-    }
-  });
 
-   $( "#district-fake" ).slider({
-    range: "min",
-    value: 400,
-    min: 1,
-    max: 700,
-  });
-
-   $( "#price-fake" ).slider({
-    range: true,
-    min: 0,
-    max: 700,
-    values: [100,400],
-  });
 
   !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 });

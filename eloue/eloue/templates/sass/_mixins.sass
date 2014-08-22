@@ -53,3 +53,9 @@
   padding: .8em 0
   +border-left-radius($bor-rad)
   +border-right-radius($bor-rad)
+
+=empty-element()
+  &:empty
+    height: (1em*$line-height-base)
+    width: 100%
+    background-color: $gray-lighter

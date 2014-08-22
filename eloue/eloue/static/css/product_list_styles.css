@@ -1453,6 +1453,7 @@ main ol li .section-body {
   overflow: hidden;
 }
 main ol li .thumbnail-img {
+  background-color: #eeeeee;
   overflow: hidden;
   position: relative;
 }
@@ -1493,10 +1494,18 @@ main ol li .info p {
   color: #c4c4c4;
   font-weight: 600;
 }
+main ol li .info p:empty {
+  height: 1.42857em;
+  width: 100%;
+  background-color: #eeeeee;
+}
 main ol li .declarer-container {
   display: table-cell;
 }
 main ol li .declarer-thumbnail {
+  background-color: #eeeeee;
+  width: 40px;
+  height: 40px;
   overflow: hidden;
   display: inline-block;
   border-radius: 50%;
