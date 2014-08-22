@@ -6,11 +6,7 @@ from django import template
 from pyjade.ext.django.compiler import Compiler as _Compiler
 
 class Compiler(_Compiler):
-    RE_INTERPOLATE = re.compile(r'(\\)?([#!]){([^\[]*)(?:\s*\[\s*(\d+)\s*\])?}')
-
-    def visitExtends(self,node):
-        path = self.format_path(node.path)
-        self.buffer('{%% extends "%(path)s" %%}{%% __pyjade_loadkwacros "%(path)s" %%}' % {'path': path})
+    RE_INTERPOLATE = re.compile(r'(\\)?([#!]){([^\}\[]*)(?:\s*\[\s*(\d+)\s*\])?}')
 
     def visitInclude(self,node):
         path = self.format_path(node.path)
