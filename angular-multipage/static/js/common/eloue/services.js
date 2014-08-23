@@ -1007,7 +1007,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     // Load all bookings for this product
                     Bookings.get({product: productId, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
                         var bookingsCount = bookingListData.results.length;
-                        var booking;
+                        var booking = null;
 
                         if(bookingsCount > 0) {
                             var bookingData = bookingListData.results[bookingsCount - 1];
