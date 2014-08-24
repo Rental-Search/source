@@ -4,15 +4,15 @@
             <div class="col-xs-9 tabs-horisontal-active">
                 <ul class="list-without-spaces">
                     <li class="divider"></li>
-                    <li class="tab-horisontal">
+                    <li class="tab-horisontal" data-ng-click="filterByBoth()">
                         <h3 class="small">Tous</h3>
                     </li>
                     <li class="divider"></li>
-                    <li class="tab-horisontal">
+                    <li class="tab-horisontal" data-ng-click="filterByOwner()">
                         <h3 class="small">Propriétaires</h3>
                     </li>
                     <li class="divider"></li>
-                    <li class="tab-horisontal">
+                    <li class="tab-horisontal" data-ng-click="filterByBorrower()">
                         <h3 class="small">Emprunteurs</h3>
                     </li>
                 </ul>
@@ -30,7 +30,7 @@
     </div>
     <ul class="scrollbar-custom">
         <!-- TODO change 'soon' class -->
-        <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="booking in bookingList track by booking.uuid">
+        <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid">
             <div class="col-thumbnail">
                 <div class="thumbnail">
                     <a href="#">
