@@ -20,6 +20,21 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.bookingList = results.bookingList;
                 $scope.bookingFilter = {};
 
+                $scope.stateList = [
+                    {label: "Statut", value: undefined},
+                    {label: "Unpaid", value: "unpaid"},
+                    {label: "Authorized", value: "authorized"},
+                    {label: "Rejected", value: "rejected"},
+                    {label: "Pending", value: "pending"},
+                    {label: "Canceled", value: "canceled"},
+                    {label: "Ongoing", value: "ongoing"},
+                    {label: "Ended", value: "ended"},
+                    {label: "Closed", value: "closed"},
+                    {label: "Incident", value: "incident"}
+                ];
+
+                $scope.stateFilter = $scope.stateList[0].value;
+
                 // Get current user url
                 var currentUserUrl = Endpoints.api_url + "users/" + results.currentUser.id + "/";
 
@@ -38,8 +53,12 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.bookingFilter.borrower = undefined;
                 };
 
-                // Initiate custom scrollbars
-                $scope.initCustomScrollbars();
+                $scope.filterByState = function () {
+                    $scope.bookingFilter.state = $scope.stateFilter;
+                };
+
+                // TODO Initiate custom scrollbars
+                //$scope.initCustomScrollbars();
             });
         }
     ]);

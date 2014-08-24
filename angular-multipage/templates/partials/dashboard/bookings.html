@@ -19,10 +19,10 @@
             </div>
             <div class="col-xs-3">
                 <div class="select-gradient without-search date-picker">
-                    <select>
-                        <option value="statut">Statut</option>
-                        <option value="statut">Statut</option>
-                        <option value="statut">Statut</option>
+                    <select name="stateFilter"
+                            data-ng-model="stateFilter"
+                            data-ng-options="state.value as state.label for state in stateList"
+                            data-ng-change="filterByState()">
                     </select>
                 </div>
             </div>
