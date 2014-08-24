@@ -1026,6 +1026,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                bookingsLoadService.requestBooking = function (booking) {
+                    return Bookings.save(booking).$promise;
+                };
+
                 return bookingsLoadService;
             }
         ]);

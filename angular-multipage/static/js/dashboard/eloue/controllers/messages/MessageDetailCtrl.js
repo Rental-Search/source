@@ -9,12 +9,13 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "$stateParams",
         "$q",
+        "Endpoints",
         "MessageThreadsLoadService",
         "BookingsLoadService",
         "ProductRelatedMessagesLoadService",
         "ProductsLoadService",
         "UtilsService",
-        function ($scope, $stateParams, $q, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService,
+        function ($scope, $stateParams, $q, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService,
                   ProductsLoadService, UtilsService) {
 
             var promises = {
@@ -66,6 +67,7 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.updateNewBookingInfo = function () {
                             var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value;
                             var toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value;
+
                             var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                             var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
 
@@ -73,14 +75,32 @@ define(["angular", "eloue/app"], function (angular) {
                                 fromDateTimeStr, toDateTimeStr, 1).then(
                                 function (data) {
                                     var period = UtilsService.calculatePeriodBetweenDates(fromDateTime.toString(), toDateTime.toString());
+                                    // Set data for displaying
                                     $scope.newBooking.period_days = period.period_days;
                                     $scope.newBooking.period_hours = period.period_hours;
                                     $scope.newBooking.total_amount = data.total_price;
                                     // TODO set deposit_amount field value
+                                    // Set data for request
+                                    $scope.newBooking.started_at = fromDateTime.toString("yyyy-MM-ddThh:mm:ss");
+                                    $scope.newBooking.ended_at = toDateTime.toString("yyyy-MM-ddThh:mm:ss");
+
+                                    var borrowerUrl = Endpoints.api_url + "users/" + results.currentUser.id + "/";
+                                    $scope.newBooking.borrower = borrowerUrl;
+
+                                    var productUrl = Endpoints.api_url + "products/" +$scope.messageThread.product.id + "/";
+                                    $scope.newBooking.product = productUrl;
                                 },
                                 function (reason) {
                                     // TODO bad date handling
                                     console.log(reason);
+                                }
+                            );
+                        };
+
+                        $scope.requestBooking = function () {
+                            BookingsLoadService.requestBooking($scope.newBooking).then(
+                                function (booking) {
+                                    $scope.booking = booking;
                                 }
                             );
                         };
