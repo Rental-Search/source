@@ -432,13 +432,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 var hourTime = 60 * 60 * 1000;
                 var dayTime = 24 * hourTime;
 
-                var startTime = Date.parse(startDateString);
-                var endTime = Date.parse(endDateString);
+                var startTime = Date.parse(startDateString).getTime();
+                var endTime = Date.parse(endDateString).getTime();
 
                 var diffTime = endTime - startTime;
 
-                var periodDays = Math.round(diffTime / dayTime);
-                var periodHours = Math.round((diffTime - dayTime * periodDays) / hourTime);
+                var periodDays = Math.floor(diffTime / dayTime);
+                var periodHours = Math.floor((diffTime - dayTime * periodDays) / hourTime);
 
                 return {
                     period_days: periodDays,
