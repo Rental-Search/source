@@ -1,23 +1,37 @@
 <div class="section-content">
     <div class="block-with-thumbnail">
         <div class="col-thumbnail">
-            <div class="thumbnail"><a href="#"><img data-ng-src="{{bookingDetails.product.picture}}" alt="{{bookingDetails.product.summary}}" width="200"></a></div>
+            <div class="thumbnail"><a href="#"><img data-ng-src="{{bookingDetails.product.picture}}"
+                                                    alt="{{bookingDetails.product.summary}}" width="200"></a></div>
         </div>
         <div class="col-exposition">
             <div class="indent-sm-h">
                 <h3><b>{{bookingDetails.product.summary}}</b></h3>
-                <p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>{{bookingDetails.product.address.street}}, {{bookingDetails.product.address.zipcode}}
+
+                <p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>{{bookingDetails.product.address.street}},
+                    {{bookingDetails.product.address.zipcode}}
                     <br>{{bookingDetails.product.address.city}}
+
                 <div class="block-with-thumbnail indent-sm-v indent-sm-">
                     <div class="col-thumbnail">
-                        <div class="thumbnail"><a href="#"><img data-ng-src="{{bookingDetails.product.owner.avatar.thumbnail}}" alt="{{bookingDetails.product.owner.username}}" width="40" height="40"></a></div>
+                        <div class="thumbnail"><a href="#"><img
+                                data-ng-src="{{bookingDetails.product.owner.avatar.thumbnail}}"
+                                alt="{{bookingDetails.product.owner.username}}" width="40" height="40"></a></div>
                     </div>
                     <div class="col-exposition text-gray">
                         <div class="indent-xs-h">
-                            <h3 class="small"><a href="#" class="text-underline-hover">{{bookingDetails.product.owner.username}}</a></h3>
-                            <p class="indent-xs-v"><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span>
+                            <h3 class="small"><a href="#" class="text-underline-hover">{{bookingDetails.product.owner.username}}</a>
+                            </h3>
+
+                            <p class="indent-xs-v"><span class="average-rate"><span class="star"><i
+                                    class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i
+                                    class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i
+                                    class="fa fa-lg fa-star"></i></span></span>
                             </p>
-                            <p><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
+
+                            <p><span class="number-of-comments"><i
+                                    class="fa fa-lg fa-comments-o"></i><span>12</span></span><span
+                                    class="number-of-bookings"><i class="fa fa-lg fa-shield"></i><span>7</span></span>
                             </p>
                         </div>
                     </div>
@@ -26,7 +40,10 @@
             </div>
         </div>
     </div>
-    <div class="bg-success-light text-success bd-rad"><i class="fa fa-phone fa-lg indent-xs-h"></i><span class="indent-sm-h">Joignable au <b>{{bookingDetails.product.phone.number}}</b> ou</span><a href="" class="btn-inline text-white bg-success-hover">Envoyez un message</a></div>
+    <div class="bg-success-light text-success bd-rad"><i class="fa fa-phone fa-lg indent-xs-h"></i><span
+            class="indent-sm-h">Joignable au <b>{{bookingDetails.product.phone.number}}</b> ou</span><a href=""
+                                                                                                        class="btn-inline text-white bg-success-hover">Envoyez
+        un message</a></div>
     <div class="block-with-thumbnail notification indent-md-v">
         <div class="col-thumbnail">
             <div class="thumbnail">
@@ -34,7 +51,8 @@
             </div>
         </div>
         <div class="col-exposition text-action">
-            <h3><b>Réservation acceptée par <a href="" class="text-success text-underline-hover">{{bookingDetails.product.owner.username}}</a></b></h3>
+            <h3><b>Réservation acceptée par <a href="" class="text-success text-underline-hover">{{bookingDetails.product.owner.username}}</a></b>
+            </h3>
             <ul class="zebra-list indent-md-v">
                 <li class="clearfix">
                     <div class="col-xs-3">Début</div>
@@ -60,7 +78,9 @@
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Période</div>
-                    <div class="col-xs-9">{{bookingDetails.period_days}} jours et {{bookingDetails.period_hours}} heures</div>
+                    <div class="col-xs-9">{{bookingDetails.period_days}} jours et {{bookingDetails.period_hours}}
+                        heures
+                    </div>
                 </li>
                 <li class="clearfix">
                     <div class="col-xs-3">Prix</div>
@@ -71,7 +91,8 @@
                     <div class="col-xs-9">{{bookingDetails.deposit_amount}}€</div>
                 </li>
             </ul>
-            <div class="text-right"><a href="#" class="text-success text-underline-hover indent-sm-h">Annulation</a><a href="#" class="btn-inline bg-success-hover text-white">Télécharger le contrat</a></div>
+            <div class="text-right"><a href="#" class="text-success text-underline-hover indent-sm-h">Annulation</a><a
+                    href="#" class="btn-inline bg-success-hover text-white">Télécharger le contrat</a></div>
         </div>
     </div>
     <div class="block-with-thumbnail text-gray notification">
@@ -80,8 +101,18 @@
         </div>
         <div class="col-exposition">
             <form data-ng-submit="postComment()">
-                <textarea name="comment" data-ng-model="comment" rows="4" placeholder="Écrire un commentaire..." class="expand"></textarea>
-                <p class="text-justify-force indent-sm-t"><span>Notes :&nbsp;&nbsp;<span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span></span>
+                <textarea name="comment.text" data-ng-model="comment.text" rows="4" placeholder="Écrire un commentaire..."
+                          class="expand" required></textarea>
+
+                <p class="text-justify-force indent-sm-t"><span>Notes :&nbsp;&nbsp;<span class="average-rate">
+                    <span class="star">
+                        <i class="fa fa-lg fa-star {{comment.rate == 1 ? 'current' : ''}}" rate="1"></i>
+                        <i class="fa fa-lg fa-star {{comment.rate == 2 ? 'current' : ''}}" rate="2"></i>
+                        <i class="fa fa-lg fa-star {{comment.rate == 3 ? 'current' : ''}}" rate="3"></i>
+                        <i class="fa fa-lg fa-star {{comment.rate == 4 ? 'current' : ''}}" rate="4"></i>
+                        <i class="fa fa-lg fa-star {{comment.rate == 5 ? 'current' : ''}}" rate="5"></i>
+                    </span>
+                </span></span>
                     <button type="submit" class="btn-inline bg-success-hover text-white">Envoyer</button>
                 </p>
             </form>
@@ -90,10 +121,12 @@
 </div>
 <section class="booking-activity-feed text-gray-strong">
     <ul class="section-content">
-        <li class="reply-to-message"><a href="#" class="text-success text-underline-hover"><i class="fa fa-mail-reply">&nbsp;&nbsp;</i>Répondre au message</a></li>
+        <li class="reply-to-message"><a href="#" class="text-success text-underline-hover"><i class="fa fa-mail-reply">
+            &nbsp;&nbsp;</i>Répondre au message</a></li>
         <!-- TODO date mark -->
         <!--<li class="feed-date-bage"><span>11/05</span></li>-->
-        <li class="block-with-thumbnail notification indent-md-v" data-ng-repeat="comment in commentList track by comment.id">
+        <li class="block-with-thumbnail notification indent-md-v"
+            data-ng-repeat="comment in commentList track by comment.id">
             <div class="col-thumbnail">
                 <div class="thumbnail">
                     <div class="icon-action"><i class="fa fa-lg fa-envelope-o"></i></div>
@@ -104,12 +137,16 @@
                     <div class="col-thumbnail">
                         <div class="thumbnail indent-sm-r round">
                             <a href="#">
-                                <img data-ng-src="{{comment.author.avatar.thumbnail}}" alt="{{comment.author.username}}" width="40" height="40">
+                                <img data-ng-src="{{comment.author.avatar.thumbnail}}" alt="{{comment.author.username}}"
+                                     width="40" height="40">
                             </a>
                         </div>
                     </div>
                     <div class="col-exposition">
-                        <h3 class="text-black indent-xs-b"><b>Message envoyé par <a href="#" class="text-success text-underline-hover">{{comment.author.username}}</a></b></h3>
+                        <h3 class="text-black indent-xs-b"><b>Message envoyé par <a href="#"
+                                                                                    class="text-success text-underline-hover">{{comment.author.username}}</a></b>
+                        </h3>
+
                         <p class="norm">{{comment.comment}}</p>
                     </div>
                 </div>

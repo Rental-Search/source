@@ -12,6 +12,17 @@ define(["angular", "eloue/app"], function (angular) {
         "CommentsLoadService",
         function ($scope, $stateParams, BookingsLoadService, CommentsLoadService) {
 
+            // Initial comment data
+            $scope.comment = {rate: 5};
+
+            // On rating star click
+            $(".star i").click(function () {
+                var self = $(this);
+                $scope.$apply(function () {
+                    $scope.comment.rate = self.attr("rate");
+                });
+            });
+
             // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
@@ -27,8 +38,13 @@ define(["angular", "eloue/app"], function (angular) {
 
             // Method to post new comment
             $scope.postComment = function () {
-                // TODO change rate
-                CommentsLoadService.postComment($stateParams.uuid, $scope.comment, 4);
+                CommentsLoadService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).$promise
+                    .then(function () {
+                        $scope.comment = {
+                            text: "",
+                            rate: 5
+                        };
+                    });
             };
 
         }
