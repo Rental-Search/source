@@ -428,6 +428,24 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return trimmedUrl.substring(trimmedUrl.lastIndexOf("/") + 1, url.length);
             };
 
+            utilsService.calculatePeriodBetweenDates = function (startDateString, endDateString) {
+                var hourTime = 60 * 60 * 1000;
+                var dayTime = 24 * hourTime;
+
+                var startTime = Date.parse(startDateString);
+                var endTime = Date.parse(endDateString);
+
+                var diffTime = endTime - startTime;
+
+                var periodDays = Math.round(diffTime / dayTime);
+                var periodHours = Math.round((diffTime - dayTime * periodDays) / hourTime);
+
+                return {
+                    period_days: periodDays,
+                    period_hours: periodHours
+                };
+            };
+
             return utilsService;
         }]);
 
@@ -526,16 +544,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             };
 
                             // Set period
-                            var hourTime = 60 * 60 * 1000;
-                            var dayTime = 24 * hourTime;
+                            var period = UtilsService.calculatePeriodBetweenDates(booking.started_at, booking.ended_at);
 
-                            var startTime = Date.parse(booking.started_at);
-                            var endTime = Date.parse(booking.ended_at);
-
-                            var diffTime = endTime - startTime;
-
-                            resultBooking.period_days = Math.round(diffTime / dayTime);
-                            resultBooking.period_hours = Math.round((diffTime - dayTime * resultBooking.period_days) / hourTime);
+                            resultBooking.period_days = period.period_days;
+                            resultBooking.period_hours = period.period_hours;
 
                             // Set product id
                             resultBooking.productId = UtilsService.getIdFromUrl(booking.product);
@@ -848,16 +860,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     bookingResult.end_time = UtilsService.formatDate(bookingResult.ended_at, "HH'h'mm");
 
                     // Parse period
-                    var hourTime = 60 * 60 * 1000;
-                    var dayTime = 24 * hourTime;
+                    var period = UtilsService.calculatePeriodBetweenDates(bookingResult.started_at, bookingResult.ended_at);
 
-                    var startTime = Date.parse(bookingResult.started_at);
-                    var endTime = Date.parse(bookingResult.ended_at);
-
-                    var diffTime = endTime - startTime;
-
-                    bookingResult.period_days = Math.round(diffTime / dayTime);
-                    bookingResult.period_hours = Math.round((diffTime - dayTime * bookingResult.period_days) / hourTime);
+                    bookingResult.period_days = period.period_days;
+                    bookingResult.period_hours = period.period_hours;
 
                     return bookingResult;
                 };
@@ -1009,7 +1015,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         var bookingsCount = bookingListData.results.length;
                         var booking = null;
 
-                        if(bookingsCount > 0) {
+                        if (bookingsCount > 0) {
                             var bookingData = bookingListData.results[bookingsCount - 1];
                             booking = BookingsParseService.parseBooking(bookingData);
                         }
@@ -1030,13 +1036,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("ProductsLoadService", [
             "$q",
             "Products",
+            "CheckAvailability",
             "AddressesService",
             "UsersService",
             "PicturesService",
             "PhoneNumbersService",
             "UtilsService",
             "ProductsParseService",
-            function ($q, Products, AddressesService, UsersService, PicturesService, PhoneNumbersService, UtilsService, ProductsParseService) {
+            function ($q, Products, CheckAvailability, AddressesService, UsersService, PicturesService, PhoneNumbersService, UtilsService, ProductsParseService) {
                 var productLoadService = {};
 
                 productLoadService.getProduct = function (productId, loadAddress, loadOwner, loadPhone, loadPictures) {
@@ -1081,6 +1088,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     });
 
                     return deferred.promise;
+                };
+
+                productLoadService.isAvailable = function (id, startDate, endDate, quantity) {
+                    return CheckAvailability.get({id: id, started_at: startDate, ended_at: endDate, quantity: quantity}).$promise;
                 };
 
                 return productLoadService;
@@ -1232,7 +1243,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                messageThreadsLoadService.getUsersRoles = function(messageThread, currentUserId) {
+                messageThreadsLoadService.getUsersRoles = function (messageThread, currentUserId) {
                     var senderId = UtilsService.getIdFromUrl(messageThread.sender);
                     var recipientId = UtilsService.getIdFromUrl(messageThread.recipient);
 

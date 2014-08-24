@@ -12,6 +12,7 @@ require.config({
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
+        "datejs": "../../bower_components/datejs/build/production/date.min",
         "selectivizr": "../../bower_components/selectivizr/selectivizr",
         "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
@@ -51,7 +52,8 @@ require([
     "bootstrap",
     "vars",
     "eloue/route",
-    "eloue/i18n"
+    "eloue/i18n",
+    "datejs"
 ], function ($, _, angular, bootstrap, vars, route) {
     "use strict";
     $(function () {

@@ -81,14 +81,14 @@
                         <div class="form-group">
                             <div class="input-group"><span class="input-group-addon">DU</span>
                                 <input type="text" placeholder="dd/mm/yyyy" data-ng-model="newBooking.start_date" data-date-format="dd/mm/yyyy" eloue-datepicker
-                                       data-ng-change="calculateBookingPrise()">
+                                       data-ng-change="updateNewBookingInfo()">
                                 <span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <select name="start_time" data-ng-model="newBooking.start_time"
                                     data-ng-options="hour as hour.label for hour in availableHours"
-                                    data-ng-change="calculateBookingPrise()">
+                                    data-ng-change="updateNewBookingInfo()">
                             </select>
                         </div>
                     </div>
@@ -96,29 +96,29 @@
                         <div class="form-group">
                             <div class="input-group"><span class="input-group-addon">AU</span>
                                 <input type="text" placeholder="dd/mm/yyyy" data-ng-model="newBooking.end_date" data-date-format="dd/mm/yyyy" eloue-datepicker
-                                       data-ng-change="calculateBookingPrise()">
+                                       data-ng-change="updateNewBookingInfo()">
                                 <span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <select name="end_time" data-ng-model="newBooking.end_time"
                                     data-ng-options="hour as hour.label for hour in availableHours"
-                                    data-ng-change="calculateBookingPrise()">
+                                    data-ng-change="updateNewBookingInfo()">
                             </select>
                         </div>
                     </div>
                     <ul class="zebra-list">
                         <li>
                             <div class="col-xs-4">Durée</div>
-                            <div class="col-xs-8">4 jours et 3 heures</div>
+                            <div class="col-xs-8">{{newBooking.period_days}} jours et {{newBooking.period_hours}} heures</div>
                         </li>
                         <li>
                             <div class="col-xs-4">Prix</div>
-                            <div class="col-xs-8 text-success">350€</div>
+                            <div class="col-xs-8 text-success">{{newBooking.total_amount}}€</div>
                         </li>
                         <li>
                             <div class="col-xs-4">Caution</div>
-                            <div class="col-xs-8">400€</div>
+                            <div class="col-xs-8">{{newBooking.total_amount}}€</div>
                         </li>
                     </ul>
                     <div class="row">

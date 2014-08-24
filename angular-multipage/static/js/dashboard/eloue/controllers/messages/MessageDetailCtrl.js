@@ -12,7 +12,10 @@ define(["angular", "eloue/app"], function (angular) {
         "MessageThreadsLoadService",
         "BookingsLoadService",
         "ProductRelatedMessagesLoadService",
-        function ($scope, $stateParams, $q, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService) {
+        "ProductsLoadService",
+        "UtilsService",
+        function ($scope, $stateParams, $q, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService,
+                  ProductsLoadService, UtilsService) {
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
@@ -54,15 +57,37 @@ define(["angular", "eloue/app"], function (angular) {
                         ];
 
                         $scope.newBooking = {
+                            start_date: Date.today().add(1).days().toString("dd/MM/yyyy"),
+                            end_date: Date.today().add(2).days().toString("dd/MM/yyyy"),
                             start_time: $scope.availableHours[0],
                             end_time: $scope.availableHours[0]
                         };
 
-                        $scope.calculateBookingPrise = function () {
-                            console.log("calculateBookingPrise()");
+                        $scope.updateNewBookingInfo = function () {
+                            var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value;
+                            var toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value;
+                            var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+                            var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+
+                            ProductsLoadService.isAvailable($scope.messageThread.product.id,
+                                fromDateTimeStr, toDateTimeStr, 1).then(
+                                function (data) {
+                                    var period = UtilsService.calculatePeriodBetweenDates(fromDateTime.toString(), toDateTime.toString());
+                                    $scope.newBooking.period_days = period.period_days;
+                                    $scope.newBooking.period_hours = period.period_hours;
+                                    $scope.newBooking.total_amount = data.total_price;
+                                    // TODO set deposit_amount field value
+                                },
+                                function (reason) {
+                                    // TODO bad date handling
+                                    console.log(reason);
+                                }
+                            );
                         };
                     }
                     $scope.booking = booking;
+
+                    $scope.updateNewBookingInfo();
                 });
 
                 // Get users' roles
