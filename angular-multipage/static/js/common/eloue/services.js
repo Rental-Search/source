@@ -940,11 +940,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService) {
                 var bookingsLoadService = {};
 
-                bookingsLoadService.getBookingList = function (page) {
+                bookingsLoadService.getBookingList = function (page, author) {
                     var deferred = $q.defer();
 
                     // Load bookings
-                    Bookings.get({page: page, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
+                    Bookings.get({page: page, author: author, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
                         var bookingListPromises = [];
 
                         // For each booking
