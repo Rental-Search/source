@@ -9,9 +9,10 @@ define(["angular", "eloue/app", "../../../../common/eloue/services"], function (
         "$scope",
         "UsersService",
         function ($scope, UsersService) {
-            UsersService.getMe(function (currentUser) {
+            $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
+                console.log($scope.currentUser);
 
                 // Send form when a file changes
                 $scope.onFileChanged = function () {
