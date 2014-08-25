@@ -20,7 +20,7 @@ a
 .clearfix
   +clearfix()
 
-@each $selector, $color in (success: $brand-success, danger: $brand-danger, primary: $brand-primary, info: $brand-info, gray: $gray-medium, white: white, gray-strong: $gray-strong, gray-stronger: $gray-stronger, gray-light: $gray-light, black: $gray-dark, lite: $gray-lite, blue: $brand-blue)
+@each $selector, $color in (success, $brand-success), (danger, $brand-danger), (primary, $brand-primary), (info, $brand-info), (gray, $gray-medium), (white, white), (gray-strong, $gray-strong), (gray-stronger, $gray-stronger), (gray-light, $gray-light), (black, $gray-dark), (lite, $gray-lite), (blue, $brand-blue)
   +make-colors($selector, $color)
 
 // text
@@ -29,7 +29,7 @@ a
     text-align: #{$align}
 
 // indent
-@each $class, $indent in (md: $indent-md, sm: $indent-sm, xs: $indent-xs, lg: $indent-lg)
+@each $class, $indent in (md, $indent-md), (sm, $indent-sm), (xs, $indent-xs), (lg, $indent-lg)
   .indent-#{$class}-h
     margin-left: $indent !important
     margin-right: $indent !important

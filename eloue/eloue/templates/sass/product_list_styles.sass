@@ -101,6 +101,7 @@ main
         position: relative
         overflow: hidden
       .thumbnail-img
+        background-color: $gray-lighter
         overflow: hidden
         position: relative
         .price
@@ -134,9 +135,13 @@ main
         p
           color: $gray-medium
           font-weight: $fw-semibold
+          +empty-element()
       .declarer-container
         display: table-cell
       .declarer-thumbnail
+        background-color: $gray-lighter
+        width: 40px
+        height: 40px
         overflow: hidden
         display: inline-block
         +border-radius(50%)
