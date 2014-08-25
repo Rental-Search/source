@@ -16,6 +16,7 @@ class NullBooleanField(serializers.BooleanField):
         return value if value is None else super(NullBooleanField, self).from_native(value)
 
 class EncodedImageField(serializers.ImageField):
+    empty = None
     _generated_image_names = None
 
     def __init__(self, generated_image_names=None, *args, **kwargs):
@@ -51,7 +52,11 @@ class EncodedImageField(serializers.ImageField):
         return value
 
     def to_native(self, value):
-        return value.url
+        try:
+            return value.url
+        except ValueError:
+            # if image file is missed and couldn't be reconstructed on the fly
+            return self.empty
 
 class ObjectMethodBooleanField(serializers.BooleanField):
     """
