@@ -11,10 +11,11 @@ define(["angular", "eloue/app"], function (angular) {
         "BookingsService",
         function ($scope, $stateParams, BookingsService) {
 
-            $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
+            $scope.selectedMonthAndYear = Date.today().getMonth()+ " " + Date.today().getFullYear();
             $scope.showUnavailable = true;
             $scope.showBookings = true;
             $scope.bookings = [];
+            $scope.currentBookings = [];
             $scope.weeks = {};
 
             var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
@@ -37,31 +38,44 @@ define(["angular", "eloue/app"], function (angular) {
             ];
 
             BookingsService.getBookingsByProduct($stateParams.id).then(function (bookings) {
+
+                angular.forEach(bookings, function (value, key) {
+                    value.startDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
+                    value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);
+                });
                 $scope.bookings = bookings;
+
+                $scope.updateCalendar();
             });
 
             $scope.updateCalendar = function () {
+                $scope.currentBookings = [];
                 var s = $scope.selectedMonthAndYear.split(" ");
                 var date = new Date();
                 date.setMonth(s[0]);
                 date.setFullYear(s[1]);
-                var startDate = new Date(date.moveToFirstDayOfMonth());
-                var endDate = new Date(date.moveToLastDayOfMonth());
-                console.log(startDate + "  " + endDate);
                 var weeks = [];
-                var start = new Date(startDate);
-                //TODO: finish
-                for (var i = 0; i < 5; i++) {
-                    var startOfWeek = start;
-                    for (var j = 1; j < 7; j++) {
-                        start.moveToDayOfWeek(1);
-                    }
+                var start = new Date(date.moveToFirstDayOfMonth());
+                for (var i = 0; i < 6; i++) {
+                    var currentDay = start.moveToDayOfWeek(1, -1);
                     var days = [];
+                    for (var j = 0; j < 7; j++) {
+                        var isBooked = false;
+                        angular.forEach($scope.bookings, function (value, key) {
+                            if (currentDay.between(value.startDay, value.endDay)) {
+                                isBooked = true;
+                                $scope.currentBookings.push(value);
+                            }
+                        });
 
+                        days.push({dayOfMonth: currentDay.getDate(), isBooked: isBooked});
+                        currentDay.add(1).days();
+                    }
 
                     var week = {};
                     week.weekDays = days;
                     weeks.push(week);
+                    start.add(1).weeks();
                 }
                 $scope.weeks = weeks;
             };
