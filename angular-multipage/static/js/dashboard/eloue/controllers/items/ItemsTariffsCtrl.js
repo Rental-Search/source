@@ -31,7 +31,6 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.product = product;
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
                     CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
-                        $scope.rootCategory = rootCategory.id;
                         $scope.updateFieldSet(rootCategory);
                     });
                 });

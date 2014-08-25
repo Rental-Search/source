@@ -1,28 +1,8 @@
 <div class="section-content">
-    <p><a href="#" class="pull-right text-underline-hover text-success"><i
-            class="fa fa-download indent-xs-r text-gray-strong"></i><span>Voir le contrat de location</span></a></p>
-
-    <h2 class="indent-lg-t">Assuarence</h2>
-    <ul class="not-ordered text-gray-strong">
-        <li>Casse accidientele (vol exclu) pour un montant maximum de 750€.</li>
-        <li>Pour les réparations n'excédant pas 750€ : franchise de 15% du mountant des réparations.</li>
-        <li>Pour les réparations supérieures à 750€ : franchise de 112,5€ plus le mountant des réparations excédant
-            750€.
-        </li>
-    </ul>
-    <h2 class="indent-lg-t">Conditioins de location</h2>
-    <ul class="not-ordered text-gray-strong">
-        <li>Le locataire doit être un particulier.</li>
-        <li>Le locataire doit payer sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au
-            début de la location.
-        </li>
-        <li>La location doit see faire en France métropolitaine.</li>
-        <li>La durée de la location ne peut pas excéder 90 jours.</li>
-    </ul>
-    <h2 class="indent-lg-t">Vos propres conditions</h2>
-
-    <p class="text-gray-strong">Il possible d'ajouter ses propres conditions de location.</p>
-
+    <div data-ng-init="car_terms_url='partials/dashboard/items/terms/car_terms.html'" data-ng-include="car_terms_url" data-ng-show="isAuto && !isProfessional"></div>
+    <div data-ng-init="real_estate_terms_url='partials/dashboard/items/terms/real_estate_terms.html'" data-ng-include="real_estate_terms_url" data-ng-show="isRealEstate && !isProfessional"></div>
+    <div data-ng-init="simple_terms_url='partials/dashboard/items/terms/simple_terms.html'" data-ng-include="simple_terms_url" data-ng-show="!isAuto && !isRealEstate && !isProfessional"></div>
+    <div data-ng-init="professional_terms_url='partials/dashboard/items/terms/professional_terms.html'" data-ng-include="professional_terms_url" data-ng-show="isProfessional"></div>
     <form action="terms" class="indent-sm-t">
         <div class="row">
             <div class="col-sm-12">

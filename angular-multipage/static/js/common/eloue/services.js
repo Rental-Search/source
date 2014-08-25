@@ -324,8 +324,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "PicturesService",
             "PricesService",
             "UtilsService",
+            "UsersService",
             "MessageThreads",
-            function ($q, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, MessageThreads) {
+            function ($q, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, UsersService, MessageThreads) {
                 var productsService = {};
 
                 productsService.getProduct = function (id) {
@@ -344,12 +345,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         promises.push(PhoneNumbersService.getPhoneNumber(phoneId).$promise);
                         var categoryId = UtilsService.getIdFromUrl(result.category);
                         promises.push(CategoriesService.getCategory(categoryId).$promise);
-
+                        var ownerId = UtilsService.getIdFromUrl(result.owner);
+                        promises.push(UsersService.get(ownerId).$promise);
                         $q.all(promises).then(function success(results) {
                             result.pictures = results[0].results;
                             result.addressDetails = results[1];
                             result.phoneDetails = results[2];
                             result.categoryDetails = results[3];
+                            result.ownerDetails = results[4];
                             deferred.resolve(result);
                         });
                     });
@@ -609,6 +612,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             // Get product
                             bookingPromises.product = ProductsService.getProduct(productId).$promise;
 
+                            var borrowerId = UtilsService.getIdFromUrl(value.borrower);
+                            bookingPromises.borrower = UsersService.get(borrowerId).$promise;
+
                             // Get picture
                             bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
 
@@ -617,6 +623,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 if (jQuery(results.pictures.results).size() > 0) {
                                     booking.picture = results.pictures.results[0].image.thumbnail;
                                 }
+                                booking.borrower = results.borrower;
                                 bookingDeferred.resolve(booking);
                             });
                             promises.push(bookingDeferred.promise);
