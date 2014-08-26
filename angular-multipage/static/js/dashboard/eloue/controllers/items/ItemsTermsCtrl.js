@@ -18,7 +18,6 @@ define(["angular", "eloue/app"], function (angular) {
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
-                console.log(product.ownerDetails.is_professional);
                 $scope.isPrfessional = product.ownerDetails.is_professional;
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
                     CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {

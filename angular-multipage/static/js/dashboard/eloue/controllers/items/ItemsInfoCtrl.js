@@ -42,7 +42,6 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.capacityOptions = Capacity;
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
-                console.log(product);
                 $scope.product = product;
 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();

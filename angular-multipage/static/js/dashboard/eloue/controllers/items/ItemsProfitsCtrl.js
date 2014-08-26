@@ -19,7 +19,6 @@ define(["angular", "eloue/app"], function (angular) {
 
             BookingsService.getBookingsByProduct($stateParams.id).then(function (bookings) {
                 $scope.bookings = bookings;
-                console.log(bookings);
                 $scope.numberOfBookings = bookings.length;
                 var sum = 0;
                 var startOfBookingPeriod = Date.today();
