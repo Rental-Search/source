@@ -20,7 +20,7 @@
             <div class="col-md-4">
                 <div class="form-control">
                     <select data-ng-model="product.category">
-                        <option data-ng-repeat="category in leafCategories" value="{{category.id}}">{{category.name}}</option>
+                        <option data-ng-repeat="category in leafCategories" value="{{categoriesBaseUrl}}{{category.id}}/">{{category.name}}</option>
                     </select>
                 </div>
             </div>

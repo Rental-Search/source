@@ -30,6 +30,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.rootCategory = {};
             $scope.nodeCategory = {};
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
+            $scope.categoriesBaseUrl = Endpoints.api_url + "categories/";
             $scope.isAuto = false;
             $scope.isRealEstate = false;
             $scope.privateLifeOptions = PrivateLife;
@@ -45,7 +46,6 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.product = product;
 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
-                $scope.product.category = $scope.product.categoryDetails.id;
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
                     $scope.nodeCategory = nodeCategory.id;
                     $scope.updateLeafCategories();
