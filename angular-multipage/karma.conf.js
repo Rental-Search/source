@@ -11,22 +11,23 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      {pattern: 'app/bower_components/angular/angular.min.js', included: false },
-      {pattern: 'app/bower_components/angular-mocks/angular-mocks.js', included: false },
-      {pattern: 'app/bower_components/angular-resource/angular-resource.min.js', included: false },
-      {pattern: 'app/bower_components/angular-cookies/angular-cookies.min.js', included: false },
-      {pattern: 'app/bower_components/angular-sanitize/angular-sanitize.min.js', included: false },
-      {pattern: 'app/bower_components/angular-route/angular-route.min.js', included: false },
-      {pattern: 'app/js/*.js', included: false },
-      {pattern: 'app/js/**/*.js', included: false },
+      {pattern: 'static/bower_components/angular/angular.min.js', included: false },
+      {pattern: 'static/bower_components/angular-mocks/angular-mocks.js', included: false },
+      {pattern: 'static/bower_components/angular-resource/angular-resource.min.js', included: false },
+      {pattern: 'static/bower_components/angular-cookies/angular-cookies.min.js', included: false },
+      {pattern: 'static/bower_components/angular-sanitize/angular-sanitize.min.js', included: false },
+      {pattern: 'static/bower_components/angular-route/angular-route.min.js', included: false },
+      {pattern: 'static/js/*.js', included: false },
+      {pattern: 'static/js/**/*.js', included: false },
+      {pattern: 'static/js/**/*.js', included: false },
       {pattern: 'tests/unit/**/*.js', included: false },
       'tests/test-main.js'
     ],
 
     // list of files / patterns to exclude
     exclude: [
-        'app/js/homepage/main-homepage.js',
-        'app/js/product_details/main-product_details.js'
+        'static/js/dashboard/main.js',
+        'static/js/widgets/main.js'
     ],
 
     // web server port

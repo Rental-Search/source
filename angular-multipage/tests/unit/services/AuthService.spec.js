@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/services/AuthService"], function() {
+define(["angular-mocks", "eloue/modules/user_management/services/AuthService"], function() {
 
     describe("Service: AuthService", function () {
 

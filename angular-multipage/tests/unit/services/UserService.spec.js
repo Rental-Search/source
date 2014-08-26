@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/services/UserService"], function() {
+define(["angular-mocks", "eloue/modules/booking/services/UserService"], function() {
 
     describe("Service: UserService", function () {
 

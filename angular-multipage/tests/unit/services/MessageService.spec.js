@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/services/MessageService"], function () {
+define(["angular-mocks", "eloue/modules/booking/services/MessageService"], function () {
 
     describe("Service: MessageService", function () {
 
