@@ -343,13 +343,47 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("ProductsService", [
             "$q",
+            "AddressesService",
+            "Bookings",
             "Products",
+            "CategoriesService",
+            "PhoneNumbersService",
             "PicturesService",
-            function ($q, Products, PicturesService) {
+            "PricesService",
+            "UtilsService",
+            "UsersService",
+            "MessageThreads",
+            function ($q, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, UsersService, MessageThreads) {
                 var productsService = {};
 
                 productsService.getProduct = function (id) {
                     return Products.get({id: id});
+                };
+
+                productsService.getProductDetails = function(id) {
+                    var deferred = $q.defer();
+                    var self = this;
+                    Products.get({id: id}).$promise.then(function (result) {
+                        var promises = [];
+                        promises.push(PicturesService.getPicturesByProduct(id).$promise);
+                        var addressId = UtilsService.getIdFromUrl(result.address);
+                        promises.push(AddressesService.getAddress(addressId).$promise);
+                        var phoneId = UtilsService.getIdFromUrl(result.phone);
+                        promises.push(PhoneNumbersService.getPhoneNumber(phoneId).$promise);
+                        var categoryId = UtilsService.getIdFromUrl(result.category);
+                        promises.push(CategoriesService.getCategory(categoryId).$promise);
+                        var ownerId = UtilsService.getIdFromUrl(result.owner);
+                        promises.push(UsersService.get(ownerId).$promise);
+                        $q.all(promises).then(function success(results) {
+                            result.pictures = results[0].results;
+                            result.addressDetails = results[1];
+                            result.phoneDetails = results[2];
+                            result.categoryDetails = results[3];
+                            result.ownerDetails = results[4];
+                            deferred.resolve(result);
+                        });
+                    });
+                    return deferred.promise;
                 };
 
                 productsService.getProductsByAddress = function (addressId) {
@@ -393,6 +427,80 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     });
 
                     return deferred.promise;
+                };
+
+                productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId) {
+                    var deferred = $q.defer();
+                    var params = {owner: userId};
+
+                    if (rootCategoryId) {
+                        params.category__isdescendant = rootCategoryId;
+                    }
+
+                    Products.get(params).$promise.then(function (data) {
+                        var promises = [];
+
+                        angular.forEach(data.results, function (value, key) {
+                            var productDeferred = $q.defer();
+
+                            var product = {
+                                id: value.id,
+                                summary: value.summary,
+                                deposit_amount: value.deposit_amount
+                            };
+
+                            var subPromises = [];
+
+                            subPromises.push(PicturesService.getPicturesByProduct(product.id).$promise);
+                            subPromises.push(PricesService.getProductPricesPerDay(product.id).$promise);
+                            subPromises.push(Bookings.get({product: product.id}).$promise);
+                            subPromises.push(MessageThreads.list({product: product.id}).$promise);
+                            $q.all(subPromises).then(
+                                function (results) {
+
+                                    var pictures = results[0];
+                                    if ($.isArray(pictures.results) && (pictures.results.length > 0)) {
+                                        product.picture = pictures.results[0].image.thumbnail;
+                                    }
+
+                                    var prices = results[1];
+                                    if (prices.results && prices.results.length > 0) {
+                                        product.pricePerDay = prices.results[0].amount;
+                                    } else {
+                                        product.pricePerDay = 0;
+                                    }
+
+                                    var bookings = results[2];
+                                    product.numberOfBookings = bookings.results.length;
+
+                                    var messageThreads = results[3];
+                                    product.numberOfComments = messageThreads.results.length;
+
+                                    productDeferred.resolve(product);
+                                },
+                                function (reasons) {
+                                    productDeferred.reject(reasons);
+                                }
+                            );
+
+                            promises.push(productDeferred.promise);
+                        });
+
+                        $q.all(promises).then(
+                            function (results) {
+                                deferred.resolve(results);
+                            },
+                            function (reasons) {
+                                deferred.reject(reasons);
+                            }
+                        );
+                    });
+
+                    return deferred.promise;
+                };
+
+                productsService.updateProduct = function (product) {
+                    return Products.update({id: product.id}, product);
                 };
 
                 return productsService;
@@ -519,6 +627,63 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                bookingsService.getBookingsByProduct = function (productId) {
+                    var deferred = $q.defer();
+
+                    Bookings.get({product: productId}).$promise.then(function (data) {
+                        var promises = [];
+
+                        angular.forEach(data.results, function (value, key) {
+                            var bookingDeferred = $q.defer();
+                            var booking = {
+                                state: value.state,
+                                total_amount: value.total_amount,
+                                uuid: value.uuid,
+                                start_date: {
+                                    day: UtilsService.formatDate(value.started_at, "dd"),
+                                    month: UtilsService.formatDate(value.started_at, "MMMM"),
+                                    year: UtilsService.formatDate(value.started_at, "yyyy")
+                                },
+                                end_date: {
+                                    day: UtilsService.formatDate(value.ended_at, "dd"),
+                                    month: UtilsService.formatDate(value.ended_at, "MMMM"),
+                                    year: UtilsService.formatDate(value.ended_at, "yyyy")
+                                }
+                            };
+
+                            var bookingPromises = {};
+
+                            // Get product id
+                            var productId = UtilsService.getIdFromUrl(value.product);
+
+                            // Get product
+                            bookingPromises.product = ProductsService.getProduct(productId).$promise;
+
+                            var borrowerId = UtilsService.getIdFromUrl(value.borrower);
+                            bookingPromises.borrower = UsersService.get(borrowerId).$promise;
+
+                            // Get picture
+                            bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
+
+                            $q.all(bookingPromises).then(function (results) {
+                                booking.title = results.product.summary;
+                                if (jQuery(results.pictures.results).size() > 0) {
+                                    booking.picture = results.pictures.results[0].image.thumbnail;
+                                }
+                                booking.borrower = results.borrower;
+                                bookingDeferred.resolve(booking);
+                            });
+                            promises.push(bookingDeferred.promise);
+                        });
+
+                        $q.all(promises).then(function (results) {
+                            deferred.resolve(results);
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+                
                 bookingsService.getBooking = function (uuid) {
                     var deferred = $q.defer();
 
@@ -710,13 +875,80 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         ]);
 
         /**
+         * Service for managing categories.
+         */
+        EloueCommon.factory("CategoriesService", ["$q", "Categories", "UtilsService", function ($q, Categories, UtilsService) {
+            var categoriesService = {};
+
+            categoriesService.getCategory = function (categoryId) {
+                return Categories.get({id: categoryId});
+            };
+
+            categoriesService.getParentCategory = function (category) {
+                var parentCategoryId = UtilsService.getIdFromUrl(category.parent);
+                return categoriesService.getCategory(parentCategoryId);
+            };
+
+            categoriesService.getRootCategories = function () {
+                return Categories.get({parent__isnull : true});
+            };
+
+            categoriesService.getChildCategories = function (parentId) {
+                var deferred = $q.defer();
+                Categories.getChildren({id: parentId}).$promise.then(function (categories) {
+                    var categoryList = [];
+                    angular.forEach(categories, function (value, key) {
+                        categoryList.push({id: value.id, name: value.name});
+                    });
+                    deferred.resolve(categoryList);
+                });
+                return deferred.promise;
+            };
+
+            return categoriesService;
+        }]);
+
+        /**
+         * Service for managing prices.
+         */
+        EloueCommon.factory("PricesService", ["Prices", function (Prices) {
+            var pricesService = {};
+
+            pricesService.getProductPricesPerDay = function (productId) {
+                return Prices.getProductPricesPerDay({product: productId});
+            };
+
+            pricesService.getPricesByProduct = function (productId) {
+                return Prices.get({product: productId});
+            };
+
+            pricesService.savePrice = function (price) {
+                return Prices.save(price);
+            };
+
+            pricesService.updatePrice = function (price) {
+                return Prices.update({id: price.id}, price);
+            };
+
+            return pricesService;
+        }]);
+
+        /**
          * Service for managing pictures.
          */
-        EloueCommon.factory("PicturesService", ["Pictures", function (Pictures) {
+        EloueCommon.factory("PicturesService", ["Pictures", "Endpoints", "FormService", function (Pictures, Endpoints, FormService) {
             var picturesService = {};
 
             picturesService.getPicturesByProduct = function (productId) {
                 return Pictures.get({product: productId});
+            };
+
+            picturesService.savePicture = function (productId, form, successCallback, errorCallback) {
+                // Calculate current user url
+                var url = Endpoints.api_url + "pictures/";
+
+                // Send form to the url
+                FormService.send("POST", url, form, successCallback, errorCallback);
             };
 
             return picturesService;
@@ -756,6 +988,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                //TODO: leave only 1 update method for addresses
+                addressesService.update = function (address) {
+                    return Addresses.update({id: address.id}, address);
+                };
+
                 addressesService.deleteAddress = function (addressId) {
                     return Addresses.delete({id: addressId});
                 };
@@ -774,9 +1011,30 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return PhoneNumbers.get({id: phoneNumbersId});
             };
 
+            phoneNumbersService.updatePhoneNumber = function (phoneNumber) {
+                return PhoneNumbers.update({id: phoneNumber.id}, phoneNumber);
+            };
+
             return phoneNumbersService;
         }]);
 
+        /**
+         * Service for managing professional agencies.
+         */
+        EloueCommon.factory("ProAgenciesService", ["ProAgencies", function (ProAgencies) {
+            var proAgenciesService = {};
+
+            proAgenciesService.getProAgencies = function () {
+                return ProAgencies.get();
+            };
+
+            proAgenciesService.updateProAgency = function (proAgency) {
+                return ProAgencies.update({id: proAgency.id}, proAgency);
+            };
+
+            return proAgenciesService;
+        }]);
+        
         /**
          * Service for managing comments.
          */

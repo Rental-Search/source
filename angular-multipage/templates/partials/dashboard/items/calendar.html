@@ -1,0 +1,78 @@
+<div class="section-content">
+    <form action="itmes">
+        <div class="row">
+            <div class="col-xs-7">
+                <h2>Sélectionner le mois</h2>
+            </div>
+            <div class="col-xs-5">
+                <div class="form-control without-search select-gradient">
+                    <select data-ng-model="selectedMonthAndYear" data-ng-change="updateCalendar()">
+                        <option data-ng-repeat="month in monthOptions" value="{{month.value}}">{{month.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 indent-sm-b">
+                <table class="calendar text-center">
+                    <thead>
+                    <tr>
+                        <td>Lun</td>
+                        <td>Mar</td>
+                        <td>Mer</td>
+                        <td>Jeu</td>
+                        <td>ven</td>
+                        <td>Sam</td>
+                        <td>Dim</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="week in weeks">
+                        <td data-ng-repeat="day in week.weekDays" class="{{day.isBooked && showBookings ? 'booking' : ''}}">{{day.dayOfMonth}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <label class="check-btn form-control text-danger-light">
+                    <input type="checkbox" data-ng-model="showUnavailable" data-ng-change="onShowUnavailable()"><span><i class="fa fa-check"></i></span>Indisponiblités
+                </label>
+            </div>
+            <div class="col-xs-4">
+                <label class="check-btn form-control text-success-light">
+                    <input type="checkbox" data-ng-model="showBookings" data-ng-change="onShowBookings()"><span><i class="fa fa-check"></i></span>Réservations
+                </label>
+            </div>
+        </div>
+        <div class="row indent-xs-b">
+            <div class="col-xs-12 indent-sm-b">
+                <table class="calendar bg-light text-center">
+                    <thead>
+                    <tr>
+                        <td>Date de début</td>
+                        <td>Date de fin</td>
+                        <td>Motifs</td>
+                        <td>Action</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="booking in currentBookings" data-ng-show="showBookings">
+                        <td>{{booking.startDay | date:'dd/MM/yyyy'}}</td>
+                        <td>{{booking.endDay | date:'dd/MM/yyyy'}}</td>
+                        <td class="text-success-light">Réservé</td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-8 col-xs-offset-2">
+                <button type="submit" class="btn bg-success-hover text-white">Ajoutez une nouvelle disponibilité
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

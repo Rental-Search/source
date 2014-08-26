@@ -57,10 +57,23 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     }]);
 
     /**
+     * Factory for managing categories.
+     */
+    EloueCommon.factory("Categories", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "categories/:id/?", {},
+            {
+                "getChildren": { method: "GET", url: Endpoints.api_url + "categories/:id/children\\/", isArray: true}
+            });
+    }]);
+
+    /**
      * Factory for managing products.
      */
     EloueCommon.factory("Products", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "products/:id/?");
+        return $resource(Endpoints.api_url + "products/:id/?", {},
+            {
+                "update": { method: "PUT" }
+            });
     }]);
 
     /**
@@ -77,9 +90,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing prices.
      */
     EloueCommon.factory("Prices", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "prices\\/", {},
+        return $resource(Endpoints.api_url + "prices/:id/?", {},
             {
-                "get": { method: "GET", params: {product: ":productId", unit: "1"}}
+                "getProductPricesPerDay": { method: "GET", params: {product: ":productId", unit: "1"}},
+                "update": { method: "PUT" }
             });
     }]);
 
@@ -87,7 +101,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing addresses.
      */
     EloueCommon.factory("Addresses", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "addresses/:id/?");
+        return $resource(Endpoints.api_url + "addresses/:id/?", {},
+            {
+                "update": { method: "PUT" }
+            });
     }]);
 
     /**
@@ -96,7 +113,18 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("PhoneNumbers", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "phones/:id\\/", {},
             {
-                "get": { method: "GET", params: {id: ":id"}}
+                "get": { method: "GET", params: {id: ":id"}},
+                "update": { method: "PUT" }
+            });
+    }]);
+
+    /**
+     * Factory for managing professional agencies.
+     */
+    EloueCommon.factory("ProAgencies", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "pro_agencies/:id/?", {},
+            {
+                "update": { method: "PUT" }
             });
     }]);
 
