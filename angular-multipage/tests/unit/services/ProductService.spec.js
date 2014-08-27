@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/services/ProductService"], function () {
+define(["angular-mocks", "eloue/modules/booking/services/ProductService"], function () {
 
     describe("Service: ProductService", function () {
 

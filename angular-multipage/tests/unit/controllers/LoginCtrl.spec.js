@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/controllers/LoginCtrl"], function() {
+define(["angular-mocks", "eloue/modules/user_management/controllers/LoginCtrl"], function() {
 
     describe("Controller: LoginCtrl", function () {
 

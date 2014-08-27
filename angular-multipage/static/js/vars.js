@@ -1,1 +1,1 @@
-var templatePrefix = "/static/";
+var templatePrefix = "/templates/";

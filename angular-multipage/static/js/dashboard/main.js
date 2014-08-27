@@ -12,6 +12,7 @@ require.config({
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
         "angular-money-directive": "../../bower_components/angular-money-directive/angular-money-directive",
+        "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
         "datejs": "../../bower_components/datejs/build/production/date.min",
         "selectivizr": "../../bower_components/selectivizr/selectivizr",
@@ -20,8 +21,7 @@ require.config({
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../js/chosen.jquery.min",
         "vars": "../vars",
-        "bootstrap_modal": "../bootstrap/modal",
-        "datejs": "../../bower_components/datejs/build/production/date.min"
+        "bootstrap_modal": "../bootstrap/modal"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -44,6 +44,7 @@ require.config({
         "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
         "jquery-autosize": ["jQuery"],
         "jquery-chosen": ["jQuery"],
+        "bootstrap-datepicker": ["jQuery"],
         "bootstrap_modal":  ["jQuery"]
     }
 });
@@ -55,9 +56,9 @@ require([
     "bootstrap",
     "vars",
     "datejs",
+    "bootstrap-datepicker",
     "eloue/route",
-    "eloue/i18n",
-    "datejs"
+    "eloue/i18n"
 ], function ($, _, angular, bootstrap, vars, route) {
     "use strict";
     $(function () {

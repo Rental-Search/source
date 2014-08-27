@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/controllers/ProductDetailsCtrl"], function () {
+define(["angular-mocks", "eloue/modules/booking/controllers/ProductDetailsCtrl"], function () {
 
     describe("Controller: ProductDetailsCtrl", function () {
 
