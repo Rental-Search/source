@@ -11,13 +11,12 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
-from rest_framework import routers
-
 from accounts.forms import EmailPasswordResetForm, PatronSetPasswordForm
 from accounts.views import activate, authenticate, authenticate_headless, contact, google_oauth_callback, patron_subscription
 from products.views import homepage, search, reply_product_related_message, homepage_object_list
 from products.search import product_only_search, car_search, realestate_search
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
+from eloue.api.urls import router, UserMeViewSet
 
 log = logbook.Logger('eloue')
 
@@ -35,97 +34,6 @@ sitemaps = {
 
 translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
 
-from accounts import views as accounts_api
-from products import views as products_api
-from rent import views as rent_api
-
-class UserMeViewSet(accounts_api.UserViewSet):
-    def retrieve_me(self, request, pk=None, *args, **kwargs):
-        # use currently authenticated user's ID as pk, ignoring the input argument
-        pk = request.user.pk
-        self.kwargs[self.pk_url_kwarg] = pk
-        return super(UserMeViewSet, self).retrieve(request, pk=pk, *args, **kwargs)
-
-    def update_me(self, request, pk=None, *args, **kwargs):
-        # use currently authenticated user's ID as pk, ignoring the input argument
-        pk = request.user.pk
-        self.kwargs[self.pk_url_kwarg] = pk
-        return super(UserMeViewSet, self).update(request, pk=pk, *args, **kwargs)
-
-# See http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
-router = routers.DefaultRouter()
-router.register(r'users', accounts_api.UserViewSet, base_name='patron')
-router.register(r'addresses', accounts_api.AddressViewSet, base_name='address')
-router.register(r'phones', accounts_api.PhoneNumberViewSet, base_name='phonenumber')
-router.register(r'credit_cards', accounts_api.CreditCardViewSet, base_name='creditcard')
-router.register(r'pro_agencies', accounts_api.ProAgencyViewSet, base_name='proagency')
-router.register(r'pro_packages', accounts_api.ProPackageViewSet, base_name='propackage')
-router.register(r'subscriptions', accounts_api.SubscriptionViewSet, base_name='subscription')
-router.register(r'billings', accounts_api.BillingViewSet, base_name='billing')
-router.register(r'billing_subscriptions', accounts_api.BillingSubscriptionViewSet, base_name='billingsubscription')
-router.register(r'categories', products_api.CategoryViewSet, base_name='category')
-router.register(r'products', products_api.ProductViewSet, base_name='product')
-router.register(r'prices', products_api.PriceViewSet, base_name='price')
-router.register(r'pictures', products_api.PictureViewSet, base_name='picture')
-router.register(r'curiosities', products_api.CuriosityViewSet, base_name='curiosity')
-router.register(r'messagethreads', products_api.MessageThreadViewSet, base_name='messagethread')
-router.register(r'productrelatedmessages', products_api.ProductRelatedMessageViewSet, base_name='productrelatedmessage')
-router.register(r'bookings', rent_api.BookingViewSet, base_name='booking')
-router.register(r'comments', rent_api.CommentViewSet, base_name='comment')
-router.register(r'sinisters', rent_api.SinisterViewSet, base_name='sinister')
-
-class ExtraContextTemplateView(TemplateView):
-    extra_context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super(ExtraContextTemplateView, self).get_context_data(**kwargs)
-        context.update(self.extra_context)
-        return context
-
-partials_urlpatterns = patterns('',
-    url(r'^homepage/login-form.html$', TemplateView.as_view(
-        template_name='jade/_log_in.jade',
-        ), name='new_ui_homepage_login',
-    ),
-    url(r'^homepage/registration-form.html$', TemplateView.as_view(
-        template_name='jade/_sign_in.jade',
-        ), name='new_ui_homepage_registration',
-    ),
-)
-
-city_list = [
-    {"name": "paris", "actives": 123254},
-    {"name": "lyon", "actives": 98453},
-    {"name": "toulouse", "actives": 90657},
-    {"name": "nantes", "actives": 123254},
-    {"name": "rennes", "actives": 98453},
-    {"name": "bordeaux", "actives": 90657},
-    {"name": "lille", "actives": 123254},
-    {"name": "montpelier", "actives": 98453},
-    {"name": "rouen", "actives": 90657},
-]
-
-newui_urlpatterns = patterns('',
-    url(r'^$', ExtraContextTemplateView.as_view(
-            template_name='index.jade',
-            extra_context={
-                'cities': city_list,
-            }
-        ),
-        name='new_ui_index',
-    ),
-    url(r'^lists/$', ExtraContextTemplateView.as_view(
-            template_name='products/product_list.jade',
-        ),
-        name='new_ui_product_list',
-    ),
-    url(r'^dashboard/$', ExtraContextTemplateView.as_view(
-            template_name='dashboard/dashboard/index.jade',
-        ),
-        name='new_ui_dashboard',
-    ),
-    url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_partials')),
-)
 
 urlpatterns = patterns('',
     url(r'^invitation_sent/$', TemplateView.as_view(template_name='accounts/invitation_sent.html'), name='invitation_sent'),
@@ -191,7 +99,114 @@ urlpatterns = patterns('',
         'set_password_form': PatronSetPasswordForm,
         'template_name': 'accounts/professional_password_reset_confirm.html',
     }),
+)
 
+
+class ExtraContextTemplateView(TemplateView):
+    extra_context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(ExtraContextTemplateView, self).get_context_data(**kwargs)
+        context.update(self.extra_context)
+        return context
+
+partials_urlpatterns = patterns('',
+    url(r'^homepage/login-form.html$', TemplateView.as_view(
+            template_name='jade/_log_in.jade',
+        ),
+    ),
+    url(r'^homepage/registration-form.html$', TemplateView.as_view(
+            template_name='jade/_sign_in.jade',
+        ),
+    ),
+
+    url(r'^dashboard/dashboard.html$', TemplateView.as_view(
+            template_name='dashboard/dashboard/index.jade',
+        ),
+    ),
+    url(r'^dashboard/messages.html$', TemplateView.as_view(
+            template_name='dashboard/messages/index.jade',
+        ),
+    ),
+    url(r'^dashboard/booking.html$', TemplateView.as_view(
+            template_name='dashboard/booking/index.jade',
+        ),
+    ),
+    url(r'^dashboard/items.html$', TemplateView.as_view(
+            template_name='dashboard/items/index.jade',
+        ),
+    ),
+    url(r'^dashboard/account.html$', TemplateView.as_view(
+            template_name='dashboard/account/_base_account.jade',
+        ),
+    ),
+
+    url(r'^dashboard/messages/message_detail.html$', TemplateView.as_view(
+            template_name='dashboard/messages/_aside_product_detail.jade',
+        ),
+    ),
+
+    url(r'^dashboard/bookings/booking_detail.html$', TemplateView.as_view(
+            template_name='dashboard/booking/_bookings_detaild.jade',
+        ),
+    ),
+
+    url(r'^dashboard/account/profile.html$', TemplateView.as_view(
+            template_name='dashboard/account/profil.jade',
+        ),
+    ),
+    url(r'^dashboard/account/verification.html$', TemplateView.as_view(
+            template_name='dashboard/account/verification.jade',
+        ),
+    ),
+    url(r'^dashboard/account/addresses.html$', TemplateView.as_view(
+            template_name='dashboard/account/address.jade',
+        ),
+    ),
+    url(r'^dashboard/account/phones.html$', TemplateView.as_view(
+            template_name='dashboard/account/phones.jade',
+        ),
+    ),
+    url(r'^dashboard/account/payments.html$', TemplateView.as_view(
+            template_name='dashboard/account/payments.jade',
+        ),
+    ),
+    url(r'^dashboard/account/password.html$', TemplateView.as_view(
+            template_name='dashboard/account/password.jade',
+        ),
+    ),
+    url(r'^dashboard/account/invitation.html$', TemplateView.as_view(
+            template_name='dashboard/account/invitation.jade',
+        ),
+    ),
+    url(r'^dashboard/account/address_detail.html$', TemplateView.as_view(
+            template_name='dashboard/account/_address_detail.jade',
+        ),
+    ),
+)
+
+dashboard_urlpatterns = patterns('',
+    url(r'^$', ExtraContextTemplateView.as_view(
+            template_name='dashboard/jade/_base_dashboard.jade',
+        ),
+        name='new_ui_dashboard',
+    ),
+    url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_dashboard_partials')),
+)
+
+city_list = [
+    {"name": "paris", "actives": 123254},
+    {"name": "lyon", "actives": 98453},
+    {"name": "toulouse", "actives": 90657},
+    {"name": "nantes", "actives": 123254},
+    {"name": "rennes", "actives": 98453},
+    {"name": "bordeaux", "actives": 90657},
+    {"name": "lille", "actives": 123254},
+    {"name": "montpelier", "actives": 98453},
+    {"name": "rouen", "actives": 90657},
+]
+
+urlpatterns = patterns('',
     # OAuth2
     url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')), # django-oauth2-provider
 #    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # django-oauth-toolkit
@@ -202,7 +217,22 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     # UI v3
-    url(r'^new_ui/', include(newui_urlpatterns, namespace='ui3')),
+    url(r'^$', ExtraContextTemplateView.as_view(
+            template_name='index.jade',
+            extra_context={
+                'cities': city_list,
+            }
+        ),
+        name='new_ui_homepage',
+    ),
+    url(r'^lists/', ExtraContextTemplateView.as_view(
+            template_name='products/product_list.jade',
+        ),
+        name='new_ui_product_list',
+    ),
+    url(r'^dashboard/', include(dashboard_urlpatterns, namespace='new_ui_dashboard')),
+    url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_partials')),
+
     # social: support for sign-in by Google and/or Facebook
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 )

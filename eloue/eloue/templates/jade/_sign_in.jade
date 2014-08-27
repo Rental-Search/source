@@ -1,4 +1,4 @@
-.modal.fade#sign-in(tabindex="-1", role="dialog", aria-hidden="true")
+.modal.fade#sign-up(tabindex="-1", role="dialog", aria-hidden="true")
 	.modal-dialog
 		.modal-content
 			.modal-header
@@ -20,16 +20,17 @@
 					| Vos données personnelles ne seront jamais cédées ou vendues.
 				span.or
 				h3 Inscrivez-vous en 30 secondes
-				form
+				form(name="registrationForm", ng-submit="register()", novalidate)
 					.classic-form
-						.form-group: input(type="text", placeholder="Nom *", required).form-control
-						.form-group: input(type="text", placeholder="Prénom *", required).form-control
-						.form-group: input(type="text", placeholder="Code postal *", required).form-control
-						.form-group: input(type="email", placeholder="E-mail *", required).form-control
-						.form-group: input(type="password", placeholder="Mot de passe *", required).form-control
-						.form-group: input(type="password", placeholder="Confirmation *", required).form-control
-						.form-group: button(type="submit").btn.bg-success Inscription
-					.form-group: button.btn.bg-success.registration Inscription via Email
+						-var registration_form_fields = [["text", "Nom", "lastName"], ["text", "Prénom", "firstName"], ["text", "Code postal", "postalCode"], ["email", "E-mail", "email"], ["text", "Username", "username"], ["password", "Mot de passe", "password"], ["password", "Confirmation", "confirmPassword"]]
+						each type, placeholder, name in registration_form_fields
+							.form-group
+								input(type="text", placeholder="#{placeholder} *", name="#{name}", data-ng-model="account.#{name}", required).form-control
+								span.errorMsg(data-ng-show="registrationForm.#{name}.$error.required && registrationForm.#{name}.$dirty") Required field
+						.form-group
+							button(type="submit").btn.bg-success(data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty") Inscription
+							span.errorMsg(data-ng-show="registrationError != ''" ng-bind="registrationError")
+					.form-group: button.btn.bg-success.registration(ng-click="openRegistrationForm()") Inscription via Email
 					.checkbox
 						label(for="inform")
 							input(type="checkbox" checked)#inform
@@ -41,4 +42,4 @@
 					| et la Politique de Confidentialité de notre site
 				span.or
 				h4 Vous êtes déjà membre e-loue ?
-				a( href = "#connectez-vous", data-toggle="modal", data-target="#log-in", data-dismiss="modal").modal-fotter-link.connexion Connexion
+				a( href = "#connectez-vous", data-toggle="modal", data-target="#sign-in", data-dismiss="modal").modal-fotter-link.connexion Connexion

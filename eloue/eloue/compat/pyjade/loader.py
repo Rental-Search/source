@@ -26,7 +26,7 @@ class Loader(BaseLoader):
         return template_name.endswith('.jade')
 
     def process_jade(self, source, template_name):
-        return process(source, filename=template_name, parser=Parser, compiler=Compiler)
+        return process(source, filename=template_name, parser=Parser, compiler=Compiler, doctype='5')
 
     def load_template_source(self, template_name, template_dirs=None):
         is_jade = self.is_jade(template_name)

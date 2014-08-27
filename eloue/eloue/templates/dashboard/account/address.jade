@@ -1,18 +1,17 @@
-extends ./_base_account
 block sections
   section.tabs-vertical-active.md.scrollbar-custom
     ul.block-with-thumbnail
-      each address in addresses
-        li.block-with-thumbnail
-          a(href="#").tab-vertical(class="#{address.def}")
+      if True
+        {% verbatim %}
+        li.block-with-thumbnail(data-ng-repeat="address in addressList track by address.id")
+          a(ui-sref="account.addresses.detail({id: address.id})").tab-vertical(class="{{address.id === defaultAddressId ? 'default' : ''}}")
             .col-thumbnail
               .thumbnail
-                img(src="#{STATIC_URL}img/#{address.thumbnail}", width="70")
+                img(data-ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{address.position.coordinates[0]}},{{address.position.coordinates[1]}}&zoom=14&size=70x70&language=fr", width="70")
             .col-exposition
               h3.indent-xs-b
-                | #{address.street}
+                | {{address.street}}
                 i.fa.fa-check.fa-lg.pull-right
-              p.normal.text-gray #{address.zip_code} #{address.city}
-
-  aside.address-detail.pull-nothing.scrollbar-custom.scrollbar-left
-    include ./_address_detail
+              p.normal.text-gray {{address.zipcode}} {{address.city}}
+        {% endverbatim %}
+  aside.address-detail.pull-nothing.scrollbar-custom.scrollbar-left(ui-view)

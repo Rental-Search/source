@@ -1,4 +1,4 @@
-doctype
+doctype 5
 html(lang="fr")
   head
     block variables
@@ -23,39 +23,10 @@ html(lang="fr")
       link(rel="stylesheet",    href="#{STATIC_URL}css/jquery.mCustomScrollbar.css")
 
     block scripts
-      // jQuery
-      script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
-
-      // for IE < 9 
-      // html5 tags supported
-      script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
-      script(src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js")
-      // palceholder supported
-      script(src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js")
-      // selectivizr
-      script(src="#{STATIC_URL}js/selectivizr.js")
-      // end scripts for IE < 9
-
-      // geolocation by Google
-      script(src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places")
-      script(src="#{STATIC_URL}js/formmapper.js")
-
-      // custom select.js
-      script(src="#{STATIC_URL}js/chosen.jquery.min.js")
-
-      // textarea autoresize
-      // http://www.jacklmoore.com/autosize/
-      script(src="#{STATIC_URL}js/jquery.autosize.js")
-
-      // modal window bootstrap
-      script(src="#{STATIC_URL}js/bootstrap/modal.js")
-
-      // custom scrollbar.js
-      script(src="#{STATIC_URL}js/jquery.mCustomScrollbar.js")
-
-      script(src="#{STATIC_URL}js/scripts.js")
+      script(src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places")
 
   body
     block content-body
-      include ./jade/_sign_in
-      include ./jade/_log_in
+      #ngModals
+          eloue-login-form
+          eloue-registration-form

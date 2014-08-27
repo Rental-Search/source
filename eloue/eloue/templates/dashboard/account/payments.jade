@@ -1,9 +1,9 @@
-extends ./_base_account
 block sections
   aside.address-detail.pull-nothing.scrollbar-custom
     .section-content.full-width
       h2.indent-md-b Locataire (débits)
       p.indent-sm-b
+      //-
         span.indent-xs-r
           | Carte de crédit : 
           b #{payments.debit.card.number} 
@@ -16,6 +16,7 @@ block sections
           | )
 
       table.calendar.text-center
+      //-
         thead
           tr
             each td in payments.debit.thead_tds
@@ -35,6 +36,7 @@ block sections
     .section-content.full-width
       h2.indent-md-b Propriétaire (crédit)
       p.indent-sm-b
+      //-
         span.indent-xs-r
           | IBAN : 
           b #{payments.credit.card.number} 
@@ -44,6 +46,7 @@ block sections
           | )
 
       table.calendar.text-center
+      //-
         thead
           tr
             each td in payments.credit.thead_tds

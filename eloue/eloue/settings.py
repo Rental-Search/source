@@ -548,8 +548,7 @@ AWS_HEADERS = {
 # staticfiles configuration
 STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
 STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
-STATICFILES_DIRS = ['eloue/static/', ]
-# Pipeline uses staticfiles app as the backend
+STATICFILES_DIRS = [local.local_path('static/'), ]
 STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
 STATICFILES_FINDERS = (
     'pipeline.finders.FileSystemFinder',

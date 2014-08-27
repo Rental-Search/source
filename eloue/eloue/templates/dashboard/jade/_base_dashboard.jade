@@ -1,29 +1,25 @@
 extends ../../base
 -load compressed
 
-block variables
-  include ./_global_variables
-  include ./_mixins
-
 block append styles
   {% compressed_css "dashboard_styles" %}
 
-block scripts
+block append scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/dashboard/main.js")
 
-block content-body
-  .container-full-screen
+block append content-body
+  .container-full-screen(data-ng-controller="DashboardRootCtrl")
     //- include ./_src
     header.header-site
       include ../../jade/_header_site
     article.dashboard
       nav
         ul
-          each item in dashboard_nav_links
-            li: a(href="../#{item.href}").text-success-dark
-              i(class="fa fa-#{item.icon}")
-                if item.badge > 0
+          -var dashboard_nav_links = [["Dashboard", "home", "dashboard", 0], ["Messages", "envelope-o", "messages", 1], ["Booking", "table", "bookings", 2], ["Items", "th-list", "items", 3], ["Account", "user", "account", 4]]
+          each title, icon, href, badge in dashboard_nav_links
+            li: a(ui-sref="#{href}").text-success-dark
+              i(class="fa fa-#{icon}")
+                if badge == 1
                   span.badge-count-action 1
-              | #{item.title}
-      .content-view
-        block content-view
+              | #{title}
+      .content-view(ui-view)

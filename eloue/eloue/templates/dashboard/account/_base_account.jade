@@ -1,9 +1,7 @@
-extends ../jade/_base_dashboard
-
 block content-view
   section.tabs-vertical-active.sm.scrollbar-custom: ul
-    each tab in account_tabs
-      li: a.tab-vertical(href="#{tab.href}.html")
-        h3 #{tab.title}
-  .content-view
-    block sections
+    -var account_tabs = [("Profil", "account.profile"), ("Vérification", "account.verification"), ("Adresses", "account.addresses"), ("Téléphones", "account.phones"), ("Paiements", "account.payments"), ("Mot de passe", "account.password"), ("Parainage", "account.invitation")]
+    each tab_title, tab_href in account_tabs
+      li: a.tab-vertical(ui-sref="#{tab_href}")
+        h3 #{tab_title}
+  .content-view(ui-view)

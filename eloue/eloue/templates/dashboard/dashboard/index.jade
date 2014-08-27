@@ -1,19 +1,15 @@
-extends ../jade/_base_dashboard
-
 include ../jade/_mixins
-
-block append variables
-  -var src_img = "dashboard/dashboard"
 
 block content-view
   section.tabs-vertical-static.lg.scrollbar-custom
+  //-
     ul.text-gray
       li.tab-vertical
          .block-with-thumbnail.indent-xs
           .col-thumbnail
-            .thumbnail.round.indent-sm-r: img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="#{tenant.name} photo")
+            .thumbnail.round.indent-sm-r: img(src="#{tenant.thumbnail.url}", alt="#{tenant.username} photo")
           .col-exposition
-            h2.small.text-black.indent-xs-b #{tenant.first_name} #{tenant.name}
+            h2.small.text-black.indent-xs-b #{tenant.first_name} #{tenant.last_name}
             +average-rate(tenant.rate)
             p.indent-sm-v Membre depus le #{tenant.date_registred}
             a(href="#").btn.bg-success-hover.text-white Mettre à jour mes infos
@@ -22,7 +18,7 @@ block content-view
         .indent-xs
           h2.text-black.indent-xs-b Statistiquess
           ul
-            each stat in tenant.stats
+            each stat in tenant_stats
               li
                 big.large.text-success #{stat.value} 
                 | #{stat.text}
@@ -31,7 +27,7 @@ block content-view
         .indent-xs
           h2.text-black.indent-xs-b Vérifications
           ul
-            each verify in tenant.verification
+            each verify in tenant_verification
               li.indent-xs-v
                 case verify
                   when "facebook"
@@ -44,7 +40,7 @@ block content-view
                    +verify-type("google", "Téléphone", "danger")
                   when "linkedin"
                    +verify-type("linkedin-square", "Linkedin", "blue")
-  aside
+  aside(ui-view)
     .section-header
      .tabs-horisontal-active.indent-xs-v
         ul.row
@@ -63,7 +59,7 @@ block content-view
             a(href="#c")
               i.fa.fa-table.fa-lg
 
-
+  //-
     section.scrollbar-custom.bg-lite
       ul.section-content.booking-activity-feed.line-fix
         li.block-with-thumbnail.notification.indent-sm-b

@@ -1,12 +1,14 @@
-section.tabs-vertical-active.sm.scrollbar-custom: ul
-  each dialog in dialogs_tabs
-    li.tab-vertical.block-with-thumbnail
+{% verbatim %}
+section.tabs-vertical-active.sm.scrollbar-custom
+  ul
+    li.tab-vertical.block-with-thumbnail(data-ng-repeat="thread in message_threads track by thread.id")
       .col-thumbnail
-        .thumbnail.round: a(href="#{dialog.tenant.account_link}")
-          img(src="#{STATIC_URL}#{dialog.tenant.thumbnail_small}", alt="#{dialog.tenant.name} photo", width="20", height="20")
+        .thumbnail.round: a(ui-sref="messages.detail({id: thread.id}))
+          img(data-ng-src="{{thread.sender.avatar.thumbnail}}", alt="{{thread.sender.username}}", width="20", height="20")
       .col-exposition
-          a(href="#{dialog.tenant.account_link}").text-underline-hover.pull-left
-            h3.small #{dialog.tenant.first_name}
-          span.time-badge.pull-right #{dialog.time}
-          h5.text-overflow.small.text-gray-stronger.clear-both #{dialog.topic}
-          p.text-overflow.text-gray.small #{dialog.last_message}
+          a(ui-sref="messages.detail({id: thread.id})").text-underline-hover.pull-left
+            h3.small {{thread.sender.username}}
+          span.time-badge.pull-right {{thread.last_message.sent_at}}
+          h5.text-overflow.small.text-gray-stronger.clear-both {{thread.subject}}
+          p.text-overflow.text-gray.small {{thread.last_message.body}}
+{% endverbatim %}

@@ -5,7 +5,7 @@ block append styles
   {% compressed_css "bootstrap" %}
   {% compressed_css "homepage_styles" %}
 
-block scripts
+block append scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 
 block append content-body
