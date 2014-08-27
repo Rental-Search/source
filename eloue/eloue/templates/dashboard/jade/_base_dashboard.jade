@@ -14,12 +14,12 @@ block append content-body
       include ../../jade/_header_site
     article.dashboard
       nav
-        ul
-          -var dashboard_nav_links = [["Dashboard", "home", "dashboard", 0], ["Messages", "envelope-o", "messages", 1], ["Booking", "table", "bookings", 2], ["Items", "th-list", "items", 3], ["Account", "user", "account", 4]]
-          each title, icon, href, badge in dashboard_nav_links
-            li: a(ui-sref="#{href}").text-success-dark
-              i(class="fa fa-#{icon}")
-                if badge == 1
-                  span.badge-count-action 1
-              | #{title}
+        ul(ng-init="dashboard_tabs=[{'title': 'Dashboard', 'icon': 'home', 'sref': 'dashboard'}, {'title': 'Messages', 'icon': 'envelope-o', 'sref': 'messages'}, {'title': 'Booking', 'icon': 'table', 'sref': 'bookings'}, {'title': 'Items', 'icon': 'th-list', 'sref': 'items'}, {'title': 'Account', 'icon': 'user', 'sref': 'account'}]")
+          li(ng-repeat="tab in dashboard_tabs")
+            {% verbatim %}
+            a(ui-sref="{{tab.sref}}").text-success-dark
+              i.fa(class="fa-{{tab.icon}}")
+                span.badge-count-action(ng-if="$index === 1" ng-bind="1")
+              | {{tab.title}}
+            {% endverbatim %}
       .content-view(ui-view)
