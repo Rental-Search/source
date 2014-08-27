@@ -11,12 +11,16 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      {pattern: 'static/bower_components/bootstrap/dist/js/bootstrap.min.js', included: false },
+      {pattern: 'static/bower_components/jquery/dist/jquery.min.js', included: false },
+      {pattern: 'static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', included: false },
       {pattern: 'static/bower_components/angular/angular.min.js', included: false },
       {pattern: 'static/bower_components/angular-mocks/angular-mocks.js', included: false },
       {pattern: 'static/bower_components/angular-resource/angular-resource.min.js', included: false },
       {pattern: 'static/bower_components/angular-cookies/angular-cookies.min.js', included: false },
       {pattern: 'static/bower_components/angular-sanitize/angular-sanitize.min.js', included: false },
       {pattern: 'static/bower_components/angular-route/angular-route.min.js', included: false },
+      {pattern: 'static/bower_components/datejs/build/production/date.min.js', included: false },
       {pattern: 'static/js/*.js', included: false },
       {pattern: 'static/js/**/*.js', included: false },
       {pattern: 'static/js/**/*.js', included: false },

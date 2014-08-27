@@ -2,35 +2,65 @@ define(["angular-mocks", "eloue/modules/user_management/services/AuthService"], 
 
     describe("Service: AuthService", function () {
 
-        var AuthService, usersResourceMock;
+        var AuthService, endpointsMock, redirectAfterLoginMock, registrationResourceMock;
 
-        beforeEach(module("EloueApp"));
+        beforeEach(module("EloueApp.UserManagementModule"));
 
         beforeEach(function () {
-            usersResourceMock = {get: function () {
-            }};
+            endpointsMock = {};
+            redirectAfterLoginMock = {};
+            registrationResourceMock = {
+                "register": {
+
+                }
+            };
 
             module(function($provide) {
-                $provide.value("Users", usersResourceMock);
+                $provide.value("Endpoints", endpointsMock);
+                $provide.value("RedirectAfterLogin", redirectAfterLoginMock);
+                $provide.value("Registration", registrationResourceMock);
             });
         });
 
-        beforeEach(inject(function (_UserService_) {
-            UserService = _UserService_;
-            spyOn(usersResourceMock, "get").andCallThrough();
+        beforeEach(inject(function (_AuthService_) {
+            AuthService = _AuthService_;
+            AuthService.getCookie = function () {
+                return "111";
+            };
+            AuthService.redirectToAttemptedUrl = function () {
+
+            };
+            spyOn(AuthService, "getCookie").andCallThrough();
+            spyOn(AuthService, "redirectToAttemptedUrl").andCallThrough();
+            spyOn(registrationResourceMock, "register").andCallThrough();
         }));
 
-        it("UserService should be not null", function() {
-            expect(!!UserService).toBe(true);
+        it("AuthService should be not null", function() {
+            expect(!!AuthService).toBe(true);
         });
 
-        it("UserService should have a getUser function", function() {
-            expect(angular.isFunction(UserService.getUser)).toBe(true);
+        it("AuthService should have all functions", function() {
+            expect(angular.isFunction(AuthService.login)).toBe(true);
+            expect(angular.isFunction(AuthService.authorize)).toBe(true);
+            expect(angular.isFunction(AuthService.clearUserData)).toBe(true);
+            expect(angular.isFunction(AuthService.redirectToAttemptedUrl)).toBe(true);
+            expect(angular.isFunction(AuthService.saveAttemptUrl)).toBe(true);
+            expect(angular.isFunction(AuthService.register)).toBe(true);
+            expect(angular.isFunction(AuthService.isLoggedIn)).toBe(true);
+            expect(angular.isFunction(AuthService.getCookie)).toBe(true);
         });
 
-        it("UserService should make a call to Users resource", function () {
-            UserService.getUser(1);
-            expect(usersResourceMock.get).toHaveBeenCalledWith({id: 1});
+        it("AuthService should make a call to itself", function () {
+            var credentials = {};
+            AuthService.login(credentials);
+            expect(AuthService.getCookie).toHaveBeenCalledWith("user_token");
+        });
+
+        it("AuthService should make a call to itself", function () {
+            var credentials = {};
+            AuthService.authorize(credentials);
+            expect(AuthService.getCookie).toHaveBeenCalledWith("user_token");
+            expect(AuthService.redirectToAttemptedUrl).toHaveBeenCalledWith();
         });
     });
 });

@@ -2,11 +2,12 @@ define(["angular-mocks", "eloue/modules/booking/services/MessageService"], funct
 
     describe("Service: MessageService", function () {
 
-        var MessageService, usersResourceMock, messageThreadsResourceMock , productRelatedMessagesResourceMock;
+        var MessageService, endpointsMock, usersResourceMock, messageThreadsResourceMock , productRelatedMessagesResourceMock;
 
-        beforeEach(module("EloueApp"));
+        beforeEach(module("EloueApp.BookingModule"));
 
         beforeEach(function () {
+            endpointsMock = {};
             usersResourceMock = {get: function () {
             }};
             messageThreadsResourceMock = {list: function () {
@@ -24,6 +25,7 @@ define(["angular-mocks", "eloue/modules/booking/services/MessageService"], funct
             }};
 
             module(function ($provide) {
+                $provide.value("Endpoints", endpointsMock);
                 $provide.value("Users", usersResourceMock);
                 $provide.value("MessageThreads", messageThreadsResourceMock);
                 $provide.value("ProductRelatedMessages", productRelatedMessagesResourceMock);

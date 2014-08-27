@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/modules/booking/controllers/ProductDetailsCtrl"], function () {
+define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDetailsCtrl"], function () {
 
     describe("Controller: ProductDetailsCtrl", function () {
 
@@ -11,18 +11,42 @@ define(["angular-mocks", "eloue/modules/booking/controllers/ProductDetailsCtrl"]
             userServiceMock,
             endpointsMock;
 
-        beforeEach(module("EloueApp"));
+        beforeEach(module("EloueApp.BookingModule"));
 
         beforeEach(function () {
             productServiceMock = {getProduct: function () {
+                return {
+                    then: function () {
+                        return {result: {}}
+                    }
+                }
             }, isAvailable: function () {
+                return {$promise: {then: function () {
+                    return {result: {}}
+                }}}
             }};
             priceServiceMock = {getPricePerDay: function () {
+                return {$promise: {then: function () {
+                    return {result: {}}
+                }}}
             }};
             messageServiceMock = {getMessageThread: function () {
+                return {
+                    then: function () {
+                        return {result: {}}
+                    }
+                }
             }, sendMessage: function () {
+                return {
+                    then: function () {
+                        return {result: {}}
+                    }
+                }
             }};
             userServiceMock = {getUser: function () {
+                return {$promise: {then: function () {
+                    return {result: {}}
+                }}}
             }};
             endpointsMock = {
                 api_url: "http://10.0.0.111:8000/api/2.0/"
@@ -45,6 +69,10 @@ define(["angular-mocks", "eloue/modules/booking/controllers/ProductDetailsCtrl"]
                 "toDate": "",
                 "toHour": "08:00:00"
             };
+            scope.currentUser = {
+                id: 111
+            };
+            scope.product = {owner: { id: 111}};
             route = {
                 current: {
                     params: {

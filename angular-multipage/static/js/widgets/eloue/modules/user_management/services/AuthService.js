@@ -82,7 +82,7 @@ define(["angular", "../../../../../common/eloue/values", "../../../../../common/
              * @param account new account
              * @returns user promise object.
              */
-            register: function register(account) {
+            register: function (account) {
                 return Registration.register(account);
             },
 

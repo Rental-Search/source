@@ -4,7 +4,7 @@ define(["angular-mocks", "eloue/modules/booking/services/ProductService"], funct
 
         var ProductService, usersResourceMock, productsResourceMock, checkAvailabilityResourceMock, phoneNumbersResourceMock, addressesResourceMock;
 
-        beforeEach(module("EloueApp"));
+        beforeEach(module("EloueApp.BookingModule"));
 
         beforeEach(function () {
             usersResourceMock = {get: function () {

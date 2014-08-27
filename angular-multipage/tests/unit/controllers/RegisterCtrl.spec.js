@@ -4,31 +4,34 @@ define(["angular-mocks", "eloue/modules/user_management/controllers/RegisterCtrl
 
         var RegisterCtrl,
             scope,
-            usersServiceMock;
+            authServiceMock;
 
-        beforeEach(module('EloueApp'));
+        beforeEach(module('EloueApp.UserManagementModule'));
 
         beforeEach(function () {
-            usersServiceMock = {register: function () {
-                console.log("User service mock called");
+            authServiceMock = {register: function () {
+                console.log("Auth service mock called");
+                return {$promise: {then: function () {
+                    return {response: {}}
+                }}}
             }};
 
             module(function($provide) {
-                $provide.value("Users", usersServiceMock);
+                $provide.value("AuthService", authServiceMock);
             })
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
 
-            spyOn(usersServiceMock, "register").andCallThrough();
+            spyOn(authServiceMock, "register").andCallThrough();
 
-            RegisterCtrl = $controller('RegisterCtrl', { $scope:scope, Users: usersServiceMock});
+            RegisterCtrl = $controller('RegisterCtrl', { $scope:scope, AuthService: authServiceMock});
         }));
 
-        it('should make a call to Users service', function () {
+        it('should make a call to Auth service', function () {
             scope.register();
-            expect(usersServiceMock.register).toHaveBeenCalled();
+            expect(authServiceMock.register).toHaveBeenCalled();
         });
     });
 });
