@@ -34,10 +34,14 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = models.Patron
-        fields = ('id', 'email', 'password', 'username', 'company_name', 'is_professional', 'slug', 'avatar',
-                  'default_address', 'default_number', 'about', 'work', 'school', 'hobby', 'languages',
-                  'drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth', 'rib', 'url')
-        read_only_fields = ('slug', 'default_address', 'default_number', 'rib', 'url', 'date_joined')
+        fields = (
+            'id', 'email', 'company_name', 'username', 'first_name', 'last_name', 
+            'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
+            'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
+            'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
+            'date_joined', 'is_active', 'rib', 'password',
+        )
+        read_only_fields = ('slug', 'default_address', 'default_number', 'url', 'date_joined', 'rib')
         immutable_fields = ('email', 'password', 'username')
 
 class PasswordChangeSerializer(ModelSerializer):
