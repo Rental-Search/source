@@ -15,40 +15,4 @@ block sections
               p.normal.text-gray #{address.zip_code} #{address.city}
 
   aside.address-detail.pull-nothing.scrollbar-custom.scrollbar-left
-    .section-content
-      form(action="address-add").indent-md-b
-        .row
-          .col-sm-12
-            input#street.form-control(type="text", name="street", placeholder="Rue *", required, autofocus)
-        .row
-          .col-sm-6
-            input#zip-code.form-control(type="text", name="zip-code", placeholder="Code postal *", required, autofocus)
-          .col-sm-6
-            input#city.form-control(type="text", name="city", placeholder="Ville *", required, autofocus)
-        .row
-          .col-xs-12
-            label.check-btn.form-control
-              input(type="checkbox", checked)
-              span: i.fa.fa-check
-              | Addresse par défaut
-        .row
-          .col-xs-12.text-right
-            button(type="reset").text.text-danger.text-underline-hover.indent-sm-h Supprimer
-            button(type="submit").btn-inline.bg-success-hover.text-white Enregistrer
-      h3 Annonces associées à cette adresse
-    section.tabs-vertical-active
-      ul.block-with-thumbnail
-        each item in bookings
-          li.block-with-thumbnail: a(href="#car").tab-vertical
-            .col-thumbnail
-              .thumbnail
-                img(src="#{STATIC_URL}img/#{item.lot.thumbnail}", alt="#{item.lot.name} photo", width="130")
-            .col-exposition
-              h3.small
-                | Location #{item.lot.name}
-              p.normal.text-gray
-                big.text-primary #{item.lot.price}€ / jour
-                br
-                +average-rate(booking_detail.lot.rate)
-                +number-of-comments(booking_detail.lot.comments_count)
-                +number-of-bookings(booking_detail.lot.booking_count)
+    include ./_address_detail
