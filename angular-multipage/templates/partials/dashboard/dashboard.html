@@ -3,11 +3,11 @@
         <li class="tab-vertical">
             <div class="block-with-thumbnail indent-xs">
                 <div class="col-thumbnail">
-                    <div class="thumbnail round indent-sm-r"><img src="../../../static/img/home-products/tenant.png" alt="Kroutchev photo"></div>
+                    <div class="thumbnail round indent-sm-r"><img data-ng-src="{{currentUser.avatar.profil}}" alt="Kroutchev photo"></div>
                 </div>
                 <div class="col-exposition">
-                    <h2 class="small text-black indent-xs-b">Gaspard Kroutchev</h2><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span>
-                    <p class="indent-sm-v">Membre depus le 12.07.2014</p><a href="#" class="btn bg-success-hover text-white">Mettre à jour mes infos</a>
+                    <h2 class="small text-black indent-xs-b">{{currentUser.username}}</h2><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span>
+                    <p class="indent-sm-v">Membre depus le {{currentUser.date_joined | date:'dd.MM.yyyy'}}</p><a ui-sref="account.profile" class="btn bg-success-hover text-white">Mettre à jour mes infos</a>
                 </div>
             </div>
         </li>
