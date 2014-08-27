@@ -6,7 +6,11 @@
                     <div class="thumbnail round indent-sm-r"><img data-ng-src="{{currentUser.avatar.profil}}" alt="Kroutchev photo"></div>
                 </div>
                 <div class="col-exposition">
-                    <h2 class="small text-black indent-xs-b">{{currentUser.username}}</h2><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span>
+                    <h2 class="small text-black indent-xs-b">{{currentUser.username}}</h2>
+                    <!--<span class="average-rate">-->
+                        <!--<span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i>-->
+                        <!--</span>-->
+                    <!--</span>-->
                     <p class="indent-sm-v">Membre depus le {{currentUser.date_joined | date:'dd.MM.yyyy'}}</p><a ui-sref="account.profile" class="btn bg-success-hover text-white">Mettre à jour mes infos</a>
                 </div>
             </div>
@@ -16,19 +20,19 @@
                 <h2 class="text-black indent-xs-b">Statistiquess</h2>
                 <ul>
                     <li>
-                        <big class="large text-success">7 </big>annonces publiées
+                        <big class="large text-success">{{products.length}}</big>annonces publiées
                     </li>
                     <li>
-                        <big class="large text-success">12 </big>locations effectués
+                        <big class="large text-success">{{bookings.length}} </big>locations effectués
+                    </li>
+                    <!--<li>-->
+                        <!--<big class="large text-success">16 </big>évalutations-->
+                    <!--</li>-->
+                    <li>
+                        <big class="large text-success">{{userStats.response_rate}}% </big>de taux de réponse
                     </li>
                     <li>
-                        <big class="large text-success">16 </big>évalutations
-                    </li>
-                    <li>
-                        <big class="large text-success">98% </big>de taux de réponse
-                    </li>
-                    <li>
-                        <big class="large text-success">6h </big>de temps de réponse en moyenne
+                        <big class="large text-success">{{userStats.response_time}} </big>de temps de réponse en moyenne
                     </li>
                 </ul>
             </div>
@@ -88,10 +92,8 @@
             <ul class="row">
                 <li class="col-sm-2">
                     <div class="select-gradient without-search date-picker">
-                        <select>
-                            <option value="statut">Filtres</option>
-                            <option value="statut">Filtres</option>
-                            <option value="statut">Filtres</option>
+                        <select data-ng-model="selectedActivityType" data-ng-change="filterByActivityType()">
+                            <option data-ng-repeat="type in activityTypes | orderBy:'id':true" value="{{type.id}}">{{type.name}}</option>
                         </select>
                     </div>
                 </li>
@@ -99,153 +101,162 @@
                     <h4>Votre activité sur e-loue</h4>
                 </li>
                 <li class="col-sm-2 text-success text-right">
-                    <p><a href="#"><i class="fa fa-envelope-o fa-lg indent-sm-r"><span class="badge-count-action">1</span></i></a><a href="#c"><i class="fa fa-table fa-lg"></i></a></p>
+                    <p>
+                        <a href="#">
+                            <i class="fa fa-envelope-o fa-lg indent-sm-r">
+                                <!--<span class="badge-count-action">1</span>-->
+                            </i>
+                        </a>
+                        <a href="#c">
+                            <i class="fa fa-table fa-lg"></i>
+                        </a>
+                    </p>
                 </li>
             </ul>
         </div>
     </div>
     <section class="scrollbar-custom bg-lite">
-        <ul class="section-content booking-activity-feed line-fix">
-            <li class="block-with-thumbnail notification indent-sm-b">
-                <div class="col-thumbnail">
-                    <div class="thumbnail">
-                        <div class="icon-action"><i class="fa fa-check-circle-o fa-lg"></i></div>
-                    </div>
-                </div>
-                <div class="col-exposition">
-                    <div class="text-action">
-                        <h3><b>Réservation acceptée par <a href="" class="text-success text-underline-hover">Gaspard</a></b></h3>
-                        <div class="block-with-thumbnail indent-sm-v">
-                            <div class="col-thumbnail">
-                                <div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="170"></a></div>
-                            </div>
-                            <div class="col-exposition">
-                                <div class="indent-sm-l">
-                                    <h3><b>BMW 520 Touring Luxe</b></h3>
-                                    <p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>Avenue Félix Faure, <br>Nice, 02200</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="block-with-thumbnail indent-md-v">
-                            <div class="col-thumbnail">
-                                <div class="thumbnail"><a href="#"><img src="../../../static//img/home-products/owner.png" alt="Dupré photo" width="40" height="40"></a></div>
-                            </div>
-                            <div class="col-exposition text-gray">
-                                <div class="indent-xs-h">
-                                    <h3 class="small"><a href="#" class="text-underline-hover">Julien Dupré</a></h3>
-                                    <p class="indent-xs-v"><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-table"></i><span>7</span></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <ul class="zebra-list">
-                            <li class="clearfix">
-                                <div class="col-xs-3">Début</div>
-                                <div class="col-xs-9">Mardi 24 Juin 2014 à 09h00</div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="col-xs-3">Fin</div>
-                                <div class="col-xs-9">Jeudi 26 Juin 2014 à 09h00</div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="col-xs-3">Période</div>
-                                <div class="col-xs-9">3 jours et 9 heures</div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="col-xs-3">Prix</div>
-                                <div class="col-xs-9 text-success">168€</div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="col-xs-3">Caution</div>
-                                <div class="col-xs-9">250€</div>
-                            </li>
-                        </ul>
-                    </div>
-                    <p class="action norm indent-sm-t">Il y a 12 min<span class="pull-right"><a href="#" class="btn bg-success-hover text-white">Accepter</a></span><span class="pull-right indent-sm-h"><a href="#" class="text-success text-underline-hover">Refuser</a></span></p>
-                </div>
-            <li class="block-with-thumbnail notification indent-sm-b">
-                <div class="col-thumbnail">
-                    <div class="thumbnail">
-                        <div class="icon-action"><i class="fa fa-lg fa-envelope-o"></i></div>
-                    </div>
-                </div>
-                <div class="col-exposition">
-                    <div class="text-action">
-                        <div class="block-with-thumbnail">
-                            <div class="col-thumbnail">
-                                <div class="thumbnail indent-sm-r round"><a href="#"><img src="../../../static//img/home-products/owner.png" alt="Dupré photo" width="40" height="40"></a></div>
-                            </div>
-                            <div class="col-exposition">
-                                <h3 class="text-black indent-xs-b"><b>Message envoyé par <a href="#" class="text-success text-underline-hover">Julien</a></b></h3>
-                                <p class="norm">Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée</p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="action norm">Il y a 12 min</p>
-                </div>
-            </li>
-            <li class="block-with-thumbnail notification indent-sm-b">
-                <div class="col-thumbnail">
-                    <div class="thumbnail">
-                        <div class="icon-action"><i class="fa fa-lg fa-dollar"></i></div>
-                    </div>
-                </div>
-                <div class="col-exposition">
-                    <div class="text-action">
-                        <div class="block-with-thumbnail">
-                            <div class="col-thumbnail">
-                                <div class="thumbnail indent-sm-r"><img src="../../../static//img/money.png" alt="" width="40" height="40"></div>
-                            </div>
-                            <div class="col-exposition">
-                                <p class="norm">Prix de la location débitée avec succès !</p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="action norm">Il y a 12 min</p>
-                </div>
-            </li>
-            <li class="block-with-thumbnail notification indent-sm-b">
-                <div class="col-thumbnail">
-                    <div class="thumbnail">
-                        <div class="icon-action"><i class="fa fa-lg fa-table"></i></div>
-                    </div>
-                </div>
-                <div class="col-exposition">
-                    <div class="text-action">
-                        <div class="block-with-thumbnail">
-                            <div class="col-thumbnail">
-                                <div class="thumbnail indent-sm-r round"><a href="#"><img src="../../../static/img/home-products/tenant.png" alt="" width="40" height="40"></a></div>
-                            </div>
-                            <div class="col-exposition">
-                                <p class="norm">Demande acceptée par <a href="#" class="text-success text-underline-hover">Gaspard</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="action norm">Il y a 12 min</p>
-                </div>
-            </li>
-            <li class="block-with-thumbnail notification indent-sm-b">
-                <div class="col-thumbnail">
-                    <div class="thumbnail">
-                        <div class="icon-action"><i class="fa fa-lg fa-envelope-o"></i></div>
-                    </div>
-                </div>
-                <div class="col-exposition">
-                    <div class="text-action">
-                        <div class="block-with-thumbnail">
-                            <div class="col-thumbnail">
-                                <div class="thumbnail indent-sm-r round"><a href="#"><img src="../../../static//img/home-products/owner.png" alt="Dupré photo" width="40" height="40"></a></div>
-                            </div>
-                            <div class="col-exposition">
-                                <h3 class="text-black indent-xs-b"><b>Message envoyé par <a href="#" class="text-success text-underline-hover">Julien</a></b></h3>
-                                <p class="norm">Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée</p>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="action norm">Il y a 12 min</p>
-                </div>
-            </li>
-            </li>
-        </ul>
+        <!--<ul class="section-content booking-activity-feed line-fix">-->
+            <!--<li class="block-with-thumbnail notification indent-sm-b">-->
+                <!--<div class="col-thumbnail">-->
+                    <!--<div class="thumbnail">-->
+                        <!--<div class="icon-action"><i class="fa fa-check-circle-o fa-lg"></i></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-exposition">-->
+                    <!--<div class="text-action">-->
+                        <!--<h3><b>Réservation acceptée par <a href="" class="text-success text-underline-hover">Gaspard</a></b></h3>-->
+                        <!--<div class="block-with-thumbnail indent-sm-v">-->
+                            <!--<div class="col-thumbnail">-->
+                                <!--<div class="thumbnail"><a href="#"><img src="../../../static/img/carousel-product/2.jpg" alt="BMW 520 Touring Luxe photo" width="170"></a></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-exposition">-->
+                                <!--<div class="indent-sm-l">-->
+                                    <!--<h3><b>BMW 520 Touring Luxe</b></h3>-->
+                                    <!--<p class="text-gray indent-sm-h indent-xs-v"><i class="fa fa-map-marker fa-lg fa-li"></i>Avenue Félix Faure, <br>Nice, 02200</p>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="block-with-thumbnail indent-md-v">-->
+                            <!--<div class="col-thumbnail">-->
+                                <!--<div class="thumbnail"><a href="#"><img src="../../../static//img/home-products/owner.png" alt="Dupré photo" width="40" height="40"></a></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-exposition text-gray">-->
+                                <!--<div class="indent-xs-h">-->
+                                    <!--<h3 class="small"><a href="#" class="text-underline-hover">Julien Dupré</a></h3>-->
+                                    <!--<p class="indent-xs-v"><span class="average-rate"><span class="star"><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i><i class="current fa fa-lg fa-star"></i><i class="fa fa-lg fa-star"></i></span></span><span class="number-of-comments"><i class="fa fa-lg fa-comments-o"></i><span>12</span></span><span class="number-of-bookings"><i class="fa fa-lg fa-table"></i><span>7</span></span>-->
+                                    <!--</p>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<ul class="zebra-list">-->
+                            <!--<li class="clearfix">-->
+                                <!--<div class="col-xs-3">Début</div>-->
+                                <!--<div class="col-xs-9">Mardi 24 Juin 2014 à 09h00</div>-->
+                            <!--</li>-->
+                            <!--<li class="clearfix">-->
+                                <!--<div class="col-xs-3">Fin</div>-->
+                                <!--<div class="col-xs-9">Jeudi 26 Juin 2014 à 09h00</div>-->
+                            <!--</li>-->
+                            <!--<li class="clearfix">-->
+                                <!--<div class="col-xs-3">Période</div>-->
+                                <!--<div class="col-xs-9">3 jours et 9 heures</div>-->
+                            <!--</li>-->
+                            <!--<li class="clearfix">-->
+                                <!--<div class="col-xs-3">Prix</div>-->
+                                <!--<div class="col-xs-9 text-success">168€</div>-->
+                            <!--</li>-->
+                            <!--<li class="clearfix">-->
+                                <!--<div class="col-xs-3">Caution</div>-->
+                                <!--<div class="col-xs-9">250€</div>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                    <!--<p class="action norm indent-sm-t">Il y a 12 min<span class="pull-right"><a href="#" class="btn bg-success-hover text-white">Accepter</a></span><span class="pull-right indent-sm-h"><a href="#" class="text-success text-underline-hover">Refuser</a></span></p>-->
+                <!--</div>-->
+            <!--<li class="block-with-thumbnail notification indent-sm-b">-->
+                <!--<div class="col-thumbnail">-->
+                    <!--<div class="thumbnail">-->
+                        <!--<div class="icon-action"><i class="fa fa-lg fa-envelope-o"></i></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-exposition">-->
+                    <!--<div class="text-action">-->
+                        <!--<div class="block-with-thumbnail">-->
+                            <!--<div class="col-thumbnail">-->
+                                <!--<div class="thumbnail indent-sm-r round"><a href="#"><img src="../../../static//img/home-products/owner.png" alt="Dupré photo" width="40" height="40"></a></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-exposition">-->
+                                <!--<h3 class="text-black indent-xs-b"><b>Message envoyé par <a href="#" class="text-success text-underline-hover">Julien</a></b></h3>-->
+                                <!--<p class="norm">Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<p class="action norm">Il y a 12 min</p>-->
+                <!--</div>-->
+            <!--</li>-->
+            <!--<li class="block-with-thumbnail notification indent-sm-b">-->
+                <!--<div class="col-thumbnail">-->
+                    <!--<div class="thumbnail">-->
+                        <!--<div class="icon-action"><i class="fa fa-lg fa-dollar"></i></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-exposition">-->
+                    <!--<div class="text-action">-->
+                        <!--<div class="block-with-thumbnail">-->
+                            <!--<div class="col-thumbnail">-->
+                                <!--<div class="thumbnail indent-sm-r"><img src="../../../static//img/money.png" alt="" width="40" height="40"></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-exposition">-->
+                                <!--<p class="norm">Prix de la location débitée avec succès !</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<p class="action norm">Il y a 12 min</p>-->
+                <!--</div>-->
+            <!--</li>-->
+            <!--<li class="block-with-thumbnail notification indent-sm-b">-->
+                <!--<div class="col-thumbnail">-->
+                    <!--<div class="thumbnail">-->
+                        <!--<div class="icon-action"><i class="fa fa-lg fa-table"></i></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-exposition">-->
+                    <!--<div class="text-action">-->
+                        <!--<div class="block-with-thumbnail">-->
+                            <!--<div class="col-thumbnail">-->
+                                <!--<div class="thumbnail indent-sm-r round"><a href="#"><img src="../../../static/img/home-products/tenant.png" alt="" width="40" height="40"></a></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-exposition">-->
+                                <!--<p class="norm">Demande acceptée par <a href="#" class="text-success text-underline-hover">Gaspard</a></p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<p class="action norm">Il y a 12 min</p>-->
+                <!--</div>-->
+            <!--</li>-->
+            <!--<li class="block-with-thumbnail notification indent-sm-b">-->
+                <!--<div class="col-thumbnail">-->
+                    <!--<div class="thumbnail">-->
+                        <!--<div class="icon-action"><i class="fa fa-lg fa-envelope-o"></i></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-exposition">-->
+                    <!--<div class="text-action">-->
+                        <!--<div class="block-with-thumbnail">-->
+                            <!--<div class="col-thumbnail">-->
+                                <!--<div class="thumbnail indent-sm-r round"><a href="#"><img src="../../../static//img/home-products/owner.png" alt="Dupré photo" width="40" height="40"></a></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-exposition">-->
+                                <!--<h3 class="text-black indent-xs-b"><b>Message envoyé par <a href="#" class="text-success text-underline-hover">Julien</a></b></h3>-->
+                                <!--<p class="norm">Merci d’avoir accepté ma réservation. Comment fait on pour se rencontrer ? Bonne soirée</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<p class="action norm">Il y a 12 min</p>-->
+                <!--</div>-->
+            <!--</li>-->
+            <!--</li>-->
+        <!--</ul>-->
     </section>
 </aside>

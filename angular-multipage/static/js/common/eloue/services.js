@@ -35,6 +35,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Users.getMe({_cache: new Date().getTime()}, successCallback, errorCallback);
                 };
 
+                usersService.getStatistics = function (userId) {
+                    return Users.getStats({id: userId,_cache: new Date().getTime()});
+                };
+
                 usersService.sendForm = function (userId, form, successCallback, errorCallback) {
                     // Calculate current user url
                     var currentUserUrl = Endpoints.api_url + "users/" + userId + "/";

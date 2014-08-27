@@ -7,7 +7,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Users", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "users/:id\\/", {},
             {
-                "getMe": { method: "GET", params: {id: "me"} }
+                "getMe": { method: "GET", params: {id: "me"} },
+                "getStats": { method: "GET", url: Endpoints.api_url + "users/:id/stats\\/" }
             });
     }]);
 
