@@ -1045,6 +1045,14 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({'detail': _(u"Votre mot de passe à bien été modifié")})
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+    @link()
+    def stats(self, request, *args, **kwargs):
+        user = self.get_object()
+        res = {
+            k: getattr(user, k) for k in ('response_rate', 'response_time')
+        }
+        return Response(res)
+
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows addresses to be viewed or edited.
