@@ -36,7 +36,8 @@ class UserSerializer(ModelSerializer):
         model = models.Patron
         fields = ('id', 'email', 'password', 'username', 'company_name', 'is_professional', 'slug', 'avatar',
                   'default_address', 'default_number', 'about', 'work', 'school', 'hobby', 'languages',
-                  'drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth', 'rib', 'url')
+                  'drivers_license_date', 'drivers_license_number', 'date_of_birth', 'place_of_birth',
+                  'rib', 'url', 'date_joined', 'is_active')
         read_only_fields = ('slug', 'default_address', 'default_number', 'rib', 'url', 'date_joined')
         immutable_fields = ('email', 'password', 'username')
 
