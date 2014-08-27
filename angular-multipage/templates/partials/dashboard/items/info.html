@@ -1,0 +1,342 @@
+<div class="section-content">
+
+        <h2>Catégories</h2>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-control">
+                    <select data-ng-model="rootCategory" data-ng-change="updateNodeCategories()">
+                        <option data-ng-repeat="category in rootCategories" value="{{category.id}}">{{category.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-control">
+                    <select data-ng-model="nodeCategory" data-ng-change="updateLeafCategories()">
+                        <option data-ng-repeat="category in nodeCategories" value="{{category.id}}">{{category.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-control">
+                    <select data-ng-model="product.category">
+                        <option data-ng-repeat="category in leafCategories" value="{{categoriesBaseUrl}}{{category.id}}/">{{category.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <h2>Titre</h2>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <input id="title" type="text" name="title" placeholder="Titre" class="form-control" data-ng-model="product.summary">
+            </div>
+        </div>
+        <h2>Photos</h2>
+    <form id="add-picture">
+            <ul class="text-gray container-with-square-thumbnail indent-xs-b">
+
+                <li data-ng-show="product.pictures.length < 3">
+
+                    <label for="image" class="file-input-drag"><i class="fa fa-plus fa-3x"></i>
+                        <input type="file" id="image"  name="image" file-chooser on-change="onPictureAdded()">
+                        <input type="hidden" id="product" name="product" value="{{productsBaseUrl}}{{product.id}}/"/>
+                    </label>
+
+                </li>
+                <li data-ng-repeat="picture in product.pictures track by picture.id">
+                    <img data-ng-src="{{picture.image.thumbnail}}" alt="{{product.summary}}">
+                </li>
+            </ul>
+    </form>
+    <form name="itemInfoForm" data-ng-submit="updateProduct()">
+
+        <h2>Caractéristiques</h2>
+
+        <div class="row">
+            <table class="calendar text-center form-control">
+                <tbody>
+                <!-- Common fields -->
+                <tr>
+                    <td>Rue</td>
+                    <td><input type="text" class="table-form" data-ng-model="product.addressDetails.street" required></td>
+                </tr>
+                <tr>
+                    <td>Code postal</td>
+                    <td><input type="text" class="table-form" data-ng-model="product.addressDetails.zipcode" required></td>
+                </tr>
+                <tr>
+                    <td>Ville</td>
+                    <td><input type="text" class="table-form" data-ng-model="product.addressDetails.city" required></td>
+                </tr>
+                <tr>
+                    <td>Phone</td>
+                    <td><input type="text" class="table-form" data-ng-model="product.phoneDetails.number" required></td>
+                </tr>
+                <tr>
+                    <td>Quantité</td>
+                    <td><input type="number" class="table-form" data-ng-model="product.quantity"></td>
+                </tr>
+                <!-- Common fields end.-->
+
+                <!-- Car Product fields -->
+                <tr data-ng-show="isAuto">
+                    <td>Marque</td>
+                    <td><input type="text" class="table-form" data-ng-model="product.brand"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Modèle</td>
+                    <td><input type="text" class="table-form" data-ng-model="product.model"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Nombre de place</td>
+                    <td>
+                        <select data-ng-model="product.seat_number" class="form-control">
+                            <option data-ng-repeat="item in seatNumberOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Nombre de porte</td>
+                    <td>
+                        <select data-ng-model="product.door_number" class="form-control">
+                            <option data-ng-repeat="item in doorNumberOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Énergie</td>
+                    <td>
+                        <select data-ng-model="product.fuel" class="form-control">
+                            <option data-ng-repeat="item in fuelOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Boite de vitesse</td>
+                    <td>
+                        <select data-ng-model="product.transmission" class="form-control">
+                            <option data-ng-repeat="item in transmissionOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Kilométrage</td>
+                    <td>
+                        <select data-ng-model="product.mileage" class="form-control">
+                            <option data-ng-repeat="item in mileageOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Consommation</td>
+                    <td>
+                        <select data-ng-model="product.consumption" class="form-control">
+                            <option data-ng-repeat="item in consumptionOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Kilomètres inclus/jour</td>
+                    <td><input type="number" class="table-form" data-ng-model="product.km_included"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Prix par kilomètres supplémentaires</td>
+                    <td><input type="number" class="table-form" data-ng-model="product.costs_per_km"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Climatisation</td>
+                    <td><input type="text" class="table-form" data-ng-model="product.air_conditioning"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Direction assistée</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.power_steering"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Régulateur de vitesse</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.cruise_control"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>GPS</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.gps"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Siège bébé</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.baby_seat"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Coffre de toit</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.roof_box"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Porte-vélo</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.bike_rack"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Pneus neige</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.snow_tires"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Chaines</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.snow_chains"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Porte-skis</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.ski_rack"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Lecteur CD</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.cd_player"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>Entrée audio/iPod</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.audio_input"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>CV fiscaux</td>
+                    <td>
+                        <select data-ng-model="product.tax_horsepower" class="form-control">
+                            <option data-ng-repeat="item in capacityOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>N° d'immatriculation</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.licence_plate"></td>
+                </tr>
+                <tr data-ng-show="isAuto">
+                    <td>1er mise en circulation</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.first_registration_date"></td>
+                </tr>
+                <!-- Car Product fields end. -->
+
+                <!-- Real-estate Product fields -->
+                <tr data-ng-show="isRealEstate">
+                    <td>Capacité</td>
+                    <td>
+                        <select data-ng-model="product.capacity" class="form-control">
+                            <option data-ng-repeat="item in capacityOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Type de logement</td>
+                    <td>
+                        <select data-ng-model="product.private_life" class="form-control">
+                            <option data-ng-repeat="item in privateLifeOptions" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Nombre de chambre</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.chamber_number"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Règles d'utilisation</td>
+                    <td><input type="text" class="table-form" data-ng-model="product.rules"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Air conditionné</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.air_conditioning"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Petit déjeuner</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.breakfast"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Balcon/terasse</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.balcony"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Chambre avec serrure</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.lockable_chamber"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Serviettes</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.towel"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Ascenseur dans l\'immeuble</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.lift"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Adapté aux familles/enfants</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.family_friendly"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Salle de sport</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.gym"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Accessible aux personnes handicapées</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.accessible"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Chauffage</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.heating"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Jacuzzi</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.jacuzzi"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Cheminée intérieure</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.chimney"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Accès internet</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.internet_access"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Cuisine</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.kitchen"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Parking</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.parking"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Fumeurs acceptées</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.smoking_accepted"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Idéal pour des évènements</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.ideal_for_events"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>TV</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.tv"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Machine à laver</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.washing_machine"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Sèche linge</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.tumble_dryer"></td>
+                </tr>
+                <tr data-ng-show="isRealEstate">
+                    <td>Ordinateur avec Internet</td>
+                    <td><input type="checkbox" class="table-form" data-ng-model="product.computer_with_internet"></td>
+                </tr>
+                <!-- Real-estate Product fields end. -->
+
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Informations complémentaires</h2>
+
+        <div class="row indent-md-b">
+            <div class="col-sm-12">
+                <textarea id="description" name="description" tabindex="1" rows="6" placeholder=""
+                          class="expand" data-ng-model="product.description"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn text-white bg-success-hover col-xs-8 col-xs-offset-2">Enregistrez les
+                modifications
+            </button>
+        </div>
+    </form>
+</div>

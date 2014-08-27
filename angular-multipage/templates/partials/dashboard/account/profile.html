@@ -24,28 +24,31 @@
     </div>
     <div class="col-sm-2">
         <label class="rad-btn form-control">Oui
-            <input id="newsletter" type="radio" name="is-pro"><i></i>
+            <input id="newsletter" type="radio" name="is_professional"><i></i>
         </label>
     </div>
     <div class="col-sm-2">
         <label class="rad-btn form-control">Non
-            <input id="is-pro" type="radio" name="is-pro" checked><i></i>
+            <input id="is-pro" type="radio" name="is_professional" checked><i></i>
         </label>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12">
-        <input id="nickname" type="text" name="nickname" placeholder="Pseudo *" required autofocus class="form-control">
+        <input id="username" type="text" name="username" placeholder="Pseudo *" required autofocus class="form-control"
+                value="{{currentUser.username}}">
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12">
-        <input id="email" type="email" name="email" placeholder="Email *" required class="form-control">
+        <input id="email" type="email" name="email" placeholder="Email *" required class="form-control"
+               value="{{currentUser.email}}">
     </div>
 </div>
 <div class="row">
     <div class="col-sm-2 without-search">
         <div class="form-control">
+            <!-- TODO set model's sex -->
             <select>
                 <option value="male">M.</option>
                 <option value="female">F.</option>
@@ -53,16 +56,19 @@
         </div>
     </div>
     <div class="col-sm-5">
-        <input id="first-name" type="text" name="first-name" placeholder="Prénom *" required class="form-control">
+        <input id=first_name" type="text" name="first_name" placeholder="Prénom *" required class="form-control"
+                value="{{currentUser.first_name}}">
     </div>
     <div class="col-sm-5">
-        <input id="name" type="text" name="name" placeholder="Nom *" required class="form-control">
+        <input id="last_name" type="text" name="last_name" placeholder="Nom *" required class="form-control"
+               value="{{currentUser.last_name}}">
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12 select-gradient without-search form-control">
         <p class="text-uppercase"><b><small>adresse par défaut</small></b></p>
-        <select>
+        <!-- TODO addresses options -->
+        <select name="default_address">
             <option value="94 avenue félix faure, 75015 Paris">94 avenue félix faure, 75015 Paris</option>
         </select>
         <h4 class="indent-sm-v text-right text-success-hover"><a href="#">Ajouter ou modifier une adresse</a></h4>
@@ -71,7 +77,8 @@
 <div class="row">
     <div class="col-sm-12 select-gradient without-search form-control">
         <p class="text-uppercase"><b><small>téléphone par défaut</small></b></p>
-        <select>
+        <!-- TODO numbers options -->
+        <select name="default_number">
             <option value="01 45 97 34 56">01 45 97 34 56</option>
         </select>
         <h4 class="indent-sm-v text-right text-success-hover"><a href="#">Téléphone par défaut</a></h4>
@@ -79,12 +86,13 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
-        <textarea id="about-myself" name="about-myself" tabindex="1" rows="6" placeholder="A propos de vous..." class="expand form-control"></textarea>
+        <textarea id="about" name="about" tabindex="1" rows="6" placeholder="A propos de vous..." class="expand form-control"></textarea>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12 without-search form-control">
-        <select multiple="" data-placeholder="Langues parlées">
+        <!-- TODO languages options -->
+        <select name="languages" multiple data-placeholder="Langues parlées">
             <option value="4">Azərbaycan</option>
             <option value="5">English</option>
             <option value="6">Беларуская</option>
@@ -103,6 +111,7 @@
 </div>
 <div class="row">
     <div class="col-sm-8">
+        <!-- TODO newsletter choice -->
         <h3>J’accepte de recevoir la newsletter e-loue</h3>
     </div>
     <div class="col-sm-2">
@@ -118,6 +127,7 @@
 </div>
 <h2>Informations sur le permis</h2>
 <div class="row form-control">
+    <!-- TODO driver license date -->
     <div class="col-sm-2">
         <select id="select-day" name="select-day" data-placeholder="Jour">
             <option value="1">1</option>
@@ -288,10 +298,12 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
-        <input id="license-number" type="text" name="license-number *" placeholder="Numéro de permis *" required class="form-control">
+        <input id="drivers_license_number" type="text" name="drivers_license_number" placeholder="Numéro de permis *" required class="form-control"
+                value="{{currentUser.drivers_license_number}}">
     </div>
 </div>
 <div class="row">
+    <!-- TODO driver license photo -->
     <div class="col-sm-12 form-control">
         <label for="change-img" class="file-input-drag"><i class="fa fa-plus fa-4x"></i><br>Ajouter une photo de votre permis
             <input type="file" id="change-img">

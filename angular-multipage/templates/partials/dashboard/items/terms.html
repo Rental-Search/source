@@ -1,0 +1,18 @@
+<div class="section-content">
+    <div data-ng-init="car_terms_url='partials/dashboard/items/terms/car_terms.html'" data-ng-include="car_terms_url" data-ng-show="isAuto && !isProfessional"></div>
+    <div data-ng-init="real_estate_terms_url='partials/dashboard/items/terms/real_estate_terms.html'" data-ng-include="real_estate_terms_url" data-ng-show="isRealEstate && !isProfessional"></div>
+    <div data-ng-init="simple_terms_url='partials/dashboard/items/terms/simple_terms.html'" data-ng-include="simple_terms_url" data-ng-show="!isAuto && !isRealEstate && !isProfessional"></div>
+    <div data-ng-init="professional_terms_url='partials/dashboard/items/terms/professional_terms.html'" data-ng-include="professional_terms_url" data-ng-show="isProfessional"></div>
+    <form action="terms" class="indent-sm-t">
+        <div class="row">
+            <div class="col-sm-12">
+                <textarea name="" tabindex="1" rows="6" placeholder="" class="expand form-control"></textarea>
+            </div>
+            <div class="col-sm-12">
+                <button type="submit" class="btn bg-success-hover text-white pull-right">Enregister les nouvelles
+                    conditions
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -11,14 +11,17 @@ require.config({
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
+        "angular-money-directive": "../../bower_components/angular-money-directive/angular-money-directive",
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
+        "datejs": "../../bower_components/datejs/build/production/date.min",
         "selectivizr": "../../bower_components/selectivizr/selectivizr",
         "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../js/chosen.jquery.min",
         "vars": "../vars",
-        "bootstrap_modal": "../bootstrap/modal"
+        "bootstrap_modal": "../bootstrap/modal",
+        "datejs": "../../bower_components/datejs/build/production/date.min"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -28,6 +31,7 @@ require.config({
         "angular-resource": ["angular"],
         "angular-ui-router": ["angular"],
         "angular-translate": ["angular"],
+        "angular-money-directive": ["angular"],
         "angular-mocks": {
             deps: ["angular"],
             "exports": "angular.mock"
@@ -50,8 +54,10 @@ require([
     "angular",
     "bootstrap",
     "vars",
+    "datejs",
     "eloue/route",
-    "eloue/i18n"
+    "eloue/i18n",
+    "datejs"
 ], function ($, _, angular, bootstrap, vars, route) {
     "use strict";
     $(function () {

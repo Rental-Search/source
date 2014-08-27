@@ -7,11 +7,11 @@ define(["angular", "eloue/app", "../../../common/eloue/services"], function (ang
      */
     angular.module("EloueDashboardApp").controller("MessagesCtrl", [
         "$scope",
-        "MessageThreadsService",
-        function ($scope, MessageThreadsService) {
+        "MessageThreadsLoadService",
+        function ($scope, MessageThreadsLoadService) {
             // Get all message threads
-            MessageThreadsService.getMessageThreads().then(function (data) {
-                $scope.message_threads = data;
+            MessageThreadsLoadService.getMessageThreadList(true, true).then(function (messageThreadList) {
+                $scope.messageThreadList = messageThreadList;
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();

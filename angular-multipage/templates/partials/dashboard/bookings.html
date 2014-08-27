@@ -4,25 +4,25 @@
             <div class="col-xs-9 tabs-horisontal-active">
                 <ul class="list-without-spaces">
                     <li class="divider"></li>
-                    <li class="tab-horisontal">
+                    <li class="tab-horisontal" data-ng-click="filterByBoth()">
                         <h3 class="small">Tous</h3>
                     </li>
                     <li class="divider"></li>
-                    <li class="tab-horisontal">
+                    <li class="tab-horisontal" data-ng-click="filterByOwner()">
                         <h3 class="small">Propriétaires</h3>
                     </li>
                     <li class="divider"></li>
-                    <li class="tab-horisontal">
+                    <li class="tab-horisontal" data-ng-click="filterByBorrower()">
                         <h3 class="small">Emprunteurs</h3>
                     </li>
                 </ul>
             </div>
             <div class="col-xs-3">
                 <div class="select-gradient without-search date-picker">
-                    <select>
-                        <option value="statut">Statut</option>
-                        <option value="statut">Statut</option>
-                        <option value="statut">Statut</option>
+                    <select name="stateFilter"
+                            data-ng-model="stateFilter"
+                            data-ng-options="state.value as state.label for state in stateList"
+                            data-ng-change="filterByState()">
                     </select>
                 </div>
             </div>
@@ -30,16 +30,19 @@
     </div>
     <ul class="scrollbar-custom">
         <!-- TODO change 'soon' class -->
-        <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="booking in bookings track by booking.uuid">
+        <li class="tab-vertical block-with-thumbnail soon" data-ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid">
             <div class="col-thumbnail">
-                <!-- TODO change 'a venir' title -->
-                <div class="thumbnail"><a href="#"><img data-ng-src="{{booking.picture}}"
-                                                        alt="{{booking.title}}" width="130"></a><span
-                        class="booking-bage">a venir</span></div>
+                <div class="thumbnail">
+                    <a href="#">
+                        <img data-ng-src="{{booking.picture}}" alt="{{booking.product.summary}}" width="130">
+                    </a>
+                    <!-- TODO change 'a venir' title -->
+                    <span class="booking-bage">a venir</span>
+                </div>
             </div>
             <div class="col-exposition">
                 <h3 class="small">Location <a ui-sref="bookings.detail({uuid: booking.uuid})"
-                                              class="text-underline-hover">{{booking.title}}</a></h3>
+                                              class="text-underline-hover">{{booking.product.summary}}</a></h3>
 
                 <p class="normal text-gray">
                     <big class="text-primary">{{booking.total_amount}}€</big><br>

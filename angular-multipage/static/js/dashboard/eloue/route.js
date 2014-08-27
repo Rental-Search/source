@@ -6,6 +6,12 @@ define(["eloue/app",
         "eloue/controllers/MessagesCtrl",
         "eloue/controllers/BookingsCtrl",
         "eloue/controllers/ItemsCtrl",
+        "eloue/controllers/items/ItemsInfoCtrl",
+        "eloue/controllers/items/ItemsCalendarCtrl",
+        "eloue/controllers/items/ItemsProfitsCtrl",
+        "eloue/controllers/items/ItemsTariffsCtrl",
+        "eloue/controllers/items/ItemsTermsCtrl",
+        "eloue/controllers/items/ItemsTabsCtrl",
         "eloue/controllers/AccountCtrl",
         "eloue/controllers/account/AccountProfileCtrl",
         "eloue/controllers/account/AccountVerificationCtrl",
@@ -60,6 +66,86 @@ define(["eloue/app",
                         url: "/items",
                         templateUrl: "partials/dashboard/items.html",
                         controller: "ItemsCtrl"
+                    })
+                    .state("items.info", {
+                        url: "/:id/info",
+                        views: {
+                            "": {
+                                templateUrl: "partials/dashboard/items/item_detail.html"
+                            },
+                            "tabs@items.info": {
+                                templateUrl: "partials/dashboard/items/tabs.html",
+                                controller: "ItemsTabsCtrl"
+                            },
+                            "details@items.info": {
+                                templateUrl: "partials/dashboard/items/info.html",
+                                controller: "ItemsInfoCtrl"
+                            }
+                        }
+                    })
+                    .state("items.calendar", {
+                        url: "/:id/calendar",
+                        views: {
+                            "": {
+                                templateUrl: "partials/dashboard/items/item_detail.html"
+                            },
+                            "tabs@items.calendar": {
+                                templateUrl: "partials/dashboard/items/tabs.html",
+                                controller: "ItemsTabsCtrl"
+                            },
+                            "details@items.calendar": {
+                                templateUrl: "partials/dashboard/items/calendar.html",
+                                controller: "ItemsCalendarCtrl"
+                            }
+                        }
+                    })
+                    .state("items.tariffs", {
+                        url: "/:id/tariffs",
+                        views: {
+                            "": {
+                                templateUrl: "partials/dashboard/items/item_detail.html"
+                            },
+                            "tabs@items.tariffs": {
+                                templateUrl: "partials/dashboard/items/tabs.html",
+                                controller: "ItemsTabsCtrl"
+                            },
+                            "details@items.tariffs": {
+                                templateUrl: "partials/dashboard/items/tariffs.html",
+                                controller: "ItemsTariffsCtrl"
+                            }
+                        }
+                    })
+                    .state("items.terms", {
+                        url: "/:id/terms",
+                        views: {
+                            "": {
+                                templateUrl: "partials/dashboard/items/item_detail.html"
+                            },
+                            "tabs@items.terms": {
+                                templateUrl: "partials/dashboard/items/tabs.html",
+                                controller: "ItemsTabsCtrl"
+                            },
+                            "details@items.terms": {
+                                templateUrl: "partials/dashboard/items/terms.html",
+                                controller: "ItemsTermsCtrl"
+                            }
+                        }
+                    })
+                    .state("items.profits", {
+                        url: "/:id/profits",
+                        views: {
+                            "": {
+                                templateUrl: "partials/dashboard/items/item_detail.html"
+                            },
+                            "tabs@items.profits": {
+                                templateUrl: "partials/dashboard/items/tabs.html",
+                                controller: "ItemsTabsCtrl"
+                            },
+                            "details@items.profits": {
+                                templateUrl: "partials/dashboard/items/profits.html",
+                                controller: "ItemsProfitsCtrl"
+                            }
+                        }
                     })
                     .state("account", {
                         url: "/account",

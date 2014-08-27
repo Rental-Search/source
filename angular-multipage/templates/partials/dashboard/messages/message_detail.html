@@ -4,12 +4,12 @@
     </div>
     <ul class="scrollbar-custom">
         <li class="tab-vertical">
-            <div class="section-content"><img src="../../../static/img/carousel-product/2.jpg" alt="" width="100%">
+            <div class="section-content"><img data-ng-src="{{messageThread.product.picture}}" alt="" width="100%">
 
-                <h3 class="indent-xs-v"><a href="#" class="text-underline-hover"><b>BMW 520 Touring Luxe</b></a></h3>
+                <h3 class="indent-xs-v"><a href="#" class="text-underline-hover"><b>{{messageThread.product.summary}}</b></a></h3>
 
-                <p class="text-gray"><i class="fa fa-map-marker fa-lg">&nbsp;</i>Nice,&nbsp;
-                    02200
+                <p class="text-gray"><i class="fa fa-map-marker fa-lg">&nbsp;</i>{{messageThread.product.address.city}},&nbsp;
+                    {{messageThread.product.address.zipcode}}
                 </p>
 
                 <p class="text-gray indent-sm-v"><span class="average-rate"><span class="star"><i
@@ -21,56 +21,126 @@
 
                 <div class="block-with-thumbnail">
                     <div class="col-thumbnail">
-                        <div class="thumbnail round"><a href="#julien_dupré_homepage"><img
-                                src="../../../static/img/home-products/owner_small.png" alt="Dupré photo" width="40"
-                                height="40"></a></div>
+                        <div class="thumbnail round">
+                            <a href="#julien_dupré_homepage">
+                                <img data-ng-src="{{messageThread.product.owner.avatar.thumbnail}}"
+                                     alt="{{messageThread.product.owner.username}}" width="40" height="40">
+                            </a>
+                        </div>
                     </div>
                     <div class="col-exposition"><a href="#julien_dupré_homepage" class="text-underline-hover text-gray">
-                        <h4 class="indent-xs-h">Julien Dupré</h4></a></div>
+                        <h4 class="indent-xs-h">{{messageThread.product.owner.username}}</h4></a></div>
                 </div>
             </div>
         </li>
         <li class="tab-vertical">
             <div class="section-content">
-                <ul class="zebra-list indent-md-b">
+                <ul data-ng-if="!!booking" class="zebra-list indent-md-b">
                     <li class="clearfix">
                         <div class="col-xs-3">Début</div>
-                        <div class="col-xs-9">Mardi 24 Juin 2014 à 09h00</div>
+                        <div class="col-xs-9">
+                            <span translate="{{booking.start_date.week_day}}"></span>
+                            <span> {{booking.start_date.day}} </span>
+                            <span translate="{{booking.start_date.month}}"></span>
+                            <span> {{booking.start_date.year}} </span>
+                            <span translate="at"></span>
+                            <span> {{booking.start_time}}</span>
+                        </div>
                     </li>
                     <li class="clearfix">
                         <div class="col-xs-3">Fin</div>
-                        <div class="col-xs-9">Jeudi 26 Juin 2014 à 09h00</div>
+                        <div class="col-xs-9">
+                            <span translate="{{booking.end_date.week_day}}"></span>
+                            <span> {{booking.end_date.day}} </span>
+                            <span translate="{{booking.end_date.month}}"></span>
+                            <span> {{booking.end_date.year}} </span>
+                            <span translate="at"></span>
+                            <span> {{booking.end_time}}</span>
+                        </div>
                     </li>
                     <li class="clearfix">
                         <div class="col-xs-3">Période</div>
-                        <div class="col-xs-9">3 jours et 9 heures</div>
+                        <div class="col-xs-9">
+                            {{booking.period_days}} jours et {{booking.period_hours}} heures
+                        </div>
                     </li>
                     <li class="clearfix">
                         <div class="col-xs-3">Prix</div>
-                        <div class="col-xs-9 text-success">168€</div>
+                        <div class="col-xs-9 text-success">{{booking.total_amount}}€</div>
                     </li>
                     <li class="clearfix">
                         <div class="col-xs-3">Caution</div>
-                        <div class="col-xs-9">250€</div>
+                        <div class="col-xs-9">{{booking.deposit_amount}}€</div>
                     </li>
                 </ul>
-                <div class="text-right"><a href="#" class="text-success text-underline-hover indent-sm-h">Annulation</a><a
+                <div data-ng-if="!!booking" class="text-right"><a href="#" class="text-success text-underline-hover indent-sm-h">Annulation</a><a
                         href="#" class="btn-inline bg-success-hover text-white">Télécharger le contrat</a></div>
+
+                <form data-ng-if="booking === null" data-ng-submit="requestBooking()">
+                    <div class="indent-sm-v select-gradient without-search date-picker">
+                        <div class="form-group">
+                            <div class="input-group"><span class="input-group-addon">DU</span>
+                                <input type="text" placeholder="dd/mm/yyyy" data-ng-model="newBooking.start_date" data-date-format="dd/mm/yyyy" eloue-datepicker
+                                       data-ng-change="updateNewBookingInfo()">
+                                <span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select name="start_time" data-ng-model="newBooking.start_time"
+                                    data-ng-options="hour as hour.label for hour in availableHours"
+                                    data-ng-change="updateNewBookingInfo()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="indent-sm-v select-gradient without-search date-picker">
+                        <div class="form-group">
+                            <div class="input-group"><span class="input-group-addon">AU</span>
+                                <input type="text" placeholder="dd/mm/yyyy" data-ng-model="newBooking.end_date" data-date-format="dd/mm/yyyy" eloue-datepicker
+                                       data-ng-change="updateNewBookingInfo()">
+                                <span class="input-group-addon"><i class="fa fa-calendar fa-lg text-gray"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select name="end_time" data-ng-model="newBooking.end_time"
+                                    data-ng-options="hour as hour.label for hour in availableHours"
+                                    data-ng-change="updateNewBookingInfo()">
+                            </select>
+                        </div>
+                    </div>
+                    <ul class="zebra-list">
+                        <li>
+                            <div class="col-xs-4">Durée</div>
+                            <div class="col-xs-8">{{newBooking.period_days}} jours et {{newBooking.period_hours}} heures</div>
+                        </li>
+                        <li>
+                            <div class="col-xs-4">Prix</div>
+                            <div class="col-xs-8 text-success">{{newBooking.total_amount}}€</div>
+                        </li>
+                        <li>
+                            <div class="col-xs-4">Caution</div>
+                            <div class="col-xs-8">{{newBooking.total_amount}}€</div>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <p class="text-gray indent-sm-v text-center">Assurance incluse</p>
+                        <button type="submit" class="btn text-white bg-success-hover col-xs-8 col-xs-offset-2">Procédez à la réservation</button>
+                    </div>
+                </form>
             </div>
         </li>
     </ul>
 </aside>
 <section class="tabs-vertical-static pull-nothing">
     <ul class="scrollbar-custom messages-container">
-        <li class="tab-vertical block-with-thumbnail" data-ng-repeat="message in messages track by message.id">
+        <li class="tab-vertical block-with-thumbnail" data-ng-repeat="message in messageThread.messages track by message.id">
             <div class="col-thumbnail">
                 <div class="thumbnail round"><a><img
-                        data-ng-src="{{message.icon}}" alt="{{message.username}}"></a></div>
+                        data-ng-src="{{message.sender.avatar.thumbnail}}" alt="{{message.sender.username}}"></a></div>
             </div>
             <div class="col-exposition">
-                <h3><a class="text-underline-hover">{{message.username}}</a></h3>
+                <h3><a class="text-underline-hover">{{message.sender.username}}</a></h3>
 
-                <p class="small text-gray-light">{{message.date}}</p>
+                <p class="small text-gray-light">{{message.sent_at}}</p>
 
                 <p class="normal text-gray text-justify">{{message.body}}</p>
             </div>

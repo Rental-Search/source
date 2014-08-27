@@ -8,14 +8,45 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("BookingDetailCtrl", [
         "$scope",
         "$stateParams",
-        "BookingsService",
-        function ($scope, $stateParams, BookingsService) {
-            BookingsService.getBookingDetail($stateParams.uuid).then(function (booking) {
-                $scope.booking = booking;
+        "BookingsLoadService",
+        "CommentsLoadService",
+        function ($scope, $stateParams, BookingsLoadService, CommentsLoadService) {
+
+            // Initial comment data
+            $scope.comment = {rate: 5};
+
+            // On rating star click
+            $(".star i").click(function () {
+                var self = $(this);
+                $scope.$apply(function () {
+                    $scope.comment.rate = self.attr("rate");
+                });
+            });
+
+            // Load booking details
+            BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
+                $scope.bookingDetails = bookingDetails;
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
             });
+
+            // Load comments
+            CommentsLoadService.getCommentList($stateParams.uuid).then(function (commentList) {
+                $scope.commentList = commentList;
+            });
+
+            // Method to post new comment
+            $scope.postComment = function () {
+                CommentsLoadService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).$promise
+                    .then(function () {
+                        $scope.comment = {
+                            text: "",
+                            rate: 5
+                        };
+                    });
+            };
+
         }
     ]);
 });

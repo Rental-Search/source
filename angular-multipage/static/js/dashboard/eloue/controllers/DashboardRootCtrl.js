@@ -1,6 +1,6 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define(["angular", "eloue/app", "../../../common/eloue/directives"], function (angular) {
 
     /**
      * Root controller for the dashboard app.
@@ -8,9 +8,13 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("DashboardRootCtrl", [
         "$scope",
         "$cookies",
-        function ($scope, $cookies) {
+        "UsersService",
+        function ($scope, $cookies, UsersService) {
             // Read authorization token
             $scope.currentUserToken = $cookies.user_token;
+
+            // Get current user
+            $scope.currentUserPromise = UsersService.getMe().$promise;
 
             // Set jQuery ajax interceptors
             $.ajaxSetup({
@@ -24,7 +28,8 @@ define(["angular", "eloue/app"], function (angular) {
             // The method to initiate custom scrollbars
             $scope.initCustomScrollbars = function () {
                 // custom select
-                $('select').chosen();
+                //TODO: fix problem with select options model update
+//                $('select').chosen();
 
                 // custom scrollbar
                 $('.chosen-drop').mCustomScrollbar({
