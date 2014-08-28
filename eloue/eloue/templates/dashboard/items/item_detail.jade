@@ -1,0 +1,11 @@
+      include _notification_not_selected_item
+      aside
+        .section-header
+          .tabs-horisontal-active
+            ul.list-without-spaces.fixed
+              each tab in items_detail.horisontal_tabs
+                li.divider
+                li.tab-horisontal: h3.small 
+                  a(href="#{tab.link}") #{tab.text}
+
+        section.scrollbar-custom.bg-lite

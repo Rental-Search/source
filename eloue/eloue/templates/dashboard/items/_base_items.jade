@@ -1,26 +1,5 @@
-extends ../jade/_base_dashboard
-
-block append variables
-  -var items_is_empty = false
-  -var items_is_not_selected = false
-
 block content-view
-  if items_is_empty
-    include _notification_empty_items
-  else
-    include _items_list
+  include _notification_empty_items
+  include _items_list
 
-    if items_is_not_selected
-      include _notification_not_selected_item
-    else
-      aside
-        .section-header
-          .tabs-horisontal-active
-            ul.list-without-spaces.fixed
-              each tab in items_detail.horisontal_tabs
-                li.divider
-                li.tab-horisontal: h3.small 
-                  a(href="#{tab.link}") #{tab.text}
-
-        section.scrollbar-custom.bg-lite
-          block details
+  .content-view(ui-view)
