@@ -21,10 +21,18 @@ module.exports = function(config) {
       {pattern: 'static/bower_components/angular-sanitize/angular-sanitize.min.js', included: false },
       {pattern: 'static/bower_components/angular-route/angular-route.min.js', included: false },
       {pattern: 'static/bower_components/datejs/build/production/date.min.js', included: false },
+      {pattern: 'static/bower_components/angular-ui-router/release/angular-ui-router.min.js', included: false },
+      {pattern: 'static/bower_components/angular-translate/angular-translate.min.js', included: false },
+      {pattern: 'static/bower_components/angular-money-directive/angular-money-directive.js', included: false },
+      {pattern: 'static/bower_components/jquery-form/jquery.form.js', included: false },
+      {pattern: 'static/bower_components/selectivizr/selectivizr.js', included: false },
+      {pattern: 'static/bower_components/jquery-autosize/jquery.autosize.min.js', included: false },
+      {pattern: 'static/bower_components/jquery-mousewheel/jquery.mousewheel.js', included: false },
+      {pattern: 'static/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js', included: false },
       {pattern: 'static/js/*.js', included: false },
       {pattern: 'static/js/**/*.js', included: false },
       {pattern: 'tests/unit/dashboard/**/*.js', included: false },
-      'tests/test-main.js'
+      'tests/test-main-dashboard.js'
     ],
 
     // list of files / patterns to exclude

@@ -11,6 +11,9 @@ define(["angular", "eloue/app"], function (angular) {
         "AddressesService",
         "ProductsService",
         function ($scope, $stateParams, AddressesService, ProductsService) {
+
+            $scope.address = {};
+
             // Get
             AddressesService.getAddress($stateParams.id).$promise.then(function (address) {
                 // Current address
@@ -18,18 +21,18 @@ define(["angular", "eloue/app"], function (angular) {
 
                 // Is this address default
                 $scope.isDefaultAddress = address.id === $scope.defaultAddressId;
-
-                // Submit form
-                $scope.submitAddress = function () {
-                    var form = $("#address_detail_form");
-                    AddressesService.updateAddress($scope.address.id, form);
-                };
-
-                // Delete address
-                $scope.deleteAddress = function () {
-                    AddressesService.deleteAddress($scope.address.id);
-                };
             });
+
+            // Submit form
+            $scope.submitAddress = function () {
+                var form = $("#address_detail_form");
+                AddressesService.updateAddress($scope.address.id, form);
+            };
+
+            // Delete address
+            $scope.deleteAddress = function () {
+                AddressesService.deleteAddress($scope.address.id);
+            };
 
             ProductsService.getProductsByAddress($stateParams.id).then(function (products) {
                 $scope.productList = products;
