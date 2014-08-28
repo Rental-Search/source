@@ -10,9 +10,8 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
 
         beforeEach(function () {
             usersServiceMock = {
-                getMe: function (successCallback, errorCallback) {
-                    console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+                resetPassword: function (userId, form) {
+                    console.log("usersServiceMock:resetPassword called with userId = " + userId + ", form = " + form);
                 }
             };
 
@@ -24,13 +23,19 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
 
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(usersServiceMock, "resetPassword").andCallThrough();
 
             AccountPasswordCtrl = $controller('AccountPasswordCtrl', { $scope: scope, UsersService: usersServiceMock });
         }));
 
         it("AccountPasswordCtrl should be not null", function () {
             expect(!!AccountPasswordCtrl).toBe(true);
+        });
+
+        it("AccountPasswordCtrl:resetPassword", function () {
+            scope.currentUser = { id: 1 };
+            scope.resetPassword();
+            expect(usersServiceMock.resetPassword).toHaveBeenCalled();
         });
     });
 });

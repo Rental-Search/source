@@ -12,7 +12,9 @@ define(["angular-mocks", "eloue/controllers/AccountCtrl"], function() {
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
                 }
             };
 
@@ -27,6 +29,7 @@ define(["angular-mocks", "eloue/controllers/AccountCtrl"], function() {
             spyOn(usersServiceMock, "getMe").andCallThrough();
 
             AccountCtrl = $controller('AccountCtrl', { $scope: scope, UsersService: usersServiceMock });
+            expect(usersServiceMock.getMe).toHaveBeenCalled();
         }));
 
         it("AccountCtrl should be not null", function () {
