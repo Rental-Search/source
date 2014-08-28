@@ -36,7 +36,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 usersService.getStatistics = function (userId) {
-                    return Users.getStats({id: userId,_cache: new Date().getTime()});
+                    return Users.getStats({id: userId, _cache: new Date().getTime()});
                 };
 
                 usersService.sendForm = function (userId, form, successCallback, errorCallback) {
@@ -364,7 +364,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Products.get({id: id});
                 };
 
-                productsService.getProductDetails = function(id) {
+                productsService.getProductDetails = function (id) {
                     var deferred = $q.defer();
                     var self = this;
                     Products.get({id: id}).$promise.then(function (result) {
@@ -687,7 +687,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                     return deferred.promise;
                 };
-                
+
                 bookingsService.getBooking = function (uuid) {
                     var deferred = $q.defer();
 
@@ -894,7 +894,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             };
 
             categoriesService.getRootCategories = function () {
-                return Categories.get({parent__isnull : true});
+                return Categories.get({parent__isnull: true});
             };
 
             categoriesService.getChildCategories = function (parentId) {
@@ -1038,7 +1038,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
             return proAgenciesService;
         }]);
-        
+
         /**
          * Service for managing comments.
          */
@@ -1430,8 +1430,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "MessageThreadsParseService",
             "ProductRelatedMessagesLoadService",
             "ProductsLoadService",
-            function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService,
-                      MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
+            function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService, MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
                 var messageThreadsLoadService = {};
 
                 messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage) {
@@ -1497,8 +1496,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         messageThreadPromises.messages = $q.all(messagesPromises);
 
                         // Get product id
-                        var productId = UtilsService.getIdFromUrl(messageThreadData.product);
-                        messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true, false, true);
+                        if (messageThreadData.product) {
+                            var productId = UtilsService.getIdFromUrl(messageThreadData.product);
+                            messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true, false, true);
+                        }
 
                         $q.all(messageThreadPromises).then(function (results) {
                             var messageThread = MessageThreadsParseService.parseMessageThread(messageThreadData, results.messages, results.product);
