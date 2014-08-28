@@ -1,31 +1,30 @@
-include ../jade/_mixins
+//-include ../jade/_mixins
 
-aside.tabs-vertical-static.pull-right.lg
+aside.tabs-vertical-static.pull-right.lg(ng-if="messageThread && messageThread.product")
   .section-header: h4.text-center.indent-xs-t Réservation associé à :
   ul.scrollbar-custom
     li.tab-vertical
-    //-
       .section-content
-        img(src="#{STATIC_URL}img/#{lot_BMW.thumbnail}", alt="", width="100%")
-        h3.indent-xs-v: a(href="#").text-underline-hover: b #{lot_BMW.name}
+        {% verbatim %}
+        img(data-ng-src="{{messageThread.product.picture}}, alt="", width="100%")
+        h3.indent-xs-v: a(href="#").text-underline-hover: b {{messageThread.product.summary}}
         p.text-gray
           i.fa.fa-map-marker.fa-lg &nbsp;
-          | #{lot_BMW.location},&nbsp;
-          | #{lot_BMW.index}
+          | {{messageThread.product.address.city}},&nbsp;
+          | {{messageThread.product.address.zipcode}}
         p.text-gray.indent-sm-v
-          +average-rate(lot_BMW.rate, lot_BMW.rate_count)
-          +number-of-comments(lot_BMW.comments_count)
+          //-+average-rate(lot_BMW.rate, lot_BMW.rate_count)
+          //-+number-of-comments(lot_BMW.comments_count)
 
         .block-with-thumbnail
           .col-thumbnail
-            .thumbnail.round: a(href="#{lot_BMW.owner.account_link}")
-              img(src="#{STATIC_URL}#{lot_BMW.owner.thumbnail_small}", alt="#{lot_BMW.owner.name} photo", width="40", height="40")
+            .thumbnail.round: a(href="#")
+              img(data-ng-src="{{messageThread.product.owner.avatar.thumbnail}}", alt="{{messageThread.product.owner.username}}", width="40", height="40")
           .col-exposition
-            a(href="#{lot_BMW.owner.account_link}").text-underline-hover.text-gray
-              h4.indent-xs-h #{lot_BMW.owner.first_name} #{lot_BMW.owner.name}
-  //-
+            a(href="#").text-underline-hover.text-gray
+              h4.indent-xs-h {{messageThread.product.owner.first_name}} {{messageThread.product.owner.last_name}}
+        {% endverbatim %}
+
     li.tab-vertical: .section-content
-      if is_reservation
         include ./_details_reservation
-      else
         include ./_form_reservation

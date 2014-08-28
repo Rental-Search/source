@@ -1,18 +1,5 @@
-block variables
-  include ../jade/_global_variables
-  -var messages_is_empty = false
-  -var conversations_is_not_selected = false
-  -var is_reservation = false
-
 block content-view
-  if messages_is_empty
     include ./_notification_empty_messages
-  else
     include ./_section_dialogs
 
     .content-view(ui-view)
-    //-  if conversations_is_not_selected
-    //-    include ./_notification_not_selected_dialog
-    //-  else
-    //-    include ./_aside_product_detail
-    //-    include ./_section_communication

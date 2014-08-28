@@ -1,11 +1,33 @@
-ul.zebra-list.indent-md-b
-  each info in booking_detail.informations
+{% verbatim %}
+ul.zebra-list.indent-md-b(ng-if="!!booking")
     li.clearfix
-      .col-xs-3 #{info.title}
-      if info.allocate
-        .col-xs-9.text-success #{info.value}
-      else
-        .col-xs-9 #{info.value}
-.text-right
+      .col-xs-3 Début
+      .col-xs-9.text
+        span(translate="{{booking.start_date.week_day}}")
+        |  {{booking.start_date.day}} 
+        span(translate="{{booking.start_date.month}}")
+        |  {{booking.start_date.year}} 
+        span(translate="at")
+        |  {{booking.start_time}}
+    li.clearfix
+      .col-xs-3 Fin
+      .col-xs-9.text
+        span(translate="{{booking.end_date.week_day}}")
+        |  {{booking.end_date.day}} 
+        span(translate="{{booking.end_date.month}}")
+        |  {{booking.end_date.year}} 
+        span(translate="at")
+        |  {{booking.end_time}}
+    li.clearfix
+      .col-xs-3 Période
+      .col-xs-9.text {{booking.period_days}} jours et {{booking.period_hours}} heures
+    li.clearfix
+      .col-xs-3 Prix
+      .col-xs-9.text.success {{booking.total_amount}}€
+    li.clearfix
+      .col-xs-3 Caution
+      .col-xs-9.text {{booking.deposit_amount}}€
+.text-right(ng-if="!!booking")
   a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
   a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
+{% endverbatim %}

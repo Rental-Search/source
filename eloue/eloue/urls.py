@@ -142,7 +142,7 @@ partials_urlpatterns = patterns('',
     ),
 
     url(r'^dashboard/messages/message_detail.html$', TemplateView.as_view(
-            template_name='dashboard/messages/_aside_product_detail.jade',
+            template_name='dashboard/messages/message_detail.jade',
         ),
     ),
 

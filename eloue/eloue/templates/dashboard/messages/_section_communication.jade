@@ -1,16 +1,17 @@
+{% verbatim %}
 section.tabs-vertical-static.pull-nothing
   ul.scrollbar-custom.messages-container
-    each message in messages
-      li.tab-vertical.block-with-thumbnail
+      li.tab-vertical.block-with-thumbnail(ng-repeat="message in messageThread.messages track by message.id")
         .col-thumbnail
-          .thumbnail.round: a(href="#{message.autor.account_link}")
-            img(src="#{STATIC_URL}#{message.autor.thumbnail_small}", alt="#{message.autor.name} photo")
+          .thumbnail.round: a(href="#")
+            img(ng-src="{{message.sender.avatar.thumbnail}}, alt="{{message.sender.username}}")
         .col-exposition
-          h3: a(href="#{message.autor.account_link}").text-underline-hover #{message.autor.first_name}
-          p.small.text-gray-light #{message.date} #{message.time}
-          p.normal.text-gray.text-justify #{message.text}
+          h3: a(href="#").text-underline-hover {{message.sender.username}}
+          p.small.text-gray-light {{message.sent_at}}
+          p.normal.text-gray.text-justify {{message.body}}
 
-  form(action="send-message").send-dialog-message.clearfix
+  form(ng-submit="postNewMessage()").send-dialog-message.clearfix
     .textarea-wrapper
-      textarea#message-text.expand(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...")
+      textarea#message-text.expand(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...", ng-model="message")
     button(type="submit").btn.bg-success-hover.text-white Envoyez
+{% endverbatim %}
