@@ -4,29 +4,18 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTabsCtrl"], function() {
 
         var ItemsTabsCtrl,
             scope,
-            usersServiceMock;
+            stateParams;
 
         beforeEach(module('EloueDashboardApp'));
 
-        beforeEach(function () {
-            usersServiceMock = {
-                getMe: function (successCallback, errorCallback) {
-                    console.log("usersServiceMock:getMe");
-                    return { id: 1190};
-                }
-            };
-
-            module(function($provide) {
-                $provide.value("UsersService", usersServiceMock);
-            })
-        });
-
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            stateParams = {
+                id: 1
+            };
 
-            spyOn(usersServiceMock, "getMe").andCallThrough();
-
-            ItemsTabsCtrl = $controller('ItemsTabsCtrl', { $scope: scope, UsersService: usersServiceMock });
+            ItemsTabsCtrl = $controller('ItemsTabsCtrl', { $scope: scope, $stateParams: stateParams });
+            expect(scope.selectedItemId).toEqual(stateParams.id);
         }));
 
         it("ItemsTabsCtrl should be not null", function () {

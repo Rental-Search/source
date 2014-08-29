@@ -4,29 +4,36 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
 
         var ItemsProfitsCtrl,
             scope,
-            usersServiceMock;
+            stateParams,
+            bookingsServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
-            usersServiceMock = {
-                getMe: function (successCallback, errorCallback) {
-                    console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+            bookingsServiceMock = {
+                getBookingsByProduct: function (productId) {
+                    console.log("bookingsServiceMock:getBookingsByProduct called with productId = " + productId);
+                    return {then: function () {
+                        return {response: {}}
+                    }}
                 }
             };
 
             module(function($provide) {
-                $provide.value("UsersService", usersServiceMock);
+                $provide.value("BookingsService", bookingsServiceMock);
             })
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            stateParams = {
+                id: 1
+            };
 
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(bookingsServiceMock, "getBookingsByProduct").andCallThrough();
 
-            ItemsProfitsCtrl = $controller('ItemsProfitsCtrl', { $scope: scope, UsersService: usersServiceMock });
+            ItemsProfitsCtrl = $controller('ItemsProfitsCtrl', { $scope: scope, $stateParams: stateParams, BookingsService: bookingsServiceMock });
+            expect(bookingsServiceMock.getBookingsByProduct).toHaveBeenCalledWith(stateParams.id);
         }));
 
         it("ItemsProfitsCtrl should be not null", function () {

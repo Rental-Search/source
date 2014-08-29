@@ -35,7 +35,7 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
                 }
             };
             scope.currentUser = { id: 1};
-            scope.currentUserUrl = Endpoints.api_url + "users/" + scope.currentUser.id + "/";
+            scope.currentUserUrl = endpointsMock.api_url + "users/" + scope.currentUser.id + "/";
             spyOn(bookingsLoadServiceMock, "getBookingList").andCallThrough();
 
             BookingsCtrl = $controller('BookingsCtrl', { $scope: scope, Endpoints: endpointsMock, BookingsLoadService: bookingsLoadServiceMock });
@@ -53,14 +53,19 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
 
         it("BookingsCtrl:filterByBorrower", function () {
             scope.filterByBorrower();
+            expect(scope.bookingFilter.borrower).toEqual(scope.currentUserUrl);
+            expect(scope.bookingFilter.owner).toBeUndefined();
         });
 
         it("BookingsCtrl:filterByBoth", function () {
             scope.filterByBoth();
+            expect(scope.bookingFilter.borrower).toBeUndefined();
+            expect(scope.bookingFilter.owner).toBeUndefined();
         });
 
         it("BookingsCtrl:filterByState", function () {
             scope.filterByState();
+            expect(scope.bookingFilter.state).toEqual(scope.stateFilter);
         });
     });
 });

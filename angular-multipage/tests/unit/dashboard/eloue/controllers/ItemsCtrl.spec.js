@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function() {
+define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
 
     describe("Controller: ItemsCtrl", function () {
 
@@ -34,7 +34,7 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function() {
                 }
             };
 
-            module(function($provide) {
+            module(function ($provide) {
                 $provide.value("ProductsService", productsServiceMock);
                 $provide.value("UsersService", usersServiceMock);
                 $provide.value("CategoriesService", categoriesServiceMock);
@@ -44,8 +44,11 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function() {
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
 
-
+            scope.currentUser = {
+                id: 1190
+            };
             spyOn(usersServiceMock, "getMe").andCallThrough();
+
             spyOn(categoriesServiceMock, "getRootCategories").andCallThrough();
             spyOn(productsServiceMock, "getProductsByOwnerAndRootCategory").andCallThrough();
 

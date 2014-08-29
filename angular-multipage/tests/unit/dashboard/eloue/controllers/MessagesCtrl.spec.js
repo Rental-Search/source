@@ -29,6 +29,7 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function() {
             spyOn(messageThreadsLoadServiceMock, "getMessageThreadList").andCallThrough();
 
             MessagesCtrl = $controller('MessagesCtrl', { $scope: scope, MessageThreadsLoadService: messageThreadsLoadServiceMock });
+            expect(messageThreadsLoadServiceMock.getMessageThreadList).toHaveBeenCalledWith(true, true);
         }));
 
         it("MessagesCtrl should be not null", function () {

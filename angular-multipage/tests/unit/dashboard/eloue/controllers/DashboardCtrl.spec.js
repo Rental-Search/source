@@ -23,7 +23,11 @@ define(["angular-mocks", "eloue/controllers/DashboardCtrl"], function() {
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
-
+            scope.currentUserPromise = {
+                then: function () {
+                }
+            };
+            scope.currentUser = { id: 1};
             spyOn(usersServiceMock, "getMe").andCallThrough();
 
             DashboardCtrl = $controller('DashboardCtrl', { $scope: scope, UsersService: usersServiceMock });
