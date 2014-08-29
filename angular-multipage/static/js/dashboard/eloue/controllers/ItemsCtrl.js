@@ -18,8 +18,7 @@ define(["angular", "eloue/app"], function (angular) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
 
-                //TODO: change hardcoded "1190" to  $scope.currentUser.id
-                ProductsService.getProductsByOwnerAndRootCategory(1190).then(function (items) {
+                ProductsService.getProductsByOwnerAndRootCategory($scope.currentUser.id).then(function (items) {
                     $scope.items = items;
 
                     // Initiate custom scrollbars
@@ -32,8 +31,7 @@ define(["angular", "eloue/app"], function (angular) {
             });
 
             $scope.filterByCategory = function () {
-                //TODO: change hardcoded "1190" to  $scope.currentUser.id
-                ProductsService.getProductsByOwnerAndRootCategory(1190, $scope.selectedCategory).then(function (items) {
+                ProductsService.getProductsByOwnerAndRootCategory($scope.currentUser.id, $scope.selectedCategory).then(function (items) {
                     $scope.items = items;
                 });
             }
