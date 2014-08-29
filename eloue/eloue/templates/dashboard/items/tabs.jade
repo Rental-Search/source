@@ -1,0 +1,17 @@
+.tabs-horisontal-active
+    ul.list-without-spaces.fixed
+        li.divider
+        li.tab-horisontal: h3.small 
+          a(ui-sref="items.info({id: selectedItemId})) Photos et infos
+        li.divider
+        li.tab-horisontal: h3.small 
+          a(ui-sref="items.tariffs({id: selectedItemId})) Tarifs
+        li.divider
+        li.tab-horisontal: h3.small 
+          a(ui-sref="items.calendar({id: selectedItemId})) Calendrier
+        li.divider
+        li.tab-horisontal: h3.small 
+          a(ui-sref="items.terms({id: selectedItemId})) Conditions
+        li.divider
+        li.tab-horisontal: h3.small 
+          a(ui-sref="items.profits({id: selectedItemId})) Revenus
