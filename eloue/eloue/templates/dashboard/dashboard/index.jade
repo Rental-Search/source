@@ -1,31 +1,42 @@
-include ../jade/_mixins
-
+//-include ../jade/_mixins
 block content-view
+  {% verbatim %}
   section.tabs-vertical-static.lg.scrollbar-custom
-  //-
     ul.text-gray
       li.tab-vertical
          .block-with-thumbnail.indent-xs
           .col-thumbnail
-            .thumbnail.round.indent-sm-r: img(src="#{tenant.thumbnail.url}", alt="#{tenant.username} photo")
+            .thumbnail.round.indent-sm-r: img(ng-src="{{currentUser.avatar.profil}}", alt="{{currentUser.username}}")
           .col-exposition
-            h2.small.text-black.indent-xs-b #{tenant.first_name} #{tenant.last_name}
-            +average-rate(tenant.rate)
-            p.indent-sm-v Membre depus le #{tenant.date_registred}
-            a(href="#").btn.bg-success-hover.text-white Mettre à jour mes infos
+            h2.small.text-black.indent-xs-b {{currentUser.username}}
+            //-+average-rate(tenant.rate)
+            p.indent-sm-v Membre depus le {{currentUser.date_joined | date:'dd.MM.yyyy'}}
+            a(ui-sref="account.profile").btn.bg-success-hover.text-white Mettre à jour mes infos
 
       li.tab-vertical
         .indent-xs
           h2.text-black.indent-xs-b Statistiquess
           ul
-            each stat in tenant_stats
-              li
-                big.large.text-success #{stat.value} 
-                | #{stat.text}
+            li
+              big.large.text-success {{products.length}}
+              | annonces publiées
+            li
+              big.large.text-success {{bookings.length}}
+              | locations effectués
+            li
+              big.large.text-success 16
+              | évalutations
+            li
+              big.large.text-success {{userStats.response_rate}}
+              | de taux de réponse
+            li
+              big.large.text-success {{userStats.response_time}}
+              | de temps de réponse en moyenne
 
       li.tab-vertical
         .indent-xs
           h2.text-black.indent-xs-b Vérifications
+        //-
           ul
             each verify in tenant_verification
               li.indent-xs-v
@@ -40,16 +51,15 @@ block content-view
                    +verify-type("google", "Téléphone", "danger")
                   when "linkedin"
                    +verify-type("linkedin-square", "Linkedin", "blue")
-  aside(ui-view)
+  aside
     .section-header
      .tabs-horisontal-active.indent-xs-v
         ul.row
           li.col-sm-2
             .select-gradient.without-search.date-picker
-              select
-                option(value="statut") Filtres
-                option(value="statut") Filtres
-                option(value="statut") Filtres
+              //-select(ng-model="selectedActivityType", ng-options="type.id as type.name for type in activityTypes | orderBy:'id':true", ng-change="filterByActivityType()")
+              select(ng-model="selectedActivityType", ng-change="filterByActivityType()")
+                option(ng-repeat="type in activityTypes | orderBy:'id':true", value="{{type.id}}") {{type.name}}
           li.col-sm-8.text-center
             h4 Votre activité sur e-loue
           li.col-sm-2.text-success.text-right: p
@@ -136,3 +146,5 @@ block content-view
                         when "amount"
                           p.norm Prix de la location débitée avec succès !
                 p.action.norm Il y a 12 min
+  {% endverbatim %}
+                
