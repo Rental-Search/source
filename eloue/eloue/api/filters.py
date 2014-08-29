@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django import forms
 
 from rest_framework import filters
+from rest_framework.permissions import SAFE_METHODS
 from mptt.fields import TreeNodeChoiceField
 import django_filters
 
@@ -65,7 +66,7 @@ class OwnerFilter(filters.BaseFilterBackend):
 class StaffEditableFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         user = request.user
-        return queryset if request.method == 'get' or user.is_staff else queryset.none()
+        return queryset if request.method in SAFE_METHODS or user.is_staff else queryset.none()
 
 class HaystackSearchFilter(filters.BaseFilterBackend):
     # The URL query parameter used for the search.
