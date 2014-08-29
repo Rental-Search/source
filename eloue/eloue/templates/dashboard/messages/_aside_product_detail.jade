@@ -1,6 +1,6 @@
 //-include ../jade/_mixins
 
-aside.tabs-vertical-static.pull-right.lg(ng-if="messageThread && messageThread.product")
+aside.tabs-vertical-static.pull-right.lg(ng-show="messageThread && messageThread.product")
   .section-header: h4.text-center.indent-xs-t Réservation associé à :
   ul.scrollbar-custom
     li.tab-vertical

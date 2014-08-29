@@ -1,5 +1,5 @@
 {% verbatim %}
-section.tabs-vertical-static.pull-nothing
+section.tabs-vertical-static.pull-nothing(ng-show="!!messageThread")
   ul.scrollbar-custom.messages-container
       li.tab-vertical.block-with-thumbnail(ng-repeat="message in messageThread.messages track by message.id")
         .col-thumbnail
