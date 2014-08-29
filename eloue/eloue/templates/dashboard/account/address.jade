@@ -1,5 +1,5 @@
 block sections
-  section.tabs-vertical-active.md.scrollbar-custom
+  section.tabs-vertical-active.md.scrollbar-custom(ng-show="addressList && addressList.length > 0")
     ul.block-with-thumbnail
       if True
         {% verbatim %}
@@ -15,3 +15,4 @@ block sections
               p.normal.text-gray {{address.zipcode}} {{address.city}}
         {% endverbatim %}
   aside.address-detail.pull-nothing.scrollbar-custom.scrollbar-left(ui-view)
+    include _notification_not_selected_address
