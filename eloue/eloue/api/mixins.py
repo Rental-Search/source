@@ -19,6 +19,8 @@ class SetOwnerMixin(object):
         user = self.request.user
         if not user.is_anonymous():
             owner_field = self.owner_field
+            if not isinstance(owner_field, basestring):
+                owner_field = iter(owner_field).next()
             owner_field_attname = obj._meta.get_field(owner_field).attname
             if not getattr(obj, owner_field_attname):
                 setattr(obj, owner_field, user)
