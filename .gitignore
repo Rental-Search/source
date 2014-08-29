@@ -28,13 +28,14 @@ eloue/eloue/test_payment_steps.py
 eloue/eloue/static/less/*.css
 eloue/collected_static/
 eloue/static/
+static/
 build/
-/static
 analytics.dat
 SqH8kAUnFOJrgYlgUT1oVU3C
 scim.log
 SCIMProperties.properties
 myKeyStore.jks
 slimpayKeyStore.jks
-eloue/eloue/templates/sass/*.css
-eloue/eloue/templates/dashboard/sass/*.css
+**/sass/*.css
+**/sass/*.css.map
+**/sass/.sass-cache/

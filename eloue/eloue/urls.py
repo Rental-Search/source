@@ -128,12 +128,12 @@ partials_urlpatterns = patterns('',
             template_name='dashboard/messages/index.jade',
         ),
     ),
-    url(r'^dashboard/booking.html$', TemplateView.as_view(
+    url(r'^dashboard/bookings.html$', TemplateView.as_view(
             template_name='dashboard/booking/index.jade',
         ),
     ),
     url(r'^dashboard/items.html$', TemplateView.as_view(
-            template_name='dashboard/items/index.jade',
+            template_name='dashboard/items/_base_items.jade',
         ),
     ),
     url(r'^dashboard/account.html$', TemplateView.as_view(
@@ -147,7 +147,36 @@ partials_urlpatterns = patterns('',
     ),
 
     url(r'^dashboard/bookings/booking_detail.html$', TemplateView.as_view(
-            template_name='dashboard/booking/_bookings_detaild.jade',
+            template_name='dashboard/booking/booking_detail.jade',
+        ),
+    ),
+
+    url(r'^dashboard/items/item_detail.html$', TemplateView.as_view(
+            template_name='dashboard/items/item_detail.jade',
+        ),
+    ),
+    url(r'^dashboard/items/tabs.html$', TemplateView.as_view(
+            template_name='dashboard/items/tabs.jade',
+        ),
+    ),
+    url(r'^dashboard/items/info.html$', TemplateView.as_view(
+            template_name='dashboard/items/index.jade',
+        ),
+    ),
+    url(r'^dashboard/items/tariffs.html$', TemplateView.as_view(
+            template_name='dashboard/items/tarifs.jade',
+        ),
+    ),
+    url(r'^dashboard/items/calendar.html$', TemplateView.as_view(
+            template_name='dashboard/items/calendar.jade',
+        ),
+    ),
+    url(r'^dashboard/items/terms.html$', TemplateView.as_view(
+            template_name='dashboard/items/terms.jade',
+        ),
+    ),
+    url(r'^dashboard/items/profits.html$', TemplateView.as_view(
+            template_name='dashboard/items/profits.jade',
         ),
     ),
 
