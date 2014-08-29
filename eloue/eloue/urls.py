@@ -147,7 +147,7 @@ partials_urlpatterns = patterns('',
     ),
 
     url(r'^dashboard/bookings/booking_detail.html$', TemplateView.as_view(
-            template_name='dashboard/booking/booking_detail.jade',
+            template_name='dashboard/booking/_bookings_detaild.jade',
         ),
     ),
 
