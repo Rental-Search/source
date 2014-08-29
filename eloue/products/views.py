@@ -878,7 +878,7 @@ class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     queryset = models.MessageThread.objects.select_related('messages')
     serializer_class = serializers.MessageThreadSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
-    owner_field = 'sender'
+    owner_field = ('sender', 'recipient')
     filter_fields = ('sender', 'recipient', 'product')
 
 class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
@@ -888,6 +888,6 @@ class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     model = models.ProductRelatedMessage
     serializer_class = serializers.ProductRelatedMessageSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
-    owner_field = 'sender'
+    owner_field = ('sender', 'recipient')
     filter_fields = ('thread', 'sender', 'recipient', 'offer')
     ordering_fields = ('sent_at',)
