@@ -42,5 +42,34 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("UsersService should be not null", function () {
             expect(!!UsersService).toBe(true);
         });
+
+        it("UsersService:get", function () {
+            var userId = 1;
+            UsersService.get(userId);
+            expect(usersMock.get).toHaveBeenCalledWith({id: userId}, undefined, undefined);
+        });
+
+        it("UsersService:getMe", function () {
+            UsersService.getMe();
+            expect(usersMock.getMe).toHaveBeenCalledWith(jasmine.any(Object), undefined, undefined);
+        });
+
+        it("UsersService:getStatistics", function () {
+            var userId = 1;
+            UsersService.getStatistics(userId);
+            expect(usersMock.getStats).toHaveBeenCalledWith({id: userId, _cache: jasmine.any(Number)});
+        });
+
+        it("UsersService:sendForm", function () {
+            var userId = 1;
+            UsersService.sendForm(userId);
+            expect(formServiceMock.send).toHaveBeenCalled();
+        });
+
+        it("UsersService:resetPassword", function () {
+            var userId = 1;
+            UsersService.resetPassword(userId);
+            expect(formServiceMock.send).toHaveBeenCalled();
+        });
     });
 });

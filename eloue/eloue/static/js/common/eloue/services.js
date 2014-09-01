@@ -532,7 +532,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 } else {
                     dateFormat = fullFormat;
                 }
-                return this.formatDate(dateString, dateFormat);
+                return this.formatDate(sentDate, dateFormat);
             };
 
             utilsService.getIdFromUrl = function (url) {

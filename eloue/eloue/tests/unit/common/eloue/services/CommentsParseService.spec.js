@@ -18,5 +18,11 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("CommentsParseService should be not null", function () {
             expect(!!CommentsParseService).toBe(true);
         });
+
+        it("CommentsParseService:parseComment", function () {
+            var author = "Author";
+            var result = CommentsParseService.parseComment({}, author);
+            expect(result).toEqual({author: author});
+        });
     });
 });

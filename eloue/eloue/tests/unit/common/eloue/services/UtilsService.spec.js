@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/commonApp", "eloue/services", "datejs"], function () {
 
     describe("Service: UtilsService", function () {
 
@@ -21,23 +21,30 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         });
 
         it("UtilsService:formatDate", function () {
-            var result = UtilsService.formatDate(new Date("09.01.2014"), "dd/MM/yyyy");
-            expect(result).toEqual("01/09/2014");
+            var date = new Date();
+            date.setDate(1);
+            date.setMonth(8);
+            date.setFullYear(2014);
+            var result = UtilsService.formatDate(date, "dd.MM.yyyy");
+            expect(result).toEqual("01.09.2014");
         });
 
         it("UtilsService:formatMessageDate", function () {
-            var result = UtilsService.formatMessageDate("09.01.2014", "dd/MM/yyyy", "dd/MM/yyyy hh:mm:ss");
-            expect(result).toEqual("09.01.2014");
+            var result = UtilsService.formatMessageDate("08.01.2014", "dd/MM/yyyy", "dd/MM/yyyy hh:mm:ss");
+            expect(result).toEqual("01/08/2014 12:00:00");
         });
 
-//        it("UtilsService:getIdFromUrl", function () {
-//            var result = UtilsService.getIdFromUrl();
-//            console.log(result);
-//        });
-//
-//        it("UtilsService:calculatePeriodBetweenDates", function () {
-//            var result = UtilsService.calculatePeriodBetweenDates();
-//            console.log(result);
-//        });
+        it("UtilsService:getIdFromUrl", function () {
+            var id = "1208";
+            var url = "http://10.0.5.47:8200/api/2.0/users/" + id + "/";
+            var result = UtilsService.getIdFromUrl(url);
+            expect(result).toEqual(id);
+        });
+
+        it("UtilsService:calculatePeriodBetweenDates", function () {
+            var startDateString = "01/01/2014 00:00:00", endDateString = "01/02/2014 12:00:00";
+            var result = UtilsService.calculatePeriodBetweenDates(startDateString, endDateString);
+            expect(result).toEqual({period_days: 1, period_hours: 12});
+        });
     });
 });
