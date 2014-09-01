@@ -28,7 +28,7 @@ eloue/eloue/media/CACHE/*
 eloue/eloue/templates/20minutes/header.html
 eloue/eloue/templates/20minutes/footer.html
 eloue/eloue/test_payment_steps.py
-eloue/eloue/static/less/*.css
+**/less/*.css
 eloue/collected_static/
 eloue/static/
 static/
@@ -42,3 +42,7 @@ slimpayKeyStore.jks
 **/sass/*.css
 **/sass/*.css.map
 **/sass/.sass-cache/
+**/node_modules/
+**/bower_components/
+**/dist/
+**/.tmp
