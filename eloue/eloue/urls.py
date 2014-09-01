@@ -241,9 +241,11 @@ urlpatterns = patterns('',
 #    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # django-oauth-toolkit
 
     # API 2.0
-    url(r'^api/2.0/users/me/$', UserMeViewSet.as_view({'get': 'retrieve_me', 'put': 'update_me'})),
+    url(r'^api/2.0/users/me/', UserMeViewSet.as_view({'get': 'retrieve_me', 'put': 'update_me'})),
     url(r'^api/2.0/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    url(r'^admin/', include(admin.site.urls)),
 
     # UI v3
     url(r'^$', ExtraContextTemplateView.as_view(
