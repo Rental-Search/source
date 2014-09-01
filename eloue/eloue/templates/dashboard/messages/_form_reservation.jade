@@ -1,0 +1,25 @@
+{% verbatim %}
+form(ng-submit="requestBooking()", ng-if="booking === null", ng-init="types=['DU', 'AU']")
+    .indent-sm-v.select-gradient.without-search.date-picker(ng-repeat="type in types")
+      .form-group: .input-group
+          span.input-group-addon {{type}}
+          input(type="text", placeholder="dd/mm/yyyy", ng-model="newBooking.start_date", ng-change="updateNewBookingInfo()", eloue-datepicker, data-date-format="dd/mm/yyyy")
+          span.input-group-addon
+            i.fa.fa-calendar.fa-lg.text-gray
+      .form-group
+        select(name="start_time", ng-model="newBooking.start_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours")
+
+  ul.zebra-list
+    li
+      .col-xs-4 Durée
+      .col-xs-8 {{newBooking.period_days}} jours et {{newBooking.period_hours}} heures
+    li
+      .col-xs-4 Prix
+      .col-xs-8.text-success {{newBooking.total_amount}}€
+    li
+      .col-xs-4 Caution
+      .col-xs-8 {{newBooking.total_amount}}€
+  .row
+    p.text-gray.indent-sm-v.text-center Assurance incluse
+    button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Procédez à la réservation
+{% endverbatim %}

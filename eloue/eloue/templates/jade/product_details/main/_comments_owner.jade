@@ -1,0 +1,13 @@
+h3 Commentaire liés au propriétaire
+
+ul.list-group
+	each comment in comments
+		li.list-group-item.thumbnail
+			.thumbnail-img
+				a(href="#")
+					img(src=STATIC_URL+comment.thumbnail, alt="")
+			.thumbnail-content
+				h5 
+					a(href="#") #{comment.name}
+				p #{comment.message}
+				small #{comment.time}

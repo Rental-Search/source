@@ -1,0 +1,36 @@
+.list-without-spaces,
+.without-spaces
+  text-align: justify
+  width: 100%
+  line-height: 1
+  margin-bottom: -1em
+  overflow: hidden
+  &:after
+    display: inline-block
+    width: 100%
+    height: 0
+    overflow: hidden
+    content: ''
+  li
+    white-space: nowrap
+    display: inline-block
+    &.divide,
+    &.divider
+      position: relative
+      &:before
+        background-color: #ccc
+        position: absolute
+        width: 1px
+        height: 10000px
+        bottom: ( 1em - $line-height-base)
+        left: 0
+        content: ''
+        background-color: $gray-lighter
+      &:first-child
+        display: none
+  &.fixed
+    overflow: visible
+    .divide:before,
+    .divider:before
+      bottom: 0
+      height: 1em

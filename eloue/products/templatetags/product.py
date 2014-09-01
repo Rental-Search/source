@@ -127,3 +127,20 @@ def partition(iterator, n):
         return [iterator]
     p = len(iterator) / n
     return [iterator[p * i:p * (i + 1)] for i in range(n - 1)] + [iterator[p * (i + 1):]]
+
+
+@register.filter
+def location(obj, attrname='location'):
+    """
+    Retrieves object's location and returns it as a comma-separated string.
+    
+    >>> from django.contrib.gis.geos import Point
+    >>> class Location(object): pass
+    >>> obj = Location()
+    >>> obj.location = Point(46.3, 2.11)
+    >>> location(obj)
+    '46.3, 2.11'
+    
+    """
+    location = getattr(obj, attrname, None)
+    return '%s, %s' % (location.x, location.y) if location else attrname

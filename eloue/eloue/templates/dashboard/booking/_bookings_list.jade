@@ -1,0 +1,32 @@
+{% verbatim %}
+section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
+  .section-header
+    .row
+      .col-xs-9.tabs-horisontal-active
+        ul.list-without-spaces.fixed
+            li.divider
+            li.tab-horisontal(ng-click="filterByBoth()"): h3.small Tous
+            li.divider
+            li.tab-horisontal(ng-click="filterByOwner()"): h3.small Propriétaires
+            li.divider
+            li.tab-horisontal(ng-click="filterByBorrower()"): h3.small Emprunteurs
+      .col-xs-3.indent-xs-t
+        .select-gradient.without-search.date-picker
+          select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()", ng-options="state.value as state.label for state in stateList")
+
+  ul.scrollbar-custom
+      li.tab-vertical.block-with-thumbnail(class="#{booking.bage.classname}", ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid")
+        .col-thumbnail
+          .thumbnail
+            a(href="#"): img(ng-src="{{booking.picture}}", alt="{{booking.product.summary}}", width="130")
+            // TODO change 'a venir' title
+            span.booking-bage a venir
+        .col-exposition
+          h3.small
+            | Location 
+            a(ui-sref="bookings.detail({uuid: booking.uuid})").text-underline-hover {{booking.product.summary}}
+          p.normal.text-gray
+            big.text-primary {{booking.total_amount}}€
+            br
+            | Du {{booking.start_date}} au {{booking.end_date}}
+{% endverbatim %}

@@ -72,3 +72,8 @@ TIME_CHOICE = (
     ('22:00:00', '22h'),
     ('23:00:00', '23h')
 )
+
+COMMENT_TYPE_CHOICES = Enum([
+    (0, 'OWNER', _('OwnerComment')),
+    (1, 'BORROWER', _('BorrowerComment')),
+])

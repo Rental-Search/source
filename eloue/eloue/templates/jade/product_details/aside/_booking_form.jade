@@ -1,0 +1,26 @@
+.section-header
+	h4 Réservez en ligne
+form.form-inline.section-body.text-center
+	.part
+		p
+			small à partir de
+			big.text-primary &nbsp;56€ /jour
+		include ../../_date_picker
+		p.available Cet article est disponible à ces dates
+		// p.available.unavailable Cet article est disponible à ces dates
+	.part
+		p
+			| Durée de la location : 
+			b.period-days 3 jours 
+			| et 
+			b.period-hours 9 heures
+		p.price
+			| Prix de la location :
+			big.text-primary &nbsp;168€
+		p Assurance incluse
+	.part
+		a( href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up-reserve").btn.bg-success.calendar-ok
+			span
+			| Réservez
+		p.mrg-v-1
+			small Cette somme vous sera débitée lorsque le propriétaire validera la location

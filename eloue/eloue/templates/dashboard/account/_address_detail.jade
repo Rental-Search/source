@@ -1,0 +1,47 @@
+include ../jade/_mixins
+
+block section-content
+  if True
+    .section-content
+      form#address_detail_form(data-ng-submit="submitAddress()").indent-md-b
+        {% verbatim %}
+        .row
+          .col-sm-12
+            input#street.form-control(type="text", name="street", placeholder="Rue *", required, autofocus, value="{{address.street}}")
+        .row
+          .col-sm-6
+            input#zipcode.form-control(type="text", name="zipcode", placeholder="Code postal *", required, autofocus, value="{{address.zipcode}}")
+          .col-sm-6
+            input#city.form-control(type="text", name="city", placeholder="Ville *", required, autofocus, value="{{address.city}}")
+        .row
+          .col-xs-12
+            label.check-btn.form-control
+              input(type="checkbox", checked)
+              span: i.fa(class="{{isDefaultAddress ? 'fa-check' : ''}}")
+              | Addresse par défaut
+        .row
+          .col-xs-12.text-right
+            button(type="reset", data-ng-click="deleteAddress()", onclick="return false;").text.text-danger.text-underline-hover.indent-sm-h Supprimer
+            button(type="submit").btn-inline.bg-success-hover.text-white Enregistrer
+        input(type="hidden", name="country", value="{{address.country}}")
+        input(type="hidden", name="_method", value="PUT")
+        {% endverbatim %}
+      h3 Annonces associées à cette adresse
+    section.tabs-vertical-active
+      ul.block-with-thumbnail
+        li.block-with-thumbnail(data-ng-repeat="product in productList track by product.id")
+          a(href="#car").tab-vertical
+            {% verbatim %}
+            .col-thumbnail
+              .thumbnail
+                img(data-ng-src="{{product.picture}}", alt="{{product.summary}}", width="130")
+            .col-exposition
+              h3.small
+                | Location {{product.summary}}
+              p.normal.text-gray
+                big.text-primary {{product.deposit_amount}}€ / jour
+                br
+                {% endverbatim %}
+                +average-rate(4)
+                +number-of-comments(12)
+                +number-of-bookings(7)

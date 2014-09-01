@@ -676,33 +676,29 @@ class CreditCardForm(forms.ModelForm):
         if self.errors:
             return self.cleaned_data
         try:
-            from payments.paybox_payment import PayboxManager, PayboxException
             pm = PayboxManager()
             self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
             pm.authorize(self.cleaned_data['card_number'], 
                 self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
             )
-        except PayboxException as e:
+        except PayboxException:
             raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
         return self.cleaned_data
 
     def save(self, *args, **kwargs):
         commit = kwargs.pop('commit', True)
         pm = PayboxManager()
-        try:
-            if self.instance.pk:
-                self.cleaned_data['card_number'] = pm.modify(
-                    self.instance.subscriber_reference, 
-                    self.cleaned_data['card_number'],
-                    self.cleaned_data['expires'], self.cleaned_data['cvv']) 
-            else:
-                self.cleaned_data['card_number'] = pm.subscribe(
-                    self.instance.subscriber_reference,
-                    self.cleaned_data['card_number'], 
-                    self.cleaned_data['expires'], self.cleaned_data['cvv']
-                )
-        except PayboxException:
-            raise
+        if self.instance.pk:
+            self.cleaned_data['card_number'] = pm.modify(
+                self.instance.subscriber_reference,
+                self.cleaned_data['card_number'],
+                self.cleaned_data['expires'], self.cleaned_data['cvv'])
+        else:
+            self.cleaned_data['card_number'] = pm.subscribe(
+                self.instance.subscriber_reference,
+                self.cleaned_data['card_number'],
+                self.cleaned_data['expires'], self.cleaned_data['cvv']
+            )
         instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
         instance.card_number = self.cleaned_data['card_number']
         instance.masked_number = self.cleaned_data['masked_number']

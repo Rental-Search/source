@@ -26,6 +26,7 @@ from django.template import RequestContext
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
 
 from haystack.query import SearchQuerySet
+from haystack.utils.geo import D
 from django.http import HttpResponse
 from django_messages.forms import ComposeForm
 from django.core.cache import cache
@@ -36,7 +37,7 @@ from accounts.search import patron_search
 
 from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
 from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
-from products.choices import UNIT
+from products.choices import UNIT, SORT
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
 from products.search import product_search, car_search, realestate_search, product_only_search
@@ -46,21 +47,62 @@ from rent.models import Booking
 
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.utils import cache_key
+from eloue.geocoder import GoogleGeocoder
  
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
+MAX_DISTANCE = 1541
 
-def last_added(search_index, location, offset=0):
-    coords = location['coordinates']
-    region_coords = location.get('region_coords') or coords
-    region_radius = location.get('region_radius') or location['radius']
-    last_added = search_index.spatial(
-            lat=region_coords[0], long=region_coords[1], radius=min(region_radius, 1541)
-        ).spatial(
-            lat=coords[0], long=coords[1], radius=min(region_radius*2 if region_radius else float('inf'), 1541)
-        ).order_by('-created_at_date', 'geo_distance')
-    return last_added[offset*10:(offset+1)*10]
+def get_point_and_radius(coords, radius=None):
+    """get_point_and_radius(coords, radius=None):
+    A helper function which transforms provided coordinates into a gis.geos.Point object and validates radius.
+
+    Input:
+    - coords : coordinates of the center of the zone of interest, tuple or list;
+               must contain (latitude, longitude) in strict order
+    - radius : a radius of the zone of interests, numeric (int or float), or any 'False' value like None, False, empty sequences, etc.
+
+    Output: a (point, radius) tuple where
+    - point : gis.geos.Point object made from the input coordinates
+    - radius : a validated radius of the zone of interests, numeric (int or float)
+    """
+    point = Point(*coords)
+    radius = min(radius or float('inf'), MAX_DISTANCE)
+    return point, radius
+
+def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+    # try to find products in the same region
+    region_point, region_radius = get_point_and_radius(
+        location['region_coords'] or location['coordinates'],
+        location['region_radius'] or location['radius']
+        )
+    last_added = search_index.dwithin('location', region_point, D(km=region_radius)
+        ).distance('location', region_point
+        ).order_by(sort_by_date, SORT.NEAR)
+
+    # if there are no products found in the same region
+    if not last_added.count():
+        # try to find products in the same country
+        try:
+            country_point, country_radius = get_point_and_radius(GoogleGeocoder().geocode(location['country'])[1:3])
+        except:
+            # silently ignore exceptions like country name is missing or incorrect
+            pass
+        else:
+            last_added = search_index.dwithin('location', country_point, D(km=country_radius)
+                ).distance('location', country_point
+                ).order_by(sort_by_date, SORT.NEAR)
+
+    # if there are no products found in the same country
+    if not last_added.count():
+        # do not filter on location, and return full list sorted by the provided date field only
+        last_added = search_index.order_by(sort_by_date)
+
+    return last_added[offset*limit:(offset+1)*limit]
+
+def last_joined(*args, **kwargs):
+    return last_added(*args, sort_by_date='-date_joined_date', **kwargs)
 
 @mobify
 def homepage(request):
@@ -69,14 +111,6 @@ def homepage(request):
     address = location.get('formatted_address') or (u'{city}, {country}'.format(**location) if location.get('city') else u'{country}'.format(**location))
     form = FacetedSearchForm({'l': address}, auto_id='id_for_%s')
     alerts = Alert.on_site.all()[:3]
-    try:
-        coords = location['coordinates']
-        last_joined = patron_search.spatial(
-            lat=coords[0], long=coords[1], radius=1541
-        ).order_by('-date_joined_date', 'geo_distance')
-    except KeyError:
-        last_joined = patron_search.order_by('-date_joined_date')
-      
     categories_list = cache.get(cache_key('home_categories_list', Site.objects.get_current()))
 
     if categories_list is None:
@@ -94,7 +128,7 @@ def homepage(request):
             'realestate_list': last_added(realestate_search, location),
             'form': form, 'curiosities': curiosities,
             'alerts':alerts,
-            'last_joined': last_joined[:11],
+            'last_joined': last_joined(patron_search, location, limit=11),
             'categories_list': categories_list,
         }, 
         context_instance=RequestContext(request)
@@ -482,40 +516,6 @@ def message_create(request, product_id, recipient_id):
 
 @never_cache
 @secure_required
-def phone_create(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-
-    from lxml import etree
-    import contextlib
-    import urlparse
-    from httplib import HTTPConnection
-    import urllib
-
-    create_link = etree.Element('createLink')
-    clef = etree.Element('clef')
-    clef.text = '2567617e03781a084ec4ba507947cbac'
-    number = etree.Element('numero')
-    number.text = '0033177350605'
-    country = etree.Element('pays')
-    country.text = 'FR'
-    create_link.append(clef)
-    create_link.append(number)
-    create_link.append(country)
-
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    s = etree.tostring(create_link, pretty_print=False)
-    base_url = urlparse.urlparse('http://mer.viva-multimedia.com/xmlRequest.php')
-    url = '%s?%s' % (base_url.path, urllib.urlencode({'xml': '%s%s' % (xml, s)}))
-    with contextlib.closing(HTTPConnection(base_url.netloc, timeout=10)) as conn:
-        conn.request("GET", url)
-        response = conn.getresponse()
-        content = response.read()
-    number = etree.XML(content)[2][0].text
-
-    return render_to_response('products/phone_view.html',{'product': product, 'number': number}, context_instance=RequestContext(request))
-
-@never_cache
-@secure_required
 def patron_message_create(request, recipient_username):
     message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
     recipient = Patron.objects.get(slug=recipient_username)
@@ -624,6 +624,7 @@ class ProductList(ListView):
         self.canonical_parameters = urllib.urlencode(self.canonical_parameters)
         if self.canonical_parameters:
             self.canonical_parameters = '?' + self.canonical_parameters
+        self.kwargs.update({'page': page}) # Django 1.5+ ignore *args and **kwargs in View.dispatch()
         return super(ProductList, self).dispatch(request, urlbits, sqs, suggestions, page=page)
 
     def get_queryset(self):
@@ -740,58 +741,114 @@ def suggestion(request):
 
 # REST API 2.0
 
-from rest_framework import viewsets
+from rest_framework import response
+from rest_framework.decorators import link
+import django_filters
 
 from products import serializers, models
-from eloue.api import filters
+from eloue.api import viewsets, filters, mixins
+from rent.forms import Api20BookingForm
+from rent.views import get_booking_price_from_form
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryFilterSet(filters.FilterSet):
+    parent__isnull = django_filters.Filter(name='parent', lookup_type='isnull')
+
+    class Meta:
+        model = models.Category
+        fields = ('parent', 'need_insurance') # TODO: is_child_node, is_leaf_node, is_root_node
+
+class CategoryViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product categories to be viewed or edited.
     """
-    queryset = models.Category.on_site.all()
+    queryset = models.Category.on_site.select_related('description__title')
     serializer_class = serializers.CategorySerializer
+    filter_backends = (filters.StaffEditableFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_class = CategoryFilterSet
+    ordering_fields = ('name',)
 
-class CategoryDescriptionViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows product category descriptions to be viewed or edited.
-    """
-    model = models.CategoryDescription
-    serializer_class = serializers.CategoryDescriptionSerializer
+    @link()
+    def ancestors(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.get_serializer(obj.get_ancestors(), many=True)
+        return response.Response(serializer.data)
 
-class ProductViewSet(viewsets.ModelViewSet):
+    @link()
+    def children(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.get_serializer(obj.get_children(), many=True)
+        return response.Response(serializer.data)
+
+    @link()
+    def descendants(self, request, *args, **kwargs):
+        obj = self.get_object()
+        serializer = self.get_serializer(obj.get_descendants(), many=True)
+        return response.Response(serializer.data)
+
+class ProductFilterSet(filters.FilterSet):
+    category__isdescendant = filters.MPTTFilter(name='category', queryset=models.Category.objects.all())
+
+    class Meta:
+        model = models.Product
+        fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
+
+class ProductViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
-    queryset = models.Product.on_site.all()
     serializer_class = serializers.ProductSerializer
-    filter_backends = (filters.OwnerFilter, )
+    queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
+    filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
+    search_index = product_search
+    filter_class = ProductFilterSet
+    ordering_fields = ('quantity', 'is_archived', 'category')
 
-class CarProductViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows car products to be viewed or edited.
-    """
-    queryset = models.CarProduct.on_site.all()
-    serializer_class = serializers.CarProductSerializer
-    filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
+    @link()
+    def is_available(self, request, *args, **kwargs):
+        obj = self.get_object()
 
-class RealEstateProductViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows real estate products to be viewed or edited.
-    """
-    queryset = models.RealEstateProduct.on_site.all()
-    serializer_class = serializers.RealEstateProductSerializer
-    filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
+        form = Api20BookingForm(data=request.GET, instance=Booking(product=obj))
+        res = get_booking_price_from_form(form)
 
-class PriceViewSet(viewsets.ModelViewSet):
+        # add errors if the form is invalid
+        if not form.is_valid():
+            res['errors'] = form.errors
+            return response.Response(res, status=400)
+
+        return response.Response(res)
+
+    def get_serializer(self, instance=None, **kwargs):
+        """
+        Return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        
+        We should use different Seializer classes for instances of
+        Product, CarProduct and RealEstateProduct models
+        """
+        if hasattr(instance, 'carproduct'):
+            # we have CarProduct here
+            serializer_class = serializers.CarProductSerializer
+            self.object = instance = instance.carproduct
+        elif hasattr(instance, 'realestateproduct'):
+            # we have RealEstateProduct here
+            serializer_class = serializers.RealEstateProductSerializer
+            self.object = instance = instance.realestateproduct
+        else:
+            # we have generic Product here
+            serializer_class = self.get_serializer_class()
+        context = self.get_serializer_context()
+        return serializer_class(instance, context=context, **kwargs)
+
+class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product prices to be viewed or edited.
     """
     model = models.Price
     serializer_class = serializers.PriceSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('product', 'unit')
+    ordering_fields = ('name',) # TODO:  'amount'
 
 class PictureViewSet(viewsets.ModelViewSet):
     """
@@ -799,24 +856,38 @@ class PictureViewSet(viewsets.ModelViewSet):
     """
     model = models.Picture
     serializer_class = serializers.PictureSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('product', 'created_at')
+    ordering_fields = ('created_at',)
 
-class CuriosityViewSet(viewsets.ModelViewSet):
+class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product curiosities to be viewed or edited.
     """
     queryset = models.Curiosity.on_site.all()
     serializer_class = serializers.CuriositySerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('product',) # TODO: 'city', 'price')
+    # TODO: ordering_fields = ('price',)
 
-class MessageThreadViewSet(viewsets.ModelViewSet):
+class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows message threads to be viewed or edited.
     """
     model = models.MessageThread
+    queryset = models.MessageThread.objects.select_related('messages')
     serializer_class = serializers.MessageThreadSerializer
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
+    owner_field = ('sender', 'recipient')
+    filter_fields = ('sender', 'recipient', 'product')
 
-class ProductRelatedMessageViewSet(viewsets.ModelViewSet):
+class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
     """
     model = models.ProductRelatedMessage
     serializer_class = serializers.ProductRelatedMessageSerializer
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = ('sender', 'recipient')
+    filter_fields = ('thread', 'sender', 'recipient', 'offer')
+    ordering_fields = ('sent_at',)

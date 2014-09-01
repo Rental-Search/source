@@ -1,0 +1,61 @@
+extends ../base
+
+block prepend variables
+  -var STATIC_URL = "../../static/"
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/product_detail_styles.css")
+
+block append scripts
+  script(src="#{STATIC_URL}js/bootstrap/dropdown.js")
+  script(src="#{STATIC_URL}js/bootstrap/carousel.js")
+  script(src="#{STATIC_URL}js/scripts.js")
+
+block append content-body
+  #fb-root
+  include ../jade/_pop_up_send_message
+  include ../jade/_pop_up_call
+  include ../jade/_pop_up_reserve
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+    nav
+      include ../jade/_breadcrumbs
+    article.container
+      .row
+        .col-sm-8.product-details-title
+          include ../jade/_porduct_details_title
+        .col-sm-4.share-btns
+          include ../jade/_share-btns
+      .row
+        main.col-sm-8
+          section
+            .section-body
+              .part.picture-tab
+                include ../jade/product_details/main/_picture_tab
+              .part.description
+                include ../jade/product_details/main/_description
+              .part.comments.comments-ad
+                include ../jade/product_details/main/_comments_ad
+              .part.comments.comments-owner
+                include ../jade/product_details/main/_comments_owner
+        aside.col-sm-4
+          section.booking-form
+            include ../jade/product_details/aside/_booking_form
+          section.add-to-wishlist
+            include ../jade/product_details/aside/_add_to_wishlist
+          section.owner-information
+            include ../jade/product_details/aside/_owner_information
+          section.similar-listing
+            include ../jade/product_details/aside/_similar_listing
+          section.connected-with-owner
+            include ../jade/product_details/aside/_connected_with_owner
+    footer
+      section.row-fluid.insurances.framing
+        include ../jade/_insurances
+      section.row-fluid.footer-links
+        include ../jade/_footer_links
+      section.row-fluid.rss
+        include ../jade/_rss
+

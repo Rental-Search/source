@@ -1,0 +1,13 @@
+-var items = ["Du", "Au"]
+each item in items
+	.row.date-picker
+		.table-cell.main-cell
+			.input-group
+				.input-group-addon #{item}
+				input(type="text" placeholder="").form-control
+				.input-group-addon.calendar
+					span
+		.table-cell
+			select.form-control
+				each interval in timing
+					option(value="#{interval}") #{interval}

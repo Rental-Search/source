@@ -1,0 +1,18 @@
+.container
+  h3.text-center 324 654 annonces de location dans toute la France
+  ul.nav.row
+    each product in products
+      li.col-sm-6.col-md-3
+        .thumbnail
+          a(href="products/product_detail.html").img-wrapper
+            img( src = "#{STATIC_URL}#{product.img_link}" )
+            span.fog
+          .info
+            h6: a(href="#") #{product.title}
+            p #{product.description}
+            a(href="#").declarer: img(src="#{STATIC_URL}#{product.declarer_img_link}" alt="")
+          span.badge.price #{product.price}&euro; /jour
+  .row.text-center
+    button(type = "button").btn.bg-success.btn-explore
+      i.icon-search
+      | Explorez toutes les annonces

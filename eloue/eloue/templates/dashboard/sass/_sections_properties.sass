@@ -1,0 +1,66 @@
+article.dashboard
+  position: relative
+  +clearfix()
+  @import nav_dashboard
+  > nav
+    background-color: $brand-success
+    float: left
+    height: 100%
+    a
+      text-decoration: none
+      position: relative
+      i
+        position: relative
+  .content-view
+    overflow: hidden
+    height: 100%
+    +clearfix()
+    section.scrollbar-custom
+      height: 100%
+    > section
+      float: left
+    > aside
+      float: none
+      position: relative
+      background-color: white
+    > *
+      height: 100%
+      overflow: auto
+    > section,
+    > aside
+      border-top: $bd-lighter
+      border-left: $bd-lighter
+    section,
+      border-top: $bd-lighter
+.section-content
+  position: relative
+  max-width: 100%
+  min-width: 60%
+  width: $section-content-max-width
+  padding: $indent-md*$indent-vertical $indent-md
+  +clearfix()
+  &.full-width
+    max-width: none
+  .tab-vertical &
+    padding: 0
+.section-header
+  background-color: $gray-lite
+  border-bottom: $bd-lighter
+  height: $form-height
+  padding: 0 $indent-sm
+  width: 100%
+  display: table
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 10
+  + *
+    padding-top: 3em !important
+.booking-activity-feed
+  background: url(../img/feed-line.png) repeat-y 4em
+  background-size: 3px 1px
+  &.line-fix
+    margin-top: $indent-md*$indent-vertical
+    padding-top: 0
+    padding-bottom: 0
+

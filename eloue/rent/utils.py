@@ -8,6 +8,12 @@ from django.utils import formats
 from django.utils.translation import ugettext as _, ungettext
 
 DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']
+TIME_FORMAT = ('%H:%M:%S', '%H:%M')
+DATE_TIME_FORMAT = [
+    ' '.join([date_part, time_part])
+    for date_part in DATE_FORMAT
+    for time_part in TIME_FORMAT
+]
 
 def combine(date_part, time_part):
     """

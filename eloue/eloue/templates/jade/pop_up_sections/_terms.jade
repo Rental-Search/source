@@ -1,0 +1,14 @@
+include ../_date_picker
+ul.list-group
+	each term, index in terms
+		li.list-group-item
+			if index == 1
+				span.col-sm-5 #{term[0]}
+				span.col-sm-7.text-success #{term[1]}
+			else
+				span.col-sm-5 #{term[0]}
+				span.col-sm-7 #{term[1]}
+p Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.
+a( href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up").btn.bg-success Réservez
+p
+a( href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up").btn.bg-gray Envoyez un message

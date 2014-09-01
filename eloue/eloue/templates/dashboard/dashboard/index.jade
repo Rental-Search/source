@@ -1,0 +1,150 @@
+//-include ../jade/_mixins
+block content-view
+  {% verbatim %}
+  section.tabs-vertical-static.lg.scrollbar-custom
+    ul.text-gray
+      li.tab-vertical
+         .block-with-thumbnail.indent-xs
+          .col-thumbnail
+            .thumbnail.round.indent-sm-r: img(ng-src="{{currentUser.avatar.profil}}", alt="{{currentUser.username}}")
+          .col-exposition
+            h2.small.text-black.indent-xs-b {{currentUser.username}}
+            //-+average-rate(tenant.rate)
+            p.indent-sm-v Membre depus le {{currentUser.date_joined | date:'dd.MM.yyyy'}}
+            a(ui-sref="account.profile").btn.bg-success-hover.text-white Mettre à jour mes infos
+
+      li.tab-vertical
+        .indent-xs
+          h2.text-black.indent-xs-b Statistiquess
+          ul
+            li
+              big.large.text-success {{products.length}}
+              | annonces publiées
+            li
+              big.large.text-success {{bookings.length}}
+              | locations effectués
+            li
+              big.large.text-success 16
+              | évalutations
+            li
+              big.large.text-success {{userStats.response_rate}}
+              | de taux de réponse
+            li
+              big.large.text-success {{userStats.response_time}}
+              | de temps de réponse en moyenne
+
+      li.tab-vertical
+        .indent-xs
+          h2.text-black.indent-xs-b Vérifications
+        //-
+          ul
+            each verify in tenant_verification
+              li.indent-xs-v
+                case verify
+                  when "facebook"
+                   +verify-type("facebook", "Facebook", "info")
+                  when "email"
+                   +verify-type("inbox", "Adresse email", "gray")
+                  when "phone"
+                   +verify-type("phone", "Téléphone", "gray")
+                  when "google"
+                   +verify-type("google", "Téléphone", "danger")
+                  when "linkedin"
+                   +verify-type("linkedin-square", "Linkedin", "blue")
+  aside
+    .section-header
+     .tabs-horisontal-active.indent-xs-v
+        ul.row
+          li.col-sm-2
+            .select-gradient.without-search.date-picker
+              //-select(ng-model="selectedActivityType", ng-options="type.id as type.name for type in activityTypes | orderBy:'id':true", ng-change="filterByActivityType()")
+              select(ng-model="selectedActivityType", ng-change="filterByActivityType()")
+                option(ng-repeat="type in activityTypes | orderBy:'id':true", value="{{type.id}}") {{type.name}}
+          li.col-sm-8.text-center
+            h4 Votre activité sur e-loue
+          li.col-sm-2.text-success.text-right: p
+            a(href="#")
+              i.fa.fa-envelope-o.fa-lg.indent-sm-r
+                span.badge-count-action 1
+            a(href="#c")
+              i.fa.fa-table.fa-lg
+
+  //-
+    section.scrollbar-custom.bg-lite
+      ul.section-content.booking-activity-feed.line-fix
+        li.block-with-thumbnail.notification.indent-sm-b
+          .col-thumbnail
+            .thumbnail: .icon-action: i.fa.fa-check-circle-o.fa-lg
+          .col-exposition
+            .text-action
+              h3: b Réservation acceptée par 
+                a(href="").text-success.text-underline-hover #{tenant.first_name}
+
+              .block-with-thumbnail.indent-sm-v
+                .col-thumbnail
+                  .thumbnail: a(href="#")
+                    img(src="#{STATIC_URL}img/#{booking_detail.lot.thumbnail}", alt="#{booking_detail.lot.name} photo", width="170")
+                .col-exposition
+                  .indent-sm-l
+                    h3: b #{booking_detail.lot.name}
+                    p.text-gray.indent-sm-h.indent-xs-v
+                      i.fa.fa-map-marker.fa-lg.fa-li
+                      | #{booking_detail.lot.address}, 
+                      br
+                      | #{booking_detail.lot.location}, #{booking_detail.lot.index}
+
+              .block-with-thumbnail.indent-md-v
+                .col-thumbnail
+                  .thumbnail: a(href="#")
+                    img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                .col-exposition.text-gray
+                  .indent-xs-h
+                    h3.small: a(href="#").text-underline-hover #{booking_detail.lot.owner.first_name} #{booking_detail.lot.owner.name}
+                    p.indent-xs-v
+                      +average-rate(booking_detail.lot.owner.rate)
+                      +number-of-comments(booking_detail.lot.owner.comments_count)
+                      +number-of-bookings(booking_detail.lot.owner.booking_count)
+
+              ul.zebra-list
+                each info in booking_detail.informations
+                  li.clearfix
+                    .col-xs-3 #{info.title}
+                    .col-xs-9(class="#{info.color}") #{info.value}
+            p.action.norm.indent-sm-t
+              | Il y a 12 min
+              span.pull-right: a(href="#").btn.bg-success-hover.text-white Accepter
+              span.pull-right.indent-sm-h: a(href="#").text-success.text-underline-hover Refuser
+
+          each item in dashboard_feed
+            li.block-with-thumbnail.notification.indent-sm-b
+              .col-thumbnail
+                .thumbnail: .icon-action: i.fa.fa-lg(class="fa-#{item.icon}")
+              .col-exposition
+                .text-action
+                  .block-with-thumbnail
+                    .col-thumbnail
+                      if item.type == "amount"
+                        .thumbnail.indent-sm-r
+                          img(src="#{STATIC_URL}/img/money.png", alt="", width="40", height="40")
+                      else
+                        .thumbnail.indent-sm-r.round: a(href="#")
+                          case item.type
+                            when "message"
+                              img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                            when "booking"
+                              img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="", width="40", height="40")
+
+                    .col-exposition
+                      case item.type
+                        when "message"
+                          h3.text-black.indent-xs-b: b Message envoyé par 
+                            a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                          p.norm #{item.value}
+                        when "booking"
+                          p.norm Demande acceptée par 
+                            a(href="#").text-success.text-underline-hover #{tenant.first_name}
+                        when "amount"
+                          p.norm Prix de la location débitée avec succès !
+                p.action.norm Il y a 12 min
+  {% endverbatim %}
+                

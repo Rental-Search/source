@@ -1,0 +1,45 @@
+.modal.fade#sign-up(tabindex="-1", role="dialog", aria-hidden="true")
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button(type="button", data-dismiss="modal").close
+					span(aria-hidden="true")&times;
+					span.sr-only Close
+				h4.modal-title Inscription
+			.modal-body
+				h3 Inscrivez-vous en 2 secondes
+				.form-group: a(href="#").btn.bg-info
+						i.icon-facebook
+						| Inscription via Facebook
+				.form-group: a(href="#").btn.bg-danger
+						i.icon-google-plus
+						| Inscription via Google
+				p.info
+					| Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) 
+					br
+					| Vos données personnelles ne seront jamais cédées ou vendues.
+				span.or
+				h3 Inscrivez-vous en 30 secondes
+				form(name="registrationForm", ng-submit="register()", novalidate)
+					.classic-form
+						-var registration_form_fields = [["text", "Nom", "lastName"], ["text", "Prénom", "firstName"], ["text", "Code postal", "postalCode"], ["email", "E-mail", "email"], ["text", "Username", "username"], ["password", "Mot de passe", "password"], ["password", "Confirmation", "confirmPassword"]]
+						each type, placeholder, name in registration_form_fields
+							.form-group
+								input(type="text", placeholder="#{placeholder} *", name="#{name}", data-ng-model="account.#{name}", required).form-control
+								span.errorMsg(data-ng-show="registrationForm.#{name}.$error.required && registrationForm.#{name}.$dirty") Required field
+						.form-group
+							button(type="submit").btn.bg-success(data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty") Inscription
+							span.errorMsg(data-ng-show="registrationError != ''" ng-bind="registrationError")
+					.form-group: button.btn.bg-success.registration(ng-click="openRegistrationForm()") Inscription via Email
+					.checkbox
+						label(for="inform")
+							input(type="checkbox" checked)#inform
+							span.icon-ok
+						| Tenez moi informé de l'actualité et des bonnes affaires e-loue
+				p
+					| En créant un compte e-loue, vous acceptez les Conditions Générales
+					br
+					| et la Politique de Confidentialité de notre site
+				span.or
+				h4 Vous êtes déjà membre e-loue ?
+				a( href = "#connectez-vous", data-toggle="modal", data-target="#sign-in", data-dismiss="modal").modal-fotter-link.connexion Connexion

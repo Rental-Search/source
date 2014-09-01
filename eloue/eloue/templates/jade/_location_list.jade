@@ -1,0 +1,28 @@
+.container
+  h3 Les viles les plus actives
+  .row
+    mixin list(name, actives)
+      li.item-city
+        .col-sm-8
+          a(href = "#").link-success-color #{name}
+        .col-sm-4
+          span.actives-count #{actives}
+    ul.nav.nav-justified
+      li.divide
+      li: ul.nav
+        each city, index in cities
+          -var indx = index % 3
+          if indx == 0
+            +list(city.name, city.actives)
+      li.divide
+      li: ul.nav
+        each city, index in cities
+          -var indx = (index + 1) % 3
+          if indx == 0
+            +list(city.name, city.actives)
+      li.divide
+      li: ul.nav
+        each city, index in cities
+          -var indx = (index + 2) % 3
+          if indx == 0
+            +list(city.name, city.actives)

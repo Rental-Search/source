@@ -1,0 +1,242 @@
+@media (max-width: $screen-xs-max)
+  body
+    font-size: 12px
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max)
+  body
+    font-size: 13px
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max)
+  body
+    font-size: 14px
+@media (min-width: $screen-lg-min)
+  body
+    font-size: 15px
+
+body
+  background-color: $gray-lite
+  overflow-x: hidden
+
+a, a:hover
+  color: inherit
+
+.form-control:focus
+  +box-shadow( 0 0 6px $smoke-lite !important)
+  z-index: 10 !important
+  border-color: $gray-medium
+
+.table-cell
+  display: table-cell !important
+  width: 1%
+  vertical-align: middle
+  &.main-cell
+    width: 100% !important
+
+.table-row
+  display: table-row
+  height: 1%
+  vertical-align: middle
+  &.main-row
+    height: 100% !important
+  
+.table
+  display: table
+  margin: 0
+
+.without-spaces
+  text-align: justify
+  margin-bottom: -1em
+  line-height: 1em
+  overflow: hidden
+  &:after
+    display: inline-block
+    width: 100%
+    content: ""
+  > li
+    display: inline-block
+
+.divide
+  position: relative
+  &:after
+    left: 50%
+    content: ""
+    bottom: -.5em
+    position: absolute
+    height: 1000px
+    width: 1px
+    background-color: $gray-lighter
+  &:first-child
+    display: none !important
+
+.link-sprite
+  font-size: 0
+  color: transparent
+
+.bg-success
+  +make-bg($brand-success)
+
+.bg-info
+  +make-bg($brand-info)
+
+.bg-danger
+  +make-bg($brand-danger)
+
+.bg-gray
+  +make-bg($gray-strong)
+
+.framing
+  border: px(1) solid $gray-lighter
+  background-color: white
+  border-width: px(1) 0
+
+.link-success-color
+  color: $brand-success
+  font-weight: 700
+  text-transform: uppercase
+  font-size: 13px
+  letter-spacing: .07em
+  &:hover
+    color: darken($brand-success, 10%)
+
+.breadcrumb
+  background-color: transparent
+  margin: 0
+  font-size: px(13)
+  font-weight: $fw-semibold
+  margin: 0
+  padding: 0
+  color: $brand-success
+  > li
+    color: inherit
+    & + li:before
+      font-family: "FontAwesome"
+      content: " \f105 "
+      font-size: 1.2em
+      cursor: pointer
+    a
+      padding: .8em 0
+      display: inline-block
+      color: inherit
+      text-decoration: none
+    &.active,
+    &:hover
+      color: $gray-strong
+    &:hover ~ li
+      color: lighten($gray-strong,20%)
+      &:before
+        color: inherit
+
+.checkbox
+  input
+    margin-left: 0 !important
+    opacity: 0
+    cursor: pointer
+    &:checked + span
+      color: inherit
+  label
+    position: relative
+    border: 1px solid $gray-medium
+    color: $gray-light
+    margin-right: .5em
+    line-height: 1.4em
+    width: 1.5em
+    +border-left-radius(px(4))
+    +border-right-radius(px(4))
+    padding: 0
+    &:hover
+      background-color: $gray-lighter
+    span
+      color: transparent
+
+.fog
+  position: absolute
+  width: 100%
+  height: 100%
+  background-color: white
+  top: 0
+  left: 0
+  +opacity(.2)
+
+.smoke
+  position: absolute
+  width: 100%
+  height: 100%
+  top: 0
+  left: 0
+  background-color: black
+  +opacity(.5)
+
+.rate
+  font-size: px(18)
+  line-height: 1
+  display: inline-block
+  color: $brand-gold
+  &:hover span
+    color: $brand-gold !important
+  span
+    cursor: pointer
+    display: inline-block
+    padding-right: .25em
+    &.current-rate ~ span
+      color: $gray-lighter
+    &:hover ~ span
+      color: $gray-lighter !important
+
+.text-success
+  color: $brand-success !important
+
+.badge.price
+  background-color: $brand-primary
+  letter-spacing: .02em
+  font-weight: $fw-bold
+  $br: 1.5em
+  +border-bottom-radius($br)
+  +border-top-radius($br)
+  padding: .6em 1em
+
+
+.date-picker
+  .table-cell
+    padding: 0 .5em
+  .calendar
+    position: relative
+    span
+      display: inline-block
+      *display: inline
+      *zoom: 1
+      +sprite($s-calendar)
+  .chosen-container,
+  .form-control,
+  .input-group-addon
+    color: $gray-dark
+    font-weight: $fw-semibold
+    background-color: transparent
+    border-width: 0
+    box-shadow: none
+    font-size: px(13, $section-fz)
+
+.chosen-container
+  display: block
+  width: auto !important
+  padding: 5px 0
+  .chosen-single
+    height: auto
+    background: $gray-lighter
+    background: linear-gradient(to bottom, white, $gray-lite 70%)
+    border-width: 0 !important
+    box-shadow: none
+  .chosen-drop
+    border-color: $gray-lighter
+    border-width: px(1)
+    background-color: white
+  .chosen-search
+    display: none
+  .chosen-results li.highlighted,
+  .chosen-results li.result-selected
+    background: $brand-primary
+
+.list-group
+  li
+    background-color: $gray-lite
+    border: none
+    padding: .8em .5em
+    +clearfix()
+

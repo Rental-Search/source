@@ -1,0 +1,189 @@
+*,
+*:before,
+*:after
+  box-sizing: border-box
+
+html, body
+  min-height: 100%
+  height: 100%
+body
+  font-family: $font-family-base
+  font-size: $font-size-base
+  line-height: $line-height-base
+  background-color: $gray-lite
+  color: $gray-dark
+  font-weight: $fw-semibold
+
+a
+  color: inherit
+
+.clearfix
+  +clearfix()
+
+@each $selector, $color in (success, $brand-success), (danger, $brand-danger), (primary, $brand-primary), (info, $brand-info), (gray, $gray-medium), (white, white), (gray-strong, $gray-strong), (gray-stronger, $gray-stronger), (gray-light, $gray-light), (black, $gray-dark), (lite, $gray-lite), (blue, $brand-blue)
+  +make-colors($selector, $color)
+
+// text
+@each $align in left, center, right, justify
+  .text-#{$align}
+    text-align: #{$align}
+
+// indent
+@each $class, $indent in (md, $indent-md), (sm, $indent-sm), (xs, $indent-xs), (lg, $indent-lg)
+  .indent-#{$class}-h
+    margin-left: $indent !important
+    margin-right: $indent !important
+  .indent-#{$class}-v
+    margin-bottom: $indent-vertical*$indent !important
+    margin-top: $indent-vertical*$indent !important
+  .indent-#{$class}-t
+    margin-top: $indent-vertical*$indent !important
+  .indent-#{$class}-r
+    margin-right: $indent !important
+  .indent-#{$class}-b
+    margin-bottom: $indent-vertical*$indent !important
+  .indent-#{$class}-l
+    margin-left: $indent !important
+  .indent-#{$class}
+    margin: $indent !important
+
+.text-justify-force
+  text-align: justify
+  width: 100%
+  margin-bottom: $line-height-base
+  &:after
+    display: inline-block
+    content: ""
+    width: 100%
+    height: 0
+    overflow: hidden
+  > *
+    display: inline-block
+    text-align: center
+    white-space: nowrap
+
+.text-nowrap
+  white-space: nowrap
+
+.text-uppercase
+  text-transform: uppercase
+
+.container-full-screen
+  width: 100%
+  height: 100%
+  position: relative
+  overflow: hidden
+
+.text-hide
+  +text-hide()
+
+.text-overflow
+  +text-overflow()
+
+.text
+  cursor: pointer
+  font-weight: $fw-semibold
+  border: none
+  background-color: transparent
+  font-size: $font-size-base
+
+.text-underline
+  text-decoration: underline
+
+.text-underline-hover:hover
+  @extend .text-underline
+
+.centred-abs
+  +centred-abs()
+
+.pull-left
+  float: left !important
+
+.pull-right
+  float: right !important
+
+.pull-nothing
+  float: none !important
+.clear-both
+  clear: both !important
+
+.mCSB_outside + .mCSB_scrollTools
+  right: -$grid-gutter-width
+
+.mCSB_container
+  min-height: 100%
+  margin-right: 0 !important
+
+.time-badge
+  font-size: $font-size-smaller - 2
+  font-weight: $fw-semibold
+  color: $gray-light
+
+.bd-rad
+  border-radius: $bdrs
+  padding: $indent-xs
+  display: inline-block
+
+.v-align:before
+  $height: 10em
+  display: inline-block
+  padding: ($height/2) 0
+  content: "`"
+  width: 0
+  color: transparent
+
+.notification-empty
+  display: table
+  width: 100%
+  height: 100%
+  text-align: center
+  color: $gray-medium
+  .notification-container
+    display: table-cell
+    vertical-align: middle
+  i
+    font-size: 10em
+
+h2
+  font-size: $font-size-large
+  font-weight: $fw-regular
+  margin-bottom: $indent-sm
+  &.small
+    font-size: $font-size-base + 4
+
+h3
+  // color: $gray-dark
+  font-size: $font-size-base
+  font-weight: $fw-semibold
+  &.small
+    font-size: $font-size-base - 1
+
+h4
+  font-size: $font-size-smaller
+  font-weight: $fw-bold
+  &.small
+    font-size: $font-size-smaller - 2
+
+h5
+  font-size: $font-size-smaller
+  font-weight: $fw-semibold
+  &.small
+    font-size: $font-size-smaller - 2
+
+p
+  margin-bottom: .5em
+  position: relative
+  &.normal
+    font-size: $font-size-base - 2
+  &.norm
+    font-size: $font-size-base - 1
+  &.small
+    font-size: $font-size-smaller - 2
+
+small
+  font-size: $font-size-little
+
+big
+  font-size: $font-size-bigger
+  &.large
+    font-size: $font-size-large

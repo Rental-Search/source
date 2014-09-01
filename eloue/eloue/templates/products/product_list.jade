@@ -1,0 +1,32 @@
+extends ../base
+-load compressed
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  link(rel="stylesheet", href="#{STATIC_URL}css/jquery-ui.css")
+  {% compressed_css "product_list_styles" %}
+
+block scripts
+  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+
+block append content-body
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+     nav
+      include ../jade/_breadcrumbs
+    article.container.grid-layout
+      .row.article-head
+        include ../jade/_product_list_article_head
+      .row
+        aside.col-xs-3
+          include ../jade/_product_list_aside
+        main.col-xs-9
+          include ../jade/_product_list_main
+    footer
+      section.download-mobile-apps.framing
+        include ../jade/_download_mobile_apps
+      section.footer-links
+        include ../jade/_footer_links
+      section.rss
+        include ../jade/_rss

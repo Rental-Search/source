@@ -24,6 +24,7 @@ from django.template import RequestContext
 
 from accounts.models import CreditCard
 from accounts.forms import EmailAuthenticationForm
+from accounts.utils import viva_check_phone
 from products.models import Product
 from products.choices import UNIT, PAYMENT_TYPE
 from rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
@@ -86,18 +87,9 @@ def product_occupied_date(request, slug, product_id):
     else:
         return HttpResponse('[]', content_type='application/json')
 
-@require_GET
-@never_cache
-def booking_price(request, slug, product_id):
-    def generate_select_list(n, selected):
-        select_options = [{'value': x, 'selected': x==selected} for x in xrange(1, 1 + n)]
-        return select_options
 
-    if not request.is_ajax():
-        return HttpResponseNotAllowed(['GET', 'XHR'])
-    product = get_object_or_404(Product.on_site, pk=product_id)
-    form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
-
+def get_booking_price_from_form(form):
+    product = form.instance.product
     if form.is_valid():
         duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
         total_price = smart_str(currency(form.cleaned_data['total_amount']))
@@ -108,33 +100,51 @@ def booking_price(request, slug, product_id):
             quantity = 1
         response_dict = {
           'duration': duration,
-          'total_price': total_price, 
-          'unit_name': UNIT[price_unit][1], 
-          'unit_value': smart_str(currency(product.prices.filter(unit=price_unit)[0].amount)), 
-          'max_available': max_available, 
-          'select_list': generate_select_list(max_available, selected=quantity) 
+          'total_price': total_price,
+          'unit_name': UNIT[price_unit][1],
+          'unit_value': smart_str(currency(product.prices.filter(unit=price_unit)[0].amount)),
+          'max_available': max_available,
+          'quantity': max_available if quantity > max_available else quantity,
         }
         if quantity > max_available:
-            response_dict.setdefault('warnings', []).append('Quantité disponible à cette période: %s' % max_available)
-            response_dict['select_list'] = generate_select_list(max_available, selected=max_available)
-        else:
-            response_dict['select_list'] = generate_select_list(max_available, selected=quantity)
-        return HttpResponse(json.dumps(response_dict), content_type='application/json')
+            response_dict.setdefault('warnings', []).append(_(u'Quantité disponible à cette période: %s') % max_available)
     else:
         max_available = getattr(form, 'max_available', product.quantity)
         try:
             price_unit = product.prices.filter(unit=1)[0]
             response_dict = {
-              'errors': form.errors.values(), 
-              'unit_name': UNIT[1][1], 
-              'unit_value': smart_str(currency(price_unit.amount)), 
-              'max_available': max_available, 
-              'select_list': generate_select_list(max_available, selected=1)
+              'unit_name': UNIT[1][1],
+              'unit_value': smart_str(currency(price_unit.amount)),
+              'max_available': max_available,
+              'quantity': 1,
             }
         except:
             response_dict = {}
-        
-        return HttpResponse(json.dumps(response_dict), content_type='application/json')
+    return response_dict
+
+
+@require_GET
+@never_cache
+def booking_price(request, slug, product_id):
+    if not request.is_ajax():
+        return HttpResponseNotAllowed(['GET', 'XHR'])
+
+    product = get_object_or_404(Product.on_site, pk=product_id)
+    form = BookingForm(request.GET, prefix="0", instance=Booking(product=product))
+    response_dict = get_booking_price_from_form(form)
+
+    # add errors if the form is invalid
+    if not form.is_valid():
+        response_dict['errors'] = form.errors.values()
+
+    # add 'select_list' field with values for the quantity selection box
+    max_available = response_dict.get('max_available', None)
+    selected = response_dict.pop('quantity', None)
+    if max_available and selected:
+        select_options = [{'value': x, 'selected': x == selected} for x in xrange(1, 1 + max_available)]
+        response_dict['select_list'] = select_options
+
+    return HttpResponse(json.dumps(response_dict), content_type='application/json')
 
 
 @require_GET
@@ -173,36 +183,10 @@ def phone_create(request, *args, **kwargs):
         'address', 'category', 'owner', 'owner__default_address', 
         'carproduct', 'realestateproduct'
         ), pk=kwargs['product_id']).subtype
-    
-    from lxml import etree
-    import contextlib
-    import urlparse
-    from httplib import HTTPConnection
-    import urllib
 
-    generate = etree.Element('generate')
-    siteId = etree.Element('siteId')
-    siteId.text = '45364001'
-    idClient = etree.Element('idClient')
-    idClient.text = '%s%s' % (request.META['REMOTE_ADDR'], request.META['HTTP_USER_AGENT'])
-    number = etree.Element('numero')
-    number.text = product.phone.number
-    country = etree.Element('pays')
-    country.text = 'FR'
-    generate.append(siteId)
-    generate.append(idClient)
-    generate.append(number)
-    generate.append(country)
-
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    s = etree.tostring(generate, pretty_print=False)
-    base_url = urlparse.urlparse('http://mer.viva-multimedia.com/v2/xmlRequest.php')
-    url = '%s?%s' % (base_url.path, urllib.urlencode({'xml': '%s%s' % (xml, s)}))
-    with contextlib.closing(HTTPConnection(base_url.netloc, timeout=20)) as conn:
-        conn.request("GET", url)
-        response = conn.getresponse()
-        content = response.read()
-    number = etree.XML(content)[2][0].text
+    # get call details by number and request parameters (e.g. REMOTE_ADDR)
+    tags = viva_check_phone(product.phone.number, request=request)
+    number = tags['numero']
     
     num = lambda s: ' '.join(' '.join(s[i:i+2] for i in range(0, len(s), 2)).split())
 
@@ -370,34 +354,46 @@ def booking_incident(request, booking_id):
 
 # REST API 2.0
 
-from rest_framework import viewsets
-
 from rent import serializers, models
-from eloue.api import filters
+from eloue.api import viewsets, filters
 
-NON_DELETABLE = [name for name in viewsets.ModelViewSet.http_method_names if name.lower() != 'delete']
+class BookingFilterSet(filters.FilterSet):
+    author = filters.MultiFieldFilter(name=('owner', 'borrower'))
 
-class BookingViewSet(viewsets.ModelViewSet):
+    class Meta:
+        model = models.Booking
+        fields = (
+            'state', 'owner', 'borrower', 'product',
+            'started_at', 'ended_at', 'total_amount', 'created_at', 'canceled_at'
+        )
+
+class BookingViewSet(viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
     queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
-    filter_backends = (filters.OwnerFilter, )
-    owner_field = 'owner'
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = ('owner', 'borrower')
+    filter_class = BookingFilterSet
+    ordering_fields = ('started_at', 'ended_at', 'state', 'total_amount', 'created_at', 'canceled_at')
 
-class CommentViewSet(viewsets.ModelViewSet):
+class CommentViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.
     """
     model = models.Comment
+    queryset = models.Comment.objects.select_related('booking__owner', 'booking__borrower')
     serializer_class = serializers.CommentSerializer
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields = ('booking',) # TODO: , 'note') # TODO: 'author'
+    ordering_fields = ('note', 'created_at')
 
-class SinisterViewSet(viewsets.ModelViewSet):
+class SinisterViewSet(viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows sinisters to be viewed or edited.
     """
     model = models.Sinister
     serializer_class = serializers.SinisterSerializer
-    filter_backends = (filters.OwnerFilter, )
-    http_method_names = NON_DELETABLE
+    filter_backends = (filters.OwnerFilter, filters.OrderingFilter)
+    filter_fields = ('patron', 'booking', 'product')

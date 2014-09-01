@@ -1,0 +1,30 @@
+mixin average-rate(rating, counter)
+  span.average-rate
+    span.star
+      -var stars = [1, 2, 3, 4, 5]
+      each star in stars
+        if star == rating
+          i.current.fa.fa-lg.fa-star
+        else
+          i.fa.fa-lg.fa-star
+    if counter
+      span.rate-counter
+        | #{counter}
+
+mixin number-of-comments(counter)
+  span.number-of-comments
+    i.fa.fa-lg.fa-comments-o
+    span #{counter}
+
+mixin number-of-bookings(counter)
+  span.number-of-bookings
+    i.fa.fa-lg.fa-table
+    span #{counter}
+
+mixin verify-type(icon, text, color)
+  .block-with-thumbnail
+    .col-thumbnail
+      .thumbnail
+        i.fa.fa-fw.fa-3x(class="fa-#{icon} text-#{color}")
+    .col-exposition #{text} verifié
+      i.fa.fa-check-circle.fa-lg.indent-xs-l.text-success

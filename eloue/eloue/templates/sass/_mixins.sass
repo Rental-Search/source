@@ -1,0 +1,61 @@
+=centred-abs()
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  margin: auto
+
+=social($width)
+  i
+    display: inline-block
+    width: $width
+    height: $width
+    line-height: $width
+
+=make-bg($color)
+  border-color: $color
+  background-color: $color
+  &:hover
+    background-color: darken($color, 5%) !important
+    border-color: darken($color, 5%) !important
+
+=block-with-thumbnail($img-width: px(80), $bor-rad: $bd-rad, $pad: $section-pad)
+  margin-top: $pad
+  &:first-child
+    margin-top: 0
+  .thumbnail-img
+    display: table-cell
+    vertical-align: top
+    a
+      display: block
+      overflow: hidden
+      width: $img-width
+      height: $img-width
+      +border-top-radius($bor-rad)
+      +border-bottom-radius($bor-rad)
+      img
+        width: 100%
+  .thumbnail-content
+    display: table-cell
+    vertical-align: top
+    padding-left: $pad
+    p
+      margin-bottom: 0
+
+=btn($fz: px(14), $bor-rad: px(3))
+  font-size: $fz
+  display: block
+  width: 100%
+  text-align: center
+  font-weight: $fw-bold
+  color: white
+  padding: .8em 0
+  +border-left-radius($bor-rad)
+  +border-right-radius($bor-rad)
+
+=empty-element()
+  &:empty
+    height: (1em*$line-height-base)
+    width: 100%
+    background-color: $gray-lighter

@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import json
-import re
 import traceback
 
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized, HttpBadRequest
 
 from products.models import Product, Price
@@ -50,5 +48,5 @@ def update_product_prices(request):
             return HttpResponse()
         else:
             return HttpBadRequest()
-    except Exception, e:
+    except Exception:
         traceback.print_exc()

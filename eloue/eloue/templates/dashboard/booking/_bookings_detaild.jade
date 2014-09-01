@@ -1,0 +1,110 @@
+//-include ../jade/_mixins
+{% verbatim %}
+aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
+  .section-content
+    .block-with-thumbnail
+      .col-thumbnail
+        .thumbnail: a(href="#")
+          img(ng-src="{{bookingDetails.product.picture}}", alt="{{bookingDetails.product.summary}}", width="200")
+      .col-exposition
+        .indent-sm-h
+          h3: b {{bookingDetails.product.summary}}
+          p.text-gray.indent-sm-h.indent-xs-v
+            i.fa.fa-map-marker.fa-lg.fa-li
+            | {{bookingDetails.product.address.street}}, {{bookingDetails.product.address.zipcode}}
+            br
+            | {{bookingDetails.product.address.city}}
+            .block-with-thumbnail.indent-sm-v
+              .col-thumbnail
+                .thumbnail: a(href="#")
+                  img(ng-src="{{bookingDetails.product.owner.avatar.thumbnail}}", alt="{{bookingDetails.product.owner.username}}", width="40", height="40")
+              .col-exposition.text-gray
+                .indent-xs-h
+                  h3.small: a(href="#").text-underline-hover {{bookingDetails.product.owner.username}}
+                  p.indent-xs-v
+                    //-+average-rate(booking_detail.lot.owner.rate)
+                  p
+                  //-
+                    +number-of-comments(booking_detail.lot.owner.comments_count)
+                    +number-of-bookings(booking_detail.lot.owner.booking_count)
+
+    .bg-success-light.text-success.bd-rad
+      i.fa.fa-phone.fa-lg.indent-xs-h
+      span.indent-sm-h
+        | Joignable au 
+        b {{bookingDetails.product.phone.number}}
+        |  ou
+      a(href="").btn-inline.text-white.bg-success-hover Envoyez un message
+  //-
+    .block-with-thumbnail.notification.indent-md-v
+      .col-thumbnail
+        .thumbnail: .icon-action: i.fa.fa-check-circle-o.fa-lg
+      .col-exposition.text-action
+        h3: b Réservation acceptée par 
+          a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
+        ul.zebra-list.indent-md-v
+          each info in booking_detail.informations
+            li.clearfix
+              .col-xs-3 #{info.title}
+              .col-xs-9(class="#{info.color}") #{info.value}
+        .text-right
+          a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
+          a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
+
+    .block-with-thumbnail.text-gray.notification
+      .col-thumbnail
+        .thumbnail: i.fa.fa-pencil.fa-3x
+      .col-exposition
+        form(ng-submit="postComment()")
+          textarea.expand(name="comment.text", rows="4", placeholder="Écrire un commentaire...", ng-model="comment.text", required)
+          p.text-justify-force.indent-sm-t
+            span
+              | Notes :&nbsp;&nbsp;
+              //-+average-rate(0)
+            button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
+{% endverbatim %}
+//-
+  section.text-gray-strong.bg-lite
+    ul.section-content.booking-activity-feed
+      li.reply-to-message: a(href="#").text-success.text-underline-hover 
+        i.fa.fa-mail-reply &nbsp;&nbsp;
+        | Répondre au message
+
+      each item in booking_detail.feed
+        if item.type == "date"
+          li.feed-date-bage: span #{item.value}
+        else
+          li.block-with-thumbnail.notification.indent-md-v
+            .col-thumbnail
+              .thumbnail: .icon-action: i.fa.fa-lg(class="fa-#{item.icon}")
+            .col-exposition.text-action
+              .block-with-thumbnail
+
+                .col-thumbnail
+                  if item.type == "amount"
+                    .thumbnail.indent-sm-r
+                      img(src="#{STATIC_URL}/img/money.png", alt="", width="40", height="40")
+                  else
+                    .thumbnail.indent-sm-r.round: a(href="#")
+                      case item.type
+                        when "message"
+                          img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                        when "booking"
+                          img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="", width="40", height="40")
+                        when "request"
+                          img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+
+                .col-exposition
+                  case item.type
+                    when "message"
+                      h3.text-black.indent-xs-b: b Message envoyé par 
+                        a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                      p.norm #{item.value}
+                    when "booking"
+                      p.norm Demande acceptée par 
+                        a(href="#").text-success.text-underline-hover #{tenant.first_name}
+                    when "request"
+                      p.norm Demande de réservation par 
+                        a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                    when "amount"
+                      p.norm Prix de la location débitée avec succès !

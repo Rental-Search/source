@@ -1,0 +1,23 @@
+.pagination
+  > li > a
+    &,
+    &:hover
+      background-color: transparent
+      border: none
+    font-size: px(15,16)
+    font-weight: $fw-bold
+    color: $brand-success
+    &:hover,
+    &.active
+      color: $gray-medium
+
+    &.chevron
+      background-color: $brand-success
+      color: $gray-lite
+      +border-radius(50%)
+      margin-left: 1em
+      margin-right: 1em
+      &:hover,
+      &.active
+        background-color: $gray-lighter
+        color: $gray-medium

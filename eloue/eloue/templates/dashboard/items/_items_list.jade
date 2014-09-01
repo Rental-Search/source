@@ -1,0 +1,25 @@
+{% verbatim %}
+section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selectedCategory)")
+  .section-header
+    .row
+      .indent-xs-t.col-xs-4.col-xs-offset-8
+        .select-gradient.without-search.date-picker
+          select(ng-model="selectedCategory", ng-change="filterByCategory()")
+            option(value="") Catégories
+            option(ng-repeat="category in categories", value="{{category.id}}") {{category.name}}
+  ul.scrollbar-custom
+      li.tab-vertical.block-with-thumbnail(ng-repeat="item in items | filter:itemsFilter track by item.id")
+        .col-thumbnail
+          .thumbnail
+            a(href="#"): img(ng-src="{{item.picture}}", alt="{{item.summary}}", width="130")
+        .col-exposition
+          h3.small
+            | Location 
+            a(ui-sref="items.info({id: item.id})").text-underline-hover {{item.summary}}
+          p.normal.text-gray
+            big.text-primary {{item.pricePerDay}}€ / jour
+            br
+            //-+average-rate(booking_detail.lot.rate)
+            //-+number-of-comments(booking_detail.lot.comments_count)
+            //-+number-of-bookings(booking_detail.lot.booking_count)
+{% endverbatim %}

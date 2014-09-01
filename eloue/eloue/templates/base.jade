@@ -1,0 +1,32 @@
+doctype 5
+html(lang="fr")
+  head
+    block variables
+      include jade/variables
+
+    block head
+      title e-loue
+      meta(charset="UTF-8")
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      link(rel="shortcut icon", href="#{STATIC_URL}img/favicon.ico")
+
+    block styles
+      // include font "Open Sans"
+      link(rel="stylesheet",    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700")
+
+      // custom select.css
+      // http://harvesthq.github.io/chosen/
+      link(rel="stylesheet",    href="#{STATIC_URL}css/chosen.min.css")
+
+      // custom scrollbar.css
+      // http://manos.malihu.gr/jquery-custom-content-scroller/
+      link(rel="stylesheet",    href="#{STATIC_URL}css/jquery.mCustomScrollbar.css")
+
+    block scripts
+      script(src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places")
+
+  body
+    block content-body
+      #ngModals
+          eloue-login-form
+          eloue-registration-form

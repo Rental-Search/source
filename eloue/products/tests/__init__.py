@@ -5,3 +5,4 @@ from products.tests.price import *
 from products.tests.views import *
 from products.tests.wizard import *
 from products.tests.fields import *
+from products.tests.api2 import *
