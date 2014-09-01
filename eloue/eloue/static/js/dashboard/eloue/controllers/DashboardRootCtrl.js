@@ -16,6 +16,10 @@ define(["angular", "eloue/app", "../../../common/eloue/directives"], function (a
             // Get current user
             $scope.currentUserPromise = UsersService.getMe().$promise;
 
+            // TODO: Retrieve counts for icons' badges
+            $scope.unreadMessageThreadsCount = 2;
+            $scope.newBookingRequestsCount = 1;
+
             // Set jQuery ajax interceptors
             $.ajaxSetup({
                 beforeSend: function (jqXHR) {

@@ -14,12 +14,12 @@ block append content-body
       include ../../jade/_header_site
     article.dashboard
       nav
-        ul(ng-init="dashboard_tabs=[{'title': 'Dashboard', 'icon': 'home', 'sref': 'dashboard'}, {'title': 'Messages', 'icon': 'envelope-o', 'sref': 'messages'}, {'title': 'Booking', 'icon': 'table', 'sref': 'bookings'}, {'title': 'Items', 'icon': 'th-list', 'sref': 'items'}, {'title': 'Account', 'icon': 'user', 'sref': 'account'}]")
+        ul(ng-init="dashboard_tabs=[{title: 'Dashboard', icon: 'home', sref: 'dashboard', badge: 0}, {title: 'Messages', icon: 'envelope-o', sref: 'messages', badge: unreadMessageThreadsCount}, {title: 'Booking', icon: 'table', sref: 'bookings', badge: newBookingRequestsCount}, {title: 'Items', icon: 'th-list', sref: 'items', badge: 0}, {title: 'Account', icon: 'user', sref: 'account', badge: 0}]")
           li(ng-repeat="tab in dashboard_tabs")
             {% verbatim %}
             a(ui-sref="{{tab.sref}}").text-success-dark
               i.fa(class="fa-{{tab.icon}}")
-                span.badge-count-action(ng-if="$index === 1" ng-bind="1")
+                span.badge-count-action(ng-show="!!{{tab.badge}}", ng-bind="{{tab.badge}}")
               | {{tab.title}}
             {% endverbatim %}
       .content-view(ui-view)

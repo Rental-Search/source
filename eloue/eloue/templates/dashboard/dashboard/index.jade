@@ -65,9 +65,10 @@ block content-view
           li.col-sm-2.text-success.text-right: p
             a(href="#")
               i.fa.fa-envelope-o.fa-lg.indent-sm-r
-                span.badge-count-action 1
+                span.badge-count-action(ng-show="!!unreadMessageThreadsCount", ng-bind="unreadMessageThreadsCount")
             a(href="#c")
               i.fa.fa-table.fa-lg
+                span.badge-count-action(ng-show="!!newBookingRequestsCount", ng-bind="newBookingRequestsCount")
 
   //-
     section.scrollbar-custom.bg-lite
