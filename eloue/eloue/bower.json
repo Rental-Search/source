@@ -16,7 +16,7 @@
     "angular-route": "1.2.11",
     "angular-moment": "0.6.2",
     "ng-stripe-payments": "0.1.1",
-    "bootstrap-datepicker": "1.1.2",
+    "bootstrap-datepicker": "https://github.com/eternicode/bootstrap-datepicker/archive/1.3.0.zip",
     "datejs": "1.0.0-rc1",
     "chosen": "https://github.com/harvesthq/chosen/releases/download/v1.1.0/chosen_v1.1.0.zip",
     "html5shiv": "3.7.2",

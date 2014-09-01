@@ -261,6 +261,8 @@ PIPELINE_CSS = {
         'source_filenames': (
             'bower_components/chosen/chosen.css',
             'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
+            'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/angular-chosen-localytics/chosen-spinner.css',
         ),
         'output_filename': 'css/extra.css',
         'extra_context': {
