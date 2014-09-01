@@ -1051,6 +1051,18 @@ class UserViewSet(viewsets.ModelViewSet):
         res = {
             k: getattr(user, k) for k in ('response_rate', 'response_time')
         }
+        # TODO: we would need a better rating calculation in the future
+        res['average_rating'] = user.average_note
+        # count message threads where we have unread messages forthe requested user
+        res['unread_message_threads_count'] = \
+            user.received_messages.filter(read_at=None
+            ).values('productrelatedmessage__thread'
+            ).annotate(Count('productrelatedmessage__thread')
+            ).order_by().count()
+        # count incoming booking requests for the requested user
+        res['booking_requests_count'] = \
+            Booking.on_site.filter(owner=user, state=Booking.STATE.AUTHORIZED
+            ).only('id').count()
         return Response(res)
 
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
