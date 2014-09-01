@@ -13,7 +13,7 @@ require.config({
         "angular-moment": "../../bower_components/angular-moment/angular-moment.min",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
         "datejs": "../../bower_components/datejs/build/production/date.min",
-        "chosen": "../../js/chosen.jquery.min",
+        "chosen": "../../bower_components/chosen/chosen.jquery.min",
         "html5shiv": "../../bower_components/html5shiv/dist/html5shiv.min",
         "respond": "../../bower_components/respond/respond.min",
         "placeholders-utils": "../../bower_components/placeholders/lib/utils",

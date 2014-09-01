@@ -257,6 +257,16 @@ PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/nod
 PIPELINE_SASS_BINARY = getattr(local, 'PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 PIPELINE_CSS = {
+    'extrastyles': {
+        'source_filenames': (
+            'bower_components/chosen/chosen.css',
+            'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
+        ),
+        'output_filename': 'css/extra.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'bootstrap': {
         'source_filenames': (
             'sass/bootstrap.scss',

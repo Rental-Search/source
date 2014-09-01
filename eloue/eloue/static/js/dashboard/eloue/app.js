@@ -11,7 +11,6 @@ define(["angular",
         "custom-scrollbar",
         "jquery-autosize",
         "jquery-chosen",
-        "bootstrap_modal",
         "../../common/eloue/commonApp"],
     function (angular) {
         // Create dashboard application
