@@ -10,6 +10,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
+            endpointsMock = {};
             addressesMock = {
                 get: function () {
 
