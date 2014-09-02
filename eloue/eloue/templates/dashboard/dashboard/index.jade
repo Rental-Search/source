@@ -1,4 +1,5 @@
-//-include ../jade/_mixins
+include ../jade/_mixins
+
 block content-view
   {% verbatim %}
   section.tabs-vertical-static.lg.scrollbar-custom
@@ -9,7 +10,9 @@ block content-view
             .thumbnail.round.indent-sm-r: img(ng-src="{{currentUser.avatar.profil}}", alt="{{currentUser.username}}")
           .col-exposition
             h2.small.text-black.indent-xs-b {{currentUser.username}}
-            //-+average-rate(tenant.rate)
+            {% endverbatim %}
+            +average-rate("accountRating")
+            {% verbatim %}
             p.indent-sm-v Membre depus le {{currentUser.date_joined | date:'dd.MM.yyyy'}}
             a(ui-sref="account.profile").btn.bg-success-hover.text-white Mettre à jour mes infos
 
@@ -148,4 +151,3 @@ block content-view
                           p.norm Prix de la location débitée avec succès !
                 p.action.norm Il y a 12 min
   {% endverbatim %}
-                

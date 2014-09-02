@@ -1,25 +1,22 @@
-mixin average-rate(rating, counter)
-  span.average-rate
-    span.star
-      -var stars = [1, 2, 3, 4, 5]
-      each star in stars
-        if star == rating
-          i.current.fa.fa-lg.fa-star
-        else
-          i.fa.fa-lg.fa-star
-    if counter
-      span.rate-counter
-        | #{counter}
+mixin average-rate(account_var)
+  span.average-rate.ng-hide(ng-show="true", ng-init="currentStar=#{account_var}")
+    {% verbatim %}
+    span.star(ng-init="stars=[1, 2, 3, 4, 5]")
+      i.fa.fa-lg.fa-star(ng-repeat="star in stars", class="{{star === currentStar ? 'current' : ''}}")
+    {% endverbatim %}
 
-mixin number-of-comments(counter)
+mixin rate-counter(account_var)
+  span.rate-counter(ng-show="!!#{account_var}", ng-bind="#{account_var}")
+
+mixin number-of-comments(counter_var)
   span.number-of-comments
     i.fa.fa-lg.fa-comments-o
-    span #{counter}
+    span(ng-bind="#{counter_var})
 
-mixin number-of-bookings(counter)
+mixin number-of-bookings(counter_var)
   span.number-of-bookings
     i.fa.fa-lg.fa-table
-    span #{counter}
+    span(ng-bind="#{counter_var})
 
 mixin verify-type(icon, text, color)
   .block-with-thumbnail

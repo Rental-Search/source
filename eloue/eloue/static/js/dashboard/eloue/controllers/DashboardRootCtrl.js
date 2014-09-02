@@ -19,6 +19,7 @@ define(["angular", "eloue/app", "../../../common/eloue/directives"], function (a
             // TODO: Retrieve counts for icons' badges
             $scope.unreadMessageThreadsCount = 2;
             $scope.newBookingRequestsCount = 1;
+            $scope.accountRating = 4;
 
             // Set jQuery ajax interceptors
             $.ajaxSetup({
