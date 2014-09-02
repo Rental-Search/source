@@ -17,8 +17,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache, cache_page
 from django.core.cache import cache
 from django.views.decorators.vary import vary_on_cookie
-from django.db.models import Q
-from django.db.models import Count
+from django.db.models import Q, Count, Avg
 
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
@@ -816,6 +815,18 @@ class ProductViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
             res['errors'] = form.errors
             return response.Response(res, status=400)
 
+        return response.Response(res)
+
+    @link()
+    def stats(self, request, *args, **kwargs):
+        obj = self.get_object()
+        # TODO: we would need a better rating calculation in the future
+        qs = obj.borrowercomments.aggregate(Avg('note'), Count('id'))
+        res = {
+            'average_rating': int(qs['note__avg'] or 0),
+            'booking_coments_count': int(qs['id__count'] or 0),
+            'bookings_count': obj.bookings.count(),
+        }
         return response.Response(res)
 
     def get_serializer(self, instance=None, **kwargs):
