@@ -19,10 +19,16 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
             bookingsMock = {
                 get: function () {
+                    return {$promise: {then: function () {
+                        return {results: []}
+                    }}}
                 }
             };
             productsMock = {
                 get: function () {
+                    return {$promise: {then: function () {
+                        return {results: []}
+                    }}}
                 }
             };
             productsServiceMock = {
@@ -89,6 +95,30 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         it("BookingsService should be not null", function () {
             expect(!!BookingsService).toBe(true);
+        });
+
+        it("BookingsService:getBookings", function () {
+            var page = null;
+            BookingsService.getBookings(page);
+            expect(bookingsMock.get).toHaveBeenCalledWith({page: page});
+        });
+
+        it("BookingsService:getBookingsByProduct", function () {
+            var productId = 1;
+            BookingsService.getBookingsByProduct(productId);
+            expect(bookingsMock.get).toHaveBeenCalledWith({product: productId});
+        });
+
+        it("BookingsService:getBooking", function () {
+            var uuid = 1;
+            BookingsService.getBooking(uuid);
+            expect(bookingsMock.get).toHaveBeenCalledWith({uuid: uuid});
+        });
+
+        it("BookingsService:getBookingDetailProduct", function () {
+            var productId = 1;
+            BookingsService.getBookingDetailProduct(productId);
+            expect(productsMock.get).toHaveBeenCalledWith({id: productId});
         });
     });
 });

@@ -32,5 +32,11 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("ProductRelatedMessagesService should be not null", function () {
             expect(!!ProductRelatedMessagesService).toBe(true);
         });
+
+        it("ProductRelatedMessagesService:getMessage", function () {
+            var messageId = 1;
+            ProductRelatedMessagesService.getMessage(messageId);
+            expect(productRelatedMessagesMock.get).toHaveBeenCalledWith({id: messageId, _cache: jasmine.any(Number)});
+        });
     });
 });

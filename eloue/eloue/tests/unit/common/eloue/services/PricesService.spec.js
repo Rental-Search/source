@@ -35,5 +35,29 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("PricesService should be not null", function () {
             expect(!!PricesService).toBe(true);
         });
+
+        it("PricesService:getProductPricesPerDay", function () {
+            var productId = 1;
+            PricesService.getProductPricesPerDay(productId);
+            expect(pricesMock.getProductPricesPerDay).toHaveBeenCalledWith({product: productId});
+        });
+
+        it("PricesService:getPricesByProduct:", function () {
+            var productId = 1;
+            PricesService.getPricesByProduct(productId);
+            expect(pricesMock.get).toHaveBeenCalledWith({product: productId});
+        });
+
+        it("PricesService:savePrice", function () {
+            var price = {id: 1};
+            PricesService.savePrice(price);
+            expect(pricesMock.save).toHaveBeenCalledWith(price);
+        });
+
+        it("PricesService:updatePrice", function () {
+            var price = {id: 1};
+            PricesService.updatePrice(price);
+            expect(pricesMock.update).toHaveBeenCalledWith({id: price.id}, price);
+        });
     });
 });

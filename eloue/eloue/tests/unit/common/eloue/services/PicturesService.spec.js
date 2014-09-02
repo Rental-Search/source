@@ -38,5 +38,17 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("PicturesService should be not null", function () {
             expect(!!PicturesService).toBe(true);
         });
+
+        it("PicturesService:getPicturesByProduct", function () {
+            var productId = 1;
+            PicturesService.getPicturesByProduct(productId);
+            expect(picturesMock.get).toHaveBeenCalledWith({product: productId});
+        });
+
+        it("PicturesService:savePicture", function () {
+            var productId = 1;
+            PicturesService.savePicture(productId, {}, undefined, undefined);
+            expect(formServiceMock.send).toHaveBeenCalledWith("POST", "/api/2.0/pictures/", {}, undefined, undefined);
+        });
     });
 });
