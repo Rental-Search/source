@@ -1,6 +1,6 @@
 "use strict";
 
-define(["angular", "eloue/app", "../../../common/eloue/services"], function (angular) {
+define(["angular", "eloue/app"], function (angular) {
 
     /**
      * Controller for the messages page.

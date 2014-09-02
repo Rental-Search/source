@@ -208,7 +208,10 @@ define(["eloue/app",
             }
             $http.defaults.useXDomain = true;
             delete $http.defaults.headers.common['X-Requested-With'];
-            $http.defaults.headers.common.authorization = "Bearer " + userToken;
+
+            if (userToken && userToken.length > 0) {
+                $http.defaults.headers.common.authorization = "Bearer " + userToken;
+            }
 
             // Route change event listener
             $rootScope.$on("$locationChangeStart", function (event, next, current) {
