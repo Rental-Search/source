@@ -23,6 +23,7 @@ define(["eloue/app",
         "eloue/controllers/account/AccountInvitationCtrl",
         "eloue/controllers/messages/MessageDetailCtrl",
         "eloue/controllers/bookings/BookingDetailCtrl",
+        "eloue/controllers/DashboardLoginCtrl",
         "eloue/directives/FileChooserDirective"],
     function (EloueApp) {
 
@@ -32,11 +33,18 @@ define(["eloue/app",
         EloueApp.config([
             "$stateProvider",
             "$urlRouterProvider",
-            function ($stateProvider, $urlRouterProvider) {
+            "$httpProvider",
+            function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
                 $urlRouterProvider.otherwise("/");
 
                 $stateProvider
+                    .state("login", {
+                        url: "/login",
+                        templateUrl: "partials/dashboard/login.html",
+                        controller: "DashboardLoginCtrl",
+                        insecure: true
+                    })
                     .state("dashboard", {
                         url: "/",
                         templateUrl: "partials/dashboard/dashboard.html",
@@ -192,10 +200,57 @@ define(["eloue/app",
                         templateUrl: "partials/dashboard/account/invitation.html",
                         controller: "AccountInvitationCtrl"
                     });
+
+
+
+
+                // push function to the responseInterceptors which will intercept
+                // the http responses of the whole application
+                $httpProvider.responseInterceptors.push(function($rootScope, $q) {
+                    $rootScope.errors = [];
+
+                    // this message will appear for a defined amount of time and then vanish again
+                    var showMessage = function(content, cl, time) {
+                        $rootScope.errors.push(content);
+                    };
+                    return function(promise) {
+                        return promise.then(function(successResponse) {
+                                return successResponse;
+                            },
+                            // if the message returns unsuccessful we display the error
+                            function(errorResponse) {
+                                console.log(errorResponse);
+                                switch (errorResponse.status) {
+                                    case 400: // if the status is 400 we return the error
+                                        showMessage("Bad request", 'xx-http-error-message', 6000);
+                                        // if we have found validation error messages we will loop through
+                                        // and display them
+
+                                        break;
+                                    case 401: // if the status is 401 we return access denied
+                                        showMessage('You are unauthorised to view this page!',
+                                            'xx-http-error-message', 6000);
+                                        break;
+                                    case 403: // if the status is 403 we tell the user that authorization was denied
+                                        showMessage('You don\'t have enough rights to view this page!',
+                                            'xx-http-error-message', 6000);
+                                        break;
+                                    case 500: // if the status is 500 we return an internal server error message
+                                        showMessage('Internal server error occurred',
+                                            'xx-http-error-message', 6000);
+                                        break;
+                                    default: // for all other errors we display a default error message
+                                        showMessage('Unexpected error occurred',
+                                            'xx-http-error-message', 6000);
+                                }
+                                return $q.reject(errorResponse.data);
+                            });
+                    };
+                });
             }
         ]);
 
-        EloueApp.run(["$rootScope", "$route", "$http", function ($rootScope, $route, $http) {
+        EloueApp.run(["$rootScope", "$route", "$http", "$state", "AuthService", function ($rootScope, $route, $http, $state, AuthService) {
             var userToken = "";
             var name = "user_token=";
             var ca = document.cookie.split(';');
@@ -214,17 +269,21 @@ define(["eloue/app",
             }
 
             // Route change event listener
-            $rootScope.$on("$locationChangeStart", function (event, next, current) {
-                // Redirect not authenticated user
-                var routes = $route.routes;
-                for (var i in routes) {
-                    if (next.indexOf(i) != -1) {
-                        if (routes[i].secure && !AuthService.isLoggedIn()) {
-                            //TODO: redirect to login
-                            event.preventDefault();
-                        }
+            $rootScope.$on('$stateChangeStart',
+                function(event, toState, toParams, fromState, fromParams){
+                    if (!toState.insecure && !AuthService.isLoggedIn()) {
+                        $rootScope.$broadcast("redirectToLogin");
+                        event.preventDefault();
                     }
-                }
+            });
+
+            /**
+             * Catch "redirectToLogin" event
+             */
+            $rootScope.$on("redirectToLogin", function() {
+                console.log(401);
+                $state.go("login");
+
             });
         }]);
     });

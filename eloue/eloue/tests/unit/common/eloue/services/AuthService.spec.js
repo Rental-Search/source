@@ -41,7 +41,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
 
         it("AuthService should have all functions", function() {
             expect(angular.isFunction(AuthService.login)).toBe(true);
-            expect(angular.isFunction(AuthService.authorize)).toBe(true);
             expect(angular.isFunction(AuthService.clearUserData)).toBe(true);
             expect(angular.isFunction(AuthService.redirectToAttemptedUrl)).toBe(true);
             expect(angular.isFunction(AuthService.saveAttemptUrl)).toBe(true);
@@ -54,13 +53,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
             var credentials = {};
             AuthService.login(credentials);
             expect(AuthService.getCookie).toHaveBeenCalledWith("user_token");
-        });
-
-        it("AuthService should make a call to itself", function () {
-            var credentials = {};
-            AuthService.authorize(credentials);
-            expect(AuthService.getCookie).toHaveBeenCalledWith("user_token");
-            expect(AuthService.redirectToAttemptedUrl).toHaveBeenCalledWith();
         });
     });
 });
