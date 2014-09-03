@@ -1,17 +1,12 @@
-
-define(["eloue/app", "eloue/modules/user_management/services/AuthService",
-        "eloue/modules/user_management/controllers/LoginCtrl",
-        "eloue/modules/user_management/controllers/RegisterCtrl",
+define(["eloue/app",
         "eloue/modules/booking/controllers/ProductDetailsCtrl",
-        "eloue/modules/user_management/directives/LoginFormDirective",
-        "eloue/modules/user_management/directives/RegistrationFormDirective",
-        "eloue/modules/user_management/directives/validation/PasswordMatchDirective",
         "eloue/modules/booking/directives/ProductDetailsBookingDirective",
         "eloue/modules/booking/directives/BookingModalDirective",
         "eloue/modules/booking/directives/MessageModalDirective",
         "eloue/modules/booking/directives/PhoneModalDirective",
         "eloue/modules/booking/directives/ProductDetailsSmallDirective",
-        "eloue/modules/booking/directives/validation/DatetimepickerDirective"],
+        "eloue/modules/booking/directives/validation/DatetimepickerDirective",
+        "../../common/eloue/services", "../../common/eloue/controllers", "../../common/eloue/directives"],
     function (EloueApp) {
         "use strict";
 
@@ -20,7 +15,9 @@ define(["eloue/app", "eloue/modules/user_management/services/AuthService",
             var userToken = AuthService.getCookie("user_token");
             $http.defaults.useXDomain = true;
             delete $http.defaults.headers.common['X-Requested-With'];
-            $http.defaults.headers.common.authorization = "Bearer " + userToken;
+            if (userToken && userToken.length > 0) {
+                $http.defaults.headers.common.authorization = "Bearer " + userToken;
+            }
 
             // Route change event listener
             $rootScope.$on("$locationChangeStart", function (event, next, current) {

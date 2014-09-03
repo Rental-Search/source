@@ -1,10 +1,10 @@
-define(["angular-mocks", "eloue/modules/user_management/services/AuthService"], function() {
+define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
 
     describe("Service: AuthService", function () {
 
         var AuthService, endpointsMock, redirectAfterLoginMock, registrationResourceMock;
 
-        beforeEach(module("EloueApp.UserManagementModule"));
+        beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             endpointsMock = {};

@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/modules/user_management/controllers/LoginCtrl"], function() {
+define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function() {
 
     describe("Controller: LoginCtrl", function () {
 
@@ -6,7 +6,7 @@ define(["angular-mocks", "eloue/modules/user_management/controllers/LoginCtrl"],
             scope,
             authServiceMock;
 
-        beforeEach(module('EloueApp.UserManagementModule'));
+        beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             authServiceMock = {login: function () {

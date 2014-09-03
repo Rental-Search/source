@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/modules/user_management/controllers/RegisterCtrl"], function() {
+define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function() {
 
     describe("Controller: RegisterCtrl", function () {
 
@@ -6,7 +6,7 @@ define(["angular-mocks", "eloue/modules/user_management/controllers/RegisterCtrl
             scope,
             authServiceMock;
 
-        beforeEach(module('EloueApp.UserManagementModule'));
+        beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             authServiceMock = {register: function () {
