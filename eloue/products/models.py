@@ -34,7 +34,7 @@ from accounts.models import Patron, Address, ProAgency, PhoneNumber
 from products.fields import SimpleDateField
 from products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
 from products.signals import (post_save_answer, post_save_product, 
-    post_save_curiosity, post_save_to_update_product,)
+    post_save_curiosity, post_save_to_update_product, post_save_message)
 from products.choices import UNIT, UNITS, CURRENCY, STATUS, PAYMENT_TYPE, SEAT_NUMBER, DOOR_NUMBER, CONSUMPTION, FUEL, TRANSMISSION, MILEAGE, CAPACITY, TAX_HORSEPOWER, PRIVATE_LIFE
 from rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
 
@@ -793,7 +793,7 @@ class MessageThread(models.Model):
     recipient = models.ForeignKey(Patron, related_name='participating_threads')
     product = models.ForeignKey(Product, related_name='messages', blank=True, null=True) # we should remove NULL after migration of the data
     last_message = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_message_in_thread')
-    last_offer = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_offer_in_thread')
+    last_offer = models.OneToOneField('ProductRelatedMessage', blank=True, null=True, related_name='last_offer_in_thread') # FIXME: I didn't find any use of this field besides post_save_message() signal handler I've introduced
     subject = models.CharField(_("Subject"), max_length=120)
     sender_archived = models.BooleanField(_("Archived"), default=False)
     recipient_archived = models.BooleanField(_("Archived"), default=False)
@@ -952,3 +952,6 @@ post_save.connect(post_save_to_update_product, sender=Price)
 post_save.connect(post_save_to_update_product, sender=Picture)
 post_save.connect(post_save_to_update_product, sender=ProductHighlight)
 post_save.connect(post_save_to_update_product, sender=ProductTopPosition)
+
+# register a signal handler to update message thread and parent of the newly created message
+post_save.connect(post_save_message, sender=ProductRelatedMessage)

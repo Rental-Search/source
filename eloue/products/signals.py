@@ -43,3 +43,34 @@ def post_save_to_batch_update_product(sender, instance, created, **kwargs):
 
 def post_save_curiosity(sender, instance, created, **kwargs):
     cache.delete(cache_key('curiosities', Site.objects.get_current()))
+
+
+def post_save_message(sender, instance, created, **kwargs):
+    if not created:
+        return
+
+    # perform thread updates after creating a new message
+    thread = instance.thread
+    if thread:
+        # update archive states
+        if instance.sender == thread.sender:
+            if thread.recipient_archived:
+                thread.recipient_archived = False
+        elif instance.sender == thread.recipient:
+            if thread.sender_archived:
+                thread.sender_archived = False
+        # TODO: should we log or notify user somehow if message's sender is not a participant of the message thread?
+
+        # update message thread to point to the created message
+        thread.last_message = instance
+        # FIXME: should we rally update 'last_offer'? I didn't find any use of it
+        if instance.offer:
+            thread.last_offer = instance
+
+        thread.save()
+
+    # perform parent message updates after creating a new message
+    parent_msg = instance.parent_msg
+    if parent_msg:
+        parent_msg.replied_at = instance.sent_at
+        parent_msg.save()

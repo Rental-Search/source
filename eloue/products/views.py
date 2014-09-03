@@ -903,12 +903,7 @@ class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_fields = ('thread', 'sender', 'recipient', 'offer')
     ordering_fields = ('sent_at',)
 
-    # FIXME: this 'post-processing' should be implemented in the model level
-    def post_save(self, obj, created=False):
-        if obj and created:
-            thread = obj.thread
-            thread.last_message = obj
-            if obj.offer:
-                thread.last_offer = obj
-            thread.save()
-        return super(ProductRelatedMessageViewSet, self).post_save(obj, created=created)
+    def pre_save(self, obj):
+        if not obj.subject and obj.thread:
+            obj.subject = obj.thread.subject
+        return super(ProductRelatedMessageViewSet, self).pre_save(obj)
