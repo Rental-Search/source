@@ -215,7 +215,7 @@ main
           z-index: 20
           top: -2em
           i
-            +sprite($s-comment-white)
+
         .rate
           position: absolute
           margin-top: (100%/1.4)
@@ -245,14 +245,12 @@ main
             bottom: 0
             right: 0
             margin: $indent-sm*$indent-vertical $indent-sm
+            a
+              margin-left: 1em
             i
               display: inline-block
-            .sprite-message i
-              +sprite($s-mail)
-            .sprite-calendar-ok 
-              margin-left: $indent-xs
-              i
-                +sprite($s-calendar-ok)
+              color: white
+              font-size: 1.1em
         .declarer-name
           display: table-cell
           font-size: px(13)
@@ -288,5 +286,4 @@ main
         .sprite-comment 
           color: $gray-medium
           i
-            +sprite($s-comment)
-            +opacity(.7)
+            font-size: 1.1em

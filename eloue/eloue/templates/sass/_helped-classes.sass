@@ -107,9 +107,10 @@ a, a:hover
   > li
     color: inherit
     & + li:before
-      font-family: "FontAwesome"
-      content: " \f105 "
+      font-family: "Flaticons Stroke"
+      content: "\e5ab"
       font-size: 1.2em
+      vertical-align: -10%
       cursor: pointer
     a
       padding: .8em 0
@@ -200,9 +201,8 @@ a, a:hover
     position: relative
     span
       display: inline-block
-      *display: inline
-      *zoom: 1
-      +sprite($s-calendar)
+      font-size: 1.1em
+      color: $gray-medium
   .chosen-container,
   .form-control,
   .input-group-addon

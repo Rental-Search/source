@@ -3,7 +3,7 @@ $(document).ready(function(){
       article = $('article');
   // switch grid/list layouts
   $(layout_switcher).on('click', 'i', function(){
-    if($(this).hasClass('sprite-grid')) {
+    if($(this).hasClass('grid')) {
       article.removeClass('list-layout')
       article.addClass('grid-layout')
     } else {

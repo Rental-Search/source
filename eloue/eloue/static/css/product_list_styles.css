@@ -82,20 +82,15 @@ input#sourse:checked + #sourse-img {
 .header-site .search-form .where-field {
   width: 40%;
 }
-.header-site .search-form .where-field .sprite-location {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -967px -67px;
-  width: 14px;
-  height: 16px;
+.header-site .search-form .where-field .location-pin-3 {
+  color: #9d9d9d;
+  font-size: 1.2em;
   position: absolute;
   top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
+  line-height: 2.5;
   z-index: 50;
   right: auto;
-  left: 1em;
+  left: 0.5em;
 }
 .header-site .search-form .where-field input {
   width: 100%;
@@ -118,9 +113,10 @@ input#sourse:checked + #sourse-img {
 .header-site .search-form .btn-search {
   border-left-width: 0;
 }
-.header-site .search-form .btn-search .icon-search {
+.header-site .search-form .btn-search .zoom-2 {
   color: #9d9d9d;
   font-size: 1.2em;
+  line-height: 1.8;
 }
 .header-site .search-form .btn-advertise {
   color: white;
@@ -284,7 +280,8 @@ input#sourse:checked + #sourse-img {
   border-bottom-left-radius: 0.35714em;
 }
 .rss .social-btns a {
-  font-size: 1.78571em;
+  font-size: 1.42857em;
+  padding: 0.125em 0.25em;
   display: inline-block;
   line-height: 1.25em;
   text-decoration: none;
@@ -296,12 +293,6 @@ input#sourse:checked + #sourse-img {
   background-color: white;
   text-align: center;
   color: #24bd77;
-}
-.rss .social-btns a i {
-  display: inline-block;
-  width: 1.25em;
-  height: 1.25em;
-  line-height: 1.25em;
 }
 .rss .social-btns a:hover {
   background-color: #24bd77;
@@ -370,12 +361,8 @@ input#sourse:checked + #sourse-img {
   border-top-right-radius: 0.21429em;
 }
 .modal .btn i {
-  display: inline-block;
-  width: 1.2em;
-  height: 1.2em;
-  line-height: 1.2em;
-}
-.modal .btn i {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
   border-bottom-left-radius: 0.10714em;
   border-top-left-radius: 0.10714em;
   border-bottom-right-radius: 0.10714em;
@@ -1160,34 +1147,15 @@ input#sourse:checked + #sourse-img {
   border-color: transparent !important;
 }
 
-.layout-switcher i[class^="sprite-"] {
+.layout-switcher i {
   cursor: pointer;
-  margin-left: 1em;
+  margin-left: 0.5em;
   float: right;
+  font-size: 2.5em;
+  color: #c4c4c4;
 }
-.layout-switcher i[class^="sprite-"].sprite-grid {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -844px -67px;
-  width: 33px;
-  height: 34px;
-}
-.layout-switcher i[class^="sprite-"].sprite-grid:hover, article.grid-layout .layout-switcher i[class^="sprite-"].sprite-grid {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -809px -67px;
-  width: 33px;
-  height: 34px;
-}
-.layout-switcher i[class^="sprite-"].sprite-list {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -914px -67px;
-  width: 33px;
-  height: 34px;
-}
-.layout-switcher i[class^="sprite-"].sprite-list:hover, article.list-layout .layout-switcher i[class^="sprite-"].sprite-list {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -879px -67px;
-  width: 33px;
-  height: 34px;
+.layout-switcher i:hover, article.grid-layout .layout-switcher i.grid, article.list-layout .layout-switcher i.list {
+  color: #24bd77;
 }
 .layout-switcher .chosen-container {
   width: auto !important;
@@ -1246,6 +1214,7 @@ article .breadcrumb {
 article .breadcrumb li + li:before {
   color: inherit;
   content: "-";
+  vertical-align: baseline;
 }
 article .breadcrumb li:hover, article .breadcrumb li:hover ~ li {
   color: inherit;
@@ -1333,6 +1302,7 @@ article .section-body .part:first-child {
   font-size: 0.9375em;
   font-weight: 700;
   color: #24bd77;
+  line-height: 2em;
 }
 .pagination > li > a, .pagination > li > a:hover {
   background-color: transparent;
@@ -1347,6 +1317,11 @@ article .section-body .part:first-child {
   border-radius: 50%;
   margin-left: 1em;
   margin-right: 1em;
+  font-size: 2em;
+  padding: 0;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
 }
 .pagination > li > a.chevron:hover, .pagination > li > a.chevron.active {
   background-color: #eeeeee;
@@ -1615,12 +1590,6 @@ main ol li .sprite-comment i {
   z-index: 20;
   top: -2em;
 }
-.grid-layout main ol li .sprite-comment i {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -999px -67px;
-  width: 16px;
-  height: 16px;
-}
 .grid-layout main ol li .rate {
   position: absolute;
   margin-top: 71.42857%;
@@ -1663,23 +1632,13 @@ main ol li .sprite-comment i {
   right: 0;
   margin: 15px 20px;
 }
+.list-layout main ol li .declarer-container .btns a {
+  margin-left: 1em;
+}
 .list-layout main ol li .declarer-container .btns i {
   display: inline-block;
-}
-.list-layout main ol li .declarer-container .btns .sprite-message i {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1107px -67px;
-  width: 16px;
-  height: 14px;
-}
-.list-layout main ol li .declarer-container .btns .sprite-calendar-ok {
-  margin-left: 10px;
-}
-.list-layout main ol li .declarer-container .btns .sprite-calendar-ok i {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1035px -67px;
-  width: 16px;
-  height: 16px;
+  color: white;
+  font-size: 1.1em;
 }
 .list-layout main ol li .declarer-name {
   display: table-cell;
@@ -1727,10 +1686,5 @@ main ol li .sprite-comment i {
   color: #c4c4c4;
 }
 .list-layout main ol li .sprite-comment i {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1017px -67px;
-  width: 16px;
-  height: 16px;
-  opacity: 0.7;
-  filter: alpha(opacity=70);
+  font-size: 1.1em;
 }

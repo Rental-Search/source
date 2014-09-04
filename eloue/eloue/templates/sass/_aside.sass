@@ -9,15 +9,15 @@ aside
       padding-top: 1em
       color: $brand-success
       &:before
-        font-family: "FontAwesome"
-        content: "\f00c"
-        font-size: .7em
+        font-family: "Flaticons Stroke"
+        content: "\e5a2"
         display: inline-block
         text-align: center
-        width: 2em
-        height: 2em
-        line-height: 2em
-        margin-right: 1em
+        font-size: .9em
+        width: 1.5em
+        height: 1.5em
+        line-height: 1.5em
+        margin-right: .5em
         +border-top-radius(50%)
         +border-bottom-radius(50%)
         background-color: $brand-success
@@ -26,25 +26,17 @@ aside
         color: $brand-danger
         &:before
           background-color: $brand-danger
-          content: "\f00d"
+          content: "\e5a3"
 
   .btn
     +btn(px(14,$section-fz))
     margin-bottom: $section-pad/2
     color: white !important
-    span
+    i
+      font-size: 1.2em
       display: inline-block
-      margin-right: 1em
+      margin-right: .7em
       vertical-align: middle
-    &.calendar-ok
-      span
-        +sprite($s-calendar-ok)
-    &.call
-      span
-        +sprite($s-call)
-    &.send-message
-      span
-        +sprite($s-mail)
   .add-to-wishlist a
     margin: 0
 
@@ -62,8 +54,6 @@ aside
     .connection
       .friend-photo-wrapper
         display: inline-block
-        *display: inline
-        *zoom: 1
         margin-right: .5em
         margin-bottom: .5em
         width: px(30, $section-fz)
@@ -92,21 +82,6 @@ aside
   .connected-with-owner
     p
       margin: 1em 0 0
-    .facebook-box
-      background-color: $brand-info
+    i
       color: $brand-info
-      display: inline-block
-      *display: inline
-      *zoom: 1
-      margin-bottom: $section-pad
-      +border-top-radius($bd-rad)
-      +border-bottom-radius($bd-rad)
-      span
-        display: inline-block
-        *display: inline
-        *zoom: 1
-        background-color: white
-        line-height: 1.1em
-        width: 1.1em
-        margin: .2em
-        font-size: px(45)
+      font-size: 5em

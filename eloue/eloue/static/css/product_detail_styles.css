@@ -82,20 +82,15 @@ input#sourse:checked + #sourse-img {
 .header-site .search-form .where-field {
   width: 40%;
 }
-.header-site .search-form .where-field .sprite-location {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -967px -67px;
-  width: 14px;
-  height: 16px;
+.header-site .search-form .where-field .location-pin-3 {
+  color: #9d9d9d;
+  font-size: 1.2em;
   position: absolute;
   top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
+  line-height: 2.5;
   z-index: 50;
   right: auto;
-  left: 1em;
+  left: 0.5em;
 }
 .header-site .search-form .where-field input {
   width: 100%;
@@ -118,9 +113,10 @@ input#sourse:checked + #sourse-img {
 .header-site .search-form .btn-search {
   border-left-width: 0;
 }
-.header-site .search-form .btn-search .icon-search {
+.header-site .search-form .btn-search .zoom-2 {
   color: #9d9d9d;
   font-size: 1.2em;
+  line-height: 1.8;
 }
 .header-site .search-form .btn-advertise {
   color: white;
@@ -142,6 +138,7 @@ article .breadcrumb {
 article .breadcrumb li + li:before {
   color: inherit;
   content: "-";
+  vertical-align: baseline;
 }
 article .breadcrumb li:hover, article .breadcrumb li:hover ~ li {
   color: inherit;
@@ -289,14 +286,14 @@ main .carousel-wrapper .thumbnail-img img.expand-h {
 }
 main .carousel-wrapper .carousel-control {
   position: absolute;
-  width: 3em;
-  height: 3em;
-  line-height: 3em;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
   border-radius: 50%;
   background: black;
-  font-size: 0.85714em;
+  font-size: 1.71429em;
   top: auto;
-  margin: 2.5em 0.5em;
+  margin: 1em 0.25em;
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
@@ -383,15 +380,15 @@ aside .booking-form .available {
   color: #24bd77;
 }
 aside .booking-form .available:before {
-  font-family: "FontAwesome";
-  content: "\f00c";
-  font-size: 0.7em;
+  font-family: "Flaticons Stroke";
+  content: "\e5a2";
   display: inline-block;
   text-align: center;
-  width: 2em;
-  height: 2em;
-  line-height: 2em;
-  margin-right: 1em;
+  font-size: 0.9em;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+  margin-right: 0.5em;
   border-top-right-radius: 50%;
   border-top-left-radius: 50%;
   border-bottom-right-radius: 50%;
@@ -404,7 +401,7 @@ aside .booking-form .available.unavailable {
 }
 aside .booking-form .available.unavailable:before {
   background-color: #e45647;
-  content: "\f00d";
+  content: "\e5a3";
 }
 aside .btn {
   font-size: 1.07692em;
@@ -421,28 +418,11 @@ aside .btn {
   margin-bottom: 0.71429em;
   color: white !important;
 }
-aside .btn span {
+aside .btn i {
+  font-size: 1.2em;
   display: inline-block;
-  margin-right: 1em;
+  margin-right: 0.7em;
   vertical-align: middle;
-}
-aside .btn.calendar-ok span {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1035px -67px;
-  width: 16px;
-  height: 16px;
-}
-aside .btn.call span {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -949px -67px;
-  width: 16px;
-  height: 16px;
-}
-aside .btn.send-message span {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1107px -67px;
-  width: 16px;
-  height: 14px;
 }
 aside .add-to-wishlist a {
   margin: 0;
@@ -489,8 +469,6 @@ aside .owner-information .connection > div p {
 }
 aside .owner-information .connection .friend-photo-wrapper {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
   width: 2.30769em;
@@ -553,27 +531,9 @@ aside .similar-listing li p {
 aside .connected-with-owner p {
   margin: 1em 0 0;
 }
-aside .connected-with-owner .facebook-box {
-  background-color: #3959a8;
+aside .connected-with-owner i {
   color: #3959a8;
-  display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  margin-bottom: 1.42857em;
-  border-top-right-radius: 0.21429em;
-  border-top-left-radius: 0.21429em;
-  border-bottom-right-radius: 0.21429em;
-  border-bottom-left-radius: 0.21429em;
-}
-aside .connected-with-owner .facebook-box span {
-  display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  background-color: white;
-  line-height: 1.1em;
-  width: 1.1em;
-  margin: 0.2em;
-  font-size: 3.21429em;
+  font-size: 5em;
 }
 
 .insurances {
@@ -720,7 +680,8 @@ aside .connected-with-owner .facebook-box span {
   border-bottom-left-radius: 0.35714em;
 }
 .rss .social-btns a {
-  font-size: 1.78571em;
+  font-size: 1.42857em;
+  padding: 0.125em 0.25em;
   display: inline-block;
   line-height: 1.25em;
   text-decoration: none;
@@ -732,12 +693,6 @@ aside .connected-with-owner .facebook-box span {
   background-color: white;
   text-align: center;
   color: #24bd77;
-}
-.rss .social-btns a i {
-  display: inline-block;
-  width: 1.25em;
-  height: 1.25em;
-  line-height: 1.25em;
 }
 .rss .social-btns a:hover {
   background-color: #24bd77;
@@ -806,12 +761,8 @@ aside .connected-with-owner .facebook-box span {
   border-top-right-radius: 0.21429em;
 }
 .modal .btn i {
-  display: inline-block;
-  width: 1.2em;
-  height: 1.2em;
-  line-height: 1.2em;
-}
-.modal .btn i {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
   border-bottom-left-radius: 0.10714em;
   border-top-left-radius: 0.10714em;
   border-bottom-right-radius: 0.10714em;
