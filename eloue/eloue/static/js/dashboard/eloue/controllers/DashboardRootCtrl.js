@@ -7,15 +7,20 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
      */
     angular.module("EloueDashboardApp").controller("DashboardRootCtrl", [
         "$scope",
-        "$cookies",
         "UsersService",
-        function ($scope, $cookies, UsersService) {
+        "AuthService",
+        function ($scope, UsersService, AuthService) {
             // Read authorization token
-            $scope.currentUserToken = $cookies.user_token;
+            $scope.currentUserToken = AuthService.getCookie("user_token");
 
-            // Get current user
-            $scope.currentUserPromise = UsersService.getMe().$promise;
-
+            if (!!$scope.currentUserToken) {
+                // Get current user
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise.then(function (currentUser) {
+                    // Save current user in the scope
+                    $scope.currentUser = currentUser;
+                });
+            }
             // TODO: Retrieve counts for icons' badges
             $scope.unreadMessageThreadsCount = 2;
             $scope.newBookingRequestsCount = 1;

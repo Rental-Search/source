@@ -5,10 +5,27 @@ define(["eloue/app",
         "eloue/modules/booking/directives/MessageModalDirective",
         "eloue/modules/booking/directives/PhoneModalDirective",
         "eloue/modules/booking/directives/ProductDetailsSmallDirective",
-        "eloue/modules/booking/directives/validation/DatetimepickerDirective",
-        "../../common/eloue/services", "../../common/eloue/controllers", "../../common/eloue/directives"],
+        "../../common/eloue/services", "../../common/eloue/controllers", "../../common/eloue/directives", "../../common/eloue/interceptors"],
     function (EloueApp) {
         "use strict";
+
+        /**
+         * Routing configuration for app.
+         */
+        EloueApp.config([
+            "$stateProvider",
+            "$urlRouterProvider",
+            "$httpProvider",
+            function ($stateProvider, $urlRouterProvider, $httpProvider) {
+                //TODO: define proper routes for pop-ins
+
+
+
+                // push function to the responseInterceptors which will intercept
+                // the http responses of the whole application
+                $httpProvider.responseInterceptors.push("ErrorHandlerInterceptor");
+            }
+        ]);
 
         EloueApp.run(["$rootScope", "$location", "$route", "$http", "AuthService", function ($rootScope, $location, $route, $http, AuthService) {
             AuthService.saveAttemptUrl();
@@ -33,7 +50,7 @@ define(["eloue/app",
                 }
             });
 
-            $rootScope.$on("redirectToLogin", function() {
+            $rootScope.$on("redirectToLogin", function () {
                 $location.path("/");
             });
         }]);

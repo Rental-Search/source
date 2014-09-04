@@ -4,20 +4,19 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the login form.
      */
-    EloueCommon.controller("LoginCtrl", ["$scope", "$cookies", "AuthService", function ($scope, $cookies, AuthService) {
+    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, AuthService, UsersService, ServiceErrors) {
         /**
          * User credentials.
          */
         $scope.credentials = {};
 
-        $scope.loginError = "";
+        $scope.loginError = null;
 
         /**
          * Sign in user.
          */
         $scope.login = function login() {
             AuthService.login(
-
                 $scope.credentials,
 
 
@@ -39,24 +38,36 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         };
 
         $scope.onLoginError = function (jqXHR) {
-
+            var errorText = "";
             if (jqXHR.status == 400) {
-                $scope.loginError = "An error occured: " + jqXHR.responseJSON;
-                console.log($scope.loginError);
+                if (!!ServiceErrors[jqXHR.responseJSON.error]) {
+                    errorText = ServiceErrors[jqXHR.responseJSON.error];
+                } else {
+                    errorText = "Bad request.";
+                }
             } else {
-                $scope.loginError = "An error occured!";
+                errorText = "An error occured!";
             }
+            $scope.$apply(function () {
+                $scope.loginError = errorText;
+            });
         };
 
         /**
          * Authorize user by "user_token" cookie.
          */
         $scope.authorize = function () {
-            var userToken = $cookies.user_token;
-            if (userToken) {
+            var userToken = AuthService.getCookie("user_token");
+            console.log(userToken);
+            if (!!userToken) {
+                $http.defaults.headers.common.authorization = "Bearer " + userToken;
                 $(".modal-backdrop").hide();
-                //TODO: redirect
-//                this.redirectToAttemptedUrl();
+                $('.modal').modal('hide');
+                UsersService.getMe(function (currentUser) {
+                    // Save current user in the root scope
+                    $rootScope.currentUser = currentUser;
+                });
+                AuthService.redirectToAttemptedUrl();
             }
         }
     }]);
@@ -74,7 +85,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         /**
          * Error occurred during registration.
          */
-        $scope.registrationError = "";
+        $scope.registrationError = null;
 
         /**
          * Register new user in the system.
@@ -89,7 +100,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 AuthService.clearUserData();
                 AuthService.login(credentials);
             }, function (error) {
-                $scope.registrationError = error.data.detail;
+                $scope.$apply(function () {
+                    $scope.registrationError = error.data.detail;
+                });
             });
         };
 

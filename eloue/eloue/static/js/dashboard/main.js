@@ -57,6 +57,7 @@ require([
     "vars",
     "datejs",
     "bootstrap-datepicker",
+    "toastr",
     "eloue/route",
     "eloue/i18n"
 ], function ($, _, angular, bootstrap, vars, route) {

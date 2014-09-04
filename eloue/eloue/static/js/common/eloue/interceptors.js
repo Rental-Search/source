@@ -1,15 +1,16 @@
 "use strict";
-define(["../../common/eloue/commonApp"], function (EloueCommon) {
+define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr) {
 
     /**
      * Controller for the login form.
      */
-    EloueCommon.factory("ErrorHandlerInterceptor", ["$q", "$rootScope", function ($q, $rootScope) {
+    EloueCommon.factory("ErrorHandlerInterceptor", ["$q", function ($q) {
 
 
         // this message will appear for a defined amount of time and then vanish again
         var showMessage = function (content) {
-            $rootScope.serviceError = content;
+            toastr.options.positionClass = "toast-top-full-width";
+            toastr.error(content, "Error!");
         };
         return function (promise) {
             return promise.then(function (successResponse) {
@@ -18,23 +19,26 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 // if the message returns unsuccessful we display the error
                 function (errorResponse) {
                     switch (errorResponse.status) {
-                        case 400: // if the status is 400 we return the error
-                            showMessage("Bad request");
-                            // if we have found validation error messages we will loop through
-                            // and display them
-
+                        case 400:
+                            showMessage("A required attribute of the API request is missing");
                             break;
-                        case 401: // if the status is 401 we return access denied
-                            showMessage('You are unauthorised to view this page!');
+                        case 401:
+                            showMessage("The user is not authenticated, a valid user token is necessary");
                             break;
-                        case 403: // if the status is 403 we tell the user that authorization was denied
-                            showMessage('You don\'t have enough rights to view this page!');
+                        case 403:
+                            showMessage("The request is not allowed");
                             break;
-                        case 500: // if the status is 500 we return an internal server error message
-                            showMessage('Internal server error occurred');
+                        case 404:
+                            showMessage("A resource could not be accessed");
                             break;
-                        default: // for all other errors we display a default error message
-                            showMessage('Unexpected error occurred');
+                        case 405:
+                            showMessage("The request is not supported");
+                            break;
+                        case 500:
+                            showMessage("While handling the request something went wrong on the server side");
+                            break;
+                        default:
+                            showMessage("Unexpected error");
                     }
                     return $q.reject(errorResponse.data);
                 });

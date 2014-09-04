@@ -7,6 +7,7 @@ require.config({
         "angular": "../../bower_components/angular/angular.min",
         "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
         "angular-route": "../../bower_components/angular-route/angular-route.min",
+        "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
         "moment": "../../bower_components/moment/min/moment.min",
@@ -20,6 +21,7 @@ require.config({
         "placeholders-main": "../../bower_components/placeholders/lib/main",
         "placeholders-jquery": "../../bower_components/placeholders/lib/adapters/placeholders.jquery",
         "angular-chosen-localytics": "../../bower_components/angular-chosen-localytics/chosen",
+        "toastr": "../../bower_components/toastr/toastr.min",
         "formmapper": "../formmapper",
         "vars": "../vars"
     },
@@ -29,6 +31,7 @@ require.config({
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],
+        "angular-ui-router": ["angular"],
         "angular-moment": ["angular"],
         "angular-chosen-localytics": ["angular"],
         "angular-mocks": {
@@ -41,7 +44,8 @@ require.config({
         "bootstrap-datepicker": ["jQuery"],
         "chosen": ["jQuery"],
         "placeholders-jquery": ["jQuery"],
-        "formmapper": ["jQuery"]
+        "formmapper": ["jQuery"],
+        "toastr": ["jQuery"]
     }
 });
 
@@ -62,6 +66,7 @@ require([
     "placeholders-jquery",
     "angular-chosen-localytics",
     "formmapper",
+    "toastr",
     "vars",
     "eloue/route"
 ], function ($, _, angular) {

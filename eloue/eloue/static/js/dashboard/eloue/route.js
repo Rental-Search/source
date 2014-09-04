@@ -212,6 +212,7 @@ define(["eloue/app",
         ]);
 
         EloueApp.run(["$rootScope", "$route", "$http", "$state", "AuthService", function ($rootScope, $route, $http, $state, AuthService) {
+            AuthService.saveAttemptUrl();
             var userToken = "";
             var name = "user_token=";
             var ca = document.cookie.split(';');
@@ -242,9 +243,7 @@ define(["eloue/app",
              * Catch "redirectToLogin" event
              */
             $rootScope.$on("redirectToLogin", function() {
-                console.log(401);
                 $state.go("login");
-
             });
         }]);
     });

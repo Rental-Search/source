@@ -10,6 +10,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         api_url: "http://10.0.5.47:8200/api/2.0/"
     });
 
+    EloueCommon.constant("ServiceErrors", {
+        "invalid_grant": "Bad credentials provided"
+    });
+
     EloueCommon.constant("ActivityType", {
         "ALL": {id: "0", name: "All"},
         "MESSAGE": {id: "1", name: "Messages"},
