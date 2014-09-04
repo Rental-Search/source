@@ -34,16 +34,27 @@ PACKAGES_UNIT = {
     'day': UNIT.DAY,
     'week': UNIT.WEEK,
     'two_weeks': UNIT.TWO_WEEKS,
-    'month': UNIT.MONTH
+    'month': UNIT.MONTH,
+    'three_days': UNIT.THREE_DAYS,
+#    'seven_days': UNIT.SEVEN_DAYS,
+#    'fifteen_days': UNIT.FIFTEEN_DAYS,
+#    'night': UNIT.NIGHT,
 }
 
+def _n_days(amount, delta, rounding=True):
+    return amount * (delta.days + delta.seconds / D('86400'))
+
 PACKAGES = {
-    UNIT.HOUR: lambda amount, delta, round=True: amount * (delta.seconds / D('3600')),
-    UNIT.WEEK_END: lambda amount, delta, round=True: amount,
-    UNIT.DAY: lambda amount, delta, round=True: amount * (max(delta.days + delta.seconds / D('86400'), 1) if round else delta.days + delta.seconds / D('86400')),
-    UNIT.WEEK: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
-    UNIT.TWO_WEEKS: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
-    UNIT.MONTH: lambda amount, delta, round=True: amount * (delta.days + delta.seconds / D('86400')),
+    UNIT.HOUR: lambda amount, delta, rounding=True: amount * (delta.seconds / D('3600')),
+    UNIT.WEEK_END: lambda amount, delta, rounding=True: amount,
+    UNIT.DAY: lambda amount, delta, rounding=True: amount * (max(delta.days + delta.seconds / D('86400'), 1) if rounding else delta.days + delta.seconds / D('86400')),
+    UNIT.WEEK: _n_days,
+    UNIT.TWO_WEEKS: _n_days,
+    UNIT.MONTH: _n_days,
+    UNIT.THREE_DAYS: _n_days,
+#    UNIT.SEVEN_DAYS: _n_days,
+#    UNIT.FIFTEEN_DAYS: _n_days,
+#    UNIT.NIGHT: lambda amount, delta, round=True: amount,
 }
 
 TIME_CHOICE = (

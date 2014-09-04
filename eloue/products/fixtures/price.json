@@ -186,5 +186,16 @@
         },
         "model": "products.price",
         "pk": 16
+    },
+    {
+        "fields": {
+            "currency": "EUR",
+            "product": 1,
+            "amount": "48",
+            "unit": 6,
+            "name": ""
+        },
+        "model": "products.price",
+        "pk": 100
     }
 ]
