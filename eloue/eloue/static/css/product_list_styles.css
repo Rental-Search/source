@@ -537,13 +537,9 @@ input#sourse:checked + #sourse-img {
   white-space: nowrap;
   text-align: left;
 }
-.modal .large .product-info > .thumbnail-content .sprite-location {
+.modal .large .product-info > .thumbnail-content .location-pin-3 {
   display: inline-block;
-  margin: 0 0.5em -0.2em 0;
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -967px -67px;
-  width: 14px;
-  height: 16px;
+  margin-right: 0.5em;
 }
 .modal .large .product-info > .thumbnail-content h3 {
   font-size: inherit;
@@ -554,13 +550,9 @@ input#sourse:checked + #sourse-img {
   font-size: inherit;
   margin: 0 0 0.5em;
 }
-.modal .large .product-info > .thumbnail-content .sprite-comment {
+.modal .large .product-info > .thumbnail-content .writing-comment {
   display: inline-block;
-  margin: 0 0.5em -0.2em 1em;
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1017px -67px;
-  width: 16px;
-  height: 16px;
+  margin: 0 0.5em 0 1em;
 }
 .modal .large .product-info > .thumbnail-content .declarer {
   margin-top: 1.42857em;
@@ -597,9 +589,6 @@ input#sourse:checked + #sourse-img {
 .modal .large .product-info > .thumbnail-content .declarer .thumbnail-content {
   vertical-align: middle;
   font-size: 0.92857em;
-}
-.modal .large .bank-information {
-  border-top: 0.07143em solid #eeeeee;
 }
 .modal .large .terms {
   font-size: 0.92857em;
@@ -927,39 +916,20 @@ input#sourse:checked + #sourse-img {
 .modal .large .form-wrapper button {
   margin-top: 1.5em;
 }
+.modal .large .bank-information {
+  border-top: 0.07143em solid #eeeeee;
+}
 .modal .large .bank-information input {
   padding-left: 2.75em;
 }
 .modal .large .bank-information i {
   z-index: 50;
-  margin: 1em;
+  line-height: 2.72727;
+  margin-left: 1em;
+  font-size: 1.1em;
   position: absolute;
   left: 12px;
   top: 0;
-}
-.modal .large .bank-information i.card {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1125px -67px;
-  width: 16px;
-  height: 13px;
-}
-.modal .large .bank-information i.calendar {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1071px -67px;
-  width: 16px;
-  height: 16px;
-}
-.modal .large .bank-information i.block {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -983px -67px;
-  width: 14px;
-  height: 16px;
-}
-.modal .large .bank-information i.user {
-  background-image: url(../../static/img/spritesheet.png);
-  background-position: -1089px -67px;
-  width: 16px;
-  height: 16px;
 }
 
 .clear-selector .chosen-container {
@@ -1151,7 +1121,7 @@ input#sourse:checked + #sourse-img {
   cursor: pointer;
   margin-left: 0.5em;
   float: right;
-  font-size: 2.5em;
+  font-size: 2.2em;
   color: #c4c4c4;
 }
 .layout-switcher i:hover, article.grid-layout .layout-switcher i.grid, article.list-layout .layout-switcher i.list {
@@ -1637,7 +1607,6 @@ main ol li .sprite-comment i {
 }
 .list-layout main ol li .declarer-container .btns i {
   display: inline-block;
-  color: white;
   font-size: 1.1em;
 }
 .list-layout main ol li .declarer-name {

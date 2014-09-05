@@ -1078,7 +1078,7 @@ article.dashboard .content-view section {
   border-right: 4px solid transparent;
   cursor: pointer;
 }
-.tabs-vertical-active .tab-vertical .fa-check {
+.tabs-vertical-active .tab-vertical .checkmark {
   color: transparent;
 }
 .tabs-vertical-active .tab-vertical:hover, .tabs-vertical-active .tab-vertical.current {
@@ -1091,7 +1091,7 @@ article.dashboard .content-view section {
 .tabs-vertical-active .tab-vertical:active {
   border-color: transparent;
 }
-.tabs-vertical-active .tab-vertical.default .fa-check {
+.tabs-vertical-active .tab-vertical.default .checkmark {
   color: #24bd77;
 }
 
@@ -1339,7 +1339,7 @@ header .where-field {
 }
 header .where-field input {
   width: 100%;
-  padding-left: 2.5em;
+  padding-left: 3em;
   font-weight: 600;
   border-radius: 0;
   border-color: lightgray #eaeaea !important;
@@ -1399,6 +1399,7 @@ header .btn-search:hover {
 .average-rate .star {
   white-space: nowrap;
   display: inline-block;
+  vertical-align: middle;
 }
 .average-rate .star:before, .average-rate .star:after {
   content: " ";
@@ -1430,11 +1431,12 @@ header .btn-search:hover {
 
 .number-of-comments i,
 .number-of-bookings i {
-  line-height: 0.5em;
+  vertical-align: top;
   margin-right: 0.5em;
 }
 .number-of-comments span,
 .number-of-bookings span {
+  vertical-align: top;
   margin-right: 1.5em;
 }
 
@@ -1743,7 +1745,7 @@ label.check-btn span i {
   border-radius: 4px 4px 0 0 !important;
 }
 .chosen-container.chosen-with-drop .chosen-single span:after {
-  content: "\f0d8";
+  content: "\e5a4";
 }
 .chosen-container .chosen-single {
   display: table;
@@ -1762,10 +1764,10 @@ label.check-btn span i {
   padding-right: 1em;
 }
 .chosen-container .chosen-single span:after {
-  content: "\f0d7";
+  content: "\e5a5";
   position: absolute;
   right: 1em;
-  font-family: "FontAwesome";
+  font-family: "Flaticons Stroke";
 }
 .chosen-container.chosen-container-multi {
   height: auto;
@@ -2091,6 +2093,7 @@ article.dashboard table.bg-light tbody {
   position: absolute;
   top: -0.5em;
   right: 0;
+  font-style: normal;
   padding: 0 0.75em;
   line-height: 1.8em;
   border-radius: 8px;
@@ -2100,8 +2103,9 @@ article.dashboard table.bg-light tbody {
   background-color: #f27e36;
   text-align: center;
 }
-.fa-lg .badge-count-action {
+.icon-lg .badge-count-action {
   font-size: 10px;
   top: -1em;
-  right: -1em;
+  right: 1em;
+  position: relative;
 }

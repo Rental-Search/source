@@ -8,7 +8,7 @@ aside.booking-detail.scrollbar-custom
         .indent-sm-h
           h3: b #{booking_detail.lot.name}
           p.text-gray.indent-sm-h.indent-xs-v
-            i.fa.fa-map-marker.fa-lg.fa-li
+            i.icon-lg.flaticon.stroke.location-pin-3.icon-li
             | #{booking_detail.lot.address}, #{booking_detail.lot.index}
             br
             | #{booking_detail.lot.location}
@@ -26,7 +26,7 @@ aside.booking-detail.scrollbar-custom
                     +number-of-bookings(booking_detail.lot.owner.booking_count)
 
     .bg-success-light.text-success.bd-rad
-      i.fa.fa-phone.fa-lg.indent-xs-h
+      i.icon-lg.flaticon.stroke.phone.indent-xs-l
       span.indent-sm-h
         | Joignable au 
         b 01 47 00 00 00 
@@ -35,7 +35,7 @@ aside.booking-detail.scrollbar-custom
 
     .block-with-thumbnail.notification.indent-md-v
       .col-thumbnail
-        .thumbnail: .icon-action: i.fa.fa-check-circle-o.fa-lg
+        .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
       .col-exposition.text-action
         h3: b Réservation acceptée par 
           a(href="").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
@@ -50,7 +50,7 @@ aside.booking-detail.scrollbar-custom
 
     .block-with-thumbnail.text-gray.notification
       .col-thumbnail
-        .thumbnail: i.fa.fa-pencil.fa-3x
+        .thumbnail: i.icon-3x.flaticon.solid.pencil
       .col-exposition
         form(action="")
           textarea.expand(name="msg", rows="4", placeholder="Écrire un commentaire...")
@@ -63,7 +63,7 @@ aside.booking-detail.scrollbar-custom
   section.text-gray-strong.bg-lite
     ul.section-content.booking-activity-feed
       li.reply-to-message: a(href="#").text-success.text-underline-hover 
-        i.fa.fa-mail-reply &nbsp;&nbsp;
+        i.flaticon.stroke.reply &nbsp;&nbsp;
         | Répondre au message
 
       each item in booking_detail.feed
@@ -72,7 +72,7 @@ aside.booking-detail.scrollbar-custom
         else
           li.block-with-thumbnail.notification.indent-md-v
             .col-thumbnail
-              .thumbnail: .icon-action: i.fa.fa-lg(class="fa-#{item.icon}")
+              .thumbnail: .icon-action: i.icon-lg(class="#{item.icon}")
             .col-exposition.text-action
               .block-with-thumbnail
 

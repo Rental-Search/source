@@ -4,27 +4,27 @@ mixin average-rate(rating, counter)
       -var stars = [1, 2, 3, 4, 5]
       each star in stars
         if star === rating
-          i.current.fa.fa-lg.fa-star
+          i.icon-lg.current.flaticon.solid.star-2
         else
-          i.fa.fa-lg.fa-star
+          i.icon-lg.flaticon.solid.star-2
     if counter
       span.rate-counter
         | #{counter}
 
 mixin number-of-comments(counter)
   span.number-of-comments
-    i.fa.fa-lg.fa-comments-o
+    i.icon-lg.flaticon.stroke.writing-comment
     span #{counter}
 
 mixin number-of-bookings(counter)
   span.number-of-bookings
-    i.fa.fa-lg.fa-table
+    i.icon-lg.flaticon.stroke.calendar-5
     span #{counter}
 
 mixin verify-type(icon, text, color)
   .block-with-thumbnail
     .col-thumbnail
       .thumbnail
-        i.fa.fa-fw.fa-3x(class="fa-#{icon} text-#{color}")
+        i.icon-fw.icon-3x.indent-sm-r(class="#{icon} text-#{color}")
     .col-exposition #{text} verifié
-      i.fa.fa-check-circle.fa-lg.indent-xs-l.text-success
+      i.icon-lg.flaticon.solid.checkmark-2.indent-xs-l.text-success
