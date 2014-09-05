@@ -1,6 +1,4 @@
-
-from rest_framework import fields
-
+# -*- coding: utf-8 -*-
 from products import models
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
 
@@ -52,7 +50,9 @@ class RealEstateProductSerializer(ModelSerializer):
         )
 
 class PriceSerializer(ModelSerializer):
-    amount = fields.DecimalField(source='local_currency_amount', max_digits=10, decimal_places=2)
+    # FIXME: uncomment if we need to provide 'local_currency_amount' instead of 'amount' to clients, remove otherwise
+    def _transform_amount(self, obj, value):
+        return self.fields['amount'].field_to_native(obj, 'local_currency_amount')
 
     def transform_currency(self, obj, value):
         return value and {
