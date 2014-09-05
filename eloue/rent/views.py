@@ -354,6 +354,8 @@ def booking_incident(request, booking_id):
 
 # REST API 2.0
 
+import django_filters
+
 from rent import serializers, models
 from eloue.api import viewsets, filters
 
@@ -378,6 +380,14 @@ class BookingViewSet(viewsets.ImmutableModelViewSet):
     filter_class = BookingFilterSet
     ordering_fields = ('started_at', 'ended_at', 'state', 'total_amount', 'created_at', 'canceled_at')
 
+class CommentFilterSet(filters.FilterSet):
+    rate = django_filters.ChoiceFilter(name='note', choices=serializers.CommentSerializer.base_fields['rate'].choices)
+    author = filters.MultiFieldFilter(name=('booking__owner', 'booking__borrower'))
+
+    class Meta:
+        model = models.Comment
+        fields = ('booking',)
+
 class CommentViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.
@@ -386,7 +396,7 @@ class CommentViewSet(viewsets.NonEditableModelViewSet):
     queryset = models.Comment.objects.select_related('booking__owner', 'booking__borrower')
     serializer_class = serializers.CommentSerializer
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields = ('booking',) # TODO: , 'note') # TODO: 'author'
+    filter_class = CommentFilterSet
     ordering_fields = ('note', 'created_at')
 
 class SinisterViewSet(viewsets.ImmutableModelViewSet):

@@ -751,6 +751,9 @@ from rent.views import get_booking_price_from_form
 
 class CategoryFilterSet(filters.FilterSet):
     parent__isnull = django_filters.Filter(name='parent', lookup_type='isnull')
+    is_child_node = filters.MPTTBooleanFilter(lookup_type='is_child_node')
+    is_leaf_node = filters.MPTTBooleanFilter(lookup_type='is_leaf_node')
+    is_root_node = filters.MPTTBooleanFilter(lookup_type='is_root_node')
 
     class Meta:
         model = models.Category
@@ -785,7 +788,7 @@ class CategoryViewSet(viewsets.NonDeletableModelViewSet):
         return response.Response(serializer.data)
 
 class ProductFilterSet(filters.FilterSet):
-    category__isdescendant = filters.MPTTFilter(name='category', queryset=models.Category.objects.all())
+    category__isdescendant = filters.MPTTModelFilter(name='category', lookup_type='descendants', queryset=Category.objects.all())
 
     class Meta:
         model = models.Product
@@ -902,3 +905,8 @@ class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     owner_field = ('sender', 'recipient')
     filter_fields = ('thread', 'sender', 'recipient', 'offer')
     ordering_fields = ('sent_at',)
+
+    def pre_save(self, obj):
+        if not obj.subject and obj.thread:
+            obj.subject = obj.thread.subject
+        return super(ProductRelatedMessageViewSet, self).pre_save(obj)

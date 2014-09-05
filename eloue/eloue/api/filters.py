@@ -1,8 +1,8 @@
-
+# -*- coding: utf-8 -*-
 import operator
 import re
 
-from django.db.models import Q, ForeignKey
+from django.db.models import Q, ForeignKey, F
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError, ImproperlyConfigured
@@ -119,22 +119,51 @@ class MultiValueForeignKeyFilter(django_filters.Filter):
             value = (value, 'in') if len(value) > 1 else value[0]
         return super(MultiValueForeignKeyFilter, self).filter(qs, value)
 
-class MPTTFilter(django_filters.ModelChoiceFilter):
+class MPTTFilterMixin(object):
+    def filter(self, qs, value):
+        filter_func = getattr(self, 'get_{}'.format(self.lookup_type))
+        if not filter_func:
+            return qs
+        qs = filter_func(qs, value)
+        if self.distinct:
+            qs = qs.distinct()
+        return qs
+
+class MPTTBooleanFilter(MPTTFilterMixin, django_filters.Filter):
+    field_class = forms.NullBooleanField
+
+    def get_is_root_node(self, qs, value):
+        opts = qs.model._mptt_meta
+        return (qs.filter if value else qs.exclude)(**{opts.parent_attr: None})
+
+    def get_is_child_node(self, qs, value):
+        return self.get_is_root_node(qs, not value)
+
+    def get_is_leaf_node(self, qs, value):
+        opts = qs.model._mptt_meta
+        return (qs.filter if value else qs.exclude)(**{opts.left_attr: (F(opts.right_attr) - 1)})
+
+class MPTTModelFilter(MPTTFilterMixin, django_filters.ModelChoiceFilter):
     field_class = TreeNodeChoiceField
 
     def filter(self, qs, value):
         if not value:
             return qs.none()
-        name = self.name
+        return super(MPTTModelFilter, self).filter(qs, value)
+
+    def join_parts(self, *args):
+        return  '__'.join((self.name,) + args if self.name else args)
+
+    def get_descendants(self, qs, value):
+        if  value.is_leaf_node():
+            return qs.none()
         opts = value._mptt_meta
         qs = qs.filter(**{
             # MPTT descendants
-            '__'.join([name, opts.tree_id_attr]): getattr(value, opts.tree_id_attr),
-            '__'.join([name, opts.left_attr, 'gt']): getattr(value, opts.left_attr),
-            '__'.join([name, opts.right_attr, 'lt']): getattr(value, opts.right_attr),
-            })
-        if self.distinct:
-            qs = qs.distinct()
+            self.join_parts(opts.tree_id_attr): getattr(value, opts.tree_id_attr),
+            self.join_parts(opts.left_attr, 'gt'): getattr(value, opts.left_attr),
+            self.join_parts(opts.right_attr, 'lt'): getattr(value, opts.right_attr),
+        })
         return qs
 
 class MultiFieldFilter(django_filters.Filter):

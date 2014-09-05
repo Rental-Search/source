@@ -11,6 +11,10 @@ UNIT = Enum([
     (3, 'WEEK', _(u'semaine'), _(u'1 semaine')),
     (4, 'TWO_WEEKS', _(u'deux semaines'), _(u'2 semaines')),
     (5, 'MONTH', _(u'mois'), _(u'1 mois')),
+    (6, 'THREE_DAYS', _(u'3jours'), _(u'3 jours')),
+#    (7, 'FIFTEEN_DAYS', _(u'15jours'), _(u'15 jours')),
+#    (8, 'SEVEN_DAYS', _(u'7jours'), _(u'7 jours')),
+#    (9, 'NIGHT', _(u'nuit'), _(u'1 nuit')),
 ])
 
 UNITS = {
@@ -20,6 +24,8 @@ UNITS = {
     3: lambda amount: amount / 7,
     4: lambda amount: amount / 14,
     5: lambda amount: amount / 30,
+    6: lambda amount: amount / 3,
+#    7: lambda amount: amount / 15,
 }
 
 CURRENCY = Enum([

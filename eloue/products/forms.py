@@ -184,27 +184,13 @@ class MessageEditForm(forms.Form):
         )
         if parent_msg is not None:
             msg.parent_msg = parent_msg
-            msg.thread = parent_msg.thread
-            msg.subject = parent_msg.thread.subject
-            if sender == msg.thread.sender:
-                if msg.thread.recipient_archived:
-                    msg.thread.recipient_archived = False
-                    msg.thread.save()
-            else:
-                if msg.thread.sender_archived:
-                    msg.thread.sender_archived = False
-                    msg.thread.save()
-            parent_msg.replied_at = datetime.datetime.now()
-            parent_msg.save()
+            thread = parent_msg.thread
         else:
-            thread = MessageThread(sender=sender, recipient=recipient, subject=subject)
-            thread.last_message = msg
-            thread.save()
-            msg.thread = thread
-            msg.subject = thread.subject
+            thread, is_thread_created = MessageThread.objects.create(sender=sender, recipient=recipient, subject=subject)
+        # thread should already exist in DB
+        msg.thread = thread
+        msg.subject = thread.subject
         msg.save()
-        msg.thread.last_message = msg
-        msg.thread.save()
         message_list.append(msg) # ... IS THIS ...
         if product:
             product.messages.add(msg.thread) # To implement a layer to wrap the message lib

@@ -21,12 +21,23 @@ week_package_for_gte_month
             prices.price(4, $amount)
             prices.price(5, $amount)
 
+three_days_package_for_gte_month
+    use pricing(three_days, $started_at, $ended_at, $delta)
+    when
+        prices.price(6, $amount)
+        check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
+        notany
+            prices.price(3, $amount)
+            prices.price(4, $amount)
+            prices.price(5, $amount)
+
 day_package_for_gte_month
     use pricing(day, $started_at, $ended_at, $delta)
     when
         prices.price(1, $amount)
         check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
         notany
+            prices.price(6, $amount)
             prices.price(3, $amount)
             prices.price(4, $amount)
             prices.price(5, $amount)
@@ -47,6 +58,16 @@ week_package_for_gte_two_weeks_lt_month
         notany
             prices.price(4, $amount)
 
+three_days_package_for_gte_two_weeks_lt_month
+    use pricing(three_days, $started_at, $ended_at, $delta)
+    when
+        prices.price(6, $amount)
+        check $delta.days < calendar.monthrange($started_at.year, $started_at.month)[1]
+        check $delta.days >= 14
+        notany
+            prices.price(4, $amount)
+            prices.price(3, $amount)
+
 day_package_for_gte_two_weeks_lt_month
     use pricing(day, $started_at, $ended_at, $delta)
     when
@@ -56,6 +77,7 @@ day_package_for_gte_two_weeks_lt_month
         notany
             prices.price(4, $amount)
             prices.price(3, $amount)
+            prices.price(6, $amount)
 
 week_package
     use pricing(week, $started_at, $ended_at, $delta)
@@ -63,6 +85,15 @@ week_package
         prices.price(3, $amount)
         check $delta.days < 14
         check $delta.days >= 7
+
+three_days_package_for_gte_week_lt_two_weeks
+    use pricing(three_days, $started_at, $ended_at, $delta)
+    when
+        prices.price(6, $amount)
+        check $delta.days < 14
+        check $delta.days >= 7
+        notany
+            prices.price(4, $amount)
 
 day_package_for_gte_week_lt_two_weeks
     use pricing(day, $started_at, $ended_at, $delta)
@@ -72,6 +103,7 @@ day_package_for_gte_week_lt_two_weeks
         check $delta.days >= 7
         notany
             prices.price(4, $amount)
+            prices.price(6, $amount)
 
 week_end_package
     use pricing(week_end, $started_at, $ended_at, $delta)
@@ -84,11 +116,27 @@ week_end_package
         check $delta.days < 4
         check $week_end == True
 
-day_package
+three_days_package
+    use pricing(three_days, $started_at, $ended_at, $delta)
+    when
+        prices.price(6, $amount)
+        check $delta.days < 7
+        check $delta.days >= 3
+
+day_package_for_gte_three_days_lt_week
     use pricing(day, $started_at, $ended_at, $delta)
     when
         prices.price(1, $amount)
         check $delta.days < 7
+        check $delta.days >= 3
+        notany
+            prices.price(6, $amount)
+
+day_package
+    use pricing(day, $started_at, $ended_at, $delta)
+    when
+        prices.price(1, $amount)
+        check $delta.days < 3
         check $delta.days >= 1
 
 hour_package
