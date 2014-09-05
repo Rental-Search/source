@@ -1,12 +1,11 @@
 define(["angular", "eloue/modules/booking/BookingModule",
-    "eloue/modules/booking/services/ProductService",
     "eloue/modules/booking/services/MessageService",
     "../../../../../common/eloue/values",
     "../../../../../common/eloue/services"
 ], function (angular) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "$location", "ProductService", "MessageService", "UsersService", "AuthService", "Endpoints", function ($scope, $route, $location, ProductService, MessageService, UsersService, AuthService, Endpoints) {
+    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "$location", "ProductsLoadService", "MessageService", "UsersService", "AuthService", "Endpoints", function ($scope, $route, $location, ProductsLoadService, MessageService, UsersService, AuthService, Endpoints) {
 
         // Read authorization token
         $scope.currentUserToken = AuthService.getCookie("user_token");
@@ -78,7 +77,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             } else if (fromDateTime < today) {
                 $scope.dateRangeError = "From date cannot be before today";
             } else {
-                ProductService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").$promise.then(function (result) {
+                ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
                     $scope.duration = result.duration;
                     $scope.pricePerDay = result.unit_value;
                     $scope.bookingPrice = result.total_price;
@@ -150,11 +149,11 @@ define(["angular", "eloue/modules/booking/BookingModule",
         });
 
         $scope.$on("openModal", function (event, args) {
-            var modalName = args.name;
-            if ((modalName === "phone" || modalName === "booking") && !$scope.product) {
-                $scope.loadProductDetails();
-            } else if ((modalName === "message") && $scope.productRelatedMessages.length == 0) {
+            if ((args.name === "message") && $scope.productRelatedMessages.length == 0) {
                 $scope.loadMessageThread();
+            }
+            if (!$scope.product) {
+                $scope.loadProductDetails();
             }
         });
 
@@ -171,7 +170,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         };
 
         $scope.loadProductDetails = function () {
-            ProductService.getProduct($scope.productId).then(function (result) {
+            ProductsLoadService.getProduct($scope.productId, true, true, true, false).then(function (result) {
                 $scope.product = result;
                 //TODO: owner contact details will be defined in some other way.
                 $scope.ownerCallDetails = {
