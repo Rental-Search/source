@@ -164,7 +164,6 @@ class PictureTest(APITestCase):
         self.assertIn('product', response.data)
         self.assertIn('created_at', response.data)
         self.assertIn('image', response.data, response.data)
-        self.assertEquals(response.data['product'], None, response.data)
         for k in ('thumbnail', 'profile', 'home', 'display'):
             self.assertIn(k, response.data['image'], response.data)
             self.assertTrue(response.data['image'][k], response.data)

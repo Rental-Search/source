@@ -745,7 +745,7 @@ from rest_framework.decorators import link
 import django_filters
 
 from products import serializers, models
-from eloue.api import viewsets, filters, mixins
+from eloue.api import viewsets, filters, mixins, permissions
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
@@ -763,9 +763,10 @@ class CategoryViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product categories to be viewed or edited.
     """
+    permission_classes = (permissions.IsStaffOrReadOnly,)
     queryset = models.Category.on_site.select_related('description__title')
     serializer_class = serializers.CategorySerializer
-    filter_backends = (filters.StaffEditableFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
 
@@ -860,7 +861,8 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
     model = models.Price
     serializer_class = serializers.PriceSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = 'product__owner'
     filter_fields = ('product', 'unit')
     ordering_fields = ('name',) # TODO:  'amount'
 
@@ -870,7 +872,8 @@ class PictureViewSet(viewsets.ModelViewSet):
     """
     model = models.Picture
     serializer_class = serializers.PictureSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = 'product__owner'
     filter_fields = ('product', 'created_at')
     ordering_fields = ('created_at',)
 

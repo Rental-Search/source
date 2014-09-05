@@ -63,11 +63,6 @@ class OwnerFilter(filters.BaseFilterBackend):
             queryset = queryset.filter(reduce(operator.or_, or_queries))
         return queryset
 
-class StaffEditableFilter(filters.BaseFilterBackend):
-    def filter_queryset(self, request, queryset, view):
-        user = request.user
-        return queryset if request.method in SAFE_METHODS or user.is_staff else queryset.none()
-
 class HaystackSearchFilter(filters.BaseFilterBackend):
     # The URL query parameter used for the search.
     search_param = filters.SearchFilter.search_param
