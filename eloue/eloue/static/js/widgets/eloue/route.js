@@ -13,13 +13,36 @@ define(["eloue/app",
          * Routing configuration for app.
          */
         EloueApp.config([
-            "$stateProvider",
-            "$urlRouterProvider",
+            "$routeProvider",
             "$httpProvider",
-            function ($stateProvider, $urlRouterProvider, $httpProvider) {
-                //TODO: define proper routes for pop-ins
-
-
+            function ($routeProvider, $httpProvider) {
+                $routeProvider
+                    .when('/login', {
+                        templateUrl: 'modalContainer',
+                        controller: 'ModalCtrl',
+                        secure: false
+                    })
+                    .when('/registration', {
+                        templateUrl: 'modalContainer',
+                        controller: 'ModalCtrl',
+                        secure: false
+                    })
+                    .when('/booking', {
+                        templateUrl: 'modalContainer',
+                        controller: 'ModalCtrl',
+                        secure: true
+                    })
+                    .when('/message', {
+                        templateUrl: 'modalContainer',
+                        controller: 'ModalCtrl',
+                        secure: true
+                    })
+                    .when('/phone', {
+                        templateUrl: 'modalContainer',
+                        controller: 'ModalCtrl',
+                        secure: true
+                    })
+                    .otherwise({redirectTo: '/'});
 
                 // push function to the responseInterceptors which will intercept
                 // the http responses of the whole application
@@ -28,7 +51,6 @@ define(["eloue/app",
         ]);
 
         EloueApp.run(["$rootScope", "$location", "$route", "$http", "AuthService", function ($rootScope, $location, $route, $http, AuthService) {
-            AuthService.saveAttemptUrl();
             var userToken = AuthService.getCookie("user_token");
             $http.defaults.useXDomain = true;
             delete $http.defaults.headers.common['X-Requested-With'];
@@ -36,22 +58,8 @@ define(["eloue/app",
                 $http.defaults.headers.common.authorization = "Bearer " + userToken;
             }
 
-            // Route change event listener
-            $rootScope.$on("$locationChangeStart", function (event, next, current) {
-                // Redirect not authenticated user
-                var routes = $route.routes;
-                for (var i in routes) {
-                    if (next.indexOf(i) != -1) {
-                        if (routes[i].secure && !AuthService.isLoggedIn()) {
-                            $rootScope.$broadcast("redirectToLogin");
-                            event.preventDefault();
-                        }
-                    }
-                }
-            });
-
             $rootScope.$on("redirectToLogin", function () {
-                $location.path("/");
+                $location.path("/login");
             });
         }]);
     });

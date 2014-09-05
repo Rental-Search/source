@@ -7,7 +7,6 @@ require.config({
         "angular": "../../bower_components/angular/angular.min",
         "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
         "angular-route": "../../bower_components/angular-route/angular-route.min",
-        "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
         "moment": "../../bower_components/moment/min/moment.min",
@@ -31,7 +30,6 @@ require.config({
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],
-        "angular-ui-router": ["angular"],
         "angular-moment": ["angular"],
         "angular-chosen-localytics": ["angular"],
         "angular-mocks": {

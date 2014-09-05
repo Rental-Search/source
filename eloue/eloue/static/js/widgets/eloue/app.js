@@ -4,7 +4,6 @@ define([
     "angular-cookies",
     "angular-resource",
     "angular-route",
-    "angular-ui-router",
     "eloue/modules/booking/BookingModule",
     "../../common/eloue/commonApp"
 ], function (angular) {
@@ -15,7 +14,6 @@ define([
         "ngCookies",
         "ngResource",
         "ngRoute",
-        "ui.router",
         "localytics.directives"
     ]);
 });

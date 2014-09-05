@@ -4,7 +4,7 @@ define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr
     /**
      * Controller for the login form.
      */
-    EloueCommon.factory("ErrorHandlerInterceptor", ["$q", function ($q) {
+    EloueCommon.factory("ErrorHandlerInterceptor", ["$q", "$rootScope", function ($q, $rootScope) {
 
 
         // this message will appear for a defined amount of time and then vanish again
@@ -23,7 +23,7 @@ define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr
                             showMessage("A required attribute of the API request is missing");
                             break;
                         case 401:
-                            showMessage("The user is not authenticated, a valid user token is necessary");
+                            $rootScope.$broadcast("redirectToLogin");
                             break;
                         case 403:
                             showMessage("The request is not allowed");

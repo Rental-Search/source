@@ -1,16 +1,25 @@
 define(["angular", "eloue/modules/booking/BookingModule",
     "eloue/modules/booking/services/ProductService",
-    "eloue/modules/booking/services/PriceService",
     "eloue/modules/booking/services/MessageService",
-    "eloue/modules/booking/services/UserService",
-    "../../../../../common/eloue/values"
+    "../../../../../common/eloue/values",
+    "../../../../../common/eloue/services"
 ], function (angular) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "ProductService", "PriceService", "MessageService", "UserService", "Endpoints", function ($scope, $route, ProductService, PriceService, MessageService, UserService, Endpoints) {
+    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "$location", "ProductService", "MessageService", "UsersService", "AuthService", "Endpoints", function ($scope, $route, $location, ProductService, MessageService, UsersService, AuthService, Endpoints) {
 
-        //TODO: change to real user ID and product ID
-        $scope.currentUserId = 17506;
+        // Read authorization token
+        $scope.currentUserToken = AuthService.getCookie("user_token");
+
+        if (!!$scope.currentUserToken) {
+            // Get current user
+            $scope.currentUserPromise = UsersService.getMe().$promise;
+            $scope.currentUserPromise.then(function (currentUser) {
+                // Save current user in the scope
+                $scope.currentUser = currentUser;
+            });
+        }
+        //TODO: change to real product ID
         $scope.productId = 315;
         $scope.bookingDetails = {
             "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy"),
@@ -54,36 +63,6 @@ define(["angular", "eloue/modules/booking/BookingModule",
             {"label": "23h", "value": "23:00:00"}
         ];
 
-        UserService.getUser($scope.currentUserId).$promise.then(function (result) {
-            $scope.currentUser = result;
-        });
-
-        ProductService.getProduct($scope.productId).then(function (result) {
-            $scope.product = result;
-            //TODO: owner contact details will be defined in some other way.
-            $scope.ownerCallDetails = {
-                number: result.phone.number,
-                tariff: "0.15"
-            };
-        });
-
-        MessageService.getMessageThread($scope.productId).then(function (result) {
-            angular.forEach(result, function (value, key) {
-                var senderId = $scope.getIdFromUrl(value.sender);
-                UserService.getUser(senderId).$promise.then(function (result) {
-                    value.sender = result;
-                });
-            });
-            $scope.productRelatedMessages = result;
-        });
-
-        PriceService.getPricePerDay($scope.productId).$promise.then(function (result) {
-            if (result.results && result.results.length > 0) {
-                $scope.pricePerDay = result.results[0].amount;
-            } else {
-                $scope.pricePerDay = 0;
-            }
-        });
 
         /**
          * Update the product booking price based on selected duration.
@@ -152,23 +131,6 @@ define(["angular", "eloue/modules/booking/BookingModule",
             console.log("Send booking request..");
         };
 
-        $scope.openBookingModal = function openBookingModal() {
-            $scope.openModal("bookingModal");
-        };
-
-        $scope.openMessageModal = function openMessageModal() {
-            $scope.openModal("messageModal");
-        };
-
-        $scope.openPhoneModal = function openPhoneModal() {
-            $scope.openModal("phoneModal");
-        };
-
-        $scope.openModal = function openModal(modalId) {
-            $('.modal').modal('hide');
-            $("#" + modalId).modal("show");
-        };
-
         /**
          * Retrieves identifier of the object from provided url, that ends with "../{%ID%}/"
          * @param url URL
@@ -179,5 +141,44 @@ define(["angular", "eloue/modules/booking/BookingModule",
         };
 
         $scope.updatePrice();
+
+        /**
+         * Catch "redirectToLogin" event
+         */
+        $scope.$on("redirectToLogin", function () {
+            $location.path("/login");
+        });
+
+        $scope.$on("openModal", function (event, args) {
+            var modalName = args.name;
+            if ((modalName === "phone" || modalName === "booking") && !$scope.product) {
+                $scope.loadProductDetails();
+            } else if ((modalName === "message") && $scope.productRelatedMessages.length == 0) {
+                $scope.loadMessageThread();
+            }
+        });
+
+        $scope.loadMessageThread = function () {
+            MessageService.getMessageThread($scope.productId).then(function (result) {
+                angular.forEach(result, function (value, key) {
+                    var senderId = $scope.getIdFromUrl(value.sender);
+                    UsersService.get(senderId).$promise.then(function (result) {
+                        value.sender = result;
+                    });
+                });
+                $scope.productRelatedMessages = result;
+            });
+        };
+
+        $scope.loadProductDetails = function () {
+            ProductService.getProduct($scope.productId).then(function (result) {
+                $scope.product = result;
+                //TODO: owner contact details will be defined in some other way.
+                $scope.ownerCallDetails = {
+                    number: result.phone.number,
+                    tariff: "0.15"
+                };
+            });
+        }
     }]);
 });

@@ -58,7 +58,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          */
         $scope.authorize = function () {
             var userToken = AuthService.getCookie("user_token");
-            console.log(userToken);
             if (!!userToken) {
                 $http.defaults.headers.common.authorization = "Bearer " + userToken;
                 $(".modal-backdrop").hide();
@@ -115,4 +114,30 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             $('.registration.email').slideUp();
         }
     }]);
+
+    EloueCommon.controller("ModalCtrl", [
+        "$scope",
+        "$rootScope",
+        "$route",
+        "$location",
+        "$timeout",
+        "AuthService",
+        function($scope, $rootScope, $route, $location, $timeout, AuthService) {
+            var currentUserToken = AuthService.getCookie("user_token");
+            var currentRoute = $route.current.$$route;
+            var path =  $route.current.$$route.originalPath;
+            var prefix =path.slice(1,path.length);
+            if (prefix != "login") {
+                AuthService.saveAttemptUrl();
+            }
+            if (!!currentRoute.secure && !currentUserToken) {
+                $location.path("/login");
+            } else {
+                $rootScope.$broadcast("openModal", { name : prefix});
+                $(".modal").modal("hide");
+                $timeout(function() {
+                    $("#" + prefix + "Modal").modal("show");
+                }, 300);
+            }
+        }]);
 });
