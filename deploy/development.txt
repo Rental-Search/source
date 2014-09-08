@@ -64,3 +64,4 @@ djangorestframework-gis==0.2
 django-filter==0.7
 django-oauth2-provider
 requests>=0.10.0
+pyjade==2.2.0
