@@ -1,0 +1,10 @@
+.container
+  h3.text-center Choisissez une catégorie pour votre annonce
+  each group in publish_items_categories
+    ul.nav.space-between.text-nowrap
+      each item in group
+        li.spacer
+        li(class="#{item.classname}"): span: a(href="#{item.href}")
+          span.border-round
+            i.sprite
+          span.title #{item.title}

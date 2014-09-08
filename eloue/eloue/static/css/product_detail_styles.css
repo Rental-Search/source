@@ -561,25 +561,25 @@ aside .connected-with-owner i {
 }
 .insurances .insurances-img .payment {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -687px -67px;
+  background-position: -708px -131px;
   width: 62px;
   height: 44px;
 }
 .insurances .insurances-img .serenity {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -751px -67px;
+  background-position: -772px -131px;
   width: 56px;
   height: 38px;
 }
 .insurances .insurances-img .simplicity {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -623px -67px;
+  background-position: -1151px -67px;
   width: 62px;
   height: 54px;
 }
 .insurances .insurances-img .trust {
   background-image: url(../../static/img/spritesheet.png);
-  background-position: -580px -67px;
+  background-position: -1108px -67px;
   width: 41px;
   height: 60px;
 }

@@ -1,0 +1,36 @@
+.publish-items-categories
+  padding: 2.5*$indent 0
+  border-top: 1px solid $gray-lighter
+  li
+    padding-top: 2*$indent
+    text-align: center
+    font-weight: $fw-bold
+    @each $class, $variable, $variable-hover in ("do-it-yourself", $s-do-it-yourself, $s-do-it-yourself_hover), ("gardening", $s-gardening, $s-gardening_hover), ("high-tech", $s-high-tech, $s-high-tech_hover), ("reception", $s-reception, $s-reception_hover), ("vehicle", $s-vehicle, $s-vehicle_hover), ("fashion-and-accessories", $s-fashion-and-accessories, $s-fashion-and-accessories_hover), ("health-and-wellness", $s-health-and-wellness, $s-health-and-wellness_hover), ("other", $s-other, $s-other_hover)
+      &.#{$class} .sprite
+        +sprite($variable)
+        +centred-abs
+      &.#{$class} a:hover .sprite,
+      &.#{$class} a:focus .sprite
+        +sprite($variable-hover)
+  a
+    text-decoration: none
+    &:hover,
+    &:focus
+      outline: none
+      color: $brand-success
+      .border-round
+        background-color: $brand-success
+  h3
+    font-size: px(26)
+    font-weight: $fw-light
+    color: $gray-dark
+    margin: 0 0 .5em
+  .border-round
+    width: px(140)
+    height: px(140)
+    display: block
+    border: px(2) solid $brand-success
+    border-radius: 50%
+  .title
+    margin-top: $indent
+    display: block
