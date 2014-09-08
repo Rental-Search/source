@@ -1015,22 +1015,14 @@ from accounts import serializers, models, search
 from accounts.utils import viva_check_phone
 from eloue.api import viewsets, filters, mixins, permissions
 
-class UserPermission(permissions.TeamStaffDjangoModelPermissions):
-    def has_permission(self, request, view):
-        # allow access on POST to support new user sign-up
-        if request.method == 'POST':
-            return True
-        # pass to parent by default
-        return super(UserPermission, self).has_permission(request, view)
-
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(mixins.OwnerListMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
     model = models.Patron
     serializer_class = serializers.UserSerializer
-    permission_classes = (UserPermission,)
-    filter_backends = (filters.OwnerFilter, filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    permission_classes = (permissions.UserPermissions,)
+    filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'id'
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
@@ -1114,7 +1106,7 @@ class CreditCardViewSet(mixins.SetOwnerMixin, viewsets.NonEditableModelViewSet):
     owner_field = 'holder'
     filter_fields = ('holder',)
 
-class ProAgencyViewSet(viewsets.ModelViewSet):
+class ProAgencyViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows professional agencies to be viewed or edited.
     ProAgency lists all agencies of a pro renter.
@@ -1131,12 +1123,13 @@ class ProPackageViewSet(viewsets.NonDeletableModelViewSet):
     ProPackage is subscribed by pro renter to access to e-loue and publish their goods online.
     """
     model = models.ProPackage
+    permission_classes = (permissions.IsStaffOrReadOnly,)
     serializer_class = serializers.ProPackageSerializer
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('maximum_items', 'price', 'valid_from', 'valid_until')
     ordering_fields = ('name', 'maximum_items', 'price', 'valid_from', 'valid_until')
 
-class SubscriptionViewSet(viewsets.NonDeletableModelViewSet):
+class SubscriptionViewSet(mixins.SetOwnerMixin, viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows subscriptions to be viewed or edited.
     Subcriptions are the means through what pro renters subscribe for ProPackages.
@@ -1147,7 +1140,7 @@ class SubscriptionViewSet(viewsets.NonDeletableModelViewSet):
     filter_fields = ('patron', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type')
     ordering_fields = ('subscription_started', 'subscription_ended', 'payment_type')
 
-class BillingViewSet(viewsets.ModelViewSet):
+class BillingViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows billings to be viewed or edited.
     """
@@ -1163,6 +1156,7 @@ class BillingSubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
     """
     model = models.BillingSubscription
     serializer_class = serializers.BillingSubscriptionSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = 'billing__patron'
     filter_fields = ('subscription', 'billing', 'price')
     ordering_fields = ('price',)

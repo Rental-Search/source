@@ -1,5 +1,8 @@
-
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
+
+from .filters import OwnerFilter
+from .permissions import OwnerPermissions
 
 class LocationHeaderMixin(object):
     def get_success_headers(self, data):
@@ -12,8 +15,17 @@ class LocationHeaderMixin(object):
         obj = self.object
         return reverse('%s-detail' % obj._meta.model_name, args=(obj.pk,))
 
-class SetOwnerMixin(object):
+class OwnerListMixin(object):
+    owner_filter_class = OwnerFilter
+
+    def paginate_queryset(self, queryset, page_size=None):
+        if self.owner_filter_class not in self.get_filter_backends():
+            self.object_list = self.owner_filter_class().filter_queryset(self.request, queryset, self)
+        return super(OwnerListMixin, self).paginate_queryset(self.object_list, page_size=page_size)
+
+class SetOwnerMixin(OwnerListMixin):
     owner_field = 'patron'
+    permission_classes = (OwnerPermissions,)
 
     def get_serializer(self, *args, **kwargs):
         """

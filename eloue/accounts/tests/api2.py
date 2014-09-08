@@ -12,7 +12,7 @@ from rest_framework.test import APITestCase
 User = get_user_model()
 
 IMAGE_FILE = os.path.join(os.path.dirname(__file__), '..', 'fixtures', 'avatar.png')
-IMAGE_URL = 'http://liyaliao.weebly.com/uploads/1/5/2/9/15298970/6065967.jpg'
+IMAGE_URL = 'http://eloue.s3.amazonaws.com/static/images/default_avatar.png'
 
 def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
@@ -109,9 +109,9 @@ class UsersTest(APITestCase):
         # check we have access to own User record
         response = self.client.get(_location('patron-detail', pk=1))
         self.assertEquals(response.status_code, 200)
-        # check we do NOT have access to other User records
+        # check we also have read-only access to other User records
         response = self.client.get(_location('patron-detail', pk=2))
-        self.assertEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 200)
 
     def test_account_avatar_upload_multipart(self):
         self.assertFalse(User.objects.get(pk=1).avatar)
