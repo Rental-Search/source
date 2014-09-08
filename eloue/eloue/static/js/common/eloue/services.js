@@ -572,7 +572,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 } else {
                     dateFormat = fullFormat;
                 }
-                return this.formatDate(dateString, dateFormat);
+                return this.formatDate(sentDate, dateFormat);
             };
 
             utilsService.getIdFromUrl = function (url) {
@@ -1060,23 +1060,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             };
 
             return phoneNumbersService;
-        }]);
-
-        /**
-         * Service for managing professional agencies.
-         */
-        EloueCommon.factory("ProAgenciesService", ["ProAgencies", function (ProAgencies) {
-            var proAgenciesService = {};
-
-            proAgenciesService.getProAgencies = function () {
-                return ProAgencies.get();
-            };
-
-            proAgenciesService.updateProAgency = function (proAgency) {
-                return ProAgencies.update({id: proAgency.id}, proAgency);
-            };
-
-            return proAgenciesService;
         }]);
 
         /**
