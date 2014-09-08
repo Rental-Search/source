@@ -212,6 +212,10 @@ partials_urlpatterns = patterns('',
             template_name='dashboard/account/_address_detail.jade',
         ),
     ),
+    url(r'^dashboard/login.html$', TemplateView.as_view(
+            template_name='dashboard/jade/_login.jade',
+         ),
+    ),
 )
 
 dashboard_urlpatterns = patterns('',

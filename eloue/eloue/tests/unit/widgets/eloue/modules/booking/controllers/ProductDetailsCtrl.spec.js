@@ -5,32 +5,28 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
         var ProductDetailsCtrl,
             scope,
             route,
-            productServiceMock,
-            priceServiceMock,
-            messageServiceMock,
-            userServiceMock,
+            location,
+            productsLoadServiceMock,
+            messageThreadsServiceMock,
+            usersServiceMock,
+            authServiceMock,
             endpointsMock;
 
         beforeEach(module("EloueApp.BookingModule"));
 
         beforeEach(function () {
-            productServiceMock = {getProduct: function () {
+            productsLoadServiceMock = {getProduct: function () {
                 return {
                     then: function () {
                         return {result: {}}
                     }
                 }
             }, isAvailable: function () {
-                return {$promise: {then: function () {
+                return {then: function () {
                     return {result: {}}
-                }}}
+                }}
             }};
-            priceServiceMock = {getPricePerDay: function () {
-                return {$promise: {then: function () {
-                    return {result: {}}
-                }}}
-            }};
-            messageServiceMock = {getMessageThread: function () {
+            messageThreadsServiceMock = {getMessageThread: function () {
                 return {
                     then: function () {
                         return {result: {}}
@@ -43,20 +39,32 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                     }
                 }
             }};
-            userServiceMock = {getUser: function () {
-                return {$promise: {then: function () {
-                    return {result: {}}
-                }}}
-            }};
-            endpointsMock = {
-                api_url: "http://10.0.0.111:8000/api/2.0/"
+            usersServiceMock = {
+                get: function (userId) {
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                },
+                getMe: function() {
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                }
             };
+            authServiceMock = {
+                getCookie: function (cookieName) {
+
+                }
+            };
+                endpointsMock = {
+                    api_url: "http://10.0.0.111:8000/api/2.0/"
+                };
 
             module(function ($provide) {
-                $provide.value("ProductService", productServiceMock);
-                $provide.value("PriceService", priceServiceMock);
-                $provide.value("MessageService", messageServiceMock);
-                $provide.value("UserService", userServiceMock);
+                $provide.value("ProductsLoadService", productsLoadServiceMock);
+                $provide.value("MessageThreadsService", messageThreadsServiceMock);
+                $provide.value("UserService", usersServiceMock);
+                $provide.value("AuthService", authServiceMock);
                 $provide.value("Endpoints", endpointsMock);
             })
         });
@@ -80,27 +88,40 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                     }
                 }
             };
-            spyOn(productServiceMock, "getProduct").andCallThrough();
-            spyOn(productServiceMock, "isAvailable").andCallThrough();
-            spyOn(priceServiceMock, "getPricePerDay").andCallThrough();
-            spyOn(messageServiceMock, "getMessageThread").andCallThrough();
-            spyOn(messageServiceMock, "sendMessage").andCallThrough();
-            spyOn(userServiceMock, "getUser").andCallThrough();
-
-            ProductDetailsCtrl = $controller("ProductDetailsCtrl", { $scope: scope, $route: route, ProductService: productServiceMock,
-                PriceService: priceServiceMock, MessageService: messageServiceMock, UserService: userServiceMock, Endpoints: endpointsMock});
+            location = {};
+            spyOn(productsLoadServiceMock, "getProduct").andCallThrough();
+            spyOn(productsLoadServiceMock, "isAvailable").andCallThrough();
+            spyOn(messageThreadsServiceMock, "getMessageThread").andCallThrough();
+            spyOn(messageThreadsServiceMock, "sendMessage").andCallThrough();
+            spyOn(usersServiceMock, "get").andCallThrough();
+            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(authServiceMock, "getCookie").andCallThrough();
+            ProductDetailsCtrl = $controller("ProductDetailsCtrl", {
+                $scope: scope, $route: route, $location: location, ProductsLoadService: productsLoadServiceMock,
+                MessageThreadsService: messageThreadsServiceMock, UsersService: usersServiceMock, Endpoints: endpointsMock
+            });
         }));
 
         it("ProductDetailsCtrl should be not null", function () {
             expect(!!ProductDetailsCtrl).toBe(true);
         });
 
-        it("ProductDetailsCtrl updatePrice", function () {
+        it("ProductDetailsCtrl:updatePrice", function () {
             scope.updatePrice();
         });
 
-        it("ProductDetailsCtrl sendMessage", function () {
+        it("ProductDetailsCtrl:sendMessage", function () {
             scope.sendMessage();
+        });
+
+        it("ProductDetailsCtrl:loadMessageThread", function () {
+            scope.loadMessageThread();
+            expect(messageThreadsServiceMock.getMessageThread).toHaveBeenCalled();
+        });
+
+        it("ProductDetailsCtrl:loadProductDetails", function () {
+            scope.loadProductDetails();
+            expect(productsLoadServiceMock.getProduct).toHaveBeenCalled();
         });
     });
 });

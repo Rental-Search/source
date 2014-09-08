@@ -1,11 +1,10 @@
 define(["angular", "eloue/modules/booking/BookingModule",
-    "eloue/modules/booking/services/MessageService",
     "../../../../../common/eloue/values",
     "../../../../../common/eloue/services"
 ], function (angular) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "$location", "ProductsLoadService", "MessageService", "UsersService", "AuthService", "Endpoints", function ($scope, $route, $location, ProductsLoadService, MessageService, UsersService, AuthService, Endpoints) {
+    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "$location", "ProductsLoadService", "MessageThreadsService", "UsersService", "AuthService", "Endpoints", function ($scope, $route, $location, ProductsLoadService, MessageThreadsService, UsersService, AuthService, Endpoints) {
 
         // Read authorization token
         $scope.currentUserToken = AuthService.getCookie("user_token");
@@ -98,7 +97,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 message.thread = $scope.productRelatedMessages[$scope.productRelatedMessages.length - 1].thread;
             }
 
-            MessageService.sendMessage(message, $scope.productId).then(function (result) {
+            MessageThreadsService.sendMessage(message, $scope.productId).then(function (result) {
                 $scope.productRelatedMessages.push(result);
                 $scope.newMessage = {};
             });
@@ -158,7 +157,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         });
 
         $scope.loadMessageThread = function () {
-            MessageService.getMessageThread($scope.productId).then(function (result) {
+            MessageThreadsService.getMessageThread($scope.productId).then(function (result) {
                 angular.forEach(result, function (value, key) {
                     var senderId = $scope.getIdFromUrl(value.sender);
                     UsersService.get(senderId).$promise.then(function (result) {
