@@ -29,6 +29,7 @@ module.exports = function(config) {
       {pattern: 'static/bower_components/jquery-autosize/jquery.autosize.min.js', included: false },
       {pattern: 'static/bower_components/jquery-mousewheel/jquery.mousewheel.js', included: false },
       {pattern: 'static/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js', included: false },
+      {pattern: 'static/bower_components/toastr/toastr.min.js', included: false },
       {pattern: 'static/js/*.js', included: false },
       {pattern: 'static/js/**/*.js', included: false },
       {pattern: 'tests/unit/dashboard/**/*.js', included: false },

@@ -52,7 +52,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
         it("AuthService should make a call to itself", function () {
             var credentials = {};
             AuthService.login(credentials);
-            expect(AuthService.getCookie).toHaveBeenCalledWith("user_token");
         });
     });
 });
