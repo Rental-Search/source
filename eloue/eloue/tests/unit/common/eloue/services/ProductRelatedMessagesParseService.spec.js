@@ -19,5 +19,11 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("ProductRelatedMessagesParseService should be not null", function () {
             expect(!!ProductRelatedMessagesParseService).toBe(true);
         });
+
+        it("ProductRelatedMessagesParseService:parseMessage", function () {
+            var sender = "Author";
+            var result = ProductRelatedMessagesParseService.parseMessage({}, sender);
+            expect(result).toEqual({sender: sender});
+        });
     });
 });
