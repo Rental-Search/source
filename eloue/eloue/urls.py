@@ -265,6 +265,11 @@ urlpatterns = patterns('',
         ),
         name='new_ui_product_list',
     ),
+    url(r'^product_detail/', ExtraContextTemplateView.as_view(
+            template_name='products/product_detail.jade',
+        ),
+        name='new_ui_product_detail',
+    ),
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='new_ui_dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_partials')),
 

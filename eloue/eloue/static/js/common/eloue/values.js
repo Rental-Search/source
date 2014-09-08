@@ -6,8 +6,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
      * Web service endpoints.
      */
     EloueCommon.constant("Endpoints", {
-        oauth_url: "http://10.0.5.47:8200/oauth2/",
-        api_url: "http://10.0.5.47:8200/api/2.0/"
+        oauth_url: "/oauth2/",
+        api_url: "/api/2.0/"
     });
 
     EloueCommon.constant("ServiceErrors", {

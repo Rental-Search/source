@@ -2,6 +2,8 @@ extends ../../base
 -load compressed
 
 block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "homepage_styles" %}
   {% compressed_css "dashboard_styles" %}
 
 block append scripts
@@ -13,7 +15,7 @@ block append content-body
     header.header-site
       include ../../jade/_header_site
     article.dashboard
-      nav
+      nav(ng-show="!!currentUser")
         ul.ng-hide(ng-show="true", ng-init="dashboard_tabs=[{title: 'Dashboard', icon: 'home', sref: 'dashboard', badge: 0}, {title: 'Messages', icon: 'envelope-o', sref: 'messages', badge: unreadMessageThreadsCount}, {title: 'Booking', icon: 'table', sref: 'bookings', badge: newBookingRequestsCount}, {title: 'Items', icon: 'th-list', sref: 'items', badge: 0}, {title: 'Account', icon: 'user', sref: 'account', badge: 0}]")
           li(ng-repeat="tab in dashboard_tabs")
             {% verbatim %}
@@ -23,3 +25,7 @@ block append content-body
               | {{tab.title}}
             {% endverbatim %}
       .content-view(ui-view)
+
+#ngModals
+    eloue-login-form
+    eloue-registration-form

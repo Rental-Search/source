@@ -298,7 +298,6 @@ PIPELINE_CSS = {
     },
     'dashboard_styles': {
         'source_filenames': (
-            'sass/homepage_styles.sass',
             'dashboard/sass/base.sass',
             'dashboard/sass/styles.sass',
         ),
