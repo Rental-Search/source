@@ -183,6 +183,8 @@ a, a:hover
 
 .text-success
   color: $brand-success !important
+.text-gray
+  color: $gray-medium !important
 
 .badge.price
   background-color: $brand-primary
@@ -240,3 +242,28 @@ a, a:hover
     padding: .8em .5em
     +clearfix()
 
+@each $indent, $size in ($indent-md, "md"), ($indent-lg, "lg"), ($indent-sm, "sm"), ($indent-xs, "xs") 
+  .indent-#{$size}
+    margin: $indent !important
+  .indent-t-#{$size}
+    margin-top: $indent !important
+  .indent-r-#{$size}
+    margin-right: $indent !important
+  .indent-b-#{$size}
+    margin-bottom: $indent !important
+  .indent-l-#{$size}
+    margin-left: $indent !important
+
+ul.not-ordered
+  padding-left: $indent-sm
+  > li
+    margin: $indent-sm 0
+    padding-left: $indent-sm
+    position: relative
+    list-style-type: none
+    &:before
+      position: absolute
+      content: "."
+      left: 0
+      line-height: 1
+      top: 0

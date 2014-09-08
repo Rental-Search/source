@@ -28,7 +28,7 @@ ul.space-between > li {
 }
 ul.space-between > li.spacer, ul.space-between > li.divider {
   overflow: hidden;
-  width: auto;
+  width: 1%;
   padding: 0;
 }
 ul.space-between > li.spacer:first-child, ul.space-between > li.divider:first-child {
@@ -434,15 +434,23 @@ input#sourse:checked + #sourse-img {
   margin: 0 0 0.5em;
 }
 .publish-items-categories .border-round {
+  margin: 0 auto;
   width: 10em;
   height: 10em;
   display: block;
   border: 0.14286em solid #24bd77;
   border-radius: 50%;
+  position: relative;
 }
 .publish-items-categories .title {
   margin-top: 1.42857em;
   display: block;
+}
+
+.modal .text-light {
+  font-weight: 300;
+  font-size: 1.21429em;
+  color: #777777;
 }
 
 .footer-links {
@@ -1160,7 +1168,7 @@ input#sourse:checked + #sourse-img {
   overflow: hidden;
   padding: 0;
 }
-.modal .large .form-wrapper button {
+.modal .large .form-wrapper .indent-t {
   margin-top: 1.5em;
 }
 .modal .large .bank-information {
@@ -1177,11 +1185,4 @@ input#sourse:checked + #sourse-img {
   position: absolute;
   left: 12px;
   top: 0;
-}
-
-section h3 {
-  font-size: 1.85714em;
-  font-weight: 300;
-  color: #2c2c2c;
-  margin: 0 0 0.5em;
 }

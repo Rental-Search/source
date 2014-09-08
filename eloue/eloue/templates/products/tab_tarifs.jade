@@ -1,0 +1,52 @@
+extends _base_product_detail
+block tab
+  -var isKM = true
+  if isKM
+    .block-tab
+      h3.indent-t-md.indent-b-xs Tarif
+      .row
+        .col-xs-6
+          table.calendar.text-center
+            thead
+              tr
+                td Durée
+                td Prix
+            tbody
+              tr
+                td 1 jours*
+                td 2.00 &euro;
+          .indent-b-md
+          table.calendar.text-center
+            tbody: tr
+              td Kilomêtres inclus par jour
+              td 250 Km
+          .indent-b-md
+          table.calendar.text-center
+            tbody: tr
+              td Caution
+              td 250 &euro;
+        .col-sm-6
+          p.indent-sm-b Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.
+          p.indent-sm-b Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.
+  else
+    .block-tab
+      h3.indent-t-md.indent-b-xs Grille tarifaire
+      .row
+        .col-xs-6
+          table.calendar.text-center
+            thead
+              tr
+                td Durée
+                td Prix
+            tbody: each item in product_detail_tarifs
+              tr
+                td #{item.duration}
+                td #{item.price} &euro;
+          .indent-b-md
+          table.calendar.text-center
+            tbody: tr
+              td Caution
+              td 250 &euro;
+        .col-sm-6
+          p.indent-sm-b Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.
+          p.indent-sm-b Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.

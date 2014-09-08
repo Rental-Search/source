@@ -9,9 +9,9 @@ block append styles
 
 block append scripts
   //- script(src="#{STATIC_URL}js/bootstrap/dropdown.js")
-  script(src="#{STATIC_URL}js/scripts.js")
 
 block append content-body
+  include ../jade/_pop_up_publish_item
   .container-flex
     header.header-site
       include ../jade/_header_site

@@ -55,3 +55,15 @@
 @import "bootstrap/responsive-utilities";
 
 @import "helped-classes";
+@import "tables";
+
+select{
+
+  height: 0;
+  width: 0;
+  overflow: hidden;
+  position: fixed;
+  left: 100%;
+  top: 100%;
+  visibility: hidden;
+}

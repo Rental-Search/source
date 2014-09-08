@@ -123,13 +123,27 @@
                     <input type="checkbox" checked id="remember-me"><span class="flaticon stroke checkmark"></span>
                   </label>Se souvenir de moi
                 </div>
-                <div class="forgot-password pull-right"><a href="#">Mot de passe oublié</a></div>
+                <div class="forgot-password pull-right"><a href="#" data-toggle="modal" data-target="#reset-password" data-dismiss="modal">Mot de passe oublié</a></div>
               </div>
               <div class="form-group">
                 <button type="submit" class="btn bg-success">Connexion</button>
               </div>
             </form><span class="or"></span>
             <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="reset-password" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Réinitialisation du mot de passe</h4>
+          </div>
+          <div class="modal-body">
+            <h2>Lien envoyé avec succés</h2>
+            <p class="indent-r-md indent-l-md">Nous vous avons envoyé par courriel les instructions pour changer de mot de passe à l'adresse que vous avez indiquée. Vous devreuez le recevoir rapidement.</p>
           </div>
         </div>
       </div>
@@ -161,7 +175,7 @@
               </form>
             </div>
             <div class="table-cell">
-              <button type="button" class="btn bg-success btn-advertise">Déposez une annonce</button>
+              <button type="button" data-toggle="modal" data-target="#pop-up-publish-item" class="btn bg-success btn-advertise">Déposez une annonce</button>
             </div>
           </section>
         </div>
