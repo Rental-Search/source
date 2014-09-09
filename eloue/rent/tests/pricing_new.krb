@@ -1,0 +1,74 @@
+month_package
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days >= calendar.monthrange($started_at.year, $started_at.month)[1]
+        units.unit(month, $unit)
+        prices.price($unit, $amount)
+
+fifteen_days_package
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days >= 15
+        units.unit(fifteen_days, $unit)
+        prices.price($unit, $amount)
+
+two_weeks_package
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days >= 14
+        units.unit(two_weeks, $unit)
+        prices.price($unit, $amount)
+
+week_package
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days >= 7
+        units.unit(week, $unit)
+        prices.price($unit, $amount)
+
+week_end_package
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days < 4
+        check $delta.days >= 2
+        check (calendar.weekday($started_at.year, $started_at.month, $started_at.day) >= 4 and
+               calendar.weekday($ended_at.year, $ended_at.month, $ended_at.day) in (0, 6)
+               ) == True
+        units.unit(week_end, $unit)
+        prices.price($unit, $amount)
+
+three_days_package
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days >= 3
+        units.unit(three_days, $unit)
+        prices.price($unit, $amount)
+
+day_package
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days >= 1
+        units.unit(day, $unit)
+        prices.price($unit, $amount)
+
+hour_package
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days < 1
+        check $delta.seconds > 0
+        units.unit(hour, $unit)
+        prices.price($unit, $amount)
+
+day_package_for_lt_day
+    use pricing($unit, $started_at, $ended_at, $delta)
+    when
+        check $delta.days < 1
+        check $delta.seconds > 0
+        units.unit(day, $unit)
+        prices.price($unit, $amount)
+        units.unit(hour, $unit_hour)
+        notany
+            prices.price($unit_hour, $amount)
+
+bc_extras
+    import calendar

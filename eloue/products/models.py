@@ -3,8 +3,8 @@ import uuid
 from decimal import Decimal as D
 
 from datetime import datetime, timedelta, date
+from calendar import monthrange, weekday
 
-import calendar
 import operator
 import itertools
 
@@ -35,7 +35,7 @@ from products.fields import SimpleDateField
 from products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
 from products.signals import (post_save_answer, post_save_product, 
     post_save_curiosity, post_save_to_update_product, post_save_message)
-from products.choices import UNIT, UNITS, CURRENCY, STATUS, PAYMENT_TYPE, SEAT_NUMBER, DOOR_NUMBER, CONSUMPTION, FUEL, TRANSMISSION, MILEAGE, CAPACITY, TAX_HORSEPOWER, PRIVATE_LIFE
+from products.choices import UNIT, CURRENCY, STATUS, PAYMENT_TYPE, SEAT_NUMBER, DOOR_NUMBER, CONSUMPTION, FUEL, TRANSMISSION, MILEAGE, CAPACITY, TAX_HORSEPOWER, PRIVATE_LIFE
 from rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
 
 from eloue.geocoder import GoogleGeocoder
@@ -164,7 +164,7 @@ class Product(models.Model):
 
         year = int(year)
         month = int(month)
-        _, days_num = calendar.monthrange(year, month)
+        _, days_num = monthrange(year, month)
 
         started_at = datetime(year, month, 1, 0, 0)
         ended_at = started_at + timedelta(days=days_num)
@@ -290,7 +290,64 @@ class Product(models.Model):
     @property
     def is_top(self):
         return bool(self.producttopposition_set.filter(ended_at__isnull=True)[:1])
-    
+
+    def calculate_price(self, started_at, ended_at):
+        prices = {price.unit: price.day_amount for price in self.prices.all()}
+        if not prices:
+            return None, None
+
+        amount, unit = D(0), prove_price_unit(prices, started_at, ended_at)
+        package = UNIT.package[unit]
+        delta = ended_at - started_at
+
+        for price in self.prices.filter(unit=unit, started_at__isnull=False, ended_at__isnull=False):
+            price_delta = price.delta(started_at, ended_at)
+            delta -= price_delta
+            amount += package(price.day_amount, price_delta, False)
+
+        if (delta.days > 0 or delta.seconds > 0):
+            price = self.prices.get(unit=unit, started_at__isnull=True, ended_at__isnull=True)
+            null_delta = timedelta(days=0)
+            amount += package(price.day_amount, null_delta if null_delta > delta else delta)
+
+        return unit, amount.quantize(D(".00"))
+
+def prove_price_unit(prices, started_at, ended_at):
+    delta = ended_at - started_at
+    delta_days = delta.days
+
+    if delta_days < 4 and delta_days >= 2 and \
+        weekday(started_at.year, started_at.month, started_at.day) >= 4 and \
+        weekday(ended_at.year, ended_at.month, ended_at.day) in (0, 6) and \
+        UNIT.WEEK_END in prices:
+        price_package = UNIT.WEEK_END
+
+    elif delta_days >= monthrange(started_at.year, started_at.month)[1] and UNIT.MONTH in prices:
+        price_package = UNIT.MONTH
+
+    elif delta_days >= 15 and UNIT.FIFTEEN_DAYS in prices:
+        price_package = UNIT.FIFTEEN_DAYS
+
+    elif delta_days >= 14 and UNIT.TWO_WEEKS in prices:
+        price_package = UNIT.TWO_WEEKS
+
+    elif delta_days >= 7 and UNIT.WEEK in prices:
+        price_package = UNIT.WEEK
+
+    elif delta_days >= 3 and UNIT.THREE_DAYS in prices:
+        price_package = UNIT.THREE_DAYS
+
+    elif delta_days < 1 and delta.seconds > 0 and UNIT.HOUR in prices:
+        price_package = UNIT.HOUR
+
+    elif UNIT.DAY in prices:
+        price_package = UNIT.DAY
+
+    else:
+        raise Exception('No price package could be proved.')
+
+    return price_package
+
 
 class CarProduct(Product):
 
@@ -632,7 +689,7 @@ class Price(models.Model):
     
     @property
     def day_amount(self):
-        return UNITS[self.unit](self.local_currency_amount)
+        return UNIT.units[self.unit](self.local_currency_amount)
     
     def __unicode__(self):
         return smart_unicode(currency(self.local_currency_amount))
@@ -913,7 +970,7 @@ class ProductHighlight(models.Model):
     def price(self, _from=datetime.min, to=datetime.max):
         started_at = _from if (_from > self.started_at) else self.started_at
         ended_at = to if (not self.ended_at or to < self.ended_at) else self.ended_at
-        days_num = calendar.monthrange(started_at.year, started_at.month)[1]
+        days_num = monthrange(started_at.year, started_at.month)[1]
         days_sec = days_num * 24 * 60 * 60
 
         td = (ended_at - started_at)
@@ -929,7 +986,7 @@ class ProductTopPosition(models.Model):
     def price(self, _from=datetime.min, to=datetime.max):
         started_at = _from if (_from > self.started_at) else self.started_at
         ended_at = to if (not self.ended_at or to < self.ended_at) else self.ended_at
-        days_num = calendar.monthrange(started_at.year, started_at.month)[1]
+        days_num = monthrange(started_at.year, started_at.month)[1]
         days_sec = days_num * 24 * 60 * 60
 
         td = (ended_at - started_at)

@@ -1,32 +1,60 @@
 # -*- coding: utf-8 -*-
+from decimal import Decimal as D
+
 from django.utils.translation import ugettext as _
 
+from products.utils import UnitEnum
 from eloue.utils import Enum
 
 
-UNIT = Enum([
-    (0, 'HOUR', _(u'heure'), _(u'1 heure')),
-    (1, 'DAY', _(u'jour'), _(u'1 jour')),
-    (2, 'WEEK_END', _(u'week-end'), _(u'1 week-end')),
-    (3, 'WEEK', _(u'semaine'), _(u'1 semaine')),
-    (4, 'TWO_WEEKS', _(u'deux semaines'), _(u'2 semaines')),
-    (5, 'MONTH', _(u'mois'), _(u'1 mois')),
-    (6, 'THREE_DAYS', _(u'3jours'), _(u'3 jours')),
-#    (7, 'FIFTEEN_DAYS', _(u'15jours'), _(u'15 jours')),
-#    (8, 'SEVEN_DAYS', _(u'7jours'), _(u'7 jours')),
-#    (9, 'NIGHT', _(u'nuit'), _(u'1 nuit')),
-])
+def _n_days(amount, delta, rounding=True):
+    return amount * (delta.days + delta.seconds / D('86400'))
 
-UNITS = {
-    0: lambda amount: amount,
-    1: lambda amount: amount,
-    2: lambda amount: amount,
-    3: lambda amount: amount / 7,
-    4: lambda amount: amount / 14,
-    5: lambda amount: amount / 30,
-    6: lambda amount: amount / 3,
-#    7: lambda amount: amount / 15,
-}
+def _noop(value, *args, **kwargs):
+    return value
+
+UNIT = UnitEnum([
+    (0, 'HOUR', _(u'heure'),
+     _(u'1 heure'),
+     _noop,
+     lambda amount, delta, rounding=True: amount * (delta.seconds / D('3600')),
+     ),
+    (1, 'DAY', _(u'jour'),
+     _(u'1 jour'),
+     _noop,
+     lambda amount, delta, rounding=True: amount * (max(delta.days + delta.seconds / D('86400'), 1) if rounding else delta.days + delta.seconds / D('86400')),
+     ),
+    (2, 'WEEK_END', _(u'week-end'),
+     _(u'1 week-end'),
+     _noop,
+     _noop,
+     ),
+    (3, 'WEEK', _(u'semaine'),
+     _(u'1 semaine'),
+     lambda amount: amount / 7,
+     _n_days,
+     ),
+    (4, 'TWO_WEEKS', _(u'deux semaines'),
+     _(u'2 semaines'),
+     lambda amount: amount / 14,
+     _n_days,
+     ),
+    (5, 'MONTH', _(u'mois'),
+     _(u'1 mois'),
+     lambda amount: amount / 30,
+     _n_days,
+     ),
+    (6, 'THREE_DAYS', _(u'3jours'),
+     _(u'3 jours'),
+     lambda amount: amount / 3,
+     _n_days,
+     ),
+    (7, 'FIFTEEN_DAYS', _(u'15jours'),
+     _(u'15 jours'),
+     lambda amount: amount / 15,
+     _n_days,
+     ),
+])
 
 CURRENCY = Enum([
     ('EUR', 'EUR', _(u'€')),

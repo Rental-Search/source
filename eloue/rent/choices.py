@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-from decimal import Decimal as D
-
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.utils import Enum
-
-from products.choices import UNIT
 
 
 BOOKING_STATE = Enum([
@@ -27,35 +23,6 @@ BOOKING_STATE = Enum([
     ('professional', 'PROFESSIONAL', _(u"Demande pro")),
     ('professional_saw', 'PROFESSIONAL_SAW', _(u'Lu')),
 ])
-
-PACKAGES_UNIT = {
-    'hour': UNIT.HOUR,
-    'week_end': UNIT.WEEK_END,
-    'day': UNIT.DAY,
-    'week': UNIT.WEEK,
-    'two_weeks': UNIT.TWO_WEEKS,
-    'month': UNIT.MONTH,
-    'three_days': UNIT.THREE_DAYS,
-#    'seven_days': UNIT.SEVEN_DAYS,
-#    'fifteen_days': UNIT.FIFTEEN_DAYS,
-#    'night': UNIT.NIGHT,
-}
-
-def _n_days(amount, delta, rounding=True):
-    return amount * (delta.days + delta.seconds / D('86400'))
-
-PACKAGES = {
-    UNIT.HOUR: lambda amount, delta, rounding=True: amount * (delta.seconds / D('3600')),
-    UNIT.WEEK_END: lambda amount, delta, rounding=True: amount,
-    UNIT.DAY: lambda amount, delta, rounding=True: amount * (max(delta.days + delta.seconds / D('86400'), 1) if rounding else delta.days + delta.seconds / D('86400')),
-    UNIT.WEEK: _n_days,
-    UNIT.TWO_WEEKS: _n_days,
-    UNIT.MONTH: _n_days,
-    UNIT.THREE_DAYS: _n_days,
-#    UNIT.SEVEN_DAYS: _n_days,
-#    UNIT.FIFTEEN_DAYS: _n_days,
-#    UNIT.NIGHT: lambda amount, delta, round=True: amount,
-}
 
 TIME_CHOICE = (
     ('00:00:00', '00h'),

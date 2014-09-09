@@ -12,7 +12,7 @@ from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
-from django.utils import translation
+from django.utils import translation, six
 from django.forms.util import ErrorList
 
 try:
@@ -106,6 +106,7 @@ def convert_to_xpf(value):
     amount = value / D(settings.XPF_EXCHANGE_RATE)
     return amount.quantize(D("0.00"), rounding=ROUND_UP)
 
+
 class Enum(object):
     """
     A small helper class for more readable enumerations,
@@ -128,20 +129,19 @@ class Enum(object):
     """
     def __init__(self, enum_list):
         self.enum_list = [(item[0], item[2]) for item in enum_list]
-        self.enum_list_prefixed = [(item[0], item[3] if len(item) > 3 else item[2]) for item in enum_list]
-        self.enum_dict = dict([(item[1], item[0]) for item in enum_list])
+        self.enum_dict = {item[1]: item[0] for item in enum_list}
 
-    def __contains__(self, v):
-        return (v in self.enum_list)
+    def __contains__(self, value):
+        return value in self.enum_list
 
     def __len__(self):
         return len(self.enum_list)
 
-    def __getitem__(self, v):
-        if isinstance(v, basestring):
-            return self.enum_dict[v]
-        elif isinstance(v, int):
-            return self.enum_list[v]
+    def __getitem__(self, value):
+        if isinstance(value, basestring):
+            return self.enum_dict[value]
+        elif isinstance(value, int):
+            return self.enum_list[value]
 
     def __getattr__(self, name):
         return self.enum_dict[name]
@@ -150,22 +150,13 @@ class Enum(object):
         return self.enum_list.__iter__()
 
     def __deepcopy__(self, memo={}):
-        copy = Enum([])
+        copy = self.__class__([])
         copy.enum_list = deepcopy(self.enum_list, memo=memo)
-        copy.enum_list_prefixed = deepcopy(self.enum_list_prefixed, memo=memo)
         copy.enum_dict = deepcopy(self.enum_dict, memo=memo)
         return copy
 
     def keys(self):
-        return self.enum_dict.keys()
+        return six.iterkeys(self.enum_dict)
 
     def values(self):
-        return self.enum_dict.values()
-
-    @property
-    def prefixed(self):
-        return dict(self.enum_list_prefixed)
-
-    @property
-    def reverted(self):
-        return dict(zip(self.enum_dict.itervalues(), self.enum_dict.iterkeys()))
+        return six.itervalues(self.enum_dict)
