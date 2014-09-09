@@ -1,40 +1,43 @@
 .modal.fade#loginModal(tabindex="-1", role="dialog", aria-hidden="true")
-	.modal-dialog
-		.modal-content
-			.modal-header
-				button(type="button", data-dismiss="modal").close
-					span(aria-hidden="true")&times;
-					span.sr-only Close
-				h4.modal-title Connexion
-			.modal-body
-				h3 Connectez-vous à votre compte
-				.form-group: a(href="#").btn.bg-info
-					i.icon-facebook
-					| Connexion via Facebook
-				.form-group: a(href="#").btn.bg-danger
-					i.icon-google-plus
-					| Connexion via Google
-				p.info
-					| Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) 
-					br
-					| Vos données personnelles ne seront jamais cédées ou vendues.
-				span.or
-				form(name="loginForm", ng-submit="login()", novalidate)
-					-var login_form_fields = [["email", "E-mail", "username"], ["password", "Mot de passe", "password"]]
-					each type, placeholder, name in login_form_fields
-						.form-group
-							input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", data-ng-model="credentials.#{name}", required).form-control
-							span.errorMsg(data-ng-show="loginForm.#{name}.$error.required && loginForm.#{name}.$dirty") Required field
-					.form-group.clearfix
-						.checkbox.pull-left
-							label(for="remember-me")
-								input(type="checkbox", checked)#remember-me
-								i.icon-ok
-							| Se souvenir de moi
-						.forgot-password.pull-right
-							a(href="#") Mot de passe oublié
-					.form-group
-						button(type="submit", data-ng-disabled="loginForm.$invalid || !loginForm.$dirty").btn.bg-success Connexion
-				span.or
-				h4 Vous êtes déjà membre e-loue ?
-				a(href="#", data-toggle="modal", data-target="#registrationModal", data-dismiss="modal").modal-fotter-link.connexion Inscription
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button(type="button", data-dismiss="modal").close
+                    span(aria-hidden="true")&times;
+                    span.sr-only Close
+                h4.modal-title Connexion
+            .modal-body
+                h3 Connectez-vous à votre compte
+                .form-group: a(href="#").btn.bg-info
+                    i.icon-facebook
+                    | Connexion via Facebook
+                .form-group: a(href="#").btn.bg-danger
+                    i.icon-google-plus
+                    | Connexion via Google
+                p.info
+                    | Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez)
+                    br
+                    | Vos données personnelles ne seront jamais cédées ou vendues.
+                .alert.alert-danger(ng-show="!!loginError")
+                    button(type="button", data-dismiss="alert", class="close")
+                    | {% verbatim %} {{loginError}} {% endverbatim %}
+                span.or
+                form(name="loginForm", ng-submit="login()", novalidate)
+                    -var login_form_fields = [["email", "E-mail", "username"], ["password", "Mot de passe", "password"]]
+                    each type, placeholder, name in login_form_fields
+                        .form-group
+                            input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", data-ng-model="credentials.#{name}", required).form-control
+                            span.errorMsg(data-ng-show="loginForm.#{name}.$error.required && loginForm.#{name}.$dirty") Required field
+                    .form-group.clearfix
+                        .checkbox.pull-left
+                            label(for="remember-me")
+                                input(type="checkbox", checked)#remember-me
+                                i.icon-ok
+                            | Se souvenir de moi
+                        .forgot-password.pull-right
+                            a(href="#") Mot de passe oublié
+                    .form-group
+                        button(type="submit", data-ng-disabled="loginForm.$invalid || !loginForm.$dirty").btn.bg-success Connexion
+                span.or
+                h4 Vous êtes déjà membre e-loue ?
+                a(href="#", data-toggle="modal", data-target="#registrationModal", data-dismiss="modal").modal-fotter-link.connexion Inscription
