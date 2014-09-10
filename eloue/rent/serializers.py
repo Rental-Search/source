@@ -17,10 +17,34 @@ class BookingSerializer(ModelSerializer):
             'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at',
         )
         read_only_fields = (
-            'state', 'deposit_amount', 'state', 'insurance_amount', 'total_amount',
-            'currency', 'owner', 'contract_id', 'created_at', 'canceled_at',
+            'state', 'deposit_amount', 'insurance_amount', 'total_amount',
+            'currency', 'contract_id', 'created_at', 'canceled_at',
+            'owner', 'borrower', 'product'
         )
         immutable_fields = ('started_at', 'ended_at', 'owner', 'borrower', 'product')
+
+class BookingStateSerializer(ModelSerializer):
+    action = fields.CharField(write_only=True, max_length=32)
+
+    default_error_messages = {
+        'invalid_action': _('Action %(action)s is not available for this state: %(state)s'),
+    }
+
+    def validate_action(self, attrs, source):
+        action = attrs.pop(source)
+        transitions = self.object.get_available_user_state_transitions(self.context['request'].user)
+        for transition in transitions:
+            if action == transition.method.__name__:
+                self.object._fsm_transition_method = transition.method
+                return attrs
+        raise ValidationError(self.error_messages['invalid_action'] % dict(action=action, state=self.object.state))
+
+    def save_object(self, obj, **kwargs):
+        obj._fsm_transition_method()
+
+    class Meta:
+        model = models.Booking
+        fields = ('action',)
 
 class CommentAuthorField(HyperlinkedRelatedField):
     default_error_messages = {

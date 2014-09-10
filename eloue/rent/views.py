@@ -354,6 +354,9 @@ def booking_incident(request, booking_id):
 
 # REST API 2.0
 
+from rest_framework import status
+from rest_framework.decorators import link, action
+from rest_framework.response import Response
 import django_filters
 
 from rent import serializers, models
@@ -373,12 +376,28 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
+    permission_classes = tuple()
     queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = ('owner', 'borrower')
     filter_class = BookingFilterSet
     ordering_fields = ('started_at', 'ended_at', 'state', 'total_amount', 'created_at', 'canceled_at')
+
+    @link()
+    def available_transitions(self, request, *args, **kwargs):
+        obj = self.get_object()
+        transitions = obj.get_available_user_state_transitions(request.user)
+        res = {transition.method.__name__: transition.target for transition in transitions}
+        return Response(dict(transitions=res))
+
+    @action(methods=['put'])
+    def perform_transition(self, request, *args, **kwargs):
+        serializer = serializers.BookingStateSerializer(instance=self.get_object(), data=request.DATA, context=dict(request=request))
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'detail': _(u"Transition performed")})
+        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class CommentFilterSet(filters.FilterSet):
     rate = django_filters.ChoiceFilter(name='note', choices=serializers.CommentSerializer.base_fields['rate'].choices)
