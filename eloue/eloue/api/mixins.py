@@ -2,7 +2,7 @@
 from django.core.urlresolvers import reverse
 
 from .filters import OwnerFilter
-from .permissions import OwnerPermissions
+from .permissions import IsOwnerOrReadOnly
 
 class LocationHeaderMixin(object):
     def get_success_headers(self, data):
@@ -25,7 +25,7 @@ class OwnerListMixin(object):
 
 class SetOwnerMixin(OwnerListMixin):
     owner_field = 'patron'
-    permission_classes = (OwnerPermissions,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def get_serializer(self, *args, **kwargs):
         """
