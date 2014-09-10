@@ -21,8 +21,7 @@ require.config({
         "placeholders-jquery": "../../bower_components/placeholders/lib/adapters/placeholders.jquery",
         "angular-chosen-localytics": "../../bower_components/angular-chosen-localytics/chosen",
         "toastr": "../../bower_components/toastr/toastr.min",
-        "formmapper": "../formmapper",
-        "vars": "../vars"
+        "formmapper": "../formmapper"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -65,7 +64,6 @@ require([
     "angular-chosen-localytics",
     "formmapper",
     "toastr",
-    "vars",
     "eloue/route"
 ], function ($, _, angular) {
     "use strict";

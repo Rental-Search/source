@@ -33,7 +33,6 @@ requirejs.config({
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../js/chosen.jquery.min",
         "toastr": "../../bower_components/toastr/toastr.min",
-        "vars": "../vars",
         "bootstrap_modal": "../bootstrap/modal"
     },
 

@@ -10,6 +10,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         api_url: "/api/2.0/"
     });
 
+    EloueCommon.constant("Path", {
+        templatePrefix: "/" // FIXME: should use /templates/ for local files, and / if HTTP scheme is HTTP/HTTPS
+    });
+
     EloueCommon.constant("ServiceErrors", {
         "invalid_grant": "Bad credentials provided"
     });
