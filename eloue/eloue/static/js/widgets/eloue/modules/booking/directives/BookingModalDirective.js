@@ -4,10 +4,10 @@ define(["angular", "eloue/modules/booking/BookingModule", "eloue/modules/booking
     /**
      * Directive to display modal window with booking details.
      */
-    angular.module("EloueApp.BookingModule").directive("eloueBookingModal", ["$window", function ($window) {
+    angular.module("EloueApp.BookingModule").directive("eloueBookingModal", ["Path", function (Path) {
         return {
             restrict: "E",
-            templateUrl: $window.templatePrefix + "partials/product_details/booking-modal.html",
+            templateUrl: Path.templatePrefix + "partials/product_details/booking-modal.html",
             scope: {},
             controller: "ProductDetailsCtrl"
         };

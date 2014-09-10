@@ -20,8 +20,7 @@ require.config({
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../bower_components/chosen/chosen.jquery.min",
-        "toastr": "../../bower_components/toastr/toastr.min",
-        "vars": "../vars"
+        "toastr": "../../bower_components/toastr/toastr.min"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -54,13 +53,12 @@ require([
     "lodash",
     "angular",
     "bootstrap",
-    "vars",
     "datejs",
     "bootstrap-datepicker",
     "toastr",
     "eloue/route",
     "eloue/i18n"
-], function ($, _, angular, bootstrap, vars, route) {
+], function ($, _, angular, bootstrap, route) {
     "use strict";
     $(function () {
         angular.bootstrap(document, ["EloueDashboardApp"]);

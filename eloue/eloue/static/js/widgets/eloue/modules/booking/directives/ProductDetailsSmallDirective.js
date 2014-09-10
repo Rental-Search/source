@@ -4,10 +4,10 @@ define(["angular", "eloue/modules/booking/BookingModule", "eloue/modules/booking
     /**
      * Directive to display modal window to call the owner.
      */
-    angular.module("EloueApp.BookingModule").directive("eloueProductDetailsSmall", ["$window", function ($window) {
+    angular.module("EloueApp.BookingModule").directive("eloueProductDetailsSmall", ["Path", function (Path) {
         return {
             restrict: "E",
-            templateUrl: $window.templatePrefix + "partials/product_details/product-details-small.html",
+            templateUrl: Path.templatePrefix + "partials/product_details/product-details-small.html",
             scope: {},
             controller: "ProductDetailsCtrl"
         };

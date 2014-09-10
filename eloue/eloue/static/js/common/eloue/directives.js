@@ -19,10 +19,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Directive to display registration form.
      */
-    EloueCommon.directive("eloueRegistrationForm", ["$window", function ($window) {
+    EloueCommon.directive("eloueRegistrationForm", ["Path", function (Path) {
         return {
             restrict: "E",
-            templateUrl: $window.templatePrefix + "partials/homepage/registration-form.html",
+            templateUrl: Path.templatePrefix + "partials/homepage/registration-form.html",
             scope: {},
             controller: "RegisterCtrl"
         };
@@ -31,10 +31,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Directive to display login form.
      */
-    EloueCommon.directive("eloueLoginForm", ["$window", function ($window) {
+    EloueCommon.directive("eloueLoginForm", ["Path", function (Path) {
         return {
             restrict: "E",
-            templateUrl: $window.templatePrefix + "partials/homepage/login-form.html",
+            templateUrl: Path.templatePrefix + "partials/homepage/login-form.html",
             scope: {},
             controller: "LoginCtrl"
         };
