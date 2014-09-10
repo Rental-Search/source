@@ -81,6 +81,10 @@ a, a:hover
 
 .bg-gray
   +make-bg($gray-strong)
+.text-white
+  color: white
+.bd-b
+  border-bottom: px(1) solid $gray-lighter
 
 .framing
   border: px(1) solid $gray-lighter
@@ -198,22 +202,35 @@ a, a:hover
 
 .date-picker
   .table-cell
-    padding: 0 .5em
-  .calendar
+    padding: 0 .3em
     position: relative
-    span
-      display: inline-block
-      font-size: 1.1em
-      color: $gray-medium
-  .chosen-container,
-  .form-control,
-  .input-group-addon
+  .form-control
     color: $gray-dark
     font-weight: $fw-semibold
     background-color: transparent
     border-width: 0
     box-shadow: none
     font-size: px(13, $section-fz)
+  i
+    position: absolute
+    top: .4em
+    right: 1.8em
+    font-size: 1.1em
+    color: $gray-medium
+  span
+    display: block
+    min-width: 2em
+    color: $gray-dark
+    font-weight: $fw-semibold
+  &.form-wrapper
+    margin-bottom: 1em
+    i
+      top: .6em
+      right: 1.2em
+    input
+      border-width: 1px
+      &:focus
+        box-shadow: none !important
 
 .chosen-container
   display: block

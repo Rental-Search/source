@@ -112,7 +112,7 @@ input#sourse:checked + #sourse-img {
 
 .header-site .signs-links {
   color: #777777;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.85714em;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -124,7 +124,7 @@ input#sourse:checked + #sourse-img {
   padding-top: 1.5em;
   padding-bottom: 1.5em;
   font-size: 1em;
-  font-weight: 700;
+  font-weight: 600;
 }
 .header-site .search-form form {
   width: 100%;
@@ -164,7 +164,7 @@ input#sourse:checked + #sourse-img {
   border-radius: 0;
   color: #9d9d9d;
   border-color: #c4c4c4 #eeeeee;
-  font-weight: 600;
+  font-weight: 500;
 }
 .header-site .search-form .where-field input::-moz-placeholder {
   color: #9d9d9d;
@@ -198,7 +198,7 @@ input#sourse:checked + #sourse-img {
   padding-top: 1.15em !important;
   padding-bottom: 1.15em !important;
   font-size: 0.92857em;
-  font-weight: 600;
+  font-weight: 500;
   color: #2c2c2c;
 }
 
@@ -251,7 +251,7 @@ input#sourse:checked + #sourse-img {
 }
 .insurances h5 {
   color: #2c2c2c;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1em;
   margin: 0.5em 0;
   text-align: inherit;
@@ -259,7 +259,7 @@ input#sourse:checked + #sourse-img {
 .insurances p {
   font-size: 0.92857em;
   text-align: inherit;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.5em;
   color: #9d9d9d;
 }
@@ -271,7 +271,7 @@ input#sourse:checked + #sourse-img {
 .publish-items-categories li {
   padding-top: 2.85714em;
   text-align: center;
-  font-weight: 700;
+  font-weight: 600;
 }
 .publish-items-categories li.do-it-yourself .sprite {
   background-image: url(../../static/img/spritesheet.png);
@@ -476,7 +476,7 @@ input#sourse:checked + #sourse-img {
   margin: 0.5em 0;
 }
 .footer-links .centering a {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.92857em;
   padding: 0;
 }
@@ -504,11 +504,11 @@ input#sourse:checked + #sourse-img {
   padding: 0 2em;
 }
 .rss input {
-  font-weight: 600;
+  font-weight: 500;
   color: #555555;
 }
 .rss button {
-  font-weight: 700;
+  font-weight: 600;
   color: #24bd77 !important;
 }
 .rss .input-group-btn {
@@ -600,14 +600,14 @@ input#sourse:checked + #sourse-img {
   padding-left: 0;
   color: #9d9d9d;
   padding-right: 0;
-  font-weight: 600;
+  font-weight: 500;
 }
 .modal .btn {
   font-size: 1em;
   display: block;
   width: 100%;
   text-align: center;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   padding: 0.8em 0;
   border-bottom-left-radius: 0.21429em;
@@ -681,7 +681,7 @@ input#sourse:checked + #sourse-img {
   margin: 2.14286em 0;
   border-top: 0.07143em solid #eeeeee;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
 }
 .modal .or:before {
   background-color: white;
@@ -798,10 +798,10 @@ input#sourse:checked + #sourse-img {
 }
 .modal .large .product-info > .thumbnail-content h3 {
   font-size: inherit;
-  font-weight: 700;
+  font-weight: 600;
 }
 .modal .large .product-info > .thumbnail-content p {
-  font-weight: 600;
+  font-weight: 500;
   font-size: inherit;
   margin: 0 0 0.5em;
 }
@@ -1067,7 +1067,7 @@ input#sourse:checked + #sourse-img {
 }
 .modal .large .variant-call ul .thumbnail-content h3 {
   font-size: inherit;
-  font-weight: 700;
+  font-weight: 600;
 }
 .modal .large .variant-call ul .thumbnail-content p {
   margin-top: 1em;

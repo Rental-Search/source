@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../../static/img/favicon.ico">
     <!-- include font "Open Sans"-->
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600">
     <!-- include icon fonts-->
     <link rel="stylesheet" href="../../../static/fonts/flaticons_social/flaticons_social.css">
     <link rel="stylesheet" href="../../../static/fonts/flaticons_solid/flaticons_solid.css">
@@ -17,6 +17,9 @@
     <!-- custom scrollbar.css-->
     <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
     <link rel="stylesheet" href="../../../static/css/jquery.mCustomScrollbar.css">
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <link rel="stylesheet" href="../../../static/css/datepicker3.css">
     <link rel="stylesheet" href="../../../static/css/base.css">
     <link rel="stylesheet" href="../../../static/css/styles.css">
     <!-- jQuery-->
@@ -42,6 +45,10 @@
     <script src="../../../static/js/bootstrap/modal.js"></script>
     <!-- custom scrollbar.js-->
     <script src="../../../static/js/jquery.mCustomScrollbar.js"></script>
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <script src="../../../static/js/bootstrap-datepicker.js"></script>
+    <script src="../../../static/js/locales/bootstrap-datepicker.fr.js"></script>
     <script src="../../../static/js/scripts.js"></script>
     <script src="../../../static/js/dashboard_scripts.js"></script>
   </head>
@@ -166,7 +173,7 @@
           <div class="content-view">
             <aside class="tabs-vertical-static pull-right lg">
               <div class="section-header">
-                <h4 class="text-center indent-xs-t">Réservation associé à :</h4>
+                <h4 class="text-center">Réservation associé à :</h4>
               </div>
               <ul class="scrollbar-custom">
                 <li class="tab-vertical">
@@ -189,13 +196,14 @@
                 <li class="tab-vertical">
                   <div class="section-content">
                     <form action="">
-                      <div class="indent-sm-v select-gradient without-search date-picker">
-                        <div class="form-group">
-                          <div class="input-group"><span class="input-group-addon">DU</span>
-                            <input type="text" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="icon-lg text-gray flaticon stroke calendar-5"></i></span>
+                      <div class="row date-picker">
+                        <div class="table-cell">
+                          <div class="table-cell"><span>Du</span></div>
+                          <div class="table-cell">
+                            <input type="text" placeholder="" class="date"><i class="flaticon stroke calendar-3"></i>
                           </div>
                         </div>
-                        <div class="form-group">
+                        <div class="table-cell without-search">
                           <select>
                             <option value="01.00">01.00</option>
                             <option value="02.00">02.00</option>
@@ -223,13 +231,14 @@
                           </select>
                         </div>
                       </div>
-                      <div class="indent-sm-v select-gradient without-search date-picker">
-                        <div class="form-group">
-                          <div class="input-group"><span class="input-group-addon">AU</span>
-                            <input type="text" placeholder="dd/mm/yyyy"><span class="input-group-addon"><i class="icon-lg text-gray flaticon stroke calendar-5"></i></span>
+                      <div class="row date-picker">
+                        <div class="table-cell">
+                          <div class="table-cell"><span>Au</span></div>
+                          <div class="table-cell">
+                            <input type="text" placeholder="" class="date"><i class="flaticon stroke calendar-3"></i>
                           </div>
                         </div>
-                        <div class="form-group">
+                        <div class="table-cell without-search">
                           <select>
                             <option value="01.00">01.00</option>
                             <option value="02.00">02.00</option>
@@ -257,20 +266,22 @@
                           </select>
                         </div>
                       </div>
-                      <ul class="zebra-list">
-                        <li>
-                          <div class="col-xs-4">Durée</div>
-                          <div class="col-xs-8">4 jours et 3 heures</div>
-                        </li>
-                        <li>
-                          <div class="col-xs-4">Prix</div>
-                          <div class="col-xs-8 text-success">350€</div>
-                        </li>
-                        <li>
-                          <div class="col-xs-4">Caution</div>
-                          <div class="col-xs-8">400€</div>
-                        </li>
-                      </ul>
+                      <table class="calendar bd-wrap indent-md-t">
+                        <tbody>
+                          <tr>
+                            <td>Durée</td>
+                            <td>4 jours et 3 heures</td>
+                          </tr>
+                          <tr>
+                            <td>Prix</td>
+                            <td class="text-success">350€</td>
+                          </tr>
+                          <tr>
+                            <td>Caution</td>
+                            <td>400€</td>
+                          </tr>
+                        </tbody>
+                      </table>
                       <div class="row">
                         <p class="text-gray indent-sm-v text-center">Assurance incluse</p>
                         <button type="submit" class="btn text-white bg-success-hover col-xs-8 col-xs-offset-2">Procédez à la réservation</button>

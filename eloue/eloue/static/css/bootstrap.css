@@ -6021,6 +6021,14 @@ a, a:hover {
   border-color: #919191 !important;
 }
 
+.text-white {
+  color: white;
+}
+
+.bd-b {
+  border-bottom: 0.07143em solid #eeeeee;
+}
+
 .framing {
   border: 0.07143em solid #eeeeee;
   background-color: white;
@@ -6042,7 +6050,7 @@ a, a:hover {
   background-color: transparent;
   margin: 0;
   font-size: 0.92857em;
-  font-weight: 600;
+  font-weight: 500;
   margin: 0;
   padding: 0;
   color: #24bd77;
@@ -6155,7 +6163,7 @@ a, a:hover {
 .badge.price {
   background-color: #f27e36;
   letter-spacing: 0.02em;
-  font-weight: 700;
+  font-weight: 600;
   border-bottom-right-radius: 1.5em;
   border-bottom-left-radius: 1.5em;
   border-top-right-radius: 1.5em;
@@ -6164,26 +6172,44 @@ a, a:hover {
 }
 
 .date-picker .table-cell {
-  padding: 0 0.5em;
-}
-.date-picker .calendar {
+  padding: 0 0.3em;
   position: relative;
 }
-.date-picker .calendar span {
-  display: inline-block;
-  font-size: 1.1em;
-  color: #c4c4c4;
-}
-.date-picker .chosen-container,
-.date-picker .form-control,
-.date-picker .input-group-addon {
+.date-picker .form-control {
   color: #2c2c2c;
-  font-weight: 600;
+  font-weight: 500;
   background-color: transparent;
   border-width: 0;
   -webkit-box-shadow: none;
   box-shadow: none;
   font-size: 1em;
+}
+.date-picker i {
+  position: absolute;
+  top: 0.4em;
+  right: 1.8em;
+  font-size: 1.1em;
+  color: #c4c4c4;
+}
+.date-picker span {
+  display: block;
+  min-width: 2em;
+  color: #2c2c2c;
+  font-weight: 500;
+}
+.date-picker.form-wrapper {
+  margin-bottom: 1em;
+}
+.date-picker.form-wrapper i {
+  top: 0.6em;
+  right: 1.2em;
+}
+.date-picker.form-wrapper input {
+  border-width: 1px;
+}
+.date-picker.form-wrapper input:focus {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 .chosen-container {
@@ -6329,7 +6355,7 @@ table {
   border-collapse: collapse;
 }
 table.calendar {
-  font-size: 0.85714em;
+  font-size: 0.92857em;
 }
 table.calendar thead tr {
   background-color: #eeeeee;
@@ -6356,6 +6382,15 @@ table.calendar td.booking {
 }
 table.bg-light tbody {
   background-color: white;
+}
+table.bd-clear td {
+  border-left: none;
+}
+table.bd-wrap td {
+  border-left: none;
+}
+table.bd-wrap tr {
+  border: 1px solid #c4c4c4;
 }
 
 select {

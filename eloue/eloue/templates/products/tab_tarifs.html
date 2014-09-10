@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../static/img/favicon.ico">
     <!-- include font "Open Sans"-->
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600">
     <!-- include icon fonts-->
     <link rel="stylesheet" href="../../static/fonts/flaticons_social/flaticons_social.css">
     <link rel="stylesheet" href="../../static/fonts/flaticons_solid/flaticons_solid.css">
@@ -17,6 +17,9 @@
     <!-- custom scrollbar.css-->
     <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
     <link rel="stylesheet" href="../../static/css/jquery.mCustomScrollbar.css">
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <link rel="stylesheet" href="../../static/css/datepicker3.css">
     <link rel="stylesheet" href="../../static/css/bootstrap.css">
     <link rel="stylesheet" href="../../static/css/product_detail_styles.css">
     <!-- jQuery-->
@@ -42,6 +45,10 @@
     <script src="../../static/js/bootstrap/modal.js"></script>
     <!-- custom scrollbar.js-->
     <script src="../../static/js/jquery.mCustomScrollbar.js"></script>
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <script src="../../static/js/bootstrap-datepicker.js"></script>
+    <script src="../../static/js/locales/bootstrap-datepicker.fr.js"></script>
     <script src="../../static/js/scripts.js"></script>
     <script src="../../static/js/bootstrap/dropdown.js"></script>
     <script src="../../static/js/bootstrap/carousel.js"></script>
@@ -178,12 +185,11 @@
                 </div>
               </section>
               <section class="terms">
-                <div class="row date-picker">
+                <div class="date-picker form-wrapper">
                   <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Du</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span class="flaticon stroke calendar-5"></span></div>
+                    <div class="table-cell"><span>Du</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                     </div>
                   </div>
                   <div class="table-cell">
@@ -214,12 +220,11 @@
                     </select>
                   </div>
                 </div>
-                <div class="row date-picker">
+                <div class="date-picker form-wrapper">
                   <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Au</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span class="flaticon stroke calendar-5"></span></div>
+                    <div class="table-cell"><span>Au</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                     </div>
                   </div>
                   <div class="table-cell">
@@ -250,14 +255,22 @@
                     </select>
                   </div>
                 </div>
-                <ul class="list-group">
-                  <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
-                  </li>
-                </ul>
+                <table class="calendar bd-wrap indent-t-md indent-b-md">
+                  <tbody>
+                    <tr>
+                      <td>Durée</td>
+                      <td><b>4 jours et 3 heures</b></td>
+                    </tr>
+                    <tr>
+                      <td>Prix</td>
+                      <td><b class="text-success">350€</b></td>
+                    </tr>
+                    <tr>
+                      <td>Caution</td>
+                      <td><b>400€</b></td>
+                    </tr>
+                  </tbody>
+                </table>
                 <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
                 <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
               </section>
@@ -329,12 +342,11 @@
                 </div>
               </section>
               <section class="terms">
-                <div class="row date-picker">
+                <div class="date-picker form-wrapper">
                   <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Du</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span class="flaticon stroke calendar-5"></span></div>
+                    <div class="table-cell"><span>Du</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                     </div>
                   </div>
                   <div class="table-cell">
@@ -365,12 +377,11 @@
                     </select>
                   </div>
                 </div>
-                <div class="row date-picker">
+                <div class="date-picker form-wrapper">
                   <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Au</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span class="flaticon stroke calendar-5"></span></div>
+                    <div class="table-cell"><span>Au</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                     </div>
                   </div>
                   <div class="table-cell">
@@ -401,14 +412,22 @@
                     </select>
                   </div>
                 </div>
-                <ul class="list-group">
-                  <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
-                  </li>
-                </ul>
+                <table class="calendar bd-wrap indent-t-md indent-b-md">
+                  <tbody>
+                    <tr>
+                      <td>Durée</td>
+                      <td><b>4 jours et 3 heures</b></td>
+                    </tr>
+                    <tr>
+                      <td>Prix</td>
+                      <td><b class="text-success">350€</b></td>
+                    </tr>
+                    <tr>
+                      <td>Caution</td>
+                      <td><b>400€</b></td>
+                    </tr>
+                  </tbody>
+                </table>
                 <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
                 <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
               </section>
@@ -483,12 +502,11 @@
                 </div>
               </section>
               <section class="terms">
-                <div class="row date-picker">
+                <div class="date-picker form-wrapper">
                   <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Du</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span class="flaticon stroke calendar-5"></span></div>
+                    <div class="table-cell"><span>Du</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                     </div>
                   </div>
                   <div class="table-cell">
@@ -519,12 +537,11 @@
                     </select>
                   </div>
                 </div>
-                <div class="row date-picker">
+                <div class="date-picker form-wrapper">
                   <div class="table-cell main-cell">
-                    <div class="input-group">
-                      <div class="input-group-addon">Au</div>
-                      <input type="text" placeholder="" class="form-control">
-                      <div class="input-group-addon calendar"><span class="flaticon stroke calendar-5"></span></div>
+                    <div class="table-cell"><span>Au</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                     </div>
                   </div>
                   <div class="table-cell">
@@ -555,14 +572,22 @@
                     </select>
                   </div>
                 </div>
-                <ul class="list-group">
-                  <li class="list-group-item"><span class="col-sm-5">Durée</span><span class="col-sm-7">4 jours et 3 heures</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Prix</span><span class="col-sm-7 text-success">350€</span>
-                  </li>
-                  <li class="list-group-item"><span class="col-sm-5">Caution</span><span class="col-sm-7">400€</span>
-                  </li>
-                </ul>
+                <table class="calendar bd-wrap indent-t-md indent-b-md">
+                  <tbody>
+                    <tr>
+                      <td>Durée</td>
+                      <td><b>4 jours et 3 heures</b></td>
+                    </tr>
+                    <tr>
+                      <td>Prix</td>
+                      <td><b class="text-success">350€</b></td>
+                    </tr>
+                    <tr>
+                      <td>Caution</td>
+                      <td><b>400€</b></td>
+                    </tr>
+                  </tbody>
+                </table>
                 <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
                 <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
               </section>
@@ -682,7 +707,7 @@
           </section>
         </div>
       </header>
-      <nav>
+      <nav class="bd-b">
         <div class="row-fluid bd-b">
           <div class="container">
             <ol class="breadcrumb">
@@ -784,17 +809,40 @@
                       <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
                     </div>
                     <div class="col-sm-6 properties">
-                      <ul class="list-group">
-                        <li class="list-group-item"><span class="col-sm-5">Notation</span><b class="col-sm-7">32&nbsp;&nbsp;
-                            <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                            </div></b></li>
-                        <li class="list-group-item"><span class="col-sm-5">Date d’achat</span><b class="col-sm-7">2008&nbsp;&nbsp;</b></li>
-                        <li class="list-group-item"><span class="col-sm-5">Marque</span><b class="col-sm-7">BMW&nbsp;&nbsp;</b></li>
-                        <li class="list-group-item"><span class="col-sm-5">Modèle</span><b class="col-sm-7">520 Touring&nbsp;&nbsp;</b></li>
-                        <li class="list-group-item"><span class="col-sm-5">Consommation</span><b class="col-sm-7">4,5 l/100km&nbsp;&nbsp;</b></li>
-                        <li class="list-group-item"><span class="col-sm-5">Prix neuf</span><b class="col-sm-7">38 000€&nbsp;&nbsp;</b></li>
-                        <li class="list-group-item"><span class="col-sm-5">Puissance</span><b class="col-sm-7">130 CV&nbsp;&nbsp;</b></li>
-                      </ul>
+                      <table class="calendar bd-clear">
+                        <tbody>
+                          <tr>
+                            <td>Notation</td>
+                            <td><b>32&nbsp;&nbsp;
+                                <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                                </div></b></td>
+                          </tr>
+                          <tr>
+                            <td>Date d’achat</td>
+                            <td><b>2008&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Marque</td>
+                            <td><b>BMW&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Modèle</td>
+                            <td><b>520 Touring&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Consommation</td>
+                            <td><b>4,5 l/100km&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Prix neuf</td>
+                            <td><b>38 000€&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Puissance</td>
+                            <td><b>130 CV&nbsp;&nbsp;</b></td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -804,35 +852,50 @@
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
@@ -844,35 +907,50 @@
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
                       <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#">Jonathan Moreira</a></h5>
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
                         <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
                       </div>
                     </li>
@@ -893,10 +971,9 @@
                   </p>
                   <div class="row date-picker">
                     <div class="table-cell main-cell">
-                      <div class="input-group">
-                        <div class="input-group-addon">Du</div>
-                        <input type="text" placeholder="" class="form-control">
-                        <div class="input-group-addon calendar"><span class="flaticon stroke calendar-5"></span></div>
+                      <div class="table-cell"><span>Du</span></div>
+                      <div class="table-cell main-cell">
+                        <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                       </div>
                     </div>
                     <div class="table-cell">
@@ -929,10 +1006,9 @@
                   </div>
                   <div class="row date-picker">
                     <div class="table-cell main-cell">
-                      <div class="input-group">
-                        <div class="input-group-addon">Au</div>
-                        <input type="text" placeholder="" class="form-control">
-                        <div class="input-group-addon calendar"><span class="flaticon stroke calendar-5"></span></div>
+                      <div class="table-cell"><span>Au</span></div>
+                      <div class="table-cell main-cell">
+                        <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                       </div>
                     </div>
                     <div class="table-cell">
@@ -1084,7 +1160,7 @@
             <section class="connected-with-owner">
               <div class="section-body">
                 <div class="part text-center"><i class="flaticon social facebook-2"></i><a href="#" class="btn bg-info">Connectez-vous avec Facebook</a>
-                  <p>Vérifiez si un de vos amis connait ce propriétaire ?</p>
+                  <p>Vérifiez si un de vos amis connait ce propriétaire&nbsp;?</p>
                 </div>
               </div>
             </section>

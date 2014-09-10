@@ -9,24 +9,17 @@ aside
       padding-top: 1em
       color: $brand-success
       &:before
-        font-family: "Flaticons Stroke"
-        content: "\e5a2"
+        font-family: "Flaticons Solid"
+        content: "\e1ce"
         display: inline-block
-        text-align: center
-        font-size: .9em
-        width: 1.5em
-        height: 1.5em
-        line-height: 1.5em
+        font-size: 1.3em
+        vertical-align: middle
         margin-right: .5em
-        +border-top-radius(50%)
-        +border-bottom-radius(50%)
-        background-color: $brand-success
-        color: white
       &.unavailable
         color: $brand-danger
         &:before
-          background-color: $brand-danger
-          content: "\e5a3"
+          content: "\e1cf"
+        
 
   .btn
     +btn(px(14,$section-fz))

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../static/img/favicon.ico">
     <!-- include font "Open Sans"-->
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600">
     <!-- include icon fonts-->
     <link rel="stylesheet" href="../../static/fonts/flaticons_social/flaticons_social.css">
     <link rel="stylesheet" href="../../static/fonts/flaticons_solid/flaticons_solid.css">
@@ -17,6 +17,9 @@
     <!-- custom scrollbar.css-->
     <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
     <link rel="stylesheet" href="../../static/css/jquery.mCustomScrollbar.css">
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <link rel="stylesheet" href="../../static/css/datepicker3.css">
     <link rel="stylesheet" href="../../static/css/bootstrap.css">
     <!-- custom input:range-->
     <link rel="stylesheet" href="../../static/css/jquery-ui.css">
@@ -44,6 +47,10 @@
     <script src="../../static/js/bootstrap/modal.js"></script>
     <!-- custom scrollbar.js-->
     <script src="../../static/js/jquery.mCustomScrollbar.js"></script>
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <script src="../../static/js/bootstrap-datepicker.js"></script>
+    <script src="../../static/js/locales/bootstrap-datepicker.fr.js"></script>
     <script src="../../static/js/scripts.js"></script>
     <!-- custom input:range-->
     <!-- http://jqueryui.com/slider/#rangemin-->
@@ -297,7 +304,7 @@
             <ol class="nav row">
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/bike.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">1</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/bike.jpg"><span class="badge price">56&euro; /jour</span><span class="badge-order">1</span></a></div>
                   <div class="info">
                     <h6><a href="#">Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike </a>
                     </h6>
@@ -308,13 +315,13 @@
                   </div>
                   <div class="declarer-container">
                     <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
-                    <div class="btns"><a href="#" class="btn bg-success text-white"><i class="flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success text-white"><i class="flaticon stroke calendar-2"></i></a></div>
+                    <div class="btns"><a href="#" class="btn bg-success"><i class="text-white flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success"><i class="text-white flaticon stroke calendar-2"></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/audi.jpg"><span class="fog"></span><span class="badge price">100&euro; /jour</span><span class="badge-order">2</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/audi.jpg"><span class="badge price">100&euro; /jour</span><span class="badge-order">2</span></a></div>
                   <div class="info">
                     <h6><a href="#">Audi - A3</a><span class="badge-pro">pro</span>
                     </h6>
@@ -325,13 +332,13 @@
                   </div>
                   <div class="declarer-container">
                     <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
-                    <div class="btns"><a href="#" class="btn bg-success text-white"><i class="flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success text-white"><i class="flaticon stroke calendar-2"></i></a></div>
+                    <div class="btns"><a href="#" class="btn bg-success"><i class="text-white flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success"><i class="text-white flaticon stroke calendar-2"></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">3</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="badge price">56&euro; /jour</span><span class="badge-order">3</span></a></div>
                   <div class="info">
                     <h6><a href="#">Tante tip indien</a>
                     </h6>
@@ -342,13 +349,13 @@
                   </div>
                   <div class="declarer-container">
                     <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
-                    <div class="btns"><a href="#" class="btn bg-success text-white"><i class="flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success text-white"><i class="flaticon stroke calendar-2"></i></a></div>
+                    <div class="btns"><a href="#" class="btn bg-success"><i class="text-white flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success"><i class="text-white flaticon stroke calendar-2"></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">4</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="badge price">56&euro; /jour</span><span class="badge-order">4</span></a></div>
                   <div class="info">
                     <h6><a href="#">Tante tip indien</a>
                     </h6>
@@ -359,13 +366,13 @@
                   </div>
                   <div class="declarer-container">
                     <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
-                    <div class="btns"><a href="#" class="btn bg-success text-white"><i class="flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success text-white"><i class="flaticon stroke calendar-2"></i></a></div>
+                    <div class="btns"><a href="#" class="btn bg-success"><i class="text-white flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success"><i class="text-white flaticon stroke calendar-2"></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">5</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="badge price">56&euro; /jour</span><span class="badge-order">5</span></a></div>
                   <div class="info">
                     <h6><a href="#">Tante tip indien</a>
                     </h6>
@@ -376,13 +383,13 @@
                   </div>
                   <div class="declarer-container">
                     <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
-                    <div class="btns"><a href="#" class="btn bg-success text-white"><i class="flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success text-white"><i class="flaticon stroke calendar-2"></i></a></div>
+                    <div class="btns"><a href="#" class="btn bg-success"><i class="text-white flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success"><i class="text-white flaticon stroke calendar-2"></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">6</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="badge price">56&euro; /jour</span><span class="badge-order">6</span></a></div>
                   <div class="info">
                     <h6><a href="#">Tante tip indien</a>
                     </h6>
@@ -393,13 +400,13 @@
                   </div>
                   <div class="declarer-container">
                     <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
-                    <div class="btns"><a href="#" class="btn bg-success text-white"><i class="flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success text-white"><i class="flaticon stroke calendar-2"></i></a></div>
+                    <div class="btns"><a href="#" class="btn bg-success"><i class="text-white flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success"><i class="text-white flaticon stroke calendar-2"></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">7</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="badge price">56&euro; /jour</span><span class="badge-order">7</span></a></div>
                   <div class="info">
                     <h6><a href="#">Tante tip indien</a>
                     </h6>
@@ -410,13 +417,13 @@
                   </div>
                   <div class="declarer-container">
                     <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
-                    <div class="btns"><a href="#" class="btn bg-success text-white"><i class="flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success text-white"><i class="flaticon stroke calendar-2"></i></a></div>
+                    <div class="btns"><a href="#" class="btn bg-success"><i class="text-white flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success"><i class="text-white flaticon stroke calendar-2"></i></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="section-body">
-                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="fog"></span><span class="badge price">56&euro; /jour</span><span class="badge-order">8</span></a></div>
+                  <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="../../static/img/home-products/tent.jpg"><span class="badge price">56&euro; /jour</span><span class="badge-order">8</span></a></div>
                   <div class="info">
                     <h6><a href="#">Tante tip indien</a>
                     </h6>
@@ -427,7 +434,7 @@
                   </div>
                   <div class="declarer-container">
                     <div class="declarer"><span class="declarer-name">Alfred Cardinal</span><a href="#" class="declarer-thumbnail"><img src="../../static/img/home-products/tenant_small.png" alt=""></a></div>
-                    <div class="btns"><a href="#" class="btn bg-success text-white"><i class="flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success text-white"><i class="flaticon stroke calendar-2"></i></a></div>
+                    <div class="btns"><a href="#" class="btn bg-success"><i class="text-white flaticon stroke mail-2"></i></a><a href="#" class="btn bg-success"><i class="text-white flaticon stroke calendar-2"></i></a></div>
                   </div>
                 </div>
               </li>

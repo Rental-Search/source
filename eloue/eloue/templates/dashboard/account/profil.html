@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../../static/img/favicon.ico">
     <!-- include font "Open Sans"-->
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600">
     <!-- include icon fonts-->
     <link rel="stylesheet" href="../../../static/fonts/flaticons_social/flaticons_social.css">
     <link rel="stylesheet" href="../../../static/fonts/flaticons_solid/flaticons_solid.css">
@@ -17,6 +17,9 @@
     <!-- custom scrollbar.css-->
     <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
     <link rel="stylesheet" href="../../../static/css/jquery.mCustomScrollbar.css">
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <link rel="stylesheet" href="../../../static/css/datepicker3.css">
     <link rel="stylesheet" href="../../../static/css/base.css">
     <link rel="stylesheet" href="../../../static/css/styles.css">
     <!-- jQuery-->
@@ -42,6 +45,10 @@
     <script src="../../../static/js/bootstrap/modal.js"></script>
     <!-- custom scrollbar.js-->
     <script src="../../../static/js/jquery.mCustomScrollbar.js"></script>
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <script src="../../../static/js/bootstrap-datepicker.js"></script>
+    <script src="../../../static/js/locales/bootstrap-datepicker.fr.js"></script>
     <script src="../../../static/js/scripts.js"></script>
     <script src="../../../static/js/dashboard_scripts.js"></script>
   </head>
@@ -166,7 +173,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-sm-12 select-gradient without-search form-control">
+                    <div class="col-sm-12 without-search form-control">
                       <p class="text-uppercase"><b><small>adresse par défaut</small></b></p>
                       <select>
                         <option value="94 avenue félix faure, 75015 Paris">94 avenue félix faure, 75015 Paris</option>
@@ -175,7 +182,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-sm-12 select-gradient without-search form-control">
+                    <div class="col-sm-12 without-search form-control">
                       <p class="text-uppercase"><b><small>téléphone par défaut</small></b></p>
                       <select>
                         <option value="01 45 97 34 56">01 45 97 34 56</option>

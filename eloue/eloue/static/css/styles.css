@@ -17,7 +17,7 @@ body {
   line-height: 1.42857;
   background-color: #fcfcfc;
   color: #2c2c2c;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 a {
@@ -745,7 +745,7 @@ a {
 
 .text {
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 500;
   border: none;
   background-color: transparent;
   font-size: 14px;
@@ -791,7 +791,7 @@ a {
 
 .time-badge {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   color: lightgray;
 }
 
@@ -835,7 +835,7 @@ h2.small {
 
 h3 {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 }
 h3.small {
   font-size: 13px;
@@ -843,7 +843,7 @@ h3.small {
 
 h4 {
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
 }
 h4.small {
   font-size: 11px;
@@ -851,7 +851,7 @@ h4.small {
 
 h5 {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
 }
 h5.small {
   font-size: 11px;
@@ -896,7 +896,7 @@ article.dashboard nav {
   overflow: hidden;
 }
 article.dashboard nav ul {
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   padding: 1em;
   font-size: 12px;
@@ -912,16 +912,9 @@ article.dashboard nav a {
   margin: 1em 0;
   -webkit-transition: color 0.2s ease-out;
   transition: color 0.2s ease-out;
-  color: rgba(0, 0, 0, 0.6);
-  text-shadow: 0.1em 0.05em 0 rgba(255, 255, 255, 0.3);
 }
 article.dashboard nav a:hover, article.dashboard nav a.current {
   color: white;
-  text-shadow: none;
-}
-article.dashboard nav a:active {
-  color: rgba(0, 0, 0, 0.6);
-  text-shadow: 0.1em 0.05em 0 rgba(255, 255, 255, 0.3);
 }
 article.dashboard > nav {
   background-color: #24bd77;
@@ -1002,6 +995,10 @@ article.dashboard .content-view section {
   top: 0;
   left: 0;
   z-index: 10;
+}
+.section-header > h4 {
+  display: table-cell;
+  vertical-align: middle;
 }
 .section-header + * {
   padding-top: 3em !important;
@@ -1103,6 +1100,9 @@ article.dashboard .content-view section {
 .tabs-horisontal-active > ul {
   position: relative;
   height: 100%;
+}
+.tabs-horisontal-active > ul > .divider:before {
+  bottom: -0.15em !important;
 }
 
 .tabs-horisontal-active .tab-horisontal {
@@ -1268,7 +1268,7 @@ header i {
   -moz-osx-font-smoothing: grayscale;
 }
 header .nav.without-spaces {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 12px;
   color: dimgray;
   margin: 15px 0 5px;
@@ -1316,7 +1316,7 @@ header .what-field {
   position: relative;
   right: -1px;
   border-color: lightgray !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   border-radius: 4px 0 0 4px !important;
 }
 header .what-field::-moz-placeholder {
@@ -1340,7 +1340,7 @@ header .where-field {
 header .where-field input {
   width: 100%;
   padding-left: 3em;
-  font-weight: 600;
+  font-weight: 500;
   border-radius: 0;
   border-color: lightgray #eaeaea !important;
 }
@@ -1465,7 +1465,7 @@ header .btn-search:hover {
   font-size: 9px;
   display: inline-block;
   padding: 0.25em 0.5em;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.05em;
 }
 
@@ -1534,7 +1534,6 @@ header .btn-search:hover {
 .list-without-spaces li.divide:before, .list-without-spaces li.divider:before,
 .without-spaces li.divide:before,
 .without-spaces li.divider:before {
-  background-color: #cccccc;
   position: absolute;
   width: 1px;
   height: 10000px;
@@ -1593,7 +1592,7 @@ header .btn-search:hover {
   border-radius: 4px;
   white-space: nowrap;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   border: 1px solid transparent;
 }
@@ -1736,7 +1735,7 @@ label.check-btn span i {
   text-align: center;
   width: 100% !important;
   display: block;
-  font-weight: 600;
+  font-weight: 500;
 }
 .chosen-container.chosen-with-drop .chosen-choices,
 .chosen-container.chosen-with-drop .chosen-single {
@@ -1869,7 +1868,7 @@ input[type="email"],
   font-size: inherit;
   background: white;
   font-family: inherit !important;
-  font-weight: 600;
+  font-weight: 500;
   color: #acacac;
   min-height: 3em;
   padding: 0 1em;
@@ -1996,49 +1995,6 @@ textarea .autosizejs {
   padding: 0;
 }
 
-.date-picker {
-  display: table;
-  width: 100%;
-}
-.date-picker > * {
-  display: table-cell;
-  width: auto !important;
-  height: 2em;
-  vertical-align: middle;
-}
-.date-picker .input-group {
-  height: 100%;
-}
-.date-picker input {
-  font-family: inherit !important;
-  color: inherit;
-  font-weight: 600 !important;
-  height: 2em;
-  padding: 0 0.5em;
-  width: 100%;
-  border: none;
-}
-.date-picker input::-moz-placeholder {
-  color: #acacac;
-  opacity: 1;
-}
-.date-picker input:-ms-input-placeholder {
-  color: #acacac;
-}
-.date-picker input::-webkit-input-placeholder {
-  color: #acacac;
-}
-.date-picker .chosen-container {
-  margin-left: 10px;
-  height: 2em;
-}
-.date-picker .chosen-single {
-  min-height: 0 !important;
-  height: 100%;
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-}
-
 ul.not-ordered {
   padding-left: 20px;
 }
@@ -2088,6 +2044,12 @@ article.dashboard table.calendar td.booking {
 article.dashboard table.bg-light tbody {
   background-color: white;
 }
+article.dashboard table.bd-wrap td {
+  border-left: none;
+}
+article.dashboard table.bd-wrap tr {
+  border: 1px solid #acacac;
+}
 
 .badge-count-action {
   position: absolute;
@@ -2098,7 +2060,7 @@ article.dashboard table.bg-light tbody {
   line-height: 1.8em;
   border-radius: 8px;
   color: white;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 12px;
   background-color: #f27e36;
   text-align: center;
@@ -2108,4 +2070,49 @@ article.dashboard table.bg-light tbody {
   top: -1em;
   right: 1em;
   position: relative;
+}
+
+.date-picker {
+  display: table;
+  margin-bottom: 1em;
+}
+.date-picker .table-cell {
+  padding: 0 0.3em;
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+}
+.date-picker .form-control {
+  color: #2c2c2c;
+  font-weight: 500;
+  background-color: transparent;
+  border-width: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-size: 0.92857em;
+}
+.date-picker .chosen-single {
+  padding-right: 1em !important;
+  padding-left: 1em !important;
+}
+.date-picker .chosen-single span:after {
+  color: #acacac;
+}
+.date-picker i {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 1em;
+  line-height: 2.72727em;
+  font-size: 1.1em;
+  color: #b9b9b9;
+}
+.date-picker span {
+  display: block;
+  min-width: 2em;
+  color: #2c2c2c;
+  font-weight: 500;
+}
+.date-picker input {
+  color: #2c2c2c;
 }

@@ -46,7 +46,7 @@ input#sourse:checked + #sourse-img {
 
 .header-site .signs-links {
   color: #777777;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.85714em;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -58,7 +58,7 @@ input#sourse:checked + #sourse-img {
   padding-top: 1.5em;
   padding-bottom: 1.5em;
   font-size: 1em;
-  font-weight: 700;
+  font-weight: 600;
 }
 .header-site .search-form form {
   width: 100%;
@@ -98,7 +98,7 @@ input#sourse:checked + #sourse-img {
   border-radius: 0;
   color: #9d9d9d;
   border-color: #c4c4c4 #eeeeee;
-  font-weight: 600;
+  font-weight: 500;
 }
 .header-site .search-form .where-field input::-moz-placeholder {
   color: #9d9d9d;
@@ -132,7 +132,7 @@ input#sourse:checked + #sourse-img {
   padding-top: 1.15em !important;
   padding-bottom: 1.15em !important;
   font-size: 0.92857em;
-  font-weight: 600;
+  font-weight: 500;
   color: #2c2c2c;
 }
 
@@ -141,7 +141,7 @@ input#sourse:checked + #sourse-img {
   background-position: right bottom;
 }
 .download-mobile-apps .row {
-  padding: 3em;
+  padding: 3em 0;
 }
 .download-mobile-apps p {
   color: #9d9d9d;
@@ -221,7 +221,7 @@ input#sourse:checked + #sourse-img {
   margin: 0.5em 0;
 }
 .footer-links .centering a {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.92857em;
   padding: 0;
 }
@@ -249,11 +249,11 @@ input#sourse:checked + #sourse-img {
   padding: 0 2em;
 }
 .rss input {
-  font-weight: 600;
+  font-weight: 500;
   color: #555555;
 }
 .rss button {
-  font-weight: 700;
+  font-weight: 600;
   color: #24bd77 !important;
 }
 .rss .input-group-btn {
@@ -345,14 +345,14 @@ input#sourse:checked + #sourse-img {
   padding-left: 0;
   color: #9d9d9d;
   padding-right: 0;
-  font-weight: 600;
+  font-weight: 500;
 }
 .modal .btn {
   font-size: 1em;
   display: block;
   width: 100%;
   text-align: center;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   padding: 0.8em 0;
   border-bottom-left-radius: 0.21429em;
@@ -426,7 +426,7 @@ input#sourse:checked + #sourse-img {
   margin: 2.14286em 0;
   border-top: 0.07143em solid #eeeeee;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
 }
 .modal .or:before {
   background-color: white;
@@ -543,10 +543,10 @@ input#sourse:checked + #sourse-img {
 }
 .modal .large .product-info > .thumbnail-content h3 {
   font-size: inherit;
-  font-weight: 700;
+  font-weight: 600;
 }
 .modal .large .product-info > .thumbnail-content p {
-  font-weight: 600;
+  font-weight: 500;
   font-size: inherit;
   margin: 0 0 0.5em;
 }
@@ -812,7 +812,7 @@ input#sourse:checked + #sourse-img {
 }
 .modal .large .variant-call ul .thumbnail-content h3 {
   font-size: inherit;
-  font-weight: 700;
+  font-weight: 600;
 }
 .modal .large .variant-call ul .thumbnail-content p {
   margin-top: 1em;
@@ -939,7 +939,7 @@ input#sourse:checked + #sourse-img {
   text-align: center;
   width: 100% !important;
   display: block;
-  font-weight: 600;
+  font-weight: 500;
 }
 .clear-selector .chosen-container.chosen-with-drop .chosen-choices,
 .clear-selector .chosen-container.chosen-with-drop .chosen-single {
@@ -1052,7 +1052,7 @@ input#sourse:checked + #sourse-img {
   font-size: inherit;
   background: white;
   font-family: inherit !important;
-  font-weight: 600;
+  font-weight: 500;
   color: #2c2c2c;
   height: 2.5em !important;
   padding-top: 0.8em \9;
@@ -1221,14 +1221,14 @@ article h3 {
 }
 article h4 {
   color: white;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1em;
   margin: 0;
 }
 article h5 {
   margin: 0;
   font-size: 1em;
-  font-weight: 700;
+  font-weight: 600;
   color: #24bd77;
 }
 article .section-body {
@@ -1243,7 +1243,7 @@ article .section-body {
 article .section-body p,
 article .section-body li {
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
 }
 article .section-body p.price,
 article .section-body li.price {
@@ -1270,7 +1270,7 @@ article .section-body .part:first-child {
 
 .pagination > li > a {
   font-size: 0.9375em;
-  font-weight: 700;
+  font-weight: 600;
   color: #24bd77;
   line-height: 2em;
 }
@@ -1352,7 +1352,7 @@ section p.little {
   color: #9d9d9d !important;
   text-transform: uppercase;
   font-size: 0.71429em;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   margin: 10px 0;
 }
 
@@ -1361,10 +1361,10 @@ aside .section-body {
 }
 aside input[type="text"] {
   color: #2c2c2c;
-  font-weight: 600;
+  font-weight: 500;
 }
 aside .checkbox {
-  font-weight: 600;
+  font-weight: 500;
 }
 aside .checkbox input {
   width: 0;
@@ -1437,7 +1437,7 @@ main ol li .info {
 }
 main ol li .info p {
   color: #c4c4c4;
-  font-weight: 600;
+  font-weight: 500;
 }
 main ol li .info p:empty {
   height: 1.42857em;
@@ -1473,14 +1473,14 @@ main ol li .badge-order {
   background-color: #2c2c2c;
   background-color: rgba(44, 44, 44, 0.8);
   color: white;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.42857;
   width: 1.42857em;
   text-align: center;
 }
 main ol li .sprite-comment {
   color: white;
-  font-weight: 600;
+  font-weight: 500;
 }
 main ol li .sprite-comment i {
   margin: 0 0.5em;
@@ -1540,7 +1540,7 @@ main ol li .sprite-comment i {
 }
 .grid-layout main ol li .info h6 {
   font-size: 0.92857em;
-  font-weight: 600;
+  font-weight: 500;
   margin: 0 0 0.25em;
 }
 .grid-layout main ol li .info p {
@@ -1616,7 +1616,7 @@ main ol li .sprite-comment i {
   text-align: right;
   padding-right: 10px;
   vertical-align: middle;
-  font-weight: 600;
+  font-weight: 500;
 }
 .list-layout main ol li:hover .declarer-name {
   color: #c4c4c4;
@@ -1635,7 +1635,7 @@ main ol li .sprite-comment i {
   padding: 10px 20px;
 }
 .list-layout main ol li .info h6 {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.07143em;
 }
 .list-layout main ol li .info p {

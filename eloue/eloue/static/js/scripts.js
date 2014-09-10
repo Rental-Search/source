@@ -25,6 +25,12 @@ $(document).ready(function(){
     }
   };
 
+  $('.date-picker input.date').datepicker({
+    language: "fr",
+    autoclose: true,
+    todayHighlight: true
+  });
+
   (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;

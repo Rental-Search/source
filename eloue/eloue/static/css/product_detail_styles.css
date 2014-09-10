@@ -46,7 +46,7 @@ input#sourse:checked + #sourse-img {
 
 .header-site .signs-links {
   color: #777777;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.85714em;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -58,7 +58,7 @@ input#sourse:checked + #sourse-img {
   padding-top: 1.5em;
   padding-bottom: 1.5em;
   font-size: 1em;
-  font-weight: 700;
+  font-weight: 600;
 }
 .header-site .search-form form {
   width: 100%;
@@ -98,7 +98,7 @@ input#sourse:checked + #sourse-img {
   border-radius: 0;
   color: #9d9d9d;
   border-color: #c4c4c4 #eeeeee;
-  font-weight: 600;
+  font-weight: 500;
 }
 .header-site .search-form .where-field input::-moz-placeholder {
   color: #9d9d9d;
@@ -175,14 +175,14 @@ article h3 {
 }
 article h4 {
   color: white;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1em;
   margin: 0;
 }
 article h5 {
   margin: 0;
   font-size: 1em;
-  font-weight: 700;
+  font-weight: 600;
   color: #24bd77;
 }
 article .section-body {
@@ -197,7 +197,7 @@ article .section-body {
 article .section-body p,
 article .section-body li {
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
 }
 article .section-body p.price,
 article .section-body li.price {
@@ -310,7 +310,7 @@ main .carousel-wrapper .carousel-control.right {
 }
 main .nav a {
   color: #2c2c2c;
-  font-weight: 600;
+  font-weight: 500;
   background-color: #eeeeee;
   border-top-right-radius: 0.21429em;
   border-top-left-radius: 0.21429em;
@@ -364,7 +364,7 @@ main .comments .thumbnail .thumbnail-content p {
 }
 main .comments .thumbnail small {
   font-size: 0.92308em;
-  font-weight: 600;
+  font-weight: 500;
   color: #9d9d9d;
 }
 
@@ -380,35 +380,25 @@ aside .booking-form .available {
   color: #24bd77;
 }
 aside .booking-form .available:before {
-  font-family: "Flaticons Stroke";
-  content: "\e5a2";
+  font-family: "Flaticons Solid";
+  content: "\e1ce";
   display: inline-block;
-  text-align: center;
-  font-size: 0.9em;
-  width: 1.5em;
-  height: 1.5em;
-  line-height: 1.5em;
+  font-size: 1.3em;
+  vertical-align: middle;
   margin-right: 0.5em;
-  border-top-right-radius: 50%;
-  border-top-left-radius: 50%;
-  border-bottom-right-radius: 50%;
-  border-bottom-left-radius: 50%;
-  background-color: #24bd77;
-  color: white;
 }
 aside .booking-form .available.unavailable {
   color: #e45647;
 }
 aside .booking-form .available.unavailable:before {
-  background-color: #e45647;
-  content: "\e5a3";
+  content: "\e1cf";
 }
 aside .btn {
   font-size: 1.07692em;
   display: block;
   width: 100%;
   text-align: center;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   padding: 0.8em 0;
   border-bottom-left-radius: 0.21429em;
@@ -521,7 +511,7 @@ aside .similar-listing li .thumbnail-content p {
 }
 aside .similar-listing li h6 {
   color: #2c2c2c;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.92857em;
   margin: 0.5em 0 0;
 }
@@ -585,7 +575,7 @@ aside .connected-with-owner i {
 }
 .insurances h5 {
   color: #2c2c2c;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1em;
   margin: 0.5em 0;
   text-align: inherit;
@@ -593,7 +583,7 @@ aside .connected-with-owner i {
 .insurances p {
   font-size: 0.92857em;
   text-align: inherit;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.5em;
   color: #9d9d9d;
 }
@@ -621,7 +611,7 @@ aside .connected-with-owner i {
   margin: 0.5em 0;
 }
 .footer-links .centering a {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.92857em;
   padding: 0;
 }
@@ -649,11 +639,11 @@ aside .connected-with-owner i {
   padding: 0 2em;
 }
 .rss input {
-  font-weight: 600;
+  font-weight: 500;
   color: #555555;
 }
 .rss button {
-  font-weight: 700;
+  font-weight: 600;
   color: #24bd77 !important;
 }
 .rss .input-group-btn {
@@ -745,14 +735,14 @@ aside .connected-with-owner i {
   padding-left: 0;
   color: #9d9d9d;
   padding-right: 0;
-  font-weight: 600;
+  font-weight: 500;
 }
 .modal .btn {
   font-size: 1em;
   display: block;
   width: 100%;
   text-align: center;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   padding: 0.8em 0;
   border-bottom-left-radius: 0.21429em;
@@ -826,7 +816,7 @@ aside .connected-with-owner i {
   margin: 2.14286em 0;
   border-top: 0.07143em solid #eeeeee;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
 }
 .modal .or:before {
   background-color: white;
@@ -943,10 +933,10 @@ aside .connected-with-owner i {
 }
 .modal .large .product-info > .thumbnail-content h3 {
   font-size: inherit;
-  font-weight: 700;
+  font-weight: 600;
 }
 .modal .large .product-info > .thumbnail-content p {
-  font-weight: 600;
+  font-weight: 500;
   font-size: inherit;
   margin: 0 0 0.5em;
 }
@@ -1212,7 +1202,7 @@ aside .connected-with-owner i {
 }
 .modal .large .variant-call ul .thumbnail-content h3 {
   font-size: inherit;
-  font-weight: 700;
+  font-weight: 600;
 }
 .modal .large .variant-call ul .thumbnail-content p {
   margin-top: 1em;

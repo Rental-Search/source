@@ -1,28 +1,27 @@
 form(action="")
-  -var types = ["DU", "AU"]
-  each type in types
-    .indent-sm-v.select-gradient.without-search.date-picker
-      .form-group
-        .input-group
-          span.input-group-addon #{type}
-          input(type="text", placeholder = "dd/mm/yyyy")
-          span.input-group-addon
-            i.icon-lg.text-gray.flaticon.stroke.calendar-5
-      .form-group
+  -var items = ["Du", "Au"]
+  each item in items
+    .row.date-picker
+      .table-cell
+        .table-cell: span #{item}
+        .table-cell
+          input(type="text", placeholder="").date
+          i.flaticon.stroke.calendar-3
+      .table-cell.without-search
         select
           each time in timing
             option(value="#{time}") #{time}
 
-  ul.zebra-list
-    li
-      .col-xs-4 Durée
-      .col-xs-8 4 jours et 3 heures
-    li
-      .col-xs-4 Prix
-      .col-xs-8.text-success 350€
-    li
-      .col-xs-4 Caution
-      .col-xs-8 400€
+  table.calendar.bd-wrap.indent-md-t: tbody
+    tr
+      td Durée
+      td 4 jours et 3 heures
+    tr
+      td Prix
+      td.text-success 350€
+    tr
+      td Caution
+      td 400€
   .row
     p.text-gray.indent-sm-v.text-center Assurance incluse
     button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Procédez à la réservation
