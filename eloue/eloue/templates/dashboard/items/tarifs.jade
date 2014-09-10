@@ -1,38 +1,97 @@
 block details
-  .section-content
-    h2 Grille tarifaire
-    .row
-      .col-lg-8
-        table.calendar.text-center.form-control
-          thead
-            tr
-              td Durée
-              td Prix 
-          tbody
-            tr
-              td 1 heure
-              td 
-                input(type="text", placeholder="Prix...").table-form
-                | €
-            tr
-              td 1 jours
-              td 
-                input(type="text", placeholder="Prix...").table-form
-                | €
-            tr
-              td 3 jours
-              td 
-                input(type="text", placeholder="Prix...").table-form
-                | €
-            tr
-              td 7 jours
-              td 
-                input(type="text", placeholder="Prix...").table-form
-                | €
-            tr
-              td 15 jours
-              td 
-                input(type="text", placeholder="Prix...").table-form
-                | €
-      .col-lg-8
-        
+    .section-content
+        {% verbatim %}
+        form(name="itemTariffsForm", ng-submit="updatePrices()")
+            h2 Grille tarifaire
+            .row
+                .col-lg-12
+                    table.calendar.text-center.form-control(ng-show="!isAuto && !isRealEstate")
+                        thead
+                            tr
+                                td Durée
+                                td Prix
+                        tbody
+                            tr
+                                td 1 heure
+                                td
+                                    input(type="text", placeholder="Prix...", ng-model="prices.hour.amount").table-form
+                                    | €
+                            tr
+                                td 1 jour
+                                td
+                                    input(type="text", placeholder="Prix...", ng-model="prices.day.amount", required).table-form
+                                    | €
+                            tr
+                                td 3 jours
+                                td
+                                    input(type="text", placeholder="Prix...", ng-model="prices.three_days.amount").table-form
+                                    | €
+                            tr
+                                td 7 jours
+                                td
+                                    input(type="text", placeholder="Prix...", ng-model="prices.seven_days.amount").table-form
+                                    | €
+                            tr
+                                td 15 jours
+                                td
+                                    input(type="text", placeholder="Prix...", ng-model="prices.fifteen_days.amount").table-form
+                                    | €
+
+
+                        table.calendar.text-center.form-control(ng-show="isAuto")
+                            thead
+                                tr
+                                    td Durée
+                                    td Prix
+                            tbody
+                                tr
+                                    td 1 jour
+                                    td
+                                        input(type="text", placeholder="Prix...", ng-model="prices.day.amount", required).table-form
+                                        | €
+                        table.calendar.text-center.form-control(ng-show="isAuto")
+                            tbody
+                                tr
+                                    td Kilomètres inclus par jour
+                                    td
+                                        input(type="text", ng-model="product.km_included").table-form
+                                        | Km
+
+                        table.calendar.text-center.form-control(ng-show="isRealEstate")
+                            thead
+                                tr
+                                    td Durée
+                                    td Prix
+                            tbody
+                                tr
+                                    td 1 nuit
+                                    td
+                                        input(type="text", placeholder="Prix...", ng-model="prices.day.amount", required).table-form
+                                        | €
+                                tr
+                                    td 3 nuits
+                                    td
+                                        input(type="text", placeholder="Prix...", ng-model="prices.three_days.amount").table-form
+                                        | €
+                                tr
+                                    td 7 nuits
+                                    td
+                                        input(type="text", placeholder="Prix...", ng-model="prices.seven_days.amount").table-form
+                                        | €
+                                tr
+                                    td 15 nuits
+                                    td
+                                        input(type="text", placeholder="Prix...", ng-model="prices.fifteen_days.amount").table-form
+                                        | €
+
+                        table.calendar.text-center.form-control(ng-show="isAuto")
+                            tbody
+                                tr
+                                    td Caution
+                                    td
+                                        input(type="text", ng-model="product.deposit_amount").table-form
+                                        | €
+                        | * : Tarif obligatoire
+            .row
+                button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
+        {% endverbatim %}

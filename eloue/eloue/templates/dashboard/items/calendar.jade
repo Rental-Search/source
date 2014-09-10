@@ -1,43 +1,38 @@
-extends ./_base_items
-
 block details
   .section-content
+    {% verbatim %}
     form(action="itmes")
       .row
         .col-xs-7
           h2 Sélectionner le mois
         .col-xs-5
           .form-control.without-search.select-gradient
-            select
-              each month in months
-                option(value="#{month}") #{month} 2014
+            select(ng-model="selectedMonthAndYear", ng-change="updateCalendar()")
+                option(ng-repeat="month in monthOptions", value="{{month.value}}") {{month.name}}
       .row
         .col-xs-12.indent-sm-b
           table.calendar.text-center
             thead
               tr
-                each day in days_of_week
-                  td #{day}
+                td Lun
+                td Mar
+                td Mer
+                td Jeu
+                td Ven
+                td Sam
+                td Dim
             tbody
-              each day, count in days
-                if count % 7 == 0
-                  tr
-                    td.outages #{+day}
-                    td #{+day+1}
-                    td #{+day+2}
-                    td #{+day+3}
-                    td.booking #{+day+4}
-                    td #{+day+5}
-                    td #{+day+6}
+                  tr(ng-repeat="week in weeks")
+                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : ''}}")
       .row
         .col-xs-4
           label.check-btn.form-control.text-danger-light
-            input(type="checkbox", checked)
+            input(type="checkbox", ng-model="showUnavailable", ng-change="onShowUnavailable()")
             span: i.fa.fa-check
             | Indisponiblités
         .col-xs-4
           label.check-btn.form-control.text-success-light
-            input(type="checkbox", checked)
+            input(type="checkbox", ng-model="showBookings", ng-change="onShowBookings()")
             span: i.fa.fa-check
             | Réservations
       .row.indent-xs-b
@@ -50,26 +45,12 @@ block details
                 td Motifs
                 td Action 
             tbody
-              tr
-                td 12/06/2014
-                td 12/06/2014
-                td.text-success-light Réservé
-                td
-              tr
-                td 12/06/2014
-                td 12/06/2014
-                td.text-danger-light Indisponible
-                td
-              tr
-                td 12/06/2014
-                td 12/06/2014
-                td.text-danger-light Indisponible
-                td
-              tr
-                td 12/06/2014
-                td 12/06/2014
+              tr(ng-repeat="booking in currentBookings", ng-show="showBookings")
+                td {{booking.startDay | date:'dd/MM/yyyy'}}
+                td {{booking.endDay | date:'dd/MM/yyyy'}}
                 td.text-success-light Réservé
                 td
       .row
         .col-xs-8.col-xs-offset-2
           button(type="submit").btn.bg-success-hover.text-white Ajoutez une nouvelle disponibilité
+    {% endverbatim %}

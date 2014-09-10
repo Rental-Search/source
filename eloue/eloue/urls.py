@@ -179,6 +179,22 @@ partials_urlpatterns = patterns('',
             template_name='dashboard/items/profits.jade',
         ),
     ),
+    url(r'^dashboard/items/terms/car_terms.html$', TemplateView.as_view(
+            template_name='dashboard/items/terms/car_terms.jade',
+        ),
+    ),
+    url(r'^dashboard/items/terms/professional_terms.html$', TemplateView.as_view(
+            template_name='dashboard/items/terms/professional_terms.jade',
+        ),
+    ),
+    url(r'^dashboard/items/terms/simple_terms.html$', TemplateView.as_view(
+            template_name='dashboard/items/terms/simple_terms.jade',
+        ),
+    ),
+    url(r'^dashboard/items/terms/real_estate_terms.html$', TemplateView.as_view(
+            template_name='dashboard/items/terms/real_estate_terms.jade',
+        ),
+    ),
 
     url(r'^dashboard/account/profile.html$', TemplateView.as_view(
             template_name='dashboard/account/profil.jade',
