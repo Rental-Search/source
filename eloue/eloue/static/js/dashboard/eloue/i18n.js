@@ -31,7 +31,18 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             // Preposition
             at: "à",
             Since: "Du",
-            to: "au"
+            to: "au",
+
+            //Booking status
+            unpaid: "Unpaid",
+            authorized: "Authorized",
+            rejected: "Rejected",
+            pending: "Pending",
+            canceled: "Canceled",
+            ongoing: "Ongoing",
+            ended: "Ended",
+            closed: "Closed",
+            incident: "Incident"
         });
 
         $translateProvider.preferredLanguage("fr");

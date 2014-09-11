@@ -12,6 +12,15 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
         function ($scope, UsersService, AuthService) {
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
+            $scope.unreadMessageThreadsCount = 0;
+            $scope.newBookingRequestsCount = 0;
+            $scope.dashboardTabs = [
+                {title: 'Dashboard', icon: 'home', sref: 'dashboard', badge: 0},
+                {title: 'Messages', icon: 'envelope-o', sref: 'messages', badge: 0},
+                {title: 'Booking', icon: 'table', sref: 'bookings', badge: 0},
+                {title: 'Items', icon: 'th-list', sref: 'items', badge: 0},
+                {title: 'Account', icon: 'user', sref: 'account', badge: 0}
+            ];
 
             if (!!$scope.currentUserToken) {
                 // Get current user
@@ -19,12 +28,14 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
+                    UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
+                        $scope.unreadMessageThreadsCount = stats.unread_message_threads_count;
+                        $scope.newBookingRequestsCount = stats.booking_requests_count;
+                        $scope.dashboardTabs[1].badge = $scope.unreadMessageThreadsCount;
+                        $scope.dashboardTabs[2].badge = $scope.newBookingRequestsCount;
+                    });
                 });
             }
-            // TODO: Retrieve counts for icons' badges
-            $scope.unreadMessageThreadsCount = 2;
-            $scope.newBookingRequestsCount = 1;
-            $scope.accountRating = 4;
 
             // Set jQuery ajax interceptors
             $.ajaxSetup({

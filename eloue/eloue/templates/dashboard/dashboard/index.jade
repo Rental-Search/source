@@ -11,7 +11,7 @@ block content-view
           .col-exposition
             h2.small.text-black.indent-xs-b {{currentUser.username}}
             {% endverbatim %}
-            +average-rate("accountRating")
+            +average-rate("userStats.average_rating")
             {% verbatim %}
             p.indent-sm-v Membre depus le {{currentUser.date_joined | date:'dd.MM.yyyy'}}
             a(ui-sref="account.profile").btn.bg-success-hover.text-white Mettre à jour mes infos

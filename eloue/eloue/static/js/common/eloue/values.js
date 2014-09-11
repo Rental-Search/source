@@ -6,12 +6,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
      * Web service endpoints.
      */
     EloueCommon.constant("Endpoints", {
-        oauth_url: "/oauth2/",
-        api_url: "/api/2.0/"
+        oauth_url: "http://10.0.5.47:8200/oauth2/",
+        api_url: "http://10.0.5.47:8200/api/2.0/"
     });
 
     EloueCommon.constant("Path", {
-        templatePrefix: "/" // FIXME: should use /templates/ for local files, and / if HTTP scheme is HTTP/HTTPS
+        templatePrefix: "/templates/" // FIXME: should use /templates/ for local files, and / if HTTP scheme is HTTP/HTTPS
     });
 
     EloueCommon.constant("ServiceErrors", {

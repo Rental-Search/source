@@ -16,12 +16,12 @@ block append content-body
       include ../../jade/_header_site
     article.dashboard
       nav(ng-show="!!currentUser")
-        ul.ng-hide(ng-show="true", ng-init="dashboard_tabs=[{title: 'Dashboard', icon: 'home', sref: 'dashboard', badge: 0}, {title: 'Messages', icon: 'envelope-o', sref: 'messages', badge: unreadMessageThreadsCount}, {title: 'Booking', icon: 'table', sref: 'bookings', badge: newBookingRequestsCount}, {title: 'Items', icon: 'th-list', sref: 'items', badge: 0}, {title: 'Account', icon: 'user', sref: 'account', badge: 0}]")
-          li(ng-repeat="tab in dashboard_tabs")
+        ul
+          li(ng-repeat="tab in dashboardTabs")
             {% verbatim %}
             a(ui-sref="{{tab.sref}}").text-success-dark
               i.fa(class="fa-{{tab.icon}}")
-                span.badge-count-action(ng-show="!!{{tab.badge}}", ng-bind="{{tab.badge}}")
+                span.badge-count-action(ng-show="tab.badge") {{tab.badge}}
               | {{tab.title}}
             {% endverbatim %}
       .content-view(ui-view)

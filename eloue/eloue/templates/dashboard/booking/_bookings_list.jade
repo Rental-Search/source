@@ -12,15 +12,16 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
             li.tab-horisontal(ng-click="filterByBorrower()"): h3.small Emprunteurs
       .col-xs-3.indent-xs-t
         .select-gradient.without-search.date-picker
-          select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()", ng-options="state.value as state.label for state in stateList")
+          select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()")
+              option(value="undefined") Statut
+              option(ng-repeat="state in stateList", value="{{state.value}}") {{state.value | translate}}
 
   ul.scrollbar-custom
       li.tab-vertical.block-with-thumbnail(class="#{booking.bage.classname}", ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid")
         .col-thumbnail
           .thumbnail
-            a(href="#"): img(ng-src="{{booking.picture}}", alt="{{booking.product.summary}}", width="130")
-            // TODO change 'a venir' title
-            span.booking-bage a venir
+            a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{booking.picture}}", alt="{{booking.product.summary}}", width="130")
+            span(translate="{{booking.state}}").booking-bage
         .col-exposition
           h3.small
             | Location 
@@ -28,5 +29,10 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
           p.normal.text-gray
             big.text-primary {{booking.total_amount}}€
             br
-            | Du {{booking.start_date}} au {{booking.end_date}}
+            | Du {{booking.start_date.day}} &nbsp;
+            span(translate="{{booking.start_date.month}}")
+            | {{booking.start_date.year}}
+            | au {{booking.end_date.day}} &nbsp;
+            span(translate="{{booking.end_date.month}}")
+            | {{booking.end_date.year}}
 {% endverbatim %}

@@ -16,7 +16,6 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.bookingFilter = {};
 
             $scope.stateList = [
-                {label: "Statut", value: undefined},
                 {label: "Unpaid", value: "unpaid"},
                 {label: "Authorized", value: "authorized"},
                 {label: "Rejected", value: "rejected"},
@@ -28,7 +27,7 @@ define(["angular", "eloue/app"], function (angular) {
                 {label: "Incident", value: "incident"}
             ];
 
-            $scope.stateFilter = $scope.stateList[0].value;
+            $scope.stateFilter = undefined;
 
             $scope.currentUserPromise.then(function (currentUser) {
                 BookingsLoadService.getBookingList(undefined, currentUser.id).then(function (bookingList) {
