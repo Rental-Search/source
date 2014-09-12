@@ -2,12 +2,13 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
 
     describe("Service: AuthService", function () {
 
-        var AuthService, endpointsMock, redirectAfterLoginMock, registrationResourceMock;
+        var AuthService, endpointsMock, authConstantsMock, redirectAfterLoginMock, registrationResourceMock;
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             endpointsMock = {};
+            authConstantsMock = {};
             redirectAfterLoginMock = {};
             registrationResourceMock = {
                 "register": {
@@ -17,6 +18,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
 
             module(function($provide) {
                 $provide.value("Endpoints", endpointsMock);
+                $provide.value("AuthConstants", authConstantsMock);
                 $provide.value("RedirectAfterLogin", redirectAfterLoginMock);
                 $provide.value("Registration", registrationResourceMock);
             });

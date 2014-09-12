@@ -10,6 +10,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         api_url: "/api/2.0/"
     });
 
+    EloueCommon.constant("AuthConstants", {
+        clientId: "51bcafe59e484b028657",
+        clientSecret: "132a8a395c140e29f15c4341758c59faa33e012b",
+        grantType: "password"
+    });
+
     EloueCommon.constant("Path", {
         templatePrefix: "/" // FIXME: should use /templates/ for local files, and / if HTTP scheme is HTTP/HTTPS
     });

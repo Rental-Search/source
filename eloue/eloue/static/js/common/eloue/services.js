@@ -1674,23 +1674,24 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             return productRelatedMessagesParseService;
         }]);
 
-        EloueCommon.factory("AuthService", ["$q", "$window", "Endpoints", "RedirectAfterLogin", "Registration", function ($q, $window, Endpoints, RedirectAfterLogin, Registration) {
+        EloueCommon.factory("AuthService", ["$q", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", function ($q, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration) {
             return {
 
                 /**
                  * Sign in user with provided credentials.
                  * @param credentials user credentials
                  * @returns Signed in user object
+                 * @param successCallback success callback function
+                 * @param errorCallback error callback function
                  */
                 login: function (credentials, successCallback, errorCallback) {
-                    var self = this;
                     $.ajax({
                         url: Endpoints.oauth_url + "access_token/",
                         type: "POST",
                         data: {
-                            client_id: "51bcafe59e484b028657",
-                            client_secret: "132a8a395c140e29f15c4341758c59faa33e012b",
-                            grant_type: "password",
+                            client_id: AuthConstants.clientId,
+                            client_secret: AuthConstants.clientSecret,
+                            grant_type: AuthConstants.grantType,
                             username: credentials.username,
                             password: credentials.password
                         },
