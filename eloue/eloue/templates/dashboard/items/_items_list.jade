@@ -1,3 +1,5 @@
+include ../jade/_mixins
+
 {% verbatim %}
 section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selectedCategory)")
   .section-header
@@ -19,7 +21,8 @@ section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selecte
           p.normal.text-gray
             big.text-primary {{item.pricePerDay}}€ / jour
             br
-            //-+average-rate(booking_detail.lot.rate)
-            //-+number-of-comments(booking_detail.lot.comments_count)
-            //-+number-of-bookings(booking_detail.lot.booking_count)
-{% endverbatim %}
+            {% endverbatim %}
+            +average-rate("item.stats.average_rating")
+            +number-of-comments("item.stats.booking_coments_count")
+            +number-of-bookings("item.stats.bookings_count")
+

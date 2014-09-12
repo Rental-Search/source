@@ -1,4 +1,4 @@
-//-include ../jade/_mixins
+include ../jade/_mixins
 
 block section-content
   if True
@@ -42,6 +42,6 @@ block section-content
                 big.text-primary {{product.deposit_amount}}€ / jour
                 br
                 {% endverbatim %}
-                //-+average-rate(4)
-                //-+number-of-comments(12)
-                //-+number-of-bookings(7)
+                +average-rate("product.ownerStats.average_rating")
+                +number-of-comments("product.stats.booking_coments_count")
+                +number-of-bookings("product.stats.bookings_count")

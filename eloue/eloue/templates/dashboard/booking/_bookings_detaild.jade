@@ -25,11 +25,10 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                   p.indent-xs-v
                     {% endverbatim %}
                     +average-rate("bookingDetails.product.ownerStats.average_rating")
+                    +number-of-comments("bookingDetails.product.stats.booking_coments_count")
+                    +number-of-bookings("bookingDetails.product.stats.bookings_count")
                     {% verbatim %}
                   p
-                  //-
-                    +number-of-comments(booking_detail.lot.owner.comments_count)
-                    +number-of-bookings(booking_detail.lot.owner.booking_count)
 
     .bg-success-light.text-success.bd-rad
       i.fa.fa-phone.fa-lg.indent-xs-h

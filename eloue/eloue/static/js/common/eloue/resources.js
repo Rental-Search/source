@@ -73,7 +73,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Products", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "products/:id/?", {},
             {
-                "update": { method: "PUT" }
+                "update": { method: "PUT" },
+                "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats\\/" }
             });
     }]);
 

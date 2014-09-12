@@ -497,8 +497,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                             subPromises.push(PicturesService.getPicturesByProduct(product.id).$promise);
                             subPromises.push(PricesService.getProductPricesPerDay(product.id).$promise);
-                            subPromises.push(Bookings.get({product: product.id}).$promise);
-                            subPromises.push(MessageThreads.list({product: product.id}).$promise);
+                            subPromises.push(Products.getStats({id: product.id}).$promise);
                             $q.all(subPromises).then(
                                 function (results) {
 
@@ -514,12 +513,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                         product.pricePerDay = 0;
                                     }
 
-                                    var bookings = results[2];
-                                    product.numberOfBookings = bookings.results.length;
-
-                                    var messageThreads = results[3];
-                                    product.numberOfComments = messageThreads.results.length;
-
+                                    product.stats = results[2];
                                     productDeferred.resolve(product);
                                 },
                                 function (reasons) {
@@ -1163,8 +1157,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("ProductsParseService", [function () {
             var productsParseService = {};
 
-            productsParseService.parseProduct = function (productData, addressData, ownerData, ownerStatsData, phoneData, picturesDataArray) {
+            productsParseService.parseProduct = function (productData, statsData, addressData, ownerData, ownerStatsData, phoneData, picturesDataArray) {
                 var productResult = angular.copy(productData);
+
+                productResult.stats = statsData;
 
                 // Parse address
                 if (!!addressData) {
@@ -1346,6 +1342,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     Products.get({id: productId, _cache: new Date().getTime()}).$promise.then(function (productData) {
                         var productPromises = {};
 
+                        productPromises.stats = Products.getStats({id: productId, _cache: new Date().getTime()});
+
                         if (loadAddress) {
                             // Get address id
                             var addressId = UtilsService.getIdFromUrl(productData.address);
@@ -1375,7 +1373,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                         // When all data loaded
                         $q.all(productPromises).then(function (results) {
-                            var product = ProductsParseService.parseProduct(productData, results.address, results.owner,
+                            var product = ProductsParseService.parseProduct(productData, results.stats, results.address, results.owner,
                                 results.ownerStats, results.phone, (!!results.pictures) ? results.pictures.results : null);
                             deferred.resolve(product);
                         });

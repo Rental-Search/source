@@ -47,7 +47,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 }
             };
             productsParseServiceMock = {
-                parseProduct: function (productData, address, owner, phone, pictures) {
+                parseProduct: function (productData, statsData, address, owner, ownerStats, phone, pictures) {
                 }
             };
 
