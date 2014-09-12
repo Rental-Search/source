@@ -1,10 +1,7 @@
 mixin average-rate(account_var)
-  span.average-rate.ng-hide(ng-show="true", ng-init="currentStar=#{account_var}")
-    {% verbatim %}
+  span.average-rate.ng-hide(ng-show="true")
     span.star(ng-init="stars=[1, 2, 3, 4, 5]")
-      i.fa.fa-lg.fa-star(ng-repeat="star in stars", class="{{star === currentStar ? 'current' : ''}}")
-    {% endverbatim %}
-
+      i.fa.fa-lg.fa-star(ng-repeat="star in stars", class="{{!#{account_var} ? 'disabled' : (star === #{account_var} ? 'current' : '')}}")
 mixin rate-counter(account_var)
   span.rate-counter(ng-show="!!#{account_var}", ng-bind="#{account_var}")
 

@@ -25,7 +25,7 @@ block details
                     li(ng-show="product.pictures.length < 3")
                         label(for="image").file-input-drag
                             i.fa.fa-plus.fa-3x
-                            input(type="file", name="image")#image
+                            input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image
                             input(type="hidden", name="product", value="{{productsBaseUrl}}{{product.id}}/")#product
                         li(ng-repeat="picture in product.pictures track by picture.id")
                             img(ng-src="{{picture.image.thumbnail}}", alt="{{product.summary}}")
