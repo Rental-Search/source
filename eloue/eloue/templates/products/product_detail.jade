@@ -1,21 +1,33 @@
 extends _base_product_detail
 block tab
-  .carousel-wrapper.block-tab
-    -var it = [1,2,3]
-    .thumbnail-inner
-      each i in it
-        .thumbnail-img
-          img(src=STATIC_URL+"img/carousel-product/#{i}.jpg", alt="")
-    #carousel-product.carousel.slide(data-ride="carousel")
-      .carousel-inner
-        each i in it
-          if i == 1
-            .item.active
-              img(src=STATIC_URL+"img/carousel-product/#{i}.jpg", alt="")
-          else
-            .item
-              img(src=STATIC_URL+"img/carousel-product/#{i}.jpg", alt="")
-      a(href="#carousel-product" role="button" data-slide="prev").left.carousel-control
-        i.flaticon.stroke.left-2
-      a(href="#carousel-product" role="button" data-slide="next").right.carousel-control
-        i.flaticon.stroke.right-2
+  .carousel-conteiner
+    .col-md-7
+      #carousel-product.carousel.slide(data-ride="carousel")
+        .carousel-inner
+          .item.active(style="background-image: url(http://lorempixel.com/800/620/technics/1)")
+          .item(style="background-image: url(http://lorempixel.com/600/810/technics/2)")
+          .item(style="background-image: url(http://lorempixel.com/400/610/technics/3)")
+          .item(style="background-image: url(http://lorempixel.com/500/310/technics/4)")
+        a(href="#carousel-product" role="button" data-slide="prev").left.carousel-control
+          i.flaticon.solid.left-2
+        a(href="#carousel-product" role="button" data-slide="next").right.carousel-control
+          i.flaticon.solid.right-2
+      .items-thumbnail-inner
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/800/600/technics/1)")
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/600/800/technics/2)")
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/400/600/technics/3)")
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/500/300/technics/4)")
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/500/300/technics/5)")
+    .col-md-5
+      .map-container
+        .map-inner
+          span.whirly
+          .map
+            // место для карты
+      .location-title-inner
+        .location-title
+          i.flaticon.solid.loca.location-pin-3.icon-li.icon-lg
+          h4 52 Boulevard Pereire
+          small Paris, 75017
+
+

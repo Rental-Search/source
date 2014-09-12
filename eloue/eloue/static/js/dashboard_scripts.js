@@ -35,9 +35,10 @@ $(document).ready(function() {
 
   // custom scrollbar
   $('.chosen-drop').mCustomScrollbar({
-    scrollInertia: '100',
+    mouseWheel:{ deltaFactor: 50 },
+    scrollInertia: '200',
     autoHideScrollbar: true,
-    theme: 'dark-thin',
+    // theme: 'minimal-dark',
     scrollbarPosition: 'outside',
     advanced:{
       autoScrollOnFocus: false,
@@ -45,9 +46,10 @@ $(document).ready(function() {
     }
   });
   $('.scrollbar-custom').mCustomScrollbar({
-    scrollInertia: '100',
+    mouseWheel:{ deltaFactor: 50 },
+    scrollInertia: '200',
     autoHideScrollbar: true,
-    theme: 'dark-thin',
+    // theme: 'minimal-dark',
     advanced:{
       updateOnContentResize: true,
       autoScrollOnFocus: false
@@ -55,10 +57,11 @@ $(document).ready(function() {
     // setHeight: "100%"
   });
   $('.textarea-wrapper').mCustomScrollbar({
+    mouseWheel:{ deltaFactor: 50 },
     // scrollbarPosition: 'outside',
-    scrollInertia: '100',
+    scrollInertia: '200',
     autoHideScrollbar: true,
-    theme: 'dark-thin',
+    // theme: 'minimal-dark',
     mouseWheel:{ 
       disableOver: false
     }

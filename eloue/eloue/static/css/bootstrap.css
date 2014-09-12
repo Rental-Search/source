@@ -5919,6 +5919,10 @@ a, a:hover {
   color: inherit;
 }
 
+.form-control {
+  width: 100% !important;
+}
+
 .form-control:focus {
   -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.1) !important;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1) !important;
@@ -6156,8 +6160,20 @@ a, a:hover {
   color: #24bd77 !important;
 }
 
+.text-blue {
+  color: #3959a8;
+}
+
 .text-gray {
   color: #c4c4c4 !important;
+}
+
+.text-gray-strong {
+  color: #9d9d9d;
+}
+
+.va-m {
+  vertical-align: middle;
 }
 
 .badge.price {
@@ -6240,6 +6256,13 @@ a, a:hover {
   background: #f27e36;
 }
 
+.round-img {
+  display: inline-block;
+  line-height: 0;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
 .list-group li {
   background-color: #fbfbfb;
   border: none;
@@ -6251,6 +6274,26 @@ a, a:hover {
 }
 .list-group li:after {
   clear: both;
+}
+
+.indent {
+  margin: 1.42857em !important;
+}
+
+.indent-t {
+  margin-top: 1.42857em !important;
+}
+
+.indent-r {
+  margin-right: 1.42857em !important;
+}
+
+.indent-b {
+  margin-bottom: 1.42857em !important;
+}
+
+.indent-l {
+  margin-left: 1.42857em !important;
 }
 
 .indent-md {
@@ -6391,6 +6434,62 @@ table.bd-wrap td {
 }
 table.bd-wrap tr {
   border: 1px solid #c4c4c4;
+}
+
+/* makes the font 33% larger relative to the icon container */
+.icon-lg {
+  font-size: 1.33333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+}
+
+.icon-2x {
+  font-size: 2em;
+}
+
+.icon-3x {
+  font-size: 3em;
+}
+
+.icon-4x {
+  font-size: 4em;
+}
+
+.icon-5x {
+  font-size: 5em;
+}
+
+.icon-6x {
+  font-size: 6em;
+}
+
+.icon-7x {
+  font-size: 7em;
+}
+
+.icon-fw {
+  width: 1.28571em;
+  text-align: center;
+}
+
+.icon-ul {
+  padding-left: 0;
+  margin-left: 2.14286em;
+  list-style-type: none;
+}
+.icon-ul > li {
+  position: relative;
+}
+
+.icon-li {
+  position: absolute;
+  left: -2.14286em;
+  width: 2.14286em;
+  top: 0.14286em;
+  text-align: center;
+}
+.icon-li.icon-lg {
+  left: -1.85714em;
 }
 
 select {

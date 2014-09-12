@@ -18,6 +18,9 @@ body
 a, a:hover
   color: inherit
 
+.form-control
+  width: 100% !important
+
 .form-control:focus
   +box-shadow( 0 0 6px $smoke-lite !important)
   z-index: 10 !important
@@ -187,8 +190,15 @@ a, a:hover
 
 .text-success
   color: $brand-success !important
+.text-blue
+  color: $brand-info
 .text-gray
   color: $gray-medium !important
+.text-gray-strong
+  color: $gray-strong
+
+.va-m
+  vertical-align: middle
 
 .badge.price
   background-color: $brand-primary
@@ -252,6 +262,12 @@ a, a:hover
   .chosen-results li.result-selected
     background: $brand-primary
 
+.round-img
+  display: inline-block
+  line-height: 0
+  overflow: hidden
+  border-radius: 50%
+
 .list-group
   li
     background-color: $gray-lite
@@ -259,16 +275,16 @@ a, a:hover
     padding: .8em .5em
     +clearfix()
 
-@each $indent, $size in ($indent-md, "md"), ($indent-lg, "lg"), ($indent-sm, "sm"), ($indent-xs, "xs") 
-  .indent-#{$size}
+@each $indent, $size in ($indent, ""), ($indent-md, "-md"), ($indent-lg, "-lg"), ($indent-sm, "-sm"), ($indent-xs, "-xs") 
+  .indent#{$size}
     margin: $indent !important
-  .indent-t-#{$size}
+  .indent-t#{$size}
     margin-top: $indent !important
-  .indent-r-#{$size}
+  .indent-r#{$size}
     margin-right: $indent !important
-  .indent-b-#{$size}
+  .indent-b#{$size}
     margin-bottom: $indent !important
-  .indent-l-#{$size}
+  .indent-l#{$size}
     margin-left: $indent !important
 
 ul.not-ordered

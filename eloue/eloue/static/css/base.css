@@ -1034,6 +1034,14 @@ input[type="reset"]::-moz-focus-inner {
     margin-left: 100%;
   }
 }
+.mCSB_draggerRail {
+  display: none !important;
+}
+
+.mCSB_dragger_bar {
+  background-color: lightgray !important;
+}
+
 input#sourse {
   position: fixed;
   z-index: 1000000 !important;

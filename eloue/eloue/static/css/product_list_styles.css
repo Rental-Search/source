@@ -1174,10 +1174,6 @@ input#sourse:checked + #sourse-img {
   animation: whirly 1.5s infinite linear;
 }
 
-article {
-  padding-top: 2.5em;
-  padding-bottom: 2.5em;
-}
 article .breadcrumb {
   color: #9d9d9d;
 }

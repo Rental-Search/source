@@ -50,8 +50,6 @@
     <script src="../../static/js/bootstrap-datepicker.js"></script>
     <script src="../../static/js/locales/bootstrap-datepicker.fr.js"></script>
     <script src="../../static/js/scripts.js"></script>
-    <script src="../../static/js/bootstrap/dropdown.js"></script>
-    <script src="../../static/js/bootstrap/carousel.js"></script>
     <script src="../../static/js/scripts.js"></script>
   </head>
   <body>
@@ -705,365 +703,167 @@
           </section>
         </div>
       </header>
-      <nav class="bd-b">
-        <div class="row-fluid bd-b">
-          <div class="container">
-            <ol class="breadcrumb">
-              <li><a href="#">Accueil</a></li>
-              <li><a href="#">Location Voiture</a></li>
-              <li><a href="#">Nice</a></li>
-              <li><a href="#">BMW - 520 Touring luxe</a></li>
-            </ol>
+      <section class="owner-headline">
+        <div class="container text-center indent-t-lg">
+          <div class="round-img"><img src="http://lorempixel.com/120/120/people" alt=""></div>
+          <h3 class="indent-b-xs">Gaspard&nbsp;Kroutchev</h3>
+          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
           </div>
+          <p class="text-gray-strong indent-t-xs">Villeneuve-le-Roi&nbsp;(94290)</p>
         </div>
-      </nav>
-      <article class="container indent-t-lg indent-b-lg">
-        <div class="row">
-          <div class="col-sm-8 product-details-title">
-            <h3>Location Bmw - 520 touring luxe - NICE</h3>
-            <ul class="breadcrumb">
-              <li>Année 2010</li>
-              <li>Moteur Diesel</li>
-              <li>Boite Automatique</li>
-              <li>10 000 à 30 000 km</li>
-            </ul>
-          </div>
-          <div class="col-sm-4 share-btns">
-            <ul class="nav without-spaces">
-              <li><a href="https://twitter.com/share" data-text="Tweeter" data-lang="fr" data-count="none" class="twitter-share-button">Tweeter</a></li>
-              <li>
-                <div data-href="https://www.e-loue.com" data-layout="button" data-action="like" data-show-faces="false" data-share="false" class="fb-like"></div>
-              </li>
-              <li>
-                <div data-href="https://www.e-loue.com" data-layout="button_count" data-action="recommend" data-show-faces="false" data-share="false" class="fb-like"></div>
-              </li>
-              <li>
-                <div data-size="medium" data-annotation="none" class="g-plusone"></div>
-              </li>
-            </ul>
-          </div>
-        </div>
+      </section>
+      <article class="container list-layout">
         <div class="row">
           <main class="col-sm-8">
             <section>
               <div class="section-body">
-                <div class="part picture-tab">
-                  <ul class="nav without-spaces">
-                    <li><a href="./product_detail.html" class="pad-v-2">Photos</a></li>
-                    <li><a href="./tab_tarifs.html" class="pad-v-2">Tarifs</a></li>
-                    <li><a href="#" class="pad-v-2">Localisation</a></li>
-                    <li><a href="./tab_available.html" class="pad-v-2">Disponibilité</a></li>
-                    <li><a href="./tab_terms.html" class="pad-v-2">Assurance</a></li>
-                  </ul>
-                  <div class="carousel-conteiner">
-                    <div class="col-md-7">
-                      <div id="carousel-product" data-ride="carousel" class="carousel slide">
-                        <div class="carousel-inner">
-                          <div style="background-image: url(http://lorempixel.com/800/620/technics/1)" class="item active"></div>
-                          <div style="background-image: url(http://lorempixel.com/600/810/technics/2)" class="item"></div>
-                          <div style="background-image: url(http://lorempixel.com/400/610/technics/3)" class="item"></div>
-                          <div style="background-image: url(http://lorempixel.com/500/310/technics/4)" class="item"></div>
-                        </div><a href="#carousel-product" role="button" data-slide="prev" class="left carousel-control"><i class="flaticon solid left-2"></i></a><a href="#carousel-product" role="button" data-slide="next" class="right carousel-control"><i class="flaticon solid right-2"></i></a>
-                      </div>
-                      <div class="items-thumbnail-inner">
-                        <div><a href="#" style="background-image: url(http://lorempixel.com/800/600/technics/1)" class="items-thumbnail"></a></div>
-                        <div><a href="#" style="background-image: url(http://lorempixel.com/600/800/technics/2)" class="items-thumbnail"></a></div>
-                        <div><a href="#" style="background-image: url(http://lorempixel.com/400/600/technics/3)" class="items-thumbnail"></a></div>
-                        <div><a href="#" style="background-image: url(http://lorempixel.com/500/300/technics/4)" class="items-thumbnail"></a></div>
-                        <div><a href="#" style="background-image: url(http://lorempixel.com/500/300/technics/5)" class="items-thumbnail"></a></div>
-                      </div>
-                    </div>
-                    <div class="col-md-5">
-                      <div class="map-container">
-                        <div class="map-inner"><span class="whirly"></span>
-                          <div class="map">
-                            <!-- место для карты-->
-                          </div>
-                        </div>
-                      </div>
-                      <div class="location-title-inner">
-                        <div class="location-title"><i class="flaticon solid loca location-pin-3 icon-li icon-lg"></i>
-                          <h4>52 Boulevard Pereire</h4><small>Paris, 75017</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="part description">
-                  <h3>Déscription</h3>
-                  <div class="row">
-                    <div class="col-sm-6 text">
-                      <p>Donec ullamcorper nulla non metus auctor fringilla. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-                      <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-                    </div>
-                    <div class="col-sm-6 properties">
-                      <table class="calendar bd-clear">
-                        <tbody>
-                          <tr>
-                            <td>Notation</td>
-                            <td><b>32&nbsp;&nbsp;
-                                <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                                </div></b></td>
-                          </tr>
-                          <tr>
-                            <td>Date d’achat</td>
-                            <td><b>2008&nbsp;&nbsp;</b></td>
-                          </tr>
-                          <tr>
-                            <td>Marque</td>
-                            <td><b>BMW&nbsp;&nbsp;</b></td>
-                          </tr>
-                          <tr>
-                            <td>Modèle</td>
-                            <td><b>520 Touring&nbsp;&nbsp;</b></td>
-                          </tr>
-                          <tr>
-                            <td>Consommation</td>
-                            <td><b>4,5 l/100km&nbsp;&nbsp;</b></td>
-                          </tr>
-                          <tr>
-                            <td>Prix neuf</td>
-                            <td><b>38 000€&nbsp;&nbsp;</b></td>
-                          </tr>
-                          <tr>
-                            <td>Puissance</td>
-                            <td><b>130 CV&nbsp;&nbsp;</b></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-                <div class="part comments comments-ad">
-                  <h3>Commentaires liés à cette annonce</h3>
+                <div class="part comments">
+                  <h3 class="indent-b-xs">Les 3 commentaires de</h3>
                   <ul class="list-group">
                     <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                      <div class="thumbnail-img"><a href="#"><img src="http://lorempixel.com/80/80/technics" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                        <p><a href="#" class="text-success"><b>BMW Série 7 </b></a><small>loué par </small><a href="#" class="text-success"><b>Philippe Dupré</b></a></p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, ut officia cupiditate eum. Maiores accusamus in eius similique quas ex!</p><small>12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                      <div class="thumbnail-img"><a href="#"><img src="http://lorempixel.com/80/80/technics" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                        <p><a href="#" class="text-success"><b>BMW Série 7 </b></a><small>loué par </small><a href="#" class="text-success"><b>Philippe Dupré</b></a></p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, ut officia cupiditate eum. Maiores accusamus in eius similique quas ex!</p><small>12 Mai 2014</small>
                       </div>
                     </li>
                     <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
+                      <div class="thumbnail-img"><a href="#"><img src="http://lorempixel.com/80/80/technics" alt=""></a></div>
                       <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
-                      </div>
-                    </li>
-                    <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
-                      </div>
-                    </li>
-                    <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                        <p><a href="#" class="text-success"><b>BMW Série 7 </b></a><small>loué par </small><a href="#" class="text-success"><b>Philippe Dupré</b></a></p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, ut officia cupiditate eum. Maiores accusamus in eius similique quas ex!</p><small>12 Mai 2014</small>
                       </div>
                     </li>
                   </ul>
                 </div>
-                <div class="part comments comments-owner">
-                  <h3>Commentaire liés au propriétaire</h3>
-                  <ul class="list-group">
-                    <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                <div class="part">
+                  <h3 class="indent-b-xs">Les 3 annonces de Gaspard</h3>
+                  <ol class="row">
+                    <li>
+                      <div class="section-body">
+                        <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="http://lorempixel.com/260/180/technics" alt=""><span class="badge price">56&euro; /jour</span></a></div>
+                        <div class="info">
+                          <h6><a href="#">Bike Bike Bike Bike Bike Bike Bike Bike Bike Bike </a>
+                          </h6>
+                          <p><b>Aubervillies<span class="zip-code">,&nbsp;12432</span></b></p>
+                          <div class="rate"><span class="flaticon solid star-2"></span><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div><span class="sprite-comment"><i class="flaticon stroke writing-comment"></i>3</span>
+                          <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque consequatur, nihil odit natus, dolores tempore.</p>
+                        </div>
                       </div>
                     </li>
-                    <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                    <li>
+                      <div class="section-body">
+                        <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="http://lorempixel.com/260/180/technics" alt=""><span class="badge price">100&euro; /jour</span></a></div>
+                        <div class="info">
+                          <h6><a href="#">Audi - A3</a><span class="badge-pro">pro</span>
+                          </h6>
+                          <p><b>Paris Paris Paris Paris Paris Paris Paris Paris Paris Paris <span class="zip-code">,&nbsp;12432</span></b></p>
+                          <div class="rate"><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div><span class="sprite-comment"><i class="flaticon stroke writing-comment"></i>1</span>
+                          <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima debitis labore, ad sequi nostrum officiis!</p>
+                        </div>
                       </div>
                     </li>
-                    <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                    <li>
+                      <div class="section-body">
+                        <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="http://lorempixel.com/260/180/technics" alt=""><span class="badge price">56&euro; /jour</span></a></div>
+                        <div class="info">
+                          <h6><a href="#">Tante tip indien</a>
+                          </h6>
+                          <p><b>Nantes<span class="zip-code">,&nbsp;12432</span></b></p>
                           <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
                           </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                          <p class="full_description">Lorem ipsum dolor sit amet, o ea adipisci?</p>
+                        </div>
                       </div>
                     </li>
-                    <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                    <li>
+                      <div class="section-body">
+                        <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="http://lorempixel.com/260/180/technics" alt=""><span class="badge price">56&euro; /jour</span></a></div>
+                        <div class="info">
+                          <h6><a href="#">Tante tip indien</a>
+                          </h6>
+                          <p><b>Nantes<span class="zip-code">,&nbsp;12432</span></b></p>
+                          <div class="rate"><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2 current-rate"></span>
+                          </div><span class="sprite-comment"><i class="flaticon stroke writing-comment"></i>6</span>
+                          <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea impedit vero natus quos praesentium eaque!</p>
+                        </div>
                       </div>
                     </li>
-                    <li class="list-group-item thumbnail">
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/comentator.png" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
-                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                          </div>
-                        </h5>
-                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                    <li>
+                      <div class="section-body">
+                        <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="http://lorempixel.com/260/180/technics" alt=""><span class="badge price">56&euro; /jour</span></a></div>
+                        <div class="info">
+                          <h6><a href="#">Tante tip indien</a>
+                          </h6>
+                          <p><b>Nantes<span class="zip-code">,&nbsp;12432</span></b></p>
+                          <div class="rate"><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span>
+                          </div><span class="sprite-comment"><i class="flaticon stroke writing-comment"></i>31</span>
+                          <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores officiis eos similique nihil velit laudantium.</p>
+                        </div>
                       </div>
                     </li>
-                  </ul>
+                    <li>
+                      <div class="section-body">
+                        <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="http://lorempixel.com/260/180/technics" alt=""><span class="badge price">56&euro; /jour</span></a></div>
+                        <div class="info">
+                          <h6><a href="#">Tante tip indien</a>
+                          </h6>
+                          <p><b>Nantes<span class="zip-code">,&nbsp;12432</span></b></p>
+                          <div class="rate"><span class="flaticon solid star-2"></span><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div><span class="sprite-comment"><i class="flaticon stroke writing-comment"></i>312</span>
+                          <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi laborum vitae, maxime dicta modi eligendi.</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="section-body">
+                        <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="http://lorempixel.com/260/180/technics" alt=""><span class="badge price">56&euro; /jour</span></a></div>
+                        <div class="info">
+                          <h6><a href="#">Tante tip indien</a>
+                          </h6>
+                          <p><b>Nantes<span class="zip-code">,&nbsp;12432</span></b></p>
+                          <div class="rate"><span class="flaticon solid star-2"></span><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div><span class="sprite-comment"><i class="flaticon stroke writing-comment"></i>3</span>
+                          <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, ipsam sed tempora, optio labore ullam.</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="section-body">
+                        <div class="thumbnail-img"><a href="products/product_detail.html" class="img-wrapper"><img src="http://lorempixel.com/260/180/technics" alt=""><span class="badge price">56&euro; /jour</span></a></div>
+                        <div class="info">
+                          <h6><a href="#">Tante tip indien</a>
+                          </h6>
+                          <p><b>Nantes<span class="zip-code">,&nbsp;12432</span></b></p>
+                          <div class="rate"><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div><span class="sprite-comment"><i class="flaticon stroke writing-comment"></i>3</span>
+                          <p class="full_description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio possimus obcaecati eligendi maxime, debitis numquam?</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ol>
                 </div>
               </div>
             </section>
           </main>
           <aside class="col-sm-4">
-            <section class="booking-form">
-              <div class="section-header">
-                <h4>Réservez en ligne</h4>
-              </div>
-              <form class="form-inline section-body text-center">
-                <div class="part">
-                  <p><small>à partir de</small>
-                    <big class="text-primary">&nbsp;56€ /jour</big>
-                  </p>
-                  <div class="row date-picker">
-                    <div class="table-cell main-cell">
-                      <div class="table-cell"><span>Du</span></div>
-                      <div class="table-cell main-cell">
-                        <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
-                      </div>
-                    </div>
-                    <div class="table-cell">
-                      <select class="form-control">
-                        <option value="01.00">01.00</option>
-                        <option value="02.00">02.00</option>
-                        <option value="03.00">03.00</option>
-                        <option value="04.00">04.00</option>
-                        <option value="05.00">05.00</option>
-                        <option value="06.00">06.00</option>
-                        <option value="07.00">07.00</option>
-                        <option value="08.00">08.00</option>
-                        <option value="09.00">09.00</option>
-                        <option value="10.00">10.00</option>
-                        <option value="11.00">11.00</option>
-                        <option value="12.00">12.00</option>
-                        <option value="13.00">13.00</option>
-                        <option value="14.00">14.00</option>
-                        <option value="15.00">15.00</option>
-                        <option value="16.00">16.00</option>
-                        <option value="17.00">17.00</option>
-                        <option value="18.00">18.00</option>
-                        <option value="19.00">19.00</option>
-                        <option value="20.00">20.00</option>
-                        <option value="21.00">21.00</option>
-                        <option value="22.00">22.00</option>
-                        <option value="23.00">23.00</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row date-picker">
-                    <div class="table-cell main-cell">
-                      <div class="table-cell"><span>Au</span></div>
-                      <div class="table-cell main-cell">
-                        <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
-                      </div>
-                    </div>
-                    <div class="table-cell">
-                      <select class="form-control">
-                        <option value="01.00">01.00</option>
-                        <option value="02.00">02.00</option>
-                        <option value="03.00">03.00</option>
-                        <option value="04.00">04.00</option>
-                        <option value="05.00">05.00</option>
-                        <option value="06.00">06.00</option>
-                        <option value="07.00">07.00</option>
-                        <option value="08.00">08.00</option>
-                        <option value="09.00">09.00</option>
-                        <option value="10.00">10.00</option>
-                        <option value="11.00">11.00</option>
-                        <option value="12.00">12.00</option>
-                        <option value="13.00">13.00</option>
-                        <option value="14.00">14.00</option>
-                        <option value="15.00">15.00</option>
-                        <option value="16.00">16.00</option>
-                        <option value="17.00">17.00</option>
-                        <option value="18.00">18.00</option>
-                        <option value="19.00">19.00</option>
-                        <option value="20.00">20.00</option>
-                        <option value="21.00">21.00</option>
-                        <option value="22.00">22.00</option>
-                        <option value="23.00">23.00</option>
-                      </select>
-                    </div>
-                  </div>
-                  <p class="available">Cet article est disponible à ces dates</p>
-                  <!-- p.available.unavailable Cet article est disponible à ces dates-->
-                </div>
-                <div class="part">
-                  <p>Durée de la location : <b class="period-days">3 jours </b>et <b class="period-hours">9 heures</b></p>
-                  <p class="price">Prix de la location :
-                    <big class="text-primary">&nbsp;168€</big>
-                  </p>
-                  <p>Assurance incluse</p>
-                </div>
-                <div class="part"><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up-reserve" class="btn bg-success calendar-ok"><i class="flaticon stroke calendar-2"></i>Réservez</a>
-                  <p class="mrg-v-1"><small>Cette somme vous sera débitée lorsque le propriétaire validera la location</small></p>
-                </div>
-              </form>
-            </section>
-            <section class="add-to-wishlist">
-              <div class="section-body">
-                <div class="part"><a href="#" class="btn bg-gray"><i class="flaticon stroke heart"></i>Ajoutez à votre liste d’envies</a></div>
-              </div>
-            </section>
             <section class="owner-information">
               <div class="section-header">
-                <h4>Contactez-moi</h4>
+                <h4>Informations sur le membre</h4>
               </div>
               <div class="section-body">
                 <div class="part">
-                  <div class="block-thumbnail">
-                    <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/declare2r.png" alt=""></a></div>
-                    <div class="thumbnail-content">
-                      <h5><a href="#">Gaspard Kroutchev</a></h5>
-                      <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
-                      </div>
-                      <p>Membre depuis le<br><span>12 Juillet 2013</span></p>
-                    </div>
-                  </div>
-                </div>
-                <div class="part"><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up-send-message" class="btn bg-success send-message"><i class="flaticon stroke mail-2"></i>Envoyez un message</a><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up-call" class="btn bg-success call"><i class="flaticon stroke phone-3"></i>Appelez</a>
+                  <p><b>Membre depuis le 12 Juillet 2013</b></p>
+                  <p class="indent-b-sm"><i>Maecenas sed diam eget risus varius bla ndit sit amet non magna. Curabitur</i></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up-send-message" class="btn bg-success send-message"><i class="flaticon stroke mail-2"></i>Envoyez un message</a><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up-call" class="btn bg-success call"><i class="flaticon stroke phone-3"></i>Appelez</a>
                   <ul class="nav stats">
                     <li><span>
                         <big class="text-success">7 </big></span><span>annonces publiées</span></li>
@@ -1085,70 +885,30 @@
                 </div>
               </div>
             </section>
-            <section class="similar-listing">
+            <section class="verify-status">
               <div class="section-header">
-                <h4>Annonces similaires</h4>
+                <h4>Vérifictions</h4>
               </div>
               <div class="section-body">
                 <div class="part">
-                  <ul class="nav">
-                    <li>
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h6><a href="#">Audi - A3</a></h6>
-                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
-                      </div>
+                  <p class="text-center">
+                    <big class="text-success">4/6&nbsp;</big><b>vérification effectuées</b>
+                  </p>
+                  <div class="progress-bar-for-verify-status">
+                    <div class="bar-status"></div>
+                  </div>
+                  <ul class="nav indent-t-xs">
+                    <li class="indent-t-xs"><i class="icon-fw icon-3x indent-r-sm va-m flaticon social facebook text-info"></i>Facebook verifié<i class="icon-lg flaticon solid checkmark-2 indent-l-xs text-success"></i>
                     </li>
-                    <li>
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h6><a href="#">Audi - A3</a></h6>
-                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
-                      </div>
+                    <li class="indent-t-xs"><i class="icon-fw icon-3x indent-r-sm va-m flaticon stroke email-1 text-gray"></i>Adresse email verifié<i class="icon-lg flaticon solid checkmark-2 indent-l-xs text-success"></i>
                     </li>
-                    <li>
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h6><a href="#">Audi - A3</a></h6>
-                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
-                      </div>
+                    <li class="indent-t-xs"><i class="icon-fw icon-3x indent-r-sm va-m flaticon stroke phone text-gray"></i>Téléphone verifié<i class="icon-lg flaticon solid checkmark-2 indent-l-xs text-success"></i>
                     </li>
-                    <li>
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h6><a href="#">Audi - A3</a></h6>
-                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
-                      </div>
+                    <li class="indent-t-xs"><i class="icon-fw icon-3x indent-r-sm va-m flaticon social google-plus text-danger"></i>Google verifié<i class="icon-lg flaticon solid checkmark-2 indent-l-xs text-success"></i>
                     </li>
-                    <li>
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h6><a href="#">Audi - A3</a></h6>
-                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h6><a href="#">Audi - A3</a></h6>
-                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="thumbnail-img"><a href="#"><img src="../../static/img/home-products/audi2.jpg" alt=""></a></div>
-                      <div class="thumbnail-content">
-                        <h6><a href="#">Audi - A3</a></h6>
-                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
-                      </div>
+                    <li class="indent-t-xs"><i class="icon-fw icon-3x indent-r-sm va-m flaticon social linkedin-2 text-blue"></i>Linkedin verifié<i class="icon-lg flaticon solid checkmark-2 indent-l-xs text-success"></i>
                     </li>
                   </ul>
-                </div>
-              </div>
-            </section>
-            <section class="connected-with-owner">
-              <div class="section-body">
-                <div class="part text-center"><i class="flaticon social facebook-2"></i><a href="#" class="btn bg-info">Connectez-vous avec Facebook</a>
-                  <p>Vérifiez si un de vos amis connait ce propriétaire&nbsp;?</p>
                 </div>
               </div>
             </section>
