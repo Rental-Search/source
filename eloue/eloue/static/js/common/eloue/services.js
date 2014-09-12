@@ -1163,7 +1163,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("ProductsParseService", [function () {
             var productsParseService = {};
 
-            productsParseService.parseProduct = function (productData, addressData, ownerData, phoneData, picturesDataArray) {
+            productsParseService.parseProduct = function (productData, addressData, ownerData, ownerStatsData, phoneData, picturesDataArray) {
                 var productResult = angular.copy(productData);
 
                 // Parse address
@@ -1174,6 +1174,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 // Parse owner
                 if (!!ownerData) {
                     productResult.owner = ownerData;
+                }
+
+                if (!!ownerStatsData) {
+                    productResult.ownerStats = ownerStatsData;
                 }
 
                 // Parse phone
@@ -1354,6 +1358,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var ownerId = UtilsService.getIdFromUrl(productData.owner);
                             // Load owner
                             productPromises.owner = UsersService.get(ownerId).$promise;
+                            productPromises.ownerStats = UsersService.getStatistics(ownerId).$promise;
                         }
 
                         if (loadPhone) {
@@ -1371,7 +1376,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // When all data loaded
                         $q.all(productPromises).then(function (results) {
                             var product = ProductsParseService.parseProduct(productData, results.address, results.owner,
-                                results.phone, (!!results.pictures) ? results.pictures.results : null);
+                                results.ownerStats, results.phone, (!!results.pictures) ? results.pictures.results : null);
                             deferred.resolve(product);
                         });
                     });
