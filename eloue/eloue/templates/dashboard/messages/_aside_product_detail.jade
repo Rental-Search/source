@@ -1,4 +1,4 @@
-//-include ../jade/_mixins
+include ../jade/_mixins
 
 aside.tabs-vertical-static.pull-right.lg(ng-show="messageThread && messageThread.product")
   .section-header: h4.text-center.indent-xs-t Réservation associé à :
@@ -13,10 +13,11 @@ aside.tabs-vertical-static.pull-right.lg(ng-show="messageThread && messageThread
           | {{messageThread.product.address.city}},&nbsp;
           | {{messageThread.product.address.zipcode}}
         p.text-gray.indent-sm-v
+          {% endverbatim %}
           +average-rate("messageThread.product.stats.average_rating")
-          //-+rate-counter("messageThread.product.stats.rate_count")
+          +rate-counter("messageThread.product.stats.ratings_count")
           +number-of-comments("messageThread.product.stats.bookings_count")
-
+        {% verbatim %}
         .block-with-thumbnail
           .col-thumbnail
             .thumbnail.round: a(href="#")
