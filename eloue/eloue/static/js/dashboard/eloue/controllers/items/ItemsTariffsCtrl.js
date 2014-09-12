@@ -21,7 +21,7 @@ define(["angular", "eloue/app"], function (angular) {
                 hour: {id: null, amount: 0, unit: Unit.HOUR.id},
                 day: {id: null, amount: 0, unit: Unit.DAY.id},
                 three_days: {id: null, amount: 0, unit: Unit.THREE_DAYS.id},
-                seven_days: {id: null, amount: 0, unit: Unit.SEVEN_DAYS.id},
+                seven_days: {id: null, amount: 0, unit: Unit.WEEK.id},
                 fifteen_days: {id: null, amount: 0, unit: Unit.FIFTEEN_DAYS.id}
             };
             $scope.isAuto = false;
@@ -51,7 +51,7 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.prices.three_days.amount = value.amount;
                             $scope.prices.three_days.id = value.id;
                             break;
-                        case Unit.SEVEN_DAYS.id:
+                        case Unit.WEEK.id:
                             $scope.prices.seven_days.amount = value.amount;
                             $scope.prices.seven_days.id = value.id;
                             break;

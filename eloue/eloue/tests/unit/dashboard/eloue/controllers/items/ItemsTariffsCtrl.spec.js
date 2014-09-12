@@ -73,9 +73,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
                 "TWO_WEEKS": {id: 4, name: "deux semaines", description: "2 semaines"},
                 "MONTH": {id: 5, name: "mois", description: "1 mois"},
                 "THREE_DAYS": {id: 6, name: "3jours", description: "3 jours"},
-                "SEVEN_DAYS": {id: 7, name: "7jours", description: "7 jours"},
-                "FIFTEEN_DAYS": {id: 8, name: "15jours", description: "15 jours"},
-                "NIGHT": {id: 9, name: "nuit", description: "1 nuit"}
+                "FIFTEEN_DAYS": {id: 7, name: "15jours", description: "15 jours"}
             };
             currencyMock = {
                 "EUR": {name: "EUR", symbol: "€"},

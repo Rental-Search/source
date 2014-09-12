@@ -6,12 +6,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
      * Web service endpoints.
      */
     EloueCommon.constant("Endpoints", {
-        oauth_url: "http://10.0.5.47:8200/oauth2/",
-        api_url: "http://10.0.5.47:8200/api/2.0/"
+        oauth_url: "/oauth2/",
+        api_url: "/api/2.0/"
     });
 
     EloueCommon.constant("Path", {
-        templatePrefix: "/templates/" // FIXME: should use /templates/ for local files, and / if HTTP scheme is HTTP/HTTPS
+        templatePrefix: "/" // FIXME: should use /templates/ for local files, and / if HTTP scheme is HTTP/HTTPS
     });
 
     EloueCommon.constant("ServiceErrors", {
@@ -42,9 +42,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         "TWO_WEEKS": {id: 4, name: "deux semaines", description: "2 semaines"},
         "MONTH": {id: 5, name: "mois", description: "1 mois"},
         "THREE_DAYS": {id: 6, name: "3jours", description: "3 jours"},
-        "SEVEN_DAYS": {id: 7, name: "7jours", description: "7 jours"},
-        "FIFTEEN_DAYS": {id: 8, name: "15jours", description: "15 jours"},
-        "NIGHT": {id: 9, name: "nuit", description: "1 nuit"}
+        "FIFTEEN_DAYS": {id: 7, name: "15jours", description: "15 jours"}
     });
 
     EloueCommon.constant("SeatNumber", {
