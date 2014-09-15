@@ -45,15 +45,15 @@ block content-view
               li.indent-xs-v
                 case verify
                   when "facebook"
-                   +verify-type("facebook", "Facebook", "info")
+                    +verify-type("flaticon social facebook", "Facebook", "info")
                   when "email"
-                   +verify-type("inbox", "Adresse email", "gray")
+                    +verify-type("flaticon stroke email-1", "Adresse email", "gray")
                   when "phone"
-                   +verify-type("phone", "Téléphone", "gray")
+                    +verify-type("flaticon stroke phone", "Téléphone", "gray")
                   when "google"
-                   +verify-type("google", "Téléphone", "danger")
+                    +verify-type("flaticon social google-plus", "Google", "danger")
                   when "linkedin"
-                   +verify-type("linkedin-square", "Linkedin", "blue")
+                    +verify-type("flaticon social linkedin-2", "Linkedin", "blue")
   aside
     .section-header
      .tabs-horisontal-active.indent-xs-v
@@ -67,18 +67,19 @@ block content-view
             h4 Votre activité sur e-loue
           li.col-sm-2.text-success.text-right: p
             a(href="#")
-              i.fa.fa-envelope-o.fa-lg.indent-sm-r
+              i.icon-lg.flaticon.stroke.mail-1.indent-sm-r
                 span.badge-count-action(ng-show="!!unreadMessageThreadsCount", ng-bind="unreadMessageThreadsCount")
             a(href="#c")
-              i.fa.fa-table.fa-lg
+              i.icon-lg.flaticon.stroke.calendar-5
                 span.badge-count-action(ng-show="!!newBookingRequestsCount", ng-bind="newBookingRequestsCount")
+  {% endverbatim %}
 
   //-
     section.scrollbar-custom.bg-lite
       ul.section-content.booking-activity-feed.line-fix
         li.block-with-thumbnail.notification.indent-sm-b
           .col-thumbnail
-            .thumbnail: .icon-action: i.fa.fa-check-circle-o.fa-lg
+            .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
           .col-exposition
             .text-action
               h3: b Réservation acceptée par 
@@ -92,7 +93,7 @@ block content-view
                   .indent-sm-l
                     h3: b #{booking_detail.lot.name}
                     p.text-gray.indent-sm-h.indent-xs-v
-                      i.fa.fa-map-marker.fa-lg.fa-li
+                      i.icon-li.icon-lg.flaticon.stroke.location-pin-3
                       | #{booking_detail.lot.address}, 
                       br
                       | #{booking_detail.lot.location}, #{booking_detail.lot.index}
@@ -122,7 +123,7 @@ block content-view
           each item in dashboard_feed
             li.block-with-thumbnail.notification.indent-sm-b
               .col-thumbnail
-                .thumbnail: .icon-action: i.fa.fa-lg(class="fa-#{item.icon}")
+                .thumbnail: .icon-action: i.icon-lg(class="#{item.icon}")
               .col-exposition
                 .text-action
                   .block-with-thumbnail
@@ -150,4 +151,3 @@ block content-view
                         when "amount"
                           p.norm Prix de la location débitée avec succès !
                 p.action.norm Il y a 12 min
-  {% endverbatim %}

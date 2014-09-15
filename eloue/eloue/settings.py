@@ -279,6 +279,9 @@ PIPELINE_CSS = {
             'bower_components/bootstrap-datepicker/css/datepicker3.css',
             'bower_components/angular-chosen-localytics/chosen-spinner.css',
             'bower_components/toastr/toastr.min.css',
+            'fonts/flaticons_social/flaticons_social.css',
+            'fonts/flaticons_solid/flaticons_solid.css',
+            'fonts/flaticons_stoke/flaticons_stoke.css',
         ),
         'output_filename': 'css/extra.css',
         'extra_context': {

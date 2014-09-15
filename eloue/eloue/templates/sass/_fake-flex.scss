@@ -1,0 +1,54 @@
+@mixin make-space($free-space: "around") {
+  display: table;
+  &:before,
+  &:after {
+    display: none;
+  }
+  > li {
+    position: relative;
+
+    display: table-cell;
+
+    vertical-align: middle;
+    @if $free-space == "around" {
+      width: 1%;
+
+      text-align: center;
+    }
+    @else if $free-space == "between" {
+      width: 0.1%;
+    }
+    &.spacer,
+    &.divider {
+      overflow: hidden;
+      @if $free-space == "around" {
+        width: 0.1%;
+      }
+      @else if $free-space == "between" {
+        width: 1%;
+        padding: 0;
+      }
+      &:first-child {
+        display: none;
+      }
+    }
+    &.divider:before {
+      @include centred-abs();
+
+      width: 0;
+      height: 100000px;
+
+      content: "";
+
+      border-left: 1px solid;
+    }
+  }
+}
+
+ul.space-between {
+  @include make-space("between");
+}
+
+ul.space-around {
+  @include make-space("around");
+}

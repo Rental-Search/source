@@ -138,7 +138,7 @@ label.check-btn
       +border-radius($bdrs $bdrs 0 0 !important)
     .chosen-single
       span:after
-        content: "\f0d8"
+        content: "\e5a4"
   font-size: inherit
   height: $form-height
   text-align: center
@@ -158,10 +158,10 @@ label.check-btn
       margin: 0
       padding-right: 1em
       &:after
-        content: "\f0d7"
+        content: "\e5a5"
         position: absolute
         right: 1em
-        font-family: $font-family-icon
+        font-family: "Flaticons Stroke"
   &.chosen-container-multi
     height: auto
     .chosen-choices
@@ -303,32 +303,3 @@ textarea
     border: none
     padding: 0
 
-
-// date picker
-.date-picker
-  display: table
-  width: 100%
-  > *
-    display: table-cell
-    width: auto !important
-    height: $date-picker-height
-    vertical-align: middle
-  .input-group
-    height: 100%
-  input
-    font-family: inherit !important
-    +placeholder($gray-medium)
-    color: inherit
-    font-weight: $fw-semibold !important
-    height: $date-picker-height
-    padding: 0 .5em
-    width: 100%
-    border: none
-  .chosen-container
-    margin-left: $indent-xs
-    height: $date-picker-height
-  .chosen-single
-    min-height: 0 !important
-    height: 100%
-    padding-left: $indent-sm !important
-    padding-right: $indent-sm !important

@@ -45,6 +45,10 @@ partials_urlpatterns = patterns('',
             template_name='jade/_sign_in.jade',
         ),
     ),
+    url(r'^homepage/reset-password-form.html$', TemplateView.as_view(
+            template_name='jade/_reset_password.jade',
+        ),
+    ),
 
     url(r'^dashboard/dashboard.html$', TemplateView.as_view(
             template_name='dashboard/dashboard/index.jade',

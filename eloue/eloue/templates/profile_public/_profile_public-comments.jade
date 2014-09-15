@@ -1,0 +1,15 @@
+h3.indent-b-xs Les 3 commentaires de
+
+ul.list-group
+  each comment in profile_public.comments
+    li.list-group-item.thumbnail
+      .thumbnail-img
+        a(href="#")
+          img(src="http://lorempixel.com/80/80/technics", alt="")
+      .thumbnail-content
+        p
+          a(href="#").text-success: b #{comment.product} 
+          small loué par 
+          a(href="#").text-success: b #{comment.username}
+        p #{comment.content}
+        small #{comment.date}

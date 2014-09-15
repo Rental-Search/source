@@ -38,8 +38,9 @@
     font-weight: $fw-semibold
   .btn
     +btn()
-    +social(1.2em)
     i
+      padding-left: .25em
+      padding-right: .25em
       +border-left-radius($bor-rad/2)
       +border-right-radius($bor-rad/2)
       background-color: white
@@ -149,9 +150,6 @@
     .product-info
       border-bottom: $bd-property
       @import pop_up_sections/product-info
-
-    .bank-information
-      border-top: $bd-property
 
     .terms
       font-size: px(13)
@@ -300,22 +298,17 @@
         border-width: 0
         overflow: hidden
         padding: 0
-      button
+      .indent-t
         margin-top: ($pad-form*2)
     .bank-information
+      border-top: $bd-property
       input
         padding-left: 2.75em
       i
         z-index: 50
-        margin: 1em
+        line-height: (3/1.1)
+        margin-left: 1em
+        font-size: 1.1em
         position: absolute
         left: $padding-base-horizontal
         top: 0
-        &.card
-          +sprite($s-card)
-        &.calendar
-          +sprite($s-calendar2)
-        &.block
-          +sprite($s-block)
-        &.user
-          +sprite($s-user)

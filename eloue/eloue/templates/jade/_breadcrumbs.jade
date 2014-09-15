@@ -3,5 +3,4 @@
     ol.breadcrumb
       -var crumbs = ["Accueil", "Location Voiture", "Nice", "BMW - 520 Touring luxe"]
       each crumb in crumbs
-        li
-          a(href="#") #{crumb}
+        li: a(href="#") #{crumb}

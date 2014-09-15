@@ -1,0 +1,29 @@
+h3.indent-b-xs Les 3 annonces de Gaspard
+
+ol.row
+  each product, index in products
+    li
+      .section-body
+        .thumbnail-img
+          a(href="products/product_detail.html").img-wrapper
+            img(src="http://lorempixel.com/260/180/technics", alt="")
+            span.badge.price #{product.price}&euro; /jour
+        .info
+          h6
+            a(href="#") #{product.title}
+            if product.ispro
+              span.badge-pro pro
+          p: b #{product.description}
+            span.zip-code ,&nbsp;#{product.zip_code}
+          .rate
+            -var stars = [1,2,3,4,5]
+            each s in stars
+              if s == product.rate
+                span.flaticon.solid.star-2.current-rate
+              else
+                span.flaticon.solid.star-2
+          if product.comments > 0
+            span.sprite-comment
+              i.flaticon.stroke.writing-comment
+              | #{product.comments}
+          p.full_description #{product.full_description}

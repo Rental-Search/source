@@ -1,0 +1,232 @@
+.row
+    table.calendar.text-center.form-control
+        tbody
+            tr
+                td Rue
+                td
+                    input(type="text", ng-model="product.addressDetails.street", required).table-form
+            tr
+                td Code postal
+                td
+                    input(type="text", ng-model="product.addressDetails.zipcode", required).table-form
+            tr
+                td Ville
+                td
+                    input(type="text", ng-model="product.addressDetails.city", required).table-form
+            tr
+                td Phone
+                td
+                    input(type="text", ng-model="product.phoneDetails.number", required).table-form
+            tr
+                td Quantité
+                td
+                    input(type="number", ng-model="product.quantity").table-form
+            tr(ng-show="isAuto")
+                td Marque
+                td
+                    input(type="text", ng-model="product.brand").table-form
+            tr(ng-show="isAuto")
+                td Modèle
+                td
+                    input(type="text", ng-model="product.model").table-form
+            tr(ng-show="isAuto")
+                td Nombre de place
+                td
+                    select(ng-model="product.seat_number").table-form
+                        option(ng-repeat="item in seatNumberOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isAuto")
+                td Nombre de porte
+                td
+                    select(ng-model="product.door_number").table-form
+                        option(ng-repeat="item in doorNumberOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isAuto")
+                td Énergie
+                td
+                    select(ng-model="product.fuel").table-form
+                        option(ng-repeat="item in fuelOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isAuto")
+                td Boite de vitesse
+                td
+                    select(ng-model="product.transmission").table-form
+                        option(ng-repeat="item in transmissionOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isAuto")
+                td Kilométrage
+                td
+                    select(ng-model="product.mileage").table-form
+                        option(ng-repeat="item in mileageOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isAuto")
+                td Consommation
+                td
+                    select(ng-model="product.consumption").table-form
+                        option(ng-repeat="item in consumptionOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isAuto")
+                td Kilomètres inclus/jour
+                td
+                    input(type="number", ng-model="product.km_included").table-form
+            tr(ng-show="isAuto")
+                td Prix par kilomètres supplémentaires
+                td
+                    input(type="number", ng-model="product.costs_per_km").table-form
+            tr(ng-show="isAuto")
+                td Climatisation
+                td
+                    input(type="text", ng-model="product.air_conditioning").table-form
+            tr(ng-show="isAuto")
+                td Direction assistée
+                td
+                    input(type="checkbox", ng-model="product.power_steering").table-form
+            tr(ng-show="isAuto")
+                td Régulateur de vitesse
+                td
+                    input(type="checkbox", ng-model="product.cruise_control").table-form
+            tr(ng-show="isAuto")
+                td GPS
+                td
+                    input(type="checkbox", ng-model="product.gps").table-form
+            tr(ng-show="isAuto")
+                td Siège bébé
+                td
+                    input(type="checkbox", ng-model="product.baby_seat").table-form
+            tr(ng-show="isAuto")
+                td Coffre de toit
+                td
+                    input(type="checkbox", ng-model="product.roof_box").table-form
+            tr(ng-show="isAuto")
+                td Porte-vélo
+                td
+                    input(type="checkbox", ng-model="product.bike_rack").table-form
+            tr(ng-show="isAuto")
+                td Pneus neige
+                td
+                    input(type="checkbox", ng-model="product.snow_tires").table-form
+            tr(ng-show="isAuto")
+                td Chaines
+                td
+                    input(type="checkbox", ng-model="product.snow_chains").table-form
+            tr(ng-show="isAuto")
+                td Porte-skis
+                td
+                    input(type="checkbox", ng-model="product.ski_rack").table-form
+            tr(ng-show="isAuto")
+                td Lecteur CD
+                td
+                    input(type="checkbox", ng-model="product.cd_player").table-form
+            tr(ng-show="isAuto")
+                td Entrée audio/iPod
+                td
+                    input(type="checkbox", ng-model="product.audio_input").table-form
+            tr(ng-show="isAuto")
+                td CV fiscaux
+                td
+                    select(ng-model="product.tax_horsepower").table-form
+                        option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isAuto")
+                td N° d'immatriculation
+                td
+                    input(type="checkbox", ng-model="product.licence_plate").table-form
+            tr(ng-show="isAuto")
+                td 1er mise en circulation
+                td
+                    input(type="checkbox", ng-model="product.first_registration_date").table-form
+            tr(ng-show="isRealEstate")
+                td Capacité
+                td
+                    select(ng-model="product.capacity").table-form
+                        option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isRealEstate")
+                td Type de logement
+                td
+                    select(ng-model="product.private_life").table-form
+                        option(ng-repeat="item in privateLifeOptions", value="{{item.id}}") {{item.name}}
+            tr(ng-show="isRealEstate")
+                td Nombre de chambre
+                td
+                    input(type="checkbox", ng-model="product.chamber_number").table-form
+            tr(ng-show="isRealEstate")
+                td Règles d'utilisation
+                td
+                    input(type="text", ng-model="product.rules").table-form
+            tr(ng-show="isRealEstate")
+                td Air conditionné
+                td
+                    input(type="checkbox", ng-model="product.air_conditioning").table-form
+            tr(ng-show="isRealEstate")
+                td Petit déjeuner
+                td
+                    input(type="checkbox", ng-model="product.breakfast").table-form
+            tr(ng-show="isRealEstate")
+                td Balcon/terasse
+                td
+                    input(type="checkbox", ng-model="product.balcony").table-form
+            tr(ng-show="isRealEstate")
+                td Chambre avec serrure
+                td
+                    input(type="checkbox", ng-model="product.lockable_chamber").table-form
+            tr(ng-show="isRealEstate")
+                td Serviettes
+                td
+                    input(type="checkbox", ng-model="product.towel").table-form
+            tr(ng-show="isRealEstate")
+                td Ascenseur dans l\'immeuble
+                td
+                    input(type="checkbox", ng-model="product.lift").table-form
+            tr(ng-show="isRealEstate")
+                td Adapté aux familles/enfants
+                td
+                    input(type="checkbox", ng-model="product.family_friendly").table-form
+            tr(ng-show="isRealEstate")
+                td Salle de sport
+                td
+                    input(type="checkbox", ng-model="product.gym").table-form
+            tr(ng-show="isRealEstate")
+                td Accessible aux personnes handicapées
+                td
+                    input(type="checkbox", ng-model="product.accessible").table-form
+            tr(ng-show="isRealEstate")
+                td Chauffage
+                td
+                    input(type="checkbox", ng-model="product.heating").table-form
+            tr(ng-show="isRealEstate")
+                td Jacuzzi
+                td
+                    input(type="checkbox", ng-model="product.jacuzzi").table-form
+            tr(ng-show="isRealEstate")
+                td Cheminée intérieure
+                td
+                    input(type="checkbox", ng-model="product.chimney").table-form
+            tr(ng-show="isRealEstate")
+                td Accès internet
+                td
+                    input(type="checkbox", ng-model="product.internet_access").table-form
+            tr(ng-show="isRealEstate")
+                td Cuisine
+                td
+                    input(type="checkbox", ng-model="product.kitchen").table-form
+            tr(ng-show="isRealEstate")
+                td Parking
+                td
+                    input(type="checkbox", ng-model="product.parking").table-form
+            tr(ng-show="isRealEstate")
+                td Fumeurs acceptées
+                td
+                    input(type="checkbox", ng-model="product.smoking_accepted").table-form
+            tr(ng-show="isRealEstate")
+                td Idéal pour des évènements
+                td
+                    input(type="checkbox", ng-model="product.ideal_for_events").table-form
+            tr(ng-show="isRealEstate")
+                td TV
+                td
+                    input(type="checkbox", ng-model="product.tv").table-form
+            tr(ng-show="isRealEstate")
+                td Machine à laver
+                td
+                    input(type="checkbox", ng-model="product.washing_machine").table-form
+            tr(ng-show="isRealEstate")
+                td Sèche linge
+                td
+                    input(type="checkbox", ng-model="product.tumble_dryer").table-form
+            tr(ng-show="isRealEstate")
+                td Ordinateur avec Internet
+                td
+                    input(type="checkbox", ng-model="product.computer_with_internet").table-form

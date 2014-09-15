@@ -1,0 +1,7 @@
+.container.text-center.indent-t-lg
+  -var owner = profile_public.owner_headline
+
+  .round-img: img(src="http://lorempixel.com/120/120/people", alt="")
+  h3.indent-b-xs #{owner.first_name}&nbsp;#{owner.last_name}
+  include ../jade/_rate
+  p.text-gray-strong.indent-t-xs #{owner.city}&nbsp;#{owner.zipcode}

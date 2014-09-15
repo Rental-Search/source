@@ -1,61 +1,33 @@
-extends ../base
+extends _base_product_detail
+block tab
+  .carousel-conteiner
+    .col-md-7
+      #carousel-product.carousel.slide(data-ride="carousel")
+        .carousel-inner
+          .item.active(style="background-image: url(http://lorempixel.com/800/620/technics/1)")
+          .item(style="background-image: url(http://lorempixel.com/600/810/technics/2)")
+          .item(style="background-image: url(http://lorempixel.com/400/610/technics/3)")
+          .item(style="background-image: url(http://lorempixel.com/500/310/technics/4)")
+        a(href="#carousel-product" role="button" data-slide="prev").left.carousel-control
+          i.flaticon.solid.left-2
+        a(href="#carousel-product" role="button" data-slide="next").right.carousel-control
+          i.flaticon.solid.right-2
+      .items-thumbnail-inner
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/800/600/technics/1)")
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/600/800/technics/2)")
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/400/600/technics/3)")
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/500/300/technics/4)")
+        div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/500/300/technics/5)")
+    .col-md-5
+      .map-container
+        .map-inner
+          span.whirly
+          .map
+            // место для карты
+      .location-title-inner
+        .location-title
+          i.flaticon.solid.loca.location-pin-3.icon-li.icon-lg
+          h4 52 Boulevard Pereire
+          small Paris, 75017
 
-block prepend variables
-  -var STATIC_URL = "../../static/"
-
-block append styles
-  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
-  link(rel="stylesheet", href="#{STATIC_URL}css/product_detail_styles.css")
-
-block append scripts
-  script(src="#{STATIC_URL}js/bootstrap/dropdown.js")
-  script(src="#{STATIC_URL}js/bootstrap/carousel.js")
-  script(src="#{STATIC_URL}js/scripts.js")
-
-block append content-body
-  #fb-root
-  include ../jade/_pop_up_send_message
-  include ../jade/_pop_up_call
-  include ../jade/_pop_up_reserve
-  .container-flex
-    header.header-site
-      include ../jade/_header_site
-    nav
-      include ../jade/_breadcrumbs
-    article.container
-      .row
-        .col-sm-8.product-details-title
-          include ../jade/_porduct_details_title
-        .col-sm-4.share-btns
-          include ../jade/_share-btns
-      .row
-        main.col-sm-8
-          section
-            .section-body
-              .part.picture-tab
-                include ../jade/product_details/main/_picture_tab
-              .part.description
-                include ../jade/product_details/main/_description
-              .part.comments.comments-ad
-                include ../jade/product_details/main/_comments_ad
-              .part.comments.comments-owner
-                include ../jade/product_details/main/_comments_owner
-        aside.col-sm-4
-          section.booking-form
-            include ../jade/product_details/aside/_booking_form
-          section.add-to-wishlist
-            include ../jade/product_details/aside/_add_to_wishlist
-          section.owner-information
-            include ../jade/product_details/aside/_owner_information
-          section.similar-listing
-            include ../jade/product_details/aside/_similar_listing
-          section.connected-with-owner
-            include ../jade/product_details/aside/_connected_with_owner
-    footer
-      section.row-fluid.insurances.framing
-        include ../jade/_insurances
-      section.row-fluid.footer-links
-        include ../jade/_footer_links
-      section.row-fluid.rss
-        include ../jade/_rss
 

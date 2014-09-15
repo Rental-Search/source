@@ -1,0 +1,29 @@
+extends ../base
+
+block prepend variables
+  -var STATIC_URL = "../../static/"
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/publish_item_styles.css")
+
+block append scripts
+  //- script(src="#{STATIC_URL}js/bootstrap/dropdown.js")
+
+block append content-body
+  include ../jade/_pop_up_publish_item
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+    nav.nav-home.container
+      include ../jade/_nav_home
+    article
+      section.publish-items-categories
+        include ../jade/_publish_items_categories
+    footer
+      section.insurances.framing
+        include ../jade/_insurances
+      section.footer-links
+        include ../jade/_footer_links
+      section.rss
+        include ../jade/_rss

@@ -1,24 +1,25 @@
 mixin average-rate(account_var)
   span.average-rate.ng-hide(ng-show="true")
     span.star(ng-init="stars=[1, 2, 3, 4, 5]")
-      i.fa.fa-lg.fa-star(ng-repeat="star in stars", class="{{!#{account_var} ? 'disabled' : (star === #{account_var} ? 'current' : '')}}")
+      i.icon-lg.flaticon.solid.star-2(ng-repeat="star in stars", class="{{!#{account_var} ? 'disabled' : (star === #{account_var} ? 'current' : '')}}")
+
 mixin rate-counter(account_var)
   span.rate-counter(ng-show="!!#{account_var}", ng-bind="#{account_var}")
 
 mixin number-of-comments(counter_var)
   span.number-of-comments
-    i.fa.fa-lg.fa-comments-o
+    i.icon-lg.flaticon.stroke.writing-comment
     span(ng-bind="#{counter_var}")
 
 mixin number-of-bookings(counter_var)
   span.number-of-bookings
-    i.fa.fa-lg.fa-table
+    i.icon-lg.flaticon.stroke.calendar-5
     span(ng-bind="#{counter_var}")
 
 mixin verify-type(icon, text, color)
   .block-with-thumbnail
     .col-thumbnail
       .thumbnail
-        i.fa.fa-fw.fa-3x(class="fa-#{icon} text-#{color}")
+        i.icon-fw.icon-3x.indent-sm-r(class="#{icon} text-#{color}")
     .col-exposition #{text} verifié
-      i.fa.fa-check-circle.fa-lg.indent-xs-l.text-success
+      i.icon-lg.flaticon.solid.checkmark-2.indent-xs-l.text-success
