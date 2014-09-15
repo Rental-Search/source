@@ -54,12 +54,6 @@ class PriceSerializer(ModelSerializer):
     def _transform_amount(self, obj, value):
         return self.fields['amount'].field_to_native(obj, 'local_currency_amount')
 
-    def transform_currency(self, obj, value):
-        return value and {
-            'id': value,
-            'symbol': obj.get_currency_display(),
-        }
-
     class Meta:
         model = models.Price
         fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')

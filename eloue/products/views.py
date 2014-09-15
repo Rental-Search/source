@@ -861,7 +861,7 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'product__owner'
     filter_fields = ('product', 'unit')
-    ordering_fields = ('name',) # TODO:  'amount'
+    ordering_fields = ('name', 'amount')
 
 class PictureViewSet(viewsets.ModelViewSet):
     """
