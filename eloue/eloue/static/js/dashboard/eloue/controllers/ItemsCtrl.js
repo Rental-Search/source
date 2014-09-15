@@ -1,6 +1,6 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define(["angular", "eloue/app", "tagged-infinite-scroll"], function (angular) {
 
     /**
      * Controller for the items page.
@@ -13,6 +13,15 @@ define(["angular", "eloue/app"], function (angular) {
         function ($scope, ProductsService, UsersService, CategoriesService) {
 
             $scope.selectedCategory = "";
+            $scope.distance = 0;
+            $scope.paginating = false;
+            $scope.enabled = true;
+
+            // Fetch more items
+            $scope.getMore = function() {
+                console.log(111);
+            };
+
 
             UsersService.getMe(function (currentUser) {
                 // Save current user in the scope

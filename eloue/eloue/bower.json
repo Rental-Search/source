@@ -30,7 +30,8 @@
     "jquery-autosize": "https://github.com/jackmoore/autosize.git#~1.18.9",
     "angular-translate": "https://github.com/angular-translate/bower-angular-translate.git#~2.2.0",
     "angular-money-directive": "1.0.2",
-    "toastr": "~2.0.3"
+    "toastr": "~2.0.3",
+    "tagged-infinite-scroll": "https://github.com/tagged/infinite-scroll.git"
   },
   "devDependencies": {
     "angular-mocks": "1.2.11",

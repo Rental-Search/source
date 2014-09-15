@@ -2,7 +2,7 @@ require.config({
     baseUrl: "../static/js/dashboard",
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",
-        "lodash": "../../bower_components/lodash/dist/lodash.min",
+        "underscore": "../../bower_components/lodash/dist/lodash.min",
         "jQuery": "../../bower_components/jquery/dist/jquery.min",
         "angular": "../../bower_components/angular/angular.min",
         "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
@@ -20,7 +20,8 @@ require.config({
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../bower_components/chosen/chosen.jquery.min",
-        "toastr": "../../bower_components/toastr/toastr.min"
+        "toastr": "../../bower_components/toastr/toastr.min",
+        "tagged-infinite-scroll": "../../bower_components/tagged-infinite-scroll/taggedInfiniteScroll.min"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -44,18 +45,20 @@ require.config({
         "jquery-autosize": ["jQuery"],
         "jquery-chosen": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
-        "toastr": ["jQuery"]
+        "toastr": ["jQuery"],
+        "tagged-infinite-scroll": ["jQuery", "underscore"]
     }
 });
 
 require([
     "jQuery",
-    "lodash",
+    "underscore",
     "angular",
     "bootstrap",
     "datejs",
     "bootstrap-datepicker",
     "toastr",
+    "tagged-infinite-scroll",
     "eloue/route",
     "eloue/i18n"
 ], function ($, _, angular, bootstrap, route) {
