@@ -1058,7 +1058,7 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     model = models.Address
     serializer_class = serializers.AddressSerializer
-    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter) # TODO: filters.OwnerFilter, 
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
 
@@ -1069,7 +1069,7 @@ class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     model = models.PhoneNumber
     serializer_class = serializers.PhoneNumberSerializer
-    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
+    filter_backends = (filters.DjangoFilterBackend,) # TODO: filters.OwnerFilter, 
     filter_fields = ('patron',)
 
     @link()
