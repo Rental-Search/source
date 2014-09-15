@@ -517,7 +517,7 @@ REST_FRAMEWORK = {
         'rest_framework.filters.DjangoFilterBackend',
     ),
     'SEARCH_PARAM': 'q',
-    'ORDERING_PARAM': 'sort',
+    'ORDERING_PARAM': 'ordering',
     'PAGINATE_BY': getattr(local, 'REST_FRAMEWORK_PAGINATE_BY', 10),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
