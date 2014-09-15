@@ -47,6 +47,8 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
         h3: b Réservation acceptée par 
           a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
         ul.zebra-list.indent-md-v
+        //-
+          //- booking history block
           each info in booking_detail.informations
             li.clearfix
               .col-xs-3 #{info.title}
