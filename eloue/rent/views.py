@@ -1,36 +1,32 @@
 # -*- coding: utf-8 -*-
 import logbook
 import urllib
-from datetime import datetime, timedelta, date
+from datetime import datetime, date
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST, require_GET
-from django.views.decorators.cache import never_cache, cache_page
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
-from django.template.loader import render_to_string
-from django.db.models import Q
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
-from django.contrib.sites.models import Site
 from django.template import RequestContext
 
-from accounts.models import CreditCard
 from accounts.forms import EmailAuthenticationForm
 from accounts.utils import viva_check_phone
 from products.models import Product
-from products.choices import UNIT, PAYMENT_TYPE
-from rent.forms import BookingForm, BookingConfirmationForm, BookingStateForm, PreApprovalIPNForm, PayIPNForm, IncidentForm
+from products.choices import UNIT
+from rent.forms import BookingForm, BookingAcceptForm, PreApprovalIPNForm, PayIPNForm, SinisterForm
 from rent.models import Booking, ProBooking
 from rent.wizard import BookingWizard, PhoneBookingWizard
-from rent.utils import get_product_occupied_date, timesince
+from rent.utils import timesince
+from rent.choices import BOOKING_STATE
 
 from eloue.utils import currency, json
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
@@ -48,13 +44,13 @@ def preapproval_ipn(request):
         booking = Booking.objects.get(preapproval_key=form.cleaned_data['preapproval_key'])
         if form.cleaned_data['approved'] and form.cleaned_data['status'] == 'ACTIVE':
             # Changing state
-            booking.state = Booking.STATE.AUTHORIZED
+            booking.state = BOOKING_STATE.AUTHORIZED # FIXME: must use actions instead of changing state directly
             booking.borrower.paypal_email = form.cleaned_data['sender_email']
             booking.borrower.save()
             # Sending email
             booking.send_ask_email()
         else:
-            booking.state = Booking.STATE.REJECTED
+            booking.state = BOOKING_STATE.REJECTED # FIXME: must use actions instead of changing state directly
         booking.save()
     return HttpResponse()
 
@@ -67,9 +63,9 @@ def pay_ipn(request):
     if form.is_valid():
         booking = Booking.objects.get(pay_key=form.cleaned_data['pay_key'])
         if form.cleaned_data['action_type'] == 'PAY_PRIMARY' and form.cleaned_data['status'] == 'INCOMPLETE':
-            booking.state = Booking.STATE.ONGOING
+            booking.state = BOOKING_STATE.ONGOING # FIXME: must use actions instead of changing state directly
         else:  # FIXME : naïve
-            booking.state = Booking.STATE.CLOSED
+            booking.state = BOOKING_STATE.CLOSED # FIXME: must use actions instead of changing state directly
         booking.save()
     return HttpResponse()
 
@@ -236,7 +232,7 @@ class BookingDetail(DetailView):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_contract(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id, state=Booking.STATE.PENDING)
+    booking = get_object_or_404(Booking, pk=booking_id, state=BOOKING_STATE.PENDING)
     content = booking.product.subtype.contract_generator(booking).getvalue()
     response = HttpResponse(content, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=contrat.pdf'
@@ -246,9 +242,9 @@ def booking_contract(request, booking_id):
 @require_POST
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_accept(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id, state=Booking.STATE.AUTHORIZED)
+    booking = get_object_or_404(Booking, pk=booking_id, state=BOOKING_STATE.AUTHORIZED)
     if booking.started_at < datetime.now():
-        booking.state = booking.STATE.OUTDATED
+        booking.expire()
         booking.save()
         messages.error(request, _(u"Votre demande est dépassée"))
     else:
@@ -260,52 +256,53 @@ def booking_accept(request, booking_id):
                 _(u"Avant l'acceptation de la demande, "
                     u"veuillez saisir votre RIB."))
             return response
-        booking.accept()
-        messages.success(request, _(u"La demande de location a été acceptée"))
-        GoalRecord.record('rent_object_accepted', WebUser(request))
+        form = BookingAcceptForm(request.POST or None, instance=booking)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.accept()
+            booking.save()
+            messages.success(request, _(u"La demande de location a été acceptée"))
+            GoalRecord.record('rent_object_accepted', WebUser(request))
+        else:
+            messages.error(request, _(u"La demande de location n'a pu être acceptée"))
     return redirect(booking)
 
 @login_required
+@require_POST
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_reject(request, booking_id):
-    booking = get_object_or_404(Booking.on_site, pk=booking_id, state=Booking.STATE.AUTHORIZED)
-    if request.method == "POST":
-        form = BookingStateForm(request.POST or None,
-            initial={'state': Booking.STATE.REJECTED},
-            instance=booking
-        )
-        if form.is_valid():
-            booking = form.save()
-            booking.send_rejection_email()
-            GoalRecord.record('rent_object_rejected', WebUser(request))
-            messages.success(request, _(u"Cette réservation a bien été refusée"))
-        else:
-            messages.error(request, _(u"Cette réservation n'a pu être refusée"))
+    booking = get_object_or_404(Booking.on_site, pk=booking_id, state=BOOKING_STATE.AUTHORIZED)
+    if booking.started_at < datetime.now():
+        booking.expire()
+        booking.save()
+        messages.error(request, _(u"Votre demande est dépassée"))
     else:
-        form = BookingStateForm(
-            initial={'state': Booking.STATE.REJECTED},
-            instance=booking)
+        booking.reject()
+        booking.save()
+        GoalRecord.record('rent_object_rejected', WebUser(request))
+        messages.success(request, _(u"Cette réservation a bien été refusée"))
     return redirect(booking)
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_read(request, booking_id):
-    pro_booking = get_object_or_404(Booking.on_site, pk=booking_id, state=Booking.STATE.PROFESSIONAL)
-    assert isinstance(pro_booking, ProBooking)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id, state=BOOKING_STATE.PROFESSIONAL)
+    assert isinstance(booking, ProBooking)
     if request.method == "POST":
-        pro_booking.accept()
+        booking.accept() # FIXME: rename to read
+        booking.save()
         messages.success(request, _(u"Cette réservation a bien été marqué comme lu"))
-    return redirect(pro_booking)
+    return redirect(booking)
 
 
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['borrower'])
 def booking_cancel(request, booking_id):
-    booking = get_object_or_404(Booking.on_site, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id, state__in=[BOOKING_STATE.AUTHORIZING, BOOKING_STATE.AUTHORIZED, BOOKING_STATE.PENDING])
     if request.POST:
-        booking.cancel()
-        booking.send_cancelation_email(source=request.user)
+        booking.cancel(source=request.user)
+        booking.save()
         messages.success(request, _(u"Cette réservation a bien été annulée"))
     return redirect(booking)
 
@@ -313,10 +310,10 @@ def booking_cancel(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner'])
 def booking_close(request, booking_id):
-    booking = get_object_or_404(Booking.on_site, pk=booking_id)
+    booking = get_object_or_404(Booking.on_site, pk=booking_id, state=BOOKING_STATE.ENDED)
     if request.POST:
-        booking.pay()
-        booking.send_closed_email()
+        booking.close()
+        booking.save()
         messages.success(request, _(u"Cette réservation a bien été cloturée. Si vous voulez vous pouvez ajouter un commentaire et une note sur le déroulement de la location."))
         return redirect(reverse('comments')+'#'+booking.pk.hex)
     return redirect(booking)
@@ -325,21 +322,18 @@ def booking_close(request, booking_id):
 @login_required
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
-    booking = get_object_or_404(Booking.on_site, pk=booking_id)
-    from rent.forms import SinisterForm
+    booking = get_object_or_404(Booking.on_site, pk=booking_id, state__in=[BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED])
     from rent.models import Sinister
     if request.method == "POST":
         form = SinisterForm(
-            request.POST, 
+            request.POST,
             instance=Sinister(
                 booking=booking, patron=request.user, product=booking.product
             )
         )
         if form.is_valid():
-            form.save()
-            text = render_to_string("rent/emails/incident.txt", {'user': request.user.username, 'booking_id': booking_id, 'problem': form.cleaned_data['description']})
-            send_mail(u"Déclaration d'incident", text, request.user.email, ['contact@e-loue.com'])
-            booking.state = Booking.STATE.INCIDENT
+            form.save() # save Sinister object
+            booking.incident(request.user, form.cleaned_data['description'])
             booking.save()
             messages.success(request, _(u'Nous avons bien pris en compte la déclaration de l\'incident. Nous vous contacterons rapidement.'))
             return redirect('booking_detail', booking_id=booking_id)
@@ -359,7 +353,7 @@ from rest_framework.decorators import link, action
 from rest_framework.response import Response
 import django_filters
 
-from rent import serializers, models
+from rent import serializers, models, forms
 from eloue.api import viewsets, filters, mixins
 
 class BookingFilterSet(filters.FilterSet):
@@ -392,10 +386,30 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         return Response(dict(transitions=res))
 
     @action(methods=['put'])
-    def perform_transition(self, request, *args, **kwargs):
-        serializer = serializers.BookingStateSerializer(instance=self.get_object(), data=request.DATA, context=dict(request=request))
+    def pay(self, request, *args, **kwargs):
+        obj = self.get_object()
+        # TODO: should use ExistingBookingCreditCardForm if there are credit card registered for user
+        form = forms.BookingCreditCardForm(instance=obj, data=request.DATA)
+        if form.is_valid():
+            return self._perform_transition(request, action='preapproval', cvv=form.cleaned_data['cvv'])
+        return Response(form.errors)
+
+    @action(methods=['put'])
+    def accept(self, request, *args, **kwargs):
+        return self._perform_transition(request, action='accept')
+
+    @action(methods=['put'])
+    def reject(self, request, *args, **kwargs):
+        return self._perform_transition(request, action='reject')
+
+    @action(methods=['put'])
+    def cancel(self, request, *args, **kwargs):
+        return self._perform_transition(request, action='cancel')
+
+    def _perform_transition(self, request, action=None, **kwargs):
+        serializer = serializers.BookingActionSerializer(instance=self.get_object(), data={'action': action}, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(**kwargs)
             return Response({'detail': _(u"Transition performed")})
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -9,8 +9,7 @@ from django.contrib import messages
 from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.vary import vary_on_headers
-from django.http import Http404, HttpResponseForbidden
+from django.http import HttpResponseForbidden, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
@@ -22,16 +21,14 @@ from django.db.models import Q, Count, Avg
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect
 
 from haystack.query import SearchQuerySet
 from haystack.utils.geo import D
 from django.http import HttpResponse
-from django_messages.forms import ComposeForm
-from django.core.cache import cache
 
 from accounts.forms import EmailAuthenticationForm
-from accounts.models import Patron, Address
+from accounts.models import Patron
 from accounts.search import patron_search
 
 from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
@@ -43,6 +40,7 @@ from products.search import product_search, car_search, realestate_search, produ
 
 from rent.forms import BookingOfferForm
 from rent.models import Booking
+from rent.choices import BOOKING_STATE
 
 from eloue.decorators import ownership_required, secure_required, mobify
 from eloue.utils import cache_key
@@ -446,24 +444,21 @@ def thread_details(request, thread_id):
     
     message_list = thread.messages.order_by('sent_at')
     
-    editForm = MessageEditForm(prefix='0')
-    offerForm = BookingOfferForm(prefix='1')
-
     if request.method == "POST":
         editForm = MessageEditForm(request.POST, prefix='0')
         if editForm.is_valid():
-            if editForm.cleaned_data.get('jointOffer'):
+            if editForm.cleaned_data.get('jointOffer'): # FIXME: this is not used
                 booking = Booking(
                   product=product, 
                   owner=owner, 
                   borrower=borrower, 
-                  state=Booking.STATE.UNACCEPTED,
+                  state=BOOKING_STATE.UNACCEPTED, # FIXME: direct manipulation of state could lead to FSM exception
                   ip=request.META.get('REMOTE_ADDR', None) if user==borrower else None) # we can fill out IP if the user is the borrower, else only when peer accepts the offer
                 offerForm = BookingOfferForm(request.POST, instance=booking, prefix='1')
                 if offerForm.is_valid():
-                    messages_with_offer = message_list.filter(~Q(offer=None) & ~Q(offer__state=Booking.STATE.REJECTED))
+                    messages_with_offer = message_list.filter(~Q(offer=None) & ~Q(offer__state=BOOKING_STATE.REJECTED)).select_related('offer').only('offer')
                     for message in messages_with_offer:
-                        message.offer.state = Booking.STATE.REJECTED
+                        message.offer.reject()
                         message.offer.save()
                     editForm.save(product, user, peer, parent_msg=thread.last_message, offer=offerForm.save())
                     messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent with booking offer."))
@@ -473,6 +468,8 @@ def thread_details(request, thread_id):
                 messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
                 return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
     elif request.method == "GET":
+        editForm = MessageEditForm(prefix='0')
+        offerForm = BookingOfferForm(prefix='1')
         for message in message_list.filter(recipient=user, read_at=None):
             message.read_at = datetime.datetime.now()
             message.save()

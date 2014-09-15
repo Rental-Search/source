@@ -13,13 +13,13 @@ BOOKING_STATE = Enum([
     ('ongoing', 'ONGOING', _(u'En cours')),
     ('ended', 'ENDED', _(u'Terminé')),
     ('incident', 'INCIDENT', _(u'Incident')),
-    ('refunded', 'REFUNDED', _(u'Remboursé')),
-    ('deposit', 'DEPOSIT', _(u'Caution versée')),
-    ('closing', 'CLOSING', _(u"En attende de clôture")),
+    ('refunded', 'REFUNDED', _(u'Remboursé')), # NOTE: not used today
+    ('deposit', 'DEPOSIT', _(u'Caution versée')), # NOTE: not used today
+    ('closing', 'CLOSING', _(u"En attende de clôture")), # NOTE: not used today
     ('closed', 'CLOSED', _(u'Clôturé')),
     ('outdated', 'OUTDATED', _(u"Dépassé")),
-    ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")),
-    ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation")),
+    ('unaccepted', 'UNACCEPTED', _(u"Pas accepté")), # NOTE: not used today
+    ('accepted_unauthorized', 'ACCEPTED_UNAUTHORIZED', _(u"Accepté et en cours d'autorisation")), # NOTE: not used today
     ('professional', 'PROFESSIONAL', _(u"Demande pro")),
     ('professional_saw', 'PROFESSIONAL_SAW', _(u'Lu')),
 ])

@@ -5,7 +5,8 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from models import Booking, OwnerComment, BorrowerComment, Sinister, BookingLog
+from rent.models import Booking, OwnerComment, BorrowerComment, Sinister, BookingLog
+from rent.choices import BOOKING_STATE
 
 from eloue.admin import CurrentSiteAdmin
 
@@ -33,7 +34,7 @@ class BookingAdmin(CurrentSiteAdmin):
     
     def send_recovery_email(self, request, queryset):
         for booking in queryset:
-            if booking.state == Booking.STATE.AUTHORIZING:
+            if booking.state == BOOKING_STATE.AUTHORIZING:
                 booking.send_recovery_email()
     send_recovery_email.short_description = _(u"Envoyer un email de relance")
     

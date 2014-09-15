@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import socket
-import datetime, time
+import datetime
 import urllib
 import itertools
-import time
-from decimal import Decimal as D
 
 from logbook import Logger
 
@@ -18,8 +16,6 @@ import gdata.gauth
 
 
 from django.views.generic import ListView
-from django.utils.decorators import method_decorator
-from django.views.generic import View
 from django.views.generic.base import TemplateResponseMixin
 
 
@@ -27,36 +23,34 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.core.mail import EmailMessage, BadHeaderError, send_mass_mail
+from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Q, Max
 from django.views.decorators.http import require_GET
-from django.forms.models import model_to_dict, inlineformset_factory
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.cache import never_cache, cache_page
+from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
 from oauth_provider.models import Token
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 
-from accounts.forms import (EmailAuthenticationForm, GmailContactFormset, PatronEditForm, 
+from accounts.forms import (EmailAuthenticationForm, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, CompanyEditForm, SubscriptionEditForm,
     PatronSetPasswordForm, FacebookForm, CreditCardForm, GmailContactForm)
-from accounts.models import Patron, FacebookSession, CreditCard, Billing, Subscription, ProPackage, BillingHistory
+from accounts.models import Patron, FacebookSession, CreditCard, Billing, ProPackage, BillingHistory
 from accounts.wizard import AuthenticationWizard
 from accounts.choices import GEOLOCATION_SOURCE
 
-from products.forms import FacetedSearchForm
 from products.models import ProductRelatedMessage, MessageThread, Product
 from products.search import product_search
 
 from rent.models import Booking, BorrowerComment, OwnerComment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
+from rent.choices import BOOKING_STATE
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.decorators import secure_required, mobify, ownership_required
@@ -238,7 +232,7 @@ def comments(request):
     patron = request.user
     closed_bookings = Booking.objects.filter(
         Q(owner=patron) | Q(borrower=patron), 
-        Q(state=Booking.STATE.CLOSED)|Q(state=Booking.STATE.CLOSING)|Q(state=Booking.STATE.ENDED)
+        Q(state__in=[BOOKING_STATE.CLOSED, BOOKING_STATE.CLOSING, BOOKING_STATE.ENDED])
     )
     commented_bookings = closed_bookings.filter(
         ~Q(ownercomment=None, owner=patron) & 
@@ -293,7 +287,7 @@ def comments(request):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def comment_booking(request, booking_id):
     booking = Booking.objects.get(pk=booking_id)
-    if booking.state not in (Booking.STATE.CLOSING, Booking.STATE.CLOSED, Booking.STATE.ENDED):
+    if booking.state not in (BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED, BOOKING_STATE.ENDED):
         return redirect('comments')
     
     if booking.owner == request.user:
@@ -558,13 +552,14 @@ def patron_edit_rib(request):
             messages.success(request, _(u"Votre RIB a bien été ajouté"))
             pk = request.GET.get('accept')
             if pk:
-                booking = get_object_or_404(Booking, pk=pk, state=Booking.STATE.AUTHORIZED, owner=request.user)
+                booking = get_object_or_404(Booking, pk=pk, state=BOOKING_STATE.AUTHORIZED, owner=request.user)
                 if booking.started_at < datetime.datetime.now():
-                    booking.state = booking.STATE.OUTDATED
+                    booking.expire()
                     booking.save()
                     messages.error(request, _(u"Votre demande est dépassée"))
                 else:
                     booking.accept()
+                    booking.save()
                     messages.success(request, _(u"La demande de location a été acceptée"))
                     GoalRecord.record('rent_object_accepted', WebUser(request))
                 return redirect(booking)
@@ -700,7 +695,7 @@ def dashboard(request):
         recipient=request.user, read_at=None
     ).order_by().values('thread').distinct()
     new_threads = MessageThread.objects.filter(pk__in=[thread['thread'] for thread in new_thread_ids]).order_by('-last_message__sent_at')
-    booking_demands = Booking.on_site.filter(owner=request.user, state=Booking.STATE.AUTHORIZED).order_by('-created_at')
+    booking_demands = Booking.on_site.filter(owner=request.user, state=BOOKING_STATE.AUTHORIZED).order_by('-created_at')
     return render(request, 'accounts/dashboard.html', 
         {'thread_list': new_threads, 'booking_demands': booking_demands}, 
     )
@@ -1053,7 +1048,7 @@ class UserViewSet(mixins.OwnerListMixin, viewsets.ModelViewSet):
             ).order_by().count()
         # count incoming booking requests for the requested user
         res['booking_requests_count'] = \
-            Booking.on_site.filter(owner=user, state=Booking.STATE.AUTHORIZED
+            Booking.on_site.filter(owner=user, state=BOOKING_STATE.AUTHORIZED
             ).only('id').count()
         return Response(res)
 

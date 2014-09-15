@@ -23,8 +23,8 @@ class BookingSerializer(ModelSerializer):
         )
         immutable_fields = ('started_at', 'ended_at', 'owner', 'borrower', 'product')
 
-class BookingStateSerializer(ModelSerializer):
-    action = fields.CharField(write_only=True, max_length=32)
+class BookingActionSerializer(ModelSerializer):
+    action = fields.CharField(write_only=True, max_length=128)
 
     default_error_messages = {
         'invalid_action': _('Action %(action)s is not available for this state: %(state)s'),
@@ -40,7 +40,7 @@ class BookingStateSerializer(ModelSerializer):
         raise ValidationError(self.error_messages['invalid_action'] % dict(action=action, state=self.object.state))
 
     def save_object(self, obj, **kwargs):
-        obj._fsm_transition_method()
+        obj._fsm_transition_method(**kwargs)
 
     class Meta:
         model = models.Booking

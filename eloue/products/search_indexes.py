@@ -4,7 +4,6 @@ import datetime
 from haystack import indexes
 
 from products.models import Alert, Product, CarProduct, RealEstateProduct
-from rent.models import Booking
 
 __all__ = ['ProductIndex', 'AlertIndex']
 
@@ -60,7 +59,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         # It doesn't play well with season
         if obj.prices.all()[:1]:
             now = datetime.datetime.now()
-            unit, amount = Booking.calculate_price(obj, now, now + datetime.timedelta(days=1))
+            unit, amount = obj.calculate_price(now, now + datetime.timedelta(days=1))
             return amount
     
     def prepare_special(self, obj):

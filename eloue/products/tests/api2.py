@@ -17,7 +17,7 @@ def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
 
 class PictureTest(APITestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'picture']
+    fixtures = ['patron', 'address', 'category', 'product', 'picture_api2']
 
     def setUp(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')

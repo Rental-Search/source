@@ -41,7 +41,7 @@ from rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGe
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites
 from eloue import signals as eloue_signals
-from eloue.utils import currency, create_alternative_email
+from eloue.utils import currency, create_alternative_email, itertools_accumulate, convert_from_xpf, convert_to_xpf
 
 
 import copy
@@ -136,7 +136,6 @@ class Product(models.Model):
     @property
     def local_currency_deposit_amount(self):
         # XXX: ugly and not very well tested hack
-        from eloue.utils import convert_from_xpf, convert_to_xpf
         if self.daily_price:
             if self.daily_price.currency == DEFAULT_CURRENCY:
                 return self.deposit_amount
@@ -168,20 +167,6 @@ class Product(models.Model):
 
         started_at = datetime(year, month, 1, 0, 0)
         ended_at = started_at + timedelta(days=days_num)
-        def _accumulate(iterable, func=operator.add, start=None):
-            """
-            Modified version of Python 3.2's itertools.accumulate.
-            """
-            # accumulate([1,2,3,4,5]) --> 0 1 3 6 10 15
-            # accumulate([1,2,3,4,5], operator.mul) --> 0 1 2 6 24 120
-            # yield 0
-            it = iter(iterable)
-            total = next(it)
-            yield total
-            for element in it:
-                total = func(total, element)
-                yield total
-            yield
         
         # the bookings 
         bookings = self.bookings.filter(
@@ -191,7 +176,7 @@ class Product(models.Model):
         )
 
         _one_day = timedelta(days=1)
-        day_first = datetime(year, month, 1)
+        #day_first = datetime(year, month, 1)
 
         START = 1
         END = -1
@@ -221,7 +206,7 @@ class Product(models.Model):
 
         borrowed = zip(
             map(operator.itemgetter(0), changements),
-            _accumulate(map(operator.itemgetter(1), changements))
+            itertools_accumulate(map(operator.itemgetter(1), changements))
         )
         availables = [(key, self.quantity - value) for key, value in borrowed]
         
@@ -714,7 +699,6 @@ class Price(models.Model):
     @property
     def local_currency_amount(self):
         # XXX: ugly and not very well tested hack
-        from eloue.utils import convert_from_xpf, convert_to_xpf
         if self.currency == DEFAULT_CURRENCY:
             return self.amount
         if self.currency == 'XPF':

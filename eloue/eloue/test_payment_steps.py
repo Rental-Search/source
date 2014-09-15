@@ -1,4 +1,5 @@
 from rent.models import Booking
+from rent.choices import BOOKING_STATE
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from eloue import settings
@@ -15,7 +16,7 @@ def process_booking_step_one(uuid):
     state authorizing -> authorized -> pending, not needed to test non-payment
     """
     booking = Booking.objects.get(uuid=uuid)
-    booking.state = Booking.STATE.AUTHORIZED # authorizing -> authorized ::preapproval, preapproval_ipn
+    booking.state = BOOKING_STATE.AUTHORIZED # authorizing -> authorized ::preapproval, preapproval_ipn
     booking.send_ask_email()
     booking.save()
     
@@ -31,7 +32,7 @@ def process_booking_step_two(uuid):
         cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
         return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
     )
-    booking.state = Booking.STATE.ONGOING
+    booking.state = BOOKING_STATE.ONGOING
     booking.save()
 
 def process_booking_step_three(uuid):
@@ -39,7 +40,7 @@ def process_booking_step_three(uuid):
     state ongoing -> ended, as time passed (time control), needed for test non-payment
     """
     booking = Booking.objects.get(uuid=uuid) # ::command ended
-    booking.state = Booking.STATE.ENDED
+    booking.state = BOOKING_STATE.ENDED
     booking.send_ended_email()
     booking.save()
     
@@ -50,7 +51,7 @@ def process_booking_step_four(uuid):
     Attention, no need step four, so step five turn to be step four. not needed to test non-payment
     """
     booking = Booking.objects.get(uuid=uuid) 
-    booking.state = Booking.STATE.CLOSED #ipn ignored, closing -> closed ::pay_ipn
+    booking.state = BOOKING_STATE.CLOSED #ipn ignored, closing -> closed ::pay_ipn
     booking.save()
     
 def httplib(uuid):

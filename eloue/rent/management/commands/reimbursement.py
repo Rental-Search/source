@@ -23,6 +23,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         from django.conf import settings
         from rent.models import Booking
+        from rent.choices import BOOKING_STATE
         log.info('Starting monthly insurance reimbursement batch')
         csv_file = TemporaryFile()
         writer = csv.writer(csv_file, delimiter='|')
@@ -36,9 +37,9 @@ class Command(BaseCommand):
             row[u'Numéro de commande'] = booking.uuid
             row['Prix de la location TTC'] = booking.total_amount
             row['Date du remboursement'] = booking.canceled_at.strftime("%Y%m%d")
-            if booking.state == Booking.STATE.CANCELED:
+            if booking.state == BOOKING_STATE.CANCELED:
                 row['Type de remboursement'] = 'ANNULATION'
-            elif booking.state == Booking.STATE.REFUNDED:
+            elif booking.state == BOOKING_STATE.REFUNDED:
                 row['Type de remboursement'] = 'REMBOURSEMENT'
             row[u'Désignation'] = smart_str(booking.product.description)
             row['Prix de la location TTC'] = booking.total_amount

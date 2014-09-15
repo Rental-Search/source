@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 from decimal import Decimal as D
-import datetime
 
 import django.forms as forms
 from form_utils.forms import BetterModelForm
@@ -12,8 +11,6 @@ from django.db.models import signals
 
 from haystack.forms import SearchForm
 from mptt.forms import TreeNodeChoiceField
-from django_messages.forms import ComposeForm
-from django_messages.fields import CommaSeparatedUserField
 
 from accounts.fields import DateSelectField, PhoneNumberField
 from accounts.models import Patron, Address, PhoneNumber
@@ -22,7 +19,7 @@ from accounts.widgets import CommentedCheckboxInput
 from products.fields import FacetField, FRLicensePlateField
 from products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, ProductRelatedMessage, ProductHighlight, ProductTopPosition, MessageThread
 from products.widgets import PriceTextInput, CommentedSelectInput, CommentedTextInput
-from products.choices import UNIT, PAYMENT_TYPE, SORT
+from products.choices import UNIT, SORT
 
 from eloue.geocoder import GoogleGeocoder
 from eloue import legacy
@@ -186,7 +183,7 @@ class MessageEditForm(forms.Form):
             msg.parent_msg = parent_msg
             thread = parent_msg.thread
         else:
-            thread, is_thread_created = MessageThread.objects.create(sender=sender, recipient=recipient, subject=subject)
+            thread = MessageThread.objects.create(sender=sender, recipient=recipient, subject=subject)
         # thread should already exist in DB
         msg.thread = thread
         msg.subject = thread.subject

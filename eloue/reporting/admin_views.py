@@ -11,6 +11,7 @@ from django.db.models import Avg, Sum, Q, Count
 from accounts.models import Patron
 from products.models import Product, CarProduct, RealEstateProduct, Category
 from rent.models import Booking, OwnerComment, BorrowerComment
+from rent.choices import BOOKING_STATE
 
 from django_messages.models import Message
 
@@ -28,7 +29,7 @@ def stats(request):
 
 	data = {}
 
-	booking_transaction_list = [Booking.STATE.PENDING, Booking.STATE.ONGOING, Booking.STATE.ENDED, Booking.STATE.INCIDENT, Booking.STATE.CLOSING, Booking.STATE.CLOSED]
+	booking_transaction_list = [BOOKING_STATE.PENDING, BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.INCIDENT, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED]
 
 	qss_parameters_list = {
 		'patrons': (Patron.objects.all(), 'date_joined'),
@@ -41,7 +42,7 @@ def stats(request):
 		'real_estate_product': (RealEstateProduct.objects.all(), 'created_at'),
 		'other_item_product': (Product.objects.filter(carproduct=None).filter(realestateproduct=None), 'created_at'),
 		'asked_booking': (Booking.objects.all(), 'created_at', Count('uuid')),
-		'booking_pro': (Booking.objects.filter(state__in=[Booking.STATE.PROFESSIONAL, Booking.STATE.PROFESSIONAL_SAW]), 'created_at', Count('uuid')),
+		'booking_pro': (Booking.objects.filter(state__in=[BOOKING_STATE.PROFESSIONAL, BOOKING_STATE.PROFESSIONAL_SAW]), 'created_at', Count('uuid')),
 		'booking_private': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Count('uuid')),
 		'car_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__carproduct=None)), 'created_at', Count('uuid')),
 		'real_estate_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__realestateproduct=None)), 'created_at', Count('uuid')),
@@ -52,7 +53,7 @@ def stats(request):
 		'sum_total_amount_booking': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Sum('total_amount')),
 		'need_assurancy_asked_booking': (Booking.objects.filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
 		'need_assurancy_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
-		'incident_declaration': (Booking.objects.filter(state__in=[Booking.STATE.INCIDENT]), 'created_at', Count('uuid')),
+		'incident_declaration': (Booking.objects.filter(state__in=[BOOKING_STATE.INCIDENT]), 'created_at', Count('uuid')),
 		'messages': (Message.objects.all(), 'sent_at'),
 		'borrower_comment': (BorrowerComment.objects.all(), 'created_at'),
 		'owner_comment': (OwnerComment.objects.all(), 'created_at'),

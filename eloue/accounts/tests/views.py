@@ -8,7 +8,6 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TransactionTestCase
 from django.utils.translation import ugettext as _
-from django.contrib.sites.models import Site
 
 from accounts.forms import PatronPasswordChangeForm, ContactForm
 from accounts.models import Patron, Address

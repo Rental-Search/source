@@ -2,6 +2,7 @@
 import hashlib
 import hmac
 import locale
+import operator
 
 from copy import deepcopy
 from decimal import ROUND_UP, ROUND_DOWN, Decimal as D
@@ -81,6 +82,23 @@ def generate_camo_url(url):
     url = urljoin("%(scheme)s://%(hostname)s" % parts, "%(path)s?%(params)s" % parts)
     digest = hmac.new(CAMO_KEY, url, hashlib.sha1).hexdigest()
     return "%s%s?url=%s" % (CAMO_URL, digest, url)
+
+
+def itertools_accumulate(iterable, func=operator.add, start=None):
+    """
+    Modified version of Python 3.2's itertools.accumulate.
+    """
+    # accumulate([1,2,3,4,5]) --> 0 1 3 6 10 15
+    # accumulate([1,2,3,4,5], operator.mul) --> 0 1 2 6 24 120
+    if start is not None:
+        yield start
+    it = iter(iterable)
+    total = next(it)
+    yield total
+    for element in it:
+        total = func(total, element)
+        yield total
+    yield
 
 
 def currency(value):
