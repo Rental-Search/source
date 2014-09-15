@@ -7,7 +7,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
      */
     EloueCommon.constant("Endpoints", {
         oauth_url: "/oauth2/",
-        api_url: "/api/2.0/"
+        api_url: "/api/2.0/",
+        backend_host: "http://10.0.5.47:8201"
     });
 
     EloueCommon.constant("AuthConstants", {
