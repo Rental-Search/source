@@ -92,4 +92,5 @@ class PatronManager(UserManager, GeoManager):
         ).extra(
             select={'joined': 'date(date_joined)'}
         ).order_by('-joined', 'distance')
+
     

@@ -10,24 +10,45 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from eloue.accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing
+from eloue.accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing
 from eloue.accounts.forms import PatronChangeForm, PatronCreationForm
 
 log = logbook.Logger('eloue')
 
 class AddressInline(admin.TabularInline):
     model = Address
-
+    extra = 0
 
 class PhoneNumberInline(admin.TabularInline):
     model = PhoneNumber
+    extra = 0
 
 class OpeningTimesInline(admin.StackedInline):
     model = OpeningTimes
 
-class BillingInline(admin.StackedInline):
-    model = Billing
+    fieldsets = (
+        (_('Monday'), {'classes': ('collapse',), 'fields': ('monday_opens', 'monday_closes', 'monday_opens_second', 'monday_closes_second',)}),
+        (_('Tuesday'), {'classes': ('collapse',), 'fields': ('tuesday_opens', 'tuesday_closes', 'tuesday_opens_second', 'tuesday_closes_second',)}),
+        (_('Wednesday'), {'classes': ('collapse',), 'fields': ('wednesday_opens', 'wednesday_closes', 'wednesday_opens_second', 'wednesday_closes_second',)}),
+        (_('Thursday'), {'classes': ('collapse',), 'fields': ('thursday_opens', 'thursday_closes', 'thursday_opens_second', 'thursday_closes_second',)}),
+        (_('Friday'), {'classes': ('collapse',), 'fields': ('friday_opens', 'friday_closes', 'friday_opens_second', 'friday_closes_second',)}),
+        (_('Saturday'), {'classes': ('collapse',), 'fields': ('saturday_opens', 'saturday_closes', 'saturday_opens_second', 'saturday_closes_second',)}),
+        (_('Sunday'), {'classes': ('collapse',), 'fields': ('sunday_opens', 'sunday_closes', 'sunday_opens_second', 'sunday_closes_second',)}),
+    )
 
+
+
+class SubscriptionInline(admin.StackedInline):
+    model = Subscription
+    extra = 0
+    readonly_fields = ('subscription_started', )
+    fieldsets = (
+        (None, {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'free', 'number_of_free_month', 'payment_type', 'annual_payment_date', 'comment')}),
+    )
+
+class BillingInline(admin.TabularInline):
+    model = Billing
+    extra = 0
 
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
@@ -56,7 +77,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional', 'is_subscribed', 'affiliate', 'new_messages_alerted')
     save_on_top = True
     ordering = ['-date_joined']
-    inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline]
+    inlines = [AddressInline, PhoneNumberInline]
     actions = ['export_as_csv', 'send_activation_email']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
 
@@ -104,13 +125,15 @@ class PhoneNumberAdmin(admin.ModelAdmin):
         (None, {'fields': ('patron', 'number', 'kind')}),
     )
 
+
+
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment')
+    list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment',)
     raw_id_fields = ("patron",)
-    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email')
+    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email', 'slimpay_code')
     fieldsets = (
-        (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', 'annual_payment_date', 'free', 'number_of_free_month', 'comment')}),
-        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email')})
+        (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', 'annual_payment_date', 'free', 'number_of_free_month', 'comment',)}),
+        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email', 'slimpay_code',)}),
     )
     ordering = ['-subscription_started']
     list_filter = ('payment_type', 'propackage',)
@@ -140,17 +163,39 @@ class SubscriptionAdmin(admin.ModelAdmin):
     def products_count(self, obj):
         return obj.patron.products.all().count()
 
+    def slimpay_code(self, obj):
+        try:
+            slimpay = obj.patron.slimpaymandateinformation_set.all()
+            return slimpay[0].RUM
+        except:
+            return None
 
-class ProPackageAdmin(admin.ModelAdmin):
-    pass
+
+class ProAdmin(PatronAdmin):
+    list_display = ('company_name', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
+    list_filter = ()
+    inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, SubscriptionInline]
+
+    def queryset(self, request):
+        return Pro.objects.exclude(subscriptions=None)
+
+    def last_subscription(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].propackage
+
+    def last_subscription_started_date(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_started
+
+    def last_subscription_ended_date(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_ended
 
 
 try:
     admin.site.register(Address, AddressAdmin)
     admin.site.register(PhoneNumber, PhoneNumberAdmin)
     admin.site.register(Patron, PatronAdmin)
+    admin.site.register(Pro, ProAdmin)
     admin.site.register(PatronAccepted)
-    admin.site.register(ProPackage, ProPackageAdmin)
+    admin.site.register(ProPackage)
     admin.site.register(Subscription, SubscriptionAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)

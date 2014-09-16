@@ -467,6 +467,17 @@ class Patron(User):
     is_expired.short_description = ugettext(u"Expiré")
 
 
+class ProManager(PatronManager):
+    def get_queryset(self):
+        return super(ProManager, self).get_queryset().filter(is_professional=True)
+
+class Pro(Patron):
+    objects = ProManager()
+
+    class Meta:
+        proxy = True
+
+
 from datetime import time
 HOURS = [(time(h, 0), "%02d:00" % (h,)) for h in xrange(24)]
 
@@ -833,7 +844,7 @@ class BillingEmailNotification(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
 
-BILLING_STATE = [('unpaid', 'UNPAID'), ('paid', 'UNPAID')]
+BILLING_STATE = [('unpaid', 'UNPAID'), ('paid', 'PAID')]
 
 class Billing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

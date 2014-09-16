@@ -511,7 +511,7 @@ class PatronCreationForm(UserCreationForm):
 
     class Meta:
         model = Patron
-    
+
 
 class PatronPaypalForm(forms.ModelForm):
     paypal_email = forms.EmailField(required=False, label=_("E-mail"), max_length=75, widget=forms.TextInput(attrs={
