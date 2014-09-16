@@ -12,8 +12,8 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
 
         beforeEach(function () {
             productsServiceMock = {
-                getProductsByOwnerAndRootCategory: function (userId, rootCategoryId) {
-                    console.log("productsServiceMock:getProductsByOwnerAndRootCategory called with userId = " + userId + ", rootCategoryId = " + rootCategoryId);
+                getProductsByOwnerAndRootCategory: function (userId, rootCategoryId, page) {
+                    console.log("productsServiceMock:getProductsByOwnerAndRootCategory called with userId = " + userId + ", rootCategoryId = " + rootCategoryId + ", page = " + page);
                     return {then: function () {
                         return {response: {}}
                     }}
@@ -64,7 +64,7 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
         it('ItemsCtrl:filterByCategory', function () {
             scope.selectedCategory = "Automobile";
             scope.filterByCategory();
-            expect(productsServiceMock.getProductsByOwnerAndRootCategory).toHaveBeenCalledWith(1190, scope.selectedCategory);
+            expect(productsServiceMock.getProductsByOwnerAndRootCategory).toHaveBeenCalledWith(1190, scope.selectedCategory, null);
         });
     });
 });

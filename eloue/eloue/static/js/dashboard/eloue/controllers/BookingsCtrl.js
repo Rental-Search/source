@@ -14,7 +14,8 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.currentUserUrl = "";
             $scope.bookingFilter = {};
-
+            $scope.pageSize = "10";
+            $scope.page = 1;
             $scope.stateList = [
                 {label: "Unpaid", value: "unpaid"},
                 {label: "Authorized", value: "authorized"},
@@ -30,7 +31,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.stateFilter = undefined;
 
             $scope.currentUserPromise.then(function (currentUser) {
-                BookingsLoadService.getBookingList(undefined, currentUser.id).then(function (bookingList) {
+                BookingsLoadService.getBookingList($scope.page, currentUser.id).then(function (bookingList) {
                     $scope.bookingList = bookingList;
                     // Get current user url
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";

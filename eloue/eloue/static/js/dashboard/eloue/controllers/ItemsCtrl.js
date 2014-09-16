@@ -1,33 +1,35 @@
 "use strict";
 
-define(["angular", "eloue/app", "tagged-infinite-scroll"], function (angular) {
+define(["angular", "eloue/app"], function (angular) {
 
     /**
      * Controller for the items page.
      */
     angular.module("EloueDashboardApp").controller("ItemsCtrl", [
         "$scope",
+        "$timeout",
+        "$q",
         "ProductsService",
         "UsersService",
         "CategoriesService",
-        function ($scope, ProductsService, UsersService, CategoriesService) {
+        function ($scope, $timeout, $q, ProductsService, UsersService, CategoriesService) {
 
             $scope.selectedCategory = "";
             $scope.distance = 0;
             $scope.paginating = false;
             $scope.enabled = true;
 
-            // Fetch more items
-            $scope.getMore = function() {
-                console.log(111);
-            };
+            $scope.data = {};
+            $scope.data.list = [];
+            $scope.pageSize = "10";
+            $scope.page = 1;
 
 
             UsersService.getMe(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
 
-                ProductsService.getProductsByOwnerAndRootCategory($scope.currentUser.id).then(function (items) {
+                ProductsService.getProductsByOwnerAndRootCategory($scope.currentUser.id, null, $scope.page).then(function (items) {
                     $scope.items = items;
 
                     // Initiate custom scrollbars
@@ -40,7 +42,7 @@ define(["angular", "eloue/app", "tagged-infinite-scroll"], function (angular) {
             });
 
             $scope.filterByCategory = function () {
-                ProductsService.getProductsByOwnerAndRootCategory($scope.currentUser.id, $scope.selectedCategory).then(function (items) {
+                ProductsService.getProductsByOwnerAndRootCategory($scope.currentUser.id, $scope.selectedCategory, $scope.page).then(function (items) {
                     $scope.items = items;
                 });
             }
