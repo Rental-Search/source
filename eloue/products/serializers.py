@@ -9,7 +9,7 @@ class CategoryDescriptionSerializer(ModelSerializer):
         fields = ('title', 'description', 'header', 'footer')
 
 class CategorySerializer(ModelSerializer):
-    description = CategoryDescriptionSerializer()
+    description = CategoryDescriptionSerializer(read_only=True)
     is_child_node = ObjectMethodBooleanField('is_child_node', read_only=True)
     is_leaf_node = ObjectMethodBooleanField('is_leaf_node', read_only=True)
     is_root_node = ObjectMethodBooleanField('is_root_node', read_only=True)

@@ -754,9 +754,9 @@ class CategoryFilterSet(filters.FilterSet):
 
     class Meta:
         model = models.Category
-        fields = ('parent', 'need_insurance') # TODO: is_child_node, is_leaf_node, is_root_node
+        fields = ('parent', 'need_insurance')
 
-class CategoryViewSet(viewsets.NonDeletableModelViewSet):
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDeletableModelViewSet after merging Category and CategoryDescription
     """
     API endpoint that allows product categories to be viewed or edited.
     """
