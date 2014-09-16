@@ -1014,7 +1014,7 @@ class UserViewSet(mixins.OwnerListMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    model = models.Patron
+    queryset = models.Patron.objects.select_related('default_address', 'default_number')
     serializer_class = serializers.UserSerializer
     permission_classes = (permissions.UserPermissions,)
     filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
@@ -1058,7 +1058,7 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     model = models.Address
     serializer_class = serializers.AddressSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter) # TODO: filters.OwnerFilter, 
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter) 
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
 
@@ -1069,7 +1069,7 @@ class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     model = models.PhoneNumber
     serializer_class = serializers.PhoneNumberSerializer
-    filter_backends = (filters.DjangoFilterBackend,) # TODO: filters.OwnerFilter, 
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend) 
     filter_fields = ('patron',)
 
     @link()

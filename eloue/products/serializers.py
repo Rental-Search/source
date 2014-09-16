@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from products import models
+from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
 
 class CategoryDescriptionSerializer(ModelSerializer):
@@ -19,6 +20,9 @@ class CategorySerializer(ModelSerializer):
         immutable_fields = ('parent',)
 
 class ProductSerializer(ModelSerializer):
+    address = NestedAddressSerializer()
+    phone = NestedPhoneNumberSerializer(required=False)
+
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
