@@ -19,19 +19,10 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django import forms
 
-from haystack.query import SearchQuerySet
-from haystack.utils.geo import D, Point
-
 
 class GenerateOnDownload(object):
     def on_content_required(self, spec):
         spec.generate()
-
-
-class CompatSearchQuerySet(SearchQuerySet):
-    def spatial(self, long=None, lat=None, radius=None, unit='km'):
-        point = Point(lat, long)
-        return self.dwithin('location', point, D(**{unit: radius})) #.distance('location', point)
 
 
 def new_message_email(sender, instance, signal,

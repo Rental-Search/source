@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib import messages
 from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import Distance
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, Http404
@@ -24,7 +25,6 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 
 from haystack.query import SearchQuerySet
-from haystack.utils.geo import D
 from django.http import HttpResponse
 
 from accounts.forms import EmailAuthenticationForm
@@ -74,7 +74,7 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
         location['region_coords'] or location['coordinates'],
         location['region_radius'] or location['radius']
         )
-    last_added = search_index.dwithin('location', region_point, D(km=region_radius)
+    last_added = search_index.dwithin('location', region_point, Distance(km=region_radius)
         ).distance('location', region_point
         ).order_by(sort_by_date, SORT.NEAR)
 
@@ -87,7 +87,7 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
             # silently ignore exceptions like country name is missing or incorrect
             pass
         else:
-            last_added = search_index.dwithin('location', country_point, D(km=country_radius)
+            last_added = search_index.dwithin('location', country_point, Distance(km=country_radius)
                 ).distance('location', country_point
                 ).order_by(sort_by_date, SORT.NEAR)
 

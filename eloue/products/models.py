@@ -112,10 +112,11 @@ class Product(models.Model):
     
     def more_like_this(self):
         from products.search import product_search
-        return product_search.spatial(
-            lat=self.address.position.x, long=self.address.position.y,
-            radius=DEFAULT_RADIUS, unit='km'
-        ).more_like_this(self)[:3]
+        sqs = product_search.dwithin(
+		    'location', self.address.position,
+		    Distance(km=DEFAULT_RADIUS)
+		) #.distance('location', self.address.position)
+        return sqs.more_like_this(self)[:3]
     
     @property
     def slug(self):

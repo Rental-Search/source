@@ -499,7 +499,10 @@ class ProductResource(UserSpecificResource):
                 name, (lat, lon), radius = GoogleGeocoder().geocode(filters['l'])
                 if lat and lon:
                     radius = filters.get('r', radius if radius else DEFAULT_RADIUS)
-                    sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
+                    point = Point(lat, lon)
+                    sqs = sqs.dwithin(
+					    'location', point, Distance(km=radius)
+					) #.distance('location', point)
 
             pk = []
             for p in sqs:

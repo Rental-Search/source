@@ -10,6 +10,7 @@ from django.utils.translation import ugettext as _
 from django.db.models import signals
 
 from haystack.forms import SearchForm
+from haystack.utils.geo import Distance, Point
 from mptt.forms import TreeNodeChoiceField
 
 from accounts.fields import DateSelectField, PhoneNumberField
@@ -83,8 +84,10 @@ class FacetedSearchForm(SearchForm):
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
-                name, (lat, lon), _ = GoogleGeocoder().geocode(location)
-                sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
+                point = Point(GoogleGeocoder().geocode(location)[1])
+                sqs = sqs.dwithin(
+                    'location', point, Distance(km=radius)
+                ) #.distance('location', point)
             
             if self.load_all:
                 sqs = sqs.load_all()
@@ -137,8 +140,10 @@ class AlertSearchForm(SearchForm):
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
-                name, (lat, lon), _ = GoogleGeocoder().geocode(location)
-                sqs = sqs.spatial(lat=lat, long=lon, radius=radius, unit='km')
+                point = Point(GoogleGeocoder().geocode(location)[1])
+                sqs = sqs.dwithin(
+                    'location', point, Distance(km=radius)
+                ) #.distance('location', point)
             
             if self.load_all:
                 sqs = sqs.load_all()
