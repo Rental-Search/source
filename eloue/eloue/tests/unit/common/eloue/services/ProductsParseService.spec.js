@@ -22,7 +22,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         it("ProductsParseService:parseProduct", function () {
             var addressData = {id: 1}, statsData = {id: 5}, ownerData = {id: 2}, ownerStatsData = {id: 4}, phoneData = {id: 3};
-            var result = ProductsParseService.parseProduct({}, addressData, ownerData, ownerStatsData, phoneData, {});
+            var result = ProductsParseService.parseProduct({}, statsData, addressData, ownerData, ownerStatsData, phoneData, {});
             expect(result).toEqual({stats: statsData, address: addressData, owner: ownerData, ownerStats: ownerStatsData, phone: phoneData});
         });
     });

@@ -16,7 +16,7 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
               option(value="undefined") Statut
               option(ng-repeat="state in stateList", value="{{state.value}}") {{state.value | translate}}
 
-  ul.scrollbar-custom
+  ul.scrollbar-custom(eloue-lazy-load, lazy-data="bookingList", lazy-data-provider="BookingsLoadService", lazy-load-method="getBookingList")
       li.tab-vertical.block-with-thumbnail(class="#{booking.bage.classname}", ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid")
         .col-thumbnail
           .thumbnail

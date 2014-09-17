@@ -96,19 +96,14 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 require: "?ngModel",
                 scope: {
                     lazyData: "=",
-                    lazyDataCollectionKey: "@",
-                    lazyDataService: "@",
-                    lazyFetchMethod: "@",
-                    lazyRange: "@",
-                    lazyDataKeys: "=",
-                    lazyStartDelay: "@",
-                    lazyAppendDelay: "@",
-                    lazySpinnerColor: "@"
+                    lazyDataProvider: "@",
+                    lazyLoadMethod: "@"
                 },
                 link: function (scope, element, attrs, ngModel) {
-
+                    scope.page = 1;
+                    scope.hasNextPage = true;
                     element.append(
-                            "<div class=\"col-md-12 loading\" ng-hide=\"spinner.hide\">" +
+                            "<div class=\"col-md-12 loading\">" +
                             "<div class=\"loading-widget\"></div>" +
                             "</div>"
                     );
@@ -123,12 +118,14 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                         },
                         callbacks: {
                             onTotalScroll: function () {
-                                loading = true;
-                                win.requestAnimationFrame(function () {
-                                    scope.$apply(function () {
-                                        lazyLoad();
+                                if (scope.hasNextPage) {
+                                    win.requestAnimationFrame(function () {
+                                        scope.shouldReloadList = false;
+                                        scope.$apply(function () {
+                                            lazyLoad();
+                                        });
                                     });
-                                });
+                                }
                             }
                         }
                     });
@@ -137,45 +134,58 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                         win = winEl[0],
                         loadingWidget = angular.element(document.querySelector(".loading-widget")),
                         lazyLoader = LazyLoader,
-                        dataService = $injector.get(scope.lazyDataService),
-                        hasRun = false,
-                        loading = true;
+                        dataProvider = $injector.get(scope.lazyDataProvider);
                     appendAnimations();
                     makeSpinner(loadingWidget, "transparent rgb(44, 44, 44) rgb(44, 44, 44) rgb(44, 44, 44)");
-                    scope.spinner = { hide: false };
 
+//                    dataProvider[scope.lazyLoadMethod].apply(null,scope.lazyLoadArgs);
                     var lazyLoad = function () {
+                        var args = scope.lazyLoadArgs.slice(0);
+                        args.push(scope.page);
                         lazyLoader.configure({
                             data: scope.lazyData,
-                            collectionKey: scope.lazyDataCollectionKey,
-                            fetchData: dataService[scope.lazyFetchMethod],
+                            fetchData: dataProvider[scope.lazyLoadMethod],
                             range: scope.lazyRange,
-                            dataKeys: scope.lazyDataKeys
+                            args: args
                         });
 
                         lazyLoader.load()
                             .then(
                             function (data) {
-                                if (!hasRun) {
-                                    angular.forEach(Object.keys(data), function (key) {
-                                        scope.lazyData[key] = data[key];
+                                if (!data.next) {
+                                    scope.hasNextPage = false;
+                                } else {
+                                    scope.page++;
+                                }
+                                if (!scope.shouldReloadList) {
+                                    angular.forEach(Object.keys(data.list), function (key) {
+                                        scope.lazyData.push(data.list[key]);
                                     });
                                 } else {
-                                    scope.lazyData[scope.lazyDataCollectionKey] = data[scope.lazyDataCollectionKey];
+                                    scope.lazyData = data.list;
                                 }
-                                loading = false;
                             }
                         );
                     };
 
-                    $rootScope.$on("hideLoading", function () {
-                        scope.spinner.hide = true;
-                    });
-                    $rootScope.$on("showLoading", function () {
-                        scope.spinner.hide = false;
+                    $rootScope.$on("startLoading", function (event, args) {
+                        if (args.shouldReloadList) {
+                            scope.page = 1;
+                            scope.shouldReloadList = true;
+                            scope.hasNextPage = true;
+                        } else {
+                            scope.shouldReloadList = false;
+                        }
+                        scope.lazyLoadArgs = args.parameters;
+                        lazyLoad();
                     });
 
-                    lazyLoad();
+                    $rootScope.$on("hideLoading", function () {
+                        loadingWidget.hide();
+                    });
+                    $rootScope.$on("showLoading", function () {
+                        loadingWidget.show();
+                    });
                 }};
         }]);
 });

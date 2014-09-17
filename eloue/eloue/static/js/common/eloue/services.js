@@ -319,7 +319,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                messageThreadsService.sendMessage = function(message, productId) {
+                messageThreadsService.sendMessage = function (message, productId) {
                     var threadDef = $q.defer();
                     var self = this;
                     if (!message.thread) {
@@ -474,31 +474,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                productsService.getList = function(){
-                    console.log("getList");
-                    var deferred = $q.defer();
-                    var n = 0;
-                    var string = '';
-                    $timeout(function(){
-                        var list = [];
-                        while (n < 9001) {
-                            string =  'This is a list item and its ID is ' + n;
-                            list.push(string);
-                            n++;
-                        }
-                        string =  'It\'s over 9000';
-                        list.push(string);
-                        var returnList = {};
-                        returnList.data = {};
-                        returnList.data.list = list;
-                        deferred.resolve(returnList);
-                    }, 1000);
-
-                    return deferred.promise;
-                };
-
                 productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
-                    console.log("!!! " + userId + " ,  " + rootCategoryId);
                     var deferred = $q.defer();
                     var params = {owner: userId};
 
@@ -512,7 +488,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                     Products.get(params).$promise.then(function (data) {
                         var promises = [];
-
                         angular.forEach(data.results, function (value, key) {
                             var productDeferred = $q.defer();
 
@@ -555,7 +530,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                         $q.all(promises).then(
                             function (results) {
-                                deferred.resolve(results);
+                                deferred.resolve({
+                                    list: results,
+                                    next: data.next
+                                });
                             },
                             function (reasons) {
                                 deferred.reject(reasons);
@@ -1254,7 +1232,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService) {
                 var bookingsLoadService = {};
 
-                bookingsLoadService.getBookingList = function (page, author) {
+                bookingsLoadService.getBookingList = function (author, page) {
                     var deferred = $q.defer();
 
                     // Load bookings
@@ -1285,7 +1263,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         });
 
                         $q.all(bookingListPromises).then(function (bookingList) {
-                            deferred.resolve(bookingList);
+                            deferred.resolve(
+                                {
+                                    list: bookingList,
+                                    next: bookingListData.next
+                                });
                         });
                     });
 
@@ -1488,11 +1470,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService, MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
                 var messageThreadsLoadService = {};
 
-                messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage) {
+                messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage, page) {
                     var deferred = $q.defer();
 
                     // Load message threads
-                    MessageThreads.get({_cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
+                    MessageThreads.get({page: page, _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
                         var messageThreadListPromises = [];
 
                         // For each message thread
@@ -1524,8 +1506,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             messageThreadListPromises.push(messageThreadDeferred.promise);
                         });
 
-                        $q.all(messageThreadListPromises).then(function (bookingList) {
-                            deferred.resolve(bookingList);
+                        $q.all(messageThreadListPromises).then(function (messageThreadList) {
+                            deferred.resolve({
+                                list: messageThreadList,
+                                next: messageThreadListData.next
+                            });
                         });
                     });
 
@@ -1785,84 +1770,41 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         }]);
 
         EloueCommon.factory("LazyLoader", ["$timeout", "$rootScope", "$q", function ($timeout, $rootScope, $q) {
-            var cache = { data : {} },
-                config,
+            var config,
                 data,
-                collectionKey,
                 fetch,
-                responseKeys,
-                range,
-                appendDelay,
-                startDelay;
+                args;
             return {
 
-                configure:  function(options){
-                    config        = options;
-                    data          = config.data;
-                    collectionKey = config.collectionKey;
-                    fetch         = config.fetchData;
-                    responseKeys  = config.dataKeys;
-                    range         = config.range;
-                    appendDelay   = 100;
-                    startDelay    = 100;
+                configure: function (options) {
+                    config = options;
+                    data = config.data;
+                    fetch = config.fetchData;
+                    args = config.args;
                 },
 
-                getData : function(){
-                    var deferred  = $q.defer();
-                    $rootScope.$broadcast('showLoading');
+                getData: function () {
+                    var deferred = $q.defer();
+                    $rootScope.$broadcast("showLoading");
 
-                    if (!cache.data[collectionKey]) {
-                        fetch().then(function(res){
-                            angular.forEach(responseKeys, function(key){
-                                cache.data[key] = res.data[key];
-                                if (key === collectionKey) {
-                                    data[key] = [];
-                                    data[key] = data[key].concat(cache.data[key].splice(0, range));
-                                } else {
-                                    data[key] = cache.data[key];
-                                }
-                            });
-                            deferred.resolve(data);
-                            $rootScope.$broadcast('hideLoading');
-                        });
-                    } else {
-                        $timeout(function(){
-                            data[collectionKey] = data[collectionKey].concat(cache.data[collectionKey].splice(0, range));
-                            deferred.resolve(data);
-                            $rootScope.$broadcast('hideLoading');
-                        }, appendDelay);
-                    }
+                    fetch.apply(null, args).then(function (res) {
+                        deferred.resolve(res);
+                        $rootScope.$broadcast("hideLoading");
+                    });
+
                     return deferred.promise;
                 },
 
-                load :  function(){
-                    var deferred              = $q.defer();
-                    var _this                 = this;
-                    var undefinedConfigValues = false;
+                load: function () {
+                    var deferred = $q.defer();
+                    var _this = this;
 
-                    $rootScope.$broadcast('showLoading');
+                    $rootScope.$broadcast("showLoading");
 
-                    // Check for config bindings before initiating a request with undefined parameters
-                    angular.forEach(Object.keys(config), function(key){
-                        if (!config[key]) { undefinedConfigValues = true; }
+                    _this.getData().then(function (col) {
+                        deferred.resolve(col);
                     });
 
-                    if (undefinedConfigValues){
-
-                        // wait for bindings and try again
-                        deferred.reject(new Error('Bindings are not yet defined'));
-
-                    } else {
-                        var loadTimer = $timeout(function(){
-                            _this.getData().then(function(col){
-                                deferred.resolve(col);
-                            });
-                        }, startDelay);
-
-                        loadTimer.then(function(){
-                            $timeout.cancel(loadTimer);
-                        });
-                    }
                     return deferred.promise;
                 }
             }

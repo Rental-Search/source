@@ -25,10 +25,10 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.userStats = stats;
                 });
                 ProductsService.getProductsByOwnerAndRootCategory(currentUser.id).then(function (items) {
-                    $scope.products = items;
+                    $scope.products = items.list;
                 });
-                BookingsLoadService.getBookingList(undefined, currentUser.id).then(function (bookingList) {
-                    $scope.bookings = bookingList;
+                BookingsLoadService.getBookingList(currentUser.id).then(function (bookingList) {
+                    $scope.bookings = bookingList.list;
                 });
             });
 
