@@ -8,7 +8,7 @@
 // Reset and dependencies
 @import "bootstrap/normalize";
 @import "bootstrap/print";
-@import "bootstrap/font-awesome/font-awesome";
+// @import "bootstrap/font-awesome/font-awesome";
 // @import "bootstrap/glyphicons";
 
 
@@ -55,3 +55,18 @@
 @import "bootstrap/responsive-utilities";
 
 @import "helped-classes";
+@import "tables";
+@import "../dashboard/sass/font_awesome/larger";
+@import "../dashboard/sass/font_awesome/fixed-width";
+@import "../dashboard/sass/font_awesome/list";
+
+select{
+
+  height: 0;
+  width: 0;
+  overflow: hidden;
+  position: fixed;
+  left: 100%;
+  top: 100%;
+  visibility: hidden;
+}

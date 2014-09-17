@@ -1,33 +1,26 @@
 # -*- coding: utf-8 -*-
 import datetime
-import urllib
 import uuid
 import itertools
-from decimal import Decimal as D
 
 from django_lean.experiments.models import GoalRecord
 from django_lean.experiments.utils import WebUser
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
-from payments.models import PayboxDirectPaymentInformation, PayboxDirectPlusPaymentInformation, NonPaymentInformation
-from payments.paybox_payment import PayboxManager, PayboxException
+from payments.models import PayboxDirectPlusPaymentInformation, NonPaymentInformation
 from payments.abstract_payment import PaymentException
-from accounts.forms import EmailAuthenticationForm, BookingCreditCardForm, ExistingBookingCreditCardForm
-from accounts.models import Patron, CreditCard
+from accounts.forms import EmailAuthenticationForm
+from accounts.models import CreditCard
 from products.forms import FacetedSearchForm
-from products.models import Product
 from products.choices import PAYMENT_TYPE
 from rent.models import Booking, ProBooking, BorrowerComment
-from rent.forms import BookingForm, BookingConfirmationForm
+from rent.forms import BookingForm, BookingCreditCardForm, ExistingBookingCreditCardForm
+from rent.choices import BOOKING_STATE
 
-from eloue.geocoder import GoogleGeocoder
 from eloue.wizard import MultiPartFormWizard
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -88,14 +81,13 @@ class BookingWizard(MultiPartFormWizard):
             ),
             None
         )
-        from django.forms.models import model_to_dict
         if self.new_patron == booking_form.instance.product.owner:
             messages.error(request, _(u"Vous ne pouvez pas louer vos propres objets"))
             return redirect(booking_form.instance.product)
         
         booking = booking_form.save(commit=False)
         booking.ip = request.META.get('REMOTE_ADDR', None)
-        unit = Booking.calculate_price(booking.product,
+        unit = booking.product.calculate_price(
             booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
         max_available = Booking.calculate_available_quantity(booking.product, booking_form.cleaned_data['started_at'], booking_form.cleaned_data['ended_at'])
         
@@ -120,17 +112,18 @@ class BookingWizard(MultiPartFormWizard):
             payment = NonPaymentInformation.objects.create()
 
         booking.payment = payment
+        # we have to save the new instance first, otherwize there will be an IntegrityError exception
+        # on logging of state change 'authorizing' -> 'authorized' during booking.preapproval() below (see BookingLog model)
         booking.save()
 
         try:
             booking.preapproval(**preapproval_parameters)
-        except PaymentException as e:
-            booking.state = Booking.STATE.REJECTED
             booking.save()
-            return redirect('booking_failure', booking.pk.hex)
-        else:
             GoalRecord.record('rent_object_pre_paypal', WebUser(request))
-            return redirect('booking_success', booking.pk.hex)
+        except PaymentException:
+            return redirect('booking_failure', booking.pk.hex)
+
+        return redirect('booking_success', booking.pk.hex)
 
     
     def get_form(self, step, data=None, files=None):
@@ -138,7 +131,7 @@ class BookingWizard(MultiPartFormWizard):
         if issubclass(next_form, BookingForm):
             product = self.extra_context['product']
             if product.owner.current_subscription:
-                booking = ProBooking(product=product, owner=product.owner, state=Booking.STATE.PROFESSIONAL)
+                booking = ProBooking(product=product, owner=product.owner, state=BOOKING_STATE.PROFESSIONAL)
             else:
                 booking = Booking(product=product, owner=product.owner)
             started_at = datetime.datetime.now() + datetime.timedelta(days=1)

@@ -241,12 +241,26 @@ MESSAGE_STORAGE = getattr(local, 'MESSAGE_STORAGE', 'django.contrib.messages.sto
 SESSION_ENGINE = local.SESSION_ENGINE
 SESSION_COOKIE_DOMAIN = local.SESSION_COOKIE_DOMAIN
 
+# staticfiles configuration
+STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
+STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
+STATICFILES_DIRS = [local.local_path('static/'), ]
+STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
+STATICFILES_FINDERS = (
+    #'pipeline.finders.FileSystemFinder',
+    #'pipeline.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'eloue.compat.pipeline.finders.TemplatesFileSystemFinder',
+)
+
 #imagekit configuration
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
-IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOnDownload'
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOnDownload' # 'imagekit.cachefiles.strategies.Optimistic'
 
 #pipeline configuration
 PIPELINE_ENABLED = getattr(local, 'PIPELINE', not DEBUG)
+PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
@@ -255,6 +269,7 @@ PIPELINE_COMPILERS = (
 )
 PIPELINE_LESS_BINARY = getattr(local, 'PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = getattr(local, 'PIPELINE_SASS_BINARY', '/usr/bin/sass')
+PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUI_BINARY = getattr(local, 'COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
 PIPELINE_CSS = {
     'extrastyles': {
@@ -264,6 +279,9 @@ PIPELINE_CSS = {
             'bower_components/bootstrap-datepicker/css/datepicker3.css',
             'bower_components/angular-chosen-localytics/chosen-spinner.css',
             'bower_components/toastr/toastr.min.css',
+            'fonts/flaticons_social/flaticons_social.css',
+            'fonts/flaticons_solid/flaticons_solid.css',
+            'fonts/flaticons_stoke/flaticons_stoke.css',
         ),
         'output_filename': 'css/extra.css',
         'extra_context': {
@@ -499,7 +517,7 @@ REST_FRAMEWORK = {
         'rest_framework.filters.DjangoFilterBackend',
     ),
     'SEARCH_PARAM': 'q',
-    'ORDERING_PARAM': 'sort',
+    'ORDERING_PARAM': 'ordering',
     'PAGINATE_BY': getattr(local, 'REST_FRAMEWORK_PAGINATE_BY', 10),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
@@ -557,17 +575,6 @@ AWS_AUTO_CREATE_BUCKET = getattr(local, 'AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926,public',
 }
-
-# staticfiles configuration
-STATIC_ROOT = getattr(local, 'STATIC_ROOT', 'static/')
-STATIC_URL = getattr(local, 'STATIC_URL', '/static/')
-STATICFILES_DIRS = [local.local_path('static/'), ]
-STATICFILES_STORAGE = getattr(local, 'STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
-STATICFILES_FINDERS = (
-    'pipeline.finders.FileSystemFinder',
-    'pipeline.finders.AppDirectoriesFinder',
-    'eloue.compat.pipeline.finders.TemplatesFileSystemFinder',
-)
 
 
 #API KEYS

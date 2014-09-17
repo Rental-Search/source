@@ -6,9 +6,8 @@ from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_str
 from django.test import TransactionTestCase
 
-from django.utils.translation import ugettext as _
-
 from rent.models import Booking
+from rent.choices import BOOKING_STATE
 
 from eloue.utils import currency, json
 
@@ -27,14 +26,31 @@ class BookingViewsTest(TransactionTestCase):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.get(reverse('booking_success', args=['8fd2f3df67e2488496899aeb22601b15']))
         self.assertEquals(response.status_code, 200)
-        
     
     def test_preapproval_failure(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.get(reverse('booking_failure', args=['8fd2f3df67e2488496899aeb22601b15']))
         self.assertEquals(response.status_code, 200)
     
-    def test_booking_price(self):
+    def test_booking_price_day_package(self):
+        started_at = self._next_weekday(0)
+        ended_at = started_at + timedelta(days=2)
+        response = self.client.get(reverse('booking_price', args=['rent/bebe/mobilier-bebe/lits/', 'perceuse-visseuse-philips', '1']), {
+            '0-started_at_0': started_at.strftime("%d/%m/%Y"),
+            '0-started_at_1': '08:00:00',
+            '0-ended_at_0': ended_at.strftime("%d/%m/%Y"),
+            '0-ended_at_1': '08:00:00',
+            '0-quantity': 1
+        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEquals(response.status_code, 200)
+        json_res = json.loads(response.content)
+        self.assertTrue('duration' in json_res)
+        self.assertTrue('total_price' in json_res)
+        self.assertEquals(json_res['unit_name'], 'day', json_res)
+        self.assertEquals(json_res['total_price'], json.loads(json.dumps(smart_str(currency(D('48.00'))))), json_res)
+        self.assertEquals(json_res['duration'], '2 '+ "jours", json_res)
+    
+    def test_booking_price_three_days_package(self):
         started_at = self._next_weekday(0)
         ended_at = started_at + timedelta(days=3)
         response = self.client.get(reverse('booking_price', args=['rent/bebe/mobilier-bebe/lits/', 'perceuse-visseuse-philips', '1']), {
@@ -48,8 +64,9 @@ class BookingViewsTest(TransactionTestCase):
         json_res = json.loads(response.content)
         self.assertTrue('duration' in json_res)
         self.assertTrue('total_price' in json_res)
-        self.assertEquals(json_res['total_price'], json.loads(json.dumps(smart_str(currency(D('72.00'))))))
-        self.assertEquals(json_res['duration'], '3 '+ "jours")
+        self.assertEquals(json_res['unit_name'], '3jours', json_res)
+        self.assertEquals(json_res['total_price'], json.loads(json.dumps(smart_str(currency(D('48.00'))))), json_res)
+        self.assertEquals(json_res['duration'], '3 '+ "jours", json_res)
     
     def test_booking_price_error(self):
         started_at = self._next_weekday(0)
@@ -103,7 +120,7 @@ class BookingViewsTestWithMultipleQuantity(TransactionTestCase):
           ended_at=self.now+timedelta(days=2),
           quantity=2,
           total_amount=7,
-          state=Booking.STATE.ONGOING,
+          state=BOOKING_STATE.ONGOING,
           owner_id=1,
           borrower_id=2,
           product_id=7,
@@ -114,7 +131,7 @@ class BookingViewsTestWithMultipleQuantity(TransactionTestCase):
           ended_at=self.now+timedelta(days=3),
           quantity=1,
           total_amount=D(str(7*1.5)),
-          state=Booking.STATE.ONGOING,
+          state=BOOKING_STATE.ONGOING,
           owner_id=1,
           borrower_id=2,
           product_id=7,

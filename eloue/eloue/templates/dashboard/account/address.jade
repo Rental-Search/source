@@ -10,9 +10,9 @@ block sections
                 img(data-ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{address.position.coordinates[0]}},{{address.position.coordinates[1]}}&zoom=14&size=70x70&language=fr", width="70")
             .col-exposition
               h3.indent-xs-b
-                | {{address.street}}
-                i.fa.fa-check.fa-lg.pull-right
-              p.normal.text-gray {{address.zipcode}} {{address.city}}
+                | #{address.street}
+                i.icon-lg.pull-right.flaticon.stroke.checkmark
+              p.normal.text-gray #{address.zip_code} #{address.city}
         {% endverbatim %}
   aside.address-detail.pull-nothing.scrollbar-custom.scrollbar-left(ui-view)
     include _notification_not_selected_address

@@ -19,8 +19,8 @@ block append content-body
           li(ng-repeat="tab in dashboardTabs")
             {% verbatim %}
             a(ui-sref="{{tab.sref}}").text-success-dark
-              i.fa(class="fa-{{tab.icon}}")
-                span.badge-count-action(ng-show="tab.badge") {{tab.badge}}
+              i.flaticon(class="{{tab.icon}}")
+                span.badge-count-action(ng-show="tab.badge", ng-bind="tab.badge")
               | {{tab.title}}
             {% endverbatim %}
       .content-view(ui-view)
@@ -28,3 +28,4 @@ block append content-body
 #ngModals
     eloue-login-form
     eloue-registration-form
+    eloue-password-reset-form

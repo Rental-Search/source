@@ -23,12 +23,15 @@
       +placeholder($brand-success)
     .where-field
       width: 40%
-      .sprite-location
-        +sprite($s-location-pin)
-        +centred-abs()
+      .location-pin-3
+        color: $gray-strong
+        font-size: 1.2em
+        position: absolute
+        top: 0
+        line-height: (3/1.2)
         z-index: 50
         right: auto
-        left: 1em
+        left: .5em
       input
         width: 100%
         padding-left: 2.5em
@@ -39,9 +42,10 @@
         +placeholder($gray-strong)
     .btn-search
       border-left-width: 0
-      .icon-search
+      .zoom-2
         color: $gray-strong
         font-size: 1.2em
+        line-height: 1.8
 
     .btn-advertise
       color: white

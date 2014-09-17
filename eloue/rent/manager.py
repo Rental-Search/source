@@ -12,7 +12,7 @@ class ProBookingQuerySet(QuerySet):
     def get(self, *args, **kwargs):
         from rent.models import ProBooking
         instance = super(ProBookingQuerySet, self).get(*args, **kwargs)
-        if instance.state == BOOKING_STATE.PROFESSIONAL or instance.state == BOOKING_STATE.PROFESSIONAL_SAW:
+        if instance.state in (BOOKING_STATE.PROFESSIONAL, BOOKING_STATE.PROFESSIONAL_SAW):
             return ProBooking(*[getattr(instance, field.attname) for field in instance._meta.fields])
         return instance
 
@@ -25,9 +25,9 @@ class BookingManager(Manager):
     
     @staticmethod
     def _filter_factory(state):
-        def filter(self, **kwargs):
+        def _filter(self, **kwargs):
             return super(BookingManager, self).filter(state=BOOKING_STATE[state], **kwargs)
-        return filter
+        return _filter
 
     def history(self):
         return self.exclude(

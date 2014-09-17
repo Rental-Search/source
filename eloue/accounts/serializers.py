@@ -4,24 +4,50 @@ import uuid
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework.serializers import (
-    PrimaryKeyRelatedField, CharField, EmailField, BooleanField,
-    ValidationError
+    PrimaryKeyRelatedField, CharField, EmailField, BooleanField, ValidationError,
 )
 from rest_framework_gis.serializers import MapGeometryField
 
 from accounts.forms import CreditCardForm
 from accounts import models
-from eloue.api.serializers import NullBooleanField, EncodedImageField, ModelSerializer
+from eloue.api import serializers
 
-class GeoModelSerializer(ModelSerializer):
-    field_mapping = MapGeometryField(ModelSerializer.field_mapping)
+class GeoModelSerializer(serializers.ModelSerializer):
+    field_mapping = MapGeometryField(serializers.ModelSerializer.field_mapping)
 
-class UserSerializer(ModelSerializer):
+class AddressSerializer(GeoModelSerializer):
+    street = CharField(source='address1')
+
+    def transform_street(self, obj, value):
+        return u' '.join([value, obj.address2]) if obj and obj.address2 else value
+
+    class Meta:
+        model = models.Address
+        fields = ('id', 'patron', 'street', 'zipcode', 'position', 'city', 'country')
+        read_only_fields = ('position',)
+        immutable_fields = ('patron',)
+        geo_field = 'position'
+
+class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
+    pass
+
+class PhoneNumberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PhoneNumber
+        fields = ('id', 'patron', 'number')
+        immutable_fields = ('patron',)
+
+class NestedPhoneNumberSerializer(serializers.NestedModelSerializerMixin, PhoneNumberSerializer):
+    pass
+
+class UserSerializer(serializers.ModelSerializer):
     username = CharField(required=False, max_length=30)
     password = CharField(required=False, write_only=True, max_length=128)
     email = EmailField(required=False)
-    is_professional = NullBooleanField(required=False)
-    avatar = EncodedImageField(('thumbnail', 'profil', 'display', 'product_page'), required=False)
+    is_professional = serializers.NullBooleanField(required=False)
+    avatar = serializers.EncodedImageField(('thumbnail', 'profil', 'display', 'product_page'), required=False)
+    default_address = NestedAddressSerializer(required=False)
+    default_number = NestedPhoneNumberSerializer(required=False)
     languages = PrimaryKeyRelatedField(many=True, required=False) # TODO: remove if we got to expose language resource
 
     def restore_object(self, attrs, instance=None):
@@ -41,10 +67,10 @@ class UserSerializer(ModelSerializer):
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
             'date_joined', 'is_active', 'rib', 'password',
         )
-        read_only_fields = ('slug', 'default_address', 'default_number', 'url', 'date_joined', 'rib')
+        read_only_fields = ('slug', 'url', 'date_joined', 'rib')
         immutable_fields = ('email', 'password', 'username')
 
-class PasswordChangeSerializer(ModelSerializer):
+class PasswordChangeSerializer(serializers.ModelSerializer):
     current_password = CharField(write_only=True, max_length=128)
     confirm_password = CharField(write_only=True, max_length=128)
 
@@ -68,26 +94,7 @@ class PasswordChangeSerializer(ModelSerializer):
         fields = ('password', 'current_password', 'confirm_password')
         write_only_fields = ('password',)
 
-class AddressSerializer(GeoModelSerializer):
-    street = CharField(source='address1')
-
-    def transform_street(self, obj, value):
-        return u' '.join([value, obj.address2]) if obj and obj.address2 else value
-
-    class Meta:
-        model = models.Address
-        fields = ('id', 'patron', 'street', 'zipcode', 'position', 'city', 'country')
-        read_only_fields = ('position',)
-        immutable_fields = ('patron',)
-        geo_field = 'position'
-
-class PhoneNumberSerializer(ModelSerializer):
-    class Meta:
-        model = models.PhoneNumber
-        fields = ('id', 'patron', 'number')
-        immutable_fields = ('patron',)
-
-class CreditCardSerializer(ModelSerializer):
+class CreditCardSerializer(serializers.ModelSerializer):
     cvv = CharField(max_length=4, min_length=3, write_only=True,
         label=_(u'Cryptogramme de sécurité'),
         help_text=_(u'Les 3 derniers chiffres au dos de la carte.'),
@@ -141,25 +148,25 @@ class ProAgencySerializer(GeoModelSerializer):
         immutable_fields = ('patron',)
         geo_field = 'position'
 
-class ProPackageSerializer(ModelSerializer):
+class ProPackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProPackage
         fields = ('id', 'name', 'maximum_items', 'price', 'valid_from', 'valid_until')
 
-class SubscriptionSerializer(ModelSerializer):
+class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Subscription
         fields = ('id', 'patron', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type')
         immutable_fields = ('patron', 'propackage')
 
-class BillingSerializer(ModelSerializer):
+class BillingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Billing
         fields = ('id', 'patron', 'created_at')
         read_only_fields = ('created_at',)
         immutable_fields = ('patron',)
 
-class BillingSubscriptionSerializer(ModelSerializer):
+class BillingSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BillingSubscription
         fields = ('subscription', 'billing', 'price')

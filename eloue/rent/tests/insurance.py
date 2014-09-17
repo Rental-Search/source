@@ -8,9 +8,10 @@ from django.conf import settings
 from django.core import mail
 from django.test import TransactionTestCase
 
-from rent.management.commands.billing import Command as BillingCommand
-from rent.management.commands.reimbursement import Command as ReimbursementCommand
-from rent.models import Booking, Sinister
+# from rent.management.commands.billing import Command as BillingCommand
+# from rent.management.commands.reimbursement import Command as ReimbursementCommand
+# from rent.models import Booking, Sinister
+# from rent.choices import BOOKING_STATE
 
 
 class MockDate(datetime.date):
@@ -44,7 +45,7 @@ class InsuranceTest(TransactionTestCase):
     #     i = 0
     #     for row in csv.reader(csv_file, delimiter='|'):
     #         booking = Booking.objects.get(pk=row[4])
-    #         self.assertEquals(booking.state, Booking.STATE.ENDED)
+    #         self.assertEquals(booking.state, BOOKING_STATE.ENDED)
     #         i += 1
     #     self.assertEquals(i, 1)
     #     self.assertTrue(settings.INSURANCE_EMAIL in mail.outbox[0].to)
@@ -61,7 +62,7 @@ class InsuranceTest(TransactionTestCase):
     #     i = 0
     #     for row in csv.reader(csv_file, delimiter='|'):
     #         booking = Booking.objects.get(pk=row[4])
-    #         self.assertEquals(booking.state, Booking.STATE.CANCELED)
+    #         self.assertEquals(booking.state, BOOKING_STATE.CANCELED)
     #         i += 1
     #     self.assertEquals(i, 3)
     #     self.assertTrue(settings.INSURANCE_EMAIL in mail.outbox[0].to)

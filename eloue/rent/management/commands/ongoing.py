@@ -40,5 +40,6 @@ class Command(BaseCommand):
         for booking in Booking.objects.pending().filter(started_at__lte=dtime):
             with handler:
                 booking.activate()
+                booking.save()
         log.info('Finished hourly ongoing mover process')
     

@@ -241,6 +241,59 @@ class PhoneNumbersTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
+    def test_edit_default_address(self):
+        response = self.client.get(_location('patron-detail', pk='me'))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+        self.assertEquals(response.data['id'], 1)
+        user_id = response.data['id']
+
+        # create a new Address record
+        response = self.client.post(_location('address-list'), {
+            'city': 'Paris',
+            'street': '2, rue debelleyme',
+            'zipcode': '75003',
+            'country': 'FR',
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # check we got fields of the created instance in the response
+        self.assertIn('id', response.data)
+        address_id = response.data['id']
+
+        # set the Address record we've just created as the 'default_address' attribute
+        response = self.client.patch(_location('patron-detail', pk=user_id), {
+            'default_address': _location('address-detail', pk=address_id),
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('default_address', response.data, response.data)
+        self.assertTrue(len(response.data['default_address']), response.data['default_address'])
+        self.assertEquals(response.data['default_address']['id'], address_id, response.data)
+
+    def test_edit_default_phone_number(self):
+        response = self.client.get(_location('patron-detail', pk='me'))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+        self.assertEquals(response.data['id'], 1)
+        user_id = response.data['id']
+
+        # create a new PhoneNumber record
+        response = self.client.post(_location('phonenumber-list'), {
+            'number': '0198765432',
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # check we got fields of the created instance in the response
+        self.assertIn('id', response.data)
+        phonenumber_id = response.data['id']
+
+        # set the PhoneNumber record we've just created as the 'default_number' attribute
+        response = self.client.patch(_location('patron-detail', pk=user_id), {
+            'default_number': _location('phonenumber-detail', pk=phonenumber_id),
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('default_number', response.data, response.data)
+        self.assertTrue(len(response.data['default_number']), response.data['default_number'])
+        self.assertEquals(response.data['default_number']['id'], phonenumber_id, response.data)
+
 class AddressesTest(APITestCase):
     fixtures = ['patron', 'address']
 

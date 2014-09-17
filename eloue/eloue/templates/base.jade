@@ -12,17 +12,7 @@ html(lang="fr")
       link(rel="shortcut icon", href="#{STATIC_URL}img/favicon.ico")
 
     block styles
-      //- include font "Open Sans"
-      link(rel="stylesheet",    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700")
-
-      //- custom select.css
-      //- http://harvesthq.github.io/chosen/
-      //-link(rel="stylesheet",    href="#{STATIC_URL}css/chosen.min.css")
-
-      //- custom scrollbar.css
-      //- http://manos.malihu.gr/jquery-custom-content-scroller/
-      //-link(rel="stylesheet",    href="#{STATIC_URL}css/jquery.mCustomScrollbar.css")
-
+      link(rel="stylesheet",    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
       {% compressed_css "extrastyles" %}
 
     block scripts
@@ -33,3 +23,4 @@ html(lang="fr")
       #ngModals
           eloue-login-form
           eloue-registration-form
+          eloue-reset-password-form

@@ -1,0 +1,33 @@
+.modal.fade#pop-up-publish-item(tabindex="-1", role="dialog", aria-hidden="true")
+  .modal-dialog.large
+    .modal-content
+      .modal-header
+        button(type="button", data-dismiss="modal").close
+          span(aria-hidden="true")&times;
+          span.sr-only Close
+        h4.modal-title Dépot d'annonce
+      .modal-body
+        section.content.clearfix
+          h3 Publiez votre annonce en 1 minute
+          p.text-light
+            | e-lou vous permet de gagner de l'argent en louant vous biens, 
+            br
+            | en toure sécurité, quand vous ne les utilisez pas
+          form(action="").input-group.form-wrapper.col-sm-10.col-sm-offset-1
+            .row
+              .col-sm-12: input(type="text", placeholder="", required).form-control
+            .row
+              .col-sm-4: select.form-control
+                each group in publish_items_categories
+                  each item in group
+                    option(value="#{item.classname}") #{item.title}
+              .col-sm-4: select.form-control
+                option(value="male") M.
+                option(value="female") F.
+              .col-sm-4: select.form-control
+                option(value="male") M.
+                option(value="female") F.
+            .row
+              .col-sm-4: input(type="text", placeholder="Prix à la journée *", required).form-control
+              .col-sm-4: input(type="text", placeholder="Caution demandée *", required).form-control
+              .col-sm-4: button(type="submit").btn.bg-success.btn-advertise Publiez votre annonce

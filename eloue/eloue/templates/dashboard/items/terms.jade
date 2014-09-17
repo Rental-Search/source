@@ -1,11 +1,18 @@
 block details
   .section-content
-    {% verbatim %}
+    p: a(href="#").pull-right.text-success-hover
+      i.flaticon.solid.download.indent-xs-r.text-gray-strong
+      span
+        | Voir le contrat de location
+
     div(ng-init="car_terms_url='partials/dashboard/items/terms/car_terms.html'", ng-include="car_terms_url", ng-show="isAuto && !isProfessional")
     div(ng-init="real_estate_terms_url='partials/dashboard/items/terms/real_estate_terms.html'", ng-include="real_estate_terms_url", ng-show="isRealEstate && !isProfessional")
     div(ng-init="simple_terms_url='partials/dashboard/items/terms/simple_terms.html'", ng-include="simple_terms_url", ng-show="!isAuto && !isRealEstate && !isProfessional")
     div(ng-init="professional_terms_url='partials/dashboard/items/terms/professional_terms.html'", ng-include="professional_terms_url", ng-show="isProfessional")
-    {% endverbatim %}
+
+    h2.indent-lg-t Vos propres conditions
+    p.text-gray-strong Il possible d'ajouter ses propres conditions de location.
+
     form(action="terms").indent-sm-t
       .row
         .col-sm-12

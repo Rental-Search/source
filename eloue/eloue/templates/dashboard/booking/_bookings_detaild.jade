@@ -11,7 +11,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
         .indent-sm-h
           h3: b {{bookingDetails.product.summary}}
           p.text-gray.indent-sm-h.indent-xs-v
-            i.fa.fa-map-marker.fa-lg.fa-li
+            i.icon-lg.flaticon.stroke.location-pin-3.icon-li
             | {{bookingDetails.product.address.street}}, {{bookingDetails.product.address.zipcode}}
             br
             | {{bookingDetails.product.address.city}}
@@ -25,26 +25,30 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                   p.indent-xs-v
                     {% endverbatim %}
                     +average-rate("bookingDetails.product.ownerStats.average_rating")
+                    {% verbatim %}
+                  p
+                    {% endverbatim %}
                     +number-of-comments("bookingDetails.product.stats.booking_coments_count")
                     +number-of-bookings("bookingDetails.product.stats.bookings_count")
                     {% verbatim %}
-                  p
 
     .bg-success-light.text-success.bd-rad
-      i.fa.fa-phone.fa-lg.indent-xs-h
+      i.icon-lg.flaticon.stroke.phone.indent-xs-l
       span.indent-sm-h
         | Joignable au 
         b {{bookingDetails.product.phone.number}}
-        |  ou
+        | ou
       a(href="").btn-inline.text-white.bg-success-hover Envoyez un message
-  //-
+
     .block-with-thumbnail.notification.indent-md-v
       .col-thumbnail
-        .thumbnail: .icon-action: i.fa.fa-check-circle-o.fa-lg
+        .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
       .col-exposition.text-action
         h3: b Réservation acceptée par 
           a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
         ul.zebra-list.indent-md-v
+        //-
+          //- booking history block
           each info in booking_detail.informations
             li.clearfix
               .col-xs-3 #{info.title}
@@ -55,7 +59,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
 
     .block-with-thumbnail.text-gray.notification
       .col-thumbnail
-        .thumbnail: i.fa.fa-pencil.fa-3x
+        .thumbnail: i.icon-3x.flaticon.solid.pencil
       .col-exposition
         form(ng-submit="postComment()")
           textarea.expand(name="comment.text", rows="4", placeholder="Écrire un commentaire...", ng-model="comment.text", required)
@@ -69,7 +73,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
   section.text-gray-strong.bg-lite
     ul.section-content.booking-activity-feed
       li.reply-to-message: a(href="#").text-success.text-underline-hover 
-        i.fa.fa-mail-reply &nbsp;&nbsp;
+        i.flaticon.stroke.reply &nbsp;&nbsp;
         | Répondre au message
 
       each item in booking_detail.feed
@@ -78,7 +82,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
         else
           li.block-with-thumbnail.notification.indent-md-v
             .col-thumbnail
-              .thumbnail: .icon-action: i.fa.fa-lg(class="fa-#{item.icon}")
+              .thumbnail: .icon-action: i.icon-lg(class="#{item.icon}")
             .col-exposition.text-action
               .block-with-thumbnail
 

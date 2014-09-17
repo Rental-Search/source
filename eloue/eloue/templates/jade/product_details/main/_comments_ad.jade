@@ -8,6 +8,7 @@ ul.list-group
 					img(src=STATIC_URL+comment.thumbnail, alt="")
 			.thumbnail-content
 				h5 
-					a(href="#") #{comment.name}
+					a(href="#").indent-r-xs #{comment.name}
+					include ../../_rate
 				p #{comment.message}
 				small #{comment.time}

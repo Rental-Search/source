@@ -2,12 +2,10 @@
 each item in items
 	.row.date-picker
 		.table-cell.main-cell
-			.input-group
-				.input-group-addon #{item}
-				input(type="text" placeholder="").form-control
-				.input-group-addon.calendar
-					span
+			.table-cell: span #{item}
+			.table-cell.main-cell
+				input(type="text" placeholder="").form-control.date
+				i.flaticon.stroke.calendar-3
 		.table-cell
-			select.form-control
-				each interval in timing
-					option(value="#{interval}") #{interval}
+			select.form-control: each interval in timing
+				option(value="#{interval}") #{interval}

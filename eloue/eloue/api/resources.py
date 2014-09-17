@@ -606,7 +606,7 @@ class ProductResource(UserSpecificResource):
 
         if bundle.data["distance"]:
             bundle.data["distance"] = bundle.data["distance"].km
-        bundle.data["unit"], bundle.data["price"] = Booking.calculate_price(bundle.obj, date_start, date_end)
+        bundle.data["unit"], bundle.data["price"] = bundle.obj.calculate_price(date_start, date_end)
         return bundle
 
 
@@ -650,7 +650,7 @@ class BookingResource(OAuthResource):
         product = Product.objects.get(pk=int(bundle.data["product"].split('/')[-2]))
         started_at = parser.parse(unquote(bundle.data["started_at"]))
         ended_at = parser.parse(unquote(bundle.data["ended_at"]))
-        unit, total_amount = Booking.calculate_price(product, started_at, ended_at)
+        unit, total_amount = product.calculate_price(started_at, ended_at)
         domain = Site.objects.get_current().domain
         protocol = "https" if USE_HTTPS else "http"
         state = "authorized" if product.owner == bundle.request.user else "authorizing"
@@ -736,7 +736,7 @@ class BookingResource(OAuthResource):
             assert_current_state_is(["closing", "ongoing"])
             if not is_offline_booking:
                 booking.init_payment_processor()
-                booking.pay()
+                booking.close()
 
 
         return super(BookingResource, self).obj_update(bundle, request=bundle.request, pk=pk, **kwargs)

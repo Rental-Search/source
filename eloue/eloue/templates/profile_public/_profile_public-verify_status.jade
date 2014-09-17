@@ -1,0 +1,28 @@
+.section-header
+  h4 Vérifictions
+.section-body
+  .part
+    p.text-center
+      big.text-success 4/6&nbsp;
+      b vérification effectuées
+    .progress-bar-for-verify-status
+      .bar-status
+
+    mixin verify-type(icon, text, color)
+      i.icon-fw.icon-3x.indent-r-sm.va-m(class="#{icon} text-#{color}")
+      | #{text} verifié
+      i.icon-lg.flaticon.solid.checkmark-2.indent-l-xs.text-success
+    ul.nav.indent-t-xs
+      each verify in profile_public.verification
+        li.indent-t-xs
+          case verify
+            when "facebook"
+              +verify-type("flaticon social facebook", "Facebook", "info")
+            when "email"
+              +verify-type("flaticon stroke email-1", "Adresse email", "gray")
+            when "phone"
+              +verify-type("flaticon stroke phone", "Téléphone", "gray")
+            when "google"
+              +verify-type("flaticon social google-plus", "Google", "danger")
+            when "linkedin"
+              +verify-type("flaticon social linkedin-2", "Linkedin", "blue")

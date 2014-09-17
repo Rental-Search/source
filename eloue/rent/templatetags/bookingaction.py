@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-import urllib
-
 from django import template
-from django.utils.safestring import mark_safe
-from django.template import Context, Template, RequestContext
-from django.core.context_processors import csrf
+from django.template import Template, RequestContext
 from django.core.urlresolvers import reverse
-from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 from rent.choices import BOOKING_STATE
 
@@ -107,7 +103,6 @@ Contract = LinkWidget(
 
 class CommentLinkWidget(LinkWidget):
 	def condition(self, request, booking):
-		from django.core.exceptions import ObjectDoesNotExist
 		if request.user == booking.owner:
 			try:
 				booking.ownercomment
@@ -122,9 +117,8 @@ class CommentLinkWidget(LinkWidget):
 
 class ViewLinkWidget(LinkWidget):
 	def condition(self, request, booking):
-		from django.core.exceptions import ObjectDoesNotExist
 		try:
-			request.user == booking.owner and booking.ownercomment or booking.borrowercomment
+			test = request.user == booking.owner and booking.ownercomment or booking.borrowercomment
 		except ObjectDoesNotExist:
 			return False
 		return True

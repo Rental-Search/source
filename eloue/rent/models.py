@@ -4,12 +4,12 @@ import logbook
 import types
 import random
 import urllib
-
+import operator
 from decimal import Decimal as D
+from itertools import chain, groupby
+
 from django_fsm import FSMField, transition
 from django_fsm.signals import post_transition
-from datetime import timedelta
-
 
 from django.conf import settings
 from django.core.validators import MaxValueValidator
@@ -36,7 +36,7 @@ from payments.paypal_payment import AdaptivePapalPayments
 from payments.non_payment import NonPayments
 
 from eloue.signals import post_save_sites
-from eloue.utils import create_alternative_email
+from eloue.utils import create_alternative_email, itertools_accumulate
 
 
 PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments)
@@ -59,7 +59,7 @@ class Booking(models.Model):
     ended_at = models.DateTimeField()
     quantity = models.IntegerField(default=1)
 
-    state = FSMField(default=BOOKING_STATE.AUTHORIZING, choices=BOOKING_STATE)
+    state = FSMField(default=BOOKING_STATE.AUTHORIZING, choices=BOOKING_STATE, protected=True)
     
     deposit_amount = models.DecimalField(max_digits=8, decimal_places=2)
     insurance_amount = models.DecimalField(max_digits=8, decimal_places=2, blank=True)
@@ -89,8 +89,6 @@ class Booking(models.Model):
     content_type = models.ForeignKey(ContentType, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     payment = generic.GenericForeignKey('content_type', 'object_id')
-
-    STATE = BOOKING_STATE
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
@@ -115,50 +113,48 @@ class Booking(models.Model):
         super(Booking, self).__init__(*args, **kwargs)
         for state in BOOKING_STATE.enum_dict:
             setattr(self, "is_%s" % state.lower(), types.MethodType(self._is_factory(state), self))
-    
+
+    # TODO: ownercomment and borrowercomment may be added automatically by a custom CommentForeignKey field
+    # derived from forms.ForeignKey, by its contribute_to_related_class() method
+    @property
+    def ownercomment(self):
+        return self.comments.get(type=COMMENT_TYPE_CHOICES.OWNER)
+
+    @property
+    def borrowercomment(self):
+        return self.comments.get(type=COMMENT_TYPE_CHOICES.BORROWER)
+
+    @property
+    def _currency(self):
+        if settings.CONVERT_XPF:
+            return "EUR"
+        else:
+            return self.currency
+
     @staticmethod
     def _is_factory(state):
         def is_state(self):
             return self.state == getattr(BOOKING_STATE, state)
         return is_state
+
+    @staticmethod
+    def _max_rented_quantity(bookings):
+        START = 1
+        END = -1
+        
+        bookings_tuple = ((booking.started_at, booking.ended_at, booking.quantity) for booking in bookings)
+        grouped_dates = groupby(sorted(chain.from_iterable(
+          ((start, START, value), (end, END, value)) for start, end, value in bookings_tuple), 
+          key=operator.itemgetter(0)), 
+          key=operator.itemgetter(0)
+        )
+        sum_gen = (sum(map(lambda x: operator.mul(*operator.itemgetter(1, 2)(x)), j)) for i, j in grouped_dates)
+        return max(itertools_accumulate(sum_gen, start=0))
     
     @staticmethod
     def calculate_available_quantity(product, started_at, ended_at):
         """Returns maximal available quantity between dates started_at and ended_at.
         """
-        from itertools import groupby, chain, izip
-        from datetime import datetime
-        import operator
-        from operator import itemgetter, mul, add
-
-        def max_rented_quantity(bookings):
-            
-            def _accumulate(iterable, func=operator.add, start=None):
-                """
-                Modified version of Python 3.2's itertools.accumulate.
-                """
-                # accumulate([1,2,3,4,5]) --> 0 1 3 6 10 15
-                # accumulate([1,2,3,4,5], operator.mul) --> 0 1 2 6 24 120
-                yield 0
-                it = iter(iterable)
-                total = next(it)
-                yield total
-                for element in it:
-                    total = func(total, element)
-                    yield total
-                yield
-            
-            START = 1
-            END = -1
-            
-            bookings_tuple = ((booking.started_at, booking.ended_at, booking.quantity) for booking in bookings)
-            grouped_dates = groupby(sorted(chain.from_iterable(
-              ((start, START, value), (end, END, value)) for start, end, value in bookings_tuple), 
-              key=itemgetter(0)), 
-              key=itemgetter(0)
-            )
-            return max(_accumulate(sum(map(lambda x: mul(*itemgetter(1, 2)(x)), j)) for i, j in grouped_dates))
-        
         bookings = Booking.objects.filter(
             product=product
         ).filter(
@@ -166,11 +162,7 @@ class Booking(models.Model):
         ).filter(
             ~Q(ended_at__lte=started_at) & ~Q(started_at__gte=ended_at)
         )
-        return product.quantity - max_rented_quantity(bookings)
-
-    @staticmethod
-    def calculate_price(product, started_at, ended_at):
-        return product.calculate_price(started_at, ended_at)
+        return product.quantity - Booking._max_rented_quantity(bookings)
 
     def send_recovery_email(self):
         context = {
@@ -231,6 +223,11 @@ class Booking(models.Model):
             message.send()
             message = create_alternative_email('rent/emails/borrower_cancelation_to_borrower', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
             message.send()
+    
+    def send_incident_email(self, source, description):
+        context = {'user': source.username, 'booking_id': self.pk, 'problem': description}
+        message = create_alternative_email('rent/emails/incident', context, settings.DEFAULT_FROM_EMAIL, [source.email])
+        message.send()
     
     def send_ended_email(self):
         context = {'booking': self}
@@ -307,68 +304,92 @@ class Booking(models.Model):
         """
         return self.insurance_fee * self.product.subtype.insurance_taxes
     
+    # FSM conditions
+    
     def not_need_ipn(self):
         return self.payment.NOT_NEED_IPN
-        
+
+    def is_expired(self):
+        return self.started_at < datetime.datetime.now()
+
+    # FSM actions
+    
     @transition(field=state, source=BOOKING_STATE.AUTHORIZING, target=BOOKING_STATE.AUTHORIZED, conditions=[not_need_ipn])
-    def preapproval(self, **kwargs):
-        self.payment.preapproval(self.pk, self.total_amount, self.currency, **kwargs)
+    def preapproval(self, *args, **kwargs):
+        self.payment.preapproval(self.pk, self.total_amount, self.currency, *args, **kwargs) # 'cvv'
         self.payment.save()
         self.send_ask_email()
-        
+    
+    @transition(field=state, source=BOOKING_STATE.AUTHORIZED, target=BOOKING_STATE.REJECTED)
+    def reject(self):
+        self.send_rejection_email()
+    
+    @transition(field=state, source=[BOOKING_STATE.AUTHORIZING, BOOKING_STATE.AUTHORIZED], target=BOOKING_STATE.OUTDATED, conditions=[is_expired])
+    def expire(self):
+        pass
+    
     @transition(field=state, source=BOOKING_STATE.AUTHORIZED, target=BOOKING_STATE.PENDING)
     def accept(self):
         self.payment.pay(self.pk, self.total_amount, self.currency)
         self.payment.save()
         self.send_acceptation_email()
         self.send_borrower_receipt()
-
+    
+    @transition(field=state, source=[BOOKING_STATE.AUTHORIZING, BOOKING_STATE.AUTHORIZED, BOOKING_STATE.PENDING], target=BOOKING_STATE.CANCELED)
+    def cancel(self, *args, **kwargs):
+        """Cancel preapproval for the borrower"""
+        self.payment.cancel_preapproval()
+        self.send_cancelation_email(*args, **kwargs) # 'source' = request.user
+    
     @transition(field=state, source=BOOKING_STATE.PENDING, target=BOOKING_STATE.ONGOING)
     def activate(self):
         pass
-
+    
+    @transition(field=state, source=[BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED], target=BOOKING_STATE.INCIDENT)
+    def incident(self, *args, **kwargs):
+        self.send_incident_email(*args, **kwargs)
+    
     @transition(field=state, source=BOOKING_STATE.ONGOING, target=BOOKING_STATE.ENDED)
     def end(self):
         self.send_ended_email()
     
     @transition(field=state, source=BOOKING_STATE.ENDED, target=BOOKING_STATE.CLOSED)
-    def pay(self):
+    def close(self):
         """Return deposit_amount to borrower and pay the owner"""
         self.payment.execute_payment()
         self.send_owner_receipt()
+        self.send_closed_email()
     
-    @transition(field=state, source=[BOOKING_STATE.AUTHORIZED, BOOKING_STATE.PENDING], target=BOOKING_STATE.CANCELED)
-    def cancel(self):
-        """Cancel preapproval for the borrower"""
-        self.payment.cancel_preapproval()
+    @transition(field=state, source=BOOKING_STATE.PENDING)
+    def contract(self):
+        pass
     
-    @transition(field=state, source=BOOKING_STATE.INCIDENT, target=BOOKING_STATE.DEPOSIT)
-    def litigation(self, amount=None, cancel_url='', return_url=''):
-        """Giving caution to owner"""
-        # FIXME : Deposit amount isn't considered in preapproval amount
-       
-        self.payment.give_caution(amount, cancel_url, return_url)
+    @transition(field=state, source=[BOOKING_STATE.AUTHORIZING, BOOKING_STATE.AUTHORIZED, BOOKING_STATE.REJECTED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED])
+    def send_message(self):
+        pass
     
-    @transition(field=state, source=BOOKING_STATE.INCIDENT, target=BOOKING_STATE.REFUNDED)
-    def refund(self):
-        """Refund borrower or owner if something as gone wrong"""
-        self.payment.refund()
+    @transition(field=state, source=[BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED])
+    def leave_comment(self):
+        pass
     
-    @property
-    def _currency(self):
-        if settings.CONVERT_XPF:
-            return "EUR"
-        else:
-            return self.currency
+# FSM oosoleted actions
+#
+#     @transition(field=state, source=BOOKING_STATE.INCIDENT, target=BOOKING_STATE.DEPOSIT)
+#     def litigation(self, amount=None, cancel_url='', return_url=''):
+#         """Giving caution to owner"""
+#         # FIXME : Deposit amount isn't considered in preapproval amount
+#        
+#         self.payment.give_caution(amount, cancel_url, return_url)
+#     
+#     @transition(field=state, source=BOOKING_STATE.INCIDENT, target=BOOKING_STATE.REFUNDED)
+#     def refund(self):
+#         """Refund borrower or owner if something as gone wrong"""
+#         self.payment.refund()
 
 
 class ProBooking(Booking):
     class Meta:
         proxy = True
-
-    @transition(field=Booking._meta.get_field('state'), source=BOOKING_STATE.PROFESSIONAL, target=BOOKING_STATE.PROFESSIONAL_SAW)
-    def accept(self):
-        pass
 
     def send_ask_email(self):
         context = {'booking': self}
@@ -377,13 +398,19 @@ class ProBooking(Booking):
         message = create_alternative_email('rent/emails/borrower_ask_pro', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
 
-    @transition(field=Booking._meta.get_field('state'), source=BOOKING_STATE.PROFESSIONAL, target=BOOKING_STATE.PROFESSIONAL)
+    # FSM actions
+
+    @transition(field=Booking._meta.get_field('state'), source=BOOKING_STATE.PROFESSIONAL)
     def preapproval(self, *args, **kwargs):
         for phonenotification in self.owner.phonenotification_set.all():
             phonenotification.send('', self)
         for emailnotification in self.owner.emailnotification_set.all():
             emailnotification.send('', self)
         self.send_ask_email()
+
+    @transition(field=Booking._meta.get_field('state'), source=BOOKING_STATE.PROFESSIONAL, target=BOOKING_STATE.PROFESSIONAL_SAW)
+    def accept(self): # FIXME: rename to read
+        pass
 
 
 class BookingLog(models.Model):

@@ -1,0 +1,97 @@
+///////////////
+// variables //
+///////////////
+$carousel-height: (220/340)*100%
+$map-height: 7/5 * $carousel-height
+$control-width: 2em
+
+.carousel-conteiner
+  +clearfix
+  > div
+    padding: 0
+  .carousel,
+  .map-container,
+  .location-title,
+  .items-thumbnail-inner
+    margin-top: $indent
+
+  ////////////////////////////////////////
+  // items карусели и миниатюрами к ним //
+  ////////////////////////////////////////
+  .item
+    background-color: #ccc
+    width: 100%
+    padding-top: $carousel-height
+  .items-thumbnail-inner
+    +clearfix
+    margin-left: -$indent
+    div
+      width: 20%
+      float: left
+      padding-left: $indent
+      .items-thumbnail
+        cursor: pointer
+        display: block
+        width: 100%
+        padding-top: 100%
+  .item,
+  .items-thumbnail-inner a
+    background-position: center center
+    background-size: cover
+
+  ///////////////////////////
+  // controls для карусели //
+  ///////////////////////////
+  .carousel-control
+    +opacity(.6)
+    cursor: pointer
+    text-shadow: none
+    background: black
+    transition: opacity .1s ease-in
+    top: auto
+    bottom: $indent*2/3
+    font-size: 1.5em
+    border-radius: 50%
+    width: $control-width
+    height: $control-width
+    line-height: $control-width
+    &.right
+      margin-right: -$control-width - $indent/4
+      right: 50%
+    &.left
+      margin-left: -$control-width - $indent/4
+      left: 50%
+    &:hover
+      +opacity(.8)
+
+  ///////////////////////
+  // карта со спинером //
+  ///////////////////////
+  .map-container
+    position: relative
+    padding-top: $map-height
+    .map,
+    .whirly,
+    .map-inner
+      +centred-abs
+    .map-inner
+      background-color: $gray-lighter
+      position: absolute
+      left: $indent
+
+  //////////////////////////
+  // подпись расположения //
+  //////////////////////////
+  .location-title-inner
+    &,
+    .location-title
+      margin-left: $indent
+    .location-title
+      position: relative
+    h4
+      color: $gray-dark
+      line-height: 1.5
+    i
+      color: $gray-medium
+    small
+      color: $gray-strong

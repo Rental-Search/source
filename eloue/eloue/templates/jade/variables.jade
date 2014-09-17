@@ -35,7 +35,8 @@
 
 //- _product_detail.jade
 -var specifications = ["Année 2010", "Moteur Diesel", "Boite Automatique", "10 000 à 30 000 km"]
--var tabs = [ "Photos", "Tarifs", "Localisation", "Disponibilité", "Assurance" ]
+
+-var tabs = [{'title': "Photos", 'href' : "./product_detail.html"}, {'title': "Tarifs", 'href' : "./tab_tarifs.html"}, {'title': "Localisation", 'href' : "#"}, {'title': "Disponibilité", 'href' : "./tab_available.html"}, {'title': "Assurance", 'href' : "./tab_terms.html"}]
 
 -var properties = [["Notation", "32"], ["Date d’achat", "2008"], ["Marque", "BMW"], ["Modèle", "520 Touring"], ["Consommation", "4,5 l/100km"], ["Prix neuf", "38 000€"], ["Puissance", "130 CV"]]
 
@@ -72,3 +73,24 @@
 //-information[4] = ({"name": "Consommation", "value": "4,5 l/100km"})
 //-information[5] = ({"name": "Prix neuf", "value": "38 000€"})
 //-information[6] = ({"name": "Puissance", "value": "130 CV"})
+
+-var publish_items_categories = []
+//-var publish_items_categories = [[{title: "Bricolage", href: "#bricolage", classname: "do-it-yourself"}, {title: "Jardinage", href: "#jardinage", classname: "gardening"}, {title: "High-tech", href: "#high-tech", classname: "high-tech"}, {title: "Réception", href: "#reception", classname: "reception"}], [{title: "Véhicule", href: "#véhicule", classname: "vehicle"}, {title: "Node et accessoires", href: "#mode_et_accessoires", classname: "fashion-and-accessories"}, {title: "Santé et bien-etre", href: "#santé_et_bien-etre", classname: "health-and-wellness"}, {title: "Autres", href: "#autres", classname: "other"}]]
+
+-var days = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]
+-var days_of_week = ["Lun", "Mar", "Mer", "Jeu", "ven", "Sam", "Dim"]
+-var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "juin", "juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+
+-var product_detail_tarifs = []
+//-var product_detail_tarifs = [{duration: "1 heure", price: "1.00"}, {duration: "1 jours*", price: "2.00"}, {duration: "3 jours", price: "5.00"}, {duration: "7 jours", price: "8.00"}, {duration: "15 jours", price: "17.00"}]
+
+
+
+-var profile_public = {}
+//-profile_public.owner_headline = {first_name: "Gaspard", last_name: "Kroutchev", city: "Villeneuve-le-Roi", zipcode: "(94290)"}
+//-profile_public.comments = []
+//-profile_public.comments[0] = {product: "BMW Série 7", username: "Philippe Dupré", content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, ut officia cupiditate eum. Maiores accusamus in eius similique quas ex!", date: "12 Mai 2014"}
+//-profile_public.comments[1] = profile_public.comments[0]
+//-profile_public.comments[2] = profile_public.comments[0]
+//-profile_public.verification = ["facebook", "email", "phone", "google", "linkedin"]
+

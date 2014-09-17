@@ -24,5 +24,6 @@ class Command(BaseCommand):
             ended_at__day=dtime.day, ended_at__month=dtime.month,
             ended_at__year=dtime.year):
                 booking.end()
+                booking.save()
         log.info('Finished hourly ender mover process')
     

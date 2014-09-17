@@ -8,7 +8,7 @@ from django.test import TransactionTestCase
 
 from accounts.models import Patron
 from rent.models import Booking, BorrowerComment, OwnerComment
-from payments.paypal_payment import AdaptivePapalPayments
+from rent.choices import BOOKING_STATE
 
 
 class MockDateTime(datetime.datetime):
@@ -139,17 +139,17 @@ class BookingTest(TransactionTestCase):
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
             quantity=1,
             total_amount=10,
-            state=Booking.STATE.AUTHORIZING,
+            state=BOOKING_STATE.AUTHORIZING,
             owner_id=1,
             borrower_id=2,
             product_id=5,
             payment=payment
         )
         self.assertEquals(booking.product.payment_type, 0) #non payment 
-        self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) 
+        self.assertEquals(booking.state, BOOKING_STATE.AUTHORIZING) 
         self.assertTrue(isinstance(booking.payment, NonPaymentInformation))
         booking.preapproval()
-        self.assertEquals(booking.state, Booking.STATE.AUTHORIZED) #state changed
+        self.assertEquals(booking.state, BOOKING_STATE.AUTHORIZED) #state changed
     
     def test_non_payment_pay(self):
         from payments.models import NonPaymentInformation
@@ -159,17 +159,17 @@ class BookingTest(TransactionTestCase):
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
             quantity=1,
             total_amount=10,
-            state=Booking.STATE.ENDED,
+            state=BOOKING_STATE.ENDED,
             owner_id=1,
             borrower_id=2,
             product_id=5,
             payment=payment
         )
         self.assertEquals(booking.product.payment_type, 0) #non payment 
-        self.assertEquals(booking.state, Booking.STATE.ENDED) 
+        self.assertEquals(booking.state, BOOKING_STATE.ENDED) 
         self.assertTrue(isinstance(booking.payment, NonPaymentInformation))
-        booking.pay()
-        self.assertEquals(booking.state, Booking.STATE.CLOSED) #state changed
+        booking.close()
+        self.assertEquals(booking.state, BOOKING_STATE.CLOSED) #state changed
     
     from payments.paybox_payment import PayboxManager
     @patch.object(PayboxManager, 'authorize_subscribed')
@@ -189,16 +189,16 @@ class BookingTest(TransactionTestCase):
             ended_at=datetime.datetime.now() + datetime.timedelta(days=3),
             quantity=1,
             total_amount=10,
-            state=Booking.STATE.AUTHORIZING,
+            state=BOOKING_STATE.AUTHORIZING,
             owner_id=1,
             borrower_id=2,
             product_id=3,
             payment=payment
         )
-        self.assertEquals(booking.state, Booking.STATE.AUTHORIZING) 
+        self.assertEquals(booking.state, BOOKING_STATE.AUTHORIZING) 
         booking.preapproval(cvv='123')
         self.assertTrue(mock_authorize.called)
-        self.assertEquals(booking.state, Booking.STATE.AUTHORIZED)
+        self.assertEquals(booking.state, BOOKING_STATE.AUTHORIZED)
         
     def tearDown(self):
         datetime.datetime = self.old_datetime

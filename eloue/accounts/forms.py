@@ -2,6 +2,7 @@
 import types
 import re
 import datetime
+import uuid
 
 from django import forms
 from form_utils.forms import BetterForm, BetterModelForm
@@ -173,16 +174,16 @@ class EmailAuthenticationForm(forms.Form):
                     pass
 
         elif any([idn_access_token, idn_id]):
-            import oauth2 as oauth
-            import urllib, urlparse
-            from django.core.urlresolvers import reverse
-            import pprint, simplejson
-            consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
-            consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
-            base_url = 'http://idn.recette.laposte.france-sso.fr/'
-            request_token_url = base_url + 'oauth/requestToken'
-            authorize_url = base_url + 'oauth/authorize'
-            access_token_url = base_url + 'oauth/accessToken'
+#             import oauth2 as oauth
+#             import urllib, urlparse
+#             from django.core.urlresolvers import reverse
+#             import pprint, simplejson
+#             consumer_key = '_ce85bad96eed75f0f7faa8f04a48feedd56b4dcb'
+#             consumer_secret = '_80b312627bf936e6f20510232cf946fff885d1f7'
+#             base_url = 'http://idn.recette.laposte.france-sso.fr/'
+#             request_token_url = base_url + 'oauth/requestToken'
+#             authorize_url = base_url + 'oauth/authorize'
+#             access_token_url = base_url + 'oauth/accessToken'
             try:
                 access_token_data = self.request.session[(idn_id, idn_access_token)]
             except KeyError:
@@ -658,6 +659,8 @@ class CreditCardForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added, to avoid save automatically the card_number. Required by rent.forms.BookingCreditCardForm
         self.fields['card_number'] = CreditCardField(
             label=_(u'Numéro de carte de crédit'), widget=forms.TextInput(
                 attrs={'placeholder': self.instance.masked_number or ''}
@@ -705,71 +708,6 @@ class CreditCardForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
-
-class BookingCreditCardForm(CreditCardForm):
-    class Meta(CreditCardForm.Meta):
-        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
-        # we excluded, then added, to avoid save automatically the card_number
-        exclude = ('card_number', 'holder', 'masked_number')
-
-class ExistingBookingCreditCardForm(CreditCardForm):
-    cvv = forms.CharField(max_length=4, required=False, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.'))
-    expires = ExpirationField(label=_(u'Date d\'expiration'), required=False)
-
-    def __init__(self, *args, **kwargs):
-        super(CreditCardForm, self).__init__(*args, **kwargs)
-        self.fields['card_number'] = forms.CharField(
-            label=_(u'Numéro de carte de crédit'),
-            min_length=16, max_length=24, required=False
-        )
-        self.fields['holder_name'] = forms.CharField(
-            label=_(u'Titulaire de la carte'), required=False
-        )
-
-    def clean(self):
-        if self.errors:
-            return self.cleaned_data
-        cvv = self.cleaned_data.get('cvv')
-        holder_name = self.cleaned_data.get('holder_name')
-        card_number = self.cleaned_data.get('card_number')
-        expires = self.cleaned_data.get('expires')
-        if any((cvv, holder_name, card_number, expires)):
-            if not all((cvv, holder_name, card_number, expires)):
-                raise forms.ValidationError('You have to fill out all the fields')
-            else:
-                try:
-                    from payments.paybox_payment import PayboxManager, PayboxException
-                    pm = PayboxManager()
-                    self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
-                    pm.authorize(self.cleaned_data['card_number'], 
-                        self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
-                    )
-                except PayboxException as e:
-                    raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
-        return self.cleaned_data
-
-    def save(self, *args, **kwargs):
-        commit = kwargs.pop('commit', True)
-        cvv = self.cleaned_data.get('cvv')
-        holder_name = self.cleaned_data.get('holder_name')
-        card_number = self.cleaned_data.get('card_number')
-        expires = self.cleaned_data.get('expires')
-        if any((cvv, holder_name, card_number, expires)):
-            pm = PayboxManager()
-            try:
-                self.cleaned_data['card_number'] = pm.modify(
-                    self.instance.subscriber_reference, 
-                    self.cleaned_data['card_number'],
-                    self.cleaned_data['expires'], self.cleaned_data['cvv']) 
-            except PayboxException:
-                raise
-            instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
-            instance.card_number = self.cleaned_data['card_number']
-            instance.masked_number = self.cleaned_data['masked_number']
-            if commit:
-                instance.save()
-            return instance
-        return self.instance
 
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
@@ -881,8 +819,6 @@ def make_missing_data_form(instance, required_fields=[]):
         else:
             phone = None
         if self.cleaned_data.get('card_number'):
-            from payments.paybox_payment import PayboxManager, PayboxException
-            import uuid
             pm = PayboxManager()
             subscriber_reference = uuid.uuid4().hex
             self.cleaned_data['card_number'] = pm.subscribe(
@@ -943,13 +879,12 @@ def make_missing_data_form(instance, required_fields=[]):
 
         if self.cleaned_data.get('card_number'):
             try:
-                from payments.paybox_payment import PayboxManager, PayboxException
                 pm = PayboxManager()
                 self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
                 pm.authorize(self.cleaned_data['card_number'], 
                     self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
                 )
-            except PayboxException as e:
+            except PayboxException:
                 raise forms.ValidationError(_(u'La validation de votre carte a échoué.'))
         
         # testing passwords against each other:

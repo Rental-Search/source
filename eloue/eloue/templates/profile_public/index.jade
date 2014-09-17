@@ -1,0 +1,43 @@
+extends ../base
+
+block prepend variables
+  -var STATIC_URL = "../../static/"
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/product_detail_styles.css")
+
+block append scripts
+  script(src="#{STATIC_URL}js/scripts.js")
+
+block append content-body
+  #fb-root
+  include ../jade/_pop_up_send_message
+  include ../jade/_pop_up_call
+  include ../jade/_pop_up_reserve
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+    section.owner-headline
+      include ./_profile_public-owner_headline
+    article.container.list-layout: .row
+      main.col-sm-8
+        section
+          .section-body
+            .part.comments
+              include ./_profile_public-comments
+            .part
+              include ./_profile_public-products_of_the_owner
+      aside.col-sm-4
+        section.owner-information
+          include ./_profile_public-owner_information
+        section.verify-status
+          include ./_profile_public-verify_status
+    footer
+      section.row-fluid.insurances.framing
+        include ../jade/_insurances
+      section.row-fluid.footer-links
+        include ../jade/_footer_links
+      section.row-fluid.rss
+        include ../jade/_rss
+

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from products import models
+from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
 
 class CategoryDescriptionSerializer(ModelSerializer):
@@ -8,7 +9,7 @@ class CategoryDescriptionSerializer(ModelSerializer):
         fields = ('title', 'description', 'header', 'footer')
 
 class CategorySerializer(ModelSerializer):
-    description = CategoryDescriptionSerializer()
+    description = CategoryDescriptionSerializer(read_only=True)
     is_child_node = ObjectMethodBooleanField('is_child_node', read_only=True)
     is_leaf_node = ObjectMethodBooleanField('is_leaf_node', read_only=True)
     is_root_node = ObjectMethodBooleanField('is_root_node', read_only=True)
@@ -19,6 +20,9 @@ class CategorySerializer(ModelSerializer):
         immutable_fields = ('parent',)
 
 class ProductSerializer(ModelSerializer):
+    address = NestedAddressSerializer()
+    phone = NestedPhoneNumberSerializer(required=False)
+
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
@@ -53,12 +57,6 @@ class PriceSerializer(ModelSerializer):
     # FIXME: uncomment if we need to provide 'local_currency_amount' instead of 'amount' to clients, remove otherwise
     def _transform_amount(self, obj, value):
         return self.fields['amount'].field_to_native(obj, 'local_currency_amount')
-
-    def transform_currency(self, obj, value):
-        return value and {
-            'id': value,
-            'symbol': obj.get_currency_display(),
-        }
 
     class Meta:
         model = models.Price

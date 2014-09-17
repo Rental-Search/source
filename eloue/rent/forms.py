@@ -10,10 +10,11 @@ from django.core import validators
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
+from accounts.forms import CreditCardForm
+
 from rent.models import Booking, Sinister, OwnerComment, BorrowerComment
-from rent.utils import get_product_occupied_date, datespan, DATE_FORMAT, DATE_TIME_FORMAT
+from rent.utils import DATE_FORMAT, DATE_TIME_FORMAT
 from rent.choices import TIME_CHOICE
-from django.db.models import Q
 
 from eloue import legacy
 
@@ -150,7 +151,7 @@ class BookingForm(forms.ModelForm):
             if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
                 raise ValidationError(_(u"La durée d'une location est limitée à %s jours."%BOOKING_DAYS))
             
-            unit = Booking.calculate_price(product, started_at, ended_at)
+            unit = product.calculate_price(started_at, ended_at)
             
             if not unit[1]:
                 raise ValidationError(_(u"Prix sur devis"))
@@ -162,6 +163,46 @@ class BookingForm(forms.ModelForm):
         return self.cleaned_data
 
 
+class BookingCreditCardForm(CreditCardForm):
+    class Meta(CreditCardForm.Meta):
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added, to avoid save automatically the card_number
+        exclude = ('card_number', 'holder', 'masked_number')
+
+
+class ExistingBookingCreditCardForm(CreditCardForm):
+    def __init__(self, *args, **kwargs):
+        super(CreditCardForm, self).__init__(*args, **kwargs)
+        self.fields['cvv'].required=False
+        self.fields['expires'].required=False
+        self.fields['holder_name'].required=False
+        self.fields['card_number'].required=False
+
+    def clean(self):
+        if self.errors:
+            return self.cleaned_data
+        if not self.instance or self.instance.pk is None:
+            raise forms.ValidationError('You have to bind an existing instance to this form')
+        cvv = self.cleaned_data.get('cvv')
+        holder_name = self.cleaned_data.get('holder_name')
+        card_number = self.cleaned_data.get('card_number')
+        expires = self.cleaned_data.get('expires')
+        if any((cvv, holder_name, card_number, expires)):
+            if not all((cvv, holder_name, card_number, expires)):
+                raise forms.ValidationError('You have to fill out all the fields')
+            return super(ExistingBookingCreditCardForm, self).clean()
+        return self.cleaned_data
+
+    def save(self, *args, **kwargs):
+        cvv = self.cleaned_data.get('cvv')
+        holder_name = self.cleaned_data.get('holder_name')
+        card_number = self.cleaned_data.get('card_number')
+        expires = self.cleaned_data.get('expires')
+        if any((cvv, holder_name, card_number, expires)):
+            return super(ExistingBookingCreditCardForm, self).save(*args, **kwargs)
+        return self.instance
+
+
 class BookingOfferForm(forms.ModelForm):
     started_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
     ended_at = DateTimeField(required=True, input_date_formats=DATE_FORMAT)
@@ -171,25 +212,15 @@ class BookingOfferForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = ('started_at', 'ended_at', 'quantity', 'total_amount')
-    
-    def __init__(self, *args, **kwargs):
-        super(BookingOfferForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        super(BookingOfferForm, self).clean()
-        # custom validation
-        return self.cleaned_data
 
 class BookingConfirmationForm(forms.Form):
     pass
 
 
-class BookingStateForm(forms.ModelForm):
-    state = forms.ChoiceField(choices=Booking.STATE, widget=forms.HiddenInput())
-    
+class BookingAcceptForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ('state',)
+        fields = ()
     
     def clean(self):
         started_at = self.instance.started_at
@@ -197,7 +228,6 @@ class BookingStateForm(forms.ModelForm):
         quantity = self.instance.quantity
         product = self.instance.product
         
-        bookings = Booking.objects.filter(product=product).filter(Q(state="pending")|Q(state="ongoing"))
         max_available = Booking.calculate_available_quantity(product, started_at, ended_at)
         if (quantity > max_available):
             raise ValidationError(u'Quantité disponible à cette période: %s' % max_available)
@@ -211,10 +241,6 @@ class SinisterForm(forms.ModelForm):
     class Meta:
         model = Sinister
         fields = ('description',)
-    
-
-class IncidentForm(forms.Form):
-    message = forms.CharField(required=True, widget=forms.Textarea(attrs={'placeholder': _(u"Décrivez votre incident")}))
 
 
 class OwnerCommentForm(forms.ModelForm):
