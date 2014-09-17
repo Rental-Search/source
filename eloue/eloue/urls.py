@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 from eloue.api.urls import router, UserMeViewSet
+from eloue.views import HomepageView
 
 log = logbook.Logger('eloue')
 
@@ -173,18 +174,6 @@ dashboard_urlpatterns = patterns('',
     url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_dashboard_partials')),
 )
 
-city_list = [
-    {"name": "paris", "actives": 123254},
-    {"name": "lyon", "actives": 98453},
-    {"name": "toulouse", "actives": 90657},
-    {"name": "nantes", "actives": 123254},
-    {"name": "rennes", "actives": 98453},
-    {"name": "bordeaux", "actives": 90657},
-    {"name": "lille", "actives": 123254},
-    {"name": "montpelier", "actives": 98453},
-    {"name": "rouen", "actives": 90657},
-]
-
 api2_urlpatterns = patterns('',
     # OAuth2
     url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')), # django-oauth2-provider
@@ -194,21 +183,16 @@ api2_urlpatterns = patterns('',
     url(r'^api/2.0/users/me/', UserMeViewSet.as_view({'get': 'retrieve_me', 'put': 'update_me'})),
     url(r'^api/2.0/', include(router.urls)),
 )
+if settings.DEBUG:
+    api2_urlpatterns += patterns('',
+        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    )
 
 urlpatterns = api2_urlpatterns + patterns('',
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
     url(r'^admin/', include(admin.site.urls)),
 
     # UI v3
-    url(r'^$', ExtraContextTemplateView.as_view(
-            template_name='index.jade',
-            extra_context={
-                'cities': city_list,
-            }
-        ),
-        name='new_ui_homepage',
-    ),
+    url(r'^$', HomepageView.as_view(), name='homepage'),
     url(r'^lists/', ExtraContextTemplateView.as_view(
             template_name='products/product_list.jade',
         ),
