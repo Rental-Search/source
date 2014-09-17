@@ -7,23 +7,17 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("ItemsCtrl", [
         "$scope",
-        "ProductsService",
-        "UsersService",
+        "$rootScope",
         "CategoriesService",
-        function ($scope, ProductsService, UsersService, CategoriesService) {
+        function ($scope, $rootScope, CategoriesService) {
 
             $scope.selectedCategory = "";
-
-            UsersService.getMe(function (currentUser) {
+            $scope.currentUser = {};
+            $scope.items = [];
+            $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
-
-                ProductsService.getProductsByOwnerAndRootCategory($scope.currentUser.id).then(function (items) {
-                    $scope.items = items;
-
-                    // Initiate custom scrollbars
-                    $scope.initCustomScrollbars();
-                });
+                $rootScope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.selectedCategory], shouldReloadList: true});
             });
 
             CategoriesService.getRootCategories().$promise.then(function (categories) {
@@ -31,9 +25,7 @@ define(["angular", "eloue/app"], function (angular) {
             });
 
             $scope.filterByCategory = function () {
-                ProductsService.getProductsByOwnerAndRootCategory($scope.currentUser.id, $scope.selectedCategory).then(function (items) {
-                    $scope.items = items;
-                });
+                $rootScope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.selectedCategory], shouldReloadList: true});
             }
         }]);
 });

@@ -319,7 +319,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                messageThreadsService.sendMessage = function(message, productId) {
+                messageThreadsService.sendMessage = function (message, productId) {
                     var threadDef = $q.defer();
                     var self = this;
                     if (!message.thread) {
@@ -387,6 +387,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("ProductsService", [
             "$q",
+            "$timeout",
             "AddressesService",
             "Bookings",
             "Products",
@@ -397,7 +398,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "UtilsService",
             "UsersService",
             "MessageThreads",
-            function ($q, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, UsersService, MessageThreads) {
+            function ($q, $timeout, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, UsersService, MessageThreads) {
                 var productsService = {};
 
                 productsService.getProduct = function (id) {
@@ -410,20 +411,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     Products.get({id: id}).$promise.then(function (result) {
                         var promises = [];
                         promises.push(PicturesService.getPicturesByProduct(id).$promise);
-                        var addressId = UtilsService.getIdFromUrl(result.address);
-                        promises.push(AddressesService.getAddress(addressId).$promise);
-                        var phoneId = UtilsService.getIdFromUrl(result.phone);
-                        promises.push(PhoneNumbersService.getPhoneNumber(phoneId).$promise);
                         var categoryId = UtilsService.getIdFromUrl(result.category);
                         promises.push(CategoriesService.getCategory(categoryId).$promise);
                         var ownerId = UtilsService.getIdFromUrl(result.owner);
                         promises.push(UsersService.get(ownerId).$promise);
                         $q.all(promises).then(function success(results) {
                             result.pictures = results[0].results;
-                            result.addressDetails = results[1];
-                            result.phoneDetails = results[2];
-                            result.categoryDetails = results[3];
-                            result.ownerDetails = results[4];
+                            result.categoryDetails = results[1];
+                            result.ownerDetails = results[2];
                             deferred.resolve(result);
                         });
                     });
@@ -473,7 +468,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId) {
+                productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
                     var deferred = $q.defer();
                     var params = {owner: userId};
 
@@ -481,9 +476,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         params.category__isdescendant = rootCategoryId;
                     }
 
+                    if (page) {
+                        params.page = page;
+                    }
+
                     Products.get(params).$promise.then(function (data) {
                         var promises = [];
-
                         angular.forEach(data.results, function (value, key) {
                             var productDeferred = $q.defer();
 
@@ -526,7 +524,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                         $q.all(promises).then(
                             function (results) {
-                                deferred.resolve(results);
+                                deferred.resolve({
+                                    list: results,
+                                    next: data.next
+                                });
                             },
                             function (reasons) {
                                 deferred.reject(reasons);
@@ -795,26 +796,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                             var productPromises = {};
 
-                            // Get address
-                            var addressId = UtilsService.getIdFromUrl(product.address);
-                            productPromises.address = AddressesService.getAddress(addressId).$promise;
-
                             // Get picture
                             productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
-
-                            // Get phone id
-                            resultProduct.phoneId = UtilsService.getIdFromUrl(product.phone);
 
                             // Get owner id
                             resultProduct.ownerId = UtilsService.getIdFromUrl(product.owner);
 
                             $q.all(productPromises).then(
                                 function (results) {
-                                    // Set address
-                                    resultProduct.address = {};
-                                    resultProduct.address.street = results.address.street;
-                                    resultProduct.address.zipcode = results.address.zipcode;
-                                    resultProduct.address.city = results.address.city;
 
                                     // Set picture
                                     if ($.isArray(results.pictures.results) && $(results.pictures.results).size() > 0) {
@@ -852,16 +841,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             self.getBookingDetailProduct(booking.productId).then(
                                 function (product) {
                                     bookingDetail.product = product;
-
-                                    PhoneNumbersService.getPhoneNumber(product.phoneId).$promise.then(
-                                        function (phone) {
-                                            bookingDetail.phone = phone.number;
-                                            productDeferred.resolve(bookingDetail);
-                                        },
-                                        function (reason) {
-                                            productDeferred.reject(reason);
-                                        }
-                                    );
+                                    bookingDetail.phone = product.phone;
+                                    productDeferred.resolve(bookingDetail);
                                 },
                                 function (reason) {
                                     productDeferred.reject(reason);
@@ -877,8 +858,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                     var commentList = comments.results;
 
                                     angular.forEach(commentList, function (value, key) {
-                                        var author = (value.type == 0) ? booking.owner : booking.borrower;
-                                        value.author = author
+                                        value.author = (value.type == 0) ? booking.owner : booking.borrower
                                     });
 
                                     bookingDetail.comments = commentList;
@@ -1157,15 +1137,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("ProductsParseService", [function () {
             var productsParseService = {};
 
-            productsParseService.parseProduct = function (productData, statsData, addressData, ownerData, ownerStatsData, phoneData, picturesDataArray) {
+            productsParseService.parseProduct = function (productData, statsData, ownerData, ownerStatsData, picturesDataArray) {
                 var productResult = angular.copy(productData);
 
                 productResult.stats = statsData;
-
-                // Parse address
-                if (!!addressData) {
-                    productResult.address = addressData;
-                }
 
                 // Parse owner
                 if (!!ownerData) {
@@ -1174,11 +1149,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 if (!!ownerStatsData) {
                     productResult.ownerStats = ownerStatsData;
-                }
-
-                // Parse phone
-                if (!!phoneData) {
-                    productResult.phone = phoneData;
                 }
 
                 // Parse pictures
@@ -1225,7 +1195,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService) {
                 var bookingsLoadService = {};
 
-                bookingsLoadService.getBookingList = function (page, author) {
+                bookingsLoadService.getBookingList = function (author, page) {
                     var deferred = $q.defer();
 
                     // Load bookings
@@ -1256,7 +1226,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         });
 
                         $q.all(bookingListPromises).then(function (bookingList) {
-                            deferred.resolve(bookingList);
+                            deferred.resolve(
+                                {
+                                    list: bookingList,
+                                    next: bookingListData.next
+                                });
                         });
                     });
 
@@ -1283,7 +1257,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Get product id
                         var productId = UtilsService.getIdFromUrl(booking.product);
                         // Load product
-                        ProductsLoadService.getProduct(productId, true, true, true, true).then(function (product) {
+                        ProductsLoadService.getProduct(productId, true, true).then(function (product) {
                             booking.product = product;
                             deferred.resolve(booking);
                         });
@@ -1335,7 +1309,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Products, CheckAvailability, AddressesService, UsersService, PicturesService, PhoneNumbersService, UtilsService, ProductsParseService) {
                 var productLoadService = {};
 
-                productLoadService.getProduct = function (productId, loadAddress, loadOwner, loadPhone, loadPictures) {
+                productLoadService.getProduct = function (productId, loadOwner, loadPictures) {
                     var deferred = $q.defer();
 
                     // Load product
@@ -1343,13 +1317,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         var productPromises = {};
 
                         productPromises.stats = Products.getStats({id: productId, _cache: new Date().getTime()});
-
-                        if (loadAddress) {
-                            // Get address id
-                            var addressId = UtilsService.getIdFromUrl(productData.address);
-                            // Load address
-                            productPromises.address = AddressesService.getAddress(addressId).$promise;
-                        }
 
                         if (loadOwner) {
                             // Get owner id
@@ -1359,13 +1326,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             productPromises.ownerStats = UsersService.getStatistics(ownerId).$promise;
                         }
 
-                        if (loadPhone) {
-                            // Get phone id
-                            var phoneId = UtilsService.getIdFromUrl(productData.phone);
-                            // Load phone
-                            productPromises.phone = PhoneNumbersService.getPhoneNumber(phoneId).$promise;
-                        }
-
                         if (loadPictures) {
                             // Load pictures
                             productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
@@ -1373,8 +1333,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                         // When all data loaded
                         $q.all(productPromises).then(function (results) {
-                            var product = ProductsParseService.parseProduct(productData, results.stats, results.address, results.owner,
-                                results.ownerStats, results.phone, (!!results.pictures) ? results.pictures.results : null);
+                            var product = ProductsParseService.parseProduct(productData, results.stats, results.owner,
+                                results.ownerStats, (!!results.pictures) ? results.pictures.results : null);
                             deferred.resolve(product);
                         });
                     });
@@ -1459,11 +1419,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService, MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
                 var messageThreadsLoadService = {};
 
-                messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage) {
+                messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage, page) {
                     var deferred = $q.defer();
 
                     // Load message threads
-                    MessageThreads.get({_cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
+                    MessageThreads.get({page: page, _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
                         var messageThreadListPromises = [];
 
                         // For each message thread
@@ -1495,8 +1455,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             messageThreadListPromises.push(messageThreadDeferred.promise);
                         });
 
-                        $q.all(messageThreadListPromises).then(function (bookingList) {
-                            deferred.resolve(bookingList);
+                        $q.all(messageThreadListPromises).then(function (messageThreadList) {
+                            deferred.resolve({
+                                list: messageThreadList,
+                                next: messageThreadListData.next
+                            });
                         });
                     });
 
@@ -1524,7 +1487,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Get product id
                         if (messageThreadData.product) {
                             var productId = UtilsService.getIdFromUrl(messageThreadData.product);
-                            messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true, false, true);
+                            messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true);
                         }
 
                         $q.all(messageThreadPromises).then(function (results) {
@@ -1753,5 +1716,46 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return "";
                 }
             };
+        }]);
+
+        EloueCommon.factory("LazyLoader", ["$timeout", "$rootScope", "$q", function ($timeout, $rootScope, $q) {
+            var config,
+                data,
+                fetch,
+                args;
+            return {
+
+                configure: function (options) {
+                    config = options;
+                    data = config.data;
+                    fetch = config.fetchData;
+                    args = config.args;
+                },
+
+                getData: function () {
+                    var deferred = $q.defer();
+                    $rootScope.$broadcast("showLoading");
+
+                    fetch.apply(null, args).then(function (res) {
+                        deferred.resolve(res);
+                        $rootScope.$broadcast("hideLoading");
+                    });
+
+                    return deferred.promise;
+                },
+
+                load: function () {
+                    var deferred = $q.defer();
+                    var _this = this;
+
+                    $rootScope.$broadcast("showLoading");
+
+                    _this.getData().then(function (col) {
+                        deferred.resolve(col);
+                    });
+
+                    return deferred.promise;
+                }
+            }
         }]);
     });

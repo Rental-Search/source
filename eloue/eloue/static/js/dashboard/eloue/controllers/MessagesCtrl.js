@@ -7,14 +7,12 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("MessagesCtrl", [
         "$scope",
-        "MessageThreadsLoadService",
-        function ($scope, MessageThreadsLoadService) {
-            // Get all message threads
-            MessageThreadsLoadService.getMessageThreadList(true, true).then(function (messageThreadList) {
-                $scope.messageThreadList = messageThreadList;
-
-                // Initiate custom scrollbars
-                $scope.initCustomScrollbars();
+        "$rootScope",
+        function ($scope, $rootScope) {
+            $scope.messageThreadList = [];
+            $scope.currentUserPromise.then(function (currentUser) {
+                $scope.currentUser = currentUser;
+                $rootScope.$broadcast("startLoading", {parameters: [true, true], shouldReloadList: true});
             });
         }
     ]);

@@ -1,6 +1,6 @@
 {% verbatim %}
 section.tabs-vertical-active.sm.scrollbar-custom(ng-show="messageThreadList && messageThreadList.length > 0")
-  ul
+  ul(eloue-lazy-load, lazy-data="messageThreadList", lazy-data-provider="MessageThreadsLoadService", lazy-load-method="getMessageThreadList")
     li.tab-vertical.block-with-thumbnail(ng-repeat="thread in messageThreadList track by thread.id")
       .col-thumbnail
         .thumbnail.round: a(ui-sref="messages.detail({id: thread.id}))

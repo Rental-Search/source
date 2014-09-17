@@ -39,7 +39,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 }
             };
             productsLoadServiceMock = {
-                getProduct: function (productId, loadAddress, loadOwner, loadPhone, loadPictures) {
+                getProduct: function (productId, loadOwner, loadPictures) {
                 }
             };
 

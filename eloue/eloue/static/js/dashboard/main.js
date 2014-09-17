@@ -2,7 +2,7 @@ require.config({
     baseUrl: "../static/js/dashboard",
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",
-        "lodash": "../../bower_components/lodash/dist/lodash.min",
+        "underscore": "../../bower_components/lodash/dist/lodash.min",
         "jQuery": "../../bower_components/jquery/dist/jquery.min",
         "angular": "../../bower_components/angular/angular.min",
         "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
@@ -50,7 +50,7 @@ require.config({
 
 require([
     "jQuery",
-    "lodash",
+    "underscore",
     "angular",
     "bootstrap",
     "datejs",
