@@ -169,7 +169,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         };
 
         $scope.loadProductDetails = function () {
-            ProductsLoadService.getProduct($scope.productId, true, true, true, false).then(function (result) {
+            ProductsLoadService.getProduct($scope.productId, true, false).then(function (result) {
                 $scope.product = result;
                 //TODO: owner contact details will be defined in some other way.
                 $scope.ownerCallDetails = {

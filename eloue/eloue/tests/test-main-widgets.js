@@ -24,6 +24,9 @@ requirejs.config({
         "angular-moment": "../../bower_components/angular-moment/angular-moment.min",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
         "datejs": "../../bower_components/datejs/build/production/date.min",
+        "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
+        "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
+        "toastr": "../../bower_components/toastr/toastr.min",
         "formmapper": "../formmapper"
     },
 
@@ -41,7 +44,10 @@ requirejs.config({
         "bootstrap": ["jQuery"],
         "moment": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
-        "formmapper": ["jQuery"]
+        "formmapper": ["jQuery"],
+        "jquery-mousewheel": ["jQuery"],
+        "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
+        "toastr": ["jQuery"]
     },
 
     // ask Require.js to load these files (all our tests)

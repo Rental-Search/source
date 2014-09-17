@@ -20,6 +20,8 @@ require.config({
         "placeholders-main": "../../bower_components/placeholders/lib/main",
         "placeholders-jquery": "../../bower_components/placeholders/lib/adapters/placeholders.jquery",
         "angular-chosen-localytics": "../../bower_components/angular-chosen-localytics/chosen",
+        "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
+        "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
         "toastr": "../../bower_components/toastr/toastr.min",
         "formmapper": "../formmapper"
     },
@@ -42,6 +44,8 @@ require.config({
         "chosen": ["jQuery"],
         "placeholders-jquery": ["jQuery"],
         "formmapper": ["jQuery"],
+        "jquery-mousewheel": ["jQuery"],
+        "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
         "toastr": ["jQuery"]
     }
 });

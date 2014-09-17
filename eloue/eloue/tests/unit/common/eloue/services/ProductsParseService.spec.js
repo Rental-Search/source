@@ -7,7 +7,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
-
             module(function ($provide) {
             });
         });
@@ -21,9 +20,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         });
 
         it("ProductsParseService:parseProduct", function () {
-            var addressData = {id: 1}, statsData = {id: 5}, ownerData = {id: 2}, ownerStatsData = {id: 4}, phoneData = {id: 3};
-            var result = ProductsParseService.parseProduct({}, statsData, addressData, ownerData, ownerStatsData, phoneData, {});
-            expect(result).toEqual({stats: statsData, address: addressData, owner: ownerData, ownerStats: ownerStatsData, phone: phoneData});
+            var statsData = {id: 1}, ownerData = {id: 2}, ownerStatsData = {id: 3};
+            var result = ProductsParseService.parseProduct({}, statsData, ownerData, ownerStatsData, {});
+            expect(result).toEqual({stats: statsData, owner: ownerData, ownerStats: ownerStatsData});
         });
     });
 });
