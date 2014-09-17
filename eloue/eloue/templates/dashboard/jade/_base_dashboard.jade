@@ -11,8 +11,9 @@ block append styles
 
 block append scripts
   script(src="#{STATIC_URL}js/dashboard_scripts.js")
+  script(src="#{STATIC_URL}js/.js")
 
-block content-body
+block append content-body
   .container-full-screen
     //- include ./_src
     header.header-site

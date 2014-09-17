@@ -1,20 +1,74 @@
+-var userLogin = true
 section.container.signs-links
 	ul(role = "tablist").nav.without-spaces
-		li.divide
-		li: span
-			| Bonjour, 
-			a( href = "#inscrivez-vous", data-toggle="modal", data-target="#sign-in") inscrivez-vous 
-			| ou 
-			a( href = "#connectez-vous", data-toggle="modal", data-target="#log-in") connectez-vous
-		li.divide
-		li: span
-			| Vous êtes un loueur professionnel, découvrez les 
-			a( href ="#") offers e-loue Pro
-		li.divide
+		if !userLogin
+			li: span
+				| Bonjour, 
+				a( href = "#inscrivez-vous", data-toggle="modal", data-target="#sign-in") inscrivez-vous 
+				| ou 
+				a( href = "#connectez-vous", data-toggle="modal", data-target="#log-in") connectez-vous
+			li.divide
+			li: span
+				| Vous êtes un loueur professionnel, découvrez les 
+				a( href ="#") offers e-loue Pro
+			li.divide
 		li: span
 			| Appelez-nous au 
 			b 0826.800.200 
 			| (0,15&euro; / min)
+		if userLogin
+			li.guest-veiw
+				.dropdown
+					span.dropdown-img: a(href="#"): img(src="http://lorempixel.com/30/30/people", alt="")
+					span(data-toggle="dropdown").dropdown-toggle.text-success Gaspard
+						span.caret
+					ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+						li.presentation: a(href="#") I
+						li.presentation: a(href="#") need
+						li.presentation: a(href="#") design
+						li.presentation: a(href="#") for
+						li.presentation: a(href="#") this
+						li.presentation: a(href="#") dropdown !
+						li.presentation.divider
+						li.presentation: a(href="#") The end!
+				.dropdown
+					span(data-toggle="dropdown").dropdown-toggle.text-success
+						i.flaticon.stroke.mail
+						span.badge-count 1
+					ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+						li.presentation: a(href="#") I
+						li.presentation: a(href="#") need
+						li.presentation: a(href="#") design
+						li.presentation: a(href="#") for
+						li.presentation: a(href="#") this
+						li.presentation: a(href="#") dropdown !
+						li.presentation.divider
+						li.presentation: a(href="#") The end!
+				.dropdown
+					span(data-toggle="dropdown").dropdown-toggle.text-success
+						i.flaticon.stroke.calendar-5
+						span.badge-count 121
+					ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+						li.presentation: a(href="#") I
+						li.presentation: a(href="#") need
+						li.presentation: a(href="#") design
+						li.presentation: a(href="#") for
+						li.presentation: a(href="#") this
+						li.presentation: a(href="#") dropdown !
+						li.presentation.divider
+						li.presentation: a(href="#") The end!
+				.dropdown
+					span(data-toggle="dropdown").dropdown-toggle.text-success Aide
+						span.caret
+					ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+						li.presentation: a(href="#") I
+						li.presentation: a(href="#") need
+						li.presentation: a(href="#") design
+						li.presentation: a(href="#") for
+						li.presentation: a(href="#") this
+						li.presentation: a(href="#") dropdown !
+						li.presentation.divider
+						li.presentation: a(href="#") The end!
 
 .framing
 	section.container.search-form

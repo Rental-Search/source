@@ -45,6 +45,8 @@
     <script src="../../static/js/jquery.autosize.js"></script>
     <!-- modal window bootstrap-->
     <script src="../../static/js/bootstrap/modal.js"></script>
+    <!-- dropdown bootstrap-->
+    <script src="../../static/js/bootstrap/dropdown.js"></script>
     <!-- custom scrollbar.js-->
     <script src="../../static/js/jquery.mCustomScrollbar.js"></script>
     <!-- datepicker-->
@@ -153,8 +155,15 @@
             <h4 class="modal-title">Réinitialisation du mot de passe</h4>
           </div>
           <div class="modal-body">
-            <h2>Lien envoyé avec succés</h2>
-            <p class="indent-r-md indent-l-md">Nous vous avons envoyé par courriel les instructions pour changer de mot de passe à l'adresse que vous avez indiquée. Vous devreuez le recevoir rapidement.</p>
+            <p class="indent-r-md indent-l-md">Mot de passe perdu ? Saisissez votre adresse électronique ci-desso us et nous vous enverrons les instructions pour en créer un nouveau.</p>
+            <form action="reset-password">
+              <div class="form-group">
+                <input type="email" placeholder="E-mail" required class="form-control">
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn bg-success">Connexion</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -163,12 +172,57 @@
       <header class="header-site">
         <section class="container signs-links">
           <ul role="tablist" class="nav without-spaces">
-            <li class="divide"></li>
-            <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
-            <li class="divide"></li>
-            <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
-            <li class="divide"></li>
             <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
+            <li class="guest-veiw">
+              <div class="dropdown"><span class="dropdown-img"><a href="#"><img src="http://lorempixel.com/30/30/people" alt=""></a></span><span data-toggle="dropdown" class="dropdown-toggle text-success">Gaspard<span class="caret"></span></span>
+                <ul role="menu" aria-labelledby="dLabel" class="dropdown-menu">
+                  <li class="presentation"><a href="#">I</a></li>
+                  <li class="presentation"><a href="#">need</a></li>
+                  <li class="presentation"><a href="#">design</a></li>
+                  <li class="presentation"><a href="#">for</a></li>
+                  <li class="presentation"><a href="#">this</a></li>
+                  <li class="presentation"><a href="#">dropdown !</a></li>
+                  <li class="presentation divider"></li>
+                  <li class="presentation"><a href="#">The end!</a></li>
+                </ul>
+              </div>
+              <div class="dropdown"><span data-toggle="dropdown" class="dropdown-toggle text-success"><i class="flaticon stroke mail"></i><span class="badge-count">1</span></span>
+                <ul role="menu" aria-labelledby="dLabel" class="dropdown-menu">
+                  <li class="presentation"><a href="#">I</a></li>
+                  <li class="presentation"><a href="#">need</a></li>
+                  <li class="presentation"><a href="#">design</a></li>
+                  <li class="presentation"><a href="#">for</a></li>
+                  <li class="presentation"><a href="#">this</a></li>
+                  <li class="presentation"><a href="#">dropdown !</a></li>
+                  <li class="presentation divider"></li>
+                  <li class="presentation"><a href="#">The end!</a></li>
+                </ul>
+              </div>
+              <div class="dropdown"><span data-toggle="dropdown" class="dropdown-toggle text-success"><i class="flaticon stroke calendar-5"></i><span class="badge-count">121</span></span>
+                <ul role="menu" aria-labelledby="dLabel" class="dropdown-menu">
+                  <li class="presentation"><a href="#">I</a></li>
+                  <li class="presentation"><a href="#">need</a></li>
+                  <li class="presentation"><a href="#">design</a></li>
+                  <li class="presentation"><a href="#">for</a></li>
+                  <li class="presentation"><a href="#">this</a></li>
+                  <li class="presentation"><a href="#">dropdown !</a></li>
+                  <li class="presentation divider"></li>
+                  <li class="presentation"><a href="#">The end!</a></li>
+                </ul>
+              </div>
+              <div class="dropdown"><span data-toggle="dropdown" class="dropdown-toggle text-success">Aide<span class="caret"></span></span>
+                <ul role="menu" aria-labelledby="dLabel" class="dropdown-menu">
+                  <li class="presentation"><a href="#">I</a></li>
+                  <li class="presentation"><a href="#">need</a></li>
+                  <li class="presentation"><a href="#">design</a></li>
+                  <li class="presentation"><a href="#">for</a></li>
+                  <li class="presentation"><a href="#">this</a></li>
+                  <li class="presentation"><a href="#">dropdown !</a></li>
+                  <li class="presentation divider"></li>
+                  <li class="presentation"><a href="#">The end!</a></li>
+                </ul>
+              </div>
+            </li>
           </ul>
         </section>
         <div class="framing">

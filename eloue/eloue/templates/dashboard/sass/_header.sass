@@ -1,8 +1,10 @@
 header
   background-color: white
+  .signs-links
+    padding-top: 1em
+    padding-bottom: 1em
   i
     display: inline-block
-    font-family:  $font-family-icon
     font-style: normal
     font-weight: normal
     line-height: 1
@@ -12,8 +14,12 @@ header
     font-weight: $fw-semibold
     font-size: $font-size-small
     color: $gray-stronger
-    margin: 15px 0 5px
-    overflow: hidden
+    overflow: visible
+    li
+      vertical-align: middle
+      &.divide:before
+        bottom: -.75em
+        height: 1.5em
     a
       color: $brand-primary
       &:hover
@@ -92,8 +98,63 @@ header
         height: 1em
         +centred-abs()
         top: 1em\9
-
-
     &:hover
       background-color: $gray-lighter
-      
+
+  .guest-veiw
+    margin-top: -.5em
+    margin-bottom: -.5em
+  .badge-count
+    font-weight: $fw-bold
+    padding: .25em .75em
+    color: white
+    display: inline-block
+    position: absolute
+    top: -.5em
+    right: -1em
+    background-color: $brand-primary
+    border-radius: 1em
+    font-size: .75em
+  .dropdown
+    display: table-cell
+    vertical-align: middle
+    & + .dropdown
+      padding-left: $indent-md
+    .dropdown-menu
+      margin-top: 1em
+      left: auto
+      right: -.75em
+      &:before,
+      &:after
+        content: ""
+        position: absolute
+        border: .75em solid
+        top: -1.5em
+        right: .75em
+        border-top-color: transparent
+        border-left-color: transparent
+        border-right-color: transparent
+      &:before
+        color: $gray-medium
+      &:after
+        color: white
+        margin-top: 1px
+      a:hover
+        text-decoration: none
+    .dropdown-toggle
+      font-weight: bolder
+      cursor: pointer
+      i
+        font-size: 2em
+    .caret
+      color: $gray-strong
+      margin-left: .5em
+    .dropdown-img
+      margin: 0 $indent-xs
+      a
+        display: inline-block
+        vertical-align: middle
+        overflow: hidden
+        border-radius: 50%
+      img
+        display: block
