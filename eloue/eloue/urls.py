@@ -12,6 +12,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 
 from eloue.api.urls import router, UserMeViewSet
 from eloue.views import HomepageView
+from products.views import ProductListView, ProductDetailView
 
 log = logbook.Logger('eloue')
 
@@ -179,7 +180,6 @@ api2_urlpatterns = patterns('',
     url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')), # django-oauth2-provider
 #    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # django-oauth-toolkit
 
-    # API 2.0
     url(r'^api/2.0/users/me/', UserMeViewSet.as_view({'get': 'retrieve_me', 'put': 'update_me'})),
     url(r'^api/2.0/', include(router.urls)),
 )
@@ -188,23 +188,31 @@ if settings.DEBUG:
         url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     )
 
-urlpatterns = api2_urlpatterns + patterns('',
+ui3_urlpatterns = patterns('',
+    url(r'^$', HomepageView.as_view(), name='home'),
+
+    url(r'^lists/', ProductListView.as_view()),
+    #url(r'^product_detail/', ProductDetailView.as_view(), name='product_detail'),
+    url(r'^([^/].+/)([-\w]+)-(?P<pk>\d+)/$', ProductDetailView.as_view(), name='booking_create'),
+
+    url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
+    url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
+)
+
+urlpatterns = patterns('',
+
+    url(r'^faq/', include('faq.urls')),
+
+    url(r'^loueur/', include('accounts.urls')),
+    #url(r'^location/', include('products.urls')),
+
     url(r'^admin/', include(admin.site.urls)),
 
+    # API 2.0
+    url(r'^', include(api2_urlpatterns)),
+
     # UI v3
-    url(r'^$', HomepageView.as_view(), name='homepage'),
-    url(r'^lists/', ExtraContextTemplateView.as_view(
-            template_name='products/product_list.jade',
-        ),
-        name='new_ui_product_list',
-    ),
-    url(r'^product_detail/', ExtraContextTemplateView.as_view(
-            template_name='products/product_detail.jade',
-        ),
-        name='new_ui_product_detail',
-    ),
-    url(r'^dashboard/', include(dashboard_urlpatterns, namespace='new_ui_dashboard')),
-    url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_partials')),
+    url(r'^', include(ui3_urlpatterns)), # namespace='ui3'
 
     # social: support for sign-in by Google and/or Facebook
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),

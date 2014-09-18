@@ -1,35 +1,37 @@
 ol.nav.row
-  each product in products
+  each product in product_list
     li
       .section-body
         .thumbnail-img
-          a(href="products/product_detail.html").img-wrapper
-            img( src = "#{STATIC_URL}#{product.img_link}" )
+          a(href="#{product.url}").img-wrapper
+            if product.thumbnail
+              img(src="#{product.thumbnail}")
             span.badge.price #{product.price}&euro; /jour
             span.badge-order #{product.order}
         .info
           h6
-            a(href="#") #{product.title}
-            if product.ispro
+            a(href="#{product.url}") #{product.summary}
+            if product.pro
               span.badge-pro pro
-          p #{product.description}
-            span.zip-code ,&nbsp;#{product.zip_code}
+          p #{product.city}
+            span.zip-code ,&nbsp;#{product.zipcode}
           .rate
             -var stars = [1,2,3,4,5]
             each s in stars
-              if s == product.rate
+              if s == 1
                 span.flaticon.solid.star-2.current-rate
               else
                 span.flaticon.solid.star-2
-          if product.comments > 0
+          if product.comments
             span.sprite-comment
               i.flaticon.stroke.writing-comment
               | #{product.comments}
-          p.full_description #{product.full_description}
+          p.full_description #{product.text}
         .declarer-container
           .declarer
-            span.declarer-name Alfred Cardinal
-            a(href="#").declarer-thumbnail: img(src="#{STATIC_URL}#{product.declarer_img_link}" alt="")
+            span.declarer-name #{product.owner}
+            if product.owner_url and product.owner_avatar
+              a(href="#{product.owner_url}").declarer-thumbnail: img(src="#{product.owner_avatar}" alt="")
           .btns
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2

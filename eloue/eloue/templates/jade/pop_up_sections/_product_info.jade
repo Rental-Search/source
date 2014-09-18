@@ -1,10 +1,10 @@
 .thumbnail-img
-  a(href="#"): img(src="#{STATIC_URL}#{pop_up.product_info.thumbnail_product}", alt="")
+  a(href="#"): img(src="#{product.profile}", alt="")
 .thumbnail-content
-  h3 #{pop_up.product_info.header}
+  h3 #{product.summary}
   p.location
     i.flaticon.stroke.location-pin-3
-    | #{pop_up.product_info.location}, #{pop_up.product_info.index}
+    | #{product.city}, #{product.zipcode}
   p.stats
     include ../_rate
     span.rate-count #{pop_up.product_info.rate_count}
@@ -12,7 +12,8 @@
       i.flaticon.stroke.writing-comment
       | #{pop_up.product_info.comments_count}
   .declarer
-    .thumbnail-img
-      a(href="#"): img(src="#{STATIC_URL}#{pop_up.product_info.thumbnail_declarer}", alt="")
+    if product.owner_url and product.owner_avatar
+      .thumbnail-img
+        a(href="#{product.owner_url}"): img(src="#{product.owner_avatar}", alt="")
     .thumbnail-content
-      p #{pop_up.product_info.name_declarer}
+      p #{product.owner}

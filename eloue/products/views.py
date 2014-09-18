@@ -25,6 +25,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 
 from haystack.query import SearchQuerySet
+from haystack.constants import DJANGO_ID
 from django.http import HttpResponse
 
 from accounts.forms import EmailAuthenticationForm
@@ -545,7 +546,7 @@ class ProductList(ListView):
     @method_decorator(mobify)
     @method_decorator(cache_page(900))
     @method_decorator(vary_on_cookie)
-    def dispatch(self, request, urlbits, sqs=SearchQuerySet(), suggestions=None, page=None):
+    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet(), suggestions=None, page=None):
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         query_data = request.GET.copy()
         if not query_data.get('l'):
@@ -733,6 +734,56 @@ def suggestion(request):
     cache.set(word, resp, 0)
     return HttpResponse(resp)
 
+
+# UI v3
+
+class ProductListView(ProductList):
+    template_name = 'products/product_list.jade'
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'products/product_detail.jade'
+    context_object_name = 'product'
+
+    def get_queryset(self):
+        return SearchQuerySet().models(self.model).load_all()
+
+    def get_object(self, queryset=None):
+        """
+        Returns the object the view is displaying.
+
+        By default this requires `self.queryset` and a `pk` or `slug` argument
+        in the URLconf, but subclasses can override this to return any object.
+        """
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        if pk is not None:
+            queryset = queryset.filter(**{DJANGO_ID: pk})
+
+        # Next, try looking up by slug.
+        elif slug is not None:
+            slug_field = self.get_slug_field()
+            queryset = queryset.filter(**{slug_field: slug})
+
+        # If none of those are defined, it's an error.
+        else:
+            raise AttributeError("Generic detail view %s must be called with "
+                                 "either an object pk or a slug."
+                                 % self.__class__.__name__)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.best_match()
+        except IndexError:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': self.model._meta.verbose_name})
+        return obj
 
 
 # REST API 2.0

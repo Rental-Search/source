@@ -4,13 +4,14 @@
     each product in products
       li.col-sm-6.col-md-3
         .thumbnail
-          a(href="products/product_detail.html").img-wrapper
-            img( src = "#{STATIC_URL}#{product.img_link}" )
+          a(href="#{product.url}").img-wrapper
+            img(src="#{product.thumbnail}")
             span.fog
           .info
-            h6: a(href="#") #{product.title}
+            h6: a(href="#{product.url}") #{product.title}
             p #{product.description}
-            a(href="#").declarer: img(src="#{STATIC_URL}#{product.declarer_img_link}" alt="")
+            if product.owner_url and product.owner_avatar
+              a(href="#{product.owner_url}").declarer: img(src="#{product.owner_avatar}" alt="")
           span.badge.price #{product.price}&euro; /jour
   .row.text-center
     button(type = "button").btn.bg-success.btn-explore

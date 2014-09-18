@@ -1,4 +1,5 @@
 extends _base_product_detail
+
 block tab
   .carousel-conteiner
     .col-md-7
@@ -8,9 +9,9 @@ block tab
           .item(style="background-image: url(http://lorempixel.com/600/810/technics/2)")
           .item(style="background-image: url(http://lorempixel.com/400/610/technics/3)")
           .item(style="background-image: url(http://lorempixel.com/500/310/technics/4)")
-        a(href="#carousel-product" role="button" data-slide="prev").left.carousel-control
+        a(href="#carousel-product", role="button", data-slide="prev").left.carousel-control
           i.flaticon.solid.left-2
-        a(href="#carousel-product" role="button" data-slide="next").right.carousel-control
+        a(href="#carousel-product", role="button", data-slide="next").right.carousel-control
           i.flaticon.solid.right-2
       .items-thumbnail-inner
         div: a.items-thumbnail(href="#")(style="background-image: url(http://lorempixel.com/800/600/technics/1)")
@@ -23,11 +24,9 @@ block tab
         .map-inner
           span.whirly
           .map
-            // место для карты
+            //- a place for embedding the map
       .location-title-inner
         .location-title
           i.flaticon.solid.loca.location-pin-3.icon-li.icon-lg
-          h4 52 Boulevard Pereire
-          small Paris, 75017
-
-
+          h4 #{product.object.address.address1}
+          small #{product.city}, #{product.zipcode}

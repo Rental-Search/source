@@ -1,4 +1,4 @@
-h3 Location Bmw - 520 touring luxe - NICE
+h3 Location #{product.summary}
 ul.breadcrumb
-  each specification in specifications
-    li #{specification}
+  each specification in product.categories
+    li #{specification|capfirst}
