@@ -7,6 +7,7 @@ from products.models import Alert, Product, CarProduct, RealEstateProduct
 
 __all__ = ['ProductIndex', 'AlertIndex']
 
+ONE_DAY_DELTA = datetime.timedelta(days=1)
 
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
@@ -35,13 +36,11 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     
     def prepare_sites(self, obj):
-        res = obj.sites.all().values_list('id', flat=True)
-        return tuple(res)
+        return tuple(obj.sites.values_list('id', flat=True))
     
     def prepare_categories(self, obj):
         if obj.category:
-            categories = [category.slug for category in obj.category.get_ancestors(ascending=False, include_self=True)]
-            return categories
+            return [category.slug for category in obj.category.get_ancestors(ascending=False, include_self=True)]
     
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]:
@@ -52,14 +51,15 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
             return picture.profile.url
     
     def prepare_owner_avatar(self, obj):
-        if obj.owner.avatar:
-            return obj.owner.thumbnail.url
+        obj = obj.owner
+        if obj.avatar and obj.thumbnail:
+            return obj.thumbnail.url
 
     def prepare_price(self, obj):
         # It doesn't play well with season
         if obj.prices.all()[:1]:
             now = datetime.datetime.now()
-            unit, amount = obj.calculate_price(now, now + datetime.timedelta(days=1))
+            unit, amount = obj.calculate_price(now, now + ONE_DAY_DELTA)
             return amount
     
     def prepare_special(self, obj):
@@ -70,7 +70,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return Product
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.active()
+        return self.get_model().on_site.active().select_related('address', 'owner')
         
 class CarIndex(ProductIndex):
 
@@ -160,4 +160,4 @@ class AlertIndex(indexes.Indexable, indexes.SearchIndex):
         return Alert
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.all()
+        return self.get_model().on_site.select_related('address', 'patron')

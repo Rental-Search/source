@@ -105,7 +105,7 @@ class Product(models.Model):
     def get_absolute_url(self):
         encestors_slug = self.category.get_ancertors_slug()
         if encestors_slug:
-            path = '%s/%s/' % (self.category.get_ancertors_slug(), self.category.slug)
+            path = '%s/%s/' % (encestors_slug, self.category.slug)
         else:
             path = '%s/' % self.category.slug
         return ('booking_create', [path, self.slug, self.pk])

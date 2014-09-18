@@ -17,15 +17,14 @@ class PatronIndex(indexes.Indexable, indexes.SearchIndex):
     url = indexes.CharField(model_attr='get_absolute_url')
 
     def prepare_sites(self, obj):
-        res = obj.sites.all().values_list('id', flat=True)
-        return tuple(res)
+        return tuple(obj.sites.values_list('id', flat=True))
 
     def prepare_avatar(self, obj):
-        if obj.avatar:
+        if obj.avatar and obj.thumbnail:
             return obj.thumbnail.url
 
     def get_model(self):
         return Patron
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.all()
+        return self.get_model().on_site.select_related('default_address__position')
