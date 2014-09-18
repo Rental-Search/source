@@ -140,4 +140,23 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 }, 300);
             }
         }]);
+
+    /**
+     * Root controller for pages which content depends on user authorized (e.g. Home page).
+     */
+    EloueCommon.controller("AuthCtrl", [
+        "$scope",
+        "AuthService",
+        "UsersService",
+        function($scope, AuthService, UsersService) {
+            var currentUserToken = AuthService.getCookie("user_token");
+            if (currentUserToken) {
+                // Get current user
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise.then(function (currentUser) {
+                    // Save current user in the scope
+                    $scope.currentUser = currentUser;
+                });
+            }
+        }]);
 });

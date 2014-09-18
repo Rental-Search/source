@@ -9,7 +9,7 @@ block append scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 
 block append content-body
-  .container-flex
+  .container-flex(data-ng-controller="AuthCtrl")
     header.header-site
       include ./jade/_header_site
     nav.nav-home.container
