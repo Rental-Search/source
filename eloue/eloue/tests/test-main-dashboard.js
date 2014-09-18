@@ -33,7 +33,8 @@ requirejs.config({
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "jquery-chosen": "../../js/chosen.jquery.min",
         "toastr": "../../bower_components/toastr/toastr.min",
-        "bootstrap_modal": "../bootstrap/modal"
+        "bootstrap_modal": "../bootstrap/modal",
+        "formmapper": "../formmapper"
     },
 
     shim: {
@@ -59,7 +60,8 @@ requirejs.config({
         "jquery-chosen": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
         "bootstrap_modal":  ["jQuery"],
-        "toastr": ["jQuery"]
+        "toastr": ["jQuery"],
+        "formmapper": ["jQuery"]
     },
 
     // ask Require.js to load these files (all our tests)

@@ -113,6 +113,11 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
             $(window).on('resize', function() {
                 setProperties();
             });
+
+            //Activate geolocation search
+            $('#geolocate').formmapper({
+                details: "form"
+            });
         }
     ]);
 });
