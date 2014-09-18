@@ -876,8 +876,9 @@ class ProductViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
         qs = obj.borrowercomments.aggregate(Avg('note'), Count('id'))
         res = {
             'average_rating': int(qs['note__avg'] or 0),
-            'booking_coments_count': int(qs['id__count'] or 0),
+            'booking_comments_count': int(qs['id__count'] or 0),
             'bookings_count': obj.bookings.count(),
+            'ratings_count': int(qs['id__count'] or 0),
         }
         return response.Response(res)
 
