@@ -2,11 +2,15 @@
 import re
 
 from httplib2 import Http
+from functools import wraps, partial
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden
 from django.utils import translation
+from django.core.cache import get_cache, cache as default_cache
+
+from eloue.utils import cache_key
 
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 USE_PAYPAL_SANDBOX = getattr(settings, 'USE_PAYPAL_SANDBOX', False)
@@ -96,4 +100,32 @@ def mobify(view_func=None):
             return HttpResponsePermanentRedirect("%s%s" % (MOBILE_REDIRECT_BASE, request.get_full_path()))
         else:
             return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+def cached(timeout=None, cache=None, key_prefix=None, key_func=None, **cache_kwargs):
+    if timeout is not None:
+        cache_kwargs['timeout'] = timeout
+    make_key = partial(key_func or cache_key, key_prefix or Site.objects.get_current().domain)
+    cache = default_cache if cache is None else get_cache(cache)
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*func_args, **func_kwargs):
+            key = make_key(func.__name__)
+            value = cache.get(key)
+            if value is None:
+                value = func(*func_args, **func_kwargs)
+                cache.set(key, value, **cache_kwargs)
+            return value
+        return wrapper
+    return decorator
+
+
+def split_args_int(f):
+    @wraps(f)
+    def wrapper(value, args):
+        if isinstance(args, basestring):
+            args = map(int, args.split(':'))
+            return f(value, *args)
+        return f(value, int(args))
     return wrapper

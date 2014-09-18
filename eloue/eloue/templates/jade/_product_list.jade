@@ -1,5 +1,6 @@
+-load humanize
 .container
-  h3.text-center 324 654 annonces de location dans toute la France
+  h3.text-center {{ total_products|intcomma }} annonces de location dans toute la France
   ul.nav.row
     each product in products
       li.col-sm-6.col-md-3

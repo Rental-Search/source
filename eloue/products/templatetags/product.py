@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+from itertools import islice
 
 from django.conf import settings
 from django.template import Library
@@ -8,10 +9,13 @@ from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.safestring import SafeData, mark_safe
 from django.utils.formats import get_format
+from django.utils import six
 
 register = Library()
 
 from products.choices import UNIT
+from eloue.utils import currency
+from eloue.decorators import split_args_int
 
 
 @register.filter
@@ -79,10 +83,9 @@ def unit(value):
     return UNIT[int(value)][1]
 
 
-@register.filter
+@register.filter(name='currency')
 @stringfilter
-def currency(value):
-    from eloue.utils import currency
+def currency_filter(value):
     return currency(value)
 
 
@@ -144,3 +147,47 @@ def location(obj, attrname='location'):
     """
     location = getattr(obj, attrname, None)
     return '%s, %s' % (location.x, location.y) if location else attrname
+
+
+@register.filter
+def takeby(iterator, size):
+    """
+    Breaks an iterator into parts by ``n`` items.
+    The ending items may be ignored if there are less then ``n`` of them.
+    That is::
+        
+        >>> l = range(10)
+        
+        >>> map(tuple, takeby(l, 5))
+        [(0, 1, 2, 3, 4), (5, 6, 7, 8, 9)]
+        
+        >>> map(tuple, takeby(l, 3))
+        [(0, 1, 2), (3, 4, 5), (6, 7, 8)]
+        
+        >>> map(tuple, takeby(l, 2))
+        [(0, 1), (2, 3), (4, 5), (6, 7), (8, 9)]
+    
+    """
+    iterator = iter(iterator)
+    parts = [iterator] * size
+    return six.moves.zip(*parts)
+
+
+@register.filter
+@split_args_int
+def takeby_transposed(iterator, size, max_length=None):
+    """
+    Breaks an iterator into parts by ``n`` items.
+    The resulting parts may have different length if ``limit`` is not provided.
+    That is::
+        
+        >>> l = range(10)
+        
+        >>> map(tuple, takeby_transposed(l, 3))
+        [(0, 3, 6, 9), (1, 4, 7), (2, 5, 8)]
+        
+        >>> map(tuple, takeby_transposed(l, '3:9'))
+        [(0, 3, 6), (1, 4, 7), (2, 5, 8)]
+    
+    """
+    return (islice(iterator, start, max_length, size) for start in six.moves.range(size))

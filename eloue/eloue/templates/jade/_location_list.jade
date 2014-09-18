@@ -1,17 +1,13 @@
-mixin list(filtered_cities_list)
-  li.divide
-  li: ul.nav
-    each city in filtered_cities_list
-      li.item-city
-        .col-sm-8
-          a(href = "#").link-success-color #{city.city}
-        .col-sm-4
-          span.actives-count #{city.id__count}
+-load product
 
 .container
   h3 Les viles les plus actives
   .row
     ul.nav.nav-justified
-      +list(cities_list|slice:":9:3")
-      +list(cities_list|slice:"1:9:3")
-      +list(cities_list|slice:"2:9:3")
+      each column in cities_list|takeby_transposed:"3:9"
+        li.divide
+        li: ul.nav
+          each city in column
+            li.item-city
+              .col-sm-8: a(href = "#").link-success-color #{city.city}
+              .col-sm-4: span.actives-count #{city.id__count}

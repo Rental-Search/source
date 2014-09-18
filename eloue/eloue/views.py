@@ -8,7 +8,8 @@ from django.template import RequestContext, loader
 from django.db.models import Count
 
 from products.forms import FacetedSearchForm
-from products.models import Product
+from products.models import Product, Category
+from eloue.decorators import cached
 
 @requires_csrf_token
 def custom404(request, template_name='404.html'):
@@ -34,11 +35,21 @@ class LoginRequiredMixin(View):
 class HomepageView(TemplateView):
     template_name = 'index.jade'
 
+    @property
+    @cached(10*60)
+    def home_root_categories_list(self):
+        return Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
+
     def get_context_data(self, **kwargs):
         product_stats = Product.objects.extra(
             tables=['accounts_address'],
             where=['"products_product"."address_id" = "accounts_address"."id"'],
             select={'city': 'lower(accounts_address.city)'}
         ).values('city').annotate(Count('id')).order_by('-id__count')
-        context = super(HomepageView, self).get_context_data(cities_list=product_stats, **kwargs)
+        context = super(HomepageView, self).get_context_data(**kwargs)
+        context.update({
+            'cities_list': product_stats,
+            'total_products': Product.objects.only('id').count(),
+            'categories_list': self.home_root_categories_list,
+        })
         return context

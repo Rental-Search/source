@@ -192,6 +192,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.formtools',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'markup_deprecated', # 'django.contrib.markup',
     'django.contrib.gis',
     'mptt',
