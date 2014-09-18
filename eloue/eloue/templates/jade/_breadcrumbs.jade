@@ -1,6 +1,21 @@
+-load i18n cache facets
+
+mixin category_crumbs(category_list)
+  for category in category_list
+    li: a(href="{{ category.get_absolute_url }}") {{ category.name|capfirst }}
+
 .row-fluid.bd-b
   .container
     ol.breadcrumb
-      -var crumbs = ["Accueil", "Location Voiture", "Nice", "BMW - 520 Touring luxe"]
-      each crumb in crumbs
-        li: a(href="#") #{crumb}
+      li: a(href="{% url 'home' %}") {% trans "Accueil" %}
+      if product
+        {% cache 43200 product:breadcrumb product.pk %}
+        -var category = product.object.category
+        +category_crumbs(category.get_ancestors)
+        li: a(href="{{ category.get_absolute_url }}") {{ category.name|capfirst }}
+        li: {{ product.summary|capfirst }}
+        {% endcache %}
+      else
+        for crumb in breadcrumbs|facets
+          +category_crumbs(crumb.object.get_ancestors)
+          li: {{ crumb.pretty_value|capfirst }}
