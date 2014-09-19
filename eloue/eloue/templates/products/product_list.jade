@@ -3,14 +3,13 @@ extends ../base
 
 block append styles
   {% compressed_css "bootstrap" %}
-  link(rel="stylesheet", href="#{STATIC_URL}css/jquery-ui.css")
   {% compressed_css "product_list_styles" %}
 
 block scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 
 block append content-body
-  .container-flex
+  .container-flex(data-ng-controller="AuthCtrl")
     header.header-site
       include ../jade/_header_site
      nav

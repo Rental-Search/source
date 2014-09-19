@@ -310,6 +310,7 @@ PIPELINE_CSS = {
     'product_list_styles': {
         'source_filenames': (
             'sass/product_list_styles.sass',
+            'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css'
         ),
         'output_filename': 'css/product_list_styles.css',
         'extra_context': {

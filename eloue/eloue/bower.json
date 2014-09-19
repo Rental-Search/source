@@ -9,6 +9,7 @@
     "requirejs": "2.1.14",
     "es5-shim": "~2.1.0",
     "jquery": "~1.11.0",
+    "jqueryui": "~1.11.1",
     "sass-bootstrap": "~3.0.2",
     "angular-resource": "1.2.11",
     "angular-cookies": "1.2.11",
