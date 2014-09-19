@@ -4,6 +4,11 @@ require.config({
         "bootstrap": "/static/bower_components/bootstrap/dist/js/bootstrap.min",
         "lodash": "/static/bower_components/lodash/dist/lodash.min",
         "jQuery": "/static/bower_components/jquery/dist/jquery.min",
+        "jquery-ui": "/static/bower_components/jqueryui/jquery-ui.min",
+        "slider": "/static/bower_components/jqueryui/ui/minified/slider.min",
+        "core": "/static/bower_components/jqueryui/ui/minified/core.min",
+        "mouse": "/static/bower_components/jqueryui/ui/minified/mouse.min",
+        "widget": "/static/bower_components/jqueryui/ui/minified/widget.min",
         "angular": "/static/bower_components/angular/angular.min",
         "angular-resource": "/static/bower_components/angular-resource/angular-resource.min",
         "angular-route": "/static/bower_components/angular-route/angular-route.min",
@@ -38,6 +43,11 @@ require.config({
             "exports": "angular.mock"
         },
         "jQuery": {exports: "jQuery"},
+        "jquery-ui": ["jQuery"],
+        "slider": ["jQuery", "jquery-ui"],
+        "core": ["jQuery", "jquery-ui"],
+        "mouse": ["jQuery", "jquery-ui"],
+        "widget": ["jQuery", "jquery-ui"],
         "bootstrap": ["jQuery"],
         "moment": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
@@ -68,15 +78,16 @@ require([
     "angular-chosen-localytics",
     "formmapper",
     "toastr",
+    "jquery-ui",
+    "slider",
+    "core",
+    "mouse",
+    "widget",
     "eloue/route"
 ], function ($, _, angular) {
     "use strict";
     $(function () {
         angular.bootstrap(document, ["EloueApp"]);
-        $('#geolocate').formmapper({
-            details: "form"
-        });
-        $('select').chosen();
 
         var slide_imgs = [].slice.call($('.carousel-wrapper').find('img'));
         for(var index = 0; index < slide_imgs.length; index++) {
@@ -90,5 +101,45 @@ require([
                 $(slide_imgs[index]).addClass('expand-h');
             }
         }
+
+        var layout_switcher = $('.layout-switcher'), article = $('article');
+        if (layout_switcher && article) {
+            // switch grid/list layouts
+            $(layout_switcher).on('click', 'i', function () {
+                if ($(this).hasClass('grid')) {
+                    article.removeClass('list-layout');
+                    article.addClass('grid-layout')
+                } else {
+                    article.removeClass('grid-layout');
+                    article.addClass('list-layout')
+
+                }
+            });
+        }
+
+        var districtFake = $( "#district-fake"), priceFake = $( "#price-fake" );
+        console.log(districtFake);
+        if (districtFake) {
+            districtFake.slider({
+                range: "min",
+                value: 400,
+                min: 1,
+                max: 700
+            });
+        }
+
+        if (priceFake) {
+            priceFake.slider({
+                range: true,
+                min: 0,
+                max: 700,
+                values: [100, 400]
+            });
+        }
+
+        $('#geolocate').formmapper({
+            details: "form"
+        });
+        $('select').chosen();
     });
 });
