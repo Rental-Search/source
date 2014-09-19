@@ -769,8 +769,21 @@ class ProductDetailView(DetailView):
     template_name = 'products/product_detail.jade'
     context_object_name = 'product'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.sqs = kwargs.get('sqs', SearchQuerySet())
+        return super(ProductDetailView, self).dispatch(request, request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # check if slug has changed
+        product = self.object.object
+        if product.slug != self.kwargs['slug']:
+            return redirect(product, permanent=True)
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
     def get_queryset(self):
-        return SearchQuerySet().models(self.model).load_all()
+        return self.sqs.load_all()
 
     def get_object(self, queryset=None):
         """

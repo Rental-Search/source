@@ -187,12 +187,11 @@ if settings.DEBUG:
         url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     )
 
+from products.urls import ui3_urlpatterns as ui3_products_urlpatterns
 ui3_urlpatterns = patterns('',
     url(r'^$', HomepageView.as_view(), name='home'),
 
-    url(r'^lists/', ProductListView.as_view()),
-    #url(r'^product_detail/', ProductDetailView.as_view(), name='product_detail'),
-    url(r'^([^/].+/)([-\w]+)-(?P<pk>\d+)/$', ProductDetailView.as_view(), name='booking_create'),
+    url(r'^location/', include(ui3_products_urlpatterns)),
 
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),

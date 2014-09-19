@@ -5,7 +5,8 @@ from django.utils.translation import ugettext as _
 from products.search import alert_search, product_search
 from products.views import product_create, message_create, \
     product_delete, alert_create, alert_inform, alert_delete, \
-    ProductList, AlertInformSuccess, AlertList
+    ProductList, AlertInformSuccess, AlertList, \
+    ProductListView, ProductDetailView
 from rent.views import booking_create, booking_price, product_occupied_date, \
     booking_create_redirect, phone_create
 
@@ -32,4 +33,10 @@ urlpatterns = patterns('',
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/appeler/occupied_date/$', product_occupied_date, name="product_occupied_date"),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<product_id>\d+)/appeler/price/$', booking_price, name="booking_price"),
     url(r'^([^/].+/)?$', ProductList.as_view(), {'sqs': product_search}, name="product_list"),
+)
+
+
+ui3_urlpatterns = patterns('',
+    url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<pk>\d+)/$', ProductDetailView.as_view(), {'sqs': product_search}, name='booking_create'),
+    url(r'^([^/].+/)?$', ProductListView.as_view(), {'sqs': product_search}, name='product_list'),
 )
