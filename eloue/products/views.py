@@ -749,7 +749,7 @@ class HomepageView(TemplateView):
             'cities_list': product_stats,
             'total_products': Product.objects.only('id').count(),
             'categories_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
-            'product_list': last_added(product_search, self.location),
+            'product_list': last_added(product_search, self.location, limit=8),
         }
 
     def get_context_data(self, **kwargs):

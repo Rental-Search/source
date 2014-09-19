@@ -1,20 +1,22 @@
+-load i18n paginator facets
+
 ol.nav.row
-  each product in product_list
+    {% for product in product_list %}
     li
       .section-body
         .thumbnail-img
-          a(href="#{product.url}").img-wrapper
+          a(href="{{ product.url }}").img-wrapper
             if product.thumbnail
-              img(src="#{product.thumbnail}")
-            span.badge.price #{product.price}&euro; /jour
-            span.badge-order #{product.order}
+              img(src="{{ product.thumbnail }}")
+            span.badge.price {{ product.price }}&euro; /jour
+            span.badge-order {{ forloop.counter }}
         .info
           h6
-            a(href="#{product.url}") #{product.summary}
+            a(href="{{ product.url }}") {{ product.summary }}
             if product.pro
               span.badge-pro pro
-          p #{product.city}
-            span.zip-code ,&nbsp;#{product.zipcode}
+          p {{ product.city }}
+            span.zip-code ,&nbsp;{{ product.zipcode }}
           .rate
             -var stars = [1,2,3,4,5]
             each s in stars
@@ -25,24 +27,23 @@ ol.nav.row
           if product.comments
             span.sprite-comment
               i.flaticon.stroke.writing-comment
-              | #{product.comments}
-          p.full_description #{product.text}
+              | {{ product.comments }}
+          p.full_description {{ product.text }}
         .declarer-container
           .declarer
-            span.declarer-name #{product.owner}
+            span.declarer-name {{ product.owner }}
             if product.owner_url and product.owner_avatar
-              a(href="#{product.owner_url}").declarer-thumbnail: img(src="#{product.owner_avatar}" alt="")
+              a(href="{{ product.owner_url }}").declarer-thumbnail: img(src="{{ product.owner_avatar }}", alt="{{ product.owner }}")
           .btns
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2
-.text-center
-  ul.pagination
-    li: a(href="#").chevron: i.flaticon.stroke.left-2
-    li: a(href="#").active 1
-    li: a(href="#") 2
-    li: a(href="#") 3
-    li: a(href="#") 4
-    li: a(href="#") 5
-    li: a(href="#") 6
-    li: a(href="#").chevron: i.flaticon.stroke.right-2
-
+    {% endfor %}
+{% pagination %}
+if is_paginated
+  .text-center: ul.pagination
+    if page_obj.has_previous
+      li: a(href="{% facet_url breadcrumbs 'page' page_obj.previous_page_number %}", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
+    for page_number in page_range
+      li: a(href="{% facet_url breadcrumbs 'page' page_number %}", class="{% if page_obj.number == page_number %}active{% endif %}") {{ page_number }}
+    if page_obj.has_next
+      li: a(href="{% facet_url breadcrumbs 'page' page_obj.next_page_number %}", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
