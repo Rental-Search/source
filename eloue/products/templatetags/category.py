@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.template import Library
 
 from products.models import Category
+from eloue.decorators import split_args_dict
 
 register = Library()
 
@@ -17,3 +18,9 @@ def category(value):
             category = 'None'
         cache.set('category:%s' % value, category, 0)
     return category
+
+
+@register.filter
+@split_args_dict
+def ancestors(value, ascending=False, include_self=False):
+    return value.get_ancestors(ascending=bool(ascending), include_self=bool(include_self))

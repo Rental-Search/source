@@ -129,3 +129,12 @@ def split_args_int(f):
             return f(value, *args)
         return f(value, int(args))
     return wrapper
+
+
+def split_args_dict(f):
+    @wraps(f)
+    def wrapper(value, args={}):
+        if isinstance(args, basestring):
+            args = dict(keyval.split('=') for keyval in args.split(','))
+        return f(value, **args)
+    return wrapper

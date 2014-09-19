@@ -1,18 +1,18 @@
--load i18n cache facets
+-load i18n cache facets category
 
 mixin category_crumbs(category_list)
   for category in category_list
-    li: a(href="{{ category.get_absolute_url }}") {{ category.name|capfirst }}
+    li: a(href="{{ category.get_absolute_url }}", alt="{{ category.name }}") {{ category.name|capfirst }}
 
 .row-fluid.bd-b
   .container
     ol.breadcrumb
-      li: a(href="{% url 'home' %}") {% trans "Accueil" %}
+      li: a(href="{% url 'home' %}", alt="{% trans 'accueil' %}") {% trans "Accueil" %}
       if product
         {% cache 43200 product:breadcrumb product.pk %}
-        -var category = product.object.category
-        +category_crumbs(category.get_ancestors)
-        li: a(href="{{ category.get_absolute_url }}") {{ category.name|capfirst }}
+        {% with product.object.category|ancestors:"include_self=True" as category_list %}
+        +category_crumbs(category_list)
+        {% endwith %}
         li: {{ product.summary|capfirst }}
         {% endcache %}
       else
