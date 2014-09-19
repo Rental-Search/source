@@ -1,15 +1,16 @@
 -load humanize
+
 .container
   h3.text-center {{ total_products|intcomma }} annonces de location dans toute la France
   ul.nav.row
-    each product in products
+    each product in product_list
       li.col-sm-6.col-md-3
         .thumbnail
           a(href="#{product.url}").img-wrapper
             img(src="#{product.thumbnail}")
             span.fog
           .info
-            h6: a(href="#{product.url}") #{product.title}
+            h6: a(href="#{product.url}") #{product.summary}
             p #{product.description}
             if product.owner_url and product.owner_avatar
               a(href="#{product.owner_url}").declarer: img(src="#{product.owner_avatar}" alt="")

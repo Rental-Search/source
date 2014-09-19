@@ -11,8 +11,7 @@ from django.views.generic import TemplateView
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 from eloue.api.urls import router, UserMeViewSet
-from eloue.views import HomepageView
-from products.views import ProductListView, ProductDetailView
+from products.views import HomepageView, ProductListView, ProductDetailView
 
 log = logbook.Logger('eloue')
 

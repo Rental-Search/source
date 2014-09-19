@@ -3,30 +3,29 @@ import re
 from urllib import urlencode
 import urllib
 import datetime
+
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib import messages
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
-from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, Http404
+from django.core.urlresolvers import reverse
+from django.core.cache import cache
+from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
+from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache, cache_page
-from django.core.cache import cache
 from django.views.decorators.vary import vary_on_cookie
+from django.views.generic import ListView, DetailView, TemplateView
 from django.db.models import Q, Count, Avg
-
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
-from django.http import HttpResponseRedirect
-
 from haystack.query import SearchQuerySet
 from haystack.constants import DJANGO_ID
-from django.http import HttpResponse
 
 from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
@@ -43,9 +42,10 @@ from rent.forms import BookingOfferForm
 from rent.models import Booking
 from rent.choices import BOOKING_STATE
 
-from eloue.decorators import ownership_required, secure_required, mobify
+from eloue.decorators import ownership_required, secure_required, mobify, cached
 from eloue.utils import cache_key
 from eloue.geocoder import GoogleGeocoder
+from eloue.views import LoginRequiredMixin
  
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -534,9 +534,6 @@ def product_delete(request, slug, product_id):
     else:
         return render(request, 'products/product_delete.html', {'product': product})
 
-from django.views.generic import ListView, DetailView
-from django.utils.decorators import method_decorator
-from eloue.views import LoginRequiredMixin
 
 class ProductList(ListView):
     template_name = "products/product_result.html"
@@ -736,6 +733,33 @@ def suggestion(request):
 
 
 # UI v3
+
+class HomepageView(TemplateView):
+    template_name = 'index.jade'
+
+    @property
+    @cached(10*60)
+    def home_context(self):
+        product_stats = Product.objects.extra(
+            tables=['accounts_address'],
+            where=['"products_product"."address_id" = "accounts_address"."id"'],
+            select={'city': 'lower(accounts_address.city)'}
+        ).values('city').annotate(Count('id')).order_by('-id__count')
+        return {
+            'cities_list': product_stats,
+            'total_products': Product.objects.only('id').count(),
+            'categories_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
+            'product_list': last_added(product_search, self.location),
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super(HomepageView, self).get_context_data(**kwargs)
+        context.update(self.home_context)
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+        return super(HomepageView, self).get(request, *args, **kwargs)
 
 class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
