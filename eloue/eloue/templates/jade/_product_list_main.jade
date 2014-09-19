@@ -1,5 +1,3 @@
--load i18n paginator facets
-
 ol.nav.row
     {% for product in product_list %}
     li
@@ -38,12 +36,4 @@ ol.nav.row
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2
     {% endfor %}
-{% pagination %}
-if is_paginated
-  .text-center: ul.pagination
-    if page_obj.has_previous
-      li: a(href="{% facet_url breadcrumbs 'page' page_obj.previous_page_number %}", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
-    for page_number in page_range
-      li: a(href="{% facet_url breadcrumbs 'page' page_number %}", class="{% if page_obj.number == page_number %}active{% endif %}") {{ page_number }}
-    if page_obj.has_next
-      li: a(href="{% facet_url breadcrumbs 'page' page_obj.next_page_number %}", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
+include ./_product_list_pagination

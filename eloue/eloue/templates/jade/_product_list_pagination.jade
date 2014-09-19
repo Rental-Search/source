@@ -1,0 +1,19 @@
+-load i18n paginator facets
+
+{% pagination %}
+if is_paginated
+  .text-center: ul.pagination
+    if page_obj.has_previous
+      li: a(href="{% facet_url breadcrumbs 'page' page_obj.previous_page_number %}", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
+    else
+      li: a.chevron.active: i.flaticon.stroke.left-2
+    for page_number in page_range
+      li
+        if page_obj.number == page_number
+          a.active {{ page_number }}
+        else
+          a(href="{% facet_url breadcrumbs 'page' page_number %}") {{ page_number }}
+    if page_obj.has_next
+      li: a(href="{% facet_url breadcrumbs 'page' page_obj.next_page_number %}", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
+    else
+      li: a.chevron.active: i.flaticon.stroke.right-2
