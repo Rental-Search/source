@@ -10,10 +10,7 @@ block scripts
 
 block append content-body
   #fb-root
-  //-include ../jade/_pop_up_send_message
-  //-include ../jade/_pop_up_call
-  //-include ../jade/_pop_up_reserve
-  .container-flex
+  .container-flex(data-ng-controller="ProductDetailsCtrl")
     header.header-site
       include ../jade/_header_site
     nav.bd-b
@@ -42,7 +39,7 @@ block append content-body
                 include ../jade/product_details/main/_comments_owner
         aside.col-sm-4
           section.booking-form
-            include ../jade/product_details/aside/_booking_form
+            eloue-product-details-booking(in-modal="false")
           section.add-to-wishlist
             include ../jade/product_details/aside/_add_to_wishlist
           section.owner-information
@@ -51,6 +48,9 @@ block append content-body
             include ../jade/product_details/aside/_similar_listing
           section.connected-with-owner
             include ../jade/product_details/aside/_connected_with_owner
+          eloue-booking-modal
+          eloue-message-modal
+          eloue-phone-modal
     footer
       section.row-fluid.insurances.framing
         include ../jade/_insurances
@@ -59,3 +59,5 @@ block append content-body
       section.row-fluid.rss
         include ../jade/_rss
 
+    script(type="text/ng-template")#modalContainer
+    div(ng-view)

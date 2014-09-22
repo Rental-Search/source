@@ -118,7 +118,6 @@ require([
         }
 
         var districtFake = $( "#district-fake"), priceFake = $( "#price-fake" );
-        console.log(districtFake);
         if (districtFake) {
             districtFake.slider({
                 range: "min",
