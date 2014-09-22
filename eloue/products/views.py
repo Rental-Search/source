@@ -46,8 +46,8 @@ from eloue.decorators import ownership_required, secure_required, mobify, cached
 from eloue.utils import cache_key
 from eloue.geocoder import GoogleGeocoder
 from eloue.views import LoginRequiredMixin
- 
-PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
+
+PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 MAX_DISTANCE = 1541

@@ -1,5 +1,5 @@
 extends ../base
--load compressed
+-load compressed paginator
 
 block append styles
   {% compressed_css "bootstrap" %}
@@ -15,6 +15,8 @@ block append content-body
      nav
       include ../jade/_breadcrumbs
     article.container.grid-layout
+      //- we shall calculate pagination for both the article head and the list below
+      {% pagination %}
       .row.article-head
         include ../jade/_product_list_article_head
       .row

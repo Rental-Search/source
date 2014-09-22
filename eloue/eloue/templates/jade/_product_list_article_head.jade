@@ -1,4 +1,12 @@
-h3.col-md-7 603 annonces correspondant à vos critères
+-load i18n humanize
+
+h3.col-md-7
+  if form.cleaned_data.q
+    {% blocktrans with count=paginator.count|intcomma count counter=paginator.count %}
+    | 1 annonce correspondant à vos critères
+    {% plural %}
+    | {{ count }} annonces correspondant à vos critères
+    {% endblocktrans%}
 .col-xs-5.col-md-3.clear-selector
   select.form-control
     option(value="male") Du - cher au + cher

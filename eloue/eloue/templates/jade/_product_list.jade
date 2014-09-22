@@ -6,14 +6,15 @@
     each product in product_list
       li.col-sm-6.col-md-3
         .thumbnail
-          a(href="#{product.url}").img-wrapper
-            img(src="#{product.thumbnail}")
+          a(href="{{ product.url }}").img-wrapper
+            if product.thumbnail
+              img(src="{{ product.thumbnail }}")
             span.fog
           .info
-            h6: a(href="#{product.url}") #{product.summary}
+            h6: a(href="{{ product.url }}") #{product.summary}
             p #{product.description}
             if product.owner_url and product.owner_avatar
-              a(href="#{product.owner_url}").declarer: img(src="#{product.owner_avatar}" alt="")
+              a(href="{{ product.owner_url }}").declarer: img(src="{{ product.owner_avatar }}", alt="{{ product.owner }}")
           span.badge.price #{product.price}&euro; /jour
   .row.text-center
     button(type = "button").btn.bg-success.btn-explore

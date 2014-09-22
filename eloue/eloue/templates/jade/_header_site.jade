@@ -21,14 +21,14 @@ section.container.signs-links
 .framing
 	section.container.search-form
 		.table-cell
-			a(href = "/templates"): img(src = "#{STATIC_URL}img/logo.png", alt = "logo")
+			a(href="{% url 'home' %}"): img(src="#{STATIC_URL}img/logo.png", alt="e-loue logo")
 		.table-cell.main-cell
-			form(action="").input-group
-				input(type = "text", placeholder = "Que voulez-vous louer ?", title = "Que voulez-vous louer ?").table-cell.main-cell.form-control.what-field
+			form(action="{% url 'product_list' %}").input-group
+				input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="Que voulez-vous louer ?", title="{% if form.cleaned_data.q %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
 				.table-cell.input-group.where-field
 					i.flaticon.stroke.location-pin-3
-					input(type = "text", placeholder = "Où ça ?", title = "Où ça ?").form-control#geolocate
+					input(type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control#geolocate
 				.table-cell.input-group-btn
-					button(type = "button").btn.btn-default.btn-search: i.flaticon.stroke.zoom-2
+					button(type="submit", default).btn.btn-default.btn-search: i.flaticon.stroke.zoom-2
 		.table-cell
 			button(type = "button", data-toggle="modal", data-target="#pop-up-publish-item").btn.bg-success.btn-advertise Déposez une annonce
