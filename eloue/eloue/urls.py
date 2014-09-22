@@ -10,7 +10,7 @@ from django.views.generic import TemplateView
 
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
-from eloue.api.urls import router, UserMeViewSet
+from eloue.api.urls import router
 from products.views import HomepageView, ProductListView, ProductDetailView
 
 log = logbook.Logger('eloue')
@@ -179,7 +179,6 @@ api2_urlpatterns = patterns('',
     url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')), # django-oauth2-provider
 #    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')), # django-oauth-toolkit
 
-    url(r'^api/2.0/users/me/', UserMeViewSet.as_view({'get': 'retrieve_me', 'put': 'update_me'})),
     url(r'^api/2.0/', include(router.urls)),
 )
 if settings.DEBUG:

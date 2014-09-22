@@ -15,19 +15,6 @@ from accounts import views as accounts_api
 from products import views as products_api
 from rent import views as rent_api
 
-class UserMeViewSet(accounts_api.UserViewSet):
-    def retrieve_me(self, request, pk=None, *args, **kwargs):
-        # use currently authenticated user's ID as pk, ignoring the input argument
-        pk = request.user.pk
-        self.kwargs[self.pk_url_kwarg] = pk
-        return super(UserMeViewSet, self).retrieve(request, pk=pk, *args, **kwargs)
-
-    def update_me(self, request, pk=None, *args, **kwargs):
-        # use currently authenticated user's ID as pk, ignoring the input argument
-        pk = request.user.pk
-        self.kwargs[self.pk_url_kwarg] = pk
-        return super(UserMeViewSet, self).update(request, pk=pk, *args, **kwargs)
-
 # See http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
 router = routers.DefaultRouter()
 router.register(r'users', accounts_api.UserViewSet, base_name='patron')

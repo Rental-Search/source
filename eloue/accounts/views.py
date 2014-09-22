@@ -1010,6 +1010,8 @@ from accounts import serializers, models, search
 from accounts.utils import viva_check_phone
 from eloue.api import viewsets, filters, mixins, permissions
 
+USER_ME = 'me'
+
 class UserViewSet(mixins.OwnerListMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -1022,6 +1024,11 @@ class UserViewSet(mixins.OwnerListMixin, viewsets.ModelViewSet):
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
+
+    def dispatch(self, request, *args, **kwargs):
+        if kwargs.get('pk') == USER_ME and request.user:
+            kwargs['pk'] = request.user.pk
+        return super(UserViewSet, self).dispatch(request, *args, **kwargs)
 
     @action(methods=['post', 'put'])
     def reset_password(self, request, *args, **kwargs):
