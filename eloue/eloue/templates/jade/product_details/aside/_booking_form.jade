@@ -1,26 +1,30 @@
-.section-header
-	h4 Réservez en ligne
+.section-header(ng-show="!inModal")
+    h4 Réservez en ligne
 form.form-inline.section-body.text-center
-	.part
-		p
-			small à partir de
-			big.text-primary &nbsp;56€ /jour
-		include ../../_date_picker
-		p.available Cet article est disponible à ces dates
-		// p.available.unavailable Cet article est disponible à ces dates
-	.part
-		p
-			| Durée de la location : 
-			b.period-days 3 jours 
-			| et 
-			b.period-hours 9 heures
-		p.price
-			| Prix de la location :
-			big.text-primary &nbsp;168€
-		p Assurance incluse
-	.part
-		a( href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up-reserve").btn.bg-success.calendar-ok
-			i.flaticon.stroke.calendar-2
-			| Réservez
-		p.mrg-v-1
-			small Cette somme vous sera débitée lorsque le propriétaire validera la location
+    {% verbatim %}
+    .part
+        p
+            small à partir de
+            big.text-primary &nbsp;{{pricePerDay}}€ /jour
+        {% endverbatim %}
+        include ../../_date_picker
+        {% verbatim %}
+        // p.available.unavailable Cet article est disponible à ces dates
+        span(ng-show="dateRangeError").text-danger {{dateRangeError}}
+        p(ng-show="available").available Cet article est disponible à ces dates
+        p(ng-show="!available").available.unavailable Cet article est disponible à ces dates
+    .part
+        p
+            | Durée de la location :
+            b.period-days {{duration}}
+        p.price
+            | Prix de la location :
+            big.text-primary &nbsp;{{bookingPrice}}€
+        p Assurance incluse
+        {% endverbatim %}
+    .part
+        a(href = "#/booking", data-dismiss="modal", ng-show="!inBooking").btn.bg-success.calendar-ok
+            i.flaticon.stroke.calendar-2
+            | Réservez
+        p.mrg-v-1
+            small Cette somme vous sera débitée lorsque le propriétaire validera la location

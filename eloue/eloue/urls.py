@@ -163,6 +163,26 @@ partials_urlpatterns = patterns('',
             template_name='dashboard/jade/_login.jade',
          ),
     ),
+    url(r'^product_details/product-details-booking.html$', TemplateView.as_view(
+            template_name='jade/product_details/aside/_booking_form.jade',
+        ),
+    ),
+    url(r'^product_details/phone-modal.html$', TemplateView.as_view(
+            template_name='jade/_pop_up_call.jade',
+        ),
+    ),
+    url(r'^product_details/message-modal.html$', TemplateView.as_view(
+            template_name='jade/_pop_up_send_message.jade',
+        ),
+    ),
+    url(r'^product_details/booking-modal.html$', TemplateView.as_view(
+            template_name='jade/_pop_up_reserve.jade',
+        ),
+    ),
+    url(r'^product_details/product-details-small.html$', TemplateView.as_view(
+            template_name='jade/pop_up_sections/_product_info.jade',
+        ),
+    ),
 )
 
 dashboard_urlpatterns = patterns('',

@@ -1,19 +1,19 @@
-.modal.fade#pop-up-reserve(tabindex="-1", role="dialog", aria-hidden="true")
-	.modal-dialog.large
-		.modal-content
-			.modal-header
-				button(type="button", data-dismiss="modal").close
-					span(aria-hidden="true")&times;
-					span.sr-only Close
-				h4.modal-title Réservation
-			.modal-body.table-cell
-				.static-part.table-cell
-					section.product-info
-						include ./pop_up_sections/_product_info
-					section.terms
-						include ./pop_up_sections/_terms
-				form(action="").input-group.change-part.table-cell
-					section.table.form-wrapper.personal-information
-						include ./pop_up_sections/_personal_information_form
-					section.table.form-wrapper.bank-information
-						include ./pop_up_sections/_bank_information
+.modal.fade#bookingModal(tabindex="-1", role="dialog", aria-hidden="true")
+    .modal-dialog.large
+        .modal-content
+            .modal-header
+                button(type="button", data-dismiss="modal").close
+                    span(aria-hidden="true")&times;
+                    span.sr-only Close
+                h4.modal-title Réservation
+            .modal-body.table-cell
+                .static-part.table-cell
+                    section.product-info
+                        eloue-product-details-small
+                    section.terms
+                        include ./pop_up_sections/_terms
+                form(action="").input-group.change-part.table-cell
+                    section.table.form-wrapper.personal-information
+                        include ./pop_up_sections/_personal_information_form
+                    section.table.form-wrapper.bank-information
+                        include ./pop_up_sections/_bank_information
