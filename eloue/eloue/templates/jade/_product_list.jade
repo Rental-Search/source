@@ -1,4 +1,4 @@
--load humanize
+-load humanize facets
 
 .container
   h3.text-center {{ total_products|intcomma }} annonces de location dans toute la France
@@ -17,6 +17,7 @@
               a(href="{{ product.owner_url }}").declarer: img(src="{{ product.owner_avatar }}", alt="{{ product.owner }}")
           span.badge.price #{product.price}&euro; /jour
   .row.text-center
-    button(type = "button").btn.bg-success.btn-explore
+    //- TODO: should use AJAX to fetch and insert next 8 items
+    form(action="{% facet_url breadcrumbs 'sort' '' %}"): button(type="submit").btn.bg-success.btn-explore
       i.flaticon.stroke.zoom-2
       | Explorez toutes les annonces

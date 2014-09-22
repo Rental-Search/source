@@ -736,6 +736,7 @@ def suggestion(request):
 
 class HomepageView(TemplateView):
     template_name = 'index.jade'
+    breadcrumbs = {'sort': {'name': 'sort', 'value': '', 'label': 'sort', 'facet': False}}
 
     @property
     @cached(10*60)
@@ -750,6 +751,7 @@ class HomepageView(TemplateView):
             'total_products': Product.objects.only('id').count(),
             'categories_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
             'product_list': last_added(product_search, self.location, limit=8),
+            'breadcrumbs': self.breadcrumbs,
         }
 
     def get_context_data(self, **kwargs):
