@@ -1026,8 +1026,9 @@ class UserViewSet(mixins.OwnerListMixin, viewsets.ModelViewSet):
     ordering_fields = ('username', 'first_name', 'last_name')
 
     def dispatch(self, request, *args, **kwargs):
-        if kwargs.get('pk') == USER_ME and request.user:
-            kwargs['pk'] = request.user.pk
+        pk_field = getattr(self, 'pk_url_kwarg', 'pk')
+        if kwargs.get(pk_field, None) == USER_ME and not request.user.is_anonymous():
+            kwargs[pk_field] = request.user.pk
         return super(UserViewSet, self).dispatch(request, *args, **kwargs)
 
     @action(methods=['post', 'put'])
