@@ -145,7 +145,8 @@ class ModelSerializer(serializers.HyperlinkedModelSerializer):
 
 class NestedModelSerializerMixin(object):
     def from_native(self, value, files=None):
-        return self._hyperlink_field_class(
-            view_name=self.opts.view_name,
-            queryset=self.opts.model.objects.all()
-        ).from_native(value)
+        if value is not None:
+            return self._hyperlink_field_class(
+                view_name=self.opts.view_name,
+                queryset=self.opts.model.objects.all()
+            ).from_native(value)
