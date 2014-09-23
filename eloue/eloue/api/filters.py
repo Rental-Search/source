@@ -79,11 +79,15 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
         search_index = getattr(view, 'search_index', None)
         query_string = self.get_query_string(request)
 
+        view._haystack_filter = False
         if search_index is not None and query_string:
             sqs = search_index.auto_query(query_string)
             pks = [obj.pk for obj in sqs]
             if pks:
                 queryset = queryset.filter(pk__in=pks)
+                # mark the view has search results
+                # FIXME: should be a better (more safe) way to do this
+                view._haystack_filter = True
 
         return queryset
 

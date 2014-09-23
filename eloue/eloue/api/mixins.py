@@ -23,6 +23,15 @@ class OwnerListMixin(object):
             self.object_list = self.owner_filter_class().filter_queryset(self.request, queryset, self)
         return super(OwnerListMixin, self).paginate_queryset(self.object_list, page_size=page_size)
 
+class OwnerListPublicSearchMixin(OwnerListMixin):
+    owner_filter_class = OwnerFilter
+
+    def paginate_queryset(self, queryset, page_size=None):
+        if getattr(self, '_haystack_filter', False):
+            # we should not filter out records by owner if there are search results
+            return super(OwnerListMixin, self).paginate_queryset(self.object_list, page_size=page_size)
+        return super(OwnerListPublicSearchMixin, self).paginate_queryset(self.object_list, page_size=page_size)
+
 class SetOwnerMixin(OwnerListMixin):
     owner_field = 'patron'
     permission_classes = (IsOwnerOrReadOnly,)

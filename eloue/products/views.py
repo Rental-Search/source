@@ -882,7 +882,7 @@ class ProductFilterSet(filters.FilterSet):
         model = models.Product
         fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
 
-class ProductViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
+class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """

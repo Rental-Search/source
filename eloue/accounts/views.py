@@ -1012,7 +1012,7 @@ from eloue.api import viewsets, filters, mixins, permissions
 
 USER_ME = 'me'
 
-class UserViewSet(mixins.OwnerListMixin, viewsets.ModelViewSet):
+class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
