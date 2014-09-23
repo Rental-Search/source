@@ -1,13 +1,25 @@
 include ../_date_picker_border
-table.calendar.bd-wrap.indent-t-md.indent-b-md: tbody
-  //each term, index in terms
-  //  tr
-  //    td #{term[0]}
-  //    if index == 1
-  //      td: b.text-success #{term[1]}
-  //    else
-  //      td: b #{term[1]}
+{% verbatim %}
+table.calendar.bd-wrap.indent-t-md.indent-b-md
+    tbody
+        tr
+            td Durée
+            td
+                b {{duration}}
+        tr
+            td Prix
+            td
+                b.text-success {{bookingPrice}}
+        tr
+            td Caution
+            td
+                b {{product.deposit_amount}}€
 p Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.
-a( href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up").btn.bg-success Réservez
+a(href="#/booking", ng-show="!inBooking").btn.bg-success
+    | Réservez
 p
-a( href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up").btn.bg-gray Envoyez un message
+a(href="#/message", ng-show="!inMessage").btn.bg-gray
+    | Envoyez un message
+a(href="#/phone", ng-show="inMessage").btn.bg-gray
+    | Appelez
+{% endverbatim %}

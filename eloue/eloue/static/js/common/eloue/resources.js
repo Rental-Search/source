@@ -150,4 +150,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Comments", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "comments/:id/?");
     }]);
+
+    /**
+     * Factory for credit cards.
+     */
+    EloueCommon.factory("CreditCards", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "credit_cards/:id/?");
+    }]);
 });

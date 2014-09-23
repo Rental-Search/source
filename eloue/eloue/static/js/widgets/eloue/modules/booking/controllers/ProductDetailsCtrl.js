@@ -4,7 +4,18 @@ define(["angular", "eloue/modules/booking/BookingModule",
 ], function (angular) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", ["$scope", "$route", "$location", "ProductsLoadService", "MessageThreadsService", "UsersService", "AuthService", "Endpoints", function ($scope, $route, $location, ProductsLoadService, MessageThreadsService, UsersService, AuthService, Endpoints) {
+    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", [
+        "$scope",
+        "$window",
+        "$location",
+        "ProductsLoadService",
+        "MessageThreadsService",
+        "ProductRelatedMessagesLoadService",
+        "UsersService",
+        "AuthService",
+        "ProductsService",
+        "BookingsLoadService",
+        function ($scope, $window, $location, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, ProductsService, BookingsLoadService) {
 
         // Read authorization token
         $scope.currentUserToken = AuthService.getCookie("user_token");
@@ -15,10 +26,30 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
+                $scope.currentUser.first_name = "1";
+                $scope.currentUser.last_name = "2";
+
             });
         }
-        //TODO: change to real product ID
-        $scope.productId = 315;
+
+        $scope.creditCard = {
+            card_number: "",
+            expires: "",
+            holder: "",
+            masked_number: "",
+            keep: "",
+            holder_name: "",
+            subscriber_reference: ""
+        };
+
+        $scope.getProductIdFromUrl = function () {
+            var href = $window.location.href;
+            href = href.substr(href.lastIndexOf("location/") + 8);
+            var parts = href.split("/");
+            var productId = parts[4];
+            return productId.substr(productId.lastIndexOf("-") + 1);
+        };
+        $scope.productId = $scope.getProductIdFromUrl();
         $scope.bookingDetails = {
             "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy"),
             "fromHour": "08:00:00",
@@ -31,9 +62,9 @@ define(["angular", "eloue/modules/booking/BookingModule",
         $scope.caution = 0;
         $scope.productRelatedMessages = [];
         $scope.ownerCallDetails = {};
-        //TODO: get it from product info
         $scope.available = true;
         $scope.newMessage = {};
+        $scope.threadId = null;
         $scope.hours = [
             {"label": "00h", "value": "00:00:00"},
             {"label": "01h", "value": "01:00:00"},
@@ -61,6 +92,21 @@ define(["angular", "eloue/modules/booking/BookingModule",
             {"label": "23h", "value": "23:00:00"}
         ];
 
+        ProductsLoadService.getProduct($scope.productId, true, true).then(function (result) {
+            console.log(result);
+            $scope.product = result;
+            //TODO: owner contact details will be defined in some other way.
+            $scope.ownerCallDetails = {
+                number: result.phone.number,
+                tariff: "0.15"
+            };
+            ProductsService.getProductsByOwnerAndRootCategory($scope.product.owner.id).then(function (items) {
+                $scope.products = items.list;
+            });
+            BookingsLoadService.getBookingList($scope.product.owner.id).then(function (bookingList) {
+                $scope.bookings = bookingList.list;
+            });
+        });
 
         /**
          * Update the product booking price based on selected duration.
@@ -89,26 +135,12 @@ define(["angular", "eloue/modules/booking/BookingModule",
          * Send new message to the owner.
          */
         $scope.sendMessage = function sendMessage() {
-            var message = $scope.newMessage;
-            message.sender = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
-            message.recipient = Endpoints.api_url + "users/" + $scope.product.owner.id + "/";
-            message.sent_at = new Date().toString("yyyy-MM-ddTHH:mm:ss");
-            if ($scope.productRelatedMessages && $scope.productRelatedMessages.length > 0) {
-                message.thread = $scope.productRelatedMessages[$scope.productRelatedMessages.length - 1].thread;
-            }
-
-            MessageThreadsService.sendMessage(message, $scope.productId).then(function (result) {
-                $scope.productRelatedMessages.push(result);
-                $scope.newMessage = {};
-            });
-        };
-
-        /**
-         * Checks if message in message thread should have an indent on the page.
-         */
-        $scope.shouldIndent = function shouldIndent(message, feed, first) {
-            //TODO:
-            return !first;
+            ProductRelatedMessagesLoadService.postMessage($scope.$parent.threadId, $scope.currentUser.id, $scope.$parent.product.owner.id,
+                $scope.newMessage.body, null).then(function (result) {
+                    // Clear message field
+                    $scope.newMessage = {};
+                    $scope.productRelatedMessages.push(result);
+                });
         };
 
         /**
@@ -151,14 +183,12 @@ define(["angular", "eloue/modules/booking/BookingModule",
             if ((args.name === "message") && $scope.productRelatedMessages.length == 0) {
                 $scope.loadMessageThread();
             }
-            if (!$scope.product) {
-                $scope.loadProductDetails();
-            }
         });
 
         $scope.loadMessageThread = function () {
             MessageThreadsService.getMessageThread($scope.productId).then(function (result) {
                 angular.forEach(result, function (value, key) {
+                    $scope.threadId = value.id;
                     var senderId = $scope.getIdFromUrl(value.sender);
                     UsersService.get(senderId).$promise.then(function (result) {
                         value.sender = result;
@@ -167,16 +197,5 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $scope.productRelatedMessages = result;
             });
         };
-
-        $scope.loadProductDetails = function () {
-            ProductsLoadService.getProduct($scope.productId, true, false).then(function (result) {
-                $scope.product = result;
-                //TODO: owner contact details will be defined in some other way.
-                $scope.ownerCallDetails = {
-                    number: result.phone.number,
-                    tariff: "0.15"
-                };
-            });
-        }
     }]);
 });

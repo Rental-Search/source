@@ -17,6 +17,7 @@ require.config({
         "moment": "/static/bower_components/moment/min/moment.min",
         "angular-moment": "/static/bower_components/angular-moment/angular-moment.min",
         "bootstrap-datepicker": "/static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
+        "bootstrap-datepicker-fr": "/static/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
         "datejs": "/static/bower_components/datejs/build/production/date.min",
         "chosen": "/static/bower_components/chosen/chosen.jquery.min",
         "html5shiv": "/static/bower_components/html5shiv/dist/html5shiv.min",
@@ -51,6 +52,7 @@ require.config({
         "bootstrap": ["jQuery"],
         "moment": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
+        "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
         "chosen": ["jQuery"],
         "placeholders-jquery": ["jQuery"],
         "formmapper": ["jQuery"],
@@ -68,6 +70,7 @@ require([
     "moment",
     "angular-moment",
     "bootstrap-datepicker",
+    "bootstrap-datepicker-fr",
     "datejs",
     "chosen",
     "html5shiv",
@@ -135,6 +138,35 @@ require([
                 values: [100, 400]
             });
         }
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        window.___gcfg = {lang: 'fr'};
+        (function () {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = 'https://apis.google.com/js/platform.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+        })();
+
+        !function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+            if (!d.getElementById(id)) {
+                js = d.createElement(s);
+                js.id = id;
+                js.src = p + '://platform.twitter.com/widgets.js';
+                fjs.parentNode.insertBefore(js, fjs);
+            }
+        }(document, 'script', 'twitter-wjs');
 
         $('#geolocate').formmapper({
             details: "form"

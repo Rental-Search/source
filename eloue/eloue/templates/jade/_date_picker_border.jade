@@ -1,11 +1,22 @@
--var items = ["Du", "Au"]
-each item in items
-	.date-picker.form-wrapper
-		.table-cell.main-cell
-			.table-cell: span #{item}
-			.table-cell.main-cell
-				input(type="text", placeholder="").form-control.date
-				i.flaticon.stroke.calendar-3
-		.table-cell
-			//select.form-control: each interval in timing
-			//	option(value="#{interval}") #{interval}
+.date-picker.form-wrapper
+    .table-cell.main-cell
+        .table-cell
+            span Du
+        .table-cell.main-cell
+            input(type="text", placeholder="", name="fromDate", date-format="dd/MM/yyyy", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
+            i.flaticon.stroke.calendar-3
+    .table-cell
+        select(name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", chosen).form-control
+    .span(ng-show="fromDate.$dirty && fromDate.$error.required").text-danger From date is required.
+    .span(ng-show="fromDate.$dirty && fromDate.$error.pattern").text-danger Invalid date.
+.date-picker.form-wrapper
+    .table-cell.main-cell
+        .table-cell
+            span Au
+        .table-cell.main-cell
+            input(type="text", placeholder="", name="toDate", date-format="dd/MM/yyyy", ng-model="bookingDetails.toDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
+            i.flaticon.stroke.calendar-3
+    .table-cell
+        select(name="toHour", ng-model="bookingDetails.toHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", chosen).form-control
+    .span(ng-show="toDate.$dirty && toDate.$error.required").text-danger To date is required.
+    .span(ng-show="toDate.$dirty && toDate.$error.pattern").text-danger Invalid date.

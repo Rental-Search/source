@@ -1,41 +1,69 @@
+include ../../_mixins
+
 .section-header
-	h4 Contactez-moi
+    h4 Contactez-moi
 .section-body
-	.part
-		.block-thumbnail
-			.thumbnail-img
-				a(href="#")
-					img(src=STATIC_URL+"img/home-products/declare2r.png", alt="")
-			.thumbnail-content
-				h5 
-					a(href="#") Gaspard Kroutchev
-				include ../../_rate
-				p
-					| Membre depuis le
-					br
-					span 12 Juillet 2013
-	.part
-		a(href = "#/message", data-dismiss="modal").btn.bg-success.send-message
-			i.flaticon.stroke.mail-2
-			| Envoyez un message
-		a(href = "#/phone", data-dismiss="modal").btn.bg-success.call
-			i.flaticon.stroke.phone-3
-			| Appelez
-		ul.nav.stats
-			each stat in stats
-				li
-					span
-						big.text-success #{stat[0]} 
-					span #{stat[1]}
-	.part.connection.clearfix
-		.col-sm-4
-			a(href="#").friend-photo-wrapper
-				img(src=STATIC_URL+"img/home-products/friend1.png", alt="")
-			a(href="#").friend-photo-wrapper
-				img(src=STATIC_URL+"img/home-products/friend2.png", alt="")
-		.col-sm-8
-			p: small
-				a(href="#") Philippe Dupré 
-				| et 
-				a(href="#") Tony Finn 
-				| sont amis avec le propriétaire.
+    {% verbatim %}
+    .part
+        .block-thumbnail
+            .thumbnail-img
+                a(href="{{product.owner.url}}")
+                    img(ng-src="{{getAvatar(product.owner.avatar.thumbnail)}}", alt="")
+            .thumbnail-content
+                h5
+                    a(href="{{product.owner.url}}") {{product.owner.first_name}} {{product.owner.last_name}}
+                {% endverbatim %}
+                +average-rate("product.ownerStats.average_rating")
+                {% verbatim %}
+                p
+                    | Membre depuis le
+                    br
+                    span {{product.owner.date_joined | date:'dd.MM.yyyy'}}
+                {% endverbatim %}
+    .part
+        a(href = "#/message", data-dismiss="modal").btn.bg-success.send-message
+            i.flaticon.stroke.mail-2
+            | Envoyez un message
+        a(href = "#/phone", data-dismiss="modal").btn.bg-success.call
+            i.flaticon.stroke.phone-3
+            | Appelez
+        ul.nav.stats
+            {% verbatim %}
+            li
+                span
+                    big.text-success {{products.length}}
+                span
+                    | annonces publiées
+            li
+                span
+                    big.text-success {{bookings.length}}
+                span
+                    | locations effectués
+            li
+                span
+                    big.text-success {{product.ownerStats.ratings_count}}
+                span
+                    | évalutations
+            li
+                span
+                    big.text-success {{product.ownerStats.response_rate}}
+                span
+                    | de taux de réponse
+            li
+                span
+                    big.text-success {{product.ownerStats.response_time}}
+                span
+                    | de temps de réponse en moyenne
+            {% endverbatim %}
+    .part.connection.clearfix
+        .col-sm-4
+            a(href="#").friend-photo-wrapper
+                img(src=STATIC_URL+"img/home-products/friend1.png", alt="")
+            a(href="#").friend-photo-wrapper
+                img(src=STATIC_URL+"img/home-products/friend2.png", alt="")
+        .col-sm-8
+            p: small
+                a(href="#") Philippe Dupré
+                | et
+                a(href="#") Tony Finn
+                | sont amis avec le propriétaire.

@@ -1,22 +1,22 @@
 h2 Vos informations personnelles
 .row
-  .col-sm-2: select.form-control
+  .col-sm-2: select(ng-model="bookingDetails.civility").form-control
     option(value="male") M.
     option(value="female") F.
-  .col-sm-5: input(type="text", placeholder="Prénom *", required).form-control
-  .col-sm-5: input(type="text", placeholder="Nom *", required).form-control
+  .col-sm-5: input(type="text", placeholder="Prénom *", ng-model="currentUser.first_name", required).form-control
+  .col-sm-5: input(type="text", placeholder="Nom *", ng-model="currentUser.last_name", required).form-control
 .row
-  .col-sm-12: input(type="text", placeholder="Adresse *", required).form-control
+  .col-sm-12: input(type="text", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
 .row
-  .col-sm-6: input(type="text", placeholder="Code postal *", required).form-control
-  .col-sm-6: input(type="text", placeholder="Ville *", required).form-control
+  .col-sm-6: input(type="text", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
+  .col-sm-6: input(type="text", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
 .row
-  .col-sm-6: input(type="text", placeholder="Date de naissance *", required).form-control
-  .col-sm-6: input(type="text", placeholder="Lieu de naissance *", required).form-control
+  .col-sm-6: input(type="text", placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", required, eloue-datepicker).form-control
+  .col-sm-6: input(type="text", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", required).form-control
 .row
-  .col-sm-12: input(type="text", placeholder="Numéro de permis *", required).form-control
+  .col-sm-12: input(type="text", placeholder="Numéro de permis *", ng-model="currentUser.drivers_license_number", required).form-control
 .row
-  .col-sm-6: input(type="text", placeholder="Date d’obtention du permis").form-control
-  .col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
-    input(type="file")#photo.form-control
+  .col-sm-6: input(type="text", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis", eloue-datepicker).form-control
+  //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
+  //  input(type="file", ng-model="bookingDetails.photo")#photo.form-control
 p.info Ces informations seront reproduites sur le contrat de location. Le propriétaire les vérifiera au début de la location. Si elles sont incorrectes, il ne pourra pas vous remettre les clés. Les champs marqués d'une étoile (*) sont obligatoires.

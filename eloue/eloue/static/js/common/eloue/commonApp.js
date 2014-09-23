@@ -4,7 +4,6 @@ define([
     "angular-cookies",
     "angular-resource",
     "angular-route",
-    "bootstrap-datepicker",
     "custom-scrollbar"
 ], function (angular) {
     // Create module

@@ -1,19 +1,23 @@
+include ../../jade/_mixins
+
+{% verbatim %}
 .thumbnail-img
-  a(href="#"): img(src="#{product.profile}", alt="")
+    a(href="#"): img(ng-src="{{product.picture}}", alt="")
 .thumbnail-content
-  h3 #{product.summary}
-  p.location
-    i.flaticon.stroke.location-pin-3
-    | #{product.city}, #{product.zipcode}
-  p.stats
-    include ../_rate
-    span.rate-count #{pop_up.product_info.rate_count}
-    span.comments-count
-      i.flaticon.stroke.writing-comment
-      | #{pop_up.product_info.comments_count}
-  .declarer
-    if product.owner_url and product.owner_avatar
-      .thumbnail-img
-        a(href="#{product.owner_url}"): img(src="#{product.owner_avatar}", alt="")
-    .thumbnail-content
-      p #{product.owner}
+    h3 {{product.summary}}
+    p.location
+        i.flaticon.stroke.location-pin-3
+        | {{product.address.city}}, {{product.address.zipcode}}
+    p.stats
+        {% endverbatim %}
+        +average-rate("product.stats.average_rating")
+        +rate-counter("product.stats.ratings_count")
+        +number-of-comments("product.stats.booking_comments_count")
+        {% verbatim %}
+    .declarer
+        .thumbnail-img
+            a(href="#")
+                img(ng-src="{{getAvatar(product.owner.avatar)}}", alt="")
+        .thumbnail-content
+            p {{product.owner.first_name}} {{product.owner.last_name}}
+{% endverbatim %}

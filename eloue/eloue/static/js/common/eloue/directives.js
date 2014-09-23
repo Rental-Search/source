@@ -11,7 +11,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             transclude: true,
             link: function (scope, element, attrs, ngModel) {
                 if (!ngModel) return;
-                element.datepicker();
+                element.datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true
+                });
             }
         };
     });

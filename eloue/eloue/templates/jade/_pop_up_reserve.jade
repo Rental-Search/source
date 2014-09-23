@@ -11,8 +11,8 @@
                     section.product-info
                         eloue-product-details-small
                     section.terms
-                        include ./pop_up_sections/_terms
-                form(action="").input-group.change-part.table-cell
+                        eloue-product-details-booking(in-modal="true", in-booking="true")
+                form(id="bookingForm", name="bookingForm", role="form", ng-submit="sendBookingRequest()", ng-model="bookingDetails", novalidate).input-group.change-part.table-cell
                     section.table.form-wrapper.personal-information
                         include ./pop_up_sections/_personal_information_form
                     section.table.form-wrapper.bank-information

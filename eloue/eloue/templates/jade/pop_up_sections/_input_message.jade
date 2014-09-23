@@ -1,4 +1,5 @@
-.table-cell.main-cell
-	textarea(name="", rows="4", placeholder="Rédigez votre message ici...")
-.table-cell
-	button.btn.bg-success Envoyez
+form(name="sendMessageForm", ng-submit="sendMessage()", novalidate)
+    .table-cell.main-cell
+        textarea(name="", rows="4", placeholder="Rédigez votre message ici...", ng-model="newMessage.body", required)
+    .table-cell
+        button(ng-disabled="sendMessageForm.$invalid || !sendMessageForm.$dirty").btn.bg-success Envoyez

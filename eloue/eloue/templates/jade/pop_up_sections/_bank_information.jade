@@ -1,17 +1,17 @@
 h2 Vos bank-information
 .row
   .col-sm-9.card
-    input(type="text", placeholder="Numéro de carte *", required).form-control
+    input(type="text", placeholder="Numéro de carte *", ng-model="creditCard.card_number", required).form-control
     i.flaticon.stroke.credit-card
   .col-sm-3
-    input(type="text", placeholder="MM/AA *", required).form-control
+    input(type="text", placeholder="MM/AA *", ng-model="creditCard.expires", required, eloue-datepicker).form-control
     i.flaticon.stroke.calendar-4
 .row
   .col-sm-5
-    input(type="text", placeholder="Code de sécurité *", required).form-control
+    input(type="text", placeholder="Code de sécurité *", ng-model="creditCard.masked_number", required).form-control
     i.flaticon.stroke.lock-3
   .col-sm-7
-    input(type="text", placeholder="Nom et prénom du titulaire *", required).form-control
+    input(type="text", placeholder="Nom et prénom du titulaire *", ng-model="creditCard.holder_name", required).form-control
     i.flaticon.stroke.user-4
 p.info
   | Vous devez payer avec votre propre carte bancaire, que vous devrez présenter au propriétaire pour vérification.

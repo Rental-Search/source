@@ -5,7 +5,7 @@ ul.table
       .thumbnail-img.text-primary
       .thumbnail-content
         h3 Appelez le propriétaire
-        a(href="#").btn.bg-primary
+        a(href="#", ng-click="callOwner()").btn.bg-primary
           | {{$parent.ownerCallDetails.number}}
           br
           small ({{$parent.ownerCallDetails.tariff}}€ /min)
