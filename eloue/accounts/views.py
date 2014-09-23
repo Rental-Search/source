@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Q, Max
+from django.db.models import Count, Q, Max, Avg
 from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
@@ -50,7 +50,7 @@ from products.search import product_search
 
 from rent.models import Booking, BorrowerComment, OwnerComment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
-from rent.choices import BOOKING_STATE
+from rent.choices import BOOKING_STATE, COMMENT_TYPE_CHOICES
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.decorators import secure_required, mobify, ownership_required
@@ -1042,22 +1042,27 @@ class UserViewSet(mixins.OwnerListMixin, viewsets.ModelViewSet):
 
     @link()
     def stats(self, request, *args, **kwargs):
-        user = self.get_object()
+        obj = self.get_object()
         res = {
-            k: getattr(user, k) for k in ('response_rate', 'response_time')
+            k: getattr(obj, k) for k in ('response_rate', 'response_time')
         }
-        # TODO: we would need a better rating calculation in the future
-        res['average_rating'] = int(user.average_note)
-        # count message threads where we have unread messages forthe requested user
-        res['unread_message_threads_count'] = \
-            user.received_messages.filter(read_at=None
-            ).values('productrelatedmessage__thread'
-            ).annotate(Count('productrelatedmessage__thread')
-            ).order_by().count()
-        # count incoming booking requests for the requested user
-        res['booking_requests_count'] = \
-            Booking.on_site.filter(owner=user, state=BOOKING_STATE.AUTHORIZED
-            ).only('id').count()
+        qs = obj.products.select_related('bookings__comments') \
+            .filter(bookings__comments__type=COMMENT_TYPE_CHOICES.BORROWER) \
+            .aggregate(Avg('bookings__comments__note'), Count('bookings__comments__id'))
+        res.update({
+            # TODO: we would need a better rating calculation in the future
+            'average_rating': int(qs['bookings__comments__note__avg'] or 0),
+            'ratings_count': int(qs['bookings__comments__id__count'] or 0),
+            # count message threads where we have unread messages forthe requested user
+            'unread_message_threads_count': obj.received_messages \
+                .filter(read_at=None) \
+                .values('productrelatedmessage__thread') \
+                .annotate(Count('productrelatedmessage__thread')) \
+                .order_by().count(),
+            # count incoming booking requests for the requested user
+            'booking_requests_count': obj.bookings.filter(state=BOOKING_STATE.AUTHORIZED).only('id').count(),
+            'bookings_count': obj.bookings.count(),
+        })
         return Response(res)
 
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
