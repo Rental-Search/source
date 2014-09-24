@@ -2,9 +2,10 @@
 import uuid
 
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from rest_framework.serializers import (
-    PrimaryKeyRelatedField, CharField, EmailField, BooleanField, ValidationError,
+    PrimaryKeyRelatedField, CharField, EmailField, BooleanField,
 )
 from rest_framework_gis.serializers import MapGeometryField
 
