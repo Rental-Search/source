@@ -91,6 +91,8 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
 
         return queryset
 
+MULTI_VALUE_FIELD_SPLIT_RE = re.compile(r'([-_\d\w]+)')
+
 class MultiValueFormField(forms.CharField):
     default_error_messages = {
         'invalid': _(u'Enter valid primary keys separated by commas.'),
@@ -102,7 +104,7 @@ class MultiValueFormField(forms.CharField):
         if not value:
             return None
         elif isinstance(value, basestring):
-            res = re.findall(r'([\d\w]+)', smart_unicode(value), re.U)
+            res = MULTI_VALUE_FIELD_SPLIT_RE.findall(smart_unicode(value))
             if value and not res:
                 raise ValidationError(self.error_messages['invalid'])
             return res
