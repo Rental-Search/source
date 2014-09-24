@@ -13,9 +13,9 @@ h2 Vos informations personnelles
 .row
   .col-sm-6: input(type="text", placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", required, eloue-datepicker).form-control
   .col-sm-6: input(type="text", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", required).form-control
-.row
+.row(ng-show="isAuto()")
   .col-sm-12: input(type="text", placeholder="Numéro de permis *", ng-model="currentUser.drivers_license_number", required).form-control
-.row
+.row(ng-show="isAuto()")
   .col-sm-6: input(type="text", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis", eloue-datepicker).form-control
   //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
   //  input(type="file", ng-model="bookingDetails.photo")#photo.form-control

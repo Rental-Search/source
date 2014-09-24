@@ -31,12 +31,12 @@ include ../../_mixins
             {% verbatim %}
             li
                 span
-                    big.text-success {{products.length}}
+                    big.text-success {{product.ownerStats.products_count}}
                 span
                     | annonces publiées
             li
                 span
-                    big.text-success {{bookings.length}}
+                    big.text-success {{product.ownerStats.bookings_count}}
                 span
                     | locations effectués
             li

@@ -62,6 +62,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                usersService.updateUser = function (user) {
+                    return Users.update({id: user.id}, user);
+                };
+
                 return usersService;
             }
         ]);
@@ -1063,6 +1067,31 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         ]);
 
         /**
+         * Service for managing comments.
+         */
+        EloueCommon.factory("CreditCardsService", [
+            "CreditCards",
+            "Endpoints",
+            function (CreditCards, Endpoints) {
+                var creditCardsService = {};
+
+                creditCardsService.getCardsByHolder = function (holderId) {
+                    return CreditCards.get({holder: holderId, _cache: new Date().getTime()}).$promise;
+                };
+
+                creditCardsService.saveCard = function (card) {
+                    return CreditCards.save(card);
+                };
+
+                creditCardsService.updateCard = function (card) {
+                    return CreditCards.update({id: card.id}, card);
+                };
+
+                return creditCardsService;
+            }
+        ]);
+
+        /**
          * Service for parsing bookings.
          */
         EloueCommon.factory("BookingsParseService", [
@@ -1574,10 +1603,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "$q",
             "ProductRelatedMessages",
             "Endpoints",
+            "MessageThreads",
             "UsersService",
             "UtilsService",
             "ProductRelatedMessagesParseService",
-            function ($q, ProductRelatedMessages, Endpoints, UsersService, UtilsService, ProductRelatedMessagesParseService) {
+            function ($q, ProductRelatedMessages, Endpoints, MessageThreads, UsersService, UtilsService, ProductRelatedMessagesParseService) {
                 var productRelatedMessagesLoadService = {};
 
                 productRelatedMessagesLoadService.getMessage = function (messageId) {
@@ -1601,16 +1631,41 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                productRelatedMessagesLoadService.postMessage = function (threadId, senderId, recipientId, text, offerId) {
-                    var message = {
-                        thread: Endpoints.api_url + "messagethreads/" + threadId + "/",
-                        sender: Endpoints.api_url + "users/" + senderId + "/",
-                        recipient: Endpoints.api_url + "users/" + recipientId + "/",
-                        body: (!!text) ? text : "",
-                        offer: (!!offerId) ? Endpoints.api_url + "bookings/" + offerId + "/" : null
-                    };
-
-                    return new ProductRelatedMessages(message).$save();
+                productRelatedMessagesLoadService.postMessage = function (threadId, senderId, recipientId, text, offerId, productId) {
+                    var threadDef = $q.defer();
+                    var self = this;
+                    if (!threadId) {
+                        var messageThread = {
+                            sender: Endpoints.api_url + "users/" + senderId + "/",
+                            recipient: Endpoints.api_url + "users/" + recipientId + "/",
+                            product: Endpoints.api_url + "products/" + productId + "/",
+                            subject: "Question",
+                            messages: []
+                        };
+                        MessageThreads.save({}, messageThread, function (response) {
+                            threadDef.resolve(response.id);
+                        });
+                    } else {
+                        threadDef.resolve(threadId);
+                    }
+                    var deferred = $q.defer();
+                    threadDef.promise.then(function (result) {
+                        var message = {
+                            thread: Endpoints.api_url + "messagethreads/" + result + "/",
+                            sender: Endpoints.api_url + "users/" + senderId + "/",
+                            recipient: Endpoints.api_url + "users/" + recipientId + "/",
+                            body: (!!text) ? text : "",
+                            offer: (!!offerId) ? Endpoints.api_url + "bookings/" + offerId + "/" : null
+                        };
+                        ProductRelatedMessages.save({}, message, function (response) {
+                            var senderId = UtilsService.getIdFromUrl(response.sender);
+                            UsersService.get(senderId).$promise.then(function (result) {
+                                response.sender = result;
+                                deferred.resolve(response);
+                            });
+                        });
+                    });
+                    return deferred.promise;
                 };
 
                 return productRelatedMessagesLoadService;

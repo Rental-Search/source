@@ -8,6 +8,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
         return $resource(Endpoints.api_url + "users/:id\\/", {},
             {
                 "getMe": { method: "GET", params: {id: "me"} },
+                "update": { method: "PUT" },
                 "getStats": { method: "GET", url: Endpoints.api_url + "users/:id/stats\\/" }
             });
     }]);
@@ -155,6 +156,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for credit cards.
      */
     EloueCommon.factory("CreditCards", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "credit_cards/:id/?");
+        return $resource(Endpoints.api_url + "credit_cards/:id/?", {},
+            {
+                "update": { method: "PUT" }
+            });
     }]);
 });

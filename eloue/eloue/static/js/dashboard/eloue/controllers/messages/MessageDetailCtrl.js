@@ -84,7 +84,7 @@ define(["angular", "eloue/app"], function (angular) {
                 // Post new message
                 $scope.postNewMessage = function () {
                     ProductRelatedMessagesLoadService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
-                        $scope.message, null).then(function () {
+                        $scope.message, null, $scope.messageThread.product.id).then(function () {
                             // Clear message field
                             $scope.message = "";
 
