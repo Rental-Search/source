@@ -21,16 +21,16 @@ block content-view
           h2.text-black.indent-xs-b Statistiquess
           ul
             li
-              big.large.text-success {{products.length}}
+              big.large.text-success {{userStats.products_count}}
               | annonces publiées
             li
-              big.large.text-success {{bookings.length}}
+              big.large.text-success {{userStats.bookings_count}}
               | locations effectués
             li
-              big.large.text-success 16
+              big.large.text-success {{userStats.ratings_count}}
               | évalutations
             li
-              big.large.text-success {{userStats.response_rate}}
+              big.large.text-success {{userStats.response_rate | number:2}}
               | de taux de réponse
             li
               big.large.text-success {{userStats.response_time}}

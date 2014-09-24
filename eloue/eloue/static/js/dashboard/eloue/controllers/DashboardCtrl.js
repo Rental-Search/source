@@ -8,10 +8,8 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("DashboardCtrl", [
         "$scope",
         "ActivityType",
-        "BookingsLoadService",
-        "ProductsService",
         "UsersService",
-        function ($scope, ActivityType, BookingsLoadService, ProductsService, UsersService) {
+        function ($scope, ActivityType, UsersService) {
 
             $scope.activityTypes = ActivityType;
             $scope.selectedActivityType = "";
@@ -23,12 +21,6 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.currentUser = currentUser;
                 UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
                     $scope.userStats = stats;
-                });
-                ProductsService.getProductsByOwnerAndRootCategory(currentUser.id).then(function (items) {
-                    $scope.products = items.list;
-                });
-                BookingsLoadService.getBookingList(currentUser.id).then(function (bookingList) {
-                    $scope.bookings = bookingList.list;
                 });
             });
 
