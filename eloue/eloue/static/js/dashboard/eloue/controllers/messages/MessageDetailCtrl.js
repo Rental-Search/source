@@ -115,11 +115,9 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.newBooking.started_at = fromDateTime.toString("yyyy-MM-ddThh:mm:ss");
                             $scope.newBooking.ended_at = toDateTime.toString("yyyy-MM-ddThh:mm:ss");
 
-                            var borrowerUrl = Endpoints.api_url + "users/" + results.currentUser.id + "/";
-                            $scope.newBooking.borrower = borrowerUrl;
+                            $scope.newBooking.borrower = Endpoints.api_url + "users/" + results.currentUser.id + "/";
 
-                            var productUrl = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
-                            $scope.newBooking.product = productUrl;
+                            $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
                         },
                         function (reason) {
                             // TODO bad date handling

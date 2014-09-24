@@ -27,6 +27,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
+                    $scope.loadCreditCards();
                 });
             }
 
@@ -192,6 +193,12 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 if ((args.name === "message") && $scope.productRelatedMessages.length == 0) {
                     $scope.loadMessageThread();
                 } else if (args.name === "booking") {
+                    $scope.loadCreditCards();
+                }
+            });
+
+            $scope.loadCreditCards = function() {
+                if ($scope.currentUser) {
                     CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
                         var cards = result.results;
                         if (!!cards) {
@@ -211,7 +218,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                         }
                     });
                 }
-            });
+            };
 
             $scope.isAuto = function () {
                 return ($scope.rootCategory === "automobile");

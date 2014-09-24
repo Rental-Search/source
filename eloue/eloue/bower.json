@@ -23,14 +23,12 @@
     "html5shiv": "3.7.2",
     "respond": "1.3.0",
     "placeholders": "3.0.2",
-    "angular-chosen-localytics": null,
     "angular-ui-router": "~0.2.10",
     "jquery-form": "https://github.com/malsup/form.git#~3.46.0",
     "selectivizr": "https://github.com/keithclark/selectivizr.git#~1.0.2",
     "malihu-custom-scrollbar-plugin": "https://github.com/malihu/malihu-custom-scrollbar-plugin.git#~3.0.3",
     "jquery-autosize": "https://github.com/jackmoore/autosize.git#~1.18.9",
     "angular-translate": "https://github.com/angular-translate/bower-angular-translate.git#~2.2.0",
-    "angular-money-directive": "1.0.2",
     "toastr": "~2.0.3"
   },
   "devDependencies": {

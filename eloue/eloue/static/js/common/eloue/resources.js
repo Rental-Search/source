@@ -8,7 +8,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
         return $resource(Endpoints.api_url + "users/:id\\/", {},
             {
                 "getMe": { method: "GET", params: {id: "me"} },
-                "update": { method: "PUT" },
+                "update": { method: "PATCH" },
                 "getStats": { method: "GET", url: Endpoints.api_url + "users/:id/stats\\/" }
             });
     }]);

@@ -11,7 +11,6 @@ require.config({
         "angular-sanitize": "/static/bower_components/angular-sanitize/angular-sanitize.min",
         "angular-ui-router": "/static/bower_components/angular-ui-router/release/angular-ui-router.min",
         "angular-translate": "/static/bower_components/angular-translate/angular-translate.min",
-        "angular-money-directive": "/static/bower_components/angular-money-directive/angular-money-directive",
         "bootstrap-datepicker": "/static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
         "jquery-form": "/static/bower_components/jquery-form/jquery.form",
         "datejs": "/static/bower_components/datejs/build/production/date.min",
@@ -31,7 +30,6 @@ require.config({
         "angular-resource": ["angular"],
         "angular-ui-router": ["angular"],
         "angular-translate": ["angular"],
-        "angular-money-directive": ["angular"],
         "angular-mocks": {
             deps: ["angular"],
             "exports": "angular.mock"

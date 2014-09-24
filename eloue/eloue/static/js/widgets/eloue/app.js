@@ -13,7 +13,6 @@ define([
         "EloueApp.BookingModule",
         "ngCookies",
         "ngResource",
-        "ngRoute",
-        "localytics.directives"
+        "ngRoute"
     ]);
 });

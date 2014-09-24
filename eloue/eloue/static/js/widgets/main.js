@@ -25,7 +25,6 @@ require.config({
         "placeholders-utils": "/static/bower_components/placeholders/lib/utils",
         "placeholders-main": "/static/bower_components/placeholders/lib/main",
         "placeholders-jquery": "/static/bower_components/placeholders/lib/adapters/placeholders.jquery",
-        "angular-chosen-localytics": "/static/bower_components/angular-chosen-localytics/chosen",
         "custom-scrollbar": "/static/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-mousewheel": "/static/bower_components/jquery-mousewheel/jquery.mousewheel",
         "toastr": "/static/bower_components/toastr/toastr.min",
@@ -38,7 +37,6 @@ require.config({
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],
         "angular-moment": ["angular"],
-        "angular-chosen-localytics": ["angular"],
         "angular-mocks": {
             deps: ["angular"],
             "exports": "angular.mock"
@@ -69,16 +67,13 @@ require([
     "bootstrap",
     "moment",
     "angular-moment",
-    "bootstrap-datepicker",
-    "bootstrap-datepicker-fr",
     "datejs",
     "chosen",
     "html5shiv",
     "respond",
-    "placeholders-utils",
     "placeholders-main",
+    "placeholders-utils",
     "placeholders-jquery",
-    "angular-chosen-localytics",
     "formmapper",
     "toastr",
     "jquery-ui",
@@ -86,19 +81,20 @@ require([
     "core",
     "mouse",
     "widget",
+    "bootstrap-datepicker",
+    "bootstrap-datepicker-fr",
     "eloue/route"
 ], function ($, _, angular) {
     "use strict";
     $(function () {
-        angular.bootstrap(document, ["EloueApp"]);
 
         var slide_imgs = [].slice.call($('.carousel-wrapper').find('img'));
-        for(var index = 0; index < slide_imgs.length; index++) {
+        for (var index = 0; index < slide_imgs.length; index++) {
             var proportions = $(slide_imgs[index]).width() / $(slide_imgs[index]).height(),
                 parent = $(slide_imgs[index]).parent(),
                 parent_proportions = $(parent).width() / $(parent).height();
 
-            if(proportions < parent_proportions) {
+            if (proportions < parent_proportions) {
                 $(slide_imgs[index]).addClass('expand-v');
             } else {
                 $(slide_imgs[index]).addClass('expand-h');
@@ -120,7 +116,7 @@ require([
             });
         }
 
-        var districtFake = $( "#district-fake"), priceFake = $( "#price-fake" );
+        var districtFake = $("#district-fake"), priceFake = $("#price-fake");
         if (districtFake) {
             districtFake.slider({
                 range: "min",
@@ -171,6 +167,7 @@ require([
         $('#geolocate').formmapper({
             details: "form"
         });
-        $('select').chosen();
+
+        angular.bootstrap(document, ["EloueApp"]);
     });
 });

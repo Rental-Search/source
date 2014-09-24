@@ -278,7 +278,6 @@ PIPELINE_CSS = {
             'bower_components/chosen/chosen.css',
             'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
             'bower_components/bootstrap-datepicker/css/datepicker3.css',
-            'bower_components/angular-chosen-localytics/chosen-spinner.css',
             'bower_components/toastr/toastr.min.css',
             'fonts/flaticons_social/flaticons_social.css',
             'fonts/flaticons_solid/flaticons_solid.css',
