@@ -1062,6 +1062,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
             # count incoming booking requests for the requested user
             'booking_requests_count': obj.bookings.filter(state=BOOKING_STATE.AUTHORIZED).only('id').count(),
             'bookings_count': obj.bookings.count(),
+            'products_count': obj.products.count(),
         })
         return Response(res)
 
