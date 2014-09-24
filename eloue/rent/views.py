@@ -374,7 +374,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
     queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
-    owner_field = ('owner', 'borrower')
+    owner_field = ('borrower', 'owner')
     filter_class = BookingFilterSet
     ordering_fields = ('started_at', 'ended_at', 'state', 'total_amount', 'created_at', 'canceled_at')
 
