@@ -1,5 +1,6 @@
 # coding=utf-8
 from collections import OrderedDict
+from django.http.response import Http404
 
 from django.utils.translation import ugettext as _
 
@@ -13,6 +14,8 @@ class ErrorGroupEnum(object):
     """Enum for error groups."""
     VALIDATION_ERRORS = ('10', _(u'Model validation error.'))
     AUTHENTICATION_ERROR = ('20', u'Authentication error.')
+    PERMISSION_ERROR = ('30', u'Permission error.')
+    IMPLEMENTATION_ERROR = ('40', u'URL error.')
 
 
 class ValidationErrorEnum(object):
@@ -26,6 +29,17 @@ class AuthenticationErrorEnum(object):
     """Enum for authentication errors."""
     AUTHENTICATION_FAILED = ('100', _(u'Incorrect authentication credentials.'))
     NOT_AUTHENTICATED = ('101', _(u'Authentication credentials were not provided.'))
+
+
+class PermissionErrorEnum(object):
+    """Enum for permission errors."""
+    PERMISSION_DENIED = ('100', _(u'You do not have permission to perform this action.'))
+
+
+class UrlErrorEnum(object):
+    """Enum for url errors."""
+    NOT_ALLOWED = ('100', _(u'Method "%s" not allowed.'))
+    NOT_FOUND = ('101', _(u'Not found.'))
 
 
 class Api20Exception(Exception):
@@ -82,6 +96,26 @@ class AuthenticationException(Api20Exception):
     error_group = ErrorGroupEnum.AUTHENTICATION_ERROR
 
 
+class PermissionException(Api20Exception):
+    """Raised on REST Framework permission errors."""
+
+    status_code = status.HTTP_403_FORBIDDEN
+    error_group = ErrorGroupEnum.PERMISSION_ERROR
+
+
+class UrlException(Api20Exception):
+    """Raised on REST Framework if url is invalid."""
+
+    error_group = ErrorGroupEnum.IMPLEMENTATION_ERROR
+
+    def __init__(self, detail, rest_api_exception=None):
+        super(UrlException, self).__init__(detail, rest_api_exception)
+        if self.detail['code'].endswith(UrlErrorEnum.NOT_ALLOWED[0]):
+            self.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
+        elif self.detail['code'].endswith(UrlErrorEnum.NOT_FOUND[0]):
+            self.status_code = status.HTTP_404_NOT_FOUND
+
+
 def api_exception_handler(exception):
     """Handler for exceptions being raised during work of REST API"""
 
@@ -95,24 +129,31 @@ def api_exception_handler(exception):
             error = AuthenticationErrorEnum.NOT_AUTHENTICATED
             exception = AuthenticationException(
                 {'code': error[0], 'description': error[1]}, exception)
+        elif isinstance(exception, exceptions.PermissionDenied):
+            error = PermissionErrorEnum.PERMISSION_DENIED
+            exception = PermissionException(
+                {'code': error[0], 'description': error[1]}, exception)
+        elif isinstance(exception, exceptions.MethodNotAllowed):
+            error = UrlErrorEnum.NOT_ALLOWED
+            exception = UrlException(
+                {'code': error[0], 'description': exception.detail},
+                exception)
+    # ... and also Django 404 exception
+    elif isinstance(exception, Http404):
+        error = UrlErrorEnum.NOT_FOUND
+        exception = UrlException({'code': error[0], 'description': error[1]})
 
-    response = exception_handler(exception)
-    if not response:
-        if isinstance(exception, Api20Exception):
-            # Response in the case of our exception to be caught is similar to
-            # response in the case of standard REST Framework exception to
-            # be caught. The only difference is JSON format.
-            headers = {}
-            if getattr(exception, 'auth_header', None):
-                headers['WWW-Authenticate'] = exception.auth_header
-            if getattr(exception, 'wait', None):
-                headers['X-Throttle-Wait-Seconds'] = '%d' % exception.wait
+    if isinstance(exception, Api20Exception):
+        # Response in the case of our exception to be caught is similar to
+        # response in the case of standard REST Framework exception to
+        # be caught. The only difference is JSON format.
+        headers = {}
+        if getattr(exception, 'auth_header', None):
+            headers['WWW-Authenticate'] = exception.auth_header
+        if getattr(exception, 'wait', None):
+            headers['X-Throttle-Wait-Seconds'] = '%d' % exception.wait
 
-            return Response(exception.detail,
-                            status=exception.status_code,
-                            headers=headers)
-        else:
-            # Unhandled exceptions will raise a 500 error.
-            response = None
-
-    return response
+        return Response(
+            exception.detail, status=exception.status_code, headers=headers)
+    else:
+        return exception_handler(exception)
