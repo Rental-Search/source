@@ -10,7 +10,7 @@ from django.core.files.base import ContentFile
 from django.utils.datastructures import SortedDict
 
 from rest_framework import serializers, status
-from eloue.api.exceptions import ValidationExceptions
+from eloue.api.exceptions import ValidationException
 
 
 def raise_on_validate(cls):
@@ -32,7 +32,7 @@ def raise_on_validate(cls):
         def is_valid(self):
             super(RaiseOnValidateSerializer, self).is_valid()
             if self._errors and not self.suppress_exception:
-                raise ValidationExceptions(self._errors)
+                raise ValidationException(self._errors)
 
     return RaiseOnValidateSerializer
 

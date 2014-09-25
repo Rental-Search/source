@@ -1,14 +1,18 @@
 # coding=utf-8
 from collections import OrderedDict
+
 from django.utils.translation import ugettext as _
-from rest_framework.exceptions import APIException
-from rest_framework.status import HTTP_400_BAD_REQUEST
+
+from rest_framework import status
+from rest_framework import exceptions
+from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
 
 class ErrorGroupEnum(object):
     """Enum for error groups."""
     VALIDATION_ERRORS = ('10', _(u'Model validation error.'))
+    AUTHENTICATION_ERROR = ('20', u'Authentication error.')
 
 
 class ValidationErrorEnum(object):
@@ -18,19 +22,43 @@ class ValidationErrorEnum(object):
     OTHER_ERROR = ('199', _(u'Other error occurred.'))
 
 
-class ValidationExceptions(APIException):
-    """Raised on REST Framework validation errors."""
-    status_code = HTTP_400_BAD_REQUEST
+class AuthenticationErrorEnum(object):
+    """Enum for authentication errors."""
+    AUTHENTICATION_FAILED = ('100', _(u'Incorrect authentication credentials.'))
+    NOT_AUTHENTICATED = ('101', _(u'Authentication credentials were not provided.'))
 
-    def __init__(self, detail):
+
+class Api20Exception(Exception):
+    """Base class for api 2.0 exceptions."""
+
+    status_code = None
+    error_group = None
+
+    def __init__(self, detail, rest_api_exception=None):
+        if rest_api_exception:
+            self.status_code = rest_api_exception.status_code
+            self.auth_header = getattr(rest_api_exception, 'auth_header', None)
+            self.wait = getattr(rest_api_exception, 'wait', None)
+
         code, description, detail = self.get_error(detail)
-        group_code, group_description = ErrorGroupEnum.VALIDATION_ERRORS
+        group_code, group_description = self.error_group
 
         self.detail = OrderedDict()
         self.detail['message'] = group_description
         self.detail['code'] = group_code + code
         self.detail['description'] = description
-        self.detail['errors'] = detail
+        if detail:
+            self.detail['errors'] = detail
+
+    def get_error(self, detail):
+        """Identify specific error."""
+        return detail['code'], detail['description'], None
+
+
+class ValidationException(Api20Exception):
+    """Raised on REST Framework validation errors."""
+    status_code = status.HTTP_400_BAD_REQUEST
+    error_group = ErrorGroupEnum.VALIDATION_ERRORS
 
     def get_error(self, detail):
         """Identify specific validation error."""
@@ -47,7 +75,44 @@ class ValidationExceptions(APIException):
         return error[0], error[1], error_detail
 
 
+class AuthenticationException(Api20Exception):
+    """Raised on REST Framework authentication errors."""
+
+    status_code = status.HTTP_401_UNAUTHORIZED
+    error_group = ErrorGroupEnum.AUTHENTICATION_ERROR
+
+
 def api_exception_handler(exception):
     """Handler for exceptions being raised during work of REST API"""
+
+    # Here we should convert REST Framework exceptions to our exceptions.
+    if isinstance(exception, exceptions.APIException):
+        if isinstance(exception, exceptions.AuthenticationFailed):
+            error = AuthenticationErrorEnum.AUTHENTICATION_FAILED
+            exception = AuthenticationException(
+                {'code': error[0], 'description': error[1]}, exception)
+        elif isinstance(exception, exceptions.NotAuthenticated):
+            error = AuthenticationErrorEnum.NOT_AUTHENTICATED
+            exception = AuthenticationException(
+                {'code': error[0], 'description': error[1]}, exception)
+
     response = exception_handler(exception)
+    if not response:
+        if isinstance(exception, Api20Exception):
+            # Response in the case of our exception to be caught is similar to
+            # response in the case of standard REST Framework exception to
+            # be caught. The only difference is JSON format.
+            headers = {}
+            if getattr(exception, 'auth_header', None):
+                headers['WWW-Authenticate'] = exception.auth_header
+            if getattr(exception, 'wait', None):
+                headers['X-Throttle-Wait-Seconds'] = '%d' % exception.wait
+
+            return Response(exception.detail,
+                            status=exception.status_code,
+                            headers=headers)
+        else:
+            # Unhandled exceptions will raise a 500 error.
+            response = None
+
     return response
