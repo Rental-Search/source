@@ -4,7 +4,7 @@
         .message.from-declarer(ng-repeat="message in $parent.productRelatedMessages | orderBy:'sent_at'", class="{{(product.owner.id === message.sender.id ? 'from-declarer' : 'from-customer')}}")
             div(ng-show="product.owner.id === message.sender.id").thumbnail-img
                 a(href="{{message.sender.url}}"): img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="")
-            div.thumbnail-content
+            .thumbnail-content
                 .thumbnail-frame
                     h4 {{message.sender.first_name}} {{message.sender.last_name}}
                     p(ng-bind="message.body")

@@ -14,7 +14,28 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 element.datepicker({
                     language: "fr",
                     autoclose: true,
-                    todayHighlight: true
+                    todayHighlight: true,
+                    startDate: Date.today()
+                });
+            }
+        };
+    });
+
+    EloueCommon.directive("eloueDatepickerMonth", function () {
+        return {
+            restrict: "A",
+            replace: true,
+            require: "?ngModel",
+            transclude: true,
+            link: function (scope, element, attrs, ngModel) {
+                if (!ngModel) return;
+                element.datepicker({
+                    language: "fr",
+                    format: "mm/yy",
+                    viewMode: "months",
+                    minViewMode: "months",
+                    autoclose: true,
+                    startDate: Date.today()
                 });
             }
         };

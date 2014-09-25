@@ -57,6 +57,10 @@ define(["eloue/app",
             if (userToken && userToken.length > 0) {
                 $http.defaults.headers.common.authorization = "Bearer " + userToken;
             }
+            var csrftoken = AuthService.getCookie('csrftoken');
+            if (csrftoken && csrftoken.length > 0) {
+                $http.defaults.headers.common["X-CSRFToken"] = csrftoken;
+            }
 
             $rootScope.$on("redirectToLogin", function () {
                 $location.path("/login");

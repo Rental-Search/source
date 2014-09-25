@@ -2,8 +2,8 @@
     .table-cell.main-cell
         .table-cell
             span Du
-        .table-cell.main-cell
-            input(type="text", placeholder="", name="fromDate", date-format="dd/MM/yyyy", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
+        .table-cell.main-cell(style="z-index: 1050")
+            input(type="text", placeholder="", name="fromDate", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
     .table-cell
         select(name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()").form-control
@@ -13,8 +13,8 @@
     .table-cell.main-cell
         .table-cell
             span Au
-        .table-cell.main-cell
-            input(type="text", placeholder="", name="toDate", date-format="dd/MM/yyyy", ng-model="bookingDetails.toDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
+        .table-cell.main-cell(style="z-index: 1050")
+            input(type="text", placeholder="", name="toDate", ng-model="bookingDetails.toDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
     .table-cell
         select(name="toHour", ng-model="bookingDetails.toHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()").form-control

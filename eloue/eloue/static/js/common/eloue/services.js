@@ -63,7 +63,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 usersService.updateUser = function (user) {
-                    return Users.update({id: user.id}, user);
+                    return Users.update({id: "me"}, user);
                 };
 
                 return usersService;

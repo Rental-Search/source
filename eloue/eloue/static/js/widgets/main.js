@@ -43,10 +43,10 @@ require.config({
         },
         "jQuery": {exports: "jQuery"},
         "jquery-ui": ["jQuery"],
-        "slider": ["jQuery", "jquery-ui"],
-        "core": ["jQuery", "jquery-ui"],
-        "mouse": ["jQuery", "jquery-ui"],
-        "widget": ["jQuery", "jquery-ui"],
+        "slider": ["jQuery"],
+        "core": ["jQuery"],
+        "mouse": ["jQuery"],
+        "widget": ["jQuery"],
         "bootstrap": ["jQuery"],
         "moment": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
@@ -71,12 +71,12 @@ require([
     "chosen",
     "html5shiv",
     "respond",
-    "placeholders-main",
     "placeholders-utils",
+    "placeholders-main",
     "placeholders-jquery",
     "formmapper",
     "toastr",
-    "jquery-ui",
+//    "jquery-ui",
     "slider",
     "core",
     "mouse",
@@ -87,6 +87,10 @@ require([
 ], function ($, _, angular) {
     "use strict";
     $(function () {
+
+        angular.bootstrap(document, ["EloueApp"]);
+
+
 
         var slide_imgs = [].slice.call($('.carousel-wrapper').find('img'));
         for (var index = 0; index < slide_imgs.length; index++) {
@@ -168,6 +172,5 @@ require([
             details: "form"
         });
 
-        angular.bootstrap(document, ["EloueApp"]);
     });
 });

@@ -144,15 +144,20 @@ define(["angular", "eloue/modules/booking/BookingModule",
 
             $scope.sendBookingRequest = function sendBookingRequest() {
                 // Update user info
-                UsersService.updateUser($scope.currentUser);
+                //TODO: patch more fields
+                var userPatch = {};
+                userPatch.first_name = $scope.currentUser.first_name;
+                userPatch.last_name = $scope.currentUser.last_name;
+                UsersService.updateUser(userPatch);
 
                 // Update credit card info
+                $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
                 if (!!$scope.creditCard.id) {
                     CreditCardsService.updateCard($scope.creditCard);
                 } else {
                     CreditCardsService.saveCard($scope.creditCard);
                 }
-
+//                $scope.creditCard.expires = $scope.creditCard.expires.slice(0, 2) + "/" + $scope.creditCard.expires.slice(2);
                 var booking = {};
                 var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
                 var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
@@ -197,12 +202,13 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 }
             });
 
-            $scope.loadCreditCards = function() {
+            $scope.loadCreditCards = function () {
                 if ($scope.currentUser) {
                     CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
                         var cards = result.results;
                         if (!!cards) {
                             $scope.creditCard = cards[0];
+                            $scope.creditCard.expires = $scope.creditCard.expires.slice(0, 2) + "/" + $scope.creditCard.expires.slice(2);
                         } else {
                             $scope.creditCard = {
                                 id: null,
