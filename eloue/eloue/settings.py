@@ -527,6 +527,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework.filters.DjangoFilterBackend',
     ),
+    'EXCEPTION_HANDLER': 'eloue.api.exceptions.api_exception_handler',
     'SEARCH_PARAM': 'q',
     'ORDERING_PARAM': 'ordering',
     'PAGINATE_BY': getattr(local, 'REST_FRAMEWORK_PAGINATE_BY', 10),
