@@ -30,9 +30,11 @@ def raise_on_validate(cls):
                     'suppress_exception', False)
 
         def is_valid(self):
-            super(RaiseOnValidateSerializer, self).is_valid()
-            if self._errors and not self.suppress_exception:
+            is_valid = super(RaiseOnValidateSerializer, self).is_valid()
+            if not is_valid and not self.suppress_exception:
                 raise ValidationException(self._errors)
+            else:
+                return is_valid
 
     return RaiseOnValidateSerializer
 
