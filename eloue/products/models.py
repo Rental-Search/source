@@ -77,7 +77,7 @@ class Product(models.Model):
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
     owner = models.ForeignKey(Patron, related_name='products')
-    created_at = models.DateTimeField(blank=True, editable=False)
+    created_at = models.DateTimeField(blank=True, editable=False) # FIXME should be auto_now_add=True
     sites = models.ManyToManyField(Site, related_name='products')
     payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
@@ -97,7 +97,7 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.summary = strip_tags(self.summary)
         self.description = strip_tags(self.description)
-        if not self.created_at:
+        if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
         super(Product, self).save(*args, **kwargs)
     
@@ -330,7 +330,7 @@ def prove_price_unit(prices, started_at, ended_at):
         price_package = UNIT.DAY
 
     else:
-        raise Exception('No price package could be proved.')
+        raise Exception('No price package could be proven.')
 
     return price_package
 
