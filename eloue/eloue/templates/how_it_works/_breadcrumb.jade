@@ -1,0 +1,7 @@
+.container
+  ol.breadcrumb
+    each item in how_it_works.breadcrumb
+      if item.is_active
+        li.active: a(href="#") #{item.text}
+      else
+        li: a(href="#") #{item.text}

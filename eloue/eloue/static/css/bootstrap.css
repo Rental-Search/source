@@ -5915,6 +5915,14 @@ body {
   overflow-x: hidden;
 }
 
+h1 {
+  text-transform: uppercase;
+  font-size: 2.78571em;
+  font-weight: 300;
+  color: #525252;
+  line-height: 1.5;
+}
+
 a, a:hover {
   color: inherit;
 }

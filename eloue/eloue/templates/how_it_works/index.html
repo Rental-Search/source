@@ -21,7 +21,7 @@
     <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
     <link rel="stylesheet" href="../../static/css/datepicker3.css">
     <link rel="stylesheet" href="../../static/css/bootstrap.css">
-    <link rel="stylesheet" href="../../static/css/publish_item_styles.css">
+    <link rel="stylesheet" href="../../static/css/how_it_works.css">
     <!-- jQuery-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <!-- for IE < 9 -->
@@ -161,66 +161,6 @@
         </div>
       </div>
     </div>
-    <div id="pop-up-publish-item" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-      <div class="modal-dialog large">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Dépot d'annonce</h4>
-          </div>
-          <div class="modal-body">
-            <section class="content clearfix">
-              <h3>Publiez votre annonce en 1 minute</h3>
-              <p class="text-light">e-lou vous permet de gagner de l'argent en louant vous biens, <br>en toure sécurité, quand vous ne les utilisez pas</p>
-              <form action="" class="input-group form-wrapper col-sm-10 col-sm-offset-1">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <input type="text" placeholder="" required class="form-control">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <select class="form-control">
-                      <option value="do-it-yourself">Bricolage</option>
-                      <option value="gardening">Jardinage</option>
-                      <option value="high-tech">High-tech</option>
-                      <option value="reception">Réception</option>
-                      <option value="vehicle">Véhicule</option>
-                      <option value="fashion-and-accessories">Node et accessoires</option>
-                      <option value="health-and-wellness">Santé et bien-etre</option>
-                      <option value="other">Autres</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-4">
-                    <select class="form-control">
-                      <option value="male">M.</option>
-                      <option value="female">F.</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-4">
-                    <select class="form-control">
-                      <option value="male">M.</option>
-                      <option value="female">F.</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <input type="text" placeholder="Prix à la journée *" required class="form-control">
-                  </div>
-                  <div class="col-sm-4">
-                    <input type="text" placeholder="Caution demandée *" required class="form-control">
-                  </div>
-                  <div class="col-sm-4">
-                    <button type="submit" class="btn bg-success btn-advertise">Publiez votre annonce</button>
-                  </div>
-                </div>
-              </form>
-            </section>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="container-flex">
       <header class="header-site">
         <section class="container signs-links">
@@ -252,78 +192,161 @@
           </section>
         </div>
       </header>
-      <nav class="nav-home container">
-        <ul class="nav without-spaces row">
-          <li><a href="#Logement">Logement</a></li>
-          <li><a href="#Jardinage">Jardinage</a></li>
-          <li><a href="#Automobile">Automobile</a></li>
-          <li><a href="#Image et son">Image et son</a></li>
-          <li><a href="#Bricolage">Bricolage</a></li>
-          <li><a href="#Mode et accessoire">Mode et accessoire</a></li>
-          <li><a href="#Réceprion">Réceprion</a></li>
-          <li><a href="#Santé et Bien être">Santé et Bien être</a></li>
-          <li><a href="#Autres">Autres</a></li>
-        </ul>
+      <nav>
+        <div class="container">
+          <ol class="breadcrumb">
+            <li><a href="#">Accueil</a></li>
+            <li class="active"><a href="#">Comment ça marche ?</a></li>
+          </ol>
+        </div>
       </nav>
       <article>
-        <section class="publish-items-categories">
+        <section class="framing">
           <div class="container">
-            <h3 class="text-center">Choisissez une catégorie pour votre annonce</h3>
-            <ul class="nav space-between text-nowrap">
-              <li class="spacer"></li>
-              <li class="do-it-yourself"><span><a href="#bricolage"><span class="border-round"><i class="sprite"></i></span><span class="title">Bricolage</span></a></span></li>
-              <li class="spacer"></li>
-              <li class="gardening"><span><a href="#jardinage"><span class="border-round"><i class="sprite"></i></span><span class="title">Jardinage</span></a></span></li>
-              <li class="spacer"></li>
-              <li class="high-tech"><span><a href="#high-tech"><span class="border-round"><i class="sprite"></i></span><span class="title">High-tech</span></a></span></li>
-              <li class="spacer"></li>
-              <li class="reception"><span><a href="#reception"><span class="border-round"><i class="sprite"></i></span><span class="title">Réception</span></a></span></li>
-            </ul>
-            <ul class="nav space-between text-nowrap">
-              <li class="spacer"></li>
-              <li class="vehicle"><span><a href="#véhicule"><span class="border-round"><i class="sprite"></i></span><span class="title">Véhicule</span></a></span></li>
-              <li class="spacer"></li>
-              <li class="fashion-and-accessories"><span><a href="#mode_et_accessoires"><span class="border-round"><i class="sprite"></i></span><span class="title">Node et accessoires</span></a></span></li>
-              <li class="spacer"></li>
-              <li class="health-and-wellness"><span><a href="#santé_et_bien-etre"><span class="border-round"><i class="sprite"></i></span><span class="title">Santé et bien-etre</span></a></span></li>
-              <li class="spacer"></li>
-              <li class="other"><span><a href="#autres"><span class="border-round"><i class="sprite"></i></span><span class="title">Autres</span></a></span></li>
-            </ul>
+            <h1 class="text-center indent-t-lg indent-b-lg">avec e-loue, vous pouvez gagner <br>de l’argent et économiser de l’argent ! <br>c’est pratique, c’est simple, <br>et c’est 100% sécurisé</h1>
+          </div>
+        </section>
+        <section>
+          <div class="container indent-t-md indent-b-md">
+            <div class="row">
+              <div class="col-sm-6">
+                <h3>Je suis <b class="text-primary">propriétaire, </b><br>J’ai des biens à mettre en location,<br>Je peux gagner de l’argent !</h3>
+              </div>
+              <div class="col-sm-6">
+                <h3 class="indent-l-sm">Je suis <b class="text-success">locataire,</b><br>Je veux louer des biens,<br>Je peux économiser de l’argent !</h3>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="timeline">
+          <div class="container indent-b-lg">
+            <div class="row">
+              <div class="col-sm-6">
+                <ul class="nav owner-column">
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                </ul>
+                <div class="text-center"><a href="#" class="btn bg-primary">Je simule mes revenus</a></div>
+              </div>
+              <div class="col-sm-6">
+                <ul class="nav tenant-column">
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                  <li>
+                    <h4>Je m’inscris gratuitement</h4>
+                    <p class="content">des locataires intéressés par mes annonces (par téléphone ou par messagerie)</p>
+                    <p>534 vues</p><span class="toggle-content">&#149;&nbsp;&#149;&nbsp;&#149;</span><span class="round"></span>
+                  </li>
+                </ul>
+                <div class="text-center"><a href="#" class="btn bg-success">Je commence à louer</a></div>
+              </div>
+            </div>
           </div>
         </section>
       </article>
       <footer>
-        <section class="insurances framing">
+        <section class="download-mobile-apps framing">
           <div class="container">
-            <ul class="nav nav-justified">
-              <li class="divide"></li>
-              <li>
-                <div class="insurances-img"><span class="payment"></span></div>
-                <h5>Louez en toute sécurité</h5>
-                <p>Transactions en ligne sécurisées.<br>Aucun échange d'argent.</p>
-              </li>
-              <li class="divide"></li>
-              <li>
-                <div class="insurances-img"><span class="serenity"></span></div>
-                <h5>Louez en toute sérénité</h5>
-                <p>Assurance incluse et automatique.<br>Caution en ligne.</p>
-              </li>
-              <li class="divide"></li>
-              <li>
-                <div class="insurances-img"><span class="simplicity"></span></div>
-                <h5>Louez en toute simplicité</h5>
-                <p>Service client dédié 7j/7.<br>Dépot d'annonce gratuite.</p>
-              </li>
-              <li class="divide"></li>
-              <li>
-                <div class="insurances-img"><span class="trust"></span></div>
-                <h5>Louez en toute confiance</h5>
-                <p>Notes et commentaires en ligne.<br>Messagerie en ligne.</p>
-              </li>
-            </ul>
+            <div class="row">
+              <div class="col-sm-9">
+                <h3>Les bonnes affaires e-loue, c'est (aussi) dans la poche</h3>
+                <p>Retrouvez toutes les fonctionnalités que vous aimez sur iPhone, iPad et Android.</p><a href="#"><img src="../../static/img/btn-google-play.png"></a><a href="#"><img src="../../static/img/btn-app-store.png"></a>
+              </div>
+            </div>
           </div>
         </section>
-        <section class="footer-links">
+        <section class="footer-links framing">
           <div class="container">
             <ul class="nav nav-justified">
               <li class="divide"></li>
@@ -404,5 +427,11 @@
         </section>
       </footer>
     </div>
+    <script>
+      $('p.content').hide();
+      $('.toggle-content').on('click', function () {
+        $(this).closest('li').find('.content').slideToggle('fast');
+        });
+    </script>
   </body>
 </html>
