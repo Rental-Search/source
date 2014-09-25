@@ -1087,6 +1087,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return CreditCards.update({id: card.id}, card);
                 };
 
+                creditCardsService.deleteCard = function (card) {
+                    return CreditCards.delete({id: card.id});
+                };
+
                 return creditCardsService;
             }
         ]);
@@ -1318,6 +1322,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Bookings.save(booking).$promise;
                 };
 
+                bookingsLoadService.payForBooking = function (uuid, paymentInfo) {
+                    return Bookings.pay({uuid: uuid}, paymentInfo).$promise;
+                };
                 return bookingsLoadService;
             }
         ]);

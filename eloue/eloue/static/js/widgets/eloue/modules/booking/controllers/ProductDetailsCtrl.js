@@ -16,7 +16,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CreditCardsService",
         "BookingsLoadService",
-        function ($scope, $window, $location, Endpoints, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
+        function ($scope, $window, $location,Endpoints, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
 
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
@@ -31,7 +31,17 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 });
             }
 
-            $scope.creditCard = {};
+            $scope.creditCard = {
+                id: null,
+                card_number: "",
+                expires: "",
+                holder: "",
+                masked_number: "",
+                cvv: "",
+                keep: "",
+                holder_name: "",
+                subscriber_reference: ""
+            };
 
             $scope.getProductIdFromUrl = function () {
                 var href = $window.location.href;
@@ -148,16 +158,24 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 var userPatch = {};
                 userPatch.first_name = $scope.currentUser.first_name;
                 userPatch.last_name = $scope.currentUser.last_name;
-                UsersService.updateUser(userPatch);
+                UsersService.updateUser(userPatch).$promise.then(function(result) {
+                    // Update credit card info
+                    $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
+                    if (!!$scope.creditCard.id) {
+                        CreditCardsService.deleteCard($scope.creditCard).$promise.then(function(result) {
+                            CreditCardsService.saveCard($scope.creditCard).$promise.then(function(result) {
+                                $scope.requestBooking();
+                            });
+                        });
+                    } else {
+                        CreditCardsService.saveCard($scope.creditCard).$promise.then(function(result) {
+                            $scope.requestBooking();
+                        });
+                    }
+                });
+            };
 
-                // Update credit card info
-                $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
-                if (!!$scope.creditCard.id) {
-                    CreditCardsService.updateCard($scope.creditCard);
-                } else {
-                    CreditCardsService.saveCard($scope.creditCard);
-                }
-//                $scope.creditCard.expires = $scope.creditCard.expires.slice(0, 2) + "/" + $scope.creditCard.expires.slice(2);
+            $scope.requestBooking = function() {
                 var booking = {};
                 var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
                 var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
@@ -171,7 +189,17 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 // Create booking
                 BookingsLoadService.requestBooking(booking).then(
                     function (booking) {
-                        console.log(booking);
+                        var paymentInfo = {
+                            card_number: $scope.creditCard.card_number,
+                            exp_month: $scope.creditCard.expires.slice(0, 2),
+                            exp_year: $scope.creditCard.expires.slice(2),
+                            cvc: $scope.creditCard.cvv,
+                            holder_name: $scope.creditCard.holder_name
+                        };
+
+                        BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function(result) {
+                            $(".modal").modal("hide");
+                        });
                     }
                 );
             };
@@ -207,20 +235,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                     CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
                         var cards = result.results;
                         if (!!cards) {
-                            $scope.creditCard = cards[0];
-                            $scope.creditCard.expires = $scope.creditCard.expires.slice(0, 2) + "/" + $scope.creditCard.expires.slice(2);
-                        } else {
-                            $scope.creditCard = {
-                                id: null,
-                                card_number: "",
-                                expires: "",
-                                holder: "",
-                                masked_number: "",
-                                cvv: "",
-                                keep: "",
-                                holder_name: "",
-                                subscriber_reference: ""
-                            };
+                            $scope.creditCard.id = cards[0].id;
                         }
                     });
                 }
