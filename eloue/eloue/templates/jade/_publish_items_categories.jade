@@ -1,10 +1,11 @@
 .container
   h3.text-center Choisissez une catégorie pour votre annonce
+  -var publish_items_categories = [[{"title": "Bricolage", "href": "#bricolage", "classname": "do-it-yourself"}, {"title": "Jardinage", "href": "#jardinage", "classname": "gardening"}, {"title": "High-tech", "href": "#high-tech", "classname": "high-tech"}, {"title": "Réception", "href": "#reception", "classname": "reception"}], [{"title": "Véhicule", "href": "#véhicule", "classname": "vehicle"}, {"title": "Node et accessoires", "href": "#mode_et_accessoires", "classname": "fashion-and-accessories"}, {"title": "Santé et bien-etre", "href": "#santé_et_bien-etre", "classname": "health-and-wellness"}, {"title": "Autres", "href": "#autres", "classname": "other"}]]
   each group in publish_items_categories
     ul.nav.space-between.text-nowrap
       each item in group
         li.spacer
-        li(class="#{item.classname}"): span: a(href="#{item.href}")
+        li(class="{{ item.classname }}"): span: a(href="{{ item.href }}")
           span.border-round
             i.sprite
-          span.title #{item.title}
+          span.title {{ item.title }}

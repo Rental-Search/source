@@ -6,7 +6,7 @@ from products.search import alert_search, product_search
 from products.views import product_create, message_create, \
     product_delete, alert_create, alert_inform, alert_delete, \
     ProductList, AlertInformSuccess, AlertList, \
-    ProductListView, ProductDetailView
+    ProductListView, ProductDetailView, PublishItemView
 from rent.views import booking_create, booking_price, product_occupied_date, \
     booking_create_redirect, phone_create
 
@@ -37,6 +37,7 @@ urlpatterns = patterns('',
 
 
 ui3_urlpatterns = patterns('',
+    url(r'^%s/$' % _('ajouter'), PublishItemView.as_view(), name='publish_item'),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<pk>\d+)/$', ProductDetailView.as_view(), {'sqs': product_search}, name='booking_create'),
     url(r'^([^/].+/)?$', ProductListView.as_view(), {'sqs': product_search}, name='product_list'),
 )

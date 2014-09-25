@@ -18,9 +18,8 @@
               .col-sm-12: input(type="text", placeholder="", required).form-control
             .row
               .col-sm-4: select.form-control
-                each group in publish_items_categories
-                  each item in group
-                    option(value="#{item.classname}") #{item.title}
+                option(value="male") M.
+                option(value="female") F.
               .col-sm-4: select.form-control
                 option(value="male") M.
                 option(value="female") F.

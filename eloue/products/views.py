@@ -824,6 +824,14 @@ class ProductDetailView(DetailView):
                           {'verbose_name': self.model._meta.verbose_name})
         return obj
 
+class PublishItemView(TemplateView):
+    template_name = 'publich_item/index.jade'
+
+    def get_context_data(self, **kwargs):
+        return {
+            'categories_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
+        }
+
 
 # REST API 2.0
 

@@ -325,6 +325,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'publish_item_styles': {
+        'source_filenames': (
+            'sass/publish_item_styles.sass',
+        ),
+        'output_filename': 'css/publish_item_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'dashboard_styles': {
         'source_filenames': (
             'dashboard/sass/base.sass',

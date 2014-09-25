@@ -18,6 +18,6 @@
           span.badge.price #{product.price}&euro; /jour
   .row.text-center
     //- TODO: should use AJAX to fetch and insert next 8 items
-    form(action="{% facet_url breadcrumbs 'sort' '' %}"): button(type="submit").btn.bg-success.btn-explore
+    button(type="button", onclick="location.href='{% facet_url breadcrumbs 'sort' '' %}';").btn.bg-success.btn-explore
       i.flaticon.stroke.zoom-2
       | Explorez toutes les annonces
