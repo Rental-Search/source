@@ -185,6 +185,16 @@ class UsersTest(APITestCase):
         self.assertEquals(response.data['count'], len(response.data['results']))
         self.assertEquals(response.data['results'][0]['id'], 1)
 
+    def test_account_edit_me(self):
+        response = self.client.patch(_location('patron-detail', pk='me'), {
+            'first_name': 'prenom',
+            'last_name': 'nom',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEquals(response.data['id'], 1)
+        self.assertEquals(response.data['first_name'], 'prenome')
+        self.assertEquals(response.data['last_name'], 'nome')
+
 class PhoneNumbersTest(APITestCase):
     fixtures = ['patron', 'phones']
 
