@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os.path
 import base64
+from datetime import date
 
 from django.db.models import get_model
 from django.contrib.auth import get_user_model
@@ -326,7 +327,7 @@ class MessageThreadMessageTest(APITestCase):
             self.assertTrue(str(response.data['last_offer']).endswith(_location('productrelatedmessage-detail', pk=message_id)), response.data)
 
 class ProductTest(APITestCase):
-    fixtures = ['patron', 'address', 'category', 'product', 'picture_api2']
+    fixtures = ['patron', 'address', 'phones', 'category', 'product', 'picture_api2']
 
     def setUp(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -383,3 +384,112 @@ class ProductTest(APITestCase):
         self.assertIn('phone', response.data, response.data)
         self.assertTrue(len(response.data['phone']), response.data['phone'])
         self.assertEquals(response.data['phone']['id'], phonenumber_id, response.data)
+
+    def test_product_get_by_id(self):
+        response = self.client.get(_location('product-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+
+    def test_product_list_paginated(self):
+        response = self.client.get(_location('product-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 6,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
+    def test_product_create(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=1),
+            'summary': 'test summary',
+            'description': 'test description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': 150,
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+
+    def test_product_create_car(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=477),
+            'summary': 'test car summary',
+            'description': 'test car description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': 600,
+
+            'brand': 'Toyota',
+            'model': 'FunCargo',
+
+            # options & accessoires
+            'air_conditioning': True,
+            'power_steering': True,
+            'cruise_control': True,
+            'gps': False,
+            'baby_seat': True,
+            'roof_box': False,
+            'bike_rack': False,
+            'snow_tires': True,
+            'snow_chains': False,
+            'ski_rack': False,
+            'cd_player': True,
+            'audio_input': False,
+
+            # informations de l'assurance
+            'tax_horsepower': 9,
+            'licence_plate': 'TX 234563',
+            'first_registration_date': date(2003, 11, 05),
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+
+    def test_product_create_real_estate(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=385),
+            'summary': 'test maison summary',
+            'description': 'test maison description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': 100,
+
+            'capacity': 6,
+            'private_life': 1,
+            'chamber_number': 3,
+
+            # service_included
+            'air_conditioning': False,
+            'breakfast': False,
+            'balcony': True,
+            'lockable_chamber': True,
+            'towel': True,
+            'lift': False,
+            'family_friendly': False,
+            'gym': False,
+            'accessible': True,
+            'heating': True,
+            'jacuzzi': False,
+            'chimney': False,
+            'internet_access': True,
+            'kitchen': True,
+            'parking': False,
+            'smoking_accepted': False,
+            'ideal_for_events': False,
+            'tv': True,
+            'washing_machine': True,
+            'tumble_dryer': True,
+            'computer_with_internet': True,
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))

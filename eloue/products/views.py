@@ -921,6 +921,26 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         }
         return response.Response(res)
 
+    def get_serializer_class(self):
+        data = getattr(self, '_post_data', None)
+        if data is not None:
+            delattr(self, '_post_data')
+            if 'brand' in data:
+                # we have CarProduct here
+                return serializers.CarProductSerializer
+            elif 'air_conditioning' in data: # FIXME: we should have a better criteria here
+                # we have RealEstateProduct here
+                return serializers.RealEstateProductSerializer
+        instance = getattr(self, 'object', None)
+        if instance is not None:
+            if hasattr(instance, 'carproduct'):
+                # we have CarProduct here
+                return serializers.CarProductSerializer
+            elif hasattr(instance, 'realestateproduct'):
+                # we have RealEstateProduct here
+                return serializers.RealEstateProductSerializer
+        return super(ProductViewSet, self).get_serializer_class()
+
     def get_serializer(self, instance=None, **kwargs):
         """
         Return the serializer instance that should be used for validating and
@@ -929,19 +949,21 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         We should use different Seializer classes for instances of
         Product, CarProduct and RealEstateProduct models
         """
-        if hasattr(instance, 'carproduct'):
-            # we have CarProduct here
-            serializer_class = serializers.CarProductSerializer
-            self.object = instance = instance.carproduct
-        elif hasattr(instance, 'realestateproduct'):
-            # we have RealEstateProduct here
-            serializer_class = serializers.RealEstateProductSerializer
-            self.object = instance = instance.realestateproduct
-        else:
-            # we have generic Product here
-            serializer_class = self.get_serializer_class()
-        context = self.get_serializer_context()
-        return serializer_class(instance, context=context, **kwargs)
+        if instance is not None:
+            if hasattr(instance, 'carproduct'):
+                # we have CarProduct here
+                self.object = instance = instance.carproduct
+            elif hasattr(instance, 'realestateproduct'):
+                # we have RealEstateProduct here
+                self.object = instance = instance.realestateproduct
+        return super(ProductViewSet, self).get_serializer(instance=instance, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        self._post_data = request.DATA
+        return super(ProductViewSet, self).create(request, *args, **kwargs)
+
+    def get_location_url(self):
+        return reverse('product-detail', args=(self.object.pk,))
 
 class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """

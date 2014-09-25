@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from products import models
-from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer
+from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer, BooleanField
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
 
 class CategoryDescriptionSerializer(ModelSerializer):
@@ -19,7 +19,19 @@ class CategorySerializer(ModelSerializer):
         fields = ('id', 'parent', 'name', 'need_insurance', 'description', 'is_child_node', 'is_leaf_node', 'is_root_node')
         immutable_fields = ('parent',)
 
-class ProductSerializer(ModelSerializer):
+class RequiredBooleanField(BooleanField):
+    def __init__(self, required=None, **kwargs):
+        return super(RequiredBooleanField, self).__init__(required=True, **kwargs)
+
+def map_require_boolean_field(field_mapping):
+    from django.db.models import BooleanField as ModelBooleanField
+    field_mapping[ModelBooleanField] = RequiredBooleanField
+    return field_mapping
+
+class RequiredBooleanFieldSerializerMixin(object):
+    field_mapping = map_require_boolean_field(ModelSerializer.field_mapping)
+
+class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
     address = NestedAddressSerializer()
     phone = NestedPhoneNumberSerializer(required=False)
 
@@ -31,7 +43,7 @@ class ProductSerializer(ModelSerializer):
         read_only_fields = ('is_archived', 'created_at')
         immutable_fields = ('owner',)
 
-class CarProductSerializer(ModelSerializer):
+class CarProductSerializer(ProductSerializer):
     class Meta(ProductSerializer.Meta):
         model = models.CarProduct
         fields = ProductSerializer.Meta.fields + (
@@ -42,14 +54,14 @@ class CarProductSerializer(ModelSerializer):
             'ski_rack', 'cd_player', 'audio_input', 'tax_horsepower', 'licence_plate', 'first_registration_date',
         )
 
-class RealEstateProductSerializer(ModelSerializer):
+class RealEstateProductSerializer(ProductSerializer):
     class Meta(ProductSerializer.Meta):
         model = models.RealEstateProduct
         fields = ProductSerializer.Meta.fields + (
             # RealEstateProduct extended fields
             'capacity', 'private_life', 'chamber_number', 'rules', 'air_conditioning', 'breakfast', 'balcony',
             'lockable_chamber', 'towel', 'lift', 'family_friendly', 'gym', 'accessible', 'heating', 'jacuzzi',
-            'chimney', 'internet_access', 'kitchen', 'smoking_accepted', 'ideal_for_events', 'tv',
+            'chimney', 'internet_access', 'kitchen', 'parking', 'smoking_accepted', 'ideal_for_events', 'tv',
             'washing_machine', 'tumble_dryer', 'computer_with_internet',
         )
 
