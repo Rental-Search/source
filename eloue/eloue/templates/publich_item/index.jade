@@ -2,27 +2,29 @@ extends ../base
 -load compressed
 
 block append styles
-  {% compressed_css "bootstrap" %}
-  {% compressed_css "publish_item_styles" %}
+    {% compressed_css "bootstrap" %}
+    {% compressed_css "publish_item_styles" %}
 
 block append scripts
-  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
-  //- script(src="#{STATIC_URL}js/bootstrap/dropdown.js")
+    script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+    //- script(src="#{STATIC_URL}js/bootstrap/dropdown.js")
 
 block append content-body
-  //-include ../jade/_pop_up_publish_item
-  .container-flex
-    header.header-site
-      include ../jade/_header_site
-    nav.nav-home.container
-      include ../jade/_nav_home
-    article
-      section.publish-items-categories
-        include ../jade/_publish_items_categories
-    footer
-      section.insurances.framing
-        include ../jade/_insurances
-      section.footer-links
-        include ../jade/_footer_links
-      section.rss
-        include ../jade/_rss
+    .container-flex(data-ng-controller="PublishAdCtrl")
+        header.header-site
+            include ../jade/_header_site
+        nav.nav-home.container
+            include ../jade/_nav_home
+        article
+            section.publish-items-categories
+                include ../jade/_publish_items_categories
+        footer
+            section.insurances.framing
+                include ../jade/_insurances
+            section.footer-links
+                include ../jade/_footer_links
+            section.rss
+                include ../jade/_rss
+        script(type="text/ng-template")#modalContainer
+        div(ng-view)
+        include ../jade/_pop_up_publish_item

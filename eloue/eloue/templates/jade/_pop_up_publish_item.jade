@@ -1,32 +1,48 @@
-.modal.fade#pop-up-publish-item(tabindex="-1", role="dialog", aria-hidden="true")
-  .modal-dialog.large
-    .modal-content
-      .modal-header
-        button(type="button", data-dismiss="modal").close
-          span(aria-hidden="true")&times;
-          span.sr-only Close
-        h4.modal-title Dépot d'annonce
-      .modal-body
-        section.content.clearfix
-          h3 Publiez votre annonce en 1 minute
-          p.text-light
-            | e-lou vous permet de gagner de l'argent en louant vous biens, 
-            br
-            | en toure sécurité, quand vous ne les utilisez pas
-          form(action="").input-group.form-wrapper.col-sm-10.col-sm-offset-1
-            .row
-              .col-sm-12: input(type="text", placeholder="", required).form-control
-            .row
-              .col-sm-4: select.form-control
-                option(value="male") M.
-                option(value="female") F.
-              .col-sm-4: select.form-control
-                option(value="male") M.
-                option(value="female") F.
-              .col-sm-4: select.form-control
-                option(value="male") M.
-                option(value="female") F.
-            .row
-              .col-sm-4: input(type="text", placeholder="Prix à la journée *", required).form-control
-              .col-sm-4: input(type="text", placeholder="Caution demandée *", required).form-control
-              .col-sm-4: button(type="submit").btn.bg-success.btn-advertise Publiez votre annonce
+.modal.fade#publishModal(tabindex="-1", role="dialog", aria-hidden="true")
+    .modal-dialog.large
+        .modal-content
+            .modal-header
+                button(type="button", data-dismiss="modal").close
+                    span(aria-hidden="true")&times;
+                    span.sr-only Close
+                h4.modal-title Dépot d'annonce
+            .modal-body
+                section.content.clearfix
+                    h3 Publiez votre annonce en 1 minute
+                    p.text-light
+                        | e-lou vous permet de gagner de l'argent en louant vous biens,
+                        br
+                        | en toure sécurité, quand vous ne les utilisez pas
+                    {% verbatim %}
+                    form(name="publishAdForm").input-group.form-wrapper.col-sm-10.col-sm-offset-1
+                        .row
+                            .col-sm-12: input(type="text", placeholder="", required, ng-model="product.summary", ng-change="searchCategory()", ng-show="!isAuto").form-control
+                            .col-sm-6: input(type="text", placeholder="Marque *", required, ng-model="product.brand", ng-show="isAuto").form-control
+                            .col-sm-6: input(type="text", placeholder="Modèle *", required, ng-model="product.model", ng-show="isAuto").form-control
+                        .row
+                            .col-md-4
+                                select(ng-model="rootCategory", ng-change="updateNodeCategories()").form-control
+                                    option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
+                            .col-md-4
+                                select(ng-model="nodeCategory", ng-change="updateLeafCategories()").form-control
+                                    option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
+                            .col-md-4
+                                select(ng-model="product.category", required).form-control
+                                    option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
+                        .row
+                            .col-sm-4
+                                input(type="number", placeholder="{{isRealEstate ? 'Prix à la nuit *' : 'Prix à la journée *'}}", required, ng-model="price.amount").form-control
+                            .col-sm-4(ng-show="!isAuto")
+                                input(type="number", placeholder="Caution demandée *", required, ng-model="product.deposit_amount").form-control
+                            .col-sm-4(ng-show="isAuto")
+                                input(type="number", placeholder="Kilomètres inclus *", required, ng-model="product.km_included").form-control
+                            .col-sm-4
+                                button(type="button", ng-show="!isAuto", ng-click="publishAd()").btn.bg-success.btn-advertise Publiez votre annonce
+                        .row
+                            .col-sm-4
+                                input(type="number", placeholder="Prix km supp *", required, ng-model="product.costs_per_km", ng-show="isAuto").form-control
+                            .col-sm-4
+                                input(type="number", placeholder="Caution demandée *", required, ng-model="product.deposit_amount", ng-show="isAuto").form-control
+                            .col-sm-4
+                                button(type="button", ng-show="isAuto", ng-click="publishAd()").btn.bg-success.btn-advertise Publiez votre annonce
+                        {% endverbatim %}

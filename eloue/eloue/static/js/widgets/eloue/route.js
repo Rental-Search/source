@@ -1,5 +1,6 @@
 define(["eloue/app",
         "eloue/modules/booking/controllers/ProductDetailsCtrl",
+        "eloue/modules/booking/controllers/PublishAdCtrl",
         "eloue/modules/booking/directives/ProductDetailsBookingDirective",
         "eloue/modules/booking/directives/BookingModalDirective",
         "eloue/modules/booking/directives/MessageModalDirective",
@@ -38,6 +39,11 @@ define(["eloue/app",
                         secure: true
                     })
                     .when('/phone', {
+                        templateUrl: 'modalContainer',
+                        controller: 'ModalCtrl',
+                        secure: true
+                    })
+                    .when('/publish', {
                         templateUrl: 'modalContainer',
                         controller: 'ModalCtrl',
                         secure: true

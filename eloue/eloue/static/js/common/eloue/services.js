@@ -542,6 +542,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                productsService.saveProduct = function (product) {
+                    return Products.save(product);
+                };
+
                 productsService.updateProduct = function (product) {
                     return Products.update({id: product.id}, product);
                 };
@@ -904,6 +908,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
             categoriesService.getCategory = function (categoryId) {
                 return Categories.get({id: categoryId});
+            };
+
+            categoriesService.getCategoryByName = function (categoryName) {
+                return Categories.get({name: categoryName});
             };
 
             categoriesService.getParentCategory = function (category) {

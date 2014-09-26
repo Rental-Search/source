@@ -133,7 +133,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             if (!!currentRoute.secure && !currentUserToken) {
                 $location.path("/login");
             } else {
-                $rootScope.$broadcast("openModal", { name : prefix});
+                $rootScope.$broadcast("openModal", { name : prefix, params: $route.current.params});
                 $(".modal").modal("hide");
                 $timeout(function() {
                     $("#" + prefix + "Modal").modal("show");

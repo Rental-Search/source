@@ -59,14 +59,3 @@
 @import "../dashboard/sass/font_awesome/larger";
 @import "../dashboard/sass/font_awesome/fixed-width";
 @import "../dashboard/sass/font_awesome/list";
-
-select{
-
-  height: 0;
-  width: 0;
-  overflow: hidden;
-  position: fixed;
-  left: 100%;
-  top: 100%;
-  visibility: hidden;
-}
