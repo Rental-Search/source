@@ -25,9 +25,10 @@ def raise_on_validate(cls):
             super(RaiseOnValidateSerializer, self).__init__(
                 instance, data, files, context, partial, many,
                 allow_add_remove, **kwargs)
-            if context:
-                self.suppress_exception = context.get(
-                    'suppress_exception', False)
+
+            self.suppress_exception = False
+            if context and 'suppress_exception' in context:
+                self.suppress_exception = context['suppress_exception']
 
         def is_valid(self):
             is_valid = super(RaiseOnValidateSerializer, self).is_valid()

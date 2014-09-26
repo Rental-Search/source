@@ -1,7 +1,8 @@
 # coding=utf-8
 from collections import OrderedDict
-from django.http.response import Http404
 
+from django.core.exceptions import PermissionDenied
+from django.http.response import Http404
 from django.utils.translation import ugettext as _
 
 from rest_framework import status
@@ -15,7 +16,8 @@ class ErrorGroupEnum(object):
     VALIDATION_ERRORS = ('10', _(u'Model validation error.'))
     AUTHENTICATION_ERROR = ('20', u'Authentication error.')
     PERMISSION_ERROR = ('30', u'Permission error.')
-    IMPLEMENTATION_ERROR = ('40', u'URL error.')
+    URL_ERROR = ('40', u'URL error.')
+    SERVER_ERROR = ('50', u'Server error.')
 
 
 class ValidationErrorEnum(object):
@@ -42,6 +44,11 @@ class UrlErrorEnum(object):
     NOT_FOUND = ('101', _(u'Not found.'))
 
 
+class ServerErrorEnum(object):
+    """Enum for server errors"""
+    OTHER_ERROR = ('199', _(u'Other error occurred.'))
+
+
 class Api20Exception(Exception):
     """Base class for api 2.0 exceptions."""
 
@@ -65,8 +72,17 @@ class Api20Exception(Exception):
             self.detail['errors'] = detail
 
     def get_error(self, detail):
-        """Identify specific error."""
-        return detail['code'], detail['description'], None
+        """Identify specific error.
+
+        It should return error code, error description and may be some
+        additional error information. By default this information is assumed
+        to be sent directly.
+        """
+        return (
+            detail.get('code', ''),
+            detail.get('description', ''),
+            detail.get('detail', None)
+        )
 
 
 class ValidationException(Api20Exception):
@@ -104,9 +120,9 @@ class PermissionException(Api20Exception):
 
 
 class UrlException(Api20Exception):
-    """Raised on REST Framework if url is invalid."""
+    """Raised if url is invalid."""
 
-    error_group = ErrorGroupEnum.IMPLEMENTATION_ERROR
+    error_group = ErrorGroupEnum.URL_ERROR
 
     def __init__(self, detail, rest_api_exception=None):
         super(UrlException, self).__init__(detail, rest_api_exception)
@@ -114,6 +130,13 @@ class UrlException(Api20Exception):
             self.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         elif self.detail['code'].endswith(UrlErrorEnum.NOT_FOUND[0]):
             self.status_code = status.HTTP_404_NOT_FOUND
+
+
+class ServerException(Api20Exception):
+    """Raised on REST Framework permission errors."""
+
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    error_group = ErrorGroupEnum.SERVER_ERROR
 
 
 def api_exception_handler(exception):
@@ -142,6 +165,16 @@ def api_exception_handler(exception):
     elif isinstance(exception, Http404):
         error = UrlErrorEnum.NOT_FOUND
         exception = UrlException({'code': error[0], 'description': error[1]})
+    # ... and also Django Permission Exception
+    elif isinstance(exception, PermissionDenied):
+        error = PermissionErrorEnum.PERMISSION_DENIED
+        exception = PermissionException(
+            {'code': error[0], 'description': error[1]})
+    # ... and also any other not REST Framework exception
+    elif not isinstance(exception, exceptions.APIException):
+        error = ServerErrorEnum.OTHER_ERROR
+        exception = ServerException(
+            {'code': error[0], 'description': error[1], 'detail': exception.message})
 
     if isinstance(exception, Api20Exception):
         # Response in the case of our exception to be caught is similar to
