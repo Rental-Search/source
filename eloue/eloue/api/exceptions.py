@@ -171,7 +171,7 @@ def api_exception_handler(exception):
         exception = PermissionException(
             {'code': error[0], 'description': error[1]})
     # ... and also any other not REST Framework exception
-    elif not isinstance(exception, exceptions.APIException):
+    elif not isinstance(exception, (exceptions.APIException, Api20Exception)):
         error = ServerErrorEnum.OTHER_ERROR
         exception = ServerException(
             {'code': error[0], 'description': error[1], 'detail': exception.message})
