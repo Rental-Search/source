@@ -70,40 +70,11 @@
             <h3>Inscrivez-vous en 2 secondes</h3>
             <div class="form-group"><a href="#" class="btn bg-info"><i class="flaticon social facebook"></i>Inscription via Facebook</a></div>
             <div class="form-group"><a href="#" class="btn bg-danger"><i class="flaticon social google-plus"></i>Inscription via Google</a></div>
-            <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+            <p class="info">Nous ne publierons jamais rien sur votre mur sans votre accord</p><span class="or"></span>
             <h3>Inscrivez-vous en 30 secondes</h3>
-            <form>
-              <div class="classic-form">
-                <div class="form-group">
-                  <input type="text" placeholder="Nom *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <input type="text" placeholder="Prénom *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <input type="text" placeholder="Code postal *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <input type="email" placeholder="E-mail *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <input type="password" placeholder="Mot de passe *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <input type="password" placeholder="Confirmation *" required class="form-control">
-                </div>
-                <div class="form-group">
-                  <button type="submit" class="btn bg-success">Inscription</button>
-                </div>
-              </div>
-              <div class="form-group"><a href="#" class="btn bg-success registration">Inscription via Email</a></div>
-              <div class="checkbox">
-                <label for="inform">
-                  <input type="checkbox" checked id="inform"><span class="flaticon stroke checkmark"></span>
-                </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
-              </div>
-            </form>
-            <p>En créant un compte e-loue, vous acceptez les Conditions Générales<br>et la Politique de Confidentialité de notre site</p><span class="or"></span>
+            <form action="">
+              <div class="form-group"><a href="#classic-form" data-toggle="modal" data-target="#classic-form" data-dismiss="modal" class="btn bg-success">Inscription via Email</a></div>
+            </form><span class="or"></span>
             <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal" class="modal-fotter-link connexion">Connexion</a>
           </div>
         </div>
@@ -141,6 +112,58 @@
               </div>
             </form><span class="or"></span>
             <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="classic-form" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Inscription</h4>
+          </div>
+          <div class="modal-body">
+            <form action="registration">
+              <h3>Inscription 30 secondes</h3>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <select>
+                      <option value="male">M.</option>
+                      <option value="female">F.</option>
+                    </select>
+                  </div>
+                  <div class="col-xs-9">
+                    <input type="text" placeholder="Nom" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="text" placeholder="Prénom" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="email" placeholder="Adresse email" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Mot de passe" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Confirmation de mot de passe" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="text" placeholder="Code postal" class="form-control">
+              </div>
+              <div class="checkbox">
+                <label for="remember-me">
+                  <input type="checkbox" checked id="remember-me"><span class="flaticon stroke checkmark"></span>
+                </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn bg-success">Inscription via Email</button>
+              </div>
+              <p>En créant un compte e-loue, vous acceptez les <a href="#">Conditions Générales </a><br>et la <a href="#">Politique de Confidentialité </a>de notre site</p>
+            </form>
           </div>
         </div>
       </div>

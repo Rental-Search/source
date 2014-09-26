@@ -6,11 +6,8 @@ $(document).ready(function(){
   $('#geolocate').formmapper({
     details: 'form',
   });
-  $('.registration').on('click', function(){
-    classic_form.slideDown();
-    $(this).slideUp();
-  });
-  $('select').chosen();
+
+  // $('select').chosen();
 
   $('.date-picker input.date').datepicker({
     language: "fr",

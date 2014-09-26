@@ -5923,8 +5923,9 @@ h1 {
   line-height: 1.5;
 }
 
-a, a:hover {
+a, a:hover, a:focus {
   color: inherit;
+  outline: none;
 }
 
 .form-control {

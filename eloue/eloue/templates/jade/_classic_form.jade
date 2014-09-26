@@ -1,0 +1,36 @@
+.modal.fade#classic-form(tabindex="-1", role="dialog", aria-hidden="true")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button(type="button", data-dismiss="modal").close
+          span(aria-hidden="true")&times;
+          span.sr-only Close
+        h4.modal-title Inscription
+      .modal-body
+        form(action="registration")
+          h3 Inscription 30 secondes
+          .form-group: .row
+            .col-xs-3: select
+              option(value="male") M.
+              option(value="female") F.
+            .col-xs-9: input(type="text", placeholder="Nom").form-control
+          .form-group: input(type="text", placeholder="Prénom").form-control
+          .form-group: input(type="email", placeholder="Adresse email").form-control
+          .form-group: input(type="password", placeholder="Mot de passe").form-control
+          .form-group: input(type="password", placeholder="Confirmation de mot de passe").form-control
+          .form-group: input(type="text", placeholder="Code postal").form-control
+          .checkbox
+            label(for="remember-me")
+              input(type="checkbox", checked)#remember-me
+              span.flaticon.stroke.checkmark
+            | Tenez moi informé de l'actualité et des bonnes affaires e-loue
+          .form-group: button(type="submit").btn.bg-success Inscription via Email
+          p
+            | En créant un compte e-loue, vous acceptez les 
+            a(href="#") Conditions Générales 
+            br
+            | et la 
+            a(href="#") Politique de Confidentialité 
+            | de notre site
+
+
