@@ -1,7 +1,7 @@
 .container.indent-b-lg
   .row
     .col-sm-6
-      ul.nav.owner-column
+      ul.timeline-steps.owner-column
         -var i = 10
         while i--
           li
@@ -9,11 +9,13 @@
             p.content #{how_it_works.timeline.text}
             p #{how_it_works.timeline.views} vues
             span.toggle-content &#149;&nbsp;&#149;&nbsp;&#149;
-            span.round
+            .addons
+              b
+              i
       .text-center: a(href="#").btn.bg-primary Je simule mes revenus
 
     .col-sm-6
-      ul.nav.tenant-column
+      ul.timeline-steps.tenant-column
         -var i = 10
         while i--
           li
@@ -21,5 +23,7 @@
             p.content #{how_it_works.timeline.text}
             p #{how_it_works.timeline.views} vues
             span.toggle-content &#149;&nbsp;&#149;&nbsp;&#149;
-            span.round
+            .addons
+              b
+              i
       .text-center: a(href="#").btn.bg-success Je commence à louer

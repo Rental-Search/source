@@ -9,84 +9,94 @@
     width: 50%
 
 
-  ul
-    &.owner-column
-      margin-right: $indent-sm
-      li
-        &:before,
-        &:after
-          left: 100%
-          top: $indent-sm
-        &:after
-          border-color: transparent transparent transparent white
-          margin-left: px(-1)
+.timeline-steps
+  padding-left: 0
+  list-style-type: none
+  &.owner-column
+    margin-right: $indent-sm
+    .addons
+      top: $indent-sm
+      left: 100%
+      margin-left: px(.5)
+      i
+        color: $brand-primary
+      b
+        left: 0
+        margin-left: px(-1)
         &:before
+          left: 0
           border-color: transparent transparent transparent darken($gray-lighter, 3%)
-      .round
-        top: $indent-sm + $indent-xs * 0.75
-        left: 100%
-        border-color: $brand-primary
-        margin-left: $indent-sm/2 + $grid-gutter-width/2
-    &.tenant-column
-      margin-left: $indent-sm
-      li
-        &:before,
         &:after
-          right: 100% 
-          bottom: $indent-md
-        &:after
-          border-color: transparent white transparent transparent
-          margin-right: px(-1)
+          left: px(-1)
+          border-color: transparent transparent transparent white
+  &.tenant-column
+    margin-left: $indent-sm
+    .addons
+      bottom: $indent-sm
+      right: 100%
+      margin-right: px(.5)
+      i
+        color: $brand-success
+      b
+        right: 0
+        margin-right: px(-1)
         &:before
+          right: 0
           border-color: transparent darken($gray-lighter, 3%) transparent transparent
-      .round
-        bottom: $indent-md + $indent-xs * 0.75
-        right: 100%
-        border-color: $brand-success
-        margin-right: $indent-sm/2 + $grid-gutter-width/2
-    li
-      position: relative
+        &:after
+          right: px(-1)
+          border-color: transparent white transparent transparent
+  li
+    position: relative
 
-      border: px(1) solid
-      border-radius: px(5)
+    border: px(1) solid
+    border-radius: px(5)
 
-      margin-bottom: $indent-sm
-      padding: $indent-sm $indent-sm ($indent-sm * 2)
+    margin-bottom: $indent-sm
+    padding: $indent-sm $indent-sm ($indent-sm * 2)
 
-      background: white
-      border-color: lighten($gray-lighter, 2%) darken($gray-lighter, 3%) darken($gray-lighter, 10%)
-      box-shadow: 0 px(2) px(2) $gray-lighter
+    background: white
+    border-color: lighten($gray-lighter, 2%) darken($gray-lighter, 3%) darken($gray-lighter, 10%)
+    box-shadow: 0 px(2) px(2) $gray-lighter
+  h4
+    font-weight: $fw-bold
+    font-size: px(17)
+    margin-top: 0
+  p
+    font-size:  px(13)
+    line-height: $line-height-base
+    color: $gray-strong
+    margin-bottom: 0
+  .toggle-content
+    cursor: pointer
+    position: absolute
+    right: 0
+    bottom: 0
+    left: 0
+    line-height: $indent-sm
+    border-top: px(1) solid $gray-lighter
+    text-align: center
+    color: darken($gray-lighter, 10%)
+
+  .addons
+    position: absolute
+    width: $indent-sm * 2 + $grid-gutter-width
+    height: $indent-sm
+    text-align: center
+    i
+      display: inline-block
+      height: $indent-sm
+      width: $indent-sm
+      background-color: white
+      border-radius: 50%
+      border: $indent-sm * 0.35 solid
+    b
+      position: absolute
+      top: 0
       &:before,
       &:after
         content: ""
         position: absolute
-        border-width: $indent-xs * 1.5
+        border-width: $indent-xs
         border-style: solid
-    h4
-      font-weight: $fw-bold
-      font-size: px(17)
-      margin-top: 0
-    p
-      font-size:  px(13)
-      line-height: $line-height-base
-      color: $gray-strong
-      margin-bottom: 0
-    .toggle-content
-      cursor: pointer
-      position: absolute
-      right: 0
-      bottom: 0
-      left: 0
-      line-height: $indent-sm
-      border-top: px(1) solid $gray-lighter
-      text-align: center
-      color: darken($gray-lighter, 10%)
-    .round
-      position: absolute
-      width: $indent-sm
-      height: $indent-sm
-      background-color: white
-      border-radius: 50%
-      border-width: $indent-sm * 0.35
-      border-style: solid
-
+        top: 0
