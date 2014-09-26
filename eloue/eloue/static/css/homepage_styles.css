@@ -1390,7 +1390,6 @@ input#sourse:checked + #sourse-img {
   font-size: inherit;
 }
 .modal .large .form-wrapper input,
-.modal .large .form-wrapper select,
 .modal .large .form-wrapper .chosen-container {
   font-size: 1em;
   -webkit-box-shadow: none;
@@ -1404,23 +1403,19 @@ input#sourse:checked + #sourse-img {
   border-bottom-left-radius: 50%;
 }
 .modal .large .form-wrapper input::-moz-placeholder,
-.modal .large .form-wrapper select::-moz-placeholder,
 .modal .large .form-wrapper .chosen-container::-moz-placeholder {
   color: #9d9d9d;
   opacity: 1;
 }
 .modal .large .form-wrapper input:-ms-input-placeholder,
-.modal .large .form-wrapper select:-ms-input-placeholder,
 .modal .large .form-wrapper .chosen-container:-ms-input-placeholder {
   color: #9d9d9d;
 }
 .modal .large .form-wrapper input::-webkit-input-placeholder,
-.modal .large .form-wrapper select::-webkit-input-placeholder,
 .modal .large .form-wrapper .chosen-container::-webkit-input-placeholder {
   color: #9d9d9d;
 }
-.modal .large .form-wrapper input[type="file"],
-.modal .large .form-wrapper select {
+.modal .large .form-wrapper input[type="file"] {
   display: table-cell !important;
   height: 0;
   border-width: 0;

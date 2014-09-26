@@ -6499,13 +6499,3 @@ table.bd-wrap tr {
 .icon-li.icon-lg {
   left: -1.85714em;
 }
-
-select {
-  height: 0;
-  width: 0;
-  overflow: hidden;
-  position: fixed;
-  left: 100%;
-  top: 100%;
-  visibility: hidden;
-}
