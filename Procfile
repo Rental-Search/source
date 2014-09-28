@@ -1,0 +1,1 @@
+web: gunicorn eloue.wsgi --log-file -
