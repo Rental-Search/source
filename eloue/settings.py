@@ -347,136 +347,136 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
-    'master': {
-        'source_filenames': (
-            'less/styles.less',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/master.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
-    'mobile': {
-        'source_filenames': (
-            'css/mobile.css',
-        ),
-        'output_filename': 'css/mobile.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
-    'ie': {
-        'source_filenames': (
-            'css/ie/ie.css',
-        ),
-        'output_filename': 'css/ie.css',
-        'extra_context': {
-            'media': 'screen',
-        }
-    },
-    'proapp': {
-        'source_filenames': (
-            'proapp/less/app.less',
-        ),
-        'output_filename': 'css/proapp.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
-    'contest': {
-        'source_filenames': (
-            'less/contest.less',
-            'css/chosen.css'
-        ),
-        'output_filename': 'css/contest.css',
-        'extra_context': {
-            'media': 'screen',
-        },
-    },
+    # 'master': {
+    #     'source_filenames': (
+    #         'less/styles.less',
+    #         'css/chosen.css'
+    #     ),
+    #     'output_filename': 'css/master.css',
+    #     'extra_context': {
+    #         'media': 'screen',
+    #     },
+    # },
+    # 'mobile': {
+    #     'source_filenames': (
+    #         'css/mobile.css',
+    #     ),
+    #     'output_filename': 'css/mobile.css',
+    #     'extra_context': {
+    #         'media': 'screen',
+    #     },
+    # },
+    # 'ie': {
+    #     'source_filenames': (
+    #         'css/ie/ie.css',
+    #     ),
+    #     'output_filename': 'css/ie.css',
+    #     'extra_context': {
+    #         'media': 'screen',
+    #     }
+    # },
+    # 'proapp': {
+    #     'source_filenames': (
+    #         'proapp/less/app.less',
+    #     ),
+    #     'output_filename': 'css/proapp.css',
+    #     'extra_context': {
+    #         'media': 'screen',
+    #     },
+    # },
+    # 'contest': {
+    #     'source_filenames': (
+    #         'less/contest.less',
+    #         'css/chosen.css'
+    #     ),
+    #     'output_filename': 'css/contest.css',
+    #     'extra_context': {
+    #         'media': 'screen',
+    #     },
+    # },
 }
 
 PIPELINE_JS = {
-    'application': {
-        'source_filenames': (
-            'js/jquery-1.7.1.min.js',
-            'js/jquery-ui-1.8.17.custom.min.js',
-            'js/jquery.ui.datepicker-fr.js',
-            'js/modernizr.js',
-            'js/mustache.js',
-            'js/chosen.jquery.min.js',
-            'js/bootstrap-alert.js',
-            'js/jquery.cookie.js',
-            'js/jquery.cycle.all.latest.js',
-            'js/application2.js',
-        ),
-        'output_filename': 'js/application2r.js',
-        'extra_context': {
-            'defer': False,
-        },
-    },
-    'proapplibs': {
-        'source_filenames': (
-            'proapp/js/libs/jquery.js',
-            'proapp/js/libs/underscore-min.js',
-            'proapp/js/libs/backbone.js',
-            'proapp/js/libs/backbone-tastypie.js',
-            'proapp/js/libs/backbone.layoutmanager.js',
-            'proapp/js/libs/bootstrap/bootstrap-transition.js',
-            'proapp/js/libs/bootstrap/bootstrap-alert.js',
-            'proapp/js/libs/bootstrap/bootstrap-modal.js',
-            'proapp/js/libs/bootstrap/bootstrap-dropdown.js',
-            'proapp/js/libs/bootstrap/bootstrap-scrollspy.js',
-            'proapp/js/libs/bootstrap/bootstrap-tab.js',
-            'proapp/js/libs/bootstrap/bootstrap-tooltip.js',
-            'proapp/js/libs/bootstrap/bootstrap-popover.js',
-            'proapp/js/libs/bootstrap/bootstrap-button.js',
-            'proapp/js/libs/bootstrap/bootstrap-collapse.js',
-            'proapp/js/libs/bootstrap/bootstrap-carousel.js',
-            'proapp/js/libs/bootstrap/bootstrap-typeahead.js',
-            'proapp/js/libs/flot/jquery.flot.js',
-            'proapp/js/libs/flot/jquery.flot.pie.js',
-            'proapp/js/libs/flot/jquery.flot.time.js',
-            'proapp/js/libs/ui/jquery.ui.core.js',
-            'proapp/js/libs/ui/jquery.ui.datepicker.js',
-            'proapp/js/libs/ui/i18n/jquery.ui.datepicker-fr.js'
-        ),
-        'output_filename': 'js/proapplibs.js',
-        'extra_context': {
-            'defer': False,
-        },
-    },
+    # 'application': {
+    #     'source_filenames': (
+    #         'js/jquery-1.7.1.min.js',
+    #         'js/jquery-ui-1.8.17.custom.min.js',
+    #         'js/jquery.ui.datepicker-fr.js',
+    #         'js/modernizr.js',
+    #         'js/mustache.js',
+    #         'js/chosen.jquery.min.js',
+    #         'js/bootstrap-alert.js',
+    #         'js/jquery.cookie.js',
+    #         'js/jquery.cycle.all.latest.js',
+    #         'js/application2.js',
+    #     ),
+    #     'output_filename': 'js/application2r.js',
+    #     'extra_context': {
+    #         'defer': False,
+    #     },
+    # },
+    # 'proapplibs': {
+    #     'source_filenames': (
+    #         'proapp/js/libs/jquery.js',
+    #         'proapp/js/libs/underscore-min.js',
+    #         'proapp/js/libs/backbone.js',
+    #         'proapp/js/libs/backbone-tastypie.js',
+    #         'proapp/js/libs/backbone.layoutmanager.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-transition.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-alert.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-modal.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-dropdown.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-scrollspy.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-tab.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-tooltip.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-popover.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-button.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-collapse.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-carousel.js',
+    #         'proapp/js/libs/bootstrap/bootstrap-typeahead.js',
+    #         'proapp/js/libs/flot/jquery.flot.js',
+    #         'proapp/js/libs/flot/jquery.flot.pie.js',
+    #         'proapp/js/libs/flot/jquery.flot.time.js',
+    #         'proapp/js/libs/ui/jquery.ui.core.js',
+    #         'proapp/js/libs/ui/jquery.ui.datepicker.js',
+    #         'proapp/js/libs/ui/i18n/jquery.ui.datepicker-fr.js'
+    #     ),
+    #     'output_filename': 'js/proapplibs.js',
+    #     'extra_context': {
+    #         'defer': False,
+    #     },
+    # },
 
-    'proapp': {
-        'source_filenames': (
-            'proapp/js/models/redirectionevents.js',
-            'proapp/js/models/phoneevents.js',
-            'proapp/js/models/addressevents.js',
-            'proapp/js/models/trafficevents.js',
-            'proapp/js/views/core/loading.js',
-            'proapp/js/views/core/navtabitem.js',
-            'proapp/js/views/core/navtab.js',
-            'proapp/js/views/core/navtabitems.js',
-            'proapp/js/views/core/nav.js',
-            'proapp/js/views/stats/timeseries.js',
-            'proapp/js/views/stats/charts.js',
-            'proapp/js/views/stats/chartsdetails.js',
-            'proapp/js/views/stats/statstabcontent.js',
-            'proapp/js/views/stats/traffictabcontent.js',
-            'proapp/js/views/stats/addresstabcontent.js',
-            'proapp/js/views/stats/redirectiontabcontent.js',
-            'proapp/js/views/stats/phonetabcontent.js',
-            'proapp/js/views/stats/statspillcontent.js',
-            'proapp/js/views/layout.js',
-            'proapp/js/routers/routes.js',
-            'proapp/js/utils.js',
-            'proapp/js/app.js',
-        ),
-        'output_filename': 'js/proapplibs.js',
-        'extra_context': {
-            'defer': False,
-        },
-    },
+    # 'proapp': {
+    #     'source_filenames': (
+    #         'proapp/js/models/redirectionevents.js',
+    #         'proapp/js/models/phoneevents.js',
+    #         'proapp/js/models/addressevents.js',
+    #         'proapp/js/models/trafficevents.js',
+    #         'proapp/js/views/core/loading.js',
+    #         'proapp/js/views/core/navtabitem.js',
+    #         'proapp/js/views/core/navtab.js',
+    #         'proapp/js/views/core/navtabitems.js',
+    #         'proapp/js/views/core/nav.js',
+    #         'proapp/js/views/stats/timeseries.js',
+    #         'proapp/js/views/stats/charts.js',
+    #         'proapp/js/views/stats/chartsdetails.js',
+    #         'proapp/js/views/stats/statstabcontent.js',
+    #         'proapp/js/views/stats/traffictabcontent.js',
+    #         'proapp/js/views/stats/addresstabcontent.js',
+    #         'proapp/js/views/stats/redirectiontabcontent.js',
+    #         'proapp/js/views/stats/phonetabcontent.js',
+    #         'proapp/js/views/stats/statspillcontent.js',
+    #         'proapp/js/views/layout.js',
+    #         'proapp/js/routers/routes.js',
+    #         'proapp/js/utils.js',
+    #         'proapp/js/app.js',
+    #     ),
+    #     'output_filename': 'js/proapplibs.js',
+    #     'extra_context': {
+    #         'defer': False,
+    #     },
+    # },
 
 }
 

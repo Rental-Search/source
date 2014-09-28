@@ -43,3 +43,4 @@ slimpayKeyStore.jks
 **/dist/
 **/.tmp
 .env
+staticfiles/
