@@ -42,3 +42,4 @@ slimpayKeyStore.jks
 **/bower_components/
 **/dist/
 **/.tmp
+.env
