@@ -13,32 +13,25 @@ from rest_framework import serializers, status
 from eloue.api.exceptions import ValidationException
 
 
-def raise_on_validate(cls):
-    """Decorate serializer with ability to raise on validation errors."""
+class RaiseOnValidateSerializerMixin(object):
+    """Serializer that has ability to raise on validation errors."""
 
-    class RaiseOnValidateSerializer(cls):
-        """Serializer that has ability to raise on validation errors."""
+    def __init__(self, instance=None, data=None, files=None,
+                 context=None, partial=False, many=None,
+                 allow_add_remove=False, **kwargs):
+        super(RaiseOnValidateSerializerMixin, self).__init__(
+            instance, data, files, context, partial, many,
+            allow_add_remove, **kwargs)
 
-        def __init__(self, instance=None, data=None, files=None,
-                     context=None, partial=False, many=None,
-                     allow_add_remove=False, **kwargs):
-            super(RaiseOnValidateSerializer, self).__init__(
-                instance, data, files, context, partial, many,
-                allow_add_remove, **kwargs)
+        self.suppress_exception = False
+        if context and 'suppress_exception' in context:
+            self.suppress_exception = context['suppress_exception']
 
-            self.suppress_exception = False
-            if context and 'suppress_exception' in context:
-                self.suppress_exception = context['suppress_exception']
-
-        def is_valid(self):
-            is_valid = super(RaiseOnValidateSerializer, self).is_valid()
-            if not is_valid and not self.suppress_exception:
-                raise ValidationException(self._errors)
-            else:
-                return is_valid
-
-    return RaiseOnValidateSerializer
-
+    def is_valid(self):
+        is_valid = super(RaiseOnValidateSerializerMixin, self).is_valid()
+        if not is_valid and not self.suppress_exception:
+            raise ValidationException(self._errors)
+        return is_valid
 
 class NullBooleanField(serializers.BooleanField):
     def from_native(self, value):
@@ -112,9 +105,7 @@ class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
         super(ModelSerializerOptions, self).__init__(meta)
         self.immutable_fields = getattr(meta, 'immutable_fields', ())
 
-
-@raise_on_validate
-class ModelSerializer(serializers.HyperlinkedModelSerializer):
+class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedModelSerializer):
     """
     A serializer that deals with model instances and querysets, and
     supports `immutable_fields`
