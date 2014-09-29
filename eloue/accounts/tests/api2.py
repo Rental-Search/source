@@ -192,8 +192,8 @@ class UsersTest(APITestCase):
         })
         self.assertEquals(response.status_code, 200, response.data)
         self.assertEquals(response.data['id'], 1)
-        self.assertEquals(response.data['first_name'], 'prenome')
-        self.assertEquals(response.data['last_name'], 'nome')
+        self.assertEquals(response.data['first_name'], 'prenom')
+        self.assertEquals(response.data['last_name'], 'nom')
 
 class PhoneNumbersTest(APITestCase):
     fixtures = ['patron', 'phones']
