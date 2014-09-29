@@ -5,6 +5,7 @@ define([
     "angular-resource",
     "angular-route",
     "datejs",
+    "chosen",
     "bootstrap-datepicker",
     "custom-scrollbar"
 ], function (angular) {
