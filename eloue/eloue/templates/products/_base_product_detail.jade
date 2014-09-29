@@ -7,6 +7,7 @@ block append styles
 
 block scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+  //- TODO: add bower/requirejs support for script(src="#{STATIC_URL}js/bootstrap/carousel.js")
 
 block append content-body
   #fb-root

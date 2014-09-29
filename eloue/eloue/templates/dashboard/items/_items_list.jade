@@ -5,7 +5,7 @@ section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selecte
   .section-header
     .row
       .indent-xs-t.col-xs-4.col-xs-offset-8
-        .select-gradient.without-search.date-picker
+        .select-gradient.without-search
           select(ng-model="selectedCategory", ng-change="filterByCategory()")
             option(value="") Catégories
             option(ng-repeat="category in categories", value="{{category.id}}") {{category.name}}

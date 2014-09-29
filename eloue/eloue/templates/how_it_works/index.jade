@@ -1,0 +1,24 @@
+extends ../base
+block prepend variables
+  -var STATIC_URL = "../../static/"
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/how_it_works.css")
+block append content-body
+  .container-flex
+    header.header-site: include ../jade/_header_site
+    nav:           include _breadcrumb
+    article
+      section.framing: include _top_content
+      section:                     include _steps
+      section.timeline:            include _timeline
+    footer
+      section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
+      section.footer-links.framing:         include ../jade/_footer_links
+      section.rss:                          include ../jade/_rss
+
+  script.
+    $('p.content').hide();
+    $('.toggle-content').on('click', function () {
+      $(this).closest('li').find('.content').slideToggle('fast');
+      });
