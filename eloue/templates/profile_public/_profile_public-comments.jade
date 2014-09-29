@@ -11,5 +11,12 @@ ul.list-group
           a(href="#").text-success: b #{comment.product} 
           small loué par 
           a(href="#").text-success: b #{comment.username}
+        .rate.indent-t-xs.indent-b-xs
+          -var stars = [1,2,3,4,5]
+          each s in stars
+            if s == 3
+              span.flaticon.solid.star-2.current-rate
+            else
+              span.flaticon.solid.star-2
         p #{comment.content}
         small #{comment.date}

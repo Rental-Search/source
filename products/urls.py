@@ -3,12 +3,14 @@ from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 
 from products.search import alert_search, product_search
-from products.views import product_create, message_create, \
-    product_delete, alert_create, alert_inform, alert_delete, \
-    ProductList, AlertInformSuccess, AlertList, \
-    ProductListView, ProductDetailView, PublishItemView
-from rent.views import booking_create, booking_price, product_occupied_date, \
-    booking_create_redirect, phone_create
+from products.views import (product_create, message_create,
+    product_delete, alert_create, alert_inform, alert_delete,
+    ProductList, AlertInformSuccess, AlertList,
+    ProductListView, ProductDetailView, PublishItemView,
+    )
+from rent.views import (booking_create, booking_price, product_occupied_date,
+    booking_create_redirect, phone_create,
+    )
 
 
 urlpatterns = patterns('',
@@ -36,8 +38,10 @@ urlpatterns = patterns('',
 )
 
 
+product_extra_context = {'sqs': product_search}
+
 ui3_urlpatterns = patterns('',
     url(r'^%s/$' % _('ajouter'), PublishItemView.as_view(), name='publish_item'),
-    url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<pk>\d+)/$', ProductDetailView.as_view(), {'sqs': product_search}, name='booking_create'),
-    url(r'^([^/].+/)?$', ProductListView.as_view(), {'sqs': product_search}, name='product_list'),
+    url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<pk>\d+)/$', ProductDetailView.as_view(), product_extra_context, name='booking_create'),
+    url(r'^([^/].+/)?$', ProductListView.as_view(), product_extra_context, name='product_list'),
 )

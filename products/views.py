@@ -25,13 +25,12 @@ from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
 from haystack.query import SearchQuerySet
-from haystack.constants import DJANGO_ID
 
 from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
 from accounts.search import patron_search
 
-from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
+from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm, SuggestCategoryViewForm
 from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
 from products.choices import UNIT, SORT
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
@@ -45,7 +44,7 @@ from rent.choices import BOOKING_STATE
 from eloue.decorators import ownership_required, secure_required, mobify, cached
 from eloue.utils import cache_key
 from eloue.geocoder import GoogleGeocoder
-from eloue.views import LoginRequiredMixin
+from eloue.views import LoginRequiredMixin, SearchQuerySetMixin
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -535,7 +534,7 @@ def product_delete(request, slug, product_id):
         return render(request, 'products/product_delete.html', {'product': product})
 
 
-class ProductList(ListView):
+class ProductList(SearchQuerySetMixin, ListView):
     template_name = "products/product_result.html"
     paginate_by = PAGINATE_PRODUCTS_BY
     context_object_name = 'product_list'
@@ -543,7 +542,7 @@ class ProductList(ListView):
     @method_decorator(mobify)
     @method_decorator(cache_page(900))
     @method_decorator(vary_on_cookie)
-    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet(), suggestions=None, page=None):
+    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet(), suggestions=None, page=None, **kwargs):
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         query_data = request.GET.copy()
         if not query_data.get('l'):
@@ -609,7 +608,7 @@ class ProductList(ListView):
         self.form = FacetedSearchForm(
             dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
             searchqueryset=sqs)
-        self.sqs, self.suggestions, self.top_products = self.form.search()
+        sqs, self.suggestions, self.top_products = self.form.search()
         # we use canonical_parameters to generate the canonical url in the header
         self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
         self.canonical_parameters.pop('categorie', None)
@@ -619,10 +618,7 @@ class ProductList(ListView):
         if self.canonical_parameters:
             self.canonical_parameters = '?' + self.canonical_parameters
         self.kwargs.update({'page': page}) # Django 1.5+ ignore *args and **kwargs in View.dispatch()
-        return super(ProductList, self).dispatch(request, urlbits, sqs, suggestions, page=page)
-
-    def get_queryset(self):
-        return self.sqs
+        return super(ProductList, self).dispatch(request, sqs=sqs, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ProductList, self).get_context_data(**kwargs)
@@ -734,12 +730,21 @@ def suggestion(request):
 
 # UI v3
 
-class HomepageView(TemplateView):
-    template_name = 'index.jade'
+class CommonPageContextMixin(object):
     breadcrumbs = {'sort': {'name': 'sort', 'value': '', 'label': 'sort', 'facet': False}}
+    def get_context_data(self, **kwargs):
+        context = super(CommonPageContextMixin, self).get_context_data(**kwargs)
+        context.update({
+            'categories_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
+            'breadcrumbs': self.breadcrumbs,
+        })
+        return context
+
+class HomepageView(CommonPageContextMixin, TemplateView):
+    template_name = 'index.jade'
 
     @property
-    @cached(10*60)
+    @method_decorator(cached(10*60))
     def home_context(self):
         product_stats = Product.objects.extra(
             tables=['accounts_address'],
@@ -749,9 +754,7 @@ class HomepageView(TemplateView):
         return {
             'cities_list': product_stats,
             'total_products': Product.objects.only('id').count(),
-            'categories_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
             'product_list': last_added(product_search, self.location, limit=8),
-            'breadcrumbs': self.breadcrumbs,
         }
 
     def get_context_data(self, **kwargs):
@@ -766,14 +769,10 @@ class HomepageView(TemplateView):
 class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
 
-class ProductDetailView(DetailView):
+class ProductDetailView(SearchQuerySetMixin, DetailView):
     model = Product
     template_name = 'products/product_detail.jade'
     context_object_name = 'product'
-
-    def dispatch(self, request, *args, **kwargs):
-        self.sqs = kwargs.get('sqs', SearchQuerySet())
-        return super(ProductDetailView, self).dispatch(request, request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -784,53 +783,8 @@ class ProductDetailView(DetailView):
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
-    def get_queryset(self):
-        return self.sqs.load_all()
-
-    def get_object(self, queryset=None):
-        """
-        Returns the object the view is displaying.
-
-        By default this requires `self.queryset` and a `pk` or `slug` argument
-        in the URLconf, but subclasses can override this to return any object.
-        """
-        # Use a custom queryset if provided; this is required for subclasses
-        # like DateDetailView
-        if queryset is None:
-            queryset = self.get_queryset()
-
-        # Next, try looking up by primary key.
-        pk = self.kwargs.get(self.pk_url_kwarg, None)
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
-        if pk is not None:
-            queryset = queryset.filter(**{DJANGO_ID: pk})
-
-        # Next, try looking up by slug.
-        elif slug is not None:
-            slug_field = self.get_slug_field()
-            queryset = queryset.filter(**{slug_field: slug})
-
-        # If none of those are defined, it's an error.
-        else:
-            raise AttributeError("Generic detail view %s must be called with "
-                                 "either an object pk or a slug."
-                                 % self.__class__.__name__)
-
-        try:
-            # Get the single item from the filtered queryset
-            obj = queryset.best_match()
-        except IndexError:
-            raise Http404(_("No %(verbose_name)s found matching the query") %
-                          {'verbose_name': self.model._meta.verbose_name})
-        return obj
-
-class PublishItemView(TemplateView):
+class PublishItemView(CommonPageContextMixin, TemplateView):
     template_name = 'publich_item/index.jade'
-
-    def get_context_data(self, **kwargs):
-        return {
-            'categories_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
-        }
 
 
 # REST API 2.0

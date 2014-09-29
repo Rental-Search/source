@@ -1,7 +1,6 @@
 .row.date-picker
     .table-cell.main-cell
-        .table-cell
-            span Du
+        .table-cell: span Du
         .table-cell.main-cell
             input(type="text", placeholder="", name="fromDate", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
@@ -11,8 +10,7 @@
     .span(ng-show="fromDate.$dirty && fromDate.$error.pattern").text-danger Invalid date.
 .row.date-picker
     .table-cell.main-cell
-        .table-cell
-            span Au
+        .table-cell: span Au
         .table-cell.main-cell
             input(type="text", placeholder="", name="toDate", ng-model="bookingDetails.toDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3

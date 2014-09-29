@@ -46,16 +46,12 @@ define(["angular", "eloue/modules/booking/BookingModule",
 
             $scope.$on("openModal", function (event, args) {
                 var params = args.params;
-                var rootCategoryName = params.category;
-                if (!!rootCategoryName) {
+                var rootCategoryId = params.category;
+                if (!!rootCategoryId) {
                     CategoriesService.getRootCategories().$promise.then(function (categories) {
                         $scope.rootCategories = categories.results;
-                        //TODO: set actual category id
-                        var id = 35;
-                        CategoriesService.getCategory(id).$promise.then(function (rootCategory) {
-                            $scope.rootCategory = rootCategory.id;
-                            $scope.updateNodeCategories();
-                        });
+                        $scope.rootCategory = rootCategoryId;
+                        $scope.updateNodeCategories();
                     });
                 }
             });

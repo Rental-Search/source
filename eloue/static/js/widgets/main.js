@@ -87,10 +87,9 @@ require([
 ], function ($, _, angular) {
     "use strict";
     $(function () {
+        $("select").attr("eloue-chosen", "");
 
         angular.bootstrap(document, ["EloueApp"]);
-
-
 
         var slide_imgs = [].slice.call($('.carousel-wrapper').find('img'));
         for (var index = 0; index < slide_imgs.length; index++) {

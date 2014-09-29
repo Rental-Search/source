@@ -6,8 +6,9 @@ from functools import wraps, partial
 
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden
+from django.http import HttpResponsePermanentRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.utils import translation
+from django.utils.translation import ugettext as _
 from django.core.cache import get_cache, cache as default_cache
 
 from eloue.utils import cache_key
@@ -137,4 +138,16 @@ def split_args_dict(f):
         if isinstance(args, basestring):
             args = dict(keyval.split('=') for keyval in args.split(','))
         return f(value, **args)
+    return wrapper
+
+
+def ajax_required(f):
+    """
+    Decorator makes sure the request is coming from JavaScript.
+    """
+    @wraps(f)
+    def wrapper(request, *args, **kwargs):
+        if not request.is_ajax():
+            return HttpResponseBadRequest(_('AJAX request is required.'))
+        return f(request, *args, **kwargs)
     return wrapper

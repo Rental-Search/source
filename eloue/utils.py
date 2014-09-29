@@ -18,7 +18,7 @@ from django.forms.util import ErrorList
 
 try:
     import json
-except ImportErorr:
+except ImportError:
     try:
         import simplejson as json
     except ImportErorr:

@@ -21,13 +21,13 @@
                             .col-sm-6: input(type="text", placeholder="Modèle *", required, ng-model="product.model", ng-show="isAuto").form-control
                         .row
                             .col-md-4
-                                select(ng-model="rootCategory", ng-change="updateNodeCategories()").form-control
+                                select(ng-model="rootCategory", ng-change="updateNodeCategories()", opts="rootCategories").form-control
                                     option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
                             .col-md-4
-                                select(ng-model="nodeCategory", ng-change="updateLeafCategories()").form-control
+                                select(ng-model="nodeCategory", ng-change="updateLeafCategories()", opts="nodeCategories").form-control
                                     option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
                             .col-md-4
-                                select(ng-model="product.category", required).form-control
+                                select(ng-model="product.category", opts="leafCategories", required).form-control
                                     option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
                         .row
                             .col-sm-4

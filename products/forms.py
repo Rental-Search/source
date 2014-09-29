@@ -673,3 +673,6 @@ class TopPositionForm(forms.ModelForm):
     class Meta:
         model = ProductTopPosition
 
+
+class SuggestCategoryViewForm(SearchForm):
+    category = TreeNodeChoiceField(queryset=Category.tree.all(), required=False)
