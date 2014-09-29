@@ -7,7 +7,7 @@ $(document).ready(function(){
     details: 'form',
   });
 
-  // $('select').chosen();
+  $('select').chosen();
 
   $('.date-picker input.date').datepicker({
     language: "fr",
