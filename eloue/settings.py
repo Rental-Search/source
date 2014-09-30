@@ -337,6 +337,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'how_it_works_styles': {
+        'source_filenames': (
+            'sass/how_it_works.sass',
+        ),
+        'output_filename': 'css/how_it_works_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'dashboard_styles': {
         'source_filenames': (
             'dashboard/sass/base.sass',

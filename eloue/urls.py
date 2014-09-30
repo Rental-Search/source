@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 from eloue.api.urls import router
-from products.views import HomepageView, ProductListView, ProductDetailView
+from products.views import HomepageView
 
 log = logbook.Logger('eloue')
 
@@ -217,6 +217,8 @@ ui3_urlpatterns = patterns('',
     url(r'^$', HomepageView.as_view(), name='home'),
 
     url(r'^location/', include(ui3_products_urlpatterns)),
+    url(r'^comment-ca-marche/', TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
+    #url(r'^simulez-vos-revenus/', TemplateView.as_view(template_name='simulator/index.jade'), name='simulator'),
 
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
