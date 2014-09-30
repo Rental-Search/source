@@ -6,15 +6,15 @@ block details
         {% verbatim %}
         .col-md-4
           .form-control
-            select(ng-model="rootCategory", ng-change="updateNodeCategories()")
+            select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories")
               option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
         .col-md-4
           .form-control
-            select(ng-model="nodeCategory", ng-change="updateLeafCategories()")
+            select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories")
               option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
         .col-md-4
           .form-control
-            select(ng-model="product.category")
+            select(ng-model="product.category", eloue-chosen, opts="leafCategories")
               option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
         {% endverbatim %}
       h2 Titre

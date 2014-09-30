@@ -61,7 +61,7 @@ block content-view
           li.col-sm-2
             .select-gradient.without-search.date-picker
               //-select(ng-model="selectedActivityType", ng-options="type.id as type.name for type in activityTypes | orderBy:'id':true", ng-change="filterByActivityType()")
-              select(ng-model="selectedActivityType", ng-change="filterByActivityType()")
+              select(ng-model="selectedActivityType", ng-change="filterByActivityType()", eloue-chosen)
                 option(ng-repeat="type in activityTypes | orderBy:'id':true", value="{{type.id}}") {{type.name}}
           li.col-sm-8.text-center
             h4 Votre activité sur e-loue
