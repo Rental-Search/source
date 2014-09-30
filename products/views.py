@@ -30,7 +30,7 @@ from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
 from accounts.search import patron_search
 
-from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm, SuggestCategoryViewForm
+from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
 from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
 from products.choices import UNIT, SORT
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
@@ -785,6 +785,38 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
 
 class PublishItemView(CommonPageContextMixin, TemplateView):
     template_name = 'publich_item/index.jade'
+
+from django.views.generic import View
+from eloue.views import AjaxResponseMixin
+from products.forms import SuggestCategoryViewForm
+
+class SuggestCategoryView(AjaxResponseMixin, View):
+    def get_context_data(self, **kwargs):
+        # search for products by provided query string
+        form = SuggestCategoryViewForm(self.request.GET, searchqueryset=product_search)
+        if not form.is_valid():
+            return dict(errors=form.errors)
+
+        sqs = form.search()
+
+        # collect categories from product records found
+        categories_set = reduce(lambda a, b: a.update(b.categories if b else []) or a, sqs, set())
+
+        qs = Category.on_site.all()
+        # we should filter by tree_id first because of SQL query performance benefits
+        category = form.cleaned_data['category']
+        if category is not None:
+            qs = qs.filter(tree_id=category._mpttfield('tree_id'))
+        qs = qs.filter(slug__in=categories_set)
+
+        context = dict(categories=[
+            self.get_ancestors(c) for c in qs if c.is_leaf_node()
+        ])
+        return context
+
+    @method_decorator(cached(60*60))
+    def get_ancestors(self, category):
+        return [dict(id=c.id, name=c.name) for c in category.get_ancestors(include_self=True)]
 
 
 # REST API 2.0

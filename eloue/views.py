@@ -10,6 +10,8 @@ from haystack.query import SearchQuerySet
 from haystack.constants import DJANGO_ID
 
 from products.forms import FacetedSearchForm
+from eloue.decorators import ajax_required
+from eloue.http import JsonResponse
 
 @requires_csrf_token
 def custom404(request, template_name='404.html'):
@@ -75,3 +77,12 @@ class SearchQuerySetMixin(object):
             raise Http404(_("No %(verbose_name)s found matching the query") %
                           {'verbose_name': self.model._meta.verbose_name})
         return obj
+
+class AjaxResponseMixin(object):
+    @method_decorator(ajax_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AjaxResponseMixin, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return JsonResponse(context)
