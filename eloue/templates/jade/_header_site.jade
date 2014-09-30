@@ -1,34 +1,85 @@
+-var userLogin = false
 section.container.signs-links
-	ul(role = "tablist").nav.without-spaces
-		li.divide
-		li: span(ng-show="!currentUser")
-			| Bonjour,
-			a( href = "#inscrivez-vous", data-toggle="modal", data-target="#registrationModal") inscrivez-vous
-			| ou
-			a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal") connectez-vous
-		li: span(ng-show="!!currentUser")
-			| Bonjour, {% verbatim %} {{currentUser.username}}. {% endverbatim %} &nbsp;
-		li.divide
-		li: span
-			| Vous êtes un loueur professionnel, découvrez les
-			a( href ="#") offers e-loue Pro
-		li.divide
-		li: span
-			| Appelez-nous au
-			b 0826.800.200
-			| (0,15&euro; / min)
+  ul(role="tablist", ng-show="!currentUser").nav.without-spaces.ng-hide
+      li:
+        | Bonjour, 
+        a( href = "#inscrivez-vous", data-toggle="modal", data-target="#registrationModal") inscrivez-vous 
+        | ou 
+        a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal") connectez-vous
+      li.divide
+      li: span
+        | Vous êtes un loueur professionnel, découvrez les 
+        a( href ="#") offers e-loue Pro
+      li.divide
+    li: span
+      | Appelez-nous au 
+      b 0826.800.200 
+      | (0,15&euro; / min)
+  ul(role="tablist", ng-show="!!currentUser").nav.without-spaces.ng-hide
+      li.guest-veiw
+        .dropdown
+          span.dropdown-img: a(href="#"): img(src="http://lorempixel.com/30/30/people", alt="")
+          span(data-toggle="dropdown").dropdown-toggle.text-success Gaspard
+            span.caret
+          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+            each item in header_popover
+              li
+                .middle-round: span
+                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
+                .content
+                  h4: a(href="#") #{item.first_name}
+                  h5: a(href="#") #{item.topic}
+                  p #{item.text}
+        .dropdown
+          span(data-toggle="dropdown").dropdown-toggle.text-success
+            i.flaticon.stroke.mail
+            span.badge-count 1
+           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+            each item in header_popover
+              li
+                .middle-round: span
+                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
+                .content
+                  h4: a(href="#") #{item.first_name}
+                  h5: a(href="#") #{item.topic}
+                  p #{item.text}
+        .dropdown
+          span(data-toggle="dropdown").dropdown-toggle.text-success
+            i.flaticon.stroke.calendar-5
+            span.badge-count 121
+           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+            each item in header_popover
+              li
+                .middle-round: span
+                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
+                .content
+                  h4: a(href="#") #{item.first_name}
+                  h5: a(href="#") #{item.topic}
+                  p #{item.text}
+        .dropdown
+          span(data-toggle="dropdown").dropdown-toggle.text-success Aide
+            span.caret
+           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+            each item in header_popover
+              li
+                .middle-round: span
+                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
+                .content
+                  h4: a(href="#") #{item.first_name}
+                  h5: a(href="#") #{item.topic}
+                  p #{item.text}
 
 .framing
-	section.container.search-form
-		.table-cell
-			a(href="{% url 'home' %}"): img(src="#{STATIC_URL}img/logo.png", alt="e-loue logo")
-		.table-cell.main-cell
-			form(action="{% url 'product_list' %}").input-group
-				input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="Que voulez-vous louer ?", title="{% if form.cleaned_data.q %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
-				.table-cell.input-group.where-field
-					i.flaticon.stroke.location-pin-3
-					input(type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control#geolocate
-				.table-cell.input-group-btn
-					button(type="submit", default).btn.btn-default.btn-search: i.flaticon.stroke.zoom-2
-		.table-cell
-			button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise Déposez une annonce
+  section.container.search-form
+    .table-cell
+      a(href="{% url 'home' %}"): img(src="#{STATIC_URL}img/logo.png", alt="e-loue logo")
+    .table-cell.main-cell
+      form(action="{% url 'product_list' %}").input-group
+        input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="Que voulez-vous louer ?", title="{% if form.cleaned_data.q %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
+        .table-cell.input-group.where-field
+          i.flaticon.stroke.location-pin-3
+          input(type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control#geolocate
+        .table-cell.input-group-btn
+          button(type="submit", default).btn.btn-default.btn-search: i.flaticon.stroke.zoom-2
+    .table-cell
+      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise Déposez une annonce

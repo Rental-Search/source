@@ -1,5 +1,5 @@
 -load i18n
 
 ul.nav.without-spaces.row
-  each category in categories_list|slice:":10"
+  each category in categories_list
     li: a(href="{{ category.get_absolute_url }}", title="{% trans 'location'%} {{ category.name }}") {{ category.name|capfirst }}

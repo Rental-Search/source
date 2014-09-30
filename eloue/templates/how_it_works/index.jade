@@ -1,0 +1,28 @@
+extends ../base
+-load compressed
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "how_it_works_styles" %}
+
+block append scripts
+  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+
+block append content-body
+  .container-flex
+    header.header-site: include ../jade/_header_site
+    nav:           include _breadcrumb
+    article
+      section.framing: include _top_content
+      section:                     include _steps
+      section.timeline:            include _timeline
+    footer
+      section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
+      section.footer-links.framing:         include ../jade/_footer_links
+      section.rss:                          include ../jade/_rss
+
+  script.
+    $('p.content').hide();
+    $('.toggle-content').on('click', function () {
+      $(this).closest('li').find('.content').slideToggle('fast');
+      });
