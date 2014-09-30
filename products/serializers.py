@@ -3,20 +3,17 @@ from products import models
 from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer, BooleanField
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
 
-class CategoryDescriptionSerializer(ModelSerializer):
-    class Meta:
-        model = models.CategoryDescription
-        fields = ('title', 'description', 'header', 'footer')
 
 class CategorySerializer(ModelSerializer):
-    description = CategoryDescriptionSerializer(read_only=True)
     is_child_node = ObjectMethodBooleanField('is_child_node', read_only=True)
     is_leaf_node = ObjectMethodBooleanField('is_leaf_node', read_only=True)
     is_root_node = ObjectMethodBooleanField('is_root_node', read_only=True)
 
     class Meta:
         model = models.Category
-        fields = ('id', 'parent', 'name', 'need_insurance', 'description', 'is_child_node', 'is_leaf_node', 'is_root_node')
+        fields = ('id', 'parent', 'name', 'need_insurance',
+                  'title', 'description', 'header', 'footer',
+                  'is_child_node', 'is_leaf_node', 'is_root_node')
         immutable_fields = ('parent',)
 
 class RequiredBooleanField(BooleanField):

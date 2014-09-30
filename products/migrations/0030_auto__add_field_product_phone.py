@@ -4,6 +4,14 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+try:
+    from django_fsm import FSMField
+    FSMField = 'django_fsm.FSMField'
+except ImportError:
+    from django_fsm.db.fields.fsmfield import FSMField
+    FSMField = 'django_fsm.db.fields.fsmfield.FSMField'
+
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
@@ -400,7 +408,7 @@ class Migration(SchemaMigration):
             'quantity': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'bookings'", 'symmetrical': 'False', 'to': "orm['sites.Site']"}),
             'started_at': ('django.db.models.fields.DateTimeField', [], {}),
-            'state': ('django_fsm.db.fields.fsmfield.FSMField', [], {'default': "'authorizing'", 'max_length': '50'}),
+            'state': (FSMField, [], {'default': "'authorizing'", 'max_length': '50'}),
             'total_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '8', 'decimal_places': '2'}),
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32', 'primary_key': 'True'})
         },

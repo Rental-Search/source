@@ -578,13 +578,19 @@ class Category(MPTTModel):
     slug = models.SlugField(unique=True, db_index=True)
     need_insurance = models.BooleanField(default=True, db_index=True)
     sites = models.ManyToManyField(Site, related_name='categories')
-    
+
+    # fields moved from CategoryDescription
+    title = models.CharField(max_length=150, blank=True)
+    description = models.TextField(blank=True)
+    header = models.TextField(blank=True)
+    footer = models.TextField(blank=True)
+
     on_site = CurrentSiteManager()
     objects = models.Manager()
     tree = TreeManager()
 
     product = models.OneToOneField(Product, related_name='category_product', null=True, blank=True)
-    
+
     class Meta:
         ordering = ['name']
         verbose_name = _('category')
@@ -613,18 +619,6 @@ class Category(MPTTModel):
         else:
             return u"/location/%(slug)s/" % {'slug': self.slug}
             
-
-class CategoryDescription(models.Model):
-    category = models.OneToOneField(Category, related_name='description')
-
-    title = models.CharField(max_length=150)
-    description = models.TextField()
-    header = models.TextField()
-    footer = models.TextField()
-    
-    def __unicode__(self):
-        return "%s - %s"%(self.category.name, self.title)
-    
 
 class Property(models.Model):
     """A property"""

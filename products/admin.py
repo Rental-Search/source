@@ -12,7 +12,7 @@ from django_messages.models import Message
 from django_messages.admin import MessageAdmin
 
 from products.forms import ProductAdminForm
-from products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage, CategoryDescription
+from products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage
 
 from eloue.admin import CurrentSiteAdmin
 
@@ -110,15 +110,12 @@ class CarProductAdmin(CurrentSiteAdmin):
             kwargs['queryset'] = Category.tree.get(name=u'Automobile').get_descendants()
         return super(CarProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
-class CategoryDescriptionInline(admin.StackedInline):
-    model = CategoryDescription
 
 class CategoryAdmin(MPTTModelAdmin):
     list_display = ('name', 'parent')
     search_fields = ['name', 'parent__name']
     prepopulated_fields = {"slug": ("name",)}
     raw_id_fields = ("product",)
-    inlines = [CategoryDescriptionInline]
 
 
 class PropertyAdmin(admin.ModelAdmin):
