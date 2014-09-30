@@ -12,13 +12,14 @@ require.config({
         "angular-ui-router": "/static/bower_components/angular-ui-router/release/angular-ui-router.min",
         "angular-translate": "/static/bower_components/angular-translate/angular-translate.min",
         "bootstrap-datepicker": "/static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
+        "bootstrap-datepicker-fr": "/static/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
         "jquery-form": "/static/bower_components/jquery-form/jquery.form",
         "datejs": "/static/bower_components/datejs/build/production/date.min",
+        "chosen": "/static/bower_components/chosen/chosen.jquery.min",
         "selectivizr": "/static/bower_components/selectivizr/selectivizr",
         "jquery-mousewheel": "/static/bower_components/jquery-mousewheel/jquery.mousewheel",
         "custom-scrollbar": "/static/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "/static/bower_components/jquery-autosize/jquery.autosize.min",
-        "jquery-chosen": "/static/bower_components/chosen/chosen.jquery.min",
         "toastr": "/static/bower_components/toastr/toastr.min",
         "formmapper": "/static/js/formmapper"
     },
@@ -41,8 +42,9 @@ require.config({
         "jquery-mousewheel": ["jQuery"],
         "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
         "jquery-autosize": ["jQuery"],
-        "jquery-chosen": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
+        "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
+        "chosen": ["jQuery"],
         "toastr": ["jQuery"],
         "formmapper": ["jQuery"]
     }
@@ -54,7 +56,9 @@ require([
     "angular",
     "bootstrap",
     "datejs",
+    "chosen",
     "bootstrap-datepicker",
+    "bootstrap-datepicker-fr",
     "formmapper",
     "toastr",
     "eloue/route",
@@ -62,6 +66,7 @@ require([
 ], function ($, _, angular, bootstrap, route) {
     "use strict";
     $(function () {
+
         angular.bootstrap(document, ["EloueDashboardApp"]);
     });
 });
