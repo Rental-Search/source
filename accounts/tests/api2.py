@@ -403,6 +403,10 @@ class CreditCardTest(APITestCase):
         self.assertEquals(response.status_code, 204, response.data)
         self.assertEquals(CreditCard.objects.filter(pk=3).count(), 0)
 
+    def test_credit_card_get_by_id(self):
+        response = self.client.get(_location('creditcard-detail', pk=3))
+        self.assertEquals(response.status_code, 200, response.data)
+
     def test_credit_card_list_paginated(self):
         response = self.client.get(_location('creditcard-list'))
         self.assertEquals(response.status_code, 200, response.data)
@@ -471,6 +475,10 @@ class ProAgencyTest(APITestCase):
         self.assertEquals(response.status_code, 204, response.data)
         self.assertEquals(ProAgency.objects.filter(pk=1).count(), 0)
 
+    def test_pro_agency_get_by_id(self):
+        response = self.client.get(_location('proagency-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+
     def test_pro_agency_list_paginated(self):
         response = self.client.get(_location('proagency-list'))
         self.assertEquals(response.status_code, 200, response.data)
@@ -525,6 +533,10 @@ class ProPackageTest(APITestCase):
         ProPackage = get_model('accounts', 'ProPackage')
         package = ProPackage.objects.get(pk=response.data['id'])
         self.assertEqual(package.valid_until, datetime.date(2014, 10, 31))
+
+    def test_pro_package_get_by_id(self):
+        response = self.client.get(_location('propackage-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
 
     def test_pro_package_list_paginated(self):
         response = self.client.get(_location('propackage-list'))
@@ -581,6 +593,10 @@ class SubscriptionTest(APITestCase):
         self.assertEqual(
             subscription.subscription_ended,
             datetime.datetime(2014, 10, 31))
+
+    def test_subscription_get_by_id(self):
+        response = self.client.get(_location('subscription-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
 
     def test_subscription_list_paginated(self):
         response = self.client.get(_location('subscription-list'))
