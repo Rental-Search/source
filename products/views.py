@@ -735,11 +735,11 @@ class CommonPageContextMixin(object):
                    'l': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
                    }
     def get_context_data(self, **kwargs):
-        context = super(CommonPageContextMixin, self).get_context_data(**kwargs)
-        context.update({
-            'categories_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
+        context = {
+            'category_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
             'breadcrumbs': self.breadcrumbs,
-        })
+        }
+        context.update(super(CommonPageContextMixin, self).get_context_data(**kwargs))
         return context
 
 class HomepageView(CommonPageContextMixin, TemplateView):
@@ -768,7 +768,7 @@ class HomepageView(CommonPageContextMixin, TemplateView):
         self.location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         return super(HomepageView, self).get(request, *args, **kwargs)
 
-class ProductListView(ProductList):
+class ProductListView(CommonPageContextMixin, ProductList):
     template_name = 'products/product_list.jade'
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
