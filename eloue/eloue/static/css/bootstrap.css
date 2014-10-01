@@ -6148,9 +6148,9 @@ a, a:hover, a:focus {
   font-size: 1.28571em;
   display: inline-block;
   color: #ffc853;
+  cursor: default;
 }
 .rate span {
-  cursor: pointer;
   display: inline-block;
   padding-right: 0.25em;
 }
@@ -6158,6 +6158,7 @@ a, a:hover, a:focus {
   color: #eeeeee;
 }
 .rate.setting span {
+  cursor: pointer;
   color: #ffc853 !important;
 }
 .rate.setting span:hover ~ span {

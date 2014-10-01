@@ -184,14 +184,15 @@ a, a:hover, a:focus
   font-size: px(18)
   display: inline-block
   color: $brand-gold
+  cursor: default
   span
-    cursor: pointer
     display: inline-block
     padding-right: .25em
     &.current-rate ~ span
       color: $gray-lighter
 
   &.setting span
+    cursor: pointer
     color: $brand-gold !important
     &:hover ~ span
       color: $gray-lighter !important
