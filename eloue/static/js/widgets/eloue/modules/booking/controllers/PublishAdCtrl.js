@@ -13,10 +13,11 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "Currency",
         "ProductsService",
         "UsersService",
+        "AddressesService",
         "AuthService",
         "CategoriesService",
         "PricesService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AuthService, CategoriesService, PricesService) {
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService) {
 
             $scope.rootCategories = {};
             $scope.nodeCategories = {};
@@ -48,9 +49,9 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 var params = args.params;
                 var rootCategoryId = params.category;
                 if (!!rootCategoryId) {
-                    CategoriesService.getRootCategories().$promise.then(function (categories) {
-                        $scope.rootCategories = categories.results;
+                    CategoriesService.getRootCategories().then(function (categories) {
                         $scope.rootCategory = rootCategoryId;
+                        $scope.rootCategories = categories;
                         $scope.updateNodeCategories();
                     });
                 }
@@ -73,6 +74,13 @@ define(["angular", "eloue/modules/booking/BookingModule",
 
             $scope.publishAd = function() {
                 console.log("Publish ad");
+                if (!!$scope.currentUser.default_address) {
+                    $scope.currentUser.default_address.country = "FR";
+                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function(result) {
+                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" +  result.id + "/"});
+                    });
+                }
+
                 ProductsService.saveProduct($scope.product).$promise.then(function(result) {
                     //TODO: finish and check saving product and price
                     $scope.price.currency = Currency.EUR.name;
@@ -85,7 +93,6 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.updateFieldSet = function (rootCategory) {
-                console.log(rootCategory);
                 $scope.isAuto = false;
                 $scope.isRealEstate = false;
                 if (rootCategory.name === "Automobile") {
