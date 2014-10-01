@@ -13,10 +13,11 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "Currency",
         "ProductsService",
         "UsersService",
+        "AddressesService",
         "AuthService",
         "CategoriesService",
         "PricesService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AuthService, CategoriesService, PricesService) {
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService) {
 
             $scope.rootCategories = {};
             $scope.nodeCategories = {};
@@ -48,9 +49,9 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 var params = args.params;
                 var rootCategoryId = params.category;
                 if (!!rootCategoryId) {
-                    CategoriesService.getRootCategories().$promise.then(function (categories) {
-                        $scope.rootCategories = categories.results;
+                    CategoriesService.getRootCategories().then(function (categories) {
                         $scope.rootCategory = rootCategoryId;
+                        $scope.rootCategories = categories;
                         $scope.updateNodeCategories();
                     });
                 }
@@ -71,13 +72,28 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 });
             };
 
-            $scope.publishAd = function() {
+            $scope.publishAd = function () {
                 console.log("Publish ad");
-                ProductsService.saveProduct($scope.product).$promise.then(function(result) {
+                if (!$scope.currentUser.default_address) {
+                    $scope.currentUser.default_address.country = "FR";
+                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
+                        $scope.currentUser.default_address = result;
+                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
+                        $scope.saveProduct();
+                    });
+                } else {
+                    $scope.saveProduct();
+                }
+            };
+
+            $scope.saveProduct = function () {
+                $scope.product.description = "";
+                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.currentUser.default_address.id + "/";
+                ProductsService.saveProduct($scope.product).$promise.then(function (result) {
                     //TODO: finish and check saving product and price
                     $scope.price.currency = Currency.EUR.name;
                     $scope.price.product = $scope.productsBaseUrl + result.id + "/";
-                    PricesService.savePrice($scope.price).$promise.then(function(result) {
+                    PricesService.savePrice($scope.price).$promise.then(function (result) {
                         //TODO: redirects to the dashboard item detail page.
                         $(".modal").modal("hide");
                     });
@@ -85,7 +101,6 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.updateFieldSet = function (rootCategory) {
-                console.log(rootCategory);
                 $scope.isAuto = false;
                 $scope.isRealEstate = false;
                 if (rootCategory.name === "Automobile") {
@@ -95,8 +110,10 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 }
             };
 
-            $scope.searchCategory = function(event) {
-                //TODO: search appropriate category by $scope.product.summary
+            $scope.searchCategory = function () {
+                CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function(categories) {
+                   //TODO: select apropriate node and leaf category
+                });
             }
         }])
 });

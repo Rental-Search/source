@@ -2,7 +2,6 @@ extends ../../base
 -load compressed
 
 block append styles
-  {% compressed_css "bootstrap" %}
   {% compressed_css "dashboard_styles" %}
 
 block append scripts
@@ -10,7 +9,6 @@ block append scripts
 
 block append content-body
   .container-full-screen(data-ng-controller="DashboardRootCtrl")
-    //- include ./_src
     header.header-site
       include ../../jade/_header_site
     article.dashboard

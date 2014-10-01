@@ -919,8 +919,51 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return categoriesService.getCategory(parentCategoryId);
             };
 
+            categoriesService.searchByProductTitle = function (query, rootCategoryId) {
+                var deferred = $q.defer();
+
+                $.ajax({
+                    url: "/location/ajouter/category/?q=" + query + "&category=" + rootCategoryId,
+                    type: "GET",
+                    success: function(data) {
+                        deferred.resolve(data.categories);
+                    }
+                });
+
+                return deferred.promise;
+            };
+
             categoriesService.getRootCategories = function () {
-                return Categories.get({parent__isnull: true});
+                var deferred = $q.defer();
+
+                Categories.get({parent__isnull: true}).$promise.then(function (result) {
+                    var total = result.count;
+                    if (total <= 10) {
+                        deferred.resolve(result.results);
+                    } else {
+                        var pagesCount = Math.floor(total / 10) + 1;
+                        var catPromises = [];
+
+                        for (var i = 1; i <= pagesCount; i++) {
+                            catPromises.push(Categories.get({parent__isnull: true, page: i}).$promise);
+                        }
+
+                        $q.all(catPromises).then(
+                            function (categories) {
+                                var categoryList = [];
+                                angular.forEach(categories, function (catPage, index) {
+                                    angular.forEach(catPage.results, function (value, key) {
+                                        categoryList.push({id: value.id, name: value.name})
+                                    });
+                                });
+                                deferred.resolve(categoryList);
+                            }
+                        );
+
+                    }
+                });
+
+                return deferred.promise;
             };
 
             categoriesService.getChildCategories = function (parentId) {
@@ -1021,6 +1064,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 //TODO: leave only 1 update method for addresses
                 addressesService.update = function (address) {
                     return Addresses.update({id: address.id}, address);
+                };
+
+                addressesService.saveAddress = function (address) {
+                    return Addresses.save(address);
                 };
 
                 addressesService.deleteAddress = function (addressId) {

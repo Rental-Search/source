@@ -9,7 +9,7 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
             li.tab-horisontal(ng-click="{{ filter_func }}"): h3.small {{ filter_name }}
       .col-xs-3.indent-xs-t
         .select-gradient.without-search
-          select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()")
+          select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()", eloue-chosen)
               option(value="undefined") Statut
               {% verbatim %}
               option(ng-repeat="state in stateList", value="{{state.value}}") {{state.value | translate}}

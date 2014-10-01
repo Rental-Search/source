@@ -7,7 +7,7 @@ block details
           h2 Sélectionner le mois
         .col-xs-5
           .form-control.without-search.select-gradient
-            select(ng-model="selectedMonthAndYear", ng-change="updateCalendar()")
+            select(ng-model="selectedMonthAndYear", ng-change="updateCalendar()", eloue-chosen, opts="monthOptions")
                 option(ng-repeat="month in monthOptions", value="{{month.value}}") {{month.name}}
       .row
         .col-xs-12.indent-sm-b

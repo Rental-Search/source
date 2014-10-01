@@ -731,7 +731,9 @@ def suggestion(request):
 # UI v3
 
 class CommonPageContextMixin(object):
-    breadcrumbs = {'sort': {'name': 'sort', 'value': '', 'label': 'sort', 'facet': False}}
+    breadcrumbs = {'sort': {'name': 'sort', 'value': None, 'label': 'sort', 'facet': False},
+                   'l': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
+                   }
     def get_context_data(self, **kwargs):
         context = super(CommonPageContextMixin, self).get_context_data(**kwargs)
         context.update({
@@ -749,7 +751,7 @@ class HomepageView(CommonPageContextMixin, TemplateView):
         product_stats = Product.objects.extra(
             tables=['accounts_address'],
             where=['"products_product"."address_id" = "accounts_address"."id"'],
-            select={'city': 'lower(accounts_address.city)'}
+            select={'city': 'lower(trim("accounts_address"."city"))'}
         ).values('city').annotate(Count('id')).order_by('-id__count')
         return {
             'cities_list': product_stats,

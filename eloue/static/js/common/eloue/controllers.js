@@ -156,6 +156,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
+                    UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
+                        $scope.userStats = stats;
+                    });
                 });
             }
         }]);

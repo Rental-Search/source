@@ -67,7 +67,7 @@ class Product(models.Model):
     summary = models.CharField(_(u'Titre'), max_length=255)
     deposit_amount = models.DecimalField(_(u'Dépôt de garantie'), max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     address = models.ForeignKey(Address, related_name='products')
     phone = models.ForeignKey(PhoneNumber, related_name='products', null=True)
     quantity = models.IntegerField(_(u'Quantité'), default=1)
