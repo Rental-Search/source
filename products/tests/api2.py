@@ -2,6 +2,7 @@
 import os.path
 import base64
 from datetime import date
+from decimal import Decimal
 
 from django.db.models import get_model
 from django.contrib.auth import get_user_model
@@ -493,3 +494,181 @@ class ProductTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+
+    def test_product_delete(self):
+        Product = get_model('products', 'Product')
+        self.assertEquals(Product.objects.filter(pk=1).count(), 1)
+        response = self.client.delete(_location('product-detail', pk=1))
+        self.assertEquals(response.status_code, 204, response.data)
+        self.assertEquals(Product.objects.filter(pk=1).count(), 0)
+
+
+class CategoryTest(APITestCase):
+    fixtures = ['patron', 'category']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_category_create(self):
+        response = self.client.post(_location('category-list'), {
+            'name': 'Test',
+            'need_insurance': False,
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('category-detail', pk=response.data['id'])))
+
+        Category = get_model('products', 'Category')
+        category = Category.objects.get(pk=response.data['id'])
+        self.assertEqual(category.name, 'Test')
+        self.assertFalse(category.need_insurance)
+        self.assertIsNone(category.parent_id)
+        self.assertEqual(category.lft, 1)
+        self.assertEqual(category.rght, 2)
+        self.assertEqual(category.level, 0)
+
+    def test_category_edit(self):
+        response = self.client.patch(_location('category-detail', pk=1), {
+            'title': 'Title',
+            'description': 'Description',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+
+        Category = get_model('products', 'Category')
+        category = Category.objects.get(pk=response.data['id'])
+        self.assertEquals(category.title, 'Title')
+        self.assertEquals(category.description, 'Description')
+
+    def test_category_get_by_id(self):
+        response = self.client.get(_location('category-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+
+    def test_category_list_paginated(self):
+        response = self.client.get(_location('category-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 26,
+            'previous': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertTrue(response.data['next'].endswith(_location('category-list') + '?page=2'))
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(len(response.data['results']), 10)
+
+
+class PriceTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'price']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_price_create(self):
+        response = self.client.post(_location('price-list'), {
+            'product': _location('product-detail', pk=1),
+            'amount': 10,
+            'unit': 0,
+            'currency': 'EUR'
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('price-detail', pk=response.data['id'])))
+
+        Price = get_model('products', 'Price')
+        price = Price.objects.get(pk=response.data['id'])
+
+        self.assertEqual(price.amount, Decimal(10))
+        self.assertEqual(price.currency, 'EUR')
+        self.assertEqual(price.product_id, 1)
+        self.assertEqual(price.unit, 0)
+
+    def test_price_edit(self):
+        response = self.client.patch(_location('price-detail', pk=1), {
+            'name': 'Name',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+
+        Price = get_model('products', 'Price')
+        price = Price.objects.get(pk=response.data['id'])
+        self.assertEqual(price.name, 'Name')
+
+    def test_price_get_by_id(self):
+        response = self.client.get(_location('price-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+
+    def test_price_list_paginated(self):
+        response = self.client.get(_location('price-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 15,
+            'previous': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertTrue(response.data['next'].endswith(_location('price-list') + '?page=2'))
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(len(response.data['results']), 10)
+
+
+class CuriosityTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'curiosity']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_curiosity_create(self):
+        response = self.client.post(_location('curiosity-list'), {
+            'product': _location('product-detail', pk=1),
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('curiosity-detail', pk=response.data['id'])))
+
+        Curiosity = get_model('products', 'Curiosity')
+        curiosity = Curiosity.objects.get(pk=response.data['id'])
+
+        self.assertEqual(curiosity.product_id, 1)
+
+    def test_curiosity_edit(self):
+        response = self.client.patch(_location('curiosity-detail', pk=1), {
+            'product': _location('product-detail', pk=2),
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+
+        Curiosity = get_model('products', 'Curiosity')
+        curiosity = Curiosity.objects.get(pk=response.data['id'])
+        self.assertEqual(curiosity.product_id, 2)
+
+    def test_curiosity_get_by_id(self):
+        response = self.client.get(_location('curiosity-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+
+    def test_price_list_paginated(self):
+        response = self.client.get(_location('curiosity-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 2,
+            'previous': None,
+            'next': None
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
