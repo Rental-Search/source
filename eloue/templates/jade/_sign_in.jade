@@ -1,25 +1,54 @@
 .modal.fade#registrationModal(tabindex="-1", role="dialog", aria-hidden="true")
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button(type="button", data-dismiss="modal").close
-          span(aria-hidden="true")&times;
-          span.sr-only Close
-        h4.modal-title Inscription
-      .modal-body
-        h3 Inscrivez-vous en 2 secondes
-        .form-group: a(href="#").btn.bg-info
-          i.flaticon.social.facebook
-          | Inscription via Facebook
-        .form-group: a(href="#").btn.bg-danger
-          i.flaticon.social.google-plus
-          | Inscription via Google
-        p.info
-          | Nous ne publierons jamais rien sur votre mur sans votre accord
-        span.or
-        h3 Inscrivez-vous en 30 secondes
-        form(action="")
-          .form-group: a( href = "#classic-form", data-toggle="modal", data-target="#classic-form", data-dismiss="modal").btn.bg-success Inscription via Email
-        span.or
-        h4 Vous êtes déjà membre e-loue ?
-        a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion Connexion
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button(type="button", data-dismiss="modal").close
+                    span(aria-hidden="true")&times;
+                    span.sr-only Close
+                h4.modal-title Inscription
+            .modal-body
+                //-
+                 h3 Inscrivez-vous en 2 secondes
+                 .form-group: a(href="#").btn.bg-info
+                    i.flaticon.social.facebook
+                    | Inscription via Facebook
+                 .form-group: a(href="#").btn.bg-danger
+                    i.flaticon.social.google-plus
+                    | Inscription via Google
+                 p.info
+                    | Nous ne publierons jamais rien sur votre mur sans votre accord
+                 span.or
+                h3 Inscrivez-vous en 30 secondes
+                //-
+                 form(action="")
+                    .form-group: a( href = "#classic-form", data-toggle="modal", data-target="#classic-form", data-dismiss="modal").btn.bg-success Inscription via Email
+                form(name="registrationForm", ng-submit="register()", novalidate)
+                    h3 Inscription 30 secondes
+                    .form-group: .row
+                        .col-xs-3.clear-selector: select
+                            option(value="male") M.
+                            option(value="female") F.
+                        .col-xs-9
+                            input(type="text", placeholder="Nom", name="lastName", ng-model="account.lastName", required).form-control
+                            span.errorMsg(ng-show="registrationForm.lastName.$error.required && registrationForm.lastName.$dirty") Required field
+                    -var registration_form_fields = [["text", "Prénom", "firstName"], ["email", "Adresse email", "email"], ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "postalCode"]]
+                    each type, placeholder, name in registration_form_fields
+                        .form-group
+                            input(type="text", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
+                            span.errorMsg(ng-show="registrationForm.#{name}.$error.required && registrationForm.#{name}.$dirty") Required field
+                    .checkbox
+                        label(for="inform")
+                            input(type="checkbox", checked)#inform
+                            span.flaticon.stroke.checkmark
+                        | Tenez moi informé de l'actualité et des bonnes affaires e-loue
+                    .form-group: button(ng-click="openRegistrationForm()").btn.bg-success Inscription via Email
+                    p
+                        | En créant un compte e-loue, vous acceptez les
+                        a(href="#") Conditions Générales
+                        br
+                        | et la
+                        a(href="#") Politique de Confidentialité
+                        | de notre site
+                span.or
+                h4 Vous êtes déjà membre e-loue ?
+                a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion Connexion
