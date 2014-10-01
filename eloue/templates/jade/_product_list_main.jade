@@ -13,8 +13,7 @@ ol.nav.row
             a(href="{{ product.url }}") {{ product.summary }}
             if product.pro
               span.badge-pro pro
-          p {{ product.city }}
-            span.zip-code ,&nbsp;{{ product.zipcode }}
+          p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
           .rate
             -var stars = [1,2,3,4,5]
             each s in stars
