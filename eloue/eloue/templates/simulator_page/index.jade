@@ -1,0 +1,44 @@
+extends ../base
+
+block prepend variables
+  -var STATIC_URL = "../../static/"
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  // custom input:range
+  link(rel="stylesheet", href="#{STATIC_URL}css/jquery-ui.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/product_list_styles.css")
+
+block append scripts
+  // custom input:range
+  // http://jqueryui.com/slider/#rangemin
+  //- script(src="#{STATIC_URL}js/scripts.js")
+
+block append content-body
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+     nav
+      include ../jade/_breadcrumbs
+    article.framing
+      .container
+        h2.text-center
+          | DITES - NOUS CE QUE VOUS AVEZ,
+          br
+          | NOUS VOUS DIRONS COMBIEN VOUS POUVEZ GAGNER !
+        h3.text-center (CLIQUEZ SUR LES BIENS QUE VOUS POSSÉDEZ, PUIS SIMULEZ VOS REVENUS)
+        main.indent-lg-t: form(action="simulator")
+          h5.text-gray-strong i DANS VOTRE CUISINE…
+          .row: ul.simulator-list
+            -var i = 6
+            while i--
+              li.col-md-2.col-sm-3.col-xs-4
+                input(type="checkbox", name="", id="ch-#{i}")
+                label(for="#ch-#{i}", style="background-image: url(http://lorempixel.com/100/100)")
+                  span.grin-area
+
+    footer
+      section.footer-links
+        include ../jade/_footer_links
+      section.rss
+        include ../jade/_rss

@@ -1452,6 +1452,23 @@ article .section-body .part:first-child {
   color: #c4c4c4;
 }
 
+.simulator-list {
+  list-style-type: none;
+}
+.simulator-list li {
+  padding-bottom: 25px;
+}
+.simulator-list li input {
+  position: absolute;
+  z-index: -10;
+}
+.simulator-list li label {
+  display: block;
+  padding-top: 100%;
+  background-color: #cccccc;
+  margin-bottom: 0;
+}
+
 article h3 {
   font-size: 1.85714em;
   font-weight: 300;
