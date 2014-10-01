@@ -215,7 +215,6 @@ main
           z-index: 20
           top: -2em
 
-
         .rate
           position: absolute
           margin-top: (100%/1.4)
@@ -232,6 +231,18 @@ main
       .list-layout &
         +make-sm-column(12)
         display: table
+        .full_description
+          max-height: (2em * $line-height-base)
+          position: relative
+          // > sky for blur overflow text
+          &:before
+            content: " "
+            left: 0
+            right: 0
+            top: 100%
+            height: (1em * $line-height-base)
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0), white 90%)
+            position: absolute
         .thumbnail-img
           width: $list-img-wrapper-width
         .declarer-container
