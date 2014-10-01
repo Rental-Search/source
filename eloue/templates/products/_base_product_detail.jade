@@ -53,12 +53,9 @@ block append content-body
           eloue-message-modal
           eloue-phone-modal
     footer
-      section.row-fluid.insurances.framing
-        include ../jade/_insurances
-      section.row-fluid.footer-links
-        include ../jade/_footer_links
-      section.row-fluid.rss
-        include ../jade/_rss
+      section.row-fluid.insurances.framing: include ../jade/_insurances
+      section.row-fluid.footer-links: include ../jade/_footer_links
+      section.row-fluid.rss: include ../jade/_rss
 
     script(type="text/ng-template")#modalContainer
     div(ng-view)
