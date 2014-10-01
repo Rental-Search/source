@@ -167,6 +167,44 @@ require([
             }
         }(document, 'script', 'twitter-wjs');
 
+        // Insert YouTube video into defined container, add play on modal open and stop on modal hide
+        var videoModal = $('#videoModal');
+        var player;
+        if (!!videoModal) {
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            $.getScript('https://www.youtube.com/player_api');
+            window.onYouTubePlayerAPIReady = function() {
+                player = new YT.Player("videoContainer", {
+                    playerVars: {
+                        modestbranding: 1,
+                        rel: 0,
+                        showinfo: 0,
+                        autoplay: 1
+                    },
+                    height: 480,
+                    width: 640,
+                    videoId: "nERu_2pSSb0",
+                    events: {
+                        'onReady': onPlayerReady
+                    }
+                });
+            };
+
+            videoModal.on('shown.bs.modal', function () {
+                player.playVideo();
+            });
+            videoModal.on('hidden.bs.modal', function () {
+                player.stopVideo();
+            });
+        }
+
+        function onPlayerReady() {
+            player.stopVideo();
+        }
+
         $('#geolocate').formmapper({
             details: "form"
         });

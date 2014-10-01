@@ -230,6 +230,11 @@ define(["eloue/app",
                 $http.defaults.headers.common.authorization = "Bearer " + userToken;
             }
 
+            var csrftoken = AuthService.getCookie('csrftoken');
+            if (csrftoken && csrftoken.length > 0) {
+                $http.defaults.headers.common["X-CSRFToken"] = csrftoken;
+            }
+
             // Route change event listener
             $rootScope.$on('$stateChangeStart',
                 function(event, toState, toParams, fromState, fromParams){
