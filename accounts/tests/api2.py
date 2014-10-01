@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os.path
 import base64
+import datetime
+from decimal import Decimal
 
 from django.db.models import get_model
 from django.contrib.auth import get_user_model
@@ -358,6 +360,234 @@ class AddressesTest(APITestCase):
         # check pagination data format in the response
         expected = {
             'count': 2, # we should get 2 addresses (from 3 in total) visible for the current user (pk=1)
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
+
+class CreditCardTest(APITestCase):
+    fixtures = ['patron', 'creditcard']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_credit_card_create(self):
+        response = self.client.post(_location('creditcard-list'), {
+            'expires': '0517',
+            'holder_name': 'John Doe',
+            'creditcard': '4987654321098769',
+            'cvv': '123',
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('creditcard-detail', pk=response.data['id'])))
+
+        CreditCard = get_model('accounts', 'CreditCard')
+        card = CreditCard.objects.get(pk=response.data['id'])
+        self.assertEqual(card.masked_number, '4XXXXXXXXXXXX769')
+        self.assertEqual(card.expires, '0517')
+        self.assertEqual(card.holder_name, 'John Doe')
+        self.assertEqual(card.holder_id, 1)
+
+    def test_credit_card_delete(self):
+        CreditCard = get_model('accounts', 'CreditCard')
+        self.assertEquals(CreditCard.objects.filter(pk=3).count(), 1)
+        response = self.client.delete(_location('creditcard-detail', pk=3))
+        self.assertEquals(response.status_code, 204, response.data)
+        self.assertEquals(CreditCard.objects.filter(pk=3).count(), 0)
+
+    def test_credit_card_list_paginated(self):
+        response = self.client.get(_location('creditcard-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 1,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
+
+class ProAgencyTest(APITestCase):
+
+    fixtures = ['patron', 'proagency']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_pro_agency_create(self):
+        response = self.client.post(_location('proagency-list'), {
+            'name': 'Agency',
+            'phone_number': '0198765432',
+            'address': '2, rue debelleyme',
+            'zipcode': '75003',
+            'city': 'Paris',
+            'country': 'FR',
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('proagency-detail', pk=response.data['id'])))
+
+        ProAgency = get_model('accounts', 'ProAgency')
+        agency = ProAgency.objects.get(pk=response.data['id'])
+
+        self.assertEqual(agency.patron_id, 1)
+        self.assertEqual(agency.name, 'Agency')
+        self.assertEqual(agency.phone_number, '0198765432')
+        self.assertEqual(agency.address1, '2, rue debelleyme')
+        self.assertEqual(agency.zipcode, '75003')
+        self.assertEqual(agency.city, 'Paris')
+        self.assertEqual(agency.country, 'FR')
+
+    def test_pro_agency_edit(self):
+        response = self.client.patch(_location('proagency-detail', pk=1), {
+            'city': 'Paris',
+            'address': '2, rue debelleyme',
+            'zipcode': '75003',
+            'country': 'FR',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+        self.assertEquals(response.data['address'], '2, rue debelleyme')
+        self.assertEquals(response.data['position']['coordinates'], [48.8603858, 2.3645553])
+
+    def test_pro_agency_delete(self):
+        ProAgency = get_model('accounts', 'ProAgency')
+        self.assertEquals(ProAgency.objects.filter(pk=1).count(), 1)
+        response = self.client.delete(_location('proagency-detail', pk=1))
+        self.assertEquals(response.status_code, 204, response.data)
+        self.assertEquals(ProAgency.objects.filter(pk=1).count(), 0)
+
+    def test_pro_agency_list_paginated(self):
+        response = self.client.get(_location('proagency-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 2,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
+
+class ProPackageTest(APITestCase):
+
+    fixtures = ['patron', 'propackages']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_pro_package_create(self):
+        response = self.client.post(_location('propackage-list'), {
+            'name': 'Agency',
+            'maximum_items': '10',
+            'price': '1234',
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('propackage-detail', pk=response.data['id'])))
+
+        ProPackage = get_model('accounts', 'ProPackage')
+        package = ProPackage.objects.get(pk=response.data['id'])
+
+        self.assertEqual(package.name, 'Agency')
+        self.assertEqual(package.maximum_items, 10)
+        self.assertEqual(package.price, Decimal(1234))
+        self.assertEqual(package.valid_from, datetime.date.today())
+        self.assertIsNone(package.valid_until)
+
+    def test_pro_package_edit(self):
+        response = self.client.patch(_location('propackage-detail', pk=1), {
+            'valid_until': '2014-10-31',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+
+        ProPackage = get_model('accounts', 'ProPackage')
+        package = ProPackage.objects.get(pk=response.data['id'])
+        self.assertEqual(package.valid_until, datetime.date(2014, 10, 31))
+
+    def test_pro_package_list_paginated(self):
+        response = self.client.get(_location('propackage-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 5,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
+
+class SubscriptionTest(APITestCase):
+
+    fixtures = ['patron', 'propackages', 'subscriptions']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_subscription_create(self):
+        response = self.client.post(_location('subscription-list'), {
+            'propackage_id': _location('propackage-detail', pk=1),
+            'payment_type': 'CHECK',
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('subscription-detail', pk=response.data['id'])))
+
+        Subscription = get_model('accounts', 'Subscription')
+        subscription = Subscription.objects.get(pk=response.data['id'])
+
+        self.assertEqual(subscription.patron_id, 1)
+        self.assertEqual(subscription.propackage_id, 1)
+        self.assertEqual(subscription.payment_type, 1)
+        self.assertEqual(subscription.subscription_started, datetime.date.today())
+        self.assertIsNone(subscription.subscription_ended)
+
+    def test_subscription_edit(self):
+        response = self.client.put(_location('subscription-detail', pk=1), {
+            'subscription_ended': '2014-10-31T00:00',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+
+        Subscription = get_model('accounts', 'Subscription')
+        subscription = Subscription.objects.get(pk=response.data['id'])
+        self.assertEqual(
+            subscription.subscription_ended,
+            datetime.datetime(2014, 10, 31))
+
+    def test_subscription_list_paginated(self):
+        response = self.client.get(_location('subscription-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 1,
             'previous': None,
             'next': None,
         }

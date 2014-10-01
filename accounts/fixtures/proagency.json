@@ -1,0 +1,47 @@
+[
+{
+    "pk": 1, 
+    "model": "accounts.proagency", 
+    "fields": {
+        "phone_number": "02 98 88 09 45", 
+        "city": "MORLAIX", 
+        "name": "MORLAIX", 
+        "patron": 1,
+        "address1": "Route de Lannion - Coat Menguy", 
+        "address2": null, 
+        "zipcode": "29600", 
+        "country": "", 
+        "position": "POINT (48.5776129999999995 -3.8282280000000002)"
+    }
+},
+{
+    "pk": 2, 
+    "model": "accounts.proagency", 
+    "fields": {
+        "phone_number": "02 97 25 45 55", 
+        "city": "PONTIVY", 
+        "name": "PONTIVY", 
+        "patron": 1,
+        "address1": "Z.A. du Signan - 5, Rue du Capitaine Leroy", 
+        "address2": null, 
+        "zipcode": "56300", 
+        "country": "", 
+        "position": "POINT (48.0425386999999873 -2.9587878000000010)"
+    }
+},
+{
+    "pk": 3, 
+    "model": "accounts.proagency", 
+    "fields": {
+        "phone_number": "02 99 36 00 33", 
+        "city": "RENNES", 
+        "name": "RENNES  Nord", 
+        "patron": 2,
+        "address1": "6, Rue de la Doneli\u00e8re ", 
+        "address2": null, 
+        "zipcode": "35000", 
+        "country": "", 
+        "position": "POINT (48.1312975000000023 -1.6854057000000000)"
+    }
+}
+]

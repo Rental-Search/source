@@ -174,7 +174,7 @@ def api_exception_handler(exception):
     elif not isinstance(exception, (exceptions.APIException, Api20Exception)):
         error = ServerErrorEnum.OTHER_ERROR
         exception = ServerException(
-            {'code': error[0], 'description': error[1], 'detail': exception.message})
+            {'code': error[0], 'description': error[1], 'detail': unicode(exception)})
 
     if isinstance(exception, Api20Exception):
         # Response in the case of our exception to be caught is similar to
