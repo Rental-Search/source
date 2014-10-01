@@ -919,6 +919,20 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return categoriesService.getCategory(parentCategoryId);
             };
 
+            categoriesService.searchByProductTitle = function (query, rootCategoryId) {
+                var deferred = $q.defer();
+
+                $.ajax({
+                    url: "/location/ajouter/category/?q=" + query + "&category=" + rootCategoryId,
+                    type: "GET",
+                    success: function(data) {
+                        deferred.resolve(data.categories);
+                    }
+                });
+
+                return deferred.promise;
+            };
+
             categoriesService.getRootCategories = function () {
                 var deferred = $q.defer();
 
@@ -1052,7 +1066,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Addresses.update({id: address.id}, address);
                 };
 
-                addressesService.saveAddress = function(address) {
+                addressesService.saveAddress = function (address) {
                     return Addresses.save(address);
                 };
 
