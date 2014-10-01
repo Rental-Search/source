@@ -6151,7 +6151,7 @@ a, a:hover, a:focus {
   color: #ffc853;
 }
 .rate:hover span {
-  color: #ffc853 !important;
+  color: #ffc853;
 }
 .rate span {
   cursor: pointer;
@@ -6162,7 +6162,7 @@ a, a:hover, a:focus {
   color: #eeeeee;
 }
 .rate span:hover ~ span {
-  color: #eeeeee !important;
+  color: #eeeeee;
 }
 
 .text-success {

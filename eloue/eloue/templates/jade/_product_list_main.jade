@@ -12,8 +12,7 @@ ol.nav.row
             a(href="#") #{product.title}
             if product.ispro
               span.badge-pro pro
-          p #{product.description}
-            span.zip-code ,&nbsp;#{product.zip_code}
+          p #{product.description}, #{product.zip_code}
           .rate
             -var stars = [1,2,3,4,5]
             each s in stars
