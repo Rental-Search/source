@@ -11,11 +11,11 @@
               img(src="{{ product.thumbnail }}")
             span.fog
           .info
-            h6: a(href="{{ product.url }}") #{product.summary}
-            p #{product.description}
+            h6: a(href="{{ product.url }}") {{ product.summary }}
+            p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
             if product.owner_url and product.owner_avatar
               a(href="{{ product.owner_url }}").declarer: img(src="{{ product.owner_avatar }}", alt="{{ product.owner }}")
-          span.badge.price #{product.price}&euro; /jour
+          span.badge.price {{ product.price }}&euro; /jour
   .row.text-center
     //- TODO: should use AJAX to fetch and insert next 8 items
     button(type="button", onclick="location.href='{% facet_url breadcrumbs 'sort' '' %}';").btn.bg-success.btn-explore
