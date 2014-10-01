@@ -182,19 +182,19 @@ a, a:hover, a:focus
 
 .rate
   font-size: px(18)
-  line-height: 1
   display: inline-block
   color: $brand-gold
-  &:hover span
-    color: $brand-gold
   span
     cursor: pointer
     display: inline-block
     padding-right: .25em
     &.current-rate ~ span
       color: $gray-lighter
+
+  &.setting span
+    color: $brand-gold !important
     &:hover ~ span
-      color: $gray-lighter
+      color: $gray-lighter !important
 
 .text-success
   color: $brand-success !important

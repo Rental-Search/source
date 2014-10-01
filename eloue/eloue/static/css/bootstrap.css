@@ -6146,11 +6146,7 @@ a, a:hover, a:focus {
 
 .rate {
   font-size: 1.28571em;
-  line-height: 1;
   display: inline-block;
-  color: #ffc853;
-}
-.rate:hover span {
   color: #ffc853;
 }
 .rate span {
@@ -6161,8 +6157,11 @@ a, a:hover, a:focus {
 .rate span.current-rate ~ span {
   color: #eeeeee;
 }
-.rate span:hover ~ span {
-  color: #eeeeee;
+.rate.setting span {
+  color: #ffc853 !important;
+}
+.rate.setting span:hover ~ span {
+  color: #eeeeee !important;
 }
 
 .text-success {
