@@ -1,18 +1,31 @@
 h2 Vos bank-information
 .row
     .col-sm-8.card
-        input(type="text", placeholder="Numéro de carte *", ng-model="creditCard.card_number", required).form-control
+        input(type="text", placeholder="Numéro de carte *", ng-model="creditCard.card_number", required, ng-show="newCreditCard").form-control
+        input(type="text", disabled, ng-model="creditCard.masked_number", ng-show="!newCreditCard").form-control
         i.flaticon.stroke.credit-card
     .col-sm-4(style="z-index: 1050")
-        input(type="text", placeholder="MM/AA *", ng-model="creditCard.expires", required, eloue-datepicker-month).form-control
+        input(type="text", placeholder="MM/AA *", ng-model="creditCard.expires", required, eloue-datepicker-month, ng-disabled="!newCreditCard").form-control
         i.flaticon.stroke.calendar-4
-.row
+.row(ng-show="newCreditCard")
     .col-sm-5
         input(type="text", placeholder="Code de sécurité *", ng-model="creditCard.cvv", required).form-control
         i.flaticon.stroke.lock-3
     .col-sm-7
         input(type="text", placeholder="Nom et prénom du titulaire *", ng-model="creditCard.holder_name", required).form-control
         i.flaticon.stroke.user-4
+.row(ng-show="!newCreditCard")
+    .col-sm-12
+        input(type="text", placeholder="Nom et prénom du titulaire *", ng-model="creditCard.holder_name", required).form-control
+        i.flaticon.stroke.user-4
+.row(ng-show="newCreditCard")
+    .col-sm-12
+        input(type="checkbox", ng-model="showSaveCard").table-form
+        | Conserves mes coordonnées bancaire
+.row(ng-show="!newCreditCard")
+    .col-sm-5
+    .col-sm-7
+        a(href="#", ng-click="clearCreditCard()").text-success Modifier mes coordonnées bancaire
 p.info
     | Vous devez payer avec votre propre carte bancaire, que vous devrez présenter au propriétaire pour vérification.
     br
