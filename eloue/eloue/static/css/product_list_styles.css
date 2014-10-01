@@ -1285,8 +1285,12 @@ input#sourse:checked + #sourse-img {
 .layout-switcher i:hover, article.grid-layout .layout-switcher i.grid, article.list-layout .layout-switcher i.list {
   color: #24bd77;
 }
-.layout-switcher .chosen-container {
-  width: auto !important;
+.layout-switcher .clear-selector {
+  float: right;
+}
+.layout-switcher .chosen-container .chosen-single {
+  padding-right: 1em !important;
+  padding-left: 1em !important;
 }
 
 @-webkit-keyframes whirly {
