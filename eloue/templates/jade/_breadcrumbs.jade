@@ -4,9 +4,8 @@ mixin category_crumbs(category_list)
   for category in category_list
     li: a(href="{{ category.get_absolute_url }}", alt="{{ category.name }}") {{ category.name|capfirst }}
 
-.row-fluid.bd-b
-  .container
-    ol.breadcrumb
+.container
+  ol.breadcrumb
       li: a(href="{% url 'home' %}", alt="{% trans 'accueil' %}") {% trans "Accueil" %}
       if product
         {% cache 43200 product:breadcrumb product.pk %}
