@@ -12,6 +12,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 
 from eloue.api.urls import router
 from products.views import HomepageView
+from accounts.views import PasswordResetView
 
 log = logbook.Logger('eloue')
 
@@ -215,6 +216,10 @@ if settings.DEBUG:
 from products.urls import ui3_urlpatterns as ui3_products_urlpatterns
 ui3_urlpatterns = patterns('',
     url(r'^$', HomepageView.as_view(), name='home'),
+    url(r'^reset/$', PasswordResetView.as_view(), {
+        'template_name': 'accounts/password_reset_form.html',
+        'email_template_name': 'accounts/emails/password_reset_email'
+    }, name='password_reset'),
 
     url(r'^location/', include(ui3_products_urlpatterns)),
     url(r'^comment-ca-marche/', TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),

@@ -72,6 +72,48 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     }]);
 
     /**
+     * Controller for the reset password form.
+     */
+    EloueCommon.controller("ResetPasswordCtrl", ["$scope", "AuthService", "ServiceErrors", function ($scope, AuthService, ServiceErrors) {
+
+        $scope.passwdResetStage = true;
+        $scope.resetPasswordError = null;
+
+        $scope.sendResetRequest = function() {
+            var form = $("#reset-password-form");
+            AuthService.sendResetPasswordRequest(
+                form,
+                function (data) {
+                    $scope.onResetSuccess(data);
+                },
+                function (jqXHR) {
+                    $scope.onResetError(jqXHR);
+                });
+        };
+
+        $scope.onResetSuccess = function (data) {
+            $scope.passwdResetStage = false;
+        };
+
+        $scope.onResetError = function (jqXHR) {
+            var errorText = "";
+            console.log(jqXHR);
+            if (jqXHR.status == 400) {
+                if (!!jqXHR.responseJSON.errors.email) {
+                    errorText = jqXHR.responseJSON.errors.email[0];
+                } else {
+                    errorText = "Bad request.";
+                }
+            } else {
+                errorText = "An error occured!";
+            }
+            $scope.$apply(function () {
+                $scope.resetPasswordError = errorText;
+            });
+        };
+    }]);
+
+    /**
      * Controller for the registration form.
      */
     EloueCommon.controller("RegisterCtrl", ["$scope", "AuthService", function ($scope, AuthService) {
@@ -99,9 +141,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 AuthService.clearUserData();
                 AuthService.login(credentials);
             }, function (error) {
-                $scope.$apply(function () {
+                if (error.data && error.data.detail) {
                     $scope.registrationError = error.data.detail;
-                });
+                }
             });
         };
 
