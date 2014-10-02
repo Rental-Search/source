@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import hashlib
-import urllib
+import requests
+from requests.exceptions import HTTPError
 
 from django.conf import settings
 from django.core.cache import cache
@@ -52,18 +53,21 @@ class Geocoder(object):
         """
         return hashlib.md5(location).hexdigest()
     
-
 class GoogleGeocoder(Geocoder):
+    api_url = 'http://maps.googleapis.com/maps/api/geocode/json'
+    api_args = {
+        'oe': 'utf8',
+        'sensor': 'false',
+        'region': GOOGLE_REGION_CODE
+    }
+
     # http://code.google.com/apis/maps/documentation/geocoding/index.html
     def get_json(self, location):
-        return json.load(urllib.urlopen(
-            'http://maps.googleapis.com/maps/api/geocode/json?' + urllib.urlencode({
-                'address': smart_str(location),
-                'oe': 'utf8',
-                'sensor': 'false',
-                'region': GOOGLE_REGION_CODE
-            })
-        ))
+        args = {'address': smart_str(location)}
+        args.update(self.api_args)
+        r = requests.get(self.api_url, params=args)
+        r.raise_for_status()
+        return r.json()
 
     def _get_radius(self, json):
         try:
@@ -81,7 +85,7 @@ class GoogleGeocoder(Geocoder):
             json = self.get_json(location)
             lon = json['results'][0]['geometry']['location']['lng']
             lat = json['results'][0]['geometry']['location']['lat']
-        except (KeyError, IndexError, IOError):
+        except (KeyError, IndexError, IOError, HTTPError):
             return None, (None, None), None
         radius = self._get_radius(json)
         if radius is None:
