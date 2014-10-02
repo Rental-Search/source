@@ -17,4 +17,14 @@ mixin category_crumbs(category_list)
       else
         for crumb in breadcrumbs|facets
           +category_crumbs(crumb.object.get_ancestors)
-          li: {{ crumb.pretty_value|capfirst }}
+          if form.cleaned_data.q or form.cleaned_data.l
+            li: a(href="{{ crumb.url }}") {{ crumb.pretty_value|capfirst }}
+          else
+            li: {{ crumb.pretty_value|capfirst }}
+        if form.cleaned_data.q
+          if form.cleaned_data.l
+            li: a(href="{% facet_url breadcrumbs -'l' -'r' %}"){% trans 'location' %} {{ form.cleaned_data.q }}
+          else
+            li: {% trans 'location' %} {{ form.cleaned_data.q }}
+        if form.cleaned_data.l
+          li: {{ form.cleaned_data.l|capfirst }}

@@ -84,10 +84,12 @@ class FacetedSearchForm(SearchForm):
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
-                point = Point(GoogleGeocoder().geocode(location)[1])
-                sqs = sqs.dwithin(
-                    'location', point, Distance(km=radius)
-                ) #.distance('location', point)
+                coords = GoogleGeocoder().geocode(location)[1]
+                if coords:
+                    point = Point(coords)
+                    sqs = sqs.dwithin(
+                        'location', point, Distance(km=radius)
+                    ) #.distance('location', point)
             
             if self.load_all:
                 sqs = sqs.load_all()
@@ -129,7 +131,7 @@ class AlertSearchForm(SearchForm):
         location = self.cleaned_data.get('l', None)
         radius = self.cleaned_data.get('r', None)
         if location not in EMPTY_VALUES and radius in EMPTY_VALUES:
-            name, coordinates, radius = GoogleGeocoder().geocode(location)
+            radius = GoogleGeocoder().geocode(location)[2]
         if radius in EMPTY_VALUES:
             radius = DEFAULT_RADIUS
         return radius
@@ -140,10 +142,12 @@ class AlertSearchForm(SearchForm):
             
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
-                point = Point(GoogleGeocoder().geocode(location)[1])
-                sqs = sqs.dwithin(
-                    'location', point, Distance(km=radius)
-                ) #.distance('location', point)
+                coords = GoogleGeocoder().geocode(location)[1]
+                if coords:
+                    point = Point(coords)
+                    sqs = sqs.dwithin(
+                        'location', point, Distance(km=radius)
+                    ) #.distance('location', point)
             
             if self.load_all:
                 sqs = sqs.load_all()

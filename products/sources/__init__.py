@@ -83,8 +83,7 @@ class BaseSource(object):
         raise NotImplementedError
 
     def get_coordinates(self, location):
-        name, (lat, lon), radius = GoogleGeocoder().geocode(location)
-        return lat, lon
+        return GoogleGeocoder().geocode(location)[1]
 
     def make_product(self, *args, **kwargs):
         if 'meta' not in kwargs:

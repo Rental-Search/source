@@ -548,9 +548,9 @@ class Address(models.Model):
                 [self.address1, self.address2, self.zipcode, self.city, self.country]
             )
         )
-        name, (lat, lon), radius = GoogleGeocoder().geocode(location)
-        if lat and lon:
-            return Point(lat, lon)
+        coords = GoogleGeocoder().geocode(location)[1]
+        if coords:
+            return Point(coords)
 
     def is_geocoded(self):
         """
@@ -607,9 +607,9 @@ class ProAgency(models.Model):
                 [self.address1, self.address2, self.zipcode, self.city, self.country]
             )
         )
-        name, (lat, lon), radius = GoogleGeocoder().geocode(location)
-        if lat and lon:
-            return Point(lat, lon)
+        coords = GoogleGeocoder().geocode(location)[1]
+        if coords:
+            return Point(coords)
 
 
 class PatronAccepted(models.Model):
