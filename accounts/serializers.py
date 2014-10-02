@@ -29,8 +29,10 @@ class AddressSerializer(GeoModelSerializer):
         immutable_fields = ('patron',)
         geo_field = 'position'
 
+
 class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
-    pass
+    AddressSerializer.Meta.public_fields = ('city', 'zipcode')
+
 
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -67,6 +69,11 @@ class UserSerializer(serializers.ModelSerializer):
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
             'date_joined', 'is_active', 'rib', 'password',
+        )
+        public_fields = (
+            'id', 'company_name', 'username', 'is_professional', 'slug',
+            'avatar', 'default_address', 'about', 'school', 'work', 'hobby',
+            'languages', 'url', 'date_joined',
         )
         read_only_fields = ('slug', 'url', 'date_joined', 'rib')
         immutable_fields = ('email', 'password', 'username')
