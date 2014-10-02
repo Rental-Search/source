@@ -5923,6 +5923,17 @@ h1 {
   line-height: 1.5;
 }
 
+.btn {
+  font-weight: 600;
+  outline: none !important;
+  color: white !important;
+}
+
+legend {
+  border: none;
+  margin-bottom: 0;
+}
+
 a, a:hover, a:focus {
   color: inherit;
   outline: none;

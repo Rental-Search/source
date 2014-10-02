@@ -33,7 +33,7 @@
     <!-- palceholder supported-->
     <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
     <!-- selectivizr-->
-    <script src="../../static/js/selectivizr.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/selectivizr/1.0.2/selectivizr-min.js"></script>
     <!-- end scripts for IE < 9-->
     <!-- geolocation by Google-->
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
@@ -54,8 +54,6 @@
     <script src="../../static/js/bootstrap-datepicker.js"></script>
     <script src="../../static/js/locales/bootstrap-datepicker.fr.js"></script>
     <script src="../../static/js/scripts.js"></script>
-    <!-- custom input:range-->
-    <!-- http://jqueryui.com/slider/#rangemin-->
   </head>
   <body>
     <div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -231,38 +229,474 @@
       </nav>
       <article class="framing">
         <div class="container">
-          <h2 class="text-center">DITES - NOUS CE QUE VOUS AVEZ,<br>NOUS VOUS DIRONS COMBIEN VOUS POUVEZ GAGNER !</h2>
+          <h2 class="text-center indent-t-lg">DITES - NOUS CE QUE VOUS AVEZ,<br>NOUS VOUS DIRONS COMBIEN VOUS POUVEZ GAGNER !</h2>
           <h3 class="text-center">(CLIQUEZ SUR LES BIENS QUE VOUS POSSÉDEZ, PUIS SIMULEZ VOS REVENUS)</h3>
-          <main class="indent-lg-t">
+          <main class="indent-t-lg indent-b-lg text-gray-strong">
             <form action="simulator">
-              <h5 class="text-gray-strong">i DANS VOTRE CUISINE…</h5>
-              <div class="row">
-                <ul class="simulator-list">
+              <fieldset class="category">
+                <legend class="text-uppercase">dans votre cuisine...</legend>
+                <ul class="simulator-list row">
                   <li class="col-md-2 col-sm-3 col-xs-4">
-                    <input type="checkbox" name="" id="ch-5">
-                    <label for="#ch-5" style="background-image: url(http://lorempixel.com/100/100)"><span class="grin-area"></span></label>
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/305/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
                   </li>
                   <li class="col-md-2 col-sm-3 col-xs-4">
-                    <input type="checkbox" name="" id="ch-4">
-                    <label for="#ch-4" style="background-image: url(http://lorempixel.com/100/100)"><span class="grin-area"></span></label>
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/304/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
                   </li>
                   <li class="col-md-2 col-sm-3 col-xs-4">
-                    <input type="checkbox" name="" id="ch-3">
-                    <label for="#ch-3" style="background-image: url(http://lorempixel.com/100/100)"><span class="grin-area"></span></label>
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/303/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
                   </li>
                   <li class="col-md-2 col-sm-3 col-xs-4">
-                    <input type="checkbox" name="" id="ch-2">
-                    <label for="#ch-2" style="background-image: url(http://lorempixel.com/100/100)"><span class="grin-area"></span></label>
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/302/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
                   </li>
                   <li class="col-md-2 col-sm-3 col-xs-4">
-                    <input type="checkbox" name="" id="ch-1">
-                    <label for="#ch-1" style="background-image: url(http://lorempixel.com/100/100)"><span class="grin-area"></span></label>
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/301/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
                   </li>
                   <li class="col-md-2 col-sm-3 col-xs-4">
-                    <input type="checkbox" name="" id="ch-0">
-                    <label for="#ch-0" style="background-image: url(http://lorempixel.com/100/100)"><span class="grin-area"></span></label>
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/300/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
                   </li>
                 </ul>
+                <p class="pull-right"><em>... et bien d’autres choses à louer dans votre cuisine</em></p>
+              </fieldset>
+              <fieldset class="category">
+                <legend class="text-uppercase">dans votre salon...</legend>
+                <ul class="simulator-list row">
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/350/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/340/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/330/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/320/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/310/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/300/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <p class="pull-right"><em>... et bien d’autres choses à louer dans votre salon</em></p>
+              </fieldset>
+              <fieldset class="category">
+                <legend class="text-uppercase">dans votre chambre...</legend>
+                <ul class="simulator-list row">
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/305/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/304/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/303/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/302/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/301/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/300/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <p class="pull-right"><em>... et bien d’autres choses à louer dans votre chambre</em></p>
+              </fieldset>
+              <fieldset class="category">
+                <legend class="text-uppercase">dans la chambre de bebe....</legend>
+                <ul class="simulator-list row">
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/305/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/304/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/303/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/302/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/301/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/300/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <p class="pull-right"><em>... et bien d’autres choses à louer dans la chambre de bebe...</em></p>
+              </fieldset>
+              <fieldset class="category">
+                <legend class="text-uppercase">dans votre cave...</legend>
+                <ul class="simulator-list row">
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/305/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/304/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/303/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/302/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/301/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/300/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <p class="pull-right"><em>... et bien d’autres choses à louer dans votre cave</em></p>
+              </fieldset>
+              <fieldset class="category">
+                <legend class="text-uppercase">dans votre garage...</legend>
+                <ul class="simulator-list row">
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/305/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor sit amet.</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/304/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor sit amet.</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/303/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor sit amet.</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/302/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor sit amet.</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/301/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor sit amet.</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/300/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor sit amet.</p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <p class="pull-right"><em>... et bien d’autres choses à louer dans votre garage</em></p>
+              </fieldset>
+              <fieldset class="category">
+                <legend class="text-uppercase">dans votre jardin ou votre atelier de bricolage...</legend>
+                <ul class="simulator-list row">
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/305/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/304/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/303/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/302/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/301/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col-md-2 col-sm-3 col-xs-4">
+                    <div class="item-wrapper">
+                      <label style="background-image: url(http://lorempixel.com/300/300/transport)">
+                        <input type="checkbox" name=""><span class="selecting-indicator"></span>
+                      </label>
+                      <div class="caption">
+                        <p>Lorem ipsum dolor</p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <p class="pull-right"><em>... et bien d’autres choses à louer dans votre jardin ou votre atelier de bricolage</em></p>
+              </fieldset>
+              <div class="text-center indent-t-md">
+                <button type="submit" class="btn btn-lg bg-success">Simulez vos revenus</button>
               </div>
             </form>
           </main>

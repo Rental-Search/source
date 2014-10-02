@@ -48,6 +48,7 @@ $animation-fill-mode: infinite
 			margin: (3 * $pad) 0
 			&:hover
 				animation-play-state: paused
+				z-index: 10
 			@for $i from 1 through 10
 				&:nth-of-type(#{$i})
 					animation-duration: random(5) + 4s

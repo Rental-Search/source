@@ -1456,21 +1456,122 @@ article .section-body .part:first-child {
   color: #c4c4c4;
 }
 
+@-webkit-keyframes slideDown {
+  0% {
+    bottom: 100%;
+  }
+
+  50% {
+    bottom: -20%;
+  }
+
+  100% {
+    bottom: 0%;
+    margin-bottom: 0;
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    bottom: 100%;
+  }
+
+  50% {
+    bottom: -20%;
+  }
+
+  100% {
+    bottom: 0%;
+    margin-bottom: 0;
+  }
+}
+@-webkit-keyframes slideUp {
+  0% {
+    bottom: 0;
+  }
+
+  50% {
+    bottom: -10%;
+  }
+
+  100% {
+    bottom: 100%;
+  }
+}
+@keyframes slideUp {
+  0% {
+    bottom: 0;
+  }
+
+  50% {
+    bottom: -10%;
+  }
+
+  100% {
+    bottom: 100%;
+  }
+}
 .simulator-list {
   list-style-type: none;
+  padding: 0;
 }
 .simulator-list li {
-  padding-bottom: 25px;
+  margin-top: 25px;
 }
-.simulator-list li input {
+.simulator-list .item-wrapper {
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid #c4c4c4;
+  -webkit-transition: -webkit-box-shadow 0.2s;
+  transition: box-shadow 0.2s;
+}
+.simulator-list .item-wrapper:hover {
+  -webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.25);
+}
+.simulator-list .item-wrapper label {
+  display: block;
+  position: relative;
+  padding-top: 75%;
+  margin-bottom: 0;
+  -webkit-background-size: cover;
+  background-size: cover;
+  cursor: pointer;
+}
+.simulator-list .item-wrapper .selecting-indicator {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 100%;
+  background-color: #24bd77;
+  -webkit-animation: slideUp 0.3s linear forwards;
+  animation: slideUp 0.3s linear forwards;
+  margin-bottom: 1px;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.simulator-list .item-wrapper .caption {
+  margin: 0;
+  text-transform: none;
+  font-size: 1em;
+  text-align: center;
+  border-top: 1px solid #c4c4c4;
+}
+.simulator-list .item-wrapper .caption p {
+  margin: 0;
+  padding: 0.5em;
+}
+.simulator-list .item-wrapper input {
+  right: 100%;
+  bottom: 100%;
   position: absolute;
   z-index: -10;
 }
-.simulator-list li label {
-  display: block;
-  padding-top: 100%;
-  background-color: #cccccc;
-  margin-bottom: 0;
+.simulator-list .item-wrapper input:checked + .selecting-indicator {
+  bottom: 0;
+  -webkit-animation: slideDown 0.4s linear forwards;
+  animation: slideDown 0.4s linear forwards;
 }
 
 article h3 {

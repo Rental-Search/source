@@ -9,11 +9,6 @@ block append styles
   link(rel="stylesheet", href="#{STATIC_URL}css/jquery-ui.css")
   link(rel="stylesheet", href="#{STATIC_URL}css/product_list_styles.css")
 
-block append scripts
-  // custom input:range
-  // http://jqueryui.com/slider/#rangemin
-  //- script(src="#{STATIC_URL}js/scripts.js")
-
 block append content-body
   .container-flex
     header.header-site
@@ -22,20 +17,107 @@ block append content-body
       include ../jade/_breadcrumbs
     article.framing
       .container
-        h2.text-center
+
+        h2.text-center.indent-t-lg
           | DITES - NOUS CE QUE VOUS AVEZ,
           br
           | NOUS VOUS DIRONS COMBIEN VOUS POUVEZ GAGNER !
         h3.text-center (CLIQUEZ SUR LES BIENS QUE VOUS POSSÉDEZ, PUIS SIMULEZ VOS REVENUS)
-        main.indent-lg-t: form(action="simulator")
-          h5.text-gray-strong i DANS VOTRE CUISINE…
-          .row: ul.simulator-list
-            -var i = 6
-            while i--
-              li.col-md-2.col-sm-3.col-xs-4
-                input(type="checkbox", name="", id="ch-#{i}")
-                label(for="#ch-#{i}", style="background-image: url(http://lorempixel.com/100/100)")
-                  span.grin-area
+
+        main.indent-t-lg.indent-b-lg.text-gray-strong: form(action="simulator")
+          fieldset.category
+            legend.text-uppercase dans votre cuisine...
+            ul.simulator-list.row
+              -var i = 6
+              while i--
+                li.col-md-2.col-sm-3.col-xs-4: .item-wrapper
+                  label(style="background-image: url(http://lorempixel.com/300/30#{i}/transport)")
+                    input(type="checkbox", name="")
+                    span.selecting-indicator
+                  .caption
+                    p Lorem ipsum dolor
+            p.pull-right: em ... et bien d’autres choses à louer dans votre cuisine
+
+          fieldset.category
+            legend.text-uppercase dans votre salon...
+            ul.simulator-list.row
+              -var i = 6
+              while i--
+                li.col-md-2.col-sm-3.col-xs-4: .item-wrapper
+                  label(style="background-image: url(http://lorempixel.com/300/3#{i}0/transport)")
+                    input(type="checkbox", name="")
+                    span.selecting-indicator
+                  .caption
+                    p Lorem ipsum dolor
+            p.pull-right: em ... et bien d’autres choses à louer dans votre salon
+
+          fieldset.category
+            legend.text-uppercase dans votre chambre...
+            ul.simulator-list.row
+              -var i = 6
+              while i--
+                li.col-md-2.col-sm-3.col-xs-4: .item-wrapper
+                  label(style="background-image: url(http://lorempixel.com/300/30#{i}/transport)")
+                    input(type="checkbox", name="")
+                    span.selecting-indicator
+                  .caption
+                    p Lorem ipsum dolor
+            p.pull-right: em ... et bien d’autres choses à louer dans votre chambre
+
+          fieldset.category
+            legend.text-uppercase dans la chambre de bebe....
+            ul.simulator-list.row
+              -var i = 6
+              while i--
+                li.col-md-2.col-sm-3.col-xs-4: .item-wrapper
+                  label(style="background-image: url(http://lorempixel.com/300/30#{i}/transport)")
+                    input(type="checkbox", name="")
+                    span.selecting-indicator
+                  .caption
+                    p Lorem ipsum dolor
+            p.pull-right: em ... et bien d’autres choses à louer dans la chambre de bebe...
+
+          fieldset.category
+            legend.text-uppercase dans votre cave...
+            ul.simulator-list.row
+              -var i = 6
+              while i--
+                li.col-md-2.col-sm-3.col-xs-4: .item-wrapper
+                  label(style="background-image: url(http://lorempixel.com/300/30#{i}/transport)")
+                    input(type="checkbox", name="")
+                    span.selecting-indicator
+                  .caption
+                    p Lorem ipsum dolor
+            p.pull-right: em ... et bien d’autres choses à louer dans votre cave
+
+          fieldset.category
+            legend.text-uppercase dans votre garage...
+            ul.simulator-list.row
+              -var i = 6
+              while i--
+                li.col-md-2.col-sm-3.col-xs-4: .item-wrapper
+                  label(style="background-image: url(http://lorempixel.com/300/30#{i}/transport)")
+                    input(type="checkbox", name="")
+                    span.selecting-indicator
+                  .caption
+                    p Lorem ipsum dolor sit amet.
+            p.pull-right: em ... et bien d’autres choses à louer dans votre garage
+
+          fieldset.category
+            legend.text-uppercase dans votre jardin ou votre atelier de bricolage...
+            ul.simulator-list.row
+              -var i = 6
+              while i--
+                li.col-md-2.col-sm-3.col-xs-4: .item-wrapper
+                  label(style="background-image: url(http://lorempixel.com/300/30#{i}/transport)")
+                    input(type="checkbox", name="")
+                    span.selecting-indicator
+                  .caption
+                    p Lorem ipsum dolor
+            p.pull-right: em ... et bien d’autres choses à louer dans votre jardin ou votre atelier de bricolage
+
+          .text-center.indent-t-md: button(type="submit").btn.btn-lg.bg-success Simulez vos revenus
+
 
     footer
       section.footer-links
