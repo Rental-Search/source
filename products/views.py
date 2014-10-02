@@ -758,7 +758,7 @@ class HomepageView(CommonPageContextMixin, TemplateView):
             'cities_list': product_stats,
             'total_products': Product.on_site.only('id').count(),
             'product_list': last_added(product_search, self.location, limit=8),
-            'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at')[:1],
+            'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at')[:10],
         }
 
     def get_context_data(self, **kwargs):

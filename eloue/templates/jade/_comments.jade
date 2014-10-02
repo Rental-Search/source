@@ -4,9 +4,9 @@
 	ul.row
 		for comment in comment_list
 			{% with comment.booking.product as product %}
-			li.col-sm-10.test: a(href="{{ product.get_absolute_url }}")
+			li.col-sm-6: a(href="{{ product.get_absolute_url }}")
 				{% with product.pictures.all|first as picture %}
-				img(src="{{ picture.home.url }}", alt="{{ product.summary }}")
+				img(src="{{ picture.home.url }}")
 				{% endwith %}
 				p.text {{ comment.comment }}
 				p.info
