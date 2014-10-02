@@ -3,6 +3,7 @@ import os.path
 import base64
 from datetime import date
 from decimal import Decimal
+import datetime
 
 from django.db.models import get_model
 from django.contrib.auth import get_user_model
@@ -328,10 +329,21 @@ class MessageThreadMessageTest(APITestCase):
             self.assertTrue(str(response.data['last_offer']).endswith(_location('productrelatedmessage-detail', pk=message_id)), response.data)
 
 class ProductTest(APITestCase):
-    fixtures = ['patron', 'address', 'phones', 'category', 'product', 'picture_api2']
+    fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
 
     def setUp(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_is_product_available(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+        response = self.client.get(_location('product-is-available', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertIn('max_available', response.data)
+        self.assertEqual(response.data['max_available'], 3)
 
     def test_edit_address(self):
         response = self.client.get(_location('product-detail', pk=1))
