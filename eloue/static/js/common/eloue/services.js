@@ -1754,7 +1754,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             return productRelatedMessagesParseService;
         }]);
 
-        EloueCommon.factory("AuthService", ["$q", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", function ($q, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration) {
+        EloueCommon.factory("AuthService", ["$q", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", "FormService", function ($q, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration, FormService) {
             return {
 
                 /**
@@ -1799,6 +1799,16 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  */
                 saveAttemptUrl: function () {
                     RedirectAfterLogin.url = $window.location.href;
+                },
+
+                /**
+                 * Sends password reset request.
+                 * @param form form
+                 * @param successCallback success callback
+                 * @param errorCallback error callback
+                 */
+                sendResetPasswordRequest: function(form, successCallback, errorCallback) {
+                    FormService.send("POST", "/reset/", form, successCallback, errorCallback);
                 },
 
                 /**

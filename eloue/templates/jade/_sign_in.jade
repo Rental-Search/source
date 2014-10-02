@@ -30,7 +30,7 @@
                         .col-xs-9
                             input(type="text", placeholder="Nom", name="lastName", ng-model="account.lastName", required).form-control
                             span.errorMsg(ng-show="registrationForm.lastName.$error.required && registrationForm.lastName.$dirty") Required field
-                    -var registration_form_fields = [["text", "Prénom", "firstName"], ["email", "Adresse email", "email"], ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "postalCode"]]
+                    -var registration_form_fields = [["text", "Prénom", "firstName"], ["email", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "postalCode"]]
                     each type, placeholder, name in registration_form_fields
                         .form-group
                             input(type="text", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control

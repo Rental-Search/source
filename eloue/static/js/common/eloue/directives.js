@@ -147,7 +147,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             restrict: "E",
             templateUrl: Path.templatePrefix + "partials/homepage/reset-password-form.html",
             scope: {},
-            controller: "LoginCtrl"
+            controller: "ResetPasswordCtrl"
         };
     }]);
 
