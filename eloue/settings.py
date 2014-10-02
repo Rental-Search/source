@@ -268,13 +268,15 @@ PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
-    'pipeline.compilers.less.LessCompiler',
-    'pipeline.compilers.sass.SASSCompiler',
+    #'pipeline.compilers.less.LessCompiler',
+    'eloue.compat.pipeline.compilers.AutoprefixerSASSCompiler',
 )
 PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = env('PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUI_BINARY = env('COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
+PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/home/benoitw/node_modules/autoprefixer/autoprefixer')
+PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
 PIPELINE_CSS = {
     'extrastyles': {
         'source_filenames': (

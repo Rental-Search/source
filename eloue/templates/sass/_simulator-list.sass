@@ -1,21 +1,3 @@
-@keyframes slideDown
-  0%
-    bottom: 100%
-  50%
-    bottom: -20%
-  100%
-    bottom: 0%
-    margin-bottom: 0
-
-
-@keyframes slideUp
-  0%
-    bottom: 0
-  50%
-    bottom: -10%
-  100%
-    bottom: 100%
-
 .simulator-list
   list-style-type: none
   padding: 0
@@ -40,17 +22,18 @@
       margin-bottom: 0 // Reset default margin
 
       background-size: cover // Fill block by image
+      background-position: center center
       cursor: pointer
 
     // Color indicator for display selected elements
     .selecting-indicator
       position: absolute
       right: 0
-      bottom: 100% // For ie < 10
+      bottom: 100%
       left: 0
       height: 100%
       background-color: $brand-success
-      animation: slideUp .3s linear forwards
+      transition: bottom .15s ease-in
       margin-bottom: 1px // For correct display color border-top
       +opacity(0.5)
 
@@ -76,5 +59,5 @@
 
       // Indication selected item with animation
       &:checked + .selecting-indicator
-        bottom: 0 // For ie < 10
-        animation: slideDown .4s linear forwards
+        margin-bottom: 0
+        bottom: 0
