@@ -38,7 +38,7 @@ from products.utils import format_quote, escape_percent_sign
 from products.search import product_search, car_search, realestate_search, product_only_search
 
 from rent.forms import BookingOfferForm
-from rent.models import Booking
+from rent.models import Booking, Comment
 from rent.choices import BOOKING_STATE
 
 from eloue.decorators import ownership_required, secure_required, mobify, cached
@@ -734,6 +734,7 @@ class CommonPageContextMixin(object):
     breadcrumbs = {'sort': {'name': 'sort', 'value': None, 'label': 'sort', 'facet': False},
                    'l': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
                    }
+
     def get_context_data(self, **kwargs):
         context = {
             'category_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
@@ -755,8 +756,9 @@ class HomepageView(CommonPageContextMixin, TemplateView):
         ).values('city').annotate(Count('id')).order_by('-id__count')
         return {
             'cities_list': product_stats,
-            'total_products': Product.objects.only('id').count(),
+            'total_products': Product.on_site.only('id').count(),
             'product_list': last_added(product_search, self.location, limit=8),
+            'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at')[:10],
         }
 
     def get_context_data(self, **kwargs):

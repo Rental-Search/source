@@ -21,7 +21,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         };
     });
 
-    EloueCommon.directive("eloueChosen", ["$timeout", function($timeout) {
+    EloueCommon.directive("eloueChosen", ["$timeout", function ($timeout) {
         return {
             restrict: "A",
             link: function (scope, element, attrs) {
@@ -30,12 +30,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     element.trigger("chosen:updated");
                 });
 
-                scope.$watch(attrs["ngModel"], function() {
+                scope.$watch(attrs["ngModel"], function () {
                     element.trigger("chosen:updated");
                 });
 
-                scope.$watch(attrs["opts"], function() {
-                    $timeout(function() {
+                scope.$watch(attrs["opts"], function () {
+                    $timeout(function () {
                         element.trigger("chosen:updated");
                     }, 300);
                 });
@@ -44,6 +44,56 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             }
         };
     }]);
+
+    EloueCommon.directive("eloueMap", ["$timeout", function ($timeout) {
+        return {
+            restrict: "A",
+            link: function (scope, element, attrs) {
+                var google_maps_loaded_def = $.Deferred();
+
+                window.google_maps_loaded = function () {
+                    console.log("loaded");
+                    google_maps_loaded_def.resolve(google.maps);
+                };
+
+                require(['http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&amp;callback=google_maps_loaded'], function () {
+                }, function (err) {
+                    google_maps_loaded_def.reject();
+                });
+
+                var radius = 10;
+
+                google_maps_loaded_def.promise().then(function (result) {
+                    var myOptions = {
+                        zoom: radius,
+                        center: new google.maps.LatLng(-34.397, 150.644),
+                        disableDefaultUI: true,
+                        zoomControl: true,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    console.log(element);
+                    var map = new google.maps.Map(element, myOptions);
+
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode(
+                        {address: document.getElementById("where").value},
+                        function (result, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                map.setCenter(result[0].geometry.location);
+                                var circle = new google.maps.Circle({
+                                    map: map,
+                                    radius: radius * 1000,
+                                    fillColor: '#FFFFFF',
+                                    editable: false
+                                });
+                            }
+                        }
+                    );
+                });
+            }
+        };
+    }]);
+
 
     EloueCommon.directive("eloueDatepickerMonth", function () {
         return {
@@ -84,6 +134,18 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         return {
             restrict: "E",
             templateUrl: Path.templatePrefix + "partials/homepage/login-form.html",
+            scope: {},
+            controller: "LoginCtrl"
+        };
+    }]);
+
+    /**
+     * Directive to display reset password form.
+     */
+    EloueCommon.directive("eloueResetPasswordForm", ["Path", function (Path) {
+        return {
+            restrict: "E",
+            templateUrl: Path.templatePrefix + "partials/homepage/reset-password-form.html",
             scope: {},
             controller: "LoginCtrl"
         };
