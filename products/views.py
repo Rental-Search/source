@@ -756,7 +756,7 @@ class HomepageView(CommonPageContextMixin, TemplateView):
         ).values('city').annotate(Count('id')).order_by('-id__count')
         return {
             'cities_list': product_stats,
-            'total_products': Product.objects.only('id').count(),
+            'total_products': Product.on_site.only('id').count(),
             'product_list': last_added(product_search, self.location, limit=8),
             'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at')[:1],
         }
