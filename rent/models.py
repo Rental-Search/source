@@ -445,6 +445,10 @@ class Comment(models.Model):
     )
 
     @property
+    def author(self):
+        return self.booking.owner if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
+
+    @property
     def response(self):
         raise NotImplementedError
     
