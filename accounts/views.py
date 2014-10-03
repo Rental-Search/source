@@ -1027,12 +1027,11 @@ from rest_framework.response import Response
 
 from accounts import serializers, models, search
 from accounts.utils import viva_check_phone
-from eloue.api import decorators, viewsets, filters, mixins, permissions
+from eloue.api import viewsets, filters, mixins, permissions
 
 USER_ME = 'me'
 
 
-@decorators.allow_anonymous_retrieve
 class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -1045,6 +1044,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
+    public_methods = ('retrieve', 'search')
 
     def dispatch(self, request, *args, **kwargs):
         pk_field = getattr(self, 'pk_url_kwarg', 'pk')
@@ -1088,7 +1088,6 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
         return Response(res)
 
 
-@decorators.allow_anonymous_retrieve
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows addresses to be viewed or edited.
@@ -1098,6 +1097,7 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter) 
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
+    public_methods = ('retrieve')
 
 
 class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):

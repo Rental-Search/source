@@ -830,7 +830,7 @@ from rest_framework.decorators import link
 import django_filters
 
 from products import serializers, models
-from eloue.api import viewsets, filters, mixins, permissions, decorators
+from eloue.api import viewsets, filters, mixins, permissions
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
@@ -845,7 +845,6 @@ class CategoryFilterSet(filters.FilterSet):
         fields = ('parent', 'need_insurance')
 
 
-@decorators.allow_anonymous_retrieve
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDeletableModelViewSet after merging Category and CategoryDescription
     """
     API endpoint that allows product categories to be viewed or edited.
@@ -856,6 +855,8 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
+    public_methods = ('retrieve', )
+
 
     @link()
     def ancestors(self, request, *args, **kwargs):
@@ -883,7 +884,6 @@ class ProductFilterSet(filters.FilterSet):
         fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
 
 
-@decorators.allow_anonymous_retrieve
 class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -895,6 +895,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     search_index = product_search
     filter_class = ProductFilterSet
     ordering_fields = ('quantity', 'is_archived', 'category')
+    public_methods = ('retrieve', 'search', 'is_available')
+
 
     @link()
     def is_available(self, request, *args, **kwargs):
@@ -968,7 +970,6 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return reverse('product-detail', args=(self.object.pk,))
 
 
-@decorators.allow_anonymous_retrieve
 class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product prices to be viewed or edited.
@@ -979,9 +980,9 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     owner_field = 'product__owner'
     filter_fields = ('product', 'unit')
     ordering_fields = ('name', 'amount')
+    public_methods = ('retrieve')
 
 
-@decorators.allow_anonymous_retrieve
 class PictureViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows product images to be viewed or edited.
@@ -992,9 +993,9 @@ class PictureViewSet(viewsets.ModelViewSet):
     owner_field = 'product__owner'
     filter_fields = ('product', 'created_at')
     ordering_fields = ('created_at',)
+    public_methods = ('retrieve', )
 
 
-@decorators.allow_anonymous_retrieve
 class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product curiosities to be viewed or edited.
@@ -1004,6 +1005,8 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('product',) # TODO: 'city', 'price')
     # TODO: ordering_fields = ('price',)
+    public_methods = ('retrieve',)
+
 
 class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """

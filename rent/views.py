@@ -354,7 +354,7 @@ from rest_framework.response import Response
 import django_filters
 
 from rent import serializers, models, forms
-from eloue.api import viewsets, filters, mixins, decorators
+from eloue.api import viewsets, filters, mixins
 
 class BookingFilterSet(filters.FilterSet):
     author = filters.MultiFieldFilter(name=('owner', 'borrower'))
@@ -422,7 +422,6 @@ class CommentFilterSet(filters.FilterSet):
         fields = ('booking',)
 
 
-@decorators.allow_anonymous_retrieve
 class CommentViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.
@@ -434,6 +433,8 @@ class CommentViewSet(viewsets.NonEditableModelViewSet):
     owner_field = ('booking__owner', 'booking__borrower')
     filter_class = CommentFilterSet
     ordering_fields = ('note', 'created_at')
+    public_methods = ('retrieve', )
+
 
 class SinisterViewSet(viewsets.ImmutableModelViewSet):
     """
