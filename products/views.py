@@ -840,6 +840,8 @@ class CategoryFilterSet(filters.FilterSet):
         model = models.Category
         fields = ('parent', 'need_insurance')
 
+
+@viewsets.allow_anonymous_retrieve
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDeletableModelViewSet after merging Category and CategoryDescription
     """
     API endpoint that allows product categories to be viewed or edited.
@@ -876,6 +878,8 @@ class ProductFilterSet(filters.FilterSet):
         model = models.Product
         fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
 
+
+@viewsets.allow_anonymous_retrieve
 class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -959,6 +963,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def get_location_url(self):
         return reverse('product-detail', args=(self.object.pk,))
 
+
+@viewsets.allow_anonymous_retrieve
 class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product prices to be viewed or edited.
@@ -970,6 +976,8 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     filter_fields = ('product', 'unit')
     ordering_fields = ('name', 'amount')
 
+
+@viewsets.allow_anonymous_retrieve
 class PictureViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows product images to be viewed or edited.
@@ -981,6 +989,8 @@ class PictureViewSet(viewsets.ModelViewSet):
     filter_fields = ('product', 'created_at')
     ordering_fields = ('created_at',)
 
+
+@viewsets.allow_anonymous_retrieve
 class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product curiosities to be viewed or edited.

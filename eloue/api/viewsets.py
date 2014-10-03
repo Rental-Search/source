@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import itertools
 
 from rest_framework import viewsets, mixins
+from eloue.api.permissions import AllowPublicRetrieve
 
 from .mixins import LocationHeaderMixin
 
@@ -37,13 +39,46 @@ class Api20ErrorMessagesMixin(object):
         return super(Api20ErrorMessagesMixin, self).finalize_response(
             request, response, *args, **kwargs)
 
-class ModelViewSet(Api20ErrorMessagesMixin, LocationHeaderMixin, viewsets.ModelViewSet):
+
+class UndeterminedPermissionMixin(object):
+    """
+    View set that allow permission checker don't make decision (return None).
+
+    If there isn't at least one checker made decision it is assumed that
+    access denied.
+    """
+
+    def check_permissions(self, request):
+        decision_made = False
+        for permission in self.get_permissions():
+            has_pemission = permission.has_permission(request, self)
+            if has_pemission is None:
+                continue
+
+            decision_made = True
+            if not has_pemission:
+                self.permission_denied(request)
+
+        if not decision_made:
+            self.permission_denied(request)
+
+
+class ModelViewSet(
+    UndeterminedPermissionMixin,
+    Api20ErrorMessagesMixin,
+    LocationHeaderMixin,
+    viewsets.ModelViewSet):
     pass
 
-class ReadOnlyModelViewSet(Api20ErrorMessagesMixin, LocationHeaderMixin, viewsets.ReadOnlyModelViewSet):
+class ReadOnlyModelViewSet(
+    UndeterminedPermissionMixin,
+    Api20ErrorMessagesMixin,
+    LocationHeaderMixin,
+    viewsets.ReadOnlyModelViewSet):
     pass
 
 class ImmutableModelViewSet(
+    UndeterminedPermissionMixin,
     Api20ErrorMessagesMixin,
     LocationHeaderMixin,
     mixins.CreateModelMixin,
@@ -70,3 +105,9 @@ class NonDeletableModelViewSet(mixins.UpdateModelMixin, ImmutableModelViewSet):
     `partial_update()` and `list()`, but misses 'destroy()' action.
     """
     pass
+
+
+def allow_anonymous_retrieve(cls):
+    """Decorator that add to ViewSet ability of getting objects anonymously."""
+    cls.permission_classes = itertools.chain((AllowPublicRetrieve,), cls.permission_classes)
+    return cls

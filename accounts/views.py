@@ -1012,6 +1012,8 @@ from eloue.api import viewsets, filters, mixins, permissions
 
 USER_ME = 'me'
 
+
+@viewsets.allow_anonymous_retrieve
 class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -1066,6 +1068,8 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
         })
         return Response(res)
 
+
+@viewsets.allow_anonymous_retrieve
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows addresses to be viewed or edited.
@@ -1075,6 +1079,7 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter) 
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
+
 
 class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """

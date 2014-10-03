@@ -421,6 +421,8 @@ class CommentFilterSet(filters.FilterSet):
         model = models.Comment
         fields = ('booking',)
 
+
+@viewsets.allow_anonymous_retrieve
 class CommentViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.

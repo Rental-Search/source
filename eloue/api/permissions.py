@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import permissions
-from rest_framework.permissions import SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS, BasePermission
+
 
 class DefaultPermissions(permissions.DjangoModelPermissions):
     def has_permission(self, request, view):
@@ -13,7 +14,7 @@ class DefaultPermissions(permissions.DjangoModelPermissions):
             if user.is_authenticated():
                 return True
         # disallow by default
-        return False
+        return None
 
 class IsAuthenticatedOrReadOnly(DefaultPermissions):
     def has_permission(self, request, view):
@@ -46,3 +47,8 @@ class IsOwnerOrReadOnly(IsAuthenticatedOrReadOnly):
         if not isinstance(owner_field, basestring):
             owner_field = iter(owner_field).next()
         return request.method in SAFE_METHODS or request.user == getattr(obj, owner_field)
+
+
+class AllowPublicRetrieve(BasePermission):
+    def has_permission(self, request, view):
+        return request.method == 'GET' or request.user.is_authenticated()
