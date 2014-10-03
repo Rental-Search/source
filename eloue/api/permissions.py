@@ -51,4 +51,5 @@ class IsOwnerOrReadOnly(IsAuthenticatedOrReadOnly):
 
 class AllowPublicRetrieve(BasePermission):
     def has_permission(self, request, view):
-        return request.method == 'GET' or request.user.is_authenticated()
+        public_retrieve = request.method == 'GET' and view.action == 'retrieve'
+        return public_retrieve or request.user.is_authenticated()

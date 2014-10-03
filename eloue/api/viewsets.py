@@ -109,5 +109,6 @@ class NonDeletableModelViewSet(mixins.UpdateModelMixin, ImmutableModelViewSet):
 
 def allow_anonymous_retrieve(cls):
     """Decorator that add to ViewSet ability of getting objects anonymously."""
-    cls.permission_classes = itertools.chain((AllowPublicRetrieve,), cls.permission_classes)
+    cls.permission_classes = tuple(
+        itertools.chain((AllowPublicRetrieve,), cls.permission_classes))
     return cls
