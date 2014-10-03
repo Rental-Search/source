@@ -1027,12 +1027,12 @@ from rest_framework.response import Response
 
 from accounts import serializers, models, search
 from accounts.utils import viva_check_phone
-from eloue.api import viewsets, filters, mixins, permissions
+from eloue.api import decorators, viewsets, filters, mixins, permissions
 
 USER_ME = 'me'
 
 
-@viewsets.allow_anonymous_retrieve
+@decorators.allow_anonymous_retrieve
 class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -1088,7 +1088,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
         return Response(res)
 
 
-@viewsets.allow_anonymous_retrieve
+@decorators.allow_anonymous_retrieve
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows addresses to be viewed or edited.

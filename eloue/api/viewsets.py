@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import itertools
 
 from rest_framework import viewsets, mixins
-from eloue.api.permissions import AllowPublicRetrieve
 
 from .mixins import LocationHeaderMixin
 
@@ -40,7 +38,7 @@ class Api20ErrorMessagesMixin(object):
             request, response, *args, **kwargs)
 
 
-class UndeterminedPermissionMixin(object):
+class PermissionMixin(object):
     """
     View set that allow permission checker don't make decision (return None).
 
@@ -64,21 +62,21 @@ class UndeterminedPermissionMixin(object):
 
 
 class ModelViewSet(
-    UndeterminedPermissionMixin,
+    PermissionMixin,
     Api20ErrorMessagesMixin,
     LocationHeaderMixin,
     viewsets.ModelViewSet):
     pass
 
 class ReadOnlyModelViewSet(
-    UndeterminedPermissionMixin,
+    PermissionMixin,
     Api20ErrorMessagesMixin,
     LocationHeaderMixin,
     viewsets.ReadOnlyModelViewSet):
     pass
 
 class ImmutableModelViewSet(
-    UndeterminedPermissionMixin,
+    PermissionMixin,
     Api20ErrorMessagesMixin,
     LocationHeaderMixin,
     mixins.CreateModelMixin,
@@ -105,10 +103,3 @@ class NonDeletableModelViewSet(mixins.UpdateModelMixin, ImmutableModelViewSet):
     `partial_update()` and `list()`, but misses 'destroy()' action.
     """
     pass
-
-
-def allow_anonymous_retrieve(cls):
-    """Decorator that add to ViewSet ability of getting objects anonymously."""
-    cls.permission_classes = tuple(
-        itertools.chain((AllowPublicRetrieve,), cls.permission_classes))
-    return cls
