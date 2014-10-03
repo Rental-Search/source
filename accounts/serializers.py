@@ -25,13 +25,16 @@ class AddressSerializer(GeoModelSerializer):
     class Meta:
         model = models.Address
         fields = ('id', 'patron', 'street', 'zipcode', 'position', 'city', 'country')
+        public_fields = ('zipcode', 'position', 'city', 'country')
         read_only_fields = ('position',)
         immutable_fields = ('patron',)
         geo_field = 'position'
 
 
 class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
-    AddressSerializer.Meta.public_fields = ('city', 'zipcode')
+
+    class Meta(AddressSerializer.Meta):
+        public_fields = ('city', 'zipcode')
 
 
 class PhoneNumberSerializer(serializers.ModelSerializer):

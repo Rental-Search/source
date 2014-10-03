@@ -188,7 +188,7 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
         user = request.user if request else None
         only_public_fields = user.is_anonymous() if user else True
 
-        if self.opts.public_fields and only_public_fields:
+        if hasattr(self.opts, 'public_fields') and only_public_fields:
             for key in public_fields.keys():
                 if key not in self.opts.public_fields:
                     public_fields.pop(key, None)
