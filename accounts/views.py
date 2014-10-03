@@ -1079,11 +1079,13 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
 
-    def dispatch(self, request, *args, **kwargs):
+    def initial(self, request, *args, **kwargs):
         pk_field = getattr(self, 'pk_url_kwarg', 'pk')
-        if kwargs.get(pk_field, None) == USER_ME and not request.user.is_anonymous():
-            kwargs[pk_field] = request.user.pk
-        return super(UserViewSet, self).dispatch(request, *args, **kwargs)
+        if kwargs.get(pk_field, None) == USER_ME:
+            user = self.request.user
+            if not user.is_anonymous():
+                self.kwargs[pk_field] = getattr(user, pk_field)
+        return super(UserViewSet, self).initial(request, *args, **kwargs)
 
     @action(methods=['post', 'put'])
     def reset_password(self, request, *args, **kwargs):
