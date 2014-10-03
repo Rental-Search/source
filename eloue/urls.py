@@ -196,9 +196,9 @@ dashboard_urlpatterns = patterns('',
     url(r'^$', ExtraContextTemplateView.as_view(
             template_name='dashboard/jade/_base_dashboard.jade',
         ),
-        name='new_ui_dashboard',
+        name='dashboard',
     ),
-    url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_dashboard_partials')),
+    url(r'^partials/', include(partials_urlpatterns, namespace='dashboard_partials')),
 )
 
 api2_urlpatterns = patterns('',
