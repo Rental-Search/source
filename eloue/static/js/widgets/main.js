@@ -197,9 +197,175 @@ require([
             event.target.playVideo();
         }
 
-        $('#geolocate').formmapper({
-            details: "form"
-        });
 
+        window.google_maps_loaded = function () {
+            $('#geolocate').formmapper({
+                details: "form"
+            });
+
+            var mapCanvas = document.getElementById("map-canvas");
+
+            if (!!mapCanvas) {
+
+
+                var radius = Number($("#district").val().replace(',', '.'));
+
+                var mapOptions = {
+                    zoom: zoom(radius),
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map = new google.maps.Map(mapCanvas, mapOptions);
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode(
+                    {address: document.getElementById("where").value},
+                    function (result, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            map.setCenter(result[0].geometry.location);
+                            var circle = new google.maps.Circle({
+                                map: map,
+                                radius: radius * 1000,
+                                fillColor: '#FFFFFF',
+                                editable: false
+                            });
+                        }
+                    }
+                );
+
+                var products = [];
+                $('li[id^="marker-"]').each(function () {
+                    var item = $(this);
+                    var product = {
+                        title: item.attr("name"),
+                        lat: item.attr("locationX"),
+                        lng: item.attr("locationY"),
+                        zIndex: Number(item.attr("id").replace("marker-",""))
+                    };
+                    products.push(product);
+                });
+
+
+                setMarkers(map, products, 'li#marker-');
+            }
+        };
+
+        function load_google_maps() {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
+            document.body.appendChild(script);
+        }
+
+        function zoom(radius) {
+            if (radius <= 0.5)
+                return 14;
+            if (radius <= 1)
+                return 13;
+            if (radius <= 3)
+                return 12;
+            if (radius <= 6)
+                return 11;
+            if (radius <= 15)
+                return 10;
+            if (radius <= 25)
+                return 9;
+            if (radius <= 100)
+                return 7;
+            if (radius <= 200)
+                return 6;
+            if (radius <= 300)
+                return 5;
+            if (radius <= 700)
+                return 4;
+            return 3;
+        }
+
+        function setMarkers(map, locations, markerId) {
+            for (var i = 0; i < locations.length; i++) {
+                var product = locations[i];
+
+                var image, image_hover;
+
+                if (markerId == "li#marker-") {
+                    image = new google.maps.MarkerImage('/static/images/markers.png',
+                        new google.maps.Size(20, 33),
+                        new google.maps.Point(44, 34 * i),
+                        new google.maps.Point(10, 33));
+
+                    image_hover = new google.maps.MarkerImage('/static/images/markers.png',
+                        new google.maps.Size(20, 33),
+                        new google.maps.Point(0, 34 * i),
+                        new google.maps.Point(10, 33));
+                }
+
+                var myLatLng = new google.maps.LatLng(product.lat, product.lng);
+
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: product.title,
+                    zIndex: product.zIndex,
+                    icon: image
+                });
+
+                marker.set("myZIndex", marker.getZIndex());
+
+                google.maps.event.addListener(marker, "mouseover", mouseOverListenerGenerator(image_hover, marker, markerId));
+                google.maps.event.addListener(marker, "click", mouseClickListenerGenerator(marker, markerId));
+                google.maps.event.addListener(marker, "mouseout", mouseOutListenerGenerator(image, marker, markerId));
+
+                $(markerId + marker.get("myZIndex")).mouseover(triggerMouseOverGenerator(marker));
+
+                $(markerId + marker.get("myZIndex")).mouseout(triggerMouseOutGenerator(marker));
+            }
+        }
+
+        function mouseClickListenerGenerator(marker, markerId) {
+            return function () {
+                // Jump to product item
+                $('html, body').animate({
+                    scrollTop: $(markerId + marker.get("myZIndex")).offset().top - 20
+                }, 1000);
+            }
+        }
+
+        function mouseOverListenerGenerator(image_hover, marker, markerId) {
+            return function () {
+                console.log("over");
+                this.setOptions({
+                    icon: image_hover,
+                    zIndex: 200
+                });
+
+                //TODO: toggle ":hover" styles
+//                $(markerId + marker.get("myZIndex")).find(".declarer-container")[0].trigger("hover");
+            }
+        }
+
+        function mouseOutListenerGenerator(image, marker, markerId) {
+            return function () {
+                this.setOptions({
+                    icon: image,
+                    zIndex: this.get("myZIndex")
+                });
+                $(markerId + marker.get("myZIndex")).removeAttr("style");
+            }
+        }
+
+        function triggerMouseOverGenerator(marker) {
+            return function () {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        }
+
+        function triggerMouseOutGenerator(marker) {
+            return function () {
+                marker.setAnimation(null);
+                google.maps.event.trigger(marker, 'mouseout');
+            }
+        }
+
+        load_google_maps();
     });
 });

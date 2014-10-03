@@ -1,6 +1,6 @@
 ol.nav.row
     {% for product in product_list %}
-    li
+    li(id="marker-{{ forloop.counter }}", locationY="{{ product.location.y|stringformat:'f' }}", locationX="{{ product.location.x|stringformat:'f' }}", name="{{ product.summary }}")
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper
