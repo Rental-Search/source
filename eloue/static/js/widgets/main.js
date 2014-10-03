@@ -18,6 +18,7 @@ require.config({
         "angular-moment": "/static/bower_components/angular-moment/angular-moment.min",
         "bootstrap-datepicker": "/static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
         "bootstrap-datepicker-fr": "/static/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
+        "jquery-form": "/static/bower_components/jquery-form/jquery.form",
         "datejs": "/static/bower_components/datejs/build/production/date.min",
         "chosen": "/static/bower_components/chosen/chosen.jquery.min",
         "html5shiv": "/static/bower_components/html5shiv/dist/html5shiv.min",
@@ -48,6 +49,7 @@ require.config({
         "mouse": ["jQuery"],
         "widget": ["jQuery"],
         "bootstrap": ["jQuery"],
+        "jquery-form": ["jQuery"],
         "moment": ["jQuery"],
         "bootstrap-datepicker": ["jQuery"],
         "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
@@ -76,6 +78,7 @@ require([
     "placeholders-jquery",
     "formmapper",
     "toastr",
+    "jquery-form",
 //    "jquery-ui",
     "slider",
     "core",
@@ -166,6 +169,33 @@ require([
                 fjs.parentNode.insertBefore(js, fjs);
             }
         }(document, 'script', 'twitter-wjs');
+
+        // Insert YouTube video into defined container, add play on modal open and stop on modal hide
+        var tag = document.createElement('script');
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        var videoModal = $('#videoModal');
+        var player;
+
+        videoModal.on('shown.bs.modal', function () {
+            player = new YT.Player('videoContainer', {
+                height: '480',
+                width: '640',
+                videoId: 'nERu_2pSSb0',
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        });
+        videoModal.on('hidden.bs.modal', function () {
+            player.destroy();
+        });
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
 
         $('#geolocate').formmapper({
             details: "form"

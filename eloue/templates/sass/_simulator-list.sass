@@ -1,0 +1,63 @@
+.simulator-list
+  list-style-type: none
+  padding: 0
+
+  li
+    margin-top: $grid-gutter-width
+  // Wrapper for content of item. Provides display shadow and border
+  .item-wrapper
+    overflow: hidden
+    background-color: white
+    border: 1px solid $gray-medium
+    // box-shadow: 0 0 .25em rgba(0,0,0,.3)
+    transition: box-shadow .2s
+    &:hover
+      box-shadow: 0 0 .5em rgba(0,0,0,.25)
+
+    // Block with background-image from inline style
+    label
+      display: block
+      position: relative
+      padding-top: 75% // 4:3
+      margin-bottom: 0 // Reset default margin
+
+      background-size: cover // Fill block by image
+      background-position: center center
+      cursor: pointer
+
+    // Color indicator for display selected elements
+    .selecting-indicator
+      position: absolute
+      right: 0
+      bottom: 100%
+      left: 0
+      height: 100%
+      background-color: $brand-success
+      transition: bottom .15s ease-in
+      margin-bottom: 1px // For correct display color border-top
+      +opacity(0.5)
+
+    // Item caption
+    .caption
+      // Reset bootstrap style
+      margin: 0
+      text-transform: none
+      font-size: 1em
+      text-align: center
+      border-top: 1px solid $gray-medium
+      p
+        margin: 0
+        padding: .5em
+
+    // Input:checkbox
+    input
+      // Hidden checkbox
+      right: 100%
+      bottom: 100%
+      position: absolute
+      z-index: -10
+
+      // Indication selected item with animation
+      &:checked + .selecting-indicator
+        margin-bottom: 0
+        bottom: 0

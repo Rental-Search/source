@@ -13,8 +13,7 @@ ol.nav.row
             a(href="{{ product.url }}") {{ product.summary }}
             if product.pro
               span.badge-pro pro
-          p {{ product.city }}
-            span.zip-code ,&nbsp;{{ product.zipcode }}
+          p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
           .rate
             -var stars = [1,2,3,4,5]
             each s in stars
@@ -22,11 +21,14 @@ ol.nav.row
                 span.flaticon.solid.star-2.current-rate
               else
                 span.flaticon.solid.star-2
-          if product.comments
+          //- TODO: need a better solution here to hit SQL DB only once for all products in the list
+          {% with product.object.comments.count as comments_num %}
+          if comments_num
             span.sprite-comment
               i.flaticon.stroke.writing-comment
-              | {{ product.comments }}
-          p.full_description {{ product.text }}
+              | {{ comments_num }}
+          {% endwith %}
+          p.full_description {{ product.description|truncatechars:145 }}
         .declarer-container
           .declarer
             span.declarer-name {{ product.owner }}

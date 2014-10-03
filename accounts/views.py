@@ -15,7 +15,7 @@ import gdata.contacts.client
 import gdata.gauth
 
 
-from django.views.generic import ListView
+from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 
 
@@ -26,12 +26,11 @@ from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Q, Max, Avg
-from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import login
@@ -56,6 +55,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.views import LoginRequiredMixin
 from eloue.utils import json
+from django.utils.decorators import method_decorator
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
@@ -998,6 +998,25 @@ def patron_delete_idn_connect(request):
         pass
     return redirect('patron_edit_idn_connect')
 
+
+# UI v3
+
+from accounts.forms import EmailPasswordResetForm
+from eloue.http import JsonResponse
+
+class PasswordResetView(View):
+    http_method_names = ['post']
+
+    def post(self, request,
+        password_reset_form=EmailPasswordResetForm,
+        **kwargs
+    ):
+        form = password_reset_form(request.POST)
+        if form.is_valid():
+            form.save(request=request, use_https=request.is_secure(), **kwargs)
+            success_msg = _("We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly.")
+            return JsonResponse({'detail': success_msg})
+        return JsonResponse({'errors': form.errors}, status=400)
 
 
 # REST API 2.0

@@ -20,8 +20,8 @@ define(["angular", "eloue/app"], function (angular) {
                 $rootScope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.selectedCategory], shouldReloadList: true});
             });
 
-            CategoriesService.getRootCategories().$promise.then(function (categories) {
-                $scope.categories = categories.results;
+            CategoriesService.getRootCategories().then(function (categories) {
+                $scope.categories = categories;
             });
 
             $scope.filterByCategory = function () {

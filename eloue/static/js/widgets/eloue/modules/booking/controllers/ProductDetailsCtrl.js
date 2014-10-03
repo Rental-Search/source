@@ -18,6 +18,20 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "BookingsLoadService",
         function ($scope, $window, $location,Endpoints, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
 
+            $scope.creditCard = {
+                id: null,
+                card_number: "",
+                expires: "",
+                holder: "",
+                masked_number: "",
+                cvv: "",
+                keep: "",
+                holder_name: "",
+                subscriber_reference: ""
+            };
+            $scope.newCreditCard = true;
+            $scope.showSaveCard = true;
+
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
 
@@ -30,18 +44,6 @@ define(["angular", "eloue/modules/booking/BookingModule",
                     $scope.loadCreditCards();
                 });
             }
-
-            $scope.creditCard = {
-                id: null,
-                card_number: "",
-                expires: "",
-                holder: "",
-                masked_number: "",
-                cvv: "",
-                keep: "",
-                holder_name: "",
-                subscriber_reference: ""
-            };
 
             $scope.getProductIdFromUrl = function () {
                 var href = $window.location.href;
@@ -161,16 +163,20 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 UsersService.updateUser(userPatch).$promise.then(function(result) {
                     // Update credit card info
                     $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
-                    if (!!$scope.creditCard.id) {
-                        CreditCardsService.deleteCard($scope.creditCard).$promise.then(function(result) {
-                            CreditCardsService.saveCard($scope.creditCard).$promise.then(function(result) {
+                    if ($scope.creditCard.masked_number == "") {
+                        if (!!$scope.creditCard.id) {
+                            CreditCardsService.deleteCard($scope.creditCard).$promise.then(function (result) {
+                                CreditCardsService.saveCard($scope.creditCard).$promise.then(function (result) {
+                                    $scope.requestBooking();
+                                });
+                            });
+                        } else {
+                            CreditCardsService.saveCard($scope.creditCard).$promise.then(function (result) {
                                 $scope.requestBooking();
                             });
-                        });
+                        }
                     } else {
-                        CreditCardsService.saveCard($scope.creditCard).$promise.then(function(result) {
-                            $scope.requestBooking();
-                        });
+                        $scope.requestBooking();
                     }
                 });
             };
@@ -204,6 +210,21 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 );
             };
 
+            $scope.clearCreditCard = function() {
+                $scope.newCreditCard = true;
+                $scope.creditCard = {
+                    id: $scope.creditCard.id,
+                    card_number: "",
+                    expires: "",
+                    holder: "",
+                    masked_number: "",
+                    cvv: "",
+                    keep: "",
+                    holder_name: "",
+                    subscriber_reference: ""
+                };
+            };
+
             /**
              * Retrieves identifier of the object from provided url, that ends with "../{%ID%}/"
              * @param url URL
@@ -234,8 +255,10 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 if ($scope.currentUser) {
                     CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
                         var cards = result.results;
-                        if (!!cards) {
-                            $scope.creditCard.id = cards[0].id;
+                        if (!!cards && cards.length > 0) {
+                            $scope.creditCard = cards[0];
+                            $scope.creditCard.expires = $scope.creditCard.expires.slice(0, 2) + "/" + $scope.creditCard.expires.slice(2);
+                            $scope.newCreditCard = false;
                         }
                     });
                 }

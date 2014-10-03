@@ -28,17 +28,11 @@ block append content-body
         include ./jade/_location_list
 
     main
-      section.download-mobile-apps.framing
-        include ./jade/_download_mobile_apps
-      section.watch-video
-        include ./jade/_watch_video
-      section.professional-renter-content.framing
-        include ./jade/_professional_renter_content
-      section.talk-about-us
-        include ./jade/_talk_about_us
+      //-section.download-mobile-apps.framing: include ./jade/_download_mobile_apps
+      section.watch-video: include ./jade/_watch_video
+      section.professional-renter-content.framing: include ./jade/_professional_renter_content
+      section.talk-about-us: include ./jade/_talk_about_us
 
     footer
-      section.footer-links.framing
-        include ./jade/_footer_links
-      section.rss
-        include ./jade/_rss
+      section.footer-links.framing: include ./jade/_footer_links
+      section.rss: include ./jade/_rss

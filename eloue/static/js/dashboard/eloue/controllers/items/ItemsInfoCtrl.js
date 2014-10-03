@@ -59,8 +59,8 @@ define(["angular", "eloue/app"], function (angular) {
 
             });
 
-            CategoriesService.getRootCategories().$promise.then(function (categories) {
-                $scope.rootCategories = categories.results;
+            CategoriesService.getRootCategories().then(function (categories) {
+                $scope.rootCategories = categories;
             });
 
             $scope.onPictureAdded = function () {

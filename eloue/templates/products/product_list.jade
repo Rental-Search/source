@@ -12,12 +12,12 @@ block append content-body
   .container-flex(data-ng-controller="AuthCtrl")
     header.header-site
       include ../jade/_header_site
-     nav
+     nav.bd-b
       include ../jade/_breadcrumbs
-    article.container.grid-layout
+    article.container.list-layout
       //- we shall calculate pagination for both the article head and the list below
       {% pagination %}
-      .row.article-head
+      .row.article-head.indent-t-md
         include ../jade/_product_list_article_head
       .row
         aside.col-xs-3
@@ -25,9 +25,7 @@ block append content-body
         main.col-xs-9
           include ../jade/_product_list_main
     footer
-      section.download-mobile-apps.framing
-        include ../jade/_download_mobile_apps
-      section.footer-links
-        include ../jade/_footer_links
-      section.rss
-        include ../jade/_rss
+      //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
+      section.footer-links: include ../jade/_footer_links
+      section.rss: include ../jade/_rss
+    script(type="text/ng-template")#modalContainer

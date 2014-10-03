@@ -29,6 +29,10 @@
                             .col-md-4
                                 select(ng-model="product.category", opts="leafCategories", required).form-control
                                     option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
+                        .row(ng-show="!currentUser.default_address")
+                            .col-sm-5: input(type="text", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
+                            .col-sm-3: input(type="text", placeholder="Code postal *", required, ng-model="currentUser.default_address.zipcode").form-control
+                            .col-sm-4: input(type="text", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
                         .row
                             .col-sm-4
                                 input(type="number", placeholder="{{isRealEstate ? 'Prix à la nuit *' : 'Prix à la journée *'}}", required, ng-model="price.amount").form-control
