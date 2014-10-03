@@ -19,7 +19,7 @@ from django.utils.translation import ugettext as _
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, View
 from django.db.models import Q, Count, Avg
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
@@ -730,6 +730,10 @@ def suggestion(request):
 
 # UI v3
 
+from eloue.views import AjaxResponseMixin
+from eloue.decorators import ajax_required
+from products.forms import SuggestCategoryViewForm
+
 class CommonPageContextMixin(object):
     breadcrumbs = {'sort': {'name': 'sort', 'value': None, 'label': 'sort', 'facet': False},
                    'l': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
@@ -790,11 +794,13 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
 class PublishItemView(CommonPageContextMixin, TemplateView):
     template_name = 'publich_item/index.jade'
 
-from django.views.generic import View
-from eloue.views import AjaxResponseMixin
-from products.forms import SuggestCategoryViewForm
-
 class SuggestCategoryView(AjaxResponseMixin, View):
+
+    @method_decorator(ajax_required)
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         # search for products by provided query string
         form = SuggestCategoryViewForm(self.request.GET, searchqueryset=product_search)
@@ -814,13 +820,10 @@ class SuggestCategoryView(AjaxResponseMixin, View):
         qs = qs.filter(slug__in=categories_set)
 
         context = dict(categories=[
-            self.get_ancestors(c) for c in qs if c.is_leaf_node()
+            [dict(id=c.id, name=c.name) for c in category.get_ancestors(include_self=True)]
+            for c in qs if c.is_leaf_node()
         ])
         return context
-
-    @method_decorator(cached(60*60))
-    def get_ancestors(self, category):
-        return [dict(id=c.id, name=c.name) for c in category.get_ancestors(include_self=True)]
 
 
 # REST API 2.0

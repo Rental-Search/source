@@ -3,6 +3,7 @@ from django.http import HttpResponseNotFound, Http404
 from django.views.decorators.csrf import requires_csrf_token
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.conf import settings
 from django.views.generic import View
 from django.template import RequestContext, loader
 
@@ -10,7 +11,6 @@ from haystack.query import SearchQuerySet
 from haystack.constants import DJANGO_ID
 
 from products.forms import FacetedSearchForm
-from eloue.decorators import ajax_required
 from eloue.http import JsonResponse
 
 @requires_csrf_token
@@ -79,10 +79,7 @@ class SearchQuerySetMixin(object):
         return obj
 
 class AjaxResponseMixin(object):
-    @method_decorator(ajax_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super(AjaxResponseMixin, self).dispatch(request, *args, **kwargs)
+    response_class = JsonResponse
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        return JsonResponse(context)
+    def render_to_response(self, context, **kwargs):
+        return self.response_class(context, **kwargs)
