@@ -32,6 +32,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         "ACCOUNT": {id: "4", name: "Accounts"}
     });
 
+    EloueCommon.constant("CivilityChoices", {
+        "MME": {id: "0", name: "Madame"},
+        "MLLE": {id: "1", name: "Mademoiselle"},
+        "M": {id: "2", name: "Monsieur"}
+    });
+
     EloueCommon.constant("Currency", {
         "EUR": {name: "EUR", symbol: "€"},
         "USD": {name: "USD", symbol: "$"},

@@ -116,7 +116,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "AuthService", function ($scope, AuthService) {
+    EloueCommon.controller("RegisterCtrl", ["$scope", "AuthService", "CivilityChoices", function ($scope, AuthService, CivilityChoices) {
 
         /**
          * New user account data.
@@ -127,6 +127,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          * Error occurred during registration.
          */
         $scope.registrationError = null;
+        $scope.civilityOptions = CivilityChoices;
 
         /**
          * Register new user in the system.
@@ -154,7 +155,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             var classic_form = $('.classic-form');
             classic_form.slideDown();
             $('.registration.email').slideUp();
-        }
+        };
+
+        $("select").attr("eloue-chosen", "");
     }]);
 
     EloueCommon.controller("ModalCtrl", [
