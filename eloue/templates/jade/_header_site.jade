@@ -29,11 +29,11 @@ section.container.signs-links
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
             {% endverbatim %}
-            li: a(href="{% url 'dashboard:dashboard' %}#/") Tableau de bord
-            li: a(href="{% url 'dashboard:dashboard' %}#/messages") Messages
-            li: a(href="{% url 'dashboard:dashboard' %}#/bookings") Réservations
-            li: a(href="{% url 'dashboard:dashboard' %}#/items") Annonces
-            li: a(href="{% url 'dashboard:dashboard' %}#/account/profile") Compte
+            li: a(href="{% url 'dashboard:dashboard' %}") Tableau de bord
+            li: a(href="{% url 'dashboard:messages' %}") Messages
+            li: a(href="{% url 'dashboard:bookings' %}") Réservations
+            li: a(href="{% url 'dashboard:items' %}") Annonces
+            li: a(href="{% url 'dashboard:account' %}") Compte
             {% verbatim %}
         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success

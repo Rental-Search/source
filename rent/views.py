@@ -400,9 +400,9 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
             credit_card.cvv = serializer.fields['cvv'].from_native(data['cvv'])
         except (KeyError, ValidationError):
             serializer = CreditCardSerializer(data=data, context={'request': request})
-            if not credit_card.is_valid():
+            if not serializer.is_valid():
                 return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-            credit_card = credit_card.save()
+            credit_card = serializer.save()
 
         payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
         booking = self.get_object()
