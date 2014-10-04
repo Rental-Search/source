@@ -57,21 +57,21 @@ class PermissionMixin(object):
     access is denied.
     """
     def check_permissions(self, request):
-        allow_access = False
+        permissions = []
         for permission in self.get_permissions():
             has_pemission = permission.has_permission(request, self)
+            permissions.append(has_pemission)
             # check if decision has been passed
             if has_pemission is None:
                 continue
             # deny access if forbidden
             if not has_pemission:
                 self.permission_denied(request)
-            allow_access = True
-        else:
-            # if iteration has finished, and there were no permission exceptions,
-            # rise one if there were no positive decisions made (all checkers have returned None)
-            if not allow_access:
-                self.permission_denied(request)
+
+        # if iteration has finished, and there were no permission exceptions,
+        # rise one if there were no positive decisions made (all checkers have returned None)
+        if permissions and not any(permissions):
+            self.permission_denied(request)
 
 class OwnerListMixin(object):
     owner_filter_class = OwnerFilter
