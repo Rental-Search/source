@@ -39,7 +39,7 @@ block append content-body
               .part.comments.comments-owner
                 include ../jade/product_details/main/_comments_owner
         aside.col-sm-4
-          section.booking-form
+          section.booking-form.ng-hide(ng-show="true")
             include  ../jade/product_details/aside/_booking_form.jade
           //-section.add-to-wishlist
           //-  include ../jade/product_details/aside/_add_to_wishlist

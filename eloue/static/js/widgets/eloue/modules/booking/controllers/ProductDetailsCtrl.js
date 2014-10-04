@@ -19,8 +19,6 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "BookingsLoadService",
         function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
 
-            console.log("ProductDetailsCtrl");
-
             $scope.creditCard = {
                 id: null,
                 card_number: "",
