@@ -791,6 +791,15 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
+    def get_context_data(self, **kwargs):
+        context = {
+            'properties': self.object.object.properties.select_related('property'),
+            'options': getattr(self.object.object, 'options', []),
+            'product_list': self.sqs.more_like_this(self.object.object)[:4],
+        }
+        context.update(super(ProductDetailView, self).get_context_data(**kwargs))
+        return context
+
 class PublishItemView(CommonPageContextMixin, TemplateView):
     template_name = 'publich_item/index.jade'
 

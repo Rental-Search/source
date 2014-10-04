@@ -450,11 +450,11 @@ class Comment(models.Model):
 
     @property
     def response(self):
-        raise NotImplementedError
-    
+        raise self.booking.borrowercomment if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.ownercomment
+
     @property
     def writer(self):
-        raise NotImplementedError
+        raise self.booking.owner if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
 
     #@permalink
     def get_absolute_url(self):
