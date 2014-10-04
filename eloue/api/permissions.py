@@ -10,22 +10,24 @@ class DefaultPermissions(permissions.DjangoModelPermissions):
             # we only check for Django Model Permissions for the team staff
             if user.is_staff and not user.is_superuser:
                 return super(DefaultPermissions, self).has_permission(request, view)
+
             # we require authenticated user
             elif user.is_authenticated():
                 return True
-            elif hasattr(view, 'public_methods'):
-                is_public_method = view.action in view.public_methods
-                is_public_search = (
-                    request.method == 'GET' and
-                    view.action == 'list' and
-                    request.QUERY_PARAMS and
-                    'search' in view.public_methods)
 
-                if is_public_method or is_public_search:
+            # check for public access if set for the view
+            elif hasattr(view, 'public_actions'):
+                if view.action in view.public_actions:
                     return True
-                else:
-                    return False
-        # can't make decision
+
+                # check if this is a search request and 'search' actions is allowed for the view
+                if (request.method == 'GET' and view.action == 'list' and
+                    request.QUERY_PARAMS and 'search' in view.public_actions):
+                    return True
+
+                return False
+
+        # can't make a decision; pass to other permission checkers if there any, otherwise deny access
         return None
 
 class IsAuthenticatedOrReadOnly(DefaultPermissions):

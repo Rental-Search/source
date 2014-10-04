@@ -433,7 +433,7 @@ class CommentViewSet(viewsets.NonEditableModelViewSet):
     owner_field = ('booking__owner', 'booking__borrower')
     filter_class = CommentFilterSet
     ordering_fields = ('note', 'created_at')
-    public_methods = ('retrieve', )
+    public_actions = ('retrieve',)
 
 
 class SinisterViewSet(viewsets.ImmutableModelViewSet):

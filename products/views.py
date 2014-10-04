@@ -858,7 +858,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
-    public_methods = ('retrieve', )
+    public_actions = ('retrieve',)
 
 
     @link()
@@ -898,7 +898,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     search_index = product_search
     filter_class = ProductFilterSet
     ordering_fields = ('quantity', 'is_archived', 'category')
-    public_methods = ('retrieve', 'search', 'is_available')
+    public_actions = ('retrieve', 'search', 'is_available')
 
 
     @link()
@@ -983,7 +983,7 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     owner_field = 'product__owner'
     filter_fields = ('product', 'unit')
     ordering_fields = ('name', 'amount')
-    public_methods = ('retrieve')
+    public_actions = ('retrieve',)
 
 
 class PictureViewSet(viewsets.ModelViewSet):
@@ -996,7 +996,7 @@ class PictureViewSet(viewsets.ModelViewSet):
     owner_field = 'product__owner'
     filter_fields = ('product', 'created_at')
     ordering_fields = ('created_at',)
-    public_methods = ('retrieve', )
+    public_actions = ('retrieve',)
 
 
 class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
@@ -1008,7 +1008,7 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('product',) # TODO: 'city', 'price')
     # TODO: ordering_fields = ('price',)
-    public_methods = ('retrieve',)
+    public_actions = ('retrieve',)
 
 
 class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):

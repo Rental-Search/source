@@ -1079,7 +1079,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
-    public_methods = ('retrieve', 'search')
+    public_actions = ('retrieve', 'search')
 
     def initial(self, request, *args, **kwargs):
         pk_field = getattr(self, 'pk_url_kwarg', 'pk')
@@ -1134,7 +1134,7 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter) 
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
-    public_methods = ('retrieve')
+    public_actions = ('retrieve',)
 
 
 class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
