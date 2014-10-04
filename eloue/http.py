@@ -4,13 +4,16 @@ from django.http import HttpResponse
 
 from rest_framework.utils.encoders import JSONEncoder, json
 
-def serialize(data):
-    return json.dumps(data, cls=JSONEncoder)
+def serialize(data, **kwargs):
+    return json.dumps(data, cls=JSONEncoder, **kwargs)
 
 class JsonResponse(HttpResponse):
+    content_type = 'application/json'
+
     def __init__(self, content=b'', *args, **kwargs):
-        kwargs['content_type'] = "%s; charset=%s" % (
-            kwargs.pop('content_type', 'application/json'),
-            kwargs.pop('charset', settings.DEFAULT_CHARSET)
-        )
-        super(JsonResponse, self).__init__(serialize(content), *args, **kwargs)
+        encoding = kwargs.pop('encoding', settings.DEFAULT_CHARSET)
+        kwargs.setdefault('content_type', '%s; charset=%s' % (
+            self.content_type, encoding
+        ))
+        data = serialize(content, encoding=encoding)
+        super(JsonResponse, self).__init__(data, *args, **kwargs)

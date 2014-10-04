@@ -1,6 +1,6 @@
 ol.nav.row
     {% for product in product_list %}
-    li
+    li(id="marker-{{ forloop.counter }}", locationY="{{ product.location.y|stringformat:'f' }}", locationX="{{ product.location.x|stringformat:'f' }}", name="{{ product.summary }}")
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper
@@ -14,16 +14,18 @@ ol.nav.row
             if product.pro
               span.badge-pro pro
           p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
-          .rate
-            -var stars = [1,2,3,4,5]
-            each s in stars
-              if s == 1
-                span.flaticon.solid.star-2.current-rate
-              else
-                span.flaticon.solid.star-2
           //- TODO: need a better solution here to hit SQL DB only once for all products in the list
           {% with product.object.comments.count as comments_num %}
           if comments_num
+            {% with product.object.average_note|stringformat:'d' as average_rate %}
+            .rate
+              -var stars = [1,2,3,4,5]
+              each s in stars
+                if s == average_rate
+                  span.flaticon.solid.star-2.current-rate
+                else
+                  span.flaticon.solid.star-2
+            {% endwith %}
             span.sprite-comment
               i.flaticon.stroke.writing-comment
               | {{ comments_num }}

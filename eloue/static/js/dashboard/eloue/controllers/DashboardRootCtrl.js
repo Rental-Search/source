@@ -41,7 +41,7 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
             $.ajaxSetup({
                 beforeSend: function (jqXHR) {
                     if (!!$scope.currentUserToken) {
-                        jqXHR.setRequestHeader("authorization", "Bearer " + $scope.currentUserToken);
+                        jqXHR.setRequestHeader("Authorization", "Bearer " + $scope.currentUserToken);
                     }
                 }
             });

@@ -12,7 +12,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 
 from eloue.api.urls import router
 from products.views import HomepageView
-from accounts.views import PasswordResetView
+from accounts.views import PasswordResetView, PasswordResetConfirmView
 
 log = logbook.Logger('eloue')
 
@@ -196,9 +196,9 @@ dashboard_urlpatterns = patterns('',
     url(r'^$', ExtraContextTemplateView.as_view(
             template_name='dashboard/jade/_base_dashboard.jade',
         ),
-        name='new_ui_dashboard',
+        name='dashboard',
     ),
-    url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_dashboard_partials')),
+    url(r'^partials/', include(partials_urlpatterns, namespace='dashboard_partials')),
 )
 
 api2_urlpatterns = patterns('',
@@ -213,18 +213,22 @@ if settings.DEBUG:
         url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     )
 
-from products.urls import ui3_urlpatterns as ui3_products_urlpatterns
-ui3_urlpatterns = patterns('',
-    url(r'^$', HomepageView.as_view(), name='home'),
-    url(r'^reset/$', PasswordResetView.as_view(), {
-        'template_name': 'accounts/password_reset_form.html',
+reset_urlpatterns = patterns('',
+    url(r'^$', PasswordResetView.as_view(), {
         'email_template_name': 'accounts/emails/password_reset_email'
     }, name='password_reset'),
+    url(r'^(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        PasswordResetConfirmView.as_view(), name='password_reset_confirm'
+    ),
+)
 
-    url(r'^location/', include(ui3_products_urlpatterns)),
+from products.urls import ui3_urlpatterns as products_urlpatterns
+ui3_urlpatterns = patterns('',
+    url(r'^$', HomepageView.as_view(), name='home'),
+    url(r'^reset/', include(reset_urlpatterns)),
+    url(r'^location/', include(products_urlpatterns)),
     url(r'^comment-ca-marche/', TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
     #url(r'^simulez-vos-revenus/', TemplateView.as_view(template_name='simulator/index.jade'), name='simulator'),
-
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
 )

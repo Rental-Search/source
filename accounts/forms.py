@@ -447,6 +447,11 @@ class PatronSetPasswordForm(forms.Form):
         self.user = user
         super(PatronSetPasswordForm, self).__init__(*args, **kwargs)
 
+    def clean(self):
+        if self.user is None:
+            raise forms.ValidationError(_("User record is empty."))
+        return self.cleaned_data
+
     def clean_new_password2(self):
         password1 = self.cleaned_data.get('new_password1')
         password2 = self.cleaned_data.get('new_password2')
