@@ -1,9 +1,8 @@
-
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
-from rest_framework import fields
+from rest_framework import fields, serializers
 
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
@@ -27,6 +26,14 @@ class BookingProductField(HyperlinkedRelatedField):
         super(BookingProductField, self).validate(value)
         if value.owner == self.context['request'].user:
             raise ValidationError(self.error_messages['own_product'])
+
+
+class BookingPayCreditCardSerializer(ModelSerializer):
+
+    class Meta:
+        model = models.Patron
+        fields = ('creditcard',)
+
 
 class BookingSerializer(ModelSerializer):
     product = BookingProductField()
@@ -64,7 +71,9 @@ class BookingActionSerializer(ModelSerializer):
         transitions = self.object.get_available_user_state_transitions(self.context['request'].user)
         for transition in transitions:
             if action == transition.method.__name__:
-                self.object._fsm_transition_method = transition.method
+                # get_available_user_state_transitions return unbound method.
+                # It must be bound manually.
+                self.object._fsm_transition_method = transition.method.__get__(self.object)
                 return attrs
         raise ValidationError(self.error_messages['invalid_action'] % dict(action=action, state=self.object.state))
 

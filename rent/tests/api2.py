@@ -15,7 +15,7 @@ def _location(name, *args, **kwargs):
 
 class BookingTest(APITransactionTestCase):
     reset_sequences = True
-    fixtures = ['patron', 'address', 'category', 'product', 'price', 'booking', 'comment']
+    fixtures = ['patron', 'address', 'category', 'product', 'price', 'booking', 'comment', 'creditcard']
 
     def setUp(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
@@ -72,6 +72,24 @@ class BookingTest(APITransactionTestCase):
         self.assertEquals(response.status_code, 400, response.data)
 #         self.assertIn('errors', response.data, response.data)
 #         self.assertIn('product', response.data['errors'], response.data)
+
+    def test_booking_pay(self):
+        response = self.client.post(_location('booking-list'), {
+            'started_at': datetime.now() + timedelta(days=2),
+            'ended_at': datetime.now() + timedelta(days=4),
+            'product': _location('product-detail', pk=6),
+        })
+        uuid = response.data['uuid']
+
+        response = self.client.put(_location('booking-pay', uuid), {
+            'exp_month': '05',
+            'exp_year': '17',
+            'holder_name': 'John Doe',
+            'card_number': '4987654321098769',
+            'cvc': '123',
+        })
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertEqual(response.data['detail'], "Transition performed")
 
 class CommentTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'booking', 'comment']

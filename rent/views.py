@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.utils.encoding import smart_str
@@ -19,11 +20,14 @@ from django_lean.experiments.utils import WebUser
 from django.template import RequestContext
 
 from accounts.forms import EmailAuthenticationForm
+from accounts.serializers import CreditCardSerializer
 from accounts.utils import viva_check_phone
+from payments.models import PayboxDirectPlusPaymentInformation
 from products.models import Product
 from products.choices import UNIT
 from rent.forms import BookingForm, BookingAcceptForm, PreApprovalIPNForm, PayIPNForm, SinisterForm
 from rent.models import Booking, ProBooking
+from rent.serializers import BookingPayCreditCardSerializer
 from rent.wizard import BookingWizard, PhoneBookingWizard
 from rent.utils import timesince
 from rent.choices import BOOKING_STATE
@@ -387,12 +391,26 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
 
     @action(methods=['put'])
     def pay(self, request, *args, **kwargs):
-        obj = self.get_object()
-        # TODO: should use ExistingBookingCreditCardForm if there are credit card registered for user
-        form = forms.BookingCreditCardForm(instance=obj, data=request.DATA)
-        if form.is_valid():
-            return self._perform_transition(request, action='preapproval', cvv=form.cleaned_data['cvv'])
-        return Response(form.errors)
+        data = request.DATA.copy()
+        data['expires'] = request.DATA.get('exp_month', '') + request.DATA.get('exp_year', '')
+        data['cvv'] = request.DATA.get('cvc', '')
+
+        try:
+            serializer = BookingPayCreditCardSerializer(
+                data=data, context={'request': request, 'suppress_exception': True})
+            credit_card = serializer.fields['creditcard'].from_native(data['card_number'])
+            credit_card.cvv = data.get('cvv', '')
+        except ValidationError:
+            credit_card = CreditCardSerializer(data=data, context={'request': request})
+            if credit_card.is_valid():
+                credit_card.save()
+                credit_card = credit_card.object
+
+        payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
+        booking = self.get_object()
+        booking.payment = payment
+        booking.save()
+        return self._perform_transition(request, action='preapproval', cvv=credit_card.cvv)
 
     @action(methods=['put'])
     def accept(self, request, *args, **kwargs):
