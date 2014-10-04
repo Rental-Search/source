@@ -111,10 +111,20 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                 setProperties();
             });
 
-            //Activate geolocation search
-            $('#geolocate').formmapper({
-                details: "form"
-            });
+            window.googleMapsLoaded = function () {
+                //Activate geolocation search
+                $('#geolocate').formmapper({
+                    details: "form"
+                });
+            };
+
+            function loadGoogleMaps() {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
+                document.body.appendChild(script);
+            }
+            loadGoogleMaps();
         }
     ]);
 });
