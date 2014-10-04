@@ -276,7 +276,6 @@ require([
                     center: new google.maps.LatLng(product.lat, product.lng),
                     radius: 10
                 };
-                // Add the circle for this city to the map.
                 var locationCircle = new google.maps.Circle(circleOptions);
             }
         };
