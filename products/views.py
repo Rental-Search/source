@@ -1003,6 +1003,13 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     # TODO: ordering_fields = ('price',)
     public_actions = ('retrieve',)
 
+class MessageThreadFilterSet(filters.FilterSet):
+    author = filters.MultiFieldFilter(name=('sender', 'recipient'))
+
+    class Meta:
+        model = models.MessageThread
+        fields = ('sender', 'recipient', 'product')
+
 class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows message threads to be viewed or edited.
@@ -1012,7 +1019,7 @@ class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     serializer_class = serializers.MessageThreadSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
     owner_field = ('sender', 'recipient')
-    filter_fields = ('sender', 'recipient', 'product')
+    filter_class = MessageThreadFilterSet
 
 class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
