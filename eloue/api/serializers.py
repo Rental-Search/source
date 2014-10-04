@@ -106,7 +106,6 @@ class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
         self.immutable_fields = getattr(meta, 'immutable_fields', ())
         self.public_fields = getattr(meta, 'public_fields', ())
 
-
 class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedModelSerializer):
     """
     A serializer that deals with model instances and querysets, and
@@ -197,7 +196,6 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
     @fields.setter
     def fields(self, fields):
         self._fields = fields
-
 
 class NestedModelSerializerMixin(object):
     def from_native(self, value, files=None):

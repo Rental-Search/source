@@ -421,7 +421,6 @@ class CommentFilterSet(filters.FilterSet):
         model = models.Comment
         fields = ('booking',)
 
-
 class CommentViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows transaction comments to be viewed or edited.
@@ -434,7 +433,6 @@ class CommentViewSet(viewsets.NonEditableModelViewSet):
     filter_class = CommentFilterSet
     ordering_fields = ('note', 'created_at')
     public_actions = ('retrieve',)
-
 
 class SinisterViewSet(viewsets.ImmutableModelViewSet):
     """

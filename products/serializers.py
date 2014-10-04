@@ -32,7 +32,6 @@ def map_require_boolean_field(field_mapping):
 class RequiredBooleanFieldSerializerMixin(object):
     field_mapping = map_require_boolean_field(ModelSerializer.field_mapping)
 
-
 class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
     address = NestedAddressSerializer()
     phone = NestedPhoneNumberSerializer(required=False)
@@ -48,7 +47,6 @@ class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
         view_name = 'product-detail'
         read_only_fields = ('is_archived', 'created_at')
         immutable_fields = ('owner',)
-
 
 class CarProductSerializer(ProductSerializer):
     class Meta(ProductSerializer.Meta):
@@ -70,7 +68,6 @@ class CarProductSerializer(ProductSerializer):
             'first_registration_date',
         )
 
-
 class RealEstateProductSerializer(ProductSerializer):
     class Meta(ProductSerializer.Meta):
         model = models.RealEstateProduct
@@ -90,7 +87,6 @@ class RealEstateProductSerializer(ProductSerializer):
             'washing_machine', 'tumble_dryer', 'computer_with_internet',
         )
 
-
 class PriceSerializer(ModelSerializer):
     # FIXME: uncomment if we need to provide 'local_currency_amount' instead of 'amount' to clients, remove otherwise
     def _transform_amount(self, obj, value):
@@ -102,7 +98,6 @@ class PriceSerializer(ModelSerializer):
         public_fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')
         immutable_fields = ('product', 'currency')
 
-
 class PictureSerializer(ModelSerializer):
     image = EncodedImageField(('thumbnail', 'profile', 'home', 'display'))
 
@@ -113,14 +108,12 @@ class PictureSerializer(ModelSerializer):
         read_only_fields = ('created_at',)
         immutable_fields = ('product',)
 
-
 class CuriositySerializer(ModelSerializer):
     class Meta:
         model = models.Curiosity
         fields = ('id', 'product')
         public_fields = ('id', 'product')
         immutable_fields = ('product',)
-
 
 class MessageThreadSerializer(ModelSerializer):
     class Meta:

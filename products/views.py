@@ -847,7 +847,6 @@ class CategoryFilterSet(filters.FilterSet):
         model = models.Category
         fields = ('parent', 'need_insurance')
 
-
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDeletableModelViewSet after merging Category and CategoryDescription
     """
     API endpoint that allows product categories to be viewed or edited.
@@ -859,7 +858,6 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
     public_actions = ('retrieve',)
-
 
     @link()
     def ancestors(self, request, *args, **kwargs):
@@ -886,7 +884,6 @@ class ProductFilterSet(filters.FilterSet):
         model = models.Product
         fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
 
-
 class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
@@ -899,7 +896,6 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     filter_class = ProductFilterSet
     ordering_fields = ('quantity', 'is_archived', 'category')
     public_actions = ('retrieve', 'search', 'is_available')
-
 
     @link()
     def is_available(self, request, *args, **kwargs):
@@ -972,7 +968,6 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def get_location_url(self):
         return reverse('product-detail', args=(self.object.pk,))
 
-
 class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product prices to be viewed or edited.
@@ -984,7 +979,6 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     filter_fields = ('product', 'unit')
     ordering_fields = ('name', 'amount')
     public_actions = ('retrieve',)
-
 
 class PictureViewSet(viewsets.ModelViewSet):
     """
@@ -998,7 +992,6 @@ class PictureViewSet(viewsets.ModelViewSet):
     ordering_fields = ('created_at',)
     public_actions = ('retrieve',)
 
-
 class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product curiosities to be viewed or edited.
@@ -1009,7 +1002,6 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     filter_fields = ('product',) # TODO: 'city', 'price')
     # TODO: ordering_fields = ('price',)
     public_actions = ('retrieve',)
-
 
 class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """

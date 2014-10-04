@@ -31,19 +31,16 @@ class AddressSerializer(GeoModelSerializer):
         immutable_fields = ('patron',)
         geo_field = 'position'
 
-
 class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
 
     class Meta(AddressSerializer.Meta):
         public_fields = ('city', 'zipcode')
-
 
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PhoneNumber
         fields = ('id', 'patron', 'number')
         immutable_fields = ('patron',)
-
 
 class NestedPhoneNumberSerializer(
         serializers.NestedModelSerializerMixin,
@@ -58,7 +55,6 @@ class NestedPhoneNumberSerializer(
 
     class Meta(PhoneNumberSerializer.Meta):
         public_fields = ('number',)
-
 
 class UserSerializer(serializers.ModelSerializer):
     username = CharField(required=False, max_length=30)
