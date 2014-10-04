@@ -103,8 +103,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $scope.product = result;
                 //TODO: owner contact details will be defined in some other way.
                 $scope.ownerCallDetails = {
-                    number: result.phone.number,
-                    tariff: "0.15"
+                    number: result.phone.number.numero,
+                    tariff: result.phone.number.tarif
                 };
             });
 
@@ -281,7 +281,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.loadMessageThread = function () {
-                MessageThreadsService.getMessageThread($scope.productId).then(function (result) {
+                MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
                     angular.forEach(result, function (value, key) {
                         $scope.threadId = value.id;
                         var senderId = $scope.getIdFromUrl(value.sender);

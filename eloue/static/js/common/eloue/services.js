@@ -305,10 +305,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                messageThreadsService.getMessageThread = function (productId) {
+                messageThreadsService.getMessageThread = function (productId, participantId) {
                     var deferred = $q.defer();
                     var self = this;
-                    MessageThreads.list({product: productId}).$promise.then(function (result) {
+                    MessageThreads.list({product: productId, participant: participantId}).$promise.then(function (result) {
                         var promises = [];
                         angular.forEach(result.results, function (value, key) {
                             angular.forEach(value.messages, function (messageLink, idx) {
