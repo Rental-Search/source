@@ -5,7 +5,7 @@
             input(type="text", placeholder="", name="fromDate", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
     .table-cell
-        select(name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()").form-control
+        select(name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", eloue-chosen).form-control
     .span(ng-show="fromDate.$dirty && fromDate.$error.required").text-danger From date is required.
     .span(ng-show="fromDate.$dirty && fromDate.$error.pattern").text-danger Invalid date.
 .row.date-picker
@@ -15,6 +15,6 @@
             input(type="text", placeholder="", name="toDate", ng-model="bookingDetails.toDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
     .table-cell
-        select(name="toHour", ng-model="bookingDetails.toHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()").form-control
+        select(name="toHour", ng-model="bookingDetails.toHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", eloue-chosen).form-control
     .span(ng-show="toDate.$dirty && toDate.$error.required").text-danger To date is required.
     .span(ng-show="toDate.$dirty && toDate.$error.pattern").text-danger Invalid date.

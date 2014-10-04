@@ -9,6 +9,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "$window",
         "$location",
         "Endpoints",
+        "CivilityChoices",
         "ProductsLoadService",
         "MessageThreadsService",
         "ProductRelatedMessagesLoadService",
@@ -16,7 +17,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CreditCardsService",
         "BookingsLoadService",
-        function ($scope, $window, $location,Endpoints, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
 
             $scope.creditCard = {
                 id: null,
@@ -70,6 +71,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.available = true;
             $scope.newMessage = {};
             $scope.threadId = null;
+            $scope.civilityOptions = CivilityChoices;
             $scope.hours = [
                 {"label": "00h", "value": "00:00:00"},
                 {"label": "01h", "value": "01:00:00"},
@@ -249,6 +251,16 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 } else if (args.name === "booking") {
                     $scope.loadCreditCards();
                 }
+            });
+
+            /**
+             * Restore path when closing modal window.
+             */
+            $scope.$on("closeModal", function (event, args) {
+                var currentPath = $location.path();
+                var newPath = currentPath.slice(0, currentPath.indexOf(args.name));
+                console.log(newPath);
+                $location.path("/");
             });
 
             $scope.loadCreditCards = function () {

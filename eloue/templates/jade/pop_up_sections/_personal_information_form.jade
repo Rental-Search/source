@@ -1,8 +1,10 @@
 h2 Vos informations personnelles
 .row
-  .col-sm-2: select(ng-model="bookingDetails.civility").form-control
-    option(value="male") M.
-    option(value="female") F.
+  .col-sm-2
+      {% verbatim %}
+      select(ng-model="currentUser.civility", eloue-chosen).form-control
+          option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
+      {% endverbatim %}
   .col-sm-5: input(type="text", placeholder="Prénom *", ng-model="currentUser.first_name", required).form-control
   .col-sm-5: input(type="text", placeholder="Nom *", ng-model="currentUser.last_name", required).form-control
 .row
@@ -10,7 +12,7 @@ h2 Vos informations personnelles
 .row
   .col-sm-6: input(type="text", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
   .col-sm-6: input(type="text", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
-.row
+.row(ng-show="isAuto()")
   .col-sm-6(style="z-index: 1050"): input(type="text", placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", required, eloue-datepicker).form-control
   .col-sm-6: input(type="text", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", required).form-control
 .row(ng-show="isAuto()")

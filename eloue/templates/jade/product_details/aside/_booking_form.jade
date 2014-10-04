@@ -27,7 +27,8 @@ div(ng-show="!inModal")
             a(href = "#/booking", data-dismiss="modal", ng-show="!inBooking").btn.bg-success.calendar-ok
                 i.flaticon.stroke.calendar-2
                 | Réservez
-            p.mrg-v-1
+            //-
+             p.mrg-v-1
                 small Cette somme vous sera débitée lorsque le propriétaire validera la location
 div(ng-show="inModal")
     include ../../pop_up_sections/_terms
