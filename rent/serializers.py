@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
-from rest_framework import fields, serializers
+from rest_framework import fields
 
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
@@ -26,14 +27,6 @@ class BookingProductField(HyperlinkedRelatedField):
         super(BookingProductField, self).validate(value)
         if value.owner == self.context['request'].user:
             raise ValidationError(self.error_messages['own_product'])
-
-
-class BookingPayCreditCardSerializer(ModelSerializer):
-
-    class Meta:
-        model = models.Patron
-        fields = ('creditcard',)
-
 
 class BookingSerializer(ModelSerializer):
     product = BookingProductField()

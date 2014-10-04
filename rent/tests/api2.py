@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 from django.db.models import get_model
 from django.db import connection
 from django.conf import settings
@@ -82,14 +83,13 @@ class BookingTest(APITransactionTestCase):
         uuid = response.data['uuid']
 
         response = self.client.put(_location('booking-pay', uuid), {
-            'exp_month': '05',
-            'exp_year': '17',
+            'expires': '0517',
             'holder_name': 'John Doe',
             'card_number': '4987654321098769',
-            'cvc': '123',
+            'cvv': '123',
         })
         self.assertEqual(response.status_code, 200, response.data)
-        self.assertEqual(response.data['detail'], "Transition performed")
+        self.assertEqual(response.data['detail'], _(u'Transition performed'))
 
 class CommentTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'booking', 'comment']
