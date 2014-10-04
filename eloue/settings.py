@@ -50,9 +50,13 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', '')
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
-DATABASES = {'default': dj_database_url.config()}
-DATABASES['default']['OPTIONS'] = {'autocommit': env('DATABASE_OPTIONS_AUTOCOMMIT', True)}
-DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+DATABASES = {
+    'default': dj_database_url.config(),
+}
+DATABASES['default'].update({
+    'OPTIONS': {'autocommit': env('DATABASE_OPTIONS_AUTOCOMMIT', True)},
+    'ENGINE': 'django.contrib.gis.db.backends.postgis',
+})
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
