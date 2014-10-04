@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http.response import Http404
 from django.utils.translation import ugettext as _
@@ -171,7 +172,7 @@ def api_exception_handler(exception):
         exception = PermissionException(
             {'code': error[0], 'description': error[1]})
     # ... and also any other not REST Framework exception
-    elif not isinstance(exception, (exceptions.APIException, ApiException)):
+    elif not isinstance(exception, (exceptions.APIException, ApiException)) and not settings.DEBUG:
         error = ServerErrorEnum.OTHER_ERROR
         exception = ServerException(
             {'code': error[0], 'description': error[1], 'detail': exception.message})
