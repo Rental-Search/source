@@ -9,9 +9,13 @@
             .modal-body.table-cell
                 .static-part.table-cell
                     section.product-info
-                        eloue-product-details-small
+                        include ./pop_up_sections/_product_info.jade
                     section.terms
-                        eloue-product-details-booking(in-modal="true")
+                        include ./pop_up_sections/_terms
+                        a(href="#/booking").btn.bg-success
+                            | Réservez
+                        a(href="#/message").btn.bg-gray
+                            | Envoyez un message
                 .change-part.table-cell.top
                     section.table.variant-call
                         include ./pop_up_sections/_variants_call

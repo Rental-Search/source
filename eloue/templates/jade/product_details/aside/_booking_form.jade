@@ -1,34 +1,31 @@
-div(ng-show="!inModal")
-    .section-header
-        h4 Réservez en ligne
-    form.form-inline.section-body.text-center
+.section-header
+    h4 Réservez en ligne
+form.form-inline.section-body.text-center
+    {% verbatim %}
+    .part
+        p
+            small à partir de
+            big.text-primary &nbsp;{{pricePerDay}}€ /jour
+        {% endverbatim %}
+        include ../../_date_picker
         {% verbatim %}
-        .part
-            p
-                small à partir de
-                big.text-primary &nbsp;{{pricePerDay}}€ /jour
-            {% endverbatim %}
-            include ../../_date_picker
-            {% verbatim %}
-            // p.available.unavailable Cet article est disponible à ces dates
-            span(ng-show="dateRangeError").text-danger {{dateRangeError}}
-            p(ng-show="available").available Cet article est disponible à ces dates
-            p(ng-show="!available").available.unavailable Cet article est disponible à ces dates
-        .part
-            p
-                | Durée de la location :
-                b.period-days {{duration}}
-            p.price
-                | Prix de la location :
-                big.text-primary &nbsp;{{bookingPrice}}€
-            p Assurance incluse
-            {% endverbatim %}
-        .part
-            a(href = "#/booking", data-dismiss="modal", ng-show="!inBooking").btn.bg-success.calendar-ok
-                i.flaticon.stroke.calendar-2
-                | Réservez
-            //-
-             p.mrg-v-1
-                small Cette somme vous sera débitée lorsque le propriétaire validera la location
-div(ng-show="inModal")
-    include ../../pop_up_sections/_terms
+        // p.available.unavailable Cet article est disponible à ces dates
+        span(ng-show="dateRangeError").text-danger {{dateRangeError}}
+        p(ng-show="available").available Cet article est disponible à ces dates
+        p(ng-show="!available").available.unavailable Cet article est disponible à ces dates
+    .part
+        p
+            | Durée de la location :
+            b.period-days {{duration}}
+        p.price
+            | Prix de la location :
+            big.text-primary &nbsp;{{bookingPrice}}€
+        p Assurance incluse
+        {% endverbatim %}
+    .part
+        a(href = "#/booking", data-dismiss="modal").btn.bg-success.calendar-ok
+            i.flaticon.stroke.calendar-2
+            | Réservez
+        //-
+         p.mrg-v-1
+            small Cette somme vous sera débitée lorsque le propriétaire validera la location
