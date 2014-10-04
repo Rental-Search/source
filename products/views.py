@@ -1004,7 +1004,7 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     public_actions = ('retrieve',)
 
 class MessageThreadFilterSet(filters.FilterSet):
-    author = filters.MultiFieldFilter(name=('sender', 'recipient'))
+    participant = filters.MultiFieldFilter(name=('sender', 'recipient'))
 
     class Meta:
         model = models.MessageThread
