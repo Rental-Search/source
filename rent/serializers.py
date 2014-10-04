@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -64,7 +64,9 @@ class BookingActionSerializer(ModelSerializer):
         transitions = self.object.get_available_user_state_transitions(self.context['request'].user)
         for transition in transitions:
             if action == transition.method.__name__:
-                self.object._fsm_transition_method = transition.method
+                # get_available_user_state_transitions return unbound method.
+                # It must be bound manually.
+                self.object._fsm_transition_method = transition.method.__get__(self.object)
                 return attrs
         raise ValidationError(self.error_messages['invalid_action'] % dict(action=action, state=self.object.state))
 

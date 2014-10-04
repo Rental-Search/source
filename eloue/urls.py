@@ -5,7 +5,6 @@ from django.conf import settings
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.utils import translation
-from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
@@ -29,14 +28,6 @@ sitemaps = {
 }
 
 translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
-
-class ExtraContextTemplateView(TemplateView):
-    extra_context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super(ExtraContextTemplateView, self).get_context_data(**kwargs)
-        context.update(self.extra_context)
-        return context
 
 partials_urlpatterns = patterns('',
     url(r'^homepage/login-form.html$', TemplateView.as_view(
@@ -171,12 +162,16 @@ partials_urlpatterns = patterns('',
     ),
 )
 
+dashboard_base_view = TemplateView.as_view(
+    template_name='dashboard/jade/_base_dashboard.jade',
+)
+
 dashboard_urlpatterns = patterns('',
-    url(r'^$', ExtraContextTemplateView.as_view(
-            template_name='dashboard/jade/_base_dashboard.jade',
-        ),
-        name='dashboard',
-    ),
+    url(r'^$', dashboard_base_view, name='dashboard'),
+    url(r'^#/messages$', dashboard_base_view, name='messages'),
+    url(r'^#/bookings', dashboard_base_view, name='bookings'),
+    url(r'^#/items', dashboard_base_view, name='items'),
+    url(r'^#/account/profile', dashboard_base_view, name='account'),
     url(r'^partials/', include(partials_urlpatterns, namespace='dashboard_partials')),
 )
 
@@ -208,6 +203,7 @@ ui3_urlpatterns = patterns('',
     url(r'^location/', include(products_urlpatterns)),
     url(r'^comment-ca-marche/', TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
     #url(r'^simulez-vos-revenus/', TemplateView.as_view(template_name='simulator/index.jade'), name='simulator'),
+    url(r'^dashboard/#/bookings/(?P<pk>[0-9a-f]{32})/$', dashboard_base_view, name='booking_detail'),
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
 )

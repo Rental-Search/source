@@ -3,7 +3,6 @@ from django.http import HttpResponseNotFound, Http404
 from django.views.decorators.csrf import requires_csrf_token
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.conf import settings
 from django.views.generic import View
 from django.template import RequestContext, loader
 

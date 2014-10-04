@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.utils.encoding import smart_str
@@ -20,6 +21,7 @@ from django.template import RequestContext
 
 from accounts.forms import EmailAuthenticationForm
 from accounts.utils import viva_check_phone
+from payments.models import PayboxDirectPlusPaymentInformation
 from products.models import Product
 from products.choices import UNIT
 from rent.forms import BookingForm, BookingAcceptForm, PreApprovalIPNForm, PayIPNForm, SinisterForm
@@ -353,8 +355,9 @@ from rest_framework.decorators import link, action
 from rest_framework.response import Response
 import django_filters
 
-from rent import serializers, models, forms
+from rent import serializers, models
 from eloue.api import viewsets, filters, mixins
+from accounts.serializers import CreditCardSerializer, BookingPayCreditCardSerializer
 
 class BookingFilterSet(filters.FilterSet):
     author = filters.MultiFieldFilter(name=('owner', 'borrower'))
@@ -387,12 +390,25 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
 
     @action(methods=['put'])
     def pay(self, request, *args, **kwargs):
-        obj = self.get_object()
-        # TODO: should use ExistingBookingCreditCardForm if there are credit card registered for user
-        form = forms.BookingCreditCardForm(instance=obj, data=request.DATA)
-        if form.is_valid():
-            return self._perform_transition(request, action='preapproval', cvv=form.cleaned_data['cvv'])
-        return Response(form.errors)
+        data = request.DATA
+        try:
+            credit_card = data['credit_card']
+            serializer = BookingPayCreditCardSerializer(
+                data=data, context={'request': request, 'suppress_exception': True}
+            )
+            credit_card = serializer.fields['creditcard'].from_native(credit_card)
+            credit_card.cvv = serializer.fields['cvv'].from_native(data['cvv'])
+        except (KeyError, ValidationError):
+            serializer = CreditCardSerializer(data=data, context={'request': request})
+            if not serializer.is_valid():
+                return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            credit_card = serializer.save()
+
+        payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
+        booking = self.get_object()
+        booking.payment = payment
+        booking.save()
+        return self._perform_transition(request, action='preapproval', cvv=credit_card.cvv)
 
     @action(methods=['put'])
     def accept(self, request, *args, **kwargs):
@@ -410,7 +426,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         serializer = serializers.BookingActionSerializer(instance=self.get_object(), data={'action': action}, context={'request': request})
         if serializer.is_valid():
             serializer.save(**kwargs)
-            return Response({'detail': _(u"Transition performed")})
+            return Response({'detail': _(u'Transition performed')})
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class CommentFilterSet(filters.FilterSet):
