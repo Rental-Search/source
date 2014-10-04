@@ -203,8 +203,6 @@ define(["eloue/app",
                     });
 
 
-
-
                 // push function to the responseInterceptors which will intercept
                 // the http responses of the whole application
                 $httpProvider.responseInterceptors.push("ErrorHandlerInterceptor");
@@ -213,9 +211,10 @@ define(["eloue/app",
 
         EloueApp.run(["$rootScope", "$route", "$http", "$state", "AuthService", function ($rootScope, $route, $http, $state, AuthService) {
             AuthService.saveAttemptUrl();
+            var navRoutes = ["dashboard", "messages", "bookings", "items", "account"];
             var userToken = "";
             var name = "user_token=";
-            var ca = document.cookie.split(';');
+            var ca = document.cookie.split(";");
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
                 while (c.charAt(0) == ' ') c = c.substring(1);
@@ -237,17 +236,26 @@ define(["eloue/app",
 
             // Route change event listener
             $rootScope.$on('$stateChangeStart',
-                function(event, toState, toParams, fromState, fromParams){
+                function (event, toState, toParams, fromState, fromParams) {
                     if (!toState.insecure && !AuthService.isLoggedIn()) {
                         $rootScope.$broadcast("redirectToLogin");
                         event.preventDefault();
+                    } else {
+                        var stateName = toState.name;
+                        angular.forEach(navRoutes, function (route, key) {
+                            if (stateName.indexOf(route) == 0) {
+                                $("[ui-sref='" + route + "']").addClass("current");
+                            } else {
+                                $("[ui-sref='" + route + "']").removeClass("current");
+                            }
+                        });
                     }
-            });
+                });
 
             /**
              * Catch "redirectToLogin" event
              */
-            $rootScope.$on("redirectToLogin", function() {
+            $rootScope.$on("redirectToLogin", function () {
                 $state.go("login");
             });
         }]);
