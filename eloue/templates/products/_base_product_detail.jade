@@ -34,10 +34,18 @@ block append content-body
                 block tab
               .part.description
                 include ../jade/product_details/main/_description
-              .part.comments.comments-ad
-                include ../jade/product_details/main/_comments_ad
-              .part.comments.comments-owner
-                include ../jade/product_details/main/_comments_owner
+              if product_comments
+                .part.comments.comments-ad
+                  h3 Commentaires liés à cette annonce
+                  {% with product_comments as comment_list %}
+                  include ../jade/product_details/main/_comments
+                  {% endwith %}
+              if owner_comments
+                .part.comments.comments-owner
+                  h3 Commentaire liés au propriétaire
+                  {% with owner_comments as comment_list %}
+                  include ../jade/product_details/main/_comments
+                  {% endwith %}
         aside.col-sm-4
           section.booking-form.ng-hide(ng-show="true")
             include  ../jade/product_details/aside/_booking_form.jade

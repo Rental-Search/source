@@ -792,13 +792,18 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
+        product = self.object.object
+        comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
         context = {
-            'properties': self.object.object.properties.select_related('property'),
-            'options': getattr(self.object.object, 'options', []),
-            'product_list': self.sqs.more_like_this(self.object.object)[:4],
+            'properties': product.properties.select_related('property'),
+            'options': getattr(product, 'options', []),
+            'product_list': self.sqs.more_like_this(product)[:4],
+            'product_comments': comment_qs.filter(booking__product=product),
+            'owner_comments': comment_qs.filter(booking__owner=product.owner),
         }
         context.update(super(ProductDetailView, self).get_context_data(**kwargs))
         return context
+
 
 class PublishItemView(CommonPageContextMixin, TemplateView):
     template_name = 'publich_item/index.jade'
