@@ -444,17 +444,21 @@ class Comment(models.Model):
         db_index=True
     )
 
+    objects = models.Manager()
+    ownercomments = CommentManager(COMMENT_TYPE_CHOICES.OWNER)
+    borrowercomments = CommentManager(COMMENT_TYPE_CHOICES.BORROWER)
+
     @property
     def author(self):
         return self.booking.owner if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
 
     @property
     def response(self):
-        raise NotImplementedError
-    
+        raise self.booking.borrowercomment if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.ownercomment
+
     @property
     def writer(self):
-        raise NotImplementedError
+        raise self.booking.owner if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
 
     #@permalink
     def get_absolute_url(self):

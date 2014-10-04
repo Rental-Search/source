@@ -28,5 +28,5 @@ block tab
       .location-title-inner
         .location-title
           i.flaticon.solid.loca.location-pin-3.icon-li.icon-lg
-          h4 #{product.object.address.address1}
-          small #{product.city}, #{product.zipcode}
+          h4 {{ product.object.address.address1 }}
+          small {{ product.city|title }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}

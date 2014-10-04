@@ -1,13 +1,15 @@
+-load product
+
 h3 Déscription
 .row
-	.col-sm-6.text
-		#{product.description}
+	{% if properties %}
+	.col-sm-6.text {{ product.description|linebreaksp }}
 	.col-sm-6.properties
 		table.calendar.bd-clear: tbody
-		//-
-			each prop, index in properties
+			each property in properties
 				tr
-					td #{prop[0]}
-					td: b #{prop[1]}&nbsp;&nbsp;
-						if index == 0
-							include ../../_rate
+					td {{ property.property.name }}
+					td: b {{ property.value }}&nbsp;&nbsp;
+	{% else %}
+	.col.text {{ product.description|linebreaksp }}
+	{% endif %}

@@ -1,4 +1,5 @@
-h3 Location #{product.summary}
-ul.breadcrumb
-  each specification in product.categories
-    li #{specification|capfirst}
+h3 Location {{ product.summary }} - {{ product.city|title }}
+if options
+  ul.breadcrumb
+    each option in options
+      li {{ option }}

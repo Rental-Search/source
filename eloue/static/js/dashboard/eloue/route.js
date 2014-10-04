@@ -227,7 +227,7 @@ define(["eloue/app",
             delete $http.defaults.headers.common['X-Requested-With'];
 
             if (userToken && userToken.length > 0) {
-                $http.defaults.headers.common.authorization = "Bearer " + userToken;
+                $http.defaults.headers.common.Authorization = "Bearer " + userToken;
             }
 
             var csrftoken = AuthService.getCookie('csrftoken');

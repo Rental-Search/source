@@ -170,6 +170,7 @@ class CommentSerializer(ModelSerializer):
     class Meta:
         model = models.Comment
         fields = ('id', 'booking', 'comment', 'rate', 'created_at', 'author') # 'author' must follow after the 'booking'
+        public_fields = ('id', 'booking', 'comment', 'rate', 'created_at', 'author')
         read_only_fields = ('created_at',)
         immutable_fields = ('booking', 'author')
 

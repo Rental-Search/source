@@ -1,7 +1,4 @@
 .rate
   -var stars = [1,2,3,4,5]
   each s in stars
-    if s == 1
-      span.flaticon.solid.star-2.current-rate
-    else
-      span.flaticon.solid.star-2
+    span.flaticon.solid.star-2(class="{% if s == rate %}current-rate{% endif %}")

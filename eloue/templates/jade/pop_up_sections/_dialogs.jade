@@ -1,7 +1,7 @@
 .dialog-scroll-container
     .dialog-container
         {% verbatim %}
-        .message(ng-repeat="message in $parent.productRelatedMessages | orderBy:'sent_at'", class="{{(product.owner.id == message.sender.id ? 'from-declarer' : 'from-customer')}}")
+        .message(ng-repeat="message in productRelatedMessages | orderBy:'sent_at'", class="{{(product.owner.id == message.sender.id ? 'from-declarer' : 'from-customer')}}")
             div(ng-show="product.owner.id == message.sender.id").thumbnail-img
                 a(href="{{message.sender.url}}"): img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="")
             .thumbnail-content

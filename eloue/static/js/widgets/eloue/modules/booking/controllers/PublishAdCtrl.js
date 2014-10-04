@@ -45,6 +45,9 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 });
             }
 
+            /**
+             * Load necessary data on modal window open event based on modal name.
+             */
             $scope.$on("openModal", function (event, args) {
                 var params = args.params;
                 var rootCategoryId = params.category;
@@ -55,6 +58,16 @@ define(["angular", "eloue/modules/booking/BookingModule",
                         $scope.updateNodeCategories();
                     });
                 }
+            });
+
+            /**
+             * Restore path when closing modal window.
+             */
+            $scope.$on("closeModal", function (event, args) {
+                var currentPath = $location.path();
+                var newPath = currentPath.slice(0, currentPath.indexOf(args.name));
+                $location.path(newPath);
+                $scope.$apply();
             });
 
             $scope.updateNodeCategories = function () {

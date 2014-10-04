@@ -28,15 +28,13 @@ section.container.signs-links
           span(data-toggle="dropdown").dropdown-toggle.text-success {{currentUser.username}}
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-          //-
-            each item in header_popover
-              li
-                .middle-round: span
-                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
-                .content
-                  h4: a(href="#") #{item.first_name}
-                  h5: a(href="#") #{item.topic}
-                  p #{item.text}
+            {% endverbatim %}
+            li: a(href="{% url 'dashboard:dashboard' %}#/") Tableau de bord
+            li: a(href="{% url 'dashboard:dashboard' %}#/messages") Messages
+            li: a(href="{% url 'dashboard:dashboard' %}#/bookings") Réservations
+            li: a(href="{% url 'dashboard:dashboard' %}#/items") Annonces
+            li: a(href="{% url 'dashboard:dashboard' %}#/account/profile") Compte
+            {% verbatim %}
         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
             i.flaticon.stroke.mail
@@ -69,16 +67,11 @@ section.container.signs-links
           span(data-toggle="dropdown").dropdown-toggle.text-success Aide
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-          //-
-            each item in header_popover
-              li
-                .middle-round: span
-                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
-                .content
-                  h4: a(href="#") #{item.first_name}
-                  h5: a(href="#") #{item.topic}
-                  p #{item.text}
-        {% endverbatim %}
+            {% endverbatim %}
+            li: a(href="{% url 'howto' %}") Comment ça marche ?
+            li: a Simulez vos revenus
+            li: a Conseils pour les propriétaires
+            li: a Conseils pour les locataires
 .framing
   section.container.search-form
     .table-cell

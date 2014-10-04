@@ -9,6 +9,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "$window",
         "$location",
         "Endpoints",
+        "CivilityChoices",
         "ProductsLoadService",
         "MessageThreadsService",
         "ProductRelatedMessagesLoadService",
@@ -16,7 +17,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CreditCardsService",
         "BookingsLoadService",
-        function ($scope, $window, $location,Endpoints, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
 
             $scope.creditCard = {
                 id: null,
@@ -70,6 +71,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.available = true;
             $scope.newMessage = {};
             $scope.threadId = null;
+            $scope.civilityOptions = CivilityChoices;
             $scope.hours = [
                 {"label": "00h", "value": "00:00:00"},
                 {"label": "01h", "value": "01:00:00"},
@@ -101,8 +103,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $scope.product = result;
                 //TODO: owner contact details will be defined in some other way.
                 $scope.ownerCallDetails = {
-                    number: result.phone.number,
-                    tariff: "0.15"
+                    number: result.phone.number.numero,
+                    tariff: result.phone.number.tarif
                 };
             });
 
@@ -243,12 +245,25 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $location.path("/login");
             });
 
+            /**
+             * Load necessary data on modal window open event based on modal name.
+             */
             $scope.$on("openModal", function (event, args) {
                 if ((args.name === "message") && $scope.productRelatedMessages.length == 0) {
                     $scope.loadMessageThread();
                 } else if (args.name === "booking") {
                     $scope.loadCreditCards();
                 }
+            });
+
+            /**
+             * Restore path when closing modal window.
+             */
+            $scope.$on("closeModal", function (event, args) {
+                var currentPath = $location.path();
+                var newPath = currentPath.slice(0, currentPath.indexOf(args.name));
+                $location.path(newPath);
+                $scope.$apply();
             });
 
             $scope.loadCreditCards = function () {
@@ -269,7 +284,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.loadMessageThread = function () {
-                MessageThreadsService.getMessageThread($scope.productId).then(function (result) {
+                MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
                     angular.forEach(result, function (value, key) {
                         $scope.threadId = value.id;
                         var senderId = $scope.getIdFromUrl(value.sender);

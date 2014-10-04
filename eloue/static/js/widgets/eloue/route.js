@@ -1,11 +1,6 @@
 define(["eloue/app",
         "eloue/modules/booking/controllers/ProductDetailsCtrl",
         "eloue/modules/booking/controllers/PublishAdCtrl",
-        "eloue/modules/booking/directives/ProductDetailsBookingDirective",
-        "eloue/modules/booking/directives/BookingModalDirective",
-        "eloue/modules/booking/directives/MessageModalDirective",
-        "eloue/modules/booking/directives/PhoneModalDirective",
-        "eloue/modules/booking/directives/ProductDetailsSmallDirective",
         "../../common/eloue/services", "../../common/eloue/controllers", "../../common/eloue/directives", "../../common/eloue/interceptors"],
     function (EloueApp) {
         "use strict";
