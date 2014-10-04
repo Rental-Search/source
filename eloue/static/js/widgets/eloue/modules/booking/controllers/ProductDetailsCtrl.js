@@ -245,6 +245,9 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $location.path("/login");
             });
 
+            /**
+             * Load necessary data on modal window open event based on modal name.
+             */
             $scope.$on("openModal", function (event, args) {
                 if ((args.name === "message") && $scope.productRelatedMessages.length == 0) {
                     $scope.loadMessageThread();
@@ -259,8 +262,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.$on("closeModal", function (event, args) {
                 var currentPath = $location.path();
                 var newPath = currentPath.slice(0, currentPath.indexOf(args.name));
-                console.log(newPath);
-                $location.path("/");
+                $location.path(newPath);
+                $scope.$apply();
             });
 
             $scope.loadCreditCards = function () {
