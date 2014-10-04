@@ -181,7 +181,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 $rootScope.$broadcast("openModal", { name : prefix, params: $route.current.params});
                 $(".modal").modal("hide");
                 $timeout(function() {
-                    $("#" + prefix + "Modal").modal("show");
+                    var modalContainer = $("#" + prefix + "Modal");
+                    modalContainer.modal("show");
+                    modalContainer.on( "hidden.bs.modal", function() {
+                        $rootScope.$broadcast("closeModal", { name : prefix, params: $route.current.params});
+                    });
                 }, 300);
             }
         }]);

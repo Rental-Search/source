@@ -2,7 +2,8 @@ include ../../jade/_mixins
 
 {% verbatim %}
 .thumbnail-img
-    a(href="#"): img(ng-src="{{product.picture}}", alt="")
+    a(href="#")
+        img(ng-src="{{product.picture}}", alt="{{product.summary}}")
 .thumbnail-content
     h3 {{product.summary}}
     p.location
@@ -17,7 +18,7 @@ include ../../jade/_mixins
     .declarer
         .thumbnail-img
             a(href="#")
-                img(ng-src="{{getAvatar(product.owner.avatar)}}", alt="")
+                img(ng-src="{{getAvatar(product.owner.avatar.thumbnail)}}", alt="")
         .thumbnail-content
             p {{product.owner.first_name}} {{product.owner.last_name}}
 {% endverbatim %}
