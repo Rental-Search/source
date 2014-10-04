@@ -49,7 +49,7 @@ class ServerErrorEnum(object):
     OTHER_ERROR = ('199', _(u'Other error occurred.'))
 
 
-class Api20Exception(Exception):
+class ApiException(Exception):
     """Base class for api 2.0 exceptions."""
 
     status_code = None
@@ -85,7 +85,7 @@ class Api20Exception(Exception):
         )
 
 
-class ValidationException(Api20Exception):
+class ValidationException(ApiException):
     """Raised on REST Framework validation errors."""
     status_code = status.HTTP_400_BAD_REQUEST
     error_group = ErrorGroupEnum.VALIDATION_ERRORS
@@ -105,21 +105,21 @@ class ValidationException(Api20Exception):
         return error[0], error[1], error_detail
 
 
-class AuthenticationException(Api20Exception):
+class AuthenticationException(ApiException):
     """Raised on REST Framework authentication errors."""
 
     status_code = status.HTTP_401_UNAUTHORIZED
     error_group = ErrorGroupEnum.AUTHENTICATION_ERROR
 
 
-class PermissionException(Api20Exception):
+class PermissionException(ApiException):
     """Raised on REST Framework permission errors."""
 
     status_code = status.HTTP_403_FORBIDDEN
     error_group = ErrorGroupEnum.PERMISSION_ERROR
 
 
-class UrlException(Api20Exception):
+class UrlException(ApiException):
     """Raised if url is invalid."""
 
     error_group = ErrorGroupEnum.URL_ERROR
@@ -132,7 +132,7 @@ class UrlException(Api20Exception):
             self.status_code = status.HTTP_404_NOT_FOUND
 
 
-class ServerException(Api20Exception):
+class ServerException(ApiException):
     """Raised on REST Framework permission errors."""
 
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -171,12 +171,12 @@ def api_exception_handler(exception):
         exception = PermissionException(
             {'code': error[0], 'description': error[1]})
     # ... and also any other not REST Framework exception
-    elif not isinstance(exception, (exceptions.APIException, Api20Exception)):
+    elif not isinstance(exception, (exceptions.APIException, ApiException)):
         error = ServerErrorEnum.OTHER_ERROR
         exception = ServerException(
             {'code': error[0], 'description': error[1], 'detail': exception.message})
 
-    if isinstance(exception, Api20Exception):
+    if isinstance(exception, ApiException):
         # Response in the case of our exception to be caught is similar to
         # response in the case of standard REST Framework exception to
         # be caught. The only difference is JSON format.

@@ -15,6 +15,64 @@ class LocationHeaderMixin(object):
         obj = self.object
         return reverse('%s-detail' % obj._meta.model_name, args=(obj.pk,))
 
+class ErrorMixin(object):
+    """
+    View set with ability to return error messages according to
+    api 2.0 spec requirements.
+    """
+    validation_exception_expected = True
+
+    def get_serializer_context(self):
+        """
+        Add to serializer context flag designated whether exception on
+        validation errors must be raised.
+        """
+        context = super(ErrorMixin, self).get_serializer_context()
+        context['suppress_exception'] = not self.validation_exception_expected
+        return context
+
+    def initialize_request(self, request, *args, **kwargs):
+        """
+        Enable exception raising on validation errors.
+        """
+        self.validation_exception_expected = True
+        return super(ErrorMixin, self).initialize_request(
+            request, *args, **kwargs)
+
+    def finalize_response(self, request, response, *args, **kwargs):
+        """
+        Disable exception raising on validation errors.
+
+        It is necessary for correct work of Django REST Framework GUI.
+        """
+        self.validation_exception_expected = False
+        return super(ErrorMixin, self).finalize_response(
+            request, response, *args, **kwargs)
+
+class PermissionMixin(object):
+    """
+    View set that allow permission checker to pass making a decision (return None).
+
+    If there was not at least one positive decision it is assumed that
+    access is denied.
+    """
+    def check_permissions(self, request):
+        allow_access = False
+        for permission in self.get_permissions():
+            has_pemission = permission.has_permission(request, self)
+            # check if decision has been passed
+            if has_pemission is None:
+                continue
+            # deny access if forbidden
+            if not has_pemission:
+                self.permission_denied(request)
+            allow_access = True
+        else:
+            # if iteration has finished, and there were no permission exceptions,
+            # rise one if there were no positive decisions made (all checkers have returned None)
+            if not allow_access:
+                self.permission_denied(request)
+
 class OwnerListMixin(object):
     owner_filter_class = OwnerFilter
 
