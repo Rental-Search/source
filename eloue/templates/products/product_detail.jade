@@ -23,7 +23,7 @@ block tab
       .map-container
         .map-inner
           span.whirly
-          .map
+          .map#map-canvas-small(locationY="{{ product.location.y|stringformat:'f' }}", locationX="{{ product.location.x|stringformat:'f' }}")
             //- a place for embedding the map
       .location-title-inner
         .location-title

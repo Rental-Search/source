@@ -240,13 +240,44 @@ require([
                         title: item.attr("name"),
                         lat: item.attr("locationX"),
                         lng: item.attr("locationY"),
-                        zIndex: Number(item.attr("id").replace("marker-",""))
+                        zIndex: Number(item.attr("id").replace("marker-", ""))
                     };
                     products.push(product);
                 });
 
 
                 setMarkers(map, products, 'li#marker-');
+            }
+
+            var mapCanvasSmall = document.getElementById("map-canvas-small");
+
+            if (!!mapCanvasSmall) {
+                var mapContainer = $("#map-canvas-small");
+                var product = {
+                    lat: mapContainer.attr("locationX"),
+                    lng: mapContainer.attr("locationY")
+                };
+
+                var productMapOptions = {
+                    zoom: 19,
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                    center: new google.maps.LatLng(product.lat, product.lng),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var productMap = new google.maps.Map(mapCanvasSmall, productMapOptions);
+                var circleOptions = {
+                    strokeColor: "#3c763d",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: "#3c763d",
+                    fillOpacity: 0.35,
+                    map: productMap,
+                    center: new google.maps.LatLng(product.lat, product.lng),
+                    radius: 10
+                };
+                // Add the circle for this city to the map.
+                var locationCircle = new google.maps.Circle(circleOptions);
             }
         };
 
