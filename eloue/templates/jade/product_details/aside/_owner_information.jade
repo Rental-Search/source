@@ -1,34 +1,30 @@
-include ../../_mixins
-
 .section-header
     h4 Contactez-moi
 .section-body
-    {% verbatim %}
     .part
         .block-thumbnail
             .thumbnail-img
-                a(href="{{product.owner.url}}")
-                    img(ng-src="{{getAvatar(product.owner.avatar.thumbnail)}}", alt="")
+                a(href="{{ product.owner_url }}")
+                    img(src="{{ product.owner_avatar }}", alt="")
             .thumbnail-content
                 h5
-                    a(href="{{product.owner.url}}") {{product.owner.first_name}} {{product.owner.last_name}}
-                {% endverbatim %}
-                +average-rate("product.ownerStats.average_rating")
-                {% verbatim %}
+                    a(href="{{ product.owner_url }}") {{ product.owner }}
+                {% with 3 as rate %}
+                include ../../_rate
+                {% endwith %}
                 p
                     | Membre depuis le
                     br
-                    span {{product.owner.date_joined | date:'dd.MM.yyyy'}}
-                {% endverbatim %}
+                    span {{ product_object.owner.date_joined|date:"d F Y" }}
     .part
-        a(href = "#/message", data-dismiss="modal").btn.bg-success.send-message
+        a(href="#/message", data-dismiss="modal").btn.bg-success.send-message
             i.flaticon.stroke.mail-2
             | Envoyez un message
-        a(href = "#/phone", data-dismiss="modal").btn.bg-success.call
+        a(href="#/phone", data-dismiss="modal").btn.bg-success.call
             i.flaticon.stroke.phone-3
             | Appelez
-        ul.nav.stats
-            {% verbatim %}
+        //-ul.nav.stats
+        //-
             li
                 span
                     big.text-success {{product.ownerStats.products_count}}
@@ -54,7 +50,7 @@ include ../../_mixins
                     big.text-success {{product.ownerStats.response_time}}
                 span
                     | de temps de réponse en moyenne
-            {% endverbatim %}
+//-
     .part.connection.clearfix
         .col-sm-4
             a(href="#").friend-photo-wrapper

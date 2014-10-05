@@ -9,6 +9,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "$window",
         "$location",
         "Endpoints",
+        "CivilityChoices",
         "ProductsLoadService",
         "MessageThreadsService",
         "ProductRelatedMessagesLoadService",
@@ -16,7 +17,21 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CreditCardsService",
         "BookingsLoadService",
-        function ($scope, $window, $location,Endpoints, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
+
+            $scope.creditCard = {
+                id: null,
+                card_number: "",
+                expires: "",
+                holder: "",
+                masked_number: "",
+                cvv: "",
+                keep: "",
+                holder_name: "",
+                subscriber_reference: ""
+            };
+            $scope.newCreditCard = true;
+            $scope.showSaveCard = true;
 
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
@@ -30,18 +45,6 @@ define(["angular", "eloue/modules/booking/BookingModule",
                     $scope.loadCreditCards();
                 });
             }
-
-            $scope.creditCard = {
-                id: null,
-                card_number: "",
-                expires: "",
-                holder: "",
-                masked_number: "",
-                cvv: "",
-                keep: "",
-                holder_name: "",
-                subscriber_reference: ""
-            };
 
             $scope.getProductIdFromUrl = function () {
                 var href = $window.location.href;
@@ -68,6 +71,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.available = true;
             $scope.newMessage = {};
             $scope.threadId = null;
+            $scope.civilityOptions = CivilityChoices;
             $scope.hours = [
                 {"label": "00h", "value": "00:00:00"},
                 {"label": "01h", "value": "01:00:00"},
@@ -99,8 +103,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $scope.product = result;
                 //TODO: owner contact details will be defined in some other way.
                 $scope.ownerCallDetails = {
-                    number: result.phone.number,
-                    tariff: "0.15"
+                    number: result.phone.number.numero,
+                    tariff: result.phone.number.tarif
                 };
             });
 
@@ -161,16 +165,20 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 UsersService.updateUser(userPatch).$promise.then(function(result) {
                     // Update credit card info
                     $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
-                    if (!!$scope.creditCard.id) {
-                        CreditCardsService.deleteCard($scope.creditCard).$promise.then(function(result) {
-                            CreditCardsService.saveCard($scope.creditCard).$promise.then(function(result) {
+                    if ($scope.creditCard.masked_number == "") {
+                        if (!!$scope.creditCard.id) {
+                            CreditCardsService.deleteCard($scope.creditCard).$promise.then(function (result) {
+                                CreditCardsService.saveCard($scope.creditCard).$promise.then(function (result) {
+                                    $scope.requestBooking();
+                                });
+                            });
+                        } else {
+                            CreditCardsService.saveCard($scope.creditCard).$promise.then(function (result) {
                                 $scope.requestBooking();
                             });
-                        });
+                        }
                     } else {
-                        CreditCardsService.saveCard($scope.creditCard).$promise.then(function(result) {
-                            $scope.requestBooking();
-                        });
+                        $scope.requestBooking();
                     }
                 });
             };
@@ -204,6 +212,21 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 );
             };
 
+            $scope.clearCreditCard = function() {
+                $scope.newCreditCard = true;
+                $scope.creditCard = {
+                    id: $scope.creditCard.id,
+                    card_number: "",
+                    expires: "",
+                    holder: "",
+                    masked_number: "",
+                    cvv: "",
+                    keep: "",
+                    holder_name: "",
+                    subscriber_reference: ""
+                };
+            };
+
             /**
              * Retrieves identifier of the object from provided url, that ends with "../{%ID%}/"
              * @param url URL
@@ -222,6 +245,9 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $location.path("/login");
             });
 
+            /**
+             * Load necessary data on modal window open event based on modal name.
+             */
             $scope.$on("openModal", function (event, args) {
                 if ((args.name === "message") && $scope.productRelatedMessages.length == 0) {
                     $scope.loadMessageThread();
@@ -230,12 +256,24 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 }
             });
 
+            /**
+             * Restore path when closing modal window.
+             */
+            $scope.$on("closeModal", function (event, args) {
+                var currentPath = $location.path();
+                var newPath = currentPath.slice(0, currentPath.indexOf(args.name));
+                $location.path(newPath);
+                $scope.$apply();
+            });
+
             $scope.loadCreditCards = function () {
                 if ($scope.currentUser) {
                     CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
                         var cards = result.results;
-                        if (!!cards) {
-                            $scope.creditCard.id = cards[0].id;
+                        if (!!cards && cards.length > 0) {
+                            $scope.creditCard = cards[0];
+                            $scope.creditCard.expires = $scope.creditCard.expires.slice(0, 2) + "/" + $scope.creditCard.expires.slice(2);
+                            $scope.newCreditCard = false;
                         }
                     });
                 }
@@ -246,7 +284,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.loadMessageThread = function () {
-                MessageThreadsService.getMessageThread($scope.productId).then(function (result) {
+                MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
                     angular.forEach(result, function (value, key) {
                         $scope.threadId = value.id;
                         var senderId = $scope.getIdFromUrl(value.sender);

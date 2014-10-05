@@ -3,14 +3,14 @@
 .section-body
 	.part
 		ul.nav
-			each similar_ad in similar_ads
+			each product in product_list
 				li
 					.thumbnail-img
-						a(href="#")
-							img(src=STATIC_URL+similar_ad.thumbnail, alt="")
+						a(href="{{ product.url }}")
+							img(src="{{ product.thumbnail }}", alt="")
 					.thumbnail-content
 						h6 
-							a(href="#") #{similar_ad.header}
+							a(href="{{ product.url }}") {{ product.summary }}
 						p
-							small #{similar_ad.place}
-						span.badge.price #{similar_ad.price}€ /jour
+							small {{ product.city|title }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+						span.badge.price {{ product.price }}€ /jour

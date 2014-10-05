@@ -1,4 +1,18 @@
-h3 Location #{product.summary}
+-load i18n
+
+h3 Location {{ product.summary }} - {{ product.city|title }}
+{% if product_type != 'product' %}
 ul.breadcrumb
-  each specification in product.categories
-    li #{specification|capfirst}
+  {% if product_type == 'carproduct' %}
+  li {{ product_object.seat_number }} {% trans 'places' %}
+  li {{ product_object.door_number }} {% trans 'portes' %}
+  li {{ product_object.get_fuel_display }}
+  li {{ product_object.get_transmission_display }}
+  li {{ product_object.consumption }} {% trans 'L/100km' %}
+  {% endif %}
+  {% if product_type == 'realestateproduct' %}
+  li {{ product_object.capacity }} {% trans 'personnes' %}
+  li {{ product_object.get_private_life_display }}
+  li {{ product_object.chamber_number }} {% trans 'chambres' %}
+  {% endif %}
+{% endif %}

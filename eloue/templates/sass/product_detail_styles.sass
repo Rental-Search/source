@@ -45,6 +45,7 @@ main
           left: 0
           width: 100%
           height: 100%
+          +default-product
         img
           min-height: 100%
           min-width: 100%
@@ -102,61 +103,6 @@ main
           vertical-align: -0.2em
           display: inline-block
 
-      .grid-layout &
-        +make-sm-column(6)
-        +make-md-column(4)
-        .thumbnail-img
-          width: 100%
-          padding-top: (100%/1.4)
-        .declarer-container
-          padding: $indent-xs
-          bottom: 0
-        &:hover
-          .fog
-            background: none
-            background: linear-gradient(to top, black, transparent 2.5em)
-            +opacity(.7)
-          .sprite-comment,
-          .rate
-            display: block
-        .info
-          padding: $indent-xs
-          p,
-          h6
-            +text-overflow()
-          h6
-            font-size: px(13)
-            font-weight: $fw-semibold
-            margin: 0 0 .25em
-          p
-            font-size: px(11)
-            margin-bottom: 0
-        .badge-pro
-          position: absolute
-          top: 2.5em
-          left: 0
-          margin: 0
-        .sprite-comment
-          display: none
-          position: absolute
-          margin-top: (100%/1.4)
-          z-index: 20
-          top: -2em
-
-        .rate
-          position: absolute
-          margin-top: (100%/1.4)
-          top: -1.5em
-          z-index: 20
-          right: $indent-xs
-          display: none
-        .full_description,
-        .zip-code,
-        .declarer-name,
-        .btns
-          display: none
-
-
       .list-layout &
         +make-sm-column(12)
         display: table
@@ -213,3 +159,12 @@ main
           color: $gray-medium
           i
             font-size: 1.1em
+
+.owner-headline
+  .round-img
+    width: $thumbnail-lg
+    height: $thumbnail-lg
+    +default-user
+    img
+      width: 100%
+      height: 100%

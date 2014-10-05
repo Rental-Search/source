@@ -1,3 +1,5 @@
+include ../jade/_global_variables
+
 block details
   .section-content
     {% verbatim %}
@@ -12,15 +14,11 @@ block details
       .row
         .col-xs-12.indent-sm-b
           table.calendar.text-center
+            {% endverbatim %}
             thead
-              tr
-                td Lun
-                td Mar
-                td Mer
-                td Jeu
-                td Ven
-                td Sam
-                td Dim
+              tr: each day in days_of_week
+                td {{ day }}
+            {% verbatim %}
             tbody
                   tr(ng-repeat="week in weeks")
                     td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : ''}}")

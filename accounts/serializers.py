@@ -11,6 +11,7 @@ from rest_framework_gis.serializers import MapGeometryField
 
 from accounts.forms import CreditCardForm
 from accounts import models
+from accounts.utils import viva_check_phone
 from eloue.api import serializers
 
 class GeoModelSerializer(serializers.ModelSerializer):
@@ -25,12 +26,15 @@ class AddressSerializer(GeoModelSerializer):
     class Meta:
         model = models.Address
         fields = ('id', 'patron', 'street', 'zipcode', 'position', 'city', 'country')
+        public_fields = ('zipcode', 'position', 'city', 'country')
         read_only_fields = ('position',)
         immutable_fields = ('patron',)
         geo_field = 'position'
 
 class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
-    pass
+
+    class Meta(AddressSerializer.Meta):
+        public_fields = ('city', 'zipcode')
 
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,8 +42,19 @@ class PhoneNumberSerializer(serializers.ModelSerializer):
         fields = ('id', 'patron', 'number')
         immutable_fields = ('patron',)
 
-class NestedPhoneNumberSerializer(serializers.NestedModelSerializerMixin, PhoneNumberSerializer):
-    pass
+class NestedPhoneNumberSerializer(
+        serializers.NestedModelSerializerMixin,
+        PhoneNumberSerializer):
+
+    def transform_number(self, obj, value):
+        request = getattr(self, 'context', {}).get('request', None)
+        if request:
+            return viva_check_phone(value, request=request)
+        else:
+            return viva_check_phone(value)
+
+    class Meta(PhoneNumberSerializer.Meta):
+        public_fields = ('number',)
 
 class UserSerializer(serializers.ModelSerializer):
     username = CharField(required=False, max_length=30)
@@ -68,6 +83,11 @@ class UserSerializer(serializers.ModelSerializer):
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
             'date_joined', 'is_active', 'rib', 'password',
         )
+        public_fields = (
+            'id', 'company_name', 'username', 'is_professional', 'slug',
+            'avatar', 'default_address', 'about', 'school', 'work', 'hobby',
+            'languages', 'url', 'date_joined',
+        )
         read_only_fields = ('slug', 'url', 'date_joined', 'rib')
         immutable_fields = ('email', 'password', 'username')
 
@@ -94,6 +114,16 @@ class PasswordChangeSerializer(serializers.ModelSerializer):
         model = models.Patron
         fields = ('password', 'current_password', 'confirm_password')
         write_only_fields = ('password',)
+
+class BookingPayCreditCardSerializer(serializers.ModelSerializer):
+    cvv = CharField(max_length=4, min_length=3, write_only=True,
+        label=_(u'Cryptogramme de sécurité'),
+        help_text=_(u'Les 3 derniers chiffres au dos de la carte.'),
+    )
+
+    class Meta:
+        model = models.Patron
+        fields = ('creditcard', 'cvv')
 
 class CreditCardSerializer(serializers.ModelSerializer):
     cvv = CharField(max_length=4, min_length=3, write_only=True,

@@ -19,7 +19,7 @@ from django.utils.translation import ugettext as _
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, View
 from django.db.models import Q, Count, Avg
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
@@ -38,7 +38,7 @@ from products.utils import format_quote, escape_percent_sign
 from products.search import product_search, car_search, realestate_search, product_only_search
 
 from rent.forms import BookingOfferForm
-from rent.models import Booking
+from rent.models import Booking, Comment
 from rent.choices import BOOKING_STATE
 
 from eloue.decorators import ownership_required, secure_required, mobify, cached
@@ -730,14 +730,21 @@ def suggestion(request):
 
 # UI v3
 
+from eloue.views import AjaxResponseMixin
+from eloue.decorators import ajax_required
+from products.forms import SuggestCategoryViewForm
+
 class CommonPageContextMixin(object):
-    breadcrumbs = {'sort': {'name': 'sort', 'value': '', 'label': 'sort', 'facet': False}}
+    breadcrumbs = {'sort': {'name': 'sort', 'value': None, 'label': 'sort', 'facet': False},
+                   'l': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
+                   }
+
     def get_context_data(self, **kwargs):
-        context = super(CommonPageContextMixin, self).get_context_data(**kwargs)
-        context.update({
-            'categories_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
+        context = {
+            'category_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
             'breadcrumbs': self.breadcrumbs,
-        })
+        }
+        context.update(super(CommonPageContextMixin, self).get_context_data(**kwargs))
         return context
 
 class HomepageView(CommonPageContextMixin, TemplateView):
@@ -749,12 +756,13 @@ class HomepageView(CommonPageContextMixin, TemplateView):
         product_stats = Product.objects.extra(
             tables=['accounts_address'],
             where=['"products_product"."address_id" = "accounts_address"."id"'],
-            select={'city': 'lower(accounts_address.city)'}
+            select={'city': 'lower(trim("accounts_address"."city"))'}
         ).values('city').annotate(Count('id')).order_by('-id__count')
         return {
             'cities_list': product_stats,
-            'total_products': Product.objects.only('id').count(),
+            'total_products': Product.on_site.only('id').count(),
             'product_list': last_added(product_search, self.location, limit=8),
+            'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at'),
         }
 
     def get_context_data(self, **kwargs):
@@ -766,12 +774,12 @@ class HomepageView(CommonPageContextMixin, TemplateView):
         self.location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         return super(HomepageView, self).get(request, *args, **kwargs)
 
-class ProductListView(ProductList):
+class ProductListView(CommonPageContextMixin, ProductList):
     template_name = 'products/product_list.jade'
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
     model = Product
-    template_name = 'products/product_detail.jade'
+    template_name = 'products/_base_product_detail.jade'
     context_object_name = 'product'
 
     def get(self, request, *args, **kwargs):
@@ -783,14 +791,33 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
+    def get_context_data(self, **kwargs):
+        product = self.object.object
+        product_type = product.name
+        comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
+        context = {
+            'properties': product.properties.select_related('property'),
+            'product_list': self.sqs.more_like_this(product)[:4],
+            'product_comments': comment_qs.filter(booking__product=product),
+            'owner_comments': comment_qs.filter(booking__owner=product.owner),
+            'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
+            'product_type': product_type,
+            'product_object': getattr(product, product_type) if product_type != 'product' else product,
+            'insurance_available': settings.INSURANCE_AVAILABLE,
+        }
+        context.update(super(ProductDetailView, self).get_context_data(**kwargs))
+        return context
+
 class PublishItemView(CommonPageContextMixin, TemplateView):
     template_name = 'publich_item/index.jade'
 
-from django.views.generic import View
-from eloue.views import AjaxResponseMixin
-from products.forms import SuggestCategoryViewForm
-
 class SuggestCategoryView(AjaxResponseMixin, View):
+
+    @method_decorator(ajax_required)
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         # search for products by provided query string
         form = SuggestCategoryViewForm(self.request.GET, searchqueryset=product_search)
@@ -810,13 +837,10 @@ class SuggestCategoryView(AjaxResponseMixin, View):
         qs = qs.filter(slug__in=categories_set)
 
         context = dict(categories=[
-            self.get_ancestors(c) for c in qs if c.is_leaf_node()
+            [dict(id=c.id, name=c.name) for c in category.get_ancestors(include_self=True)]
+            for c in qs if c.is_leaf_node()
         ])
         return context
-
-    @method_decorator(cached(60*60))
-    def get_ancestors(self, category):
-        return [dict(id=c.id, name=c.name) for c in category.get_ancestors(include_self=True)]
 
 
 # REST API 2.0
@@ -850,6 +874,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
+    public_actions = ('retrieve',)
 
     @link()
     def ancestors(self, request, *args, **kwargs):
@@ -887,6 +912,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     search_index = product_search
     filter_class = ProductFilterSet
     ordering_fields = ('quantity', 'is_archived', 'category')
+    public_actions = ('retrieve', 'search', 'is_available')
 
     @link()
     def is_available(self, request, *args, **kwargs):
@@ -969,6 +995,7 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     owner_field = 'product__owner'
     filter_fields = ('product', 'unit')
     ordering_fields = ('name', 'amount')
+    public_actions = ('retrieve',)
 
 class PictureViewSet(viewsets.ModelViewSet):
     """
@@ -980,6 +1007,7 @@ class PictureViewSet(viewsets.ModelViewSet):
     owner_field = 'product__owner'
     filter_fields = ('product', 'created_at')
     ordering_fields = ('created_at',)
+    public_actions = ('retrieve',)
 
 class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     """
@@ -990,6 +1018,14 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('product',) # TODO: 'city', 'price')
     # TODO: ordering_fields = ('price',)
+    public_actions = ('retrieve',)
+
+class MessageThreadFilterSet(filters.FilterSet):
+    participant = filters.MultiFieldFilter(name=('sender', 'recipient'))
+
+    class Meta:
+        model = models.MessageThread
+        fields = ('sender', 'recipient', 'product')
 
 class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
@@ -1000,7 +1036,7 @@ class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     serializer_class = serializers.MessageThreadSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
     owner_field = ('sender', 'recipient')
-    filter_fields = ('sender', 'recipient', 'product')
+    filter_class = MessageThreadFilterSet
 
 class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """

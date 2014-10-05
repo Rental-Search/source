@@ -17,11 +17,11 @@ block append content-body
       section:                     include _steps
       section.timeline:            include _timeline
     footer
-      section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
+      //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
       section.footer-links.framing:         include ../jade/_footer_links
       section.rss:                          include ../jade/_rss
 
-  script.
+  script
     $('p.content').hide();
     $('.toggle-content').on('click', function () {
       $(this).closest('li').find('.content').slideToggle('fast');

@@ -50,9 +50,13 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', '')
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
-DATABASES = {'default': dj_database_url.config()}
-DATABASES['default']['OPTIONS'] = {'autocommit': env('DATABASE_OPTIONS_AUTOCOMMIT', True)}
-DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+DATABASES = {
+    'default': dj_database_url.config(),
+}
+DATABASES['default'].update({
+    'OPTIONS': {'autocommit': env('DATABASE_OPTIONS_AUTOCOMMIT', True)},
+    'ENGINE': 'django.contrib.gis.db.backends.postgis',
+})
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -268,23 +272,25 @@ PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
-    'pipeline.compilers.less.LessCompiler',
-    'pipeline.compilers.sass.SASSCompiler',
+    #'pipeline.compilers.less.LessCompiler',
+    'eloue.compat.pipeline.compilers.AutoprefixerSASSCompiler',
 )
 PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = env('PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUI_BINARY = env('COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
+PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/home/benoitw/node_modules/autoprefixer/autoprefixer')
+PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
 PIPELINE_CSS = {
     'extrastyles': {
         'source_filenames': (
-            'bower_components/chosen/chosen.css',
-            'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
-            'bower_components/bootstrap-datepicker/css/datepicker3.css',
-            'bower_components/toastr/toastr.min.css',
             'fonts/flaticons_social/flaticons_social.css',
             'fonts/flaticons_solid/flaticons_solid.css',
             'fonts/flaticons_stoke/flaticons_stoke.css',
+            'bower_components/chosen/chosen.min.css',
+            'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
+            'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/toastr/toastr.min.css',
         ),
         'output_filename': 'css/extra.css',
         'extra_context': {
@@ -312,7 +318,8 @@ PIPELINE_CSS = {
     'product_list_styles': {
         'source_filenames': (
             'sass/product_list_styles.sass',
-            'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css'
+            #'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css',
+            'css/jquery-ui.css', # temporary use our own hacked version of jQuery-UI styles to get green sliders
         ),
         'output_filename': 'css/product_list_styles.css',
         'extra_context': {

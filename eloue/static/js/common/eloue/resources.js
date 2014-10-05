@@ -5,7 +5,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing users.
      */
     EloueCommon.factory("Users", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "users/:id\\/", {},
+        return $resource(Endpoints.api_url + "users/:id/?", {},
             {
                 "getMe": { method: "GET", params: {id: "me"} },
                 "update": { method: "PATCH" },
@@ -114,7 +114,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing phone numbers.
      */
     EloueCommon.factory("PhoneNumbers", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "phones/:id\\/", {},
+        return $resource(Endpoints.api_url + "phones/:id/?", {},
             {
                 "get": { method: "GET", params: {id: ":id"}},
                 "update": { method: "PUT" }

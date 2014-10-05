@@ -1,4 +1,4 @@
--load product
+-load product facets
 
 .container
   h3 Les viles les plus actives
@@ -9,5 +9,5 @@
         li: ul.nav
           each city in column
             li.item-city
-              .col-sm-8: a(href = "#").link-success-color #{city.city}
-              .col-sm-4: span.actives-count #{city.id__count}
+              .col-sm-8: a(href="{% facet_url breadcrumbs 'l' city.city %}").link-success-color {{ city.city }}
+              .col-sm-4: span.actives-count {{ city.id__count }}

@@ -7,7 +7,6 @@ block append styles
 
 block scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
-  //- TODO: add bower/requirejs support for script(src="#{STATIC_URL}js/bootstrap/carousel.js")
 
 block append content-body
   #fb-root
@@ -26,39 +25,52 @@ block append content-body
         main.col-sm-8
           section
             .section-body
-              .part.picture-tab
-                ul.nav.without-spaces
-                //-
-                  each tab in tabs
-                    li: a( href = "#{tab.href}" ).pad-v-2 #{tab.title}
-                block tab
+              .part.picture-tab#tabs
+                ul.nav.nav-justified
+                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"], ["Localisation", "#tabs-location"], ["Disponibilité", "#tabs-availability"]]
+                  each title, href in tabs
+                    li.spacer
+                    li: a(href="{{ href }}").pad-v-2 {{ title }}
+                  if insurance_available
+                    li.spacer
+                    li: a(href="#tabs-insurance").pad-v-2 Assurance
+                //-include ./product_detail
+                //-include ./tab_tarifs
+                include ./tab_available
+                if insurance_available
+                  //-include ./tab_terms
               .part.description
                 include ../jade/product_details/main/_description
-              .part.comments.comments-ad
-                include ../jade/product_details/main/_comments_ad
-              .part.comments.comments-owner
-                include ../jade/product_details/main/_comments_owner
+              if product_comments
+                .part.comments.comments-ad
+                  h3 Commentaires liés à cette annonce
+                  {% with product_comments as comment_list %}
+                  include ../jade/product_details/main/_comments
+                  {% endwith %}
+              if owner_comments
+                .part.comments.comments-owner
+                  h3 Commentaire liés au propriétaire
+                  {% with owner_comments as comment_list %}
+                  include ../jade/product_details/main/_comments
+                  {% endwith %}
         aside.col-sm-4
-          section.booking-form
-            eloue-product-details-booking(in-modal="false")
-          section.add-to-wishlist
-            include ../jade/product_details/aside/_add_to_wishlist
+          section.booking-form.ng-hide(ng-show="true")
+            include  ../jade/product_details/aside/_booking_form.jade
+          //-section.add-to-wishlist
+          //-  include ../jade/product_details/aside/_add_to_wishlist
           section.owner-information
             include ../jade/product_details/aside/_owner_information
           section.similar-listing
             include ../jade/product_details/aside/_similar_listing
-          section.connected-with-owner
-            include ../jade/product_details/aside/_connected_with_owner
-          eloue-booking-modal
-          eloue-message-modal
-          eloue-phone-modal
+          //-section.connected-with-owner
+          //-  include ../jade/product_details/aside/_connected_with_owner
+          include ../jade/_pop_up_reserve.jade
+          include ../jade/_pop_up_send_message.jade
+          include ../jade/_pop_up_call.jade
     footer
-      section.row-fluid.insurances.framing
-        include ../jade/_insurances
-      section.row-fluid.footer-links
-        include ../jade/_footer_links
-      section.row-fluid.rss
-        include ../jade/_rss
+      section.row-fluid.insurances.framing: include ../jade/_insurances
+      section.row-fluid.footer-links: include ../jade/_footer_links
+      section.row-fluid.rss: include ../jade/_rss
 
     script(type="text/ng-template")#modalContainer
     div(ng-view)

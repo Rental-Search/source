@@ -50,9 +50,8 @@ class OwnerFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         user = request.user
-        if user.is_anonymous():
-            return queryset.none()
-        elif user.is_staff or user.is_superuser:
+        if user.is_anonymous() or user.is_staff or user.is_superuser:
+            # restriction for anonymous user set with permission, not filters.
             return queryset
         owner_field = getattr(view, 'owner_field', self.owner_field)
         if isinstance(owner_field, basestring):

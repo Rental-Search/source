@@ -110,6 +110,7 @@ main
           margin-top: $indent-xs
           margin-right: $indent-xs
         a
+          +default-product
           position: absolute
           top: 0
           left: 0
@@ -139,11 +140,12 @@ main
         display: table-cell
       .declarer-thumbnail
         background-color: $gray-lighter
-        width: 40px
-        height: 40px
+        min-width: $thumbnail-sm
+        height: $thumbnail-sm
         overflow: hidden
         display: inline-block
         +border-radius(50%)
+        +default-user
       .badge-pro
         font-size: px(11,15)
         text-transform: uppercase
@@ -213,7 +215,6 @@ main
           margin-top: (100%/1.4)
           z-index: 20
           top: -2em
-          i
 
         .rate
           position: absolute
@@ -223,7 +224,6 @@ main
           right: $indent-xs
           display: none
         .full_description,
-        .zip-code,
         .declarer-name,
         .btns
           display: none
@@ -232,6 +232,18 @@ main
       .list-layout &
         +make-sm-column(12)
         display: table
+        .full_description
+          max-height: (2em * $line-height-base)
+          position: relative
+          // > sky for blur overflow text
+          &:before
+            content: " "
+            left: 0
+            right: 0
+            top: 100%
+            height: (1em * $line-height-base)
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0), white 90%)
+            position: absolute
         .thumbnail-img
           width: $list-img-wrapper-width
         .declarer-container

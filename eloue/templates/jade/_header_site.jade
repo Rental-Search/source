@@ -1,6 +1,6 @@
 section.container.signs-links
   //- version of header for anonymous user
-  ul.ng-hide(role="tablist", ng-show="!currentUser").nav.without-spaces
+  ul.ng-hide(role="tablist", ng-show="!currentUser").without-spaces
     li: span
         | Bonjour, 
         a( href = "#inscrivez-vous", data-toggle="modal", data-target="#registrationModal") inscrivez-vous 
@@ -28,15 +28,13 @@ section.container.signs-links
           span(data-toggle="dropdown").dropdown-toggle.text-success {{currentUser.username}}
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-          //-
-            each item in header_popover
-              li
-                .middle-round: span
-                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
-                .content
-                  h4: a(href="#") #{item.first_name}
-                  h5: a(href="#") #{item.topic}
-                  p #{item.text}
+            {% endverbatim %}
+            li: a(href="{% url 'dashboard:dashboard' %}") Tableau de bord
+            li: a(href="{% url 'dashboard:messages' %}") Messages
+            li: a(href="{% url 'dashboard:bookings' %}") Réservations
+            li: a(href="{% url 'dashboard:items' %}") Annonces
+            li: a(href="{% url 'dashboard:account' %}") Compte
+            {% verbatim %}
         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
             i.flaticon.stroke.mail
@@ -69,16 +67,11 @@ section.container.signs-links
           span(data-toggle="dropdown").dropdown-toggle.text-success Aide
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-          //-
-            each item in header_popover
-              li
-                .middle-round: span
-                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
-                .content
-                  h4: a(href="#") #{item.first_name}
-                  h5: a(href="#") #{item.topic}
-                  p #{item.text}
-        {% endverbatim %}
+            {% endverbatim %}
+            li: a(href="{% url 'howto' %}") Comment ça marche ?
+            li: a Simulez vos revenus
+            li: a Conseils pour les propriétaires
+            li: a Conseils pour les locataires
 .framing
   section.container.search-form
     .table-cell

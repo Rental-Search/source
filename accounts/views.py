@@ -15,7 +15,7 @@ import gdata.contacts.client
 import gdata.gauth
 
 
-from django.views.generic import ListView
+from django.views.generic import ListView, View, TemplateView
 from django.views.generic.base import TemplateResponseMixin
 
 
@@ -26,15 +26,17 @@ from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Q, Max, Avg
-from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
+from django.utils.http import urlsafe_base64_decode
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseForbidden
-from django.contrib.auth import login
+from django.contrib.auth import login, get_user_model
+from django.contrib.auth.tokens import default_token_generator
+
 from oauth_provider.models import Token
 from django.shortcuts import redirect
 
@@ -56,12 +58,16 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.decorators import secure_required, mobify, ownership_required
 from eloue.views import LoginRequiredMixin
 from eloue.utils import json
+from django.utils.decorators import method_decorator
 
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 10)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 
 log = Logger('eloue.accounts')
+
+User = get_user_model()
+assert User
 
 
 @never_cache
@@ -999,6 +1005,54 @@ def patron_delete_idn_connect(request):
     return redirect('patron_edit_idn_connect')
 
 
+# UI v3
+
+from accounts.forms import EmailPasswordResetForm
+from eloue.views import AjaxResponseMixin
+from eloue.decorators import ajax_required
+
+class PasswordResetView(AjaxResponseMixin, View):
+    http_method_names = ['post']
+    form_class = EmailPasswordResetForm
+
+    @method_decorator(ajax_required)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save(request=request, use_https=request.is_secure(), **kwargs)
+            success_msg = _("We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly.")
+            return self.render_to_response({'detail': success_msg})
+        return self.render_to_response({'errors': form.errors}, status=400)
+
+class PasswordResetConfirmView(TemplateView):
+    template_name = 'accounts/password_reset_confirm.jade'
+    form_class = PatronSetPasswordForm
+    token_generator = default_token_generator
+
+    def dispatch(self, request, uidb64=None, **kwargs):
+        try:
+            uid = urlsafe_base64_decode(uidb64)
+            user = User._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        return super(PasswordResetConfirmView, self).dispatch(request, user=user, **kwargs)
+
+    def get_context_data(self, user=None, token=None, **kwargs):
+        context = super(PasswordResetConfirmView, self).get_context_data(**kwargs)
+        context.update({
+            'validlink': bool(user is not None and self.token_generator.check_token(user, token)),
+        })
+        return context
+
+    @method_decorator(ajax_required)
+    def post(self, request, user=None, **kwargs):
+        form = self.form_class(user, request.POST)
+        if form.is_valid():
+            form.save()
+            success_msg = _("Your password has been set.  You may go ahead and log in now.")
+            return self.response_class({'detail': success_msg})
+        return self.response_class({'errors': form.errors}, status=400)
+
 
 # REST API 2.0
 
@@ -1024,12 +1078,15 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
+    public_actions = ('retrieve', 'search')
 
-    def dispatch(self, request, *args, **kwargs):
+    def initial(self, request, *args, **kwargs):
         pk_field = getattr(self, 'pk_url_kwarg', 'pk')
-        if kwargs.get(pk_field, None) == USER_ME and not request.user.is_anonymous():
-            kwargs[pk_field] = request.user.pk
-        return super(UserViewSet, self).dispatch(request, *args, **kwargs)
+        if kwargs.get(pk_field, None) == USER_ME:
+            user = self.request.user
+            if not user.is_anonymous():
+                self.kwargs[pk_field] = getattr(user, pk_field)
+        return super(UserViewSet, self).initial(request, *args, **kwargs)
 
     @action(methods=['post', 'put'])
     def reset_password(self, request, *args, **kwargs):
@@ -1075,6 +1132,7 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter) 
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
+    public_actions = ('retrieve',)
 
 class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """

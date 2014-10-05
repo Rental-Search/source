@@ -9,9 +9,13 @@
             .modal-body.table-cell
                 .static-part.table-cell
                     section.product-info
-                        eloue-product-details-small
+                        include ./pop_up_sections/_product_info.jade
                     section.terms
-                        eloue-product-details-booking(in-modal="true", in-booking="true")
+                        include ./pop_up_sections/_terms
+                        a(href="#/message").btn.bg-gray
+                            | Envoyez un message
+                        a(href="#/phone").btn.bg-gray
+                            | Appelez
                 form(id="bookingForm", name="bookingForm", role="form", ng-submit="sendBookingRequest()", ng-model="bookingDetails", novalidate).input-group.change-part.table-cell
                     section.table.form-wrapper.personal-information
                         include ./pop_up_sections/_personal_information_form

@@ -2,8 +2,8 @@
  {% load cache facets i18n l10n param category product paginator mptt_tags seo booking %}
 
 {% block title %}
-{% if breadcrumbs.categorie.object.description %}
-{{ breadcrumbs.categorie.object.description.title }}
+{% if breadcrumbs.categorie.object.title %}
+{{ breadcrumbs.categorie.object.title }}
 {% else %}
 {% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
 {% endif %}
@@ -11,7 +11,7 @@
 
 {% block description %}
 {% if breadcrumbs.categorie.object.description %}
-{{ breadcrumbs.categorie.object.description.description }}
+{{ breadcrumbs.categorie.object.description }}
 {% else %}
 {% trans "Location " %}
 {% for crumb in breadcrumbs|facets %}
@@ -91,15 +91,15 @@
     </ul>{# breadcrumb #}
     <div class="content-main">
     {% if not form.cleaned_data.q %}
-        {% if breadcrumbs.categorie.object.description %}
-            <h1>{{ breadcrumbs.categorie.object.description.title }}</h1>
+        {% if breadcrumbs.categorie.object.title %}
+            <h1>{{ breadcrumbs.categorie.object.title }}</h1>
         {% else %}
             <h1>{% trans "Location"%} {% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}</h1>
         {% endif %}
     {% endif %}
-    {% if breadcrumbs.categorie.object.description %}
+    {% if breadcrumbs.categorie.object.header %}
     <div class="category-description">
-        {{ breadcrumbs.categorie.object.description.header|safe }}
+        {{ breadcrumbs.categorie.object.header|safe }}
     </div>
     {% endif %}
     {% if product_list or top_products %}
@@ -169,9 +169,9 @@
             </div><!-- pagination -->
             {% endif %}
         {% endif %}
-        {% if breadcrumbs.categorie.object.description %}
+        {% if breadcrumbs.categorie.object.footer %}
         <div class="category-description">
-            {{ breadcrumbs.categorie.object.description.footer|safe }}
+            {{ breadcrumbs.categorie.object.footer|safe }}
         </div>
         {% endif %}
     {% else %}

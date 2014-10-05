@@ -5,13 +5,13 @@ from django.conf import settings
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.utils import translation
-from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 from eloue.api.urls import router
 from products.views import HomepageView
+from accounts.views import PasswordResetView, PasswordResetConfirmView
 
 log = logbook.Logger('eloue')
 
@@ -29,14 +29,6 @@ sitemaps = {
 
 translation.activate(settings.LANGUAGE_CODE)  # Force language for test and dev
 
-class ExtraContextTemplateView(TemplateView):
-    extra_context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super(ExtraContextTemplateView, self).get_context_data(**kwargs)
-        context.update(self.extra_context)
-        return context
-
 partials_urlpatterns = patterns('',
     url(r'^homepage/login-form.html$', TemplateView.as_view(
             template_name='jade/_log_in.jade',
@@ -48,27 +40,6 @@ partials_urlpatterns = patterns('',
     ),
     url(r'^homepage/reset-password-form.html$', TemplateView.as_view(
             template_name='jade/_reset_password.jade',
-        ),
-    ),
-
-    url(r'^product_details/product-details-booking.html$', TemplateView.as_view(
-            template_name='jade/product_details/aside/_booking_form.jade',
-        ),
-    ),
-    url(r'^product_details/phone-modal.html$', TemplateView.as_view(
-            template_name='jade/_pop_up_call.jade',
-        ),
-    ),
-    url(r'^product_details/message-modal.html$', TemplateView.as_view(
-            template_name='jade/_pop_up_send_message.jade',
-        ),
-    ),
-    url(r'^product_details/booking-modal.html$', TemplateView.as_view(
-            template_name='jade/_pop_up_reserve.jade',
-        ),
-    ),
-    url(r'^product_details/product-details-small.html$', TemplateView.as_view(
-            template_name='jade/pop_up_sections/_product_info.jade',
         ),
     ),
 
@@ -191,13 +162,17 @@ partials_urlpatterns = patterns('',
     ),
 )
 
+dashboard_base_view = TemplateView.as_view(
+    template_name='dashboard/jade/_base_dashboard.jade',
+)
+
 dashboard_urlpatterns = patterns('',
-    url(r'^$', ExtraContextTemplateView.as_view(
-            template_name='dashboard/jade/_base_dashboard.jade',
-        ),
-        name='new_ui_dashboard',
-    ),
-    url(r'^partials/', include(partials_urlpatterns, namespace='new_ui_dashboard_partials')),
+    url(r'^$', dashboard_base_view, name='dashboard'),
+    url(r'^#/messages$', dashboard_base_view, name='messages'),
+    url(r'^#/bookings', dashboard_base_view, name='bookings'),
+    url(r'^#/items', dashboard_base_view, name='items'),
+    url(r'^#/account/profile', dashboard_base_view, name='account'),
+    url(r'^partials/', include(partials_urlpatterns, namespace='dashboard_partials')),
 )
 
 api2_urlpatterns = patterns('',
@@ -212,14 +187,23 @@ if settings.DEBUG:
         url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     )
 
-from products.urls import ui3_urlpatterns as ui3_products_urlpatterns
+reset_urlpatterns = patterns('',
+    url(r'^$', PasswordResetView.as_view(), {
+        'email_template_name': 'accounts/emails/password_reset_email'
+    }, name='password_reset'),
+    url(r'^(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        PasswordResetConfirmView.as_view(), name='password_reset_confirm'
+    ),
+)
+
+from products.urls import ui3_urlpatterns as products_urlpatterns
 ui3_urlpatterns = patterns('',
     url(r'^$', HomepageView.as_view(), name='home'),
-
-    url(r'^location/', include(ui3_products_urlpatterns)),
+    url(r'^reset/', include(reset_urlpatterns)),
+    url(r'^location/', include(products_urlpatterns)),
     url(r'^comment-ca-marche/', TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
     #url(r'^simulez-vos-revenus/', TemplateView.as_view(template_name='simulator/index.jade'), name='simulator'),
-
+    url(r'^dashboard/#/bookings/(?P<pk>[0-9a-f]{32})/$', dashboard_base_view, name='booking_detail'),
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
 )

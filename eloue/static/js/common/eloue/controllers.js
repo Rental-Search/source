@@ -72,9 +72,53 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     }]);
 
     /**
+     * Controller for the reset password form.
+     */
+    EloueCommon.controller("ResetPasswordCtrl", ["$scope", "AuthService", "ServiceErrors", function ($scope, AuthService, ServiceErrors) {
+
+        $scope.passwdResetStage = true;
+        $scope.resetPasswordError = null;
+
+        $scope.sendResetRequest = function() {
+            var form = $("#reset-password-form");
+            AuthService.sendResetPasswordRequest(
+                form,
+                function (data) {
+                    $scope.onResetSuccess(data);
+                },
+                function (jqXHR) {
+                    $scope.onResetError(jqXHR);
+                });
+        };
+
+        $scope.onResetSuccess = function (data) {
+            $scope.$apply(function () {
+                $scope.passwdResetStage = false;
+            });
+        };
+
+        $scope.onResetError = function (jqXHR) {
+            var errorText = "";
+            console.log(jqXHR);
+            if (jqXHR.status == 400) {
+                if (!!jqXHR.responseJSON.errors.email) {
+                    errorText = jqXHR.responseJSON.errors.email[0];
+                } else {
+                    errorText = "Bad request.";
+                }
+            } else {
+                errorText = "An error occured!";
+            }
+            $scope.$apply(function () {
+                $scope.resetPasswordError = errorText;
+            });
+        };
+    }]);
+
+    /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "AuthService", function ($scope, AuthService) {
+    EloueCommon.controller("RegisterCtrl", ["$scope", "AuthService", "CivilityChoices", function ($scope, AuthService, CivilityChoices) {
 
         /**
          * New user account data.
@@ -85,6 +129,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          * Error occurred during registration.
          */
         $scope.registrationError = null;
+        $scope.civilityOptions = CivilityChoices;
 
         /**
          * Register new user in the system.
@@ -99,9 +144,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 AuthService.clearUserData();
                 AuthService.login(credentials);
             }, function (error) {
-                $scope.$apply(function () {
-                    $scope.registrationError = error.data.detail;
-                });
+                if (error.data && error.data.detail) {
+                    $scope.$apply(function () {
+                        $scope.registrationError = error.data.detail;
+                    });
+                }
             });
         };
 
@@ -112,7 +159,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             var classic_form = $('.classic-form');
             classic_form.slideDown();
             $('.registration.email').slideUp();
-        }
+        };
+
+        $("select").attr("eloue-chosen", "");
     }]);
 
     EloueCommon.controller("ModalCtrl", [
@@ -136,7 +185,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 $rootScope.$broadcast("openModal", { name : prefix, params: $route.current.params});
                 $(".modal").modal("hide");
                 $timeout(function() {
-                    $("#" + prefix + "Modal").modal("show");
+                    var modalContainer = $("#" + prefix + "Modal");
+                    modalContainer.modal("show");
+                    modalContainer.on( "hidden.bs.modal", function() {
+                        $rootScope.$broadcast("closeModal", { name : prefix, params: $route.current.params});
+                    });
                 }, 300);
             }
         }]);

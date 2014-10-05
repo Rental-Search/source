@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 import re
 from itertools import islice
+from datetime import timedelta, date
+import calendar
 
 from django.conf import settings
-from django.template import Library
+from django.template import Library, Node
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.safestring import SafeData, mark_safe
 from django.utils.formats import get_format
 from django.utils import six
+from django.views.generic.dates import timezone_today
 
 register = Library()
 
@@ -191,3 +194,32 @@ def takeby_transposed(iterator, size, max_length=None):
     
     """
     return (islice(iterator, start, max_length, size) for start in six.moves.range(size))
+
+
+def next_month(a, b):
+    value = a[-1]
+    a.append(value + timedelta(days=calendar.monthrange(value.year, value.month)[1]))
+    return a
+
+class MonthCalendarNode(Node):
+    count = 11
+
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        today = timezone_today()
+        context.update({
+            'today': today,
+            'months': reduce(next_month, six.moves.range(self.count), [today]),
+            'week_days': [date(2001, 1, 1 + i) for i in six.moves.range(7)], # January 1, 2001, was a Monday.
+            'monthcalendar': calendar.monthcalendar(today.year, today.month),
+        })
+        return self.nodelist.render(context)
+
+@register.tag('monthcalendar')
+def do_monthcalendar(parser, token):
+    nodelist = parser.parse(('endmonthcalendar',))
+    parser.delete_first_token()
+    tokens = token.split_contents()
+    return MonthCalendarNode(nodelist)

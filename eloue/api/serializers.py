@@ -104,6 +104,7 @@ class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
     def __init__(self, meta):
         super(ModelSerializerOptions, self).__init__(meta)
         self.immutable_fields = getattr(meta, 'immutable_fields', ())
+        self.public_fields = getattr(meta, 'public_fields', ())
 
 class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedModelSerializer):
     """
@@ -111,6 +112,15 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
     supports `immutable_fields`
     """
     _options_class = ModelSerializerOptions
+
+    def __init__(self, instance=None, data=None, files=None,
+                     context=None, partial=False, many=None,
+                     allow_add_remove=False, **kwargs):
+
+        self._fields = {}
+        super(ModelSerializer, self).__init__(
+            instance, data, files, context, partial, many,
+            allow_add_remove, **kwargs)
 
     def get_fields(self):
         """
@@ -164,6 +174,28 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
             field.initialize(parent=self, field_name=key)
 
         return ret
+
+    @property
+    def fields(self):
+        # We must override simple attribute `fields` with property due to
+        # nested serializers. Common serializers are created at every request
+        # and know about current user, but nested serializers are created only
+        # once at server initialization and therefore can't get any information
+        # about current user. So, dynamic filtration is the only way.
+        public_fields = copy.copy(self._fields)
+        request = getattr(self, 'context', {}).get('request', None)
+        user = request.user if request else None
+        only_public_fields = user.is_anonymous() if user else True
+
+        if hasattr(self.opts, 'public_fields') and only_public_fields:
+            for key in public_fields.keys():
+                if key not in self.opts.public_fields:
+                    public_fields.pop(key, None)
+        return public_fields
+
+    @fields.setter
+    def fields(self, fields):
+        self._fields = fields
 
 class NestedModelSerializerMixin(object):
     def from_native(self, value, files=None):

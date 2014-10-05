@@ -1,32 +1,35 @@
-extends _base_product_detail
-block tab
-  .block-tab
-    form(action="itmes")
+-load product
+
+.block-tab#tabs-availability
+    form
+      {% monthcalendar %}
       .row.indent-t-sm.indent-b-sm
         .col-xs-7
           h3 Sélectionner le mois
         .col-xs-5
           .without-search.select-gradient
-            select: each month in months
-              option(value="#{month}") #{month} 2014
+            select
+              {% for month in months %}
+              option(value="{{ month|date:'Yd' }}") {{ month|date:'F Y' }}
+              {% endfor %}
       .row
         .col-xs-6
           table.calendar.text-center
             thead
-              tr: each day in days_of_week
-                td #{day}
-            tbody: each day, count in days
-              if count % 7 == 0
-                tr
-                  td #{+day}
-                  td #{+day+1}
-                  td #{+day+2}
-                  td #{+day+3}
-                  td #{+day+4}
-                  td #{+day+5}
-                  td #{+day+6}
+              tr
+                {% for week_day in week_days %}
+                td {{ week_day|date:'D' }}
+                {% endfor %}
+            tbody
+              {% for line in monthcalendar %}
+              tr
+                {% for day in line %}
+                td {% if day %}{{ day }}{% endif %}
+                {% endfor %}
+              {% endfor %}
         .col-sm-6
           p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.
+      {% endmonthcalendar %}
       .row.indent-t-sm
         .col-xs-4: .checkbox
           label(for="inform")
