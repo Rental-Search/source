@@ -1,5 +1,6 @@
 -load i18n
 
-ul.nav.without-spaces.row
+ul.without-spaces
   each category in category_list
+    li.spacer
     li: a(href="{{ category.get_absolute_url }}", title="{% trans 'location'%} {{ category.name }}") {{ category.name|capfirst }}

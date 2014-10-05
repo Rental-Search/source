@@ -26,11 +26,13 @@ block append content-body
           section
             .section-body
               .part.picture-tab#tabs
-                ul.nav.without-spaces
+                ul.nav.nav-justified
                   -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"], ["Localisation", "#tabs-location"], ["Disponibilité", "#tabs-availability"]]
                   each title, href in tabs
+                    li.spacer
                     li: a(href="{{ href }}").pad-v-2 {{ title }}
                   if insurance_available
+                    li.spacer
                     li: a(href="#tabs-insurance").pad-v-2 Assurance
                 //-include ./product_detail
                 //-include ./tab_tarifs

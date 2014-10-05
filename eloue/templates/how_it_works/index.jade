@@ -21,7 +21,7 @@ block append content-body
       section.footer-links.framing:         include ../jade/_footer_links
       section.rss:                          include ../jade/_rss
 
-  script.
+  script
     $('p.content').hide();
     $('.toggle-content').on('click', function () {
       $(this).closest('li').find('.content').slideToggle('fast');

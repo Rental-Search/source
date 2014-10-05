@@ -35,7 +35,10 @@ aside
 
   .owner-information
     .block-thumbnail
-      +block-with-thumbnail(px(80, $section-fz), 50%)
+      +block-with-thumbnail($thumbnail-md, 50%)
+    .thumbnail-img a
+      +default-user
+
       .rate
         margin: .5em 0
     .connection
@@ -49,9 +52,10 @@ aside
         display: inline-block
         margin-right: .5em
         margin-bottom: .5em
-        width: px(30, $section-fz)
-        height: px(30, $section-fz)
-        line-height: px(30, $section-fz)
+        width: $thumbnail-sm
+        height: $thumbnail-sm
+        +default-user
+        vertical-align: middle
         img
           height: 100%
           width: 100%
@@ -64,7 +68,7 @@ aside
           font-weight: bolder
   .similar-listing
     li
-      +block-with-thumbnail(px(80, $section-fz), $bd-rad)
+      +block-with-thumbnail($thumbnail-md)
       h6
         color: $gray-dark
         font-weight: $fw-semibold
@@ -72,6 +76,9 @@ aside
         margin: .5em 0 0
       p
         margin: .25em 0 .5em !important
+    .thumbnail-img a
+      +default-product
+
   .connected-with-owner
     p
       margin: 1em 0 0

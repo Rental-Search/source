@@ -284,13 +284,13 @@ PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
 PIPELINE_CSS = {
     'extrastyles': {
         'source_filenames': (
-            'bower_components/chosen/chosen.css',
-            'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
-            'bower_components/bootstrap-datepicker/css/datepicker3.css',
-            'bower_components/toastr/toastr.min.css',
             'fonts/flaticons_social/flaticons_social.css',
             'fonts/flaticons_solid/flaticons_solid.css',
             'fonts/flaticons_stoke/flaticons_stoke.css',
+            'bower_components/chosen/chosen.min.css',
+            'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
+            'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/toastr/toastr.min.css',
         ),
         'output_filename': 'css/extra.css',
         'extra_context': {
