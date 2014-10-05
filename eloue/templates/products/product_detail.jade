@@ -24,9 +24,8 @@ block tab
         .map-inner
           span.whirly
           .map#map-canvas-small(locationY="{{ product.location.y|stringformat:'f' }}", locationX="{{ product.location.x|stringformat:'f' }}")
-            //- a place for embedding the map
       .location-title-inner
         .location-title
           i.flaticon.solid.loca.location-pin-3.icon-li.icon-lg
-          h4 {{ product.object.address.address1 }}
+          h4 {{ product_object.address.address1 }}
           small {{ product.city|title }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}

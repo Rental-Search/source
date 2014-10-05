@@ -1,15 +1,46 @@
--load product
+-load product i18n
 
 h3 Déscription
 .row
-	{% if properties %}
-	.col-sm-6.text {{ product.description|linebreaksp }}
-	.col-sm-6.properties
-		table.calendar.bd-clear: tbody
-			each property in properties
-				tr
-					td {{ property.property.name }}
-					td: b {{ property.value }}&nbsp;&nbsp;
-	{% else %}
-	.col.text {{ product.description|linebreaksp }}
-	{% endif %}
+  {% if product_type != 'product' or rating.id__count or properties %}
+  .col-sm-6.text {{ product.description|linebreaksp }}
+  .col-sm-6.properties
+    table.calendar.bd-clear: tbody
+      {% if rating.id__count %}
+      tr
+        td {% trans 'Notation' %}
+        td: b {{ rating.id__count }}&nbsp;&nbsp;
+          {% with rating.note__avg as rate %}
+          include ../../_rate
+          {% endwith %}
+      {% endif %}
+      {% if product_type == 'carproduct' %}
+      tr
+        td {% trans 'Marque' %}
+        td: b {{ product_object.brand }}&nbsp;&nbsp;
+      tr
+        td {% trans 'Modèle' %}
+        td: b {{ product_object.model }}&nbsp;&nbsp;
+      tr
+        td {% trans 'Consommation' %}
+        td: b {{ product_object.consumption }}&nbsp;&nbsp;
+      {% endif %}
+      {% if product_type == 'realestateproduct' %}
+      tr
+        td {% trans 'capacity' %}
+        td: b {{ product_object.capacity }}&nbsp;&nbsp;
+      tr
+        td {% trans 'private_life' %}
+        td: b {{ product_object.private_life }}&nbsp;&nbsp;
+      tr
+        td {% trans 'chamber_number' %}
+        td: b {{ product_object.chamber_number }}&nbsp;&nbsp;
+      {% endif %}
+      //- generic properties from products.models.ProperyValue model
+      each property in properties
+        tr
+          td {{ property.proeprty.name }}
+          td: b {{ property.value }}&nbsp;&nbsp;
+  {% else %}
+  .col-sm-6.text {{ product.description|linebreaksp }}
+  {% endif %}

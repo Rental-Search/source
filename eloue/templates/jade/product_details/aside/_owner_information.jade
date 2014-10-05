@@ -9,16 +9,13 @@
             .thumbnail-content
                 h5
                     a(href="{{ product.owner_url }}") {{ product.owner }}
-                -var stars = [1,2,3,4,5]
-                each s in stars
-                    if s == product.object.average_note
-                        span.flaticon.solid.star-2.current-rate
-                    else
-                        span.flaticon.solid.star-2
+                {% with 3 as rate %}
+                include ../../_rate
+                {% endwith %}
                 p
                     | Membre depuis le
                     br
-                    span {{ product.object.owner.date_joined|date:"l d F Y" }}
+                    span {{ product_object.owner.date_joined|date:"d F Y" }}
     .part
         a(href="#/message", data-dismiss="modal").btn.bg-success.send-message
             i.flaticon.stroke.mail-2

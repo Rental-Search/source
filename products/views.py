@@ -762,7 +762,7 @@ class HomepageView(CommonPageContextMixin, TemplateView):
             'cities_list': product_stats,
             'total_products': Product.on_site.only('id').count(),
             'product_list': last_added(product_search, self.location, limit=8),
-            'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at')[:10],
+            'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at'),
         }
 
     def get_context_data(self, **kwargs):
@@ -793,17 +793,19 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         product = self.object.object
+        product_type = product.name
         comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
         context = {
             'properties': product.properties.select_related('property'),
-            'options': getattr(product, 'options', []),
             'product_list': self.sqs.more_like_this(product)[:4],
             'product_comments': comment_qs.filter(booking__product=product),
             'owner_comments': comment_qs.filter(booking__owner=product.owner),
+            'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
+            'product_type': product_type,
+            'product_object': getattr(product, product_type) if product_type != 'product' else product,
         }
         context.update(super(ProductDetailView, self).get_context_data(**kwargs))
         return context
-
 
 class PublishItemView(CommonPageContextMixin, TemplateView):
     template_name = 'publich_item/index.jade'
