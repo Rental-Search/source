@@ -255,10 +255,10 @@ STATIC_URL = env('STATIC_URL', '/static/')
 STATICFILES_DIRS = [local_path('static/'), ]
 STATICFILES_STORAGE = env('STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
 STATICFILES_FINDERS = (
-    #'pipeline.finders.FileSystemFinder',
-    #'pipeline.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    #'eloue.compat.pipeline.finders.FileSystemFinder',
+    #'eloue.compat.pipeline.finders.AppDirectoriesFinder',
     'eloue.compat.pipeline.finders.TemplatesFileSystemFinder',
 )
 
