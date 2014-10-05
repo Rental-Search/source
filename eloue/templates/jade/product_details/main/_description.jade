@@ -10,7 +10,7 @@ h3 Déscription
       tr
         td {% trans 'Notation' %}
         td: b {{ rating.id__count }}&nbsp;&nbsp;
-          {% with rating.note__avg as rate %}
+          {% with rating.note__avg|stringformat:'d' as rate %}
           include ../../_rate
           {% endwith %}
       {% endif %}
