@@ -531,7 +531,7 @@ class Picture(models.Model):
     thumbnail = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=60, height=60),
+            Crop(width=100, height=100),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ],
@@ -539,7 +539,7 @@ class Picture(models.Model):
     profile = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=200, height=170),
+            Crop(width=300, height=200),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ],
@@ -547,7 +547,7 @@ class Picture(models.Model):
     home = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=120, height=140),
+            Crop(width=180, height=120),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ],
@@ -555,7 +555,7 @@ class Picture(models.Model):
     display = ImageSpecField(
         source='image',
         processors=[
-            ResizeToFit(width=578, height=500),
+            ResizeToFit(width=450, height=300),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ],
