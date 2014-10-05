@@ -23,7 +23,10 @@ form(action="detail-search").section-body
         {% endfor %}
       else
         for category in category_list
-          option(value="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+          if breadcrumbs.categorie.value = category.slug
+            option(selected, value="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+          else
+            option(value="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
 
   label.caption(for="where") où
   input#where(type="text", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
