@@ -17,7 +17,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for user registration.
      */
     EloueCommon.factory("Registration", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "users\\/", {},
+        return $resource(Endpoints.api_url + "users/?", {},
             {
                 "register": {
                     method: "POST",
@@ -41,9 +41,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing product related messages.
      */
     EloueCommon.factory("ProductRelatedMessages", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "productrelatedmessages\\/", {},
+        return $resource(Endpoints.api_url + "productrelatedmessages/?", {},
             {
-                "get": { method: "GET", url: Endpoints.api_url + "productrelatedmessages/:id\\/", params: {id: ":id"}},
+                "get": { method: "GET", url: Endpoints.api_url + "productrelatedmessages/:id/?", params: {id: ":id"}},
                 "save": {method: "POST"}
             });
     }]);
@@ -51,11 +51,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     /**
      * Factory for managing contacts.
      */
-    EloueCommon.factory("Contacts", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource("data/contacts.json", {},
-            {
-                "get": { method: "GET"}
-            });
+    EloueCommon.factory("Contacts", ["$resource", function ($resource) {
+        return $resource("data/contacts.json");
     }]);
 
     /**
@@ -64,7 +61,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Categories", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "categories/:id/?", {},
             {
-                "getChildren": { method: "GET", url: Endpoints.api_url + "categories/:id/children\\/", isArray: true}
+                "getChildren": { method: "GET", url: Endpoints.api_url + "categories/:id/children/?", isArray: true}
             });
     }]);
 
@@ -75,7 +72,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
         return $resource(Endpoints.api_url + "products/:id/?", {},
             {
                 "update": { method: "PUT" },
-                "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats\\/" }
+                "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats/?" }
             });
     }]);
 
@@ -83,7 +80,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for checikng availability of product and retrieving product information.
      */
     EloueCommon.factory("CheckAvailability", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "products/:id/is_available\\/", {},
+        return $resource(Endpoints.api_url + "products/:id/is_available/?", {},
             {
                 "get": { method: "GET", params: {id: ":id", started_at: ":started_at", ended_at: "ended_at", quantity: ":quantity"}}
             });
@@ -137,7 +134,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Bookings", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "bookings/:uuid/?", {},
             {
-                "pay": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/pay\\/"}
+                "pay": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/pay/?"}
             });
     }]);
 
@@ -145,7 +142,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing pictures.
      */
     EloueCommon.factory("Pictures", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "pictures\\/");
+        return $resource(Endpoints.api_url + "pictures/?");
     }]);
 
     /**

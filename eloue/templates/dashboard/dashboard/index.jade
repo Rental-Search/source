@@ -38,8 +38,9 @@ block content-view
 
       li.tab-vertical
         .indent-xs
+         //-
           h2.text-black.indent-xs-b Vérifications
-        //-
+
           ul
             each verify in tenant_verification
               li.indent-xs-v
@@ -61,11 +62,13 @@ block content-view
           li.col-sm-2
             .select-gradient.without-search.date-picker
               //-select(ng-model="selectedActivityType", ng-options="type.id as type.name for type in activityTypes | orderBy:'id':true", ng-change="filterByActivityType()")
-              select(ng-model="selectedActivityType", ng-change="filterByActivityType()", eloue-chosen)
+              //-
+               select(ng-model="selectedActivityType", ng-change="filterByActivityType()", eloue-chosen)
                 option(ng-repeat="type in activityTypes | orderBy:'id':true", value="{{type.id}}") {{type.name}}
           li.col-sm-8.text-center
             h4 Votre activité sur e-loue
           li.col-sm-2.text-success.text-right: p
+           //-
             a(href="#")
               i.icon-lg.flaticon.stroke.mail-1.indent-sm-r
                 span.badge-count-action(ng-show="!!unreadMessageThreadsCount", ng-bind="unreadMessageThreadsCount")
