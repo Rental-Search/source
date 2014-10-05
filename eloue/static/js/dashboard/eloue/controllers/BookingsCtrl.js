@@ -44,16 +44,19 @@ define(["angular", "eloue/app"], function (angular) {
             });
 
             $scope.filterByOwner = function () {
+                $scope.markListItemAsSelected("filter-", "Propriétaires");
                 $scope.bookingFilter.owner = $scope.currentUserUrl;
                 $scope.bookingFilter.borrower = undefined;
             };
 
             $scope.filterByBorrower = function () {
+                $scope.markListItemAsSelected("filter-", "Emprunteurs");
                 $scope.bookingFilter.owner = undefined;
                 $scope.bookingFilter.borrower = $scope.currentUserUrl;
             };
 
             $scope.filterByBoth = function () {
+                $scope.markListItemAsSelected("filter-", "Tous");
                 $scope.bookingFilter.owner = undefined;
                 $scope.bookingFilter.borrower = undefined;
             };

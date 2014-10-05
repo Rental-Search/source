@@ -26,6 +26,7 @@ define(["angular", "eloue/app"], function (angular) {
             // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
+                $scope.markListItemAsSelected("booking-", $stateParams.uuid);
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();

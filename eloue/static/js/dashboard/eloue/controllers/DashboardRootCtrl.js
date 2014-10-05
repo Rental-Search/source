@@ -46,6 +46,17 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                 }
             });
 
+            $scope.markListItemAsSelected = function(prefix, id) {
+                $('li[id^=' + prefix + ']').each(function () {
+                    var item = $(this);
+                    if (item.attr("id") == (prefix + id)) {
+                        item.addClass("current");
+                    } else {
+                        item.removeClass("current");
+                    }
+                });
+            };
+
             // The method to initiate custom scrollbars
             $scope.initCustomScrollbars = function () {
 
