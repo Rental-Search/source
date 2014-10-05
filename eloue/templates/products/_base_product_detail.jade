@@ -7,7 +7,6 @@ block append styles
 
 block scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
-  //- TODO: add bower/requirejs support for script(src="#{STATIC_URL}js/bootstrap/carousel.js")
 
 block append content-body
   #fb-root
@@ -26,12 +25,18 @@ block append content-body
         main.col-sm-8
           section
             .section-body
-              .part.picture-tab
+              .part.picture-tab#tabs
                 ul.nav.without-spaces
-                //-
-                  each tab in tabs
-                    li: a( href = "#{tab.href}" ).pad-v-2 #{tab.title}
-                block tab
+                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"], ["Localisation", "#tabs-location"], ["Disponibilité", "#tabs-availability"]]
+                  each title, href in tabs
+                    li: a(href="{{ href }}").pad-v-2 {{ title }}
+                  if insurance_available
+                    li: a(href="#tabs-insurance").pad-v-2 Assurance
+                //-include ./product_detail
+                //-include ./tab_tarifs
+                include ./tab_available
+                if insurance_available
+                  //-include ./tab_terms
               .part.description
                 include ../jade/product_details/main/_description
               if product_comments

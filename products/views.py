@@ -779,7 +779,7 @@ class ProductListView(CommonPageContextMixin, ProductList):
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
     model = Product
-    template_name = 'products/product_detail.jade'
+    template_name = 'products/_base_product_detail.jade'
     context_object_name = 'product'
 
     def get(self, request, *args, **kwargs):
@@ -803,6 +803,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
             'product_type': product_type,
             'product_object': getattr(product, product_type) if product_type != 'product' else product,
+            'insurance_available': settings.INSURANCE_AVAILABLE,
         }
         context.update(super(ProductDetailView, self).get_context_data(**kwargs))
         return context
