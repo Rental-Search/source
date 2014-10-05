@@ -22,11 +22,13 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     owner = indexes.CharField(model_attr='owner__username', faceted=True)
     owner_url = indexes.CharField(model_attr='owner__get_absolute_url', indexed=False)
     owner_avatar = indexes.CharField(null=True)
+    owner_avatar_medium = indexes.CharField(null=True)
     price = indexes.FloatField(faceted=True, null=True)
     sites = indexes.MultiValueField(faceted=True)
     summary = indexes.EdgeNgramField(model_attr='summary')
     url = indexes.CharField(model_attr='get_absolute_url', indexed=False)
     thumbnail = indexes.CharField(indexed=False, null=True)
+    thumbnail_medium = indexes.CharField(indexed=False, null=True)
     profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
@@ -41,19 +43,28 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     def prepare_categories(self, obj):
         if obj.category:
             return [category.slug for category in obj.category.get_ancestors(ascending=False, include_self=True)]
-    
+
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]:
-            return picture.thumbnail.url
+            return picture.thumbnail and picture.thumbnail.url
+
+    def prepare_thumbnail_medium(self, obj):
+        for picture in obj.pictures.all()[:1]:
+            return picture.home and picture.home.url
 
     def prepare_profile(self, obj):
         for picture in obj.pictures.all()[:1]:
-            return picture.profile.url
-    
+            return picture.profile and picture.profile.url
+
     def prepare_owner_avatar(self, obj):
         obj = obj.owner
         if obj.avatar and obj.thumbnail:
             return obj.thumbnail.url
+
+    def prepare_owner_avatar_medium(self, obj):
+        obj = obj.owner
+        if obj.avatar and obj.product_page:
+            return obj.product_page.url
 
     def prepare_price(self, obj):
         # It doesn't play well with season

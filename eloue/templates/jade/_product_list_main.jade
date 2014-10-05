@@ -5,7 +5,7 @@ ol.nav.row
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper
             if product.thumbnail
-              img(src="{{ product.thumbnail }}")
+              img(src="{{ product.profile }}")
             span.badge.price {{ product.price }}&euro; /jour
             span.badge-order {{ forloop.counter }}
         .info

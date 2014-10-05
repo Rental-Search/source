@@ -6,7 +6,7 @@
     each product in product_list
       li.col-sm-3: .product-item
         .product-image
-          a(href="{{ product.url }}").img-wrapper: img(style="background-image: url({{ product.thumbnail }})")
+          a(href="{{ product.url }}").img-wrapper: img(style="background-image: url({{ product.profile }})")
           span.badge.price {{ product.price }}&euro; /jour
 
         .product-info
