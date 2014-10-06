@@ -92,6 +92,14 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                 });
             };
 
+            $scope.getAvatar = function (uri) {
+                return uri ? uri : '/static/img/profile_img.png';
+            };
+
+            $scope.getProductImg = function (uri) {
+                return uri ? uri : '/static/img/product_img.png';
+            };
+
             // Nav bar autoresizing
             var dashboardElement = $('.dashboard');
             var dashboard = {

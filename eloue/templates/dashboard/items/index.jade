@@ -35,7 +35,7 @@ block details
                             input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image
                             input(type="hidden", name="product", value="{{productsBaseUrl}}{{product.id}}/")#product
                     li(ng-repeat="picture in product.pictures track by picture.id")
-                        img(ng-src="{{picture.image.thumbnail}}", alt="{{product.summary}}")
+                        img(ng-src="{{getProductImg(picture.image.thumbnail)}}", alt="{{product.summary}}", onerror="$(this).attr('src', '/static/img/product_img.png')")
                 {% endverbatim %}
         form(name="itemInfoForm", ng-submit="updateProduct()")
             h2(ng-show="isAuto || isRealEstate") Caractéristiques

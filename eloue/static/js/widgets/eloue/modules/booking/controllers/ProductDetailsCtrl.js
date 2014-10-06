@@ -174,7 +174,11 @@ define(["angular", "eloue/modules/booking/BookingModule",
              * @param uri
              */
             $scope.getAvatar = function getAvatar(uri) {
-                return uri ? uri : '/static/img/avatar_default.jpg';
+                return uri ? uri : '/static/img/profile_img.png';
+            };
+
+            $scope.getProductImg = function (uri) {
+                return uri ? uri : '/static/img/product_img.png';
             };
 
             $scope.callOwner = function callOwner() {

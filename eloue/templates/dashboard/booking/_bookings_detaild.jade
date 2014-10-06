@@ -6,7 +6,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
     .block-with-thumbnail
       .col-thumbnail
         .thumbnail: a(href="#")
-          img(ng-src="{{bookingDetails.product.picture}}", alt="{{bookingDetails.product.summary}}", width="200")
+          img(ng-src="{{getProductImg(bookingDetails.product.picture)}}", alt="{{bookingDetails.product.summary}}", width="200", onerror="$(this).attr('src', '/static/img/product_img.png')")
       .col-exposition
         .indent-sm-h
           h3: b {{bookingDetails.product.summary}}
@@ -18,7 +18,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
             .block-with-thumbnail.indent-sm-v
               .col-thumbnail
                 .thumbnail: a(href="#")
-                  img(ng-src="{{bookingDetails.product.owner.avatar.thumbnail}}", alt="{{bookingDetails.product.owner.username}}", width="40", height="40")
+                  img(ng-src="{{getAvatar(bookingDetails.product.owner.avatar.thumbnail)}}", alt="{{bookingDetails.product.owner.username}}", width="40", height="40", onerror="$(this).attr('src', '/static/img/profile_img.png')")
               .col-exposition.text-gray
                 .indent-xs-h
                   h3.small: a(href="#").text-underline-hover {{bookingDetails.product.owner.username}}
