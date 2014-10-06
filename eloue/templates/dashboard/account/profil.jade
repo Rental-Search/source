@@ -10,7 +10,7 @@ block sections
           //- change photo
           .block-with-thumbnail.form-control.col-sm-12
             .col-thumbnail
-              .thumbnail.round.indent-sm-r: img(data-ng-src="{{currentUser.avatar.profil}}", alt="avatar")
+              .thumbnail.round.indent-sm-r: img(data-ng-src="{{getAvatar(currentUser.avatar.profil)}}", alt="{{currentUser.username}}", onerror="$(this).attr('src', '/static/img/profile_img.png')")
             .col-exposition
               label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifier mon image
                 input(type="file", name="avatar", file-chooser, on-change="onFileChanged()")#change-img

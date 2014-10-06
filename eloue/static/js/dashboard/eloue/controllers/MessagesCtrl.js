@@ -12,7 +12,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.messageThreadList = [];
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
-                $rootScope.$broadcast("startLoading", {parameters: [true, true], shouldReloadList: true});
+                $scope.$broadcast("startLoading", {parameters: [true, true], shouldReloadList: true});
             });
         }
     ]);

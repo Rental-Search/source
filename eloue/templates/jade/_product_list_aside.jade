@@ -43,17 +43,15 @@ form(action="detail-search").section-body
 
   label.caption(for="start-date") date de début
   .date-picker
-    .input-group
-      input#start-date(type="text", placeholder="").form-control
-      .input-group-addon.calendar
-        span
+    .table-cell.main-cell
+      input#start-date(type="text", placeholder="").form-control.date
+      i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="end-date") date de fin
   .date-picker
-    .input-group
-      input#end-date(type="text", placeholder="").form-control
-      .input-group-addon.calendar
-        span
+    .table-cell.main-cell
+      input#end-date(type="text", placeholder="").form-control.date
+      i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="price") prix
   input#price(type="range", name="price", min="5", max="100", step="1")

@@ -34,7 +34,7 @@ block section-content
             {% verbatim %}
             .col-thumbnail
               .thumbnail
-                img(data-ng-src="{{product.picture}}", alt="{{product.summary}}", width="130")
+                img(data-ng-src="{{getProductImg(product.picture)}}", alt="{{product.summary}}", width="130", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
             .col-exposition
               h3.small
                 | Location {{product.summary}}

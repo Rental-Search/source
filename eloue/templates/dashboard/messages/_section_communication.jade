@@ -4,7 +4,7 @@ section.tabs-vertical-static.pull-nothing(ng-show="!!messageThread")
       li.tab-vertical.block-with-thumbnail(ng-repeat="message in messageThread.messages track by message.id")
         .col-thumbnail
           .thumbnail.round: a(href="#")
-            img(ng-src="{{message.sender.avatar.thumbnail}}, alt="{{message.sender.username}}")
+            img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="{{message.sender.username}}", onerror="$(this).attr('src', '/static/img/profile_img.png')")
         .col-exposition
           h3: a(href="#").text-underline-hover {{message.sender.username}}
           p.small.text-gray-light {{message.sent_at}}

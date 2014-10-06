@@ -86,6 +86,7 @@ require([
     "widget",
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
+    "../common/eloue/commonApp",
     "eloue/route"
 ], function ($, _, angular) {
     "use strict";

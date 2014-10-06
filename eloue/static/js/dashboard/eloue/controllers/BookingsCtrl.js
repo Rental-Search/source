@@ -32,7 +32,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
 
-                $rootScope.$broadcast("startLoading", {parameters: [$scope.currentUser.id], shouldReloadList: true});
+                $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id], shouldReloadList: true});
 //                BookingsLoadService.getBookingList($scope.page, currentUser.id).then(function (bookingList) {
 //                    $scope.bookingList = bookingList;
 //                    // Get current user url
@@ -44,16 +44,19 @@ define(["angular", "eloue/app"], function (angular) {
             });
 
             $scope.filterByOwner = function () {
+                $scope.markListItemAsSelected("filter-", "Propriétaires");
                 $scope.bookingFilter.owner = $scope.currentUserUrl;
                 $scope.bookingFilter.borrower = undefined;
             };
 
             $scope.filterByBorrower = function () {
+                $scope.markListItemAsSelected("filter-", "Emprunteurs");
                 $scope.bookingFilter.owner = undefined;
                 $scope.bookingFilter.borrower = $scope.currentUserUrl;
             };
 
             $scope.filterByBoth = function () {
+                $scope.markListItemAsSelected("filter-", "Tous");
                 $scope.bookingFilter.owner = undefined;
                 $scope.bookingFilter.borrower = undefined;
             };

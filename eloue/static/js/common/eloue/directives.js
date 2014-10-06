@@ -295,7 +295,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                         );
                     };
 
-                    $rootScope.$on("startLoading", function (event, args) {
+                    scope.$on("startLoading", function (event, args) {
                         if (args.shouldReloadList) {
                             scope.page = 1;
                             scope.shouldReloadList = true;
@@ -307,10 +307,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                         lazyLoad();
                     });
 
-                    $rootScope.$on("hideLoading", function () {
+                    scope.$on("hideLoading", function () {
                         loadingWidget.hide();
                     });
-                    $rootScope.$on("showLoading", function () {
+                    scope.$on("showLoading", function () {
                         loadingWidget.show();
                     });
                 }};
