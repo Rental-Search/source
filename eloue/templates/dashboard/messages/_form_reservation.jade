@@ -16,7 +16,7 @@ form(ng-submit="requestBooking()", ng-if="booking === null")
         .table-cell.without-search
             select(name="end_time", ng-model="newBooking.end_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen)
 
-  table.calendar.bd-wrap.indent-md-t: tbody
+  table(ng-if="booking === null").calendar.bd-wrap.indent-md-t: tbody
     {% verbatim %}
     tr
       td Durée
@@ -29,6 +29,6 @@ form(ng-submit="requestBooking()", ng-if="booking === null")
       td {{newBooking.total_amount}}€
     {% endverbatim %}
 
-  .row
+  .row(ng-if="booking === null")
     p.text-gray.indent-sm-v.text-center Assurance incluse
     button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Procédez à la réservation

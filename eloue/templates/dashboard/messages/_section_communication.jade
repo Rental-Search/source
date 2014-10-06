@@ -1,17 +1,17 @@
 {% verbatim %}
 section.tabs-vertical-static.pull-nothing(ng-show="!!messageThread")
-  ul.scrollbar-custom.messages-container
-      li.tab-vertical.block-with-thumbnail(ng-repeat="message in messageThread.messages track by message.id")
-        .col-thumbnail
-          .thumbnail.round: a(href="#")
-            img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="{{message.sender.username}}", onerror="$(this).attr('src', '/static/img/profile_img.png')")
-        .col-exposition
-          h3: a(href="#").text-underline-hover {{message.sender.username}}
-          p.small.text-gray-light {{message.sent_at}}
-          p.normal.text-gray.text-justify {{message.body}}
+    ul.scrollbar-custom.messages-container
+        li.tab-vertical.block-with-thumbnail(ng-repeat="message in messageThread.messages track by message.id")
+            .col-thumbnail
+                .thumbnail.round: a(href="#")
+                    img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="{{message.sender.username}}", width="40", height="40", onerror="$(this).attr('src', '/static/img/profile_img.png')")
+            .col-exposition
+                h3: a(href="#").text-underline-hover {{message.sender.username}}
+                p.small.text-gray-light {{message.sent_at}}
+                p.normal.text-gray.text-justify {{message.body}}
 
-  form(ng-submit="postNewMessage()").send-dialog-message.clearfix
-    .textarea-wrapper
-      textarea#message-text.expand(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...", ng-model="message")
-    button(type="submit").btn.bg-success-hover.text-white Envoyez
+    form(ng-submit="postNewMessage()").send-dialog-message.clearfix
+        .textarea-wrapper
+            textarea#message-text.expand(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...", ng-model="message")
+        button(type="submit").btn.bg-success-hover.text-white Envoyez
 {% endverbatim %}

@@ -75,6 +75,8 @@ define(["angular", "eloue/app"], function (angular) {
 
                             $scope.booking = booking;
                             $scope.updateNewBookingInfo();
+                        } else {
+                            $scope.booking = booking;
                         }
                     });
                 }
