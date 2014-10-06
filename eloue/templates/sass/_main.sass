@@ -6,7 +6,7 @@ main
 	.part
 		border-top: none !important
 
-	.nav a
+	.picture-tab ul a
 		color: $gray-dark
 		font-weight: $fw-semibold
 		background-color: $gray-lighter
@@ -14,6 +14,7 @@ main
 		+border-bottom-radius($bd-rad)
 		border: 1px solid darken($gray-lighter, 10%)
 		padding: .75em 1.5em !important
+		text-decoration: none
 		&:hover
 			background-color: $brand-primary
 			border-color: $brand-primary
@@ -26,7 +27,9 @@ main
 			padding: $section-pad
 			+border-top-radius(0)
 			+border-bottom-radius(0)
-			+block-with-thumbnail(px(80, $section-fz), 50%)
+			+block-with-thumbnail($thumbnail-md, 50%)
+			.thumbnail-img a
+				+default-user
 			small
 				font-size: px(12, $section-fz)
 				font-weight: $fw-semibold

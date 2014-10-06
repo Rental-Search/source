@@ -14,14 +14,20 @@ $control-width: 2em
   .location-title,
   .items-thumbnail-inner
     margin-top: $indent
+  .carousel-inner
+    +default-product
+    padding-top: $carousel-height
 
   ////////////////////////////////////////
   // items карусели и миниатюрами к ним //
   ////////////////////////////////////////
-  .item
-    background-color: #ccc
+  .item,
+  .items-thumbnail-inner img
+    position: absolute
+    top: 0
+    left: 0
     width: 100%
-    padding-top: $carousel-height
+    height: 100%
   .items-thumbnail-inner
     +clearfix
     margin-left: -$indent
@@ -29,13 +35,15 @@ $control-width: 2em
       width: 20%
       float: left
       padding-left: $indent
-      .items-thumbnail
-        cursor: pointer
-        display: block
-        width: 100%
-        padding-top: 100%
+    .items-thumbnail
+      +default-product
+      cursor: pointer
+      display: block
+      width: 100%
+      padding-top: 100%
+      position: relative
   .item,
-  .items-thumbnail-inner a
+  .items-thumbnail-inner img
     background-position: center center
     background-size: cover
 

@@ -92,7 +92,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         };
 
         $scope.onResetSuccess = function (data) {
-            $scope.passwdResetStage = false;
+            $scope.$apply(function () {
+                $scope.passwdResetStage = false;
+            });
         };
 
         $scope.onResetError = function (jqXHR) {
@@ -143,7 +145,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 AuthService.login(credentials);
             }, function (error) {
                 if (error.data && error.data.detail) {
-                    $scope.registrationError = error.data.detail;
+                    $scope.$apply(function () {
+                        $scope.registrationError = error.data.detail;
+                    });
                 }
             });
         };

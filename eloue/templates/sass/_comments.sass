@@ -50,7 +50,7 @@ $animation-fill-mode: infinite
 				animation-play-state: paused
 				z-index: 10
 			@for $i from 1 through 10
-				&:nth-of-type(#{$i})
+				&:nth-of-type(#{$i}n)
 					animation-duration: random(5) + 4s
 
 			a
@@ -88,6 +88,10 @@ $animation-fill-mode: infinite
 					left: 0
 					top: 0
 					margin: $pad * $line-height-base
+					width: $thumbnail-sm
+					height: $thumbnail-sm
+					+default-user
+
 				p
 					color: inherit
 					margin-bottom: .5em

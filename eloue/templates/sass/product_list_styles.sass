@@ -110,6 +110,7 @@ main
           margin-top: $indent-xs
           margin-right: $indent-xs
         a
+          +default-product
           position: absolute
           top: 0
           left: 0
@@ -139,11 +140,12 @@ main
         display: table-cell
       .declarer-thumbnail
         background-color: $gray-lighter
-        width: 40px
-        height: 40px
+        min-width: $thumbnail-sm
+        height: $thumbnail-sm
         overflow: hidden
         display: inline-block
         +border-radius(50%)
+        +default-user
       .badge-pro
         font-size: px(11,15)
         text-transform: uppercase

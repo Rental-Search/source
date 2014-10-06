@@ -5,7 +5,7 @@ ol.nav.row
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper
             if product.thumbnail
-              img(src="{{ product.thumbnail }}")
+              img(src="{{ product.profile }}")
             span.badge.price {{ product.price }}&euro; /jour
             span.badge-order {{ forloop.counter }}
         .info
@@ -17,14 +17,9 @@ ol.nav.row
           //- TODO: need a better solution here to hit SQL DB only once for all products in the list
           {% with product.object.comments.count as comments_num %}
           if comments_num
-            {% with product.object.average_note|stringformat:'d' as average_rate %}
+            {% with product.object.average_note|stringformat:'d' as rate %}
             .rate
-              -var stars = [1,2,3,4,5]
-              each s in stars
-                if s == average_rate
-                  span.flaticon.solid.star-2.current-rate
-                else
-                  span.flaticon.solid.star-2
+              include ./_rate
             {% endwith %}
             span.sprite-comment
               i.flaticon.stroke.writing-comment

@@ -255,10 +255,10 @@ STATIC_URL = env('STATIC_URL', '/static/')
 STATICFILES_DIRS = [local_path('static/'), ]
 STATICFILES_STORAGE = env('STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
 STATICFILES_FINDERS = (
-    #'pipeline.finders.FileSystemFinder',
-    #'pipeline.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    #'eloue.compat.pipeline.finders.FileSystemFinder',
+    #'eloue.compat.pipeline.finders.AppDirectoriesFinder',
     'eloue.compat.pipeline.finders.TemplatesFileSystemFinder',
 )
 
@@ -284,13 +284,13 @@ PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
 PIPELINE_CSS = {
     'extrastyles': {
         'source_filenames': (
-            'bower_components/chosen/chosen.css',
-            'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
-            'bower_components/bootstrap-datepicker/css/datepicker3.css',
-            'bower_components/toastr/toastr.min.css',
             'fonts/flaticons_social/flaticons_social.css',
             'fonts/flaticons_solid/flaticons_solid.css',
             'fonts/flaticons_stoke/flaticons_stoke.css',
+            'bower_components/chosen/chosen.min.css',
+            'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
+            'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/toastr/toastr.min.css',
         ),
         'output_filename': 'css/extra.css',
         'extra_context': {
@@ -318,7 +318,8 @@ PIPELINE_CSS = {
     'product_list_styles': {
         'source_filenames': (
             'sass/product_list_styles.sass',
-            'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css'
+            #'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css',
+            'css/jquery-ui.css', # temporary use our own hacked version of jQuery-UI styles to get green sliders
         ),
         'output_filename': 'css/product_list_styles.css',
         'extra_context': {

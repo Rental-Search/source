@@ -1,91 +1,72 @@
 .product-list
-  padding: $block-section-pad 0
-  ul
-    margin: 2em 0
-    li
-      margin: 0
-      padding: 1em
+  list-style-type: none
+  padding-left: 0
+  margin-bottom: 0
+  > li
+    margin: ($grid-gutter-width / 2) 0
 
-  .thumbnail
-    +border-bottom-radius($bd-rad)
-    +border-top-radius($bd-rad)
-    white-space: nowrap
-    padding: 0
-    position: relative
-    border: none
-    border-bottom: px(1) solid darken($gray-lighter, 8%)
-    color: $gray-dark
-    background-color: white
-    overflow: hidden
-    margin: 0
-
-  .img-wrapper
-    width: 100%
-    display: block
-    overflow: hidden
-    &:hover .fog
-      background: transparent
-    .fog
-      +transition(all .2s ease-in-out)
-    img
-      width: 100%
-
-  .info
-    overflow: hidden
-    padding: 1em
+  .product-item
     border: px(1) solid $gray-lighter
-    border-top: none
-    +border-bottom-radius($bd-rad)
-    position: relative
-    &:before
-      position: absolute
-      content: ''
-      bottom: 0
-      right: 0
-      width: px(70)
-      height: 100%
-      background: white
-      background: linear-gradient(to right, rgba(255,255,255,0), white px(10))
-    h6
-      color: $gray-dark
-      font-weight: $fw-semibold
-      font-size: px(13)
-      margin: 0
-    p
-      margin: .5em 0 0 0
-      font-weight: $fw-semibold
-      font-size: px(11)
-      color: $gray-light
-    .declarer
-      position: absolute
-      bottom: 0
-      top: 0
-      right: px(10)
-      $w: px(40)
-      width: $w
-      height: $w
-      $bd-rad: 50%
-      +border-bottom-radius($bd-rad)
-      +border-top-radius($bd-rad)
-      overflow: hidden
-      margin: auto 0
-      img
-        height: 100%
-        width: 100%
+    border-radius: px(5)
+    overflow: hidden
+    box-shadow: 0 px(1) 0 rgba(0,0,0,0.1)
 
-  .price
-    font-size: px(12)
-    position: absolute
+  img
     top: 0
-    right: 0
-    margin: .7em
+    left: 0
+    height: 100%
+    width: 100%
+    position: absolute
+    background-position: center center
+    background-size: cover
+    background-repeat: no-repeat
 
-  button
-    text-align: center
-    height: 3em
-    color: white !important
-    font-weight: $fw-bold
-    padding: 0 1.5em
-    i
-      font-size: 1.2em
-      margin-right: 1em
+  .product-image
+    padding-top: (60%)
+    +default-product
+    position: relative
+    display: block
+    .price
+      position: absolute
+      top: 0
+      right: 0
+      margin: $indent-xs
+
+  .product-info
+    display: table
+    border-top: px(1) solid $gray-lighter
+
+  .product-owner,
+  .product-description
+    display: table-cell
+    vertical-align: middle
+
+  .product-description
+    max-width: 0
+    width: 100%
+    padding: $indent-xs
+    p,
+    h6
+      +text-overflow()
+      +empty-element()
+      font-weight: $fw-semibold
+    p
+      color: $gray-medium
+      font-size: px(11)
+      margin-bottom: 0
+    h6
+      font-size: px(13)
+      margin: 0 0 .25em
+
+  .product-owner
+    padding: $indent-xs
+    bottom: 0
+    a
+      +default-user
+      width: $thumbnail-sm
+      height: $thumbnail-sm
+      overflow: hidden
+      display: block
+      border-radius: 50%
+      position: relative
+

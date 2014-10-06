@@ -1,11 +1,13 @@
-extends _base_product_detail
-block tab
-  .block-tab
-    h3.indent-t-sm Assuarence
+.block-tab#tabs-insurance
+    {% if product.pro %}
+    p.text-gray-strong Il n'y a pas d'asurance pour les professionnels
+    {% else %}
+    {% if product_type == 'product' %}
+    h3.indent-t-sm Assuarence de l'objet
     ul.not-ordered
-      li Casse accidientele (vol exclu) pour un montant maximum de 750€.
-      li Pour les réparations n'excédant pas 750€ : franchise de 15% du mountant des réparations.
-      li Pour les réparations supérieures à 750€ : franchise de 112,5€ plus le mountant des réparations excédant 750€.
+      li Casse accidientele (vol exclu) pour un montant maximum de 750&euro;.
+      li Pour les réparations n'excédant pas 750&euro; : franchise de 15% du mountant des réparations.
+      li Pour les réparations supérieures à 750&euro; : franchise de 112,5&euro; plus le mountant des réparations excédant 750&euro;.
 
     h3.indent-t-sm Conditioins de location
     ul.not-ordered
@@ -13,3 +15,33 @@ block tab
       li Le locataire doit payer sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location.
       li La location doit see faire en France métropolitaine.
       li La durée de la location ne peut pas excéder 90 jours.
+    {% endif %}
+    {% if product_type == 'carproduct' %}
+    h3.indent-t-sm Assuarence du véhicule
+    ul.not-ordered
+      li Assurance accident et vol inclus dans le prix du montant de la réservation. La franchise de cette assurance est de 2000&euro;.
+
+    h3.indent-t-sm Conditioins de location
+    ul.not-ordered
+      li Le conducteur doit avoir au moins 21 ans.
+      li Le conducteur doit être titulaire d'un permis de conduire obtenu depuis plus de 2 ans valable en France.
+      li Le conducteur doit payer la location sur le site avec une carte bancaire à son nom qu'il présentera au propriétaire au début de la location, ainsi que son permis de conduire.
+      li Il est possible d'avoir plusieurs conducteurs. Dans ce cas, chaque conducteur devra être mentionné sur le contrat de location et répondre aux conditions d'age et de permis de conduire.
+      li Le véhicule ne doit circuler qu'en France métropolitaine.
+      li L'usage est exclusivement privé.
+      li Le transport de passagers à titre onéreux est exclus.
+    {% endif %}
+    {% if product_type == 'carproduct' %}
+    h3.indent-t-sm Assuarence du logement
+    ul.not-ordered
+      li Annulation de séjour
+      li Intéruption de séjour
+      li Responsabilité civile villégiature
+      li.last Non-conformité du bien loué
+
+    h3.indent-t-sm Conditioins de location
+    ul.not-ordered
+      li Le locataire doit être un particulier.
+      li La durée de la location ne peut pas excéder 90 jours.
+    {% endif %}
+    {% endif %}

@@ -6,7 +6,15 @@ block append styles
   {% compressed_css "how_it_works_styles" %}
 
 block append scripts
-  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+  script(src="#{STATIC_URL}bower_components/requirejs/require.js", data-main="#{STATIC_URL}js/widgets/main.js")
+  script(src="#{STATIC_URL}bower_components/jquery/dist/jquery.min.js")
+  script
+    $(document).ready(function() {
+      $('p.content').hide();
+      $('.toggle-content').on('click', function () {
+        $(this).closest('li').find('.content').slideToggle('fast');
+        });
+    });
 
 block append content-body
   .container-flex
@@ -20,9 +28,3 @@ block append content-body
       //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
       section.footer-links.framing:         include ../jade/_footer_links
       section.rss:                          include ../jade/_rss
-
-  script.
-    $('p.content').hide();
-    $('.toggle-content').on('click', function () {
-      $(this).closest('li').find('.content').slideToggle('fast');
-      });

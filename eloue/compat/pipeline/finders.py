@@ -1,15 +1,13 @@
 
 from itertools import chain
 
-import os.path
-
-from django.conf import settings
-from django.contrib.staticfiles.finders import FileSystemFinder
+from django.contrib.staticfiles.finders import FileSystemFinder, AppDirectoriesFinder
 from django.core.files.storage import FileSystemStorage
 from django.template.loaders import filesystem
 from django.utils.functional import cached_property
 
-from pipeline.conf import settings as pl_settings
+from eloue.compat.pipeline.conf import settings
+
 
 class TemplatesFileSystemFinder(FileSystemFinder):
     loader_class = filesystem.Loader
@@ -30,12 +28,11 @@ class TemplatesFileSystemFinder(FileSystemFinder):
         Looks for files in PIPELINE_CSS and PIPELINE_JS
         """
         matches = []
-        for source in self.sources:
-            if self.filenames_match(path, source):
-                for match in self.loader.get_template_sources(path):
-                    if not all:
-                        return match
-                    matches.append(match)
+        if path in self.sources:
+            for match in self.loader.get_template_sources(path):
+                if not all:
+                    return match
+                matches.append(match)
         return matches
 
     def list(self, *args):
@@ -49,29 +46,11 @@ class TemplatesFileSystemFinder(FileSystemFinder):
         """
         Collects source file names from PIPELINE_CSS and PIPELINE_JS dictionaries
         """
-        res = []
-        for elem in chain(pl_settings.PIPELINE_CSS.values(), pl_settings.PIPELINE_JS.values()):
-            res.extend(elem.get('source_filenames', []))
-        return res
-
-    def filenames_match(self, path, source):
-        """
-        Checks if two file names match:
-            1. file names without extension are equal
-            2. requested file's extension is one of known translation targets (e.g. .css)
-        """
-        if source == path:
-            return True
-
-        path_name, path_ext = os.path.splitext(path)
-        source_name = os.path.splitext(source)[0]
-
-        # SCSS >= 3.3 compiles into 2 files, .css and .css.map
-        if path.endswith('.css.map'):
-            path_name, path_ext = os.path.splitext(path_name)
-
-        if path_name == source_name and path_ext in ('.css', '.js'):
-            return True
+        res = set()
+        for elem in chain(settings.PIPELINE_CSS.values(), settings.PIPELINE_JS.values()):
+            # TODO: add support for glob
+            res.update(elem.get('source_filenames', []))
+        return tuple(res)
 
     @cached_property
     def loader(self):
@@ -79,3 +58,37 @@ class TemplatesFileSystemFinder(FileSystemFinder):
         Instantiates Loader instance using 'loader_class' attribute
         """
         return self.loader_class()
+
+class PatternFilterMixin(object):
+    ignore_patterns = [
+        '*.less',
+        '*.scss',
+        '*.sass',
+        '*.coffee',
+    ]
+
+    def get_ignored_patterns(self, ignore_patterns):
+        return list(set(self.ignore_patterns + ignore_patterns or []))
+
+    def list(self, ignore_patterns):
+        ignore_patterns = self.get_ignored_patterns(ignore_patterns)
+        return super(PatternFilterMixin, self).list(ignore_patterns)
+
+class AppDirectoriesFinder(PatternFilterMixin, AppDirectoriesFinder):
+    """
+    Like AppDirectoriesFinder, but doesn't return any additional ignored
+    patterns.
+
+    This allows us to concentrate/compress our components without dragging
+    the raw versions in via collectstatic.
+    """
+    pass
+
+class FileSystemFinder(PatternFilterMixin, FileSystemFinder):
+    """
+    Like FileSystemFinder, but doesn't return any additional ignored patterns
+
+    This allows us to concentrate/compress our components without dragging
+    the raw versions in via collectstatic.
+    """
+    pass

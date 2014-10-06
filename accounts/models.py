@@ -103,7 +103,7 @@ class Patron(AbstractUser):
     thumbnail = ImageSpecField(
         source='avatar',
         processors=[
-            Crop(width=60, height=60),
+            Crop(width=40, height=40),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ],
@@ -111,7 +111,7 @@ class Patron(AbstractUser):
     profil = ImageSpecField(
         source='avatar',
         processors=[
-            ResizeToFit(width=100),
+            ResizeToFit(width=120, height=120),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ],
@@ -124,16 +124,15 @@ class Patron(AbstractUser):
             Transpose(Transpose.AUTO),
         ],
     )
-
     product_page = ImageSpecField(
         source='avatar',
         processors=[
-            ResizeToFit(width=74, height=74),
+            ResizeToFit(width=86, height=86),
             Adjust(contrast=1.2, sharpness=1.1),
             Transpose(Transpose.AUTO),
         ],
     )
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             if self.is_professional:

@@ -1,18 +1,20 @@
--load humanize
+-load humanize product
 
 .float-comments-wrapper.container
-	ul.row
-		for comment in comment_list
-			{% with comment.booking.product as product %}
-			li.col-sm-6: a(href="{{ product.get_absolute_url }}")
-				{% with product.pictures.all|first as picture %}
-				img(src="{{ picture.home.url }}")
-				{% endwith %}
-				p.text {{ comment.comment }}
-				p.info
-					| Par 
-					b.autor-name {{ comment.author.username }} 
-					span.time {{ comment.created_at|naturaltime }}
-				{{ product.summary|capfirst }} - {{ product.address.city|title }}{% if product.address.zipcode %}, {{ product.address.zipcode }}{%endif %}
-			{% endwith %}
+  {% for columns in comment_list|takeby_transposed:"2:10" %}
+  ul.row.col-sm-6
+    for comment in columns
+      {% with comment.booking.product as product %}
+      li: a(href="{{ product.get_absolute_url }}")
+        {% with product.pictures.all|first as picture %}
+        img(src="{{ picture.thumbnail.url }}")
+        {% endwith %}
+        p.text {{ comment.comment }}
+        p.info
+          | Par 
+          b.autor-name {{ comment.author.username }} 
+          span.time {{ comment.created_at|naturaltime }} 
+        {{ product.summary|capfirst }} - {{ product.address.city|title }}{% if product.address.zipcode %}, {{ product.address.zipcode }}{%endif %}
+      {% endwith %}
+  {% endfor %}
 .decorated-houses

@@ -35,6 +35,10 @@ class BookingTest(APITransactionTestCase):
         # check data
         self.assertEquals(min(response.data['count'], settings.REST_FRAMEWORK['PAGINATE_BY']), len(response.data['results']))
 
+    def test_booking_get_by_id(self):
+        response = self.client.get(_location('booking-detail', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'))
+        self.assertEquals(response.status_code, 200, response.data)
+
     def test_booking_create(self):
         response = self.client.post(_location('booking-list'), {
             'started_at': datetime.now() + timedelta(days=2),
@@ -165,6 +169,10 @@ class CommentTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
+    def test_comment_get_by_id(self):
+        response = self.client.get(_location('comment-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+
     def test_comment_get_author_owner(self):
         response = self.client.get(_location('comment-detail', pk=1))
         self.assertEquals(response.status_code, 200, response.data)
@@ -176,3 +184,58 @@ class CommentTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         self.assertIn('author', response.data, response.data)
         self.assertTrue(response.data['author'].endswith(_location('patron-detail', pk=1)))
+
+    def test_comment_delete(self):
+        Comment = get_model('rent', 'Comment')
+        self.assertEquals(Comment.objects.filter(pk=1).count(), 1)
+        response = self.client.delete(_location('comment-detail', pk=1))
+        self.assertEquals(response.status_code, 204, response.data)
+        self.assertEquals(Comment.objects.filter(pk=1).count(), 0)
+
+
+class SinisterTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'booking', 'sinister']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_sinister_create(self):
+        response = self.client.post(_location('sinister-list'), {
+            'product': _location('product-detail', pk=1),
+            'patron': _location('patron-detail', pk=1),
+            'booking': _location('booking-detail', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'),
+            'description': 'Description'
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('uuid', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('sinister-detail', pk=response.data['uuid'])))
+
+        Sinister = get_model('rent', 'Sinister')
+        sinister = Sinister.objects.get(pk=response.data['uuid'])
+
+        self.assertEqual(sinister.product_id, 1)
+        self.assertEqual(sinister.patron_id, 1)
+        self.assertEqual(sinister.booking_id, '87ee8e9dec1d47c29ebb27e09bda8fc3')
+        self.assertEqual(sinister.description, 'Description')
+
+    def test_sinister_get_by_id(self):
+        response = self.client.get(_location('sinister-detail', pk='aaf26618b6654a05bf3cc57ade322928'))
+        self.assertEquals(response.status_code, 200, response.data)
+
+    def test_sinister_list_paginated(self):
+        response = self.client.get(_location('sinister-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 2,
+            'previous': None,
+            'next': None
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))

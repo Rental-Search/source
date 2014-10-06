@@ -1,23 +1,22 @@
 -load humanize facets
 
 .container
-  h3.text-center {{ total_products|intcomma }} annonces de location dans toute la France
-  ul.nav.row
+  h3.text-center.indent-v-lg {{ total_products|intcomma }} annonces de location dans toute la France
+  ul.product-list.row
     each product in product_list
-      li.col-sm-6.col-md-3
-        .thumbnail
-          a(href="{{ product.url }}").img-wrapper
-            if product.thumbnail
-              img(src="{{ product.thumbnail }}")
-            span.fog
-          .info
+      li.col-sm-3: .product-item
+        .product-image
+          a(href="{{ product.url }}").img-wrapper: img(style="background-image: url({{ product.profile }})")
+          span.badge.price {{ product.price }}&euro; /jour
+
+        .product-info
+          .product-description
             h6: a(href="{{ product.url }}") {{ product.summary }}
             p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
-            if product.owner_url and product.owner_avatar
-              a(href="{{ product.owner_url }}").declarer: img(src="{{ product.owner_avatar }}", alt="{{ product.owner }}")
-          span.badge.price {{ product.price }}&euro; /jour
-  .row.text-center
+          .product-owner
+            a(href="{{ product.owner_url }}"): img(style="background-image: url({{ product.owner_avatar }})")
+  .row.text-center.indent-v-lg
     //- TODO: should use AJAX to fetch and insert next 8 items
-    button(type="button", onclick="location.href='{% facet_url breadcrumbs 'sort' '' %}';").btn.bg-success.btn-explore
-      i.flaticon.stroke.zoom-2
+    button(type="button", onclick="location.href='{% facet_url breadcrumbs 'sort' '' %}';").btn.bg-success.btn-explore.btn-lg
+      i.flaticon.stroke.zoom-2.indent-r-xs
       | Explorez toutes les annonces
