@@ -7,11 +7,11 @@
       {% with comment.booking.product as product %}
       li: a(href="{{ product.get_absolute_url }}")
         {% with product.pictures.all|first as picture %}
-        img(src="{{ picture.thumbnail.url }}")
+        span.img-wrapper: img(style="background-image: url({{ picture.thumbnail.url }})").bg-image
         {% endwith %}
         p.text {{ comment.comment }}
         p.info
-          | Par 
+          | Par
           b.autor-name {{ comment.author.username }} 
           span.time {{ comment.created_at|naturaltime }} 
         {{ product.summary|capfirst }} - {{ product.address.city|title }}{% if product.address.zipcode %}, {{ product.address.zipcode }}{%endif %}

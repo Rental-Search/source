@@ -4,8 +4,7 @@ ol.nav.row
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper
-            if product.thumbnail
-              img(src="{{ product.profile }}")
+            img(style="background-image: url({{ product.profile }})").bg-image
             span.badge.price {{ product.price }}&euro; /jour
             span.badge-order {{ forloop.counter }}
         .info
@@ -29,8 +28,7 @@ ol.nav.row
         .declarer-container
           .declarer
             span.declarer-name {{ product.owner }}
-            if product.owner_url and product.owner_avatar
-              a(href="{{ product.owner_url }}").declarer-thumbnail: img(src="{{ product.owner_avatar }}", alt="{{ product.owner }}")
+            a(href="{{ product.owner_url }}").declarer-thumbnail: img(style="background-image: url({{ product.owner_avatar }})").bg-image
           .btns
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2

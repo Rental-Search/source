@@ -2,9 +2,9 @@ ul.list-group
   each comment in comment_list
     li.list-group-item.thumbnail
       .thumbnail-img
-        a(href="{{ comment.author.get_absolute_url }}"): img(src="{{ comment.author.product_page.url }}", alt="avatar")
+        a(href="{{ comment.author.get_absolute_url }}"): img(style="background-image: url({{ comment.author.product_page.url }})").bg-image
       .thumbnail-content
-        h5 
+        h5
           a(href="#").indent-r-xs {{ comment.author.username }}
           {% with comment.note as rate %}
           include ../../_rate
