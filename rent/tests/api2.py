@@ -78,6 +78,9 @@ class BookingTest(APITransactionTestCase):
 #         self.assertIn('errors', response.data, response.data)
 #         self.assertIn('product', response.data['errors'], response.data)
 
+    def test_booking_comments(self):
+        self.fail('Not implemented!')
+
     def test_booking_pay_new_card(self):
         response = self.client.post(_location('booking-list'), {
             'started_at': datetime.now() + timedelta(days=2),
