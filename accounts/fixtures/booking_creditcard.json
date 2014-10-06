@@ -22,5 +22,18 @@
             "holder": 8,
             "card_number": "SLLLqssDLLS"
         }
+    },
+    {
+        "pk": 3,
+        "model": "accounts.creditcard",
+        "fields": {
+            "holder_name": "John Doe",
+            "masked_number": "4XXXXXXXXXXXX769",
+            "expires": "0517",
+            "keep": true,
+            "holder": 1,
+            "card_number": "CM`MvCpHNXC",
+            "subscriber_reference": "a11703993d1147348fdd1208f0cabbf6"
+        }
     }
 ]

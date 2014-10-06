@@ -16,7 +16,7 @@ def _location(name, *args, **kwargs):
 
 class BookingTest(APITransactionTestCase):
     reset_sequences = True
-    fixtures = ['patron', 'address', 'category', 'product', 'price', 'booking', 'comment', 'creditcard']
+    fixtures = ['patron', 'address', 'category', 'product', 'price', 'booking', 'comment', 'booking_creditcard']
 
     def setUp(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
