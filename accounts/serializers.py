@@ -11,7 +11,6 @@ from rest_framework_gis.serializers import MapGeometryField
 
 from accounts.forms import CreditCardForm
 from accounts import models
-from accounts.utils import viva_check_phone
 from eloue.api import serializers
 
 class GeoModelSerializer(serializers.ModelSerializer):
@@ -32,7 +31,6 @@ class AddressSerializer(GeoModelSerializer):
         geo_field = 'position'
 
 class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
-
     class Meta(AddressSerializer.Meta):
         public_fields = ('city', 'zipcode')
 
@@ -42,19 +40,8 @@ class PhoneNumberSerializer(serializers.ModelSerializer):
         fields = ('id', 'patron', 'number')
         immutable_fields = ('patron',)
 
-class NestedPhoneNumberSerializer(
-        serializers.NestedModelSerializerMixin,
-        PhoneNumberSerializer):
-
-    def transform_number(self, obj, value):
-        request = getattr(self, 'context', {}).get('request', None)
-        if request:
-            return viva_check_phone(value, request=request)
-        else:
-            return viva_check_phone(value)
-
-    class Meta(PhoneNumberSerializer.Meta):
-        public_fields = ('number',)
+class NestedPhoneNumberSerializer(serializers.NestedModelSerializerMixin, PhoneNumberSerializer):
+    pass
 
 class UserSerializer(serializers.ModelSerializer):
     username = CharField(required=False, max_length=30)
