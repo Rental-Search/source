@@ -10,10 +10,10 @@ section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selecte
             option(value="") Catégories
             option(ng-repeat="category in categories", value="{{category.id}}") {{category.name}}
   ul.scrollbar-custom(eloue-lazy-load, lazy-data="items", lazy-data-provider="ProductsService", lazy-load-method="getProductsByOwnerAndRootCategory")
-      li.tab-vertical.block-with-thumbnail(ng-repeat="item in items | filter:itemsFilter track by item.id", id="item-{{item.id}}")
+      li.tab-vertical.block-with-thumbnail(ng-repeat="item in items | filter:itemsFilter track by item.id", id="item-{{item.id}}", ui-sref="items.info({id: item.id})")
         .col-thumbnail
           .thumbnail
-            a(ui-sref="items.info({id: item.id})"): img(ng-src="{{item.picture}}", alt="{{item.summary}}", width="130")
+            a(ui-sref="items.info({id: item.id})"): img(ng-src="{{getProductImg(item.picture)}}", alt="{{item.summary}}", width="130", onerror="$(this).attr('src', '/static/img/product_img.png')")
         .col-exposition
           h3.small
             | Location&nbsp;

@@ -2,7 +2,7 @@ block content-view
   section.tabs-vertical-active.sm.scrollbar-custom
     ul(ng-init="account_tabs=[{title: 'Profil', sref: 'account.profile'}, {title: 'Vérification', sref: 'account.verification'}, {title: 'Adresses', sref: 'account.addresses'}, {title: 'Téléphones', sref: 'account.phones'}, {title: 'Paiements', sref: 'account.payments'}, {title: 'Mot de passe', sref: 'account.password'}, {title: 'Parainage', sref: 'account.invitation'}]")
       {% verbatim %}
-      li(ng-repeat="tab in account_tabs"): a.tab-vertical(ui-sref="{{tab.sref}}")
+      li(ng-repeat="tab in account_tabs", id="account-part-{{tab.sref}}"): a.tab-vertical(ui-sref="{{tab.sref}}")
         h3(ng-bind="tab.title")
       {% endverbatim %}
   .content-view(ui-view)

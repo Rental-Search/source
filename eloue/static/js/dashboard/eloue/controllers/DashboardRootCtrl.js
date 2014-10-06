@@ -46,6 +46,19 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                 }
             });
 
+            $scope.markListItemAsSelected = function(prefix, id) {
+                $('li[id^=' + prefix + ']').each(function () {
+                    var item = $(this);
+                    if (item.attr("id") == (prefix + id)) {
+                        item.addClass("current");
+                        item.find(".tab-vertical").addClass("current");
+                    } else {
+                        item.removeClass("current");
+                        item.find(".tab-vertical").removeClass("current");
+                    }
+                });
+            };
+
             // The method to initiate custom scrollbars
             $scope.initCustomScrollbars = function () {
 
@@ -77,6 +90,14 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                         disableOver: false
                     }
                 });
+            };
+
+            $scope.getAvatar = function (uri) {
+                return uri ? uri : '/static/img/profile_img.png';
+            };
+
+            $scope.getProductImg = function (uri) {
+                return uri ? uri : '/static/img/product_img.png';
             };
 
             // Nav bar autoresizing

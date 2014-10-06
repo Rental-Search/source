@@ -24,7 +24,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $q.all(promises).then(function (results) {
                 $scope.messageThread = results.messageThread;
-
+                $scope.markListItemAsSelected("thread-", $stateParams.id);
                 if ($scope.messageThread.product) {
 
                     // Get booking product

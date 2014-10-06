@@ -8,10 +8,10 @@
           h3 Sélectionner le mois
         .col-xs-5
           .without-search.select-gradient
-            select
-              {% for month in months %}
-              option(value="{{ month|date:'Yd' }}") {{ month|date:'F Y' }}
-              {% endfor %}
+              select(ng-model="selectedMonthAndYear", ng-change="updateCalendar()", eloue-chosen, opts="monthOptions").ng-hide(ng-show="true")
+                  {% verbatim %}
+                  option(ng-repeat="month in monthOptions", value="{{month.value}}") {{month.name}}
+                  {% endverbatim %}
       .row
         .col-xs-6
           table.calendar.text-center
@@ -20,24 +20,22 @@
                 {% for week_day in week_days %}
                 td {{ week_day|date:'D' }}
                 {% endfor %}
-            tbody
-              {% for line in monthcalendar %}
-              tr
-                {% for day in line %}
-                td {% if day %}{{ day }}{% endif %}
-                {% endfor %}
-              {% endfor %}
+            tbody.ng-hide(ng-show="true")
+                {% verbatim %}
+                tr(ng-repeat="week in weeks")
+                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : ''}}") {{day.dayOfMonth}}
+                {% endverbatim %}
         .col-sm-6
           p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.
       {% endmonthcalendar %}
       .row.indent-t-sm
         .col-xs-4: .checkbox
           label(for="inform")
-            input(type="checkbox")#inform
+            input(type="checkbox", ng-model="showUnavailable", ng-change="onShowUnavailable()")#inform
             span.flaticon.stroke.checkmark
           | Indisponiblités
         .col-xs-4: .checkbox
           label(for="reserve")
-            input(type="checkbox")#reserve
+            input(type="checkbox", ng-model="showBookings", ng-change="onShowBookings()")#reserve
             span.flaticon.stroke.checkmark
           | Réservations

@@ -3,12 +3,12 @@
         {% verbatim %}
         .message(ng-repeat="message in productRelatedMessages | orderBy:'sent_at'", class="{{(product.owner.id == message.sender.id ? 'from-declarer' : 'from-customer')}}")
             div(ng-show="product.owner.id == message.sender.id").thumbnail-img
-                a(href="{{message.sender.url}}"): img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="")
+                a(href="{{message.sender.url}}"): img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="", onerror="$(this).attr('src', '/static/img/profile_img.png')")
             .thumbnail-content
                 .thumbnail-frame
                     h4 {{message.sender.first_name}} {{message.sender.last_name}}
                     p(ng-bind="message.body")
                 p(ng-bind="message.sent_at | date : 'Le dd.MM.yyyy à HH:mm'").time
             div(ng-show="product.owner.id != message.sender.id").thumbnail-img
-                a(href="{{message.sender.url}}"): img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="")
+                a(href="{{message.sender.url}}"): img(ng-src="{{getAvatar(message.sender.avatar.thumbnail)}}", alt="", onerror="$(this).attr('src', '/static/img/profile_img.png')")
         {% endverbatim %}

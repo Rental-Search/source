@@ -7,5 +7,6 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("AccountPhonesCtrl", ["$scope", function ($scope) {
         $scope.title = "Phones title";
+        $scope.markListItemAsSelected("account-part-", "account.phones");
     }]);
 });

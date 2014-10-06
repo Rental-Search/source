@@ -7,7 +7,7 @@ block content-view
       li.tab-vertical
          .block-with-thumbnail.indent-xs
           .col-thumbnail
-            .thumbnail.round.indent-sm-r: img(ng-src="{{currentUser.avatar.profil}}", alt="{{currentUser.username}}")
+            .thumbnail.round.indent-sm-r: img(ng-src="{{getAvatar(currentUser.avatar.profil)}}", alt="{{currentUser.username}}", onerror="$(this).attr('src', '/static/img/profile_img.png')")
           .col-exposition
             h2.small.text-black.indent-xs-b {{currentUser.username}}
             {% endverbatim %}

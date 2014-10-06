@@ -3,16 +3,16 @@ block sections
     ul.block-with-thumbnail
       if True
         {% verbatim %}
-        li.block-with-thumbnail(data-ng-repeat="address in addressList track by address.id")
+        li.block-with-thumbnail(data-ng-repeat="address in addressList track by address.id", id="account-address-{{address.id}}")
           a(ui-sref="account.addresses.detail({id: address.id})").tab-vertical(class="{{address.id === defaultAddressId ? 'default' : ''}}")
             .col-thumbnail
               .thumbnail
                 img(data-ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{address.position.coordinates[0]}},{{address.position.coordinates[1]}}&zoom=14&size=70x70&language=fr", width="70")
             .col-exposition
               h3.indent-xs-b
-                | #{address.street}
+                | {{address.street}}
                 i.icon-lg.pull-right.flaticon.stroke.checkmark
-              p.normal.text-gray #{address.zip_code} #{address.city}
+              p.normal.text-gray {{address.zip_code}} {{address.city}}
         {% endverbatim %}
   aside.address-detail.pull-nothing.scrollbar-custom.scrollbar-left(ui-view)
     include _notification_not_selected_address

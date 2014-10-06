@@ -17,7 +17,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CreditCardsService",
         "BookingsLoadService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService) {
+        "BookingsService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -32,6 +33,30 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
             $scope.newCreditCard = true;
             $scope.showSaveCard = true;
+            $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
+            $scope.showUnavailable = true;
+            $scope.showBookings = true;
+            $scope.bookings = [];
+            $scope.currentBookings = [];
+            $scope.weeks = {};
+            var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+            $scope.monthOptions = [
+                {name: months[Date.today().add(-1).months().getMonth()] + " " + Date.today().add(-1).months().getFullYear(), value: Date.today().add(-1).months().getMonth() + " " + Date.today().add(-1).months().getFullYear()},
+                {name: months[Date.today().getMonth()] + " " + Date.today().getFullYear(), value: Date.today().getMonth() + " " + Date.today().getFullYear()},
+                {name: months[Date.today().add(1).months().getMonth()] + " " + Date.today().add(1).months().getFullYear(), value: Date.today().add(1).months().getMonth() + " " + Date.today().add(1).months().getFullYear()},
+                {name: months[Date.today().add(2).months().getMonth()] + " " + Date.today().add(2).months().getFullYear(), value: Date.today().add(2).months().getMonth() + " " + Date.today().add(2).months().getFullYear()},
+                {name: months[Date.today().add(3).months().getMonth()] + " " + Date.today().add(3).months().getFullYear(), value: Date.today().add(3).months().getMonth() + " " + Date.today().add(3).months().getFullYear()},
+                {name: months[Date.today().add(4).months().getMonth()] + " " + Date.today().add(4).months().getFullYear(), value: Date.today().add(4).months().getMonth() + " " + Date.today().add(4).months().getFullYear()},
+                {name: months[Date.today().add(5).months().getMonth()] + " " + Date.today().add(5).months().getFullYear(), value: Date.today().add(5).months().getMonth() + " " + Date.today().add(5).months().getFullYear()},
+                {name: months[Date.today().add(6).months().getMonth()] + " " + Date.today().add(6).months().getFullYear(), value: Date.today().add(6).months().getMonth() + " " + Date.today().add(6).months().getFullYear()},
+                {name: months[Date.today().add(7).months().getMonth()] + " " + Date.today().add(7).months().getFullYear(), value: Date.today().add(7).months().getMonth() + " " + Date.today().add(7).months().getFullYear()},
+                {name: months[Date.today().add(8).months().getMonth()] + " " + Date.today().add(8).months().getFullYear(), value: Date.today().add(8).months().getMonth() + " " + Date.today().add(8).months().getFullYear()},
+                {name: months[Date.today().add(9).months().getMonth()] + " " + Date.today().add(9).months().getFullYear(), value: Date.today().add(9).months().getMonth() + " " + Date.today().add(9).months().getFullYear()},
+                {name: months[Date.today().add(10).months().getMonth()] + " " + Date.today().add(10).months().getFullYear(), value: Date.today().add(10).months().getMonth() + " " + Date.today().add(10).months().getFullYear()},
+                {name: months[Date.today().add(11).months().getMonth()] + " " + Date.today().add(11).months().getFullYear(), value: Date.today().add(11).months().getMonth() + " " + Date.today().add(11).months().getFullYear()},
+                {name: months[Date.today().add(12).months().getMonth()] + " " + Date.today().add(12).months().getFullYear(), value: Date.today().add(12).months().getMonth() + " " + Date.today().add(12).months().getFullYear()}
+            ];
 
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
@@ -106,6 +131,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                     number: result.phone.number.numero,
                     tariff: result.phone.number.tarif
                 };
+                $scope.loadCalendar();
             });
 
             /**
@@ -148,7 +174,11 @@ define(["angular", "eloue/modules/booking/BookingModule",
              * @param uri
              */
             $scope.getAvatar = function getAvatar(uri) {
-                return uri ? uri : '/static/img/avatar_default.jpg';
+                return uri ? uri : '/static/img/profile_img.png';
+            };
+
+            $scope.getProductImg = function (uri) {
+                return uri ? uri : '/static/img/product_img.png';
             };
 
             $scope.callOwner = function callOwner() {
@@ -162,7 +192,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 var userPatch = {};
                 userPatch.first_name = $scope.currentUser.first_name;
                 userPatch.last_name = $scope.currentUser.last_name;
-                UsersService.updateUser(userPatch).$promise.then(function(result) {
+                UsersService.updateUser(userPatch).$promise.then(function (result) {
                     // Update credit card info
                     $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
                     if ($scope.creditCard.masked_number == "") {
@@ -183,7 +213,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 });
             };
 
-            $scope.requestBooking = function() {
+            $scope.requestBooking = function () {
                 var booking = {};
                 var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
                 var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
@@ -205,14 +235,14 @@ define(["angular", "eloue/modules/booking/BookingModule",
                             holder_name: $scope.creditCard.holder_name
                         };
 
-                        BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function(result) {
+                        BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                             $(".modal").modal("hide");
                         });
                     }
                 );
             };
 
-            $scope.clearCreditCard = function() {
+            $scope.clearCreditCard = function () {
                 $scope.newCreditCard = true;
                 $scope.creditCard = {
                     id: $scope.creditCard.id,
@@ -295,5 +325,58 @@ define(["angular", "eloue/modules/booking/BookingModule",
                     $scope.productRelatedMessages = result;
                 });
             };
+
+            $scope.loadCalendar = function () {
+                BookingsService.getBookingsByProduct($scope.product.id).then(function (bookings) {
+
+                    angular.forEach(bookings, function (value, key) {
+                        value.startDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
+                        value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);
+                    });
+                    $scope.bookings = bookings;
+
+                    $scope.updateCalendar();
+                });
+            };
+
+            $scope.updateCalendar = function () {
+                $scope.currentBookings = [];
+                var s = $scope.selectedMonthAndYear.split(" ");
+                var date = new Date();
+                date.setMonth(s[0]);
+                date.setFullYear(s[1]);
+                var weeks = [];
+                var start = new Date(date.moveToFirstDayOfMonth());
+                for (var i = 0; i < 6; i++) {
+                    var currentDay = start.moveToDayOfWeek(1, -1);
+                    var days = [];
+                    for (var j = 0; j < 7; j++) {
+                        var isBooked = false;
+                        angular.forEach($scope.bookings, function (value, key) {
+                            if (currentDay.between(value.startDay, value.endDay)) {
+                                isBooked = true;
+                                $scope.currentBookings.push(value);
+                            }
+                        });
+
+                        days.push({dayOfMonth: currentDay.getDate(), isBooked: isBooked});
+                        currentDay.add(1).days();
+                    }
+
+                    var week = {};
+                    week.weekDays = days;
+                    weeks.push(week);
+                    start.add(1).weeks();
+                }
+                $scope.weeks = weeks;
+            };
+
+            $scope.onShowUnavailable = function () {
+                //TODO: implement when product availability is added to the model
+            };
+
+            $scope.onShowBookings = function () {
+                console.log("onShowBookings");
+            }
         }]);
 });
