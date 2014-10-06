@@ -1,42 +1,43 @@
 block details
-  .section-content
-    form(name="itemInfoForm", ng-submit="updateProduct()")
-      h2 Catégories
-      .row
-        {% verbatim %}
-        .col-md-4
-          .form-control
-            select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories")
-              option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
-        .col-md-4
-          .form-control
-            select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories")
-              option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
-        .col-md-4
-          .form-control
-            select(ng-model="product.category", eloue-chosen, opts="leafCategories")
-              option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
-        {% endverbatim %}
-      h2 Titre
-      .row
-        .col-xs-12
-          input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary")
-      h2 Photos
-      {% verbatim %}
-      ul.text-gray.container-with-square-thumbnail.indent-xs-b //-(ng-if="product.pictures.length > 0")
-        li(ng-show="product.pictures.length < 3"): form#add-picture 
-          label(for="image").file-input-drag
-            i.icon-3x.flaticon.solid.plus
-            input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image
-            input(type="hidden", name="product", value="{{productsBaseUrl}}{{product.id}}/")#product
-        li(ng-repeat="picture in product.pictures track by picture.id")
-          img(ng-src="{{picture.image.thumbnail}}", alt="{{product.summary}}")
-      {% endverbatim %}
-      h2 Caractéristiques
-      include ./_item_characteristics
-      h2 Informations complémentaires
-      .row.indent-md-b
-        .col-sm-12
-          textarea#description.expand(name="description", tabindex="1", rows="6", placeholder="", ng-model="product.description")
-      .row
-        button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
+    .section-content
+        h2 Catégories
+        .row
+            {% verbatim %}
+            .col-md-4
+                .form-control
+                    select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories")
+                        option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
+            .col-md-4
+                .form-control
+                    select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories")
+                        option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
+            .col-md-4
+                .form-control
+                    select(ng-model="product.category", eloue-chosen, opts="leafCategories")
+                        option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
+            {% endverbatim %}
+        h2 Titre
+        .row
+            .col-xs-12
+                input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary")
+        h2 Photos
+            form#add-picture
+                {% verbatim %}
+                ul.text-gray.container-with-square-thumbnail.indent-xs-b
+                    li(ng-show="product.pictures.length < 3"): form#add-picture
+                        label(for="image").file-input-drag
+                            i.icon-3x.flaticon.solid.plus
+                            input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image
+                            input(type="hidden", name="product", value="{{productsBaseUrl}}{{product.id}}/")#product
+                    li(ng-repeat="picture in product.pictures track by picture.id")
+                        img(ng-src="{{picture.image.thumbnail}}", alt="{{product.summary}}")
+                {% endverbatim %}
+        form(name="itemInfoForm", ng-submit="updateProduct()")
+            h2(ng-show="isAuto || isRealEstate") Caractéristiques
+            include ./_item_characteristics
+            h2 Informations complémentaires
+            .row.indent-md-b
+                .col-sm-12
+                    textarea#description.expand(name="description", tabindex="1", rows="6", placeholder="", ng-model="product.description")
+            .row
+                button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications

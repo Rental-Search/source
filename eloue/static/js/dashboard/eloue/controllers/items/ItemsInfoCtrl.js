@@ -47,6 +47,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.categoryDetails.id + "/";
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
+                $scope.markListItemAsSelected();
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
                     $scope.nodeCategory = nodeCategory.id;
                     $scope.updateLeafCategories();
@@ -62,6 +63,17 @@ define(["angular", "eloue/app"], function (angular) {
             CategoriesService.getRootCategories().then(function (categories) {
                 $scope.rootCategories = categories;
             });
+
+            $scope.markListItemAsSelected = function() {
+                $('li[id^="item-"]').each(function () {
+                    var item = $(this);
+                    if (item.attr("id") == ("item-" + $scope.product.id)) {
+                        item.addClass("current");
+                    } else {
+                        item.removeClass("current");
+                    }
+                });
+            };
 
             $scope.onPictureAdded = function () {
                 PicturesService.savePicture($scope.product.id, $("#add-picture"), function (data) {

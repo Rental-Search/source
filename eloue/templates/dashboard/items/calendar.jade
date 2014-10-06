@@ -21,7 +21,7 @@ block details
             {% verbatim %}
             tbody
                   tr(ng-repeat="week in weeks")
-                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : ''}}")
+                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : ''}}") {{day.dayOfMonth}}
       .row
         .col-xs-4
           label.check-btn.form-control.text-danger-light
