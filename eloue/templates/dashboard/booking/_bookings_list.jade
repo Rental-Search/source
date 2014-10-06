@@ -20,7 +20,7 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
       li.tab-vertical.block-with-thumbnail(ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid", id="booking-{{booking.uuid}}", ui-sref="bookings.detail({uuid: booking.uuid})")
         .col-thumbnail
           .thumbnail
-            a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{getProductImg(booking.picture)}}", alt="{{booking.product.summary}}", width="130", onerror="$(this).attr('src', '/static/img/product_img.png')")
+            a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{getProductImg(booking.picture)}}", alt="{{booking.product.summary}}", width="130", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
             span(translate="{{booking.state}}").booking-bage
         .col-exposition
           h3.small

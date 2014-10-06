@@ -6,7 +6,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
     .block-with-thumbnail
       .col-thumbnail
         .thumbnail: a(href="#")
-          img(ng-src="{{getProductImg(bookingDetails.product.picture)}}", alt="{{bookingDetails.product.summary}}", width="200", onerror="$(this).attr('src', '/static/img/product_img.png')")
+          img(ng-src="{{getProductImg(bookingDetails.product.picture)}}", alt="{{bookingDetails.product.summary}}", width="200", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
       .col-exposition
         .indent-sm-h
           h3: b {{bookingDetails.product.summary}}

@@ -3,7 +3,7 @@ include ../../jade/_mixins
 {% verbatim %}
 .thumbnail-img
     a(href="#")
-        img(ng-src="{{getProductImg(product.picture)}}", alt="{{product.summary}}", onerror="$(this).attr('src', '/static/img/product_img.png')")
+        img(ng-src="{{getProductImg(product.picture)}}", alt="{{product.summary}}", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
 .thumbnail-content
     h3 {{product.summary}}
     p.location
