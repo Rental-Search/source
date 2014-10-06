@@ -4,21 +4,23 @@
     white-space: nowrap
     display: inline-block
     vertical-align: middle
+    color: $brand-gold
+    cursor: default
     +clearfix()
-    &:hover > i
-      color: $brand-gold !important
-    > i
-      color: $brand-gold
-      float: left
+
+    i
+      display: inline-block
       padding-right: .25em
-      cursor: pointer
-      line-height: .5em
       &.current ~ i
         color: $gray-lighter
+
+    &.setting i
+      cursor: pointer
+      color: $brand-gold !important
       &:hover ~ i
         color: $gray-lighter !important
-    .disabled
-      color: $gray-lighter
+
   .rate-counter
     color: inherit
     margin-left: .5em
+

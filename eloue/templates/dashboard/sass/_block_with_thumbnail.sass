@@ -10,8 +10,24 @@
     position: relative
     &.round
       +border-radius(50%)
+    .sm,
+    .md,
+    .lg
+      +default-user
+      display: block
+      img
+        width: 100%
     img
       display: block
+    .sm
+      width: $thumbnail-sm
+      height: $thumbnail-sm
+    .md
+      width: $thumbnail-md
+      height: $thumbnail-md
+    .lg
+      width: $thumbnail-lg
+      height: $thumbnail-lg
   .col-exposition
     display: table-cell
     overflow: hidden

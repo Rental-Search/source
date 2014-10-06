@@ -166,9 +166,10 @@ header
             border-radius: 50%
             overflow: hidden
             +opacity(.9)
-          img
-            border-radius: 50%
-            display: block
+            width: $thumbnail-sm
+            height: $thumbnail-sm
+            +default-user
+
         .content
           width: 100%
           max-width: 0px
@@ -220,5 +221,6 @@ header
         vertical-align: middle
         overflow: hidden
         border-radius: 50%
-      img
-        display: block
+        width: $thumbnail-sm
+        height: $thumbnail-sm
+        +default-user
