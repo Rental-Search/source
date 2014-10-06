@@ -10,3 +10,10 @@ urlpatterns = patterns('',
     url(r'^(?P<recipient_username>[-\w]+)/message/$', 'products.views.patron_message_create', name='patron_message_create'),
     url(r'^(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', PatronDetail.as_view(), name="patron_detail"),
 )
+
+
+from accounts.views import PublicProfileView
+
+ui3_urlpatterns = patterns('',
+    url(r'^(?P<slug>[-\w]+)/$', PublicProfileView.as_view(), name='public_profile'),
+)

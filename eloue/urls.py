@@ -197,8 +197,11 @@ reset_urlpatterns = patterns('',
 )
 
 from products.urls import ui3_urlpatterns as products_urlpatterns
+from accounts.urls import ui3_urlpatterns as accounts_urlpatterns
+
 ui3_urlpatterns = patterns('',
     url(r'^$', HomepageView.as_view(), name='home'),
+    url(r'^loueur/', include(accounts_urlpatterns)),
     url(r'^reset/', include(reset_urlpatterns)),
     url(r'^location/', include(products_urlpatterns)),
     url(r'^comment-ca-marche/', TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
@@ -212,7 +215,7 @@ urlpatterns = patterns('',
 
     url(r'^faq/', include('faq.urls')),
 
-    url(r'^loueur/', include('accounts.urls')),
+    #url(r'^loueur/', include('accounts.urls')),
     #url(r'^location/', include('products.urls')),
 
     url(r'^admin/', include(admin.site.urls)),

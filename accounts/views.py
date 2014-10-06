@@ -49,8 +49,9 @@ from accounts.choices import GEOLOCATION_SOURCE
 
 from products.models import ProductRelatedMessage, MessageThread, Product
 from products.search import product_search
+from products.views import CommonPageContextMixin
 
-from rent.models import Booking, BorrowerComment, OwnerComment
+from rent.models import Booking, BorrowerComment, OwnerComment, Comment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
 from rent.choices import BOOKING_STATE, COMMENT_TYPE_CHOICES
 
@@ -1052,6 +1053,22 @@ class PasswordResetConfirmView(TemplateView):
             success_msg = _("Your password has been set.  You may go ahead and log in now.")
             return self.response_class({'detail': success_msg})
         return self.response_class({'errors': form.errors}, status=400)
+
+
+class PublicProfileView(TemplateView):
+    template_name = 'profile_public/index.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(PublicProfileView, self).get_context_data(**kwargs)
+        patron = get_object_or_404(Patron.on_site.select_related('default_address'), slug=kwargs.get('slug'))
+        comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
+
+        context['patron'] = patron
+        context['comments'] = comment_qs.filter(booking__owner=patron)[:3],
+        context['products'] = patron.products.order_by('-created_at')[:3]
+        context['verification'] = []
+
+        return context
 
 
 # REST API 2.0
