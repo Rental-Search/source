@@ -342,6 +342,7 @@ class ProductTest(APITestCase):
             'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
             'quantity': 2
         })
+        self.assertEquals(response.status_code, 200, response.data)
         self.assertIn('max_available', response.data)
         self.assertEqual(response.data['max_available'], 3)
 
@@ -554,6 +555,29 @@ class CategoryTest(APITestCase):
         category = Category.objects.get(pk=response.data['id'])
         self.assertEquals(category.title, 'Title')
         self.assertEquals(category.description, 'Description')
+
+    def test_category_get_ancestor(self):
+        response = self.client.get(_location('category-ancestors', pk=475))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 1)
+        self.assertIn('id', response.data[0])
+        self.assertEqual(response.data[0]['id'], 3)
+
+    def test_category_get_children(self):
+        response = self.client.get(_location('category-children', pk=3))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 1)
+        self.assertIn('id', response.data[0])
+        self.assertEqual(response.data[0]['id'], 475)
+
+    def test_category_get_descendants(self):
+        response = self.client.get(_location('category-descendants', pk=3))
+        descendants_ids = [475, 476, 477, 665]
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 4)
+        for descendant in response.data:
+            self.assertIn('id', descendant)
+            self.assertIn(descendant['id'], descendants_ids)
 
     def test_category_get_by_id(self):
         response = self.client.get(_location('category-detail', pk=1))
