@@ -14,9 +14,9 @@
           h3 Inscription 30 secondes
           .form-group: .row
             .col-xs-5: select.form-control
-              option(value="monsieur") Monsieur
-              option(value="mademoiselle") Mademoiselle
-              option(value="madame") Madame
+              option(value="madame", selected) Mme
+              option(value="mademoiselle") Mlle
+              option(value="monsieur") Mr
             .col-xs-7:
               input(type="text", placeholder="Nom", name="lastName", ng-model="account.lastName", required).form-control
               span.errorMsg(ng-show="registrationForm.lastName.$error.required && registrationForm.lastName.$dirty") Required field
