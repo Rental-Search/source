@@ -32,7 +32,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
 
-                $rootScope.$broadcast("startLoading", {parameters: [$scope.currentUser.id], shouldReloadList: true});
+                $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id], shouldReloadList: true});
 //                BookingsLoadService.getBookingList($scope.page, currentUser.id).then(function (bookingList) {
 //                    $scope.bookingList = bookingList;
 //                    // Get current user url
