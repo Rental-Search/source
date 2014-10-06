@@ -14,14 +14,12 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
               {% verbatim %}
               option(value="") All statut
               option(ng-repeat="state in stateList", value="{{state.value}}") {{state.value | translate}}
-              {% endverbatim %}
 
   ul.scrollbar-custom(eloue-lazy-load, lazy-data="bookingList", lazy-data-provider="BookingsLoadService", lazy-load-method="getBookingList")
       //- we should use class="soon" or class=="in-progress" or class="completed" in the line below
       li.tab-vertical.block-with-thumbnail(ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid", id="booking-{{booking.uuid}}")
         .col-thumbnail
           .thumbnail
-            {% verbatim %}
             a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{booking.picture}}", alt="{{booking.product.summary}}", width="130")
             span(translate="{{booking.state}}").booking-bage
         .col-exposition
