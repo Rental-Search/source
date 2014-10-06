@@ -1,0 +1,20 @@
+.container
+  .row(style="position: relative;")
+    .e_loue-mark
+    .col-sm-6: .mark-wrapper.indent-r-sm
+      h3.text-white
+        b.text-primary Je gagne de l’argent
+        br
+        b grâce à e-loue
+    .col-sm-6: .mark-wrapper.indent-l-sm
+      h3.text-white
+        b.text-primary J’économise de l’argent
+        br
+        b grâce à e-loue
+  .row.indent-v-md
+    .col-sm-6: .indent-r-sm
+      a(href="{% url 'publish_item' %}", style="width: 100%;").btn.btn-lg.bg-success Déposez vos annonces
+    .col-sm-6: .indent-l-sm
+      a(href="{% url 'product_list' %}", style="width: 100%;").btn.btn-lg.bg-success Cherchez des biens à louer
+  .row
+    .col-sm-6: a(href="#").link-success Simulez vos revenus
