@@ -15,7 +15,7 @@ import gdata.contacts.client
 import gdata.gauth
 
 
-from django.views.generic import ListView, View, TemplateView
+from django.views.generic import ListView, View, TemplateView, DetailView
 from django.views.generic.base import TemplateResponseMixin
 
 
@@ -1054,20 +1054,18 @@ class PasswordResetConfirmView(TemplateView):
             return self.response_class({'detail': success_msg})
         return self.response_class({'errors': form.errors}, status=400)
 
-
-class PublicProfileView(TemplateView):
+class PatronDetailView(DetailView):
+    model = Patron
     template_name = 'profile_public/index.jade'
+    context_object_name = 'patron'
+    search_index = product_search
 
     def get_context_data(self, **kwargs):
-        context = super(PublicProfileView, self).get_context_data(**kwargs)
-        patron = get_object_or_404(Patron.on_site.select_related('default_address'), slug=kwargs.get('slug'))
-        comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
-
+        context = super(PatronDetailView, self).get_context_data(**kwargs)
+        patron = self.object
         context['patron'] = patron
-        context['comments'] = comment_qs.filter(booking__owner=patron)[:3],
-        context['products'] = patron.products.order_by('-created_at')[:3]
-        context['verification'] = []
-
+        context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')[:3]
+        context['products'] = Product.on_site.filter(owner=patron).order_by('-created_at')[:3]
         return context
 
 

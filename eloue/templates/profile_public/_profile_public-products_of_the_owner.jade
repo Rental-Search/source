@@ -1,29 +1,31 @@
-h3.indent-b-xs Les 3 annonces de Gaspard
+{% with products|length as product_count %}
+{% if product_count %}
+h3.indent-b-xs Les {{ product_count }} annonces de {{ patron.username }}
 
 ol.row
-  each product, index in products
+  each product in products
     li
       .section-body
         .thumbnail-img
-          a(href="products/product_detail.html").img-wrapper
-            img(src="http://lorempixel.com/260/180/technics", alt="")
-            span.badge.price #{product.daily_price}&euro; /jour
+          a(href="{{ product.get_absolute_url }}").img-wrapper
+            img(style="background-image: url({{ product.pictures.all.0.profile.url }})").bg-image
+            span.badge.price {{ product.daily_price }}&euro; /jour
         .info
           h6
-            a(href="#") #{product.name}
-            if product.ispro
+            a(href="{{ product.get_absolute_url }}") {{ product.summary }}
+            if patron.is_professional
               span.badge-pro pro
-          p: b #{product.summary}
-            span.zip-code ,&nbsp;#{product.address.zipcode}
-          .rate
-            -var stars = [1,2,3,4,5]
-            each s in stars
-              if s == product.average_note
-                span.flaticon.solid.star-2.current-rate
-              else
-                span.flaticon.solid.star-2
-          if product.borrowercomments > 0
+          p: {{ product.address.city|title }}{% if product.address.city and product.address.zipcode %}, {{ product.address.zipcode }}{% endif %}
+          //- TODO: need a better solution here to hit SQL DB only once for all products in the list
+          {% with product.borrowercomments.count as comments_num %}
+          if comments_num
+            {% with product.average_note as rate %}
+            include ../jade/_rate
+            {% endwith %}
             span.sprite-comment
               i.flaticon.stroke.writing-comment
-              | #{product.borrowercomments}
-          p.full_description #{product.description}
+              | {{ comments_num }}
+          {% endwith %}
+          p.full_description {{ product.description|truncatechars:145 }}
+{% endif %}
+{% endwith %}

@@ -2,20 +2,23 @@
   h4 Informations sur le membre
 .section-body
   .part
-    p: b Membre depuis le 12 Juillet 2013
-    p.indent-b-sm: i Maecenas sed diam eget risus varius bla ndit sit amet non magna. Curabitur
-    a(href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up-send-message").btn.bg-success.send-message
+    p: b Membre depuis le {{ patron.date_joined|date:"d F Y" }}
+    if patron.about
+      p.indent-b-sm: i {{ patron.about }}
+    a(href="#/message", data-dismiss="modal").btn.bg-success.send-message
       i.flaticon.stroke.mail-2
       | Envoyez un message
-    a(href = "#inscrivez-vous", data-toggle="modal", data-target="#pop-up-call").btn.bg-success.call
+    a(href="#/phone", data-dismiss="modal").btn.bg-success.call
       i.flaticon.stroke.phone-3
       | Appelez
     ul.nav.stats
+    //-
       each stat in stats
         li
           span
             big.text-success #{stat[0]} 
           span #{stat[1]}
+//-
   .part.connection.clearfix
     .col-sm-4
       a(href="#").friend-photo-wrapper

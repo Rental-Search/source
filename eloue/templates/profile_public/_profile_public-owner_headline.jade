@@ -1,5 +1,9 @@
 .container.text-center.indent-t-lg
-  .round-img: img(src="http://lorempixel.com/120/120/people", alt="")
-  h3.indent-b-xs #{patron.first_name}&nbsp;#{patron.last_name}
+  .round-img.: img(style="background-image: url({{ patron.profile.url }})").bg-image
+  h3.indent-b-xs {{ patron.username }}
+  {% with patron.average_note as rate %}
   include ../jade/_rate
-  p.text-gray-strong.indent-t-xs #{patron.default_address.city}&nbsp;#{patron.default_address.zipcode}
+  {% endwith %}
+  {% with patron.default_address as address %}
+  p.text-gray-strong.indent-t-xs {{ address.city|title }}{% if address.zipcode %}, {{ address.zipcode }}{% endif %}
+  {% endwith %}

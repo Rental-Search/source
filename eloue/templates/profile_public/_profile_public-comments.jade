@@ -1,22 +1,23 @@
-h3.indent-b-xs Les 3 commentaires de
+{% with comments|length as comment_count %}
+{% if comment_count %}
+h3.indent-b-xs Les {{ comment_count }} commentaires de {{ patron.username }}
 
 ul.list-group
   each comment in comments
     li.list-group-item.thumbnail
       .thumbnail-img
-        a(href="#")
-          img(src="http://lorempixel.com/80/80/technics", alt="")
+        a(href="{{ product.url }}").img-wrapper
+          img(style="background-image: url({{ product.thumbnail_medium }})").bg-image
       .thumbnail-content
         p
-          a(href="#").text-success: b #{comment.product} 
+          a(href="{{ product.url }}").text-success: b {{ comment.summary }} 
           small loué par 
-          a(href="#").text-success: b #{comment.username}
-        .rate.indent-t-xs.indent-b-xs
-          -var stars = [1,2,3,4,5]
-          each s in stars
-            if s == 3
-              span.flaticon.solid.star-2.current-rate
-            else
-              span.flaticon.solid.star-2
-        p #{comment.content}
-        small #{comment.date}
+          a(href="{{ comment.author.username.get_absolute_url }}").text-success: b {{ comment.author.username }}
+        .indent-t-xs.indent-b-xs
+          {% with comment.note as rate %}
+          include ../jade/_rate
+          {% endwith %}
+        p {{ comment.comment|truncatechars:145 }}
+        small Le {{ comment.created_at|date:"d F Y" }}
+{% endif %}
+{% endwith %}

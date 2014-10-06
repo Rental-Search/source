@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.template import RequestContext, loader
+from django.utils.translation import ugettext_lazy as _
 
 from haystack.query import SearchQuerySet
 from haystack.constants import DJANGO_ID

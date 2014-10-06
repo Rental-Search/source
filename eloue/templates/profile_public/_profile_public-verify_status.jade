@@ -13,6 +13,7 @@
       | #{text} verifié
       i.icon-lg.flaticon.solid.checkmark-2.indent-l-xs.text-success
     ul.nav.indent-t-xs
+      -var verification = ["facebook", "email", "phone", "google", "linkedin"]
       each verify in verification
         li.indent-t-xs
           case verify
