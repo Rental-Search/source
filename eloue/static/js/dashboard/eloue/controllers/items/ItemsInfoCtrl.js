@@ -45,6 +45,8 @@ define(["angular", "eloue/app"], function (angular) {
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.categoryDetails.id + "/";
+                $scope.product.addressDetails = $scope.product.address;
+                $scope.product.phoneDetails = $scope.product.phone;
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
                 $scope.markListItemAsSelected("item-", $scope.product.id);
@@ -73,9 +75,11 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.updateProduct = function () {
-                ProductsService.updateProduct($scope.product);
+                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.address.id + "/";
+                $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
                 AddressesService.update($scope.product.addressDetails);
                 PhoneNumbersService.updatePhoneNumber($scope.product.phoneDetails);
+                ProductsService.updateProduct($scope.product);
             };
 
             $scope.updateNodeCategories = function () {

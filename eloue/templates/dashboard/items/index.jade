@@ -20,6 +20,11 @@ block details
         .row
             .col-xs-12
                 input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary")
+        h2 Adresse
+        .row
+            .col-sm-5: input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
+            .col-sm-3: input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
+            .col-sm-4: input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
         h2 Photos
             form#add-picture
                 {% verbatim %}
