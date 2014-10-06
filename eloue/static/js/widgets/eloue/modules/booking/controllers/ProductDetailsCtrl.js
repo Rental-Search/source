@@ -377,6 +377,29 @@ define(["angular", "eloue/modules/booking/BookingModule",
 
             $scope.onShowBookings = function () {
                 console.log("onShowBookings");
-            }
+            };
+
+            $scope.selectTab = function(tabName) {
+                $('[id^=tabs-]').each(function () {
+                    var item = $(this);
+                    if (("#" + item.attr("id")) == tabName) {
+//                        item.show();
+                        item.removeClass("ng-hide");
+                    } else {
+//                        item.hide();
+                        item.addClass("ng-hide");
+                    }
+                });
+                $('a[href^=#tabs-]').each(function () {
+                    var item = $(this);
+                    if (item.attr("href") == tabName) {
+                        item.addClass("current");
+                    } else {
+                        item.removeClass("current");
+                    }
+                });
+            };
+
+            $scope.selectTab("#tabs-photos");
         }]);
 });
