@@ -11,6 +11,9 @@ define(["angular", "eloue/app"], function (angular) {
         "AddressesService",
         "UtilsService",
         function ($scope, UsersService, AddressesService, UtilsService) {
+
+            $scope.markListItemAsSelected("account-part-", "account.addresses");
+
             UsersService.getMe().$promise.then(function (currentUser) {
                 var currentUserId = currentUser.id;
 

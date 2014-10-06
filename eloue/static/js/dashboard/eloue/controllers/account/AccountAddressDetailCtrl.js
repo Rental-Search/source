@@ -18,7 +18,7 @@ define(["angular", "eloue/app"], function (angular) {
             AddressesService.getAddress($stateParams.id).$promise.then(function (address) {
                 // Current address
                 $scope.address = address;
-
+                $scope.markListItemAsSelected("account-address-", $stateParams.id);
                 // Is this address default
                 $scope.isDefaultAddress = address.id === $scope.defaultAddressId;
             });

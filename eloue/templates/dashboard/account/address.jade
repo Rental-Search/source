@@ -3,7 +3,7 @@ block sections
     ul.block-with-thumbnail
       if True
         {% verbatim %}
-        li.block-with-thumbnail(data-ng-repeat="address in addressList track by address.id")
+        li.block-with-thumbnail(data-ng-repeat="address in addressList track by address.id", id="account-address-{{address.id}}")
           a(ui-sref="account.addresses.detail({id: address.id})").tab-vertical(class="{{address.id === defaultAddressId ? 'default' : ''}}")
             .col-thumbnail
               .thumbnail

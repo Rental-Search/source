@@ -51,8 +51,10 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                     var item = $(this);
                     if (item.attr("id") == (prefix + id)) {
                         item.addClass("current");
+                        item.find(".tab-vertical").addClass("current");
                     } else {
                         item.removeClass("current");
+                        item.find(".tab-vertical").removeClass("current");
                     }
                 });
             };

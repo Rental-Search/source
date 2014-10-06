@@ -9,6 +9,8 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "UsersService",
         function ($scope, UsersService) {
+            $scope.markListItemAsSelected("account-part-", "account.profile");
+
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
