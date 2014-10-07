@@ -127,6 +127,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             ProductsLoadService.getProduct($scope.productId, true, true).then(function (result) {
                 $scope.product = result;
                 //TODO: owner contact details will be defined in some other way.
+                console.log(result.phone);
                 $scope.ownerCallDetails = {
                     number: result.phone.number.numero,
                     tariff: result.phone.number.tarif
@@ -148,6 +149,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 } else if (fromDateTime < today) {
                     $scope.dateRangeError = "From date cannot be before today";
                 } else {
+                    $scope.dateRangeError = null;
                     ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
                         $scope.duration = result.duration;
                         $scope.pricePerDay = result.unit_value;
@@ -161,8 +163,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
              * Send new message to the owner.
              */
             $scope.sendMessage = function sendMessage() {
-                ProductRelatedMessagesLoadService.postMessage($scope.$parent.threadId, $scope.currentUser.id, $scope.$parent.product.owner.id,
-                    $scope.newMessage.body, null, $scope.$parent.product.id).then(function (result) {
+                ProductRelatedMessagesLoadService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
+                    $scope.newMessage.body, null, $scope.product.id).then(function (result) {
                         // Clear message field
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
@@ -229,9 +231,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
                     function (booking) {
                         var paymentInfo = {
                             card_number: $scope.creditCard.card_number,
-                            exp_month: $scope.creditCard.expires.slice(0, 2),
-                            exp_year: $scope.creditCard.expires.slice(2),
-                            cvc: $scope.creditCard.cvv,
+                            expires: $scope.creditCard.expires,
+                            cvv: $scope.creditCard.cvv,
                             holder_name: $scope.creditCard.holder_name
                         };
 
@@ -322,7 +323,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                             value.sender = result;
                         });
                     });
-                    $scope.productRelatedMessages = result;
+                    $scope.loadMessageThread();
                 });
             };
 
