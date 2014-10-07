@@ -319,6 +319,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'sass/product_list_styles.sass',
             #'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css',
+            'bower_components/bootstrap-datepicker/css/datepicker3.css',
             'css/jquery-ui.css', # temporary use our own hacked version of jQuery-UI styles to get green sliders
         ),
         'output_filename': 'css/product_list_styles.css',

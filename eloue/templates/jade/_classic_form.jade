@@ -13,10 +13,11 @@
         form(name="registrationForm", ng-submit="register()", novalidate)
           h3 Inscription 30 secondes
           .form-group: .row
-            .col-xs-3.clear-selector: select
-              option(value="male") M.
-              option(value="female") F.
-            .col-xs-9:
+            .col-xs-5: select.form-control
+              option(value="madame", selected) Mme
+              option(value="mademoiselle") Mlle
+              option(value="monsieur") Mr
+            .col-xs-7:
               input(type="text", placeholder="Nom", name="lastName", ng-model="account.lastName", required).form-control
               span.errorMsg(ng-show="registrationForm.lastName.$error.required && registrationForm.lastName.$dirty") Required field
           -var registration_form_fields = [["text", "Prénom", "firstName"], ["email", "Adresse email", "email"], ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "postalCode"]]

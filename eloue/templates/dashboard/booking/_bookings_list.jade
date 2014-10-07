@@ -6,22 +6,21 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
           -var  booking_detail_horisontal_tabs = [["filterByBoth()", "Tous"], ["filterByOwner()", "Propriétaires"], ["filterByBorrower()", "Emprunteurs"]]
           each filter_func, filter_name in booking_detail_horisontal_tabs
             li.divider
-            li.tab-horisontal(ng-click="{{ filter_func }}"): h3.small {{ filter_name }}
+            li.tab-horisontal(ng-click="{{ filter_func }}", id="filter-{{ filter_name }}"): h3.small {{ filter_name }}
       .col-xs-3.indent-xs-t
         .select-gradient.without-search
           select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()", eloue-chosen)
               option(value="undefined") Statut
               {% verbatim %}
+              option(value="") All statut
               option(ng-repeat="state in stateList", value="{{state.value}}") {{state.value | translate}}
-              {% endverbatim %}
 
   ul.scrollbar-custom(eloue-lazy-load, lazy-data="bookingList", lazy-data-provider="BookingsLoadService", lazy-load-method="getBookingList")
       //- we should use class="soon" or class=="in-progress" or class="completed" in the line below
-      li.tab-vertical.block-with-thumbnail(class="", ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid")
+      li.tab-vertical.block-with-thumbnail(ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid", id="booking-{{booking.uuid}}", ui-sref="bookings.detail({uuid: booking.uuid})", class="{{getStateClass(booking.state)}}")
         .col-thumbnail
           .thumbnail
-            {% verbatim %}
-            a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{booking.picture}}", alt="{{booking.product.summary}}", width="130")
+            a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{getProductImg(booking.picture)}}", alt="{{booking.product.summary}}", width="130", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
             span(translate="{{booking.state}}").booking-bage
         .col-exposition
           h3.small

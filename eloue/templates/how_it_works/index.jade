@@ -19,11 +19,12 @@ block append scripts
 block append content-body
   .container-flex
     header.header-site: include ../jade/_header_site
-    nav:           include _breadcrumb
-    article
-      section.framing: include _top_content
+    nav:                include _breadcrumb
+    article.text-center
+      section.framing:             include _top_content
       section:                     include _steps
       section.timeline:            include _timeline
+      section.indent-v-lg:         include _bottom_content
     footer
       //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
       section.footer-links.framing:         include ../jade/_footer_links

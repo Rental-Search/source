@@ -58,6 +58,7 @@ main
           left: 0
           z-index: 10
       .info
+        position: relative
         display: table-cell
         max-width: 0
         width: 100%
@@ -102,6 +103,17 @@ main
           margin: 0 .5em
           vertical-align: -0.2em
           display: inline-block
+      .full_description
+        max-height: (2em * $line-height-base)
+        // > sky for blur overflow text
+        &:before
+          content: " "
+          left: 0
+          right: 0
+          bottom: 0
+          height: (1em * $line-height-base)
+          background-image: linear-gradient(to bottom, rgba(255,255,255,0), white 90%)
+          position: absolute
 
       .list-layout &
         +make-sm-column(12)

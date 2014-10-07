@@ -23,7 +23,7 @@ form.form-inline.section-body.text-center
         p Assurance incluse
         {% endverbatim %}
     .part
-        a(href = "#/booking", data-dismiss="modal").btn.bg-success.calendar-ok
+        a(href = "#/booking", data-dismiss="modal", ng-disabled="!!dateRangeError").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2
             | Réservez
         //-

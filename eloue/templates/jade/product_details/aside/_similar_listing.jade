@@ -7,9 +7,9 @@
 				li
 					.thumbnail-img
 						a(href="{{ product.url }}")
-							img(src="{{ product.thumbnail }}", alt="")
+							img(style="background-image: url({{ product.thumbnail }})").bg-image
 					.thumbnail-content
-						h6 
+						h6
 							a(href="{{ product.url }}") {{ product.summary }}
 						p
 							small {{ product.city|title }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}

@@ -86,6 +86,7 @@ require([
     "widget",
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
+    "../common/eloue/commonApp",
     "eloue/route"
 ], function ($, _, angular) {
     "use strict";
@@ -207,6 +208,23 @@ require([
 
             if (!!mapCanvas) {
 
+                $('#where').formmapper({
+                    details: "form"
+                });
+
+                $('#start-date').datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true,
+                    startDate: Date.today()
+                });
+
+                $('#end-date').datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true,
+                    startDate: Date.today()
+                });
 
                 var radius = Number($("#district").val().replace(',', '.'));
 
@@ -362,7 +380,6 @@ require([
 
         function mouseOverListenerGenerator(image_hover, marker, markerId) {
             return function () {
-                console.log("over");
                 this.setOptions({
                     icon: image_hover,
                     zIndex: 200

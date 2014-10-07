@@ -2,77 +2,104 @@ include ../jade/_mixins
 
 {% verbatim %}
 aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
-  .section-content
-    .block-with-thumbnail
-      .col-thumbnail
-        .thumbnail: a(href="#")
-          img(ng-src="{{bookingDetails.product.picture}}", alt="{{bookingDetails.product.summary}}", width="200")
-      .col-exposition
-        .indent-sm-h
-          h3: b {{bookingDetails.product.summary}}
-          p.text-gray.indent-sm-h.indent-xs-v
-            i.icon-lg.flaticon.stroke.location-pin-3.icon-li
-            | {{bookingDetails.product.address.street}}, {{bookingDetails.product.address.zipcode}}
-            br
-            | {{bookingDetails.product.address.city}}
-            .block-with-thumbnail.indent-sm-v
-              .col-thumbnail
+    .section-content
+        .block-with-thumbnail
+            .col-thumbnail
                 .thumbnail: a(href="#")
-                  img(ng-src="{{bookingDetails.product.owner.avatar.thumbnail}}", alt="{{bookingDetails.product.owner.username}}", width="40", height="40")
-              .col-exposition.text-gray
-                .indent-xs-h
-                  h3.small: a(href="#").text-underline-hover {{bookingDetails.product.owner.username}}
-                  p.indent-xs-v
-                    {% endverbatim %}
-                    +average-rate("bookingDetails.product.ownerStats.average_rating")
-                    {% verbatim %}
-                  p
-                    {% endverbatim %}
-                    +number-of-comments("bookingDetails.product.stats.booking_comments_count")
-                    +number-of-bookings("bookingDetails.product.stats.bookings_count")
-                    {% verbatim %}
+                    img(ng-src="{{getProductImg(bookingDetails.product.picture)}}", alt="{{bookingDetails.product.summary}}", width="200", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
+            .col-exposition
+                .indent-sm-h
+                    h3: b {{bookingDetails.product.summary}}
+                    p.text-gray.indent-sm-h.indent-xs-v
+                        i.icon-lg.flaticon.stroke.location-pin-3.icon-li
+                        | {{bookingDetails.product.address.street}}, {{bookingDetails.product.address.zipcode}}
+                        br
+                        | {{bookingDetails.product.address.city}}
+                        .block-with-thumbnail.indent-sm-v
+                            .col-thumbnail
+                                .thumbnail: a(href="#")
+                                    img(ng-src="{{getAvatar(bookingDetails.product.owner.avatar.thumbnail)}}", alt="{{bookingDetails.product.owner.username}}", width="40", height="40", onerror="$(this).attr('src', '/static/img/profile_img.png')")
+                            .col-exposition.text-gray
+                                .indent-xs-h
+                                    h3.small: a(href="#").text-underline-hover {{bookingDetails.product.owner.username}}
+                                    p.indent-xs-v
+                                        {% endverbatim %}
+                                        +average-rate("bookingDetails.product.ownerStats.average_rating")
+                                        {% verbatim %}
+                                    p
+                                        {% endverbatim %}
+                                        +number-of-comments("bookingDetails.product.stats.booking_comments_count")
+                                        +number-of-bookings("bookingDetails.product.stats.bookings_count")
+                                        {% verbatim %}
 
-    .bg-success-light.text-success.bd-rad
-      i.icon-lg.flaticon.stroke.phone.indent-xs-l
-      span.indent-sm-h
-        | Joignable au 
-        b {{bookingDetails.product.phone.number.numero}}
-        | ou
-      a(href="").btn-inline.text-white.bg-success-hover Envoyez un message
+        .bg-success-light.text-success.bd-rad
+            i.icon-lg.flaticon.stroke.phone.indent-xs-l
+            span.indent-sm-h
+                | Joignable au
+                b {{bookingDetails.product.phone.number.numero}}
+                | ou
+            a(ui-sref="messages.detail({id: bookingDetails.lastThreadId})").btn-inline.text-white.bg-success-hover Envoyez un message
 
-    .block-with-thumbnail.notification.indent-md-v
-      .col-thumbnail
-        .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
-      .col-exposition.text-action
-        h3: b Réservation acceptée par 
-          a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
-        ul.zebra-list.indent-md-v
-        //-
-          //- booking history block
-          each info in booking_detail.informations
-            li.clearfix
-              .col-xs-3 #{info.title}
-              .col-xs-9(class="#{info.color}") #{info.value}
-        .text-right
-          a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
-          a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
+        .block-with-thumbnail.notification.indent-md-v
+            .col-thumbnail
+                .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
+            .col-exposition.text-action
+                h3: b Réservation acceptée par
+                    a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
+                ul.zebra-list.indent-md-v
+                    li.clearfix
+                        .col-xs-3 Début
+                        .col-xs-9
+                            span(translate="{{bookingDetails.start_date.week_day}}")
+                            span
+                                | {{bookingDetails.start_date.day}} &nbsp;
+                            span(translate="{{bookingDetails.start_date.month}}")
+                            span
+                                | {{bookingDetails.start_date.year}} &nbsp;
+                            span(translate="at")
+                            span
+                                | {{bookingDetails.start_time}}
+                    li.clearfix
+                        .col-xs-3 Fin
+                        .col-xs-9
+                            span(translate="{{bookingDetails.end_date.week_day}}")
+                            span
+                                | {{bookingDetails.end_date.day}} &nbsp;
+                            span(translate="{{bookingDetails.end_date.month}}")
+                            span
+                                | {{bookingDetails.end_date.year}} &nbsp;
+                            span(translate="at")
+                            span
+                                | {{bookingDetails.end_time}}
+                    li.clearfix
+                        .col-xs-3 Période
+                        .col-xs-9 {{bookingDetails.period_days}} jours et {{bookingDetails.period_hours}} heures
+                    li.clearfix
+                        .col-xs-3 Prix
+                        .col-xs-9.text-success {{bookingDetails.total_amount}}€
+                    li.clearfix
+                        .col-xs-3 Caution
+                        .col-xs-9 {{bookingDetails.deposit_amount}}€
+                .text-right
+                    a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
+                    a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
 
-    .block-with-thumbnail.text-gray.notification
-      .col-thumbnail
-        .thumbnail: i.icon-3x.flaticon.solid.pencil
-      .col-exposition
-        form(ng-submit="postComment()")
-          textarea.expand(name="comment.text", rows="4", placeholder="Écrire un commentaire...", ng-model="comment.text", required)
-          p.text-justify-force.indent-sm-t
-            span
-              | Notes :&nbsp;&nbsp;
-              //-+average-rate(0)
-            button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
-{% endverbatim %}
+        .block-with-thumbnail.text-gray.notification
+            .col-thumbnail
+                .thumbnail: i.icon-3x.flaticon.solid.pencil
+            .col-exposition
+                form(ng-submit="postComment()")
+                    textarea.expand(name="comment.text", rows="4", placeholder="Écrire un commentaire...", ng-model="comment.text", required)
+                    p.text-justify-force.indent-sm-t
+                        span
+                            | Notes :&nbsp;&nbsp;
+                            {% endverbatim %}
+                            +average-rate("comment.rate")
+                        button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
 //-
   section.text-gray-strong.bg-lite
     ul.section-content.booking-activity-feed
-      li.reply-to-message: a(href="#").text-success.text-underline-hover 
+      li.reply-to-message: a(href="#").text-success.text-underline-hover
         i.flaticon.stroke.reply &nbsp;&nbsp;
         | Répondre au message
 
@@ -103,14 +130,14 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 .col-exposition
                   case item.type
                     when "message"
-                      h3.text-black.indent-xs-b: b Message envoyé par 
+                      h3.text-black.indent-xs-b: b Message envoyé par
                         a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
                       p.norm #{item.value}
                     when "booking"
-                      p.norm Demande acceptée par 
+                      p.norm Demande acceptée par
                         a(href="#").text-success.text-underline-hover #{tenant.first_name}
                     when "request"
-                      p.norm Demande de réservation par 
+                      p.norm Demande de réservation par
                         a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
                     when "amount"
                       p.norm Prix de la location débitée avec succès !

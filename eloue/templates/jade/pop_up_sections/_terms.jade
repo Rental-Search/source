@@ -1,5 +1,6 @@
 include ../_date_picker_border
 {% verbatim %}
+span(ng-show="dateRangeError").text-danger {{dateRangeError}}
 table.calendar.bd-wrap.indent-t-md.indent-b-md
     tbody
         tr

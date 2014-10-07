@@ -6,8 +6,8 @@ aside.tabs-vertical-static.pull-right.lg(ng-show="messageThread && messageThread
     li.tab-vertical
       .section-content
         {% verbatim %}
-        img(data-ng-src="{{messageThread.product.picture}}, alt="", width="100%")
-        h3.indent-xs-v: a(href="#").text-underline-hover: b(ng-bind="messageThread.product.summary")
+        img(data-ng-src="{{getProductImg(messageThread.product.picture)}}", alt="{{messageThread.product.summary}}", width="100%", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
+        h3.indent-xs-v: a(ui-sref="items.info({id: messageThread.product.id})").text-underline-hover: b(ng-bind="messageThread.product.summary")
         p.text-gray
           i.icon-lg.flaticon.stroke.location-pin-3 &nbsp;
           | {{messageThread.product.address.city}},&nbsp;
@@ -21,7 +21,7 @@ aside.tabs-vertical-static.pull-right.lg(ng-show="messageThread && messageThread
         .block-with-thumbnail
           .col-thumbnail
             .thumbnail.round: a(href="#")
-              img(data-ng-src="{{messageThread.product.owner.avatar.thumbnail}}", alt="{{messageThread.product.owner.username}}", width="40", height="40")
+              img(data-ng-src="{{getAvatar(messageThread.product.owner.avatar.thumbnail)}}", alt="{{messageThread.product.owner.username}}", width="40", height="40", onerror="$(this).attr('src', '/static/img/profile_img.png')")
           .col-exposition
             a(href="#").text-underline-hover.text-gray
               h4.indent-xs-h {{messageThread.product.owner.first_name}} {{messageThread.product.owner.last_name}}

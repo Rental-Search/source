@@ -13,7 +13,8 @@ define(["angular", "eloue/app"], function (angular) {
         function ($scope, $stateParams, BookingsLoadService, CommentsLoadService) {
 
             // Initial comment data
-            $scope.comment = {rate: 5};
+            $scope.comment = {rate: 0};
+            $scope.markListItemAsSelected("booking-", $stateParams.uuid);
 
             // On rating star click
             $(".star i").click(function () {

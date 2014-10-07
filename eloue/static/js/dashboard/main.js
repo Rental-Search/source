@@ -61,6 +61,7 @@ require([
     "bootstrap-datepicker-fr",
     "formmapper",
     "toastr",
+    "../common/eloue/commonApp",
     "eloue/route",
     "eloue/i18n"
 ], function ($, _, angular, bootstrap, route) {

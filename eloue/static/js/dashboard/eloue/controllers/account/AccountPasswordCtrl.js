@@ -9,6 +9,7 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "UsersService",
         function ($scope, UsersService) {
+            $scope.markListItemAsSelected("account-part-", "account.password");
             $scope.resetPassword = function () {
                 if (!!$scope.currentUser) {
                     UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form"));

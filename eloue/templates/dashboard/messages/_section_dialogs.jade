@@ -1,10 +1,11 @@
 {% verbatim %}
 section.tabs-vertical-active.sm.scrollbar-custom(ng-show="messageThreadList && messageThreadList.length > 0")
   ul(eloue-lazy-load, lazy-data="messageThreadList", lazy-data-provider="MessageThreadsLoadService", lazy-load-method="getMessageThreadList")
-    li.tab-vertical.block-with-thumbnail(ng-repeat="thread in messageThreadList track by thread.id")
+    li.tab-vertical.block-with-thumbnail(ng-repeat="thread in messageThreadList track by thread.id", id="thread-{{thread.id}}", ui-sref="messages.detail({id: thread.id})")
       .col-thumbnail
+        .unread-marker(ng-show="{{!thread.last_message.read_at}}")
         .thumbnail.round: a(ui-sref="messages.detail({id: thread.id}))
-          img(data-ng-src="{{thread.sender.avatar.thumbnail}}", alt="{{thread.sender.username}}", width="20", height="20")
+          img(data-ng-src="{{getAvatar(thread.sender.avatar.thumbnail)}}", alt="{{thread.sender.username}}", width="20", height="20", onerror="$(this).attr('src', '/static/img/profile_img.png')")
       .col-exposition
           a(ui-sref="messages.detail({id: thread.id})").text-underline-hover.pull-left
             h3.small {{thread.sender.username}}

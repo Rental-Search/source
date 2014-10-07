@@ -41,13 +41,15 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.mileageOptions = Mileage;
             $scope.consumptionOptions = Consumption;
             $scope.capacityOptions = Capacity;
+            $scope.markListItemAsSelected("item-", $stateParams.id);
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.categoryDetails.id + "/";
+                $scope.product.addressDetails = $scope.product.address;
+                $scope.product.phoneDetails = $scope.product.phone;
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
-                $scope.markListItemAsSelected();
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
                     $scope.nodeCategory = nodeCategory.id;
                     $scope.updateLeafCategories();
@@ -64,17 +66,6 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.rootCategories = categories;
             });
 
-            $scope.markListItemAsSelected = function() {
-                $('li[id^="item-"]').each(function () {
-                    var item = $(this);
-                    if (item.attr("id") == ("item-" + $scope.product.id)) {
-                        item.addClass("current");
-                    } else {
-                        item.removeClass("current");
-                    }
-                });
-            };
-
             $scope.onPictureAdded = function () {
                 PicturesService.savePicture($scope.product.id, $("#add-picture"), function (data) {
                     $scope.$apply(function () {
@@ -84,9 +75,11 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.updateProduct = function () {
-                ProductsService.updateProduct($scope.product);
+                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.address.id + "/";
+                $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
                 AddressesService.update($scope.product.addressDetails);
                 PhoneNumbersService.updatePhoneNumber($scope.product.phoneDetails);
+                ProductsService.updateProduct($scope.product);
             };
 
             $scope.updateNodeCategories = function () {

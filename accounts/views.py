@@ -15,7 +15,7 @@ import gdata.contacts.client
 import gdata.gauth
 
 
-from django.views.generic import ListView, View, TemplateView
+from django.views.generic import ListView, View, TemplateView, DetailView
 from django.views.generic.base import TemplateResponseMixin
 
 
@@ -49,8 +49,9 @@ from accounts.choices import GEOLOCATION_SOURCE
 
 from products.models import ProductRelatedMessage, MessageThread, Product
 from products.search import product_search
+from products.views import CommonPageContextMixin
 
-from rent.models import Booking, BorrowerComment, OwnerComment
+from rent.models import Booking, BorrowerComment, OwnerComment, Comment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
 from rent.choices import BOOKING_STATE, COMMENT_TYPE_CHOICES
 
@@ -1053,6 +1054,20 @@ class PasswordResetConfirmView(TemplateView):
             return self.response_class({'detail': success_msg})
         return self.response_class({'errors': form.errors}, status=400)
 
+class PatronDetailView(DetailView):
+    model = Patron
+    template_name = 'profile_public/index.jade'
+    context_object_name = 'patron'
+    search_index = product_search
+
+    def get_context_data(self, **kwargs):
+        context = super(PatronDetailView, self).get_context_data(**kwargs)
+        patron = self.object
+        context['patron'] = patron
+        context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')
+        context['products'] = Product.on_site.filter(owner=patron).order_by('-created_at')
+        return context
+
 
 # REST API 2.0
 
@@ -1099,29 +1114,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
 
     @link()
     def stats(self, request, *args, **kwargs):
-        obj = self.get_object()
-        res = {
-            k: getattr(obj, k) for k in ('response_rate', 'response_time')
-        }
-        qs = obj.products.select_related('bookings__comments') \
-            .filter(bookings__comments__type=COMMENT_TYPE_CHOICES.BORROWER) \
-            .aggregate(Avg('bookings__comments__note'), Count('bookings__comments__id'))
-        res.update({
-            # TODO: we would need a better rating calculation in the future
-            'average_rating': int(qs['bookings__comments__note__avg'] or 0),
-            'ratings_count': int(qs['bookings__comments__id__count'] or 0),
-            # count message threads where we have unread messages forthe requested user
-            'unread_message_threads_count': obj.received_messages \
-                .filter(read_at=None) \
-                .values('productrelatedmessage__thread') \
-                .annotate(Count('productrelatedmessage__thread')) \
-                .order_by().count(),
-            # count incoming booking requests for the requested user
-            'booking_requests_count': obj.bookings.filter(state=BOOKING_STATE.AUTHORIZED).only('id').count(),
-            'bookings_count': obj.bookings.count(),
-            'products_count': obj.products.count(),
-        })
-        return Response(res)
+        return Response(self.get_object().stats)
 
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """

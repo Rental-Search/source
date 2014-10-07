@@ -38,6 +38,15 @@
   text-overflow: ellipsis
   white-space: nowrap
 
+
+=default-user
+  background: url($default-user-picture) center bottom  no-repeat
+  background-size: 100% 100%
+
+=default-product
+  background: $gray-lighter url($default-product-picture) center no-repeat
+  background-size: 40% auto
+
 // создание цветовой палитры для элементов
 =make-colors($selector, $color)
   .text-#{$selector}

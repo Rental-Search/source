@@ -1,6 +1,13 @@
 .block-with-thumbnail
   display: table
   width: 100%
+  .unread-marker
+    background: $brand-success
+    +border-radius(100%)
+    width: 0.5em
+    height: 0.5em
+    position: absolute
+    left: 10px
   .col-thumbnail
     display: table-cell
     width: auto
@@ -10,8 +17,24 @@
     position: relative
     &.round
       +border-radius(50%)
+    .sm,
+    .md,
+    .lg
+      +default-user
+      display: block
+      img
+        width: 100%
     img
       display: block
+    .sm
+      width: $thumbnail-sm
+      height: $thumbnail-sm
+    .md
+      width: $thumbnail-md
+      height: $thumbnail-md
+    .lg
+      width: $thumbnail-lg
+      height: $thumbnail-lg
   .col-exposition
     display: table-cell
     overflow: hidden

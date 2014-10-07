@@ -72,10 +72,10 @@
             display: block
             border-radius: 50%
             overflow: hidden
+            width: $thumbnail-sm
+            height: $thumbnail-sm
+            +default-user
             +opacity(.9)
-          img
-            border-radius: 50%
-            display: block
         .content
           width: 100%
           max-width: 0px
@@ -127,6 +127,9 @@
         vertical-align: middle
         overflow: hidden
         border-radius: 50%
+        width: $thumbnail-sm
+        height: $thumbnail-sm
+        +default-user
 
   .search-form
     padding-top: 1.5em

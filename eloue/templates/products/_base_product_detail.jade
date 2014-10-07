@@ -27,18 +27,18 @@ block append content-body
             .section-body
               .part.picture-tab#tabs
                 ul.nav.nav-justified
-                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"], ["Localisation", "#tabs-location"], ["Disponibilité", "#tabs-availability"]]
+                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"], ["Disponibilité", "#tabs-availability"]]
                   each title, href in tabs
                     li.spacer
-                    li: a(href="{{ href }}").pad-v-2 {{ title }}
+                    li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2 {{ title }}
                   if insurance_available
                     li.spacer
-                    li: a(href="#tabs-insurance").pad-v-2 Assurance
-                //-include ./product_detail
-                //-include ./tab_tarifs
+                    li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 Assurance
+                include ./product_detail
+                include ./tab_tarifs
                 include ./tab_available
                 if insurance_available
-                  //-include ./tab_terms
+                  include ./tab_terms
               .part.description
                 include ../jade/product_details/main/_description
               if product_comments

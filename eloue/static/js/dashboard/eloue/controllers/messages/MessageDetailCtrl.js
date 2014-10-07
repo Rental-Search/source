@@ -21,10 +21,10 @@ define(["angular", "eloue/app"], function (angular) {
                 currentUser: $scope.currentUserPromise,
                 messageThread: MessageThreadsLoadService.getMessageThread($stateParams.id)
             };
+            $scope.markListItemAsSelected("thread-", $stateParams.id);
 
             $q.all(promises).then(function (results) {
                 $scope.messageThread = results.messageThread;
-
                 if ($scope.messageThread.product) {
 
                     // Get booking product
@@ -75,6 +75,8 @@ define(["angular", "eloue/app"], function (angular) {
 
                             $scope.booking = booking;
                             $scope.updateNewBookingInfo();
+                        } else {
+                            $scope.booking = booking;
                         }
                     });
                 }

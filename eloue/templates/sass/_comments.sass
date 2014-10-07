@@ -52,7 +52,18 @@ $animation-fill-mode: infinite
 			@for $i from 1 through 10
 				&:nth-of-type(#{$i}n)
 					animation-duration: random(5) + 4s
-
+			.img-wrapper
+				width: $thumbnail-sm
+				height: $thumbnail-sm
+				display: block
+				+border-top-radius(50%)
+				+border-bottom-radius(50%)
+				+default-user
+				position: absolute
+				left: 0
+				top: 0
+				margin: $pad * $line-height-base
+				overflow: hidden
 			a
 				padding: $pad $pad $pad ($pad * 5.5) !important
 				color: white
@@ -81,16 +92,6 @@ $animation-fill-mode: infinite
 					background-color: darken($brand-primary,10%) !important
 					&:before
 						border-top-color: darken($brand-primary,10%)
-				img
-					+border-top-radius(50%)
-					+border-bottom-radius(50%)
-					position: absolute
-					left: 0
-					top: 0
-					margin: $pad * $line-height-base
-					width: $thumbnail-sm
-					height: $thumbnail-sm
-					+default-user
 
 				p
 					color: inherit

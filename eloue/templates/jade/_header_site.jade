@@ -21,10 +21,11 @@ section.container.signs-links
       | Appelez-nous au 
       b 0826.800.200 
       | (0,15&euro; / min)
+    li.spacer
     li.guest-veiw(ng-show="!!currentUser").ng-hide
         {% verbatim %}
         .dropdown
-          span.dropdown-img: a(href="#"): img(data-ng-src="{{currentUser.avatar.profil}}", alt="")
+          span.dropdown-img: a(href="#"): img(data-ng-src="{{currentUser.avatar.profil}}").bg-image
           span(data-toggle="dropdown").dropdown-toggle.text-success {{currentUser.username}}
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
@@ -34,6 +35,7 @@ section.container.signs-links
             li: a(href="{% url 'dashboard:bookings' %}") Réservations
             li: a(href="{% url 'dashboard:items' %}") Annonces
             li: a(href="{% url 'dashboard:account' %}") Compte
+            li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()") Déconnexion
             {% verbatim %}
         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
@@ -44,7 +46,7 @@ section.container.signs-links
             each item in header_popover
               li
                 .middle-round: span
-                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
+                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="").bg-image
                 .content
                   h4: a(href="#") #{item.first_name}
                   h5: a(href="#") #{item.topic}

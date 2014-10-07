@@ -1,4 +1,8 @@
+{% if rate %}
+{% with rate as rate|stringformat:'d' %}
 .rate
-  -var stars = [1,2,3,4,5]
+  -var stars = "12345"
   each s in stars
     span.flaticon.solid.star-2(class="{% if s == rate %}current-rate{% endif %}")
+{% endwith %}
+{% endif %}
