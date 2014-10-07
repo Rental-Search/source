@@ -21,7 +21,7 @@ from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
-from django.db.models import permalink, Q, signals, Count, Sum
+from django.db.models import permalink, Q, signals, Count, Sum, Avg
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
 from django.utils.timesince import timesince
@@ -39,6 +39,7 @@ from payments import paypal_payment
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, json
+from rent.choices import COMMENT_TYPE_CHOICES, BOOKING_STATE
 
 
 DEFAULT_CURRENCY = get_format('CURRENCY')
@@ -279,17 +280,16 @@ class Patron(AbstractUser):
         # if he uses no service at all, we return None
         return None
 
-
     @property
     def response_rate(self):
         from products.models import MessageThread
         threads = MessageThread.objects.filter(recipient=self).annotate(num_messages=Count('messages'))
         if not threads:
-            return 100.0
+            return D('100.0')
         threads_num = threads.count()
         answered = threads.filter(num_messages__gt=1)
         answered_num = answered.count()
-        return answered_num/float(threads_num)*100.0
+        return D(answered_num/float(threads_num)*100.0).quantize(D('0.0'))
     
     @property
     def response_time(self):
@@ -299,6 +299,31 @@ class Patron(AbstractUser):
             return timesince(datetime.datetime.now() - datetime.timedelta(days=1))
         rt = sum([message.sent_at - message.parent_msg.sent_at for message in messages], datetime.timedelta(seconds=0))/len(messages)
         return timesince(datetime.datetime.now() - rt)
+
+    @property
+    def stats(self):
+        res = {
+            k: getattr(self, k) for k in ('response_rate', 'response_time')
+        }
+        qs = self.products.select_related('bookings__comments') \
+            .filter(bookings__comments__type=COMMENT_TYPE_CHOICES.BORROWER) \
+            .aggregate(Avg('bookings__comments__note'), Count('bookings__comments__id'))
+        res.update({
+            # TODO: we would need a better rating calculation in the future
+            'average_rating': int(qs['bookings__comments__note__avg'] or 0),
+            'ratings_count': int(qs['bookings__comments__id__count'] or 0),
+            # count message threads where we have unread messages forthe requested user
+            'unread_message_threads_count': self.received_messages \
+                .filter(read_at=None) \
+                .values('productrelatedmessage__thread') \
+                .annotate(Count('productrelatedmessage__thread')) \
+                .order_by().count(),
+            # count incoming booking requests for the requested user
+            'booking_requests_count': self.bookings.filter(state=BOOKING_STATE.AUTHORIZED).only('id').count(),
+            'bookings_count': self.bookings.count(),
+            'products_count': self.products.count(),
+        })
+        return res
 
     @property
     def average_note(self):

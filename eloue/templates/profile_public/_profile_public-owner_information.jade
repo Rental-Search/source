@@ -12,12 +12,13 @@
       i.flaticon.stroke.phone-3
       | Appelez
     ul.nav.stats
-    //-
+      {% with patron_stats.items as stats %}
       each stat in stats
         li
           span
-            big.text-success #{stat[0]} 
-          span #{stat[1]}
+            big.text-success {{stat.1}}
+          span {{stat.0}}
+      {% endwith %}
 //-
   .part.connection.clearfix
     .col-sm-4
