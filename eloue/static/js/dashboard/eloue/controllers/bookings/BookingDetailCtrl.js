@@ -13,7 +13,8 @@ define(["angular", "eloue/app"], function (angular) {
         function ($scope, $stateParams, BookingsLoadService, CommentsLoadService) {
 
             // Initial comment data
-            $scope.comment = {rate: 5};
+            $scope.comment = {rate: 0};
+            $scope.markListItemAsSelected("booking-", $stateParams.uuid);
 
             // On rating star click
             $(".star i").click(function () {
@@ -26,7 +27,6 @@ define(["angular", "eloue/app"], function (angular) {
             // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
-                $scope.markListItemAsSelected("booking-", $stateParams.uuid);
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
