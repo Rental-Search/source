@@ -1064,8 +1064,8 @@ class PatronDetailView(DetailView):
         context = super(PatronDetailView, self).get_context_data(**kwargs)
         patron = self.object
         context['patron'] = patron
-        context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')[:3]
-        context['products'] = Product.on_site.filter(owner=patron).order_by('-created_at')[:3]
+        context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')
+        context['products'] = Product.on_site.filter(owner=patron).order_by('-created_at')
         return context
 
 

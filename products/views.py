@@ -797,7 +797,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
         context = {
             'properties': product.properties.select_related('property'),
-            'product_list': self.sqs.more_like_this(product)[:4],
+            'product_list': self.sqs.more_like_this(product)[:5],
             'product_comments': comment_qs.filter(booking__product=product),
             'owner_comments': comment_qs.filter(booking__owner=product.owner),
             'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
