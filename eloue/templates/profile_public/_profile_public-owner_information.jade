@@ -15,24 +15,24 @@
       {% with patron.stats as stats %}
       li
         span
-          big.text-success {{stats.products_count}}
-        span &nbsp;annonces publiées
+          big.text-success {{ stats.ratings_count }}&nbsp;
+        span annonces publiées
       li
         span
-            big.text-success {{stats.bookings_count}}
-        span &nbsp;locations effectués
+            big.text-success {{ stats.products_count }}&nbsp;
+        span locations effectués
       li
         span
-            big.text-success {{stats.ratings_count}}
-        span &nbsp;évalutations
+            big.text-success {{ stats.bookings_count }}&nbsp;
+        span évalutations
       li
         span
-            big.text-success {{stats.response_rate|floatformat:"0"}}%
-        span &nbsp;de taux de réponse
+            big.text-success {{ stats.response_rate|floatformat:"0" }}%&nbsp;
+        span de taux de réponse
       li
         span
-            big.text-success {{stats.response_time}}
-        span &nbsp;de temps de réponse en moyenne
+            big.text-success {{ stats.response_time }}&nbsp;
+        span de temps de réponse en moyenne
       {% endwith %}
 //-
   .part.connection.clearfix
