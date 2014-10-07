@@ -9,7 +9,7 @@
             .thumbnail-content
                 h5
                     a(href="{{ product.owner_url }}") {{ product.owner }}
-                {% with 3 as rate %}
+                {% with product.owner.average_note as rate %}
                 include ../../_rate
                 {% endwith %}
                 p

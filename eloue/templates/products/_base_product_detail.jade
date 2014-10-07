@@ -27,7 +27,7 @@ block append content-body
             .section-body
               .part.picture-tab#tabs
                 ul.nav.nav-justified
-                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"], ["Localisation", "#tabs-location"], ["Disponibilité", "#tabs-availability"]]
+                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"], ["Disponibilité", "#tabs-availability"]]
                   each title, href in tabs
                     li.spacer
                     li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2 {{ title }}

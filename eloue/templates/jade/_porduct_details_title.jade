@@ -4,15 +4,17 @@ h3 Location {{ product.summary }} - {{ product.city|title }}
 {% if product_type != 'product' %}
 ul.breadcrumb
   {% if product_type == 'carproduct' %}
-  li {{ product_object.seat_number }} {% trans 'places' %}
-  li {{ product_object.door_number }} {% trans 'portes' %}
+  li {{ product_object.seat_number }}&nbsp;{% trans 'places' %}
+  li {{ product_object.door_number }}&nbsp;{% trans 'portes' %}
   li {{ product_object.get_fuel_display }}
-  li {{ product_object.get_transmission_display }}
-  li {{ product_object.consumption }} {% trans 'L/100km' %}
+  li {{ product_object.get_consumption_display }}&nbsp;{% trans 'litres/100km' %}
+  {% with product_object.licence_plate_is_peer as licence_plate_is_peer %}{% if licence_plate_is_peer != '' %}
+  li plaque&nbsp;{{ licence_plate_is_peer|yesno:'pair,impaire,None' }}
+  {% endif %}{% endwith %}
   {% endif %}
   {% if product_type == 'realestateproduct' %}
-  li {{ product_object.capacity }} {% trans 'personnes' %}
+  li {{ product_object.capacity }}&nbsp;{% trans 'personnes' %}
   li {{ product_object.get_private_life_display }}
-  li {{ product_object.chamber_number }} {% trans 'chambres' %}
+  li {{ product_object.chamber_number }}&nbsp;{% trans 'chambres' %}
   {% endif %}
 {% endif %}
