@@ -23,33 +23,10 @@
         a(href="#/phone", data-dismiss="modal").btn.bg-success.call
             i.flaticon.stroke.phone-3
             | Appelez
-        //-ul.nav.stats
-        //-
-            li
-                span
-                    big.text-success {{product.ownerStats.products_count}}
-                span
-                    | annonces publiées
-            li
-                span
-                    big.text-success {{product.ownerStats.bookings_count}}
-                span
-                    | locations effectués
-            li
-                span
-                    big.text-success {{product.ownerStats.ratings_count}}
-                span
-                    | évalutations
-            li
-                span
-                    big.text-success {{product.ownerStats.response_rate}}
-                span
-                    | de taux de réponse
-            li
-                span
-                    big.text-success {{product.ownerStats.response_time}}
-                span
-                    | de temps de réponse en moyenne
+        ul.nav.stats
+            {% with product_object.owner.stats as stats %}
+            include ../../_patron_stats
+            {% endwith %}
 //-
     .part.connection.clearfix
         .col-sm-4

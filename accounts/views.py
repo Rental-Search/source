@@ -1114,29 +1114,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
 
     @link()
     def stats(self, request, *args, **kwargs):
-        obj = self.get_object()
-        res = {
-            k: getattr(obj, k) for k in ('response_rate', 'response_time')
-        }
-        qs = obj.products.select_related('bookings__comments') \
-            .filter(bookings__comments__type=COMMENT_TYPE_CHOICES.BORROWER) \
-            .aggregate(Avg('bookings__comments__note'), Count('bookings__comments__id'))
-        res.update({
-            # TODO: we would need a better rating calculation in the future
-            'average_rating': int(qs['bookings__comments__note__avg'] or 0),
-            'ratings_count': int(qs['bookings__comments__id__count'] or 0),
-            # count message threads where we have unread messages forthe requested user
-            'unread_message_threads_count': obj.received_messages \
-                .filter(read_at=None) \
-                .values('productrelatedmessage__thread') \
-                .annotate(Count('productrelatedmessage__thread')) \
-                .order_by().count(),
-            # count incoming booking requests for the requested user
-            'booking_requests_count': obj.bookings.filter(state=BOOKING_STATE.AUTHORIZED).only('id').count(),
-            'bookings_count': obj.bookings.count(),
-            'products_count': obj.products.count(),
-        })
-        return Response(res)
+        return Response(self.get_object().stats)
 
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """

@@ -12,12 +12,9 @@
       i.flaticon.stroke.phone-3
       | Appelez
     ul.nav.stats
-    //-
-      each stat in stats
-        li
-          span
-            big.text-success #{stat[0]} 
-          span #{stat[1]}
+      {% with patron.stats as stats %}
+      include ../jade/_patron_stats
+      {% endwith %}
 //-
   .part.connection.clearfix
     .col-sm-4

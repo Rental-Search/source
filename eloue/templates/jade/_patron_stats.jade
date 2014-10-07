@@ -1,0 +1,23 @@
+{% if stats %}
+li
+  span
+    big.text-success {{ stats.ratings_count }}&nbsp;
+  span annonces publiées
+li
+  span
+    big.text-success {{ stats.products_count }}&nbsp;
+  span locations effectués
+li
+  span
+    big.text-success {{ stats.bookings_count }}&nbsp;
+  span évalutations
+li
+  span
+    big.text-success {{ stats.response_rate|floatformat:"0" }}%&nbsp;
+  span de taux de réponse
+li
+  span
+    big.text-success {{ stats.response_time }}&nbsp;
+  span de temps de réponse en moyenne
+{% endif %}
+
