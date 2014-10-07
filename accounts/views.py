@@ -1060,24 +1060,12 @@ class PatronDetailView(DetailView):
     context_object_name = 'patron'
     search_index = product_search
 
-    stats_map = {
-        'products_count': _(u'products_count'),
-        'bookings_count': _(u'locations effectués'),
-        'ratings_count': _(u'évalutations'),
-        'response_rate': _(u'de taux de réponse'),
-        'response_time': _(u'de temps de réponse en moyenne')
-    }
-
     def get_context_data(self, **kwargs):
         context = super(PatronDetailView, self).get_context_data(**kwargs)
         patron = self.object
         context['patron'] = patron
         context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')[:3]
         context['products'] = Product.on_site.filter(owner=patron).order_by('-created_at')[:3]
-
-        pure_stats = patron.stats
-        pure_stats['response_rate'] = '{}%'.format(pure_stats['response_rate'])
-        context['patron_stats'] = {self.stats_map[key]: pure_stats[key] for key in self.stats_map}
         return context
 
 

@@ -285,11 +285,11 @@ class Patron(AbstractUser):
         from products.models import MessageThread
         threads = MessageThread.objects.filter(recipient=self).annotate(num_messages=Count('messages'))
         if not threads:
-            return D('100.0')
+            return 100.0
         threads_num = threads.count()
         answered = threads.filter(num_messages__gt=1)
         answered_num = answered.count()
-        return D(answered_num/float(threads_num)*100.0).quantize(D('0.0'))
+        return answered_num/float(threads_num)*100.0
     
     @property
     def response_time(self):

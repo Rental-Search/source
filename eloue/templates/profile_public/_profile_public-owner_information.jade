@@ -12,12 +12,27 @@
       i.flaticon.stroke.phone-3
       | Appelez
     ul.nav.stats
-      {% with patron_stats.items as stats %}
-      each stat in stats
-        li
-          span
-            big.text-success {{stat.1}}
-          span {{stat.0}}
+      {% with patron.stats as stats %}
+      li
+        span
+          big.text-success {{stats.products_count}}
+        span &nbsp;annonces publiées
+      li
+        span
+            big.text-success {{stats.bookings_count}}
+        span &nbsp;locations effectués
+      li
+        span
+            big.text-success {{stats.ratings_count}}
+        span &nbsp;évalutations
+      li
+        span
+            big.text-success {{stats.response_rate|floatformat:"0"}}%
+        span &nbsp;de taux de réponse
+      li
+        span
+            big.text-success {{stats.response_time}}
+        span &nbsp;de temps de réponse en moyenne
       {% endwith %}
 //-
   .part.connection.clearfix
