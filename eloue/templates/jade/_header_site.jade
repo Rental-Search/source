@@ -35,6 +35,7 @@ section.container.signs-links
             li: a(href="{% url 'dashboard:bookings' %}") Réservations
             li: a(href="{% url 'dashboard:items' %}") Annonces
             li: a(href="{% url 'dashboard:account' %}") Compte
+            li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()") Déconnexion
             {% verbatim %}
         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success

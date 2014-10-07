@@ -199,9 +199,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
      */
     EloueCommon.controller("AuthCtrl", [
         "$scope",
+        "$window",
         "AuthService",
         "UsersService",
-        function($scope, AuthService, UsersService) {
+        function($scope, $window, AuthService, UsersService) {
             var currentUserToken = AuthService.getCookie("user_token");
             if (currentUserToken) {
                 // Get current user
@@ -214,5 +215,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     });
                 });
             }
+
+            $scope.logout = function() {
+                AuthService.clearUserData();
+                $window.location.reload();
+            };
         }]);
 });
