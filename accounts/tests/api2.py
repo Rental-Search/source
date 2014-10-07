@@ -20,11 +20,57 @@ def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
 
 class AnonymousUsersTest(APITestCase):
+
+    fixtures = ['patron']
+
+    public_fields = (
+        'id', 'company_name', 'username', 'is_professional', 'slug', 'avatar', 'default_address', 'about', 'work',
+        'school', 'hobby', 'languages', 'url', 'date_joined')
+    private_fields = (
+        'email', 'first_name', 'last_name', 'default_number', 'driver_license_date', 'driver_license_number',
+        'date_of_birth', 'place_of_birth', 'is_active')
+
     def test_location(self):
         self.assertEqual(_location('patron-reset-password', pk=2222), '/api/2.0/users/2222/reset_password/')
 
-    def test_account_anonymous_access_forbidden(self):
+    def test_account_list_forbidden(self):
         response = self.client.get(_location('patron-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_account_search_allowed(self):
+        response = self.client.get(_location('patron-list'), {
+            'username': 'alexandre'
+        })
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.data['count'], 1)
+        data = response.data['results'][0]
+
+        for field in self.public_fields:
+            self.assertIn(field, data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, data, field)
+
+    def test_account_show_allowed(self):
+        response = self.client.get(_location('patron-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_account_update_forbidden(self):
+        response = self.client.put(_location('patron-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_account_delete_forbidden(self):
+        response = self.client.delete(_location('patron-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_account_reset_password_forbidden(self):
+        response = self.client.put(_location('patron-reset-password', pk=1))
         self.assertEquals(response.status_code, 401)
 
     def test_account_anonymous_creation_required(self):

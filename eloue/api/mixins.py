@@ -73,6 +73,15 @@ class PermissionMixin(object):
         if permissions and not any(permissions):
             self.permission_denied(request)
 
+    def get_serializer_context(self):
+        """
+        Add to serializer context flag designated whether exception on
+        validation errors must be raised.
+        """
+        context = super(PermissionMixin, self).get_serializer_context()
+        context['creation'] = (self.action == 'create')
+        return context
+
 class OwnerListMixin(object):
     owner_filter_class = OwnerFilter
 
