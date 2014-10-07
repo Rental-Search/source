@@ -1637,7 +1637,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     // Parse last message
                     if (!!lastMessageData) {
                         messageThreadResult.last_message = lastMessageData;
-                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "HH'h'mm");
+                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.mm.yyyy HH'h'mm");
                     }
 
                     return messageThreadResult;
