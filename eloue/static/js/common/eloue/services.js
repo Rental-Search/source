@@ -1280,7 +1280,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "UtilsService",
             "BookingsParseService",
             "ProductsLoadService",
-            function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService) {
+            "MessageThreadsService",
+            function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService, MessageThreadsService) {
                 var bookingsLoadService = {};
 
                 bookingsLoadService.getBookingList = function (author, page) {
@@ -1347,7 +1348,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Load product
                         ProductsLoadService.getProduct(productId, true, true).then(function (product) {
                             booking.product = product;
-                            deferred.resolve(booking);
+                            MessageThreadsService.getMessageThread(product.id, UtilsService.getIdFromUrl(booking.borrower)).then(function(threads) {
+                                if (threads && threads.length > 0) {
+                                    booking.lastThreadId = UtilsService.getIdFromUrl(threads[threads.length - 1].thread);
+                                }
+                                deferred.resolve(booking);
+                            });
+
                         });
                     });
 

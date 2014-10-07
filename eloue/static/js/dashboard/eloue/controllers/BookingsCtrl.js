@@ -64,6 +64,20 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.filterByState = function () {
                 $scope.bookingFilter.state = $scope.stateFilter;
             };
+
+            //TODO: add all possible states
+            $scope.getStateClass = function(state) {
+                switch (state) {
+                    case "pending":
+                        return "soon";
+                    case "ongoing":
+                        return "in-progress";
+                    case "ended":
+                        return "completed";
+                    default:
+                        return "in-progress"
+                }
+            };
         }
     ]);
 });
