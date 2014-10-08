@@ -113,7 +113,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("PhoneNumbers", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "phones/:id/?", {},
             {
-                "get": { method: "GET", params: {id: ":id"}},
+                "getPremiumRateNumber": { method: "GET", url: Endpoints.api_url + "phones/:id/premium_rate_number/?" },
                 "update": { method: "PUT" }
             });
     }]);

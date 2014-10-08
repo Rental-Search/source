@@ -1084,12 +1084,16 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("PhoneNumbersService", ["PhoneNumbers", function (PhoneNumbers) {
             var phoneNumbersService = {};
 
-            phoneNumbersService.getPhoneNumber = function (phoneNumbersId) {
-                return PhoneNumbers.get({id: phoneNumbersId});
+            phoneNumbersService.getPhoneNumber = function (phoneNumberId) {
+                return PhoneNumbers.get({id: phoneNumberId});
             };
 
             phoneNumbersService.updatePhoneNumber = function (phoneNumber) {
                 return PhoneNumbers.update({id: phoneNumber.id}, phoneNumber);
+            };
+
+            phoneNumbersService.getPremiumRateNumber = function (phoneNumberId) {
+                return PhoneNumbers.getPremiumRateNumber({id: phoneNumberId});
             };
 
             return phoneNumbersService;
