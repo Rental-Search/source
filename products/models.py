@@ -159,7 +159,11 @@ class Product(models.Model):
     def borrowercomments(self):
         from rent.models import BorrowerComment
         return BorrowerComment.objects.filter(booking__product=self)
-    
+
+    @property
+    def comment_count(self):
+        return self.borrowercomments.count()
+
     def monthly_availability(self, year, month):
 
         year = int(year)

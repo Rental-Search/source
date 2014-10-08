@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from rest_framework.serializers import (
-    PrimaryKeyRelatedField, CharField, EmailField, BooleanField,
+    PrimaryKeyRelatedField, CharField, EmailField, BooleanField, FloatField
 )
 from rest_framework_gis.serializers import MapGeometryField
 
@@ -52,6 +52,7 @@ class UserSerializer(serializers.ModelSerializer):
     default_address = NestedAddressSerializer(required=False)
     default_number = NestedPhoneNumberSerializer(required=False)
     languages = PrimaryKeyRelatedField(many=True, required=False) # TODO: remove if we got to expose language resource
+    average_note = FloatField(read_only=True)
 
     def restore_object(self, attrs, instance=None):
         # we should allow password setting on initial user registration only
@@ -68,7 +69,7 @@ class UserSerializer(serializers.ModelSerializer):
             'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
-            'date_joined', 'is_active', 'rib', 'password',
+            'date_joined', 'is_active', 'rib', 'password', 'average_note'
         )
         public_fields = (
             'id', 'company_name', 'username', 'is_professional', 'slug',

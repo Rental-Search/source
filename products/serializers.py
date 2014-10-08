@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from rest_framework.fields import FloatField, IntegerField
 from products import models
 from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer, BooleanField
-from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
+from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
+    NestedModelSerializerMixin
 
 
 class CategorySerializer(ModelSerializer):
@@ -20,6 +22,11 @@ class CategorySerializer(ModelSerializer):
             'is_child_node', 'is_leaf_node', 'is_root_node')
         immutable_fields = ('parent',)
 
+
+class NestedCategorySerializer(NestedModelSerializerMixin, CategorySerializer):
+    pass
+
+
 class RequiredBooleanField(BooleanField):
     def __init__(self, required=None, **kwargs):
         return super(RequiredBooleanField, self).__init__(required=True, **kwargs)
@@ -34,15 +41,18 @@ class RequiredBooleanFieldSerializerMixin(object):
 
 class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
     address = NestedAddressSerializer()
-    phone = NestedPhoneNumberSerializer(required=False)
+    average_note = FloatField(read_only=True)
+    comment_count = IntegerField(read_only=True)
+    category = NestedCategorySerializer(read_only=True)
 
     class Meta:
         model = models.Product
-        fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
-                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies')
+        fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'average_note', 'prices',
+                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies', 'comment_count',
+                  'pictures')
         public_fields = (
             'id', 'summary', 'deposit_amount', 'currency', 'description',
-            'address', 'phone', 'quantity', 'category', 'owner',
+            'address', 'quantity', 'category', 'owner',
             'pro_agencies')
         view_name = 'product-detail'
         read_only_fields = ('is_archived', 'created_at')
