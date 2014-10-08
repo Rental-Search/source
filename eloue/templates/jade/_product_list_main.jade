@@ -29,6 +29,7 @@ ol.nav.row
             span.declarer-name {{ product.owner }}
             a(href="{{ product.owner_url }}").declarer-thumbnail: img(style="background-image: url({{ product.owner_avatar }})").bg-image
           .btns
+           //-
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2
     {% endfor %}
