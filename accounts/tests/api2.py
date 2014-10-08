@@ -352,6 +352,41 @@ class PhoneNumbersTest(APITestCase):
         self.assertTrue(len(response.data['default_number']), response.data['default_number'])
         self.assertEquals(response.data['default_number']['id'], phonenumber_id, response.data)
 
+
+class AnonymousAddressesTest(APITestCase):
+
+    fixtures = ['patron', 'address']
+
+    public_fields = ('zipcode', 'position', 'city', 'country')
+    private_fields = ('patron', 'id', 'street')
+
+    def test_address_list_forbidden(self):
+        response = self.client.get(_location('address-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_address_show_allowed(self):
+        response = self.client.get(_location('address-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_address_create_forbidden(self):
+        response = self.client.post(_location('address-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_address_update_forbidden(self):
+        response = self.client.put(_location('address-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_address_delete_forbidden(self):
+        response = self.client.delete(_location('address-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+
 class AddressesTest(APITestCase):
     fixtures = ['patron', 'address']
 
