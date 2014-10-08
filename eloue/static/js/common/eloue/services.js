@@ -1823,6 +1823,17 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 },
 
                 /**
+                 * Sends password reset request.
+                 * @param form form
+                 * @param url post url
+                 * @param successCallback success callback
+                 * @param errorCallback error callback
+                 */
+                resetPassword: function(form, url, successCallback, errorCallback) {
+                    FormService.send("POST", url, form, successCallback, errorCallback);
+                },
+
+                /**
                  * Register new account
                  * @param account new account
                  * @returns user promise object.
