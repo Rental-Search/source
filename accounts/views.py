@@ -1010,6 +1010,7 @@ def patron_delete_idn_connect(request):
 
 from accounts.forms import EmailPasswordResetForm
 from eloue.views import AjaxResponseMixin
+from eloue.http import JsonResponse
 from eloue.decorators import ajax_required
 
 class PasswordResetView(AjaxResponseMixin, View):
@@ -1051,8 +1052,8 @@ class PasswordResetConfirmView(TemplateView):
         if form.is_valid():
             form.save()
             success_msg = _("Your password has been set.  You may go ahead and log in now.")
-            return self.response_class({'detail': success_msg})
-        return self.response_class({'errors': form.errors}, status=400)
+            return JsonResponse({'detail': success_msg})
+        return JsonResponse({'errors': form.errors}, status=400)
 
 class PatronDetailView(DetailView):
     model = Patron
