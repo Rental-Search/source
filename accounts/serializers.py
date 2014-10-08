@@ -103,14 +103,9 @@ class PasswordChangeSerializer(serializers.ModelSerializer):
         write_only_fields = ('password',)
 
 class BookingPayCreditCardSerializer(serializers.ModelSerializer):
-    cvv = CharField(max_length=4, min_length=3, write_only=True,
-        label=_(u'Cryptogramme de sécurité'),
-        help_text=_(u'Les 3 derniers chiffres au dos de la carte.'),
-    )
-
     class Meta:
         model = models.Patron
-        fields = ('creditcard', 'cvv')
+        fields = ('creditcard',)
 
 class CreditCardSerializer(serializers.ModelSerializer):
     cvv = CharField(max_length=4, min_length=3, write_only=True,
