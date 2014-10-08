@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework.fields import FloatField, IntegerField
 from products import models
-from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer, BooleanField
+from accounts.serializers import NestedAddressSerializer, BooleanField
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
     NestedModelSerializerMixin
 
@@ -27,6 +27,37 @@ class NestedCategorySerializer(NestedModelSerializerMixin, CategorySerializer):
     pass
 
 
+class PriceSerializer(ModelSerializer):
+    # FIXME: uncomment if we need to provide 'local_currency_amount' instead of 'amount' to clients, remove otherwise
+    def _transform_amount(self, obj, value):
+        return self.fields['amount'].field_to_native(obj, 'local_currency_amount')
+
+    class Meta:
+        model = models.Price
+        fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')
+        public_fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')
+        immutable_fields = ('product', 'currency')
+
+
+class NestedPriceSerializer(NestedModelSerializerMixin, PriceSerializer):
+    pass
+
+
+class PictureSerializer(ModelSerializer):
+    image = EncodedImageField(('thumbnail', 'profile', 'home', 'display'))
+
+    class Meta:
+        model = models.Picture
+        fields = ('id', 'product', 'image', 'created_at')
+        public_fields = ('id', 'product', 'image', 'created_at')
+        read_only_fields = ('created_at',)
+        immutable_fields = ('product',)
+
+
+class NestedPictureSerializer(NestedModelSerializerMixin, PictureSerializer):
+    pass
+
+
 class RequiredBooleanField(BooleanField):
     def __init__(self, required=None, **kwargs):
         return super(RequiredBooleanField, self).__init__(required=True, **kwargs)
@@ -44,6 +75,8 @@ class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
     average_note = FloatField(read_only=True)
     comment_count = IntegerField(read_only=True)
     category = NestedCategorySerializer(read_only=True)
+    prices = NestedPriceSerializer(read_only=True, many=True)
+    pictures = NestedPictureSerializer(read_only=True, many=True)
 
     class Meta:
         model = models.Product
@@ -97,26 +130,6 @@ class RealEstateProductSerializer(ProductSerializer):
             'washing_machine', 'tumble_dryer', 'computer_with_internet',
         )
 
-class PriceSerializer(ModelSerializer):
-    # FIXME: uncomment if we need to provide 'local_currency_amount' instead of 'amount' to clients, remove otherwise
-    def _transform_amount(self, obj, value):
-        return self.fields['amount'].field_to_native(obj, 'local_currency_amount')
-
-    class Meta:
-        model = models.Price
-        fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')
-        public_fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')
-        immutable_fields = ('product', 'currency')
-
-class PictureSerializer(ModelSerializer):
-    image = EncodedImageField(('thumbnail', 'profile', 'home', 'display'))
-
-    class Meta:
-        model = models.Picture
-        fields = ('id', 'product', 'image', 'created_at')
-        public_fields = ('id', 'product', 'image', 'created_at')
-        read_only_fields = ('created_at',)
-        immutable_fields = ('product',)
 
 class CuriositySerializer(ModelSerializer):
     class Meta:
