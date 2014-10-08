@@ -174,6 +174,7 @@ class ProAgencySerializer(GeoModelSerializer):
     class Meta:
         model = models.ProAgency
         fields = ('id', 'patron', 'name', 'phone_number', 'address', 'zipcode', 'city', 'country', 'position')
+        public_fields = fields
         read_only_fields = ('position',)
         immutable_fields = ('patron',)
         geo_field = 'position'
@@ -182,6 +183,7 @@ class ProPackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProPackage
         fields = ('id', 'name', 'maximum_items', 'price', 'valid_from', 'valid_until')
+        public_fields = fields
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:

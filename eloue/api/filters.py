@@ -50,8 +50,7 @@ class OwnerFilter(filters.BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         # restrictions for public mode are set with permission, not filters
-        public_actions = getattr(view, 'public_actions', None)
-        if public_actions and view.action in public_actions:
+        if view.public_mode:
             return queryset
 
         user = request.user

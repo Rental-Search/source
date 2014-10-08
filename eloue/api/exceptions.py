@@ -172,10 +172,10 @@ def api_exception_handler(exception):
         exception = PermissionException(
             {'code': error[0], 'description': error[1]})
     # ... and also any other not REST Framework exception
-    elif not isinstance(exception, (exceptions.APIException, ApiException)) and not settings.DEBUG:
-        error = ServerErrorEnum.OTHER_ERROR
-        exception = ServerException(
-            {'code': error[0], 'description': error[1], 'detail': unicode(exception)})
+    # elif not isinstance(exception, (exceptions.APIException, ApiException)) and not settings.DEBUG:
+    #     error = ServerErrorEnum.OTHER_ERROR
+    #     exception = ServerException(
+    #         {'code': error[0], 'description': error[1], 'detail': unicode(exception)})
 
     if isinstance(exception, ApiException):
         # Response in the case of our exception to be caught is similar to

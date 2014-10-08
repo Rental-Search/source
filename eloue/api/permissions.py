@@ -16,16 +16,8 @@ class DefaultPermissions(permissions.DjangoModelPermissions):
                 return True
 
             # check for public access if set for the view
-            elif hasattr(view, 'public_actions'):
-                if view.action in view.public_actions:
-                    return True
-
-                # check if this is a search request and 'search' actions is allowed for the view
-                if (request.method == 'GET' and view.action == 'list' and
-                    request.QUERY_PARAMS and 'search' in view.public_actions):
-                    return True
-
-                return False
+            else:
+                return view.public_mode
 
         # can't make a decision; pass to other permission checkers if there any, otherwise deny access
         return None

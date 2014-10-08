@@ -1093,7 +1093,8 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
-    public_actions = ('retrieve', 'search')
+    guest_public_actions = ('retrieve', 'search',)
+    user_public_actions = ('retrieve', 'search',)
 
     def initial(self, request, *args, **kwargs):
         pk_field = getattr(self, 'pk_url_kwarg', 'pk')
@@ -1106,7 +1107,8 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     @action(methods=['post', 'put'])
     def reset_password(self, request, *args, **kwargs):
         user = self.get_object()
-        serializer = serializers.PasswordChangeSerializer(instance=user, data=request.DATA)
+        serializer = serializers.PasswordChangeSerializer(
+            instance=user, data=request.DATA, context=self.get_serializer_context())
         if serializer.is_valid():
             serializer.save()
             return Response({'detail': _(u"Votre mot de passe à bien été modifié")})
@@ -1125,7 +1127,9 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter) 
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
-    public_actions = ('retrieve',)
+    guest_public_actions = ('retrieve',)
+    user_public_actions = ('retrieve', 'list')
+
 
 class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
@@ -1136,7 +1140,8 @@ class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     serializer_class = serializers.PhoneNumberSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend) 
     filter_fields = ('patron',)
-    public_actions = ('premium_rate_number',)
+    guest_public_actions = ('premium_rate_number',)
+    user_public_actions = ('premium_rate_number',)
 
     @link()
     def premium_rate_number(self, request, *args, **kwargs):
@@ -1177,6 +1182,9 @@ class ProAgencyViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('patron', 'zipcode', 'city', 'country')
     ordering_fields = ('city', 'country')
+    guest_public_actions = ('retrieve', 'list')
+    user_public_actions = ('retrieve', 'list')
+
 
 class ProPackageViewSet(viewsets.NonDeletableModelViewSet):
     """
@@ -1189,6 +1197,9 @@ class ProPackageViewSet(viewsets.NonDeletableModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('maximum_items', 'price', 'valid_from', 'valid_until')
     ordering_fields = ('name', 'maximum_items', 'price', 'valid_from', 'valid_until')
+    guest_public_actions = ('retrieve', 'list')
+    user_public_actions = ('retrieve', 'list')
+
 
 class SubscriptionViewSet(mixins.SetOwnerMixin, viewsets.NonDeletableModelViewSet):
     """

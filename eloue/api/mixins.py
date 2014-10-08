@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
+from rest_framework.permissions import SAFE_METHODS
 from eloue.api.serializers import NestedModelSerializerMixin
 
 from .filters import OwnerFilter
@@ -51,13 +52,28 @@ class ErrorMixin(object):
             request, response, *args, **kwargs)
 
 class PermissionMixin(object):
-    """
-    View set that allow permission checker to pass making a decision (return None).
 
-    If there was not at least one positive decision it is assumed that
-    access is denied.
-    """
+    def initial(self, request, *args, **kwargs):
+        # We must distinguish `list` and `search` but they are the same action by implementation.
+        action = self.action
+        if request.method == 'GET' and action == 'list' and request.QUERY_PARAMS:
+            action = 'search'
+
+        self.public_mode = True
+        if request.user.is_staff or request.user.is_superuser:
+            self.public_mode = False
+        elif request.user.is_authenticated() and action not in getattr(self, 'user_public_actions', ()):
+            self.public_mode = False
+        elif action not in getattr(self, 'guest_public_actions', ()):
+            self.public_mode = False
+
+        super(PermissionMixin, self).initial(request, *args, **kwargs)
+
     def check_permissions(self, request):
+        """
+        Allow permission checker to pass making a decision (return None). If there was not at least one positive
+        decision it is assumed that access is denied.
+        """
         permissions = []
         for permission in self.get_permissions():
             has_pemission = permission.has_permission(request, self)
@@ -76,12 +92,12 @@ class PermissionMixin(object):
 
     def get_serializer_context(self):
         """
-        Add to serializer context flag designated whether exception on
-        validation errors must be raised.
+        Add to serializer context flag designated whether one can access to all fields or to only public fields.
         """
         context = super(PermissionMixin, self).get_serializer_context()
-        context['creation'] = (self.action == 'create')
+        context['public_mode'] = self.public_mode
         return context
+
 
 class OwnerListMixin(object):
     owner_filter_class = OwnerFilter
