@@ -1136,6 +1136,7 @@ class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     serializer_class = serializers.PhoneNumberSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend) 
     filter_fields = ('patron',)
+    public_actions = ('premium_rate_number',)
 
     @link()
     def premium_rate_number(self, request, *args, **kwargs):

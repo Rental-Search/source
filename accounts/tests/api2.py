@@ -243,6 +243,39 @@ class UsersTest(APITestCase):
         self.assertEquals(response.data['first_name'], 'prenom')
         self.assertEquals(response.data['last_name'], 'nom')
 
+
+class AnonymousPhoneNumbersTest(APITestCase):
+
+    fixtures = ['patron', 'phones']
+
+    def test_phonenumber_list_forbidden(self):
+        response = self.client.get(_location('phonenumber-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_phonenumber_show_forbidden(self):
+        response = self.client.get(_location('phonenumber-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_phonenumber_create_forbidden(self):
+        response = self.client.post(_location('phonenumber-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_phonenumber_update_forbidden(self):
+        response = self.client.put(_location('phonenumber-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_phonenumber_delete_forbidden(self):
+        response = self.client.delete(_location('phonenumber-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_phonenumber_premium_rate_number_allowed(self):
+        response = self.client.get(_location('phonenumber-premium-rate-number', pk=1))
+        self.assertEquals(response.status_code, 200)
+        self.assertIn('numero', response.data)
+        number = response.data['numero']
+        self.assertTrue(isinstance(number, basestring) and len(number))
+
+
 class PhoneNumbersTest(APITestCase):
     fixtures = ['patron', 'phones']
 
@@ -448,6 +481,27 @@ class AddressesTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
+
+
+class AnonymousCreditCardTest(APITestCase):
+
+    fixtures = ['patron', 'creditcard']
+
+    def test_creditcard_list_forbidden(self):
+        response = self.client.get(_location('creditcard-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_creditcard_show_forbidden(self):
+        response = self.client.get(_location('creditcard-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_creditcard_create_forbidden(self):
+        response = self.client.post(_location('creditcard-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_creditcard_delete_forbidden(self):
+        response = self.client.delete(_location('creditcard-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
 
 
 class CreditCardTest(APITestCase):
