@@ -228,12 +228,20 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 // Create booking
                 BookingsLoadService.requestBooking(booking).then(
                     function (booking) {
-                        var paymentInfo = {
-                            card_number: $scope.creditCard.card_number,
-                            expires: $scope.creditCard.expires,
-                            cvv: $scope.creditCard.cvv,
-                            holder_name: $scope.creditCard.holder_name
-                        };
+                        var paymentInfo = {};
+                        if ($scope.creditCard.card_number && $scope.creditCard.cvv) {
+                            paymentInfo = {
+                                card_number: $scope.creditCard.card_number,
+                                expires: $scope.creditCard.expires,
+                                cvv: $scope.creditCard.cvv,
+                                holder_name: $scope.creditCard.holder_name
+                            };
+                        }else {
+                            // send only credit card link if using saved credit card
+                            paymentInfo = {
+                                credit_card: Endpoints.api_url + "credit_cards/" + $scope.creditCard.id + "/"
+                            };
+                        }
 
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                             $(".modal").modal("hide");
