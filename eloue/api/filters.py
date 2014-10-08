@@ -49,10 +49,17 @@ class OwnerFilter(filters.BaseFilterBackend):
     owner_field = 'patron'
 
     def filter_queryset(self, request, queryset, view):
-        user = request.user
-        if user.is_anonymous() or user.is_staff or user.is_superuser:
-            # restriction for anonymous user set with permission, not filters.
+        # restrictions for public mode are set with permission, not filters
+        public_actions = getattr(view, 'public_actions', None)
+        if public_actions and view.action in public_actions:
             return queryset
+
+        user = request.user
+
+        # restrictions for anonymous users are set with permission, not filters
+        if user.is_anonymous() or user.is_staff or user.is_superuser:
+            return queryset
+
         owner_field = getattr(view, 'owner_field', self.owner_field)
         if isinstance(owner_field, basestring):
             queryset = queryset.filter(**{owner_field: user.pk})
@@ -60,6 +67,7 @@ class OwnerFilter(filters.BaseFilterBackend):
             or_queries = [Q(**{owner_field: user.pk})
                           for owner_field in owner_field]
             queryset = queryset.filter(reduce(operator.or_, or_queries))
+
         return queryset
 
 class HaystackSearchFilter(filters.BaseFilterBackend):
