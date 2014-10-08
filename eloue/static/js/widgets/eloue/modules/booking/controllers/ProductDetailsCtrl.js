@@ -18,7 +18,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "CreditCardsService",
         "BookingsLoadService",
         "BookingsService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService) {
+        "PhoneNumbersService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService) {
 
             $scope.creditCard = {
                 id: null,
@@ -93,6 +94,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.caution = 0;
             $scope.productRelatedMessages = [];
             $scope.ownerCallDetails = {};
+            $scope.ownerCallDetailsError = null;
             $scope.available = true;
             $scope.newMessage = {};
             $scope.threadId = null;
@@ -126,11 +128,6 @@ define(["angular", "eloue/modules/booking/BookingModule",
 
             ProductsLoadService.getProduct($scope.productId, true, true).then(function (result) {
                 $scope.product = result;
-                //TODO: owner contact details will be defined in some other way.
-                $scope.ownerCallDetails = {
-                    number: result.phone.number.numero,
-                    tariff: result.phone.number.tarif
-                };
                 $scope.loadCalendar();
             });
 
@@ -291,6 +288,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
                     $scope.loadMessageThread();
                 } else if (args.name === "booking") {
                     $scope.loadCreditCards();
+                } else if (args.name === "phone") {
+                    $scope.loadPhoneDetails();
                 }
             });
 
@@ -303,6 +302,22 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 $location.path(newPath);
                 $scope.$apply();
             });
+
+            /**
+             * Load premium phone number using product's phone number id.
+             */
+            $scope.loadPhoneDetails = function() {
+                PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function(result) {
+                    if (!result.error || result.error == "0") {
+                        $scope.ownerCallDetails = {
+                            number: result.numero,
+                            tariff: result.tarif
+                        };
+                    } else {
+                        $scope.ownerCallDetailsError = !!result.error_msg ? result.error_msg : "Le numero n'est pas disponible";
+                    }
+                });
+            };
 
             $scope.loadCreditCards = function () {
                 if ($scope.currentUser) {
