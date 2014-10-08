@@ -198,6 +198,12 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
         self._fields = fields
 
 class NestedModelSerializerMixin(object):
+
+    def to_hyperlink(self, instance):
+        field = self._hyperlink_field_class(view_name=self.opts.view_name, queryset=self.opts.model.objects.all())
+        field.context = self.context
+        return field.to_native(instance)
+
     def from_native(self, value, files=None):
         if value is not None:
             return self._hyperlink_field_class(

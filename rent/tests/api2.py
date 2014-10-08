@@ -49,9 +49,9 @@ class BookingTest(APITransactionTestCase):
         # check we got fields of the created instance in the response
         self.assertIn('uuid', response.data)
         # the currently authenticated user must be used on creation
-        self.assertTrue(response.data['borrower'].endswith(_location('patron-detail', pk=1)))
+        self.assertTrue(response.data['borrower']['id'], 1)
         # the owner must be taken from the product automatically
-        self.assertTrue(response.data['owner'].endswith(_location('patron-detail', pk=4)))
+        self.assertTrue(response.data['owner']['id'], 4)
 
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
@@ -66,7 +66,7 @@ class BookingTest(APITransactionTestCase):
         })
         self.assertEquals(response.status_code, 201, response.data)
         # the currently authenticated user must be used on creation
-        self.assertTrue(response.data['borrower'].endswith(_location('patron-detail', pk=1)))
+        self.assertTrue(response.data['borrower']['id'], 1)
 
     def test_booking_create_own_product_error(self):
         response = self.client.post(_location('booking-list'), {

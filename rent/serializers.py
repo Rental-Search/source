@@ -4,18 +4,18 @@ from django.core.exceptions import ValidationError
 
 from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
 from rest_framework import fields
+from accounts.serializers import NestedPublicUserSerializer
+from products.serializers import NestedPublicProductSerializer
 
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api.serializers import ModelSerializer
 
-class BookingProductField(HyperlinkedRelatedField):
+
+class BookingProductField(NestedPublicProductSerializer):
     default_error_messages = {
         'own_product': _(u"Vous ne pouvez pas louer vos propres objets"),
     }
-
-    def __init__(self, view_name='product-detail', *args, **kwargs):
-        super(BookingProductField, self).__init__(*args, view_name=view_name, **kwargs)
 
     def field_from_native(self, data, files, field_name, into):
         super(BookingProductField, self).field_from_native(data, files, field_name, into)
@@ -28,8 +28,11 @@ class BookingProductField(HyperlinkedRelatedField):
         if value.owner == self.context['request'].user:
             raise ValidationError(self.error_messages['own_product'])
 
+
 class BookingSerializer(ModelSerializer):
     product = BookingProductField()
+    owner = NestedPublicUserSerializer(read_only=True)
+    borrower = NestedPublicUserSerializer()
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)
@@ -48,7 +51,7 @@ class BookingSerializer(ModelSerializer):
         )
         read_only_fields = (
             'state', 'deposit_amount', 'insurance_amount', 'total_amount',
-            'currency', 'contract_id', 'created_at', 'canceled_at', 'owner',
+            'currency', 'contract_id', 'created_at', 'canceled_at',
         )
         immutable_fields = ('started_at', 'ended_at', 'owner', 'borrower', 'product')
 

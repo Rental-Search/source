@@ -12,6 +12,8 @@ from rest_framework_gis.serializers import MapGeometryField
 from accounts.forms import CreditCardForm
 from accounts import models
 from eloue.api import serializers
+from eloue.api.serializers import NestedModelSerializerMixin
+
 
 class GeoModelSerializer(serializers.ModelSerializer):
     field_mapping = MapGeometryField(serializers.ModelSerializer.field_mapping)
@@ -33,6 +35,12 @@ class AddressSerializer(GeoModelSerializer):
 class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
     class Meta(AddressSerializer.Meta):
         public_fields = ('city', 'zipcode')
+
+
+class PublicNestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
+    class Meta(AddressSerializer.Meta):
+        public_fields = ('city', 'zipcode')
+        fields = public_fields
 
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,6 +86,14 @@ class UserSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('slug', 'url', 'date_joined', 'rib')
         immutable_fields = ('email', 'password', 'username')
+
+
+class NestedPublicUserSerializer(NestedModelSerializerMixin, UserSerializer):
+    default_address = PublicNestedAddressSerializer()
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.public_fields
+
 
 class PasswordChangeSerializer(serializers.ModelSerializer):
     current_password = CharField(write_only=True, max_length=128)

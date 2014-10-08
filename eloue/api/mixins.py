@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
+from eloue.api.serializers import NestedModelSerializerMixin
 
 from .filters import OwnerFilter
 from .permissions import IsOwnerOrReadOnly
@@ -111,7 +112,10 @@ class SetOwnerMixin(OwnerListMixin):
                 if not isinstance(owner_field, basestring):
                     owner_field = iter(owner_field).next()
                 owner_field = serializer.fields[owner_field]
-                owner_field.default = owner_field.to_native(user)
+                if isinstance(owner_field, NestedModelSerializerMixin):
+                    owner_field.default = owner_field.to_hyperlink(user)
+                else:
+                    owner_field.default = owner_field.to_native(user)
         return serializer
 
     def pre_save(self, obj):

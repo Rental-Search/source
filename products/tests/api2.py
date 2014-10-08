@@ -374,31 +374,6 @@ class ProductTest(APITestCase):
         self.assertTrue(len(response.data['address']), response.data['address'])
         self.assertEquals(response.data['address']['id'], address_id, response.data)
 
-    def test_edit_phone(self):
-        response = self.client.get(_location('product-detail', pk=1))
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertIn('id', response.data)
-        self.assertEquals(response.data['id'], 1)
-        product_id = response.data['id']
-
-        # create a new PhoneNumber record
-        response = self.client.post(_location('phonenumber-list'), {
-            'number': '0198765432',
-        })
-        self.assertEquals(response.status_code, 201, response.data)
-        # check we got fields of the created instance in the response
-        self.assertIn('id', response.data)
-        phonenumber_id = response.data['id']
-
-        # set the PhoneNumber record we've just created as the 'default_number' attribute
-        response = self.client.patch(_location('product-detail', pk=product_id), {
-            'phone': _location('phonenumber-detail', pk=phonenumber_id),
-        })
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertIn('phone', response.data, response.data)
-        self.assertTrue(len(response.data['phone']), response.data['phone'])
-        self.assertEquals(response.data['phone']['id'], phonenumber_id, response.data)
-
     def test_product_get_by_id(self):
         response = self.client.get(_location('product-detail', pk=1))
         self.assertEquals(response.status_code, 200, response.data)

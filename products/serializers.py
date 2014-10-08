@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from rest_framework.fields import FloatField, IntegerField
 from products import models
-from accounts.serializers import NestedAddressSerializer, BooleanField
+from accounts.serializers import NestedAddressSerializer, BooleanField, NestedPublicUserSerializer, \
+    PublicNestedAddressSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
     NestedModelSerializerMixin
 
@@ -74,9 +75,10 @@ class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
     address = NestedAddressSerializer()
     average_note = FloatField(read_only=True)
     comment_count = IntegerField(read_only=True)
-    category = NestedCategorySerializer(read_only=True)
+    category = NestedCategorySerializer()
     prices = NestedPriceSerializer(read_only=True, many=True)
     pictures = NestedPictureSerializer(read_only=True, many=True)
+    owner = NestedPublicUserSerializer()
 
     class Meta:
         model = models.Product
@@ -90,6 +92,14 @@ class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
         view_name = 'product-detail'
         read_only_fields = ('is_archived', 'created_at')
         immutable_fields = ('owner',)
+
+
+class NestedPublicProductSerializer(NestedModelSerializerMixin, ProductSerializer):
+    address = PublicNestedAddressSerializer()
+
+    class Meta(ProductSerializer.Meta):
+        fields = ProductSerializer.Meta.public_fields
+
 
 class CarProductSerializer(ProductSerializer):
     class Meta(ProductSerializer.Meta):
