@@ -1,4 +1,4 @@
-h2 Vos bank-information
+h2 Vos informations bancaires
 .row
     .col-sm-8.card
         input(type="text", placeholder="Numéro de carte *", ng-model="creditCard.card_number", required, ng-show="newCreditCard").form-control
@@ -20,8 +20,11 @@ h2 Vos bank-information
         i.flaticon.stroke.user-4
 .row(ng-show="newCreditCard")
     .col-sm-12
-        input(type="checkbox", ng-model="showSaveCard").table-form
-        | Conserves mes coordonnées bancaire
+        .checkbox.pull-left
+            label(for="show-save-card")
+                input(type="checkbox", ng-model="showSaveCard")#show-save-card
+                span.flaticon.stroke.checkmark
+            | Conserves mes coordonnées bancaire
 .row(ng-show="!newCreditCard")
     .col-sm-5
     .col-sm-7
@@ -30,5 +33,5 @@ p.info
     | Vous devez payer avec votre propre carte bancaire, que vous devrez présenter au propriétaire pour vérification.
     br
     | Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire devra refuser la location.
-.col-sm-8.col-sm-offset-2: button(type="submit").btn.bg-success.indent-t Réservez
+.col-sm-8.col-sm-offset-2: button(type="submit", ng-disabled="!!dateRangeError").btn.bg-success.indent-t Réservez
 

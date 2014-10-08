@@ -16,13 +16,13 @@ section.container.signs-links
       b 0826.800.200 
       | (0,15&euro; / min)
   //- version of header for authorized user
-  ul.ng-hide(role="tablist", ng-show="!!currentUser").nav.without-spaces
+  ul.ng-hide(role="tablist", ng-show="!!currentUser").without-spaces
     li: span
       | Appelez-nous au 
       b 0826.800.200 
       | (0,15&euro; / min)
     li.spacer
-    li.guest-veiw(ng-show="!!currentUser").ng-hide
+    li.guest-veiw
         {% verbatim %}
         .dropdown
           span.dropdown-img: a(href="#"): img(data-ng-src="{{currentUser.avatar.profil}}").bg-image
@@ -35,6 +35,7 @@ section.container.signs-links
             li: a(href="{% url 'dashboard:bookings' %}") Réservations
             li: a(href="{% url 'dashboard:items' %}") Annonces
             li: a(href="{% url 'dashboard:account' %}") Compte
+            li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()") Déconnexion
             {% verbatim %}
         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
@@ -73,6 +74,7 @@ section.container.signs-links
             li: a Simulez vos revenus
             li: a Conseils pour les propriétaires
             li: a Conseils pour les locataires
+
 .framing
   section.container.search-form
     .table-cell

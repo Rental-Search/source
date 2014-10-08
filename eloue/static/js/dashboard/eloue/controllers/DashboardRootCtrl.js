@@ -97,7 +97,7 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
             };
 
             $scope.getProductImg = function (uri) {
-                return uri ? uri : '/static/img/product_img.png';
+                return uri ? uri : '/static/img/product_img_full.png';
             };
 
             // Nav bar autoresizing

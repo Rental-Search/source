@@ -148,6 +148,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 } else if (fromDateTime < today) {
                     $scope.dateRangeError = "From date cannot be before today";
                 } else {
+                    $scope.dateRangeError = null;
                     ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
                         $scope.duration = result.duration;
                         $scope.pricePerDay = result.unit_value;
@@ -161,8 +162,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
              * Send new message to the owner.
              */
             $scope.sendMessage = function sendMessage() {
-                ProductRelatedMessagesLoadService.postMessage($scope.$parent.threadId, $scope.currentUser.id, $scope.$parent.product.owner.id,
-                    $scope.newMessage.body, null, $scope.$parent.product.id).then(function (result) {
+                ProductRelatedMessagesLoadService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
+                    $scope.newMessage.body, null, $scope.product.id).then(function (result) {
                         // Clear message field
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
@@ -227,13 +228,20 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 // Create booking
                 BookingsLoadService.requestBooking(booking).then(
                     function (booking) {
-                        var paymentInfo = {
-                            card_number: $scope.creditCard.card_number,
-                            exp_month: $scope.creditCard.expires.slice(0, 2),
-                            exp_year: $scope.creditCard.expires.slice(2),
-                            cvc: $scope.creditCard.cvv,
-                            holder_name: $scope.creditCard.holder_name
-                        };
+                        var paymentInfo = {};
+                        if ($scope.creditCard.card_number && $scope.creditCard.cvv) {
+                            paymentInfo = {
+                                card_number: $scope.creditCard.card_number,
+                                expires: $scope.creditCard.expires,
+                                cvv: $scope.creditCard.cvv,
+                                holder_name: $scope.creditCard.holder_name
+                            };
+                        }else {
+                            // send only credit card link if using saved credit card
+                            paymentInfo = {
+                                credit_card: Endpoints.api_url + "credit_cards/" + $scope.creditCard.id + "/"
+                            };
+                        }
 
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                             $(".modal").modal("hide");
@@ -322,7 +330,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                             value.sender = result;
                         });
                     });
-                    $scope.productRelatedMessages = result;
+                    $scope.loadMessageThread();
                 });
             };
 

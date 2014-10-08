@@ -1,14 +1,11 @@
-@media (max-width: $screen-xs-max)
-  body
+body
+  @media (max-width: $screen-xs-max)
     font-size: 12px
-@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max)
-  body
+  @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max)
     font-size: 13px
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max)
-  body
+  @media (min-width: $screen-md-min) and (max-width: $screen-md-max)
     font-size: 14px
-@media (min-width: $screen-lg-min)
-  body
+  @media (min-width: $screen-lg-min)
     font-size: 15px
 
 body
@@ -116,15 +113,20 @@ a, a:hover, a:focus
   +make-bg($brand-success)
 
 .bg-info
-  +make-bg($brand-info)
+  background-color: $brand-info !important
 
 .bg-danger
-  +make-bg($brand-danger)
+  background-color: $brand-danger !important
 
 .bg-gray
-  +make-bg($gray-strong)
+  background-color: $gray-strong !important
+
+.bg-gray-dark
+  background-color: $gray !important
+
 .text-white
   color: white
+
 .bd-b
   border-bottom: px(1) solid $gray-lighter
 
@@ -315,6 +317,10 @@ a, a:hover, a:focus
     padding: .8em .5em
     +clearfix()
 
+.reset_list
+  padding-left: 0
+  list-style-position: inside
+
 @each $indent, $size in ($indent, ""), ($indent-md, "-md"), ($indent-lg, "-lg"), ($indent-sm, "-sm"), ($indent-xs, "-xs") 
   .indent#{$size}
     margin: $indent !important
@@ -332,6 +338,14 @@ a, a:hover, a:focus
   .indent-h#{$size}
     margin-left: $indent !important
     margin-right: $indent !important
+  .pad#{$size}
+    padding: $indent !important
+  .pad-v#{$size}
+    padding-top: $indent !important
+    padding-bottom: $indent !important
+  .pad-h#{$size}
+    padding-right: $indent !important
+    padding-left: $indent !important
 
 ul.not-ordered
   padding-left: $indent-sm

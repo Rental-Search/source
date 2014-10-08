@@ -183,9 +183,13 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
         # once at server initialization and therefore can't get any information
         # about current user. So, dynamic filtration is the only way.
         public_fields = copy.copy(self._fields)
-        request = getattr(self, 'context', {}).get('request', None)
-        user = request.user if request else None
-        only_public_fields = user.is_anonymous() if user else True
+
+        only_public_fields = True
+        if self.context:
+            request = self.context.get('request', None)
+            creation = self.context.get('creation', False)
+            user = request.user if request else None
+            only_public_fields = not creation and user.is_anonymous() if user else True
 
         if hasattr(self.opts, 'public_fields') and only_public_fields:
             for key in public_fields.keys():

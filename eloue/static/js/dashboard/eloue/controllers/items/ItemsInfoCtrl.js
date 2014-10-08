@@ -41,6 +41,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.mileageOptions = Mileage;
             $scope.consumptionOptions = Consumption;
             $scope.capacityOptions = Capacity;
+            $scope.markListItemAsSelected("item-", $stateParams.id);
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
@@ -49,7 +50,6 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.product.phoneDetails = $scope.product.phone;
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
-                $scope.markListItemAsSelected("item-", $scope.product.id);
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
                     $scope.nodeCategory = nodeCategory.id;
                     $scope.updateLeafCategories();

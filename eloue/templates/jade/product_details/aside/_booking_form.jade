@@ -7,7 +7,7 @@ form.form-inline.section-body.text-center
             small à partir de
             big.text-primary &nbsp;{{pricePerDay}}€ /jour
         {% endverbatim %}
-        include ../../_date_picker
+        include ../../_date_picker_border
         {% verbatim %}
         // p.available.unavailable Cet article est disponible à ces dates
         span(ng-show="dateRangeError").text-danger {{dateRangeError}}
@@ -23,7 +23,7 @@ form.form-inline.section-body.text-center
         p Assurance incluse
         {% endverbatim %}
     .part
-        a(href = "#/booking", data-dismiss="modal").btn.bg-success.calendar-ok
+        a(href = "#/booking", data-dismiss="modal", ng-disabled="!!dateRangeError").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2
             | Réservez
         //-

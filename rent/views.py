@@ -397,7 +397,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
                 data=data, context={'request': request, 'suppress_exception': True}
             )
             credit_card = serializer.fields['creditcard'].from_native(credit_card)
-            credit_card.cvv = serializer.fields['cvv'].from_native(data['cvv'])
+            credit_card.cvv = ''
         except (KeyError, ValidationError):
             serializer = CreditCardSerializer(data=data, context={'request': request})
             if not serializer.is_valid():

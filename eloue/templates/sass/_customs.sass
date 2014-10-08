@@ -1,134 +1,81 @@
-.clear-selector
-  .chosen-container
-    font-weight: inherit
-    padding: 0
-    &.chosen-with-drop
-      .chosen-choices,
-      .chosen-single
-        background: white
-        border-color: $gray-medium !important
-    font-size: inherit
-    text-align: center
-    width: 100% !important
-    display: block
-    font-weight: $fw-semibold
-    .chosen-single
-      display: table
-      box-shadow: none
-      width: 100%
-      padding: 0 !important
-      div
-        display: table-cell
-        vertical-align: middle
-        width: 2.5em
-        b
-          width: 1em
-          height: 1.5em
-          +centred_abs()
-      span
-        vertical-align: middle
-        display: table-cell
-        margin: 0
-        padding-right: 1em
-    &.chosen-container-multi
-      height: auto
-      .chosen-choices
-        padding: 0
-        min-height: 0 !important
-        height: auto !important
-        padding: .5em
-        +clearfix()
-        .search-choice
-          padding: .5em
-          margin: .5em
-          background: none
-          color: $gray-medium
-          .search-choice-close
-            background: none
-            top: 0
-            left: 0
-            width: 100%
-            height: 100%
-            z-index: 100
-        .search-field
-          input
-            color: $gray-medium !important
-            margin: 0 !important
-            padding: 0 0 0 .5em !important
-            height: .5em !important
-    .chosen-drop
-      background-color: white
-      border-color: $gray-medium
-      border-width: px(1)
-      border-top-width: 0
-      max-height: 240px
-      margin-top: 0
-    .chosen-search
-      padding: 0
-      margin: 0
-      input
-        border-width: 0 0 1px !important
-        font-weight: $fw-regular
-    .chosen-results
-      padding: 0
-      margin: 0
-      overflow: hidden
-      max-height: none !important
-      li
-        color: $gray-medium
-        &.highlighted
-          background: $gray-lighter
-          &:hover
-            color: $gray-medium
-        &.result-selected
-          background: $gray-light
-          &:hover
-            color: white
+.chosen-container
+  padding: 0
+  font-size: inherit
+  text-align: center
+  display: block
+  font-weight: $fw-semibold
+  color: $gray-strong
+  +placeholder($gray-strong)
 
-
-  .chosen-container .chosen-choices,
-  .chosen-container .chosen-single
-    font-size: inherit
-    +placeholder($gray-medium)
-    background: white
-    font-family: inherit !important
-    font-weight: $fw-semibold 
-    color: $gray-dark
-    height: 2.5em !important
-    padding-top: .8em\9
+  .chosen-choices,
+  .chosen-single
     border: 1px solid $gray-medium !important
-    box-shadow: none
-    transition: border-color .2s
-    overflow: visible
-    &:hover,
-    &:focus
-      border-color: $gray-medium
-      z-index: 5
-    &:invalid
-      border-color: lighten($brand-danger, 20%)
-    &:invalid:focus,
-    &:invalid:hover
-      border-color: $brand-danger
-    &.table-form
-      background-color: transparent
-      text-align: right
-      border: none
-      min-height: 0
-      padding: 0
-      margin-right: .5em
-      width: 5em
-      color: $gray-dark !important
+    background: transparent
 
-  &.select-gradient .chosen-container
+  &.chosen-with-drop
     .chosen-choices,
     .chosen-single
-      color: $gray-dark
-      border: none
-      border-bottom: 1px solid $gray-lighter
-      background-color: $gray-lighter !important
-      +linear-gradient((to bottom, white, darken($gray-lite,2%)))
-      border-color: transparent !important
-    .chosen-drop
-      border-color: transparent !important
+      background: transparent
+      border-color: $gray-strong !important
 
-    
+  .chosen-single
+    display: table
+    width: 100%
+    padding: 0 !important
+
+    color: inherit
+    height: 2.5em
+    span,
+    div
+      vertical-align: middle
+      display: table-cell
+    span
+      margin: 0
+      padding: 0 0.5em
+    div
+      position: relative
+      b
+        display: inline-block
+        width: 15px
+        height: 15px
+
+  .chosen-drop
+    background-color: white
+    border-color: $gray-medium
+    border-width: px(1)
+    border-top-width: 0
+    max-height: 240px
+    margin-top: px(-1)
+    border: px(1) solid
+    text-align: center
+    width: 100%
+
+  .chosen-search
+    padding: 0
+    margin: 0
+    input
+      border-width: 0 0 1px !important
+      font-weight: $fw-regular
+
+  .chosen-results
+    padding: 0
+    margin: 0
+    li
+      color: $gray-medium
+      &.highlighted
+        background: $gray-lighter
+        &:hover
+          color: $gray-medium
+      &.result-selected
+        background: $gray-light
+        &:hover
+          color: white
+
+  &.chosen-container-multi
+    height: auto
+    .chosen-choices
+      padding: 0
+      min-height: 0 !important
+      height: auto !important
+      padding: .5em
+      +clearfix()

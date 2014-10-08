@@ -158,6 +158,6 @@ class MessageThreadSerializer(ModelSerializer):
 class ProductRelatedMessageSerializer(ModelSerializer):
     class Meta:
         model = models.ProductRelatedMessage
-        fields = ('id', 'thread', 'sender', 'recipient', 'body', 'sent_at', 'offer')
-        read_only_fields = ('sent_at',)
+        fields = ('id', 'thread', 'sender', 'recipient', 'body', 'sent_at', 'read_at', 'replied_at', 'offer')
+        read_only_fields = ('sent_at', 'read_at', 'replied_at')
         immutable_fields = ('thread', 'sender', 'recipient', 'offer')
