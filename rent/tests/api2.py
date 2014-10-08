@@ -107,8 +107,7 @@ class BookingTest(APITransactionTestCase):
         uuid = response.data['uuid']
 
         response = self.client.put(_location('booking-pay', uuid), {
-            'credit_card': _location('creditcard-detail', 3),
-            'cvv': '123',
+            'credit_card': _location('creditcard-detail', 3)
         })
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
