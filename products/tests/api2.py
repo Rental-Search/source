@@ -19,6 +19,40 @@ IMAGE_URL = 'http://www.topcarrating.com/jaguar/1966-jaguar-xj13.jpg'
 def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
 
+
+class AnonymousPictureTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'picture_api2']
+    public_fields = ('product', 'created_at', 'image')
+    private_fields = tuple()
+
+    def test_picture_list_forbidden(self):
+        response = self.client.get(_location('picture-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_picture_show_allowed(self):
+        response = self.client.get(_location('picture-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_picture_create_forbidden(self):
+        response = self.client.post(_location('picture-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_picture_update_forbidden(self):
+        response = self.client.put(_location('picture-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_picture_delete_forbidden(self):
+        response = self.client.delete(_location('picture-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+
 class PictureTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'picture_api2']
 
@@ -328,6 +362,82 @@ class MessageThreadMessageTest(APITestCase):
         if 'last_offer' in response.data:
             self.assertTrue(str(response.data['last_offer']).endswith(_location('productrelatedmessage-detail', pk=message_id)), response.data)
 
+
+class AnonymousProductTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
+
+    public_fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'quantity', 'category',
+                     'owner', 'pro_agencies',)
+    private_fields = ('is_archived', 'created_at',)
+
+    def test_product_list_allowed(self):
+        response = self.client.get(_location('product-list'))
+        self.assertEquals(response.status_code, 200)
+        expected = {
+            'count': 8,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+
+        self.assertEquals(response.data['count'], len(response.data['results']))
+        for field in self.public_fields:
+            self.assertIn(field, response.data['results'][0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data['results'][0], field)
+
+    def test_product_search_allowed(self):
+        response = self.client.get(_location('product-list'), {
+            'quantity': 3,
+        })
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.data['count'], 2)
+        data = response.data['results'][0]
+
+        for field in self.public_fields:
+            self.assertIn(field, data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, data, field)
+
+    def test_product_show_allowed(self):
+        response = self.client.get(_location('product-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_product_update_forbidden(self):
+        response = self.client.put(_location('product-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_product_delete_forbidden(self):
+        response = self.client.delete(_location('product-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_product_create_forbidden(self):
+        response = self.client.post(_location('product-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_product_is_available_allowed(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+        response = self.client.get(_location('product-is-available', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('max_available', response.data)
+        self.assertEqual(response.data['max_available'], 3)
+
+
 class ProductTest(APITestCase):
     fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
 
@@ -491,6 +601,90 @@ class ProductTest(APITestCase):
         self.assertEquals(Product.objects.filter(pk=1).count(), 0)
 
 
+class AnonymousCategoryTest(APITestCase):
+
+    fixtures = ['patron', 'category']
+    public_fields = ('parent', 'name', 'need_insurance', 'title', 'description', 'header', 'footer', 'is_child_node',
+                     'is_leaf_node', 'is_root_node',)
+    private_fields = tuple()
+
+    def test_category_list_allowed(self):
+        response = self.client.get(_location('category-list'))
+        self.assertEquals(response.status_code, 200)
+        expected = {
+            'count': 26,
+            'previous': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+
+        self.assertEquals(len(response.data['results']), 10)
+        for field in self.public_fields:
+            self.assertIn(field, response.data['results'][0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data['results'][0], field)
+
+    def test_category_show_allowed(self):
+        response = self.client.get(_location('category-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_category_create_forbidden(self):
+        response = self.client.post(_location('category-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_category_update_forbidden(self):
+        response = self.client.put(_location('category-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_category_get_ancestor_allowed(self):
+        response = self.client.get(_location('category-ancestors', pk=475))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 1)
+        self.assertIn('id', response.data[0])
+        self.assertEqual(response.data[0]['id'], 3)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data[0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data[0], field)
+
+    def test_category_get_children_allowed(self):
+        response = self.client.get(_location('category-children', pk=3))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 1)
+        self.assertIn('id', response.data[0])
+        self.assertEqual(response.data[0]['id'], 475)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data[0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data[0], field)
+
+    def test_category_get_descendants_allowed(self):
+        response = self.client.get(_location('category-descendants', pk=3))
+        descendants_ids = [475, 476, 477, 665]
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 4)
+        for descendant in response.data:
+            self.assertIn('id', descendant)
+            self.assertIn(descendant['id'], descendants_ids)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data[0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data[0], field)
+
+
 class CategoryTest(APITestCase):
     fixtures = ['patron', 'category']
 
@@ -573,6 +767,35 @@ class CategoryTest(APITestCase):
         self.assertEquals(len(response.data['results']), 10)
 
 
+class AnonymousPriceTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'price']
+    public_fields = ('name', 'amount', 'product', 'unit', 'currency')
+    private_fields = tuple()
+
+    def test_price_list_forbidden(self):
+        response = self.client.get(_location('price-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_price_show_allowed(self):
+        response = self.client.get(_location('price-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_price_create_forbidden(self):
+        response = self.client.post(_location('price-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_price_update_forbidden(self):
+        response = self.client.put(_location('price-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+
 class PriceTest(APITestCase):
 
     fixtures = ['patron', 'address', 'category', 'product', 'price']
@@ -630,6 +853,49 @@ class PriceTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(len(response.data['results']), 10)
+
+
+class AnonymousCuriosityTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'curiosity']
+    public_fields = ('product', 'summary', 'city', 'price', 'owner_username', 'owner_thumbnail')
+    private_fields = tuple()
+
+    def test_curiosity_list_allowed(self):
+        response = self.client.get(_location('curiosity-list'))
+        self.assertEquals(response.status_code, 200)
+        expected = {
+            'count': 2,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+
+        self.assertEquals(response.data['count'], len(response.data['results']))
+        for field in self.public_fields:
+            self.assertIn(field, response.data['results'][0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data['results'][0], field)
+
+    def test_curiosity_show_allowed(self):
+        response = self.client.get(_location('curiosity-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_curiosity_create_forbidden(self):
+        response = self.client.post(_location('curiosity-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_curiosity_update_forbidden(self):
+        response = self.client.put(_location('curiosity-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
 
 
 class CuriosityTest(APITestCase):
