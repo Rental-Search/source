@@ -136,7 +136,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.onResetPasswordError = function (jqXHR) {
             var errorText = "";
             if (jqXHR.status == 400) {
-                errorText = "Bad request.";
+                console.log(jqXHR.responseJSON);
+                if (!!jqXHR.responseJSON.errors.__all__) {
+                    errorText = jqXHR.responseJSON.errors.__all__[0];
+                } else {
+                    errorText = "Bad request.";
+                }
             } else {
                 errorText = "An error occured!";
             }
