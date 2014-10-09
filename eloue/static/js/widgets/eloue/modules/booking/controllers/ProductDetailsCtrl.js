@@ -33,6 +33,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 subscriber_reference: ""
             };
             $scope.newCreditCard = true;
+            $scope.submitInProgress = false;
             $scope.showSaveCard = true;
             $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
             $scope.showUnavailable = true;
@@ -199,6 +200,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.sendBookingRequest = function sendBookingRequest() {
+                $scope.submitInProgress = true;
                 // Update user info
                 //TODO: patch more fields
                 var userPatch = {};
@@ -259,6 +261,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             toastr.success( "Réservation enregistré", "");
                             $(".modal").modal("hide");
                             $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
+                            $scope.submitInProgress = false;
                         });
                     }
                 );

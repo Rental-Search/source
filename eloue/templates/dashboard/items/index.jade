@@ -38,6 +38,7 @@ block details
                         img(ng-src="{{getProductImg(picture.image.thumbnail)}}", alt="{{product.summary}}", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
                 {% endverbatim %}
         form(name="itemInfoForm", ng-submit="updateProduct()")
+          fieldset(data-ng-disabled="submitInProgress")
             h2(ng-show="isAuto || isRealEstate") Caractéristiques
             include ./_item_characteristics
             h2 Informations complémentaires
