@@ -87,9 +87,10 @@ class AjaxResponseMixin(object):
 class BreadcrumbsMixin(object):
     breadcrumbs = {
         'sort': {'name': 'sort', 'value': None, 'label': 'sort', 'facet': False},
-        'q': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
+        'q': {'name': 'q', 'value': None, 'label': 'q', 'facet': False},
         'l': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
-        'r': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
+        'r': {'name': 'r', 'value': None, 'label': 'r', 'facet': False},
+        'renter': {'name': 'renter', 'value': None, 'label': 'renter', 'facet': False},
     }
 
     def get_context_data(self, **kwargs):
@@ -100,6 +101,3 @@ class BreadcrumbsMixin(object):
         }
         context.update(super(BreadcrumbsMixin, self).get_context_data(**kwargs))
         return context
-
-class StaticView(BreadcrumbsMixin, TemplateView):
-    pass

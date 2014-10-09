@@ -10,7 +10,6 @@ from django.views.generic import TemplateView
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 from eloue.api.urls import router
-from eloue.views import StaticView
 from products.views import HomepageView
 from accounts.views import PasswordResetView, PasswordResetConfirmView
 
@@ -206,7 +205,7 @@ ui3_urlpatterns = patterns('',
     url(r'^reset/', include(reset_urlpatterns)),
     url(r'^location/', include(products_urlpatterns)),
     url(r'^comment-ca-marche/', TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
-    url(r'^offre-professionnel/', StaticView.as_view(template_name='subscription/index.jade'), name='subscription'),
+    url(r'^offre-professionnel/', TemplateView.as_view(template_name='subscription/index.jade'), name='subscription'),
     #url(r'^simulez-vos-revenus/', TemplateView.as_view(template_name='simulator/index.jade'), name='simulator'),
     url(r'^dashboard/#/bookings/(?P<pk>[0-9a-f]{32})/$', dashboard_base_view, name='booking_detail'),
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
