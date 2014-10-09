@@ -16,7 +16,7 @@ h2 Vos informations bancaires
         i.flaticon.stroke.user-4
 .row(ng-show="!newCreditCard")
     .col-sm-12
-        input(type="text", placeholder="Nom et prénom du titulaire *", ng-model="creditCard.holder_name", required).form-control
+        input(type="text", placeholder="Nom et prénom du titulaire *", disabled, ng-model="creditCard.holder_name", required).form-control
         i.flaticon.stroke.user-4
 .row(ng-show="newCreditCard")
     .col-sm-12

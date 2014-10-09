@@ -88,6 +88,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 "toDate": Date.today().add(2).days().toString("dd/MM/yyyy"),
                 "toHour": "08:00:00"
             };
+            var fromDateSelector = $("input[name='fromDate']"), toDateSelector = $("input[name='toDate']");
+            fromDateSelector.datepicker("setDate", Date.today().add(1).days());
+            fromDateSelector.datepicker("update");
+            toDateSelector.datepicker("setDate", Date.today().add(2).days());
+            toDateSelector.datepicker("update");
             $scope.duration = "0 jour";
             $scope.bookingPrice = 0;
             $scope.pricePerDay = 0;
