@@ -38,6 +38,55 @@ h1
     color: $brand-success
     text-decoration: underline
 
+i[data-toggle="collapse"]
+  cursor: pointer
+  &:before
+    content: "\e5a8" !important
+  &.collapsed:before
+    content: "\e5a9" !important
+
+
+.e_loue-mark
+  $width: ($indent-md * 1.5)
+  position: absolute
+  width: $width
+  height: $width
+  border-radius: 50%
+  background-color: $brand-primary
+  left: 0
+  right: 0
+  top: $indent
+  margin: auto
+  &:before
+    content: " "
+    position: absolute
+    border-style: solid
+    border-color: $brand-primary transparent transparent
+    z-index: -1
+    border-width: ($width) ($width * 1/2)
+    top: 60%
+    left: 0
+    right: 0
+
+  &:after
+    content: "e"
+    color: white
+    font-size: 2.5em
+    line-height: 1.25
+    display: block
+    text-align: center
+
+.btn-inline
+  display: inline-block !important
+  width: auto !important
+  padding-left: .5em !important
+  padding-right: .5em !important
+
+textarea
+  &.form-control
+    resize: none
+    height: auto
+
 legend
   border: none
   margin-bottom: 0
@@ -60,8 +109,6 @@ a, a:hover, a:focus
   vertical-align: middle
   &.main-cell
     width: 100% !important
-  &.top
-    vertical-align: top
 
 .table-row
   display: table-row
@@ -252,6 +299,15 @@ a, a:hover, a:focus
   +border-bottom-radius($br)
   +border-top-radius($br)
   padding: .6em 1em
+
+.badge-pro
+  text-transform: uppercase
+  color: white
+  background-color: $gray-strong
+  font-size: px(13)
+  padding-left: .5em
+  padding-right: .5em
+  font-weight: $fw-bold
 
 
 .date-picker

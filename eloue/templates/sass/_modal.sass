@@ -137,6 +137,21 @@
     .chosen-single
       height: 3em
 
+  .map-wrapper
+    width: 100%
+    padding-top: 60%
+    position: relative
+    margin-top: $indent
+    .map
+      background-color: $brand-success
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+    & + .map-wrapper
+      margin-bottom: $indent
+
   .large
     $bd-property: px(1) solid $gray-lighter
     width: $modal-large-width
