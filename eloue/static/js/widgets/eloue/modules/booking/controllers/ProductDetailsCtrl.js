@@ -126,7 +126,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 {"label": "23h", "value": "23:00:00"}
             ];
 
-            ProductsLoadService.getProduct($scope.productId, true, true).then(function (result) {
+            ProductsLoadService.getProduct($scope.productId, true, true, false, false).then(function (result) {
                 $scope.product = result;
                 $scope.loadCalendar();
             });
