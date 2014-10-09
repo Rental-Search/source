@@ -251,7 +251,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                             toastr.options.positionClass = "toast-top-full-width";
-                            toastr.success( "Réservation enregistré", "");
+                            toastr.success("Réservation enregistré", "");
                             $(".modal").modal("hide");
                             $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                         });
@@ -289,21 +289,37 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Catch "redirectToLogin" event
              */
             $scope.$on("redirectToLogin", function () {
-                $location.path("/login");
+                $scope.openModal("login");
             });
 
             /**
              * Load necessary data on modal window open event based on modal name.
              */
             $scope.$on("openModal", function (event, args) {
-                if ((args.name === "message") && $scope.productRelatedMessages.length == 0) {
-                    $scope.loadMessageThread();
-                } else if (args.name === "booking") {
-                    $scope.loadCreditCards();
-                } else if (args.name === "phone") {
-                    $scope.loadPhoneDetails();
-                }
+                $scope.openModal(args.name);
             });
+
+            $scope.openModal = function (name) {
+                var currentUserToken = AuthService.getCookie("user_token");
+                if (!currentUserToken && name != "login") {
+                    AuthService.saveAttemptUrl(name);
+                    name = "login";
+                } else {
+                    if ((name === "message") && $scope.productRelatedMessages.length == 0) {
+                        $scope.loadMessageThread();
+                    } else if (name === "booking") {
+                        $scope.loadCreditCards();
+                    } else if (name === "phone") {
+                        $scope.loadPhoneDetails();
+                    }
+                }
+
+                if (!!name) {
+                    $(".modal").modal("hide");
+                    var modalContainer = $("#" + name + "Modal");
+                    modalContainer.modal("show");
+                }
+            };
 
             /**
              * Restore path when closing modal window.

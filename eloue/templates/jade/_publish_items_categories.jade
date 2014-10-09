@@ -5,7 +5,7 @@
     ul.nav.space-between.text-nowrap
       each item in group
         li.spacer
-        li(class="{{ item.classname }}"): span: a(href="#/publish?category={{ item.id }}", data-dismiss="modal")
+        li(class="{{ item.classname }}"): span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '{{ item.id }}')")
           span.border-round
             i.sprite
           span.title {{ item.title }}

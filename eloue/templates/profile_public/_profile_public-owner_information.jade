@@ -5,10 +5,10 @@
     p: b Membre depuis le {{ patron.date_joined|date:"d F Y" }}
     if patron.about
       p.indent-b-sm: i {{ patron.about }}
-    a(href="#/message", data-dismiss="modal").btn.bg-success.send-message
+    a(href="", data-dismiss="modal", ng-click="openModal('message')").btn.bg-success.send-message
       i.flaticon.stroke.mail-2
       | Envoyez un message
-    a(href="#/phone", data-dismiss="modal").btn.bg-success.call
+    a(href="", data-dismiss="modal", ng-click="openModal('phone')").btn.bg-success.call
       i.flaticon.stroke.phone-3
       | Appelez
     ul.nav.stats

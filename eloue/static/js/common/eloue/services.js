@@ -1769,7 +1769,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             return productRelatedMessagesParseService;
         }]);
 
-        EloueCommon.factory("AuthService", ["$q", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", "FormService", function ($q, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration, FormService) {
+        EloueCommon.factory("AuthService", ["$q", "$rootScope", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", "FormService", function ($q, $rootScope, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration, FormService) {
             return {
 
                 /**
@@ -1806,14 +1806,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * Redirect to attempted URL.
                  */
                 redirectToAttemptedUrl: function () {
-                    $window.location.href = RedirectAfterLogin.url;
+                    $rootScope.$broadcast("openModal", { name : RedirectAfterLogin.url});
                 },
 
                 /**
                  * Save URL that user attempts to access.
                  */
-                saveAttemptUrl: function () {
-                    RedirectAfterLogin.url = $window.location.href;
+                saveAttemptUrl: function (name) {
+                    RedirectAfterLogin.url = name;
                 },
 
                 /**

@@ -12,9 +12,9 @@
                         include ./pop_up_sections/_product_info.jade
                     section.terms
                         include ./pop_up_sections/_terms
-                        a(href="#/message").btn.bg-gray
+                        a(href="", ng-click="openModal('message')").btn.bg-gray
                             | Envoyez un message
-                        a(href="#/phone").btn.bg-gray
+                        a(href="", ng-click="openModal('phone')").btn.bg-gray
                             | Appelez
                 form(id="bookingForm", name="bookingForm", role="form", ng-submit="sendBookingRequest()", ng-model="bookingDetails", novalidate).input-group.change-part.table-cell
                     section.table.form-wrapper.personal-information

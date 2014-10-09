@@ -9,49 +9,17 @@ define(["eloue/app",
          * Routing configuration for app.
          */
         EloueApp.config([
-            "$routeProvider",
             "$httpProvider",
-            function ($routeProvider, $httpProvider) {
-                $routeProvider
-                    .when('/login', {
-                        templateUrl: 'modalContainer',
-                        controller: 'ModalCtrl',
-                        secure: false
-                    })
-                    .when('/registration', {
-                        templateUrl: 'modalContainer',
-                        controller: 'ModalCtrl',
-                        secure: false
-                    })
-                    .when('/booking', {
-                        templateUrl: 'modalContainer',
-                        controller: 'ModalCtrl',
-                        secure: true
-                    })
-                    .when('/message', {
-                        templateUrl: 'modalContainer',
-                        controller: 'ModalCtrl',
-                        secure: true
-                    })
-                    .when('/phone', {
-                        templateUrl: 'modalContainer',
-                        controller: 'ModalCtrl',
-                        secure: true
-                    })
-                    .when('/publish', {
-                        templateUrl: 'modalContainer',
-                        controller: 'ModalCtrl',
-                        secure: true
-                    })
-                    .otherwise({redirectTo: '/'});
-
+            function ($httpProvider) {
                 // push function to the responseInterceptors which will intercept
                 // the http responses of the whole application
                 $httpProvider.responseInterceptors.push("ErrorHandlerInterceptor");
+                // use the HTML5 History API
+//                $locationProvider.html5Mode(true);
             }
         ]);
 
-        EloueApp.run(["$rootScope", "$location", "$route", "$http", "AuthService", function ($rootScope, $location, $route, $http, AuthService) {
+        EloueApp.run(["$location", "$http", "AuthService", function ($location, $http, AuthService) {
             var userToken = AuthService.getCookie("user_token");
             $http.defaults.useXDomain = true;
             delete $http.defaults.headers.common['X-Requested-With'];
@@ -62,9 +30,5 @@ define(["eloue/app",
             if (csrftoken && csrftoken.length > 0) {
                 $http.defaults.headers.common["X-CSRFToken"] = csrftoken;
             }
-
-            $rootScope.$on("redirectToLogin", function () {
-                $location.path("/login");
-            });
         }]);
     });

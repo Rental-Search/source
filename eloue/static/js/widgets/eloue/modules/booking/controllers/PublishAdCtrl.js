@@ -49,16 +49,28 @@ define(["angular", "eloue/modules/booking/BookingModule",
              * Load necessary data on modal window open event based on modal name.
              */
             $scope.$on("openModal", function (event, args) {
-                var params = args.params;
-                var rootCategoryId = params.category;
-                if (!!rootCategoryId) {
+                $scope.openModal(args.name);
+            });
+
+            $scope.openModal = function (name, category) {
+                var currentUserToken = AuthService.getCookie("user_token");
+                if (!currentUserToken && name != "login") {
+                    AuthService.saveAttemptUrl(name);
+                    name = "login";
+                } else {
                     CategoriesService.getRootCategories().then(function (categories) {
-                        $scope.rootCategory = rootCategoryId;
+                        $scope.rootCategory = category;
                         $scope.rootCategories = categories;
                         $scope.updateNodeCategories();
                     });
                 }
-            });
+
+                if (!!name) {
+                    $(".modal").modal("hide");
+                    var modalContainer = $("#" + name + "Modal");
+                    modalContainer.modal("show");
+                }
+            };
 
             /**
              * Restore path when closing modal window.
@@ -124,8 +136,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.searchCategory = function () {
-                CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function(categories) {
-                   //TODO: select apropriate node and leaf category
+                CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function (categories) {
+                    //TODO: select apropriate node and leaf category
                 });
             }
         }])
