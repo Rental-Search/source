@@ -27,7 +27,7 @@ block append content-body
             .section-body
               .part.picture-tab#tabs
                 ul.nav.nav-justified
-                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"], ["Disponibilité", "#tabs-availability"]]
+                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"]]
                   each title, href in tabs
                     li.spacer
                     li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2 {{ title }}
@@ -36,7 +36,8 @@ block append content-body
                     li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 Assurance
                 include ./product_detail
                 include ./tab_tarifs
-                include ./tab_available
+                //-
+                 include ./tab_available
                 if insurance_available
                   include ./tab_terms
               .part.description
