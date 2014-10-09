@@ -373,7 +373,6 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows bookings to be viewed or edited.
     """
-    permission_classes = tuple()
     queryset = models.Booking.on_site.all()
     serializer_class = serializers.BookingSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)

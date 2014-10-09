@@ -14,6 +14,43 @@ from rent.choices import COMMENT_TYPE_CHOICES
 def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
 
+
+class AnonymousBookingTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'price', 'booking', 'comment', 'booking_creditcard']
+
+    def test_booking_list_forbidden(self):
+        response = self.client.get(_location('booking-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_booking_show_forbidden(self):
+        response = self.client.get(_location('booking-detail', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_booking_create_forbidden(self):
+        response = self.client.post(_location('booking-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_booking_pay_forbidden(self):
+        response = self.client.put(_location('booking-pay', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_booking_accept_forbidden(self):
+        response = self.client.put(_location('booking-accept', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_booking_reject_forbidden(self):
+        response = self.client.put(_location('booking-reject', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_booking_cancel_forbidden(self):
+        response = self.client.put(_location('booking-cancel', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_booking_comments_forbidden(self):
+        self.fail('Not implemented!')
+
+
 class BookingTest(APITransactionTestCase):
     reset_sequences = True
     fixtures = ['patron', 'address', 'category', 'product', 'price', 'booking', 'comment', 'booking_creditcard']
@@ -113,6 +150,35 @@ class BookingTest(APITransactionTestCase):
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
 
 
+class AnonymousCommentTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'booking', 'comment']
+    public_fields = ('id', 'author', 'booking', 'comment', 'rate')
+    private_fields = tuple()
+
+    def test_comment_list_forbidden(self):
+        response = self.client.get(_location('picture-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_comment_show_allowed(self):
+        response = self.client.get(_location('comment-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_comment_create_forbidden(self):
+        response = self.client.post(_location('comment-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_comment_delete_forbidden(self):
+        response = self.client.delete(_location('comment-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+
 class CommentTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'booking', 'comment']
 
@@ -193,6 +259,23 @@ class CommentTest(APITestCase):
         response = self.client.delete(_location('comment-detail', pk=1))
         self.assertEquals(response.status_code, 204, response.data)
         self.assertEquals(Comment.objects.filter(pk=1).count(), 0)
+
+
+class AnonymousSinisterTest(APITestCase):
+
+    fixtures = ['patron', 'address', 'category', 'product', 'booking', 'sinister']
+
+    def test_sinister_list_forbidden(self):
+        response = self.client.get(_location('sinister-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_sinister_show_forbidden(self):
+        response = self.client.get(_location('sinister-detail', pk='aaf26618b6654a05bf3cc57ade322928'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_sinister_create_forbidden(self):
+        response = self.client.post(_location('sinister-list'))
+        self.assertEquals(response.status_code, 401)
 
 
 class SinisterTest(APITestCase):
