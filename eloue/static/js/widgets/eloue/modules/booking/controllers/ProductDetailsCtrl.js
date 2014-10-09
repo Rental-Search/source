@@ -1,7 +1,7 @@
-define(["angular", "eloue/modules/booking/BookingModule",
+define(["angular", "toastr", "eloue/modules/booking/BookingModule",
     "../../../../../common/eloue/values",
     "../../../../../common/eloue/services"
-], function (angular) {
+], function (angular, toastr) {
     "use strict";
 
     angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", [
@@ -242,7 +242,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                                 cvv: $scope.creditCard.cvv,
                                 holder_name: $scope.creditCard.holder_name
                             };
-                        }else {
+                        } else {
                             // send only credit card link if using saved credit card
                             paymentInfo = {
                                 credit_card: Endpoints.api_url + "credit_cards/" + $scope.creditCard.id + "/"
@@ -250,7 +250,10 @@ define(["angular", "eloue/modules/booking/BookingModule",
                         }
 
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                            toastr.options.positionClass = "toast-top-full-width";
+                            toastr.success( "Réservation enregistré", "");
                             $(".modal").modal("hide");
+                            $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                         });
                     }
                 );
@@ -315,8 +318,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
             /**
              * Load premium phone number using product's phone number id.
              */
-            $scope.loadPhoneDetails = function() {
-                PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function(result) {
+            $scope.loadPhoneDetails = function () {
+                PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
                     if (!result.error || result.error == "0") {
                         $scope.ownerCallDetails = {
                             number: result.numero,
@@ -411,7 +414,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 console.log("onShowBookings");
             };
 
-            $scope.selectTab = function(tabName) {
+            $scope.selectTab = function (tabName) {
                 $('[id^=tabs-]').each(function () {
                     var item = $(this);
                     if (("#" + item.attr("id")) == tabName) {
