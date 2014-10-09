@@ -2,7 +2,7 @@ h2 Vos informations personnelles
 .row
   .col-sm-2
       {% verbatim %}
-      select(ng-model="currentUser.civility", eloue-chosen).form-control
+      select(ng-model="currentUser.civility", data-placeholder="Civilité", eloue-chosen).form-control
           option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
       {% endverbatim %}
   .col-sm-5: input(type="text", placeholder="Prénom *", ng-model="currentUser.first_name", required).form-control

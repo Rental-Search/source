@@ -140,10 +140,19 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 var today = Date.today().set({hour: 8, minute: 0});
+                $scope.dateRangeError = "";
                 if (fromDateTime > toDateTime) {
-                    $scope.dateRangeError = "From date cannot be after to date";
+                    //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
+                    $scope.dateRangeError = "La date de début ne peut pas être après la date de fin";
+                    if (fromDateTime.getHours() < 23) {
+                        $scope.bookingDetails.toDate = fromDateTime.toString("dd/MM/yyyy");
+                        $scope.bookingDetails.toHour = fromDateTime.add(1).hours().toString("HH:mm:ss");
+                    } else {
+                        $scope.bookingDetails.toDate = fromDateTime.add(1).days().toString("dd/MM/yyyy");
+                        $scope.bookingDetails.toHour = fromDateTime.add(1).hours().toString("HH:mm:ss");
+                    }
                 } else if (fromDateTime < today) {
-                    $scope.dateRangeError = "From date cannot be before today";
+                    $scope.dateRangeError = "La date de début ne peut pas être ";
                 } else {
                     $scope.dateRangeError = null;
                     ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
