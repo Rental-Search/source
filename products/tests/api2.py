@@ -383,7 +383,7 @@ class ProductTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         # check pagination data format in the response
         expected = {
-            'count': 6,
+            'count': 8,
             'previous': None,
             'next': None,
         }

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework.fields import FloatField, IntegerField
 from products import models
-from accounts.serializers import NestedAddressSerializer, BooleanField, NestedPublicUserSerializer, \
-    PublicNestedAddressSerializer
+from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
     NestedModelSerializerMixin
 
@@ -78,7 +77,7 @@ class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
     category = NestedCategorySerializer()
     prices = NestedPriceSerializer(read_only=True, many=True)
     pictures = NestedPictureSerializer(read_only=True, many=True)
-    owner = NestedPublicUserSerializer()
+    owner = NestedUserSerializer()
 
     class Meta:
         model = models.Product
@@ -94,9 +93,7 @@ class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
         immutable_fields = ('owner',)
 
 
-class NestedPublicProductSerializer(NestedModelSerializerMixin, ProductSerializer):
-    address = PublicNestedAddressSerializer()
-
+class NestedProductSerializer(NestedModelSerializerMixin, ProductSerializer):
     class Meta(ProductSerializer.Meta):
         fields = ProductSerializer.Meta.public_fields
 

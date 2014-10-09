@@ -62,10 +62,21 @@ class PermissionMixin(object):
         self.public_mode = True
         if request.user.is_staff or request.user.is_superuser:
             self.public_mode = False
-        elif request.user.is_authenticated() and action not in getattr(self, 'user_public_actions', ()):
+        elif action not in getattr(self, 'public_actions', ()):
             self.public_mode = False
-        elif action not in getattr(self, 'guest_public_actions', ()):
-            self.public_mode = False
+
+        self.owner_mode = False
+        if 'pk' in kwargs:
+            instance = self.get_object()
+            if not request.user.is_anonymous():
+                owner_field = getattr(self, 'owner_field', None)
+                if owner_field:
+                    if not isinstance(owner_field, basestring):
+                        owner_field = iter(owner_field).next()
+                    owner_field = getattr(instance, owner_field, None)
+                    self.owner_mode = (owner_field == request.user)
+        elif action == 'create':
+            self.owner_mode = True
 
         super(PermissionMixin, self).initial(request, *args, **kwargs)
 
@@ -96,6 +107,7 @@ class PermissionMixin(object):
         """
         context = super(PermissionMixin, self).get_serializer_context()
         context['public_mode'] = self.public_mode
+        context['owner_mode'] = self.owner_mode
         return context
 
 

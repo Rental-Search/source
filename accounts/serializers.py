@@ -37,11 +37,6 @@ class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSer
         public_fields = ('city', 'zipcode')
 
 
-class PublicNestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
-    class Meta(AddressSerializer.Meta):
-        public_fields = ('city', 'zipcode')
-        fields = public_fields
-
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PhoneNumber
@@ -88,9 +83,7 @@ class UserSerializer(serializers.ModelSerializer):
         immutable_fields = ('email', 'password', 'username')
 
 
-class NestedPublicUserSerializer(NestedModelSerializerMixin, UserSerializer):
-    default_address = PublicNestedAddressSerializer()
-
+class NestedUserSerializer(NestedModelSerializerMixin, UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.public_fields
 

@@ -874,7 +874,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
-    public_actions = ('retrieve',)
+    public_actions = ('list', 'retrieve', 'ancestors', 'children', 'descendants')
 
     @link()
     def ancestors(self, request, *args, **kwargs):
@@ -912,7 +912,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     search_index = product_search
     filter_class = ProductFilterSet
     ordering_fields = ('quantity', 'is_archived', 'category')
-    public_actions = ('retrieve', 'search', 'is_available')
+    public_actions = ('retrieve', 'list', 'search', 'is_available')
 
     @link()
     def is_available(self, request, *args, **kwargs):
@@ -1018,7 +1018,7 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('product',) # TODO: 'city', 'price')
     # TODO: ordering_fields = ('price',)
-    public_actions = ('retrieve',)
+    public_actions = ('retrieve', 'list', )
 
 class MessageThreadFilterSet(filters.FilterSet):
     participant = filters.MultiFieldFilter(name=('sender', 'recipient'))

@@ -4,15 +4,15 @@ from django.core.exceptions import ValidationError
 
 from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
 from rest_framework import fields
-from accounts.serializers import NestedPublicUserSerializer
-from products.serializers import NestedPublicProductSerializer
+from accounts.serializers import NestedUserSerializer
+from products.serializers import NestedProductSerializer
 
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api.serializers import ModelSerializer
 
 
-class BookingProductField(NestedPublicProductSerializer):
+class BookingProductField(NestedProductSerializer):
     default_error_messages = {
         'own_product': _(u"Vous ne pouvez pas louer vos propres objets"),
     }
@@ -31,8 +31,8 @@ class BookingProductField(NestedPublicProductSerializer):
 
 class BookingSerializer(ModelSerializer):
     product = BookingProductField()
-    owner = NestedPublicUserSerializer(read_only=True)
-    borrower = NestedPublicUserSerializer()
+    owner = NestedUserSerializer(read_only=True)
+    borrower = NestedUserSerializer()
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)

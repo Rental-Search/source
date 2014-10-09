@@ -393,13 +393,13 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         data = request.DATA
         try:
             credit_card = data['credit_card']
-            serializer = BookingPayCreditCardSerializer(
-                data=data, context={'request': request, 'suppress_exception': True}
-            )
+            context = self.get_serializer_context()
+            context.update({'suppress_exception': True})
+            serializer = BookingPayCreditCardSerializer(data=data, context=context)
             credit_card = serializer.fields['creditcard'].from_native(credit_card)
             credit_card.cvv = ''
         except (KeyError, ValidationError):
-            serializer = CreditCardSerializer(data=data, context={'request': request})
+            serializer = CreditCardSerializer(data=data, context=self.get_serializer_context())
             if not serializer.is_valid():
                 return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
             credit_card = serializer.save()
@@ -423,7 +423,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         return self._perform_transition(request, action='cancel')
 
     def _perform_transition(self, request, action=None, **kwargs):
-        serializer = serializers.BookingActionSerializer(instance=self.get_object(), data={'action': action}, context={'request': request})
+        serializer = serializers.BookingActionSerializer(instance=self.get_object(), data={'action': action}, context=self.get_serializer_context())
         if serializer.is_valid():
             serializer.save(**kwargs)
             return Response({'detail': _(u'Transition performed')})

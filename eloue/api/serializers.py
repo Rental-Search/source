@@ -184,7 +184,8 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
         # about current user. So, dynamic filtration is the only way.
         public_fields = copy.copy(self._fields)
         only_public_fields = self.context.get('public_mode', True) if self.context else True
-        if hasattr(self.opts, 'public_fields') and only_public_fields:
+        is_owner = self.context.get('owner_mode', False) if self.context else True
+        if hasattr(self.opts, 'public_fields') and only_public_fields and not is_owner:
             for key in public_fields.keys():
                 if key not in self.opts.public_fields:
                     public_fields.pop(key, None)

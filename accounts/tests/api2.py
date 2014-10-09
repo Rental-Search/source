@@ -393,9 +393,23 @@ class AnonymousAddressesTest(APITestCase):
     public_fields = ('zipcode', 'position', 'city', 'country')
     private_fields = ('patron', 'id', 'street')
 
-    def test_address_list_forbidden(self):
+    def test_address_list_allowed(self):
         response = self.client.get(_location('address-list'))
-        self.assertEquals(response.status_code, 401)
+        self.assertEquals(response.status_code, 200)
+        expected = {
+            'count': 3,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+
+        self.assertEquals(response.data['count'], len(response.data['results']))
+        for field in self.public_fields:
+            self.assertIn(field, response.data['results'][0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data['results'][0], field)
 
     def test_address_show_allowed(self):
         response = self.client.get(_location('address-detail', pk=1))
@@ -473,7 +487,7 @@ class AddressesTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         # check pagination data format in the response
         expected = {
-            'count': 2, # we should get 2 addresses (from 3 in total) visible for the current user (pk=1)
+            'count': 3,
             'previous': None,
             'next': None,
         }
@@ -619,7 +633,7 @@ class ProAgencyTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         # check pagination data format in the response
         expected = {
-            'count': 2,
+            'count': 3,
             'previous': None,
             'next': None,
         }
@@ -697,7 +711,7 @@ class SubscriptionTest(APITestCase):
 
     def test_subscription_create(self):
         response = self.client.post(_location('subscription-list'), {
-            'propackage_id': _location('propackage-detail', pk=1),
+            'propackage': _location('propackage-detail', pk=1),
             'payment_type': 'CHECK',
         })
 
