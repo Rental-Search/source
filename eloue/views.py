@@ -3,7 +3,7 @@ from django.http import HttpResponseNotFound, Http404
 from django.views.decorators.csrf import requires_csrf_token
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.template import RequestContext, loader
 from django.utils.translation import ugettext_lazy as _
 
@@ -83,3 +83,23 @@ class AjaxResponseMixin(object):
 
     def render_to_response(self, context, **kwargs):
         return self.response_class(context, **kwargs)
+
+class BreadcrumbsMixin(object):
+    breadcrumbs = {
+        'sort': {'name': 'sort', 'value': None, 'label': 'sort', 'facet': False},
+        'q': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
+        'l': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
+        'r': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
+    }
+
+    def get_context_data(self, **kwargs):
+        from products.models import Category
+        context = {
+            'category_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
+            'breadcrumbs': self.breadcrumbs,
+        }
+        context.update(super(BreadcrumbsMixin, self).get_context_data(**kwargs))
+        return context
+
+class StaticView(BreadcrumbsMixin, TemplateView):
+    pass

@@ -1,0 +1,25 @@
+extends ../base
+-load compressed
+
+block append styles
+    {% compressed_css "bootstrap" %}
+    {% compressed_css "subscription_styles" %}
+
+block append scripts
+    script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+
+block append content-body
+  .container-flex
+    header.header-site:              include ../jade/_header_site
+    nav.bd-b:                        include _breadcrumbs
+
+    article
+      section.introduction:          include _introduction
+      section.insurances.framing:    include _insurances
+      section.pro-logo:              include _pro_logo
+      section.pricing-table.framing: include _pricing_table
+      section.process:               include _process
+
+    footer
+      section.footer-links.framing:  include ../jade/_footer_links
+      section.rss:                   include ../jade/_rss

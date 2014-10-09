@@ -49,7 +49,6 @@ from accounts.choices import GEOLOCATION_SOURCE
 
 from products.models import ProductRelatedMessage, MessageThread, Product
 from products.search import product_search
-from products.views import CommonPageContextMixin
 
 from rent.models import Booking, BorrowerComment, OwnerComment, Comment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
