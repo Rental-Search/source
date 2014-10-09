@@ -1,12 +1,12 @@
-ol.nav.row
+ol.product-layout
     {% for product in product_list %}
     li(id="marker-{{ forloop.counter }}", locationY="{{ product.location.y|stringformat:'f' }}", locationX="{{ product.location.x|stringformat:'f' }}", name="{{ product.summary }}")
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper
             img(style="background-image: url({{ product.profile }})").bg-image
-            span.badge.price {{ product.price }}&euro; /jour
-            span.badge-order {{ forloop.counter }}
+          span.badge.price {{ product.price }}&euro; /jour
+          span.badge-order {{ forloop.counter }}
         .info
           h6
             a(href="{{ product.url }}") {{ product.summary }}
@@ -29,7 +29,7 @@ ol.nav.row
             span.declarer-name {{ product.owner }}
             a(href="{{ product.owner_url }}").declarer-thumbnail: img(style="background-image: url({{ product.owner_avatar }})").bg-image
           .btns
-           //-
+          //-
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2
     {% endfor %}

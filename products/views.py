@@ -44,7 +44,7 @@ from rent.choices import BOOKING_STATE
 from eloue.decorators import ownership_required, secure_required, mobify, cached
 from eloue.utils import cache_key
 from eloue.geocoder import GoogleGeocoder
-from eloue.views import LoginRequiredMixin, SearchQuerySetMixin
+from eloue.views import LoginRequiredMixin, SearchQuerySetMixin, BreadcrumbsMixin
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -534,7 +534,7 @@ def product_delete(request, slug, product_id):
         return render(request, 'products/product_delete.html', {'product': product})
 
 
-class ProductList(SearchQuerySetMixin, ListView):
+class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
     template_name = "products/product_result.html"
     paginate_by = PAGINATE_PRODUCTS_BY
     context_object_name = 'product_list'
@@ -543,21 +543,7 @@ class ProductList(SearchQuerySetMixin, ListView):
     @method_decorator(cache_page(900))
     @method_decorator(vary_on_cookie)
     def dispatch(self, request, urlbits=None, sqs=SearchQuerySet(), suggestions=None, page=None, **kwargs):
-        location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-        query_data = request.GET.copy()
-        if not query_data.get('l'):
-            query_data['l'] = location['country']
-        form = FacetedSearchForm(query_data)
-        if not form.is_valid():
-            raise Http404
-        
-        self.breadcrumbs = SortedDict()
-        self.breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
-        self.breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
-        self.breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
-        self.breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
-        self.breadcrumbs['renter'] = {'name': 'renter', 'value': form.cleaned_data.get('renter'), 'label': 'renter', 'facet': False}
-
+        self.breadcrumbs = self.get_breadcrumbs(request)
         urlbits = urlbits or ''
         urlbits = filter(None, urlbits.split('/')[::-1])
         while urlbits:
@@ -730,7 +716,7 @@ def suggestion(request):
 
 # UI v3
 
-from eloue.views import AjaxResponseMixin, BreadcrumbsMixin
+from eloue.views import AjaxResponseMixin
 from eloue.decorators import ajax_required
 from products.forms import SuggestCategoryViewForm
 
@@ -761,7 +747,7 @@ class HomepageView(BreadcrumbsMixin, TemplateView):
         self.location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         return super(HomepageView, self).get(request, *args, **kwargs)
 
-class ProductListView(BreadcrumbsMixin, ProductList):
+class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):

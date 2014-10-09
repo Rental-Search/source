@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.http import HttpResponseNotFound, Http404
 from django.views.decorators.csrf import requires_csrf_token
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import View, TemplateView
+from django.views.generic import View
 from django.template import RequestContext, loader
 from django.utils.translation import ugettext_lazy as _
+from django.utils.datastructures import SortedDict
 
 from haystack.query import SearchQuerySet
 from haystack.constants import DJANGO_ID
@@ -85,13 +87,26 @@ class AjaxResponseMixin(object):
         return self.response_class(context, **kwargs)
 
 class BreadcrumbsMixin(object):
-    breadcrumbs = {
-        'sort': {'name': 'sort', 'value': None, 'label': 'sort', 'facet': False},
-        'q': {'name': 'q', 'value': None, 'label': 'q', 'facet': False},
-        'l': {'name': 'l', 'value': None, 'label': 'l', 'facet': False},
-        'r': {'name': 'r', 'value': None, 'label': 'r', 'facet': False},
-        'renter': {'name': 'renter', 'value': None, 'label': 'renter', 'facet': False},
-    }
+    def get_breadcrumbs(self, request):
+        location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+        query_data = request.GET.copy()
+        query_data.setdefault('l', location['country'])
+        form = FacetedSearchForm(query_data)
+        if not form.is_valid():
+            raise Http404
+
+        breadcrumbs = SortedDict()
+        breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
+        breadcrumbs['sort'] = {'name': 'sort', 'value': form.cleaned_data.get('sort', None), 'label': 'sort', 'facet': False}
+        breadcrumbs['l'] = {'name': 'l', 'value': form.cleaned_data.get('l', None), 'label': 'l', 'facet': False}
+        breadcrumbs['r'] = {'name': 'r', 'value': form.cleaned_data.get('r', None), 'label': 'r', 'facet': False}
+        breadcrumbs['renter'] = {'name': 'renter', 'value': form.cleaned_data.get('renter'), 'label': 'renter', 'facet': False}
+        return breadcrumbs
+
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(self, 'breadcrumbs'):
+            self.breadcrumbs = self.get_breadcrumbs(request)
+        return super(BreadcrumbsMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         from products.models import Category

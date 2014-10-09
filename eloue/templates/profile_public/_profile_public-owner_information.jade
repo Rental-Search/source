@@ -1,6 +1,14 @@
 .section-header
-  h4 Informations sur le membre
+  if is_pro
+    span.badge-pro.pull-right pro
+    h4 Informations sur membre
+  else
+    h4 Informations sur le membre
 .section-body
+  {% if is_pro %}
+  .part
+    p: i Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit accusamus laudantium repudiandae soluta amet consequuntur, quo saepe architecto illum autem dolorem quaerat tempora aspernatur eos nesciunt veritatis impedit minima, tempore laboriosam cumque. Laborum ad ex libero debitis dolores cum praesentium facilis nihil quis eaque error, ipsam enim aspernatur deserunt vitae.
+  {% else %}
   .part
     p: b Membre depuis le {{ patron.date_joined|date:"d F Y" }}
     if patron.about
@@ -15,7 +23,9 @@
       {% with patron.stats as stats %}
       include ../jade/_patron_stats
       {% endwith %}
+  {% endif %}
 //-
+  //- move 2 lines above to be inside the else part (for non-pro members)
   .part.connection.clearfix
     .col-sm-4
       a(href="#").friend-photo-wrapper

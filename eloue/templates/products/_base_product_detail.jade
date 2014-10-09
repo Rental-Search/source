@@ -42,25 +42,35 @@ block append content-body
                   include ./tab_terms
               .part.description
                 include ../jade/product_details/main/_description
-              if product_comments
+              if product_comments and not product.pro
                 .part.comments.comments-ad
                   h3 Commentaires liés à cette annonce
                   {% with product_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}
-              if owner_comments
+              if owner_comments and not product.pro
                 .part.comments.comments-owner
                   h3 Commentaire liés au propriétaire
                   {% with owner_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}
         aside.col-sm-4
-          section.booking-form.ng-hide(ng-show="true")
-            include  ../jade/product_details/aside/_booking_form.jade
-          //-section.add-to-wishlist
-          //-  include ../jade/product_details/aside/_add_to_wishlist
+          {% if product.pro %}
           section.owner-information
             include ../jade/product_details/aside/_owner_information
+          {% else %}
+          section.booking-form.ng-hide(ng-show="true")
+            include  ../jade/product_details/aside/_booking_form.jade
+          {% endif %}
+          //-section.add-to-wishlist
+          //-  include ../jade/product_details/aside/_add_to_wishlist
+          {% if product.pro %}
+          section.booking-form.ng-hide(ng-show="true")
+            include  ../jade/product_details/aside/_booking_form.jade
+          {% else %}
+          section.owner-information
+            include ../jade/product_details/aside/_owner_information
+          {% endif %}
           section.similar-listing
             include ../jade/product_details/aside/_similar_listing
           //-section.connected-with-owner

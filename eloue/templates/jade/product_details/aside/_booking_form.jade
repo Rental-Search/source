@@ -1,5 +1,5 @@
 .section-header
-    h4 Réservez en ligne
+    h4 {% if product.pro %}Demandez un devis{% else %}Réservez en ligne{% endif %}
 form.form-inline.section-body.text-center
     {% verbatim %}
     .part
@@ -11,21 +11,44 @@ form.form-inline.section-body.text-center
         {% verbatim %}
         // p.available.unavailable Cet article est disponible à ces dates
         span(ng-show="dateRangeError").text-danger {{dateRangeError}}
+        {% endverbatim %}
+        {% if not product.pro %}
         p(ng-show="available").available Cet article est disponible à ces dates
         p(ng-show="!available").available.unavailable Cet article est disponible à ces dates
+        {% endif %}
+        {% verbatim %}
     .part
         p
-            | Durée de la location :
+            | Durée de la location&nbsp;:
             b.period-days {{duration}}
         p.price
-            | Prix de la location :
+            | Prix {% endverbatim %}{% if product.pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
             big.text-primary &nbsp;{{bookingPrice}}
-        p Assurance incluse
         {% endverbatim %}
+        if not product.pro
+            p Assurance incluse
     .part
         a(href = "#/booking", data-dismiss="modal").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2
-            | Réservez
+            | {% if product.pro %}Envoyez{% else %}Réservez{% endif %}
+        p.mrg-v-1
+            if is_pro
+                | Vous allez envoyer
+                br
+                | une demande de location. 
+                br
+                | &ndash;
+                br
+                | Le loueur vous recontactera 
+                br
+                | très rapidement 
+                br
+                | pour vous confirmer la location.
+                br
+                | &ndash;
+                br
+                | Le paiement se fera directement 
+                br
+                | chez le loueur.
         //-
-         p.mrg-v-1
             small Cette somme vous sera débitée lorsque le propriétaire validera la location

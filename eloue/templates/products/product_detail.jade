@@ -17,6 +17,7 @@
         {% endfor %}
       {% endif %}
       {% endwith %}
+    {% if not product.pro %}
     .col-md-5
       .map-container
         .map-inner
@@ -26,3 +27,4 @@
         .location-title
           i.flaticon.solid.loca.location-pin-3.icon-li.icon-lg
           small {{ product.city|title }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+    {% endif %}

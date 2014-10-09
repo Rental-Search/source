@@ -1,25 +1,27 @@
-{% with products|length as product_count %}
-{% if product_count %}
-h3.indent-b-xs Les {{ product_count }} annonces de {{ patron.username }}
+-load paginator i18n
 
-ol.row
-  each product in products
+{% if paginator.count %}
+h3.indent-b-xs Les {{ paginator.count }} annonces de {{ patron.username }}{% if is_pro %}&nbsp;Pro{% endif %}
+
+ol.product-layout
+  each product in product_list
     li
       .section-body
         .thumbnail-img
-          a(href="{{ product.get_absolute_url }}").img-wrapper
-            img(style="background-image: url({{ product.pictures.all.0.profile.url }})").bg-image
-            span.badge.price {{ product.daily_price }}&euro; /jour
+          a(href="{{ product.url }}").img-wrapper
+            img(style="background-image: url({{ product.profile }})").bg-image
+          span.badge.price {{ product.price }}&euro; /jour
+          //-span.badge-order {{ forloop.counter }}
         .info
           h6
-            a(href="{{ product.get_absolute_url }}") {{ product.summary }}
-            if patron.is_professional
+            a(href="{{ product.url }}") {{ product.summary }}
+            if is_pro
               span.badge-pro pro
-          p: {{ product.address.city|title }}{% if product.address.city and product.address.zipcode %}, {{ product.address.zipcode }}{% endif %}
+          p: {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
           //- TODO: need a better solution here to hit SQL DB only once for all products in the list
-          {% with product.borrowercomments.count as comments_num %}
+          {% with product.object.borrowercomments.count as comments_num %}
           if comments_num
-            {% with product.average_note as rate %}
+            {% with product.object.average_note as rate %}
             include ../jade/_rate
             {% endwith %}
             span.sprite-comment
@@ -27,5 +29,27 @@ ol.row
               | {{ comments_num }}
           {% endwith %}
           p.full_description {{ product.description|truncatechars:145 }}
+        .declarer-container
+        //-
+          if is_pro
+            .declarer
+              span.declarer-name {{ patron.username }}
+              a.declarer-thumbnail: img(style="background-image: url({{ patron.profile.url }})").bg-image
+{% pagination %}
+if is_paginated
+  .text-center: ul.pagination
+    if page_obj.has_previous
+      li: a(href="{% if page_obj.previous_page_number == 1 %}{{ patron.get_absolute_url }}{% else %}{% url 'patron_detail' patron.slug page_obj.previous_page_number %}{% endif %}", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
+    else
+      li: a.chevron.active: i.flaticon.stroke.left-2
+    for page_number in page_range
+      li
+        if page_obj.number == page_number
+          a.active {{ page_number }}
+        else
+          a(href="{% if page_number == 1 %}{{ patron.get_absolute_url }}{% else %}{% url 'patron_detail' patron.slug page_number %}{% endif %}") {{ page_number }}
+    if page_obj.has_next
+      li: a(href="{% url 'patron_detail' patron.slug page_obj.next_page_number %}", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
+    else
+      li: a.chevron.active: i.flaticon.stroke.right-2
 {% endif %}
-{% endwith %}
