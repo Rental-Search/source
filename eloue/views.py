@@ -26,10 +26,8 @@ def custom404(request, template_name='404.html'):
             The path of the requested URL (e.g., '/app/pages/bad_page/')
     """
     t = loader.get_template(template_name) # You need to create a 404.html template.
-    form = FacetedSearchForm()
-    return HttpResponseNotFound(
-    	t.render(RequestContext(request, {'request_path': request.path, 'form': form}))
-    )
+    #form = FacetedSearchForm()
+    return HttpResponseNotFound()
 
 class LoginRequiredMixin(View):
     @method_decorator(login_required)
