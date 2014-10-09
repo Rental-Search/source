@@ -5,7 +5,7 @@ form.form-inline.section-body.text-center
     .part
         p
             small à partir de
-            big.text-primary &nbsp;{{pricePerDay}}€ /jour
+            big.text-primary &nbsp;{{pricePerDay}}/jour
         {% endverbatim %}
         include ../../_date_picker_border
         {% verbatim %}
@@ -19,7 +19,7 @@ form.form-inline.section-body.text-center
             b.period-days {{duration}}
         p.price
             | Prix de la location :
-            big.text-primary &nbsp;{{bookingPrice}}€
+            big.text-primary &nbsp;{{bookingPrice}}
         p Assurance incluse
         {% endverbatim %}
     .part
