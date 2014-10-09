@@ -518,6 +518,27 @@ class AnonymousCreditCardTest(APITestCase):
         self.assertEquals(response.status_code, 401)
 
 
+class AnonymousCreditCardTest(APITestCase):
+
+    fixtures = ['patron', 'creditcard']
+
+    def test_creditcard_list_forbidden(self):
+        response = self.client.get(_location('creditcard-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_creditcard_show_forbidden(self):
+        response = self.client.get(_location('creditcard-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_creditcard_create_forbidden(self):
+        response = self.client.post(_location('creditcard-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_creditcard_delete_forbidden(self):
+        response = self.client.delete(_location('creditcard-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+
 class CreditCardTest(APITestCase):
     fixtures = ['patron', 'creditcard']
 
@@ -569,6 +590,53 @@ class CreditCardTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
+
+
+class AnonymousProAgencyTest(APITestCase):
+
+    fixtures = ['patron', 'proagency']
+    public_fields = ('id', 'patron', 'name', 'phone_number', 'address', 'zipcode', 'city', 'country', 'position')
+    private_fields = tuple()
+
+    def test_pro_agency_list_allowed(self):
+        response = self.client.get(_location('proagency-list'))
+        self.assertEquals(response.status_code, 200)
+        expected = {
+            'count': 3,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+
+        self.assertEquals(response.data['count'], len(response.data['results']))
+        for field in self.public_fields:
+            self.assertIn(field, response.data['results'][0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data['results'][0], field)
+
+    def test_pro_agency_show_allowed(self):
+        response = self.client.get(_location('proagency-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_pro_agency_create_forbidden(self):
+        response = self.client.post(_location('proagency-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_pro_agency_update_forbidden(self):
+        response = self.client.put(_location('proagency-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_pro_agency_delete_forbidden(self):
+        response = self.client.delete(_location('proagency-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
 
 
 class ProAgencyTest(APITestCase):
@@ -643,6 +711,53 @@ class ProAgencyTest(APITestCase):
         self.assertEquals(response.data['count'], len(response.data['results']))
 
 
+class AnonymousProPackageTest(APITestCase):
+
+    fixtures = ['patron', 'propackages']
+    public_fields = ('id', 'name', 'maximum_items', 'price', 'valid_from', 'valid_until')
+    private_fields = tuple()
+
+    def test_pro_package_list_allowed(self):
+        response = self.client.get(_location('propackage-list'))
+        self.assertEquals(response.status_code, 200)
+        expected = {
+            'count': 5,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+
+        self.assertEquals(response.data['count'], len(response.data['results']))
+        for field in self.public_fields:
+            self.assertIn(field, response.data['results'][0], field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data['results'][0], field)
+
+    def test_pro_package_show_allowed(self):
+        response = self.client.get(_location('propackage-detail', pk=1))
+        self.assertEquals(response.status_code, 200)
+
+        for field in self.public_fields:
+            self.assertIn(field, response.data, field)
+
+        for field in self.private_fields:
+            self.assertNotIn(field, response.data, field)
+
+    def test_pro_package_create_forbidden(self):
+        response = self.client.post(_location('propackage-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_pro_package_update_forbidden(self):
+        response = self.client.put(_location('propackage-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_pro_package_delete_forbidden(self):
+        response = self.client.delete(_location('propackage-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+
 class ProPackageTest(APITestCase):
 
     fixtures = ['patron', 'propackages']
@@ -700,6 +815,27 @@ class ProPackageTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
+
+
+class AnonymousSubscriptionTest(APITestCase):
+
+    fixtures = ['patron', 'propackages', 'subscriptions']
+
+    def test_subscription_list_forbidden(self):
+        response = self.client.get(_location('subscription-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_subscription_show_forbidden(self):
+        response = self.client.get(_location('subscription-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
+
+    def test_subscription_create_forbidden(self):
+        response = self.client.post(_location('subscription-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_subscription_update_forbidden(self):
+        response = self.client.put(_location('subscription-detail', pk=1))
+        self.assertEquals(response.status_code, 401)
 
 
 class SubscriptionTest(APITestCase):
@@ -760,3 +896,16 @@ class SubscriptionTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
+
+
+class AnonymousBillingSubscriptionTest(APITestCase):
+
+    fixtures = ['patron', 'propackages', 'subscriptions', 'billing', 'billing_subscriptions']
+
+    def test_billing_subscription_list_forbidden(self):
+        response = self.client.get(_location('billingsubscription-list'))
+        self.assertEquals(response.status_code, 401)
+
+    def test_billing_subscription_show_forbidden(self):
+        response = self.client.get(_location('billingsubscription-detail', pk=1))
+        self.assertEquals(response.status_code, 401)

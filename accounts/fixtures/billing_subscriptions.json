@@ -1,0 +1,29 @@
+[
+{
+    "pk": 1, 
+    "model": "accounts.billingsubscription", 
+    "fields": {
+        "price": "0.00", 
+        "billing": 1, 
+        "subscription": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "accounts.billingsubscription", 
+    "fields": {
+        "price": "0.00", 
+        "billing": 2, 
+        "subscription": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "accounts.billingsubscription", 
+    "fields": {
+        "price": "0.00", 
+        "billing": 3, 
+        "subscription": 2
+    }
+}
+]

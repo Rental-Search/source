@@ -65,6 +65,8 @@ class PermissionMixin(object):
         elif action not in getattr(self, 'public_actions', ()):
             self.public_mode = False
 
+        super(PermissionMixin, self).initial(request, *args, **kwargs)
+
         self.owner_mode = False
         if 'pk' in kwargs:
             instance = self.get_object()
@@ -77,8 +79,6 @@ class PermissionMixin(object):
                     self.owner_mode = (owner_field == request.user)
         elif action == 'create':
             self.owner_mode = True
-
-        super(PermissionMixin, self).initial(request, *args, **kwargs)
 
     def check_permissions(self, request):
         """

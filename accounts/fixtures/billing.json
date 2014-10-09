@@ -1,0 +1,50 @@
+[
+{
+    "pk": 1, 
+    "model": "accounts.billing", 
+    "fields": {
+        "total_amount": "0.00", 
+        "patron": 1,
+        "created_at": "2012-11-24T07:30:47.827", 
+        "modified_at": "2013-08-18T08:41:35.291", 
+        "object_id": 371, 
+        "total_tva": "0.00", 
+        "state": "paid", 
+        "content_type": 60, 
+        "date_to": "2012-11-24", 
+        "date_from": "2012-10-24"
+    }
+},
+{
+    "pk": 2, 
+    "model": "accounts.billing", 
+    "fields": {
+        "total_amount": "0.00", 
+        "patron": 1,
+        "created_at": "2012-12-24T07:37:49.945", 
+        "modified_at": "2013-08-18T08:39:33.723", 
+        "object_id": 435, 
+        "total_tva": "0.00", 
+        "state": "paid", 
+        "content_type": 60, 
+        "date_to": "2012-12-24", 
+        "date_from": "2012-11-24"
+    }
+},
+{
+    "pk": 3, 
+    "model": "accounts.billing", 
+    "fields": {
+        "total_amount": "0.00", 
+        "patron": 7,
+        "created_at": "2013-01-12T07:44:23.263", 
+        "modified_at": "2013-08-18T08:39:55.281", 
+        "object_id": 474, 
+        "total_tva": "0.00", 
+        "state": "paid", 
+        "content_type": 60, 
+        "date_to": "2013-01-12", 
+        "date_from": "2012-12-12"
+    }
+}
+]
