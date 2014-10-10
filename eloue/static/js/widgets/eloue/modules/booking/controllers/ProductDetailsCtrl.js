@@ -168,17 +168,17 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.bookingDetails.toDate = fromDateTime.add(1).days().toString("dd/MM/yyyy");
                         $scope.bookingDetails.toHour = fromDateTime.add(1).hours().toString("HH:mm:ss");
                     }
-                } else if (fromDateTime < today) {
-                    $scope.dateRangeError = "La date de début ne peut pas être ";
-                } else {
-                    $scope.dateRangeError = null;
-                    ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
-                        $scope.duration = result.duration;
-                        $scope.pricePerDay = result.unit_value;
-                        $scope.bookingPrice = result.total_price;
-                        $scope.available = result.max_available > 0;
-                    });
+                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
+                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
                 }
+                $scope.dateRangeError = null;
+                ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
+                    $scope.duration = result.duration;
+                    $scope.pricePerDay = result.unit_value;
+                    $scope.bookingPrice = result.total_price;
+                    $scope.available = result.max_available > 0;
+                });
+
             };
 
             /**
@@ -269,7 +269,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                             toastr.options.positionClass = "toast-top-full-width";
-                            toastr.success( "Réservation enregistré", "");
+                            toastr.success("Réservation enregistré", "");
                             $(".modal").modal("hide");
                             $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                             $scope.submitInProgress = false;
@@ -327,8 +327,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             });
 
-            $scope.loadPictures = function() {
-                PicturesService.getPicturesByProduct($scope.productId).$promise.then(function(pictures) {
+            $scope.loadPictures = function () {
+                PicturesService.getPicturesByProduct($scope.productId).$promise.then(function (pictures) {
                     var picturesDataArray = pictures.results;
                     // Parse pictures
                     if (angular.isArray(picturesDataArray) && picturesDataArray.length > 0) {

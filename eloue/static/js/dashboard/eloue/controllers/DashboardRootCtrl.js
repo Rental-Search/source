@@ -14,7 +14,7 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
             $scope.currentUserToken = AuthService.getCookie("user_token");
             $scope.unreadMessageThreadsCount = 0;
             $scope.newBookingRequestsCount = 0;
-            $scope.submitInProgress = false;
+            $scope.submitInProgress = true;
             $scope.dashboardTabs = [
                 {title: 'Dashboard', icon: 'stroke home', sref: 'dashboard', badge: 0},
                 {title: 'Messages', icon: 'stroke mail', sref: 'messages', badge: 0},

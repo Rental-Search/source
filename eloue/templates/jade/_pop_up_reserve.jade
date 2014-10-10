@@ -16,7 +16,7 @@
                             | Envoyez un message
                         a(href="#/phone").btn.bg-gray
                             | Appelez
-                form(id="bookingForm", name="bookingForm", role="form", ng-submit="sendBookingRequest()", ng-model="bookingDetails", novalidate).input-group.change-part.table-cell
+                form(id="bookingForm", name="bookingForm", role="form", ng-submit="sendBookingRequest()", ng-model="bookingDetails", novalidate).input-group.change-part.table-cell.top
                   fieldset(data-ng-disabled="submitInProgress")
                     section.table.form-wrapper.personal-information
                         include ./pop_up_sections/_personal_information_form
