@@ -9,7 +9,7 @@ block append scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 
 block append content-body
-  -var is_pro = patron.is_professional
+  -var is_pro = patron.current_subscription is not None 
   #fb-root
   if is_pro
     include ../jade/_pro_popin_message

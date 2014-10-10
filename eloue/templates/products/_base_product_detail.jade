@@ -9,6 +9,7 @@ block scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 
 block append content-body
+  -var is_pro = product.pro_owner
   #fb-root
   .container-flex(data-ng-controller="ProductDetailsCtrl")
     header.header-site
@@ -42,20 +43,20 @@ block append content-body
                   include ./tab_terms
               .part.description
                 include ../jade/product_details/main/_description
-              if product_comments and not product.pro
+              if product_comments and not is_pro
                 .part.comments.comments-ad
                   h3 Commentaires liés à cette annonce
                   {% with product_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}
-              if owner_comments and not product.pro
+              if owner_comments and not is_pro
                 .part.comments.comments-owner
                   h3 Commentaire liés au propriétaire
                   {% with owner_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}
         aside.col-sm-4
-          {% if product.pro %}
+          {% if is_pro %}
           section.owner-information
             include ../jade/product_details/aside/_owner_information
           {% else %}
@@ -64,7 +65,7 @@ block append content-body
           {% endif %}
           //-section.add-to-wishlist
           //-  include ../jade/product_details/aside/_add_to_wishlist
-          {% if product.pro %}
+          {% if is_pro %}
           section.booking-form.ng-hide(ng-show="true")
             include  ../jade/product_details/aside/_booking_form.jade
           {% else %}

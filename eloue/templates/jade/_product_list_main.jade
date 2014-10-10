@@ -10,7 +10,7 @@ ol.product-layout
         .info
           h6
             a(href="{{ product.url }}") {{ product.summary }}
-            if product.pro
+            if product.pro_owner
               span.badge-pro pro
           p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
           //- TODO: need a better solution here to hit SQL DB only once for all products in the list

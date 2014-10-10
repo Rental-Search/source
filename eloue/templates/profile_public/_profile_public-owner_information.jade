@@ -7,7 +7,8 @@
 .section-body
   {% if is_pro %}
   .part
-    p: i Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit accusamus laudantium repudiandae soluta amet consequuntur, quo saepe architecto illum autem dolorem quaerat tempora aspernatur eos nesciunt veritatis impedit minima, tempore laboriosam cumque. Laborum ad ex libero debitis dolores cum praesentium facilis nihil quis eaque error, ipsam enim aspernatur deserunt vitae.
+    if patron.about
+      p: i {{ patron.about }}
   {% else %}
   .part
     p: b Membre depuis le {{ patron.date_joined|date:"d F Y" }}

@@ -1,5 +1,5 @@
 .section-header
-    h4 {% if product.pro %}Demandez un devis{% else %}Réservez en ligne{% endif %}
+    h4 {% if product.pro_owner %}Demandez un devis{% else %}Réservez en ligne{% endif %}
 form.form-inline.section-body.text-center
     {% verbatim %}
     .part
@@ -12,7 +12,7 @@ form.form-inline.section-body.text-center
         // p.available.unavailable Cet article est disponible à ces dates
         span(ng-show="dateRangeError").text-danger {{dateRangeError}}
         {% endverbatim %}
-        {% if not product.pro %}
+        {% if not is_pro %}
         p(ng-show="available").available Cet article est disponible à ces dates
         p(ng-show="!available").available.unavailable Cet article est disponible à ces dates
         {% endif %}
@@ -22,15 +22,15 @@ form.form-inline.section-body.text-center
             | Durée de la location&nbsp;:
             b.period-days {{duration}}
         p.price
-            | Prix {% endverbatim %}{% if product.pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
+            | Prix {% endverbatim %}{% if is_pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
             big.text-primary &nbsp;{{bookingPrice}}
         {% endverbatim %}
-        if not product.pro
+        if not product.pro_owner
             p Assurance incluse
     .part
         a(href = "#/booking", data-dismiss="modal").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2
-            | {% if product.pro %}Envoyez{% else %}Réservez{% endif %}
+            | {% if is_pro %}Envoyez{% else %}Réservez{% endif %}
         p.mrg-v-1
             if is_pro
                 | Vous allez envoyer
