@@ -790,9 +790,19 @@ class CreditCardTest(APITestCase):
     fixtures = ['patron', 'creditcard']
 
     def setUp(self):
+        self.model = get_model('accounts', 'CreditCard')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
-    def test_credit_card_create(self):
+    def test_credit_card_create_no_fields(self):
+        response = self.client.post(_location('creditcard-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'expires', 'holder_name', 'creditcard', 'cvv', 'holder'}
+        default_fields = {'holder'}
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
+
+    def test_credit_card_create_required_fields(self):
         response = self.client.post(_location('creditcard-list'), {
             'expires': '0517',
             'holder_name': 'John Doe',
@@ -806,19 +816,66 @@ class CreditCardTest(APITestCase):
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('creditcard-detail', pk=response.data['id'])))
 
-        CreditCard = get_model('accounts', 'CreditCard')
-        card = CreditCard.objects.get(pk=response.data['id'])
+        card = self.model.objects.get(pk=response.data['id'])
         self.assertEqual(card.masked_number, '4XXXXXXXXXXXX769')
         self.assertEqual(card.expires, '0517')
         self.assertEqual(card.holder_name, 'John Doe')
         self.assertEqual(card.holder_id, 1)
 
+    def test_credit_card_create_all_fields(self):
+        response = self.client.post(_location('creditcard-list'), {
+            'expires': '0517',
+            'holder_name': 'John Doe',
+            'creditcard': '4987654321098769',
+            'cvv': '123',
+            'holder': _location('patron-detail', pk=1)
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('creditcard-detail', pk=response.data['id'])))
+
+        card = self.model.objects.get(pk=response.data['id'])
+        self.assertEqual(card.masked_number, '4XXXXXXXXXXXX769')
+        self.assertEqual(card.expires, '0517')
+        self.assertEqual(card.holder_name, 'John Doe')
+        self.assertEqual(card.holder_id, 1)
+
+    def test_credit_card_create_not_mine(self):
+        response = self.client.post(_location('creditcard-list'), {
+            'expires': '0517',
+            'holder_name': 'John Doe',
+            'creditcard': '4987654321098769',
+            'cvv': '123',
+            'holder': _location('patron-detail', pk=2)
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('creditcard-detail', pk=response.data['id'])))
+
+        card = self.model.objects.get(pk=response.data['id'])
+        self.assertEqual(card.masked_number, '4XXXXXXXXXXXX769')
+        self.assertEqual(card.expires, '0517')
+        self.assertEqual(card.holder_name, 'John Doe')
+        # End user can't create record for other person. Owner is force set as current user.
+        self.assertEqual(card.holder_id, 1)
+
     def test_credit_card_delete(self):
-        CreditCard = get_model('accounts', 'CreditCard')
-        self.assertEquals(CreditCard.objects.filter(pk=3).count(), 1)
+        self.assertEquals(self.model.objects.filter(pk=3).count(), 1)
         response = self.client.delete(_location('creditcard-detail', pk=3))
         self.assertEquals(response.status_code, 204, response.data)
-        self.assertEquals(CreditCard.objects.filter(pk=3).count(), 0)
+        self.assertEquals(self.model.objects.filter(pk=3).count(), 0)
+
+    def test_credit_card_delete_not_mine(self):
+        self.assertEquals(self.model.objects.filter(pk=2).count(), 1)
+        response = self.client.delete(_location('creditcard-detail', pk=2))
+        self.assertEquals(response.status_code, 404, response.data)
+        self.assertEquals(self.model.objects.filter(pk=2).count(), 1)
 
     def test_credit_card_get_by_id(self):
         response = self.client.get(_location('creditcard-detail', pk=3))
