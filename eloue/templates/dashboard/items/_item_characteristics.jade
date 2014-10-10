@@ -16,32 +16,32 @@
             tr(ng-show="isAuto")
                 td Nombre de place
                 td
-                    select(ng-model="product.seat_number", eloue-chosen).table-form
+                    select(ng-model="product.seat_number", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in seatNumberOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Nombre de porte
                 td
-                    select(ng-model="product.door_number", eloue-chosen).table-form
+                    select(ng-model="product.door_number", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in doorNumberOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Énergie
                 td
-                    select(ng-model="product.fuel", eloue-chosen).table-form
+                    select(ng-model="product.fuel", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in fuelOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Boite de vitesse
                 td
-                    select(ng-model="product.transmission", eloue-chosen).table-form
+                    select(ng-model="product.transmission", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in transmissionOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Kilométrage
                 td
-                    select(ng-model="product.mileage", eloue-chosen).table-form
+                    select(ng-model="product.mileage", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in mileageOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Consommation
                 td
-                    select(ng-model="product.consumption", eloue-chosen).table-form
+                    select(ng-model="product.consumption", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in consumptionOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Kilomètres inclus/jour
@@ -102,7 +102,7 @@
             tr(ng-show="isAuto")
                 td CV fiscaux
                 td
-                    select(ng-model="product.tax_horsepower", eloue-chosen).table-form
+                    select(ng-model="product.tax_horsepower", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td N° d'immatriculation
@@ -115,12 +115,12 @@
             tr(ng-show="isRealEstate")
                 td Capacité
                 td
-                    select(ng-model="product.capacity", eloue-chosen).table-form
+                    select(ng-model="product.capacity", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isRealEstate")
                 td Type de logement
                 td
-                    select(ng-model="product.private_life", eloue-chosen).table-form
+                    select(ng-model="product.private_life", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in privateLifeOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isRealEstate")
                 td Nombre de chambre

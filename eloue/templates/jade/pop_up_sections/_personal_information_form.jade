@@ -2,23 +2,23 @@ h2 Vos informations personnelles
 .row
   .col-sm-2
       {% verbatim %}
-      select(ng-model="currentUser.civility", data-placeholder="Civilité", eloue-chosen).form-control
+      select(ng-model="currentUser.civility", name="", data-placeholder="Civilité", eloue-chosen, data-ng-disabled="submitInProgress").form-control
           option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
       {% endverbatim %}
-  .col-sm-5: input(type="text", placeholder="Prénom *", ng-model="currentUser.first_name", required).form-control
-  .col-sm-5: input(type="text", placeholder="Nom *", ng-model="currentUser.last_name", required).form-control
+  .col-sm-5: input(type="text", name="first_name", placeholder="Prénom *", ng-model="currentUser.first_name", required).form-control
+  .col-sm-5: input(type="text", name="last_name", placeholder="Nom *", ng-model="currentUser.last_name", required).form-control
 .row
-  .col-sm-12: input(type="text", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
+  .col-sm-12: input(type="text", name="street", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
 .row
-  .col-sm-6: input(type="text", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
-  .col-sm-6: input(type="text", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
+  .col-sm-6: input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
+  .col-sm-6: input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
 .row(ng-show="isAuto()")
-  .col-sm-6(style="z-index: 1050"): input(type="text", placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", required, eloue-datepicker).form-control
-  .col-sm-6: input(type="text", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", required).form-control
+  .col-sm-6(style="z-index: 1050"): input(type="text", name="date_of_birth", placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto()", eloue-datepicker).form-control
+  .col-sm-6: input(type="text", name="place_of_birth", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", ng-required="isAuto()").form-control
 .row(ng-show="isAuto()")
-  .col-sm-12: input(type="text", placeholder="Numéro de permis *", ng-model="currentUser.drivers_license_number", required).form-control
+  .col-sm-12: input(type="text", name="drivers_license_number", placeholder="Numéro de permis *", ng-model="currentUser.drivers_license_number", ng-required="isAuto()").form-control
 .row(ng-show="isAuto()")
-  .col-sm-6(style="z-index: 1050"): input(type="text", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis", eloue-datepicker).form-control
+  .col-sm-6(style="z-index: 1050"): input(type="text", name="drivers_license_date", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis", eloue-datepicker).form-control
   //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
   //  input(type="file", ng-model="bookingDetails.photo")#photo.form-control
 p.info Ces informations seront reproduites sur le contrat de location. Le propriétaire les vérifiera au début de la location. Si elles sont incorrectes, il ne pourra pas vous remettre les clés. Les champs marqués d'une étoile (*) sont obligatoires.
