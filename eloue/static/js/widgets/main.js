@@ -336,15 +336,15 @@ require([
                 var image, image_hover;
 
                 if (markerId == "li#marker-") {
-                    image = new google.maps.MarkerImage('/static/images/markers.png',
-                        new google.maps.Size(20, 33),
-                        new google.maps.Point(44, 34 * i),
-                        new google.maps.Point(10, 33));
+                    image = new google.maps.MarkerImage('/static/images/markers_new_crush.png',
+                        new google.maps.Size(20, 32),
+                        new google.maps.Point(0, 36 * i),
+                        new google.maps.Point(10, 32));
 
-                    image_hover = new google.maps.MarkerImage('/static/images/markers.png',
-                        new google.maps.Size(20, 33),
-                        new google.maps.Point(0, 34 * i),
-                        new google.maps.Point(10, 33));
+                    image_hover = new google.maps.MarkerImage('/static/images/markers_new_crush.png',
+                        new google.maps.Size(20, 32),
+                        new google.maps.Point(22, 36 * i),
+                        new google.maps.Point(10, 32));
                 }
 
                 var myLatLng = new google.maps.LatLng(product.lat, product.lng);
@@ -403,6 +403,7 @@ require([
         function triggerMouseOverGenerator(marker) {
             return function () {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
+                google.maps.event.trigger(marker, 'mouseover');
             }
         }
 

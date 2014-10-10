@@ -6,6 +6,7 @@ define(["angular", "eloue/app"], function (angular) {
      * Controller for the items tariffs tab.
      */
     angular.module("EloueDashboardApp").controller("ItemsTariffsCtrl", [
+        "$q",
         "$scope",
         "$stateParams",
         "Endpoints",
@@ -14,7 +15,7 @@ define(["angular", "eloue/app"], function (angular) {
         "CategoriesService",
         "ProductsService",
         "PricesService",
-        function ($scope, $stateParams, Endpoints, Currency, Unit, CategoriesService, ProductsService, PricesService) {
+        function ($q, $scope, $stateParams, Endpoints, Currency, Unit, CategoriesService, ProductsService, PricesService) {
 
             $scope.units = Unit;
             $scope.prices = {
@@ -74,17 +75,25 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.updatePrices = function () {
+                $scope.submitInProgress = true;
+                var promises = [];
                 angular.forEach($scope.prices, function (value, key) {
-                    value.currency = Currency.EUR.name;
-                    value.product = Endpoints.api_url + "products/" + $scope.product.id + "/";
-                    if (value.id) {
-                        PricesService.updatePrice(value);
-                    } else {
-                        PricesService.savePrice(value);
+                    if (value.amount && value.amount > 0) {
+                        value.currency = Currency.EUR.name;
+                        value.product = Endpoints.api_url + "products/" + $scope.product.id + "/";
+                        if (value.id) {
+                            promises.push(PricesService.updatePrice(value).$promise);
+                        } else {
+                            promises.push(PricesService.savePrice(value).$promise);
+                        }
                     }
-
                 });
-                ProductsService.updateProduct($scope.product);
+                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.address.id + "/";
+                $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
+                promises.push(ProductsService.updateProduct($scope.product).$promise);
+                $q.all(promises).then(function(results) {
+                    $scope.submitInProgress = false;
+                });
             }
         }]);
 });

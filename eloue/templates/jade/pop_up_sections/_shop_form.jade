@@ -1,0 +1,53 @@
+h4
+  b N’hésitez pas à nous écrire 
+  | via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions...
+p Nos boutiques sont situées au&nbsp;:
+
+if is_agencies
+  .indent-t-sm.text-white.btn-lg.bg-primary: b
+    i.flaticon.stroke.up-2.icon-2x.pull-right(data-toggle="collapse", data-target="#map-1")
+    | Adresse
+    br
+    | XXXXX Ville
+  #map-1.collapse.in.map-wrapper
+    .map
+    // МЕСТО ДЛЯ КАРТЫ!!
+
+
+  .indent-t-sm.text-white.btn-lg.bg-primary: b
+    i.flaticon.stroke.up-2.icon-2x.pull-right(data-toggle="collapse", data-target="#map-2")
+    | Adresse
+    br
+    | XXXXX Ville
+  #map-2.collapse.map-wrapper
+    .map
+    // МЕСТО ДЛЯ КАРТЫ!!
+
+
+  .indent-t-sm.text-white.btn-lg.bg-primary: b
+    i.flaticon.stroke.up-2.icon-2x.pull-right(data-toggle="collapse", data-target="#map-3")
+    | Adresse
+    br
+    | XXXXX Ville
+  #map-3.collapse.map-wrapper
+    .map
+    // МЕСТО ДЛЯ КАРТЫ!!
+
+
+  .indent-t-sm.text-white.btn-lg.bg-primary: b
+    i.flaticon.stroke.up-2.icon-2x.pull-right(data-toggle="collapse", data-target="#map-4")
+    | Adresse
+    br
+    | XXXXX Ville
+  #map-4.collapse.map-wrapper
+    .map
+    // МЕСТО ДЛЯ КАРТЫ!!
+
+else
+  .indent-t-sm.text-white.btn-lg.bg-primary: b
+    | Adresse
+    br
+    | XXXXX Ville
+  .map-wrapper
+    .map
+    // МЕСТО ДЛЯ КАРТЫ!!

@@ -1,0 +1,29 @@
+if is_send
+  h4(style="position: relative;").text-success.indent-l-md
+    i.flaticon.solid.checkmark-2.icon-li
+    | Demande de devis envoyé
+  p
+    | Votre demande de devis vient d’être envoyée. 
+  p
+    | Nos équipes font le nécessaire pour que le loueur vous 
+    | réponde dans les 24 heures, afin de confirmer votre 
+    | location.
+  p
+    | Vous n’avez rien à payer sur e-loue, le paiement se fera 
+    | directement chez le loueur. 
+  p
+    | Nous vous remercions pour votre confiance et  restons à 
+    | votre disposi;on si vous avez des questions. 
+  p
+    | L’équipe e-loue
+else
+  h4
+    b N’hésitez pas à nous écrire 
+    | via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions...
+
+  form(action="send-message").form-wrapper
+    input(type="email", placeholder="Votre adresse e‐mail *",   required).form-control.indent-t-md
+    input(type="text",  placeholder="Objet de votre message *", required).form-control.indent-t-md
+    textarea(name="", placeholder="Votre message", rows="5").expand.form-control.indent-t-md
+    input(type="submit", value="Envoyer").btn.btn-lg.bg-success.indent-t-md
+

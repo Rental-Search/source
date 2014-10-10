@@ -131,39 +131,28 @@
       border-color: $brand-primary
     &:valid
       border-color: $gray-medium
+    &:disabled
+      border-color: $gray-medium
 
   .chosen-container
-    display: table-cell
-    float: left
-    padding: 0 !important
-    width: 100% !important
-    border-width: 0 !important
-  .chosen-single
-    background: transparent
-    color: $gray-strong
-    text-align: center
-    box-shadow: none
-    height: 100%
-    border: px(1) solid $gray-medium !important
-    span,
-    div b
-      margin-top: .5em
-    div b
-      height: 20px
-  .chosen-drop
-    border: px(1) solid $gray-medium
-    text-align: center
-    border-top-width: 0
+    .chosen-choices,
+    .chosen-single
+      height: 3em
 
-  .chosen-container
-    font-size: 1em
-    box-shadow: none
-    height: 2.9em
-    padding: 0 0 0 1em
-    color: $gray-strong
-    +placeholder($gray-strong)
-    +border-top-radius($bd-rad)
-    +border-bottom-radius($bd-rad)
+  .map-wrapper
+    width: 100%
+    padding-top: 60%
+    position: relative
+    margin-top: $indent
+    .map
+      background-color: $brand-success
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+    & + .map-wrapper
+      margin-bottom: $indent
 
   .large
     $bd-property: px(1) solid $gray-lighter

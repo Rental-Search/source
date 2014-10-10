@@ -1,0 +1,216 @@
+.product-layout
+  +make-row
+  margin-bottom: 0
+  padding-left: 0
+  list-style-type: none
+
+  // > BASE SETTING
+  .section-body
+    margin-bottom: $grid-gutter-width
+    position: relative
+    overflow: hidden
+
+  .thumbnail-img
+    +default-product
+    position: relative
+    a
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+    img
+      position: absolute
+      min-height: 100%
+      min-width: 100%
+    .price
+      position: absolute
+      top: 0
+      right: 0
+      margin: $indent-xs
+    .badge-order
+      position: absolute
+      top: 0
+      left: 0
+      background-color: $gray-dark
+      background-color: rgba($gray-dark, .8)
+      color: white
+      font-weight: $fw-bold
+      width: ($line-height-base * 1em)
+      text-align: center
+
+  .info
+    display: table-cell
+    max-width: 0
+    width: 100%
+    vertical-align: middle
+    p
+      +empty-element
+      color: $gray-medium
+      font-weight: $fw-semibold
+
+  .declarer-container
+    display: table-cell
+
+  .declarer-thumbnail
+    +default-user
+    min-width: $thumbnail-sm
+    height: $thumbnail-sm
+    overflow: hidden
+    display: block
+    border-radius: 50%
+
+  .badge-pro
+    font-size: px(11,15)
+    text-transform: uppercase
+    display: inline-block
+    background-color: $gray-medium
+    color: white
+    margin-left: 1em
+    padding: .2em .4em
+    font-weight: bolder
+    vertical-align: top
+
+  .sprite-comment
+    font-weight: $fw-semibold
+    color: white
+    i
+      margin: 0 .5em
+
+  .btns
+    display: none
+
+  // > GRID LAYOUT
+  .grid-layout &
+
+    .declarer-name,
+    .full_description
+      display: none
+
+    & > li
+      +make-sm-column(6)
+      +make-md-column(4)
+
+    .thumbnail-img
+      padding-top: (100%/1.4)
+
+    .declarer-container
+      padding: $indent-xs
+
+    .info
+      padding: $indent-xs
+      p,
+      h6
+        +text-overflow()
+      h6
+        font-size: px(13)
+        font-weight: $fw-semibold
+        margin: 0 0 .25em
+      p
+        font-size: px(11)
+        margin-bottom: 0
+
+    .badge-pro
+      position: absolute
+      top: 2.5em
+      left: 0
+      margin: 0
+
+
+    .rate,
+    .sprite-comment
+      display: none
+      position: absolute
+      margin-top: (100%/1.4)
+      z-index: 20
+
+    .sprite-comment
+      top: -2em
+      left: $indent-xs
+
+    .rate
+      top: -1.75em
+      right: $indent-xs
+
+    .section-body:hover
+      .rate,
+      .sprite-comment
+        display: block
+
+  // > LIST LAYOUT
+  .list-layout &
+
+    & > li
+      +make-sm-column(12)
+
+    .full_description
+      max-height: (2em * $line-height-base)
+      position: relative
+      margin-bottom: $indent
+
+    .info
+      width: auto
+      position: relative
+      padding: $indent-xs $indent-sm
+      h6
+        font-weight: $fw-bold
+        font-size: px(15)
+      p
+        font-size: px(13)
+      &:before
+        content: " "
+        left: 0
+        right: 0
+        bottom: 0
+        height: (1.5em * $line-height-base)
+        background-image: linear-gradient(to bottom, rgba(255,255,255,0), white 60%)
+        // background: red
+        position: absolute
+        z-index: 10
+
+    .thumbnail-img
+      width: $list-img-wrapper-width
+
+    .btns,
+    .declarer-container
+      padding: $indent-sm*$indent-vertical $indent-sm
+
+    .declarer-container
+      padding-left: 0
+      width: 1%
+
+    .btns
+      position: absolute
+      bottom: 0
+      right: 0
+      a
+        margin-left: 1em
+      i
+        display: inline-block
+        font-size: 1.1em
+
+    .info,
+    .thumbnail-img,
+    .declarer-name,
+    .declarer-thumbnail
+      display: table-cell
+      vertical-align: middle
+
+    .declarer-name
+      font-size: px(13)
+      color: transparent
+      text-align: right
+      padding-right: $indent-xs
+      vertical-align: middle
+      font-weight: $fw-semibold
+
+    .section-body:hover
+      .declarer-name
+        color: $gray-medium
+      .btns
+        display: block
+
+    .sprite-comment
+      color: $gray-medium
+      i
+        font-size: 1.1em

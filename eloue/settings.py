@@ -354,6 +354,24 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'subscription_styles': {
+        'source_filenames': (
+            'sass/subscription_styles.sass',
+        ),
+        'output_filename': 'css/subscription_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
+    'profile_public_styles': {
+        'source_filenames': (
+            'sass/profile_public_styles.sass',
+        ),
+        'output_filename': 'css/profile_public_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'dashboard_styles': {
         'source_filenames': (
             'dashboard/sass/base.sass',

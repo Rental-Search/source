@@ -1,0 +1,14 @@
+.container
+  ul.nav.nav-justified
+    -var insurances_pro = [["payment", "efficace", "Nous vous apportons de nouveaux clients. Vous augmentez vos revenus"], ["serenity", "rapide", "Nous ouvrons votre boutique et intégrons vos produits en moins de 2 semaines"], ["simplicity", "transparent", "Nous vous donnons accès à toutes les statistiques Google de votre boutique"], ["trust", "adaptable", "Vous pouvez modifier ou compléter votre bou8que en toute simplicité"]]
+    each thumbnail, title, text in insurances_pro
+      li.divide
+      li
+        h5
+          | e-loue Pro 
+          br
+          | c’est 
+          span.text-primary {{ title }}&nbsp;!
+        .insurances-img.indent-t-md
+          span(class="{{ thumbnail }}")
+        p {{ text }}

@@ -1,5 +1,10 @@
 .section-header
+    {% if is_pro %}
+    span.badge-pro.pull-right pro
+    h4 Contactez-nous
+    {% else %}
     h4 Contactez-moi
+    {% endif %}
 .section-body
     .part
         .block-thumbnail
@@ -7,8 +12,10 @@
                 a(href="{{ product.owner_url }}")
                     img(style="background-image: url({{ product.owner_avatar_medium }})").bg-image
             .thumbnail-content
-                h5
-                    a(href="{{ product.owner_url }}") {{ product.owner }}
+                h5: a(href="{{ product.owner_url }}") {{ product.owner }} {% if is_pro %}&nbsp;Pro{% endif %}
+                {% if is_pro %}
+                p: i Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit accusamus laudantium repudiandae soluta amet consequuntur, quo saepe architecto illum autem dolorem quaerat tempora aspernatur eos nesciunt veritatis impedit minima, tempore laboriosam cumque. Laborum ad ex libero debitis dolores cum praesentium facilis nihil quis eaque error, ipsam enim aspernatur deserunt vitae.
+                {% else %}
                 {% with product.owner.average_note as rate %}
                 include ../../_rate
                 {% endwith %}
@@ -16,6 +23,7 @@
                     | Membre depuis le
                     br
                     span {{ product_object.owner.date_joined|date:"d F Y" }}
+                {% endif %}
     .part
         a(href="#/message", data-dismiss="modal").btn.bg-success.send-message
             i.flaticon.stroke.mail-2
@@ -23,10 +31,19 @@
         a(href="#/phone", data-dismiss="modal").btn.bg-success.call
             i.flaticon.stroke.phone-3
             | Appelez
+        {% if is_pro %}
+        a(href = "#inscrivez-vous", data-toggle="modal", data-target="#pro-popin-website-link").btn.bg-success
+            i.flaticon.stroke.shop-1
+            | Venez en magasin
+        a(href = "#inscrivez-vous", data-toggle="modal", data-target="#pro-popin-website-link").btn.bg-success
+            i.flaticon.stroke.imac-1
+            | Visitez notre sitesin
+        {% else %}
         ul.nav.stats
             {% with product_object.owner.stats as stats %}
             include ../../_patron_stats
             {% endwith %}
+        {% endif %}
 //-
     .part.connection.clearfix
         .col-sm-4

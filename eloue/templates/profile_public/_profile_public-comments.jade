@@ -13,7 +13,7 @@ ul.list-group
           a(href="{{ product.url }}").text-success: b {{ comment.summary }} 
           small loué par 
           a(href="{{ comment.author.username.get_absolute_url }}").text-success: b {{ comment.author.username }}
-        .indent-t-xs.indent-b-xs
+        .indent-t-xs.indent-b-xs //- this is a change against HTML dev's branch, should be checked that it looks like expected
           {% with comment.note as rate %}
           include ../jade/_rate
           {% endwith %}
