@@ -2,12 +2,12 @@
 
 form(action="detail-search").section-body
   label.caption(for="what") quoi
-  input#what(type="text", placeholder="", autofocus).form-control
+  input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
 
   p.caption catégories
   .clear-selector
-    select.form-control
-      option(value="male") Tous les catigories
+    select.form-control(name="categories")
+      option(value="") Tous les catigories
       if form.cleaned_data.q
         {% for value, count in facets.fields.categories %}
         if count and value
@@ -29,7 +29,7 @@ form(action="detail-search").section-body
             option(value="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
 
   label.caption(for="where") où
-  input#where(type="text", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
+  input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
 
   .map-container
     .whirly
@@ -38,7 +38,7 @@ form(action="detail-search").section-body
 
   //- .slider
   label.caption(for="district") rayon
-  input#district(type="range", name="district", min="5", max="1000", step="1", value="500")
+  input#district(type="range", name="r", min="5", max="1000", step="1", value="500")
   #district-fake
 
   label.caption(for="start-date") date de début
@@ -60,15 +60,16 @@ form(action="detail-search").section-body
   p.caption loueur
   .checkbox
     label(for="particular")
-      input(type="checkbox")#particular
+      input(type="checkbox", name="renter", value="particuliers")#particular
       span.flaticon.stroke.checkmark-1
     | Particulier
   .checkbox
     label(for="professional")
-      input(type="checkbox")#professional
+      input(type="checkbox", name="renter", value="professionnels")#professional
       span.flaticon.stroke.checkmark-1
     | Professionel
 
+//-
   p.caption champ 1
   .clear-selector
     select.form-control
