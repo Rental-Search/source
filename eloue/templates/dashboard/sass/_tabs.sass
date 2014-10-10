@@ -56,26 +56,25 @@
 // tabs horisontal //
 /////////////////////
 .tabs-horisontal-active
-  position: relative
-  padding-top: .8em
-  margin-bottom: -1.5em
+  height: 3em
   > ul
     position: relative
     height: 100%
-    > .divider:before
-      // background-color: red !important
-      bottom: -.15em !important
+    text-align: center
 
-.tabs-horisontal-active .tab-horisontal
-  cursor: pointer
-  color: $brand-success
-  padding: .25em .5em .75em
-  position: relative
-  border-bottom: 4px solid transparent
-  transition: border-color $trns-fast
-  &:hover,
-  &.current
-    border-color: $brand-success
+  .tab-horisontal
+    cursor: pointer
+    color: $brand-success
+    // background-color: #ccc
+    padding: 0 $indent-xs
+    position: relative
+    border-bottom: 4px solid transparent
+    transition: border-color $trns-fast
+    &:hover,
+    &.current
+      border-color: $brand-success
+    a
+      display: block
 
 .messages-container
   padding-bottom: $form-message-area-height

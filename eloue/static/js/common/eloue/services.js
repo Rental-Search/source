@@ -1084,12 +1084,16 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("PhoneNumbersService", ["PhoneNumbers", function (PhoneNumbers) {
             var phoneNumbersService = {};
 
-            phoneNumbersService.getPhoneNumber = function (phoneNumbersId) {
-                return PhoneNumbers.get({id: phoneNumbersId});
+            phoneNumbersService.getPhoneNumber = function (phoneNumberId) {
+                return PhoneNumbers.get({id: phoneNumberId});
             };
 
             phoneNumbersService.updatePhoneNumber = function (phoneNumber) {
                 return PhoneNumbers.update({id: phoneNumber.id}, phoneNumber);
+            };
+
+            phoneNumbersService.getPremiumRateNumber = function (phoneNumberId) {
+                return PhoneNumbers.getPremiumRateNumber({id: phoneNumberId});
             };
 
             return phoneNumbersService;
@@ -1346,7 +1350,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Get product id
                         var productId = UtilsService.getIdFromUrl(booking.product);
                         // Load product
-                        ProductsLoadService.getProduct(productId, true, true).then(function (product) {
+                        ProductsLoadService.getProduct(productId, true, true, true, true).then(function (product) {
                             booking.product = product;
                             MessageThreadsService.getMessageThread(product.id, UtilsService.getIdFromUrl(booking.borrower)).then(function(threads) {
                                 if (threads && threads.length > 0) {
@@ -1407,21 +1411,25 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Products, CheckAvailability, AddressesService, UsersService, PicturesService, PhoneNumbersService, UtilsService, ProductsParseService) {
                 var productLoadService = {};
 
-                productLoadService.getProduct = function (productId, loadOwner, loadPictures) {
+                productLoadService.getProduct = function (productId, loadOwner, loadPictures, loadProductStats, loadOwnerStats) {
                     var deferred = $q.defer();
 
                     // Load product
                     Products.get({id: productId, _cache: new Date().getTime()}).$promise.then(function (productData) {
                         var productPromises = {};
 
-                        productPromises.stats = Products.getStats({id: productId, _cache: new Date().getTime()});
+                        if (loadProductStats) {
+                            productPromises.stats = Products.getStats({id: productId, _cache: new Date().getTime()});
+                        }
 
                         if (loadOwner) {
                             // Get owner id
                             var ownerId = UtilsService.getIdFromUrl(productData.owner);
                             // Load owner
                             productPromises.owner = UsersService.get(ownerId).$promise;
-                            productPromises.ownerStats = UsersService.getStatistics(ownerId).$promise;
+                            if (loadOwnerStats) {
+                                productPromises.ownerStats = UsersService.getStatistics(ownerId).$promise;
+                            }
                         }
 
                         if (loadPictures) {
@@ -1521,7 +1529,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load message threads
-                    MessageThreads.get({page: page, _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
+                    MessageThreads.get({page: page, ordering: "-last_message__sent_at", _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
                         var messageThreadListPromises = [];
 
                         // For each message thread
@@ -1585,7 +1593,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Get product id
                         if (messageThreadData.product) {
                             var productId = UtilsService.getIdFromUrl(messageThreadData.product);
-                            messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true);
+                            messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true, true, true);
                         }
 
                         $q.all(messageThreadPromises).then(function (results) {
@@ -1816,6 +1824,17 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  */
                 sendResetPasswordRequest: function(form, successCallback, errorCallback) {
                     FormService.send("POST", "/reset/", form, successCallback, errorCallback);
+                },
+
+                /**
+                 * Sends password reset request.
+                 * @param form form
+                 * @param url post url
+                 * @param successCallback success callback
+                 * @param errorCallback error callback
+                 */
+                resetPassword: function(form, url, successCallback, errorCallback) {
+                    FormService.send("POST", url, form, successCallback, errorCallback);
                 },
 
                 /**

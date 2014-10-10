@@ -32,6 +32,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
+    pro_owner = indexes.BooleanField(default=False)
     
     is_highlighted = indexes.BooleanField(model_attr='is_highlighted')
     is_top = indexes.BooleanField(model_attr='is_top')
@@ -46,25 +47,23 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]:
-            return picture.thumbnail and picture.thumbnail.url
+            return picture.thumbnail.url if picture.thumbnail else None
 
     def prepare_thumbnail_medium(self, obj):
         for picture in obj.pictures.all()[:1]:
-            return picture.home and picture.home.url
+            return picture.home.url if picture.home else None
 
     def prepare_profile(self, obj):
         for picture in obj.pictures.all()[:1]:
-            return picture.profile and picture.profile.url
+            return picture.profile.url if picture.profile else None
 
     def prepare_owner_avatar(self, obj):
         obj = obj.owner
-        if obj.avatar and obj.thumbnail:
-            return obj.thumbnail.url
+        return obj.thumbnail.url if obj.thumbnail else None
 
     def prepare_owner_avatar_medium(self, obj):
         obj = obj.owner
-        if obj.avatar and obj.product_page:
-            return obj.product_page.url
+        return obj.product_page.url if obj.product_page else None
 
     def prepare_price(self, obj):
         # It doesn't play well with season
@@ -77,11 +76,14 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         special = hasattr(obj, 'carproduct') or hasattr(obj, 'realestateproduct')
         return special
 
+    def prepare_pro_owner(self, obj):
+        return obj.owner.current_subscription is not None
+
     def get_model(self):
         return Product
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.active().select_related('address', 'owner')
+        return self.get_model().on_site.active().select_related('address', 'owner')#.prefetch_related('pictures', 'prices')
         
 class CarIndex(ProductIndex):
 

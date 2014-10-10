@@ -1,19 +1,20 @@
 block details
     .section-content
+      fieldset(data-ng-disabled="submitInProgress")
         h2 Catégories
         .row
             {% verbatim %}
             .col-md-4
                 .form-control
-                    select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories")
+                    select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-ng-disabled="submitInProgress")
                         option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
             .col-md-4
                 .form-control
-                    select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories")
+                    select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", data-ng-disabled="submitInProgress")
                         option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
             .col-md-4
                 .form-control
-                    select(ng-model="product.category", eloue-chosen, opts="leafCategories")
+                    select(ng-model="product.category", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress")
                         option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
             {% endverbatim %}
         h2 Titre
@@ -27,6 +28,7 @@ block details
             .col-sm-4: input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
         h2 Photos
             form#add-picture
+              fieldset(data-ng-disabled="submitInProgress")
                 {% verbatim %}
                 ul.text-gray.container-with-square-thumbnail.indent-xs-b
                     li(ng-show="product.pictures.length < 3"): form#add-picture
@@ -38,6 +40,7 @@ block details
                         img(ng-src="{{getProductImg(picture.image.thumbnail)}}", alt="{{product.summary}}", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
                 {% endverbatim %}
         form(name="itemInfoForm", ng-submit="updateProduct()")
+          fieldset(data-ng-disabled="submitInProgress")
             h2(ng-show="isAuto || isRealEstate") Caractéristiques
             include ./_item_characteristics
             h2 Informations complémentaires

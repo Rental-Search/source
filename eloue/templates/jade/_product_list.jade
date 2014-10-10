@@ -8,7 +8,8 @@
         .product-image
           a(href="{{ product.url }}").img-wrapper: img(style="background-image: url({{ product.profile }})")
           span.badge.price {{ product.price }}&euro; /jour
-
+          if product.pro_owner
+            span.badge-pro pro
         .product-info
           .product-description
             h6: a(href="{{ product.url }}") {{ product.summary }}

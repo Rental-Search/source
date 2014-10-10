@@ -15,5 +15,5 @@ urlpatterns = patterns('',
 from accounts.views import PatronDetailView
 
 ui3_urlpatterns = patterns('',
-    url(r'^(?P<slug>[-\w]+)/$', PatronDetailView.as_view(), name='patron_detail'),
+    url(r'^(?P<slug>[-\w]+)(?:/page/(?P<page>\d+))?/$', PatronDetailView.as_view(), name='patron_detail'),
 )

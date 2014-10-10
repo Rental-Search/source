@@ -2,19 +2,19 @@ section.container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser").without-spaces
     li: span
-        | Bonjour, 
-        a( href = "#inscrivez-vous", data-toggle="modal", data-target="#registrationModal") inscrivez-vous 
-        | ou 
-        a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal") connectez-vous
+      | Appelez-nous au 
+      b 0826.800.200 
+      | (0,15&euro; / min)
     li.divide
     li: span
         | Vous êtes un loueur professionnel, découvrez les 
         a( href ="#") offers e-loue Pro
     li.divide
     li: span
-      | Appelez-nous au 
-      b 0826.800.200 
-      | (0,15&euro; / min)
+        | Bonjour, 
+        a( href = "#inscrivez-vous", data-toggle="modal", data-target="#registrationModal") inscrivez-vous 
+        | ou 
+        a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal") connectez-vous
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser").without-spaces
     li: span
@@ -37,7 +37,8 @@ section.container.signs-links
             li: a(href="{% url 'dashboard:account' %}") Compte
             li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()") Déconnexion
             {% verbatim %}
-        .dropdown
+        //-
+         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
             i.flaticon.stroke.mail
             span.badge-count {{userStats.unread_message_threads_count}}
@@ -51,7 +52,8 @@ section.container.signs-links
                   h4: a(href="#") #{item.first_name}
                   h5: a(href="#") #{item.topic}
                   p #{item.text}
-        .dropdown
+        //-
+         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
             i.flaticon.stroke.calendar-5
             span.badge-count {{userStats.booking_requests_count}}

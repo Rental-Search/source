@@ -7,6 +7,7 @@ define([
     "datejs",
     "chosen",
     "bootstrap-datepicker",
+    "bootstrap-datepicker-fr",
     "custom-scrollbar"
 ], function (angular) {
     // Create module
