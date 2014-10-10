@@ -76,10 +76,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.getProductIdFromUrl = function () {
                 var href = $window.location.href;
                 href = href.substr(href.lastIndexOf("location/") + 8);
-                var parts = href.split("/");
-                var productId = parts[4];
-                $scope.rootCategory = parts[1];
-                return productId.substr(productId.lastIndexOf("-") + 1);
+
+                $scope.rootCategory = href.split("/")[1];
+                var subparts = href.split("-");
+                var productId = subparts[subparts.length - 1];
+                var lastIndex = productId.indexOf("/") > 0 ? productId.indexOf("/") : (productId.length - 1);
+                return productId.substr(0, lastIndex);
             };
             $scope.productId = $scope.getProductIdFromUrl();
 
