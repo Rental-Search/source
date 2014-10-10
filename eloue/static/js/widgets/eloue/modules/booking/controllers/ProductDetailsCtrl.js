@@ -19,7 +19,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "BookingsLoadService",
         "BookingsService",
         "PhoneNumbersService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService) {
+        "PicturesService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService) {
 
             $scope.creditCard = {
                 id: null,
@@ -140,7 +141,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 {"label": "23h", "value": "23:00:00"}
             ];
 
-            ProductsLoadService.getProduct($scope.productId, true, true, false, false).then(function (result) {
+            ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
                 $scope.product = result;
                 $scope.loadCalendar();
             });
@@ -321,7 +322,20 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 } else if (args.name === "phone") {
                     $scope.loadPhoneDetails();
                 }
+                if (args.name != "login") {
+                    $scope.loadPictures();
+                }
             });
+
+            $scope.loadPictures = function() {
+                PicturesService.getPicturesByProduct($scope.productId).$promise.then(function(pictures) {
+                    var picturesDataArray = pictures.results;
+                    // Parse pictures
+                    if (angular.isArray(picturesDataArray) && picturesDataArray.length > 0) {
+                        $scope.product.picture = picturesDataArray[0].image.thumbnail;
+                    }
+                });
+            };
 
             /**
              * Restore path when closing modal window.
