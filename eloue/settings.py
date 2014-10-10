@@ -363,6 +363,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'security_styles': {
+        'source_filenames': (
+            'sass/security_styles.sass',
+        ),
+        'output_filename': 'css/security_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'press_styles': {
         'source_filenames': (
             'sass/press_styles.sass',

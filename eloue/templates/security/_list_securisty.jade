@@ -1,0 +1,31 @@
+.container
+  -var security_items = [{'head': "Identité des membres vérifiée", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Notes et commentaires", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Appels et messagerie en ligne", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Paiement en ligne sécurisé", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Dépôt de garantie en ligne", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Contrat de location pré-rempli", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Vos biens sont automatiquement assurés", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Service Client dédié 7j/7‐24h/24", 'icon': "flaticon solid checkmark-2", 'text': ""}]
+
+  h2.text-center.text-uppercase
+    b chez e‐loue, la sécurité est notre priorité&nbsp;!
+    br
+    | nous faisons tout ce qu’il faut pour vous rassurer
+    br
+    | avant, pendant et après votre location...
+
+  .press-release.indent-v-md
+    {% for item in security_items %}
+    .table
+      .logo-wripper
+        i(class="{{ item.icon }}")
+      ul.timeline-steps.tenant-column.list-history: li
+        h5.text-primary {{ item.head }}
+        p.content.indent-t-sm.text-overflow Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore veniam doloremque unde, hic aspernatur necessitatibus voluptatibus. Facilis aut aliquam, ullam pariatur exercitationem nemo nesciunt quo maiores nobis laudantium dignissimos quod necessitatibus autem sit beatae ut delectus! Fuga soluta, velit alias! Sunt asperiores unde consequuntur, cupiditate dicta expedita libero, non quibusdam minus. Cum numquam nobis iure eius incidunt autem ad voluptate eligendi quae, vel quibusdam, voluptates cumque molestiae laboriosam odit magni dignissimos repellat quod doloremque consequatur fugiat. Mollitia sint voluptate reiciendis cum a consequuntur perspiciatis, labore porro, facere dolor hic, laudantium fugiat soluta ex quia, delectus maxime? Tenetur impedit magni perferendis!
+        .addons
+          b
+          i
+    {% endfor %}
+
+  .row.indent-v-md
+    .col-md-4.col-md-offset-4.col-sm-6.col-sm-offset-3
+      a(href="#", style="width: 100%;").btn.btn-lg.bg-success Cherchez des biens à louer
+  .row
+    .col-md-4.col-md-offset-4.col-sm-6.col-sm-offset-3
+      a(href="#", style="width: 100%;").btn.btn-lg.bg-success Déposez vos annonces
+
+  .text-center.indent-t-xs: a(href="#").link-success Simulez vos revenus

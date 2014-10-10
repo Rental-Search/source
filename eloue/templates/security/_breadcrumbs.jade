@@ -1,0 +1,14 @@
+.container
+  ol.breadcrumb
+    -var breadcrumbs = [{'text': "Accueil"}, {'text': "Pourquoi choisir e-loue"}, {'text': "e-loue et la sécurité", 'is_active': true}]
+    {% for item in breadcrumbs %}
+    {% if item.is_active %}
+    li.active: a(href="#")
+        != item.text
+    {% else %}
+    li: a(href="#")
+        != item.text
+    {% endif %}
+    {%endfor%}
+
+
