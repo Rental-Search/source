@@ -1,11 +1,11 @@
 .container
   h3.text-center Choisissez une catégorie pour votre annonce
-  -var publish_items_categories = [[{"title": "Bricolage", "id": 35, "classname": "do-it-yourself"}, {"title": "Jardinage", "id": 390, "classname": "gardening"}, {"title": "High-tech", "id": 253, "classname": "high-tech"}, {"title": "Réception", "id": 418, "classname": "reception"}], [{"title": "Véhicule", "id": 2700, "classname": "vehicle"}, {"title": "Mode et accessoires", "id": 126, "classname": "fashion-and-accessories"}, {"title": "Santé et bien-etre", "id": 323, "classname": "health-and-wellness"}, {"title": "Autres", "id": "", "classname": "other"}]]
+  -var publish_items_categories = [[{"title": "Bricolage", "id": 35, "classname": "eloue-drill"}, {"title": "Jardinage", "id": 390, "classname": "eloue-mower"}, {"title": "High-tech", "id": 253, "classname": "eloue-camera"}, {"title": "Réception", "id": 418, "classname": "eloue-glass"}], [{"title": "Véhicule", "id": 2700, "classname": "eloue-car"}, {"title": "Mode et accessoires", "id": 126, "classname": "eloue-dress"}, {"title": "Santé et bien-etre", "id": 323, "classname": "eloue-basket"}, {"title": "Autres", "id": "", "classname": "eloue-other"}]]
   each group in publish_items_categories
-    ul.nav.space-between.text-nowrap
+    ul.nav.space-between
       each item in group
         li.spacer
-        li(class="{{ item.classname }}"): span: a(href="#/publish?category={{ item.id }}", data-dismiss="modal")
+        li: span: a(href="#/publish?category={{ item.id }}", data-dismiss="modal")
           span.border-round
-            i.sprite
+            i(class="{{ item.classname }}")
           span.title {{ item.title }}
