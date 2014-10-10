@@ -209,6 +209,9 @@ ui3_urlpatterns = patterns('',
     url(r'^dashboard/#/bookings/(?P<pk>[0-9a-f]{32})/$', dashboard_base_view, name='booking_detail'),
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
+    url(r'^nos-partenaries/', TemplateView.as_view(template_name='our_partners/index.jade'), name='our_partners'),
+    url(r'^contactez-nous/', TemplateView.as_view(template_name='contact_us/index.jade'), name='contact_us'),
+    url(r'^espace-presse/', TemplateView.as_view(template_name='press/index.jade'), name='press_page'),
 )
 
 urlpatterns = patterns('',

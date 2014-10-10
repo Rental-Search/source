@@ -1,0 +1,44 @@
+.container.indent-v-lg
+  -var select_items = [{'text': "Demande d'information", 'value': "request_information"},{'text': "Problème technique", 'value': "technical_problem"}, {'text': "Inscription / Connexion", 'value': "register_login"}, {'text': "Tableau de bord / Espace client", 'value': "dashboard_client_area"}, {'text': "Recherche", 'value': "research"}, {'text': "Réservations / Locations", 'value': "booking_rentals"}, {'text': "Paiement / Caution", 'value': "payment_deposit"}, {'text': "Assurance", 'value': "insurance"}, {'text': "Suggestions", 'value': "suggestions"}, {'text': "Félicitations", 'value': "congratulations"}, {'text': "Relation presse", 'value': "press_relations"}, {'text': "Proposition de partenariat", 'value': "partnership_proposal"}, {'text': "Autre", 'value': "other"}]
+  form(action="send-message").form-wrapper
+    .row.indent-v-sm
+      .col-xs-4.text-right: label Votre e‐mail*&nbsp;:
+      .col-xs-8.col-sm-6.col-md-4: input(type="email", required).form-control
+
+    .row.indent-v-sm
+      .col-xs-4.text-right: label Catégorie*&nbsp;:
+      .col-xs-8.col-sm-6.col-md-4: select(data-placeholder="Sélectionner une catégorie", required)
+        option(value="")
+        {% for item in select_items %}
+        option(value="{{item.value}}") {{item.text}}
+        {% endfor %}
+
+    .row.indent-v-sm
+      .col-xs-4.text-right: label Objet&nbsp;:
+      .col-xs-8.col-sm-6: input(type="text").form-control
+
+    .row.indent-t-sm
+      .col-xs-4.text-right: label Message*&nbsp;:
+      .col-xs-8.col-sm-6: textarea(name="", rows="5", required).expand.form-control
+
+    .row.indent-v-xs
+      .col-xs-4.col-sm-3.col-xs-offset-4
+        .checkbox
+          label
+            input(type="checkbox")#particular
+            span.flaticon.stroke.checkmark-1
+          | être en copie du mail
+      .col-xs-4.col-sm-3.text-right
+        p: em *&nbsp;champs obligatoires
+
+    .row.indent-v-md
+      .col-xs-8.col-sm-4.col-xs-offset-4
+        input(type="submit", value="Envoyer le message", style="width: 100%;").btn.btn-lg.bg-success
+
+    .row
+      hr.col-xs-6.col-sm-4.col-xs-offset-3.col-sm-offset-4
+
+  p.text-center
+    | Vous pouvez également nous joindre, du lundi au vendredi de 9h à 18h,
+    br
+    | par chat (accessible depuis notre home-­‐page) ou par téléphone (0826.800.200)
