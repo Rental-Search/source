@@ -1,5 +1,5 @@
 .section-header
-    h4 {% if product.pro_owner %}Demandez un devis{% else %}Réservez en ligne{% endif %}
+    h4 {% if is_pro %}Demandez un devis{% else %}Réservez en ligne{% endif %}
 form.form-inline.section-body.text-center
     {% verbatim %}
     .part
@@ -25,7 +25,7 @@ form.form-inline.section-body.text-center
             | Prix {% endverbatim %}{% if is_pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
             big.text-primary &nbsp;{{bookingPrice}}
         {% endverbatim %}
-        if not product.pro_owner
+        if not is_pro
             p Assurance incluse
     .part
         a(href = "#/booking", data-dismiss="modal").btn.bg-success.calendar-ok
