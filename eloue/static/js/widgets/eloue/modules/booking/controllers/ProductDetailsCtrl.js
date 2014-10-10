@@ -90,10 +90,16 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 "toHour": "08:00:00"
             };
             var fromDateSelector = $("input[name='fromDate']"), toDateSelector = $("input[name='toDate']");
-            fromDateSelector.datepicker("setDate", Date.today().add(1).days());
-            fromDateSelector.datepicker("update");
-            toDateSelector.datepicker("setDate", Date.today().add(2).days());
-            toDateSelector.datepicker("update");
+            fromDateSelector.val(Date.today().add(1).days().toString("dd/MM/yyyy")).datepicker({
+                language: "fr",
+                autoclose: true,
+                startDate: Date.today().add(1).days().toString("dd/MM/yyyy")
+            });
+            toDateSelector.val(Date.today().add(2).days().toString("dd/MM/yyyy")).datepicker({
+                language: "fr",
+                autoclose: true,
+                startDate: Date.today().add(2).days().toString("dd/MM/yyyy")
+            });
             $scope.duration = "0 jour";
             $scope.bookingPrice = 0;
             $scope.pricePerDay = 0;
@@ -145,6 +151,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
                 var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+                toDateSelector.datepicker("setStartDate", fromDateTime);
+                toDateSelector.datepicker("update");
                 var today = Date.today().set({hour: 8, minute: 0});
                 $scope.dateRangeError = "";
                 if (fromDateTime > toDateTime) {
