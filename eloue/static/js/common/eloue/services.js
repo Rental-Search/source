@@ -1529,7 +1529,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load message threads
-                    MessageThreads.get({page: page, ordering: "-message__sent_at", _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
+                    MessageThreads.get({page: page, ordering: "-last_message__sent_at", _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
                         var messageThreadListPromises = [];
 
                         // For each message thread
