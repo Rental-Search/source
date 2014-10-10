@@ -32,6 +32,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
+    pro_owner = indexes.BooleanField(default=False)
     
     is_highlighted = indexes.BooleanField(model_attr='is_highlighted')
     is_top = indexes.BooleanField(model_attr='is_top')
@@ -76,6 +77,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     def prepare_special(self, obj):
         special = hasattr(obj, 'carproduct') or hasattr(obj, 'realestateproduct')
         return special
+
+    def prepare_pro_owner(self, obj):
+        return obj.current_subscription() is not None
 
     def get_model(self):
         return Product
