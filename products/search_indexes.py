@@ -79,7 +79,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return special
 
     def prepare_pro_owner(self, obj):
-        return obj.current_subscription() is not None
+        return obj.owner.current_subscription is not None
 
     def get_model(self):
         return Product
