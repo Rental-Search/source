@@ -343,7 +343,7 @@ require([
 
                     image_hover = new google.maps.MarkerImage('/static/images/markers_new_crush.png',
                         new google.maps.Size(20, 32),
-                        new google.maps.Point(21, 36 * i),
+                        new google.maps.Point(22, 36 * i),
                         new google.maps.Point(10, 32));
                 }
 
