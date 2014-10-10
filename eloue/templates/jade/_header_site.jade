@@ -37,7 +37,8 @@ section.container.signs-links
             li: a(href="{% url 'dashboard:account' %}") Compte
             li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()") Déconnexion
             {% verbatim %}
-        .dropdown
+        //-
+         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
             i.flaticon.stroke.mail
             span.badge-count {{userStats.unread_message_threads_count}}
@@ -51,7 +52,8 @@ section.container.signs-links
                   h4: a(href="#") #{item.first_name}
                   h5: a(href="#") #{item.topic}
                   p #{item.text}
-        .dropdown
+        //-
+         .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
             i.flaticon.stroke.calendar-5
             span.badge-count {{userStats.booking_requests_count}}
