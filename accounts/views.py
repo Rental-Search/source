@@ -1101,6 +1101,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
             user = self.request.user
             if not user.is_anonymous():
                 self.kwargs[pk_field] = getattr(user, pk_field)
+                kwargs[pk_field] = getattr(user, pk_field)
         return super(UserViewSet, self).initial(request, *args, **kwargs)
 
     @action(methods=['post', 'put'])

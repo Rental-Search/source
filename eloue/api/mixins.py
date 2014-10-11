@@ -76,7 +76,10 @@ class PermissionMixin(object):
                     if not isinstance(owner_field, basestring):
                         owner_field = iter(owner_field).next()
                     owner_field = getattr(instance, owner_field, None)
-                    self.owner_mode = (owner_field == request.user)
+                    if isinstance(owner_field, int):
+                        self.owner_mode = (owner_field == request.user.pk)
+                    else:
+                        self.owner_mode = (owner_field == request.user)
         elif action == 'create':
             self.owner_mode = True
 
