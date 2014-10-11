@@ -332,6 +332,9 @@ class ProductTest(APITestCase):
     fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
 
     def setUp(self):
+        self.model = get_model('products', 'Product')
+        self.car_model = get_model('products', 'CarProduct')
+        self.real_estate_model = get_model('products', 'RealEstateProduct')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
     def test_is_product_available(self):
@@ -430,6 +433,57 @@ class ProductTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.model.objects.filter(pk=response.data['id']).exists())
+
+    def test_product_create_negative_amount(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=1),
+            'summary': 'test summary',
+            'description': 'test description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': -1,
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('deposit_amount', response.data['errors'], response.data)
+
+    def test_product_create_large_amount(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=1),
+            'summary': 'test summary',
+            'description': 'test description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': 12345678912,
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('deposit_amount', response.data['errors'], response.data)
+
+    def test_product_create_no_fields(self):
+        response = self.client.post(_location('product-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'summary', 'address', 'category', 'owner', 'deposit_amount', }
+        default_fields = {'owner'}
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
+
+    def test_product_create_car_required_fields(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=477),
+            'summary': 'test car summary',
+            'address': _location('address-detail', pk=1),
+            'deposit_amount': 600,
+
+            'brand': 'Toyota',
+            'model': 'FunCargo',
+            'km_included': 1000
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.car_model.objects.filter(pk=response.data['id']).exists())
 
     def test_product_create_car(self):
         response = self.client.post(_location('product-list'), {
@@ -466,6 +520,24 @@ class ProductTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.car_model.objects.filter(pk=response.data['id']).exists())
+
+    def test_product_create_real_estate_required_fields(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=385),
+            'summary': 'test maison summary',
+            'address': _location('address-detail', pk=1),
+            'deposit_amount': 100,
+
+            'capacity': 6,
+            'private_life': 1,
+            'chamber_number': 3,
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.real_estate_model.objects.filter(pk=response.data['id']).exists())
 
     def test_product_create_real_estate(self):
         response = self.client.post(_location('product-list'), {
@@ -507,6 +579,7 @@ class ProductTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.real_estate_model.objects.filter(pk=response.data['id']).exists())
 
     def test_product_delete(self):
         Product = get_model('products', 'Product')
