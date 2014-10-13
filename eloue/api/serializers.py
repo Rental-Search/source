@@ -6,6 +6,7 @@ from urllib2 import urlparse
 
 import requests
 
+from django.db import models
 from django.core.files.base import ContentFile
 from django.utils.datastructures import SortedDict
 
@@ -106,12 +107,17 @@ class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
         self.immutable_fields = getattr(meta, 'immutable_fields', ())
         self.public_fields = getattr(meta, 'public_fields', ())
 
+def map_fields(field_mapping):
+    field_mapping[models.NullBooleanField] = NullBooleanField
+    return field_mapping
+
 class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedModelSerializer):
     """
     A serializer that deals with model instances and querysets, and
     supports `immutable_fields`
     """
     _options_class = ModelSerializerOptions
+    field_mapping = map_fields(serializers.HyperlinkedModelSerializer.field_mapping)
 
     def __init__(self, instance=None, data=None, files=None,
                      context=None, partial=False, many=None,

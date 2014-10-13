@@ -17,7 +17,7 @@ section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selecte
         .col-exposition
           h3.small
             | Location&nbsp;
-            a(ui-sref="items.info({id: item.id})").text-underline-hover {{item.summary}}
+            a(ui-sref="items.info({id: item.id})") {{item.summary}}
           p.normal.text-gray
             big.text-primary {{item.pricePerDay}}€ / jour
             br
