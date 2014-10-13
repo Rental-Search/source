@@ -576,7 +576,7 @@ class Address(models.Model):
             )
         )
         coords = GoogleGeocoder().geocode(location)[1]
-        if coords:
+        if all(coords):
             return Point(coords)
 
     def is_geocoded(self):
@@ -635,7 +635,7 @@ class ProAgency(models.Model):
             )
         )
         coords = GoogleGeocoder().geocode(location)[1]
-        if coords:
+        if all(coords):
             return Point(coords)
 
 
