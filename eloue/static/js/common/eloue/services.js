@@ -474,7 +474,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
                     var deferred = $q.defer();
-                    var params = {owner: userId};
+                    var params = {owner: userId, ordering: "-created_at"};
 
                     if (rootCategoryId) {
                         params.category__isdescendant = rootCategoryId;
@@ -1292,7 +1292,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load bookings
-                    Bookings.get({page: page, author: author, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
+                    Bookings.get({page: page, author: author, ordering: "-created_at", _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
                         var bookingListPromises = [];
 
                         // For each booking

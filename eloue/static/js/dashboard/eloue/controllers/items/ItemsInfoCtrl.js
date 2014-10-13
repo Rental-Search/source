@@ -42,9 +42,9 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.mileageOptions = Mileage;
             $scope.consumptionOptions = Consumption;
             $scope.capacityOptions = Capacity;
-            $scope.markListItemAsSelected("item-", $stateParams.id);
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
+                $scope.markListItemAsSelected("item-", $stateParams.id);
                 $scope.product = product;
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.categoryDetails.id + "/";
                 $scope.product.addressDetails = $scope.product.address;
