@@ -121,8 +121,7 @@ class PictureTest(APITestCase):
                 'encoding': 'url',
             }
         })
-        # check HTTP response code must be 201 CREATED
-        self.assertEquals(response.status_code, 201, response.data)
+        self.assertEquals(response.status_code, 400, response.data)
 
     def test_picture_edit_multipart(self):
         with open(IMAGE_FILE, 'rb') as image:
