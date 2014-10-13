@@ -19,11 +19,11 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.units = Unit;
             $scope.prices = {
-                hour: {id: null, amount: 0, unit: Unit.HOUR.id},
-                day: {id: null, amount: 0, unit: Unit.DAY.id},
-                three_days: {id: null, amount: 0, unit: Unit.THREE_DAYS.id},
-                seven_days: {id: null, amount: 0, unit: Unit.WEEK.id},
-                fifteen_days: {id: null, amount: 0, unit: Unit.FIFTEEN_DAYS.id}
+                hour: {id: null, amount: null, unit: Unit.HOUR.id},
+                day: {id: null, amount: null, unit: Unit.DAY.id},
+                three_days: {id: null, amount: null, unit: Unit.THREE_DAYS.id},
+                seven_days: {id: null, amount: null, unit: Unit.WEEK.id},
+                fifteen_days: {id: null, amount: null, unit: Unit.FIFTEEN_DAYS.id}
             };
             $scope.isAuto = false;
             $scope.isRealEstate = false;
@@ -88,11 +88,29 @@ define(["angular", "eloue/app"], function (angular) {
                         }
                     }
                 });
-                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.address.id + "/";
-                $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
+                var addressId, phoneId;
+                if (!!$scope.product.address) {
+                    addressId = $scope.product.address.id;
+                    if (!!addressId) {
+                        $scope.product.address = Endpoints.api_url + "addresses/" + addressId + "/";
+                    }
+                }
+                if (!!$scope.product.phone) {
+                    phoneId = $scope.product.phone.id;
+                    if (!!phoneId) {
+                        $scope.product.phone = Endpoints.api_url + "phones/" + phoneId + "/";
+                    }
+                }
+
                 promises.push(ProductsService.updateProduct($scope.product).$promise);
                 $q.all(promises).then(function(results) {
                     $scope.submitInProgress = false;
+                    $scope.product.address = {
+                        id: addressId
+                    };
+                    $scope.product.phone = {
+                        id: phoneId
+                    };
                 });
             }
         }]);

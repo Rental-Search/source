@@ -25,7 +25,7 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
         .col-exposition
           h3.small
             | Location 
-            a(ui-sref="bookings.detail({uuid: booking.uuid})").text-underline-hover {{booking.product.summary}}
+            a(ui-sref="bookings.detail({uuid: booking.uuid})") {{booking.product.summary}}
           p.normal.text-gray
             big.text-primary {{booking.total_amount}}€
             br
