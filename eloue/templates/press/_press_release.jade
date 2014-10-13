@@ -1,0 +1,8 @@
+.section-header
+  h4 Communiqué de presse
+.section-body
+  -var press_release = [{'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}, {'title': "Lorem ipsum dolor sit amet.", 'date': "XX/XX/XX"}]
+  ul.nav
+    {% for item in press_release %}
+    li: a(href="#.") #{item.title} - #{item.date}
+    {% endfor %}

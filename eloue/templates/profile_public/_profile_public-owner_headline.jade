@@ -1,9 +1,11 @@
 .container.text-center.indent-t-lg
-  .round-img.: img(style="background-image: url({{ patron.profile.url }})").bg-image
-  h3.indent-b-xs {{ patron.username }}
-  {% with patron.average_note as rate %}
-  include ../jade/_rate
-  {% endwith %}
-  {% with patron.default_address as address %}
-  p.text-gray-strong.indent-t-xs {{ address.city|title }}{% if address.zipcode %}, {{ address.zipcode }}{% endif %}
-  {% endwith %}
+  .round-img: img(style="background-image: url({{ patron.profile.url }})").bg-image
+  h3.indent-b-xs {{ patron.username }}{% if is_pro %}&nbsp;Pro{% endif %}
+  
+  if not is_pro
+    {% with patron.average_note as rate %}
+    include ../jade/_rate
+    {% endwith %}
+    {% with patron.default_address as address %}
+    p.text-gray-strong.indent-t-xs {{ address.city|title }}{% if address.zipcode %}, {{ address.zipcode }}{% endif %}
+    {% endwith %}

@@ -6,7 +6,7 @@ form(ng-submit="requestBooking()", ng-if="booking === null")
           input(type="text", placeholder="dd/mm/yyyy", ng-model="newBooking.start_date", ng-change="updateNewBookingInfo()", eloue-datepicker).date
           i.flaticon.stroke.calendar-3
       .table-cell.without-search
-        select(name="start_time", ng-model="newBooking.start_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen)
+        select(name="start_time", ng-model="newBooking.start_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen, data-ng-disabled="submitInProgress")
     .row.date-picker
         .table-cell
             .table-cell Au
@@ -14,7 +14,7 @@ form(ng-submit="requestBooking()", ng-if="booking === null")
                 input(type="text", placeholder="dd/mm/yyyy", ng-model="newBooking.end_date", ng-change="updateNewBookingInfo()", eloue-datepicker).date
                 i.flaticon.stroke.calendar-3
         .table-cell.without-search
-            select(name="end_time", ng-model="newBooking.end_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen)
+            select(name="end_time", ng-model="newBooking.end_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen, data-ng-disabled="submitInProgress")
 
   table(ng-if="booking === null").calendar.bd-wrap.indent-md-t: tbody
     {% verbatim %}

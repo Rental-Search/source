@@ -1,0 +1,61 @@
+@import bootstrap/variables
+@import bootstrap/mixins
+@import variables
+@import sprites
+@import mixins
+@import src
+
+@import header-site
+@import main
+@import aside
+@import rss
+@import footer-links
+@import modal
+@import product-details-article
+@import timeline
+
+h3
+  font-size: 1.5em !important
+  line-height: $line-height-base
+
+.logo-wripper,
+.timeline-steps
+  display: table-cell
+  vertical-align: middle
+
+.logo-wripper
+  min-width: 100px
+
+.timeline-steps
+  width: 100%
+  padding-left: $indent-lg
+  > li
+    width: 100%
+    padding-bottom: $indent
+    margin-bottom: 0 !important
+    
+    h5
+      color: $gray-medium
+  .addons
+    bottom: 50% !important
+    margin-bottom: -$indent-xs
+    i
+      color: $gray-strong !important
+
+.press-logo
+  +default-product
+  position: relative
+  padding-top: 100%
+  display: block
+  img
+    +centred-abs
+    background-size: cover
+    background-position: center center
+
+.press-release
+  margin-top: $indent-lg
+  background: url(../img/feed-line.png) repeat-y
+  background-size: 6px auto
+  background-position: (95px + $indent-lg/2)
+  .table + .table
+    margin-top: $indent-md

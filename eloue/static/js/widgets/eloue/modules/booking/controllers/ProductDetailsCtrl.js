@@ -1,7 +1,7 @@
-define(["angular", "eloue/modules/booking/BookingModule",
+define(["angular", "toastr", "eloue/modules/booking/BookingModule",
     "../../../../../common/eloue/values",
     "../../../../../common/eloue/services"
-], function (angular) {
+], function (angular, toastr) {
     "use strict";
 
     angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", [
@@ -19,7 +19,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "BookingsLoadService",
         "BookingsService",
         "PhoneNumbersService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService) {
+        "PicturesService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService) {
 
             $scope.creditCard = {
                 id: null,
@@ -33,6 +34,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 subscriber_reference: ""
             };
             $scope.newCreditCard = true;
+            $scope.submitInProgress = false;
             $scope.showSaveCard = true;
             $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
             $scope.showUnavailable = true;
@@ -75,10 +77,12 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.getProductIdFromUrl = function () {
                 var href = $window.location.href;
                 href = href.substr(href.lastIndexOf("location/") + 8);
-                var parts = href.split("/");
-                var productId = parts[4];
-                $scope.rootCategory = parts[1];
-                return productId.substr(productId.lastIndexOf("-") + 1);
+
+                $scope.rootCategory = href.split("/")[1];
+                var subparts = href.split("-");
+                var productId = subparts[subparts.length - 1];
+                var lastIndex = productId.indexOf("/") > 0 ? productId.indexOf("/") : (productId.length - 1);
+                return productId.substr(0, lastIndex);
             };
             $scope.productId = $scope.getProductIdFromUrl();
 
@@ -88,6 +92,17 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 "toDate": Date.today().add(2).days().toString("dd/MM/yyyy"),
                 "toHour": "08:00:00"
             };
+            var fromDateSelector = $("input[name='fromDate']"), toDateSelector = $("input[name='toDate']");
+            fromDateSelector.val(Date.today().add(1).days().toString("dd/MM/yyyy")).datepicker({
+                language: "fr",
+                autoclose: true,
+                startDate: Date.today().add(1).days().toString("dd/MM/yyyy")
+            });
+            toDateSelector.val(Date.today().add(2).days().toString("dd/MM/yyyy")).datepicker({
+                language: "fr",
+                autoclose: true,
+                startDate: Date.today().add(2).days().toString("dd/MM/yyyy")
+            });
             $scope.duration = "0 jour";
             $scope.bookingPrice = 0;
             $scope.pricePerDay = 0;
@@ -126,7 +141,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 {"label": "23h", "value": "23:00:00"}
             ];
 
-            ProductsLoadService.getProduct($scope.productId, true, true).then(function (result) {
+            ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
                 $scope.product = result;
                 $scope.loadCalendar();
             });
@@ -139,20 +154,31 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
                 var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+                toDateSelector.datepicker("setStartDate", fromDateTime);
+                toDateSelector.datepicker("update");
                 var today = Date.today().set({hour: 8, minute: 0});
+                $scope.dateRangeError = "";
                 if (fromDateTime > toDateTime) {
-                    $scope.dateRangeError = "From date cannot be after to date";
-                } else if (fromDateTime < today) {
-                    $scope.dateRangeError = "From date cannot be before today";
-                } else {
-                    $scope.dateRangeError = null;
-                    ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
-                        $scope.duration = result.duration;
-                        $scope.pricePerDay = result.unit_value;
-                        $scope.bookingPrice = result.total_price;
-                        $scope.available = result.max_available > 0;
-                    });
+                    //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
+                    $scope.dateRangeError = "La date de début ne peut pas être après la date de fin";
+                    if (fromDateTime.getHours() < 23) {
+                        $scope.bookingDetails.toDate = fromDateTime.toString("dd/MM/yyyy");
+                        $scope.bookingDetails.toHour = fromDateTime.add(1).hours().toString("HH:mm:ss");
+                    } else {
+                        $scope.bookingDetails.toDate = fromDateTime.add(1).days().toString("dd/MM/yyyy");
+                        $scope.bookingDetails.toHour = fromDateTime.add(1).hours().toString("HH:mm:ss");
+                    }
+                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
+                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
                 }
+                $scope.dateRangeError = null;
+                ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
+                    $scope.duration = result.duration;
+                    $scope.pricePerDay = result.unit_value;
+                    $scope.bookingPrice = result.total_price;
+                    $scope.available = result.max_available > 0;
+                });
+
             };
 
             /**
@@ -185,6 +211,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.sendBookingRequest = function sendBookingRequest() {
+                $scope.submitInProgress = true;
                 // Update user info
                 //TODO: patch more fields
                 var userPatch = {};
@@ -233,7 +260,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                                 cvv: $scope.creditCard.cvv,
                                 holder_name: $scope.creditCard.holder_name
                             };
-                        }else {
+                        } else {
                             // send only credit card link if using saved credit card
                             paymentInfo = {
                                 credit_card: Endpoints.api_url + "credit_cards/" + $scope.creditCard.id + "/"
@@ -241,7 +268,11 @@ define(["angular", "eloue/modules/booking/BookingModule",
                         }
 
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                            toastr.options.positionClass = "toast-top-full-width";
+                            toastr.success("Réservation enregistré", "");
                             $(".modal").modal("hide");
+                            $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
+                            $scope.submitInProgress = false;
                         });
                     }
                 );
@@ -291,7 +322,20 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 } else if (args.name === "phone") {
                     $scope.loadPhoneDetails();
                 }
+                if (args.name != "login") {
+                    $scope.loadPictures();
+                }
             });
+
+            $scope.loadPictures = function () {
+                PicturesService.getPicturesByProduct($scope.productId).$promise.then(function (pictures) {
+                    var picturesDataArray = pictures.results;
+                    // Parse pictures
+                    if (angular.isArray(picturesDataArray) && picturesDataArray.length > 0) {
+                        $scope.product.picture = picturesDataArray[0].image.thumbnail;
+                    }
+                });
+            };
 
             /**
              * Restore path when closing modal window.
@@ -306,8 +350,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
             /**
              * Load premium phone number using product's phone number id.
              */
-            $scope.loadPhoneDetails = function() {
-                PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function(result) {
+            $scope.loadPhoneDetails = function () {
+                PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
                     if (!result.error || result.error == "0") {
                         $scope.ownerCallDetails = {
                             number: result.numero,
@@ -402,7 +446,7 @@ define(["angular", "eloue/modules/booking/BookingModule",
                 console.log("onShowBookings");
             };
 
-            $scope.selectTab = function(tabName) {
+            $scope.selectTab = function (tabName) {
                 $('[id^=tabs-]').each(function () {
                     var item = $(this);
                     if (("#" + item.attr("id")) == tabName) {

@@ -1,0 +1,37 @@
+.container.text-center.indent-v-lg
+  table.calendar.bd-full
+    thead
+      tr.text-white.text-uppercase
+        td.empty
+        td.bg-gray: b pack e-loue pro classique
+        td.bg-gray-dark: b pack e-loue pro premium
+      tr
+        td.empty
+        td
+          strong.text-primary 20&euro;&nbsp;/&nbsp;mois&nbsp;/&nbsp;agence
+          br
+          small.text-gray-strong avec engagement 6 mois
+        td
+          strong.text-primary 12&euro;&nbsp;/&nbsp;mois&nbsp;/&nbsp;agence
+          br
+          small.text-gray-strong avec engagement 12 moisois
+    tbody.text-gray-strong
+      -var table_data = [["Importation automatique de votre catalogue", "+"], ["Nombre d’annonces illimité", "+"], ["Annonces visibles 24h/24 par nos 150 000 membres", "+"], ["Mise en place de votre boutique en 1 semaine", "<br><small>(1 mois)</small>"], ["Affichage de votre numéro de téléphone,<br> de votre site web et de votre adresse postale", "+"], ["Assistance & Conseils via notre Service Client dédié Pro<br> (mise à jour de vos annonces, modification de vos prix, ...)", "+"], ["Réception de votre Bilan d’Activité Mensuel", "+"], ["Référencement Google optimisé", "-"], ["Affichage prioritaire sur nos résultats de recherche", "-"], ["Présence dans notre annuaire de loueurs Pro<br> & mises en avant sur notre page Facebook et nos newsletier", "-"]]
+      each functionalities, classic in table_data
+        tr
+          td {{ functionalities|safe }}
+          td
+            if classic == "+"
+              i.flaticon.solid.checkmark-2.text-success.icon-lg
+            elif classic == "-"
+              | &ndash;
+            else
+              | &ndash;
+              != classic|safe
+          td
+            i.flaticon.solid.checkmark-2.text-success.icon-lg
+
+  p.text-primary.indent-t-md
+    | Vous n’avez rien d’autre à payer : pas de pourcentage sur vos locations, pas de frais de résiliation...
+    br
+    u: b Il n’y a  aucun frais caché&nbsp;!

@@ -6,6 +6,7 @@ define(["angular", "eloue/app"], function (angular) {
      * Controller for the items photos and info page.
      */
     angular.module("EloueDashboardApp").controller("ItemsInfoCtrl", [
+        "$q",
         "$scope",
         "$stateParams",
         "Endpoints",
@@ -22,7 +23,7 @@ define(["angular", "eloue/app"], function (angular) {
         "PicturesService",
         "ProductsService",
         "PhoneNumbersService",
-        function ($scope, $stateParams, Endpoints, PrivateLife, SeatNumber, DoorNumber, Fuel, Transmission, Mileage, Consumption, Capacity, AddressesService, CategoriesService, PicturesService, ProductsService, PhoneNumbersService) {
+        function ($q, $scope, $stateParams, Endpoints, PrivateLife, SeatNumber, DoorNumber, Fuel, Transmission, Mileage, Consumption, Capacity, AddressesService, CategoriesService, PicturesService, ProductsService, PhoneNumbersService) {
 
             $scope.rootCategories = {};
             $scope.nodeCategories = {};
@@ -75,11 +76,15 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.updateProduct = function () {
+                $scope.submitInProgress = true;
                 $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.address.id + "/";
                 $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
-                AddressesService.update($scope.product.addressDetails);
-                PhoneNumbersService.updatePhoneNumber($scope.product.phoneDetails);
-                ProductsService.updateProduct($scope.product);
+                var promises = [];
+                promises.push(AddressesService.update($scope.product.addressDetails).$promise);
+                promises.push(ProductsService.updateProduct($scope.product).$promise);
+                $q.all(promises).then(function(results) {
+                    $scope.submitInProgress = false;
+                });
             };
 
             $scope.updateNodeCategories = function () {

@@ -354,6 +354,51 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'subscription_styles': {
+        'source_filenames': (
+            'sass/subscription_styles.sass',
+        ),
+        'output_filename': 'css/subscription_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
+    'contact_us_styles': {
+        'source_filenames': (
+            'sass/contact_us_styles.sass',
+        ),
+        'output_filename': 'css/contact_us_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
+    'security_styles': {
+        'source_filenames': (
+            'sass/security_styles.sass',
+        ),
+        'output_filename': 'css/security_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
+    'press_styles': {
+        'source_filenames': (
+            'sass/press_styles.sass',
+        ),
+        'output_filename': 'css/press_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
+    'profile_public_styles': {
+        'source_filenames': (
+            'sass/profile_public_styles.sass',
+        ),
+        'output_filename': 'css/profile_public_styles.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
     'dashboard_styles': {
         'source_filenames': (
             'dashboard/sass/base.sass',

@@ -1,0 +1,12 @@
+.container.indent-v-lg.text-gray-strong
+  -var process_items = [["Choisissez", "votre Pack <br>e‐loue Pro"], ["Bénéficiez", "des avantages <br>e‐loue Pro"], ["Augmentez",  "vos revenus <br>en boostant vos transactions"]]
+  ul.process-list
+    each mark, text in process_items
+      li.arrow-container: .arrow
+        b.text-primary {{ mark }} 
+        span {{ text|safe }}
+  p.indent-t-md: em Les Packs e‐loue Pro impliquent un engagement de 6 ou 12 mois minimum. 
+    |A la fin de la période d’engagement, si vous n’êtes pas satisfaits des services proposés, 
+    | vous pourrez meKre un terme à votre abonnement , sur simple demande auprès d’e‐loue 
+    | (par mail ou par courrier). Vous pouvez choisir la date de publication de vos annonces. 
+    | La première mensualité sera débitée à la fin du mois suivant la publication de vos annonces.

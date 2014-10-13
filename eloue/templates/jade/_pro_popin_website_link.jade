@@ -1,0 +1,15 @@
+.modal.fade#pro-popin-website-link(tabindex="-1", role="dialog", aria-hidden="true")
+	.modal-dialog.large
+		.modal-content
+			.modal-header
+				button(type="button", data-dismiss="modal").close
+					span(aria-hidden="true")&times;
+					span.sr-only Close
+				h4.modal-title {{ patron.username }} Pro - Visitez notre site
+			.modal-body.table-cell.text-justify
+				//-.static-part.table-cell
+				//-	section.product-info
+				//-		include pop_up_sections/_pro_product_info
+				.change-part.table-cell
+					section.phone-form
+						include pop_up_sections/_website_link_form

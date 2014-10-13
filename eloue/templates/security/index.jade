@@ -1,0 +1,37 @@
+extends ../base
+-load compressed
+
+block prepend variables
+  -var is_pro = true
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "security_styles" %}
+
+block append scripts
+  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+
+block append content-body
+  include ../jade/_pop_up_send_message
+  include ../jade/_pop_up_call
+  include ../jade/_pop_up_reserve
+
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+    nav.bd-b
+      include _breadcrumbs
+    article.indent-v-lg
+      section: include _list_securisty
+
+    footer
+      section.row-fluid.footer-links.framing
+        include ../jade/_footer_links
+      section.row-fluid.rss
+        include ../jade/_rss
+
+  script.
+    $('.timeline-steps li').on('click', function () {
+      $(this).find('.content').toggleClass('text-overflow');
+      });
+

@@ -1,0 +1,13 @@
+.container.indent-v-lg
+  -var partners_list = [{'header': "historiques", 'partners': ["http://lorempixel.com/150/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100"]}, {'header': "techniques et logistiques", 'partners': ["http://lorempixel.com/200/100", "http://lorempixel.com/200/100", "http://lorempixel.com/200/100", "http://lorempixel.com/120/100"]}, {'header': "commerciaux", 'partners': ["http://lorempixel.com/150/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100"]}, {'header': "stratégiques", 'partners': ["http://lorempixel.com/150/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100"]}, {'header': "financiers", 'partners': ["http://lorempixel.com/150/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100"]}, {'header': "assureurs", 'partners': ["http://lorempixel.com/150/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100"]}, {'header': "affiliés", 'partners': ["http://lorempixel.com/150/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100", "http://lorempixel.com/100/100", "http://lorempixel.com/300/100"]}]
+  h2.text-center.text-uppercase
+    | s’ils nous font confiance 
+    br
+    | vous n’avez aucun doute a avoir...
+
+  each item in partners_list
+    h4.indent-t-md
+      | Nos partenaires #{item.header}&nbsp;:
+    ul.nav.nav-pills.row.indent-l-md
+      each partner in item.partners
+        li: a(href="#"): img(src="#{partner}", alt="")

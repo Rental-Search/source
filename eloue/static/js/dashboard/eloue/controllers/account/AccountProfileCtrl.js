@@ -8,7 +8,9 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("AccountProfileCtrl", [
         "$scope",
         "UsersService",
-        function ($scope, UsersService) {
+        "CivilityChoices",
+        function ($scope, UsersService, CivilityChoices) {
+            $scope.civilityOptions = CivilityChoices;
             $scope.markListItemAsSelected("account-part-", "account.profile");
 
             $scope.currentUserPromise.then(function (currentUser) {
@@ -27,7 +29,10 @@ define(["angular", "eloue/app"], function (angular) {
 
             // Send form with data by submit
             $scope.dataFormSubmit = function () {
-                UsersService.sendForm($scope.currentUser.id, $("#profile-information"));
+                $scope.submitInProgress = true;
+                UsersService.sendForm($scope.currentUser.id, $("#profile-information"), function(data) {
+                    $scope.submitInProgress = false;
+                });
             };
         }
     ]);

@@ -2,6 +2,7 @@ block details
     .section-content
         {% verbatim %}
         form(name="itemTariffsForm", ng-submit="updatePrices()")
+          fieldset(ng-disabled="submitInProgress")
             h2 Grille tarifaire
             .row
                 .col-lg-12

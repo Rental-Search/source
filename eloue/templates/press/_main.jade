@@ -1,0 +1,23 @@
+section
+  .section-body
+    .part
+      h3.text-justify
+        | Depuis plus de 5 ans, les plus grands médias français ont montré un intérêt croissant pour e‐loue,
+        | grâce à son modèle, sa croissance, et son positionnement innovant...
+
+      .press-release
+        -var counter = '123456789012345'
+        {% for i in counter %}
+        .table
+          .logo-wripper: a(href="#").press-logo: img(style="background-image: url(http://lorempixel.com/200/400)", alt="")
+          ul.timeline-steps.tenant-column.list-history
+            li
+              h5
+                span.text-success Nom Média
+                | &ndash;
+                em Date
+              p.content.indent-t-sm  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt praesentium nulla rerum cupiditate magnam porro adipisci magni quisquam dolore aliquam.
+              .addons
+                b
+                i
+        {% endfor %}

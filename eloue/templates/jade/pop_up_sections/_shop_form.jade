@@ -1,0 +1,22 @@
+h4
+  b N’hésitez pas à nous écrire 
+  | via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions...
+p Nos boutiques sont situées au&nbsp;:
+
+for agency in patron.pro_agencies.all
+  .indent-t-sm.text-white.btn-lg.bg-primary: b
+    i.flaticon.stroke.up-2.icon-2x.pull-right(data-toggle="collapse", data-target="#map-{{ forloop.counter }}")
+    | Adresse
+    br
+    | {{ agency.zipcode }} {{ agency.city }}
+  .collapse.in.map-wrapper(id="map-{{ forloop.counter }}")
+    .map
+  {% empty %}
+  {% if patron.default_address %}
+  .indent-t-sm.text-white.btn-lg.bg-primary: b
+    | Adresse
+    br
+    | {{ patron.default_address.zipcode }} {{ patron.default_address.city }}
+  .map-wrapper
+    .map
+  {% endif %}
