@@ -1,9 +1,9 @@
-{% with comments|length as comment_count %}
+{% with borrowercomments|length as comment_count %}
 {% if comment_count %}
 h3.indent-b-xs Les {{ comment_count }} commentaires de {{ patron.username }}
 
 ul.list-group
-  each comment in comments
+  each comment in borrowercomments
     li.list-group-item.thumbnail
       .thumbnail-img
         a(href="{{ product.url }}").img-wrapper

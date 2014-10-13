@@ -306,7 +306,9 @@ class Patron(AbstractUser):
         res = {
             k: getattr(self, k) for k in ('response_rate', 'response_time')
         }
-        qs = self.products.select_related('bookings__comments') \
+        bookings_qs = self.bookings.filter(sites__id__exact=settings.SITE_ID)
+        products_qs = self.products.filter(sites__id__exact=settings.SITE_ID)
+        qs = products_qs.select_related('bookings__comments') \
             .filter(bookings__comments__type=COMMENT_TYPE_CHOICES.BORROWER) \
             .aggregate(Avg('bookings__comments__note'), Count('bookings__comments__id'))
         res.update({
@@ -320,9 +322,9 @@ class Patron(AbstractUser):
                 .annotate(Count('productrelatedmessage__thread')) \
                 .order_by().count(),
             # count incoming booking requests for the requested user
-            'booking_requests_count': self.bookings.filter(state=BOOKING_STATE.AUTHORIZED).only('id').count(),
-            'bookings_count': self.bookings.count(),
-            'products_count': self.products.count(),
+            'booking_requests_count': bookings_qs.filter(state=BOOKING_STATE.AUTHORIZED).count(),
+            'bookings_count': bookings_qs.count(),
+            'products_count': products_qs.count(),
         })
         return res
 

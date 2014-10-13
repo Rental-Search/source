@@ -1062,11 +1062,13 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
         return [self.template_name]
 
     def get_context_data(self, **kwargs):
-        context = super(PatronDetail, self).get_context_data(**kwargs)
         patron = self.patron
-        context['patron'] = patron
-        context['breadcrumbs'] = self.breadcrumbs
-        context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')
+        context = {
+            'patron': patron,
+            'breadcrumbs': self.breadcrumbs,
+            'borrowercomments': Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at'),
+        }
+        context.update(super(PatronDetail, self).get_context_data(**kwargs))
         return context
 
 
