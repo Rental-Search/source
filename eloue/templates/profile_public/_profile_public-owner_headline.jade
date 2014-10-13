@@ -1,5 +1,5 @@
 .container.text-center.indent-t-lg
-  .round-img.: img(style="background-image: url({{ patron.profile.url }})").bg-image
+  .round-img: img(style="background-image: url({{ patron.profile.url }})").bg-image
   h3.indent-b-xs {{ patron.username }}{% if is_pro %}&nbsp;Pro{% endif %}
   
   if not is_pro

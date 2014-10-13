@@ -16,6 +16,7 @@ block sections
                 input(type="file", name="avatar", file-chooser, on-change="onFileChanged()")#change-img
                 input(type="hidden", name="_method", value="PUT")
       form#profile-information(data-ng-submit="dataFormSubmit()")
+       fieldset(data-ng-disabled="submitInProgress")
         //- proffessional radio btns
         .row
           .col-sm-5
@@ -38,9 +39,8 @@ block sections
         .row
           .col-sm-2.without-search
             .form-control
-              select(eloue-chosen, data-ng-disabled="submitInProgress")
-                option(value="male") M.
-                option(value="female") F.
+              select(eloue-chosen, data-ng-disabled="submitInProgress", value="{{currentUser.civility}}")
+                option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
           .col-sm-5
             input#first_name.form-control(type="text", name="first_name", placeholder="Prénom *", required, value="{{currentUser.first_name}}")
           .col-sm-5

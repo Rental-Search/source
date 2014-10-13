@@ -810,8 +810,8 @@ class SuggestCategoryView(AjaxResponseMixin, View):
         qs = qs.filter(slug__in=categories_set)
 
         context = dict(categories=[
-            [dict(id=c.id, name=c.name) for c in category.get_ancestors(include_self=True)]
-            for c in qs if c.is_leaf_node()
+            [dict(id=c.id, name=c.name) for c in cat.get_ancestors(include_self=True)]
+            for cat in qs if cat.is_leaf_node()
         ])
         return context
 
@@ -847,7 +847,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
-    public_actions = ('retrieve',)
+    public_actions = ('list', 'retrieve', 'ancestors', 'children', 'descendants')
 
     @link()
     def ancestors(self, request, *args, **kwargs):

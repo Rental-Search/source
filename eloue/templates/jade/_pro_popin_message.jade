@@ -10,11 +10,11 @@
 				if is_send
 					| Demande de devis
 				else
-					| Gaspard Kroutchev PRO - Envoyez un message
+					| {{ patron.username }} Pro - Envoyez un message
 			.modal-body.table-cell.text-justify
-				.static-part.table-cell
-					section.product-info
-						include pop_up_sections/_pro_product_info
+				//-.static-part.table-cell
+				//-	section.product-info
+				//-		include pop_up_sections/_pro_product_info
 				.change-part.table-cell
 					section.message-form
 						include pop_up_sections/_message_form

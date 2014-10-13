@@ -1,7 +1,7 @@
-define(["angular", "eloue/modules/booking/BookingModule",
+define(["angular", "toastr", "eloue/modules/booking/BookingModule",
     "../../../../../common/eloue/values",
     "../../../../../common/eloue/services"
-], function (angular) {
+], function (angular, toastr) {
     "use strict";
 
     angular.module("EloueApp.BookingModule").controller("PublishAdCtrl", [
@@ -19,6 +19,8 @@ define(["angular", "eloue/modules/booking/BookingModule",
         "PricesService",
         function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService) {
 
+            $scope.submitInProgress = false;
+            $scope.publishAdError = null;
             $scope.rootCategories = {};
             $scope.nodeCategories = {};
             $scope.leafCategories = {};
@@ -51,13 +53,18 @@ define(["angular", "eloue/modules/booking/BookingModule",
             $scope.$on("openModal", function (event, args) {
                 var params = args.params;
                 var rootCategoryId = params.category;
-                if (!!rootCategoryId) {
-                    CategoriesService.getRootCategories().then(function (categories) {
+                $scope.product = {};
+                $scope.price = {
+                    id: null, amount: null, unit: Unit.DAY.id
+                };
+                $scope.publishAdError = null;
+                CategoriesService.getRootCategories().then(function (categories) {
+                    $scope.rootCategories = categories;
+                    if (!!rootCategoryId) {
                         $scope.rootCategory = rootCategoryId;
-                        $scope.rootCategories = categories;
                         $scope.updateNodeCategories();
-                    });
-                }
+                    }
+                });
             });
 
             /**
@@ -100,17 +107,29 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.saveProduct = function () {
+                $scope.submitInProgress = true;
                 $scope.product.description = "";
                 $scope.product.address = Endpoints.api_url + "addresses/" + $scope.currentUser.default_address.id + "/";
-                ProductsService.saveProduct($scope.product).$promise.then(function (result) {
-                    //TODO: finish and check saving product and price
-                    $scope.price.currency = Currency.EUR.name;
-                    $scope.price.product = $scope.productsBaseUrl + result.id + "/";
-                    PricesService.savePrice($scope.price).$promise.then(function (result) {
-                        //TODO: redirects to the dashboard item detail page.
-                        $(".modal").modal("hide");
+                if ($scope.price.amount > 0) {
+                    ProductsService.saveProduct($scope.product).$promise.then(function (product) {
+                        //TODO: finish and check saving product and price
+                        $scope.price.currency = Currency.EUR.name;
+                        $scope.price.product = $scope.productsBaseUrl + product.id + "/";
+
+                        PricesService.savePrice($scope.price).$promise.then(function (result) {
+                            //TODO: redirects to the dashboard item detail page.
+                            toastr.options.positionClass = "toast-top-full-width";
+                            toastr.success("Annonce publiée", "");
+                            $(".modal").modal("hide");
+                            $window.location.href = "/dashboard/#/items/" + product.id + "/info";
+                            $scope.submitInProgress = false;
+                        });
+
                     });
-                });
+                } else {
+                    $scope.publishAdError = "All prices should be positive numbers!";
+                    $scope.submitInProgress = false;
+                }
             };
 
             $scope.updateFieldSet = function (rootCategory) {
@@ -124,8 +143,9 @@ define(["angular", "eloue/modules/booking/BookingModule",
             };
 
             $scope.searchCategory = function () {
-                CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function(categories) {
-                   //TODO: select apropriate node and leaf category
+                CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function (categories) {
+                    //TODO: select apropriate node and leaf category
+                    console.log(categories);
                 });
             }
         }])
