@@ -149,15 +149,17 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 //TODO: enable for auto and real estate
                 if (!$scope.isAuto && !$scope.isRealEstate &&$scope.rootCategory && $scope.product.summary && ($scope.product.summary.length > 1)) {
                     CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function (categories) {
-                        var nodeCategoryList = [];
-                        var leafCategoryList = [];
-                        angular.forEach(categories, function (value, key) {
-                            nodeCategoryList.push({id: value[1].id, name: value[1].name});
-                            leafCategoryList.push({id: value[2].id, name: value[2].name});
+                        if (categories && categories.length > 0) {
+                            var nodeCategoryList = [];
+                            var leafCategoryList = [];
+                            angular.forEach(categories, function (value, key) {
+                                nodeCategoryList.push({id: value[1].id, name: value[1].name});
+                                leafCategoryList.push({id: value[2].id, name: value[2].name});
 
-                        });
-                        $scope.nodeCategories = nodeCategoryList;
-                        $scope.leafCategories = leafCategoryList;
+                            });
+                            $scope.nodeCategories = nodeCategoryList;
+                            $scope.leafCategories = leafCategoryList;
+                        }
                     });
                 }
             }
