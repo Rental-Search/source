@@ -21,13 +21,13 @@
                             .col-sm-6: input(type="text", placeholder="Modèle *", required, ng-model="product.model", ng-show="isAuto").form-control
                         .row
                             .col-md-4
-                                select(ng-model="rootCategory", ng-change="updateNodeCategories()", opts="rootCategories").form-control
+                                select(ng-model="rootCategory", ng-change="updateNodeCategories()", opts="rootCategories", data-placeholder="Catégorie Niv.1").form-control
                                     option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
                             .col-md-4
-                                select(ng-model="nodeCategory", ng-change="updateLeafCategories()", opts="nodeCategories").form-control
+                                select(ng-model="nodeCategory", ng-change="updateLeafCategories()", opts="nodeCategories", data-placeholder="Catégorie Niv.2").form-control
                                     option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
                             .col-md-4
-                                select(ng-model="product.category", opts="leafCategories", required).form-control
+                                select(ng-model="product.category", opts="leafCategories", data-placeholder="Catégorie Niv.3", required).form-control
                                     option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
                         .row(ng-show="!currentUser.default_address")
                             .col-sm-5: input(type="text", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
