@@ -23,6 +23,7 @@ class PictureTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'picture_api2']
 
     def setUp(self):
+        self.model = get_model('products', 'Picture')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
     def test_picture_create_multipart(self):
@@ -85,7 +86,7 @@ class PictureTest(APITestCase):
 
     def test_picture_create_url(self):
         response = self.client.post(_location('picture-list'), {
-            'product' : _location('product-detail', pk=1),
+            'product': _location('product-detail', pk=1),
             'image': {
                 'content': IMAGE_URL,
                 'encoding': 'url',
@@ -111,6 +112,17 @@ class PictureTest(APITestCase):
 
         # check product has been applied properly
         self.assertTrue(response.data['product'].endswith(_location('product-detail', pk=1)))
+
+    def test_picture_create_not_mine_product(self):
+        response = self.client.post(_location('picture-list'), {
+            'product': _location('product-detail', pk=6),
+            'image': {
+                'content': IMAGE_URL,
+                'encoding': 'url',
+            }
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
 
     def test_picture_edit_multipart(self):
         with open(IMAGE_FILE, 'rb') as image:
@@ -435,6 +447,24 @@ class ProductTest(APITestCase):
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
         self.assertTrue(self.model.objects.filter(pk=response.data['id']).exists())
 
+    def test_product_create_not_mine(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=1),
+            'summary': 'test summary',
+            'description': 'test description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': 150,
+            'owner': _location('patron-detail', pk=2)
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        # End user can't create record for other person. Owner is force set as current user.
+        self.assertTrue(response.data['owner'].endswith(_location('patron-detail', pk=1)))
+        self.assertTrue(self.model.objects.filter(pk=response.data['id']).exists())
+
     def test_product_create_negative_amount(self):
         response = self.client.post(_location('product-list'), {
             'category': _location('category-detail', pk=1),
@@ -582,11 +612,16 @@ class ProductTest(APITestCase):
         self.assertTrue(self.real_estate_model.objects.filter(pk=response.data['id']).exists())
 
     def test_product_delete(self):
-        Product = get_model('products', 'Product')
-        self.assertEquals(Product.objects.filter(pk=1).count(), 1)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 1)
         response = self.client.delete(_location('product-detail', pk=1))
         self.assertEquals(response.status_code, 204, response.data)
-        self.assertEquals(Product.objects.filter(pk=1).count(), 0)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 0)
+
+    def test_product_delete_not_mine(self):
+        self.assertEquals(self.model.objects.filter(pk=6).count(), 1)
+        response = self.client.delete(_location('product-detail', pk=6))
+        self.assertEquals(response.status_code, 404, response.data)
+        self.assertEquals(self.model.objects.filter(pk=6).count(), 0)
 
 
 class CategoryTest(APITestCase):
