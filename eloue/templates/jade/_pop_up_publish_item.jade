@@ -25,10 +25,10 @@
                             .col-sm-6: input(type="text", name="model", placeholder="Modèle *", ng-required="isAuto", ng-model="product.model", ng-show="isAuto").form-control
                         .row
                             .col-md-4
-                                select(ng-model="rootCategory", name="rootCategory", ng-change="updateNodeCategories()", opts="rootCategories", eloue-chosen, data-placeholder="Catégorie Niv.1", data-ng-disabled="submitInProgress").form-control
-                                    option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
+                                select(ng-model="rootCategory", name="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-placeholder="Catégorie Niv.1", data-ng-disabled="submitInProgress").form-control
+                                    option(ng-repeat="category in rootCategories", value="{{category.id}}", ng-selected="category.id == rootCategory") {{category.name}}
                             .col-md-4
-                                select(ng-model="nodeCategory", name="nodeCategory", ng-change="updateLeafCategories()", opts="nodeCategories", eloue-chosen, data-placeholder="Catégorie Niv.2", data-ng-disabled="submitInProgress").form-control
+                                select(ng-model="nodeCategory", name="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", data-placeholder="Catégorie Niv.2", data-ng-disabled="submitInProgress").form-control
                                     option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
                             .col-md-4
                                 select(ng-model="product.category", name="category", opts="leafCategories", eloue-chosen, data-placeholder="Catégorie Niv.3", required, data-ng-disabled="submitInProgress").form-control
