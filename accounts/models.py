@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.db.models.deletion import PROTECT
 import logbook
 import uuid
 import calendar
@@ -74,8 +75,8 @@ class Patron(AbstractUser):
     
     avatar = models.ImageField(upload_to=upload_to, null=True, blank=True)
 
-    default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+")
-    default_number = models.ForeignKey('PhoneNumber', null=True, blank=True, related_name="+")
+    default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+", on_delete=PROTECT)
+    default_number = models.ForeignKey('PhoneNumber', null=True, blank=True, related_name="+", on_delete=PROTECT)
 
     customers = models.ManyToManyField('self', symmetrical=False)
 

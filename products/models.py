@@ -7,6 +7,7 @@ from calendar import monthrange, weekday
 
 import operator
 import itertools
+from django.db.models.deletion import PROTECT
 
 from imagekit.models import ImageSpecField
 from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
@@ -68,8 +69,8 @@ class Product(models.Model):
     deposit_amount = models.DecimalField(_(u'Dépôt de garantie'), max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     description = models.TextField(blank=True)
-    address = models.ForeignKey(Address, related_name='products')
-    phone = models.ForeignKey(PhoneNumber, related_name='products', null=True)
+    address = models.ForeignKey(Address, related_name='products', on_delete=PROTECT)
+    phone = models.ForeignKey(PhoneNumber, related_name='products', null=True, on_delete=PROTECT)
     quantity = models.IntegerField(_(u'Quantité'), default=1)
     shipping = models.BooleanField(_(u'Livraison possible'), default=False)
 
