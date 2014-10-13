@@ -592,10 +592,7 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                 }
         
         self.site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
-        self.form = FacetedSearchForm(
-            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
-            searchqueryset=sqs)
-        sqs, self.suggestions, self.top_products = self._get_sqs()
+        sqs, self.suggestions, self.top_products = self._do_form_search(sqs)
         # we use canonical_parameters to generate the canonical url in the header
         self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
         self.canonical_parameters.pop('categorie', None)
@@ -618,7 +615,10 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         context['top_products'] = self.top_products
         return context
 
-    def _get_sqs(self):
+    def _do_form_search(self, sqs):
+        self.form = FacetedSearchForm(
+            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
+            searchqueryset=sqs)
         return self.form.search()
 
 @never_cache
@@ -769,9 +769,7 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
 class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
 
-    def _get_sqs(self):
-        sqs, suggestions, top_products = super(ProductListView, self)._get_sqs()
-
+    def _do_form_search(self, sqs):
         form = ProductSearchRangeForm(self.request.GET)
         if form.is_valid():
             if form.cleaned_data['price_from'] is not None:
@@ -782,10 +780,7 @@ class ProductListView(ProductList):
                 sqs = sqs.filter(created_at_date__gte=form.cleaned_data['date_from'])
             if form.cleaned_data['date_to'] is not None:
                 sqs = sqs.filter(created_at_date__lte=form.cleaned_data['date_to'])
-        else:
-            raise Http404
-
-        return sqs, suggestions, top_products
+        return super(ProductListView, self)._do_form_search(sqs)
 
     def get_context_data(self, **kwargs):
         context = {

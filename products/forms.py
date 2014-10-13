@@ -129,16 +129,41 @@ class ProductSearchRangeForm(forms.Form):
     date_from = forms.DateField(input_formats=DATE_FORMAT, required=False)
     date_to = forms.DateField(input_formats=DATE_FORMAT, required=False)
 
-    def is_valid(self):
-        is_valid = super(ProductSearchRangeForm, self).is_valid()
-        if is_valid:
-            if (self.cleaned_data['price_to'] is not None and self.cleaned_data['price_from'] is not None and
-                    self.cleaned_data['price_to'] < self.cleaned_data['price_from']):
-                is_valid = False
-            if (self.cleaned_data['date_to'] is not None and self.cleaned_data['date_from'] is not None and
-                    self.cleaned_data['date_to'] < self.cleaned_data['date_from']):
-                is_valid = False
-        return is_valid
+    def clean_price_from(self):
+        price_from = self.cleaned_data.get('price_from', None)
+        price_to = self.cleaned_data.get('price_to', None)
+        if (price_to is not None and price_from is not None and
+            price_from > price_to
+        ):
+            return None
+        return price_from
+
+    def clean_price_to(self):
+        price_from = self.cleaned_data.get('price_from', None)
+        price_to = self.cleaned_data.get('price_to', None)
+        if (price_to is not None and price_from is not None and
+            price_to < price_from
+        ):
+            return None
+        return price_to
+
+    def clean_date_from(self):
+        date_from = self.cleaned_data.get('date_from', None)
+        date_to = self.cleaned_data.get('date_to', None)
+        if (date_to is not None and date_from is not None and
+            date_from > date_to
+        ):
+            return None
+        return date_from
+
+    def clean_date_to(self):
+        date_from = self.cleaned_data.get('date_from', None)
+        date_to = self.cleaned_data.get('date_to', None)
+        if (date_to is not None and date_from is not None and
+            date_to < date_from
+        ):
+            return None
+        return date_to
 
 class AlertSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
