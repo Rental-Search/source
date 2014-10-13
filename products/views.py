@@ -724,7 +724,21 @@ from eloue.views import AjaxResponseMixin
 from eloue.decorators import ajax_required
 from products.forms import SuggestCategoryViewForm
 
-class HomepageView(BreadcrumbsMixin, TemplateView):
+class NavbarCategoryMixin(object):
+    def get_context_data(self, **kwargs):
+        categories = [
+            253, 335, 35, 390, 126, 418, 2700, 495, # first line / nav bar
+            323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
+        ]
+        category_list = list(Category.on_site.filter(pk__in=categories))
+        category_list.sort(key=lambda obj: categories.index(obj.pk))
+        context = {
+            'category_list': category_list,
+        }
+        context.update(super(NavbarCategoryMixin, self).get_context_data(**kwargs))
+        return context
+
+class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
     @property
@@ -743,8 +757,9 @@ class HomepageView(BreadcrumbsMixin, TemplateView):
         }
 
     def get_context_data(self, **kwargs):
-        context = super(HomepageView, self).get_context_data(**kwargs)
+        context = {}
         context.update(self.home_context)
+        context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
 
     def get(self, request, *args, **kwargs):
@@ -771,6 +786,13 @@ class ProductListView(ProductList):
             raise Http404
 
         return sqs, suggestions, top_products
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
+        }
+        context.update(super(ProductListView, self).get_context_data(**kwargs))
+        return context
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
     model = Product
@@ -803,7 +825,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         context.update(super(ProductDetailView, self).get_context_data(**kwargs))
         return context
 
-class PublishItemView(BreadcrumbsMixin, TemplateView):
+class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'publich_item/index.jade'
 
 class SuggestCategoryView(AjaxResponseMixin, View):
@@ -832,8 +854,8 @@ class SuggestCategoryView(AjaxResponseMixin, View):
         qs = qs.filter(slug__in=categories_set)
 
         context = dict(categories=[
-            [dict(id=c.id, name=c.name) for c in category.get_ancestors(include_self=True)]
-            for c in qs if c.is_leaf_node()
+            [dict(id=c.id, name=c.name) for c in cat.get_ancestors(include_self=True)]
+            for cat in qs if cat.is_leaf_node()
         ])
         return context
 

@@ -23,6 +23,7 @@ class PictureTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'picture_api2']
 
     def setUp(self):
+        self.model = get_model('products', 'Picture')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
     def test_picture_create_multipart(self):
@@ -85,7 +86,7 @@ class PictureTest(APITestCase):
 
     def test_picture_create_url(self):
         response = self.client.post(_location('picture-list'), {
-            'product' : _location('product-detail', pk=1),
+            'product': _location('product-detail', pk=1),
             'image': {
                 'content': IMAGE_URL,
                 'encoding': 'url',
@@ -111,6 +112,38 @@ class PictureTest(APITestCase):
 
         # check product has been applied properly
         self.assertTrue(response.data['product'].endswith(_location('product-detail', pk=1)))
+
+    def test_picture_create_url_wrong_url(self):
+        response = self.client.post(_location('picture-list'), {
+            'product': _location('product-detail', pk=1),
+            'image': {
+                'content': 'wrong_url',
+                'encoding': 'url',
+            }
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('image', response.data['errors'])
+
+    def test_picture_create_url_not_exist_url(self):
+        response = self.client.post(_location('picture-list'), {
+            'product': _location('product-detail', pk=1),
+            'image': {
+                'content': IMAGE_URL.replace('.jpg', '.png'),
+                'encoding': 'url',
+            }
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('image', response.data['errors'])
+
+    def test_picture_create_not_mine_product(self):
+        response = self.client.post(_location('picture-list'), {
+            'product': _location('product-detail', pk=6),
+            'image': {
+                'content': IMAGE_URL,
+                'encoding': 'url',
+            }
+        })
+        self.assertEquals(response.status_code, 400, response.data)
 
     def test_picture_edit_multipart(self):
         with open(IMAGE_FILE, 'rb') as image:
@@ -139,12 +172,26 @@ class PictureTest(APITestCase):
         })
         self.assertEquals(response.status_code, 200, response.data)
 
+    def test_picture_edit_not_mine_product(self):
+        response = self.client.patch(_location('picture-detail', pk=2), {
+            'image': {
+                'content': IMAGE_URL,
+                'encoding': 'url',
+            }
+        })
+        self.assertEquals(response.status_code, 404, response.data)
+
     def test_picture_delete(self):
-        Picture = get_model('products', 'Picture')
-        self.assertEquals(Picture.objects.filter(pk=1).count(), 1)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 1)
         response = self.client.delete(_location('picture-detail', pk=1))
         self.assertEquals(response.status_code, 204, response.data)
-        self.assertEquals(Picture.objects.filter(pk=1).count(), 0)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 0)
+
+    def test_picture_delete_not_mine_product(self):
+        self.assertEquals(self.model.objects.filter(pk=2).count(), 1)
+        response = self.client.delete(_location('picture-detail', pk=2))
+        self.assertEquals(response.status_code, 404, response.data)
+        self.assertEquals(self.model.objects.filter(pk=2).count(), 1)
 
     def test_picture_list_paginated(self):
         response = self.client.get(_location('picture-list'))
@@ -332,6 +379,9 @@ class ProductTest(APITestCase):
     fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
 
     def setUp(self):
+        self.model = get_model('products', 'Product')
+        self.car_model = get_model('products', 'CarProduct')
+        self.real_estate_model = get_model('products', 'RealEstateProduct')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
     def test_is_product_available(self):
@@ -430,6 +480,75 @@ class ProductTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.model.objects.filter(pk=response.data['id']).exists())
+
+    def test_product_create_not_mine(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=1),
+            'summary': 'test summary',
+            'description': 'test description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': 150,
+            'owner': _location('patron-detail', pk=2)
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        # End user can't create record for other person. Owner is force set as current user.
+        self.assertTrue(response.data['owner'].endswith(_location('patron-detail', pk=1)))
+        self.assertTrue(self.model.objects.filter(pk=response.data['id']).exists())
+
+    def test_product_create_negative_amount(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=1),
+            'summary': 'test summary',
+            'description': 'test description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': -1,
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('deposit_amount', response.data['errors'], response.data)
+
+    def test_product_create_large_amount(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=1),
+            'summary': 'test summary',
+            'description': 'test description',
+            'address': _location('address-detail', pk=1),
+            'phone': _location('phonenumber-detail', pk=1),
+            'deposit_amount': 12345678912,
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('deposit_amount', response.data['errors'], response.data)
+
+    def test_product_create_no_fields(self):
+        response = self.client.post(_location('product-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'summary', 'address', 'category', 'owner', 'deposit_amount', }
+        default_fields = {'owner'}
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
+
+    def test_product_create_car_required_fields(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=477),
+            'summary': 'test car summary',
+            'address': _location('address-detail', pk=1),
+            'deposit_amount': 600,
+
+            'brand': 'Toyota',
+            'model': 'FunCargo',
+            'km_included': 1000
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.car_model.objects.filter(pk=response.data['id']).exists())
 
     def test_product_create_car(self):
         response = self.client.post(_location('product-list'), {
@@ -466,6 +585,24 @@ class ProductTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.car_model.objects.filter(pk=response.data['id']).exists())
+
+    def test_product_create_real_estate_required_fields(self):
+        response = self.client.post(_location('product-list'), {
+            'category': _location('category-detail', pk=385),
+            'summary': 'test maison summary',
+            'address': _location('address-detail', pk=1),
+            'deposit_amount': 100,
+
+            'capacity': 6,
+            'private_life': 1,
+            'chamber_number': 3,
+        })
+        self.assertEquals(response.status_code, 201, response.data)
+        # Location header must be properly set to redirect to the resource have just been created
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.real_estate_model.objects.filter(pk=response.data['id']).exists())
 
     def test_product_create_real_estate(self):
         response = self.client.post(_location('product-list'), {
@@ -507,13 +644,19 @@ class ProductTest(APITestCase):
         # Location header must be properly set to redirect to the resource have just been created
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
+        self.assertTrue(self.real_estate_model.objects.filter(pk=response.data['id']).exists())
 
     def test_product_delete(self):
-        Product = get_model('products', 'Product')
-        self.assertEquals(Product.objects.filter(pk=1).count(), 1)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 1)
         response = self.client.delete(_location('product-detail', pk=1))
         self.assertEquals(response.status_code, 204, response.data)
-        self.assertEquals(Product.objects.filter(pk=1).count(), 0)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 0)
+
+    def test_product_delete_not_mine(self):
+        self.assertEquals(self.model.objects.filter(pk=6).count(), 1)
+        response = self.client.delete(_location('product-detail', pk=6))
+        self.assertEquals(response.status_code, 404, response.data)
+        self.assertEquals(self.model.objects.filter(pk=6).count(), 0)
 
 
 class CategoryTest(APITestCase):
@@ -603,7 +746,49 @@ class PriceTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'price']
 
     def setUp(self):
+        self.model = get_model('products', 'Price')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_price_create_not_mine_product(self):
+        response = self.client.post(_location('price-list'), {
+            'product': _location('product-detail', pk=6),
+            'amount': 10,
+            'unit': 0,
+            'currency': 'EUR'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_price_create_negative_amount(self):
+        response = self.client.post(_location('price-list'), {
+            'product': _location('product-detail', pk=1),
+            'amount': -10,
+            'unit': 0,
+            'currency': 'EUR'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('amount', response.data['errors'], response.data)
+
+    def test_price_create_large_amount(self):
+        response = self.client.post(_location('price-list'), {
+            'product': _location('product-detail', pk=1),
+            'amount': 12345678912,
+            'unit': 0,
+            'currency': 'EUR'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('amount', response.data['errors'], response.data)
+
+    def test_price_create_no_fields(self):
+        response = self.client.post(_location('price-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'amount', 'product', 'unit', }
+        default_fields = set()
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
 
     def test_price_create(self):
         response = self.client.post(_location('price-list'), {
@@ -637,6 +822,12 @@ class PriceTest(APITestCase):
         Price = get_model('products', 'Price')
         price = Price.objects.get(pk=response.data['id'])
         self.assertEqual(price.name, 'Name')
+
+    def test_price_edit_not_mine_product(self):
+        response = self.client.patch(_location('price-detail', pk=14), {
+            'name': 'Name',
+        })
+        self.assertEquals(response.status_code, 404, response.data)
 
     def test_price_get_by_id(self):
         response = self.client.get(_location('price-detail', pk=1))

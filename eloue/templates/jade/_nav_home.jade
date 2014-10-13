@@ -1,6 +1,12 @@
 -load i18n
 
 ul.without-spaces
-  each category in category_list
+  each category in category_list|slice:":8"
     li.spacer
     li: a(href="{{ category.get_absolute_url }}", title="{% trans 'location'%} {{ category.name }}") {{ category.name|capfirst }}
+  li.spacer
+  li.dropdown
+    a(data-toggle="dropdown").dropdown-toggle {% trans 'Autres' %}
+    ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+      each category in category_list|slice:"8:"
+        li.content: a(href="{{ category.get_absolute_url }}", title="{% trans 'location'%} {{ category.name }}") {{ category.name|capfirst }}

@@ -107,9 +107,7 @@ class BreadcrumbsMixin(object):
         return super(BreadcrumbsMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        from products.models import Category
         context = {
-            'category_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
             'breadcrumbs': self.breadcrumbs,
         }
         context.update(super(BreadcrumbsMixin, self).get_context_data(**kwargs))

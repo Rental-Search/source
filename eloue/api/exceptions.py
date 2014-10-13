@@ -47,6 +47,7 @@ class UrlErrorEnum(object):
 
 class ServerErrorEnum(object):
     """Enum for server errors"""
+    PROTECTED_ERROR = ('100', _(u'The Object is referenced by other objects and can\'t be deleted'))
     OTHER_ERROR = ('199', _(u'Other error occurred.'))
 
 
@@ -134,9 +135,16 @@ class UrlException(ApiException):
 
 
 class ServerException(ApiException):
-    """Raised on REST Framework permission errors."""
+    """Raised on unexpected errors."""
 
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    error_group = ErrorGroupEnum.SERVER_ERROR
+
+
+class DocumentedServerException(ApiException):
+    """Raised on documented errors."""
+
+    status_code = status.HTTP_400_BAD_REQUEST
     error_group = ErrorGroupEnum.SERVER_ERROR
 
 

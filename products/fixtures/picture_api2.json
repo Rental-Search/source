@@ -7,5 +7,14 @@
         },
         "model": "products.picture",
         "pk": 1
+    },
+    {
+        "fields": {
+            "product": 6,
+            "created_at": "2010-08-15 09:00:10",
+            "image": "pictures/4f2224b0a09c45ba8ba94b6bfcbb4ac7.jpg"
+        },
+        "model": "products.picture",
+        "pk": 2
     }
 ]

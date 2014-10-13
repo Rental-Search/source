@@ -21,116 +21,6 @@
     background-color: $brand-primary
     border-radius: 1em
     font-size: .75em
-  .dropdown
-    display: table-cell
-    vertical-align: middle
-    width: 1%
-    & + .dropdown
-      padding-left: $indent-md
-    .dropdown-menu
-      margin-top: 1em
-      left: auto
-      right: -.75em
-      width: 280px
-      padding: 0
-      // triangle
-      &:before,
-      &:after
-        content: ""
-        position: absolute
-        border: .75em solid
-        top: -1.5em
-        right: .75em
-        border-top-color: transparent
-        border-left-color: transparent
-        border-right-color: transparent
-      &:before
-        color: $gray-medium
-      &:after
-        color: white
-        margin-top: 1px
-      // end triangle
-      > li
-        padding: px(20)
-        & + li
-          border-top: px(1) solid $gray-lighter
-        a
-          color: inherit
-          text-decoration: none
-        > div
-          vertical-align: middle
-          display: table-cell
-        .middle-round span
-          width: px(10)
-          height: px(10)
-          background-color: $gray-lighter
-          display: inline-block
-          border-radius: 50%
-        .autor-img
-          padding-left: px(20)
-          padding-right: px(10)
-          a
-            display: block
-            border-radius: 50%
-            overflow: hidden
-            width: $thumbnail-sm
-            height: $thumbnail-sm
-            +default-user
-            +opacity(.9)
-        .content
-          width: 100%
-          max-width: 0px
-          font-weight: $fw-semibold
-          a:hover
-            text-decoration: underline
-          h5,
-          p
-            font-size: px(11)
-          h4
-            font-size: px(12)
-            margin-bottom: .25em
-            color: $gray-dark
-          h5
-            color: $gray-light
-          p
-            margin-top: .125em
-            line-height: $line-height-base
-            color: $gray-strong
-          &,
-          > *
-            +text-overflow
-          > *
-            margin: 0
-        &:hover
-          .middle-round span
-            background-color: $brand-success
-          .autor-img a
-            +opacity(1)
-          .content
-            h4
-              color: darken($gray-dark, 30%)
-            h5
-              color: darken($gray-light, 20%)
-            p
-              color: darken($gray-strong, 20%)
-    .dropdown-toggle
-      font-weight: bolder
-      cursor: pointer
-      i
-        font-size: 2em
-    .caret
-      color: $gray-strong
-      margin-left: .5em
-    .dropdown-img
-      margin: 0 $indent-xs
-      a
-        display: inline-block
-        vertical-align: middle
-        overflow: hidden
-        border-radius: 50%
-        width: $thumbnail-sm
-        height: $thumbnail-sm
-        +default-user
 
   .search-form
     padding-top: 1.5em
@@ -179,3 +69,114 @@
     .form-control,
     .btn
       height: 3em
+
+.dropdown
+  display: table-cell
+  vertical-align: middle
+  width: 1%
+  & + .dropdown
+    padding-left: $indent-md
+  .dropdown-menu
+    margin-top: 1em
+    left: auto
+    right: -.75em
+    width: 280px
+    padding: 0
+    // triangle
+    &:before,
+    &:after
+      content: ""
+      position: absolute
+      border: .75em solid
+      top: -1.5em
+      right: .75em
+      border-top-color: transparent
+      border-left-color: transparent
+      border-right-color: transparent
+    &:before
+      color: $gray-medium
+    &:after
+      color: white
+      margin-top: 1px
+    // end triangle
+    > li
+      padding: px(20)
+      & + li
+        border-top: px(1) solid $gray-lighter
+      a
+        color: inherit
+        text-decoration: none
+      > div
+        vertical-align: middle
+        display: table-cell
+      .middle-round span
+        width: px(10)
+        height: px(10)
+        background-color: $gray-lighter
+        display: inline-block
+        border-radius: 50%
+      .autor-img
+        padding-left: px(20)
+        padding-right: px(10)
+        a
+          display: block
+          border-radius: 50%
+          overflow: hidden
+          width: $thumbnail-sm
+          height: $thumbnail-sm
+          +default-user
+          +opacity(.9)
+      .content
+        width: 100%
+        max-width: 0px
+        font-weight: $fw-semibold
+        a:hover
+          text-decoration: underline
+        h5,
+        p
+          font-size: px(11)
+        h4
+          font-size: px(12)
+          margin-bottom: .25em
+          color: $gray-dark
+        h5
+          color: $gray-light
+        p
+          margin-top: .125em
+          line-height: $line-height-base
+          color: $gray-strong
+        &,
+        > *
+          +text-overflow
+        > *
+          margin: 0
+      &:hover
+        .middle-round span
+          background-color: $brand-success
+        .autor-img a
+          +opacity(1)
+        .content
+          h4
+            color: darken($gray-dark, 30%)
+          h5
+            color: darken($gray-light, 20%)
+          p
+            color: darken($gray-strong, 20%)
+  .dropdown-toggle
+    font-weight: bolder
+    cursor: pointer
+    i
+      font-size: 2em
+  .caret
+    color: $gray-strong
+    margin-left: .5em
+  .dropdown-img
+    margin: 0 $indent-xs
+    a
+      display: inline-block
+      vertical-align: middle
+      overflow: hidden
+      border-radius: 50%
+      width: $thumbnail-sm
+      height: $thumbnail-sm
+      +default-user

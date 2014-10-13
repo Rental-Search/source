@@ -46,6 +46,7 @@ from accounts.forms import (EmailAuthenticationForm, PatronEditForm,
 from accounts.models import Patron, FacebookSession, CreditCard, Billing, ProPackage, BillingHistory
 from accounts.wizard import AuthenticationWizard
 from accounts.choices import GEOLOCATION_SOURCE
+from eloue.api.exceptions import ServerErrorEnum, DocumentedServerException
 
 from products.models import ProductRelatedMessage, MessageThread, Product
 from products.search import product_search
@@ -1061,11 +1062,13 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
         return [self.template_name]
 
     def get_context_data(self, **kwargs):
-        context = super(PatronDetail, self).get_context_data(**kwargs)
         patron = self.patron
-        context['patron'] = patron
-        context['breadcrumbs'] = self.breadcrumbs
-        context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')
+        context = {
+            'patron': patron,
+            'breadcrumbs': self.breadcrumbs,
+            'borrowercomments': Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at'),
+        }
+        context.update(super(PatronDetail, self).get_context_data(**kwargs))
         return context
 
 
@@ -1127,6 +1130,24 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     ordering_fields = ('city', 'country')
     public_actions = ('retrieve',)
 
+    def destroy(self, request, *args, **kwargs):
+        address = self.get_object()
+        if request.user.default_address == address:
+            raise DocumentedServerException({
+                'code': ServerErrorEnum.PROTECTED_ERROR[0],
+                'description': ServerErrorEnum.PROTECTED_ERROR[1],
+                'detail': _(u'The address is default address of current user')
+            })
+        elif address.products.exists():
+            raise DocumentedServerException({
+                'code': ServerErrorEnum.PROTECTED_ERROR[0],
+                'description': ServerErrorEnum.PROTECTED_ERROR[1],
+                'detail': _(u'The address is used in products')
+            })
+        else:
+            return super(AddressViewSet, self).destroy(request, *args, **kwargs)
+
+
 class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows phone numbers to be viewed or edited.
@@ -1154,6 +1175,24 @@ class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response(tags)
+
+    def destroy(self, request, *args, **kwargs):
+        phone = self.get_object()
+        if request.user.default_number == phone:
+            raise DocumentedServerException({
+                'code': ServerErrorEnum.PROTECTED_ERROR[0],
+                'description': ServerErrorEnum.PROTECTED_ERROR[1],
+                'detail': _(u'The phone is default number of current user')
+            })
+        elif phone.products.exists():
+            raise DocumentedServerException({
+                'code': ServerErrorEnum.PROTECTED_ERROR[0],
+                'description': ServerErrorEnum.PROTECTED_ERROR[1],
+                'detail': _(u'The phone is used in products')
+            })
+        else:
+            return super(PhoneNumberViewSet, self).destroy(request, *args, **kwargs)
+
 
 class CreditCardViewSet(mixins.SetOwnerMixin, viewsets.NonEditableModelViewSet):
     """

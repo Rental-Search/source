@@ -44,7 +44,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var currentUserUrl = Endpoints.api_url + "users/" + userId + "/";
 
                     // Send form to the current user url
-                    FormService.send("PATCH", currentUserUrl, form, successCallback, errorCallback);
+                    FormService.send("PUT", currentUserUrl, form, successCallback, errorCallback);
                 };
 
                 usersService.resetPassword = function (userId, form) {
@@ -474,7 +474,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
                     var deferred = $q.defer();
-                    var params = {owner: userId};
+                    var params = {owner: userId, ordering: "-created_at"};
 
                     if (rootCategoryId) {
                         params.category__isdescendant = rootCategoryId;
@@ -1292,7 +1292,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load bookings
-                    Bookings.get({page: page, author: author, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
+                    Bookings.get({page: page, author: author, ordering: "-created_at", _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
                         var bookingListPromises = [];
 
                         // For each booking
