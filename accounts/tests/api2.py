@@ -901,12 +901,21 @@ class ProAgencyTest(APITestCase):
     fixtures = ['patron', 'proagency']
 
     def setUp(self):
+        self.model = get_model('accounts', 'ProAgency')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
-    def test_pro_agency_create(self):
+    def test_pro_agency_create_no_fields(self):
+        response = self.client.post(_location('proagency-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'patron', 'name', 'address', 'zipcode', 'city', 'country'}
+        default_fields = {'patron'}
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
+
+    def test_pro_agency_create_required_fields(self):
         response = self.client.post(_location('proagency-list'), {
             'name': 'Agency',
-            'phone_number': '0198765432',
             'address': '2, rue debelleyme',
             'zipcode': '75003',
             'city': 'Paris',
@@ -919,8 +928,32 @@ class ProAgencyTest(APITestCase):
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('proagency-detail', pk=response.data['id'])))
 
-        ProAgency = get_model('accounts', 'ProAgency')
-        agency = ProAgency.objects.get(pk=response.data['id'])
+        agency = self.model.objects.get(pk=response.data['id'])
+        self.assertEqual(agency.patron_id, 1)
+        self.assertEqual(agency.name, 'Agency')
+        self.assertEqual(agency.address1, '2, rue debelleyme')
+        self.assertEqual(agency.zipcode, '75003')
+        self.assertEqual(agency.city, 'Paris')
+        self.assertEqual(agency.country, 'FR')
+
+    def test_pro_agency_create_all_fields(self):
+        response = self.client.post(_location('proagency-list'), {
+            'name': 'Agency',
+            'phone_number': '0198765432',
+            'address': '2, rue debelleyme',
+            'zipcode': '75003',
+            'city': 'Paris',
+            'country': 'FR',
+            'patron': _location('patron-detail', pk=1)
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('proagency-detail', pk=response.data['id'])))
+
+        agency = self.model.objects.get(pk=response.data['id'])
 
         self.assertEqual(agency.patron_id, 1)
         self.assertEqual(agency.name, 'Agency')
@@ -929,6 +962,46 @@ class ProAgencyTest(APITestCase):
         self.assertEqual(agency.zipcode, '75003')
         self.assertEqual(agency.city, 'Paris')
         self.assertEqual(agency.country, 'FR')
+
+    def test_pro_agency_create_not_mine(self):
+        response = self.client.post(_location('proagency-list'), {
+            'name': 'Agency',
+            'phone_number': '0198765432',
+            'address': '2, rue debelleyme',
+            'zipcode': '75003',
+            'city': 'Paris',
+            'country': 'FR',
+            'patron': _location('patron-detail', pk=2)
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('proagency-detail', pk=response.data['id'])))
+
+        agency = self.model.objects.get(pk=response.data['id'])
+
+        # End user can't create record for other person. Owner is force set as current user.
+        self.assertEqual(agency.patron_id, 1)
+        self.assertEqual(agency.name, 'Agency')
+        self.assertEqual(agency.phone_number, '0198765432')
+        self.assertEqual(agency.address1, '2, rue debelleyme')
+        self.assertEqual(agency.zipcode, '75003')
+        self.assertEqual(agency.city, 'Paris')
+        self.assertEqual(agency.country, 'FR')
+
+    def test_pro_agency_create_wrong_country(self):
+        response = self.client.post(_location('proagency-list'), {
+            'name': 'Agency',
+            'phone_number': '0198765432',
+            'address': '2, rue debelleyme',
+            'zipcode': '75003',
+            'city': 'Paris',
+            'country': 'Neverland',
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('country', response.data['errors'])
 
     def test_pro_agency_edit(self):
         response = self.client.patch(_location('proagency-detail', pk=1), {
@@ -942,12 +1015,44 @@ class ProAgencyTest(APITestCase):
         self.assertEquals(response.data['address'], '2, rue debelleyme')
         self.assertEquals(response.data['position']['coordinates'], [48.8603858, 2.3645553])
 
+    def test_pro_agency_edit_wrong_country(self):
+        response = self.client.patch(_location('proagency-detail', pk=1), {
+            'city': 'Paris',
+            'address': '2, rue debelleyme',
+            'zipcode': '75003',
+            'country': 'Neverland',
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('country', response.data['errors'])
+
+    def test_pro_agency_edit_not_mine(self):
+        response = self.client.patch(_location('proagency-detail', pk=3), {
+            'city': 'Paris',
+            'address': '2, rue debelleyme',
+            'zipcode': '75003',
+            'country': 'FR',
+        })
+        self.assertEqual(response.status_code, 404, response.data)
+
+    def test_pro_agency_edit_change_owner(self):
+        response = self.client.patch(_location('proagency-detail', pk=1), {
+            'patron': _location('patron-detail', pk=2)
+        })
+        self.assertEqual(response.status_code, 200, response.data)
+        # End user can't create record for other person. Owner is force set as current user.
+        self.assertTrue(response.data['patron'].endswith(_location('patron-detail', pk=1)))
+
     def test_pro_agency_delete(self):
-        ProAgency = get_model('accounts', 'ProAgency')
-        self.assertEquals(ProAgency.objects.filter(pk=1).count(), 1)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 1)
         response = self.client.delete(_location('proagency-detail', pk=1))
         self.assertEquals(response.status_code, 204, response.data)
-        self.assertEquals(ProAgency.objects.filter(pk=1).count(), 0)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 0)
+
+    def test_pro_agency_delete_not_mine(self):
+        self.assertEquals(self.model.objects.filter(pk=3).count(), 1)
+        response = self.client.delete(_location('address-detail', pk=3))
+        self.assertEquals(response.status_code, 404, response.data)
+        self.assertEquals(self.model.objects.filter(pk=3).count(), 1)
 
     def test_pro_agency_get_by_id(self):
         response = self.client.get(_location('proagency-detail', pk=1))
@@ -973,9 +1078,19 @@ class ProPackageTest(APITestCase):
     fixtures = ['patron', 'propackages']
 
     def setUp(self):
+        self.model = get_model('accounts', 'ProPackage')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
-    def test_pro_package_create(self):
+    def test_pro_package_create_no_fields(self):
+        response = self.client.post(_location('propackage-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'name', 'maximum_items', 'price', 'valid_from'}
+        default_fields = {'valid_from'}
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
+
+    def test_pro_package_create_required_fields(self):
         response = self.client.post(_location('propackage-list'), {
             'name': 'Agency',
             'maximum_items': '10',
@@ -988,14 +1103,93 @@ class ProPackageTest(APITestCase):
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('propackage-detail', pk=response.data['id'])))
 
-        ProPackage = get_model('accounts', 'ProPackage')
-        package = ProPackage.objects.get(pk=response.data['id'])
-
+        package = self.model.objects.get(pk=response.data['id'])
         self.assertEqual(package.name, 'Agency')
         self.assertEqual(package.maximum_items, 10)
         self.assertEqual(package.price, Decimal(1234))
         self.assertEqual(package.valid_from, datetime.date.today())
         self.assertIsNone(package.valid_until)
+
+    def test_pro_package_create_all_fields(self):
+        response = self.client.post(_location('propackage-list'), {
+            'name': 'Agency',
+            'maximum_items': '10',
+            'price': '1234',
+            'valid_from': '2010-01-01',
+            'valid_until': '2010-01-02'
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('propackage-detail', pk=response.data['id'])))
+
+        package = self.model.objects.get(pk=response.data['id'])
+        self.assertEqual(package.name, 'Agency')
+        self.assertEqual(package.maximum_items, 10)
+        self.assertEqual(package.price, Decimal(1234))
+        self.assertEqual(package.valid_from, datetime.date(2010, 1, 1))
+        self.assertEqual(package.valid_until, datetime.date(2010, 1, 2))
+
+    def test_pro_package_create_wrong_range(self):
+        response = self.client.post(_location('propackage-list'), {
+            'name': 'Agency',
+            'maximum_items': '10',
+            'price': '1234',
+            'valid_from': '2010-01-02',
+            'valid_until': '2010-01-01'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_pro_package_create_large_price(self):
+        response = self.client.post(_location('propackage-list'), {
+            'name': 'Agency',
+            'maximum_items': '10',
+            'price': '123456789',
+            'valid_from': '2010-01-01',
+            'valid_until': '2010-01-02'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('price', response.data['errors'], response.data)
+
+    def test_pro_package_create_negative_count(self):
+        response = self.client.post(_location('propackage-list'), {
+            'name': 'Agency',
+            'maximum_items': '-10',
+            'price': '1234',
+            'valid_from': '2010-01-01',
+            'valid_until': '2010-01-02'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('maximum_items', response.data['errors'], response.data)
+
+    def test_pro_package_edit_wrong_range(self):
+        response = self.client.patch(_location('propackage-detail', pk=1), {
+            'valid_from': '2010-01-02',
+            'valid_until': '2010-01-01'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_pro_package_edit_large_price(self):
+        response = self.client.patch(_location('propackage-detail', pk=1), {
+            'price': '123456789',
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('price', response.data['errors'], response.data)
+
+    def test_pro_package_edit_negative_count(self):
+        response = self.client.patch(_location('propackage-detail', pk=1), {
+            'maximum_items': '-10',
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('maximum_items', response.data['errors'], response.data)
 
     def test_pro_package_edit(self):
         response = self.client.patch(_location('propackage-detail', pk=1), {
@@ -1004,8 +1198,7 @@ class ProPackageTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         self.assertIn('id', response.data)
 
-        ProPackage = get_model('accounts', 'ProPackage')
-        package = ProPackage.objects.get(pk=response.data['id'])
+        package = self.model.objects.get(pk=response.data['id'])
         self.assertEqual(package.valid_until, datetime.date(2014, 10, 31))
 
     def test_pro_package_get_by_id(self):
@@ -1032,12 +1225,22 @@ class SubscriptionTest(APITestCase):
     fixtures = ['patron', 'propackages', 'subscriptions']
 
     def setUp(self):
+        self.model = get_model('accounts', 'Subscription')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
-    def test_subscription_create(self):
+    def test_subscription_create_no_fields(self):
+        response = self.client.post(_location('subscription-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'patron', 'propackage', 'payment_type', }
+        default_fields = {'patron'}
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
+
+    def test_subscription_create_required_fields(self):
         response = self.client.post(_location('subscription-list'), {
-            'propackage_id': _location('propackage-detail', pk=1),
-            'payment_type': 'CHECK',
+            'propackage': _location('propackage-detail', pk=1),
+            'payment_type': 1,
         })
 
         self.assertEquals(response.status_code, 201, response.data)
@@ -1046,14 +1249,62 @@ class SubscriptionTest(APITestCase):
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('subscription-detail', pk=response.data['id'])))
 
-        Subscription = get_model('accounts', 'Subscription')
-        subscription = Subscription.objects.get(pk=response.data['id'])
-
+        subscription = self.model.objects.get(pk=response.data['id'])
         self.assertEqual(subscription.patron_id, 1)
         self.assertEqual(subscription.propackage_id, 1)
         self.assertEqual(subscription.payment_type, 1)
-        self.assertEqual(subscription.subscription_started, datetime.date.today())
+        self.assertEqual(subscription.subscription_started.date(), datetime.date.today())
         self.assertIsNone(subscription.subscription_ended)
+
+    def test_subscription_create_all_fields(self):
+        response = self.client.post(_location('subscription-list'), {
+            'propackage': _location('propackage-detail', pk=1),
+            'payment_type': 1,
+            'patron': _location('patron-detail', pk=1),
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('subscription-detail', pk=response.data['id'])))
+
+        subscription = self.model.objects.get(pk=response.data['id'])
+        self.assertEqual(subscription.patron_id, 1)
+        self.assertEqual(subscription.propackage_id, 1)
+        self.assertEqual(subscription.payment_type, 1)
+        self.assertEqual(subscription.subscription_started.date(), datetime.date.today())
+        self.assertIsNone(subscription.subscription_ended)
+
+    def test_subscription_create_not_mine(self):
+        response = self.client.post(_location('subscription-list'), {
+            'propackage': _location('propackage-detail', pk=1),
+            'payment_type': 1,
+            'patron': _location('patron-detail', pk=2),
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('subscription-detail', pk=response.data['id'])))
+
+        subscription = self.model.objects.get(pk=response.data['id'])
+        self.assertEqual(subscription.patron_id, 1)
+        self.assertEqual(subscription.propackage_id, 1)
+        self.assertEqual(subscription.payment_type, 1)
+        self.assertEqual(subscription.subscription_started.date(), datetime.date.today())
+        self.assertIsNone(subscription.subscription_ended)
+
+    def test_subscription_create_wrong_payment_type(self):
+        response = self.client.post(_location('subscription-list'), {
+            'propackage': _location('propackage-detail', pk=1),
+            'payment_type': -1,
+            'patron': _location('patron-detail', pk=2),
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('payment_type', response.data['errors'], response.data)
 
     def test_subscription_edit(self):
         response = self.client.put(_location('subscription-detail', pk=1), {
@@ -1062,11 +1313,25 @@ class SubscriptionTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         self.assertIn('id', response.data)
 
-        Subscription = get_model('accounts', 'Subscription')
-        subscription = Subscription.objects.get(pk=response.data['id'])
+        subscription = self.model.objects.get(pk=response.data['id'])
         self.assertEqual(
             subscription.subscription_ended,
             datetime.datetime(2014, 10, 31))
+
+    def test_subscription_edit_wrong_period(self):
+        subscription = self.model.objects.get(pk=1)
+        self.assertGreater(subscription.subscription_started, datetime.datetime(1901, 1, 1))
+        response = self.client.patch(_location('subscription-detail', pk=1), {
+            'subscription_ended': '1900-01-01T00:00',
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('payment_type', response.data['errors'], response.data)
+
+    def test_subscription_edit_wrong_payment_type(self):
+        response = self.client.patch(_location('subscription-detail', pk=1), {
+            'payment_type': -1,
+        })
+        self.assertEquals(response.status_code, 400, response.data)
 
     def test_subscription_get_by_id(self):
         response = self.client.get(_location('subscription-detail', pk=1))
