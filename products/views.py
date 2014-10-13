@@ -847,7 +847,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
-    public_actions = ('retrieve',)
+    public_actions = ('list', 'retrieve', 'ancestors', 'children', 'descendants')
 
     @link()
     def ancestors(self, request, *args, **kwargs):
