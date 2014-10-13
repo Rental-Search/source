@@ -14,39 +14,43 @@
                         br
                         | en toure sécurité, quand vous ne les utilisez pas
                     {% verbatim %}
-                    form(name="publishAdForm").input-group.form-wrapper.col-sm-10.col-sm-offset-1
+                    .alert.alert-danger(ng-show="!!publishAdError")
+                        button(type="button", data-dismiss="alert", class="close")
+                        | {{publishAdError}}
+                    form(name="publishAdForm", ng-submit="publishAd()", role="form", novalidate).input-group.form-wrapper.col-sm-10.col-sm-offset-1
+                      fieldset(data-ng-disabled="submitInProgress")
                         .row
-                            .col-sm-12: input(type="text", placeholder="", required, ng-model="product.summary", ng-change="searchCategory()", ng-show="!isAuto").form-control
-                            .col-sm-6: input(type="text", placeholder="Marque *", required, ng-model="product.brand", ng-show="isAuto").form-control
-                            .col-sm-6: input(type="text", placeholder="Modèle *", required, ng-model="product.model", ng-show="isAuto").form-control
+                            .col-sm-12: input(type="text", name="summary", placeholder="Titre", ng-required="!isAuto", ng-model="product.summary", ng-change="searchCategory()", ng-show="!isAuto").form-control
+                            .col-sm-6: input(type="text", name="brand", placeholder="Marque *", ng-required="isAuto", ng-model="product.brand", ng-show="isAuto").form-control
+                            .col-sm-6: input(type="text", name="model", placeholder="Modèle *", ng-required="isAuto", ng-model="product.model", ng-show="isAuto").form-control
                         .row
                             .col-md-4
-                                select(ng-model="rootCategory", ng-change="updateNodeCategories()", opts="rootCategories", data-placeholder="Catégorie Niv.1").form-control
+                                select(ng-model="rootCategory", name="rootCategory", ng-change="updateNodeCategories()", opts="rootCategories", eloue-chosen, data-placeholder="Catégorie Niv.1", data-ng-disabled="submitInProgress").form-control
                                     option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
                             .col-md-4
-                                select(ng-model="nodeCategory", ng-change="updateLeafCategories()", opts="nodeCategories", data-placeholder="Catégorie Niv.2").form-control
+                                select(ng-model="nodeCategory", name="nodeCategory", ng-change="updateLeafCategories()", opts="nodeCategories", eloue-chosen, data-placeholder="Catégorie Niv.2", data-ng-disabled="submitInProgress").form-control
                                     option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
                             .col-md-4
-                                select(ng-model="product.category", opts="leafCategories", data-placeholder="Catégorie Niv.3", required).form-control
+                                select(ng-model="product.category", name="category", opts="leafCategories", eloue-chosen, data-placeholder="Catégorie Niv.3", required, data-ng-disabled="submitInProgress").form-control
                                     option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
                         .row(ng-show="!currentUser.default_address")
-                            .col-sm-5: input(type="text", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
-                            .col-sm-3: input(type="text", placeholder="Code postal *", required, ng-model="currentUser.default_address.zipcode").form-control
-                            .col-sm-4: input(type="text", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
+                            .col-sm-5: input(type="text", name="street", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
+                            .col-sm-3: input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="currentUser.default_address.zipcode").form-control
+                            .col-sm-4: input(type="text", name="city", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
                         .row
                             .col-sm-4
-                                input(type="number", placeholder="{{isRealEstate ? 'Prix à la nuit *' : 'Prix à la journée *'}}", required, ng-model="price.amount").form-control
+                                input(type="number", name="amount", placeholder="{{isRealEstate ? 'Prix à la nuit *' : 'Prix à la journée *'}}", required, ng-model="price.amount").form-control
                             .col-sm-4(ng-show="!isAuto")
-                                input(type="number", placeholder="Caution demandée *", required, ng-model="product.deposit_amount").form-control
+                                input(type="number", name="deposit_amount", placeholder="Caution demandée *", ng-required="!isAuto", ng-model="product.deposit_amount").form-control
                             .col-sm-4(ng-show="isAuto")
-                                input(type="number", placeholder="Kilomètres inclus *", required, ng-model="product.km_included").form-control
+                                input(type="number", name="km_included", placeholder="Kilomètres inclus *", ng-required="isAuto", ng-model="product.km_included").form-control
                             .col-sm-4
-                                button(type="button", ng-show="!isAuto", ng-click="publishAd()").btn.bg-success.btn-advertise Publiez votre annonce
+                                button(ng-show="!isAuto", type="submit", ng-disabled="publishAdForm.$invalid").btn.bg-success.btn-advertise Publiez votre annonce
                         .row
                             .col-sm-4
-                                input(type="number", placeholder="Prix km supp *", required, ng-model="product.costs_per_km", ng-show="isAuto").form-control
+                                input(type="number", name="costs_per_km", placeholder="Prix km supp *", ng-required="isAuto", ng-model="product.costs_per_km", ng-show="isAuto").form-control
                             .col-sm-4
-                                input(type="number", placeholder="Caution demandée *", required, ng-model="product.deposit_amount", ng-show="isAuto").form-control
+                                input(type="number", name="deposit_amount", placeholder="Caution demandée *", ng-required="isAuto", ng-model="product.deposit_amount", ng-show="isAuto").form-control
                             .col-sm-4
-                                button(type="button", ng-show="isAuto", ng-click="publishAd()").btn.bg-success.btn-advertise Publiez votre annonce
+                                button(ng-show="isAuto", type="submit", ng-disabled="publishAdForm.$invalid").btn.bg-success.btn-advertise Publiez votre annonce
                         {% endverbatim %}

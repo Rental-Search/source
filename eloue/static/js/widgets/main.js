@@ -91,7 +91,6 @@ require([
 ], function ($, _, angular) {
     "use strict";
     $(function () {
-        $("select").attr("eloue-chosen", "");
 
         angular.bootstrap(document, ["EloueApp"]);
 
