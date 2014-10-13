@@ -44,7 +44,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var currentUserUrl = Endpoints.api_url + "users/" + userId + "/";
 
                     // Send form to the current user url
-                    FormService.send("PATCH", currentUserUrl, form, successCallback, errorCallback);
+                    FormService.send("PUT", currentUserUrl, form, successCallback, errorCallback);
                 };
 
                 usersService.resetPassword = function (userId, form) {
