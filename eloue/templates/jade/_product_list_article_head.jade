@@ -10,8 +10,10 @@ h3.col-md-7
 .col-xs-5.layout-switcher
   i.flaticon.stroke.menu-list-4.list
   i.flaticon.stroke.window-1.grid
-  .clear-selector: select.form-control
-    option(value="male") Du - cher au + cher
-    option(value="female") Du - cher au + cher
-    option(value="female") Du - cher au + cher
-    option(value="female") Du - cher au + cher
+  .clear-selector: select.form-control(name="sort")
+    -var options = [["-created_at", "Les plus récents"], ["geo_distance", "Les plus proches"], ["price", "Les prix les plus bas"], ["-price", "Les prix les plus haut"]]
+    for sort, title in options
+      if form.sort.data == sort
+        option(value="{{ sort }}", selected) {{ title }}
+      else
+        option(value="{{ sort }}") {{ title }}
