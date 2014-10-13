@@ -731,11 +731,18 @@ class HomepageView(BreadcrumbsMixin, TemplateView):
             where=['"products_product"."address_id" = "accounts_address"."id"'],
             select={'city': 'lower(trim("accounts_address"."city"))'}
         ).values('city').annotate(Count('id')).order_by('-id__count')
+        categories = [
+            253, 335, 35, 390, 126, 418, 2700, 495, # first line / nav bar
+            323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
+        ]
+        category_list = list(Category.on_site.filter(pk__in=categories))
+        category_list.sort(key=lambda obj: categories.index(obj.pk))
         return {
             'cities_list': product_stats,
             'total_products': Product.on_site.only('id').count(),
             'product_list': last_added(product_search, self.location, limit=8),
             'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at'),
+            'category_list': category_list,
         }
 
     def get_context_data(self, **kwargs):
@@ -749,6 +756,13 @@ class HomepageView(BreadcrumbsMixin, TemplateView):
 
 class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
+        }
+        context.update(super(ProductListView, self).get_context_data(**kwargs))
+        return context
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
     model = Product
