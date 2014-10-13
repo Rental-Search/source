@@ -111,6 +111,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.product.description = "";
                 $scope.product.address = Endpoints.api_url + "addresses/" + $scope.currentUser.default_address.id + "/";
                 if ($scope.price.amount > 0) {
+                    if ($scope.isAuto || $scope.isRealEstate) {
+                        $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
+                    }
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         //TODO: finish and check saving product and price
                         $scope.price.currency = Currency.EUR.name;
