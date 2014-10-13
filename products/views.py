@@ -770,17 +770,10 @@ class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
 
     def _do_form_search(self, sqs):
-        form = ProductSearchRangeForm(self.request.GET)
-        if form.is_valid():
-            if form.cleaned_data['price_from'] is not None:
-                sqs = sqs.filter(price__gte=form.cleaned_data['price_from'])
-            if form.cleaned_data['price_to'] is not None:
-                sqs = sqs.filter(price__lte=form.cleaned_data['price_to'])
-            if form.cleaned_data['date_from'] is not None:
-                sqs = sqs.filter(created_at_date__gte=form.cleaned_data['date_from'])
-            if form.cleaned_data['date_to'] is not None:
-                sqs = sqs.filter(created_at_date__lte=form.cleaned_data['date_to'])
-        return super(ProductListView, self)._do_form_search(sqs)
+        self.form = ProductSearchRangeForm(
+            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
+            searchqueryset=sqs)
+        return self.form.search()
 
     def get_context_data(self, **kwargs):
         context = {
