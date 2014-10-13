@@ -62,7 +62,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
 
         it("ItemsTermsCtrl:updateTermsBlocks real estate", function () {
             var category = {
-                name: "Hébergement"
+                name: "Location saisonnière"
             };
             scope.updateTermsBlocks(category);
             expect(scope.isAuto).toBe(false);

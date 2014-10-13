@@ -31,7 +31,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.isRealEstate = false;
                 if (rootCategory.name === "Automobile") {
                     $scope.isAuto = true;
-                } else if (rootCategory.name === "Hébergement") {
+                } else if (rootCategory.name === "Location saisonnière") {
                     $scope.isRealEstate = true;
                 }
             }
