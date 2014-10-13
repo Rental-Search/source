@@ -21,9 +21,9 @@ define(["angular", "eloue/app"], function (angular) {
                 currentUser: $scope.currentUserPromise,
                 messageThread: MessageThreadsLoadService.getMessageThread($stateParams.id)
             };
-            $scope.markListItemAsSelected("thread-", $stateParams.id);
 
             $q.all(promises).then(function (results) {
+                $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
                 if ($scope.messageThread.product) {
 
