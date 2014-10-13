@@ -4,6 +4,10 @@
 
   li
     margin-top: $grid-gutter-width
+    @media screen and (min-width: $screen-sm)
+      width: (100%/4)
+    @media screen and (min-width: $screen-md)
+      width: (100%/8)
   // Wrapper for content of item. Provides display shadow and border
   .item-wrapper
     overflow: hidden
@@ -16,22 +20,24 @@
 
     // Block with background-image from inline style
     label
+      +default-product
       display: block
       position: relative
       padding-top: 75% // 4:3
       margin-bottom: 0 // Reset default margin
       cursor: pointer
       position: relative
-      +default-product
+      background-color: white
       img
         position: absolute
-        top: 0
-        right: 0
-        left: 0
-        bottom: 0
+        top: 5%
+        right: 5%
+        left: 5%
+        bottom: 5%
 
-        background-size: cover // Fill block by image
+        background-size: contain // Fill block by image
         background-position: center center
+        background-repeat: no-repeat
 
     // Color indicator for display selected elements
     .selecting-indicator
@@ -53,9 +59,11 @@
       font-size: 1em
       text-align: center
       border-top: 1px solid $gray-medium
+      padding: .5em
+      height: (2em * $line-height-base + 1em)
+      width: 100%
       p
         margin: 0
-        padding: .5em
 
     // Input:checkbox
     input

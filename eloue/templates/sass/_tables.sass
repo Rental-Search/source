@@ -3,18 +3,17 @@ table
   border-collapse: collapse
   &.calendar
     font-size: px(13)
-    thead tr
+    thead td
       background-color: $gray-lighter
     tbody
       background-color: darken($gray-lite, 2%)
-    tr:nth-of-type(2n)
-      background-color: $gray-lite
+      tr:nth-of-type(2n)
+        background-color: $gray-lite
     td
       padding: $indent-xs
       vertical-align: middle
-      border-left: 1px solid $gray-medium
-      &:first-child
-        border-left: none
+      & + td
+        border-left: 1px solid $gray-medium
       &.outages
         background-color: lighten($brand-danger, 35%)
       &.booking
@@ -30,3 +29,9 @@ table
       border-left: none
     tr
       border: 1px solid $gray-medium
+  &.bd-full
+    td
+      border: 1px solid $gray-medium
+  .empty
+    background: transparent !important
+    border: transparent !important

@@ -3,35 +3,50 @@ extends ../base
 
 block append styles
   {% compressed_css "bootstrap" %}
-  {% compressed_css "product_detail_styles" %}
+  {% compressed_css "profile_public_styles" %}
 
 block append scripts
   script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 
 block append content-body
+  -var is_pro = patron.current_subscription is not None 
   #fb-root
-  include ../jade/_pop_up_send_message
-  include ../jade/_pop_up_call
-  include ../jade/_pop_up_reserve
+  if is_pro
+    include ../jade/_pro_popin_message
+    include ../jade/_pro_popin_phone
+    include ../jade/_pro_popin_website_link
+    include ../jade/_pro_popin_shop
+  else
+    include ../jade/_pop_up_send_message
+    include ../jade/_pop_up_call
+    include ../jade/_pop_up_reserve
   .container-flex
     header.header-site
       include ../jade/_header_site
     section.owner-headline
       include ./_profile_public-owner_headline
-    article.container.list-layout: .row
+    article.container: .row
       main.col-sm-8
         section
           .section-body
-            .part.comments
-              include ./_profile_public-comments
-            .part
-              include ./_profile_public-products_of_the_owner
+            if is_pro
+              .part.grid-layout
+                include ./_profile_public-products_of_the_owner
+            else
+              .part.comments
+                include ./_profile_public-comments
+              .part.list-layout
+                include ./_profile_public-products_of_the_owner
       aside.col-sm-4
         section.owner-information
           include ./_profile_public-owner_information
-      //-
-        section.verify-status
-          include ./_profile_public-verify_status
+        if is_pro
+          section.contact-member
+            include ./_profile_public-contact_member
+        else
+          section.verify-status
+          //-
+            include ./_profile_public-verify_status
     footer
       section.row-fluid.insurances.framing
         include ../jade/_insurances

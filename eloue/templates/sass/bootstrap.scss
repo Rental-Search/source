@@ -55,39 +55,8 @@
 @import "bootstrap/responsive-utilities";
 
 @import "helped-classes";
+@import "customs";
 @import "tables";
 @import "../dashboard/sass/font_awesome/larger";
 @import "../dashboard/sass/font_awesome/fixed-width";
 @import "../dashboard/sass/font_awesome/list";
-
-.e_loue-mark {
-  $width: ($indent-md * 1.5);
-  position: absolute;
-  width: $width;
-  height: $width;
-  border-radius: 50%;
-  background-color: $brand-primary;
-  left: 0;
-  right: 0;
-  top: $indent;
-  margin: auto;
-  &:before {
-    content: " ";
-    position: absolute;
-    border-style: solid;
-    border-color: $brand-primary transparent transparent;
-    z-index: -1;
-    border-width: ($width) ($width * 1/2);
-    top: 60%;
-    left: 0;
-    right: 0;
-  }
-  &:after {
-    content: "e";
-    color: white;
-    font-size: 2.5em;
-    line-height: 1.25;
-    display: block;
-    text-align: center;
-  }
-}

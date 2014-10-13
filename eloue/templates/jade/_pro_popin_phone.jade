@@ -1,0 +1,16 @@
+.modal.fade#pro-popin-phone(tabindex="-1", role="dialog", aria-hidden="true")
+	//- -var is_send = true
+	.modal-dialog.large
+		.modal-content
+			.modal-header
+				button(type="button", data-dismiss="modal").close
+					span(aria-hidden="true")&times;
+					span.sr-only Close
+				h4.modal-title Gaspard Kroutchev PRO - Appelez
+			.modal-body.table-cell.text-justify
+				.static-part.table-cell
+					section.product-info
+						include pop_up_sections/_pro_product_info
+				.change-part.table-cell
+					section.phone-form
+						include pop_up_sections/_phone_form

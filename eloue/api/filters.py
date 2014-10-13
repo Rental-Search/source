@@ -3,14 +3,16 @@ import operator
 import re
 
 from django.db.models import Q, ForeignKey, F
+from django.db.models.fields import FieldDoesNotExist
+from django.db.models.fields.related import RelatedObject
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django import forms
 
 from rest_framework import filters
-from rest_framework.permissions import SAFE_METHODS
 from mptt.fields import TreeNodeChoiceField
+
 import django_filters
 
 DjangoFilterBackend = filters.DjangoFilterBackend
@@ -42,6 +44,38 @@ class OrderingFilter(filters.OrderingFilter):
 
         return ordering
 
+class RelatedOrderingFilter(OrderingFilter):
+    """
+    Extends OrderingFilter to support ordering by fields in related models
+    using the Django ORM __ notation
+    """
+    def is_valid_field(self, model, field):
+        """
+        Return true if the field exists within the model (or in the related
+        model specified using the Django ORM __ notation)
+        """
+        components = field.split('__', 1)
+        try:
+            field, parent_model, direct, m2m = \
+                model._meta.get_field_by_name(components[0])
+
+            # reverse relation
+            if isinstance(field, RelatedObject):
+                return self.is_valid_field(field.model, components[1])
+
+            # foreign key
+            if field.rel and len(components) == 2:
+                return self.is_valid_field(field.rel.to, components[1])
+            return True
+        except FieldDoesNotExist:
+            return False
+
+    def remove_invalid_fields(self, queryset, ordering, view):
+        return [
+            term for term in ordering
+            if self.is_valid_field(queryset.model, term.lstrip('-'))
+        ]
+
 class OwnerFilter(filters.BaseFilterBackend):
     """
     Filter that allows users to see their own objects only.
@@ -49,10 +83,17 @@ class OwnerFilter(filters.BaseFilterBackend):
     owner_field = 'patron'
 
     def filter_queryset(self, request, queryset, view):
-        user = request.user
-        if user.is_anonymous() or user.is_staff or user.is_superuser:
-            # restriction for anonymous user set with permission, not filters.
+        # restrictions for public mode are set with permission, not filters
+        public_actions = getattr(view, 'public_actions', None)
+        if public_actions and view.action in public_actions:
             return queryset
+
+        user = request.user
+
+        # restrictions for anonymous users are set with permission, not filters
+        if user.is_anonymous() or user.is_staff or user.is_superuser:
+            return queryset
+
         owner_field = getattr(view, 'owner_field', self.owner_field)
         if isinstance(owner_field, basestring):
             queryset = queryset.filter(**{owner_field: user.pk})
@@ -60,6 +101,7 @@ class OwnerFilter(filters.BaseFilterBackend):
             or_queries = [Q(**{owner_field: user.pk})
                           for owner_field in owner_field]
             queryset = queryset.filter(reduce(operator.or_, or_queries))
+
         return queryset
 
 class HaystackSearchFilter(filters.BaseFilterBackend):

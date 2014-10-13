@@ -5,21 +5,26 @@
     padding-top: 2*$indent
     text-align: center
     font-weight: $fw-bold
-    @each $class, $variable, $variable-hover in ("do-it-yourself", $s-do-it-yourself, $s-do-it-yourself_hover), ("gardening", $s-gardening, $s-gardening_hover), ("high-tech", $s-high-tech, $s-high-tech_hover), ("reception", $s-reception, $s-reception_hover), ("vehicle", $s-vehicle, $s-vehicle_hover), ("fashion-and-accessories", $s-fashion-and-accessories, $s-fashion-and-accessories_hover), ("health-and-wellness", $s-health-and-wellness, $s-health-and-wellness_hover), ("other", $s-other, $s-other_hover)
-      &.#{$class} .sprite
-        +sprite($variable)
-        +centred-abs
-      &.#{$class} a:hover .sprite,
-      &.#{$class} a:focus .sprite
-        +sprite($variable-hover)
   a
     text-decoration: none
+    
     &:hover,
     &:focus
       outline: none
       color: $brand-success
       .border-round
         background-color: $brand-success
+      [class*="eloue-"]
+        color: white
+      
+    [class*="eloue-"]
+      +centred-abs
+      width: 2em
+      height: 2em
+      line-height: 2em
+      font-size: 4em
+
+      color: $brand-success
   h3
     font-size: px(26)
     font-weight: $fw-light

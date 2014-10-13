@@ -50,7 +50,6 @@ from eloue.api.exceptions import ServerErrorEnum, DocumentedServerException
 
 from products.models import ProductRelatedMessage, MessageThread, Product
 from products.search import product_search
-from products.views import CommonPageContextMixin
 
 from rent.models import Booking, BorrowerComment, OwnerComment, Comment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
@@ -1010,7 +1009,8 @@ def patron_delete_idn_connect(request):
 # UI v3
 
 from accounts.forms import EmailPasswordResetForm
-from eloue.views import AjaxResponseMixin
+from eloue.views import AjaxResponseMixin, BreadcrumbsMixin
+from eloue.http import JsonResponse
 from eloue.decorators import ajax_required
 
 class PasswordResetView(AjaxResponseMixin, View):
@@ -1052,21 +1052,21 @@ class PasswordResetConfirmView(TemplateView):
         if form.is_valid():
             form.save()
             success_msg = _("Your password has been set.  You may go ahead and log in now.")
-            return self.response_class({'detail': success_msg})
-        return self.response_class({'errors': form.errors}, status=400)
+            return JsonResponse({'detail': success_msg})
+        return JsonResponse({'errors': form.errors}, status=400)
 
-class PatronDetailView(DetailView):
-    model = Patron
+class PatronDetailView(BreadcrumbsMixin, PatronDetail):
     template_name = 'profile_public/index.jade'
-    context_object_name = 'patron'
-    search_index = product_search
+
+    def get_template_names(self):
+        return [self.template_name]
 
     def get_context_data(self, **kwargs):
-        context = super(PatronDetailView, self).get_context_data(**kwargs)
-        patron = self.object
+        context = super(PatronDetail, self).get_context_data(**kwargs)
+        patron = self.patron
         context['patron'] = patron
+        context['breadcrumbs'] = self.breadcrumbs
         context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')
-        context['products'] = Product.on_site.filter(owner=patron).order_by('-created_at')
         return context
 
 

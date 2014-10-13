@@ -1,0 +1,8 @@
+.section-header
+  h4 Téléchargements
+.section-body
+  -var assets_download_links = [{'name': "Logo HD", 'href': "logo_hd", 'suffix': "eps"}, {'name': "Logo HD signature", 'href': "logo_hd_signature", 'suffix': "eps"}, {'name': "Logos HD (couleurs)", 'href': "logos_hd_(couleurs)", 'suffix': "eps"}, {'name': "Visuel Guitare", 'href': "visuel_guitare", 'suffix': "eps"}, {'name': "Visuel Burger", 'href': "visuel_burger", 'suffix': "eps"}, {'name': "Visuel Sèche‐cheveu", 'href': "visuel_sèche‐cheveu", 'suffix': "eps"}, {'name': "Capture d’écran Home", 'href': "capture_d’écran_home", 'suffix': "pdf"}, {'name': "Capture d’écran Recherche", 'href': "capture_d’écran_recherche", 'suffix': "pdf"}, {'name': "Capture d’écran Fiche", 'href': "capture_d’écran_fiche", 'suffix': "pdf"}, {'name': "Dossier de presse", 'href': "dossier_de_presse", 'suffix': "pdf"}]
+  ul.nav
+    {% for item in assets_download_links %}
+    li: a(href="{{ item.name }}.{{ item.suffix }}", download) {{ item.name }}
+    {% endfor %}

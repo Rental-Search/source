@@ -1,0 +1,21 @@
+extends ../base
+-load compressed
+
+block append styles
+    {% compressed_css "bootstrap" %}
+    {% compressed_css "contact_us_styles" %}
+
+block append scripts
+    script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+
+block append content-body
+  .container-flex
+    header.header-site:               include ../jade/_header_site
+    nav.bd-b:                         include _breadcrumbs
+
+    article.text-gray-strong
+      section:                        include _static_content
+
+    footer
+      section.footer-links.framing:   include ../jade/_footer_links
+      section.rss:                    include ../jade/_rss
