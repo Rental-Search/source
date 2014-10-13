@@ -30,7 +30,8 @@ from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
 from accounts.search import patron_search
 
-from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm
+from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm, \
+    ProductSearchRangeForm
 from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
 from products.choices import UNIT, SORT
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
@@ -594,7 +595,7 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         self.form = FacetedSearchForm(
             dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
             searchqueryset=sqs)
-        sqs, self.suggestions, self.top_products = self.form.search()
+        sqs, self.suggestions, self.top_products = self._get_sqs()
         # we use canonical_parameters to generate the canonical url in the header
         self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
         self.canonical_parameters.pop('categorie', None)
@@ -616,6 +617,9 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         context['canonical_parameters'] = self.canonical_parameters
         context['top_products'] = self.top_products
         return context
+
+    def _get_sqs(self):
+        return self.form.search()
 
 @never_cache
 @secure_required
@@ -749,6 +753,24 @@ class HomepageView(BreadcrumbsMixin, TemplateView):
 
 class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
+
+    def _get_sqs(self):
+        sqs, suggestions, top_products = super(ProductListView, self)._get_sqs()
+
+        form = ProductSearchRangeForm(self.request.GET)
+        if form.is_valid():
+            if form.cleaned_data['price_from'] is not None:
+                sqs = sqs.filter(price__gte=form.cleaned_data['price_from'])
+            if form.cleaned_data['price_to'] is not None:
+                sqs = sqs.filter(price__lte=form.cleaned_data['price_to'])
+            if form.cleaned_data['date_from'] is not None:
+                sqs = sqs.filter(created_at_date__gte=form.cleaned_data['date_from'])
+            if form.cleaned_data['date_to'] is not None:
+                sqs = sqs.filter(created_at_date__lte=form.cleaned_data['date_to'])
+        else:
+            raise Http404
+
+        return sqs, suggestions, top_products
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
     model = Product

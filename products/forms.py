@@ -24,6 +24,7 @@ from products.choices import UNIT, SORT
 
 from eloue.geocoder import GoogleGeocoder
 from eloue import legacy
+from rent.utils import DATE_FORMAT
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -121,6 +122,23 @@ class FacetedSearchForm(SearchForm):
         else:
             return self.searchqueryset, None, top_products
 
+
+class ProductSearchRangeForm(forms.Form):
+    price_from = forms.DecimalField(decimal_places=2, max_digits=10, min_value=0, required=False)
+    price_to = forms.DecimalField(decimal_places=2, max_digits=10, min_value=0, required=False)
+    date_from = forms.DateField(input_formats=DATE_FORMAT, required=False)
+    date_to = forms.DateField(input_formats=DATE_FORMAT, required=False)
+
+    def is_valid(self):
+        is_valid = super(ProductSearchRangeForm, self).is_valid()
+        if is_valid:
+            if (self.cleaned_data['price_to'] is not None and self.cleaned_data['price_from'] is not None and
+                    self.cleaned_data['price_to'] < self.cleaned_data['price_from']):
+                is_valid = False
+            if (self.cleaned_data['date_to'] is not None and self.cleaned_data['date_from'] is not None and
+                    self.cleaned_data['date_to'] < self.cleaned_data['date_from']):
+                is_valid = False
+        return is_valid
 
 class AlertSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
