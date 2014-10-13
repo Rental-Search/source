@@ -20,19 +20,7 @@ class CategorySerializer(ModelSerializer):
             'is_child_node', 'is_leaf_node', 'is_root_node')
         immutable_fields = ('parent',)
 
-class RequiredBooleanField(BooleanField):
-    def __init__(self, required=None, **kwargs):
-        return super(RequiredBooleanField, self).__init__(required=True, **kwargs)
-
-def map_require_boolean_field(field_mapping):
-    from django.db.models import BooleanField as ModelBooleanField
-    field_mapping[ModelBooleanField] = RequiredBooleanField
-    return field_mapping
-
-class RequiredBooleanFieldSerializerMixin(object):
-    field_mapping = map_require_boolean_field(ModelSerializer.field_mapping)
-
-class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
+class ProductSerializer(ModelSerializer):
     address = NestedAddressSerializer()
     phone = NestedPhoneNumberSerializer(required=False)
 
