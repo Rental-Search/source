@@ -137,13 +137,14 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.isRealEstate = false;
                 if (rootCategory.name === "Automobile") {
                     $scope.isAuto = true;
-                } else if (rootCategory.name === "Hébergement") {
+                } else if (rootCategory.name === "Location saisonnière") {
                     $scope.isRealEstate = true;
                 }
             };
 
             $scope.searchCategory = function () {
-                if ($scope.rootCategory && $scope.product.summary && ($scope.product.summary.length > 1)) {
+                //TODO: enable for auto and real estate
+                if (!$scope.isAuto && !$scope.isRealEstate &&$scope.rootCategory && $scope.product.summary && ($scope.product.summary.length > 1)) {
                     CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function (categories) {
                         var nodeCategoryList = [];
                         var leafCategoryList = [];
