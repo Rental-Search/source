@@ -113,6 +113,28 @@ class PictureTest(APITestCase):
         # check product has been applied properly
         self.assertTrue(response.data['product'].endswith(_location('product-detail', pk=1)))
 
+    def test_picture_create_url_wrong_url(self):
+        response = self.client.post(_location('picture-list'), {
+            'product': _location('product-detail', pk=1),
+            'image': {
+                'content': 'wrong_url',
+                'encoding': 'url',
+            }
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('image', response.data['errors'])
+
+    def test_picture_create_url_not_exist_url(self):
+        response = self.client.post(_location('picture-list'), {
+            'product': _location('product-detail', pk=1),
+            'image': {
+                'content': IMAGE_URL.replace('.jpg', '.png'),
+                'encoding': 'url',
+            }
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('image', response.data['errors'])
+
     def test_picture_create_not_mine_product(self):
         response = self.client.post(_location('picture-list'), {
             'product': _location('product-detail', pk=6),
@@ -150,12 +172,26 @@ class PictureTest(APITestCase):
         })
         self.assertEquals(response.status_code, 200, response.data)
 
+    def test_picture_edit_not_mine_product(self):
+        response = self.client.patch(_location('picture-detail', pk=2), {
+            'image': {
+                'content': IMAGE_URL,
+                'encoding': 'url',
+            }
+        })
+        self.assertEquals(response.status_code, 404, response.data)
+
     def test_picture_delete(self):
-        Picture = get_model('products', 'Picture')
-        self.assertEquals(Picture.objects.filter(pk=1).count(), 1)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 1)
         response = self.client.delete(_location('picture-detail', pk=1))
         self.assertEquals(response.status_code, 204, response.data)
-        self.assertEquals(Picture.objects.filter(pk=1).count(), 0)
+        self.assertEquals(self.model.objects.filter(pk=1).count(), 0)
+
+    def test_picture_delete_not_mine_product(self):
+        self.assertEquals(self.model.objects.filter(pk=2).count(), 1)
+        response = self.client.delete(_location('picture-detail', pk=2))
+        self.assertEquals(response.status_code, 404, response.data)
+        self.assertEquals(self.model.objects.filter(pk=2).count(), 1)
 
     def test_picture_list_paginated(self):
         response = self.client.get(_location('picture-list'))
@@ -710,7 +746,49 @@ class PriceTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'price']
 
     def setUp(self):
+        self.model = get_model('products', 'Price')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_price_create_not_mine_product(self):
+        response = self.client.post(_location('price-list'), {
+            'product': _location('product-detail', pk=6),
+            'amount': 10,
+            'unit': 0,
+            'currency': 'EUR'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_price_create_negative_amount(self):
+        response = self.client.post(_location('price-list'), {
+            'product': _location('product-detail', pk=1),
+            'amount': -10,
+            'unit': 0,
+            'currency': 'EUR'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('amount', response.data['errors'], response.data)
+
+    def test_price_create_large_amount(self):
+        response = self.client.post(_location('price-list'), {
+            'product': _location('product-detail', pk=1),
+            'amount': 12345678912,
+            'unit': 0,
+            'currency': 'EUR'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('amount', response.data['errors'], response.data)
+
+    def test_price_create_no_fields(self):
+        response = self.client.post(_location('price-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'amount', 'product', 'unit', }
+        default_fields = set()
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
 
     def test_price_create(self):
         response = self.client.post(_location('price-list'), {
@@ -744,6 +822,12 @@ class PriceTest(APITestCase):
         Price = get_model('products', 'Price')
         price = Price.objects.get(pk=response.data['id'])
         self.assertEqual(price.name, 'Name')
+
+    def test_price_edit_not_mine_product(self):
+        response = self.client.patch(_location('price-detail', pk=14), {
+            'name': 'Name',
+        })
+        self.assertEquals(response.status_code, 404, response.data)
 
     def test_price_get_by_id(self):
         response = self.client.get(_location('price-detail', pk=1))
