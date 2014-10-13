@@ -1745,6 +1745,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                productRelatedMessagesLoadService.updateMessage = function (message) {
+                    return ProductRelatedMessages.update({id: message.id}, message);
+                };
+
+
                 return productRelatedMessagesLoadService;
             }
         ]);
