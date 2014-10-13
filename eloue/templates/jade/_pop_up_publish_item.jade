@@ -20,7 +20,7 @@
                     form(name="publishAdForm", ng-submit="publishAd()", role="form", novalidate).input-group.form-wrapper.col-sm-10.col-sm-offset-1
                       fieldset(data-ng-disabled="submitInProgress")
                         .row
-                            .col-sm-12: input(type="text", name="summary", placeholder="Titre", ng-required="!isAuto", ng-model="product.summary", ng-change="searchCategory()", ng-show="!isAuto").form-control
+                            .col-sm-12: input(type="text", name="summary", placeholder="Titre", ng-required="!isAuto", ng-model="product.summary", ng-blur="searchCategory()", ng-show="!isAuto").form-control
                             .col-sm-6: input(type="text", name="brand", placeholder="Marque *", ng-required="isAuto", ng-model="product.brand", ng-show="isAuto").form-control
                             .col-sm-6: input(type="text", name="model", placeholder="Modèle *", ng-required="isAuto", ng-model="product.model", ng-show="isAuto").form-control
                         .row
