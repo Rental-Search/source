@@ -82,7 +82,7 @@ class Product(models.Model):
     sites = models.ManyToManyField(Site, related_name='products')
     payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
-    objects = ProductManager()
+    objects = ProductManager() # FIXME: this should be first manager in the class
     
     modified_at = models.DateTimeField(blank=True, null=True, auto_now=True)
 
