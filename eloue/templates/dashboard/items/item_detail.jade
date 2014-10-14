@@ -1,2 +1,4 @@
-span(class="section_header", ui-view="tabs")
-span(class="scrollbar-custom bg-lite", ui-view="details")
+aside
+    include tabs.jade
+    section.scrollbar-custom.bg-lite
+        span(ui-view="details")
