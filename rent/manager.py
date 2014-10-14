@@ -40,6 +40,18 @@ class BookingManager(Manager):
             ]
         )
 
+    def active(self):
+        return self.exclude(
+            state__in=[
+                BOOKING_STATE.AUTHORIZING,
+                BOOKING_STATE.REFUNDED,
+                BOOKING_STATE.DEPOSIT,
+                BOOKING_STATE.CLOSING,
+                BOOKING_STATE.UNACCEPTED,
+                BOOKING_STATE.ACCEPTED_UNAUTHORIZED,
+            ]
+        )
+
     def get_query_set(self):
         """Returns a new QuerySet object.  Subclasses can override this method
         to easily customize the behavior of the Manager.

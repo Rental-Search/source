@@ -20,7 +20,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.db.models import Q, Count, Avg, Min, Max
+from django.db.models import Q, Count, Avg
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
@@ -35,7 +35,7 @@ from products.forms import (
     RealEstateEditForm, CarProductEditForm, ProductEditForm,
     ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
 )
-from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread, Price
+from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
 from products.choices import UNIT, SORT
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
@@ -861,8 +861,8 @@ class SuggestCategoryView(AjaxResponseMixin, View):
 
 # REST API 2.0
 
-from rest_framework import response
 from rest_framework.decorators import link
+from rest_framework.response import Response
 import django_filters
 
 from products import serializers, models
@@ -896,19 +896,19 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     def ancestors(self, request, *args, **kwargs):
         obj = self.get_object()
         serializer = self.get_serializer(obj.get_ancestors(), many=True)
-        return response.Response(serializer.data)
+        return Response(serializer.data)
 
     @link()
     def children(self, request, *args, **kwargs):
         obj = self.get_object()
         serializer = self.get_serializer(obj.get_children(), many=True)
-        return response.Response(serializer.data)
+        return Response(serializer.data)
 
     @link()
     def descendants(self, request, *args, **kwargs):
         obj = self.get_object()
         serializer = self.get_serializer(obj.get_descendants(), many=True)
-        return response.Response(serializer.data)
+        return Response(serializer.data)
 
 class ProductFilterSet(filters.FilterSet):
     category__isdescendant = filters.MPTTModelFilter(name='category', lookup_type='descendants', queryset=Category.objects.all())
@@ -940,22 +940,23 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         # add errors if the form is invalid
         if not form.is_valid():
             res['errors'] = form.errors
-            return response.Response(res, status=400)
+            return Response(res, status=400)
 
-        return response.Response(res)
+        return Response(res)
 
     @link()
     def stats(self, request, *args, **kwargs):
         obj = self.get_object()
         # TODO: we would need a better rating calculation in the future
         qs = obj.borrowercomments.aggregate(Avg('note'), Count('id'))
+        id__count = qs['id__count'] or 0
         res = {
-            'average_rating': int(qs['note__avg'] or 0),
-            'booking_comments_count': int(qs['id__count'] or 0),
-            'bookings_count': obj.bookings.count(),
-            'ratings_count': int(qs['id__count'] or 0),
+            'average_rating': qs['note__avg'] or 0,
+            'ratings_count': id__count,
+            'booking_comments_count': id__count,
+            'bookings_count': Booking.on_site.active().filter(Q(owner=obj) | Q(borrower=obj)).count(),
         }
-        return response.Response(res)
+        return Response(res)
 
     def get_serializer_class(self):
         data = getattr(self, '_post_data', None)

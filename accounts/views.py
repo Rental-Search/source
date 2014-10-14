@@ -8,14 +8,14 @@ import itertools
 from logbook import Logger
 
 
-from django_lean.experiments.models import GoalRecord
-from django_lean.experiments.utils import WebUser
+#from django_lean.experiments.models import GoalRecord
+#from django_lean.experiments.utils import WebUser
 
 import gdata.contacts.client
 import gdata.gauth
 
 
-from django.views.generic import ListView, View, TemplateView, DetailView
+from django.views.generic import ListView, View, TemplateView
 from django.views.generic.base import TemplateResponseMixin
 
 
@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Q, Max, Avg
+from django.db.models import Count, Q, Max
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -53,7 +53,7 @@ from products.search import product_search
 
 from rent.models import Booking, BorrowerComment, OwnerComment, Comment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
-from rent.choices import BOOKING_STATE, COMMENT_TYPE_CHOICES
+from rent.choices import BOOKING_STATE
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.decorators import secure_required, mobify, ownership_required
