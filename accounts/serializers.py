@@ -46,76 +46,6 @@ class PhoneNumberSerializer(serializers.ModelSerializer):
 class NestedPhoneNumberSerializer(serializers.NestedModelSerializerMixin, PhoneNumberSerializer):
     pass
 
-class UserSerializer(serializers.ModelSerializer):
-    username = CharField(required=False, max_length=30)
-    password = CharField(required=False, write_only=True, max_length=128)
-    email = EmailField(required=False)
-    is_professional = serializers.NullBooleanField(required=False)
-    avatar = serializers.EncodedImageField(('thumbnail', 'profil', 'display', 'product_page'), required=False)
-    default_address = NestedAddressSerializer(required=False)
-    default_number = NestedPhoneNumberSerializer(required=False)
-    languages = PrimaryKeyRelatedField(many=True, required=False) # TODO: remove if we got to expose language resource
-    average_note = FloatField(read_only=True)
-
-    def restore_object(self, attrs, instance=None):
-        # we should allow password setting on initial user registration only
-        password = attrs.pop('password', None)
-        user = super(UserSerializer, self).restore_object(attrs, instance=instance)
-        if not instance and password:
-            user.set_password(password)
-        return user
-
-    class Meta:
-        model = models.Patron
-        fields = (
-            'id', 'email', 'company_name', 'username', 'first_name', 'last_name', 
-            'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
-            'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
-            'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
-            'date_joined', 'is_active', 'rib', 'password', 'average_note'
-        )
-        public_fields = (
-            'id', 'company_name', 'username', 'is_professional', 'slug',
-            'avatar', 'default_address', 'about', 'school', 'work', 'hobby',
-            'languages', 'url', 'date_joined',
-        )
-        read_only_fields = ('slug', 'url', 'date_joined', 'rib')
-        immutable_fields = ('email', 'password', 'username')
-
-
-class NestedUserSerializer(NestedModelSerializerMixin, UserSerializer):
-    class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.public_fields
-
-
-class PasswordChangeSerializer(serializers.ModelSerializer):
-    current_password = CharField(write_only=True, max_length=128)
-    confirm_password = CharField(write_only=True, max_length=128)
-
-    def restore_object(self, attrs, instance=None):
-        if instance:
-            instance.set_password(attrs['password'])
-        return instance
-
-    def validate_current_password(self, attrs, source):
-        if not self.object.check_password(attrs[source]):
-            raise ValidationError(_("Your current password was entered incorrectly. Please enter it again."))
-        return attrs
-
-    def validate_confirm_password(self, attrs, source):
-        if attrs[source] != attrs['password']:
-            raise ValidationError(_("The two password fields didn't match."))
-        return attrs
-
-    class Meta:
-        model = models.Patron
-        fields = ('password', 'current_password', 'confirm_password')
-        write_only_fields = ('password',)
-
-class BookingPayCreditCardSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Patron
-        fields = ('creditcard',)
 
 class CreditCardSerializer(serializers.ModelSerializer):
     cvv = CharField(max_length=4, min_length=3, write_only=True,
@@ -157,6 +87,83 @@ class CreditCardSerializer(serializers.ModelSerializer):
         read_only_fields = ('masked_number',)
         write_only_fields = ('card_number',)
         immutable_fields = ('expires', 'holder_name', 'holder', 'card_number', 'cvv')
+
+
+class NestedCreditCardSerializer(NestedModelSerializerMixin, CreditCardSerializer):
+    pass
+
+
+class UserSerializer(serializers.ModelSerializer):
+    username = CharField(required=False, max_length=30)
+    password = CharField(required=False, write_only=True, max_length=128)
+    email = EmailField(required=False)
+    is_professional = serializers.NullBooleanField(required=False)
+    avatar = serializers.EncodedImageField(('thumbnail', 'profil', 'display', 'product_page'), required=False)
+    default_address = NestedAddressSerializer(required=False)
+    default_number = NestedPhoneNumberSerializer(required=False)
+    languages = PrimaryKeyRelatedField(many=True, required=False) # TODO: remove if we got to expose language resource
+    average_note = FloatField(read_only=True)
+    creditcard = NestedCreditCardSerializer(read_only=True, required=False)
+
+    def restore_object(self, attrs, instance=None):
+        # we should allow password setting on initial user registration only
+        password = attrs.pop('password', None)
+        user = super(UserSerializer, self).restore_object(attrs, instance=instance)
+        if not instance and password:
+            user.set_password(password)
+        return user
+
+    class Meta:
+        model = models.Patron
+        fields = (
+            'id', 'email', 'company_name', 'username', 'first_name', 'last_name', 
+            'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
+            'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
+            'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
+            'date_joined', 'is_active', 'rib', 'password', 'average_note', 'creditcard'
+        )
+        public_fields = (
+            'id', 'company_name', 'username', 'is_professional', 'slug',
+            'avatar', 'default_address', 'about', 'school', 'work', 'hobby',
+            'languages', 'url', 'date_joined',
+        )
+        read_only_fields = ('slug', 'url', 'date_joined', 'rib',)
+        immutable_fields = ('email', 'password', 'username')
+
+
+class NestedUserSerializer(NestedModelSerializerMixin, UserSerializer):
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.public_fields
+
+
+class PasswordChangeSerializer(serializers.ModelSerializer):
+    current_password = CharField(write_only=True, max_length=128)
+    confirm_password = CharField(write_only=True, max_length=128)
+
+    def restore_object(self, attrs, instance=None):
+        if instance:
+            instance.set_password(attrs['password'])
+        return instance
+
+    def validate_current_password(self, attrs, source):
+        if not self.object.check_password(attrs[source]):
+            raise ValidationError(_("Your current password was entered incorrectly. Please enter it again."))
+        return attrs
+
+    def validate_confirm_password(self, attrs, source):
+        if attrs[source] != attrs['password']:
+            raise ValidationError(_("The two password fields didn't match."))
+        return attrs
+
+    class Meta:
+        model = models.Patron
+        fields = ('password', 'current_password', 'confirm_password')
+        write_only_fields = ('password',)
+
+class BookingPayCreditCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Patron
+        fields = ('creditcard',)
 
 class ProAgencySerializer(GeoModelSerializer):
     address = CharField(source='address1')
