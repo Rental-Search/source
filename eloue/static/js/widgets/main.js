@@ -122,22 +122,30 @@ require([
             });
         }
 
-        var districtFake = $("#district-fake"), priceFake = $("#price-fake");
-        if (districtFake) {
-            districtFake.slider({
+        var rangeSlider = $("#range-slider");
+        if (rangeSlider) {
+            rangeSlider.slider({
                 range: "min",
                 value: 400,
                 min: 1,
-                max: 700
+                max: 700,
+                slide: function(event, ui) {
+                    $("#range").val(ui.value);
+                }
             });
         }
 
-        if (priceFake) {
-            priceFake.slider({
+        var priceSlider = $("#price-slider");
+        if (priceSlider) {
+            priceSlider.slider({
                 range: true,
                 min: 0,
                 max: 700,
-                values: [100, 400]
+                values: [100, 400],
+                slide: function(event, ui) {
+                    $("#price-min").val(ui.values[0]);
+                    $("#price-max").val(ui.values[1]);
+                }
             });
         }
 

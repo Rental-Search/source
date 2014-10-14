@@ -38,9 +38,9 @@ form#detail-search(action=".").section-body
       //- map here
 
   //- .slider
-  label.caption(for="district") rayon
-  input#district(type="number", data-type="range", name="r", min="{{ form.fields.r.min_value }}", max="{{ form.fields.r.max_value }}", step="1", value="{{ form.cleaned_data.r }}")
-  #district-fake
+  label.caption(for="range") rayon
+  input#range(type="number", data-type="range", name="r", value="{{ form.cleaned_data.r }}")
+  #range-slider
 
   label.caption(for="start-date") date de début
   .date-picker
@@ -55,9 +55,9 @@ form#detail-search(action=".").section-body
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="price") prix
-  input#price-min((type="number", data-type="range", name="price_from", min="1", max="100", step="1")
-  input#price-max((type="number", data-type="range", name="price_to", min="1", max="100", step="1")
-  #price-fake
+  input#price-min(type="number", data-type="range", name="price_from", value="{{ price_from }}")
+  input#price-max(type="number", data-type="range", name="price_to", value="{{ price_to }}")
+  #price-slider
 
   p.caption loueur
   .checkbox
