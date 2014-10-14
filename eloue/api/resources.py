@@ -496,10 +496,10 @@ class ProductResource(UserSpecificResource):
                 sqs = sqs.auto_query(filters['q'])
 
             if "l" in filters:
-                name, (lat, lon), radius = GoogleGeocoder().geocode(filters['l'])
-                if lat and lon:
+                name, coords, radius = GoogleGeocoder().geocode(filters['l'])
+                if all(coords):
                     radius = filters.get('r', radius if radius else DEFAULT_RADIUS)
-                    point = Point(lat, lon)
+                    point = Point(coords)
                     sqs = sqs.dwithin(
 					    'location', point, Distance(km=radius)
 					) #.distance('location', point)
@@ -526,8 +526,9 @@ class ProductResource(UserSpecificResource):
     def get_object_list(self, request):
         object_list = super(ProductResource, self).get_object_list(request)
         if request and "l" in request.GET:
-            name, (lat, lon), radius = GoogleGeocoder().geocode(request.GET['l'])
-            object_list = object_list.distance(Point(lat, lon), field_name='address__position')
+            name, coords, radius = GoogleGeocoder().geocode(request.GET['l'])
+            if all(coords):
+                object_list = object_list.distance(Point(coords), field_name='address__position')
         return object_list
 
     def _obj_process_fields(self, product, picture_data, day_price_data):

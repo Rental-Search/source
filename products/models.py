@@ -897,9 +897,9 @@ class Alert(models.Model):
         return smart_unicode(self.designation)
     
     def geocode(self):
-        name, (lat, lon), radius = GoogleGeocoder().geocode(self.location)
-        if lat and lon:
-            return Point(lat, lon)
+        name, coords, radius = GoogleGeocoder().geocode(self.location)
+        if all(coords):
+            return Point(coords)
     
     def save(self, *args, **kwargs):
         if not self.created_at:

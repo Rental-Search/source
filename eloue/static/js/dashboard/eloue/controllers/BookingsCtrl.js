@@ -78,6 +78,18 @@ define(["angular", "eloue/app"], function (angular) {
                         return "in-progress"
                 }
             };
+
+            $scope.filterByBoth();
+            $('.chosen-drop').mCustomScrollbar({
+                scrollInertia: '100',
+                autoHideScrollbar: true,
+                theme: 'dark-thin',
+                scrollbarPosition: 'outside',
+                advanced:{
+                    autoScrollOnFocus: false,
+                    updateOnContentResize: true
+                }
+            });
         }
     ]);
 });

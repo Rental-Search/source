@@ -25,6 +25,13 @@
   font-weight: $fw-bold
   text-align: center
   border: 1px solid transparent
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] &
+    cursor: not-allowed
+    pointer-events: none // Future-proof disabling of clicks
+    @include opacity(.65)
+    @include box-shadow(none)
 
 .btn
   font-size: $font-size-base
