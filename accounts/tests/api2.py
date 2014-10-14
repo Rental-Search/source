@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from operator import itemgetter
 import os.path
 import base64
 import datetime
@@ -364,6 +365,25 @@ class UsersTest(APITestCase):
         self.assertEqual(user.place_of_birth, 'Earth')
         self.assertEqual(user.rib, 'Some rib')
         self.assertEqual(user.url, 'http://www.website.com')
+
+
+class StaffUserTest(APITestCase):
+    fixtures = ['patron_staff']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('patron-list'), {'ordering': 'username'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('username')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('patron-list'), {'ordering': '-username'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('username'), reverse=True))
 
 
 class AnonymousPhoneNumbersTest(APITestCase):
@@ -764,6 +784,38 @@ class AddressTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
+    def test_ordering(self):
+        response = self.client.get(_location('address-list'), {'ordering': 'city'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('city')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('address-list'), {'ordering': '-city'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('city'), reverse=True))
+
+
+class StaffAddressTest(APITestCase):
+    fixtures = ['patron_staff', 'address']
+    sort_fields = ('city', 'country')
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('address-list'), {'ordering': 'city'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('city')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('address-list'), {'ordering': '-city'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('city'), reverse=True))
+
 
 class AnonymousCreditCardTest(APITestCase):
 
@@ -1071,6 +1123,37 @@ class ProAgencyTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
+
+    def test_ordering(self):
+        response = self.client.get(_location('proagency-list'), {'ordering': 'city'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('city')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('proagency-list'), {'ordering': '-city'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('city'), reverse=True))
+
+
+class StaffProAgencyTest(APITestCase):
+    fixtures = ['patron_staff', 'proagency']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('proagency-list'), {'ordering': 'city'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('city')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('proagency-list'), {'ordering': '-city'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('city'), reverse=True))
 
 
 class ProPackageTest(APITestCase):
