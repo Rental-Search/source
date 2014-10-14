@@ -5,7 +5,7 @@
       #carousel-product.carousel.slide(data-ride="carousel")
         .carousel-inner
           {% for picture in pictures %}
-          .item(style="background-image: url({{ picture.display.url }})", class="{% if forloop.first %}active{% endif %}")
+          .item(style="{% if picture.display.url %}background-image: url({{ picture.display.url }}){% endif %}", class="{% if forloop.first %}active{% endif %}")
           {% endfor %}
         a(href="#carousel-product", role="button", data-slide="prev").left.carousel-control
           i.flaticon.solid.left-2
@@ -13,7 +13,7 @@
           i.flaticon.solid.right-2
       .items-thumbnail-inner
         {% for picture in pictures %}
-        div: a.items-thumbnail(href="#")(style="background-image: url({{ picture.thumbnail.url }})")
+        div: a.items-thumbnail(href="#"): img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}")
         {% endfor %}
       {% endif %}
       {% endwith %}
