@@ -72,6 +72,7 @@ class BookingActionSerializer(ModelSerializer):
 
     def save_object(self, obj, **kwargs):
         obj._fsm_transition_method(**kwargs)
+        obj.save()
 
     class Meta:
         model = models.Booking
