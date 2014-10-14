@@ -499,7 +499,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                             subPromises.push(PicturesService.getPicturesByProduct(product.id).$promise);
                             subPromises.push(PricesService.getProductPricesPerDay(product.id).$promise);
-                            subPromises.push(Products.getStats({id: product.id}).$promise);
+                            subPromises.push(Products.getStats({id: product.id, _cache: new Date().getTime()}).$promise);
                             $q.all(subPromises).then(
                                 function (results) {
 
@@ -516,6 +516,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                     }
 
                                     product.stats = results[2];
+                                    if (product.stats) {
+                                        if (product.stats.average_rating) {
+                                            product.stats.average_rating = Math.round(product.stats.average_rating);
+                                        } else {
+                                            product.stats.average_rating = 0;
+                                        }
+                                    }
+
                                     productDeferred.resolve(product);
                                 },
                                 function (reasons) {
@@ -1233,6 +1241,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 var productResult = angular.copy(productData);
 
                 productResult.stats = statsData;
+                if (productResult.stats) {
+                    if (productResult.stats && productResult.stats.average_rating) {
+                        productResult.stats.average_rating = Math.round(productResult.stats.average_rating);
+                    } else {
+                        productResult.stats.average_rating = 0;
+                    }
+                }
 
                 // Parse owner
                 if (!!ownerData) {
