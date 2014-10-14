@@ -20,10 +20,15 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.product = product;
                 $scope.markListItemAsSelected("item-tab-", "terms");
                 $scope.isPrfessional = product.ownerDetails.is_professional;
+                $scope.initCustomScrollbars();
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
-                    CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
-                        $scope.updateTermsBlocks(rootCategory);
-                    });
+                    if (!nodeCategory.parent) {
+                        $scope.updateTermsBlocks(nodeCategory);
+                    } else {
+                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                            $scope.updateTermsBlocks(rootCategory);
+                        });
+                    }
                 });
             });
 
