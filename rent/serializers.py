@@ -70,9 +70,9 @@ class BookingActionSerializer(ModelSerializer):
                 return attrs
         raise ValidationError(self.error_messages['invalid_action'] % dict(action=action, state=self.object.state))
 
-    def save_object(self, obj, **kwargs):
+    def save_object(self, obj, force_insert=False, force_update=False, using=None, update_fields=None, **kwargs):
         obj._fsm_transition_method(**kwargs)
-        obj.save()
+        super(BookingActionSerializer, self).save_object(obj, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
     class Meta:
         model = models.Booking

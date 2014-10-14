@@ -30,6 +30,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
+                $scope.markListItemAsSelected("item-tab-", "tariffs");
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
                     CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
                         $scope.updateFieldSet(rootCategory);

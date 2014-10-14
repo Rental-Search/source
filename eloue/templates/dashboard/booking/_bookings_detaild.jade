@@ -48,6 +48,10 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
                 ul.zebra-list.indent-md-v
                     li.clearfix
+                        .col-xs-3 Statut
+                        .col-xs-9
+                            span(translate="{{bookingDetails.state}}")
+                    li.clearfix
                         .col-xs-3 Début
                         .col-xs-9
                             span(translate="{{bookingDetails.start_date.week_day}}")
