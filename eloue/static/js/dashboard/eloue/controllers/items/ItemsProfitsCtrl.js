@@ -19,6 +19,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             BookingsService.getBookingsByProduct($stateParams.id).then(function (bookings) {
                 $scope.markListItemAsSelected("item-tab-", "profits");
+                $scope.initCustomScrollbars();
                 $scope.bookings = bookings;
                 $scope.numberOfBookings = bookings.length;
                 var sum = 0;
