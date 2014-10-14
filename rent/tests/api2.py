@@ -192,7 +192,7 @@ class BookingTest(APITransactionTestCase):
         uuid = response.data['uuid']
 
         response = self.client.put(_location('booking-cancel', uuid))
-        self.assertEqual(response.status_code, 400, response.data)
+        self.assertEqual(response.status_code, 200, response.data)
 
     def test_booking_pay_existing_card(self):
         response = self.client.post(_location('booking-list'), {

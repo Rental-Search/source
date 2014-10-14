@@ -339,8 +339,9 @@ class Booking(models.Model):
     @transition(field=state, source=[BOOKING_STATE.AUTHORIZING, BOOKING_STATE.AUTHORIZED, BOOKING_STATE.PENDING], target=BOOKING_STATE.CANCELED)
     def cancel(self, *args, **kwargs):
         """Cancel preapproval for the borrower"""
-        self.payment.cancel_preapproval()
-        self.send_cancelation_email(*args, **kwargs) # 'source' = request.user
+        if self.state != BOOKING_STATE.AUTHORIZING:
+            self.payment.cancel_preapproval()
+        self.send_cancelation_email(*args, **kwargs)  # 'source' = request.user
         self.canceled_at = datetime.datetime.now()
     
     @transition(field=state, source=BOOKING_STATE.PENDING, target=BOOKING_STATE.ONGOING)
