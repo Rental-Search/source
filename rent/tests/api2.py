@@ -456,6 +456,25 @@ class SinisterTest(APITestCase):
     def setUp(self):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
+    def test_sinister_create_no_fields(self):
+        response = self.client.post(_location('sinister-list'))
+        self.assertEquals(response.status_code, 400, response.data)
+
+        required_fields = {'booking', 'product', 'description', 'author'}
+        default_fields = {'author'}
+        for field in required_fields - default_fields:
+            self.assertIn(field, response.data['errors'], response.data)
+
+    def test_sinister_create_product_from_wrong_booking(self):
+        response = self.client.post(_location('sinister-list'), {
+            'product': _location('product-detail', pk=2),
+            'patron': _location('patron-detail', pk=1),
+            'booking': _location('booking-detail', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'),
+            'description': 'Description'
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+
     def test_sinister_create(self):
         response = self.client.post(_location('sinister-list'), {
             'product': _location('product-detail', pk=1),
