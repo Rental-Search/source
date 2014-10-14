@@ -308,7 +308,7 @@ class Booking(models.Model):
     # FSM conditions
     
     def not_need_ipn(self):
-        return self.payment.NOT_NEED_IPN
+        return self.payment.NOT_NEED_IPN if self.payment else False
 
     def is_expired(self):
         return self.started_at < datetime.datetime.now()
