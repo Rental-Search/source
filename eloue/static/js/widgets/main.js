@@ -354,15 +354,15 @@ require([
                 var image, image_hover;
 
                 if (markerId == "li#marker-") {
-                    image = new google.maps.MarkerImage('/static/images/markers_new_crush.png',
-                        new google.maps.Size(20, 32),
-                        new google.maps.Point(0, 36 * i),
-                        new google.maps.Point(10, 32));
+                    image = new google.maps.MarkerImage('/static/images/markers_smooth_aligned.png',
+                        new google.maps.Size(25, 27),
+                        new google.maps.Point(0, 28 * i),
+                        new google.maps.Point(13, 27));
 
-                    image_hover = new google.maps.MarkerImage('/static/images/markers_new_crush.png',
-                        new google.maps.Size(20, 32),
-                        new google.maps.Point(22, 36 * i),
-                        new google.maps.Point(10, 32));
+                    image_hover = new google.maps.MarkerImage('/static/images/markers_smooth_aligned.png',
+                        new google.maps.Size(25, 27),
+                        new google.maps.Point(29, 28 * i),
+                        new google.maps.Point(13, 27));
                 }
 
                 var myLatLng = new google.maps.LatLng(product.lat, product.lng);
