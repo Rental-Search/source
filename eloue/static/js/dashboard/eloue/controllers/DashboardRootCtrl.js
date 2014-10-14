@@ -88,9 +88,11 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                     autoHideScrollbar: true,
                     theme: 'dark-thin',
                     mouseWheel:{
+                        updateOnContentResize: true,
                         disableOver: false
                     }
                 });
+                $(window).trigger('resize');
             };
 
             $scope.getAvatar = function (uri) {

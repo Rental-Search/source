@@ -34,15 +34,16 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             to: "au",
 
             //Booking status
-            unpaid: "Unpaid",
-            authorized: "Authorized",
-            rejected: "Rejected",
-            pending: "Pending",
-            canceled: "Canceled",
-            ongoing: "Ongoing",
-            ended: "Ended",
-            closed: "Closed",
-            incident: "Incident"
+            unpaid: "Impayé",
+            authorized: "En attente",
+            rejected: "Rejeté",
+            pending: "A venir",
+            canceled: "Annulé",
+            ongoing: "En cours",
+            ended: "Terminé",
+            closed: "Clôture",
+            incident: "Incident",
+            refunded: "Remboursé"
         });
 
         $translateProvider.preferredLanguage("fr");
