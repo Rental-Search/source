@@ -7,7 +7,7 @@ form#detail-search(action=".").section-body
 
   p.caption catégories
   .clear-selector
-    select.form-control(name="categories")
+    select#category-selection.form-control(name="categories")
       option(value="") Tous les catigories
       if form.cleaned_data.q
         {% for value, count in facets.fields.categories %}

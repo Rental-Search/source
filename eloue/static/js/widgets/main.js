@@ -122,29 +122,27 @@ require([
             });
         }
 
-        var rangeSlider = $("#range-slider");
-        if (rangeSlider) {
-            rangeSlider.slider({
-                range: "min",
-                value: 400,
-                min: 1,
-                max: 700,
-                slide: function(event, ui) {
-                    $("#range").val(ui.value);
-                }
+        var categorySelection = $("#category-selection");
+        var detailSearchForm = $("#detail-search");
+        if (detailSearchForm && categorySelection) {
+            categorySelection.change(function() {
+                var location = $(this).find(":selected").attr("location");
+                detailSearchForm.attr("action", location);
             });
         }
-
+        var rangeSlider = $("#range-slider");
         var priceSlider = $("#price-slider");
         if (priceSlider) {
+            var priceMinInput = $("#price-min");
+            var priceMaxInput = $("#price-max");
             priceSlider.slider({
                 range: true,
-                min: 0,
-                max: 700,
-                values: [100, 400],
+                min: rangeSlider.attr("min-value"),
+                max: rangeSlider.attr("max-value"),
+                values: [priceMinInput.val(), priceMaxInput.val()],
                 slide: function(event, ui) {
-                    $("#price-min").val(ui.values[0]);
-                    $("#price-max").val(ui.values[1]);
+                    priceMinInput.val(ui.values[0]);
+                    priceMaxInput.val(ui.values[1]);
                 }
             });
         }
@@ -234,7 +232,6 @@ require([
                 });
 
                 var radius = Number($("#range").val().replace(',', '.'));
-
                 var mapOptions = {
                     zoom: zoom(radius),
                     disableDefaultUI: true,
@@ -257,6 +254,20 @@ require([
                         }
                     }
                 );
+
+                if (rangeSlider) {
+                    var rangeInput = $("#range");
+                    rangeSlider.slider({
+                        range: "min",
+                        value: rangeInput.val(),
+                        min: 1,
+                        max: rangeSlider.attr("max-value"),
+                        slide: function(event, ui) {
+                            rangeInput.val(ui.value);
+                            map.setZoom(zoom(ui.value));
+                        }
+                    });
+                }
 
                 var products = [];
                 $('li[id^="marker-"]').each(function () {
