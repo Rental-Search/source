@@ -15,22 +15,22 @@ form#detail-search(action=".").section-body
           {% with value|category as category %}
           if breadcrumbs.categorie
             if breadcrumbs.categorie.value = category.slug
-              option(selected, value="{{ category.slug }}", location="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+              option(selected, location="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
             else
-              option(value="{{ category.slug }}", location="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+              option(location="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
           else
-            option(value="{{ category.slug }}", location="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+            option(location="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
           {% endwith %}
         {% endfor %}
       else
         for category in category_list
           if breadcrumbs.categorie
             if breadcrumbs.categorie.value = category.slug
-              option(selected, value="{{ category.slug }}", location="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+              option(selected, location="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
             else
-              option(value="{{ category.slug }}", location="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+              option(location="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
           else
-            option(value="{{ category.slug }}", location="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+            option(location="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
 
   label.caption(for="where") où
   input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
@@ -48,18 +48,18 @@ form#detail-search(action=".").section-body
   label.caption(for="start-date") date de début
   .date-picker
     .table-cell.main-cell
-      input#start-date(type="text", placeholder="", name="date_from", value="{{ date_from }}").form-control.date
+      input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="end-date") date de fin
   .date-picker
     .table-cell.main-cell
-      input#end-date(type="text", placeholder="", name="date_to", value="{{ date_to }}").form-control.date
+      input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="price") prix
-  input#price-min(type="number", data-type="range", name="price_from", value="{{ price_from }}")
-  input#price-max(type="number", data-type="range", name="price_to", value="{{ price_to }}")
+  input#price-min(type="number", data-type="range", name="price_from", value="{{ form.cleaned_data.price_from }}")
+  input#price-max(type="number", data-type="range", name="price_to", value="{{ form.cleaned_data.price_to }}")
   #price-slider(min-value="{{ price_min }}", max-value="{{ price_max }}")
 
   p.caption loueur

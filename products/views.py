@@ -595,7 +595,11 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                 }
         
         self.site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
-        sqs, self.suggestions, self.top_products = self._do_form_search(sqs)
+        self.form = self.form_class(
+            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
+            searchqueryset=sqs
+        )
+        sqs, self.suggestions, self.top_products = self.form.search()
         # we use canonical_parameters to generate the canonical url in the header
         self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
         self.canonical_parameters.pop('categorie', None)
@@ -617,12 +621,6 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         context['canonical_parameters'] = self.canonical_parameters
         context['top_products'] = self.top_products
         return context
-
-    def _do_form_search(self, sqs):
-        self.form = FacetedSearchForm(
-            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
-            searchqueryset=sqs)
-        return self.form.search()
 
 @never_cache
 @secure_required
@@ -771,19 +769,28 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
 
 class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
+    form_class = ProductFacetedSearchForm
 
-    def _do_form_search(self, sqs):
-        self.form = ProductFacetedSearchForm(
-            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
-            searchqueryset=sqs)
-        return self.form.search()
+    def get_breadcrumbs(self, request):
+        breadcrumbs = super(ProductListView, self).get_breadcrumbs(request)
+        form = self.form
+        breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date from', 'facet': False}
+        breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date to', 'facet': False}
+        breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'date from', 'facet': False}
+        breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'date to', 'facet': False}
+        return breadcrumbs
 
     def get_context_data(self, **kwargs):
         context = {
             'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
         }
-        context.update(Price.objects.filter(product__in=[obj.pk for obj in self.sqs]).aggregate(price_min=Min('amount'), price_max=Max('amount')))
         context.update(super(ProductListView, self).get_context_data(**kwargs))
+        prices = [price[0] for price in context['facets']['fields']['price']]
+        if prices:
+            context.update({
+                'price_min': min(prices),
+                'price_max': max(prices),
+            })
         return context
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
