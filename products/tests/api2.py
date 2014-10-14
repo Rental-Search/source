@@ -373,21 +373,7 @@ class AnonymousProductTest(APITestCase):
 
     def test_product_list_allowed(self):
         response = self.client.get(_location('product-list'))
-        self.assertEquals(response.status_code, 200)
-        expected = {
-            'count': 8,
-            'previous': None,
-            'next': None,
-        }
-        self.assertDictContainsSubset(expected, response.data)
-        self.assertIn('results', response.data)
-
-        self.assertEquals(response.data['count'], len(response.data['results']))
-        for field in self.public_fields:
-            self.assertIn(field, response.data['results'][0], field)
-
-        for field in self.private_fields:
-            self.assertNotIn(field, response.data['results'][0], field)
+        self.assertEquals(response.status_code, 401)
 
     def test_product_search_allowed(self):
         response = self.client.get(_location('product-list'), {
@@ -493,7 +479,7 @@ class ProductTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         # check pagination data format in the response
         expected = {
-            'count': 8,
+            'count': 6,
             'previous': None,
             'next': None,
         }

@@ -28,7 +28,7 @@ class AnonymousUsersTest(APITestCase):
         'school', 'hobby', 'languages', 'url', 'date_joined')
     private_fields = (
         'email', 'first_name', 'last_name', 'default_number', 'driver_license_date', 'driver_license_number',
-        'date_of_birth', 'place_of_birth', 'is_active')
+        'date_of_birth', 'place_of_birth', 'is_active', 'creditcard')
 
     def test_location(self):
         self.assertEqual(_location('patron-reset-password', pk=2222), '/api/2.0/users/2222/reset_password/')
@@ -395,21 +395,7 @@ class AnonymousAddressesTest(APITestCase):
 
     def test_address_list_allowed(self):
         response = self.client.get(_location('address-list'))
-        self.assertEquals(response.status_code, 200)
-        expected = {
-            'count': 3,
-            'previous': None,
-            'next': None,
-        }
-        self.assertDictContainsSubset(expected, response.data)
-        self.assertIn('results', response.data)
-
-        self.assertEquals(response.data['count'], len(response.data['results']))
-        for field in self.public_fields:
-            self.assertIn(field, response.data['results'][0], field)
-
-        for field in self.private_fields:
-            self.assertNotIn(field, response.data['results'][0], field)
+        self.assertEquals(response.status_code, 401)
 
     def test_address_show_allowed(self):
         response = self.client.get(_location('address-detail', pk=1))
@@ -487,7 +473,7 @@ class AddressesTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         # check pagination data format in the response
         expected = {
-            'count': 3,
+            'count': 2,
             'previous': None,
             'next': None,
         }
