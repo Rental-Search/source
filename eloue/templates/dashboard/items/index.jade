@@ -27,11 +27,12 @@ block details
             .col-sm-3: input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
             .col-sm-4: input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
         h2 Photos
+        .row
             form#add-picture
               fieldset(data-ng-disabled="submitInProgress")
                 {% verbatim %}
                 ul.text-gray.container-with-square-thumbnail.indent-xs-b
-                    li(ng-show="product.pictures.length < 3"): form#add-picture
+                    li(ng-show="product.pictures.length < 3")
                         label(for="image").file-input-drag
                             i.icon-3x.flaticon.solid.plus
                             input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image

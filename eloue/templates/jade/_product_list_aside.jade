@@ -1,6 +1,7 @@
 -load category facets
 
-form(action="detail-search").section-body
+//- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
+form#detail-search(action=".").section-body
   label.caption(for="what") quoi
   input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
 
@@ -14,19 +15,19 @@ form(action="detail-search").section-body
           {% with value|category as category %}
           if breadcrumbs.categorie
             if breadcrumbs.categorie.value = category.slug
-              option(selected, value="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+              option(selected, value="{{ category.slug }}") {{ category.name }}
             else
-              option(value="{% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+              option(value="{{ category.slug }}") {{ category.name }}
           else
-            option(value="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+            option(value="{{ category.slug }}") {{ category.name }}
           {% endwith %}
         {% endfor %}
       else
         for category in category_list
           if breadcrumbs.categorie.value = category.slug
-            option(selected, value="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+            option(selected, value="{{ category.slug }}") {{ category.name }}
           else
-            option(value="{% facet_url breadcrumbs category.get_ancertors_slug category.slug %}") {{ category.name }}
+            option(value="{{ category.slug }}") {{ category.name }}
 
   label.caption(for="where") où
   input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
@@ -37,37 +38,49 @@ form(action="detail-search").section-body
       //- map here
 
   //- .slider
-  label.caption(for="district") rayon
-  input#district(type="range", name="r", min="5", max="1000", step="1", value="500")
-  #district-fake
+  label.caption(for="range") rayon
+  input#range(type="number", data-type="range", name="r", value="{{ form.cleaned_data.r }}")
+  #range-slider(max-value="{{ form.max_range }}")
 
   label.caption(for="start-date") date de début
   .date-picker
     .table-cell.main-cell
-      input#start-date(type="text", placeholder="").form-control.date
+      input#start-date(type="text", placeholder="", name="date_from", value="{{ date_from }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="end-date") date de fin
   .date-picker
     .table-cell.main-cell
-      input#end-date(type="text", placeholder="").form-control.date
+      input#end-date(type="text", placeholder="", name="date_to", value="{{ date_to }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="price") prix
-  input#price(type="range", name="price", min="5", max="100", step="1")
-  #price-fake
+  input#price-min(type="number", data-type="range", name="price_from", value="{{ price_from }}")
+  input#price-max(type="number", data-type="range", name="price_to", value="{{ price_to }}")
+  #price-slider(min-value="{{ price_min }}", max-value="{{ price_max }}")
 
   p.caption loueur
   .checkbox
     label(for="particular")
+      {% if form.cleaned_data.renter == 'particuliers' %}
+      input(type="checkbox", name="renter", value="particuliers", checked)#particular
+      {% else %}
       input(type="checkbox", name="renter", value="particuliers")#particular
+      {% endif %}
       span.flaticon.stroke.checkmark-1
     | Particulier
   .checkbox
     label(for="professional")
+      {% if form.cleaned_data.renter == 'professionnels' %}
+      input(type="checkbox", name="renter", value="professionnels", checked)#professional
+      {% else %}
       input(type="checkbox", name="renter", value="professionnels")#professional
+      {% endif %}
       span.flaticon.stroke.checkmark-1
     | Professionel
+
+  .indent-t-md
+    input(type="submit", style="width: 100%", value="Filter").btn.btn-lg.btn-advertise.bg-success
 
 //-
   p.caption champ 1
