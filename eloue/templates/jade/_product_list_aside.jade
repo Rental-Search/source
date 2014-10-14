@@ -58,9 +58,9 @@ form#detail-search(action=".").section-body
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="price") prix
-  input#price-min(type="number", data-type="range", name="price_from", value="{{ form.cleaned_data.price_from }}")
-  input#price-max(type="number", data-type="range", name="price_to", value="{{ form.cleaned_data.price_to }}")
-  #price-slider(min-value="{{ price_min }}", max-value="{{ price_max }}")
+  input#price-min(type="number", data-type="range", name="price_from", value="{{ form.cleaned_data.price_from|floatformat:'-2' }}")
+  input#price-max(type="number", data-type="range", name="price_to", value="{{ form.cleaned_data.price_to|floatformat:'-2' }}")
+  #price-slider(min-value="{{ price_min|floatformat:'-2' }}", max-value="{{ price_max|floatformat:'-2' }}")
 
   p.caption loueur
   .checkbox
