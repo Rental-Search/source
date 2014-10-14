@@ -85,7 +85,7 @@ class FacetedSearchForm(SearchForm):
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
                 coords = GoogleGeocoder().geocode(location)[1]
-                if coords:
+                if all(coords):
                     point = Point(coords)
                     sqs = sqs.dwithin(
                         'location', point, Distance(km=radius)
@@ -143,7 +143,7 @@ class AlertSearchForm(SearchForm):
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
                 coords = GoogleGeocoder().geocode(location)[1]
-                if coords:
+                if all(coords):
                     point = Point(coords)
                     sqs = sqs.dwithin(
                         'location', point, Distance(km=radius)

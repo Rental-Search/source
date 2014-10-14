@@ -113,7 +113,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
 
         it("ItemsTariffsCtrl:updateFieldSet real estate", function () {
             var category = {
-                name: "Hébergement"
+                name: "Location saisonnière"
             };
             scope.updateFieldSet(category);
             expect(scope.isAuto).toBe(false);

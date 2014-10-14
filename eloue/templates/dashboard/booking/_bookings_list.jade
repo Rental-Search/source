@@ -10,9 +10,8 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
       .col-xs-3.indent-xs-t
         .select-gradient.without-search
           select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()", eloue-chosen)
-              option(value="undefined") Statut
               {% verbatim %}
-              option(value="") All statut
+              option(value="") Statuts
               option(ng-repeat="state in stateList", value="{{state.value}}") {{state.value | translate}}
 
   ul.scrollbar-custom(eloue-lazy-load, lazy-data="bookingList", lazy-data-provider="BookingsLoadService", lazy-load-method="getBookingList")
@@ -25,7 +24,7 @@ section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
         .col-exposition
           h3.small
             | Location 
-            a(ui-sref="bookings.detail({uuid: booking.uuid})").text-underline-hover {{booking.product.summary}}
+            a(ui-sref="bookings.detail({uuid: booking.uuid})") {{booking.product.summary}}
           p.normal.text-gray
             big.text-primary {{booking.total_amount}}€
             br

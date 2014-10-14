@@ -41,9 +41,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing product related messages.
      */
     EloueCommon.factory("ProductRelatedMessages", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "productrelatedmessages/?", {},
+        return $resource(Endpoints.api_url + "productrelatedmessages/:id/?", {},
             {
                 "get": { method: "GET", url: Endpoints.api_url + "productrelatedmessages/:id/?", params: {id: ":id"}},
+                "update": { method: "PUT" },
                 "save": {method: "POST"}
             });
     }]);

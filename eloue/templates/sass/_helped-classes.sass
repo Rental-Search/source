@@ -38,6 +38,34 @@ h1
     color: $brand-success
     text-decoration: underline
 
+.form-suffix
+  line-height: 3em
+
+a[download]
+  &[href $= ".eps"]
+    &::after
+      content: " [EPS]"
+
+  &[href $= ".psd"]
+    &::after
+      content: " [PSD]"
+
+  &[href $= ".png"]
+    &::after
+      content: " [PNG]"
+
+  &[href $= ".oi"]
+    &::after
+      content: " [OI]"
+
+  &[href $= ".svg"]
+    &::after
+      content: " [SVG]"
+
+  &[href $= ".pdf"]
+    &::after
+      content: " [PDF]"
+
 i[data-toggle="collapse"]
   cursor: pointer
   &:before
@@ -45,6 +73,8 @@ i[data-toggle="collapse"]
   &.collapsed:before
     content: "\e5a9" !important
 
+h2
+  line-height: $line-height-base
 
 .e_loue-mark
   $width: ($indent-md * 1.5)

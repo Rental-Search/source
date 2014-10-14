@@ -143,7 +143,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
                 $scope.product = result;
-                $scope.loadCalendar();
+//                $scope.loadCalendar();
             });
 
             /**

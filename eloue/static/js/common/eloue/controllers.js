@@ -256,7 +256,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
 
             $scope.logout = function() {
                 AuthService.clearUserData();
-                $window.location.reload();
+                $window.location.href = "/";
             };
         }]);
 });

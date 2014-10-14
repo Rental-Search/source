@@ -22,6 +22,16 @@ define(["angular", "eloue/app"], function (angular) {
 
             CategoriesService.getRootCategories().then(function (categories) {
                 $scope.categories = categories;
+                $('.chosen-drop').mCustomScrollbar({
+                    scrollInertia: '100',
+                    autoHideScrollbar: true,
+                    theme: 'dark-thin',
+                    scrollbarPosition: 'outside',
+                    advanced:{
+                        autoScrollOnFocus: false,
+                        updateOnContentResize: true
+                    }
+                });
             });
 
             $scope.filterByCategory = function () {
