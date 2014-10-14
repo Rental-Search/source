@@ -233,7 +233,7 @@ require([
                     startDate: Date.today()
                 });
 
-                var radius = Number($("#district").val().replace(',', '.'));
+                var radius = Number($("#range").val().replace(',', '.'));
 
                 var mapOptions = {
                     zoom: zoom(radius),

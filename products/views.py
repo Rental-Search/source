@@ -20,7 +20,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.db.models import Q, Count, Avg
+from django.db.models import Q, Count, Avg, Min, Max
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
@@ -30,9 +30,12 @@ from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
 from accounts.search import patron_search
 
-from products.forms import AlertSearchForm, AlertForm, FacetedSearchForm, RealEstateEditForm, ProductForm, CarProductEditForm, ProductEditForm, ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm, \
-    ProductSearchRangeForm
-from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
+from products.forms import (
+    AlertSearchForm, AlertForm, FacetedSearchForm, ProductFacetedSearchForm, ProductForm,
+    RealEstateEditForm, CarProductEditForm, ProductEditForm,
+    ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
+)
+from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread, Price
 from products.choices import UNIT, SORT
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
@@ -770,7 +773,7 @@ class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
 
     def _do_form_search(self, sqs):
-        self.form = ProductSearchRangeForm(
+        self.form = ProductFacetedSearchForm(
             dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
             searchqueryset=sqs)
         return self.form.search()
@@ -779,6 +782,7 @@ class ProductListView(ProductList):
         context = {
             'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
         }
+        context.update(Price.objects.filter(product__in=[obj.pk for obj in self.sqs]).aggregate(price_min=Min('amount'), price_max=Max('amount')))
         context.update(super(ProductListView, self).get_context_data(**kwargs))
         return context
 

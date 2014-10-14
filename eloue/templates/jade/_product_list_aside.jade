@@ -40,24 +40,24 @@ form#detail-search(action=".").section-body
   //- .slider
   label.caption(for="range") rayon
   input#range(type="number", data-type="range", name="r", value="{{ form.cleaned_data.r }}")
-  #range-slider
+  #range-slider(max-value="{{ form.max_range }}")
 
   label.caption(for="start-date") date de début
   .date-picker
     .table-cell.main-cell
-      input#date_from(type="text", placeholder="").form-control.date
+      input#start-date(type="text", placeholder="", name="date_from", value="{{ date_from }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="end-date") date de fin
   .date-picker
     .table-cell.main-cell
-      input#date_to(type="text", placeholder="").form-control.date
+      input#end-date(type="text", placeholder="", name="date_to", value="{{ date_to }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label.caption(for="price") prix
   input#price-min(type="number", data-type="range", name="price_from", value="{{ price_from }}")
   input#price-max(type="number", data-type="range", name="price_to", value="{{ price_to }}")
-  #price-slider
+  #price-slider(min-value="{{ price_min }}", max-value="{{ price_max }}")
 
   p.caption loueur
   .checkbox
