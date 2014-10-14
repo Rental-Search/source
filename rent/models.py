@@ -75,7 +75,7 @@ class Booking(models.Model):
     pin = models.CharField(blank=True, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     
-    created_at = models.DateTimeField(blank=True, editable=False)
+    created_at = models.DateTimeField(blank=True, editable=False) # TODO: should use auto_now_add=True here
     canceled_at = models.DateTimeField(null=True, blank=True, editable=False)
     
     preapproval_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
@@ -93,7 +93,7 @@ class Booking(models.Model):
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created_at = datetime.datetime.now()
+            self.created_at = datetime.datetime.now() # TODO: should be replaced with auto_now_add=True in the model's field
             self.pin = str(random.randint(1000, 9999))
             self.deposit_amount = self.product.deposit_amount
             if self.product.has_insurance:
@@ -340,6 +340,7 @@ class Booking(models.Model):
         """Cancel preapproval for the borrower"""
         self.payment.cancel_preapproval()
         self.send_cancelation_email(*args, **kwargs) # 'source' = request.user
+        self.canceled_at = datetime.datetime.now()
     
     @transition(field=state, source=BOOKING_STATE.PENDING, target=BOOKING_STATE.ONGOING)
     def activate(self):
@@ -525,7 +526,7 @@ class Sinister(models.Model):
     booking = models.ForeignKey(Booking, related_name='sinisters')
     product = models.ForeignKey(Product, related_name='sinisters')
     
-    created_at = models.DateTimeField(blank=True, editable=False)
+    created_at = models.DateTimeField(blank=True, editable=False) # TODO: should use auto_now_add=True here
 
     def __unicide__(self):
         return self.uuid
@@ -533,7 +534,7 @@ class Sinister(models.Model):
     @incr_sequence('sinister_id', 'rent_sinister_sinister_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created_at = datetime.datetime.now()
+            self.created_at = datetime.datetime.now() # TODO: should be replaced with auto_now_add=True in the model's field
         super(Sinister, self).save(*args, **kwargs)
     
 

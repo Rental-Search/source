@@ -420,7 +420,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
 
     @action(methods=['put'])
     def cancel(self, request, *args, **kwargs):
-        return self._perform_transition(request, action='cancel')
+        return self._perform_transition(request, action='cancel', source=request.user)
 
     def _perform_transition(self, request, action=None, **kwargs):
         serializer = serializers.BookingActionSerializer(instance=self.get_object(), data={'action': action}, context={'request': request})
