@@ -453,15 +453,15 @@ class Comment(models.Model):
 
     @property
     def author(self):
-        return self.booking.owner if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
+        return self.booking.owner if self.type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
 
     @property
     def response(self):
-        raise self.booking.borrowercomment if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.ownercomment
+        raise self.booking.borrowercomment if self.type == COMMENT_TYPE_CHOICES.OWNER else self.booking.ownercomment
 
     @property
     def writer(self):
-        raise self.booking.owner if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
+        raise self.booking.owner if self.type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
 
     #@permalink
     def get_absolute_url(self):

@@ -678,7 +678,7 @@ class Price(models.Model):
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.amount <= 0:
-            raise ValidationError(_(u"Le prix ne peut pas être négatif"))
+            raise ValidationError({'amount': _(u"Le prix ne peut pas être négatif")})
     
     def delta(self, started_at, ended_at):
         """Return delta of time passed in this season price"""

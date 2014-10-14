@@ -835,6 +835,22 @@ class PriceTest(APITestCase):
         })
         self.assertEquals(response.status_code, 404, response.data)
 
+    def test_price_edit_negative_amount(self):
+        response = self.client.patch(_location('price-detail', pk=1), {
+            'amount': -10,
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('amount', response.data['errors'], response.data)
+
+    def test_price_edit_large_amount(self):
+        response = self.client.patch(_location('price-detail', pk=1), {
+            'amount': 12345678912,
+        })
+
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('amount', response.data['errors'], response.data)
+
     def test_price_get_by_id(self):
         response = self.client.get(_location('price-detail', pk=1))
         self.assertEquals(response.status_code, 200, response.data)
