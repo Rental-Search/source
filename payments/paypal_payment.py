@@ -138,7 +138,6 @@ class AdaptivePapalPayments(AbstractPayment):
         response = self.payments.cancel_preapproval(
                 preapprovalKey=self.booking.preapproval_key,
             )
-        self.booking.canceled_at = datetime.datetime.now()
         
     def give_caution(self, amount, cancel_url, return_url):
         if not amount or amount > self.booking.deposit_amount:
