@@ -407,8 +407,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
         booking = self.get_object()
         booking.payment = payment
-        booking.save()
-        return self._perform_transition(request, action='preapproval', cvv=credit_card.cvv)
+        return self._perform_transition(request, instance=booking, action='preapproval', cvv=credit_card.cvv)
 
     @action(methods=['put'])
     def accept(self, request, *args, **kwargs):
@@ -422,8 +421,10 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
     def cancel(self, request, *args, **kwargs):
         return self._perform_transition(request, action='cancel', source=request.user)
 
-    def _perform_transition(self, request, action=None, **kwargs):
-        serializer = serializers.BookingActionSerializer(instance=self.get_object(), data={'action': action}, context={'request': request})
+    def _perform_transition(self, request, action=None, instance=None, **kwargs):
+        if instance is None:
+            instance = self.get_object()
+        serializer = serializers.BookingActionSerializer(instance=instance, data={'action': action}, context={'request': request})
         if serializer.is_valid():
             serializer.save(**kwargs)
             return Response({'detail': _(u'Transition performed')})
