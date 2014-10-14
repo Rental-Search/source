@@ -45,6 +45,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);
+                $scope.markListItemAsSelected("item-tab-", "info");
                 $scope.product = product;
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.categoryDetails.id + "/";
                 $scope.product.addressDetails = $scope.product.address;
