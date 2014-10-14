@@ -290,12 +290,18 @@ class MessageTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
+    def test_message_edit(self):
+        response = self.client.patch(_location('productrelatedmessage-detail', 1), {
+            'read_at': '2014-10-14T00:00',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+
     def test_message_create(self):
         response = self.client.post(_location('productrelatedmessage-list'), {
-             'sender': _location('patron-detail', pk=1),
-             'recipient': _location('patron-detail', pk=2),
-             'thread': _location('messagethread-detail', pk=1),
-             'body': 'Could you send me the contract again, please?',
+            'sender': _location('patron-detail', pk=1),
+            'recipient': _location('patron-detail', pk=2),
+            'thread': _location('messagethread-detail', pk=1),
+            'body': 'Could you send me the contract again, please?',
         })
 
         # check HTTP response code must be 201 CREATED

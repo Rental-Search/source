@@ -378,6 +378,11 @@ class StaffUserTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('username')))
 
+    def test_ordering_private_field(self):
+        response = self.client.get(_location('patron-list'), {'ordering': 'first_name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('first_name')))
+
     def test_reverse_ordering(self):
         response = self.client.get(_location('patron-list'), {'ordering': '-username'})
         self.assertEquals(response.status_code, 200, response.data)
