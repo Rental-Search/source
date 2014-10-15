@@ -33,10 +33,10 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                                         {% verbatim %}
 
         .bg-success-light.text-success.bd-rad
-            i.icon-lg.flaticon.stroke.phone.indent-xs-l
-            span.indent-sm-h
-                | Joignable au
-                b {{bookingDetails.product.phone.number.numero}}
+            i(ng-show="!!phoneNumber").icon-lg.flaticon.stroke.phone.indent-xs-l
+            span(ng-show="!!phoneNumber").indent-sm-h
+                | Joignable au &nbsp;
+                b {{phoneNumber}}
                 | ou
             a(ui-sref="messages.detail({id: bookingDetails.lastThreadId})").btn-inline.text-white.bg-success-hover Envoyez un message
 
@@ -44,13 +44,13 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
             .col-exposition.text-action
-                h3: b Réservation acceptée par
+                h3: b Réservation acceptée par &nbsp;
                     a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
                 ul.zebra-list.indent-md-v
                     li.clearfix
                         .col-xs-3 Statut
-                        .col-xs-9
-                            span(translate="{{bookingDetails.state}}")
+                        .col-xs-9(class="{{bookingDetails.state}}")
+                            span(translate="{{bookingDetails.state}}").booking-bage
                     li.clearfix
                         .col-xs-3 Début
                         .col-xs-9
@@ -84,9 +84,12 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     li.clearfix
                         .col-xs-3 Caution
                         .col-xs-9 {{bookingDetails.deposit_amount}}€
+                    li.clearfix
+                        .col-xs-3 Contrat
+                        .col-xs-9
+                            a(href="#").text-success.text-underline-hover Télécharger le contrat
                 .text-right
                     a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
-                    a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
 
         .block-with-thumbnail.text-gray.notification
             .col-thumbnail

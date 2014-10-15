@@ -32,9 +32,13 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.product = product;
                 $scope.markListItemAsSelected("item-tab-", "tariffs");
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
-                    CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
-                        $scope.updateFieldSet(rootCategory);
-                    });
+                    if (!nodeCategory.parent) {
+                        $scope.updateFieldSet(nodeCategory);
+                    } else {
+                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                            $scope.updateFieldSet(rootCategory);
+                        });
+                    }
                 });
             });
 
@@ -100,11 +104,14 @@ define(["angular", "eloue/app"], function (angular) {
                     phoneId = $scope.product.phone.id;
                     if (!!phoneId) {
                         $scope.product.phone = Endpoints.api_url + "phones/" + phoneId + "/";
+                    } else {
+                        $scope.product.phone = null;
                     }
                 }
 
                 promises.push(ProductsService.updateProduct($scope.product).$promise);
                 $q.all(promises).then(function(results) {
+                    $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
                     $scope.product.address = {
                         id: addressId

@@ -2,7 +2,7 @@ ul.list-group
   each comment in comment_list
     li.list-group-item.thumbnail
       .thumbnail-img
-        a(href="{{ comment.author.get_absolute_url }}"): img(style="background-image: url({{ comment.author.product_page.url }})").bg-image
+        a(href="{{ comment.author.get_absolute_url }}"): img(style="{% if comment.author.product_page.url %}background-image: url({{ comment.author.product_page.url }}){% endif %}").bg-image
       .thumbnail-content
         h5
           a(href="#").indent-r-xs {{ comment.author.username }}

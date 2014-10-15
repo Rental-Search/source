@@ -6,7 +6,7 @@ import uuid
 import calendar
 from decimal import Decimal as D
 
-import facebook
+#import facebook
 
 from imagekit.models import ImageSpecField
 from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
@@ -34,13 +34,14 @@ from accounts.manager import PatronManager
 from accounts.choices import CIVILITY_CHOICES, COUNTRY_CHOICES, PHONE_TYPES, SUBSCRIPTION_PAYMENT_TYPE_CHOICES
 from accounts.auth import AbstractUser
 from products.signals import post_save_to_batch_update_product
+from rent.choices import COMMENT_TYPE_CHOICES, BOOKING_STATE
+
 from payments.paypal_payment import accounts, PaypalError
 from payments import paypal_payment
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, json
-from rent.choices import COMMENT_TYPE_CHOICES, BOOKING_STATE
 
 
 DEFAULT_CURRENCY = get_format('CURRENCY')
@@ -303,18 +304,18 @@ class Patron(AbstractUser):
 
     @property
     def stats(self):
+        from rent.models import Booking
+        from products.search import product_search
         res = {
             k: getattr(self, k) for k in ('response_rate', 'response_time')
         }
-        bookings_qs = self.bookings.filter(sites__id__exact=settings.SITE_ID)
-        products_qs = self.products.filter(sites__id__exact=settings.SITE_ID)
-        qs = products_qs.select_related('bookings__comments') \
+        qs = self.products.select_related('bookings__comments') \
             .filter(bookings__comments__type=COMMENT_TYPE_CHOICES.BORROWER) \
             .aggregate(Avg('bookings__comments__note'), Count('bookings__comments__id'))
         res.update({
             # TODO: we would need a better rating calculation in the future
-            'average_rating': int(qs['bookings__comments__note__avg'] or 0),
-            'ratings_count': int(qs['bookings__comments__id__count'] or 0),
+            'average_rating': qs['bookings__comments__note__avg'] or 0,
+            'ratings_count': qs['bookings__comments__id__count'] or 0,
             # count message threads where we have unread messages forthe requested user
             'unread_message_threads_count': self.received_messages \
                 .filter(read_at=None) \
@@ -322,9 +323,9 @@ class Patron(AbstractUser):
                 .annotate(Count('productrelatedmessage__thread')) \
                 .order_by().count(),
             # count incoming booking requests for the requested user
-            'booking_requests_count': bookings_qs.filter(state=BOOKING_STATE.AUTHORIZED).count(),
-            'bookings_count': bookings_qs.count(),
-            'products_count': products_qs.count(),
+            'booking_requests_count': Booking.on_site.filter(owner=self, state=BOOKING_STATE.AUTHORIZED).count(),
+            'bookings_count': Booking.on_site.active().filter(Q(owner=self) | Q(borrower=self)).count(),
+            'products_count': product_search.narrow('%s_exact:%s' % ('owner', self.username)).count(),
         })
         return res
 

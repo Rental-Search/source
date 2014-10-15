@@ -30,7 +30,7 @@
                     .form-group: .row
                         .col-xs-5.clear-selector
                             {% verbatim %}
-                            select(ng-model="account.civility", eloue-chosen).form-control
+                            select(ng-model="account.civility", data-placeholder="Civilité", eloue-chosen).form-control
                                 option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
                             {% endverbatim %}
                         .col-xs-7

@@ -1,13 +1,12 @@
 .container
   ul.nav.nav-justified
     -var insurances = [["payment", "Louez en toute sécurité", "Paiement en ligne sécurisées", "Dépôt de garanti en ligne"], ["serenity", "Louez en toute sérénité", "Assurance incluse et automatique", "Aucun échange d’argent"], ["simplicity", "Louez en toute simplicité", "Contrat de location pré-rempli", "Service client dédié 7j/7"], ["trust", "Louez en toute confiance", "Identité des membres vérifiée", "Notes et commentaires"]]
-    each insurance in insurances
+    each style, title, text1, text2 in insurances
       li.divide
       li
-        .insurances-img
-          span( class = insurance[0])
-        h5 #{insurance[1]}
+        .insurances-img: span(class="{{ style }}")
+        h5 {{ title }}
         p 
-          | #{insurance[2]}
+          | {{ text1 }}
           br
-          | #{insurance[3]}
+          | {{ text2 }}

@@ -430,6 +430,10 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
             return Response({'detail': _(u'Transition performed')})
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+    def paginate_queryset(self, queryset, page_size=None):
+        self.object_list = queryset.model.on_site.active(queryset)
+        return super(BookingViewSet, self).paginate_queryset(self.object_list, page_size=page_size)
+
 class CommentFilterSet(filters.FilterSet):
     rate = django_filters.ChoiceFilter(name='note', choices=serializers.CommentSerializer.base_fields['rate'].choices)
     author = filters.MultiFieldFilter(name=('booking__owner', 'booking__borrower'))

@@ -53,13 +53,20 @@ define(["angular", "eloue/app"], function (angular) {
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
-                    $scope.nodeCategory = nodeCategory.id;
-                    $scope.updateLeafCategories();
-                    CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
-                        $scope.rootCategory = rootCategory.id;
+                    if (!nodeCategory.parent) {
+                        $scope.nodeCategory = $scope.product.categoryDetails.id;
+                        $scope.rootCategory = nodeCategory.id;
                         $scope.updateNodeCategories();
-                        $scope.updateFieldSet(rootCategory);
-                    });
+                        $scope.updateFieldSet(nodeCategory);
+                    } else {
+                        $scope.nodeCategory = nodeCategory.id;
+                        $scope.updateLeafCategories();
+                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                            $scope.rootCategory = rootCategory.id;
+                            $scope.updateNodeCategories();
+                            $scope.updateFieldSet(rootCategory);
+                        });
+                    }
                 });
 
             });
@@ -78,12 +85,20 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.updateProduct = function () {
                 $scope.submitInProgress = true;
-                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.address.id + "/";
-                $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
+                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.addressDetails.id + "/";
+                if ($scope.product.phone && $scope.product.phone.id) {
+                    $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
+                } else {
+                    $scope.product.phone = null;
+                }
+                if ($scope.isAuto || $scope.isRealEstate) {
+                    $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
+                }
                 var promises = [];
                 promises.push(AddressesService.update($scope.product.addressDetails).$promise);
                 promises.push(ProductsService.updateProduct($scope.product).$promise);
                 $q.all(promises).then(function(results) {
+                    $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
                 });
             };
