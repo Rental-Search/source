@@ -17,6 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict, MultiValueDict
 from django.utils.translation import ugettext as _
 from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
@@ -36,7 +37,7 @@ from products.forms import (
     ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
 )
 from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
-from products.choices import UNIT, SORT
+from products.choices import UNIT, SORT, PRODUCT_TYPE
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
 from products.search import product_search, car_search, realestate_search, product_only_search
@@ -726,13 +727,15 @@ from eloue.decorators import ajax_required
 from products.forms import SuggestCategoryViewForm
 
 class NavbarCategoryMixin(object):
+    categories = [
+        253, 335, 35, 390, 126, 418, 2700, 495, # first line / nav bar
+        323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
+    ]
+
     def get_context_data(self, **kwargs):
-        categories = [
-            253, 335, 35, 390, 126, 418, 2700, 495, # first line / nav bar
-            323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
-        ]
-        category_list = list(Category.on_site.filter(pk__in=categories))
-        category_list.sort(key=lambda obj: categories.index(obj.pk))
+        category_list = list(Category.on_site.filter(pk__in=self.categories))
+        index = self.categories.index
+        category_list.sort(key=lambda obj: index(obj.pk))
         context = {
             'category_list': category_list,
         }
@@ -958,14 +961,22 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         }
         return Response(res)
 
+    @cached_property
+    def _category_from_native(self):
+        return self.serializer_class().fields['category'].from_native
+
     def get_serializer_class(self):
         data = getattr(self, '_post_data', None)
         if data is not None:
             delattr(self, '_post_data')
-            if 'brand' in data:
+            category = data.get('category', None)
+            if category is not None:
+                category = self._category_from_native(category)
+                category = getattr(category, category._mptt_meta.tree_id_attr)
+            if category == PRODUCT_TYPE.CAR or 'brand' in data:
                 # we have CarProduct here
                 return serializers.CarProductSerializer
-            elif 'air_conditioning' in data: # FIXME: we should have a better criteria here
+            elif category == PRODUCT_TYPE.REALESTATE or 'private_life' in data:
                 # we have RealEstateProduct here
                 return serializers.RealEstateProductSerializer
         instance = getattr(self, 'object', None)
