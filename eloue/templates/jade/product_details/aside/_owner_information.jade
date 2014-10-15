@@ -13,7 +13,8 @@
             .thumbnail-content
                 h5: a(href="{{ product.owner_url }}") {{ product.owner }} {% if is_pro %}&nbsp;Pro{% endif %}
                 {% if is_pro %}
-                p: i Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit accusamus laudantium repudiandae soluta amet consequuntur, quo saepe architecto illum autem dolorem quaerat tempora aspernatur eos nesciunt veritatis impedit minima, tempore laboriosam cumque. Laborum ad ex libero debitis dolores cum praesentium facilis nihil quis eaque error, ipsam enim aspernatur deserunt vitae.
+                if patron.about
+                  p: i {{ patron.about }}
                 {% else %}
                 {% with product.owner.average_note as rate %}
                 include ../../_rate
