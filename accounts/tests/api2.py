@@ -25,7 +25,7 @@ class AnonymousUsersTest(APITestCase):
 
     public_fields = (
         'id', 'company_name', 'username', 'is_professional', 'slug', 'avatar', 'default_address', 'about', 'work',
-        'school', 'hobby', 'languages', 'url', 'date_joined')
+        'school', 'hobby', 'languages', 'url', 'date_joined', 'average_note', 'comment_count')
     private_fields = (
         'email', 'first_name', 'last_name', 'default_number', 'driver_license_date', 'driver_license_number',
         'date_of_birth', 'place_of_birth', 'is_active', 'creditcard')

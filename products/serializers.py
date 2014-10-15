@@ -86,8 +86,8 @@ class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
                   'pictures')
         public_fields = (
             'id', 'summary', 'deposit_amount', 'currency', 'description',
-            'address', 'quantity', 'category', 'owner',
-            'pro_agencies', 'prices', 'pictures')
+            'address', 'quantity', 'category', 'owner',  'comment_count',
+            'pro_agencies', 'prices', 'pictures', 'average_note', )
         view_name = 'product-detail'
         read_only_fields = ('is_archived', 'created_at')
         immutable_fields = ('owner',)

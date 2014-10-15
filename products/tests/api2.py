@@ -368,7 +368,7 @@ class AnonymousProductTest(APITestCase):
     fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
 
     public_fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'quantity', 'category',
-                     'owner', 'pro_agencies',)
+                     'owner', 'pro_agencies', 'comment_count', 'average_note')
     private_fields = ('is_archived', 'created_at',)
 
     def test_product_list_allowed(self):

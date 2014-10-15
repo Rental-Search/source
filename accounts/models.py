@@ -350,6 +350,11 @@ class Patron(AbstractUser):
             avg = 0
         return avg
 
+    @property
+    def comment_count(self):
+        from rent.models import BorrowerComment
+        return BorrowerComment.objects.filter(booking__owner=self).count()
+
     def send_activation_email(self):
         context = {
             'patron': self, 

@@ -3,6 +3,7 @@ import uuid
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from rest_framework.fields import IntegerField
 
 from rest_framework.serializers import (
     PrimaryKeyRelatedField, CharField, EmailField, BooleanField, FloatField
@@ -103,6 +104,7 @@ class UserSerializer(serializers.ModelSerializer):
     default_number = NestedPhoneNumberSerializer(required=False)
     languages = PrimaryKeyRelatedField(many=True, required=False) # TODO: remove if we got to expose language resource
     average_note = FloatField(read_only=True)
+    comment_count = IntegerField(read_only=True)
     creditcard = NestedCreditCardSerializer(read_only=True, required=False)
 
     def restore_object(self, attrs, instance=None):
@@ -120,14 +122,14 @@ class UserSerializer(serializers.ModelSerializer):
             'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
-            'date_joined', 'is_active', 'rib', 'password', 'average_note', 'creditcard'
+            'date_joined', 'is_active', 'rib', 'password', 'average_note', 'creditcard', 'comment_count'
         )
         public_fields = (
             'id', 'company_name', 'username', 'is_professional', 'slug',
             'avatar', 'default_address', 'about', 'school', 'work', 'hobby',
-            'languages', 'url', 'date_joined',
+            'languages', 'url', 'date_joined', 'comment_count', 'average_note'
         )
-        read_only_fields = ('slug', 'url', 'date_joined', 'rib',)
+        read_only_fields = ('slug', 'url', 'date_joined', 'rib')
         immutable_fields = ('email', 'password', 'username')
 
 
