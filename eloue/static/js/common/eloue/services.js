@@ -1380,6 +1380,18 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                bookingsLoadService.acceptBooking = function (uuid) {
+                    return Bookings.accept({uuid: uuid}, {uuid: uuid});
+                };
+
+                bookingsLoadService.cancelBooking = function (uuid) {
+                    return Bookings.cancel({uuid: uuid}, {uuid: uuid});
+                };
+
+                bookingsLoadService.rejectBooking = function (uuid) {
+                    return Bookings.reject({uuid: uuid}, {uuid: uuid});
+                };
+
                 bookingsLoadService.getBookingByProduct = function (productId) {
                     var deferred = $q.defer();
 
