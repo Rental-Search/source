@@ -4,7 +4,7 @@
     each style, title, text1, text2 in insurances
       li.divide
       li
-        .insurances-img: span(class="{{ style }}{% if is_pro %}-black{% endif %}")
+        .insurances-img: span(class="{{ style }}")
         h5 {{ title }}
         p 
           | {{ text1 }}
