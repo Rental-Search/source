@@ -5,15 +5,15 @@
             tr
                 td Quantité
                 td
-                    input(type="number", ng-model="product.quantity").table-form
+                    input(type="number", ng-model="product.quantity", placeholder="Quantité").table-form
             tr(ng-show="isAuto")
                 td Marque
                 td
-                    input(type="text", ng-model="product.brand").table-form
+                    input(type="text", ng-model="product.brand", placeholder="Marque").table-form
             tr(ng-show="isAuto")
                 td Modèle
                 td
-                    input(type="text", ng-model="product.model").table-form
+                    input(type="text", ng-model="product.model", placeholder="Modèle").table-form
             tr(ng-show="isAuto")
                 td Nombre de place
                 td
@@ -43,19 +43,19 @@
                 td Consommation
                 td
                     select(ng-model="product.consumption", eloue-chosen, data-ng-disabled="submitInProgress").table-form
-                        option(ng-repeat="item in consumptionOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in consumptionOptions | orderBy:'id':true", value="{{item.id}}") {{item.id}} {{item.name}}
             tr(ng-show="isAuto")
                 td Kilomètres inclus/jour
                 td
-                    input(type="number", ng-model="product.km_included").table-form
+                    input(type="number", ng-model="product.km_included", placeholder="Km inclus").table-form
             tr(ng-show="isAuto")
                 td Prix par kilomètres supplémentaires
                 td
-                    input(type="number", ng-model="product.costs_per_km").table-form
+                    input(type="number", ng-model="product.costs_per_km", placeholder="Prix").table-form
             tr(ng-show="isAuto")
                 td Climatisation
                 td
-                    input(type="text", ng-model="product.air_conditioning").table-form
+                    input(type="text", ng-model="product.air_conditioning", placeholder="Climatisation").table-form
             tr(ng-show="isAuto")
                 td Direction assistée
                 td
@@ -117,7 +117,7 @@
                 td Capacité
                 td
                     select(ng-model="product.capacity", eloue-chosen, data-ng-disabled="submitInProgress").table-form
-                        option(ng-repeat="item in capacityOptions| orderBy:Number('id')", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in capacityOptions| orderBy:id", value="{{item.id}}") {{item.name}}
             tr(ng-show="isRealEstate")
                 td Type de logement
                 td
@@ -130,7 +130,7 @@
             tr(ng-show="isRealEstate")
                 td Règles d'utilisation
                 td
-                    input(type="text", ng-model="product.rules").table-form
+                    input(type="text", ng-model="product.rules", placeholder="Règles d'utilisation").table-form
             tr(ng-show="isRealEstate")
                 td Air conditionné
                 td

@@ -17,7 +17,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CategoriesService",
         "PricesService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService) {
+        "Capacity",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, Capacity) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -26,6 +27,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.leafCategories = {};
             $scope.rootCategory = {};
             $scope.nodeCategory = {};
+            $scope.capacityOptions = Capacity;
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
             $scope.categoriesBaseUrl = Endpoints.api_url + "categories/";
             $scope.product = {};
@@ -113,6 +115,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 if ($scope.price.amount > 0) {
                     if ($scope.isAuto || $scope.isRealEstate) {
                         $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
+                    }
+                    if ($scope.isAuto) {
+                        $scope.product.summary = $scope.product.brand + " " + $scope.product.model;
                     }
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         //TODO: finish and check saving product and price
