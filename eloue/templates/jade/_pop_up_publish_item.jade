@@ -25,7 +25,7 @@
                             .col-sm-6: input(type="text", name="model", placeholder="Modèle *", ng-required="isAuto", ng-model="product.model", ng-show="isAuto").form-control
                         .row
                             .col-sm-4
-                                select(ng-model="rootCategory", name="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-placeholder="Catégorie Niv.1 *", data-ng-disabled="submitInProgress").form-control
+                                select(ng-model="rootCategory", name="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-placeholder="Catégorie Niv.1 *", data-ng-disabled="submitInProgress", style="z-index: 1051").form-control
                                     option(ng-repeat="category in rootCategories", value="{{category.id}}", ng-selected="category.id == rootCategory") {{category.name}}
                             .col-sm-4
                                 select(ng-model="nodeCategory", name="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", data-placeholder="Catégorie Niv.2 *", data-ng-disabled="submitInProgress", ng-required="isAuto || isRealEstate").form-control
