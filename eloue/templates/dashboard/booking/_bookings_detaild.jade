@@ -52,6 +52,8 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                   a(href="/loueur/{{ownerSlug}}/").text-success.text-underline-hover {{ownerName}}
                 h3(ng-show="bookingDetails.state=='ended'")
                     b Réservation terminée &nbsp;
+                h3(ng-show="bookingDetails.state=='outdated'")
+                    b Réservation dépassée &nbsp;
                 ul.zebra-list.indent-md-v
                     li.clearfix
                         .col-xs-3 Statut
@@ -86,7 +88,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                         .col-xs-9 {{bookingDetails.period_days}} jours et {{bookingDetails.period_hours}} heures
                     li.clearfix
                         .col-xs-3 Prix
-                        .col-xs-9.text-success {{bookingDetails.total_amount}}€
+                        .col-xs-9.text-primary {{bookingDetails.total_amount}}€
                     li.clearfix
                         .col-xs-3 Caution
                         .col-xs-9 {{bookingDetails.deposit_amount}}€
