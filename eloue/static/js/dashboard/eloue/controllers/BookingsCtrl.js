@@ -15,17 +15,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.currentUserUrl = "";
             $scope.bookingFilter = {};
-            $scope.stateList = [
-                {label: "Unpaid", value: "unpaid"},
-                {label: "Authorized", value: "authorized"},
-                {label: "Rejected", value: "rejected"},
-                {label: "Pending", value: "pending"},
-                {label: "Canceled", value: "canceled"},
-                {label: "Ongoing", value: "ongoing"},
-                {label: "Ended", value: "ended"},
-                {label: "Closed", value: "closed"},
-                {label: "Incident", value: "incident"}
-            ];
+            $scope.stateList = ["authorized", "rejected", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"];
             $scope.bookingList = [];
             $scope.stateFilter = undefined;
 
@@ -33,14 +23,6 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
 
                 $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id], shouldReloadList: true});
-//                BookingsLoadService.getBookingList($scope.page, currentUser.id).then(function (bookingList) {
-//                    $scope.bookingList = bookingList;
-//                    // Get current user url
-//
-//
-//                    // TODO Initiate custom scrollbars
-//                    //$scope.initCustomScrollbars();
-//                });
             });
 
             $scope.filterByOwner = function () {
@@ -65,18 +47,8 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.bookingFilter.state = $scope.stateFilter;
             };
 
-            //TODO: add all possible states
-            $scope.getStateClass = function(state) {
-                switch (state) {
-                    case "pending":
-                        return "soon";
-                    case "ongoing":
-                        return "in-progress";
-                    case "ended":
-                        return "completed";
-                    default:
-                        return "in-progress"
-                }
+            $scope.isAllowedStatus = function(status) {
+                return $.inArray(status, ["authorized", "rejected", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"]) != -1;
             };
 
             $scope.filterByBoth();

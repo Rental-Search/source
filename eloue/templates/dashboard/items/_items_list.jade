@@ -22,7 +22,8 @@ section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selecte
             big(id="item-title-price-{{item.id}}").text-primary {{item.pricePerDay}}€ / jour
             br
             {% endverbatim %}
-            +average-rate("item.stats.average_rating")
-            +number-of-comments("item.stats.booking_comments_count")
-            +number-of-bookings("item.stats.bookings_count")
+            span(ng-hide="item.stats.booking_comments_count == 0 && item.stats.bookings_count == 0")
+             +average-rate("item.stats.average_rating")
+             +number-of-comments("item.stats.booking_comments_count")
+             +number-of-bookings("item.stats.bookings_count")
 
