@@ -11,9 +11,9 @@ block details
     div(ng-init="simple_terms_url='partials/dashboard/items/terms/simple_terms.html'", ng-include="simple_terms_url", ng-show="!isAuto && !isRealEstate && !isProfessional")
     div(ng-init="professional_terms_url='partials/dashboard/items/terms/professional_terms.html'", ng-include="professional_terms_url", ng-show="isProfessional")
 
-    h2.indent-lg-t Vos propres conditions
-    p.text-gray-strong Il possible d'ajouter ses propres conditions de location.
     //-
+     h2.indent-lg-t Vos propres conditions
+     p.text-gray-strong Il possible d'ajouter ses propres conditions de location.
      form(action="terms").indent-sm-t
       .row
         .col-sm-12
