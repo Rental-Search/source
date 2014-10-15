@@ -19,9 +19,9 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
 
             // Initial comment data
             $scope.comment = {rate: 0};
+            $scope.showIncidentForm = false;
 
-
-            // On rating star click
+                // On rating star click
             $(".star i").click(function () {
                 var self = $(this);
                 $scope.$apply(function () {
@@ -29,18 +29,14 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                 });
             });
 
-
-
             // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
-                console.log(bookingDetails);
                 $scope.bookingDetails = bookingDetails;
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.contractLink = Endpoints.api_url + "bookings/" + $stateParams.uuid + "/contract/";
                     $scope.isOwner = bookingDetails.owner.indexOf($scope.currentUserUrl) != -1;
                     $scope.isBorrower = bookingDetails.borrower.indexOf($scope.currentUserUrl) != -1;
-
                 });
 
                 UsersService.get(UtilsService.getIdFromUrl(bookingDetails.borrower)).$promise.then(function(result) {
@@ -71,7 +67,7 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                 // Load comments
                 CommentsLoadService.getCommentList($stateParams.uuid).then(function (commentList) {
                     $scope.commentList = commentList;
-                    $scope.showCommentForm = !!$scope.commentList && $scope.bookingDetails.state == "ended";
+                    $scope.showCommentForm = $scope.commentList.length == 0 && $scope.bookingDetails.state == "ended";
                 });
             });
 
@@ -110,16 +106,24 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
             };
 
             $scope.declareIncident = function() {
+                $scope.showIncidentForm = true;
             };
 
             // Method to post new comment
             $scope.postComment = function () {
                 CommentsLoadService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).$promise
                     .then(function () {
-                        $scope.comment = {
-                            text: "",
-                            rate: 5
-                        };
+                        toastr.options.positionClass = "toast-top-full-width";
+                        toastr.success("Posted comment", "");
+                        $scope.showCommentForm = false;
+                    });
+            };
+
+            // Method to post new incident
+            $scope.postIncident = function () {
+                BookingsLoadService.postIncident($stateParams.uuid, $scope.incident.description).$promise
+                    .then(function (result) {
+                        console.log(result);
                     });
             };
         }

@@ -47,13 +47,24 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 h3(ng-show="bookingDetails.state=='authorized'")
                   b Demande de réservation par &nbsp;
                   a(href="/loueur/{{borrowerSlug}}/").text-success.text-underline-hover {{borrowerName}}
+                h3(ng-show="bookingDetails.state=='incident'")
+                    b Incident declare par &nbsp;
+                    a(href="/loueur/{{borrowerSlug}}/").text-success.text-underline-hover {{borrowerName}}
                 h3(ng-show="bookingDetails.state=='canceled'")
                   b Réservation annulée &nbsp;
                   a(href="/loueur/{{ownerSlug}}/").text-success.text-underline-hover {{ownerName}}
+                h3(ng-show="bookingDetails.state=='pending'")
+                  b Réservation acceptée par &nbsp;
+                  a(href="/loueur/{{ownerSlug}}/").text-success.text-underline-hover {{ownerName}}
+                h3(ng-show="bookingDetails.state=='rejected'")
+                    b Réservation rejetée par &nbsp;
+                    a(href="/loueur/{{ownerSlug}}/").text-success.text-underline-hover {{ownerName}}
                 h3(ng-show="bookingDetails.state=='ended'")
-                    b Réservation terminée &nbsp;
+                  b Réservation terminée &nbsp;
                 h3(ng-show="bookingDetails.state=='outdated'")
-                    b Réservation dépassée &nbsp;
+                  b Réservation dépassée &nbsp;
+                h3(ng-show="bookingDetails.state=='ongoing'")
+                    b Réservation en cours &nbsp;
                 ul.zebra-list.indent-md-v
                     li.clearfix
                         .col-xs-3 Statut
@@ -99,10 +110,10 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 .text-right
                     a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'").btn-inline.text-white.bg-gray-light-hover Refuser
                     a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'").btn-inline.text-white.bg-success-hover Accepter la Réservation
-                    a(href="", ng-click="cancelBooking()", ng-show="isBorrower && bookingDetails.state=='authorized'").btn-inline.text-white.bg-gray-light-hover Annuler
-                    a(href="", ng-click="cancelBooking()", ng-show="bookingDetails.state=='ended'").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
+                    a(href="", ng-click="cancelBooking()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')").btn-inline.text-white.bg-gray-light-hover Annuler
+                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || (isOwner && (bookingDetails.state=='incident' || bookingDetails.state=='pending'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
-        .block-with-thumbnail.text-gray.notification(ng-if="showCommentForm")
+        .block-with-thumbnail.text-gray.notification(ng-show="showCommentForm")
             .col-thumbnail
                 .thumbnail: i.icon-3x.flaticon.solid.pencil
             .col-exposition
@@ -113,6 +124,14 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                             | Notes :&nbsp;&nbsp;
                             {% endverbatim %}
                             +average-rate("comment.rate")
+                        button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
+        .block-with-thumbnail.text-gray.notification(ng-show="showIncidentForm")
+            .col-thumbnail
+                .thumbnail: i.icon-3x.flaticon.solid.pencil
+            .col-exposition
+                form(ng-submit="postIncident()")
+                    textarea.expand(name="incident.description", rows="4", placeholder="Décrire l'incident...", ng-model="incident.description", required)
+                    p.text-justify-force.indent-sm-t
                         button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
 //-
   section.text-gray-strong.bg-lite

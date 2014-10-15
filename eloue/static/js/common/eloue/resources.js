@@ -138,7 +138,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
                 "pay": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/pay/?"},
                 "accept": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/accept/?"},
                 "reject": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/reject/?"},
-                "cancel": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/cancel/?"}
+                "cancel": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/cancel/?"},
+                "incident": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/incident/?"}
             });
     }]);
 
