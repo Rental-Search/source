@@ -32,7 +32,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                                         +number-of-bookings("bookingDetails.product.stats.bookings_count")
                                         {% verbatim %}
 
-        .bg-success-light.text-success.bd-rad
+        .bg-success-light.text-success.text-right.bd-rad
             i(ng-show="!!phoneNumber").icon-lg.flaticon.stroke.phone.indent-xs-l
             span(ng-show="!!phoneNumber").indent-sm-h
                 | Joignable au &nbsp;
@@ -44,8 +44,9 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
             .col-exposition.text-action
-                h3: b Réservation acceptée par &nbsp;
-                    a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
+                h3(ng-show="bookingDetails.state=='authorized'")
+                  b Demande de réservation par &nbsp;
+                  a(href="/loueur/{{borrowerSlug}}/").text-success.text-underline-hover {{borrowerName}}
                 ul.zebra-list.indent-md-v
                     li.clearfix
                         .col-xs-3 Statut
@@ -89,9 +90,11 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                         .col-xs-9
                             a(href="#").text-success.text-underline-hover Télécharger le contrat
                 .text-right
-                    a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
+                    a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'").btn-inline.text-white.bg-gray-light-hover Refuser
+                    a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'").btn-inline.text-white.bg-success-hover Accepter la Réservation
+                    a(href="", ng-click="cancelBooking()", ng-show="isBorrower && bookingDetails.state=='authorized'").btn-inline.text-white.bg-gray-light-hover Annuler
 
-        .block-with-thumbnail.text-gray.notification
+        .block-with-thumbnail.text-gray.notification(ng-if="showCommentForm")
             .col-thumbnail
                 .thumbnail: i.icon-3x.flaticon.solid.pencil
             .col-exposition
