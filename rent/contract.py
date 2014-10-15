@@ -67,7 +67,7 @@ class ContractGenerator(object):
 
         canvas.drawString(59, 706, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
         canvas.drawString(59, 688, u"{address}".format(
-            address=booking.owner.default_address or booking.owner.addresses.all()[0])
+            address=booking.owner.default_address or first_or_empty(booking.owner.addresses.all()))
         )
 
         if booking.borrower.is_professional:
@@ -80,13 +80,9 @@ class ContractGenerator(object):
         )
         canvas.drawString(364, 698, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
         canvas.drawString(356, 689, u"{address1}".format(
-            address1=booking.borrower.default_address or booking.borrower.addresses.all()[0])
+            address1=booking.borrower.default_address or first_or_empty(booking.borrower.addresses.all()))
         )
-        # canvas.drawString(135, 575, "{date_of_birth}, {place_of_birth}".format(
-        #         date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
-        #         place_of_birth=booking.borrower.place_of_birth
-        #     )
-        # )
+
         canvas.drawString(373, 499, "{masked_number}".format(
             masked_number=booking.payment.creditcard.masked_number
         ))
@@ -94,7 +90,6 @@ class ContractGenerator(object):
             expires1=booking.payment.creditcard.expires[:2],
             expires2=booking.payment.creditcard.expires[2:],
         ))
-
 
         canvas.drawString(100, 595, u"{summary}".format(summary=smart_str(booking.product.summary)))
 
@@ -123,7 +118,7 @@ class ContractGeneratorNormal(ContractGenerator):
 
         canvas.drawString(128, 732, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
         canvas.drawString(81, 712, u"{address}".format(
-            address=booking.owner.default_address or booking.owner.addresses.all()[0])
+            address=booking.owner.default_address or first_or_empty(booking.owner.addresses.all()))
         )
 
         if booking.borrower.is_professional:
@@ -136,7 +131,7 @@ class ContractGeneratorNormal(ContractGenerator):
         )
         canvas.drawString(363, 732, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
         canvas.drawString(315, 712, u"{address1}".format(
-            address1=booking.borrower.default_address or booking.borrower.addresses.all()[0])
+            address1=booking.borrower.default_address or first_or_empty(booking.borrower.addresses.all()))
         )
 
         canvas.drawString(378, 427, "{masked_number}".format(
@@ -156,8 +151,6 @@ class ContractGeneratorNormal(ContractGenerator):
         
         canvas.drawString(157, 510,  str(booking.product.deposit_amount))
 
-        
-
         canvas.showPage()
         canvas.setFont("Helvetica", 8)
 
@@ -168,15 +161,15 @@ class ContractGeneratorNormal(ContractGenerator):
             )
         )
 
-        borrower_address = booking.borrower.default_address or booking.borrower.addresses.all()[0]
+        borrower_address = booking.borrower.default_address or first_or_empty(booking.borrower.addresses.all())
 
         canvas.drawString(100, 706,  u"{address1}".format(
-            address1=borrower_address.address1)
+            address1=borrower_address.address1 if borrower_address else '')
         )
 
         canvas.drawString(113, 690, u"{zipcode} {city}".format(
-                zipcode=borrower_address.zipcode,
-                city=borrower_address.city,
+                zipcode=borrower_address.zipcode if borrower_address else '',
+                city=borrower_address.city if borrower_address else '',
             )
         )
 
@@ -197,14 +190,14 @@ class ContractGeneratorNormal(ContractGenerator):
 
         )
 
-        owner_address = booking.owner.default_address or booking.owner.addresses.all()[0]
+        owner_address = booking.owner.default_address or first_or_empty(booking.owner.addresses.all())
 
         canvas.drawString(323, 706,  u"{address1}".format(
-            address1=owner_address.address1))
+            address1=owner_address.address1 if owner_address else ''))
 
         canvas.drawString(336, 690, u"{zipcode} {city}".format(
-                zipcode=owner_address.zipcode,
-                city=owner_address.city,
+                zipcode=owner_address.zipcode if owner_address else '',
+                city=owner_address.city if owner_address else '',
             )
         )
 
@@ -230,7 +223,7 @@ class ContractGeneratorCar(ContractGenerator):
 
         canvas.drawString(126, 754, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
         canvas.drawString(81, 734, u"{address}".format(
-            address=booking.borrower.default_address or booking.borrower.addresses.all()[0])
+            address=booking.borrower.default_address or first_or_empty(booking.borrower.addresses.all()))
         )
         canvas.drawString(180, 712, "{date_of_birth}, {place_of_birth}".format(
                 date_of_birth=booking.borrower.date_of_birth.strftime("%d/%m/%Y"),
@@ -300,7 +293,7 @@ class ContractGeneratorRealEstate(ContractGenerator):
         canvas.drawString(128, 732, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
         
         canvas.drawString(81, 712, u"{address}".format(
-            address=booking.owner.default_address or booking.owner.addresses.all()[0])
+            address=booking.owner.default_address or first_or_empty(booking.owner.addresses.all()))
         )
 
         if booking.borrower.is_professional:
@@ -313,7 +306,7 @@ class ContractGeneratorRealEstate(ContractGenerator):
         )
         canvas.drawString(363, 732, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
         canvas.drawString(315, 712, u"{address1}".format(
-            address1=booking.borrower.default_address or booking.borrower.addresses.all()[0])
+            address1=booking.borrower.default_address or first_or_empty(booking.borrower.addresses.all()))
         )
 
         canvas.drawString(378, 427, "{masked_number}".format(
