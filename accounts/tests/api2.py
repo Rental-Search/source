@@ -366,6 +366,20 @@ class UsersTest(APITestCase):
         self.assertEqual(user.rib, 'Some rib')
         self.assertEqual(user.url, 'http://www.website.com')
 
+    def test_filter1(self):
+        response = self.client.get(_location('patron-list'), {'is_professional': True})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['is_professional'], response.data['results']))
+        self.assertEqual([], filter(lambda x: not x['is_professional'], response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('patron-list'), {'is_professional': False})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: not x['is_professional'], response.data['results']))
+        self.assertEqual([], filter(lambda x: x['is_professional'], response.data['results']))
+
 
 class StaffUserTest(APITestCase):
     fixtures = ['patron_staff']
@@ -389,6 +403,34 @@ class StaffUserTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('username'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('patron-list'), {'is_professional': True})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['is_professional'], response.data['results']))
+        self.assertEqual([], filter(lambda x: not x['is_professional'], response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('patron-list'), {'is_professional': False})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: not x['is_professional'], response.data['results']))
+        self.assertEqual([], filter(lambda x: x['is_professional'], response.data['results']))
+
+    def test_filter_private_field1(self):
+        response = self.client.get(_location('patron-list'), {'is_active': True})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['is_active'], response.data['results']))
+        self.assertEqual([], filter(lambda x: not x['is_active'], response.data['results']))
+
+    def test_filter_private_field2(self):
+        response = self.client.get(_location('patron-list'), {'is_active': False})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: not x['is_active'], response.data['results']))
+        self.assertEqual([], filter(lambda x: x['is_active'], response.data['results']))
 
 
 class AnonymousPhoneNumbersTest(APITestCase):
@@ -1141,6 +1183,20 @@ class ProAgencyTest(APITestCase):
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('city'), reverse=True))
 
+    def test_filter1(self):
+        response = self.client.get(_location('proagency-list'), {'zipcode': '29600'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['zipcode'] == '29600', response.data['results']))
+        self.assertEqual([], filter(lambda x: x['zipcode'] != '29600', response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('proagency-list'), {'zipcode': '56300'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['zipcode'] == '56300', response.data['results']))
+        self.assertEqual([], filter(lambda x: x['zipcode'] != '56300', response.data['results']))
+
 
 class StaffProAgencyTest(APITestCase):
     fixtures = ['patron_staff', 'proagency']
@@ -1159,6 +1215,20 @@ class StaffProAgencyTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('city'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('proagency-list'), {'zipcode': '29600'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['zipcode'] == '29600', response.data['results']))
+        self.assertEqual([], filter(lambda x: x['zipcode'] != '29600', response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('proagency-list'), {'zipcode': '56300'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['zipcode'] == '56300', response.data['results']))
+        self.assertEqual([], filter(lambda x: x['zipcode'] != '56300', response.data['results']))
 
 
 class ProPackageTest(APITestCase):
@@ -1319,6 +1389,20 @@ class ProPackageTest(APITestCase):
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('name'), reverse=True))
 
+    def test_filter1(self):
+        response = self.client.get(_location('propackage-list'), {'price': 30})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['price'] == 30, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['price'] != 30, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('propackage-list'), {'price': 54})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['price'] == 54, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['price'] != 54, response.data['results']))
+
 
 class StaffProPackageTest(APITestCase):
     fixtures = ['patron_staff', 'propackages']
@@ -1337,6 +1421,20 @@ class StaffProPackageTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('name'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('propackage-list'), {'price': 30})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['price'] == 30, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['price'] != 30, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('propackage-list'), {'price': 54})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['price'] == 54, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['price'] != 54, response.data['results']))
 
 
 class SubscriptionTest(APITestCase):
