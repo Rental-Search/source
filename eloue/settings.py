@@ -264,7 +264,7 @@ STATICFILES_FINDERS = (
 
 #imagekit configuration
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
-IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOnDownload' # 'imagekit.cachefiles.strategies.Optimistic'
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic' # 'eloue.legacy.GenerateOnDownload'
 
 #pipeline configuration
 PIPELINE_ENABLED = env('PIPELINE', not DEBUG)

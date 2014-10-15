@@ -8,8 +8,7 @@ ol.product-layout
     li
       .section-body
         .thumbnail-img
-          a(href="{{ product.url }}").img-wrapper
-            img(style="background-image: url({{ product.profile }})").bg-image
+          a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
           span.badge.price {{ product.price }}&euro; /jour
           //-span.badge-order {{ forloop.counter }}
         .info
@@ -34,7 +33,7 @@ ol.product-layout
           if is_pro
             .declarer
               span.declarer-name {{ patron.username }}
-              a.declarer-thumbnail: img(style="background-image: url({{ patron.profile.url }})").bg-image
+              a.declarer-thumbnail: img(style="{% if patron.profile.url %}background-image: url({{ patron.profile.url }}){% endif %}").bg-image
 {% pagination %}
 if is_paginated
   .text-center: ul.pagination

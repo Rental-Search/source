@@ -8,6 +8,24 @@ from django.db.models.query import QuerySet
 
 from rent.choices import BOOKING_STATE
 
+BOOKING_ACTIVE_STATES = [
+    BOOKING_STATE.AUTHORIZING,
+    BOOKING_STATE.REFUNDED,
+    BOOKING_STATE.DEPOSIT,
+    BOOKING_STATE.CLOSING,
+    BOOKING_STATE.UNACCEPTED,
+    BOOKING_STATE.ACCEPTED_UNAUTHORIZED,
+]
+
+BOOKING_HISTORY_STATES = [
+    BOOKING_STATE.ONGOING,
+    BOOKING_STATE.PENDING,
+    BOOKING_STATE.AUTHORIZED,
+    BOOKING_STATE.AUTHORIZING,
+    BOOKING_STATE.OUTDATED
+]
+
+
 class ProBookingQuerySet(QuerySet):
     def get(self, *args, **kwargs):
         from rent.models import ProBooking
@@ -30,15 +48,11 @@ class BookingManager(Manager):
         return _filter
 
     def history(self):
-        return self.exclude(
-            state__in=[
-                BOOKING_STATE.ONGOING, 
-                BOOKING_STATE.PENDING, 
-                BOOKING_STATE.AUTHORIZED,
-                BOOKING_STATE.AUTHORIZING,
-                BOOKING_STATE.OUTDATED
-            ]
-        )
+        return self.exclude(state__in=BOOKING_HISTORY_STATES)
+
+    def active(self, queryset=None):
+        queryset = self if queryset is None else queryset
+        return queryset.exclude(state__in=BOOKING_ACTIVE_STATES)
 
     def get_query_set(self):
         """Returns a new QuerySet object.  Subclasses can override this method

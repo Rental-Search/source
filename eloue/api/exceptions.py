@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 
+from requests.exceptions import RequestException
+
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http.response import Http404
 from django.utils.translation import ugettext as _
+from django.utils.encoding import smart_unicode
 
 from rest_framework import status
 from rest_framework import exceptions
@@ -47,7 +50,8 @@ class UrlErrorEnum(object):
 
 class ServerErrorEnum(object):
     """Enum for server errors"""
-    PROTECTED_ERROR = ('100', _(u'The Object is referenced by other objects and can\'t be deleted'))
+    PROTECTED_ERROR = ('100', _(u'The Object is referenced by other objects and can\'t be deleted.'))
+    REQUEST_FAILED = ('101', _(u'A request to external server has failed.'))
     OTHER_ERROR = ('199', _(u'Other error occurred.'))
 
 
@@ -94,17 +98,14 @@ class ValidationException(ApiException):
 
     def get_error(self, detail):
         """Identify specific validation error."""
-        if detail.get('non_field_errors'):
-            error = ValidationErrorEnum.OTHER_ERROR
-            error_detail = detail['non_field_errors']
-        elif detail:
-            error = ValidationErrorEnum.INVALID_FIELD
-            detail.pop('non_field_errors', None)
-            error_detail = detail
-        else:
-            error = ValidationErrorEnum.UNKNOWN_ERROR
-            error_detail = {}
-        return error[0], error[1], error_detail
+        if detail:
+            error_message = detail.pop('non_field_errors', None) or detail.pop('__all__', None)
+            if error_message:
+                return ValidationErrorEnum.OTHER_ERROR[0], error_message, detail
+            error_code, error_message = ValidationErrorEnum.INVALID_FIELD
+            return error_code, error_message, detail
+        error_code, error_message = ValidationErrorEnum.UNKNOWN_ERROR
+        return error_code, error_message, {}
 
 
 class AuthenticationException(ApiException):
@@ -179,11 +180,16 @@ def api_exception_handler(exception):
         error = PermissionErrorEnum.PERMISSION_DENIED
         exception = PermissionException(
             {'code': error[0], 'description': error[1]})
+    # ... and also python-requests exceptions
+    elif isinstance(exception, RequestException):
+        error = ServerErrorEnum.REQUEST_FAILED
+        exception = ServerException(
+            {'code': error[0], 'description': error[1], 'detail': smart_unicode(exception.response.reason)})
     # ... and also any other not REST Framework exception
     elif not isinstance(exception, (exceptions.APIException, ApiException)) and not settings.DEBUG:
         error = ServerErrorEnum.OTHER_ERROR
         exception = ServerException(
-            {'code': error[0], 'description': error[1], 'detail': unicode(exception)})
+            {'code': error[0], 'description': error[1], 'detail': smart_unicode(exception)})
 
     if isinstance(exception, ApiException):
         # Response in the case of our exception to be caught is similar to

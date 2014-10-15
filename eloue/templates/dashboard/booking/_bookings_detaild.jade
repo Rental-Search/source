@@ -32,11 +32,11 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                                         +number-of-bookings("bookingDetails.product.stats.bookings_count")
                                         {% verbatim %}
 
-        .bg-success-light.text-success.bd-rad
-            i.icon-lg.flaticon.stroke.phone.indent-xs-l
-            span.indent-sm-h
-                | Joignable au
-                b {{bookingDetails.product.phone.number.numero}}
+        .bg-success-light.text-success.text-right.bd-rad
+            i(ng-show="!!phoneNumber").icon-lg.flaticon.stroke.phone.indent-xs-l
+            span(ng-show="!!phoneNumber").indent-sm-h
+                | Joignable au &nbsp;
+                b {{phoneNumber}}
                 | ou
             a(ui-sref="messages.detail({id: bookingDetails.lastThreadId})").btn-inline.text-white.bg-success-hover Envoyez un message
 
@@ -44,13 +44,19 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
             .col-exposition.text-action
-                h3: b Réservation acceptée par
-                    a(href="").text-success.text-underline-hover {{bookingDetails.product.owner.username}}
+                h3(ng-show="bookingDetails.state=='authorized'")
+                  b Demande de réservation par &nbsp;
+                  a(href="/loueur/{{borrowerSlug}}/").text-success.text-underline-hover {{borrowerName}}
+                h3(ng-show="bookingDetails.state=='canceled'")
+                  b Réservation annulée &nbsp;
+                  a(href="/loueur/{{ownerSlug}}/").text-success.text-underline-hover {{ownerName}}
+                h3(ng-show="bookingDetails.state=='ended'")
+                    b Réservation terminée &nbsp;
                 ul.zebra-list.indent-md-v
                     li.clearfix
                         .col-xs-3 Statut
-                        .col-xs-9
-                            span(translate="{{bookingDetails.state}}")
+                        .col-xs-9(class="{{bookingDetails.state}}")
+                            span(translate="{{bookingDetails.state}}").booking-bage
                     li.clearfix
                         .col-xs-3 Début
                         .col-xs-9
@@ -84,11 +90,17 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     li.clearfix
                         .col-xs-3 Caution
                         .col-xs-9 {{bookingDetails.deposit_amount}}€
+                    li.clearfix
+                        .col-xs-3 Contrat
+                        .col-xs-9
+                            a(href="{{contractLink}}", target="_blank").text-success.text-underline-hover Télécharger le contrat
                 .text-right
-                    a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
-                    a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
+                    a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'").btn-inline.text-white.bg-gray-light-hover Refuser
+                    a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'").btn-inline.text-white.bg-success-hover Accepter la Réservation
+                    a(href="", ng-click="cancelBooking()", ng-show="isBorrower && bookingDetails.state=='authorized'").btn-inline.text-white.bg-gray-light-hover Annuler
+                    a(href="", ng-click="cancelBooking()", ng-show="bookingDetails.state=='ended'").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
-        .block-with-thumbnail.text-gray.notification
+        .block-with-thumbnail.text-gray.notification(ng-if="showCommentForm")
             .col-thumbnail
                 .thumbnail: i.icon-3x.flaticon.solid.pencil
             .col-exposition

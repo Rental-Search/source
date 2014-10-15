@@ -135,7 +135,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Bookings", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "bookings/:uuid/?", {},
             {
-                "pay": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/pay/?"}
+                "pay": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/pay/?"},
+                "accept": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/accept/?"},
+                "reject": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/reject/?"},
+                "cancel": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/cancel/?"}
             });
     }]);
 

@@ -173,3 +173,8 @@ SORT = Enum([
     ('price', 'LOW_PRICE', _(u"Les pris les plus bas")),
     ('-price', 'HIGH_PRICE', _(u"Les pris les plus haut")),
 ])
+
+PRODUCT_TYPE = Enum([
+    (2700, 'CAR', _(u"Location Automobile")),
+    (2713, 'REALESTATE', _(u"Location saisonnière")),
+])
