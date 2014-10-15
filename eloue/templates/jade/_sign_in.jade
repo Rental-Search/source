@@ -24,6 +24,9 @@
                 .alert.alert-danger(ng-show="!!registrationError")
                     button(type="button", data-dismiss="alert", class="close")
                     | {% verbatim %} {{registrationError}} {% endverbatim %}
+                .alert.alert-danger(ng-show="!!loginError")
+                    button(type="button", data-dismiss="alert", class="close")
+                    | {% verbatim %} {{loginError}} {% endverbatim %}
                 form(name="registrationForm", ng-submit="register()", novalidate)
                     //-
                      h3 Inscription 30 secondes
