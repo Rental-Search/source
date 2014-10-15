@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
+from operator import itemgetter
 
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
@@ -248,6 +249,41 @@ class BookingTest(APITransactionTestCase):
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
 
+    def test_ordering(self):
+        response = self.client.get(_location('booking-list'), {'ordering': 'state'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('state')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('booking-list'), {'ordering': '-state'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('state'), reverse=True))
+
+
+class StaffBookingTest(APITestCase):
+    fixtures = ['patron_staff', 'booking_address', 'category', 'product', 'price', 'booking', 'comment', 'booking_creditcard']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('booking-list'), {'ordering': 'state'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('state')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('booking-list'), {'ordering': '-state'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('state'), reverse=True))
+
 
 class CommentTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'booking', 'comment']
@@ -448,12 +484,48 @@ class CommentTest(APITestCase):
         self.assertEquals(response.status_code, 204, response.data)
         self.assertEquals(Comment.objects.filter(pk=1).count(), 0)
 
+    def test_ordering(self):
+        response = self.client.get(_location('comment-list'), {'ordering': 'created_at'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('created_at')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('comment-list'), {'ordering': '-created_at'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('created_at'), reverse=True))
+
+
+class StaffCommentTest(APITestCase):
+    fixtures = ['patron_staff', 'address', 'category', 'product', 'booking', 'comment']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('comment-list'), {'ordering': 'created_at'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('created_at')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('comment-list'), {'ordering': '-created_at'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('created_at'), reverse=True))
+
 
 class SinisterTest(APITestCase):
 
     fixtures = ['patron', 'address', 'category', 'product', 'booking', 'sinister']
 
     def setUp(self):
+        self.model = get_model('rent', 'Sinister')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
     def test_sinister_create_no_fields(self):
@@ -475,6 +547,35 @@ class SinisterTest(APITestCase):
 
         self.assertEquals(response.status_code, 400, response.data)
 
+    def test_sinister_create_not_mine_booking(self):
+        response = self.client.post(_location('sinister-list'), {
+            'product': _location('product-detail', pk=1),
+            'patron': _location('patron-detail', pk=1),
+            'booking': _location('booking-detail', pk='349ce9ba628abfdfc9cb3a72608dab68'),
+            'description': 'Description'
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_sinister_create_not_mine(self):
+        response = self.client.post(_location('sinister-list'), {
+            'product': _location('product-detail', pk=1),
+            'patron': _location('patron-detail', pk=2),
+            'booking': _location('booking-detail', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'),
+            'description': 'Description'
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('uuid', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('sinister-detail', pk=response.data['uuid'])))
+
+        sinister = self.model.objects.get(pk=response.data['uuid'])
+        self.assertEqual(sinister.product_id, 1)
+        self.assertEqual(sinister.patron_id, 1)
+        self.assertEqual(sinister.booking_id, '87ee8e9dec1d47c29ebb27e09bda8fc3')
+        self.assertEqual(sinister.description, 'Description')
+
     def test_sinister_create(self):
         response = self.client.post(_location('sinister-list'), {
             'product': _location('product-detail', pk=1),
@@ -489,9 +590,7 @@ class SinisterTest(APITestCase):
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('sinister-detail', pk=response.data['uuid'])))
 
-        Sinister = get_model('rent', 'Sinister')
-        sinister = Sinister.objects.get(pk=response.data['uuid'])
-
+        sinister = self.model.objects.get(pk=response.data['uuid'])
         self.assertEqual(sinister.product_id, 1)
         self.assertEqual(sinister.patron_id, 1)
         self.assertEqual(sinister.booking_id, '87ee8e9dec1d47c29ebb27e09bda8fc3')

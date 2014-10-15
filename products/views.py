@@ -921,7 +921,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     search_index = product_search
     filter_class = ProductFilterSet
     ordering_fields = ('quantity', 'is_archived', 'category')
-    public_actions = ('retrieve', 'search', 'is_available')
+    public_actions = ('retrieve', 'search', 'is_archived')
 
     @link()
     def is_available(self, request, *args, **kwargs):

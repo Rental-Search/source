@@ -1307,6 +1307,37 @@ class ProPackageTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
+    def test_ordering(self):
+        response = self.client.get(_location('propackage-list'), {'ordering': 'name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('name')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('propackage-list'), {'ordering': '-name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('name'), reverse=True))
+
+
+class StaffProPackageTest(APITestCase):
+    fixtures = ['patron_staff', 'propackages']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('propackage-list'), {'ordering': 'name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('name')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('propackage-list'), {'ordering': '-name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('name'), reverse=True))
+
 
 class SubscriptionTest(APITestCase):
 
@@ -1438,3 +1469,34 @@ class SubscriptionTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
+
+    def test_ordering(self):
+        response = self.client.get(_location('subscription-list'), {'ordering': 'subscription_started'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('subscription_started')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('subscription-list'), {'ordering': '-subscription_started'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('subscription_started'), reverse=True))
+
+
+class StaffSubscriptionTest(APITestCase):
+    fixtures = ['patron_staff', 'propackages', 'subscriptions']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('subscription-list'), {'ordering': 'subscription_started'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('subscription_started')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('subscription-list'), {'ordering': '-subscription_started'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('subscription_started'), reverse=True))

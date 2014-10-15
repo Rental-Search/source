@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from operator import itemgetter
 import os.path
 import base64
 from datetime import date
@@ -217,6 +218,38 @@ class PictureTest(APITestCase):
         for k in ('thumbnail', 'profile', 'home', 'display'):
             self.assertIn(k, response.data['image'], response.data)
             self.assertTrue(response.data['image'][k], response.data)
+
+    def test_ordering(self):
+        response = self.client.get(_location('picture-list'), {'ordering': 'created_at'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('created_at')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('picture-list'), {'ordering': '-created_at'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('created_at'), reverse=True))
+
+
+class StaffPictureTest(APITestCase):
+    fixtures = ['patron_staff', 'address', 'category', 'product', 'picture_api2']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('picture-list'), {'ordering': 'created_at'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('created_at')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('picture-list'), {'ordering': '-created_at'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('created_at'), reverse=True))
+
 
 class MessageThreadTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'messagethread', 'message']
@@ -664,6 +697,42 @@ class ProductTest(APITestCase):
         self.assertEquals(response.status_code, 404, response.data)
         self.assertEquals(self.model.objects.filter(pk=6).count(), 0)
 
+    def test_ordering(self):
+        response = self.client.get(_location('product-list'), {'ordering': 'quantity'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('quantity')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('product-list'), {'ordering': '-quantity'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('quantity'), reverse=True))
+
+
+class StaffProductTest(APITestCase):
+    fixtures = ['patron_staff', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('product-list'), {'ordering': 'quantity'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('quantity')))
+
+    def test_ordering_private_field(self):
+        response = self.client.get(_location('product-list'), {'ordering': 'is_archived'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('is_archived')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('product-list'), {'ordering': '-quantity'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('quantity'), reverse=True))
+
 
 class CategoryTest(APITestCase):
     fixtures = ['patron', 'category']
@@ -745,6 +814,39 @@ class CategoryTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(len(response.data['results']), 10)
+
+    def test_ordering(self):
+        response = self.client.get(_location('category-list'), {'ordering': 'name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('name')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('category-list'), {'ordering': '-name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('name'), reverse=True))
+
+
+class StaffCategoryTest(APITestCase):
+    fixtures = ['patron_staff', 'category']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('category-list'), {'ordering': 'name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('name')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('category-list'), {'ordering': '-name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('name'), reverse=True))
 
 
 class PriceTest(APITestCase):
@@ -868,6 +970,41 @@ class PriceTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(len(response.data['results']), 10)
+
+    def test_ordering(self):
+        response = self.client.get(_location('price-list'), {'ordering': 'amount'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('amount')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('price-list'), {'ordering': '-amount'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('amount'), reverse=True))
+
+
+class StaffPriceTest(APITestCase):
+    fixtures = ['patron_staff', 'address', 'category', 'product', 'price']
+
+    def setUp(self):
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_ordering(self):
+        response = self.client.get(_location('price-list'), {'ordering': 'amount'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('amount')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('price-list'), {'ordering': '-amount'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('amount'), reverse=True))
 
 
 class CuriosityTest(APITestCase):
