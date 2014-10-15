@@ -15,7 +15,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.currentUserUrl = "";
             $scope.bookingFilter = {};
-            $scope.stateList = ["authorized", "rejected", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"];
+            $scope.stateList = ["authorized", "rejected", "outdated", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"];
             $scope.bookingList = [];
             $scope.stateFilter = undefined;
 
@@ -45,10 +45,6 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.filterByState = function () {
                 $scope.bookingFilter.state = $scope.stateFilter;
-            };
-
-            $scope.isAllowedStatus = function(status) {
-                return $.inArray(status, ["authorized", "rejected", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"]) != -1;
             };
 
             $scope.filterByBoth();

@@ -43,7 +43,8 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             ended: "Terminé",
             closed: "Clôture",
             incident: "Incident",
-            refunded: "Remboursé"
+            refunded: "Remboursé",
+            outdated: "Dépassée"
         });
 
         $translateProvider.preferredLanguage("fr");
