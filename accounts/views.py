@@ -1163,17 +1163,9 @@ class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     def premium_rate_number(self, request, *args, **kwargs):
         # get current object
         obj = self.get_object()
-
         # get call details by number and request parameters (e.g. REMOTE_ADDR)
+        # note: request's exceptions will be handled in eloue.api.exception.api_exception_handler
         tags = viva_check_phone(obj.number, request=request)
-
-        # check for errors
-        error = int(tags.get('error', 0))
-        if error:
-            return Response(
-                {'error': error, 'error_msg': tags.get('error_msg', '')},
-                status=status.HTTP_400_BAD_REQUEST
-            )
         return Response(tags)
 
     def destroy(self, request, *args, **kwargs):
