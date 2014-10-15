@@ -39,7 +39,7 @@ block details
                                     | €
 
 
-                        table.calendar.text-center.form-control(ng-show="isAuto")
+                        table.calendar(ng-show="isAuto")
                             thead
                                 tr
                                     td Durée
@@ -50,7 +50,7 @@ block details
                                     td
                                         input(type="text", placeholder="Prix...", ng-model="prices.day.amount", required).table-form
                                         | €
-                        table.calendar.text-center.form-control(ng-show="isAuto")
+                        table.calendar(ng-show="isAuto")
                             tbody
                                 tr
                                     td Kilomètres inclus par jour
@@ -58,7 +58,7 @@ block details
                                         input(type="text", ng-model="product.km_included").table-form
                                         | Km
 
-                        table.calendar.text-center.form-control(ng-show="isRealEstate")
+                        table.calendar(ng-show="isRealEstate")
                             thead
                                 tr
                                     td Durée
@@ -85,7 +85,7 @@ block details
                                         input(type="text", placeholder="Prix...", ng-model="prices.fifteen_days.amount").table-form
                                         | €
 
-                        table.calendar.text-center.form-control(ng-show="isAuto")
+                        table.calendar(ng-show="isAuto")
                             tbody
                                 tr
                                     td Caution
