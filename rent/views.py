@@ -25,7 +25,7 @@ from payments.models import PayboxDirectPlusPaymentInformation
 from products.models import Product
 from products.choices import UNIT
 from rent.forms import BookingForm, BookingAcceptForm, PreApprovalIPNForm, PayIPNForm, SinisterForm
-from rent.models import Booking, ProBooking
+from rent.models import Booking, ProBooking, Sinister
 from rent.wizard import BookingWizard, PhoneBookingWizard
 from rent.utils import timesince
 from rent.choices import BOOKING_STATE
@@ -325,7 +325,6 @@ def booking_close(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id, state__in=[BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED])
-    from rent.models import Sinister
     if request.method == "POST":
         form = SinisterForm(
             request.POST,
@@ -356,7 +355,7 @@ from rest_framework.response import Response
 import django_filters
 
 from rent import serializers, models
-from eloue.api import viewsets, filters, mixins
+from eloue.api import viewsets, filters, mixins, exceptions
 from accounts.serializers import CreditCardSerializer, BookingPayCreditCardSerializer
 
 class BookingFilterSet(filters.FilterSet):
@@ -393,11 +392,11 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         queryset = self.filter_queryset(self.get_queryset()).filter(state=BOOKING_STATE.PENDING)
         obj = self.get_object(queryset=queryset)
         content = obj.product.subtype.contract_generator(obj).getvalue()
-        response_kwargs = {
-            'headers': {'Content-Disposition': 'attachment; filename=contrat.pdf'},
-            'content_type': 'application/pdf',
-        }
-        return Response(content, **response_kwargs)
+        return Response(
+            content,
+            headers={'Content-Disposition': 'attachment; filename=contrat.pdf'},
+            content_type='application/pdf',
+        )
 
     @action(methods=['put'])
     def pay(self, request, *args, **kwargs):
@@ -432,14 +431,29 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
     def cancel(self, request, *args, **kwargs):
         return self._perform_transition(request, action='cancel', source=request.user)
 
+    @action(methods=['put'])
+    def incident(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset()).filter(state__in=[BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED])
+        obj = self.get_object(queryset=queryset)
+        form = SinisterForm(
+            request.DATA.copy(),
+            instance=Sinister(
+                booking=obj, patron=request.user, product=obj.product
+            )
+        )
+        if not form.is_valid():
+            raise exceptions.ValidationException(form.errors)
+        sinister = form.save() # save Sinister object
+        return self._perform_transition(request, action='incident', source=request.user, description=sinister.description)
+
     def _perform_transition(self, request, action=None, instance=None, **kwargs):
         if instance is None:
             instance = self.get_object()
         serializer = serializers.BookingActionSerializer(instance=instance, data={'action': action}, context={'request': request})
-        if serializer.is_valid():
-            serializer.save(**kwargs)
-            return Response({'detail': _(u'Transition performed')})
-        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            raise exceptions.ValidationException(serializer.errors)
+        serializer.save(**kwargs)
+        return Response({'detail': _(u'Transition performed')})
 
     def paginate_queryset(self, queryset, page_size=None):
         self.object_list = queryset.model.on_site.active(queryset)

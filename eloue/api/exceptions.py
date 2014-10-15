@@ -98,17 +98,14 @@ class ValidationException(ApiException):
 
     def get_error(self, detail):
         """Identify specific validation error."""
-        if detail.get('non_field_errors'):
-            error = ValidationErrorEnum.OTHER_ERROR
-            error_detail = detail['non_field_errors']
-        elif detail:
-            error = ValidationErrorEnum.INVALID_FIELD
-            detail.pop('non_field_errors', None)
-            error_detail = detail
-        else:
-            error = ValidationErrorEnum.UNKNOWN_ERROR
-            error_detail = {}
-        return error[0], error[1], error_detail
+        if detail:
+            error_message = detail.pop('non_field_errors', None) or detail.pop('__all__', None)
+            if error_message:
+                return ValidationErrorEnum.OTHER_ERROR[0], error_message, detail
+            error_code, error_message = ValidationErrorEnum.INVALID_FIELD
+            return error_code, error_message, detail
+        error_code, error_message = ValidationErrorEnum.UNKNOWN_ERROR
+        return error_code, error_message, {}
 
 
 class AuthenticationException(ApiException):
