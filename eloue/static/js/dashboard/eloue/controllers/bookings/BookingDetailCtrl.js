@@ -34,7 +34,6 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 console.log(bookingDetails);
                 $scope.bookingDetails = bookingDetails;
-                $scope.bookingDetails.state = "authorized";
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.isOwner = bookingDetails.owner.indexOf($scope.currentUserUrl) != -1;
@@ -93,7 +92,6 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
             };
 
             $scope.cancelBooking = function() {
-                console.log($stateParams.uuid);
                 BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function(result) {
                     toastr.options.positionClass = "toast-top-full-width";
                     toastr.success(result.detail, "");
