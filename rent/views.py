@@ -388,6 +388,17 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         res = {transition.method.__name__: transition.target for transition in transitions}
         return Response(dict(transitions=res))
 
+    @link()
+    def contract(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset()).filter(state=BOOKING_STATE.PENDING)
+        obj = self.get_object(queryset=queryset)
+        content = obj.product.subtype.contract_generator(obj).getvalue()
+        response_kwargs = {
+            'headers': {'Content-Disposition': 'attachment; filename=contrat.pdf'},
+            'content_type': 'application/pdf',
+        }
+        return Response(content, **response_kwargs)
+
     @action(methods=['put'])
     def pay(self, request, *args, **kwargs):
         data = request.DATA
