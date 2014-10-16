@@ -349,7 +349,8 @@ def booking_incident(request, booking_id):
 
 # REST API 2.0
 
-from rest_framework import status
+from django.utils.functional import wraps
+
 from rest_framework.decorators import link, action
 from rest_framework.response import Response
 import django_filters
@@ -357,6 +358,18 @@ import django_filters
 from rent import serializers, models
 from eloue.api import viewsets, filters, mixins, exceptions
 from accounts.serializers import CreditCardSerializer, BookingPayCreditCardSerializer
+
+def user_required(attname):
+    def user_required_inner(f):
+        @wraps(f)
+        def wrapper(self, request, *args, **kwargs):
+            obj = self.get_object()
+            if getattr(obj, attname) != request.user:
+                error = getattr(exceptions.PermissionErrorEnum, 'ACTION_%s_REQUIRED' % attname.upper())
+                raise exceptions.PermissionException(error)
+            return f(self, request, *args, **kwargs)
+        return wrapper
+    return user_required_inner
 
 class BookingFilterSet(filters.FilterSet):
     author = filters.MultiFieldFilter(name=('owner', 'borrower'))
@@ -398,7 +411,9 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         return response
 
     @action(methods=['put'])
+    @user_required(attname='borrower')
     def pay(self, request, *args, **kwargs):
+        obj = self.get_object()
         data = request.DATA
         try:
             credit_card = data['credit_card']
@@ -410,25 +425,32 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         except (KeyError, ValidationError):
             serializer = CreditCardSerializer(data=data, context={'request': request})
             if not serializer.is_valid():
-                return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                raise exceptions.ValidationException(serializer.errors)
             credit_card = serializer.save()
 
         payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
-        booking = self.get_object()
-        booking.payment = payment
-        return self._perform_transition(request, instance=booking, action='preapproval', cvv=credit_card.cvv)
+        obj.payment = payment
+        return self._perform_transition(request, instance=obj, action='preapproval', cvv=credit_card.cvv)
 
     @action(methods=['put'])
+    @user_required(attname='owner')
     def accept(self, request, *args, **kwargs):
         return self._perform_transition(request, action='accept')
 
     @action(methods=['put'])
+    @user_required(attname='owner')
     def reject(self, request, *args, **kwargs):
         return self._perform_transition(request, action='reject')
 
     @action(methods=['put'])
+    @user_required(attname='borrower')
     def cancel(self, request, *args, **kwargs):
         return self._perform_transition(request, action='cancel', source=request.user)
+
+    @action(methods=['put'])
+    @user_required(attname='owner')
+    def close(self, request, *args, **kwargs):
+        return self._perform_transition(request, action='close', source=request.user)
 
     @action(methods=['put'])
     def incident(self, request, *args, **kwargs):

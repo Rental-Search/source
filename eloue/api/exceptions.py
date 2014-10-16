@@ -40,6 +40,8 @@ class AuthenticationErrorEnum(object):
 class PermissionErrorEnum(object):
     """Enum for permission errors."""
     PERMISSION_DENIED = ('100', _(u'You do not have permission to perform this action.'))
+    ACTION_OWNER_REQUIRED = ('101', _(u'You must be owner to perform this action.'))
+    ACTION_BORROWER_REQUIRED = ('102', _(u'You must be borrower to perform this action.'))
 
 
 class UrlErrorEnum(object):
@@ -84,6 +86,10 @@ class ApiException(Exception):
         additional error information. By default this information is assumed
         to be sent directly.
         """
+        if isinstance(detail, tuple):
+            if len(detail) >= 3:
+                return detail[:3]
+            return detail + (None,)
         return (
             detail.get('code', ''),
             detail.get('description', ''),
