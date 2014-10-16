@@ -506,5 +506,5 @@ class SinisterViewSet(viewsets.ImmutableModelViewSet):
     """
     model = models.Sinister
     serializer_class = serializers.SinisterSerializer
-    filter_backends = (filters.OwnerFilter, filters.OrderingFilter)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     filter_fields = ('patron', 'booking', 'product')
