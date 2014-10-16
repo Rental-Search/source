@@ -117,7 +117,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
             .col-thumbnail
                 .thumbnail: i.icon-3x.flaticon.solid.pencil
             .col-exposition
-                form(ng-submit="postComment()")
+                form(name="commentForm", ng-submit="postComment()")
                     textarea.expand(name="comment.text", rows="4", placeholder="Écrire un commentaire...", ng-model="comment.text", required)
                     p.text-justify-force.indent-sm-t
                         span
@@ -129,10 +129,17 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
             .col-thumbnail
                 .thumbnail: i.icon-3x.flaticon.solid.pencil
             .col-exposition
-                form(ng-submit="postIncident()")
+                form(name="incidentForm", ng-submit="postIncident()")
                     textarea.expand(name="incident.description", rows="4", placeholder="Décrire l'incident...", ng-model="incident.description", required)
                     p.text-right.indent-sm-t
                         button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
+        .block-with-thumbnail.notification.indent-md-v(ng-show="showIncidentDescription")
+            .col-thumbnail
+                .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
+            .col-exposition.text-action
+                h3
+                    b Description de l'incident
+                p(ng-bind="sinister.description")
 //-
   section.text-gray-strong.bg-lite
     ul.section-content.booking-activity-feed
