@@ -1096,12 +1096,20 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return PhoneNumbers.get({id: phoneNumberId});
             };
 
+            phoneNumbersService.savePhoneNumber = function (phoneNumber) {
+                return PhoneNumbers.save(phoneNumber);
+            };
+
             phoneNumbersService.updatePhoneNumber = function (phoneNumber) {
                 return PhoneNumbers.update({id: phoneNumber.id}, phoneNumber);
             };
 
             phoneNumbersService.getPremiumRateNumber = function (phoneNumberId) {
                 return PhoneNumbers.getPremiumRateNumber({id: phoneNumberId});
+            };
+
+            phoneNumbersService.deletePhoneNumber = function (phoneNumberId) {
+                return PhoneNumbers.delete({id: phoneNumberId});
             };
 
             return phoneNumbersService;
@@ -1393,7 +1401,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 bookingsLoadService.postIncident = function (uuid, description) {
-                   return Bookings.incident({uuid: uuid}, {uuid: uuid, description: description});
+                   return Bookings.incident({uuid: uuid}, {description: description});
                 };
 
                 bookingsLoadService.getBookingByProduct = function (productId) {
