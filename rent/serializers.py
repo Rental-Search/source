@@ -7,7 +7,18 @@ from rest_framework import fields
 
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
-from eloue.api.serializers import ModelSerializer
+from eloue.api import serializers
+
+class SinisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Sinister
+        fields = ('uuid', 'sinister_id', 'description', 'patron', 'booking', 'product') # TBD: do we need sinister_id to be exposed? How it's going to be used?
+        read_only_fields = ('sinister_id',)
+        immutable_fields = ('patron', 'booking', 'product')
+
+class NestedSinisterSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
+    class Meta(SinisterSerializer.Meta):
+        fields = ('description',)
 
 class BookingProductField(HyperlinkedRelatedField):
     default_error_messages = {
@@ -28,8 +39,9 @@ class BookingProductField(HyperlinkedRelatedField):
         if value.owner == self.context['request'].user:
             raise ValidationError(self.error_messages['own_product'])
 
-class BookingSerializer(ModelSerializer):
+class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
+    sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)
@@ -52,7 +64,7 @@ class BookingSerializer(ModelSerializer):
         )
         immutable_fields = ('started_at', 'ended_at', 'owner', 'borrower', 'product')
 
-class BookingActionSerializer(ModelSerializer):
+class BookingActionSerializer(serializers.ModelSerializer):
     action = fields.CharField(write_only=True, max_length=128)
 
     default_error_messages = {
@@ -157,7 +169,7 @@ class CommentAuthorField(HyperlinkedRelatedField):
                     model = field.field.rel.to
             self.queryset = model._default_manager.all()
 
-class CommentSerializer(ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     rate = fields.ChoiceField(source='note', choices=models.Comment._meta.get_field('note').choices)
     author = CommentAuthorField()
 
@@ -167,10 +179,3 @@ class CommentSerializer(ModelSerializer):
         public_fields = ('id', 'booking', 'comment', 'rate', 'created_at', 'author')
         read_only_fields = ('created_at',)
         immutable_fields = ('booking', 'author')
-
-class SinisterSerializer(ModelSerializer):
-    class Meta:
-        model = models.Sinister
-        fields = ('uuid', 'sinister_id', 'description', 'patron', 'booking', 'product') # TBD: do we need sinister_id to be exposed? How it's going to be used?
-        read_only_fields = ('sinister_id',)
-        immutable_fields = ('patron', 'booking', 'product')
