@@ -9,7 +9,7 @@ from decimal import Decimal as D
 #import facebook
 
 from imagekit.models import ImageSpecField
-from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
+from pilkit import processors
 
 from django_fsm import FSMField, transition
 
@@ -106,33 +106,33 @@ class Patron(AbstractUser):
     thumbnail = ImageSpecField(
         source='avatar',
         processors=[
-            Crop(width=40, height=40),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.ResizeToFit(width=40, height=40),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+            processors.Transpose(processors.Transpose.AUTO),
         ],
     )
     profil = ImageSpecField(
         source='avatar',
         processors=[
-            ResizeToFit(width=120, height=120),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.ResizeToFit(width=120, height=120),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+            processors.Transpose(processors.Transpose.AUTO),
         ],
     )
     display = ImageSpecField(
         source='avatar',
         processors=[
-            ResizeToFit(width=180),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.ResizeToFit(width=180),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+            processors.Transpose(processors.Transpose.AUTO),
         ],
     )
     product_page = ImageSpecField(
         source='avatar',
         processors=[
-            ResizeToFit(width=86, height=86),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.ResizeToFit(width=86, height=86),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+            processors.Transpose(processors.Transpose.AUTO),
         ],
     )
 
