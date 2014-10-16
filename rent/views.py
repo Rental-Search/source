@@ -392,11 +392,10 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         queryset = self.filter_queryset(self.get_queryset()).filter(state=BOOKING_STATE.PENDING)
         obj = self.get_object(queryset=queryset)
         content = obj.product.subtype.contract_generator(obj).getvalue()
-        return Response(
-            content,
-            headers={'Content-Disposition': 'attachment; filename=contrat.pdf'},
-            content_type='application/pdf',
-        )
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename=contrat.pdf'
+        response.write(content)
+        return response
 
     @action(methods=['put'])
     def pay(self, request, *args, **kwargs):
