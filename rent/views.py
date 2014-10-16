@@ -402,7 +402,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
 
     @link()
     def contract(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset()).filter(state=BOOKING_STATE.PENDING)
+        queryset = self.filter_queryset(self.get_queryset()).filter(state__in=[BOOKING_STATE.PENDING, BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSED, BOOKING_STATE.INCIDENT])
         obj = self.get_object(queryset=queryset)
         content = obj.product.subtype.contract_generator(obj).getvalue()
         response = HttpResponse(content, content_type='application/pdf')
