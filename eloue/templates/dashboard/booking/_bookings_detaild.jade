@@ -103,7 +103,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     li.clearfix
                         .col-xs-3 Caution
                         .col-xs-9 {{bookingDetails.deposit_amount}}€
-                    li.clearfix
+                    li.clearfix(ng-show="bookingDetails.state=='pending'")
                         .col-xs-3 Contrat
                         .col-xs-9
                             a(href="{{contractLink}}", target="_blank").text-success.text-underline-hover Télécharger le contrat
@@ -131,7 +131,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
             .col-exposition
                 form(ng-submit="postIncident()")
                     textarea.expand(name="incident.description", rows="4", placeholder="Décrire l'incident...", ng-model="incident.description", required)
-                    p.text-justify-force.indent-sm-t
+                    p.text-right.indent-sm-t
                         button(type="submit").btn-inline.bg-success-hover.text-white Envoyer
 //-
   section.text-gray-strong.bg-lite
