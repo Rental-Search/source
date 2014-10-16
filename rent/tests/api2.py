@@ -139,6 +139,24 @@ class BookingTest(APITransactionTestCase):
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
 
+    def test_booking_pay_owner(self):
+        response = self.client.post(_location('booking-list'), {
+            'started_at': datetime.now() + timedelta(days=2),
+            'ended_at': datetime.now() + timedelta(days=4),
+            'product': _location('product-detail', pk=6),
+        })
+        uuid = response.data['uuid']
+
+        self.client.login(username='lin.liu@e-loue.com', password='lin')
+
+        response = self.client.put(_location('booking-pay', uuid), {
+            'expires': '0517',
+            'holder_name': 'John Doe',
+            'card_number': '4987654321098769',
+            'cvv': '123',
+        })
+        self.assertEqual(response.status_code, 403, response.data)
+
     def test_booking_accept(self):
         response = self.client.post(_location('booking-list'), {
             'started_at': datetime.now() + timedelta(days=2),
@@ -156,9 +174,31 @@ class BookingTest(APITransactionTestCase):
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
 
+        self.client.login(username='lin.liu@e-loue.com', password='lin')
+
         response = self.client.put(_location('booking-accept', uuid))
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
+
+    def test_booking_accept_borrower(self):
+        response = self.client.post(_location('booking-list'), {
+            'started_at': datetime.now() + timedelta(days=2),
+            'ended_at': datetime.now() + timedelta(days=4),
+            'product': _location('product-detail', pk=6),
+        })
+        uuid = response.data['uuid']
+
+        response = self.client.put(_location('booking-pay', uuid), {
+            'expires': '0517',
+            'holder_name': 'John Doe',
+            'card_number': '4987654321098769',
+            'cvv': '123',
+        })
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertEqual(response.data['detail'], _(u'Transition performed'))
+
+        response = self.client.put(_location('booking-accept', uuid))
+        self.assertEqual(response.status_code, 403, response.data)
 
     def test_booking_contract(self):
         response = self.client.post(_location('booking-list'), {
@@ -237,9 +277,31 @@ class BookingTest(APITransactionTestCase):
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
 
+        self.client.login(username='lin.liu@e-loue.com', password='lin')
+
         response = self.client.put(_location('booking-reject', uuid))
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
+
+    def test_booking_reject_borrower(self):
+        response = self.client.post(_location('booking-list'), {
+            'started_at': datetime.now() + timedelta(days=2),
+            'ended_at': datetime.now() + timedelta(days=4),
+            'product': _location('product-detail', pk=6),
+        })
+        uuid = response.data['uuid']
+
+        response = self.client.put(_location('booking-pay', uuid), {
+            'expires': '0517',
+            'holder_name': 'John Doe',
+            'card_number': '4987654321098769',
+            'cvv': '123',
+        })
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertEqual(response.data['detail'], _(u'Transition performed'))
+
+        response = self.client.put(_location('booking-reject', uuid))
+        self.assertEqual(response.status_code, 403, response.data)
 
     def test_booking_reject_wrong_state(self):
         response = self.client.post(_location('booking-list'), {
@@ -253,6 +315,28 @@ class BookingTest(APITransactionTestCase):
         self.assertEqual(response.status_code, 400, response.data)
 
     def test_booking_cancel(self):
+        response = self.client.post(_location('booking-list'), {
+            'started_at': datetime.now() + timedelta(days=2),
+            'ended_at': datetime.now() + timedelta(days=4),
+            'product': _location('product-detail', pk=6),
+        })
+        uuid = response.data['uuid']
+
+        response = self.client.put(_location('booking-pay', uuid), {
+            'expires': '0517',
+            'holder_name': 'John Doe',
+            'card_number': '4987654321098769',
+            'cvv': '123',
+        })
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertEqual(response.data['detail'], _(u'Transition performed'))
+
+        self.client.login(username='lin.liu@e-loue.com', password='lin')
+
+        response = self.client.put(_location('booking-cancel', uuid))
+        self.assertEqual(response.status_code, 403, response.data)
+
+    def test_booking_cancel_owner(self):
         response = self.client.post(_location('booking-list'), {
             'started_at': datetime.now() + timedelta(days=2),
             'ended_at': datetime.now() + timedelta(days=4),
