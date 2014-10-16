@@ -505,6 +505,8 @@ class SinisterViewSet(viewsets.ImmutableModelViewSet):
     API endpoint that allows sinisters to be viewed or edited.
     """
     model = models.Sinister
+    queryset = models.Sinister.objects.select_related('booking__owner', 'booking__borrower')
     serializer_class = serializers.SinisterSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = ('patron', 'booking__owner', 'booking__borrower')
     filter_fields = ('patron', 'booking', 'product')
