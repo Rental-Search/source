@@ -17,8 +17,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CategoriesService",
         "PricesService",
-        "Capacity",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, Capacity) {
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -27,7 +26,27 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.leafCategories = {};
             $scope.rootCategory = {};
             $scope.nodeCategory = {};
-            $scope.capacityOptions = Capacity;
+            $scope.capacityOptions = [
+                {id: 1, name: "1"},
+                {id: 2, name: "2"},
+                {id: 3, name: "3"},
+                {id: 4, name: "4"},
+                {id: 5, name: "5"},
+                {id: 6, name: "6"},
+                {id: 7, name: "7"},
+                {id: 8, name: "8"},
+                {id: 9, name: "9"},
+                {id: 10, name: "10"},
+                {id: 11, name: "11"},
+                {id: 12, name: "12"},
+                {id: 13, name: "13"},
+                {id: 14, name: "14"},
+                {id: 15, name: "15"},
+                {id: 16, name: "16"},
+                {id: 17, name: "17"},
+                {id: 18, name: "18"},
+                {id: 19, name: "19+"}
+            ];
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
             $scope.categoriesBaseUrl = Endpoints.api_url + "categories/";
             $scope.product = {};
