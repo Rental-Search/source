@@ -13,12 +13,12 @@ class SinisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Sinister
         fields = ('uuid', 'sinister_id', 'description', 'patron', 'booking', 'product') # TBD: do we need sinister_id to be exposed? How it's going to be used?
-        read_only_fields = ('sinister_id',)
+        read_only_fields = ('uuid', 'sinister_id')
         immutable_fields = ('patron', 'booking', 'product')
 
 class NestedSinisterSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
     class Meta(SinisterSerializer.Meta):
-        fields = ('description',)
+        fields = ('uuid', 'description')
 
 class BookingProductField(HyperlinkedRelatedField):
     default_error_messages = {
@@ -56,7 +56,7 @@ class BookingSerializer(serializers.ModelSerializer):
         model = models.Booking
         fields = (
             'uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
-            'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at',
+            'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at', 'sinisters',
         )
         read_only_fields = (
             'state', 'deposit_amount', 'insurance_amount', 'total_amount',
