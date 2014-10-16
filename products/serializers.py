@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from products import models
-from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer, BooleanField
+from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
 
 
