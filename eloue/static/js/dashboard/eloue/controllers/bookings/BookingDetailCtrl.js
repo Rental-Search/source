@@ -13,13 +13,15 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
         "BookingsLoadService",
         "CommentsLoadService",
         "PhoneNumbersService",
+        "SinistersService",
         "UsersService",
         "UtilsService",
-        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, UsersService, UtilsService) {
+        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, SinistersService, UsersService, UtilsService) {
 
             // Initial comment data
             $scope.comment = {rate: 0};
             $scope.showIncidentForm = false;
+            $scope.showIncidentDescription = false;
 
             // On rating star click
             $(".star i").click(function () {
@@ -32,7 +34,7 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
             // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
-                $scope.showIncidentForm = $scope.bookingDetails.state == 'incident';
+                $scope.showIncidentDescription = $scope.bookingDetails.state == 'incident';
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.contractLink = Endpoints.api_url + "bookings/" + $stateParams.uuid + "/contract/";
@@ -70,6 +72,14 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                     $scope.commentList = commentList;
                     $scope.showCommentForm = $scope.commentList.length == 0 && $scope.bookingDetails.state == "ended";
                 });
+
+                if ($scope.showIncidentDescription) {
+                    SinistersService.getSinisterList($stateParams.uuid).then(function (sinisterList) {
+                        if (!!sinisterList.results) {
+                            $scope.sinister = sinisterList.results[0];
+                        }
+                    });
+                }
             });
 
             /**
