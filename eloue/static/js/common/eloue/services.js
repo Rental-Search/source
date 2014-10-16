@@ -1051,7 +1051,36 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 addressesService.getAddressesByPatron = function (patronId) {
-                    return Addresses.get({patron: patronId});
+                    var deferred = $q.defer();
+
+                    Addresses.get({patron: patronId}).$promise.then(function (result) {
+                        var total = result.count;
+                        if (total <= 10) {
+                            deferred.resolve(result.results);
+                        } else {
+                            var pagesCount = Math.floor(total / 10) + 1;
+                            var adrPromises = [];
+
+                            for (var i = 1; i <= pagesCount; i++) {
+                                adrPromises.push(Addresses.get({patron: patronId, page: i}).$promise);
+                            }
+
+                            $q.all(adrPromises).then(
+                                function (addresses) {
+                                    var addressList = [];
+                                    angular.forEach(addresses, function (adrPage, index) {
+                                        angular.forEach(adrPage.results, function (value, key) {
+                                            addressList.push(value);
+                                        });
+                                    });
+                                    deferred.resolve(addressList);
+                                }
+                            );
+
+                        }
+                    });
+
+                    return deferred.promise;
                 };
 
                 addressesService.updateAddress = function (addressId, formData) {

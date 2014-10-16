@@ -25,8 +25,8 @@ define(["angular", "eloue/app"], function (angular) {
                 if (!!$scope.currentUser.default_number) {
                     $scope.phoneNumber = !!$scope.currentUser.default_number.number.numero ? $scope.currentUser.default_number.number.numero : $scope.currentUser.default_number.number;
                 }
-                AddressesService.getAddressesByPatron(currentUser.id).$promise.then(function (data) {
-                    $scope.addressList = data.results;
+                AddressesService.getAddressesByPatron(currentUser.id).then(function (results) {
+                    $scope.addressList = results;
                     $scope.defaultAddress = (!!currentUser.default_address) ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
                     console.log($scope.defaultAddress);
                 });
