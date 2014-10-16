@@ -1392,6 +1392,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Bookings.reject({uuid: uuid}, {uuid: uuid});
                 };
 
+                bookingsLoadService.postIncident = function (uuid, description) {
+                   return Bookings.incident({uuid: uuid}, {uuid: uuid, description: description});
+                };
+
                 bookingsLoadService.getBookingByProduct = function (productId) {
                     var deferred = $q.defer();
 
