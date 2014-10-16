@@ -106,33 +106,33 @@ class Patron(AbstractUser):
     thumbnail = ImageSpecField(
         source='avatar',
         processors=[
-            processors.ResizeToFit(width=40, height=40),
-            processors.Adjust(contrast=1.2, sharpness=1.1),
             processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=40, height=40),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     profil = ImageSpecField(
         source='avatar',
         processors=[
-            processors.ResizeToFit(width=120, height=120),
-            processors.Adjust(contrast=1.2, sharpness=1.1),
             processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=120, height=120),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     display = ImageSpecField(
         source='avatar',
         processors=[
+            processors.Transpose(processors.Transpose.AUTO),
             processors.ResizeToFit(width=180),
             processors.Adjust(contrast=1.2, sharpness=1.1),
-            processors.Transpose(processors.Transpose.AUTO),
         ],
     )
     product_page = ImageSpecField(
         source='avatar',
         processors=[
-            processors.ResizeToFit(width=86, height=86),
-            processors.Adjust(contrast=1.2, sharpness=1.1),
             processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=86, height=86),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
 

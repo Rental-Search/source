@@ -532,33 +532,33 @@ class Picture(models.Model):
     thumbnail = ImageSpecField(
         source='image',
         processors=[
-            processors.ResizeToFit(width=100, height=100),
-            processors.Adjust(contrast=1.2, sharpness=1.1),
             processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=100, height=100),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     profile = ImageSpecField(
         source='image',
         processors=[
-            processors.ResizeToFit(width=300, height=200),
-            processors.Adjust(contrast=1.2, sharpness=1.1),
             processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=300, height=200),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     home = ImageSpecField(
         source='image',
         processors=[
-            processors.ResizeToFit(width=180, height=120),
-            processors.Adjust(contrast=1.2, sharpness=1.1),
             processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=180, height=120),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     display = ImageSpecField(
         source='image',
         processors=[
-            processors.ResizeToFit(width=450, height=300),
-            processors.Adjust(contrast=1.2, sharpness=1.1),
             processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=450, height=300),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
 
