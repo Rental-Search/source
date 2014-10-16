@@ -45,11 +45,13 @@ class BookingSerializer(serializers.ModelSerializer):
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)
-        unit = obj.product.calculate_price(obj.started_at, obj.ended_at)
-        max_available = self.opts.model.calculate_available_quantity(obj.product, obj.started_at, obj.ended_at)
-        quantity = attrs.get('quantity', None)
-        obj.total_amount = unit[1] * min(quantity or 1, max_available)
-        obj.ip = self.context['request'].META.get('REMOTE_ADDR', None)
+        if instance is None:
+            product = obj.product
+            unit = product.calculate_price(obj.started_at, obj.ended_at)
+            max_available = self.opts.model.calculate_available_quantity(product, obj.started_at, obj.ended_at)
+            obj.quantity = quantity = min(obj.quantity or 1, max_available)
+            obj.total_amount = unit[1] * quantity
+            obj.ip = self.context['request'].META.get('REMOTE_ADDR', None)
         return obj
 
     class Meta:
