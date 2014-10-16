@@ -6,7 +6,8 @@
             "subscription_ended": "2011-09-07 10:12:02",
             "propackage": 3,
             "subscription_started": "2011-08-06 14:28:52",
-            "patron": 1
+            "patron": 1,
+            "payment_type": 0
         }
     },
     {
@@ -16,7 +17,8 @@
             "subscription_ended": null,
             "propackage": 3,
             "subscription_started": "2011-09-07 10:12:03",
-            "patron": 7
+            "patron": 7,
+            "payment_type": 0
         }
     },
     {
@@ -26,7 +28,8 @@
             "subscription_ended": null,
             "propackage": 3,
             "subscription_started": "2011-09-07 10:12:03",
-            "patron": 8
+            "patron": 8,
+            "payment_type": 1
         }
     }
 ]

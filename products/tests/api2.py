@@ -709,6 +709,20 @@ class ProductTest(APITestCase):
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('quantity'), reverse=True))
 
+    def test_filter1(self):
+        response = self.client.get(_location('product-list'), {'deposit_amount': 250})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['deposit_amount'] == 250, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['deposit_amount'] != 250, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('product-list'), {'deposit_amount': 700})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['deposit_amount'] == 700, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['deposit_amount'] != 700, response.data['results']))
+
 
 class StaffProductTest(APITestCase):
     fixtures = ['patron_staff', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
@@ -732,6 +746,32 @@ class StaffProductTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('quantity'), reverse=True))
+
+    def test_filter_private_field1(self):
+        response = self.client.get(_location('product-list'), {'is_archived': True})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['count'], 0)
+
+    def test_filter_private_field2(self):
+        response = self.client.get(_location('product-list'), {'is_archived': False})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: not x['is_archived'], response.data['results']))
+        self.assertEqual([], filter(lambda x: x['is_archived'], response.data['results']))
+
+    def test_filter1(self):
+        response = self.client.get(_location('product-list'), {'deposit_amount': 250})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['deposit_amount'] == 250, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['deposit_amount'] != 250, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('product-list'), {'deposit_amount': 700})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['deposit_amount'] == 700, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['deposit_amount'] != 700, response.data['results']))
 
 
 class CategoryTest(APITestCase):
@@ -827,6 +867,20 @@ class CategoryTest(APITestCase):
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('name'), reverse=True))
 
+    def test_filter1(self):
+        response = self.client.get(_location('category-list'), {'is_child_node': True})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['is_child_node'], response.data['results']))
+        self.assertEqual([], filter(lambda x: not x['is_child_node'], response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('category-list'), {'is_child_node': False})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: not x['is_child_node'], response.data['results']))
+        self.assertEqual([], filter(lambda x: x['is_child_node'], response.data['results']))
+
 
 class StaffCategoryTest(APITestCase):
     fixtures = ['patron_staff', 'category']
@@ -847,6 +901,20 @@ class StaffCategoryTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('name'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('category-list'), {'is_child_node': True})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['is_child_node'], response.data['results']))
+        self.assertEqual([], filter(lambda x: not x['is_child_node'], response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('category-list'), {'is_child_node': False})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: not x['is_child_node'], response.data['results']))
+        self.assertEqual([], filter(lambda x: x['is_child_node'], response.data['results']))
 
 
 class PriceTest(APITestCase):
@@ -985,6 +1053,28 @@ class PriceTest(APITestCase):
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('amount'), reverse=True))
 
+    def test_filter1(self):
+        response = self.client.get(_location('price-list'), {'product': 1})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(
+            response.data['results'],
+            filter(lambda x: x['product'].endswith(_location('product-detail', pk=1)), response.data['results']))
+        self.assertEqual(
+            [],
+            filter(lambda x: not x['product'].endswith(_location('product-detail', pk=1)), response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('price-list'), {'product': 2})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(
+            response.data['results'],
+            filter(lambda x: x['product'].endswith(_location('product-detail', pk=2)), response.data['results']))
+        self.assertEqual(
+            [],
+            filter(lambda x: not x['product'].endswith(_location('product-detail', pk=2)), response.data['results']))
+
 
 class StaffPriceTest(APITestCase):
     fixtures = ['patron_staff', 'address', 'category', 'product', 'price']
@@ -1005,6 +1095,28 @@ class StaffPriceTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('amount'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('price-list'), {'product': 1})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(
+            response.data['results'],
+            filter(lambda x: x['product'].endswith(_location('product-detail', pk=1)), response.data['results']))
+        self.assertEqual(
+            [],
+            filter(lambda x: not x['product'].endswith(_location('product-detail', pk=1)), response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('price-list'), {'product': 2})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(
+            response.data['results'],
+            filter(lambda x: x['product'].endswith(_location('product-detail', pk=2)), response.data['results']))
+        self.assertEqual(
+            [],
+            filter(lambda x: not x['product'].endswith(_location('product-detail', pk=2)), response.data['results']))
 
 
 class CuriosityTest(APITestCase):

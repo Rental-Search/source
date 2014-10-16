@@ -263,6 +263,20 @@ class BookingTest(APITransactionTestCase):
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('state'), reverse=True))
 
+    def test_filter1(self):
+        response = self.client.get(_location('booking-list'), {'total_amount': 20})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['total_amount'] == 20, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['total_amount'] != 20, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('booking-list'), {'total_amount': 10})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['total_amount'] == 10, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['total_amount'] != 10, response.data['results']))
+
 
 class StaffBookingTest(APITestCase):
     fixtures = ['patron_staff', 'booking_address', 'category', 'product', 'price', 'booking', 'comment', 'booking_creditcard']
@@ -283,6 +297,20 @@ class StaffBookingTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('state'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('booking-list'), {'total_amount': 20})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['total_amount'] == 20, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['total_amount'] != 20, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('booking-list'), {'total_amount': 10})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['total_amount'] == 10, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['total_amount'] != 10, response.data['results']))
 
 
 class CommentTest(APITestCase):

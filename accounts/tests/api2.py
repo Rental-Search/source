@@ -1580,6 +1580,18 @@ class SubscriptionTest(APITestCase):
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('subscription_started'), reverse=True))
 
+    def test_filter1(self):
+        response = self.client.get(_location('subscription-list'), {'payment_type': 0})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['payment_type'] == 0, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['payment_type'] != 0, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('subscription-list'), {'payment_type': 1})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['count'], 0)
+
 
 class StaffSubscriptionTest(APITestCase):
     fixtures = ['patron_staff', 'propackages', 'subscriptions']
@@ -1598,3 +1610,17 @@ class StaffSubscriptionTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('subscription_started'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('subscription-list'), {'payment_type': 0})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['payment_type'] == 0, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['payment_type'] != 0, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('subscription-list'), {'payment_type': 1})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['payment_type'] == 1, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['payment_type'] != 1, response.data['results']))
