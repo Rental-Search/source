@@ -69,7 +69,7 @@ class CreditCardSerializer(serializers.ModelSerializer):
             attrs.pop('holder', None)
         self.form = form = CreditCardForm(attrs)
         if not form.is_valid():
-            raise ValidationError('Form errors: %s' % dict(form.errors))
+            raise ValidationError(dict(form.errors))
         new_attrs = form.clean()
         new_attrs['keep'] = keep
         return new_attrs
