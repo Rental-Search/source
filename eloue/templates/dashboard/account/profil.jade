@@ -58,7 +58,7 @@ block sections
           .col-sm-12
             p.text-uppercase: b: small téléphone par défaut
             input#phone.form-control(type="text", name="phoneNumber", placeholder="Téléphone par défaut", ng-model="phoneNumber")
-            input#phone_number(type="hidden", name="default_number", ng-model="currentUser.default_number")
+            input#default_number(type="hidden", name="default_number", ng-model="currentUser.default_number")
         //- about myself
         .row
           .col-sm-12
@@ -84,22 +84,17 @@ block sections
               i
         h2.text-black Informations sur le permis
         //- date birthday
-        {% endverbatim %}
         .row.form-control
           .col-sm-2
             select#select-day(name="select-day", data-placeholder="Jour", ng-model="licenceDay", eloue-chosen, data-ng-disabled="submitInProgress")
-              each day in days
-                option(value="#{day}") #{day}
+                option(ng-repeat="item in dayOptions", value="{{item}}", ng-selected="item == licenceDay") {{item}}
           .col-sm-4
             select#select-month(name="select-month", data-placeholder="Mois", ng-model="licenceMonth", eloue-chosen, data-ng-disabled="submitInProgress")
-              each month in months
-                option(value="#{month}") #{month}
+                option(ng-repeat="item in monthOptions", value="{{item.id}}", ng-selected="item.id == licenceMonth") {{item.value | translate}}
           .col-sm-3
             select#select-year(name="select-year", data-placeholder="Année", ng-model="licenceYear", eloue-chosen, data-ng-disabled="submitInProgress")
-              each year in years
-                option(value="#{year}") #{year}
-           input(type="hidden", name="drivers_license_date", ng-model="currentUser.drivers_license_date")
-        {% verbatim %}
+                option(ng-repeat="item in yearOptions", value="{{item}}", ng-selected="item == licenceYear") {{item}}
+           input#drivers_license_date(type="hidden", name="drivers_license_date", ng-model="currentUser.drivers_license_date")
         //- license-number
         .row
           .col-sm-12
