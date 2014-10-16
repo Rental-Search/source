@@ -23,11 +23,11 @@ block sections
             h3.text-black Je suis un professionnel ?
           .col-sm-2
             label.rad-btn.form-control Oui
-              input#newsletter(type="radio", name="is_professional", ng-checked="currentUser.is_professional")
+              input#is_professional(type="radio", name="is_professional", ng-checked="currentUser.is_professional")
               i
           .col-sm-2
             label.rad-btn.form-control Non
-              input#is-pro(type="radio", name="is_professional", ng-checked="!currentUser.is_professional")
+              input#is_professional(type="radio", name="is_professional", ng-checked="!currentUser.is_professional")
               i
         //- nackname & email
         .row
@@ -64,7 +64,7 @@ block sections
           .col-sm-12
             textarea#about-myself.expand.form-control(name="about", tabindex="1", rows="6", placeholder="A propos de vous...", ng-model="currentUser.about")
         //- languages
-        .row
+         .row
           .col-sm-12.without-search.form-control
             select(multiple, data-placeholder="Langues parlées", eloue-chosen, data-ng-disabled="submitInProgress")
                 option(value="fr_FR") Français
@@ -76,11 +76,11 @@ block sections
             h3.text-black J’accepte de recevoir la newsletter e-loue
           .col-sm-2
             label.rad-btn.form-control Oui
-              input#newsletter(type="radio", name="newsletter")
+              input#is_subscribed(type="radio", name="is_subscribed", ng-checked="currentUser.is_subscribed")
               i
           .col-sm-2
             label.rad-btn.form-control Non
-              input#newsletter(type="radio", name="newsletter", checked)
+              input#is_subscribed(type="radio", name="is_subscribed", ng-checked="!currentUser.is_subscribed")
               i
         h2.text-black Informations sur le permis
         //- date birthday
@@ -105,7 +105,7 @@ block sections
           .col-sm-12
             input#drivers_license_number.form-control(type="text", name="drivers_license_number", placeholder="Numéro de permis", ng-model="currentUser.drivers_license_number")
         //- drag photo
-        .row
+         .row
           .col-sm-12.form-control
             label(for="change-img").file-input-drag
               i.icon-4x.flaticon.stroke.plus

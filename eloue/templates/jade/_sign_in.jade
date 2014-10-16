@@ -37,7 +37,7 @@
                                 option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
                             {% endverbatim %}
                         .col-xs-7
-                            input(type="text", placeholder="Nom", name="lastName", ng-model="account.lastName", required).form-control
+                            input(type="text", placeholder="Nom *", name="lastName", ng-model="account.lastName", required).form-control
                             span.errorMsg(ng-show="registrationForm.lastName.$error.required && registrationForm.lastName.$dirty") Required field
                     -var registration_form_fields = [["text", "Prénom", "firstName"], ["email", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "postalCode"]]
                     each type, placeholder, name in registration_form_fields
@@ -49,7 +49,7 @@
                             input(type="checkbox", checked)#inform
                             span.flaticon.stroke.checkmark
                         | Tenez moi informé de l'actualité et des bonnes affaires e-loue
-                    .form-group: button(ng-click="openRegistrationForm()").btn.bg-success Inscription via Email
+                    .form-group: button(type="submit", data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty").btn.bg-success Inscription via Email
                     p
                         | En créant un compte e-loue, vous acceptez les &nbsp;
                         a(href="/conditions-generales/") Conditions Générales
