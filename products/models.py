@@ -10,7 +10,7 @@ import itertools
 from django.db.models.deletion import PROTECT
 
 from imagekit.models import ImageSpecField
-from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
+from pilkit import processors
 
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -532,33 +532,33 @@ class Picture(models.Model):
     thumbnail = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=100, height=100),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=100, height=100),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     profile = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=300, height=200),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=300, height=200),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     home = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=180, height=120),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=180, height=120),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     display = ImageSpecField(
         source='image',
         processors=[
-            ResizeToFit(width=450, height=300),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=450, height=300),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
 

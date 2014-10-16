@@ -13,15 +13,17 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
         "BookingsLoadService",
         "CommentsLoadService",
         "PhoneNumbersService",
+        "SinistersService",
         "UsersService",
         "UtilsService",
-        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, UsersService, UtilsService) {
+        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, SinistersService, UsersService, UtilsService) {
 
             // Initial comment data
             $scope.comment = {rate: 0};
             $scope.showIncidentForm = false;
+            $scope.showIncidentDescription = false;
 
-                // On rating star click
+            // On rating star click
             $(".star i").click(function () {
                 var self = $(this);
                 $scope.$apply(function () {
@@ -32,6 +34,8 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
             // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
+                $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
+                $scope.showIncidentDescription = $scope.bookingDetails.state == 'incident';
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.contractLink = Endpoints.api_url + "bookings/" + $stateParams.uuid + "/contract/";
@@ -39,12 +43,12 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                     $scope.isBorrower = bookingDetails.borrower.indexOf($scope.currentUserUrl) != -1;
                 });
 
-                UsersService.get(UtilsService.getIdFromUrl(bookingDetails.borrower)).$promise.then(function(result) {
+                UsersService.get(UtilsService.getIdFromUrl(bookingDetails.borrower)).$promise.then(function (result) {
                     $scope.borrowerName = result.username;
                     $scope.borrowerSlug = result.slug;
                 });
 
-                UsersService.get(UtilsService.getIdFromUrl(bookingDetails.owner)).$promise.then(function(result) {
+                UsersService.get(UtilsService.getIdFromUrl(bookingDetails.owner)).$promise.then(function (result) {
                     $scope.ownerName = result.username;
                     $scope.ownerSlug = result.slug;
                 });
@@ -69,6 +73,14 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                     $scope.commentList = commentList;
                     $scope.showCommentForm = $scope.commentList.length == 0 && $scope.bookingDetails.state == "ended";
                 });
+
+                if ($scope.showIncidentDescription) {
+                    SinistersService.getSinisterList($stateParams.uuid).then(function (sinisterList) {
+                        if (!!sinisterList.results) {
+                            $scope.sinister = sinisterList.results[0];
+                        }
+                    });
+                }
             });
 
             /**
@@ -76,36 +88,36 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
              * @param status booking status
              * @returns show be real number shown
              */
-            $scope.showRealPhoneNumber = function(status) {
+            $scope.showRealPhoneNumber = function (status) {
                 return $.inArray(status, ["pending", "ongoing", "ended", "incident", "refunded", "closed"]) != -1;
             };
 
 
-            $scope.acceptBooking = function() {
-                BookingsLoadService.acceptBooking($stateParams.uuid).$promise.then(function(result) {
+            $scope.acceptBooking = function () {
+                BookingsLoadService.acceptBooking($stateParams.uuid).$promise.then(function (result) {
                     toastr.options.positionClass = "toast-top-full-width";
                     toastr.success(result.detail, "");
                     $window.location.reload();
                 })
             };
 
-            $scope.rejectBooking = function() {
-                BookingsLoadService.rejectBooking($stateParams.uuid).$promise.then(function(result) {
+            $scope.rejectBooking = function () {
+                BookingsLoadService.rejectBooking($stateParams.uuid).$promise.then(function (result) {
                     toastr.options.positionClass = "toast-top-full-width";
                     toastr.success(result.detail, "");
                     $window.location.reload();
                 })
             };
 
-            $scope.cancelBooking = function() {
-                BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function(result) {
+            $scope.cancelBooking = function () {
+                BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
                     toastr.options.positionClass = "toast-top-full-width";
                     toastr.success(result.detail, "");
                     $window.location.reload();
                 })
             };
 
-            $scope.declareIncident = function() {
+            $scope.declareIncident = function () {
                 $scope.showIncidentForm = true;
             };
 
@@ -123,7 +135,10 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
             $scope.postIncident = function () {
                 BookingsLoadService.postIncident($stateParams.uuid, $scope.incident.description).$promise
                     .then(function (result) {
-                        console.log(result);
+                        toastr.options.positionClass = "toast-top-full-width";
+                        toastr.success(result.detail, "");
+                        $scope.showIncidentForm = false;
+                        $window.location.reload();
                     });
             };
         }

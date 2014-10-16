@@ -350,7 +350,7 @@ class Booking(models.Model):
     
     @transition(field=state, source=[BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED], target=BOOKING_STATE.INCIDENT)
     def incident(self, *args, **kwargs):
-        self.send_incident_email(*args, **kwargs)
+        pass #self.send_incident_email(*args, **kwargs)
     
     @transition(field=state, source=BOOKING_STATE.ONGOING, target=BOOKING_STATE.ENDED)
     def end(self):

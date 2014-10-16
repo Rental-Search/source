@@ -43,7 +43,7 @@
                 td Consommation
                 td
                     select(ng-model="product.consumption", eloue-chosen, data-ng-disabled="submitInProgress").table-form
-                        option(ng-repeat="item in consumptionOptions | orderBy:'id':true", value="{{item.id}}") {{item.id}} {{item.name}}
+                        option(ng-repeat="item in consumptionOptions", value="{{item.id}}")  {{item.name}}
             tr(ng-show="isAuto")
                 td Kilomètres inclus/jour
                 td
@@ -104,7 +104,7 @@
                 td CV fiscaux
                 td
                     select(ng-model="product.tax_horsepower", eloue-chosen, data-ng-disabled="submitInProgress").table-form
-                        option(ng-repeat="item in capacityOptions | orderBy:Number('id')", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td N° d'immatriculation
                 td
@@ -117,7 +117,7 @@
                 td Capacité
                 td
                     select(ng-model="product.capacity", eloue-chosen, data-ng-disabled="submitInProgress").table-form
-                        option(ng-repeat="item in capacityOptions| orderBy:id", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isRealEstate")
                 td Type de logement
                 td

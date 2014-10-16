@@ -6,17 +6,19 @@ p Nos boutiques sont situées au&nbsp;:
 for agency in patron.pro_agencies.all
   .indent-t-sm.text-white.btn-lg.bg-primary: b
     i.flaticon.stroke.up-2.icon-2x.pull-right(data-toggle="collapse", data-target="#map-{{ forloop.counter }}")
-    | Adresse
+    | {{ agency.address1 }}
     br
-    | {{ agency.zipcode }} {{ agency.city }}
+    | {{ agency.zipcode }} {{ agency.city|upper }}
   .collapse.in.map-wrapper(id="map-{{ forloop.counter }}")
-    .map
+    .map(locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}")
+  {% comment %}
   {% empty %}
   {% if patron.default_address %}
   .indent-t-sm.text-white.btn-lg.bg-primary: b
-    | Adresse
+    | {{ patron.default_address.address1 }}
     br
-    | {{ patron.default_address.zipcode }} {{ patron.default_address.city }}
+    | {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
   .map-wrapper
-    .map
+    .map(locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}")
   {% endif %}
+  {% endcomment %}

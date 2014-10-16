@@ -1051,7 +1051,36 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 addressesService.getAddressesByPatron = function (patronId) {
-                    return Addresses.get({patron: patronId});
+                    var deferred = $q.defer();
+
+                    Addresses.get({patron: patronId}).$promise.then(function (result) {
+                        var total = result.count;
+                        if (total <= 10) {
+                            deferred.resolve(result.results);
+                        } else {
+                            var pagesCount = Math.floor(total / 10) + 1;
+                            var adrPromises = [];
+
+                            for (var i = 1; i <= pagesCount; i++) {
+                                adrPromises.push(Addresses.get({patron: patronId, page: i}).$promise);
+                            }
+
+                            $q.all(adrPromises).then(
+                                function (addresses) {
+                                    var addressList = [];
+                                    angular.forEach(addresses, function (adrPage, index) {
+                                        angular.forEach(adrPage.results, function (value, key) {
+                                            addressList.push(value);
+                                        });
+                                    });
+                                    deferred.resolve(addressList);
+                                }
+                            );
+
+                        }
+                    });
+
+                    return deferred.promise;
                 };
 
                 addressesService.updateAddress = function (addressId, formData) {
@@ -1096,12 +1125,20 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return PhoneNumbers.get({id: phoneNumberId});
             };
 
+            phoneNumbersService.savePhoneNumber = function (phoneNumber) {
+                return PhoneNumbers.save(phoneNumber);
+            };
+
             phoneNumbersService.updatePhoneNumber = function (phoneNumber) {
                 return PhoneNumbers.update({id: phoneNumber.id}, phoneNumber);
             };
 
             phoneNumbersService.getPremiumRateNumber = function (phoneNumberId) {
                 return PhoneNumbers.getPremiumRateNumber({id: phoneNumberId});
+            };
+
+            phoneNumbersService.deletePhoneNumber = function (phoneNumberId) {
+                return PhoneNumbers.delete({id: phoneNumberId});
             };
 
             return phoneNumbersService;
@@ -1130,6 +1167,23 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 return commentsService;
+            }
+        ]);
+
+        /**
+         * Service for managing sinisters.
+         */
+        EloueCommon.factory("SinistersService", [
+            "Sinisters",
+            "Endpoints",
+            function (Sinisters, Endpoints) {
+                var sinistersService = {};
+
+                sinistersService.getSinisterList = function (bookingUUID) {
+                    return Sinisters.get({_cache: new Date().getTime(), booking: bookingUUID}).$promise;
+                };
+
+                return sinistersService;
             }
         ]);
 
@@ -1393,7 +1447,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 bookingsLoadService.postIncident = function (uuid, description) {
-                   return Bookings.incident({uuid: uuid}, {uuid: uuid, description: description});
+                   return Bookings.incident({uuid: uuid}, {description: description});
                 };
 
                 bookingsLoadService.getBookingByProduct = function (productId) {

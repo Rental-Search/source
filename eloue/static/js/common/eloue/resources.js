@@ -158,6 +158,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     }]);
 
     /**
+     * Factory for managing sinisters.
+     */
+    EloueCommon.factory("Sinisters", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "sinisters/:id/?");
+    }]);
+
+    /**
      * Factory for credit cards.
      */
     EloueCommon.factory("CreditCards", ["$resource", "Endpoints", function ($resource, Endpoints) {

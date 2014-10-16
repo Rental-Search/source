@@ -402,7 +402,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
 
     @link()
     def contract(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset()).filter(state=BOOKING_STATE.PENDING)
+        queryset = self.filter_queryset(self.get_queryset()).filter(state__in=[BOOKING_STATE.PENDING, BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSED, BOOKING_STATE.INCIDENT])
         obj = self.get_object(queryset=queryset)
         content = obj.product.subtype.contract_generator(obj).getvalue()
         response = HttpResponse(content, content_type='application/pdf')
@@ -505,6 +505,8 @@ class SinisterViewSet(viewsets.ImmutableModelViewSet):
     API endpoint that allows sinisters to be viewed or edited.
     """
     model = models.Sinister
+    queryset = models.Sinister.objects.select_related('booking__owner', 'booking__borrower')
     serializer_class = serializers.SinisterSerializer
-    filter_backends = (filters.OwnerFilter, filters.OrderingFilter)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = ('patron', 'booking__owner', 'booking__borrower')
     filter_fields = ('patron', 'booking', 'product')

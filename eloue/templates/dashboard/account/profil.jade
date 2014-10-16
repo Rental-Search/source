@@ -23,90 +23,89 @@ block sections
             h3.text-black Je suis un professionnel ?
           .col-sm-2
             label.rad-btn.form-control Oui
-              input#newsletter(type="radio", name="is_professional")
+              input#is_professional(type="radio", name="is_professional", ng-checked="currentUser.is_professional")
               i
           .col-sm-2
             label.rad-btn.form-control Non
-              input#is-pro(type="radio", name="is_professional", checked)
+              input#is_professional(type="radio", name="is_professional", ng-checked="!currentUser.is_professional")
               i
         //- nackname & email
         .row
           .col-md-12.col-lg-6
-            input#username.form-control(type="text", name="username", placeholder="Pseudo *", required, autofocus, value="{{currentUser.username}}")
+            input#username.form-control(type="text", name="username", placeholder="Pseudo *", required, autofocus, ng-model="currentUser.username")
           .col-md-12.col-lg-6
-            input#email.form-control(type="email", name="email", placeholder="Email *", required, value="{{currentUser.email}}")
+            input#email.form-control(type="email", name="email", placeholder="Email *", required, ng-model="currentUser.email")
         //- gender, first-name, name
         .row
           .col-sm-2.without-search
             .form-control
-              select(eloue-chosen, data-placeholder="Civilité", data-ng-disabled="submitInProgress", value="{{currentUser.civility}}")
+              select(eloue-chosen, data-placeholder="Civilité", data-ng-disabled="submitInProgress", ng-model="currentUser.civility")
                 option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
           .col-sm-5
-            input#first_name.form-control(type="text", name="first_name", placeholder="Prénom *", required, value="{{currentUser.first_name}}")
+            input#first_name.form-control(type="text", name="first_name", placeholder="Prénom *", required, ng-model="currentUser.first_name")
           .col-sm-5
-            input#last_name.form-control(type="text", name="last_name", placeholder="Nom *", required, value="{{currentUser.last_name}}")
+            input#last_name.form-control(type="text", name="last_name", placeholder="Nom *", required, ng-model="currentUser.last_name")
         //- address
         .row
           .col-sm-12.without-search.form-control
             p.text-uppercase: b: small adresse par défaut
-            select(eloue-chosen, data-ng-disabled="submitInProgress")
+            select(name="default_address", eloue-chosen, ng-model="defaultAddress", data-ng-disabled="submitInProgress", data-placeholder="Adresse par défaut *", required)
+                option(ng-repeat="address in addressList", value="{{addressesBaseUrl}}{{address.id}}/", ng-selected="defaultAddress == (addressesBaseUrl + address.id + '/')") {{address.street}}, {{address.zipcode}} {{address.city}}
               //-option(value="#{tenant.address}") #{tenant.address}
-            h4.indent-sm-v.text-right.text-success-hover: a(href="#") Ajouter ou modifier une adresse
+            h4.indent-sm-v.text-right.text-success-hover: a(ui-sref="account.addresses") Ajouter ou modifier une adresse
         //- telephone
         .row
-          .col-sm-12.without-search.form-control
+          .col-sm-12
             p.text-uppercase: b: small téléphone par défaut
-            select(eloue-chosen, data-ng-disabled="submitInProgress")
-              //-each telefone in tenant.telephones
-              //-
-                option(value="#{telefone}") #{telefone}
-            h4.indent-sm-v.text-right.text-success-hover: a(href="#") Téléphone par défaut
+            input#phone.form-control(type="text", name="phoneNumber", placeholder="Téléphone par défaut", ng-model="phoneNumber")
+            input#phone_number(type="hidden", name="default_number", ng-model="currentUser.default_number")
         //- about myself
         .row
           .col-sm-12
-            textarea#about-myself.expand.form-control(name="about-myself", tabindex="1", rows="6", placeholder="A propos de vous...")
+            textarea#about-myself.expand.form-control(name="about", tabindex="1", rows="6", placeholder="A propos de vous...", ng-model="currentUser.about")
         //- languages
-        .row
+         .row
           .col-sm-12.without-search.form-control
-            select(multiple="", data-placeholder="Langues parlées", eloue-chosen, data-ng-disabled="submitInProgress")
-              //-each language in tenant.languages
-              //-
-                option(value="#{language.ID}") #{language.self}
+            select(multiple, data-placeholder="Langues parlées", eloue-chosen, data-ng-disabled="submitInProgress")
+                option(value="fr_FR") Français
+                option(value="en_US") Anglais
+                option(value="es_ES") Espagnol
         //- newsletter
         .row
           .col-sm-8
             h3.text-black J’accepte de recevoir la newsletter e-loue
           .col-sm-2
             label.rad-btn.form-control Oui
-              input#newsletter(type="radio", name="newsletter")
+              input#is_subscribed(type="radio", name="is_subscribed", ng-checked="currentUser.is_subscribed")
               i
           .col-sm-2
             label.rad-btn.form-control Non
-              input#newsletter(type="radio", name="newsletter", checked)
+              input#is_subscribed(type="radio", name="is_subscribed", ng-checked="!currentUser.is_subscribed")
               i
         h2.text-black Informations sur le permis
         //- date birthday
         {% endverbatim %}
         .row.form-control
           .col-sm-2
-            select#select-day(name="select-day", data-placeholder="Jour", eloue-chosen, data-ng-disabled="submitInProgress")
+            select#select-day(name="select-day", data-placeholder="Jour", ng-model="licenceDay", eloue-chosen, data-ng-disabled="submitInProgress")
               each day in days
                 option(value="#{day}") #{day}
           .col-sm-4
-            select#select-month(name="select-month", data-placeholder="Mois", eloue-chosen, data-ng-disabled="submitInProgress")
+            select#select-month(name="select-month", data-placeholder="Mois", ng-model="licenceMonth", eloue-chosen, data-ng-disabled="submitInProgress")
               each month in months
                 option(value="#{month}") #{month}
           .col-sm-3
-            select#select-year(name="select-year", data-placeholder="Année", eloue-chosen, data-ng-disabled="submitInProgress")
+            select#select-year(name="select-year", data-placeholder="Année", ng-model="licenceYear", eloue-chosen, data-ng-disabled="submitInProgress")
               each year in years
                 option(value="#{year}") #{year}
+           input(type="hidden", name="drivers_license_date", ng-model="currentUser.drivers_license_date")
         {% verbatim %}
         //- license-number
         .row
           .col-sm-12
-            input#drivers_license_number.form-control(type="text", name="drivers_license_number", placeholder="Numéro de permis", value="{{currentUser.drivers_license_number}}")
+            input#drivers_license_number.form-control(type="text", name="drivers_license_number", placeholder="Numéro de permis", ng-model="currentUser.drivers_license_number")
         //- drag photo
-        .row
+         .row
           .col-sm-12.form-control
             label(for="change-img").file-input-drag
               i.icon-4x.flaticon.stroke.plus
