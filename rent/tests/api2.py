@@ -217,9 +217,11 @@ class BookingTest(APITransactionTestCase):
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
 
+        self.client.login(username='lin.liu@e-loue.com', password='lin')
         response = self.client.put(_location('booking-accept', uuid))
         self.assertEqual(response.status_code, 200, response.data)
 
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.get(_location('booking-contract', uuid))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.content.startswith('%PDF'), "'{}'.startswith('%PDF')".format(response.content))
@@ -240,9 +242,11 @@ class BookingTest(APITransactionTestCase):
         })
         self.assertEqual(response.status_code, 200, response.data)
 
+        self.client.login(username='lin.liu@e-loue.com', password='lin')
         response = self.client.put(_location('booking-accept', uuid))
         self.assertEqual(response.status_code, 200, response.data)
 
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
         response = self.client.put(_location('booking-incident', uuid), {
             'description': 'Description',
         })
@@ -257,6 +261,7 @@ class BookingTest(APITransactionTestCase):
         })
         uuid = response.data['uuid']
 
+        self.client.login(username='lin.liu@e-loue.com', password='lin')
         response = self.client.put(_location('booking-accept', uuid))
         self.assertEqual(response.status_code, 400, response.data)
 
@@ -336,7 +341,7 @@ class BookingTest(APITransactionTestCase):
         response = self.client.put(_location('booking-cancel', uuid))
         self.assertEqual(response.status_code, 403, response.data)
 
-    def test_booking_cancel_owner(self):
+    def test_booking_cancel_borrower(self):
         response = self.client.post(_location('booking-list'), {
             'started_at': datetime.now() + timedelta(days=2),
             'ended_at': datetime.now() + timedelta(days=4),
