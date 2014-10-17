@@ -11,6 +11,11 @@ block scripts
 block append content-body
   -var is_pro = product.pro_owner
   #fb-root
+  if is_pro
+    {% with product.object.owner as patron %}
+    include ../jade/_pro_popin_website_link
+    include ../jade/_pro_popin_shop
+    {% endwith %}
   .container-flex(data-ng-controller="ProductDetailsCtrl")
     header.header-site
       include ../jade/_header_site
