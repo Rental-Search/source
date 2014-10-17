@@ -1,784 +1,1309 @@
-{% extends "base.html" %}
-{% load i18n product booking cache %}
-
-
-{% block html_properties %}
-    xmlns:fb="http://ogp.me/ns/fb#" itemscope itemtype="http://schema.org/Product"
-{% endblock %}
-
-{% block title %}{% trans "Location"%} {{ product.summary }} - {{ product.address.city }}{% endblock %}
-
-{% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
-
-
-{% block head %}
- {{ block.super }}
-    {% cache 43200 product:meta product.pk %}
-    {% with product.pictures.all|first as picture %}
-    {% with product.get_absolute_url as absolute_url %}
-        <meta property="og:title" content="A louer sur e-loue : {{product.summary}}"/>
-        <meta property="og:type" content="product"/>
-        <meta property="og:url" content="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}"/>
-        {% with product.address as address %}
-            <meta property="og:locality" content="{{address.city}}"/>
-            <meta property="og:postal-code" content="{{address.zipcode}}"/>
-            <meta property="og:country-name" content="{{address.get_country_display}}"/>
-        {% endwith %}
-          {% if picture %}
-            <meta property="og:image" content="{{picture.thumbnail.url }}"/>
-          {% endif %}
-        <meta property="og:site_name" content="e-loue"/>
-        <meta property="fb:app_id" content="{{FACEBOOK_APP_ID}}"/>
-        <meta property="og:description" content="{{ product.description }}"/>
-
-        {% if picture %}
-            <meta itemprop="image" content="{{picture.thumbnail.url}}">
-        {% endif %}
-        <meta itemprop="name" content="{{ product.summary }}">
-        
-        <link rel="canonical" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" />
-    {% endwith %}
-    {% endwith %} {# picture #}
-    {% endcache %}
-    {% if product.is_archived %}
-    <style>
-    .ui-widget-overlay {
-       background: #000 !important;
-       opacity: .70 !important;
-       filter: Alpha(Opacity=70)!important;
-    }
-
-    .ui-dialog .ui-dialog-title {
-        float: none !important;
-        margin: 0px !important ;
-        
-        h2 { margin-top: 10px; }
-      }
-
-    .ui-dialog-title {
-        text-align: center !important;
-    }
-    </style>
-    {% endif %}
-{% endblock %}
-
-{% block tail %}
-	{{ block.super }}
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '{{FACEBOOK_APP_ID}}', // App ID
-          channelUrl : '{{ STATIC_URL }}channel.html', // Channel File
-          status     : true, // check login status
-          cookie     : true, // enable cookies to allow the server to access the session
-          xfbml      : true  // parse XFBML
-        });
-
-        // Additional initialization code here
-      };
-
-      // Load the SDK Asynchronously
-      (function(d){
-         var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-         js = d.createElement('script'); js.id = id; js.async = true;
-         js.src = "//connect.facebook.net/fr_FR/all.js";
-         d.getElementsByTagName('head')[0].appendChild(js);
-       }(document));
-    </script>
-    
-    <script type="text/javascript">
-      (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/plusone.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
-    </script>
-    
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-    <script>
-        enabled = {};
-        function availability(year, month, inst) {
-            $.ajax({
-                type: 'GET',
-                url: 'occupied_date/',
-                dataType: 'json',
-                data: {year:year, month:month},
-                success: function(response) {
-                    enabled = {};
-                    for (i in response) {
-                        enabled[response[i][0]] = response[i][1];
-                    }
-                    if (typeof(inst) == 'undefined'){
-                        $('.hasDatepicker').datepicker("refresh");
-                    } else {
-                        inst.input.datepicker("refresh");
-                    }
-                }
-            });
-        }
-
-        beforeShowDay = function(date) {
-            today = new Date();
-            today.setHours(0);
-            today.setMinutes(0);
-            today.setSeconds(0);
-            today.setMilliseconds(0);
-            if (date < today) {
-                return [false, 'outdated'];
-            }
-            c = date.getFullYear()+'-'+('0'+(date.getMonth()+1)).slice(-2)+'-'+('0'+date.getDate()).slice(-2);
-            if (c in enabled && !enabled[c]) return [false, 'unavailable'];
-            return [true];
-        }
-        
-        onChangeMonthYear = function(year, month, inst) {
-            availability(inst.drawYear, inst.drawMonth + 1, inst);
-        }
-
-        beforeShow = function(input, inst) {
-            setTimeout(
-                //XXX: outside a timeout it doesn't work, dunno why
-                function(){
-                    availability(inst.selectedYear, inst.selectedMonth + 1, inst);
-            }, 0);
-        }
-
-        $(document).ready(function () {
-            date = new Date();
-            $(".calendar-display").datepicker(
-                {
-                    minDate: 0,
-                    maxDate: '+360d',
-                    beforeShowDay: beforeShowDay,
-                    onChangeMonthYear: onChangeMonthYear
-                }
-            );
-
-            //Display datepicker on product detail page
-            startDate = $('input[name$=started_at_0]');
-            startDate.datepicker({
-                dateFormat: 'dd/mm/yy',
-                defaultDate: '+1d',
-                minDate: 0, 
-                maxDate: '+360d',
-                beforeShow: beforeShow,
-                beforeShowDay: beforeShowDay,
-                onChangeMonthYear: onChangeMonthYear,
-                onSelect: function(dateText, inst) {
-                    var date1 = $(this).datepicker('getDate');
-                    var date = new Date( Date.parse( date1 ) ); 
-                    date.setDate( date.getDate() );
-                    var newDate = date.toDateString(); 
-                    newDate = new Date( Date.parse( newDate ) );
-                    var ended_at = $('input[name$=ended_at_0]');
-                    ended_at.datepicker("option", "minDate", newDate);
-                    ended_at.datepicker('setDate', newDate );
-                    var ended_hour = $('#id_0-ended_at_1');
-                    if ( parseInt(ended_hour.val()) != 23 ) {
-                        ended_hour.children('option:selected').next('option').attr('selected', 'selected');
-                    }
-                    bookingPrice($('#booking_create'));
-                }
-            }).datepicker('setDate', '+1d');
-            
-            endDate = $('input[name$=ended_at_0]');
-            endDate.datepicker({
-                defaultDate: '+2d',
-                dateFormat: 'dd/mm/yy',
-                beforeShowDay: beforeShowDay,
-                onChangeMonthYear: onChangeMonthYear,
-                beforeShow: beforeShow
-            }).datepicker('setDate', '+2d');
-
-            availability(date.getFullYear(), date.getMonth()+1);
-        });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function (){
-            $("div.btn-pro-contact a").click(function (e) {
-                e.preventDefault();
-                if ($('.open.btn-pro-contact').length == 0) { 
-                    $('.btn-pro-contact').addClass('open');
-                }
-                $('.btn-pro-contact .dropdown-toggle').removeClass('dropdown-toggle');
-                $(".btn-pro-contact-content div").hide();
-                val = $(this).attr("href");
-                $(this).addClass('dropdown-toggle');
-                $(val).show();
-            });
-            {% if product.is_archived %}
-                $("#product-archived").dialog({
-                    autoOpen: true,
-                    width: '500',
-                    resizable: false,
-                    modal: true,
-                    closeOnEscape: false,
-                    open: function(event, ui) { 
-                        $(".ui-dialog-titlebar-close.ui-corner-all").remove(); 
-                    },
-                    draggable: false,
-                });
-            {% endif %}
-        });
-    </script>
-    <script type="text/javascript">
-            $(document).ready(function() {
-                $('a.phone-agency-link').click(function(e) {
-                    e.preventDefault();
-                    $(this).hide();
-                    $(this).parent().children('.phone-agency').show('slow')
-                });
-            });
-        </script>
-    {% if not debug %}
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == "success" %}
-            <!-- Google Code for Depot HTTPS Conversion Page -->
-            <script type="text/javascript">
-            /* <![CDATA[ */
-            var google_conversion_id = 1027691277;
-            var google_conversion_language = "en";
-            var google_conversion_format = "3";
-            var google_conversion_color = "ffffff";
-            var google_conversion_label = "EO41CNPrpQMQjaaF6gM";
-            var google_conversion_value = 0;
-            var google_remarketing_only = false;
-            /* ]]> */
-            </script>
-            <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-            </script>
-            <noscript>
-            <div style="display:inline;">
-            <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1027691277/?value=0&amp;label=EO41CNPrpQMQjaaF6gM&amp;guid=ON&amp;script=0"/>
-            </div>
-            </noscript>
-            <script type="text/javascript">
-                var fb_param = {};
-                fb_param.pixel_id = '6012641161301';
-                fb_param.value = '0.01';
-                fb_param.currency = 'EUR';
-                (function(){
-                var fpw = document.createElement('script');
-                fpw.async = true;
-                fpw.src = '//connect.facebook.net/en_US/fp.js';
-                var ref = document.getElementsByTagName('script')[0];
-                ref.parentNode.insertBefore(fpw, ref);
-                })();
-            </script>
-            <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6012641161301&amp;value=0.01&amp;currency=EUR" /></noscript>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-    {% endif %}
-{% endblock %}
-{% block gaq %}
-{% if messages %}
-    {%  for message in messages %}
-        {% if message.tags == "success" %}
-        {% if not request.user.is_active %}
-            _gaq.push(['_trackEvent', 'Membre', 'Inscription', 'Dépôt annonce']);
-        {% endif %}
-        {% if thread.product.carproduct %}
-            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Voiture', '{{ product.category.name }}']);
-        {% endif %}
-        {% if thread.product.realestateproduct %}
-            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Logement', '{{ product.category.name }}']);
-        {% endif %}
-        {% if not thread.product.carproduct and not thread.product.realestateproduct %}
-            _gaq.push(['_trackEvent', 'Dépôt annonce', 'Objet', '{% for category in product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ product.category.name }}']);
-        {% endif %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
-{% endblock %}
-{% block content %}
-<div id="fb-root"></div>
-
-<div class="container-main">
-
-{% cache 43200 product:breadcrumb product.pk %}
-    <ul class="breadcrumb">
-        <li><a href="{% url 'home' %}">{% trans "Accueil" %}</a></li>
-		{% for category in product.category.get_ancestors %}
-		 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
-		{% endfor %}
-		<li><a href="{{ product.category.get_absolute_url }}">{% trans "Location" %} {{ product.category|capfirst }}</a></li>
-		<li class="lastb">{{ product.summary|capitalize }}</li>
-    </ul>{# breadcrumb #}
-{% endcache %}
-    <div class="content-main">
-        {% include "partials/alerts_message.html" %}
-
-{% cache 43200 product:details:before_csrf product.pk site.pk %}
-        <h1>{% trans "Location" %} {{ product.summary|capitalize}} - {{ product.address.city }}</h1>
-        <div class="product-resume">
-            <div class="product-resume-left">
-                <address class="product-address ">
-                    <i class="icon-map-marker"></i>
-                    {% with product.address as product_address %}
-                    {{ product_address.city|capfirst }}, {{ product_address.zipcode }}
-                    {% endwith %}
-                </address>
-                {% if product.name == 'carproduct' %}
-                <ul class="product-properties">
-                    <li>
-                        <i class="icon-user"></i>
-                        {{ product.seat_number }} {% trans "places" %}
-                    </li>
-                    <li>
-                        <i class="icon-th-large"></i>
-                        {{ product.door_number }} {% trans "portes" %}
-                    </li>
-                    <li>
-                        <i class="icon-fire"></i>
-                        {{ product.get_fuel_display }}
-                    </li>
-                    <li>
-                        <i class="icon-move"></i>
-                        {{ product.get_transmission_display }}
-                    </li>
-                    <li>
-                        <i class="icon-road"></i>
-                        {{  product.consumption }} {% trans "L/100km" %}
-                    </li>
-                    <li>
-                        <i class="icon-barcode"></i>
-                        {% if product.licence_plate %}
-                            {% if product.licence_plate_is_peer %}
-                                {% trans "Plaque paire" %}
-                            {% else %}
-                                {% trans "Plaque impaire" %}
-                            {% endif %} 
-                        {% endif %}
-                    </li>
-                </ul>{# product-properties #}
-                {% endif %}
-                {% if product.name == 'realestateproduct' %}
-                <ul class="product-properties">
-                    <li>
-                        <i class="icon-user"></i>
-                        {{product.capacity}} {% trans "personnes" %}
-                    </li>
-                    <li>
-                        <i class="icon-home"></i>
-                        {{ product.get_private_life_display }}
-                    </li>
-                    <li>
-                        <i class="icon-tags"></i>
-                        {{ product.chamber_number }} {% trans "chambres" %}
-                    </li>
-                </ul>
-                {% endif %}
-            </div>
-            <div class="product-resume-right">
-                <span class="stars empty"><span class="stars filled_{{ product.average_note }}"></span></span>
-                <a href="#id_product_comment">
-                {% blocktrans count product.borrowercomments.count as count %}
-                    ({{ count }} avis)
-                    {% plural %}
-                    ({{ count }} avis)
-                {% endblocktrans%}
-                </a>
-            </div>
-        </div>{# product-resume #}
-        <div class="product-tabs ui-tabs ui-widget ui-widget-content ui-corner-all">
-            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-                <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
-                    <a href="#gallery">{% trans "Photo" %}</a>
-                </li>
-                <li class="ui-state-default ui-corner-top">
-                    <a href="#prices_calendar">{% trans "Disponibilités et tarifs" %}</a>
-                </li>
-                {% if insurance_available %}
-                <li class="ui-state-default ui-corner-top">
-                    <a href="#conditions">{% trans "Conditions et assurance"%}</a>
-                </li>
-                {% endif %}
-            </ul>
-            <div id="gallery" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
-            {% with product.pictures.all|first as picture %}
-                {% if picture %}
-                    <img src="{{ picture.display.url }}" alt="{{ product.summary }}">
-                {% endif %}
-            {% endwith %}
-            </div> {# gallery #}
-            <div id="prices_calendar" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-                <div class="prices">
-                    <div class="table-bg">
-                        {% if product.prices.all %}
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>{% trans "Période" %}</th>
-                                    <th class="price-head">{% trans "Prix" %}</th>
-                                </tr>
-                            </thead>
-                            {% for price in product.prices.all %}
-                            <tr>
-                                <td>{% trans price.get_prefixed_unit_display|capfirst %}
-                                </td>
-                                <td class="price-display">{{ price }}</td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                        {% else %}
-                            <p style="padding: 10px;">{% trans "Prix uniquement sur devis"%}</p>
-                        {% endif %}
-                    </div>
-                    {% if product.deposit_amount %}
-                    <ul>
-                        <li style="margin-bottom: 10px;">{% trans "Dépôt de garantie" %} : {{ product.local_currency_deposit_amount|currency }}</li>
-                        <li>{% trans "Uniquement débité en cas de dommage constaté et avec votre accord."%}</li>
-                    </ul>
-                    {% endif %}
-                    {% if product.type == 'carproduct' %}
-                    <ul class="service-included">
-                        <li>
-                            {% if product.km_included %}{{ product.km_included }} km inclus par jour {% endif %} 
-                            {% if product.costs_per_km %}{% if product.km_included %}puis {% endif %}{{ product.costs_per_km|floatformat:2 }} &euro;/km supplémentaire{% endif %}
-                        </li>
-                        <li>Assurance vol et accident incluse</li>
-                    </ul>
-                    {% endif %}
-                </div>{# prices #}
-                <div class="calendar">
-                    <div class="calendar-display"></div>
-                    <ul class="calendar-legend">
-                        <li>
-                            <span class="available-date"></span>
-                            {% trans "Date disponible" %}
-                        </li>
-                        <li>
-                            <span class="unavailable-date"></span>
-                            {% trans "Date non disponible" %}
-                        </li>
-                    </ul>
-                </div>{# calendar #}
-            </div>
-            {% if insurance_available %}
-            <div id="conditions" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
-                {% include "rent/partials/condition_assurance.html" %}
-            </div>
-            {% endif %}
-        </div>{# product-tabs #}
-        {% if product.options %}
-        <div class="product-info">
-            <h2>{% trans "Options & accessoires" %}</h2>
-            <ul class="product-options">
-                {% for option in product.options %}
-                <li><i class="icon-ok"></i> {{option}}</li>
-                {% endfor %}
-            </ul>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <title>e-loue</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../static/img/favicon.ico">
+    <!-- include font "Open Sans"-->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600">
+    <!-- include icon fonts-->
+    <link rel="stylesheet" href="../../static/fonts/flaticons_social/flaticons_social.css">
+    <link rel="stylesheet" href="../../static/fonts/flaticons_solid/flaticons_solid.css">
+    <link rel="stylesheet" href="../../static/fonts/flaticons_stoke/flaticons_stoke.css">
+    <!-- custom select.css-->
+    <!-- http://harvesthq.github.io/chosen/-->
+    <link rel="stylesheet" href="../../static/css/chosen.min.css">
+    <!-- custom scrollbar.css-->
+    <!-- http://manos.malihu.gr/jquery-custom-content-scroller/-->
+    <link rel="stylesheet" href="../../static/css/jquery.mCustomScrollbar.css">
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <link rel="stylesheet" href="../../static/css/datepicker3.css">
+    <link rel="stylesheet" href="../../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../../static/css/product_detail_styles.css">
+    <!-- jQuery-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!-- for IE < 9 -->
+    <!-- html5 tags supported-->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <!-- palceholder supported-->
+    <script src="http://jamesallardice.github.io/Placeholders.js/assets/js/placeholders.min.js"></script>
+    <!-- selectivizr-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/selectivizr/1.0.2/selectivizr-min.js"></script>
+    <!-- end scripts for IE < 9-->
+    <!-- geolocation by Google-->
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+    <script src="../../static/js/formmapper.js"></script>
+    <!-- custom select.js-->
+    <script src="../../static/js/chosen.jquery.min.js"></script>
+    <!-- textarea autoresize-->
+    <!-- http://www.jacklmoore.com/autosize/-->
+    <script src="../../static/js/jquery.autosize.js"></script>
+    <!-- modal window bootstrap-->
+    <script src="../../static/js/bootstrap/modal.js"></script>
+    <!-- dropdown bootstrap-->
+    <script src="../../static/js/bootstrap/dropdown.js"></script>
+    <!-- custom scrollbar.js-->
+    <script src="../../static/js/jquery.mCustomScrollbar.js"></script>
+    <!-- datepicker-->
+    <!-- http://eternicode.github.io/bootstrap-datepicker/?markup=input&format=&weekStart=&startDate=&endDate=&startView=0&minViewMode=0&todayBtn=false&language=en&orientation=auto&multidate=&multidateSeparator=&keyboardNavigation=on&forceParse=on#sandbox-->
+    <script src="../../static/js/bootstrap-datepicker.js"></script>
+    <script src="../../static/js/locales/bootstrap-datepicker.fr.js"></script>
+    <script src="../../static/js/scripts.js"></script>
+    <script src="../../static/js/bootstrap/carousel.js"></script>
+    <script src="../../static/js/scripts.js"></script>
+  </head>
+  <body>
+    <div id="sign-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Inscription</h4>
+          </div>
+          <div class="modal-body">
+            <h3>Inscrivez-vous en 2 secondes</h3>
+            <div class="form-group"><a href="#" class="btn bg-info"><i class="flaticon social facebook"></i>Inscription via Facebook</a></div>
+            <div class="form-group"><a href="#" class="btn bg-danger"><i class="flaticon social google-plus"></i>Inscription via Google</a></div>
+            <p class="info">Nous ne publierons jamais rien sur votre mur sans votre accord</p><span class="or"></span>
+            <h3>Inscrivez-vous en 30 secondes</h3>
+            <form action="">
+              <div class="form-group"><a href="#classic-form" data-toggle="modal" data-target="#classic-form" data-dismiss="modal" class="btn bg-success">Inscription via Email</a></div>
+            </form><span class="or"></span>
+            <h4>Vous êtes déjà membre e-loue ?</h4><a href="#connectez-vous" data-toggle="modal" data-target="#log-in" data-dismiss="modal" class="modal-fotter-link connexion">Connexion</a>
+          </div>
         </div>
-        {% endif %}
-        <div class="product-info">
-            <h2>{% trans "Description" %}</h2>
-            {{ product.description|linebreaksp }}
+      </div>
+    </div>
+    <div id="log-in" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Connexion</h4>
+          </div>
+          <div class="modal-body">
+            <h3>Connectez-vous à votre compte</h3>
+            <div class="form-group"><a href="#" class="btn bg-info"><i class="flaticon social facebook"></i>Connexion via Facebook</a></div>
+            <div class="form-group"><a href="#" class="btn bg-danger"><i class="flaticon social google-plus"></i>Connexion via Google</a></div>
+            <p class="info">Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez) <br>Vos données personnelles ne seront jamais cédées ou vendues.</p><span class="or"></span>
+            <form>
+              <div class="form-group">
+                <input type="email" placeholder="E-mail" required class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Mot de passe" required class="form-control">
+              </div>
+              <div class="form-group clearfix">
+                <div class="checkbox pull-left">
+                  <label for="remember-me">
+                    <input type="checkbox" checked id="remember-me"><span class="flaticon stroke checkmark"></span>
+                  </label>Se souvenir de moi
+                </div>
+                <div class="forgot-password pull-right"><a href="#" data-toggle="modal" data-target="#reset-password" data-dismiss="modal">Mot de passe oublié</a></div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn bg-success">Connexion</button>
+              </div>
+            </form><span class="or"></span>
+            <h4>Vous êtes déjà membre e-loue ?</h4><a href="#" data-toggle="modal" data-target="#sign-in" data-dismiss="modal" class="modal-fotter-link connexion">Inscription</a>
+          </div>
         </div>
-        {% if product.rules %}
-        <div class="product-info">
-            <h2>{% trans "Règle d'utilisation"%}</h2>
-            {{ product.rules|linebreaksp }}
-        </div>        
-        {% endif %}
-        <div id="id-product-comment" class="product-comment">
-            {% with product.borrowercomments as borrowercomments %}
-                {% if borrowercomments.count > 0 %}
-                    {% blocktrans count borrowercomments.count as count %}
-                        <h2>{{ count }} commentaires</h2>
-                        {% plural %}
-                        <h2>{{ count }} commentaire</h2>
-                    {% endblocktrans%}
-                {% else %}
-                <h2>{% trans "Pas de commentaire" %}</h2>
-                {% endif %}
-                <ul>
-                {% for comment in borrowercomments %}
-                    <li>{% include "rent/partials/comment.html" %}</li>
-                {% empty %}
-                    <li>{% trans "Soyez-le premier à réserver et à commenter !" %}</li>
-                {% endfor %}
-                </ul>
-            {% endwith %}
-        </div>{# product-comment #}
-    </div>{# content-main #}
-    <div class="content-aside">
-    {% with product.get_absolute_url as absolute_url %}
-        <ul class="social-button">
-            <li class="fb">
-                <fb:like href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" send="true" layout="button_count" show_faces="false" font="tahoma"></fb:like>
-            </li>
-            <li class="tweet">
-                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}" data-hashtags="eloue" data-text="A louer sur e-loue : "></a>
-            </li>
-            <li class="gplus">
-                <g:plusone size="medium" annotation="none" href="{% if request.is_secure %}https{%else%}http{%endif%}://{{ request.get_host }}{{ absolute_url }}"></g:plusone>
-            </li>
-        </ul>{# social-button #}
-    {% endwith %}
-    {% with product.owner as patron %}
-        {% if patron.is_professional %}
-            {% if patron.pro_agencies.all %}
-            <div id="owner" class="info-block" style="height: 155px;">
-                <h2>
-                    {% trans "Professionnel"%}
-                    <small>
-                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
-                    </small>
-                </h2>
-                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
-                    {% if patron.avatar %}
-                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                    {% else %}
-                    <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                    {% endif %}
-                </a>
-                <p class="patron-company_name">
-                    {{ patron.company_name|truncate:13 }}
-                </p>
-                <p class="patron-description">
-                    {{ patron.about }}
-                </p>
-                <p class="patron-website">
-                    <a href="{{ patron.url }}">{{ patron.url }}</a>
-                </p>
-            </div>
-            {% if patron.pro_agencies.all %}
-                <div id="pro-agencies" class="info-block">
-                    <h2>
-                        {% trans "Retrait en magasin"%}
-                    </h2>
-                    <div class="pro-agencies">
-                        <ul>
-                        {% for agency in patron.pro_agencies.all %}
-                            <li>
-                                <span class="name-agency">{{ agency.name }}</span>
-                                <address>
-                                    {{ agency.address1 }}<br>
-                                    {{ agency.zipcode }} {{ agency.city }}<br>
-                                </address>
-                                <a href="#" class="phone-agency-link" nClick="_gaq.push(['_trackEvent', 'Pro', 'Phone', '{{ patron.slug }}']);">Voir le N° de Téléphone</a>
-                                <span class="phone-agency">{{ agency.phone_number }}<span>
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    </div>
+      </div>
+    </div>
+    <div id="classic-form" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Inscription</h4>
+          </div>
+          <div class="modal-body">
+            <form action="registration">
+              <h3>Inscription 30 secondes</h3>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-xs-5">
+                    <select class="form-control">
+                      <option value="monsieur">Monsieur.</option>
+                      <option value="mademoiselle">Mademoiselle</option>
+                      <option value="madame">Madame</option>
+                    </select>
+                  </div>
+                  <div class="col-xs-7">
+                    <input type="text" placeholder="Nom" class="form-control">
+                  </div>
                 </div>
-            {% endif %}
-            {% else %}
-            <div id="owner" class="info-block">
-                <h2>
-                    {% trans "Professionnel"%}
-                    <small>
-                        <a href="{{ patron.get_absolute_url }}" >({% trans " Voir toutes ses annonces "%})</a>
-                    </small>
-                </h2>
-                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
-                    {% if patron.avatar %}
-                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                    {% else %}
-                    <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                    {% endif %}
-                </a>
-                <p class="owner-username">
-                    <a href="{{ patron.get_absolute_url }}">{{ patron.company_name|truncate:13 }}</a>
-                </p>
-                <address>
-                    {% if patron.default_address %}
-                        {% with patron.default_address as default_address %}
-                            {{ default_address.city }} - {{ default_address.zipcode }}
-                        {% endwith %}
-                    {% else %}
-                        {% with patron.addresses.all|first as default_address %}
-                            {{ default_address.city }} - {{ default_address.zipcode }}
-                        {% endwith %}
-                    {% endif %}
-                </address>
-                <a href="{% url 'message_create' product.pk patron.pk %}" class="btn-contactme">Contactez moi</a>
-                {% if patron.current_subscription %}
-                <div class="btn-pro-contact btn-group">
-                {% if patron.default_number %}
-                  <a href="#btn-pro-contact-number" class="btn btn-info btn-small" onClick="_gaq.push(['_trackEvent', 'Pro', 'Phone', '{{ patron.slug }}']);">Téléphone</a>
-                {% endif %}
-                {% if patron.url %}
-                  <a href="#btn-pro-contact-redirection" class="btn btn-info btn-small">Site Internet</a>
-                {% endif %}
-                {% if patron.default_address %}
-                  <a href="#btn-pro-contact-shop" class="btn btn-info btn-small" onClick="_gaq.push(['_trackEvent', 'Pro', 'Address', '{{ patron.slug }}']);">Boutique</a>
-                {% endif %}
+              </div>
+              <div class="form-group">
+                <input type="text" placeholder="Prénom" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="email" placeholder="Adresse email" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Mot de passe" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="password" placeholder="Confirmation de mot de passe" class="form-control">
+              </div>
+              <div class="form-group">
+                <input type="text" placeholder="Code postal" class="form-control">
+              </div>
+              <div class="checkbox">
+                <label for="remember-me">
+                  <input type="checkbox" checked id="remember-me"><span class="flaticon stroke checkmark"></span>
+                </label>Tenez moi informé de l'actualité et des bonnes affaires e-loue
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn bg-success">Inscription via Email</button>
+              </div>
+              <p>En créant un compte e-loue, vous acceptez les <a href="#">Conditions Générales </a><br>et la <a href="#">Politique de Confidentialité </a>de notre site</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="reset-password" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Réinitialisation du mot de passe</h4>
+          </div>
+          <div class="modal-body">
+            <p class="indent-r-md indent-l-md">Mot de passe perdu ? Saisissez votre adresse électronique ci-desso us et nous vous enverrons les instructions pour en créer un nouveau.</p>
+            <form action="reset-password">
+              <div class="form-group">
+                <input type="email" placeholder="E-mail" required class="form-control">
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn bg-success">Connexion</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="fb-root"></div>
+    <div id="pop-up-send-message" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog large">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Message</h4>
+          </div>
+          <div class="modal-body table-cell">
+            <div class="static-part table-cell">
+              <section class="product-info">
+                <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/180/120/technics)" class="bg-image"></a></div>
+                <div class="thumbnail-content">
+                  <h3>BMW 520 Touring Luxe</h3>
+                  <p class="location"><i class="flaticon stroke location-pin-3"></i>Nice, 02200</p>
+                  <p class="stats">
+                    <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                    </div><span class="rate-count">32</span><span class="comments-count"><i class="flaticon stroke writing-comment"></i>12</span>
+                  </p>
+                  <div class="declarer">
+                    <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100/people)" class="bg-image"></a></div>
+                    <div class="thumbnail-content">
+                      <p>Julien Dupré</p>
+                    </div>
+                  </div>
                 </div>
-                <div class="btn-pro-contact-content">
-                    {% if patron.default_number %}
-                    <div id="btn-pro-contact-number">
-                        <h5>{% trans "Contacter par téléphone"%}</h5>
-                        <p>{{ patron.default_number.number }}</p>
+              </section>
+              <section class="terms">
+                <div class="date-picker form-wrapper">
+                  <div class="table-cell main-cell">
+                    <div class="table-cell"><span>Du</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
                     </div>
-                    {% endif %}
-                    {% if patron.url %}
-                    <div id="btn-pro-contact-redirection">
-                        <h5>{% trans "Vister le site internet"%}</h5>
-                        <p><a href="{{ patron.url }}" onClick="_gaq.push(['_trackEvent', 'Pro', 'Redirection', '{{ patron.slug }}']);" rel="nofollow">{{patron.url}}</a></p>
-                    </div>
-                    {% endif %}
-                    {% if patron.default_address %}
-                    <div id="btn-pro-contact-shop">
-                        <h5>{% trans "Aller à la boutique"%}</h5>
-                        <address>{{ patron.default_address.address1 }}<br>
-                        {{ patron.default_address.zipcode }} {{ patron.default_address.city }}
-                        </address>
-                    </div>
-                    {% endif %}
+                  </div>
+                  <div class="table-cell">
+                    <select class="form-control">
+                      <option value="01.00">01.00</option>
+                      <option value="02.00">02.00</option>
+                      <option value="03.00">03.00</option>
+                      <option value="04.00">04.00</option>
+                      <option value="05.00">05.00</option>
+                      <option value="06.00">06.00</option>
+                      <option value="07.00">07.00</option>
+                      <option value="08.00">08.00</option>
+                      <option value="09.00">09.00</option>
+                      <option value="10.00">10.00</option>
+                      <option value="11.00">11.00</option>
+                      <option value="12.00">12.00</option>
+                      <option value="13.00">13.00</option>
+                      <option value="14.00">14.00</option>
+                      <option value="15.00">15.00</option>
+                      <option value="16.00">16.00</option>
+                      <option value="17.00">17.00</option>
+                      <option value="18.00">18.00</option>
+                      <option value="19.00">19.00</option>
+                      <option value="20.00">20.00</option>
+                      <option value="21.00">21.00</option>
+                      <option value="22.00">22.00</option>
+                      <option value="23.00">23.00</option>
+                    </select>
+                  </div>
                 </div>
-                {% endif %}
-            </div>{#  owner #}
-            {% endif %}
-        {% else %}
-            <div id="owner" class="info-block">
-                <h2>
-                    {% trans "Posez-moi vos questions" %}
-                </h2>
-                <a href="{{ patron.get_absolute_url }}" class="onwer-avatar">
-                    {% if patron.avatar %}
-                    <img src="{{ patron.profil.url }}" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                    {% else %}
-                    <img src="{{ STATIC_URL }}images/default_avatar.png" alt="{% trans "loueur"%}{{ patron.username }}" width="100" height="100">
-                    {% endif %}
-                </a>
-                <p class="owner-username">
-                    <a href="{{ patron.get_absolute_url }}">{{ patron.username|truncate:13 }}</a>
-                </p>
-                {% if product.phone %}
-                    {% if product.carproduct %}
-                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Voiture - {{ product.category.name }}']);">{% trans "Appeler" %}</a>
-                    {% endif %}
-                    {% if product.realestateproduct %}
-                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Logement - {{ product.category.name }}']);">{% trans "Appeler" %}</a>
-                    {% endif %}
-                    {% if not product.carproduct and not product.realestateproduct %}
-                        <a href="{{ product.get_absolute_url }}appeler/" class="btn-contactme" style="margin-bottom: 7px; width: 93px; text-align: center;" onClick="_gaq.push(['_trackEvent', 'Réservation', 'Appel', 'Objet - {% for category in product.category.get_ancestors %}{{ category.name }} - {% endfor %}{{ product.category.name }}']);">{% trans "Appeler" %}</a>
-                    {% endif %}
-                {% endif %}
-                <a href="{% url 'message_create' product.pk patron.pk %}" class="btn-contactme" style="margin-bottom: 8px; width: 93px; text-align: center">{% trans "Message" %}</a>
-                {% cache 43200 response_stats patron.pk %}
-                <table class="answer-stats" style="margin-top: 10px;">
-                    {% if patron.average_note %}
+                <div class="date-picker form-wrapper">
+                  <div class="table-cell main-cell">
+                    <div class="table-cell"><span>Au</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
+                    </div>
+                  </div>
+                  <div class="table-cell">
+                    <select class="form-control">
+                      <option value="01.00">01.00</option>
+                      <option value="02.00">02.00</option>
+                      <option value="03.00">03.00</option>
+                      <option value="04.00">04.00</option>
+                      <option value="05.00">05.00</option>
+                      <option value="06.00">06.00</option>
+                      <option value="07.00">07.00</option>
+                      <option value="08.00">08.00</option>
+                      <option value="09.00">09.00</option>
+                      <option value="10.00">10.00</option>
+                      <option value="11.00">11.00</option>
+                      <option value="12.00">12.00</option>
+                      <option value="13.00">13.00</option>
+                      <option value="14.00">14.00</option>
+                      <option value="15.00">15.00</option>
+                      <option value="16.00">16.00</option>
+                      <option value="17.00">17.00</option>
+                      <option value="18.00">18.00</option>
+                      <option value="19.00">19.00</option>
+                      <option value="20.00">20.00</option>
+                      <option value="21.00">21.00</option>
+                      <option value="22.00">22.00</option>
+                      <option value="23.00">23.00</option>
+                    </select>
+                  </div>
+                </div>
+                <table class="calendar bd-wrap indent-t-md indent-b-md">
+                  <tbody>
                     <tr>
-                        <th >{% trans "Evaluations" %}</th>
-                        <td>
-                            <span class="stars empty"><span class="stars filled_{{ patron.average_note }}"></span></span>
-                        </td>
-                    </tr>
-                    {% endif %}
-                    <tr>
-                        <th class="answer-rate">{% trans "Taux de réponse" %}</th>
-                        <td>
-                            {{patron.response_rate|floatformat:"0"}}%
-                        </td>
+                      <td>Durée</td>
+                      <td><b>4 jours et 3 heures</b></td>
                     </tr>
                     <tr>
-                        <th class="answer-time">{% trans "Temps de réponse moyen" %}</th>
-                        <td>{{patron.response_time}}</td>
+                      <td>Prix</td>
+                      <td><b class="text-success">350€</b></td>
                     </tr>
+                    <tr>
+                      <td>Caution</td>
+                      <td><b>400€</b></td>
+                    </tr>
+                  </tbody>
                 </table>
-                {% endcache %}
-            </div>{#  owner #}
-        {% endif %}
-        {% endwith %}
-        <div class="booking-block">
-            <h2>
-                {% if product.owner.current_subscription %}
-                    {% trans "Demande de réservation" %}
-                {% else %}
-                    {% trans "Réservez en ligne" %}
-                {% endif %}
-            </h2>
-            <form id="booking_create" action="" method="POST">
-{% endcache %}
-                {% csrf_token %}
-{% cache 43200 product:details:after_csrf product.pk site.pk %}
-                <div class="top-block">
-                {% with product.daily_price as price %}
-                {% if price %}
-                    {{ price }} <span>{% blocktrans with price.unit|unit as unit %} / par {{ unit }}{% endblocktrans %}</span>
-                {% else %}
-                    {% trans "Sur devis" %}
-                {% endif %}
-                {% endwith %}
-{% endcache %}
-                </div>{# top block #}
-                <div class="main-block">
-                    <div class="booking-dates form-stacked">
-                        <p class="start-date">
-                            <label>{% trans "Début" %} :</label>
-                            {{ form.started_at }}
-                        </p>
-                        <p class="end-date">
-                            <label>{% trans "Fin" %} :</label>
-                            {{ form.ended_at }}
-                        </p>
-                        {% if product.quantity > 1 %}
-                        <p class="quantity-input">
-                            <label>{% trans "Quantité" %} :</label>
-                            {{ form.quantity }}
-                        </p>
-                        {% else %}
-                        {{ form.quantity }}
-                        {% endif %}
+                <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
+                <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
+              </section>
+            </div>
+            <div class="change-part table-cell">
+              <section class="dialogs">
+                <div class="dialog-scroll-container">
+                  <div class="dialog-container">
+                    <div class="message from-declarer">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100/people)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <div class="thumbnail-frame">
+                          <h4>Julien Dupré</h4>
+                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, consequuntur ut quae quisquam eaque minus quod dignissimos aliquid adipisci sint!</p>
+                        </div>
+                        <p class="time">Le 23.06.2014 à 09h25</p>
+                      </div>
                     </div>
-                    <div id="available">
-                        <p class="available">Ces dates sont disponibles</p>
+                    <div class="message from-customer">
+                      <div class="thumbnail-content">
+                        <div class="thumbnail-frame">
+                          <h4>Julien Dupré</h4>
+                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde, consequuntur ut quae quisquam eaque minus quod dignissimos aliquid adipisci sint!</p>
+                        </div>
+                        <p class="time">Le 23.06.2014 à 09h25</p>
+                      </div>
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100/people)" class="bg-image"></a></div>
                     </div>
-                </div>{# main-block #}
-{% cache 43200 product:details:after_dates product.pk %}
-                 <div class="bottom-block">
-                    {% if product.daily_price %}
-                    {% blocktrans with product.daily_price as day_price %}
-                        <p id="booking-total" class="total-price">
-                            Total : <span class="day">1 jour</span> soit <span class="pricing">{{ day_price }}</span>
-                        </p>
-                    {% endblocktrans %}
-                    {% endif %}
-                        <p>
-                            {% if product.owner.current_subscription %}
-                            <input type="submit" class="btn-booking" value="{% trans "Envoyer" %}"/>
-                            {% else %}
-                            <input type="submit" class="btn-booking" value="{% trans "Réserver" %}"/>
-                            {% endif %}
-                        </p>
-                        <p class="booking-info">
-                            {% if product.owner.current_subscription %}
-                                {% trans "Il s'agit d'une demande de réservation.<br>Le loueur va vous contacter rapidement. Le prix total est indicatif." %}
-                            {% else %}
-                                {% trans "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le propriétaire accepte la demande de location sous 24h."%}
-                            {% endif %}
-                        </p>
-                    </form>
-                </div><!-- bottom-block -->
-        </div>{# booking-block #}
-        {% if product_list %}
-        <div id="related-product" class="info-block">
-            <h2>{% trans "Objets similaires" %}</h2>
-            {% with 15 as truncation %}
-            {% include 'products/partials/result_list.html' %}
-            {% endwith %}
+                  </div>
+                </div>
+              </section>
+              <section class="input-message">
+                <div class="table-cell main-cell">
+                  <textarea name="" rows="4" placeholder="Rédigez votre message ici..."></textarea>
+                </div>
+                <div class="table-cell">
+                  <button class="btn bg-success">Envoyez</button>
+                </div>
+              </section>
+            </div>
+          </div>
         </div>
-        {% endif %}
-{% endcache %}
-    </div>{# content-aside #}
-</div>{# container-main #}
-{% if product.is_archived %}
-<div id="product-archived" title="<h2>{% trans "Désolé l'annnonce n\'est plus disponible" %}</h2> <br> <p >{% trans "Effectuez une nouvelle recherche"%} {% if product_list %}{% trans "ou sélectionnez un objet similaire" %}{% endif %}</p>">
-    <form action="{% url 'product_list' %}" method="get" id="form_search_results">
-        <div class="search-block">
-            {{search_form.q}}
-            <input type="submit" value="Rechercher" class="btn-search"/>
-        </div><!-- search-block -->
-    </form>
-    {% with 35 as truncation %}
-        {% include 'products/partials/result_list.html' %}
-    {% endwith %}
-</div>
-{% endif %}
-{% endblock %}
+      </div>
+    </div>
+    <div id="pop-up-call" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog large">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Appel</h4>
+          </div>
+          <div class="modal-body table-cell">
+            <div class="static-part table-cell">
+              <section class="product-info">
+                <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/180/120/technics)" class="bg-image"></a></div>
+                <div class="thumbnail-content">
+                  <h3>BMW 520 Touring Luxe</h3>
+                  <p class="location"><i class="flaticon stroke location-pin-3"></i>Nice, 02200</p>
+                  <p class="stats">
+                    <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                    </div><span class="rate-count">32</span><span class="comments-count"><i class="flaticon stroke writing-comment"></i>12</span>
+                  </p>
+                  <div class="declarer">
+                    <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100/people)" class="bg-image"></a></div>
+                    <div class="thumbnail-content">
+                      <p>Julien Dupré</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section class="terms">
+                <div class="date-picker form-wrapper">
+                  <div class="table-cell main-cell">
+                    <div class="table-cell"><span>Du</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
+                    </div>
+                  </div>
+                  <div class="table-cell">
+                    <select class="form-control">
+                      <option value="01.00">01.00</option>
+                      <option value="02.00">02.00</option>
+                      <option value="03.00">03.00</option>
+                      <option value="04.00">04.00</option>
+                      <option value="05.00">05.00</option>
+                      <option value="06.00">06.00</option>
+                      <option value="07.00">07.00</option>
+                      <option value="08.00">08.00</option>
+                      <option value="09.00">09.00</option>
+                      <option value="10.00">10.00</option>
+                      <option value="11.00">11.00</option>
+                      <option value="12.00">12.00</option>
+                      <option value="13.00">13.00</option>
+                      <option value="14.00">14.00</option>
+                      <option value="15.00">15.00</option>
+                      <option value="16.00">16.00</option>
+                      <option value="17.00">17.00</option>
+                      <option value="18.00">18.00</option>
+                      <option value="19.00">19.00</option>
+                      <option value="20.00">20.00</option>
+                      <option value="21.00">21.00</option>
+                      <option value="22.00">22.00</option>
+                      <option value="23.00">23.00</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="date-picker form-wrapper">
+                  <div class="table-cell main-cell">
+                    <div class="table-cell"><span>Au</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
+                    </div>
+                  </div>
+                  <div class="table-cell">
+                    <select class="form-control">
+                      <option value="01.00">01.00</option>
+                      <option value="02.00">02.00</option>
+                      <option value="03.00">03.00</option>
+                      <option value="04.00">04.00</option>
+                      <option value="05.00">05.00</option>
+                      <option value="06.00">06.00</option>
+                      <option value="07.00">07.00</option>
+                      <option value="08.00">08.00</option>
+                      <option value="09.00">09.00</option>
+                      <option value="10.00">10.00</option>
+                      <option value="11.00">11.00</option>
+                      <option value="12.00">12.00</option>
+                      <option value="13.00">13.00</option>
+                      <option value="14.00">14.00</option>
+                      <option value="15.00">15.00</option>
+                      <option value="16.00">16.00</option>
+                      <option value="17.00">17.00</option>
+                      <option value="18.00">18.00</option>
+                      <option value="19.00">19.00</option>
+                      <option value="20.00">20.00</option>
+                      <option value="21.00">21.00</option>
+                      <option value="22.00">22.00</option>
+                      <option value="23.00">23.00</option>
+                    </select>
+                  </div>
+                </div>
+                <table class="calendar bd-wrap indent-t-md indent-b-md">
+                  <tbody>
+                    <tr>
+                      <td>Durée</td>
+                      <td><b>4 jours et 3 heures</b></td>
+                    </tr>
+                    <tr>
+                      <td>Prix</td>
+                      <td><b class="text-success">350€</b></td>
+                    </tr>
+                    <tr>
+                      <td>Caution</td>
+                      <td><b>400€</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
+                <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
+              </section>
+            </div>
+            <div class="change-part table-cell">
+              <section class="table variant-call">
+                <ul class="table">
+                  <li class="table-row">
+                    <div class="table-cell">
+                      <div class="text">
+                        <div class="thumbnail-img text-primary"></div>
+                        <div class="thumbnail-content">
+                          <h3>Appelez le propriétaire</h3><a href="#" class="btn bg-primary">08.99.45.65.43<br><small>(0,15€ /min)</small></a>
+                          <p>Après 21h, afin de respecter la tranquillité des membres e-loue, nous vous remercions  de  poser vos questions par <a href="#" class="text-success">messagerie. </a>Et oui, tout le monde a le droit de se reposer.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="table-row">
+                    <div class="table-cell">
+                      <div class="text">
+                        <div class="thumbnail-img text-gray"></div>
+                        <div class="thumbnail-content">
+                          <h3>Posez lui toutes vos questions</h3>
+                          <p>Besoin de détails  supplémentaires sur l’objet à louer ?  Des questions sur les modalités de locations ? Sur le  lieu et l’horaire du RDV ? N’ayez pas peur, les membres e-loue  sont très  serviables, et vous répondront...</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="table-row">
+                    <div class="table-cell">
+                      <div class="text">
+                        <div class="thumbnail-img text-success"></div>
+                        <div class="thumbnail-content">
+                          <h3>Réservez en ligne</h3>
+                          <p>En réservant sur e-loue, vous avez l’assurance de ne pas avoir de mauvaise surprise : le paiement  est sécurisé, la caution est automatiquement débloquée dès que vous restituez le produit.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pop-up-reserve" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog large">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Réservation</h4>
+          </div>
+          <div class="modal-body table-cell">
+            <div class="static-part table-cell">
+              <section class="product-info">
+                <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/180/120/technics)" class="bg-image"></a></div>
+                <div class="thumbnail-content">
+                  <h3>BMW 520 Touring Luxe</h3>
+                  <p class="location"><i class="flaticon stroke location-pin-3"></i>Nice, 02200</p>
+                  <p class="stats">
+                    <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                    </div><span class="rate-count">32</span><span class="comments-count"><i class="flaticon stroke writing-comment"></i>12</span>
+                  </p>
+                  <div class="declarer">
+                    <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100/people)" class="bg-image"></a></div>
+                    <div class="thumbnail-content">
+                      <p>Julien Dupré</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section class="terms">
+                <div class="date-picker form-wrapper">
+                  <div class="table-cell main-cell">
+                    <div class="table-cell"><span>Du</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
+                    </div>
+                  </div>
+                  <div class="table-cell">
+                    <select class="form-control">
+                      <option value="01.00">01.00</option>
+                      <option value="02.00">02.00</option>
+                      <option value="03.00">03.00</option>
+                      <option value="04.00">04.00</option>
+                      <option value="05.00">05.00</option>
+                      <option value="06.00">06.00</option>
+                      <option value="07.00">07.00</option>
+                      <option value="08.00">08.00</option>
+                      <option value="09.00">09.00</option>
+                      <option value="10.00">10.00</option>
+                      <option value="11.00">11.00</option>
+                      <option value="12.00">12.00</option>
+                      <option value="13.00">13.00</option>
+                      <option value="14.00">14.00</option>
+                      <option value="15.00">15.00</option>
+                      <option value="16.00">16.00</option>
+                      <option value="17.00">17.00</option>
+                      <option value="18.00">18.00</option>
+                      <option value="19.00">19.00</option>
+                      <option value="20.00">20.00</option>
+                      <option value="21.00">21.00</option>
+                      <option value="22.00">22.00</option>
+                      <option value="23.00">23.00</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="date-picker form-wrapper">
+                  <div class="table-cell main-cell">
+                    <div class="table-cell"><span>Au</span></div>
+                    <div class="table-cell main-cell">
+                      <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
+                    </div>
+                  </div>
+                  <div class="table-cell">
+                    <select class="form-control">
+                      <option value="01.00">01.00</option>
+                      <option value="02.00">02.00</option>
+                      <option value="03.00">03.00</option>
+                      <option value="04.00">04.00</option>
+                      <option value="05.00">05.00</option>
+                      <option value="06.00">06.00</option>
+                      <option value="07.00">07.00</option>
+                      <option value="08.00">08.00</option>
+                      <option value="09.00">09.00</option>
+                      <option value="10.00">10.00</option>
+                      <option value="11.00">11.00</option>
+                      <option value="12.00">12.00</option>
+                      <option value="13.00">13.00</option>
+                      <option value="14.00">14.00</option>
+                      <option value="15.00">15.00</option>
+                      <option value="16.00">16.00</option>
+                      <option value="17.00">17.00</option>
+                      <option value="18.00">18.00</option>
+                      <option value="19.00">19.00</option>
+                      <option value="20.00">20.00</option>
+                      <option value="21.00">21.00</option>
+                      <option value="22.00">22.00</option>
+                      <option value="23.00">23.00</option>
+                    </select>
+                  </div>
+                </div>
+                <table class="calendar bd-wrap indent-t-md indent-b-md">
+                  <tbody>
+                    <tr>
+                      <td>Durée</td>
+                      <td><b>4 jours et 3 heures</b></td>
+                    </tr>
+                    <tr>
+                      <td>Prix</td>
+                      <td><b class="text-success">350€</b></td>
+                    </tr>
+                    <tr>
+                      <td>Caution</td>
+                      <td><b>400€</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.</p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-success">Réservez</a>
+                <p></p><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up" class="btn bg-gray">Envoyez un message</a>
+              </section>
+            </div>
+            <form action="" class="input-group change-part table-cell">
+              <section class="table form-wrapper personal-information">
+                <h2>Vos informations personnelles</h2>
+                <div class="row">
+                  <div class="col-sm-2">
+                    <select class="form-control">
+                      <option value="male">M.</option>
+                      <option value="female">F.</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-5">
+                    <input type="text" placeholder="Prénom *" required class="form-control">
+                  </div>
+                  <div class="col-sm-5">
+                    <input type="text" placeholder="Nom *" required class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <input type="text" placeholder="Adresse *" required class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <input type="text" placeholder="Code postal *" required class="form-control">
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" placeholder="Ville *" required class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" checked id="particular"><span class="flaticon stroke checkmark-1"></span>
+                      </label><b class="text-black">Option livraison, Recevez cet objet  dans un point relais Pickup à proximiter de ches vous</b>
+                    </div>
+                  </div>
+                </div>
+                <p class="info">Ces informations seront reproduites sur le contrat de location. Le propriétaire les vérifiera au début de la location. Si elles sont incorrectes, il ne pourra pas vous remettre les clés. Les champs marqués d'une étoile (*) sont obligatoires.</p>
+              </section>
+              <section class="table form-wrapper bank-information">
+                <div class="indent-b-lg">
+                  <h2>Livraison</h2>
+                  <p class="text-black">Sélectionner un point relais ci-dessous&nbsp;</p>
+                  <table class="calendar bd-wrap">
+                    <tr>
+                      <td><span class="sprite-pickup-logo pull-left"></span>
+                        <div class="ovy-h pad-l-xs">KAHLOUCHE PRESSE<br>79 BOULEVARD BEAUMARCHAIS<br>75003 PARIS</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><span class="sprite-pickup-logo pull-left"></span>
+                        <div class="ovy-h pad-l-xs">KAHLOUCHE PRESSE<br>79 BOULEVARD BEAUMARCHAIS<br>75003 PARIS</div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <h2>Vos bank-information</h2>
+                <div class="row">
+                  <div class="col-sm-9 card">
+                    <input type="text" placeholder="Numéro de carte *" required class="form-control"><i class="flaticon stroke credit-card"></i>
+                  </div>
+                  <div class="col-sm-3">
+                    <input type="text" placeholder="MM/AA *" required class="form-control"><i class="flaticon stroke calendar-4"></i>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5">
+                    <input type="text" placeholder="Code de sécurité *" required class="form-control"><i class="flaticon stroke lock-3"></i>
+                  </div>
+                  <div class="col-sm-7">
+                    <input type="text" placeholder="Nom et prénom du titulaire *" required class="form-control"><i class="flaticon stroke user-4"></i>
+                  </div>
+                </div>
+                <p class="info">Vous devez payer avec votre propre carte bancaire, que vous devrez présenter au propriétaire pour vérification.<br>Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire devra refuser la location.</p>
+                <div class="col-sm-8 col-sm-offset-2">
+                  <button type="submit" class="btn bg-success indent-t">Réservez</button>
+                </div>
+              </section>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-flex">
+      <header class="header-site">
+        <section class="container signs-links">
+          <ul role="tablist" class="without-spaces">
+            <li><span>Bonjour, <a href="#inscrivez-vous" data-toggle="modal" data-target="#sign-in">inscrivez-vous </a>ou <a href="#connectez-vous" data-toggle="modal" data-target="#log-in">connectez-vous</a></span></li>
+            <li class="divide"></li>
+            <li><span>Vous êtes un loueur professionnel, découvrez les <a href="#">offers e-loue Pro</a></span></li>
+            <li class="divide"></li>
+            <li><span>Appelez-nous au <b>0826.800.200 </b>(0,15&euro; / min)</span></li>
+          </ul>
+        </section>
+        <div class="framing">
+          <section class="container search-form">
+            <div class="table-cell"><a href="/templates"><img src="../../static/img/logo.png" alt="logo"></a></div>
+            <div class="table-cell main-cell">
+              <form action="" class="input-group">
+                <input type="text" placeholder="Que voulez-vous louer ?" title="Que voulez-vous louer ?" class="table-cell main-cell form-control what-field">
+                <div class="table-cell input-group where-field"><i class="flaticon stroke location-pin-3"></i>
+                  <input type="text" placeholder="Où ça ?" title="Où ça ?" id="geolocate" class="form-control">
+                </div>
+                <div class="table-cell input-group-btn">
+                  <button type="button" class="btn btn-default btn-search"><i class="flaticon stroke zoom-2"></i></button>
+                </div>
+              </form>
+            </div>
+            <div class="table-cell">
+              <button type="button" data-toggle="modal" data-target="#pop-up-publish-item" class="btn bg-success btn-advertise">Déposez une annonce</button>
+            </div>
+          </section>
+        </div>
+      </header>
+      <nav class="bd-b">
+        <div class="container">
+          <ol class="breadcrumb">
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Location Voiture</a></li>
+            <li><a href="#">Nice</a></li>
+            <li><a href="#">BMW - 520 Touring luxe</a></li>
+          </ol>
+        </div>
+      </nav>
+      <article class="container indent-t-lg indent-b-lg">
+        <div class="row">
+          <div class="col-sm-8 product-details-title">
+            <h3>Location Bmw - 520 touring luxe - NICE</h3>
+            <ul class="breadcrumb">
+              <li>Année 2010</li>
+              <li>Moteur Diesel</li>
+              <li>Boite Automatique</li>
+              <li>10 000 à 30 000 km</li>
+            </ul>
+          </div>
+          <div class="col-sm-4 share-btns">
+            <ul class="without-spaces">
+              <li><a href="https://twitter.com/share" data-text="Tweeter" data-lang="fr" data-count="none" class="twitter-share-button">Tweeter</a></li>
+              <li class="spacer"></li>
+              <li>
+                <div data-href="https://www.e-loue.com" data-layout="button" data-action="like" data-show-faces="false" data-share="false" class="fb-like"></div>
+              </li>
+              <li class="spacer"></li>
+              <li>
+                <div data-href="https://www.e-loue.com" data-layout="button_count" data-action="recommend" data-show-faces="false" data-share="false" class="fb-like"></div>
+              </li>
+              <li class="spacer"></li>
+              <li>
+                <div data-size="medium" data-annotation="none" class="g-plusone"></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row">
+          <main class="col-sm-8">
+            <section>
+              <div class="section-body">
+                <div class="part picture-tab">
+                  <ul class="nav nav-justified">
+                    <li class="spacer"></li>
+                    <li><a href="./product_detail.html" class="pad-v-2">Photos</a></li>
+                    <li class="spacer"></li>
+                    <li><a href="./tab_tarifs.html" class="pad-v-2">Tarifs</a></li>
+                    <li class="spacer"></li>
+                    <li><a href="#" class="pad-v-2">Localisation</a></li>
+                    <li class="spacer"></li>
+                    <li><a href="./tab_available.html" class="pad-v-2">Disponibilité</a></li>
+                    <li class="spacer"></li>
+                    <li><a href="./tab_terms.html" class="pad-v-2">Assurance</a></li>
+                    <li class="spacer"></li>
+                    <li><a href="./shipping.html" class="pad-v-2">Livraison</a></li>
+                  </ul>
+                  <div class="carousel-conteiner">
+                    <div class="col-md-7">
+                      <div id="carousel-product" data-ride="carousel" class="carousel slide">
+                        <div class="carousel-inner">
+                          <div style="background-image: url(http://lorempixel.com/800/620/technics/1)" class="item active"></div>
+                          <div style="background-image: url(http://lorempixel.com/600/810/technics/2)" class="item"></div>
+                          <div style="background-image: url(http://lorempixel.com/400/610/technics/3)" class="item"></div>
+                          <div style="background-image: url(http://lorempixel.com/500/310/technics/4)" class="item"></div>
+                        </div><a href="#carousel-product" role="button" data-slide="prev" class="left carousel-control"><i class="flaticon solid left-2"></i></a><a href="#carousel-product" role="button" data-slide="next" class="right carousel-control"><i class="flaticon solid right-2"></i></a>
+                      </div>
+                      <div class="items-thumbnail-inner">
+                        <div><a href="#" class="items-thumbnail"><img style="background-image: url(1http://lorempixel.com/800/600/technics/1)"></a></div>
+                        <div><a href="#" class="items-thumbnail"><img style="background-image: url(http://lorempixel.com/600/800/technics/2)"></a></div>
+                        <div><a href="#" class="items-thumbnail"><img style="background-image: url(http1://lorempixel.com/400/600/technics/3)"></a></div>
+                        <div><a href="#" class="items-thumbnail"><img style="background-image: url(http://lorempixel.com/500/300/technics/4)"></a></div>
+                        <div><a href="#" class="items-thumbnail"><img style="background-image: url(http://lorempixel.com/500/300/technics/5)"></a></div>
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="map-container">
+                        <div class="map-inner"><span class="whirly"></span>
+                          <div class="map">
+                            <!-- место для карты-->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="location-title-inner">
+                        <div class="location-title"><i class="flaticon solid loca location-pin-3 icon-li icon-lg"></i>
+                          <h4>52 Boulevard Pereire</h4><small>Paris, 75017</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="part description">
+                  <h3>Déscription</h3>
+                  <div class="row">
+                    <div class="col-sm-6 text">
+                      <p>Donec ullamcorper nulla non metus auctor fringilla. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                      <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui. Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                    </div>
+                    <div class="col-sm-6 properties">
+                      <table class="calendar bd-clear">
+                        <tbody>
+                          <tr>
+                            <td>Notation</td>
+                            <td><b>32&nbsp;&nbsp;
+                                <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                                </div></b></td>
+                          </tr>
+                          <tr>
+                            <td>Date d’achat</td>
+                            <td><b>2008&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Marque</td>
+                            <td><b>BMW&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Modèle</td>
+                            <td><b>520 Touring&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Consommation</td>
+                            <td><b>4,5 l/100km&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Prix neuf</td>
+                            <td><b>38 000€&nbsp;&nbsp;</b></td>
+                          </tr>
+                          <tr>
+                            <td>Puissance</td>
+                            <td><b>130 CV&nbsp;&nbsp;</b></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="part comments comments-ad">
+                  <h3>Commentaires liés à cette annonce</h3>
+                  <ul class="list-group">
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="part comments comments-owner">
+                  <h3>Commentaire liés au propriétaire</h3>
+                  <ul class="list-group">
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                    <li class="list-group-item thumbnail">
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/100/100)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h5><a href="#" class="indent-r-xs">Jonathan Moreira</a>
+                          <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                          </div>
+                        </h5>
+                        <p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. est non commodo luctus, nisi erat porttitor ligula, eget.</p><small>Le 12 Mai 2014</small>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+          </main>
+          <aside class="col-sm-4">
+            <section class="booking-form">
+              <div class="section-header">
+                <h4>Réservez en ligne</h4>
+              </div>
+              <form class="form-inline section-body text-center">
+                <div class="part">
+                  <p><small>à partir de</small>
+                    <big class="text-primary">&nbsp;56€ /jour</big>
+                  </p>
+                  <div class="date-picker form-wrapper">
+                    <div class="table-cell main-cell">
+                      <div class="table-cell"><span>Du</span></div>
+                      <div class="table-cell main-cell">
+                        <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
+                      </div>
+                    </div>
+                    <div class="table-cell">
+                      <select class="form-control">
+                        <option value="01.00">01.00</option>
+                        <option value="02.00">02.00</option>
+                        <option value="03.00">03.00</option>
+                        <option value="04.00">04.00</option>
+                        <option value="05.00">05.00</option>
+                        <option value="06.00">06.00</option>
+                        <option value="07.00">07.00</option>
+                        <option value="08.00">08.00</option>
+                        <option value="09.00">09.00</option>
+                        <option value="10.00">10.00</option>
+                        <option value="11.00">11.00</option>
+                        <option value="12.00">12.00</option>
+                        <option value="13.00">13.00</option>
+                        <option value="14.00">14.00</option>
+                        <option value="15.00">15.00</option>
+                        <option value="16.00">16.00</option>
+                        <option value="17.00">17.00</option>
+                        <option value="18.00">18.00</option>
+                        <option value="19.00">19.00</option>
+                        <option value="20.00">20.00</option>
+                        <option value="21.00">21.00</option>
+                        <option value="22.00">22.00</option>
+                        <option value="23.00">23.00</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="date-picker form-wrapper">
+                    <div class="table-cell main-cell">
+                      <div class="table-cell"><span>Au</span></div>
+                      <div class="table-cell main-cell">
+                        <input type="text" placeholder="" class="form-control date"><i class="flaticon stroke calendar-3"></i>
+                      </div>
+                    </div>
+                    <div class="table-cell">
+                      <select class="form-control">
+                        <option value="01.00">01.00</option>
+                        <option value="02.00">02.00</option>
+                        <option value="03.00">03.00</option>
+                        <option value="04.00">04.00</option>
+                        <option value="05.00">05.00</option>
+                        <option value="06.00">06.00</option>
+                        <option value="07.00">07.00</option>
+                        <option value="08.00">08.00</option>
+                        <option value="09.00">09.00</option>
+                        <option value="10.00">10.00</option>
+                        <option value="11.00">11.00</option>
+                        <option value="12.00">12.00</option>
+                        <option value="13.00">13.00</option>
+                        <option value="14.00">14.00</option>
+                        <option value="15.00">15.00</option>
+                        <option value="16.00">16.00</option>
+                        <option value="17.00">17.00</option>
+                        <option value="18.00">18.00</option>
+                        <option value="19.00">19.00</option>
+                        <option value="20.00">20.00</option>
+                        <option value="21.00">21.00</option>
+                        <option value="22.00">22.00</option>
+                        <option value="23.00">23.00</option>
+                      </select>
+                    </div>
+                  </div>
+                  <p class="available">Cet article est disponible à ces dates</p>
+                  <!-- p.available.unavailable Cet article est disponible à ces dates-->
+                </div>
+                <div class="part">
+                  <p>Durée de la location : <b class="period-days">3 jours </b>et <b class="period-hours">9 heures</b></p>
+                  <p class="price">Prix de la location&nbsp;:
+                    <big class="text-primary">&nbsp;168€</big>
+                  </p>
+                  <p>Assurance incluse</p>
+                </div>
+                <div class="part"><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up-reserve" class="btn bg-success calendar-ok"><i class="flaticon stroke calendar-2"></i>Réservez</a>
+                  <p class="mrg-v-1"><small>Cette somme vous sera débitée lorsque le propriétaire validera la location</small></p>
+                </div>
+              </form>
+            </section>
+            <section class="add-to-wishlist">
+              <div class="section-body">
+                <div class="part"><a href="#" class="btn bg-gray"><i class="flaticon stroke heart"></i>Ajoutez à votre liste d’envies</a></div>
+              </div>
+            </section>
+            <section class="owner-information">
+              <div class="section-header">
+                <h4>Contactez-moi</h4>
+              </div>
+              <div class="section-body">
+                <div class="part">
+                  <div class="block-thumbnail">
+                    <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/130/130/people)" class="bg-image"></a></div>
+                    <div class="thumbnail-content">
+                      <h5><a href="#">Gaspard Kroutchev </a></h5>
+                      <div class="rate"><span class="flaticon solid star-2 current-rate"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span><span class="flaticon solid star-2"></span>
+                      </div>
+                      <p>Membre depuis le<br><span>12 Juillet 2013</span></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="part"><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up-send-message" class="btn bg-success"><i class="flaticon stroke mail-2"></i>Envoyez un message</a><a href="#inscrivez-vous" data-toggle="modal" data-target="#pop-up-call" class="btn bg-success"><i class="flaticon stroke phone-3"></i>Appelez</a>
+                  <ul class="nav stats">
+                    <li><span>
+                        <big class="text-success">7 </big></span><span>annonces publiées</span></li>
+                    <li><span>
+                        <big class="text-success">12 </big></span><span>locations effectués</span></li>
+                    <li><span>
+                        <big class="text-success">16 </big></span><span>évalutations</span></li>
+                    <li><span>
+                        <big class="text-success">98% </big></span><span>de taux de réponse</span></li>
+                    <li><span>
+                        <big class="text-success">6h </big></span><span>de temps de réponse en moyenne</span></li>
+                  </ul>
+                </div>
+                <div class="part connection clearfix">
+                  <div class="col-sm-4"><a href="#" class="friend-photo-wrapper"><img style="background-image: url(http://lorempixel.com/50/50/people)" class="bg-image"></a><a href="#" class="friend-photo-wrapper"><img style="background-image: url(http://lorempixel.com/50/50/people)" class="bg-image"></a></div>
+                  <div class="col-sm-8">
+                    <p><small><a href="#">Philippe Dupré </a>et <a href="#">Tony Finn </a>sont amis avec le propriétaire.</small></p>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="similar-listing">
+              <div class="section-header">
+                <h4>Annonces similaires</h4>
+              </div>
+              <div class="section-body">
+                <div class="part">
+                  <ul class="nav">
+                    <li>
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/130/130/transport)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h6><a href="#">Audi - A3</a></h6>
+                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/130/130/transport)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h6><a href="#">Audi - A3</a></h6>
+                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/130/130/transport)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h6><a href="#">Audi - A3</a></h6>
+                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/130/130/transport)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h6><a href="#">Audi - A3</a></h6>
+                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/130/130/transport)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h6><a href="#">Audi - A3</a></h6>
+                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/130/130/transport)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h6><a href="#">Audi - A3</a></h6>
+                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="thumbnail-img"><a href="#"><img style="background-image: url(http://lorempixel.com/130/130/transport)" class="bg-image"></a></div>
+                      <div class="thumbnail-content">
+                        <h6><a href="#">Audi - A3</a></h6>
+                        <p><small>Paris</small></p><span class="badge price">100€ /jour</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+            <section class="connected-with-owner">
+              <div class="section-body">
+                <div class="part text-center"><i class="flaticon social facebook-2"></i><a href="#" class="btn bg-info">Connectez-vous avec Facebook</a>
+                  <p>Vérifiez si un de vos amis connait ce propriétaire&nbsp;?</p>
+                </div>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </article>
+      <footer>
+        <section class="row-fluid insurances framing">
+          <div class="container">
+            <ul class="nav nav-justified">
+              <li class="divide"></li>
+              <li>
+                <div class="insurances-img"><span class="payment"></span></div>
+                <h5>Louez en toute sécurité</h5>
+                <p>Transactions en ligne sécurisées.<br>Aucun échange d'argent.</p>
+              </li>
+              <li class="divide"></li>
+              <li>
+                <div class="insurances-img"><span class="serenity"></span></div>
+                <h5>Louez en toute sérénité</h5>
+                <p>Assurance incluse et automatique.<br>Caution en ligne.</p>
+              </li>
+              <li class="divide"></li>
+              <li>
+                <div class="insurances-img"><span class="simplicity"></span></div>
+                <h5>Louez en toute simplicité</h5>
+                <p>Service client dédié 7j/7.<br>Dépot d'annonce gratuite.</p>
+              </li>
+              <li class="divide"></li>
+              <li>
+                <div class="insurances-img"><span class="trust"></span></div>
+                <h5>Louez en toute confiance</h5>
+                <p>Notes et commentaires en ligne.<br>Messagerie en ligne.</p>
+              </li>
+            </ul>
+          </div>
+        </section>
+        <section class="row-fluid footer-links">
+          <div class="container">
+            <ul class="nav nav-justified">
+              <li class="divide"></li>
+              <li class="ul-wrapper">
+                <div class="centering">
+                  <h4 class="text-nowrap">Le concept eloue</h4>
+                  <ul class="nav">
+                    <li class="link-wrapper"><a href="#">Comment ça marche ?</a></li>
+                    <li class="link-wrapper"><a href="#">Simulez vos revenus</a></li>
+                    <li class="link-wrapper"><a href="#">Questions fréquentes</a></li>
+                    <li class="link-wrapper"><a href="#">Conseils propriétaires</a></li>
+                    <li class="link-wrapper"><a href="#">Conseils locataires</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li class="divide"></li>
+              <li class="ul-wrapper">
+                <div class="centering">
+                  <h4 class="text-nowrap">Pourquoi choisir eloue</h4>
+                  <ul class="nav">
+                    <li class="link-wrapper"><a href="#">E-loue at la sérénité</a></li>
+                    <li class="link-wrapper"><a href="#">Assurance sérénité</a></li>
+                    <li class="link-wrapper"><a href="#">Contrats de location</a></li>
+                    <li class="link-wrapper"><a href="#">L’offre e-loue Pro</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li class="divide"></li>
+              <li class="ul-wrapper">
+                <div class="centering">
+                  <h4 class="text-nowrap">L’entreprise e-loue</h4>
+                  <ul class="nav">
+                    <li class="link-wrapper"><a href="#">Qui sommes-nous ?</a></li>
+                    <li class="link-wrapper"><a href="#">Nos partenaires</a></li>
+                    <li class="link-wrapper"><a href="#">Respect de la vie privée</a></li>
+                    <li class="link-wrapper"><a href="#">Conditions générales</a></li>
+                    <li class="link-wrapper"><a href="#">Mentions légales</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li class="divide"></li>
+              <li class="ul-wrapper">
+                <div class="centering">
+                  <h4 class="text-nowrap">En savoir plus</h4>
+                  <ul class="nav">
+                    <li class="link-wrapper"><a href="#">Espace presse</a></li>
+                    <li class="link-wrapper"><a href="#">Contactez-nous</a></li>
+                    <li class="link-wrapper"><a href="#">E-loue en mobilité</a></li>
+                    <li class="link-wrapper"><a href="#">Blog e-loue</a></li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+        <section class="row-fluid rss">
+          <div class="container">
+            <div class="row">
+              <div class="table-cell">
+                <p>Abonnez-vous à la newsletter e-loue pour être informé des bonnes affaires et de nos actualités. </p><a href="#"><b>Déjà 2 Millions d'inscrits !</b></a>
+              </div>
+              <div class="table-cell main-cell">
+                <form role="" class="input-group">
+                  <input type="email" placeholder="Saisissez votre email..." class="form-control">
+                  <div class="input-group-btn">
+                    <button type="submit" class="table-cell btn btn-default">Validez</button>
+                  </div>
+                </form>
+              </div>
+              <div class="table-cell">
+                <div class="social-btns"><a href="#"><i class="flaticon social facebook"></i></a><a href="#"><i class="flaticon social twitter"></i></a><a href="#"><i class="flaticon social google-plus"></i></a></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </footer>
+    </div>
+  </body>
+</html>

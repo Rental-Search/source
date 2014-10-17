@@ -1,4 +1,17 @@
-h2 Vos informations bancaires
+.indent-b-lg
+    h2 Livraison
+    p.text-black Sélectionner un point relais ci-dessous&nbsp;
+    table.calendar.bd-wrap
+        tr: td
+            span.sprite-pickup-logo.pull-left
+            .ovy-h.pad-l-xs
+                | KAHLOUCHE PRESSE
+                br
+                | 79 BOULEVARD BEAUMARCHAIS
+                br
+                | 75003 PARIS
+
+h2 Vos bank-information
 .row
     .col-sm-8.card
         input(type="text", name="card_number", placeholder="Numéro de carte *", ng-model="creditCard.card_number", ng-required="newCreditCard", ng-show="newCreditCard").form-control

@@ -26,7 +26,7 @@
   text-align: center
   border: 1px solid transparent
   &.disabled,
-  &:disabled,
+  &[disabled],
   fieldset:disabled &
     pointer-events: none // Future-proof disabling of clicks
     @include opacity(.65)
@@ -255,7 +255,7 @@ label.check-btn
 // custom select
 select
   &.disabled,
-  &:disabled,
+  &[disabled],
   fieldset:disabled &
     + .chosen-container
       @include opacity(1)
@@ -307,7 +307,7 @@ input[type="email"],
     width: 5em
     color: $gray-dark !important
   &.disabled,
-  &:disabled,
+  &[disabled],
   fieldset:disabled &
     @include opacity(1)
     @include box-shadow(none)
