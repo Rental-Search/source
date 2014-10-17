@@ -640,15 +640,12 @@ USE_HTTPS = env('USE_HTTPS', True)
 SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE', True)
 
 # Storage configuration
-if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-else:
-    DEFAULT_FILE_STORAGE = 'storages.backends.overwrite.OverwriteStorage'
+DEFAULT_FILE_STORAGE = env('DEFAULT_FILE_STORAGE', 'storages.backends.overwrite.OverwriteStorage')
 
 # S3 configuration
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', 'AKIAJ3PXVVKSTM3WSZSQ')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', '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')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', 'eloue')
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', '')
 AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', 'eloue.s3.amazonaws.com')
 AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', 'public-read')
 AWS_AUTO_CREATE_BUCKET = env('AWS_AUTO_CREATE_BUCKET', False)
