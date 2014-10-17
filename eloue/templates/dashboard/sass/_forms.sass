@@ -26,12 +26,18 @@
   text-align: center
   border: 1px solid transparent
   &.disabled,
-  &[disabled],
-  fieldset[disabled] &
-    cursor: not-allowed
+  &:disabled,
+  fieldset:disabled &
     pointer-events: none // Future-proof disabling of clicks
     @include opacity(.65)
     @include box-shadow(none)
+  &.loading
+    background-image: url("../img/preloader.gif")
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: auto 80%
+    color: transparent !important
+
 
 .btn-default
   color: lighten($gray-medium, 10%)
@@ -140,7 +146,6 @@ label.check-btn
       height: 1em
       +centred-abs()
 
-// custom select
 .chosen-container
   font-weight: inherit
   &.chosen-with-drop
@@ -247,6 +252,21 @@ label.check-btn
 .without-search .chosen-search
   display: none
 
+// custom select
+select
+  &.disabled,
+  &:disabled,
+  fieldset:disabled &
+    + .chosen-container
+      @include opacity(1)
+      @include box-shadow(none)
+      border-color: $gray-medium !important
+      pointer-events: none
+
+      .chosen-choices,
+      .chosen-single
+        background-color: $gray-lighter !important
+
 // custom areas
 textarea,
 input[type="text"],
@@ -286,6 +306,15 @@ input[type="email"],
     margin-right: .5em
     width: 5em
     color: $gray-dark !important
+  &.disabled,
+  &:disabled,
+  fieldset:disabled &
+    @include opacity(1)
+    @include box-shadow(none)
+    cursor: not-allowed
+    background-color: $gray-lighter
+    border-color: $gray-medium !important
+
 
 .pickup-input-wrapper
   position: relative

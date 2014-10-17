@@ -14,7 +14,7 @@ block content-view
             +average-rate("userStats.average_rating")
             {% verbatim %}
             p.indent-sm-v Membre depus le {{currentUser.date_joined | date:'dd.MM.yyyy'}}
-            a(ui-sref="account.profile").btn.bg-success-hover.text-white Mettre à jour mes infos
+            a(ui-sref="account.profile").btn.bg-success-hover.text-white.loading Mettre à jour mes infos
 
       li.tab-vertical
         .indent-xs
@@ -125,7 +125,8 @@ block content-view
                 each info in booking_detail.informations
                   li.clearfix
                     .col-xs-3 #{info.title}
-                    .col-xs-9(class="#{info.color}") #{info.value}
+                    .col-xs-9: span(class="#{info.color}")
+                      != info.value
             p.action.norm.indent-sm-t
               | Il y a 12 min
               span.pull-right: a(href="#").btn.bg-success-hover.text-white Accepter
