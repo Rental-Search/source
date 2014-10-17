@@ -1,6 +1,6 @@
 "use strict";
 
-define(["angular", "eloue/app", "../../../common/eloue/services", "../../../common/eloue/controllers", "../../../common/eloue/directives"], function (angular) {
+define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../../../common/eloue/controllers", "../../../common/eloue/directives"], function (angular, toastr) {
 
     /**
      * Root controller for the dashboard app.
@@ -105,6 +105,11 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
 
             $scope.getProductImg = function (uri) {
                 return uri ? uri : '/static/img/product_img_full.png';
+            };
+
+            $scope.showNotification = function(msg) {
+                toastr.options.positionClass = "toast-top-full-width";
+                toastr.success(msg, "");
             };
 
             // Nav bar autoresizing
