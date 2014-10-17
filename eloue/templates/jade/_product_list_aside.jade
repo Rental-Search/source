@@ -57,7 +57,7 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categor
       input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
-  label.caption(for="price") prix
+  label#price-label.caption(for="price") prix
   input#price-min(type="number", data-type="range", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}")
   input#price-max(type="number", data-type="range", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}")
   #price-slider(min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
