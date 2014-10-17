@@ -19,7 +19,7 @@ define(["angular", "eloue/app"], function (angular) {
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
                 $scope.markListItemAsSelected("item-tab-", "terms");
-                $scope.isPrfessional = product.ownerDetails.is_professional;
+                $scope.isProfessional = product.ownerDetails.is_professional;
                 $scope.initCustomScrollbars();
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
