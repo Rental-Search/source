@@ -4,6 +4,7 @@ block section-content
   if True
     .section-content
       form#address_detail_form(data-ng-submit="submitAddress()").indent-md-b
+       fieldset(data-ng-disabled="submitInProgress")
         {% verbatim %}
         .row
           .col-sm-12
@@ -16,12 +17,12 @@ block section-content
         .row
           .col-xs-12
             label.check-btn.form-control
-              input(type="checkbox", checked)
-              span: i(class="{{isDefaultAddress ? 'flaticon.stroke.checkmark' : ''}}")
+              input(type="checkbox", checked, disabled)
+              span: i(class="{{isDefaultAddress ? 'checkmark' : ''}}").icon-lg.pull-right.flaticon.stroke
               | Addresse par défaut
         .row
           .col-xs-12.text-right
-            button(type="reset", data-ng-click="deleteAddress()", onclick="return false;").text.text-danger.text-underline-hover.indent-sm-h Supprimer
+            button(type="reset", data-ng-click="deleteAddress()", onclick="return false;", ng-hide="productList.length > 0 || isDefaultAddress").text.text-danger.text-underline-hover.indent-sm-h Supprimer
             button(type="submit").btn-inline.bg-success-hover.text-white Enregistrer
         input(type="hidden", name="country", value="{{address.country}}")
         input(type="hidden", name="_method", value="PUT")
@@ -29,7 +30,7 @@ block section-content
       h3 Annonces associées à cette adresse
     section.tabs-vertical-active
       ul.block-with-thumbnail
-        li.block-with-thumbnail(data-ng-repeat="product in productList track by product.id")
+        li.block-with-thumbnail(data-ng-repeat="product in productList track by product.id", ui-sref="items.info({id: product.id})")
           a(href="#car").tab-vertical
             {% verbatim %}
             .col-thumbnail
@@ -42,6 +43,7 @@ block section-content
                 big.text-primary {{product.deposit_amount}}€ / jour
                 br
                 {% endverbatim %}
-                +average-rate("product.ownerStats.average_rating")
-                +number-of-comments("product.stats.booking_comments_count")
-                +number-of-bookings("product.stats.bookings_count")
+                span(ng-hide="product.stats.booking_comments_count == 0 && product.stats.bookings_count == 0")
+                  +average-rate("product.stats.average_rating")
+                  +number-of-comments("product.stats.booking_comments_count")
+                  +number-of-bookings("product.stats.bookings_count")
