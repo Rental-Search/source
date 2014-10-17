@@ -1109,7 +1109,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     @action(methods=['post', 'put'])
     def reset_password(self, request, *args, **kwargs):
         user = self.get_object()
-        serializer = serializers.PasswordChangeSerializer(instance=user, data=request.DATA)
+        serializer = serializers.PasswordChangeSerializer(instance=user, data=request.DATA, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response({'detail': _(u"Votre mot de passe à bien été modifié")})
