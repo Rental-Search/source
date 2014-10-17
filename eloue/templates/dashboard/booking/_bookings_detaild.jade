@@ -113,6 +113,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     a(href="", ng-click="cancelBooking()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')").btn-inline.text-white.bg-gray-light-hover Annuler
                     a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident' || bookingDetails.state=='pending'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
+        {% endverbatim %}{% comment %}
         .block-with-thumbnail.notification.indent-md-b
           .col-thumbnail
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
@@ -129,6 +130,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
               li 75003 PARIS
             hr
             .text-center: a(href="#").text-success.text-underline-hover Télécharger les étiquettes
+        {% endcomment %}{% verbatim %}
 
         .block-with-thumbnail.text-gray.notification(ng-show="showCommentForm")
             .col-thumbnail

@@ -40,6 +40,7 @@ block append content-body
                   if insurance_available
                     li.spacer
                     li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 Assurance
+                //-
                   li.spacer
                   li: a(href="#tabs-shipping", ng-click="selectTab('#tabs-shipping')").pad-v-2 Livraison
                 include ./product_detail
@@ -47,7 +48,7 @@ block append content-body
                 //-include ./tab_available
                 if insurance_available
                   include ./tab_terms
-                include ./tab_shipping
+                //-include ./tab_shipping
               .part.description
                 include ../jade/product_details/main/_description
               if product_comments and not is_pro
