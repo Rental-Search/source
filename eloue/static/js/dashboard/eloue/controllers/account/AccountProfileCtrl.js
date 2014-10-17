@@ -89,14 +89,13 @@ define(["angular", "eloue/app"], function (angular) {
                     } else {
                         $scope.currentUser.default_number.number = $scope.phoneNumber;
                         PhoneNumbersService.updatePhoneNumber($scope.currentUser.default_number).$promise.then(function (number) {
-                            $scope.currentUser.default_number = $scope.phonesBaseUrl + number.id + "/";
-                            $("#default_number").val($scope.currentUser.default_number);
+                            $("#default_number").val($scope.phonesBaseUrl + number.id + "/");
                             $scope.sendUserForm();
                         });
                     }
                 } else {
                     if (!!$scope.currentUser.default_number) {
-                        $scope.currentUser.default_number = $scope.phonesBaseUrl + $scope.currentUser.default_number.id + "/";
+                        $("#default_number").val($scope.phonesBaseUrl + $scope.currentUser.default_number.id + "/");
                     }
                     $scope.sendUserForm();
                 }
@@ -108,8 +107,7 @@ define(["angular", "eloue/app"], function (angular) {
                     number: $scope.phoneNumber
                 };
                 PhoneNumbersService.savePhoneNumber(newPhone).$promise.then(function (number) {
-                    $scope.currentUser.default_number = $scope.phonesBaseUrl + number.id + "/";
-                    $("#default_number").val($scope.currentUser.default_number);
+                    $("#default_number").val($scope.phonesBaseUrl + number.id + "/");
                     $scope.sendUserForm();
                 })
             };
