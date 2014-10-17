@@ -27,8 +27,9 @@ form(ng-submit="requestBooking()", ng-if="booking === null")
     tr
       td Caution
       td {{newBooking.total_amount}}€
-    {% endverbatim %}
+
 
   .row(ng-if="booking === null")
     p.text-gray.indent-sm-v.text-center Assurance incluse
-    button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Procédez à la réservation
+    button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Procédez à la réservation
+    {% endverbatim %}

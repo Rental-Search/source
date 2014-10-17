@@ -22,8 +22,8 @@ block section-content
               | Addresse par défaut
         .row
           .col-xs-12.text-right
-            button(type="reset", data-ng-click="deleteAddress()", onclick="return false;", ng-hide="productList.length > 0 || isDefaultAddress").text.text-danger.text-underline-hover.indent-sm-h Supprimer
-            button(type="submit").btn-inline.bg-success-hover.text-white Enregistrer
+            button(type="reset", data-ng-click="deleteAddress()", onclick="return false;", ng-hide="productList.length > 0 || isDefaultAddress", class="{{submitInProgress ? 'loading' : ''}}").text.text-danger.text-underline-hover.indent-sm-h Supprimer
+            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.bg-success-hover.text-white Enregistrer
         input(type="hidden", name="country", value="{{address.country}}")
         input(type="hidden", name="_method", value="PUT")
         {% endverbatim %}

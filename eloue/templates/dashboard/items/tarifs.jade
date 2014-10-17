@@ -94,5 +94,5 @@ block details
                                         | €
                         | * : Tarif obligatoire
             .row
-                button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
+                button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
         {% endverbatim %}

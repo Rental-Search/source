@@ -50,4 +50,6 @@ block details
                 .col-sm-12
                     textarea#description.expand(name="description", tabindex="1", rows="6", placeholder="", ng-model="product.description")
             .row
-                button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
+                {% verbatim %}
+                button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
+                {% endverbatim %}
