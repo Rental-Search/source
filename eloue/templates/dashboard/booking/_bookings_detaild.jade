@@ -40,7 +40,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 | ou
             a(ui-sref="messages.detail({id: bookingDetails.lastThreadId})").btn-inline.text-white.bg-success-hover Envoyez un message
 
-        .block-with-thumbnail.notification.indent-md-v
+        .block-with-thumbnail.notification.indent-md-t.col-bg-line
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
             .col-exposition.text-action
@@ -68,7 +68,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 ul.zebra-list.indent-md-v
                     li.clearfix
                         .col-xs-3 Statut
-                        .col-xs-9(class="{{bookingDetails.state}}")
+                        .col-xs-9: span(class="{{bookingDetails.state}}")
                             span(translate="{{bookingDetails.state}}").booking-bage
                     li.clearfix
                         .col-xs-3 Début
@@ -113,6 +113,23 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     a(href="", ng-click="cancelBooking()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')").btn-inline.text-white.bg-gray-light-hover Annuler
                     a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident' || bookingDetails.state=='pending'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
+        .block-with-thumbnail.notification.indent-md-b
+          .col-thumbnail
+            .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
+          .col-exposition.text-action
+            h3: b.indent-xs-b Relais de départ
+            ul.text-uppercase.indent-md-b
+              li KAHLOUCHE PRESSE
+              li 79 BOULEVARD BEAUMARCHAIS
+              li 75003 PARIS
+            h3: b.indent-xs-b Relais de d’arrivée
+            ul.text-uppercase
+              li KAHLOUCHE PRESSE
+              li 79 BOULEVARD BEAUMARCHAIS
+              li 75003 PARIS
+            hr
+            .text-center: a(href="#").text-success.text-underline-hover Télécharger les étiquettes
+
         .block-with-thumbnail.text-gray.notification(ng-show="showCommentForm")
             .col-thumbnail
                 .thumbnail: i.icon-3x.flaticon.solid.pencil
@@ -140,6 +157,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 h3
                     b Description de l'incident
                 p(ng-bind="sinister.description")
+
 //-
   section.text-gray-strong.bg-lite
     ul.section-content.booking-activity-feed

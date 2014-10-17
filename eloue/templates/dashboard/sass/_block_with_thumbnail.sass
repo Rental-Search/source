@@ -45,6 +45,12 @@
     position: relative
   
   &.notification
+    hr
+      margin: $indent-sm (-$indent-sm)
+      border: $bd-lighter
+      border-bottom-width: 0
+      border-left-width: 0
+      border-right-width: 0
     > .col-thumbnail .thumbnail
       margin-right: $indent-md
       overflow: visible
@@ -56,12 +62,12 @@
       width: 100%
       height: 100%
       position: relative
+      i,
+      span
+        +centred-abs()
       i
         width: 1em
         height: 1em
-        vertical-align: 0
-        line-height: 1
-        +centred-abs()
     .col-exposition
       border: none
       overflow: visible

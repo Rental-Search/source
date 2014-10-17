@@ -781,6 +781,7 @@ class ProductListView(ProductList):
         breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date to', 'facet': False}
         breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'date from', 'facet': False}
         breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'date to', 'facet': False}
+        breadcrumbs['categorie'] = {'name': 'categorie', 'value': None, 'label': 'categorie', 'facet': True}
         return breadcrumbs
 
     def get_context_data(self, **kwargs):

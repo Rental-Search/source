@@ -1,0 +1,66 @@
+block details
+  .section-content
+    h2 La livraison avec la
+      span.sprite-pickup-logo-full.indent-sm-l
+
+    if True
+        h2.small La navette pickup disponible partout en France
+        ul
+          li.row.indent-lg-v
+            .col-xs-1.text-right: span.sprite-pickup-logo-short-black
+            .col-xs-11 Il y aura dès l’ouverture 1500 point relais partenaires partout en France, et rapidement cela montera à 6000.
+          li.row.indent-lg-v
+            .col-xs-1.text-right: span.sprite-calendar
+            .col-xs-11 La livraison sera en général de 24 ou 48h (non garanti).
+          li.row.indent-lg-v
+            .col-xs-1.text-right: span.sprite-euro
+            .col-xs-11 Les coûts de livraison seront très faibles et à la charge du locataire, donc en tant que propriétaire vous n’aurez rien à payer.
+
+        h2.small Comment se passeront les locations sur e-loue avec la Navette pickup&nbsp;?
+        ol.ordered-list-big
+          li.row.indent-lg-v
+            .col-xs-1.text-right: span.counter
+            .col-xs-11 Si j'accepte une demande de réservation, je me rends dans un point relais navette pickup pour envoyer l'objet.
+          li.row.indent-lg-v
+            .col-xs-1.text-right: span.counter
+            .col-xs-11 En fin de location, je suis averti par sms pour récupérer l'objet
+
+    if True
+        form(action="choice_point")
+          .pickup-input-wrapper
+            input#nickname.form-control(type="text", name="address", placeholder="")
+            span.sprite-pickup-logo-short-grey
+          h3 Sélectionner un point relais ci-dessous&nbsp;:
+
+          table.calendar.bd-wrap
+            -var range = "123"
+            for i in range
+              tr: td
+                span.sprite-pickup-logo.pull-left
+                .ovy-h.pad-xs-l
+                  | KAHLOUCHE PRESSE
+                  br
+                  | 79 BOULEVARD BEAUMARCHAIS
+                  br
+                  | 75003 PARIS
+
+    if True
+        .block-with-thumbnail.notification.indent-md-v
+          .col-thumbnail
+            .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
+          .col-exposition.text-action
+            h3: b.indent-xs-b Relais de départ
+            ul.text-uppercase.indent-md-b
+              li KAHLOUCHE PRESSE
+              li 79 BOULEVARD BEAUMARCHAIS
+              li 75003 PARIS
+
+            table.calendar.bd-wrap
+              -var data = [["Lundi", "08:15 - 14:00, 15:30 - 20:30"], ["Mardi", "08:15 - 14:00, 15:30 - 20:30"], ["Mercredi", "08:15 - 14:00, 15:30 - 20:30"], ["Jeudi", "08:15 - 14:00, 15:30 - 20:30"], ["Vendredi", "08:15 - 14:00, 15:30 - 20:30"], ["Samedi", "08:15 - 14:00, 15:30 - 20:30"], ["Dimanche", "Fermé"]]
+              each title, info in data
+                tr
+                  td {{ title }}
+                  td {{ info }}
+            .indent-sm-t.clearfix
+              .pull-left.indent-sm-t: a(href="#").text-gray-light.text-underline-hover Supprimer
+              .pull-right: a(href="#").btn-inline.btn-default.text-success Modifier le point relais
