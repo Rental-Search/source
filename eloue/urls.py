@@ -107,6 +107,10 @@ partials_urlpatterns = patterns('',
             template_name='dashboard/items/profits.jade',
         ),
     ),
+    url(r'^dashboard/items/shipping.html$', TemplateView.as_view(
+            template_name='dashboard/items/shipping.jade',
+        ),
+    ),
     url(r'^dashboard/items/terms/car_terms.html$', TemplateView.as_view(
             template_name='dashboard/items/terms/car_terms.jade',
         ),

@@ -55,6 +55,9 @@ a
   .indent-#{$class}
     margin: $indent !important
 
+.pad-xs-l
+  padding-left: $indent-xs
+
 .text-justify-force
   text-align: justify
   width: 100%
@@ -115,6 +118,9 @@ a
 .clear-both
   clear: both !important
 
+.ovy-h
+  overflow-y: hidden
+
 .mCSB_outside + .mCSB_scrollTools
   right: -$grid-gutter-width
 
@@ -152,6 +158,26 @@ a
   i
     font-size: 10em
 
+.status-on-hold
+  background-color: $brand-primary
+  color: white
+  display: inline-block
+  text-transform: uppercase
+  font-weight: $fw-bold
+  font-size: px(9)
+  padding: 0.5em 1em
+
+.col-bg-line
+  background: url(../img/feed-line.png) repeat-y (2em - px(3) / 2) center / px(3)
+  padding-bottom: $indent-md
+
+.ordered-list-big
+  counter-reset: list 0
+  .counter:before
+    font-size: 2em
+    font-weight: $fw-bold
+    content: counter(list) ". "
+    counter-increment: list
 
 h2
   font-size: $font-size-large

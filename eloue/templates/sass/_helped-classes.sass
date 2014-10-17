@@ -70,6 +70,16 @@ a[download]
     &::after
       content: " [PDF]"
 
+@each $name, $var in "pickup-logo-full" $s-pickup_logo_full, "pickup-logo-short-black" $s-pickup_logo_short_black, "calendar" $s-calendar, "euro" $s-euro
+  .sprite-#{$name}
+    +sprite($var)
+
+[class *= "sprite-"]
+  display: inline-block
+  vertical-align: middle
+
+
+
 i[data-toggle="collapse"]
   cursor: pointer
   &:before

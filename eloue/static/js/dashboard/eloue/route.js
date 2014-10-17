@@ -156,6 +156,22 @@ define(["eloue/app",
                             }
                         }
                     })
+                    .state("items.shipping", {
+                        url: "/:id/shipping",
+                        views: {
+                            "": {
+                                templateUrl: "partials/dashboard/items/item_detail.html"
+                            },
+                            "tabs@items.shipping": {
+                                templateUrl: "partials/dashboard/items/tabs.html",
+                                controller: "ItemsTabsCtrl"
+                            },
+                            "details@items.shipping": {
+                                templateUrl: "partials/dashboard/items/shipping.html",
+                                controller: "ItemsShippingCtrl"
+                            }
+                        }
+                    })
                     .state("account", {
                         url: "/account",
                         templateUrl: "partials/dashboard/account.html",
