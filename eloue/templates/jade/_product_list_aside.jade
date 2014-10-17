@@ -1,7 +1,7 @@
 -load category facets
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
-form#detail-search(action="{% facet_url breadcrumbs -'page' %}").section-body
+form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}").section-body
   label.caption(for="what") quoi
   input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
 
