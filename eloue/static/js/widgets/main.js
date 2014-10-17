@@ -133,18 +133,32 @@ require([
         var rangeSlider = $("#range-slider");
         var priceSlider = $("#price-slider");
         if (priceSlider) {
-            var priceMinInput = $("#price-min");
-            var priceMaxInput = $("#price-max");
-            priceSlider.slider({
-                range: true,
-                min: rangeSlider.attr("min-value"),
-                max: rangeSlider.attr("max-value"),
-                values: [priceMinInput.val(), priceMaxInput.val()],
-                slide: function(event, ui) {
-                    priceMinInput.val(ui.values[0]);
-                    priceMaxInput.val(ui.values[1]);
-                }
-            });
+            var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
+            var min = priceSlider.attr("min-value");
+            var max = priceSlider.attr("max-value");
+            var minPrice = 0, maxPrice = 0;
+            if (!priceMinInput.val()) {
+                minPrice = min;
+            }
+            if (!priceMaxInput.val()) {
+                maxPrice = max;
+            }
+            if (!min || !max) {
+                priceSlider.hide();
+                $("#price-label").hide();
+            } else {
+                priceSlider.slider({
+                    range: true,
+                    min: Number(min),
+                    max: Number(max),
+                    values: [minPrice, maxPrice],
+                    slide: function(event, ui) {
+                        priceMinInput.attr("value", Number(ui.values[0]));
+                        priceMaxInput.attr("value", Number(ui.values[1]));
+                    }
+                });
+            }
+
         }
 
         (function (d, s, id) {

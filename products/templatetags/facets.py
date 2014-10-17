@@ -140,4 +140,4 @@ def do_canonical_url(parser, token):
 
 @register.filter
 def facets(breadcrumbs):
-    return [value for value in breadcrumbs.values() if value['facet']]
+    return [value for value in breadcrumbs.values() if value['facet'] and value['value']]
