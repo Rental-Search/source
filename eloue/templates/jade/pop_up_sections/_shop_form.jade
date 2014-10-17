@@ -9,9 +9,9 @@ for agency in patron.pro_agencies.all
     | {{ agency.address1 }}
     br
     | {{ agency.zipcode }} {{ agency.city|upper }}
-  .collapse.in.map-wrapper(id="map-{{ forloop.counter }}")
+  .collapse.map-wrapper(id="map-{{ forloop.counter }}")
     .map(locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}")
-        img(src="http://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.y|stringformat:'f' }},{{ agency.position.x|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.y|stringformat:'f' }},{{ agency.position.x|stringformat:'f' }}&zoom=5&size=910x546&language=fr", width="100%", height="100%")
+        img(src="http://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&zoom=18&size=910x546&language=fr", width="100%", height="100%")
   {% comment %}
   {% empty %}
   {% if patron.default_address %}
@@ -21,6 +21,6 @@ for agency in patron.pro_agencies.all
     | {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
   .map-wrapper
     .map(locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}")
-      img(src="http://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.y|stringformat:'f' }},{{ agency.position.x|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.y|stringformat:'f' }},{{ agency.position.x|stringformat:'f' }}&zoom=5&size=910x546&language=fr", width="100%", height="100%")
+      img(src="http://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&zoom=18&size=910x546&language=fr", width="100%", height="100%")
   {% endif %}
   {% endcomment %}
