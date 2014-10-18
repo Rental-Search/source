@@ -10,6 +10,24 @@ from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api import serializers
 
 class SinisterSerializer(serializers.ModelSerializer):
+
+    def full_clean(self, instance):
+        instance = super(SinisterSerializer, self).full_clean(instance)
+        if instance:
+            if instance.booking:
+                if instance.booking.product != instance.product:
+                    self._errors.update({
+                        'product': _(u'The booking is made on another product')
+                    })
+                    return None
+                elif not (instance.patron == instance.booking.owner or instance.patron == instance.booking.borrower):
+                    self._errors.update({
+                        'booking': _(u'You are not owner or borrower of this booking')
+                    })
+                    return None
+
+        return instance
+
     class Meta:
         model = models.Sinister
         fields = ('uuid', 'sinister_id', 'description', 'patron', 'booking', 'product') # TBD: do we need sinister_id to be exposed? How it's going to be used?
@@ -42,6 +60,16 @@ class BookingProductField(HyperlinkedRelatedField):
 class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
     sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
+
+    def full_clean(self, instance):
+        instance = super(BookingSerializer, self).full_clean(instance)
+        if instance:
+            if instance.started_at and instance.ended_at and instance.started_at > instance.ended_at:
+                self._errors.update({
+                    'started_at': _(u'Start date is later than end date')
+                })
+                return None
+        return instance
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)

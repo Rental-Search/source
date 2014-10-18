@@ -187,7 +187,7 @@ def api_exception_handler(exception):
         exception = PermissionException(
             {'code': error[0], 'description': error[1]})
     # ... and also python-requests exceptions
-    elif isinstance(exception, RequestException):
+    elif isinstance(exception, RequestException) and exception.response:
         error = ServerErrorEnum.REQUEST_FAILED
         exception = ServerException(
             {'code': error[0], 'description': error[1], 'detail': smart_unicode(exception.response.reason)})

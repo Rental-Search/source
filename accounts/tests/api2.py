@@ -40,10 +40,10 @@ class AnonymousUsersTest(APITestCase):
 
     def test_account_search_allowed(self):
         response = self.client.get(_location('patron-list'), {
-            'username': 'alexandre'
+            'is_professional': True
         })
         self.assertEquals(response.status_code, 200)
-        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['count'], 2)
         data = response.data['results'][0]
 
         for field in self.public_fields:
@@ -435,7 +435,7 @@ class StaffUserTest(APITestCase):
 
 class AnonymousPhoneNumbersTest(APITestCase):
 
-    fixtures = ['phone_patron', 'phones']
+    fixtures = ['phone_patron', 'phone_api2']
 
     def test_phonenumber_list_forbidden(self):
         response = self.client.get(_location('phonenumber-list'))
@@ -896,16 +896,19 @@ class CreditCardTest(APITestCase):
         response = self.client.post(_location('creditcard-list'))
         self.assertEquals(response.status_code, 400, response.data)
 
-        required_fields = {'expires', 'holder_name', 'creditcard', 'cvv', 'holder'}
+        required_fields = {'expires', 'holder_name', 'card_number', 'cvv', 'holder'}
         default_fields = {'holder'}
         for field in required_fields - default_fields:
             self.assertIn(field, response.data['errors'], response.data)
 
     def test_credit_card_create_required_fields(self):
+        response = self.client.delete(_location('creditcard-detail', pk=3))
+        self.assertEqual(response.status_code, 204, response.data)
+
         response = self.client.post(_location('creditcard-list'), {
             'expires': '0517',
             'holder_name': 'John Doe',
-            'creditcard': '4987654321098769',
+            'card_number': '4987654321098769',
             'cvv': '123',
         })
 
@@ -922,10 +925,13 @@ class CreditCardTest(APITestCase):
         self.assertEqual(card.holder_id, 1)
 
     def test_credit_card_create_all_fields(self):
+        response = self.client.delete(_location('creditcard-detail', pk=3))
+        self.assertEqual(response.status_code, 204, response.data)
+
         response = self.client.post(_location('creditcard-list'), {
             'expires': '0517',
             'holder_name': 'John Doe',
-            'creditcard': '4987654321098769',
+            'card_number': '4987654321098769',
             'cvv': '123',
             'holder': _location('patron-detail', pk=1)
         })
@@ -943,10 +949,13 @@ class CreditCardTest(APITestCase):
         self.assertEqual(card.holder_id, 1)
 
     def test_credit_card_create_not_mine(self):
+        response = self.client.delete(_location('creditcard-detail', pk=3))
+        self.assertEqual(response.status_code, 204, response.data)
+
         response = self.client.post(_location('creditcard-list'), {
             'expires': '0517',
             'holder_name': 'John Doe',
-            'creditcard': '4987654321098769',
+            'card_number': '4987654321098769',
             'cvv': '123',
             'holder': _location('patron-detail', pk=2)
         })

@@ -3,12 +3,15 @@ import copy
 import base64
 from posixpath import basename
 from urllib2 import urlparse
+from django.core.exceptions import ValidationError
+from django.utils.encoding import smart_unicode
 
 import requests
 
 from django.db import models
 from django.core.files.base import ContentFile
 from django.utils.datastructures import SortedDict
+from requests.exceptions import MissingSchema, InvalidSchema, InvalidURL
 
 from rest_framework import serializers, status
 from eloue.api.exceptions import ValidationException
@@ -57,7 +60,10 @@ class EncodedImageField(serializers.ImageField):
             if encoding == 'base64':
                 content = base64.b64decode(content)
             elif encoding == 'url':
-                res = requests.get(content, stream=True)
+                try:
+                    res = requests.get(content, stream=True)
+                except (MissingSchema, InvalidSchema, InvalidURL), e:
+                    raise ValidationError(smart_unicode(e))
                 if status.is_success(res.status_code):
                     if not filename:
                         filename = basename(urlparse.urlsplit(content)[2])

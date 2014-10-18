@@ -68,6 +68,7 @@ class BookingTest(APITransactionTestCase):
             'product': _location('product-detail', pk=6),
         })
         self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('started_at', response.data['errors'], response.data)
 
     def test_booking_create_not_mine(self):
         response = self.client.post(_location('booking-list'), {
@@ -484,6 +485,20 @@ class CommentTest(APITestCase):
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('created_at'), reverse=True))
 
+    def test_filter1(self):
+        response = self.client.get(_location('comment-list'), {'rate': 5})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['rate'] == 5, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['rate'] != 5, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('comment-list'), {'rate': 4})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['rate'] == 4, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['rate'] != 4, response.data['results']))
+
 
 class StaffCommentTest(APITestCase):
     fixtures = ['patron_staff', 'address', 'category', 'product', 'booking', 'comment']
@@ -504,6 +519,20 @@ class StaffCommentTest(APITestCase):
         self.assertEqual(
             response.data['results'],
             sorted(response.data['results'], key=itemgetter('created_at'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('comment-list'), {'rate': 5})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['rate'] == 5, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['rate'] != 5, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('comment-list'), {'rate': 4})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['rate'] == 4, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['rate'] != 4, response.data['results']))
 
 
 class SinisterTest(APITestCase):
@@ -532,15 +561,17 @@ class SinisterTest(APITestCase):
         })
 
         self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('product', response.data['errors'], response.data)
 
     def test_sinister_create_not_mine_booking(self):
         response = self.client.post(_location('sinister-list'), {
-            'product': _location('product-detail', pk=1),
+            'product': _location('product-detail', pk=6),
             'patron': _location('patron-detail', pk=1),
             'booking': _location('booking-detail', pk='349ce9ba628abfdfc9cb3a72608dab68'),
             'description': 'Description'
         })
         self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('booking', response.data['errors'], response.data)
 
     def test_sinister_create_not_mine(self):
         response = self.client.post(_location('sinister-list'), {
@@ -599,3 +630,25 @@ class SinisterTest(APITestCase):
         self.assertIn('results', response.data)
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
+
+    def test_filter1(self):
+        response = self.client.get(_location('sinister-list'), {'booking': 'a72608d9a7e349ce9ba628abfdfc9cb3'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(
+            response.data['results'],
+            filter(lambda x: x['booking'].endswith(_location('booking-detail', pk='a72608d9-a7e3-49ce-9ba6-28abfdfc9cb3')), response.data['results']))
+        self.assertEqual(
+            [],
+            filter(lambda x: not x['booking'].endswith(_location('booking-detail', pk='a72608d9-a7e3-49ce-9ba6-28abfdfc9cb3')), response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('sinister-list'), {'booking': '349ce9ba628abfdfc9cb3a72608d9a7e'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(
+            response.data['results'],
+            filter(lambda x: x['booking'].endswith(_location('booking-detail', pk='349ce9ba-628a-bfdf-c9cb-3a72608d9a7e')), response.data['results']))
+        self.assertEqual(
+            [],
+            filter(lambda x: not x['booking'].endswith(_location('booking-detail', pk='349ce9ba-628a-bfdf-c9cb-3a72608d9a7e')), response.data['results']))
