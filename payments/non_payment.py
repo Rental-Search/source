@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.db.models import get_model
 from payments.abstract_payment import AbstractPayment
 
 
@@ -6,23 +7,25 @@ class NonPayments(AbstractPayment):
     
     NOT_NEED_IPN = True
         
-    def preapproval(self, cancel_url=None, return_url=None, ip_address=None):
-        self.booking.send_ask_email()
-        return None
-        
+    def preapproval(self, *args, **kwargs):
+        pass
 
-    def pay(self, cancel_url=None, return_url=None):
-        return None
-        
-    def refund(self):
+    def pay(self, *args, **kwargs):
         pass
         
-    def execute_payment(self):
+    def refund(self, *args, **kwargs):
         pass
         
-    def cancel_preapproval(self):
+    def execute_payment(self, *args, **kwargs):
         pass
         
-    def give_caution(self, amount, cancel_url, return_url):
+    def cancel_preapproval(self, *args, **kwargs):
         pass
         
+    def give_caution(self, *args, **kwargs):
+        pass
+
+    @property
+    def creditcard(self):
+        model = get_model('accounts', 'CreditCard')
+        return model(expires='0000', masked_number='1XXXXXXXXXXXX234', holder_name='John Doe')
