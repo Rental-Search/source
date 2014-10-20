@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import viewsets, mixins
-
-from .mixins import LocationHeaderMixin, ErrorMixin, PermissionMixin
+from .mixins import LocationHeaderMixin, ErrorMixin, PermissionMixin, CacheControlMixin
 
 
 class ModelViewSet(
+    CacheControlMixin,
     PermissionMixin,
     ErrorMixin,
     LocationHeaderMixin,
@@ -13,7 +13,9 @@ class ModelViewSet(
 ):
     pass
 
+
 class ReadOnlyModelViewSet(
+    CacheControlMixin,
     PermissionMixin,
     ErrorMixin,
     LocationHeaderMixin,
@@ -21,7 +23,9 @@ class ReadOnlyModelViewSet(
 ):
     pass
 
+
 class ImmutableModelViewSet(
+    CacheControlMixin,
     PermissionMixin,
     ErrorMixin,
     LocationHeaderMixin,
