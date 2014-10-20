@@ -168,7 +168,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 var result = {
                                     id: data.id,
                                     body: data.body,
-                                    date: UtilsService.formatDate(data.sent_at, "dd.mm.yyyy HH'h'mm")
+                                    date: UtilsService.formatDate(data.sent_at, "dd.MM.yyyy HH'h'mm")
                                 };
 
                                 // Get sender
@@ -271,7 +271,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                     id: data.id,
                                     body: data.body,
                                     date: UtilsService.formatMessageDate(data.sent_at,
-                                        "HH'h'mm", "dd.mm.yyyy HH'h'mm")
+                                        "HH'h'mm", "dd.MM.yyyy HH'h'mm")
                                 };
 
                                 // Get sender
@@ -1733,7 +1733,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     // Parse last message
                     if (!!lastMessageData) {
                         messageThreadResult.last_message = lastMessageData;
-                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.mm.yyyy HH'h'mm");
+                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.MM.yyyy HH'h'mm");
                     }
 
                     return messageThreadResult;
@@ -1746,7 +1746,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     if (!!messagesDataArray) {
                         messageThreadResult.messages = messagesDataArray;
                         angular.forEach(messageThreadResult.messages, function (message, key) {
-                            message.sent_at = UtilsService.formatDate(message.sent_at, "dd.mm.yyyy HH'h'mm");
+                            message.sent_at = UtilsService.formatDate(message.sent_at, "dd.MM.yyyy HH'h'mm");
                         });
                     }
 
