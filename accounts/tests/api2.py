@@ -1551,7 +1551,7 @@ class SubscriptionTest(APITestCase):
             'subscription_ended': '1900-01-01T00:00',
         })
         self.assertEquals(response.status_code, 400, response.data)
-        self.assertIn('payment_type', response.data['errors'], response.data)
+        self.assertIn('subscription_started', response.data['errors'], response.data)
 
     def test_subscription_edit_wrong_payment_type(self):
         response = self.client.patch(_location('subscription-detail', pk=1), {

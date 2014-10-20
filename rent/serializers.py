@@ -61,16 +61,6 @@ class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
     sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
 
-    def full_clean(self, instance):
-        instance = super(BookingSerializer, self).full_clean(instance)
-        if instance:
-            if instance.started_at and instance.ended_at and instance.started_at > instance.ended_at:
-                self._errors.update({
-                    'started_at': _(u'Start date is later than end date')
-                })
-                return None
-        return instance
-
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)
         if instance is None:
@@ -93,6 +83,7 @@ class BookingSerializer(serializers.ModelSerializer):
             'currency', 'contract_id', 'created_at', 'canceled_at', 'owner',
         )
         immutable_fields = ('started_at', 'ended_at', 'owner', 'borrower', 'product')
+        range_fields = (('started_at', 'ended_at'),)
 
 class BookingActionSerializer(serializers.ModelSerializer):
     action = fields.CharField(write_only=True, max_length=128)

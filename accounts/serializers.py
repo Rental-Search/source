@@ -165,12 +165,14 @@ class ProPackageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProPackage
         fields = ('id', 'name', 'maximum_items', 'price', 'valid_from', 'valid_until')
+        range_fields = (('valid_from', 'valid_until'), )
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Subscription
         fields = ('id', 'patron', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type')
         immutable_fields = ('patron', 'propackage')
+        range_fields = (('subscription_started', 'subscription_ended'), )
 
 class BillingSerializer(serializers.ModelSerializer):
     class Meta:

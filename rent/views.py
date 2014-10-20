@@ -500,7 +500,7 @@ class CommentViewSet(viewsets.NonEditableModelViewSet):
     ordering_fields = ('note', 'created_at')
     public_actions = ('retrieve',)
 
-class SinisterViewSet(viewsets.ImmutableModelViewSet):
+class SinisterViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows sinisters to be viewed or edited.
     """
