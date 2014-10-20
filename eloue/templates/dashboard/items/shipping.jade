@@ -5,25 +5,45 @@ block details
 
     if True
         h2.small La navette pickup disponible partout en France
-        ul
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.sprite-pickup-logo-short-black
-            .col-xs-11 Il y aura dès l’ouverture 1500 point relais partenaires partout en France, et rapidement cela montera à 6000.
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.sprite-calendar
-            .col-xs-11 La livraison sera en général de 24 ou 48h (non garanti).
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.sprite-euro
-            .col-xs-11 Les coûts de livraison seront très faibles et à la charge du locataire, donc en tant que propriétaire vous n’aurez rien à payer.
+        p
+            | Vous pouvez proposer  grâce à notre partenaire La Navette Pickup une 
+            | option de livraison à votre objet.
+            br
+            | L’objet sera transporté via une pochette de relais pickup à relais pickup 
+            | à travers toute la France. Il faut donc que votre objet rentre dans une 
+            | pochette de ce type :
 
-        h2.small Comment se passeront les locations sur e-loue avec la Navette pickup&nbsp;?
+        .indent-md-v: img(src="#{STATIC_URL}img/pickup_instruction.jpg", alt="", width="100%")
+        ul
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.sprite-pickup-logo-short-black
+            .col-xs-11: p
+              | 7000 points relais partenaires partout en France : vous 
+              | choisissez le relais le plus proche de chez vous.
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.sprite-calendar
+            .col-xs-11: p
+              | La livraison sera en général de 24 ou 48h (non garanti).
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.sprite-euro
+            .col-xs-11: p
+              | Les coûts de livraison sont à la charge du locataire.
+
+        h2.small.indent-lg-t Comment se passeront les locations sur e-loue avec la Navette pickup&nbsp;?
         ol.ordered-list-big
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.counter
-            .col-xs-11 Si j'accepte une demande de réservation, je me rends dans un point relais navette pickup pour envoyer l'objet.
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.counter
-            .col-xs-11 En fin de location, je suis averti par sms pour récupérer l'objet
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.counter
+            .col-xs-11: p
+              | Si j’accepte une demande de réservation avec l’option 
+              | livraison, je me rends dans un point relais La Navette Pickup 
+              | pour envoyer l’objet.
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.counter
+            .col-xs-11: p
+              | En fin de location vous êtes prévenu par email de la livraison 
+              | de votre navette dans votre relais d’arrivée.
+
+        .text-center: a(href="#").btn-inline.bg-success-hover.text-white J’accepte les  livraisons
 
     if True
         form(action="choice_point")
@@ -33,8 +53,8 @@ block details
           h3 Sélectionner un point relais ci-dessous&nbsp;:
 
           table.calendar.bd-wrap
-            -var range = "123"
-            for i in range
+            -var i = 3
+            while i--
               tr: td
                 span.sprite-pickup-logo.pull-left
                 .ovy-h.pad-xs-l
