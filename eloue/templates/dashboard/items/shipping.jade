@@ -43,7 +43,7 @@ block details
               | En fin de location vous êtes prévenu par email de la livraison 
               | de votre navette dans votre relais d’arrivée.
 
-        .text-center: a(href="#").btn-inline.bg-success-hover.text-white J’accepte les  livraisons
+        .text-center: a(href="#").btn.btn-inline.bg-success-hover.text-white J’accepte les  livraisons
 
     if True
         form(action="choice_point")
@@ -52,17 +52,25 @@ block details
             span.sprite-pickup-logo-short-grey
           h3 Sélectionner un point relais ci-dessous&nbsp;:
 
-          table.calendar.bd-wrap
+          .zebra.indent-md-v
             -var i = 3
             while i--
-              tr: td
-                span.sprite-pickup-logo.pull-left
-                .ovy-h.pad-xs-l
-                  | KAHLOUCHE PRESSE
-                  br
-                  | 79 BOULEVARD BEAUMARCHAIS
-                  br
-                  | 75003 PARIS
+              label.zebra-row
+                input(type="checkbox", checked)
+                .zebra-row-wrapper
+                  .zebra-col.checkbox-col
+                    span: i.flaticon.stroke.checkmark
+                  .zebra-col
+                    span.sprite-pickup-logo
+                  .zebra-col.main-cell
+                    | KAHLOUCHE PRESSE
+                    br
+                    | 79 BOULEVARD BEAUMARCHAIS
+                    br
+                    | 75003 PARIS
+
+        .text-center: a(href="#").btn.btn-inline.bg-success-hover.text-white Enregistrer
+
 
     if True
         .block-with-thumbnail.notification.indent-md-v

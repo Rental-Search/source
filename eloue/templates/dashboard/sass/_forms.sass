@@ -129,8 +129,11 @@ label.check-btn
     font-size: 0
     width: 0
     padding: 0
-    &:checked + span > i
-      color: $gray-strong
+    &:checked
+      + span > i
+        color: $gray-strong
+      ~ .check-bg-indicator
+        background-color: $gray-lighter
   span
     display: inline-block
     margin-right: $indent-xs
@@ -145,6 +148,7 @@ label.check-btn
       width: 1em
       height: 1em
       +centred-abs()
+
 
 .chosen-container
   font-weight: inherit

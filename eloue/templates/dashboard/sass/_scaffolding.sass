@@ -28,6 +28,10 @@ a
 .clearfix
   +clearfix()
 
+.center
+  margin-right: auto !important
+  margin-left: auto !important
+
 @each $selector, $color in (success, $brand-success), (danger, $brand-danger), (primary, $brand-primary), (info, $brand-info), (gray, $gray-medium), (white, white), (gray-strong, $gray-strong), (gray-stronger, $gray-stronger), (gray-light, $gray-light), (black, $gray-dark), (lite, $gray-lite), (blue, $brand-blue)
   +make-colors($selector, $color)
 
@@ -72,6 +76,9 @@ a
     display: inline-block
     text-align: center
     white-space: nowrap
+
+.centred-abs
+  +centred-abs
 
 .text-nowrap
   white-space: nowrap
