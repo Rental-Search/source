@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from decimal import Decimal as D
+from datetime import date
 
 import django.forms as forms
 from form_utils.forms import BetterModelForm
@@ -24,6 +25,7 @@ from products.choices import UNIT, SORT
 
 from eloue.geocoder import GoogleGeocoder
 from eloue import legacy
+from rent.utils import DATE_FORMAT
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification
@@ -37,7 +39,7 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 class FacetedSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1', 'placeholder': _(u'Que voulez-vous louer ?')}))
     l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': _(u'Où voulez-vous louer?')}))
-    r = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'class': 'ins'}))
+    r = forms.DecimalField(required=False, min_value=1, widget=forms.TextInput(attrs={'class': 'ins'}))
     sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
     price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
@@ -59,7 +61,6 @@ class FacetedSearchForm(SearchForm):
         return radius
 
     def clean_l(self):
-        import re
         location = self.cleaned_data.get('l', None)
         if location:
             location = re.sub('^[0-9]* +(.*)', r'\1', location)
@@ -81,25 +82,11 @@ class FacetedSearchForm(SearchForm):
                     suggestions = suggestions.strip()
                 if suggestions == query:
                     suggestions = None
-            
-            location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
-            if location:
-                coords = GoogleGeocoder().geocode(location)[1]
-                if coords:
-                    point = Point(coords)
-                    sqs = sqs.dwithin(
-                        'location', point, Distance(km=radius)
-                    ) #.distance('location', point)
+
+            sqs = self.filter_queryset(sqs)
             
             if self.load_all:
                 sqs = sqs.load_all()
-            
-            status = self.cleaned_data.get('renter')
-            if status == "particuliers":
-                sqs = sqs.filter(pro=False)
-            elif status == "professionnels":
-                sqs = sqs.filter(pro=True)
-
             
             if query:
                 top_products = sqs.filter(is_top=True)[:3]
@@ -119,8 +106,93 @@ class FacetedSearchForm(SearchForm):
                 sqs = sqs.order_by(SORT.RECENT)
             return sqs, suggestions, top_products
         else:
-            return self.searchqueryset, None, top_products
+            return self.searchqueryset, None, None
 
+    def filter_queryset(self, sqs):
+        location = self.cleaned_data.get('l', None)
+        if location:
+            _location, coords, radius = GoogleGeocoder().geocode(location)
+            self.max_range = radius or DEFAULT_RADIUS
+            if all(coords):
+                point = Point(coords)
+                sqs = sqs.dwithin(
+                    'location', point, Distance(km=self.cleaned_data.get('r', self.max_range))
+                )
+                if 'distance' in self.cleaned_data['sort']:
+                    sqs = sqs.distance('location', point)
+
+        status = self.cleaned_data.get('renter')
+        if status == "particuliers":
+            sqs = sqs.filter(pro=False)
+        elif status == "professionnels":
+            sqs = sqs.filter(pro=True)
+
+        return sqs
+
+class ProductFacetedSearchForm(FacetedSearchForm):
+    price_from = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.01'), required=False)
+    price_to = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.01'), required=False)
+    date_from = forms.DateField(input_formats=DATE_FORMAT, required=False)
+    date_to = forms.DateField(input_formats=DATE_FORMAT, required=False)
+
+    def clean_price_from(self):
+        price_from = self.cleaned_data.get('price_from', None)
+        if price_from is None:
+            return
+        price_to = self.cleaned_data.get('price_to', None)
+        if (price_to is not None and price_from is not None and
+            price_from > price_to
+        ):
+            return
+        return price_from
+
+    def clean_price_to(self):
+        price_to = self.cleaned_data.get('price_to', None)
+        if price_to is None:
+            return
+        price_from = self.cleaned_data.get('price_from', None)
+        if (price_to is not None and price_from is not None and
+            price_to < price_from
+        ):
+            return
+        return price_to
+
+    def clean_date_from(self):
+        date_from = self.cleaned_data.get('date_from', None)
+        if date_from is None:
+            return
+        date_to = self.cleaned_data.get('date_to', None)
+        if (date_to is not None and date_from is not None and
+            date_from > date_to
+        ):
+            return
+        return min(date_from, date.today())
+
+    def clean_date_to(self):
+        date_to = self.cleaned_data.get('date_to', None)
+        if date_to is None:
+            return
+        date_from = self.cleaned_data.get('date_from', None)
+        if (date_to is not None and date_from is not None and
+            date_to < date_from
+        ):
+            return
+        return min(date_to, date.today())
+
+    def filter_queryset(self, sqs):
+        sqs = super(ProductFacetedSearchForm, self).filter_queryset(sqs)
+
+        if self.cleaned_data['price_from'] is not None:
+            sqs = sqs.filter(price__gte=self.cleaned_data['price_from'])
+        if self.cleaned_data['price_to'] is not None:
+            sqs = sqs.filter(price__lte=self.cleaned_data['price_to'])
+
+        if self.cleaned_data['date_from'] is not None:
+            sqs = sqs.filter(created_at_date__gte=self.cleaned_data['date_from'])
+        if self.cleaned_data['date_to'] is not None:
+            sqs = sqs.filter(created_at_date__lte=self.cleaned_data['date_to'])
+
+        return sqs
 
 class AlertSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
@@ -143,7 +215,7 @@ class AlertSearchForm(SearchForm):
             location, radius = self.cleaned_data.get('l', None), self.cleaned_data.get('r', DEFAULT_RADIUS)
             if location:
                 coords = GoogleGeocoder().geocode(location)[1]
-                if coords:
+                if all(coords):
                     point = Point(coords)
                     sqs = sqs.dwithin(
                         'location', point, Distance(km=radius)

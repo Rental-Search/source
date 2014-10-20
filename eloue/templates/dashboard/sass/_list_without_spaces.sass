@@ -1,33 +1,3 @@
-// .list-without-spaces,
-// .without-spaces
-//   text-align: justify
-//   width: 100%
-//   line-height: 1
-//   margin-bottom: -1em
-//   // overflow: hidden
-//   &:after
-//     display: inline-block
-//     width: 100%
-//     height: 0
-//     overflow: hidden
-//     content: ''
-//   > li
-//     white-space: nowrap
-//     display: inline-block
-//     &.divide,
-//     &.divider
-//       position: relative
-//       &:before
-//         position: absolute
-//         width: 1px
-//         height: 10000px
-//         bottom: ( 1em - $line-height-base)
-//         left: 0
-//         content: ''
-//         background-color: $gray-lighter
-//       &:first-child
-//         display: none
-
 .list-without-spaces,
 .without-spaces
   margin: 0
@@ -38,6 +8,11 @@
     display: table-cell
     width: 0.1%
     vertical-align: middle
+  &.compress > li
+    width: auto
+    a
+      padding: 0 1em
+
   &.fixed
     .divide:before,
     .divider:before

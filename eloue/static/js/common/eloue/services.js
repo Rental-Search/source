@@ -44,7 +44,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var currentUserUrl = Endpoints.api_url + "users/" + userId + "/";
 
                     // Send form to the current user url
-                    FormService.send("PATCH", currentUserUrl, form, successCallback, errorCallback);
+                    FormService.send("PUT", currentUserUrl, form, successCallback, errorCallback);
                 };
 
                 usersService.resetPassword = function (userId, form) {
@@ -402,7 +402,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "UtilsService",
             "UsersService",
             "MessageThreads",
-            function ($q, $timeout, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, UsersService, MessageThreads) {
+            "ProductsParseService",
+            function ($q, $timeout, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, UsersService, MessageThreads, ProductsParseService) {
                 var productsService = {};
 
                 productsService.getProduct = function (id) {
@@ -438,23 +439,25 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         angular.forEach(data.results, function (value, key) {
                             var productDeferred = $q.defer();
 
-                            var product = {
+                            var productData = {
                                 id: value.id,
                                 summary: value.summary,
                                 deposit_amount: value.deposit_amount
                             };
 
-                            PicturesService.getPicturesByProduct(value.id).$promise.then(
-                                function (pictures) {
-                                    if ($.isArray(pictures.results) && (pictures.results.length > 0)) {
-                                        product.picture = pictures.results[0].image.thumbnail;
-                                    }
-                                    productDeferred.resolve(product);
-                                },
-                                function (reason) {
-                                    productDeferred.reject(reason);
-                                }
-                            );
+                            var productPromises = {};
+                            productPromises.stats = Products.getStats({id:  value.id, _cache: new Date().getTime()});
+
+                            // Load pictures
+                            productPromises.pictures = PicturesService.getPicturesByProduct(value.id).$promise;
+
+
+                            // When all data loaded
+                            $q.all(productPromises).then(function (results) {
+                                var product = ProductsParseService.parseProduct(productData, results.stats, results.owner,
+                                    results.ownerStats, (!!results.pictures) ? results.pictures.results : null);
+                                productDeferred.resolve(product);
+                            });
 
                             promises.push(productDeferred.promise);
                         });
@@ -474,7 +477,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
                     var deferred = $q.defer();
-                    var params = {owner: userId};
+                    var params = {owner: userId, ordering: "-created_at"};
 
                     if (rootCategoryId) {
                         params.category__isdescendant = rootCategoryId;
@@ -499,7 +502,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                             subPromises.push(PicturesService.getPicturesByProduct(product.id).$promise);
                             subPromises.push(PricesService.getProductPricesPerDay(product.id).$promise);
-                            subPromises.push(Products.getStats({id: product.id}).$promise);
+                            subPromises.push(Products.getStats({id: product.id, _cache: new Date().getTime()}).$promise);
                             $q.all(subPromises).then(
                                 function (results) {
 
@@ -516,6 +519,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                     }
 
                                     product.stats = results[2];
+                                    if (product.stats) {
+                                        if (product.stats.average_rating) {
+                                            product.stats.average_rating = Math.round(product.stats.average_rating);
+                                        } else {
+                                            product.stats.average_rating = 0;
+                                        }
+                                    }
+
                                     productDeferred.resolve(product);
                                 },
                                 function (reasons) {
@@ -925,7 +936,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 $.ajax({
                     url: "/location/ajouter/category/?q=" + query + "&category=" + rootCategoryId,
                     type: "GET",
-                    success: function(data) {
+                    success: function (data) {
                         deferred.resolve(data.categories);
                     }
                 });
@@ -1039,11 +1050,40 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 var addressesService = {};
 
                 addressesService.getAddress = function (addressId) {
-                    return Addresses.get({id: addressId});
+                    return Addresses.get({id: addressId, _cache: new Date().getTime()});
                 };
 
                 addressesService.getAddressesByPatron = function (patronId) {
-                    return Addresses.get({patron: patronId});
+                    var deferred = $q.defer();
+
+                    Addresses.get({patron: patronId, _cache: new Date().getTime()}).$promise.then(function (result) {
+                        var total = result.count;
+                        if (total <= 10) {
+                            deferred.resolve(result.results);
+                        } else {
+                            var pagesCount = Math.floor(total / 10) + 1;
+                            var adrPromises = [];
+
+                            for (var i = 1; i <= pagesCount; i++) {
+                                adrPromises.push(Addresses.get({patron: patronId, page: i}).$promise);
+                            }
+
+                            $q.all(adrPromises).then(
+                                function (addresses) {
+                                    var addressList = [];
+                                    angular.forEach(addresses, function (adrPage, index) {
+                                        angular.forEach(adrPage.results, function (value, key) {
+                                            addressList.push(value);
+                                        });
+                                    });
+                                    deferred.resolve(addressList);
+                                }
+                            );
+
+                        }
+                    });
+
+                    return deferred.promise;
                 };
 
                 addressesService.updateAddress = function (addressId, formData) {
@@ -1088,12 +1128,20 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return PhoneNumbers.get({id: phoneNumberId});
             };
 
+            phoneNumbersService.savePhoneNumber = function (phoneNumber) {
+                return PhoneNumbers.save(phoneNumber);
+            };
+
             phoneNumbersService.updatePhoneNumber = function (phoneNumber) {
                 return PhoneNumbers.update({id: phoneNumber.id}, phoneNumber);
             };
 
             phoneNumbersService.getPremiumRateNumber = function (phoneNumberId) {
                 return PhoneNumbers.getPremiumRateNumber({id: phoneNumberId});
+            };
+
+            phoneNumbersService.deletePhoneNumber = function (phoneNumberId) {
+                return PhoneNumbers.delete({id: phoneNumberId});
             };
 
             return phoneNumbersService;
@@ -1122,6 +1170,23 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 return commentsService;
+            }
+        ]);
+
+        /**
+         * Service for managing sinisters.
+         */
+        EloueCommon.factory("SinistersService", [
+            "Sinisters",
+            "Endpoints",
+            function (Sinisters, Endpoints) {
+                var sinistersService = {};
+
+                sinistersService.getSinisterList = function (bookingUUID) {
+                    return Sinisters.get({_cache: new Date().getTime(), booking: bookingUUID}).$promise;
+                };
+
+                return sinistersService;
             }
         ]);
 
@@ -1233,6 +1298,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 var productResult = angular.copy(productData);
 
                 productResult.stats = statsData;
+                if (productResult.stats) {
+                    if (productResult.stats && productResult.stats.average_rating) {
+                        productResult.stats.average_rating = Math.round(productResult.stats.average_rating);
+                    } else {
+                        productResult.stats.average_rating = 0;
+                    }
+                }
 
                 // Parse owner
                 if (!!ownerData) {
@@ -1292,7 +1364,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load bookings
-                    Bookings.get({page: page, author: author, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
+                    Bookings.get({page: page, author: author, ordering: "-created_at", _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
                         var bookingListPromises = [];
 
                         // For each booking
@@ -1352,7 +1424,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Load product
                         ProductsLoadService.getProduct(productId, true, true, true, true).then(function (product) {
                             booking.product = product;
-                            MessageThreadsService.getMessageThread(product.id, UtilsService.getIdFromUrl(booking.borrower)).then(function(threads) {
+                            MessageThreadsService.getMessageThread(product.id, UtilsService.getIdFromUrl(booking.borrower)).then(function (threads) {
                                 if (threads && threads.length > 0) {
                                     booking.lastThreadId = UtilsService.getIdFromUrl(threads[threads.length - 1].thread);
                                 }
@@ -1363,6 +1435,22 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     });
 
                     return deferred.promise;
+                };
+
+                bookingsLoadService.acceptBooking = function (uuid) {
+                    return Bookings.accept({uuid: uuid}, {uuid: uuid});
+                };
+
+                bookingsLoadService.cancelBooking = function (uuid) {
+                    return Bookings.cancel({uuid: uuid}, {uuid: uuid});
+                };
+
+                bookingsLoadService.rejectBooking = function (uuid) {
+                    return Bookings.reject({uuid: uuid}, {uuid: uuid});
+                };
+
+                bookingsLoadService.postIncident = function (uuid, description) {
+                    return Bookings.incident({uuid: uuid}, {description: description});
                 };
 
                 bookingsLoadService.getBookingByProduct = function (productId) {
@@ -1745,6 +1833,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                productRelatedMessagesLoadService.updateMessage = function (message) {
+                    return ProductRelatedMessages.update({id: message.id}, message);
+                };
+
+
                 return productRelatedMessagesLoadService;
             }
         ]);
@@ -1822,7 +1915,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * @param successCallback success callback
                  * @param errorCallback error callback
                  */
-                sendResetPasswordRequest: function(form, successCallback, errorCallback) {
+                sendResetPasswordRequest: function (form, successCallback, errorCallback) {
                     FormService.send("POST", "/reset/", form, successCallback, errorCallback);
                 },
 
@@ -1833,7 +1926,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * @param successCallback success callback
                  * @param errorCallback error callback
                  */
-                resetPassword: function(form, url, successCallback, errorCallback) {
+                resetPassword: function (form, url, successCallback, errorCallback) {
                     FormService.send("POST", url, form, successCallback, errorCallback);
                 },
 

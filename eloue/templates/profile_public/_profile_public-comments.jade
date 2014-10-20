@@ -1,13 +1,12 @@
-{% with comments|length as comment_count %}
+{% with borrowercomments|length as comment_count %}
 {% if comment_count %}
 h3.indent-b-xs Les {{ comment_count }} commentaires de {{ patron.username }}
 
 ul.list-group
-  each comment in comments
+  each comment in borrowercomments
     li.list-group-item.thumbnail
       .thumbnail-img
-        a(href="{{ product.url }}").img-wrapper
-          img(style="background-image: url({{ product.thumbnail_medium }})").bg-image
+        a(href="{{ product.url }}").img-wrapper: img(style="{% if product.thumbnail_medium %}background-image: url({{ product.thumbnail_medium }}){% endif %}").bg-image
       .thumbnail-content
         p
           a(href="{{ product.url }}").text-success: b {{ comment.summary }} 

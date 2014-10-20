@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.db.models.deletion import PROTECT
 import logbook
 import uuid
 import calendar
 from decimal import Decimal as D
 
-import facebook
+#import facebook
 
 from imagekit.models import ImageSpecField
-from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
+from pilkit import processors
 
 from django_fsm import FSMField, transition
 
@@ -33,13 +34,14 @@ from accounts.manager import PatronManager
 from accounts.choices import CIVILITY_CHOICES, COUNTRY_CHOICES, PHONE_TYPES, SUBSCRIPTION_PAYMENT_TYPE_CHOICES
 from accounts.auth import AbstractUser
 from products.signals import post_save_to_batch_update_product
+from rent.choices import COMMENT_TYPE_CHOICES, BOOKING_STATE
+
 from payments.paypal_payment import accounts, PaypalError
 from payments import paypal_payment
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, json
-from rent.choices import COMMENT_TYPE_CHOICES, BOOKING_STATE
 
 
 DEFAULT_CURRENCY = get_format('CURRENCY')
@@ -74,8 +76,8 @@ class Patron(AbstractUser):
     
     avatar = models.ImageField(upload_to=upload_to, null=True, blank=True)
 
-    default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+")
-    default_number = models.ForeignKey('PhoneNumber', null=True, blank=True, related_name="+")
+    default_address = models.ForeignKey('Address', null=True, blank=True, related_name="+", on_delete=PROTECT)
+    default_number = models.ForeignKey('PhoneNumber', null=True, blank=True, related_name="+", on_delete=PROTECT)
 
     customers = models.ManyToManyField('self', symmetrical=False)
 
@@ -104,33 +106,33 @@ class Patron(AbstractUser):
     thumbnail = ImageSpecField(
         source='avatar',
         processors=[
-            Crop(width=40, height=40),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=40, height=40),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     profil = ImageSpecField(
         source='avatar',
         processors=[
-            ResizeToFit(width=120, height=120),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=120, height=120),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     display = ImageSpecField(
         source='avatar',
         processors=[
-            ResizeToFit(width=180),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.ResizeToFit(width=180),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     product_page = ImageSpecField(
         source='avatar',
         processors=[
-            ResizeToFit(width=86, height=86),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=86, height=86),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
 
@@ -302,6 +304,8 @@ class Patron(AbstractUser):
 
     @property
     def stats(self):
+        from rent.models import Booking
+        from products.search import product_search
         res = {
             k: getattr(self, k) for k in ('response_rate', 'response_time')
         }
@@ -310,8 +314,8 @@ class Patron(AbstractUser):
             .aggregate(Avg('bookings__comments__note'), Count('bookings__comments__id'))
         res.update({
             # TODO: we would need a better rating calculation in the future
-            'average_rating': int(qs['bookings__comments__note__avg'] or 0),
-            'ratings_count': int(qs['bookings__comments__id__count'] or 0),
+            'average_rating': qs['bookings__comments__note__avg'] or 0,
+            'ratings_count': qs['bookings__comments__id__count'] or 0,
             # count message threads where we have unread messages forthe requested user
             'unread_message_threads_count': self.received_messages \
                 .filter(read_at=None) \
@@ -319,9 +323,9 @@ class Patron(AbstractUser):
                 .annotate(Count('productrelatedmessage__thread')) \
                 .order_by().count(),
             # count incoming booking requests for the requested user
-            'booking_requests_count': self.bookings.filter(state=BOOKING_STATE.AUTHORIZED).only('id').count(),
-            'bookings_count': self.bookings.count(),
-            'products_count': self.products.count(),
+            'booking_requests_count': Booking.on_site.filter(owner=self, state=BOOKING_STATE.AUTHORIZED).count(),
+            'bookings_count': Booking.on_site.active().filter(Q(owner=self) | Q(borrower=self)).count(),
+            'products_count': product_search.narrow('%s_exact:%s' % ('owner', self.username)).count(),
         })
         return res
 
@@ -578,7 +582,7 @@ class Address(models.Model):
             )
         )
         coords = GoogleGeocoder().geocode(location)[1]
-        if coords:
+        if all(coords):
             return Point(coords)
 
     def is_geocoded(self):
@@ -637,7 +641,7 @@ class ProAgency(models.Model):
             )
         )
         coords = GoogleGeocoder().geocode(location)[1]
-        if coords:
+        if all(coords):
             return Point(coords)
 
 

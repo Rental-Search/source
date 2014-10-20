@@ -75,7 +75,7 @@ class Booking(models.Model):
     pin = models.CharField(blank=True, max_length=4)
     ip = models.IPAddressField(blank=True, null=True)
     
-    created_at = models.DateTimeField(blank=True, editable=False)
+    created_at = models.DateTimeField(blank=True, editable=False) # TODO: should use auto_now_add=True here
     canceled_at = models.DateTimeField(null=True, blank=True, editable=False)
     
     preapproval_key = models.CharField(null=True, editable=False, blank=True, max_length=255)
@@ -93,7 +93,7 @@ class Booking(models.Model):
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created_at = datetime.datetime.now()
+            self.created_at = datetime.datetime.now() # TODO: should be replaced with auto_now_add=True in the model's field
             self.pin = str(random.randint(1000, 9999))
             self.deposit_amount = self.product.deposit_amount
             if self.product.has_insurance:
@@ -184,16 +184,17 @@ class Booking(models.Model):
     
     def send_acceptation_email(self):
         context = {'booking': self}
+        contract_content = None
         if not self.owner.is_professional:
             contract = self.product.subtype.contract_generator(self)
-            content = contract.getvalue()
+            contract_content = contract.getvalue()
         message = create_alternative_email('rent/emails/owner_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
-        if not self.owner.is_professional: 
-            message.attach('contrat.pdf', content, 'application/pdf')
+        if contract_content:
+            message.attach('contrat.pdf', contract_content, 'application/pdf')
         message.send()
         message = create_alternative_email('rent/emails/borrower_acceptation', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
-        if not self.owner.is_professional:    
-            message.attach('contrat.pdf', content, 'application/pdf')
+        if contract_content:
+            message.attach('contrat.pdf', contract_content, 'application/pdf')
         message.send()
     
     def send_borrower_receipt(self):
@@ -307,7 +308,7 @@ class Booking(models.Model):
     # FSM conditions
     
     def not_need_ipn(self):
-        return self.payment.NOT_NEED_IPN
+        return self.payment.NOT_NEED_IPN if self.payment else False
 
     def is_expired(self):
         return self.started_at < datetime.datetime.now()
@@ -338,8 +339,10 @@ class Booking(models.Model):
     @transition(field=state, source=[BOOKING_STATE.AUTHORIZING, BOOKING_STATE.AUTHORIZED, BOOKING_STATE.PENDING], target=BOOKING_STATE.CANCELED)
     def cancel(self, *args, **kwargs):
         """Cancel preapproval for the borrower"""
-        self.payment.cancel_preapproval()
-        self.send_cancelation_email(*args, **kwargs) # 'source' = request.user
+        if self.state != BOOKING_STATE.AUTHORIZING:
+            self.payment.cancel_preapproval()
+        self.send_cancelation_email(*args, **kwargs)  # 'source' = request.user
+        self.canceled_at = datetime.datetime.now()
     
     @transition(field=state, source=BOOKING_STATE.PENDING, target=BOOKING_STATE.ONGOING)
     def activate(self):
@@ -347,7 +350,7 @@ class Booking(models.Model):
     
     @transition(field=state, source=[BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED], target=BOOKING_STATE.INCIDENT)
     def incident(self, *args, **kwargs):
-        self.send_incident_email(*args, **kwargs)
+        pass #self.send_incident_email(*args, **kwargs)
     
     @transition(field=state, source=BOOKING_STATE.ONGOING, target=BOOKING_STATE.ENDED)
     def end(self):
@@ -450,15 +453,15 @@ class Comment(models.Model):
 
     @property
     def author(self):
-        return self.booking.owner if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
+        return self.booking.owner if self.type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
 
     @property
     def response(self):
-        raise self.booking.borrowercomment if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.ownercomment
+        raise self.booking.borrowercomment if self.type == COMMENT_TYPE_CHOICES.OWNER else self.booking.ownercomment
 
     @property
     def writer(self):
-        raise self.booking.owner if type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
+        raise self.booking.owner if self.type == COMMENT_TYPE_CHOICES.OWNER else self.booking.borrower
 
     #@permalink
     def get_absolute_url(self):
@@ -525,7 +528,7 @@ class Sinister(models.Model):
     booking = models.ForeignKey(Booking, related_name='sinisters')
     product = models.ForeignKey(Product, related_name='sinisters')
     
-    created_at = models.DateTimeField(blank=True, editable=False)
+    created_at = models.DateTimeField(blank=True, editable=False) # TODO: should use auto_now_add=True here
 
     def __unicide__(self):
         return self.uuid
@@ -533,7 +536,7 @@ class Sinister(models.Model):
     @incr_sequence('sinister_id', 'rent_sinister_sinister_id_seq')
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created_at = datetime.datetime.now()
+            self.created_at = datetime.datetime.now() # TODO: should be replaced with auto_now_add=True in the model's field
         super(Sinister, self).save(*args, **kwargs)
     
 

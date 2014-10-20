@@ -38,7 +38,7 @@ define(["angular", "eloue/app"], function (angular) {
             ];
 
             BookingsService.getBookingsByProduct($stateParams.id).then(function (bookings) {
-
+                $scope.markListItemAsSelected("item-tab-", "calendar");
                 angular.forEach(bookings, function (value, key) {
                     value.startDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
                     value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);

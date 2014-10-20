@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework.fields import FloatField, IntegerField
 from products import models
-from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
+from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
     NestedModelSerializerMixin
 
@@ -70,7 +70,7 @@ def map_require_boolean_field(field_mapping):
 class RequiredBooleanFieldSerializerMixin(object):
     field_mapping = map_require_boolean_field(ModelSerializer.field_mapping)
 
-class ProductSerializer(RequiredBooleanFieldSerializerMixin, ModelSerializer):
+class ProductSerializer(ModelSerializer):
     address = NestedAddressSerializer()
     average_note = FloatField(read_only=True)
     comment_count = IntegerField(read_only=True)
@@ -156,5 +156,5 @@ class ProductRelatedMessageSerializer(ModelSerializer):
     class Meta:
         model = models.ProductRelatedMessage
         fields = ('id', 'thread', 'sender', 'recipient', 'body', 'sent_at', 'read_at', 'replied_at', 'offer')
-        read_only_fields = ('sent_at', 'read_at', 'replied_at')
+        read_only_fields = ('sent_at',)
         immutable_fields = ('thread', 'sender', 'recipient', 'offer')

@@ -19,21 +19,26 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.units = Unit;
             $scope.prices = {
-                hour: {id: null, amount: 0, unit: Unit.HOUR.id},
-                day: {id: null, amount: 0, unit: Unit.DAY.id},
-                three_days: {id: null, amount: 0, unit: Unit.THREE_DAYS.id},
-                seven_days: {id: null, amount: 0, unit: Unit.WEEK.id},
-                fifteen_days: {id: null, amount: 0, unit: Unit.FIFTEEN_DAYS.id}
+                hour: {id: null, amount: null, unit: Unit.HOUR.id},
+                day: {id: null, amount: null, unit: Unit.DAY.id},
+                three_days: {id: null, amount: null, unit: Unit.THREE_DAYS.id},
+                seven_days: {id: null, amount: null, unit: Unit.WEEK.id},
+                fifteen_days: {id: null, amount: null, unit: Unit.FIFTEEN_DAYS.id}
             };
             $scope.isAuto = false;
             $scope.isRealEstate = false;
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
+                $scope.markListItemAsSelected("item-tab-", "tariffs");
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
-                    CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
-                        $scope.updateFieldSet(rootCategory);
-                    });
+                    if (!nodeCategory.parent) {
+                        $scope.updateFieldSet(nodeCategory);
+                    } else {
+                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                            $scope.updateFieldSet(rootCategory);
+                        });
+                    }
                 });
             });
 
@@ -69,7 +74,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.isRealEstate = false;
                 if (rootCategory.name === "Automobile") {
                     $scope.isAuto = true;
-                } else if (rootCategory.name === "Hébergement") {
+                } else if (rootCategory.name === "Location saisonnière") {
                     $scope.isRealEstate = true;
                 }
             };
@@ -88,11 +93,32 @@ define(["angular", "eloue/app"], function (angular) {
                         }
                     }
                 });
-                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.address.id + "/";
-                $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
+                var addressId, phoneId;
+                if (!!$scope.product.address) {
+                    addressId = $scope.product.address.id;
+                    if (!!addressId) {
+                        $scope.product.address = Endpoints.api_url + "addresses/" + addressId + "/";
+                    }
+                }
+                if (!!$scope.product.phone) {
+                    phoneId = $scope.product.phone.id;
+                    if (!!phoneId) {
+                        $scope.product.phone = Endpoints.api_url + "phones/" + phoneId + "/";
+                    } else {
+                        $scope.product.phone = null;
+                    }
+                }
+
                 promises.push(ProductsService.updateProduct($scope.product).$promise);
                 $q.all(promises).then(function(results) {
+                    $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
+                    $scope.product.address = {
+                        id: addressId
+                    };
+                    $scope.product.phone = {
+                        id: phoneId
+                    };
                 });
             }
         }]);

@@ -91,7 +91,6 @@ require([
 ], function ($, _, angular) {
     "use strict";
     $(function () {
-        $("select").attr("eloue-chosen", "");
 
         angular.bootstrap(document, ["EloueApp"]);
 
@@ -123,22 +122,28 @@ require([
             });
         }
 
-        var districtFake = $("#district-fake"), priceFake = $("#price-fake");
-        if (districtFake) {
-            districtFake.slider({
-                range: "min",
-                value: 400,
-                min: 1,
-                max: 700
+        var categorySelection = $("#category-selection");
+        var detailSearchForm = $("#detail-search");
+        if (detailSearchForm && categorySelection) {
+            categorySelection.change(function() {
+                var location = $(this).find(":selected").attr("location");
+                detailSearchForm.attr("action", location);
             });
         }
-
-        if (priceFake) {
-            priceFake.slider({
+        var rangeSlider = $("#range-slider");
+        var priceSlider = $("#price-slider");
+        if (priceSlider) {
+            var priceMinInput = $("#price-min");
+            var priceMaxInput = $("#price-max");
+            priceSlider.slider({
                 range: true,
-                min: 0,
-                max: 700,
-                values: [100, 400]
+                min: rangeSlider.attr("min-value"),
+                max: rangeSlider.attr("max-value"),
+                values: [priceMinInput.val(), priceMaxInput.val()],
+                slide: function(event, ui) {
+                    priceMinInput.val(ui.values[0]);
+                    priceMaxInput.val(ui.values[1]);
+                }
             });
         }
 
@@ -226,8 +231,7 @@ require([
                     startDate: Date.today()
                 });
 
-                var radius = Number($("#district").val().replace(',', '.'));
-
+                var radius = Number($("#range").val().replace(',', '.'));
                 var mapOptions = {
                     zoom: zoom(radius),
                     disableDefaultUI: true,
@@ -250,6 +254,20 @@ require([
                         }
                     }
                 );
+
+                if (rangeSlider) {
+                    var rangeInput = $("#range");
+                    rangeSlider.slider({
+                        range: "min",
+                        value: rangeInput.val(),
+                        min: 1,
+                        max: rangeSlider.attr("max-value"),
+                        slide: function(event, ui) {
+                            rangeInput.val(ui.value);
+                            map.setZoom(zoom(ui.value));
+                        }
+                    });
+                }
 
                 var products = [];
                 $('li[id^="marker-"]').each(function () {
@@ -336,15 +354,15 @@ require([
                 var image, image_hover;
 
                 if (markerId == "li#marker-") {
-                    image = new google.maps.MarkerImage('/static/images/markers_new_crush.png',
-                        new google.maps.Size(20, 32),
-                        new google.maps.Point(0, 36 * i),
-                        new google.maps.Point(10, 32));
+                    image = new google.maps.MarkerImage('/static/images/markers_smooth_aligned.png',
+                        new google.maps.Size(26, 28),
+                        new google.maps.Point(0, 28 * i),
+                        new google.maps.Point(14, 28));
 
-                    image_hover = new google.maps.MarkerImage('/static/images/markers_new_crush.png',
-                        new google.maps.Size(20, 32),
-                        new google.maps.Point(22, 36 * i),
-                        new google.maps.Point(10, 32));
+                    image_hover = new google.maps.MarkerImage('/static/images/markers_smooth_aligned.png',
+                        new google.maps.Size(26, 28),
+                        new google.maps.Point(29, 28 * i),
+                        new google.maps.Point(14, 28));
                 }
 
                 var myLatLng = new google.maps.LatLng(product.lat, product.lng);

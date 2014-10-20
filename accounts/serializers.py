@@ -122,7 +122,7 @@ class UserSerializer(serializers.ModelSerializer):
             'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
-            'date_joined', 'is_active', 'rib', 'password', 'average_note', 'creditcard', 'comment_count'
+            'date_joined', 'is_active', 'rib', 'password', 'is_subscribed', 'creditcard', 'comment_count'
         )
         public_fields = (
             'id', 'company_name', 'username', 'is_professional', 'slug',
@@ -186,12 +186,14 @@ class ProPackageSerializer(serializers.ModelSerializer):
         model = models.ProPackage
         fields = ('id', 'name', 'maximum_items', 'price', 'valid_from', 'valid_until')
         public_fields = fields
+        range_fields = (('valid_from', 'valid_until'), )
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Subscription
         fields = ('id', 'patron', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type')
         immutable_fields = ('patron', 'propackage')
+        range_fields = (('subscription_started', 'subscription_ended'), )
 
 class BillingSerializer(serializers.ModelSerializer):
     class Meta:

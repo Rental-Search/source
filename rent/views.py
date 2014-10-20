@@ -25,7 +25,7 @@ from payments.models import PayboxDirectPlusPaymentInformation
 from products.models import Product
 from products.choices import UNIT
 from rent.forms import BookingForm, BookingAcceptForm, PreApprovalIPNForm, PayIPNForm, SinisterForm
-from rent.models import Booking, ProBooking
+from rent.models import Booking, ProBooking, Sinister
 from rent.wizard import BookingWizard, PhoneBookingWizard
 from rent.utils import timesince
 from rent.choices import BOOKING_STATE
@@ -325,7 +325,6 @@ def booking_close(request, booking_id):
 @ownership_required(model=Booking, object_key='booking_id', ownership=['owner', 'borrower'])
 def booking_incident(request, booking_id):
     booking = get_object_or_404(Booking.on_site, pk=booking_id, state__in=[BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED])
-    from rent.models import Sinister
     if request.method == "POST":
         form = SinisterForm(
             request.POST,
@@ -350,14 +349,27 @@ def booking_incident(request, booking_id):
 
 # REST API 2.0
 
-from rest_framework import status
+from django.utils.functional import wraps
+
 from rest_framework.decorators import link, action
 from rest_framework.response import Response
 import django_filters
 
 from rent import serializers, models
-from eloue.api import viewsets, filters, mixins
+from eloue.api import viewsets, filters, mixins, exceptions
 from accounts.serializers import CreditCardSerializer, BookingPayCreditCardSerializer
+
+def user_required(attname):
+    def user_required_inner(f):
+        @wraps(f)
+        def wrapper(self, request, *args, **kwargs):
+            obj = self.get_object()
+            if getattr(obj, attname) != request.user:
+                error = getattr(exceptions.PermissionErrorEnum, 'ACTION_%s_REQUIRED' % attname.upper())
+                raise exceptions.PermissionException(error)
+            return f(self, request, *args, **kwargs)
+        return wrapper
+    return user_required_inner
 
 class BookingFilterSet(filters.FilterSet):
     author = filters.MultiFieldFilter(name=('owner', 'borrower'))
@@ -387,8 +399,19 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         res = {transition.method.__name__: transition.target for transition in transitions}
         return Response(dict(transitions=res))
 
+    @link()
+    def contract(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset()).filter(state__in=[BOOKING_STATE.PENDING, BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSED, BOOKING_STATE.INCIDENT])
+        obj = self.get_object(queryset=queryset)
+        content = obj.product.subtype.contract_generator(obj).getvalue()
+        response = HttpResponse(content, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename=contrat.pdf'
+        return response
+
     @action(methods=['put'])
+    @user_required(attname='borrower')
     def pay(self, request, *args, **kwargs):
+        obj = self.get_object()
         data = request.DATA
         try:
             credit_card = data['credit_card']
@@ -400,33 +423,60 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         except (KeyError, ValidationError):
             serializer = CreditCardSerializer(data=data, context=self.get_serializer_context())
             if not serializer.is_valid():
-                return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                raise exceptions.ValidationException(serializer.errors)
             credit_card = serializer.save()
 
         payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
-        booking = self.get_object()
-        booking.payment = payment
-        booking.save()
-        return self._perform_transition(request, action='preapproval', cvv=credit_card.cvv)
+        obj.payment = payment
+        return self._perform_transition(request, instance=obj, action='preapproval', cvv=credit_card.cvv)
 
     @action(methods=['put'])
+    @user_required(attname='owner')
     def accept(self, request, *args, **kwargs):
         return self._perform_transition(request, action='accept')
 
     @action(methods=['put'])
+    @user_required(attname='owner')
     def reject(self, request, *args, **kwargs):
         return self._perform_transition(request, action='reject')
 
     @action(methods=['put'])
+    @user_required(attname='borrower')
     def cancel(self, request, *args, **kwargs):
-        return self._perform_transition(request, action='cancel')
+        return self._perform_transition(request, action='cancel', source=request.user)
 
-    def _perform_transition(self, request, action=None, **kwargs):
-        serializer = serializers.BookingActionSerializer(instance=self.get_object(), data={'action': action}, context=self.get_serializer_context())
-        if serializer.is_valid():
-            serializer.save(**kwargs)
-            return Response({'detail': _(u'Transition performed')})
-        return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    @action(methods=['put'])
+    @user_required(attname='owner')
+    def close(self, request, *args, **kwargs):
+        return self._perform_transition(request, action='close', source=request.user)
+
+    @action(methods=['put'])
+    def incident(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset()).filter(state__in=[BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED])
+        obj = self.get_object(queryset=queryset)
+        form = SinisterForm(
+            request.DATA.copy(),
+            instance=Sinister(
+                booking=obj, patron=request.user, product=obj.product
+            )
+        )
+        if not form.is_valid():
+            raise exceptions.ValidationException(form.errors)
+        sinister = form.save() # save Sinister object
+        return self._perform_transition(request, action='incident', source=request.user, description=sinister.description)
+
+    def _perform_transition(self, request, action=None, instance=None, **kwargs):
+        if instance is None:
+            instance = self.get_object()
+        serializer = serializers.BookingActionSerializer(instance=instance, data={'action': action}, context=self.get_serializer_context())
+        if not serializer.is_valid():
+            raise exceptions.ValidationException(serializer.errors)
+        serializer.save(**kwargs)
+        return Response({'detail': _(u'Transition performed')})
+
+    def paginate_queryset(self, queryset, page_size=None):
+        self.object_list = queryset.model.on_site.active(queryset)
+        return super(BookingViewSet, self).paginate_queryset(self.object_list, page_size=page_size)
 
 class CommentFilterSet(filters.FilterSet):
     rate = django_filters.ChoiceFilter(name='note', choices=serializers.CommentSerializer.base_fields['rate'].choices)
@@ -449,11 +499,13 @@ class CommentViewSet(viewsets.NonEditableModelViewSet):
     ordering_fields = ('note', 'created_at')
     public_actions = ('retrieve',)
 
-class SinisterViewSet(viewsets.ImmutableModelViewSet):
+class SinisterViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
     """
     API endpoint that allows sinisters to be viewed or edited.
     """
     model = models.Sinister
+    queryset = models.Sinister.objects.select_related('booking__owner', 'booking__borrower')
     serializer_class = serializers.SinisterSerializer
-    filter_backends = (filters.OwnerFilter, filters.OrderingFilter)
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    owner_field = ('patron', 'booking__owner', 'booking__borrower')
     filter_fields = ('patron', 'booking', 'product')

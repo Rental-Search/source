@@ -6,15 +6,15 @@ block details
             {% verbatim %}
             .col-md-4
                 .form-control
-                    select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-ng-disabled="submitInProgress")
+                    select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.1")
                         option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
             .col-md-4
                 .form-control
-                    select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", data-ng-disabled="submitInProgress")
+                    select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", ng-required="isAuto || isRealEstate", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.2")
                         option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
             .col-md-4
                 .form-control
-                    select(ng-model="product.category", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress")
+                    select(ng-model="product.category", ng-required="!isAuto && !isRealEstate", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate", data-placeholder="Catégorie Niv.3")
                         option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
             {% endverbatim %}
         h2 Titre
@@ -23,15 +23,17 @@ block details
                 input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary")
         h2 Adresse
         .row
-            .col-sm-5: input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
-            .col-sm-3: input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
-            .col-sm-4: input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
+            .col-sm-12: input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
+        .row
+            .col-sm-6: input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
+            .col-sm-6: input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
         h2 Photos
+        .row
             form#add-picture
               fieldset(data-ng-disabled="submitInProgress")
                 {% verbatim %}
                 ul.text-gray.container-with-square-thumbnail.indent-xs-b
-                    li(ng-show="product.pictures.length < 3"): form#add-picture
+                    li(ng-show="product.pictures.length < 3")
                         label(for="image").file-input-drag
                             i.icon-3x.flaticon.solid.plus
                             input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image

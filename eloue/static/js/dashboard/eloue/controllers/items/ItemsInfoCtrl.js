@@ -11,19 +11,14 @@ define(["angular", "eloue/app"], function (angular) {
         "$stateParams",
         "Endpoints",
         "PrivateLife",
-        "SeatNumber",
-        "DoorNumber",
         "Fuel",
         "Transmission",
         "Mileage",
-        "Consumption",
-        "Capacity",
         "AddressesService",
         "CategoriesService",
         "PicturesService",
         "ProductsService",
-        "PhoneNumbersService",
-        function ($q, $scope, $stateParams, Endpoints, PrivateLife, SeatNumber, DoorNumber, Fuel, Transmission, Mileage, Consumption, Capacity, AddressesService, CategoriesService, PicturesService, ProductsService, PhoneNumbersService) {
+        function ($q, $scope, $stateParams, Endpoints, PrivateLife, Fuel, Transmission, Mileage, AddressesService, CategoriesService, PicturesService, ProductsService) {
 
             $scope.rootCategories = {};
             $scope.nodeCategories = {};
@@ -35,16 +30,72 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.isAuto = false;
             $scope.isRealEstate = false;
             $scope.privateLifeOptions = PrivateLife;
-            $scope.seatNumberOptions = SeatNumber;
-            $scope.doorNumberOptions = DoorNumber;
+            $scope.seatNumberOptions = [
+                {id: 2, name: "2"},
+                {id: 3, name: "3"},
+                {id: 4, name: "4"},
+                {id: 5, name: "5"},
+                {id: 6, name: "6"},
+                {id: 7, name: "7"},
+                {id: 8, name: "8"},
+                {id: 9, name: "9"},
+                {id: 10, name: "10"}
+            ];
+            $scope.doorNumberOptions = [
+                {id: 2, name: "2"},
+                {id: 3, name: "3"},
+                {id: 4, name: "4"},
+                {id: 5, name: "5"},
+                {id: 6, name: "6"}
+            ];
             $scope.fuelOptions = Fuel;
             $scope.transmissionOptions = Transmission;
             $scope.mileageOptions = Mileage;
-            $scope.consumptionOptions = Consumption;
-            $scope.capacityOptions = Capacity;
-            $scope.markListItemAsSelected("item-", $stateParams.id);
+            $scope.consumptionOptions = [
+                {id: 2, name: "2"},
+                {id: 3, name: "3"},
+                {id: 4, name: "4"},
+                {id: 5, name: "5"},
+                {id: 6, name: "6"},
+                {id: 7, name: "7"},
+                {id: 8, name: "8"},
+                {id: 9, name: "9"},
+                {id: 10, name: "10"},
+                {id: 11, name: "11"},
+                {id: 12, name: "12"},
+                {id: 13, name: "13"},
+                {id: 14, name: "14"},
+                {id: 15, name: "15"},
+                {id: 16, name: "16"},
+                {id: 17, name: "17"},
+                {id: 18, name: "18"},
+                {id: 19, name: "19"}
+            ];
+            $scope.capacityOptions = [
+                {id: 1, name: "1"},
+                {id: 2, name: "2"},
+                {id: 3, name: "3"},
+                {id: 4, name: "4"},
+                {id: 5, name: "5"},
+                {id: 6, name: "6"},
+                {id: 7, name: "7"},
+                {id: 8, name: "8"},
+                {id: 9, name: "9"},
+                {id: 10, name: "10"},
+                {id: 11, name: "11"},
+                {id: 12, name: "12"},
+                {id: 13, name: "13"},
+                {id: 14, name: "14"},
+                {id: 15, name: "15"},
+                {id: 16, name: "16"},
+                {id: 17, name: "17"},
+                {id: 18, name: "18"},
+                {id: 19, name: "19+"}
+            ];
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
+                $scope.markListItemAsSelected("item-", $stateParams.id);
+                $scope.markListItemAsSelected("item-tab-", "info");
                 $scope.product = product;
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.categoryDetails.id + "/";
                 $scope.product.addressDetails = $scope.product.address;
@@ -52,13 +103,20 @@ define(["angular", "eloue/app"], function (angular) {
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
-                    $scope.nodeCategory = nodeCategory.id;
-                    $scope.updateLeafCategories();
-                    CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
-                        $scope.rootCategory = rootCategory.id;
+                    if (!nodeCategory.parent) {
+                        $scope.nodeCategory = $scope.product.categoryDetails.id;
+                        $scope.rootCategory = nodeCategory.id;
                         $scope.updateNodeCategories();
-                        $scope.updateFieldSet(rootCategory);
-                    });
+                        $scope.updateFieldSet(nodeCategory);
+                    } else {
+                        $scope.nodeCategory = nodeCategory.id;
+                        $scope.updateLeafCategories();
+                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                            $scope.rootCategory = rootCategory.id;
+                            $scope.updateNodeCategories();
+                            $scope.updateFieldSet(rootCategory);
+                        });
+                    }
                 });
 
             });
@@ -77,12 +135,20 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.updateProduct = function () {
                 $scope.submitInProgress = true;
-                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.address.id + "/";
-                $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
+                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.product.addressDetails.id + "/";
+                if ($scope.product.phone && $scope.product.phone.id) {
+                    $scope.product.phone = Endpoints.api_url + "phones/" + $scope.product.phone.id + "/";
+                } else {
+                    $scope.product.phone = null;
+                }
+                if ($scope.isAuto || $scope.isRealEstate) {
+                    $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
+                }
                 var promises = [];
                 promises.push(AddressesService.update($scope.product.addressDetails).$promise);
                 promises.push(ProductsService.updateProduct($scope.product).$promise);
-                $q.all(promises).then(function(results) {
+                $q.all(promises).then(function (results) {
+                    $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
                 });
             };
@@ -107,7 +173,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.isRealEstate = false;
                 if (rootCategory.name === "Automobile") {
                     $scope.isAuto = true;
-                } else if (rootCategory.name === "Hébergement") {
+                } else if (rootCategory.name === "Location saisonnière") {
                     $scope.isRealEstate = true;
                 }
             }

@@ -17,9 +17,9 @@ define(["angular", "eloue/app"], function (angular) {
             UsersService.getMe().$promise.then(function (currentUser) {
                 var currentUserId = currentUser.id;
 
-                AddressesService.getAddressesByPatron(currentUserId).$promise.then(function (data) {
-                    $scope.addressList = data.results;
-                    $scope.defaultAddressId = (!!currentUser.default_address) ? currentUser.default_address.id : null;
+                AddressesService.getAddressesByPatron(currentUserId).then(function (results) {
+                    $scope.addressList = results;
+                    $scope.defaultAddressId = !!currentUser.default_address ? currentUser.default_address.id : null;
                 });
             });
         }

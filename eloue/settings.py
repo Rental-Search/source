@@ -264,12 +264,11 @@ STATICFILES_FINDERS = (
 
 #imagekit configuration
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
-IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOnDownload' # 'imagekit.cachefiles.strategies.Optimistic'
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic' # 'eloue.legacy.GenerateOnDownload'
 
 #pipeline configuration
 PIPELINE_ENABLED = env('PIPELINE', not DEBUG)
 PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yui.YUICompressor'
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
     #'pipeline.compilers.less.LessCompiler',
@@ -278,7 +277,7 @@ PIPELINE_COMPILERS = (
 PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = env('PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_SASS_ARGUMENTS = '-q'
-PIPELINE_YUI_BINARY = env('COMPRESS_YUI_BINARY', '/usr/bin/yui-compressor')
+PIPELINE_YUGLIFY_BINARY = env('PIPELINE_YUGLIFY_BINARY', '/usr/bin/env yuglify')
 PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/home/benoitw/node_modules/autoprefixer/autoprefixer')
 PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
 PIPELINE_CSS = {
@@ -756,7 +755,8 @@ DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
     'source': 4
 })
 
-if DEBUG:
+USE_PAYBOX_SANDBOX = env('USE_PAYBOX_SANDBOX', DEBUG)
+if USE_PAYBOX_SANDBOX:
     PAYBOX_VERSION = env('PAYBOX_VERSION', '00104')
     PAYBOX_SITE = env('PAYBOX_SITE', 1999888)
     PAYBOX_RANG = env('PAYBOX_RANG', 99)

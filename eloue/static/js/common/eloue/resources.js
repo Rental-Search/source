@@ -41,9 +41,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing product related messages.
      */
     EloueCommon.factory("ProductRelatedMessages", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "productrelatedmessages/?", {},
+        return $resource(Endpoints.api_url + "productrelatedmessages/:id/?", {},
             {
                 "get": { method: "GET", url: Endpoints.api_url + "productrelatedmessages/:id/?", params: {id: ":id"}},
+                "update": { method: "PUT" },
                 "save": {method: "POST"}
             });
     }]);
@@ -134,7 +135,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Bookings", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "bookings/:uuid/?", {},
             {
-                "pay": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/pay/?"}
+                "pay": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/pay/?"},
+                "accept": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/accept/?"},
+                "reject": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/reject/?"},
+                "cancel": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/cancel/?"},
+                "incident": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/incident/?"}
             });
     }]);
 
@@ -150,6 +155,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      */
     EloueCommon.factory("Comments", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "comments/:id/?");
+    }]);
+
+    /**
+     * Factory for managing sinisters.
+     */
+    EloueCommon.factory("Sinisters", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "sinisters/:id/?");
     }]);
 
     /**

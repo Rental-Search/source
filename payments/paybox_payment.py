@@ -87,10 +87,11 @@ class PayboxManager(object):
         return response['PORTEUR'][0]
 
     def unsubscribe(self, member_id):
-        TYPE = TYPES['SUBSCRIBER_DELETE']
-        response = self._request(
-            TYPE=TYPE, REFABONNE=member_id
-        )
+        if member_id:
+            TYPE = TYPES['SUBSCRIBER_DELETE']
+            response = self._request(
+                TYPE=TYPE, REFABONNE=member_id
+            )
 
     def modify(self, member_id, card_number, expiration_date, cvv):
         TYPE = TYPES['SUBSCRIBER_MODIFY']

@@ -19,6 +19,10 @@ h1
   color: rgb(82,82,82)
   line-height: 1.5
 
+.part.comments .list-group
+  max-height: px(600) !important
+  overflow-y: auto
+
 .btn
   font-weight: $fw-bold
   outline: none !important
@@ -38,6 +42,44 @@ h1
     color: $brand-success
     text-decoration: underline
 
+.form-suffix
+  line-height: 3em
+
+a[download]
+  &[href $= ".eps"]
+    &::after
+      content: " [EPS]"
+
+  &[href $= ".psd"]
+    &::after
+      content: " [PSD]"
+
+  &[href $= ".png"]
+    &::after
+      content: " [PNG]"
+
+  &[href $= ".oi"]
+    &::after
+      content: " [OI]"
+
+  &[href $= ".svg"]
+    &::after
+      content: " [SVG]"
+
+  &[href $= ".pdf"]
+    &::after
+      content: " [PDF]"
+
+@each $name, $var in "pickup-logo-full" $s-pickup_logo_full, "pickup-logo-short-black" $s-pickup_logo_short_black, "calendar" $s-calendar, "euro" $s-euro
+  .sprite-#{$name}
+    +sprite($var)
+
+[class *= "sprite-"]
+  display: inline-block
+  vertical-align: middle
+
+
+
 i[data-toggle="collapse"]
   cursor: pointer
   &:before
@@ -45,6 +87,8 @@ i[data-toggle="collapse"]
   &.collapsed:before
     content: "\e5a9" !important
 
+h2
+  line-height: $line-height-base
 
 .e_loue-mark
   $width: ($indent-md * 1.5)

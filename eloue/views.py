@@ -85,13 +85,16 @@ class AjaxResponseMixin(object):
         return self.response_class(context, **kwargs)
 
 class BreadcrumbsMixin(object):
+    form_class = FacetedSearchForm
+
     def get_breadcrumbs(self, request):
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         query_data = request.GET.copy()
         query_data.setdefault('l', location['country'])
-        form = FacetedSearchForm(query_data)
+        form = self.form_class(query_data)
         if not form.is_valid():
             raise Http404
+        self.form = form
 
         breadcrumbs = SortedDict()
         breadcrumbs['q'] = {'name': 'q', 'value': form.cleaned_data.get('q', None), 'label': 'q', 'facet': False}
@@ -107,9 +110,7 @@ class BreadcrumbsMixin(object):
         return super(BreadcrumbsMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        from products.models import Category
         context = {
-            'category_list': Category.on_site.filter(pk__in=[35, 390, 253, 418, 2700, 2713, 172, 126, 323]),
             'breadcrumbs': self.breadcrumbs,
         }
         context.update(super(BreadcrumbsMixin, self).get_context_data(**kwargs))

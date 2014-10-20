@@ -21,10 +21,21 @@ define(["angular", "eloue/app"], function (angular) {
                 currentUser: $scope.currentUserPromise,
                 messageThread: MessageThreadsLoadService.getMessageThread($stateParams.id)
             };
-            $scope.markListItemAsSelected("thread-", $stateParams.id);
 
             $q.all(promises).then(function (results) {
+                $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
+
+                ProductRelatedMessagesLoadService.getMessage(UtilsService.getIdFromUrl($scope.messageThread.last_message)).then(function (message) {
+                    if (!message.read_at) {
+                        message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
+                        ProductRelatedMessagesLoadService.updateMessage(message).$promise.then(function (result) {
+                            $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
+                            $scope.updateStatistics();
+                        });
+                    }
+                });
+
                 if ($scope.messageThread.product) {
 
                     // Get booking product

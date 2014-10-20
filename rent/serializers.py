@@ -9,8 +9,36 @@ from products.serializers import NestedProductSerializer
 
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
-from eloue.api.serializers import ModelSerializer
+from eloue.api import serializers
 
+class SinisterSerializer(serializers.ModelSerializer):
+
+    def full_clean(self, instance):
+        instance = super(SinisterSerializer, self).full_clean(instance)
+        if instance:
+            if instance.booking:
+                if instance.booking.product != instance.product:
+                    self._errors.update({
+                        'product': _(u'The booking is made on another product')
+                    })
+                    return None
+                elif not (instance.patron == instance.booking.owner or instance.patron == instance.booking.borrower):
+                    self._errors.update({
+                        'booking': _(u'You are not owner or borrower of this booking')
+                    })
+                    return None
+
+        return instance
+
+    class Meta:
+        model = models.Sinister
+        fields = ('uuid', 'sinister_id', 'description', 'patron', 'booking', 'product') # TBD: do we need sinister_id to be exposed? How it's going to be used?
+        read_only_fields = ('uuid', 'sinister_id')
+        immutable_fields = ('patron', 'booking', 'product')
+
+class NestedSinisterSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
+    class Meta(SinisterSerializer.Meta):
+        fields = ('uuid', 'description')
 
 class BookingProductField(NestedProductSerializer):
     default_error_messages = {
@@ -29,33 +57,37 @@ class BookingProductField(NestedProductSerializer):
             raise ValidationError(self.error_messages['own_product'])
 
 
-class BookingSerializer(ModelSerializer):
+class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
     owner = NestedUserSerializer(read_only=True)
     borrower = NestedUserSerializer()
+    sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)
-        unit = obj.product.calculate_price(obj.started_at, obj.ended_at)
-        max_available = self.opts.model.calculate_available_quantity(obj.product, obj.started_at, obj.ended_at)
-        quantity = attrs.get('quantity', None)
-        obj.total_amount = unit[1] * min(quantity or 1, max_available)
-        obj.ip = self.context['request'].META.get('REMOTE_ADDR', None)
+        if instance is None:
+            product = obj.product
+            unit = product.calculate_price(obj.started_at, obj.ended_at)
+            max_available = self.opts.model.calculate_available_quantity(product, obj.started_at, obj.ended_at)
+            obj.quantity = quantity = min(obj.quantity or 1, max_available)
+            obj.total_amount = unit[1] * quantity
+            obj.ip = self.context['request'].META.get('REMOTE_ADDR', None)
         return obj
 
     class Meta:
         model = models.Booking
         fields = (
             'uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
-            'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at',
+            'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at', 'sinisters',
         )
         read_only_fields = (
             'state', 'deposit_amount', 'insurance_amount', 'total_amount',
             'currency', 'contract_id', 'created_at', 'canceled_at',
         )
         immutable_fields = ('started_at', 'ended_at', 'owner', 'borrower', 'product')
+        range_fields = (('started_at', 'ended_at'),)
 
-class BookingActionSerializer(ModelSerializer):
+class BookingActionSerializer(serializers.ModelSerializer):
     action = fields.CharField(write_only=True, max_length=128)
 
     default_error_messages = {
@@ -73,8 +105,9 @@ class BookingActionSerializer(ModelSerializer):
                 return attrs
         raise ValidationError(self.error_messages['invalid_action'] % dict(action=action, state=self.object.state))
 
-    def save_object(self, obj, **kwargs):
+    def save_object(self, obj, force_insert=False, force_update=False, using=None, update_fields=None, **kwargs):
         obj._fsm_transition_method(**kwargs)
+        super(BookingActionSerializer, self).save_object(obj, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
     class Meta:
         model = models.Booking
@@ -159,7 +192,7 @@ class CommentAuthorField(HyperlinkedRelatedField):
                     model = field.field.rel.to
             self.queryset = model._default_manager.all()
 
-class CommentSerializer(ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     rate = fields.ChoiceField(source='note', choices=models.Comment._meta.get_field('note').choices)
     author = CommentAuthorField()
 
@@ -169,10 +202,3 @@ class CommentSerializer(ModelSerializer):
         public_fields = ('id', 'booking', 'comment', 'rate', 'created_at', 'author')
         read_only_fields = ('created_at',)
         immutable_fields = ('booking', 'author')
-
-class SinisterSerializer(ModelSerializer):
-    class Meta:
-        model = models.Sinister
-        fields = ('uuid', 'sinister_id', 'description', 'patron', 'booking', 'product') # TBD: do we need sinister_id to be exposed? How it's going to be used?
-        read_only_fields = ('sinister_id',)
-        immutable_fields = ('patron', 'booking', 'product')

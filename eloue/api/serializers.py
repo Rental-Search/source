@@ -3,11 +3,17 @@ import copy
 import base64
 from posixpath import basename
 from urllib2 import urlparse
+import datetime
+from django.core.exceptions import ValidationError
+from django.utils.encoding import smart_unicode
+from django.utils.translation import ugettext as _
 
 import requests
 
+from django.db import models
 from django.core.files.base import ContentFile
 from django.utils.datastructures import SortedDict
+from requests.exceptions import MissingSchema, InvalidSchema, InvalidURL
 
 from rest_framework import serializers, status
 from eloue.api.exceptions import ValidationException
@@ -56,7 +62,10 @@ class EncodedImageField(serializers.ImageField):
             if encoding == 'base64':
                 content = base64.b64decode(content)
             elif encoding == 'url':
-                res = requests.get(content, stream=True)
+                try:
+                    res = requests.get(content, stream=True)
+                except (MissingSchema, InvalidSchema, InvalidURL), e:
+                    raise ValidationError(smart_unicode(e))
                 if status.is_success(res.status_code):
                     if not filename:
                         filename = basename(urlparse.urlsplit(content)[2])
@@ -97,6 +106,7 @@ class ObjectMethodBooleanField(serializers.BooleanField):
         value = getattr(obj, self._method_name)()
         return self.to_native(value)
 
+
 class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
     """
     Meta class options for ModelSerializer which supports `immutable_fields`
@@ -105,6 +115,13 @@ class ModelSerializerOptions(serializers.HyperlinkedModelSerializerOptions):
         super(ModelSerializerOptions, self).__init__(meta)
         self.immutable_fields = getattr(meta, 'immutable_fields', ())
         self.public_fields = getattr(meta, 'public_fields', ())
+        self.range_fields = getattr(meta, 'range_fields', ())
+
+
+def map_fields(field_mapping):
+    field_mapping[models.NullBooleanField] = NullBooleanField
+    return field_mapping
+
 
 class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedModelSerializer):
     """
@@ -112,6 +129,7 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
     supports `immutable_fields`
     """
     _options_class = ModelSerializerOptions
+    field_mapping = map_fields(serializers.HyperlinkedModelSerializer.field_mapping)
 
     def __init__(self, instance=None, data=None, files=None,
                      context=None, partial=False, many=None,
@@ -121,6 +139,24 @@ class ModelSerializer(RaiseOnValidateSerializerMixin, serializers.HyperlinkedMod
         super(ModelSerializer, self).__init__(
             instance, data, files, context, partial, many,
             allow_add_remove, **kwargs)
+
+    def full_clean(self, instance):
+        """
+        Additional validation for ranges.
+        """
+        instance = super(ModelSerializer, self).full_clean(instance)
+        if instance:
+            for begin_field, end_field in getattr(self.opts, 'range_fields', ()):
+                begin = getattr(instance, begin_field, None)
+                end = getattr(instance, end_field, None)
+                if begin and end and begin > end:
+                    if isinstance(begin, datetime.date):
+                        msg = _(u'Start date is later than end date')
+                    else:
+                        msg = _(u'Start value is large than end value')
+                    self._errors.update({begin_field: msg})
+                    instance = None
+        return instance
 
     def get_fields(self):
         """

@@ -7,9 +7,10 @@ from calendar import monthrange, weekday
 
 import operator
 import itertools
+from django.db.models.deletion import PROTECT
 
 from imagekit.models import ImageSpecField
-from pilkit.processors import Crop, ResizeToFit, Adjust, Transpose
+from pilkit import processors
 
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -68,8 +69,8 @@ class Product(models.Model):
     deposit_amount = models.DecimalField(_(u'Dépôt de garantie'), max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     description = models.TextField(blank=True)
-    address = models.ForeignKey(Address, related_name='products')
-    phone = models.ForeignKey(PhoneNumber, related_name='products', null=True)
+    address = models.ForeignKey(Address, related_name='products', on_delete=PROTECT)
+    phone = models.ForeignKey(PhoneNumber, related_name='products', null=True, on_delete=PROTECT)
     quantity = models.IntegerField(_(u'Quantité'), default=1)
     shipping = models.BooleanField(_(u'Livraison possible'), default=False)
 
@@ -81,7 +82,7 @@ class Product(models.Model):
     sites = models.ManyToManyField(Site, related_name='products')
     payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
-    objects = ProductManager()
+    objects = ProductManager() # FIXME: this should be first manager in the class
     
     modified_at = models.DateTimeField(blank=True, null=True, auto_now=True)
 
@@ -357,18 +358,18 @@ class CarProduct(Product):
     costs_per_km = models.DecimalField(_(u'Prix par kilomètres supplémentaires'), null=True, blank=True, max_digits=8, decimal_places=3, help_text=_(u'Prix du kilomètre supplémentaire. Si le locataire dépasse le nombre de kilomètre inclus par jour.'))
 
     # options & accessoires
-    air_conditioning = models.BooleanField(_(u'climatisation'))
-    power_steering = models.BooleanField(_(u'direction assistée'))
-    cruise_control = models.BooleanField(_(u'régulateur de vitesse'))
-    gps = models.BooleanField(_(u'GPS'))
-    baby_seat = models.BooleanField(_(u'siège bébé'))
-    roof_box = models.BooleanField(_(u'coffre de toit'))
-    bike_rack = models.BooleanField(_(u'porte-vélo'))
-    snow_tires = models.BooleanField(_(u'pneus neige'))
-    snow_chains = models.BooleanField(_(u'chaines'))
-    ski_rack = models.BooleanField(_(u'porte-skis'))
-    cd_player = models.BooleanField(_(u'lecteur CD'))
-    audio_input = models.BooleanField(_(u'entrée audio/iPod'))
+    air_conditioning = models.NullBooleanField(_(u'climatisation'))
+    power_steering = models.NullBooleanField(_(u'direction assistée'))
+    cruise_control = models.NullBooleanField(_(u'régulateur de vitesse'))
+    gps = models.NullBooleanField(_(u'GPS'))
+    baby_seat = models.NullBooleanField(_(u'siège bébé'))
+    roof_box = models.NullBooleanField(_(u'coffre de toit'))
+    bike_rack = models.NullBooleanField(_(u'porte-vélo'))
+    snow_tires = models.NullBooleanField(_(u'pneus neige'))
+    snow_chains = models.NullBooleanField(_(u'chaines'))
+    ski_rack = models.NullBooleanField(_(u'porte-skis'))
+    cd_player = models.NullBooleanField(_(u'lecteur CD'))
+    audio_input = models.NullBooleanField(_(u'entrée audio/iPod'))
 
     # informations de l'assurance
     tax_horsepower = models.PositiveIntegerField(_(u'CV fiscaux'), choices=TAX_HORSEPOWER)
@@ -453,27 +454,27 @@ class RealEstateProduct(Product):
     rules = models.TextField(_(u"Règles d'utilisation"), max_length=60, null=True, blank=True)
 
     # service_included
-    air_conditioning = models.BooleanField(_(u'air conditionné'))
-    breakfast = models.BooleanField(_(u'petit déjeuner'))
-    balcony = models.BooleanField(_(u'balcon/terasse'))
-    lockable_chamber = models.BooleanField(_(u'chambre avec serrure'))
-    towel = models.BooleanField(_(u'serviettes'))
-    lift = models.BooleanField(_(u'ascenseur dans l\'immeuble'))
-    family_friendly = models.BooleanField(_(u'adapté aux familles/enfants'))
-    gym = models.BooleanField(_(u'salle de sport'))
-    accessible = models.BooleanField(_(u'accessible aux personnes handicapées'))
-    heating = models.BooleanField(_(u'chauffage'))
-    jacuzzi = models.BooleanField(_(u'jacuzzi'))
-    chimney = models.BooleanField(_(u'cheminée intérieure'))
-    internet_access = models.BooleanField(_(u'accès internet'))
-    kitchen = models.BooleanField(_(u'cuisine'))
-    parking = models.BooleanField(_(u'parking'))
-    smoking_accepted = models.BooleanField(_(u'fumeurs acceptées'))
-    ideal_for_events = models.BooleanField(_(u'idéal pour des évènements'))
-    tv = models.BooleanField(_(u'TV'))
-    washing_machine = models.BooleanField(_(u'machine à laver'))
-    tumble_dryer = models.BooleanField(_(u'sèche linge'))
-    computer_with_internet = models.BooleanField(_(u'ordinateur avec Internet'))
+    air_conditioning = models.NullBooleanField(_(u'air conditionné'))
+    breakfast = models.NullBooleanField(_(u'petit déjeuner'))
+    balcony = models.NullBooleanField(_(u'balcon/terasse'))
+    lockable_chamber = models.NullBooleanField(_(u'chambre avec serrure'))
+    towel = models.NullBooleanField(_(u'serviettes'))
+    lift = models.NullBooleanField(_(u'ascenseur dans l\'immeuble'))
+    family_friendly = models.NullBooleanField(_(u'adapté aux familles/enfants'))
+    gym = models.NullBooleanField(_(u'salle de sport'))
+    accessible = models.NullBooleanField(_(u'accessible aux personnes handicapées'))
+    heating = models.NullBooleanField(_(u'chauffage'))
+    jacuzzi = models.NullBooleanField(_(u'jacuzzi'))
+    chimney = models.NullBooleanField(_(u'cheminée intérieure'))
+    internet_access = models.NullBooleanField(_(u'accès internet'))
+    kitchen = models.NullBooleanField(_(u'cuisine'))
+    parking = models.NullBooleanField(_(u'parking'))
+    smoking_accepted = models.NullBooleanField(_(u'fumeurs acceptées'))
+    ideal_for_events = models.NullBooleanField(_(u'idéal pour des évènements'))
+    tv = models.NullBooleanField(_(u'TV'))
+    washing_machine = models.NullBooleanField(_(u'machine à laver'))
+    tumble_dryer = models.NullBooleanField(_(u'sèche linge'))
+    computer_with_internet = models.NullBooleanField(_(u'ordinateur avec Internet'))
 
     objects = ProductManager()
     on_site = CurrentSiteProductManager()
@@ -535,33 +536,33 @@ class Picture(models.Model):
     thumbnail = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=100, height=100),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=100, height=100),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     profile = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=300, height=200),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=300, height=200),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     home = ImageSpecField(
         source='image',
         processors=[
-            Crop(width=180, height=120),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=180, height=120),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
     display = ImageSpecField(
         source='image',
         processors=[
-            ResizeToFit(width=450, height=300),
-            Adjust(contrast=1.2, sharpness=1.1),
-            Transpose(Transpose.AUTO),
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=450, height=300),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
 
@@ -681,7 +682,7 @@ class Price(models.Model):
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.amount <= 0:
-            raise ValidationError(_(u"Le prix ne peut pas être négatif"))
+            raise ValidationError({'amount': _(u"Le prix ne peut pas être négatif")})
     
     def delta(self, started_at, ended_at):
         """Return delta of time passed in this season price"""
@@ -900,9 +901,9 @@ class Alert(models.Model):
         return smart_unicode(self.designation)
     
     def geocode(self):
-        name, (lat, lon), radius = GoogleGeocoder().geocode(self.location)
-        if lat and lon:
-            return Point(lat, lon)
+        name, coords, radius = GoogleGeocoder().geocode(self.location)
+        if all(coords):
+            return Point(coords)
     
     def save(self, *args, **kwargs):
         if not self.created_at:

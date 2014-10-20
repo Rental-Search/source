@@ -69,42 +69,45 @@ class GoogleGeocoder(Geocoder):
         r.raise_for_status()
         return r.json()
 
-    def _get_radius(self, json):
+    def _get_radius(self, southwest=None, northeast=None, **kwargs):
         try:
-            sw = Point(json['results'][0]['geometry']['viewport']['southwest']['lat'],
-                json['results'][0]['geometry']['viewport']['southwest']['lng'])
-            ne = Point(json['results'][0]['geometry']['viewport']['northeast']['lat'],
-                json['results'][0]['geometry']['viewport']['northeast']['lng'])
+            sw = Point(southwest['lat'], southwest['lng'])
+            ne = Point(northeast['lat'], northeast['lng'])
             radius = (distance.distance(sw, ne).km // 2) + 1
-        except (KeyError, IndexError):
-            return None
-        return radius
+            return radius
+        except KeyError:
+            pass
 
     def _geocode(self, location):
         try:
             json = self.get_json(location)
-            lon = json['results'][0]['geometry']['location']['lng']
-            lat = json['results'][0]['geometry']['location']['lat']
+            res = json['results'][0]
+            geom = res['geometry']
+            location = geom['location']
+            coords = (location['lat'], location['lng'])
         except (KeyError, IndexError, IOError, HTTPError):
             return None, (None, None), None
-        radius = self._get_radius(json)
+        radius = self._get_radius(**geom['viewport'])
         if radius is None:
-            return None, (lat, lon), None
-        name = json['results'][0]['formatted_address']
-        return name, (lat, lon), int(radius)
+            return None, coords, None
+        name = res['formatted_address']
+        return name, coords, int(radius)
     
-    def getCityCountry(self, locationName):
+    def getCityCountry(self, location):
         # returns city and country
-        json = self.get_json(locationName)
-        return json['results'][0]['address_components'][0]['long_name'], json['results'][0]['address_components'][-1]['short_name']
+        try:
+            json = self.get_json(location)
+            address_components = json['results'][0]['address_components']
+            return address_components[0]['long_name'], address_components[-1]['short_name']
+        except (KeyError, IndexError, IOError, HTTPError):
+            pass
 
     def get_departement(self, location):
-        json = self.get_json(location)
         try:
+            json = self.get_json(location)
             return filter(
                 lambda component: 'administrative_area_level_2' in component['types'], 
                 json['results'][0]['address_components']
             )[0]
-        except (KeyError, IndexError):
-            return None
-
+        except (KeyError, IndexError, IOError, HTTPError):
+            pass

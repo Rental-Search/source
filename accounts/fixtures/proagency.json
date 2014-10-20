@@ -10,7 +10,7 @@
         "address1": "Route de Lannion - Coat Menguy", 
         "address2": null, 
         "zipcode": "29600", 
-        "country": "", 
+        "country": "FR",
         "position": "POINT (48.5776129999999995 -3.8282280000000002)"
     }
 },
@@ -25,7 +25,7 @@
         "address1": "Z.A. du Signan - 5, Rue du Capitaine Leroy", 
         "address2": null, 
         "zipcode": "56300", 
-        "country": "", 
+        "country": "FR",
         "position": "POINT (48.0425386999999873 -2.9587878000000010)"
     }
 },
@@ -40,7 +40,7 @@
         "address1": "6, Rue de la Doneli\u00e8re ", 
         "address2": null, 
         "zipcode": "35000", 
-        "country": "", 
+        "country": "FR",
         "position": "POINT (48.1312975000000023 -1.6854057000000000)"
     }
 }

@@ -8,14 +8,14 @@ import itertools
 from logbook import Logger
 
 
-from django_lean.experiments.models import GoalRecord
-from django_lean.experiments.utils import WebUser
+#from django_lean.experiments.models import GoalRecord
+#from django_lean.experiments.utils import WebUser
 
 import gdata.contacts.client
 import gdata.gauth
 
 
-from django.views.generic import ListView, View, TemplateView, DetailView
+from django.views.generic import ListView, View, TemplateView
 from django.views.generic.base import TemplateResponseMixin
 
 
@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage, BadHeaderError
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Q, Max, Avg
+from django.db.models import Count, Q, Max
 from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
@@ -46,13 +46,14 @@ from accounts.forms import (EmailAuthenticationForm, PatronEditForm,
 from accounts.models import Patron, FacebookSession, CreditCard, Billing, ProPackage, BillingHistory
 from accounts.wizard import AuthenticationWizard
 from accounts.choices import GEOLOCATION_SOURCE
+from eloue.api.exceptions import ServerErrorEnum, DocumentedServerException
 
 from products.models import ProductRelatedMessage, MessageThread, Product
 from products.search import product_search
 
 from rent.models import Booking, BorrowerComment, OwnerComment, Comment
 from rent.forms import OwnerCommentForm, BorrowerCommentForm
-from rent.choices import BOOKING_STATE, COMMENT_TYPE_CHOICES
+from rent.choices import BOOKING_STATE
 
 from eloue.geocoder import GoogleGeocoder
 from eloue.decorators import secure_required, mobify, ownership_required
@@ -1061,11 +1062,13 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
         return [self.template_name]
 
     def get_context_data(self, **kwargs):
-        context = super(PatronDetail, self).get_context_data(**kwargs)
         patron = self.patron
-        context['patron'] = patron
-        context['breadcrumbs'] = self.breadcrumbs
-        context['comments'] = Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at')
+        context = {
+            'patron': patron,
+            'breadcrumbs': self.breadcrumbs,
+            'borrowercomments': Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at'),
+        }
+        context.update(super(PatronDetail, self).get_context_data(**kwargs))
         return context
 
 
@@ -1129,6 +1132,24 @@ class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     ordering_fields = ('city', 'country')
     public_actions = ('retrieve', )
 
+    def destroy(self, request, *args, **kwargs):
+        address = self.get_object()
+        if request.user.default_address == address:
+            raise DocumentedServerException({
+                'code': ServerErrorEnum.PROTECTED_ERROR[0],
+                'description': ServerErrorEnum.PROTECTED_ERROR[1],
+                'detail': _(u'The address is default address of current user')
+            })
+        elif address.products.exists():
+            raise DocumentedServerException({
+                'code': ServerErrorEnum.PROTECTED_ERROR[0],
+                'description': ServerErrorEnum.PROTECTED_ERROR[1],
+                'detail': _(u'The address is used in products')
+            })
+        else:
+            return super(AddressViewSet, self).destroy(request, *args, **kwargs)
+
+
 
 class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
@@ -1145,18 +1166,28 @@ class PhoneNumberViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     def premium_rate_number(self, request, *args, **kwargs):
         # get current object
         obj = self.get_object()
-
         # get call details by number and request parameters (e.g. REMOTE_ADDR)
+        # note: request's exceptions will be handled in eloue.api.exception.api_exception_handler
         tags = viva_check_phone(obj.number, request=request)
-
-        # check for errors
-        error = int(tags.get('error', 0))
-        if error:
-            return Response(
-                {'error': error, 'error_msg': tags.get('error_msg', '')},
-                status=status.HTTP_400_BAD_REQUEST
-            )
         return Response(tags)
+
+    def destroy(self, request, *args, **kwargs):
+        phone = self.get_object()
+        if request.user.default_number == phone:
+            raise DocumentedServerException({
+                'code': ServerErrorEnum.PROTECTED_ERROR[0],
+                'description': ServerErrorEnum.PROTECTED_ERROR[1],
+                'detail': _(u'The phone is default number of current user')
+            })
+        elif phone.products.exists():
+            raise DocumentedServerException({
+                'code': ServerErrorEnum.PROTECTED_ERROR[0],
+                'description': ServerErrorEnum.PROTECTED_ERROR[1],
+                'detail': _(u'The phone is used in products')
+            })
+        else:
+            return super(PhoneNumberViewSet, self).destroy(request, *args, **kwargs)
+
 
 class CreditCardViewSet(mixins.SetOwnerMixin, viewsets.NonEditableModelViewSet):
     """

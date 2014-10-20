@@ -156,7 +156,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "AuthService", "CivilityChoices", function ($scope, AuthService, CivilityChoices) {
+    EloueCommon.controller("RegisterCtrl", ["$scope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", function ($scope, $http, $window, AuthService, CivilityChoices, UsersService) {
 
         /**
          * New user account data.
@@ -180,13 +180,44 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     password: $scope.account.password
                 };
                 AuthService.clearUserData();
-                AuthService.login(credentials);
+                AuthService.login(credentials,
+                    function (data) {
+                        $scope.onLoginSuccess(data);
+                    },
+                    function (jqXHR) {
+                        $scope.onLoginError(jqXHR);
+                    }
+                );
             }, function (error) {
                 if (error.data && error.data.detail) {
                     $scope.$apply(function () {
                         $scope.registrationError = error.data.detail;
                     });
                 }
+            });
+        };
+
+        $scope.onLoginSuccess = function (data) {
+            var expire = new Date();
+            expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
+            document.cookie = "user_token=" + escape(data.access_token) + ";expires="
+                + expire.toGMTString();
+            $scope.authorize();
+        };
+
+        $scope.onLoginError = function (jqXHR) {
+            var errorText = "";
+            if (jqXHR.status == 400) {
+                if (!!ServiceErrors[jqXHR.responseJSON.error]) {
+                    errorText = ServiceErrors[jqXHR.responseJSON.error];
+                } else {
+                    errorText = "Bad request.";
+                }
+            } else {
+                errorText = "An error occured!";
+            }
+            $scope.$apply(function () {
+                $scope.loginError = errorText;
             });
         };
 
@@ -197,6 +228,23 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             var classic_form = $('.classic-form');
             classic_form.slideDown();
             $('.registration.email').slideUp();
+        };
+
+        /**
+         * Authorize user by "user_token" cookie.
+         */
+        $scope.authorize = function () {
+            var userToken = AuthService.getCookie("user_token");
+            if (!!userToken) {
+                $http.defaults.headers.common.authorization = "Bearer " + userToken;
+                $(".modal-backdrop").hide();
+                $('.modal').modal('hide');
+                UsersService.getMe(function (currentUser) {
+                    // Save current user in the root scope
+                    $rootScope.currentUser = currentUser;
+                });
+                $window.location.href = "/dashboard"
+            }
         };
 
         $("select").attr("eloue-chosen", "");
@@ -256,7 +304,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
 
             $scope.logout = function() {
                 AuthService.clearUserData();
-                $window.location.reload();
+                $window.location.href = "/";
             };
         }]);
 });

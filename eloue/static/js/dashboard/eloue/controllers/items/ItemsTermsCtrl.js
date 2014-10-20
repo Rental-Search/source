@@ -18,11 +18,17 @@ define(["angular", "eloue/app"], function (angular) {
 
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
-                $scope.isPrfessional = product.ownerDetails.is_professional;
+                $scope.markListItemAsSelected("item-tab-", "terms");
+                $scope.isProfessional = product.ownerDetails.is_professional;
+                $scope.initCustomScrollbars();
                 CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
-                    CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
-                        $scope.updateTermsBlocks(rootCategory);
-                    });
+                    if (!nodeCategory.parent) {
+                        $scope.updateTermsBlocks(nodeCategory);
+                    } else {
+                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                            $scope.updateTermsBlocks(rootCategory);
+                        });
+                    }
                 });
             });
 
@@ -31,7 +37,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.isRealEstate = false;
                 if (rootCategory.name === "Automobile") {
                     $scope.isAuto = true;
-                } else if (rootCategory.name === "Hébergement") {
+                } else if (rootCategory.name === "Location saisonnière") {
                     $scope.isRealEstate = true;
                 }
             }

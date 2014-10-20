@@ -25,7 +25,20 @@
   font-weight: $fw-bold
   text-align: center
   border: 1px solid transparent
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] &
+    cursor: not-allowed
+    pointer-events: none // Future-proof disabling of clicks
+    @include opacity(.65)
+    @include box-shadow(none)
 
+.btn-default
+  color: lighten($gray-medium, 10%)
+  border: px(1) solid lighten($gray-medium, 10%)
+  &:hover
+    background-color: $gray-lighter
+  
 .btn
   font-size: $font-size-base
   display: table-cell
@@ -273,6 +286,15 @@ input[type="email"],
     margin-right: .5em
     width: 5em
     color: $gray-dark !important
+
+.pickup-input-wrapper
+  position: relative
+  input
+    padding-left: 2.5em
+  span
+    position: absolute
+    top: 1em
+    left: 1em
 
 // custom textarea
 textarea

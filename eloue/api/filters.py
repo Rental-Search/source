@@ -30,7 +30,7 @@ class OrderingFilter(filters.OrderingFilter):
         # preapre a dict to map resource attributes to model fields
         trans = {
             field_name: field.source or field_name
-            for field_name, field in serializer_class().fields.items()
+            for field_name, field in serializer_class(context={'request': view.request}).fields.items()
             if not getattr(field, 'write_only', False) and (valid_fields == '__all__' or (field.source or field_name) in valid_fields)
         }
 

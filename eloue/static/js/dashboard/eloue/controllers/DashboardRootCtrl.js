@@ -1,6 +1,6 @@
 "use strict";
 
-define(["angular", "eloue/app", "../../../common/eloue/services", "../../../common/eloue/controllers", "../../../common/eloue/directives"], function (angular) {
+define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../../../common/eloue/controllers", "../../../common/eloue/directives"], function (angular, toastr) {
 
     /**
      * Root controller for the dashboard app.
@@ -20,7 +20,7 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                 {title: 'Messages', icon: 'stroke mail', sref: 'messages', badge: 0},
                 {title: 'Booking', icon: 'stroke calendar-5', sref: 'bookings', badge: 0},
                 {title: 'Items', icon: 'solid menu-list-4', sref: 'items', badge: 0},
-                {title: 'Account', icon: 'stroke user-4', sref: 'account', badge: 0}
+                {title: 'Account', icon: 'stroke user-4', sref: 'account.profile', badge: 0}
             ];
 
             if (!!$scope.currentUserToken) {
@@ -29,14 +29,18 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
-                    UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
-                        $scope.unreadMessageThreadsCount = stats.unread_message_threads_count;
-                        $scope.newBookingRequestsCount = stats.booking_requests_count;
-                        $scope.dashboardTabs[1].badge = $scope.unreadMessageThreadsCount;
-                        $scope.dashboardTabs[2].badge = $scope.newBookingRequestsCount;
-                    });
+                    $scope.updateStatistics();
                 });
             }
+
+            $scope.updateStatistics = function() {
+                UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
+                    $scope.unreadMessageThreadsCount = stats.unread_message_threads_count;
+                    $scope.newBookingRequestsCount = stats.booking_requests_count;
+                    $scope.dashboardTabs[1].badge = $scope.unreadMessageThreadsCount;
+                    $scope.dashboardTabs[2].badge = $scope.newBookingRequestsCount;
+                });
+            };
 
             // Set jQuery ajax interceptors
             $.ajaxSetup({
@@ -88,9 +92,11 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
                     autoHideScrollbar: true,
                     theme: 'dark-thin',
                     mouseWheel:{
+                        updateOnContentResize: true,
                         disableOver: false
                     }
                 });
+                $(window).trigger('resize');
             };
 
             $scope.getAvatar = function (uri) {
@@ -99,6 +105,11 @@ define(["angular", "eloue/app", "../../../common/eloue/services", "../../../comm
 
             $scope.getProductImg = function (uri) {
                 return uri ? uri : '/static/img/product_img_full.png';
+            };
+
+            $scope.showNotification = function(msg) {
+                toastr.options.positionClass = "toast-top-full-width";
+                toastr.success(msg, "");
             };
 
             // Nav bar autoresizing
