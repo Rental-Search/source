@@ -5,7 +5,12 @@ require.config({
         "lodash": "/static/bower_components/lodash/dist/lodash.min",
         "jQuery": "/static/bower_components/jquery/dist/jquery.min",
         "jquery-ui": "/static/bower_components/jqueryui/jquery-ui.min",
-        "slider": "/static/bower_components/jqueryui/ui/minified/slider.min",
+        "jshashtable": "/static/js/jshashtable-2.1_src",
+        "jquery.numberformatter": "/static/js/jquery.numberformatter-1.2.3",
+        "tmpl": "/static/js/tmpl",
+        "jquery.dependClass": "/static/js/jquery.dependClass-0.1",
+        "draggable": "/static/js/draggable-0.1",
+        "slider": "/static/js/jquery.slider",
         "core": "/static/bower_components/jqueryui/ui/minified/core.min",
         "mouse": "/static/bower_components/jqueryui/ui/minified/mouse.min",
         "widget": "/static/bower_components/jqueryui/ui/minified/widget.min",
@@ -44,6 +49,11 @@ require.config({
         },
         "jQuery": {exports: "jQuery"},
         "jquery-ui": ["jQuery"],
+        "jshashtable": ["jQuery"],
+        "jquery.numberformatter": ["jQuery"],
+        "tmpl": ["jQuery"],
+        "jquery.dependClass": ["jQuery"],
+        "draggable": ["jQuery"],
         "slider": ["jQuery"],
         "core": ["jQuery"],
         "mouse": ["jQuery"],
@@ -80,6 +90,11 @@ require([
     "toastr",
     "jquery-form",
 //    "jquery-ui",
+    "jshashtable",
+    "jquery.numberformatter",
+    "tmpl",
+    "jquery.dependClass",
+    "draggable",
     "slider",
     "core",
     "mouse",
@@ -137,10 +152,10 @@ require([
             var min = priceSlider.attr("min-value");
             var max = priceSlider.attr("max-value");
             var minPrice = 0, maxPrice = 0;
-            if (!priceMinInput.val()) {
+            if (!priceMinInput.attr("value")) {
                 minPrice = min;
             }
-            if (!priceMaxInput.val()) {
+            if (!priceMaxInput.attr("value")) {
                 maxPrice = max;
             }
             if (!min || !max) {
@@ -148,15 +163,17 @@ require([
                 $("#price-label").hide();
             } else {
                 priceSlider.slider({
-                    range: true,
-                    min: Number(min),
-                    max: Number(max),
-                    values: [minPrice, maxPrice],
-                    slide: function(event, ui) {
-                        priceMinInput.attr("value", Number(ui.values[0]));
-                        priceMaxInput.attr("value", Number(ui.values[1]));
+                    from: Number(min),
+                    to: Number(max),
+                    limits: false,
+                    dimension: '&nbsp;&euro;',
+                    onstatechange: function( value ){
+                        var values = value.split(";");
+                        priceMinInput.attr("value", Number(values[0]));
+                        priceMaxInput.attr("value", Number(values[1]));
                     }
                 });
+                priceSlider.slider("value", minPrice, maxPrice);
             }
 
         }
@@ -272,15 +289,17 @@ require([
                 if (rangeSlider) {
                     var rangeInput = $("#range");
                     rangeSlider.slider({
-                        range: "min",
-                        value: rangeInput.val(),
-                        min: 1,
-                        max: rangeSlider.attr("max-value"),
-                        slide: function(event, ui) {
-                            rangeInput.val(ui.value);
-                            map.setZoom(zoom(ui.value));
+                        from: 1,
+                        to: rangeSlider.attr("max-value"),
+                        limits: false,
+                        dimension: 'km',
+                        onstatechange: function( value ){
+                            var values = value.split(";");
+                            rangeInput.attr("value", values[1]);
+                            map.setZoom(zoom(values[1]));
                         }
                     });
+                    rangeSlider.slider("value", 0, rangeInput.attr("value"));
                 }
 
                 var products = [];
