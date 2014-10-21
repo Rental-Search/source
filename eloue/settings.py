@@ -253,12 +253,12 @@ SESSION_COOKIE_DOMAIN = env('SESSION_COOKIE_DOMAIN')
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = env('STATIC_URL', '/static/')
 STATICFILES_DIRS = [local_path('static/'), ]
-STATICFILES_STORAGE = env('STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
+STATICFILES_STORAGE = env('STATICFILES_STORAGE', 'eloue.compat.pipeline.storage.PipelineCachedStorage')
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #'eloue.compat.pipeline.finders.FileSystemFinder',
-    #'eloue.compat.pipeline.finders.AppDirectoriesFinder',
+    #'django.contrib.staticfiles.finders.FileSystemFinder',
+    #'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'eloue.compat.pipeline.finders.FileSystemFinder',
+    'eloue.compat.pipeline.finders.AppDirectoriesFinder',
     'eloue.compat.pipeline.finders.TemplatesFileSystemFinder',
 )
 
@@ -268,7 +268,7 @@ IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic
 
 #pipeline configuration
 PIPELINE_ENABLED = env('PIPELINE', not DEBUG)
-PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
+#PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
 PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
     #'pipeline.compilers.less.LessCompiler',
