@@ -22,6 +22,7 @@ define(["eloue/app",
         "eloue/controllers/account/AccountPasswordCtrl",
         "eloue/controllers/account/AccountInvitationCtrl",
         "eloue/controllers/messages/MessageDetailCtrl",
+        "eloue/controllers/messages/NewMessageThreadCtrl",
         "eloue/controllers/bookings/BookingDetailCtrl",
         "eloue/controllers/DashboardLoginCtrl",
         "eloue/directives/FileChooserDirective",
@@ -55,6 +56,11 @@ define(["eloue/app",
                         url: "/messages",
                         templateUrl: "partials/dashboard/messages.html",
                         controller: "MessagesCtrl"
+                    })
+                    .state("messages.new", {
+                        url: "/new_message/:productId",
+                        templateUrl: "partials/dashboard/messages/message_detail.html",
+                        controller: "NewMessageThreadCtrl"
                     })
                     .state("messages.detail", {
                         url: "/:id",
