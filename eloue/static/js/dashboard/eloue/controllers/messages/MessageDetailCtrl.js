@@ -7,6 +7,7 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("MessageDetailCtrl", [
         "$scope",
+        "$state",
         "$stateParams",
         "$q",
         "Endpoints",
@@ -15,7 +16,7 @@ define(["angular", "eloue/app"], function (angular) {
         "ProductRelatedMessagesLoadService",
         "ProductsLoadService",
         "UtilsService",
-        function ($scope, $stateParams, $q, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
+        function ($scope, $state, $stateParams, $q, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
@@ -88,6 +89,8 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.updateNewBookingInfo();
                         } else {
                             $scope.booking = booking;
+                            $scope.isBorrower = booking.borrower.indexOf(results.currentUser.id) != -1;
+                            $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
                     });
                 }
@@ -96,6 +99,7 @@ define(["angular", "eloue/app"], function (angular) {
 
                 // Post new message
                 $scope.postNewMessage = function () {
+                    $scope.submitInProgress = true;
                     ProductRelatedMessagesLoadService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(function () {
                             // Clear message field
@@ -104,6 +108,7 @@ define(["angular", "eloue/app"], function (angular) {
                             // Reload data
                             MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
                                 $scope.messageThread.messages = messageThread.messages;
+                                $scope.submitInProgress = false;
                             });
                         });
                 };
@@ -137,6 +142,15 @@ define(["angular", "eloue/app"], function (angular) {
                             console.log(reason);
                         }
                     );
+                };
+
+                $scope.cancelBooking = function () {
+                    BookingsLoadService.cancelBooking($scope.booking.uuid).$promise.then(function (result) {
+                        toastr.options.positionClass = "toast-top-full-width";
+                        toastr.success(result.detail, "");
+                        $stateParams.uuid = $scope.booking.uuid;
+                        $state.transitionTo("booking.detail", $stateParams, { reload: true });
+                    })
                 };
 
                 // Initiate custom scrollbars
