@@ -10,13 +10,15 @@ define(["angular", "eloue/app"], function (angular) {
         "$state",
         "$stateParams",
         "$q",
+        "$window",
         "Endpoints",
         "MessageThreadsLoadService",
         "BookingsLoadService",
         "ProductRelatedMessagesLoadService",
         "ProductsLoadService",
+        "CategoriesService",
         "UtilsService",
-        function ($scope, $state, $stateParams, $q, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
+        function ($scope, $state, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, CategoriesService, UtilsService) {
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
@@ -78,6 +80,13 @@ define(["angular", "eloue/app"], function (angular) {
                             };
 
                             $scope.requestBooking = function () {
+//                                //Get product details
+//                                ProductsLoadService.getProduct($scope.messageThread.product.id).then(function (product) {
+//                                    CategoriesService.getCategory(UtilsService.getIdFromUrl(product.category)).$promise.then(function (rootCategory) {
+//                                        console.log(rootCategory)
+//                                    });
+//                                });
+//                                $window.location.href = "/location/#/booking";
                                 BookingsLoadService.requestBooking($scope.newBooking).then(
                                     function (booking) {
                                         $scope.booking = booking;
@@ -89,8 +98,6 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.updateNewBookingInfo();
                         } else {
                             $scope.booking = booking;
-                            $scope.isBorrower = booking.borrower.indexOf(results.currentUser.id) != -1;
-                            $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
                     });
                 }
@@ -142,15 +149,6 @@ define(["angular", "eloue/app"], function (angular) {
                             console.log(reason);
                         }
                     );
-                };
-
-                $scope.cancelBooking = function () {
-                    BookingsLoadService.cancelBooking($scope.booking.uuid).$promise.then(function (result) {
-                        toastr.options.positionClass = "toast-top-full-width";
-                        toastr.success(result.detail, "");
-                        $stateParams.uuid = $scope.booking.uuid;
-                        $state.transitionTo("booking.detail", $stateParams, { reload: true });
-                    })
                 };
 
                 // Initiate custom scrollbars

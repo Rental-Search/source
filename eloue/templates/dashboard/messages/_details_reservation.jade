@@ -28,6 +28,5 @@ ul.zebra-list.indent-md-b(ng-if="!!booking")
       .col-xs-3 Caution
       .col-xs-9.text {{booking.deposit_amount}}€
 .text-right(ng-if="!!booking")
-  a(href="", ng-click="cancelBooking()", ng-show="isBorrower && (booking.state=='authorized' || booking.state=='pending')").text-success.text-underline-hover.indent-sm-h Annulation
-  a(href="{{contractLink}}", target="_blank").btn-inline.bg-success-hover.text-white Télécharger le contrat
+  a(ui-sref="bookings.detail({uuid: booking.uuid})").btn-inline.bg-success-hover.text-white Détails de la réservation
 {% endverbatim %}
