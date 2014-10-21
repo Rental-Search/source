@@ -1360,11 +1360,26 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService, MessageThreadsService) {
                 var bookingsLoadService = {};
 
-                bookingsLoadService.getBookingList = function (author, page) {
+                bookingsLoadService.getBookingList = function (author, state, borrowerId, ownerId, page) {
                     var deferred = $q.defer();
+                    var params = {
+                        page: page,
+                        author: author,
+                        ordering: "-created_at",
+                        _cache: new Date().getTime()
+                    };
+                    if (!!state) {
+                        params.state = state;
+                    }
+                    if (!!borrowerId) {
+                        params.borrower = borrowerId;
+                    }
+                    if (!!ownerId) {
+                        params.owner = ownerId;
+                    }
 
                     // Load bookings
-                    Bookings.get({page: page, author: author, ordering: "-created_at", _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
+                    Bookings.get(params).$promise.then(function (bookingListData) {
                         var bookingListPromises = [];
 
                         // For each booking
