@@ -225,24 +225,26 @@ a, a:hover, a:focus
   input
     position: absolute
     z-index: -100
-    + .zebra-row-wrapper .checkbox-col
-      span
-        display: inline-block
-        background-color: white
-        margin: 0 $indent-xs
-        width: 1.5em
-        line-height: 1.5em
-        text-align: center
-        border: 1px solid $gray-medium
-        border-radius: .25em
-        > b
-          color: transparent
+    + .zebra-row-wrapper .radio-indicator
+      display: inline-block
+      background-color: white
+      margin: 0 $indent-xs
+      text-align: center
+      border: 1px solid $gray-medium
+      border-radius: 50%
+      padding: 0.4em
+      &:before
+        content: " "
+        display: block
+        width: 0.6em
+        height: 0.6em
+        border-radius: inherit
 
     &:checked + .zebra-row-wrapper
       background-color: darken($gray-lite, 10%)
-      .checkbox-col
-        span > b
-          color: $gray-light
+      .radio-indicator:before
+        background-color: $gray-light
+
 
 .without-spaces
   margin: 0

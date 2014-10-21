@@ -56,10 +56,10 @@ block details
             -var i = 3
             while i--
               label.zebra-row
-                input(type="checkbox", checked)
+                input(type="radio", name="pickup")
                 .zebra-row-wrapper
-                  .zebra-col.checkbox-col
-                    span: i.flaticon.stroke.checkmark
+                  .zebra-col
+                    span.radio-indicator
                   .zebra-col
                     span.sprite-pickup-logo
                   .zebra-col.main-cell

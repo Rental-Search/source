@@ -40,7 +40,7 @@ table
   width: 100%
   .zebra-row
     display: table-row
-    border: 1px solid $gray-light
+    border: 1px solid $gray-medium
     &:nth-of-type(2n - 1)
       background-color: darken($gray-lite, 3%)
     &:nth-of-type(2n)
@@ -58,24 +58,27 @@ table
       width: 100%
   label
     cursor: pointer
+    p
+      color: $gray-dark
   input
     position: absolute
     z-index: -100
-    + .zebra-row-wrapper .checkbox-col
-      span
-        display: inline-block
-        background-color: white
-        margin: 0 $indent-xs
-        width: 1.5em
-        line-height: 1.5em
-        text-align: center
-        border: 1px solid $gray-light
-        border-radius: .25em
-        > i
-          color: transparent
+    + .zebra-row-wrapper .radio-indicator
+      display: inline-block
+      background-color: white
+      margin: 0 $indent-xs
+      text-align: center
+      border: 1px solid $gray-medium
+      border-radius: 50%
+      padding: 0.4em
+      &:before
+        content: " "
+        display: block
+        width: 0.6em
+        height: 0.6em
+        border-radius: inherit
 
     &:checked + .zebra-row-wrapper
-      background-color: darken($gray-lighter, 3%)
-      .checkbox-col
-        span > i
-          color: $gray-strong
+      background-color: darken($gray-lite, 10%)
+      .radio-indicator:before
+        background-color: $gray-strong
