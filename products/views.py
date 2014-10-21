@@ -30,6 +30,7 @@ from haystack.query import SearchQuerySet
 from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
 from accounts.search import patron_search
+from eloue.api.exceptions import ValidationException
 
 from products.forms import (
     AlertSearchForm, AlertForm, FacetedSearchForm, ProductFacetedSearchForm, ProductForm,
@@ -50,6 +51,8 @@ from eloue.decorators import ownership_required, secure_required, mobify, cached
 from eloue.utils import cache_key
 from eloue.geocoder import GoogleGeocoder
 from eloue.views import LoginRequiredMixin, SearchQuerySetMixin, BreadcrumbsMixin
+from shipping import helpers
+from shipping.models import ShippingPoint
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -933,6 +936,22 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     filter_class = ProductFilterSet
     ordering_fields = ('quantity', 'is_archived', 'category')
     public_actions = ('retrieve', 'search', 'is_available')
+
+    @link()
+    def shipping_price(self, request, *args, **kwargs):
+        params = serializers.ShippingPriceParamsSerializer(data=request.QUERY_PARAMS)
+        if params.is_valid():
+            params = params.data
+            product = self.get_object()
+            try:
+                departure_point = product.departure_point
+            except ShippingPoint.DoesNotExist:
+                # FIXME: I think the other exception should be there
+                raise ValidationException({'departure_point': 'Departure point not specified'})
+            result = serializers.ShippingPriceSerializer(
+                data=helpers.get_shipping_price(departure_point.site_id, params['arrival_point_id']))
+            if result.is_valid():
+                return Response(result.data)
 
     @link()
     def is_available(self, request, *args, **kwargs):
