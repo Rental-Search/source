@@ -27,11 +27,12 @@
                 //-
                  span.or
                 form(name="loginForm", ng-submit="login()", novalidate)
-                    -var login_form_fields = [["email", "E-mail", "username"], ["password", "Mot de passe", "password"]]
-                    each type, placeholder, name in login_form_fields
-                        .form-group
-                            input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", data-ng-model="credentials.#{name}", required).form-control
-                            span.errorMsg(data-ng-show="loginForm.#{name}.$error.required && loginForm.#{name}.$dirty") Required field
+                    .form-group
+                        input(type="email", placeholder="E-mail *", name="username", data-ng-model="credentials.username", ng-pattern="emailPattern", required).form-control
+                        span.errorMsg(data-ng-show="loginForm.username.$error.required && loginForm.username.$dirty") Required field
+                    .form-group
+                        input(type="password", placeholder="Mot de passe *", name="password", data-ng-model="credentials.password", required).form-control
+                        span.errorMsg(data-ng-show="loginForm.password.$error.required && loginForm.password.$dirty") Required field
                     .form-group.clearfix
                         .checkbox.pull-left
                             label(for="remember-me")

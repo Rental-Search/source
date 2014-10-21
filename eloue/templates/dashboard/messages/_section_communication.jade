@@ -11,7 +11,8 @@ section.tabs-vertical-static.pull-nothing(ng-show="!!messageThread")
                 p.normal.text-gray.text-justify {{message.body}}
 
     form(ng-submit="postNewMessage()").send-dialog-message.clearfix
+      fieldset(data-ng-disabled="submitInProgress")
         .textarea-wrapper
             textarea#message-text.expand(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...", ng-model="message")
-        button(type="submit").btn.bg-success-hover.text-white Envoyez
+        button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success-hover.text-white Envoyez
 {% endverbatim %}

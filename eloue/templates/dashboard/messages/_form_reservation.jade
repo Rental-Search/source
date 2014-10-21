@@ -16,19 +16,20 @@ form(ng-submit="requestBooking()", ng-if="booking === null")
         .table-cell.without-search
             select(name="end_time", ng-model="newBooking.end_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen, data-ng-disabled="submitInProgress")
 
-  table(ng-if="booking === null").calendar.bd-wrap.indent-md-t: tbody
-    {% verbatim %}
-    tr
-      td Durée
-      td {{newBooking.period_days}} jours et {{newBooking.period_hours}} heures
-    tr
-      td Prix
-      td.text-success {{newBooking.total_amount}}€
-    tr
-      td Caution
-      td {{newBooking.total_amount}}€
-    {% endverbatim %}
+    table(ng-if="booking === null").calendar.bd-wrap.indent-md-t: tbody
+      {% verbatim %}
+      tr
+        td Durée
+        td {{newBooking.period_days}} jours et {{newBooking.period_hours}} heures
+      tr
+        td Prix
+        td.text-success {{newBooking.total_amount}}€
+      tr
+        td Caution
+        td {{newBooking.total_amount}}€
 
-  .row(ng-if="booking === null")
-    p.text-gray.indent-sm-v.text-center Assurance incluse
-    button(type="submit").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Procédez à la réservation
+
+    .row(ng-if="booking === null")
+      p.text-gray.indent-sm-v.text-center Assurance incluse
+      button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Procédez à la réservation
+      {% endverbatim %}

@@ -12,7 +12,7 @@
         tbody
           tr
             td 1 jours*
-            td {{ product.price|currency }} &euro;
+            td {{ product.price|price:"&euro;" }}
       {% if product_object.km_included %}
       .indent-b-md
       table.calendar.text-center

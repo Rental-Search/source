@@ -229,6 +229,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 link: function (scope, element, attrs, ngModel) {
                     scope.page = 1;
                     scope.hasNextPage = true;
+                    scope.isLoading = false;
                     element.append(
                             "<div class=\"col-md-12 loading\">" +
                             "<div class=\"loading-widget\"></div>" +
@@ -245,7 +246,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                         },
                         callbacks: {
                             onTotalScroll: function () {
-                                if (scope.hasNextPage) {
+                                if (scope.hasNextPage && !scope.isLoading) {
                                     win.requestAnimationFrame(function () {
                                         scope.shouldReloadList = false;
                                         scope.$apply(function () {
@@ -267,6 +268,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
 
 //                    dataProvider[scope.lazyLoadMethod].apply(null,scope.lazyLoadArgs);
                     var lazyLoad = function () {
+                        scope.isLoading = true;
                         var args = scope.lazyLoadArgs.slice(0);
                         args.push(scope.page);
                         lazyLoader.configure({
@@ -291,6 +293,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                                 } else {
                                     scope.lazyData = data.list;
                                 }
+                                scope.isLoading = false;
                             }
                         );
                     };

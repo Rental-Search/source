@@ -67,5 +67,5 @@
                             .col-sm-1: b.form-suffix CV
                             .col-sm-4
                             .col-sm-4
-                                button(type="submit", ng-disabled="publishAdForm.$invalid").btn.bg-success.btn-advertise Publiez votre annonce
+                                button(type="submit", ng-disabled="publishAdForm.$invalid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
                         {% endverbatim %}

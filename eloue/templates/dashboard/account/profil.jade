@@ -113,5 +113,5 @@ block sections
         //- btn submit
         .row
           .col-sm-6.col-sm-offset-3
-            button(type="submit").btn.bg-success-hover.text-white Enregistrez les informations
+            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success-hover.text-white Enregistrez les informations
         {% endverbatim %}
