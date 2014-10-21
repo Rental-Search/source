@@ -1,4 +1,4 @@
-section.pull-nothing(ng-hide="bookingList && bookingList.length > 0")
+section.pull-nothing(ng-hide="(bookingList && bookingList.length > 0) || filtered")
   .notification-empty
     .notification-container
       i.icon-5x.indent-sm-b.flaticon.stroke.calendar-5

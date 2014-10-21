@@ -12,42 +12,54 @@ define(["angular", "eloue/app"], function (angular) {
         "Endpoints",
         "BookingsLoadService",
         function ($q, $scope, $rootScope, Endpoints, BookingsLoadService) {
-
-            $scope.currentUserUrl = "";
             $scope.bookingFilter = {};
             $scope.stateList = ["authorized", "rejected", "outdated", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"];
             $scope.bookingList = [];
             $scope.stateFilter = undefined;
 
-            $scope.currentUserPromise.then(function (currentUser) {
-                $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
-
-                $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id], shouldReloadList: true});
-            });
-
-            $scope.filterByOwner = function () {
-                $scope.markListItemAsSelected("filter-", "Propriétaires");
-                $scope.bookingFilter.owner = $scope.currentUserUrl;
-                $scope.bookingFilter.borrower = undefined;
-            };
-
-            $scope.filterByBorrower = function () {
-                $scope.markListItemAsSelected("filter-", "Emprunteurs");
-                $scope.bookingFilter.owner = undefined;
-                $scope.bookingFilter.borrower = $scope.currentUserUrl;
-            };
+            /**
+             * Shows that booking list was not empty and now is being filtered, not to hide left panel with filters when filtered booking list is empty.
+             */
+            $scope.filtered = false;
 
             $scope.filterByBoth = function () {
                 $scope.markListItemAsSelected("filter-", "Tous");
                 $scope.bookingFilter.owner = undefined;
                 $scope.bookingFilter.borrower = undefined;
+                $scope.filter();
             };
+
+            $scope.currentUserPromise.then(function (currentUser) {
+                $scope.currentUser = currentUser;
+                $scope.filterByBoth();
+            });
+
+            $scope.filterByOwner = function () {
+                $scope.filtered = true;
+                $scope.markListItemAsSelected("filter-", "Propriétaires");
+                $scope.bookingFilter.owner = $scope.currentUser.id;
+                $scope.bookingFilter.borrower = undefined;
+                $scope.filter();
+            };
+
+            $scope.filterByBorrower = function () {
+                $scope.filtered = true;
+                $scope.markListItemAsSelected("filter-", "Emprunteurs");
+                $scope.bookingFilter.owner = undefined;
+                $scope.bookingFilter.borrower = $scope.currentUser.id;
+                $scope.filter();
+            };
+
 
             $scope.filterByState = function () {
-                $scope.bookingFilter.state = $scope.stateFilter;
+                $scope.filtered = true;
+                $scope.filter();
             };
 
-            $scope.filterByBoth();
+            $scope.filter = function() {
+                $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.stateFilter, $scope.bookingFilter.borrower, $scope.bookingFilter.owner], shouldReloadList: true});
+            };
+
             $('.chosen-drop').mCustomScrollbar({
                 scrollInertia: '100',
                 autoHideScrollbar: true,
