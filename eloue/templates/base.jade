@@ -1,4 +1,4 @@
--load compressed
+-load compressed staticfiles
 doctype 5
 html(lang="fr")
   head
@@ -16,6 +16,7 @@ html(lang="fr")
       {% compressed_css "extrastyles" %}
 
     block scripts
+      script(src="{% static 'bower_components/requirejs/require.js' %}", data-main="{% static 'js/widgets/main.js' %}", data-static-path="{{ STATIC_URL }}")
 
   body
     block content-body
