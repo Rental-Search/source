@@ -1,5 +1,5 @@
 .container
-  -var security_items = [{'head': "Identité des membres vérifiée", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Notes et commentaires", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Appels et messagerie en ligne", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Paiement en ligne sécurisé", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Dépôt de garantie en ligne", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Contrat de location pré-rempli", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Vos biens sont automatiquement assurés", 'icon': "flaticon solid checkmark-2", 'text': ""}, {'head': "Service Client dédié 7j/7‐24h/24", 'icon': "flaticon solid checkmark-2", 'text': ""}]
+  -var security_items = [["Identité des membres vérifiée", "flaticon solid id-2", "Nous validons systématiquement les coordonnées de nos membres (n° téléphone et e-mail). Nous leur proposons également de s’identifier en se connectant à leurs réseaux sociaux (Facebook, Twitter, LinkedIn) et/ou en numérisant leurs pièces d’identité officielles. <b>Avec tout ça, on perd un peu d’anonymat... mais on gagne beaucoup de confiance&nbsp;!</b>"], ["Notes et commentaires", "flaticon solid star-2", "Vous avez accès en permanence aux notes et commentaires disponibles sur nos annonces. Ces commentaires sont laissés  par les propriétaires et les locataires ayant déjà effectué une transaction ensemble. Ils permettent à la communauté e-loue de louer en toute confiance. <b>Alors après votre prochaine location, n’hésitez pas à laisser vos impressions...</b>"], ["Appels et messagerie en ligne", "flaticon solid call", "Avant une location, pas de place aux doutes. Que vous ayez 1 ou 20 questions à poser, nous vous offrons la possibilité d’échanger sans limite, par message et/ou par téléphone, afin que votre interlocuteur puisse  répondre à toutes vos interrogations. <b>Pas besoin de stresser avant de louer... il parait que vos proches vous préfèrent quand vous êtes zen.</b>"], ["Paiement en ligne sécurisé", "flaticon solid lock-2", "Afin d’éviter l’échange d’argent de main à main (et les risques associés), chez e-loue, les paiements se font en ligne. Notre système de paiement (Société Générale) est sécurisé, fiable et pratique. <b>Ne vous préoccupez pas des problèmes d’argent, on gère ça à votre place...</b>"], ["Dépôt de garantie en ligne", "flaticon solid help-2", "Afin d’éviter les éventuels litiges, nous prenons, lors de chaque transaction, un dépôt de garantie en ligne (= une empreinte bancaire) sur la carte bancaire du locataire. Ainsi, en cas de détérioration du bien loué, ce dépôt de garantie est versé au propriétaire afin qu’il puisse le remettre à neuf. <b>Quand on loue, une caution, c’est bien. Mais une caution sans risque de chèque impayé, c’est encore mieux...</b>"], ["Contrat de location pré-rempli", "flaticon solid calendar-2", "Pour votre sécurité et pour vous faciliter les choses, nous vous envoyons un contrat de location pré-rempli. Il ne vous restera plus qu'à le compléter (état du bien avant et après la location) et à le signer. <b>Pas besoin de vous prendre la tête, on gère l’administratif pour vous...</b>"], ["Vos biens sont automatiquement assurés", "flaticon solid umbrella", "Des accidents,  même en faisant attention, ça peut toujours arriver. C’est pour cela que toutes* les locations effectuées sur e-loue sont assurées contre la casse, la perte et le vol. <b>Avec nous, vous pouvez louer les yeux fermés, il ne pourra rien vous arriver...</b>"], ["Service Client dédié 7j/7‐24h/24", "flaticon solid group-2", "Nous avons essayé de répondre à toutes vos questions sur notre site. Si malgré cela, vous avez encore des interrogations ou des doutes, notre Service Client se fera un plaisir de vous aider. Nous sommes disponibles du lundi au vendredi de 9h à 18h par téléphone ou chat. <b>Les soirs et les WE, nous ne travaillons pas encore... mais envoyez-nous un mail et nous y répondrons dans les 48h.</b>"]]
 
   h2.text-center.text-uppercase
     b chez e‐loue, la sécurité est notre priorité&nbsp;!
@@ -9,23 +9,23 @@
     | avant, pendant et après votre location...
 
   .press-release.indent-v-md
-    {% for item in security_items %}
-    .table
-      .logo-wripper
-        i(class="{{ item.icon }}")
-      ul.timeline-steps.tenant-column.list-history: li
-        h5.text-primary {{ item.head }}
-        p.content.indent-t-sm.text-overflow Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore veniam doloremque unde, hic aspernatur necessitatibus voluptatibus. Facilis aut aliquam, ullam pariatur exercitationem nemo nesciunt quo maiores nobis laudantium dignissimos quod necessitatibus autem sit beatae ut delectus! Fuga soluta, velit alias! Sunt asperiores unde consequuntur, cupiditate dicta expedita libero, non quibusdam minus. Cum numquam nobis iure eius incidunt autem ad voluptate eligendi quae, vel quibusdam, voluptates cumque molestiae laboriosam odit magni dignissimos repellat quod doloremque consequatur fugiat. Mollitia sint voluptate reiciendis cum a consequuntur perspiciatis, labore porro, facere dolor hic, laudantium fugiat soluta ex quia, delectus maxime? Tenetur impedit magni perferendis!
-        .addons
-          b
-          i
-    {% endfor %}
+    each title, style, text in security_items
+      .table
+        .logo-wripper
+          i(class="{{ style }}")
+        ul.timeline-steps.tenant-column.list-history: li
+          h5.text-primary {{ title }}
+          p.content.indent-t-sm.text-overflow
+            != text|safe
+          .addons
+            b
+            i
 
   .row.indent-v-md
     .col-md-4.col-md-offset-4.col-sm-6.col-sm-offset-3
-      a(href="#", style="width: 100%;").btn.btn-lg.bg-success Cherchez des biens à louer
+      a(href="{% url 'product_list' %}", style="width: 100%;").btn.btn-lg.bg-success Cherchez des biens à louer
   .row
     .col-md-4.col-md-offset-4.col-sm-6.col-sm-offset-3
-      a(href="#", style="width: 100%;").btn.btn-lg.bg-success Déposez vos annonces
+      a(href="{% url 'publish_item' %}", style="width: 100%;").btn.btn-lg.bg-success Déposez vos annonces
 
   .text-center.indent-t-xs: a(href="#").link-success Simulez vos revenus
