@@ -16,7 +16,8 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
         "SinistersService",
         "UsersService",
         "UtilsService",
-        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, SinistersService, UsersService, UtilsService) {
+        "ShippingsService",
+        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, SinistersService, UsersService, UtilsService, ShippingsService) {
 
             // Initial comment data
             $scope.comment = {rate: 0};
@@ -81,6 +82,13 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                         }
                     });
                 }
+
+                ShippingsService.getByBooking($stateParams.uuid).then(function (shippingList) {
+                    console.log(shippingList);
+                    if (!!shippingList.results) {
+                        $scope.shipping = shippingList.results[0];
+                    }
+                });
             });
 
             /**

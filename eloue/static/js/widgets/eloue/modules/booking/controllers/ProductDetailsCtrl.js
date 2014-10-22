@@ -20,7 +20,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "BookingsService",
         "PhoneNumbersService",
         "PicturesService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService) {
+        "ShippingsService",
+        "ShippingPointsService",
+        "ProductShippingPointsService",
+        "PatronShippingPointsService",
+        function ($scope, $window, $location, Enpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -34,6 +38,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 subscriber_reference: ""
             };
             $scope.newCreditCard = true;
+            $scope.borrowerShippingPoints = [];
             $scope.submitInProgress = false;
             $scope.showSaveCard = true;
             $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
@@ -267,6 +272,15 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             };
                         }
 
+                        //TODO: save user shipping point and product shipping
+//                        var userShippingPoint = {};
+//                        PatronShippingPointsService.saveShippingPoint(userShippingPoint).$promise.then(function (shippingPoint) {
+//                            var shipping = {};
+//                            ShippingsService.saveShipping(shipping).$promise.then(function (result) {
+//
+//                            });
+//                        });
+
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                             toastr.options.positionClass = "toast-top-full-width";
                             toastr.success("Réservation enregistré", "");
@@ -319,6 +333,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.loadMessageThread();
                 } else if (args.name === "booking") {
                     $scope.loadCreditCards();
+                    $scope.loadShippingPoints();
                 } else if (args.name === "phone") {
                     $scope.loadPhoneDetails();
                 }
@@ -372,6 +387,15 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             $scope.creditCard.expires = $scope.creditCard.expires.slice(0, 2) + "/" + $scope.creditCard.expires.slice(2);
                             $scope.newCreditCard = false;
                         }
+                    });
+                }
+            };
+
+            $scope.loadShippingPoints = function () {
+                if ($scope.currentUser) {
+                    ShippingPointsService.searchArrivalShippingPointsByCoordinates($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1]).then(function (result) {
+                        console.log(result);
+                        $scope.borrowerShippingPoints = result.results;
                     });
                 }
             };

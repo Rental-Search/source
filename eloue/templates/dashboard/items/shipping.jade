@@ -1,10 +1,8 @@
 block details
-  .section-content
+  .section-content(ng-show="showWellcome")
     h2 La livraison avec la
       span.sprite-pickup-logo-full.indent-sm-l
-
-    if True
-        h2.small La navette pickup disponible partout en France
+    h2.small La navette pickup disponible partout en France
         p
             | Vous pouvez proposer  grâce à notre partenaire La Navette Pickup une 
             | option de livraison à votre objet.
@@ -43,12 +41,14 @@ block details
               | En fin de location vous êtes prévenu par email de la livraison 
               | de votre navette dans votre relais d’arrivée.
 
-        .text-center: a(href="#").btn.btn-inline.bg-success-hover.text-white J’accepte les  livraisons
+        .text-center: a(href="", ng-click="showMapPointList()").btn.btn-inline.bg-success-hover.text-white J’accepte les  livraisons
 
-    if True
-        form(action="choice_point")
+  .section-content(ng-show="showPointList")
+    h2 La livraison avec la
+      span.sprite-pickup-logo-full.indent-sm-l
+    form(action="choice_point")
           .pickup-input-wrapper
-            input#nickname.form-control(type="text", name="address", placeholder="")
+            input#nickname.form-control(type="text", name="address", placeholder="", ng-model="addressQuery", ng-blur="searchShippingPoints()")
             span.sprite-pickup-logo-short-grey
           h3 Sélectionner un point relais ci-dessous&nbsp;:
 
@@ -67,11 +67,13 @@ block details
                     br
                     | 75003 PARIS
 
-        .text-center: a(href="#").btn.btn-inline.bg-success-hover.text-white Enregistrer
+        .text-center: a(href="", ng-click="saveMapPoint()").btn.btn-inline.bg-success-hover.text-white Enregistrer
 
 
-    if True
-        .block-with-thumbnail.notification.indent-md-v
+  .section-content(ng-show="showPointDetails")
+    h2 La livraison avec la
+      span.sprite-pickup-logo-full.indent-sm-l
+    .block-with-thumbnail.notification.indent-md-v
           .col-thumbnail
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
           .col-exposition.text-action
@@ -88,5 +90,5 @@ block details
                   td {{ title }}
                   td {{ info }}
             .indent-sm-t.clearfix
-              .pull-left.indent-sm-t: a(href="#").text-gray-light.text-underline-hover Supprimer
-              .pull-right: a(href="#").btn-inline.btn-default.text-success Modifier le point relais
+              .pull-left.indent-sm-t: a(href="", ng-click="removeMapPoint()").text-gray-light.text-underline-hover Supprimer
+              .pull-right: a(href="", ng-click="showMapPointList()").btn-inline.btn-default.text-success Modifier le point relais

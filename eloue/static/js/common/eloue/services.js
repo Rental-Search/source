@@ -1191,6 +1191,99 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         ]);
 
         /**
+         * Service for managing shippings.
+         */
+        EloueCommon.factory("ShippingsService", [
+            "Shippings",
+            "Endpoints",
+            function (Shippings, Endpoints) {
+                var shippingsService = {};
+
+                shippingsService.getByBooking = function (uuid) {
+                    return Shippings.get({_cache: new Date().getTime(), booking: uuid}).$promise;
+                };
+
+                shippingsService.saveShipping = function (shipping) {
+                    return Shippings.save(shipping);
+                };
+
+                return shippingsService;
+            }
+        ]);
+
+
+        /**
+         * Service for managing shipping points.
+         */
+        EloueCommon.factory("ShippingPointsService", [
+            "ShippingPoints",
+            "Endpoints",
+            function (ShippingPoints, Endpoints) {
+                var shippingPointsService = {};
+
+                shippingPointsService.searchDepartureShippingPointsByAddress = function(address) {
+                   return shippingPointsService.searchShippingPointsByAddress(address, 1);
+                };
+
+                shippingPointsService.searchArrivalShippingPointsByAddress = function(address) {
+                    return shippingPointsService.searchShippingPointsByAddress(address, 2);
+                };
+
+                shippingPointsService.searchArrivalShippingPointsByCoordinates = function(lat, lng) {
+                    return shippingPointsService.searchShippingPointsByCoordinates(lat, lng, 2);
+                };
+
+                shippingPointsService.searchShippingPointsByCoordinates = function(lat, lng, searchType) {
+                    return ShippingPoints.get({lat: lat, lng: lng, search_type: searchType, _cache: new Date().getTime()}).$promise;
+                };
+
+                shippingPointsService.searchShippingPointsByAddress = function(address, searchType) {
+                    return ShippingPoints.get({address: address, search_type: searchType, _cache: new Date().getTime()}).$promise;
+                };
+
+                return shippingPointsService;
+            }
+        ]);
+
+        /**
+         * Service for managing product shipping points.
+         */
+        EloueCommon.factory("ProductShippingPointsService", [
+            "ProductShippingPoints",
+            "Endpoints",
+            function (ProductShippingPoints, Endpoints) {
+                var productShippingPointsService = {};
+
+                productShippingPointsService.saveShippingPoint = function (shippingPoint) {
+                    return ProductShippingPoints.save(shippingPoint);
+                };
+
+                productShippingPointsService.getByProduct = function (productId) {
+                    return ProductShippingPoints.get({_cache: new Date().getTime(), product: productId}).$promise;
+                };
+
+                return productShippingPointsService;
+            }
+        ]);
+
+        /**
+         * Service for managing patron shipping points.
+         */
+        EloueCommon.factory("PatronShippingPointsService", [
+            "PatronShippingPoints",
+            "Endpoints",
+            function (PatronShippingPoints, Endpoints) {
+                var patronShippingPointsService = {};
+
+                patronShippingPointsService.saveShippingPoint = function (shippingPoint) {
+                    return PatronShippingPoints.save(shippingPoint);
+                };
+
+                return patronShippingPointsService;
+            }
+        ]);
+
+        /**
          * Service for managing comments.
          */
         EloueCommon.factory("CreditCardsService", [
