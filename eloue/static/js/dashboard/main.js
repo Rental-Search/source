@@ -1,7 +1,7 @@
 var STATIC_URL = "/static/";
 var scripts = document.getElementsByTagName('script');
 for(var i = 0, l = scripts.length; i < l; i++){
-    if(scripts[i].src.indexOf('require.js') != -1){
+    if(scripts[i].getAttribute('data-static-path')){
         STATIC_URL = scripts[i].getAttribute('data-static-path');
         break;
     }
