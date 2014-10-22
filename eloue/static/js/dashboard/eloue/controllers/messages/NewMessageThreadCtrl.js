@@ -35,8 +35,6 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                     // Get booking product
                     BookingsLoadService.getBookingByProduct($stateParams.productId).then(function (booking) {
                         $scope.booking = booking;
-                        $scope.isBorrower = booking.borrower.indexOf($scope.currentUserUrl) != -1;
-                        $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                     });
                 } else {
                     toastr.options.positionClass = "toast-top-full-width";
@@ -54,15 +52,6 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                             $stateParams.id = UtilsService.getIdFromUrl(result.thread);
                             $state.transitionTo("messages.detail", $stateParams, { reload: true });
                         });
-                };
-
-                $scope.cancelBooking = function () {
-                    BookingsLoadService.cancelBooking($scope.booking.uuid).$promise.then(function (result) {
-                        toastr.options.positionClass = "toast-top-full-width";
-                        toastr.success(result.detail, "");
-                        $stateParams.uuid = $scope.booking.uuid;
-                        $state.transitionTo("booking.detail", $stateParams, { reload: true });
-                    })
                 };
 
                 // Initiate custom scrollbars
