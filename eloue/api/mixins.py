@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import patch_cache_control
 
 from .filters import OwnerFilter
 from .permissions import IsOwnerOrReadOnly
@@ -134,3 +136,16 @@ class SetOwnerMixin(OwnerListMixin):
                 if not (user.is_staff and getattr(obj, owner_field_attname)):
                     setattr(obj, owner_field, user)
         return super(SetOwnerMixin, self).pre_save(obj)
+
+class CacheControlMixin(object):
+    cache_control = {'no-cache': True}
+
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        response = super(CacheControlMixin, self).dispatch(request, *args, **kwargs)
+        cache_control = self.cache_control.copy()
+        if 'private' not in cache_control and 'public' not in cache_control:
+            key = 'public' if request.user.is_anonymous() else 'private'
+            cache_control[key] = True
+        patch_cache_control(response, **cache_control)
+        return response

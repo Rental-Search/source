@@ -1,18 +1,20 @@
 extends ../base
--load compressed
+-load compressed staticfiles
 
 block append styles
   {% compressed_css "bootstrap" %}
   {% compressed_css "security_styles" %}
 
 block append scripts
-    script(src="#{STATIC_URL}bower_components/requirejs/require.js", data-main="#{STATIC_URL}js/widgets/main.js", data-static-path="#{STATIC_URL}")
+  script(src="{% static 'bower_components/jquery/dist/jquery.min.js' %}")
+  script
+    $(document).ready(function() {
+      $('.timeline-steps li').on('click', function () {
+        $(this).find('.content').toggleClass('text-overflow');
+        });
+    });
 
 block append content-body
-  include ../jade/_pop_up_send_message
-  include ../jade/_pop_up_call
-  include ../jade/_pop_up_reserve
-
   .container-flex
     header.header-site
       include ../jade/_header_site
@@ -26,9 +28,3 @@ block append content-body
         include ../jade/_footer_links
       section.row-fluid.rss
         include ../jade/_rss
-
-  script.
-    $('.timeline-steps li').on('click', function () {
-      $(this).find('.content').toggleClass('text-overflow');
-      });
-

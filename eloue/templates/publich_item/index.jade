@@ -5,10 +5,6 @@ block append styles
     {% compressed_css "bootstrap" %}
     {% compressed_css "publish_item_styles" %}
 
-block append scripts
-    script(src="#{STATIC_URL}bower_components/requirejs/require.js", data-main="#{STATIC_URL}js/widgets/main.js", data-static-path="#{STATIC_URL}")
-    //- script(src="#{STATIC_URL}js/bootstrap/dropdown.js")
-
 block append content-body
     .container-flex(data-ng-controller="PublishAdCtrl")
         header.header-site

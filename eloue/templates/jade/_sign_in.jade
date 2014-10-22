@@ -21,12 +21,14 @@
                  h3 Inscrivez-vous en 30 secondes
                  form(action="")
                     .form-group: a( href = "#classic-form", data-toggle="modal", data-target="#classic-form", data-dismiss="modal").btn.bg-success Inscription via Email
+                {% verbatim %}
                 .alert.alert-danger(ng-show="!!registrationError")
                     button(type="button", data-dismiss="alert", class="close")
-                    | {% verbatim %} {{registrationError}} {% endverbatim %}
+                    | {{registrationError}}
                 .alert.alert-danger(ng-show="!!loginError")
                     button(type="button", data-dismiss="alert", class="close")
-                    | {% verbatim %} {{loginError}} {% endverbatim %}
+                    | {{loginError}}
+                {% endverbatim %}
                 form(name="registrationForm", ng-submit="register()", novalidate)
                     //-
                      h3 Inscription 30 secondes
@@ -52,7 +54,7 @@
                     .form-group: button(type="submit", data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty").btn.bg-success Inscription via Email
                     p
                         | En créant un compte e-loue, vous acceptez les &nbsp;
-                        a(href="/conditions-generales/") Conditions Générales
+                        a(href="{% url 'terms' %}") Conditions Générales
                         br
                         | et la &nbsp;
                         a(href="/respect-vie-privee/") Politique de Confidentialité

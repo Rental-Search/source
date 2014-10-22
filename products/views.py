@@ -888,7 +888,7 @@ class CategoryFilterSet(filters.FilterSet):
         model = models.Category
         fields = ('parent', 'need_insurance')
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDeletableModelViewSet after merging Category and CategoryDescription
+class CategoryViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product categories to be viewed or edited.
     """
@@ -899,6 +899,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
     public_actions = ('list', 'retrieve', 'ancestors', 'children', 'descendants')
+    cache_control = {'max_age': 60*60} # categories are not going to change frequently
 
     @link()
     def ancestors(self, request, *args, **kwargs):

@@ -31,7 +31,7 @@ h1
 .btn,
 .btn-inline
   &.loading
-    background-image: url("/static/img/preloader.GIF")
+    background-image: url("../img/preloader.gif")
     background-repeat: no-repeat
     background-position: center center
     background-size: auto 80%
@@ -531,8 +531,9 @@ a, a:hover, a:focus
     padding-right: $indent !important
     padding-left: $indent !important
 
-ul.not-ordered
-  padding-left: $indent-sm
+ul.not-ordered,
+ul.dash-item
+  padding-left: 0
   > li
     margin: $indent-sm 0
     padding-left: $indent-sm
@@ -540,7 +541,13 @@ ul.not-ordered
     list-style-type: none
     &:before
       position: absolute
-      content: "."
       left: 0
       line-height: 1
       top: 0
+
+li:before
+  ul.not-ordered > &
+    content: "."
+  ul.dash-item > &
+    content: "-"
+

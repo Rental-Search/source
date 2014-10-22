@@ -1,7 +1,7 @@
 var STATIC_URL = "/static/";
 var scripts = document.getElementsByTagName('script');
 for(var i = 0, l = scripts.length; i < l; i++){
-    if(scripts[i].src.indexOf('require.js') != -1){
+    if(scripts[i].getAttribute('data-static-path')){
         STATIC_URL = scripts[i].getAttribute('data-static-path');
         break;
     }
@@ -9,27 +9,27 @@ for(var i = 0, l = scripts.length; i < l; i++){
 require.config({
     baseUrl: STATIC_URL + "js/dashboard",
     paths: {
-        "bootstrap": STATIC_URL + "bower_components/bootstrap/dist/js/bootstrap.min",
-        "underscore": STATIC_URL + "bower_components/lodash/dist/lodash.min",
-        "jQuery": STATIC_URL + "bower_components/jquery/dist/jquery.min",
-        "angular": STATIC_URL + "bower_components/angular/angular.min",
-        "angular-resource": STATIC_URL + "bower_components/angular-resource/angular-resource.min",
-        "angular-route": STATIC_URL + "bower_components/angular-route/angular-route.min",
-        "angular-cookies": STATIC_URL + "bower_components/angular-cookies/angular-cookies.min",
-        "angular-sanitize": STATIC_URL + "bower_components/angular-sanitize/angular-sanitize.min",
-        "angular-ui-router": STATIC_URL + "bower_components/angular-ui-router/release/angular-ui-router.min",
-        "angular-translate": STATIC_URL + "bower_components/angular-translate/angular-translate.min",
-        "bootstrap-datepicker": STATIC_URL + "bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
-        "bootstrap-datepicker-fr": STATIC_URL + "bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
-        "jquery-form": STATIC_URL + "bower_components/jquery-form/jquery.form",
-        "datejs": STATIC_URL + "bower_components/datejs/build/production/date.min",
-        "chosen": STATIC_URL + "bower_components/chosen/chosen.jquery.min",
-        "selectivizr": STATIC_URL + "bower_components/selectivizr/selectivizr",
-        "jquery-mousewheel": STATIC_URL + "bower_components/jquery-mousewheel/jquery.mousewheel",
-        "custom-scrollbar": STATIC_URL + "bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
-        "jquery-autosize": STATIC_URL + "bower_components/jquery-autosize/jquery.autosize.min",
-        "toastr": STATIC_URL + "bower_components/toastr/toastr.min",
-        "formmapper": STATIC_URL + "js/formmapper"
+        "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",
+        "underscore": "../../bower_components/lodash/dist/lodash.min",
+        "jQuery": "../../bower_components/jquery/dist/jquery.min",
+        "angular": "../../bower_components/angular/angular.min",
+        "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
+        "angular-route": "../../bower_components/angular-route/angular-route.min",
+        "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
+        "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
+        "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
+        "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
+        "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
+        "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
+        "jquery-form": "../../bower_components/jquery-form/jquery.form",
+        "datejs": "../../bower_components/datejs/build/production/date.min",
+        "chosen": "../../bower_components/chosen/chosen.jquery.min",
+        "selectivizr": "../../bower_components/selectivizr/selectivizr",
+        "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
+        "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
+        "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
+        "toastr": "../../bower_components/toastr/toastr.min",
+        "formmapper": "../formmapper"
     },
     shim: {
         "angular": {"exports": "angular"},
