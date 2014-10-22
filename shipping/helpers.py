@@ -5,6 +5,22 @@ from shipping.choises import SHIPPING_POINT_TYPE
 from shipping.navette import Navette
 
 
+class FakeShippingPoint(object):
+
+    def __init__(self, identifier):
+        self.site_id = identifier
+        self.name = 'Test'
+        self.zipcode = '123456'
+        self.country = 'Test'
+        self.city = 'Test'
+        self.address = 'Test'
+        self.distance = 500.5
+        self.latitude = 123.456
+        self.longitude = 123.456
+        self.is_open = True
+        self.price = 3.9
+
+
 SHIPPING_POINT_TO_DICT_MAP = {
     'site_id': 'site_id',
     'name': 'name',
@@ -16,6 +32,7 @@ SHIPPING_POINT_TO_DICT_MAP = {
     'latitude': 'latitude',
     'longitude': 'longitude',
     'is_open': 'is_open',
+    'price': 'price',
 }
 
 
@@ -42,6 +59,7 @@ def get_shipping_points(lat, lng, point_type):
         2: 'Arrival',
     }
     shipping_points = Navette().get_pudo(Point((lat, lng)), point_type_map[point_type])
+    return [shipping_point_to_dict(FakeShippingPoint(identifier)) for identifier in xrange(6)]
     return [shipping_point_to_dict(shipping_point) for shipping_point in shipping_points]
 
 

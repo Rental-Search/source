@@ -979,10 +979,11 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
                 if shipping_point.get('site_id', None):
-                    price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
-                    token = price.pop('token')
-                    cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
-                    shipping_point.update(price)
+                    pass
+                    # price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
+                    # token = price.pop('token')
+                    #cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
+                    #shipping_point.update(price)
             result = PudoSerializer(data=shipping_points, many=True)
             if result.is_valid():
                 return Response(result.data)
