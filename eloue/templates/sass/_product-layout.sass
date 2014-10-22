@@ -66,7 +66,6 @@
     display: inline-block
     background-color: $gray-medium
     color: white
-    margin-left: 1em
     padding: .2em .4em
     font-weight: bolder
     vertical-align: top
@@ -114,8 +113,6 @@
       position: absolute
       top: 2.5em
       left: 0
-      margin: 0
-
 
     .rate,
     .sprite-comment
@@ -155,6 +152,9 @@
       h6
         font-weight: $fw-bold
         font-size: px(15)
+        line-height: 1.6
+        a
+          margin-right: 1em
       p
         font-size: px(13)
       &:before
@@ -183,11 +183,15 @@
       position: absolute
       bottom: 0
       right: 0
-      a
-        margin-left: 1em
-      i
-        display: inline-block
-        font-size: 1.1em
+      z-index: 10
+      .btn
+        margin-left: ($thumbnail-sm / 4)
+        border-radius: 50%
+        font-size: 1.2em
+        width: $thumbnail-sm
+        height: $thumbnail-sm
+        line-height: $thumbnail-sm
+        padding: 0
 
     .info,
     .thumbnail-img,
