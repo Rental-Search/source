@@ -630,6 +630,11 @@ try:
 except ImportError:
     pass
 
+logging.getLogger('suds.client').setLevel(logging.ERROR)
+logging.getLogger('suds.transport').setLevel(logging.ERROR)
+logging.getLogger('suds.xsd.schema').setLevel(logging.ERROR)
+logging.getLogger('suds.wsdl').setLevel(logging.ERROR)
+
 # Lean configuration
 LEAN_ENGAGEMENT_CALCULATOR = 'eloue.lean.PatronEngagementScoreCalculator'
 

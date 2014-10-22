@@ -9,14 +9,19 @@ from eloue.api import serializers
 from . import models
 
 
+class PudoSerializer(serializers.SimpleSerializer):
+    name = CharField()
+    zipcode = CharField()
+    country = CharField()
+    city = CharField()
+    address = CharField()
+    distance = DecimalField()
+    is_open = BooleanField()
+    latitude = DecimalField()
+    longitude = DecimalField()
+
+
 class ShippingPointSerializer(serializers.GeoModelSerializer):
-    name = CharField(required=False)
-    zipcode = CharField(required=False)
-    country = CharField(required=False)
-    city = CharField(required=False)
-    address = CharField(required=False)
-    distance = DecimalField(required=False)
-    is_open = BooleanField(required=False)
     lat = DecimalField(required=True, write_only=True)
     lng = DecimalField(required=True, write_only=True)
 
@@ -26,8 +31,7 @@ class ShippingPointSerializer(serializers.GeoModelSerializer):
 
     class Meta:
         model = models.ShippingPoint
-        fields = ('id', 'site_id', 'pudo_id', 'position', 'type', 'lat', 'lng', 'name', 'zipcode', 'country',
-                  'city', 'address', 'distance', 'is_open')
+        fields = ('id', 'site_id', 'pudo_id', 'position', 'type', 'lat', 'lng')
         read_only_fields = ('position',)
 
 
@@ -67,9 +71,3 @@ class ShippingPointListParamsSerializer(serializers.SimpleSerializer):
             self._errors['lat'] = msg
             self._errors['address'] = msg
         return attrs
-
-
-class ShippingPointRetrieveParamsSerializer(serializers.SimpleSerializer):
-    lat = DecimalField(required=True)
-    lng = DecimalField(required=True)
-    search_type = IntegerField(required=True)

@@ -43,7 +43,10 @@ def get_shipping_points(lat, lng, point_type):
 
 def get_shipping_point(site_id, lat, lng, point_type):
     """Return shipping point info"""
-    return filter(lambda x: x['site_id'] == site_id, get_shipping_points(lat, lng, point_type))
+    try:
+        return filter(lambda x: x['site_id'] == site_id, get_shipping_points(lat, lng, point_type))[0]
+    except IndexError:
+        return None
 
 
 def get_shipping_price(departure_point_id, arrival_point_id):

@@ -6,13 +6,16 @@ from eloue.api import filters, mixins, viewsets
 from . import helpers, models, serializers
 
 
-class ShippingPointViewSet(viewsets.NonEditableModelViewSet):
+class ShippingPointViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows shipping points to be viewed.
     """
 
     serializer_class = serializers.ShippingPointSerializer
+    pudo_serializer_class = serializers.PudoSerializer
     queryset = models.ShippingPoint.objects.all()
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
+    owner_field = ('patronshippingpoint__patron', 'productshippingpoint__product__owner')
 
     def list(self, request, *args, **kwargs):
         params = serializers.ShippingPointListParamsSerializer(data=request.QUERY_PARAMS)
@@ -23,22 +26,20 @@ class ShippingPointViewSet(viewsets.NonEditableModelViewSet):
             if lat is None or lng is None:
                 lat, lng = helpers.get_position(params['address'])
             shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
-            result = self.serializer_class(data=shipping_points, many=True)
+            result = self.pudo_serializer_class(data=shipping_points, many=True)
             if result.is_valid():
                 return Response(result.data)
         return Response([])
 
     @link()
     def details(self, request, *args, **kwargs):
-        params = serializers.ShippingPointRetrieveParamsSerializer(data=request.QUERY_PARAMS)
-        if params.is_valid():
-            params = params.data
-            shipping_point = helpers.get_shipping_point(
-                int(kwargs['pk']), params['lat'], params['lng'], params['search_type'])
-            if shipping_point:
-                result = self.serializer_class(data=shipping_point)
-                if result.is_valid():
-                    return Response(result.data)
+        point = self.get_object()
+        shipping_point = helpers.get_shipping_point(
+            point.site_id, point.position.x, point.position.y, point.type)
+        if shipping_point:
+            result = self.pudo_serializer_class(data=shipping_point)
+            if result.is_valid():
+                return Response(result.data)
         raise Http404
 
 
