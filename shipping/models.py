@@ -24,4 +24,6 @@ class Shipping(models.Model):
     departure_point = models.ForeignKey(ShippingPoint, on_delete=PROTECT, related_name='+')
     arrival_point = models.ForeignKey(ShippingPoint, on_delete=PROTECT, related_name='+')
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    token = models.CharField(max_length=128)
+    order_number = models.CharField(max_length=128, default='')
+    shuttle_code = models.CharField(max_length=128, default='')
+    shuttle_document_url = models.CharField(max_length=1024, default='')

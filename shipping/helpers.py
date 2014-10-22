@@ -56,3 +56,12 @@ def get_shipping_point(site_id, lat, lng, point_type):
 def get_shipping_price(departure_point_id, arrival_point_id):
     price = Navette().get_price_from_partner(departure_point_id, arrival_point_id)
     return {'price': price.Amount, 'token': price.Token}
+
+
+def create_shipping(token, order_params):
+    shipping_params = Navette().create_from_partner(token, **order_params)
+    return {
+        'order_number': shipping_params.OrderNumber,
+        'shuttle_code': shipping_params.NavetteCode,
+        'shuttle_document_url': shipping_params.NavettePDFUrl
+    }
