@@ -14,6 +14,7 @@ urlpatterns = patterns('',
 from accounts import views as accounts_api
 from products import views as products_api
 from rent import views as rent_api
+from shipping import views as shipping_api
 
 # See http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
 router = routers.DefaultRouter()
@@ -36,3 +37,7 @@ router.register(r'productrelatedmessages', products_api.ProductRelatedMessageVie
 router.register(r'bookings', rent_api.BookingViewSet, base_name='booking')
 router.register(r'comments', rent_api.CommentViewSet, base_name='comment')
 router.register(r'sinisters', rent_api.SinisterViewSet, base_name='sinister')
+router.register(r'shippingpoints', shipping_api.ShippingPointViewSet, base_name='shippingpoint')
+router.register(r'patronshippingpoints', shipping_api.PatronShippingPointViewSet, base_name='patronshippingpoint')
+router.register(r'productshippingpoints', shipping_api.ProductShippingPointViewSet, base_name='productshippingpoint')
+router.register(r'shippings', shipping_api.ShippingViewSet, base_name='shipping')

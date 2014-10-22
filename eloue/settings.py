@@ -219,6 +219,7 @@ INSTALLED_APPS = (
     'accounts',
     'products',
     'rent',
+    'shipping',
     'payments',
     'contest',
     'eloue.api',

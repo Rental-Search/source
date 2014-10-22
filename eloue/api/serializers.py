@@ -11,6 +11,7 @@ from django.core.files.base import ContentFile
 from django.utils.datastructures import SortedDict
 
 from rest_framework import serializers, status
+from rest_framework_gis.serializers import MapGeometryField
 from eloue.api.exceptions import ValidationException
 
 
@@ -214,3 +215,11 @@ class NestedModelSerializerMixin(object):
                 view_name=self.opts.view_name,
                 queryset=self.opts.model.objects.all()
             ).from_native(value)
+
+
+class SimpleSerializer(RaiseOnValidateSerializerMixin, serializers.Serializer):
+    pass
+
+
+class GeoModelSerializer(ModelSerializer):
+    field_mapping = MapGeometryField(ModelSerializer.field_mapping)
