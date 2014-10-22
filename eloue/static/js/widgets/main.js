@@ -1,35 +1,48 @@
+var STATIC_URL = "/static/";
+var scripts = document.getElementsByTagName('script');
+for(var i = 0, l = scripts.length; i < l; i++){
+    if(scripts[i].src.indexOf('require.js') != -1){
+        STATIC_URL = scripts[i].getAttribute('data-static-path');
+        break;
+    }
+}
 require.config({
-    baseUrl: "/static/js/widgets",
+    baseUrl: STATIC_URL + "js/widgets",
     paths: {
-        "bootstrap": "/static/bower_components/bootstrap/dist/js/bootstrap.min",
-        "lodash": "/static/bower_components/lodash/dist/lodash.min",
-        "jQuery": "/static/bower_components/jquery/dist/jquery.min",
-        "jquery-ui": "/static/bower_components/jqueryui/jquery-ui.min",
-        "slider": "/static/bower_components/jqueryui/ui/minified/slider.min",
-        "core": "/static/bower_components/jqueryui/ui/minified/core.min",
-        "mouse": "/static/bower_components/jqueryui/ui/minified/mouse.min",
-        "widget": "/static/bower_components/jqueryui/ui/minified/widget.min",
-        "angular": "/static/bower_components/angular/angular.min",
-        "angular-resource": "/static/bower_components/angular-resource/angular-resource.min",
-        "angular-route": "/static/bower_components/angular-route/angular-route.min",
-        "angular-cookies": "/static/bower_components/angular-cookies/angular-cookies.min",
-        "angular-sanitize": "/static/bower_components/angular-sanitize/angular-sanitize.min",
-        "moment": "/static/bower_components/moment/min/moment.min",
-        "angular-moment": "/static/bower_components/angular-moment/angular-moment.min",
-        "bootstrap-datepicker": "/static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
-        "bootstrap-datepicker-fr": "/static/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
-        "jquery-form": "/static/bower_components/jquery-form/jquery.form",
-        "datejs": "/static/bower_components/datejs/build/production/date.min",
-        "chosen": "/static/bower_components/chosen/chosen.jquery.min",
-        "html5shiv": "/static/bower_components/html5shiv/dist/html5shiv.min",
-        "respond": "/static/bower_components/respond/respond.min",
-        "placeholders-utils": "/static/bower_components/placeholders/lib/utils",
-        "placeholders-main": "/static/bower_components/placeholders/lib/main",
-        "placeholders-jquery": "/static/bower_components/placeholders/lib/adapters/placeholders.jquery",
-        "custom-scrollbar": "/static/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
-        "jquery-mousewheel": "/static/bower_components/jquery-mousewheel/jquery.mousewheel",
-        "toastr": "/static/bower_components/toastr/toastr.min",
-        "formmapper": "/static/js/formmapper"
+        "bootstrap": STATIC_URL + "bower_components/bootstrap/dist/js/bootstrap.min",
+        "lodash": STATIC_URL + "bower_components/lodash/dist/lodash.min",
+        "jQuery": STATIC_URL + "bower_components/jquery/dist/jquery.min",
+        "jquery-ui": STATIC_URL + "bower_components/jqueryui/jquery-ui.min",
+        "jshashtable": STATIC_URL + "js/jshashtable-2.1_src",
+        "jquery.numberformatter": STATIC_URL + "js/jquery.numberformatter-1.2.3",
+        "tmpl": STATIC_URL + "js/tmpl",
+        "jquery.dependClass": STATIC_URL + "js/jquery.dependClass-0.1",
+        "draggable": STATIC_URL + "js/draggable-0.1",
+        "slider": STATIC_URL + "js/jquery.slider",
+        "core": STATIC_URL + "bower_components/jqueryui/ui/minified/core.min",
+        "mouse": STATIC_URL + "bower_components/jqueryui/ui/minified/mouse.min",
+        "widget": STATIC_URL + "bower_components/jqueryui/ui/minified/widget.min",
+        "angular": STATIC_URL + "bower_components/angular/angular.min",
+        "angular-resource": STATIC_URL + "bower_components/angular-resource/angular-resource.min",
+        "angular-route": STATIC_URL + "bower_components/angular-route/angular-route.min",
+        "angular-cookies": STATIC_URL + "bower_components/angular-cookies/angular-cookies.min",
+        "angular-sanitize": STATIC_URL + "bower_components/angular-sanitize/angular-sanitize.min",
+        "moment": STATIC_URL + "bower_components/moment/min/moment.min",
+        "angular-moment": STATIC_URL + "bower_components/angular-moment/angular-moment.min",
+        "bootstrap-datepicker": STATIC_URL + "bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
+        "bootstrap-datepicker-fr": STATIC_URL + "bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
+        "jquery-form": STATIC_URL + "bower_components/jquery-form/jquery.form",
+        "datejs": STATIC_URL + "bower_components/datejs/build/production/date.min",
+        "chosen": STATIC_URL + "bower_components/chosen/chosen.jquery.min",
+        "html5shiv": STATIC_URL + "bower_components/html5shiv/dist/html5shiv.min",
+        "respond": STATIC_URL + "bower_components/respond/respond.min",
+        "placeholders-utils": STATIC_URL + "bower_components/placeholders/lib/utils",
+        "placeholders-main": STATIC_URL + "bower_components/placeholders/lib/main",
+        "placeholders-jquery": STATIC_URL + "bower_components/placeholders/lib/adapters/placeholders.jquery",
+        "custom-scrollbar": STATIC_URL + "bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
+        "jquery-mousewheel": STATIC_URL + "bower_components/jquery-mousewheel/jquery.mousewheel",
+        "toastr": STATIC_URL + "bower_components/toastr/toastr.min",
+        "formmapper": STATIC_URL + "js/formmapper"
     },
     shim: {
         "angular": {"exports": "angular"},
@@ -44,6 +57,11 @@ require.config({
         },
         "jQuery": {exports: "jQuery"},
         "jquery-ui": ["jQuery"],
+        "jshashtable": ["jQuery"],
+        "jquery.numberformatter": ["jQuery"],
+        "tmpl": ["jQuery"],
+        "jquery.dependClass": ["jQuery"],
+        "draggable": ["jQuery"],
         "slider": ["jQuery"],
         "core": ["jQuery"],
         "mouse": ["jQuery"],
@@ -80,6 +98,11 @@ require([
     "toastr",
     "jquery-form",
 //    "jquery-ui",
+    "jshashtable",
+    "jquery.numberformatter",
+    "tmpl",
+    "jquery.dependClass",
+    "draggable",
     "slider",
     "core",
     "mouse",
@@ -133,18 +156,34 @@ require([
         var rangeSlider = $("#range-slider");
         var priceSlider = $("#price-slider");
         if (priceSlider) {
-            var priceMinInput = $("#price-min");
-            var priceMaxInput = $("#price-max");
-            priceSlider.slider({
-                range: true,
-                min: rangeSlider.attr("min-value"),
-                max: rangeSlider.attr("max-value"),
-                values: [priceMinInput.val(), priceMaxInput.val()],
-                slide: function(event, ui) {
-                    priceMinInput.val(ui.values[0]);
-                    priceMaxInput.val(ui.values[1]);
-                }
-            });
+            var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
+            var min = priceSlider.attr("min-value");
+            var max = priceSlider.attr("max-value");
+            var minPrice = 0, maxPrice = 0;
+            if (!priceMinInput.attr("value")) {
+                minPrice = min;
+            }
+            if (!priceMaxInput.attr("value")) {
+                maxPrice = max;
+            }
+            if (!min || !max) {
+                priceSlider.hide();
+                $("#price-label").hide();
+            } else {
+                priceSlider.slider({
+                    from: Number(min),
+                    to: Number(max),
+                    limits: false,
+                    dimension: '&nbsp;&euro;',
+                    onstatechange: function( value ){
+                        var values = value.split(";");
+                        priceMinInput.attr("value", Number(values[0]));
+                        priceMaxInput.attr("value", Number(values[1]));
+                    }
+                });
+                priceSlider.slider("value", minPrice, maxPrice);
+            }
+
         }
 
         (function (d, s, id) {
@@ -258,15 +297,17 @@ require([
                 if (rangeSlider) {
                     var rangeInput = $("#range");
                     rangeSlider.slider({
-                        range: "min",
-                        value: rangeInput.val(),
-                        min: 1,
-                        max: rangeSlider.attr("max-value"),
-                        slide: function(event, ui) {
-                            rangeInput.val(ui.value);
-                            map.setZoom(zoom(ui.value));
+                        from: 1,
+                        to: rangeSlider.attr("max-value"),
+                        limits: false,
+                        dimension: 'km',
+                        onstatechange: function( value ){
+                            var values = value.split(";");
+                            rangeInput.attr("value", values[1]);
+                            map.setZoom(zoom(values[1]));
                         }
                     });
+                    rangeSlider.slider("value", 0, rangeInput.attr("value"));
                 }
 
                 var products = [];

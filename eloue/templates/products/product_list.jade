@@ -6,7 +6,7 @@ block append styles
   {% compressed_css "product_list_styles" %}
 
 block scripts
-  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+    script(src="#{STATIC_URL}bower_components/requirejs/require.js", data-main="#{STATIC_URL}js/widgets/main.js", data-static-path="#{STATIC_URL}")
 
 block append content-body
   .container-flex(data-ng-controller="AuthCtrl")

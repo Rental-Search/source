@@ -9,6 +9,7 @@ from django.template import Library, Node
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_unicode
 from django.utils.html import escape
+from django.utils.translation import ugettext as _
 from django.utils.safestring import SafeData, mark_safe
 from django.utils.formats import get_format
 from django.utils import six
@@ -223,3 +224,10 @@ def do_monthcalendar(parser, token):
     parser.delete_first_token()
     tokens = token.split_contents()
     return MonthCalendarNode(nodelist)
+
+
+@register.filter(name='price')
+def price_filter(value, ending=''):
+    res = '%s%s' % (value, ending) if value else _('sur devis')
+    return mark_safe(res)
+price_filter.is_safe = True

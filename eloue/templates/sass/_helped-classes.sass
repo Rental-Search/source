@@ -28,6 +28,15 @@ h1
   outline: none !important
   color: white !important
 
+.btn,
+.btn-inline
+  &.loading
+    background-image: url("/static/img/preloader.GIF")
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: auto 80%
+    color: transparent !important
+
 .bg-image
   height: 100% !important
   width: 100% !important
@@ -44,6 +53,19 @@ h1
 
 .form-suffix
   line-height: 3em
+
+select
+  &.disabled,
+  &:disabled,
+  fieldset:disabled &
+    + .chosen-container
+      @include opacity(1)
+      @include box-shadow(none)
+      border-color: $gray-medium !important
+      pointer-events: none
+      .chosen-choices,
+      .chosen-single
+        background-color: $gray-lighter
 
 a[download]
   &[href $= ".eps"]

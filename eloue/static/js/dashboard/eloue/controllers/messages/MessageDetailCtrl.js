@@ -7,15 +7,18 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("MessageDetailCtrl", [
         "$scope",
+        "$state",
         "$stateParams",
         "$q",
+        "$window",
         "Endpoints",
         "MessageThreadsLoadService",
         "BookingsLoadService",
         "ProductRelatedMessagesLoadService",
         "ProductsLoadService",
+        "CategoriesService",
         "UtilsService",
-        function ($scope, $stateParams, $q, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
+        function ($scope, $state, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, CategoriesService, UtilsService) {
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
@@ -77,6 +80,13 @@ define(["angular", "eloue/app"], function (angular) {
                             };
 
                             $scope.requestBooking = function () {
+//                                //Get product details
+//                                ProductsLoadService.getProduct($scope.messageThread.product.id).then(function (product) {
+//                                    CategoriesService.getCategory(UtilsService.getIdFromUrl(product.category)).$promise.then(function (rootCategory) {
+//                                        console.log(rootCategory)
+//                                    });
+//                                });
+//                                $window.location.href = "/location/#/booking";
                                 BookingsLoadService.requestBooking($scope.newBooking).then(
                                     function (booking) {
                                         $scope.booking = booking;
@@ -96,6 +106,7 @@ define(["angular", "eloue/app"], function (angular) {
 
                 // Post new message
                 $scope.postNewMessage = function () {
+                    $scope.submitInProgress = true;
                     ProductRelatedMessagesLoadService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(function () {
                             // Clear message field
@@ -104,6 +115,7 @@ define(["angular", "eloue/app"], function (angular) {
                             // Reload data
                             MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
                                 $scope.messageThread.messages = messageThread.messages;
+                                $scope.submitInProgress = false;
                             });
                         });
                 };

@@ -28,7 +28,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 var usersService = {};
 
                 usersService.get = function (userId, successCallback, errorCallback) {
-                    return Users.get({id: userId}, successCallback, errorCallback);
+                    return Users.get({id: userId, _cache: new Date().getTime()}, successCallback, errorCallback);
                 };
 
                 usersService.getMe = function (successCallback, errorCallback) {
@@ -168,7 +168,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 var result = {
                                     id: data.id,
                                     body: data.body,
-                                    date: UtilsService.formatDate(data.sent_at, "dd.mm.yyyy HH'h'mm")
+                                    date: UtilsService.formatDate(data.sent_at, "dd.MM.yyyy HH'h'mm")
                                 };
 
                                 // Get sender
@@ -271,7 +271,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                     id: data.id,
                                     body: data.body,
                                     date: UtilsService.formatMessageDate(data.sent_at,
-                                        "HH'h'mm", "dd.mm.yyyy HH'h'mm")
+                                        "HH'h'mm", "dd.MM.yyyy HH'h'mm")
                                 };
 
                                 // Get sender
@@ -308,7 +308,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 messageThreadsService.getMessageThread = function (productId, participantId) {
                     var deferred = $q.defer();
                     var self = this;
-                    MessageThreads.list({product: productId, participant: participantId}).$promise.then(function (result) {
+                    MessageThreads.list({product: productId, participant: participantId, _cache: new Date().getTime()}).$promise.then(function (result) {
                         var promises = [];
                         angular.forEach(result.results, function (value, key) {
                             angular.forEach(value.messages, function (messageLink, idx) {
@@ -407,13 +407,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 var productsService = {};
 
                 productsService.getProduct = function (id) {
-                    return Products.get({id: id});
+                    return Products.get({id: id, _cache: new Date().getTime()});
                 };
 
                 productsService.getProductDetails = function (id) {
                     var deferred = $q.defer();
                     var self = this;
-                    Products.get({id: id}).$promise.then(function (result) {
+                    Products.get({id: id, _cache: new Date().getTime()}).$promise.then(function (result) {
                         var promises = [];
                         promises.push(PicturesService.getPicturesByProduct(id).$promise);
                         var categoryId = UtilsService.getIdFromUrl(result.category);
@@ -433,7 +433,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 productsService.getProductsByAddress = function (addressId) {
                     var deferred = $q.defer();
 
-                    Products.get({address: addressId}).$promise.then(function (data) {
+                    Products.get({address: addressId, _cache: new Date().getTime()}).$promise.then(function (data) {
                         var promises = [];
 
                         angular.forEach(data.results, function (value, key) {
@@ -477,7 +477,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
                     var deferred = $q.defer();
-                    var params = {owner: userId, ordering: "-created_at"};
+                    var params = {owner: userId, ordering: "-created_at", _cache: new Date().getTime()};
 
                     if (rootCategoryId) {
                         params.category__isdescendant = rootCategoryId;
@@ -635,7 +635,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 bookingsService.getBookings = function (page) {
                     var deferred = $q.defer();
 
-                    Bookings.get({page: page}).$promise.then(function (data) {
+                    Bookings.get({page: page, _cache: new Date().getTime()}).$promise.then(function (data) {
                         var promises = [];
 
                         angular.forEach(data.results, function (value, key) {
@@ -688,7 +688,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 bookingsService.getBookingsByProduct = function (productId) {
                     var deferred = $q.defer();
 
-                    Bookings.get({product: productId}).$promise.then(function (data) {
+                    Bookings.get({product: productId, _cache: new Date().getTime()}).$promise.then(function (data) {
                         var promises = [];
 
                         angular.forEach(data.results, function (value, key) {
@@ -745,7 +745,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 bookingsService.getBooking = function (uuid) {
                     var deferred = $q.defer();
 
-                    Bookings.get({uuid: uuid}).$promise.then(
+                    Bookings.get({uuid: uuid, _cache: new Date().getTime()}).$promise.then(
                         function (booking) {
                             var resultBooking = {
                                 total_amount: booking.total_amount,
@@ -807,7 +807,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 bookingsService.getBookingDetailProduct = function (productId) {
                     var productDeferred = $q.defer();
 
-                    Products.get({id: productId}).$promise.then(
+                    Products.get({id: productId, _cache: new Date().getTime()}).$promise.then(
                         function (product) {
                             var resultProduct = {
                                 summary: product.summary
@@ -918,11 +918,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             var categoriesService = {};
 
             categoriesService.getCategory = function (categoryId) {
-                return Categories.get({id: categoryId});
+                return Categories.get({id: categoryId, _cache: new Date().getTime()});
             };
 
             categoriesService.getCategoryByName = function (categoryName) {
-                return Categories.get({name: categoryName});
+                return Categories.get({name: categoryName, _cache: new Date().getTime()});
             };
 
             categoriesService.getParentCategory = function (category) {
@@ -999,11 +999,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             var pricesService = {};
 
             pricesService.getProductPricesPerDay = function (productId) {
-                return Prices.getProductPricesPerDay({product: productId});
+                return Prices.getProductPricesPerDay({product: productId, _cache: new Date().getTime()});
             };
 
             pricesService.getPricesByProduct = function (productId) {
-                return Prices.get({product: productId});
+                return Prices.get({product: productId, _cache: new Date().getTime()});
             };
 
             pricesService.savePrice = function (price) {
@@ -1024,7 +1024,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             var picturesService = {};
 
             picturesService.getPicturesByProduct = function (productId) {
-                return Pictures.get({product: productId});
+                return Pictures.get({product: productId, _cache: new Date().getTime()});
             };
 
             picturesService.savePicture = function (productId, form, successCallback, errorCallback) {
@@ -1065,7 +1065,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var adrPromises = [];
 
                             for (var i = 1; i <= pagesCount; i++) {
-                                adrPromises.push(Addresses.get({patron: patronId, page: i}).$promise);
+                                adrPromises.push(Addresses.get({patron: patronId, _cache: new Date().getTime(), page: i}).$promise);
                             }
 
                             $q.all(adrPromises).then(
@@ -1125,7 +1125,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             var phoneNumbersService = {};
 
             phoneNumbersService.getPhoneNumber = function (phoneNumberId) {
-                return PhoneNumbers.get({id: phoneNumberId});
+                return PhoneNumbers.get({id: phoneNumberId, _cache: new Date().getTime()});
             };
 
             phoneNumbersService.savePhoneNumber = function (phoneNumber) {
@@ -1137,7 +1137,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             };
 
             phoneNumbersService.getPremiumRateNumber = function (phoneNumberId) {
-                return PhoneNumbers.getPremiumRateNumber({id: phoneNumberId});
+                return PhoneNumbers.getPremiumRateNumber({id: phoneNumberId, _cache: new Date().getTime()});
             };
 
             phoneNumbersService.deletePhoneNumber = function (phoneNumberId) {
@@ -1360,11 +1360,26 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService, MessageThreadsService) {
                 var bookingsLoadService = {};
 
-                bookingsLoadService.getBookingList = function (author, page) {
+                bookingsLoadService.getBookingList = function (author, state, borrowerId, ownerId, page) {
                     var deferred = $q.defer();
+                    var params = {
+                        page: page,
+                        author: author,
+                        ordering: "-created_at",
+                        _cache: new Date().getTime()
+                    };
+                    if (!!state) {
+                        params.state = state;
+                    }
+                    if (!!borrowerId) {
+                        params.borrower = borrowerId;
+                    }
+                    if (!!ownerId) {
+                        params.owner = ownerId;
+                    }
 
                     // Load bookings
-                    Bookings.get({page: page, author: author, ordering: "-created_at", _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
+                    Bookings.get(params).$promise.then(function (bookingListData) {
                         var bookingListPromises = [];
 
                         // For each booking
@@ -1733,7 +1748,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     // Parse last message
                     if (!!lastMessageData) {
                         messageThreadResult.last_message = lastMessageData;
-                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.mm.yyyy HH'h'mm");
+                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.MM.yyyy HH'h'mm");
                     }
 
                     return messageThreadResult;
@@ -1746,7 +1761,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     if (!!messagesDataArray) {
                         messageThreadResult.messages = messagesDataArray;
                         angular.forEach(messageThreadResult.messages, function (message, key) {
-                            message.sent_at = UtilsService.formatDate(message.sent_at, "dd.mm.yyyy HH'h'mm");
+                            message.sent_at = UtilsService.formatDate(message.sent_at, "dd.MM.yyyy HH'h'mm");
                         });
                     }
 
