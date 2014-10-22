@@ -884,7 +884,7 @@ class CategoryFilterSet(filters.FilterSet):
         model = models.Category
         fields = ('parent', 'need_insurance')
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDeletableModelViewSet after merging Category and CategoryDescription
+class CategoryViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product categories to be viewed or edited.
     """
