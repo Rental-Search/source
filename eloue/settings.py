@@ -568,10 +568,7 @@ HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 
 # Queue configuration
-if DEBUG:
-    QUEUE_BACKEND = 'dummy'
-else:
-    QUEUE_BACKEND = 'redisd'
+QUEUE_BACKEND = env('QUEUE_BACKEND', 'dummy')
 QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = env('QUEUE_REDIS_DB', 1)
 
