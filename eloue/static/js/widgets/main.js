@@ -395,12 +395,12 @@ require([
                 var image, image_hover;
 
                 if (markerId == "li#marker-") {
-                    image = new google.maps.MarkerImage('/static/images/markers_smooth_aligned.png',
+                    image = new google.maps.MarkerImage(STATIC_URL + 'images/markers_smooth_aligned.png',
                         new google.maps.Size(26, 28),
                         new google.maps.Point(0, 28 * i),
                         new google.maps.Point(14, 28));
 
-                    image_hover = new google.maps.MarkerImage('/static/images/markers_smooth_aligned.png',
+                    image_hover = new google.maps.MarkerImage(STATIC_URL + 'images/markers_smooth_aligned.png',
                         new google.maps.Size(26, 28),
                         new google.maps.Point(29, 28 * i),
                         new google.maps.Point(14, 28));

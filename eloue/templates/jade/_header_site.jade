@@ -1,3 +1,5 @@
+-load staticfiles
+
 section.container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser").without-spaces
@@ -80,7 +82,7 @@ section.container.signs-links
 .framing
   section.container.search-form
     .table-cell
-      a(href="{% url 'home' %}"): img(src="#{STATIC_URL}img/logo.png", alt="e-loue logo")
+      a(href="{% url 'home' %}"): img(src="{% static 'img/logo.png' %}", alt="e-loue logo")
     .table-cell.main-cell
       form(action="{% url 'product_list' %}").input-group
         input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="Que voulez-vous louer ?", title="{% if form.cleaned_data.q %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
