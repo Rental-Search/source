@@ -32,16 +32,15 @@ class DefaultPermissions(permissions.DjangoModelPermissions):
 
 class IsAuthenticatedOrReadOnly(DefaultPermissions):
     def has_permission(self, request, view):
-        return (request.user.is_authenticated() and request.method in SAFE_METHODS or
-            super(IsAuthenticatedOrReadOnly, self).has_permission(request, view)
-        )
+        if request.user.is_anonymous():
+            return request.method in SAFE_METHODS
+        return super(IsAuthenticatedOrReadOnly, self).has_permission(request, view)
 
 class IsStaffOrReadOnly(DefaultPermissions):
     def has_permission(self, request, view):
-        return (request.user.is_authenticated() and request.method in SAFE_METHODS or
-            request.user.is_staff or
-            super(IsStaffOrReadOnly, self).has_permission(request, view)
-        )
+        if request.user.is_anonymous() or (not request.user.is_staff and not request.user.is_superuser):
+            return request.method in SAFE_METHODS
+        return super(IsStaffOrReadOnly, self).has_permission(request, view)
 
 class UserPermissions(DefaultPermissions):
     def has_permission(self, request, view):
