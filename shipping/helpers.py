@@ -1,38 +1,60 @@
 # coding=utf-8
+import datetime
 from django.contrib.gis.geos.point import Point
 from eloue.geocoder import GoogleGeocoder
 from shipping.choises import SHIPPING_POINT_TYPE
 from shipping.navette import Navette
 
 
+class FakeOpeningDate(object):
+
+    def __init__(self):
+        self.AfternoonClosingTime = datetime.time(19, 30)
+        self.AfternoonOpeningTime = datetime.time(15, 30)
+        self.MorningClosingTime = datetime.time(12, 00)
+        self.MorningOpeningTime = datetime.time(10, 00)
+        self.DayOfWeek = 'Monday'
+
+
 class FakeShippingPoint(object):
 
     def __init__(self, identifier):
-        self.site_id = identifier
-        self.name = 'Test'
-        self.zipcode = '123456'
-        self.country = 'Test'
-        self.city = 'Test'
-        self.address = 'Test'
-        self.distance = 500.5
-        self.latitude = 123.456
-        self.longitude = 123.456
-        self.is_open = True
+        self.SiteId = identifier
+        self.Name = 'Test'
+        self.Zipcode = '123456'
+        self.CountryCode = 'Test'
+        self.CityName = 'Test'
+        self.AddressLine = 'Test'
+        self.DistanceFromSearch = 500.5
+        self.Latitude = 123.456
+        self.Longitude = 123.456
+        self.IsOpen = True
+        self.OpeningDates = [
+            FakeOpeningDate()
+        ]
         self.price = 3.9
 
 
 SHIPPING_POINT_TO_DICT_MAP = {
-    'site_id': 'site_id',
-    'name': 'name',
-    'zipcode': 'zipcode',
-    'country': 'country',
-    'city': 'city',
-    'address': 'address',
-    'distance': 'distance',
-    'latitude': 'latitude',
-    'longitude': 'longitude',
-    'is_open': 'is_open',
+    'SiteId': 'site_id',
+    'Name': 'name',
+    'Zipcode': 'zipcode',
+    'CountryCode': 'country',
+    'CityName': 'city',
+    'AddressLine': 'address',
+    'DistanceFromSearch': 'distance',
+    'Latitude': 'latitude',
+    'Longitude': 'longitude',
+    'IsOpen': 'is_open',
     'price': 'price',
+}
+
+OPENING_DATE_TO_DICT_MAP = {
+    'AfternoonClosingTime': 'afternoon_closing_time',
+    'AfternoonOpeningTime': 'afternoon_opening_time',
+    'MorningClosingTime': 'morning_closing_time',
+    'MorningOpeningTime': 'morning_opening_time',
+    'DayOfWeek': 'day_of_week',
 }
 
 
@@ -42,8 +64,19 @@ def build_cache_id(product, user, site_id):
 
 def shipping_point_to_dict(shipping_point):
     """Convert shipping point object to dict"""
-    return {
+    opening_dates = [opening_date_to_dict(opening_date) for opening_date in shipping_point.OpeningDates]
+
+    result = {
         dict_key: getattr(shipping_point, field_name) for field_name, dict_key in SHIPPING_POINT_TO_DICT_MAP.items()
+    }
+    result['opening_dates'] = opening_dates
+    return result
+
+
+def opening_date_to_dict(opening_date):
+    """Convert opening date object to dict"""
+    return {
+        dict_key: getattr(opening_date, field_name) for field_name, dict_key in OPENING_DATE_TO_DICT_MAP.items()
     }
 
 

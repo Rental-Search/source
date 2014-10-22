@@ -4,6 +4,7 @@ import datetime
 from django.utils.translation import gettext as _
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
+from rest_framework.fields import TimeField
 
 from rest_framework.serializers import CharField, BooleanField, DecimalField, IntegerField
 from accounts.choices import COUNTRY_CHOICES
@@ -12,6 +13,14 @@ from eloue.api import serializers
 
 from . import helpers, models
 from rent.contract import first_or_empty
+
+
+class PudoOpeningDateSerializer(serializers.SimpleSerializer):
+    afternoon_closing_time = TimeField()
+    afternoon_opening_time = TimeField()
+    day_of_week = CharField()
+    morning_closing_time = TimeField()
+    morning_opening_time = TimeField()
 
 
 class PudoSerializer(serializers.SimpleSerializer):
@@ -24,6 +33,7 @@ class PudoSerializer(serializers.SimpleSerializer):
     is_open = BooleanField()
     latitude = DecimalField()
     longitude = DecimalField()
+    opening_dates = PudoOpeningDateSerializer(many=True)
 
 
 class ShippingPointSerializer(serializers.GeoModelSerializer):
