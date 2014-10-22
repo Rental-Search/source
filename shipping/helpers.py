@@ -1,20 +1,8 @@
 # coding=utf-8
+from django.contrib.gis.geos.point import Point
 from eloue.geocoder import GoogleGeocoder
-
-
-class FakeShippingPoint(object):
-
-    def __init__(self, identifier):
-        self.site_id = identifier
-        self.name = 'Test'
-        self.zipcode = '123456'
-        self.country = 'Test'
-        self.city = 'Test'
-        self.address = 'Test'
-        self.distance = 500.5
-        self.latitude = 123.456
-        self.longitude = 123.456
-        self.is_open = True
+from shipping.choises import SHIPPING_POINT_TYPE
+from shipping.navette import Navette
 
 
 SHIPPING_POINT_TO_DICT_MAP = {
@@ -45,7 +33,12 @@ def get_position(address):
 
 def get_shipping_points(lat, lng, point_type):
     """Search nearest shipping points"""
-    return [shipping_point_to_dict(FakeShippingPoint(identifier)) for identifier in xrange(6)]
+    point_type_map = {
+        1: 'Departure',
+        2: 'Arrival',
+    }
+    shipping_points = Navette().get_pudo(Point((lat, lng)), point_type_map[point_type])
+    return [shipping_point_to_dict(shipping_point) for shipping_point in shipping_points]
 
 
 def get_shipping_point(site_id, lat, lng, point_type):
@@ -54,4 +47,5 @@ def get_shipping_point(site_id, lat, lng, point_type):
 
 
 def get_shipping_price(departure_point_id, arrival_point_id):
-    return {'price': 123.45, 'token': '123456'}
+    price = Navette().get_price_from_partner(departure_point_id, arrival_point_id)
+    return {'price': price.Amount, 'token': price.Token}

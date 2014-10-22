@@ -16,7 +16,7 @@ class PatronShippingPoint(ShippingPoint):
 
 
 class ProductShippingPoint(ShippingPoint):
-    product = models.OneToOneField('products.Product', related_name='shipping_point')
+    product = models.OneToOneField('products.Product', related_name='departure_point')
 
 
 class Shipping(models.Model):

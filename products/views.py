@@ -30,7 +30,7 @@ from haystack.query import SearchQuerySet
 from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
 from accounts.search import patron_search
-from eloue.api.exceptions import ValidationException
+from eloue.api.exceptions import ValidationException, ServerException, ServerErrorEnum
 
 from products.forms import (
     AlertSearchForm, AlertForm, FacetedSearchForm, ProductFacetedSearchForm, ProductForm,
@@ -946,8 +946,11 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             try:
                 departure_point = product.departure_point
             except ShippingPoint.DoesNotExist:
-                # FIXME: I think the other exception should be there
-                raise ValidationException({'departure_point': 'Departure point not specified'})
+                raise ServerException({
+                    'code': ServerErrorEnum.OTHER_ERROR[0],
+                    'description': ServerErrorEnum.OTHER_ERROR[1],
+                    'detail': _(u'Departure point not specified')
+                })
             result = serializers.ShippingPriceSerializer(
                 data=helpers.get_shipping_price(departure_point.site_id, params['arrival_point_id']))
             if result.is_valid():

@@ -6,12 +6,13 @@ from eloue.api import filters, mixins, viewsets
 from . import helpers, models, serializers
 
 
-class ShippingPointViewSet(viewsets.SimpleViewSet):
+class ShippingPointViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows shipping points to be viewed.
     """
 
     serializer_class = serializers.ShippingPointSerializer
+    queryset = models.ShippingPoint.objects.all()
 
     def list(self, request, *args, **kwargs):
         params = serializers.ShippingPointListParamsSerializer(data=request.QUERY_PARAMS)
@@ -27,7 +28,8 @@ class ShippingPointViewSet(viewsets.SimpleViewSet):
                 return Response(result.data)
         return Response([])
 
-    def retrieve(self, request, *args, **kwargs):
+    @link()
+    def details(self, request, *args, **kwargs):
         params = serializers.ShippingPointRetrieveParamsSerializer(data=request.QUERY_PARAMS)
         if params.is_valid():
             params = params.data
@@ -51,7 +53,7 @@ class PatronShippingPointViewSet(mixins.SetOwnerMixin, viewsets.NonEditableModel
     filter_fields = ('patron', )
 
 
-class ProductShippingPointViewSet(mixins.SetOwnerMixin, viewsets.NonEditableModelViewSet):
+class ProductShippingPointViewSet(viewsets.NonEditableModelViewSet):
     """
     API endpoint that allows product's shipping points to be viewed or edited.
     """

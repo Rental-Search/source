@@ -9,44 +9,40 @@ from eloue.api import serializers
 from . import models
 
 
-class ShippingPointSerializer(serializers.SimpleSerializer):
-    site_id = IntegerField()
-    name = CharField()
-    zipcode = CharField()
-    country = CharField()
-    city = CharField()
-    address = CharField()
-    distance = DecimalField()
-    latitude = DecimalField()
-    longitude = DecimalField()
-    is_open = BooleanField()
-
-
-class AbstractShippingPointSerializer(serializers.GeoModelSerializer):
-    lat = DecimalField(write_only=True, required=True)
-    lng = DecimalField(write_only=True, required=True)
+class ShippingPointSerializer(serializers.GeoModelSerializer):
+    name = CharField(required=False)
+    zipcode = CharField(required=False)
+    country = CharField(required=False)
+    city = CharField(required=False)
+    address = CharField(required=False)
+    distance = DecimalField(required=False)
+    is_open = BooleanField(required=False)
+    lat = DecimalField(required=True, write_only=True)
+    lng = DecimalField(required=True, write_only=True)
 
     def save_object(self, obj, **kwargs):
         obj.position = Point((obj.lat, obj.lng))
-        super(AbstractShippingPointSerializer, self).save_object(obj, **kwargs)
+        super(ShippingPointSerializer, self).save_object(obj, **kwargs)
 
     class Meta:
-        fields = ('id', 'patron', 'site_id', 'position', 'type', 'lat', 'lng')
+        model = models.ShippingPoint
+        fields = ('id', 'site_id', 'pudo_id', 'position', 'type', 'lat', 'lng', 'name', 'zipcode', 'country',
+                  'city', 'address', 'distance', 'is_open')
         read_only_fields = ('position',)
 
 
-class PatronShippingPointSerializer(AbstractShippingPointSerializer):
+class PatronShippingPointSerializer(ShippingPointSerializer):
 
-    class Meta(AbstractShippingPointSerializer.Meta):
+    class Meta(ShippingPointSerializer.Meta):
         model = models.PatronShippingPoint
-        fields = AbstractShippingPointSerializer.Meta.fields + ('patron',)
+        fields = ShippingPointSerializer.Meta.fields + ('patron',)
 
 
-class ProductShippingPointSerializer(AbstractShippingPointSerializer):
+class ProductShippingPointSerializer(ShippingPointSerializer):
 
-    class Meta(AbstractShippingPointSerializer.Meta):
+    class Meta(ShippingPointSerializer.Meta):
         model = models.ProductShippingPoint
-        fields = AbstractShippingPointSerializer.Meta.fields + ('product',)
+        fields = ShippingPointSerializer.Meta.fields + ('product',)
 
 
 class ShippingSerializer(serializers.ModelSerializer):
