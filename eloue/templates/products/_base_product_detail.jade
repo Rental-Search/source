@@ -6,7 +6,8 @@ block append styles
   {% compressed_css "product_detail_styles" %}
 
 block scripts
-  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+    script(src="#{STATIC_URL}js/vars.js")
+    script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 
 block append content-body
   -var is_pro = product.pro_owner

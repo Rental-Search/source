@@ -6,7 +6,8 @@ block append styles
   {% compressed_css "security_styles" %}
 
 block append scripts
-  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
+    script(src="#{STATIC_URL}js/vars.js")
+    script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
 
 block append content-body
   include ../jade/_pop_up_send_message
