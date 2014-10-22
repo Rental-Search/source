@@ -19,6 +19,10 @@ SHIPPING_POINT_TO_DICT_MAP = {
 }
 
 
+def build_cache_id(product, user, site_id):
+    return '{}_{}_{}_shipping_token'.format(product.id, user.id, site_id)
+
+
 def shipping_point_to_dict(shipping_point):
     """Convert shipping point object to dict"""
     return {

@@ -53,6 +53,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.views import LoginRequiredMixin, SearchQuerySetMixin, BreadcrumbsMixin
 from shipping import helpers
 from shipping.models import ShippingPoint
+from shipping.serializers import ShippingPointListParamsSerializer, PudoSerializer
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -955,6 +956,37 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                 data=helpers.get_shipping_price(departure_point.site_id, params['arrival_point_id']))
             if result.is_valid():
                 return Response(result.data)
+
+    @link()
+    def shipping_points(self, request, *args, **kwargs):
+        try:
+            product = self.get_object()
+            departure_point = product.departure_point
+        except ShippingPoint.DoesNotExist:
+            raise ServerException({
+                'code': ServerErrorEnum.OTHER_ERROR[0],
+                'description': ServerErrorEnum.OTHER_ERROR[1],
+                'detail': _(u'Departure point not specified')
+            })
+
+        params = ShippingPointListParamsSerializer(data=request.QUERY_PARAMS)
+        if params.is_valid():
+            params = params.data
+            lat = params['lat']
+            lng = params['lng']
+            if lat is None or lng is None:
+                lat, lng = helpers.get_position(params['address'])
+            shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
+            for shipping_point in shipping_points:
+                if shipping_point.get('site_id', None):
+                    price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
+                    token = price.pop('token')
+                    cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
+                    shipping_point.update(price)
+            result = PudoSerializer(data=shipping_points, many=True)
+            if result.is_valid():
+                return Response(result.data)
+        return Response([])
 
     @link()
     def is_available(self, request, *args, **kwargs):
