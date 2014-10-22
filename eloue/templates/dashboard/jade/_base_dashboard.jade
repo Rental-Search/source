@@ -1,11 +1,11 @@
 extends ../../base
--load compressed
+-load compressed staticfiles
 
 block append styles
   {% compressed_css "dashboard_styles" %}
 
-block append scripts
-    script(src="#{STATIC_URL}bower_components/requirejs/require.js", data-main="#{STATIC_URL}js/dashboard/main.js", data-static-path="#{STATIC_URL}")
+block scripts
+  script(src="{% static 'bower_components/requirejs/require.js' %}", data-main="{% static 'js/dashboard/main.js' %}", data-static-path="{{ STATIC_URL }}")
 
 block append content-body
   .container-full-screen(data-ng-controller="DashboardRootCtrl")

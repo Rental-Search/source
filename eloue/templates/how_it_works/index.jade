@@ -6,7 +6,6 @@ block append styles
   {% compressed_css "how_it_works_styles" %}
 
 block append scripts
-  script(src="#{STATIC_URL}bower_components/requirejs/require.js", data-main="#{STATIC_URL}js/widgets/main.js", data-static-path="#{STATIC_URL}")
   script(src="#{STATIC_URL}bower_components/jquery/dist/jquery.min.js")
   script
     $(document).ready(function() {
