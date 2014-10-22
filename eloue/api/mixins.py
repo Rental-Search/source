@@ -138,13 +138,12 @@ class SetOwnerMixin(OwnerListMixin):
         return super(SetOwnerMixin, self).pre_save(obj)
 
 class CacheControlMixin(object):
-    default_cache_control = {'no-cache': True}
+    cache_control = {'no-cache': True}
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         response = super(CacheControlMixin, self).dispatch(request, *args, **kwargs)
-        cache_control = self.default_cache_control.copy()
-        cache_control.update(getattr(self, 'cache_control', {}))
+        cache_control = self.cache_control.copy()
         if 'private' not in cache_control and 'public' not in cache_control:
             key = 'public' if request.user.is_anonymous() else 'private'
             cache_control[key] = True

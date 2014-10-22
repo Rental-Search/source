@@ -895,6 +895,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
     public_actions = ('list', 'retrieve', 'ancestors', 'children', 'descendants')
+    cache_control = {'max_age': 60*60} # categories are not going to change frequently
 
     @link()
     def ancestors(self, request, *args, **kwargs):
