@@ -1,1 +1,0 @@
-var STATIC_URL = "/";
