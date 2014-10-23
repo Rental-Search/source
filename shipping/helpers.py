@@ -20,33 +20,33 @@ class FakeShippingPoint(object):
 
     def __init__(self, identifier):
         self.SiteId = identifier
+        self.PudoId = 'identifier'
         self.Name = 'Test'
         self.Zipcode = '123456'
         self.CountryCode = 'Test'
         self.CityName = 'Test'
         self.AddressLine = 'Test'
         self.DistanceFromSearch = 500.5
-        self.Latitude = 123.456
-        self.Longitude = 123.456
+        self.Latitude = 45.45
+        self.Longitude = 22.22
         self.IsOpen = True
         self.OpeningDates = [
             FakeOpeningDate()
         ]
-        self.price = 3.9
 
 
 SHIPPING_POINT_TO_DICT_MAP = {
     'SiteId': 'site_id',
+    'PudoId': 'pudo_id',
     'Name': 'name',
     'Zipcode': 'zipcode',
     'CountryCode': 'country',
     'CityName': 'city',
     'AddressLine': 'address',
     'DistanceFromSearch': 'distance',
-    'Latitude': 'latitude',
-    'Longitude': 'longitude',
+    'Latitude': 'lat',
+    'Longitude': 'lng',
     'IsOpen': 'is_open',
-    'price': 'price',
 }
 
 OPENING_DATE_TO_DICT_MAP = {

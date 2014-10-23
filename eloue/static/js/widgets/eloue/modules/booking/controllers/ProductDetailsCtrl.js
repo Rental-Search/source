@@ -20,7 +20,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "BookingsService",
         "PhoneNumbersService",
         "PicturesService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService) {
+        "ShippingsService",
+        "ShippingPointsService",
+        "ProductShippingPointsService",
+        "PatronShippingPointsService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -34,6 +38,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 subscriber_reference: ""
             };
             $scope.newCreditCard = true;
+            $scope.borrowerShippingPoints = [];
             $scope.submitInProgress = false;
             $scope.showSaveCard = true;
             $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
@@ -210,6 +215,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 console.log("Calling product owner..");
             };
 
+            $scope.selectedPointId = "";
+
+            $scope.pointSelected = function(pointId) {
+                $scope.selectedPointId = pointId;
+            };
+
             $scope.sendBookingRequest = function sendBookingRequest() {
                 $scope.submitInProgress = true;
                 // Update user info
@@ -267,15 +278,48 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             };
                         }
 
-                        BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
-                            toastr.options.positionClass = "toast-top-full-width";
-                            toastr.success("Réservation enregistré", "");
-                            $(".modal").modal("hide");
-                            $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
-                            $scope.submitInProgress = false;
+                        //TODO: save user shipping point and product shipping
+                        console.log($scope.borrowerShippingPoints);
+                        var selectedPoint = {};
+                        angular.forEach($scope.borrowerShippingPoints, function (value, key) {
+                            if($scope.selectedPointId == value.site_id) {
+                                selectedPoint = value;
+                            }
                         });
+                        if (!!selectedPoint) {
+                            selectedPoint.type = 2;
+                            selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
+                            console.log(selectedPoint);
+
+
+                            PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (shippingPoint) {
+                                console.log($scope.productShippingPoint.id);
+                                var shipping = {
+                                    price: selectedPoint.price,
+                                    booking:  Endpoints.api_url + "bookings/" + booking.uuid + "/",
+                                    departure_point: Endpoints.api_url + "productshippingpoints/" + $scope.productShippingPoint.id + "/",
+                                    arrival_point: Endpoints.api_url + "patronshippingpoints/" + shippingPoint.id + "/"
+                                };
+                                ShippingsService.saveShipping(shipping).$promise.then(function (result) {
+                                    console.log(result);
+                                    $scope.payForBooking(booking, paymentInfo);
+                                });
+                            });
+                        } else {
+                            $scope.payForBooking(booking, paymentInfo);
+                        }
                     }
                 );
+            };
+
+            $scope.payForBooking = function (booking, paymentInfo) {
+                BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                    toastr.options.positionClass = "toast-top-full-width";
+                    toastr.success("Réservation enregistré", "");
+                    $(".modal").modal("hide");
+                    $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
+                    $scope.submitInProgress = false;
+                });
             };
 
             $scope.clearCreditCard = function () {
@@ -319,6 +363,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.loadMessageThread();
                 } else if (args.name === "booking") {
                     $scope.loadCreditCards();
+                    $scope.loadShippingPoints();
                 } else if (args.name === "phone") {
                     $scope.loadPhoneDetails();
                 }
@@ -374,6 +419,21 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         }
                     });
                 }
+            };
+
+            $scope.loadShippingPoints = function () {
+                $scope.currentUserPromise.then(function (currentUser) {
+                    ProductShippingPointsService.getByProduct($scope.productId).then(function(data) {
+                        //Show shipping choice only if there are existing product shipping points
+                        if (!!data.results && data.results.length > 0) {
+                            $scope.productShippingPoint = data.results[0];
+                            ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
+                                console.log(result);
+                                $scope.borrowerShippingPoints = result;
+                            });
+                        }
+                    });
+                });
             };
 
             $scope.isAuto = function () {

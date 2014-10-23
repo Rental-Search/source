@@ -60,8 +60,7 @@ class ProductShippingPointViewSet(viewsets.NonEditableModelViewSet):
     """
     serializer_class = serializers.ProductShippingPointSerializer
     queryset = models.ProductShippingPoint.objects.select_related('product')
-    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
-    owner_field = 'product__owner'
+    filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('product', )
 
 

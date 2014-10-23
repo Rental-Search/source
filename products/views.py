@@ -979,8 +979,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                 lat, lng = helpers.get_position(params['address'])
             shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
-                if shipping_point.get('site_id', None):
-                    pass
+                if 'site_id' in shipping_point:
+                    shipping_point.update({'price': 3.99})
                     # price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
                     # token = price.pop('token')
                     #cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)

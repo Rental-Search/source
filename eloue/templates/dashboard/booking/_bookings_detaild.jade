@@ -114,20 +114,20 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     a(href="", ng-click="cancelBooking()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')").btn-inline.text-white.bg-gray-light-hover Annuler
                     a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident' || bookingDetails.state=='pending'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
-        .block-with-thumbnail.notification.indent-md-b
+        .block-with-thumbnail.notification.indent-md-b(ng-show="!!shipping")
           .col-thumbnail
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
           .col-exposition.text-action
             h3: b.indent-xs-b Relais de départ
             ul.text-uppercase.indent-md-b
-              li KAHLOUCHE PRESSE
-              li 79 BOULEVARD BEAUMARCHAIS
-              li 75003 PARIS
+              li {{shipping.departure_point.name}}
+              li {{shipping.departure_point.address}}
+              li {{shipping.departure_point.zipcode}} {{shipping.departure_point.city}}
             h3: b.indent-xs-b Relais de d’arrivée
             ul.text-uppercase
-              li KAHLOUCHE PRESSE
-              li 79 BOULEVARD BEAUMARCHAIS
-              li 75003 PARIS
+              li {{shipping.arrival_point.name}}
+              li {{shipping.arrival_point.address}}
+              li {{shipping.arrival_point.zipcode}} {{shipping.arrival_point.city}}
             hr
             .text-center: a(href="#").text-success.text-underline-hover Télécharger les étiquettes
 

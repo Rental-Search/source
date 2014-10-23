@@ -31,14 +31,27 @@ class PudoSerializer(serializers.SimpleSerializer):
     address = CharField()
     distance = DecimalField()
     is_open = BooleanField()
-    latitude = DecimalField()
-    longitude = DecimalField()
+    lat = DecimalField()
+    lng = DecimalField()
+    site_id = IntegerField()
+    pudo_id = CharField()
+    price = DecimalField(max_digits=10, decimal_places=2, required=False)
     opening_dates = PudoOpeningDateSerializer(many=True)
 
 
 class ShippingPointSerializer(serializers.GeoModelSerializer):
     lat = DecimalField(required=True, write_only=True)
     lng = DecimalField(required=True, write_only=True)
+
+    def to_native(self, obj):
+        result = super(ShippingPointSerializer, self).to_native(obj)
+        if obj:  # for working of REST framework GUI
+            shipping_point = helpers.get_shipping_point(obj.site_id, obj.position.x, obj.position.y, obj.type)
+            if shipping_point:
+                extra_info = PudoSerializer(data=shipping_point)
+                if extra_info.is_valid():
+                    result.update(extra_info.data)
+        return result
 
     def save_object(self, obj, **kwargs):
         obj.position = Point((obj.lat, obj.lng))
@@ -64,7 +77,18 @@ class ProductShippingPointSerializer(ShippingPointSerializer):
         fields = ShippingPointSerializer.Meta.fields + ('product',)
 
 
+class NestedPatronShippingPointSerializer(serializers.NestedModelSerializerMixin, PatronShippingPointSerializer):
+    pass
+
+
+class NestedProductShippingPointSerializer(serializers.NestedModelSerializerMixin, ProductShippingPointSerializer):
+    pass
+
+
 class ShippingSerializer(serializers.ModelSerializer):
+
+    departure_point = NestedProductShippingPointSerializer()
+    arrival_point = NestedPatronShippingPointSerializer()
 
     def from_native(self, data, files):
         instance = super(ShippingSerializer, self).from_native(data, files)
@@ -119,7 +143,12 @@ class ShippingSerializer(serializers.ModelSerializer):
             }
             token = cache.get(
                 helpers.build_cache_id(instance.booking.product, instance.booking.borrower, instance.arrival_point.site_id))
-            shipping_params = helpers.create_shipping(token, order_details)
+            # shipping_params = helpers.create_shipping(token, order_details)
+            shipping_params = {
+                'order_number': 'fake order number',
+                'shuttle_code': 'fake shuttle code',
+                'shuttle_document_url': 'fake shuttle document url'
+            }
             instance.order_number = shipping_params['order_number']
             instance.shuttle_code = shipping_params['shuttle_code']
             instance.shuttle_document_url = shipping_params['shuttle_document_url']
