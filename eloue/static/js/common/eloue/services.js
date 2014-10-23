@@ -1217,8 +1217,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("ShippingPointsService", [
             "ShippingPoints",
+            "Products",
             "Endpoints",
-            function (ShippingPoints, Endpoints) {
+            function (ShippingPoints, Products, Endpoints) {
                 var shippingPointsService = {};
 
                 shippingPointsService.searchDepartureShippingPointsByAddress = function(address) {
@@ -1231,6 +1232,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 shippingPointsService.searchArrivalShippingPointsByCoordinates = function(lat, lng) {
                     return shippingPointsService.searchShippingPointsByCoordinates(lat, lng, 2);
+                };
+
+                shippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct = function(lat, lng, productId) {
+                    return Products.getShippingPoints({id: productId, lat: lat, lng: lng, search_type: 2, _cache: new Date().getTime()}).$promise;
                 };
 
                 shippingPointsService.searchShippingPointsByCoordinates = function(lat, lng, searchType) {
@@ -1256,6 +1261,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 productShippingPointsService.saveShippingPoint = function (shippingPoint) {
                     return ProductShippingPoints.save(shippingPoint);
+                };
+
+                productShippingPointsService.deleteShippingPoint = function (shippingPointId) {
+                    return ProductShippingPoints.delete({id: shippingPointId});
                 };
 
                 productShippingPointsService.getByProduct = function (productId) {

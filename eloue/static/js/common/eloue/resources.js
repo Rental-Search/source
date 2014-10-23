@@ -73,7 +73,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
         return $resource(Endpoints.api_url + "products/:id/?", {},
             {
                 "update": { method: "PUT" },
-                "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats/?" }
+                "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats/?" },
+                "getShippingPoints": { method: "GET", url: Endpoints.api_url + "products/:id/shipping_points/?" }
             });
     }]);
 
@@ -175,7 +176,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing shipping points.
      */
     EloueCommon.factory("ShippingPoints", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "shippingpoints/:id/?");
+        return $resource(Endpoints.api_url + "shippingpoints/:id/?", {},
+            {
+                "get": {method: "GET", isArray: true}
+            });
     }]);
 
     /**
