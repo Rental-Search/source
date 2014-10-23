@@ -21,8 +21,15 @@ from django import forms
 
 
 class GenerateOnDownload(object):
-    def on_content_required(self, spec):
-        spec.generate()
+    def on_content_required(self, file_obj):
+        file_obj.generate()
+
+class GenerateOnAnyAccess(GenerateOnDownload):
+    def on_existence_required(self, file_obj):
+        file_obj.generate()
+
+    def on_source_saved(self, file_obj):
+        file_obj.generate()
 
 
 def new_message_email(sender, instance, signal,
