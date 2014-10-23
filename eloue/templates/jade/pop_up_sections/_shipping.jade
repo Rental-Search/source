@@ -4,7 +4,7 @@ h2 Livraison
     .zebra.indent-xs-t-
         {% verbatim %}
         label(ng-repeat="point in borrowerShippingPoints").zebra-row
-            input(type="radio", name="pickup", ng-model="point.selected")
+            input(type="radio", name="pickup", value="{{point.site_id}}", ng-model="point.selected", ng-change="pointSelected('{{point.site_id}}')")
             .zebra-row-wrapper
                 .zebra-col
                     span.radio-indicator
@@ -16,5 +16,5 @@ h2 Livraison
                     | {{point.address}}
                     br
                     | {{point.zipcode}} {{point.city}}
-                .zebra-col: p.indent-r-md +2,50&euro;
+                .zebra-col: p.indent-r-md +{{point.price}}&euro;
         {% endverbatim %}
