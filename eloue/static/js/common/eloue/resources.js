@@ -74,7 +74,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
             {
                 "update": { method: "PUT" },
                 "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats/?" },
-                "getShippingPoints": { method: "GET", url: Endpoints.api_url + "products/:id/shipping_points/?" }
+                "getShippingPoints": { method: "GET", url: Endpoints.api_url + "products/:id/shipping_points/?", isArray: true }
             });
     }]);
 

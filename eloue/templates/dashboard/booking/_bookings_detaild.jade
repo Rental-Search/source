@@ -114,7 +114,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     a(href="", ng-click="cancelBooking()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')").btn-inline.text-white.bg-gray-light-hover Annuler
                     a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident' || bookingDetails.state=='pending'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
-        .block-with-thumbnail.notification.indent-md-b
+        .block-with-thumbnail.notification.indent-md-b(ng-show="!!shipping")
           .col-thumbnail
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
           .col-exposition.text-action

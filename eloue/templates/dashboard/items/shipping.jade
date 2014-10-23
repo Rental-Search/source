@@ -92,25 +92,25 @@ block details
               //each title, info in data
               tr
                   td Lundi
-                  td Fermé
+                  td {{schedule['Monday'] ? schedule['Monday']: 'Fermé'}}
               tr
                   td Mardi
-                  td Fermé
+                  td {{schedule['Tuesday'] ? schedule['Tuesday']: 'Fermé'}}
               tr
                   td Mercredi
-                  td Fermé
+                  td {{schedule['Wednesday'] ? schedule['Wednesday']: 'Fermé'}}
               tr
                   td Jeudi
-                  td Fermé
+                  td {{schedule['Thursday'] ? schedule['Thursday']: 'Fermé'}}
               tr
                   td Vendredi
-                  td Fermé
+                  td {{schedule['Friday'] ? schedule['Friday']: 'Fermé'}}
               tr
                   td Samedi
-                  td Fermé
+                  td {{schedule['Saturday'] ? schedule['Saturday']: 'Fermé'}}
               tr
                   td Dimanche
-                  td Fermé
+                  td {{schedule['Sunday'] ? schedule['Sunday']: 'Fermé'}}
             {% endverbatim %}
             .indent-sm-t.clearfix
               .pull-left.indent-sm-t: a(href="", ng-click="removeMapPoint()").text-gray-light.text-underline-hover Supprimer

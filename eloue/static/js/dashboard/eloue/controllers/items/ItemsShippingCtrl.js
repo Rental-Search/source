@@ -11,7 +11,8 @@ define(["angular", "eloue/app"], function (angular) {
         "Endpoints",
         "ProductShippingPointsService",
         "ShippingPointsService",
-        function ($scope, $stateParams, Endpoints, ProductShippingPointsService, ShippingPointsService) {
+        "UtilsService",
+        function ($scope, $stateParams, Endpoints, ProductShippingPointsService, ShippingPointsService, UtilsService) {
         	$scope.markListItemAsSelected("item-tab-", "shipping");
         	$scope.initCustomScrollbars();
             $scope.addressQuery = "";
@@ -24,14 +25,25 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.productShippingPoint = {};
 
             ProductShippingPointsService.getByProduct($stateParams.id).then(function(data) {
-                console.log(data);
                 if (!!data.results && data.results.length > 0) {
                     $scope.productShippingPoint = data.results[0];
+                    $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
                     $scope.showPointDetails = true;
                 } else {
                     $scope.showWellcome = true;
                 }
             });
+
+            $scope.fillInSchedule = function(openingDates) {
+                console.log(openingDates);
+                $scope.schedule = {};
+                angular.forEach(openingDates, function (value, key) {
+                    $scope.schedule[value.day_of_week] = UtilsService.formatDate(value.morning_opening_time, "HH:mm") + " - "
+                        + UtilsService.formatDate(value.morning_closing_time, "HH:mm") + ", "
+                        + UtilsService.formatDate(value.afternoon_opening_time, "HH:mm") + " - "
+                        + UtilsService.formatDate(value.afternoon_closing_time, "HH:mm")
+                });
+            };
 
             $scope.showMapPointList = function() {
                 $scope.showWellcome = false;
@@ -65,9 +77,7 @@ define(["angular", "eloue/app"], function (angular) {
                 });
                 selectedPoint.product = $scope.productsBaseUrl + $stateParams.id + "/";
                 selectedPoint.type = 1;
-                console.log(selectedPoint);
                 ProductShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function(result) {
-                    console.log(result);
                     $scope.productShippingPoint = result;
                     $scope.submitInProgress = false;
                     $scope.showMapPointDetails();
@@ -81,6 +91,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.removeMapPoint = function() {
                 ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function(result) {
                     $scope.productShippingPoint = {};
+                    $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
                     $scope.showMapPointList();
                 });
             };
