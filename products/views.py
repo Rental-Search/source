@@ -728,7 +728,7 @@ from products.forms import SuggestCategoryViewForm
 
 class NavbarCategoryMixin(object):
     categories = [
-        253, 335, 35, 390, 126, 418, 2700, 495, # first line / nav bar
+        35, 390, 253, 335, 418, 2700, 495, 126, # first line / nav bar
         323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
     ]
 
