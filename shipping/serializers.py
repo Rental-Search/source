@@ -132,7 +132,12 @@ class ShippingSerializer(serializers.ModelSerializer):
             }
             token = cache.get(
                 helpers.build_cache_id(instance.booking.product, instance.booking.borrower, instance.arrival_point.site_id))
-            shipping_params = helpers.create_shipping(token, order_details)
+            # shipping_params = helpers.create_shipping(token, order_details)
+            shipping_params = {
+                'order_number': 'fake order number',
+                'shuttle_code': 'fake shuttle code',
+                'shuttle_document_url': 'fake shuttle document url'
+            }
             instance.order_number = shipping_params['order_number']
             instance.shuttle_code = shipping_params['shuttle_code']
             instance.shuttle_document_url = shipping_params['shuttle_document_url']
