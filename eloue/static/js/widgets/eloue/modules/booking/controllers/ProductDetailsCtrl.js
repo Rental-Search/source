@@ -38,6 +38,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 subscriber_reference: ""
             };
             $scope.newCreditCard = true;
+            $scope.addShipping = false;
             $scope.borrowerShippingPoints = [];
             $scope.submitInProgress = false;
             $scope.showSaveCard = true;
@@ -286,7 +287,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                                 selectedPoint = value;
                             }
                         });
-                        if (!!selectedPoint) {
+                        if (!!selectedPoint && !!selectedPoint.site_id) {
                             selectedPoint.type = 2;
                             selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
                             console.log(selectedPoint);
@@ -426,6 +427,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     ProductShippingPointsService.getByProduct($scope.productId).then(function(data) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!data.results && data.results.length > 0) {
+                            $scope.shippingAllowed = true;
                             $scope.productShippingPoint = data.results[0];
                             ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
                                 console.log(result);

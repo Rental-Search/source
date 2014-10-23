@@ -12,10 +12,10 @@ h2 Vos informations personnelles
 .row
     .col-sm-6: input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
     .col-sm-6: input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
-.row: .col-xs-12
+.row(ng-show="!!productShippingPoint"): .col-xs-12
     .checkbox
         label
-            input(type="checkbox", checked)#particular
+            input(type="checkbox", ng-model="addShipping")#particular
             span.flaticon.stroke.checkmark-1
         b.text-black Option livraison, Recevez cet objet  dans un point relais Pickup à proximiter de ches vous
 .row(ng-show="isAuto()")
