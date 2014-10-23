@@ -21,8 +21,8 @@ class ProductShippingPoint(ShippingPoint):
 
 class Shipping(models.Model):
     booking = models.OneToOneField('rent.Booking', related_name='shipping')
-    departure_point = models.ForeignKey(ShippingPoint, on_delete=PROTECT, related_name='+')
-    arrival_point = models.ForeignKey(ShippingPoint, on_delete=PROTECT, related_name='+')
+    departure_point = models.ForeignKey(ProductShippingPoint, on_delete=PROTECT, related_name='+')
+    arrival_point = models.ForeignKey(PatronShippingPoint, on_delete=PROTECT, related_name='+')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     order_number = models.CharField(max_length=128, default='')
     shuttle_code = models.CharField(max_length=128, default='')
