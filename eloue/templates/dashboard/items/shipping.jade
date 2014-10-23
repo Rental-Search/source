@@ -47,27 +47,30 @@ block details
     h2 La livraison avec la
       span.sprite-pickup-logo-full.indent-sm-l
     form(action="choice_point")
+        fieldset(ng-disabled="submitInProgress")
           .pickup-input-wrapper
-            input#nickname.form-control(type="text", name="address", placeholder="", ng-model="addressQuery", ng-blur="searchShippingPoints()")
+            input#nickname.form-control(type="text", name="address", placeholder="", ng-model="addressQuery", ng-keyup="searchShippingPoints()")
             span.sprite-pickup-logo-short-grey
-          h3 Sélectionner un point relais ci-dessous&nbsp;:
+          h3(ng-show="!!shippingPoints && shippingPoints.length > 0") Sélectionner un point relais ci-dessous&nbsp;:
 
-          .zebra.indent-md-v
-              label.zebra-row
-                input(type="radio", name="pickup")
+          .zebra.indent-md-v(ng-show="!!shippingPoints && shippingPoints.length > 0")
+              {% verbatim %}
+              label(ng-repeat="point in shippingPoints").zebra-row
+                input(type="radio", name="pickup", value="{{point.site_id}}", ng-model="point.selected", ng-change="pointSelected('{{point.site_id}}')")
                 .zebra-row-wrapper
                   .zebra-col
                     span.radio-indicator
                   .zebra-col
                     span.sprite-pickup-logo
                   .zebra-col.main-cell
-                    | KAHLOUCHE PRESSE
+                    | {{point.name}}
                     br
-                    | 79 BOULEVARD BEAUMARCHAIS
+                    | {{point.address}}
                     br
-                    | 75003 PARIS
+                    | {{point.zipcode}} {{point.city}}
+              {% endverbatim %}
 
-        .text-center: a(href="", ng-click="saveMapPoint()").btn.btn-inline.bg-success-hover.text-white Enregistrer
+        .text-center(ng-show="!!shippingPoints && shippingPoints.length > 0"): a(href="", ng-click="saveMapPoint()", ng-disabled="!selectedPointId").btn.btn-inline.bg-success-hover.text-white Enregistrer
 
 
   .section-content(ng-show="showPointDetails")
@@ -78,17 +81,37 @@ block details
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
           .col-exposition.text-action
             h3: b.indent-xs-b Relais de départ
+            {% verbatim %}
             ul.text-uppercase.indent-md-b
-              li KAHLOUCHE PRESSE
-              li 79 BOULEVARD BEAUMARCHAIS
-              li 75003 PARIS
+              li {{productShippingPoint.name}}
+              li {{productShippingPoint.address}}
+              li {{productShippingPointzipcode}} {{productShippingPoint.city}}
 
             table.calendar.bd-wrap
-              -var data = [["Lundi", "08:15 - 14:00, 15:30 - 20:30"], ["Mardi", "08:15 - 14:00, 15:30 - 20:30"], ["Mercredi", "08:15 - 14:00, 15:30 - 20:30"], ["Jeudi", "08:15 - 14:00, 15:30 - 20:30"], ["Vendredi", "08:15 - 14:00, 15:30 - 20:30"], ["Samedi", "08:15 - 14:00, 15:30 - 20:30"], ["Dimanche", "Fermé"]]
-              each title, info in data
-                tr
-                  td {{ title }}
-                  td {{ info }}
+              //-var data = [["Lundi", "08:15 - 14:00, 15:30 - 20:30"], ["Mardi", "08:15 - 14:00, 15:30 - 20:30"], ["Mercredi", "08:15 - 14:00, 15:30 - 20:30"], ["Jeudi", "08:15 - 14:00, 15:30 - 20:30"], ["Vendredi", "08:15 - 14:00, 15:30 - 20:30"], ["Samedi", "08:15 - 14:00, 15:30 - 20:30"], ["Dimanche", "Fermé"]]
+              //each title, info in data
+              tr
+                  td Lundi
+                  td Fermé
+              tr
+                  td Mardi
+                  td Fermé
+              tr
+                  td Mercredi
+                  td Fermé
+              tr
+                  td Jeudi
+                  td Fermé
+              tr
+                  td Vendredi
+                  td Fermé
+              tr
+                  td Samedi
+                  td Fermé
+              tr
+                  td Dimanche
+                  td Fermé
+            {% endverbatim %}
             .indent-sm-t.clearfix
               .pull-left.indent-sm-t: a(href="", ng-click="removeMapPoint()").text-gray-light.text-underline-hover Supprimer
               .pull-right: a(href="", ng-click="showMapPointList()").btn-inline.btn-default.text-success Modifier le point relais

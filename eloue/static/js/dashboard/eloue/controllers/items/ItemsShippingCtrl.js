@@ -8,9 +8,10 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("ItemsShippingCtrl", [
         "$scope",
         "$stateParams",
+        "Endpoints",
         "ProductShippingPointsService",
         "ShippingPointsService",
-        function ($scope, $stateParams, ProductShippingPointsService, ShippingPointsService) {
+        function ($scope, $stateParams, Endpoints, ProductShippingPointsService, ShippingPointsService) {
         	$scope.markListItemAsSelected("item-tab-", "shipping");
         	$scope.initCustomScrollbars();
             $scope.addressQuery = "";
@@ -18,6 +19,9 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.showWellcome = false;
             $scope.showPointList = false;
             $scope.showPointDetails = false;
+            $scope.selectedPointId = "";
+            $scope.productsBaseUrl = Endpoints.api_url + "products/";
+            $scope.productShippingPoint = {};
 
             ProductShippingPointsService.getByProduct($stateParams.id).then(function(data) {
                 console.log(data);
@@ -42,20 +46,51 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.saveMapPoint = function() {
-                //TODO: save selected
-                $scope.showMapPointDetails();
+                $scope.submitInProgress = true;
+                if (!!$scope.productShippingPoint && !!$scope.productShippingPoint.id) {
+                    ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function(result) {
+                        $scope.savePoint();
+                    });
+                } else {
+                    $scope.savePoint();
+                }
+            };
+
+            $scope.savePoint = function() {
+                var selectedPoint = {};
+                angular.forEach($scope.shippingPoints, function (value, key) {
+                    if($scope.selectedPointId == value.site_id) {
+                        selectedPoint = value;
+                    }
+                });
+                selectedPoint.product = $scope.productsBaseUrl + $stateParams.id + "/";
+                selectedPoint.type = 1;
+                console.log(selectedPoint);
+                ProductShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function(result) {
+                    console.log(result);
+                    $scope.productShippingPoint = result;
+                    $scope.submitInProgress = false;
+                    $scope.showMapPointDetails();
+                });
+            };
+
+            $scope.pointSelected = function(pointId) {
+                $scope.selectedPointId = pointId;
             };
 
             $scope.removeMapPoint = function() {
-                //TODO: remove point
-                $scope.showMapPointList();
+                ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function(result) {
+                    $scope.productShippingPoint = {};
+                    $scope.showMapPointList();
+                });
             };
 
             $scope.searchShippingPoints = function() {
                 if (!!$scope.addressQuery && $scope.addressQuery.length > 3) {
+                    $scope.submitInProgress = true;
                     ShippingPointsService.searchDepartureShippingPointsByAddress($scope.addressQuery).then(function(data) {
-                        console.log(data);
-                        $scope.shippingPoints = data.results;
+                        $scope.shippingPoints = data;
+                        $scope.submitInProgress = false;
                     });
                 }
             }

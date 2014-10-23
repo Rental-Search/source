@@ -2,17 +2,19 @@ h2 Livraison
 .indent-b-md
     p.text-black Sélectionner un point relais ci-dessous :
     .zebra.indent-xs-t-
-        label.zebra-row
-            input(type="radio", name="pickup")
+        {% verbatim %}
+        label(ng-repeat="point in borrowerShippingPoints").zebra-row
+            input(type="radio", name="pickup", ng-model="point.selected")
             .zebra-row-wrapper
                 .zebra-col
                     span.radio-indicator
                 .zebra-col
                     span.sprite-pickup-logo
                 .zebra-col.main-cell: p
-                    | KAHLOUCHE PRESSE
+                    | {{point.name}}
                     br
-                    | 79 BOULEVARD BEAUMARCHAIS
+                    | {{point.address}}
                     br
-                    | 75003 PARIS
+                    | {{point.zipcode}} {{point.city}}
                 .zebra-col: p.indent-r-md +2,50&euro;
+        {% endverbatim %}
