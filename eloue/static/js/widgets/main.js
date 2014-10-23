@@ -360,7 +360,7 @@ require([
         function load_google_maps() {
             var script = document.createElement("script");
             script.type = "text/javascript";
-            script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
+            script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
             document.body.appendChild(script);
         }
 

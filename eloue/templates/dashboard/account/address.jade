@@ -7,7 +7,7 @@ block sections
           a(ui-sref="account.addresses.detail({id: address.id})").tab-vertical(class="{{address.id === defaultAddressId ? 'default' : ''}}")
             .col-thumbnail
               .thumbnail
-                img(data-ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{address.position.coordinates[0]}},{{address.position.coordinates[1]}}&zoom=14&size=70x70&language=fr", width="70")
+                img(data-ng-src="https://maps.googleapis.com/maps/api/staticmap?center={{address.position.coordinates[0]}},{{address.position.coordinates[1]}}&zoom=14&size=70x70&language=fr", width="70")
             .col-exposition
               h3.indent-xs-b
                 | {{address.street}}
