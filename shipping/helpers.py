@@ -27,8 +27,8 @@ class FakeShippingPoint(object):
         self.CityName = 'Test'
         self.AddressLine = 'Test'
         self.DistanceFromSearch = 500.5
-        self.Latitude = 123.456
-        self.Longitude = 123.456
+        self.Latitude = 45.45
+        self.Longitude = 22.22
         self.IsOpen = True
         self.OpeningDates = [
             FakeOpeningDate()
