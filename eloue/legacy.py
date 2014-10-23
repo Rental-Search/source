@@ -20,21 +20,40 @@ from django.conf import settings
 from django import forms
 
 
+class GenerateOptimistic(object):
+    """
+    A strategy that acts immediately when the source file changes and assumes
+    that the cache files will not be removed (i.e. it doesn't ensure the
+    cache file exists when it's accessed).
+    """
+    def on_source_saved(self, file_obj):
+        try:
+            file_obj.generate()
+        except:
+            pass
+
+    def should_verify_existence(self, file_obj):
+        return False
+
+class GenerateOnUpload(object):
+    def on_source_saved(self, file_obj):
+        try:
+            file_obj.generate()
+        except:
+            pass
+
 class GenerateOnDownload(object):
     def on_content_required(self, file_obj):
         try:
             file_obj.generate()
-        except IOError:
+        except:
             pass
 
-class GenerateOnAnyAccess(GenerateOnDownload):
+class GenerateOnContent(GenerateOnDownload, GenerateOnUpload):
+    pass
+
+class GenerateOnAnyAccess(GenerateOnContent):
     def on_existence_required(self, file_obj):
-        try:
-            file_obj.generate()
-        except IOError:
-            pass
-
-    def on_source_saved(self, file_obj):
         try:
             file_obj.generate()
         except IOError:
@@ -358,3 +377,20 @@ class FormWizard(object):
         data.
         """
         raise NotImplementedError("Your %s class has not defined a done() method, which is required." % self.__class__.__name__)
+
+
+def generate_spec(spec):
+    try:
+        if spec:
+            spec.generate()
+    except:
+        import logging
+        logging.error('image generation failed: %s' % spec)
+
+def generate_patron_images(patron):
+    for spec in [getattr(patron, k) for k in ('thumbnail', 'profil', 'display', 'product_page')]:
+        generate_spec(spec)
+
+def generate_picture_images(picture):
+    for spec in [getattr(picture, k) for k in ('thumbnail', 'profile', 'home', 'display')]:
+        generate_spec(spec)

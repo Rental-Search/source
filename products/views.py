@@ -753,11 +753,27 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
             where=['"products_product"."address_id" = "accounts_address"."id"'],
             select={'city': 'lower(trim("accounts_address"."city"))'}
         ).values('city').annotate(Count('id')).order_by('-id__count')
+        product_list = last_added(product_search, self.location, limit=8)
+        comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from eloue.legacy import generate_patron_images, generate_picture_images
+        patron_set = set()
+        for elem in product_list:
+            patron_set.add(elem.object.owner)
+            for picture in elem.object.pictures.all():
+                generate_picture_images(picture)
+        for comment in comment_list:
+            patron_set.add(comment.booking.owner)
+            patron_set.add(comment.booking.borrower)
+        for patron in patron_set:
+            generate_patron_images(patron)
+
         return {
             'cities_list': product_stats,
             'total_products': Product.on_site.only('id').count(),
-            'product_list': last_added(product_search, self.location, limit=8),
-            'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at'),
+            'product_list': product_list,
+            'comment_list': comment_list,
         }
 
     def get_context_data(self, **kwargs):
@@ -795,6 +811,21 @@ class ProductListView(ProductList):
                 'price_min': min(prices),
                 'price_max': max(prices),
             })
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from eloue.legacy import generate_patron_images, generate_picture_images
+        patron_set = set()
+        if context.get('is_paginated', False):
+            product_list = context['page_obj'].object_list
+        else:
+            product_list = context['product_list']
+        for elem in product_list:
+            patron_set.add(elem.object.owner)
+            for picture in elem.object.pictures.all():
+                generate_picture_images(picture)
+        for patron in patron_set:
+            generate_patron_images(patron)
+
         return context
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
@@ -815,11 +846,29 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         product = self.object.object
         product_type = product.name
         comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
+        product_list = self.sqs.more_like_this(product)[:5]
+        product_comment_list = comment_qs.filter(booking__product=product)
+        owner_comment_list = comment_qs.filter(booking__owner=product.owner)
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from itertools import chain
+        from eloue.legacy import generate_patron_images, generate_picture_images
+        patron_set = set()
+        for elem in chain(product_list, [self.object]):
+            patron_set.add(elem.object.owner)
+            for picture in elem.object.pictures.all():
+                generate_picture_images(picture)
+        for comment in chain(product_comment_list, owner_comment_list):
+            patron_set.add(comment.booking.owner)
+            patron_set.add(comment.booking.borrower)
+        for patron in patron_set:
+            generate_patron_images(patron)
+
         context = {
             'properties': product.properties.select_related('property'),
-            'product_list': self.sqs.more_like_this(product)[:5],
-            'product_comments': comment_qs.filter(booking__product=product),
-            'owner_comments': comment_qs.filter(booking__owner=product.owner),
+            'product_list': product_list,
+            'product_comments': product_comment_list,
+            'owner_comments': owner_comment_list,
             'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
             'product_type': product_type,
             'product_object': getattr(product, product_type) if product_type != 'product' else product,
