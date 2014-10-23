@@ -154,7 +154,7 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             function loadGoogleMaps() {
                 var script = document.createElement("script");
                 script.type = "text/javascript";
-                script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
+                script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
                 document.body.appendChild(script);
             }
             loadGoogleMaps();

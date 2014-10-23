@@ -6,7 +6,7 @@ import calendar
 
 from django.conf import settings
 from django.template import Library, Node
-from django.template.defaultfilters import stringfilter
+from django.template.defaultfilters import stringfilter, floatformat
 from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -228,6 +228,8 @@ def do_monthcalendar(parser, token):
 
 @register.filter(name='price')
 def price_filter(value, ending=''):
-    res = '%s%s' % (value, ending) if value else _('sur devis')
+    if not value:
+        return _('sur devis')
+    res = '%s%s' % (floatformat(value, -2), ending)
     return mark_safe(res)
 price_filter.is_safe = True

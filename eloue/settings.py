@@ -264,7 +264,7 @@ STATICFILES_FINDERS = (
 
 #imagekit configuration
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
-IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic' # 'eloue.legacy.GenerateOnDownload'
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOptimistic' # 'imagekit.cachefiles.strategies.Optimistic'
 
 #pipeline configuration
 PIPELINE_ENABLED = env('PIPELINE', not DEBUG)
@@ -568,12 +568,8 @@ HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 
 # Queue configuration
-if DEBUG:
-    QUEUE_BACKEND = 'dummy'
-else:
-    QUEUE_BACKEND = 'eloue.redisd_backend'
-QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'redis://localhost:6379')
-QUEUE_REDIS_CONNECTION_PASSWORD = env('QUEUE_REDIS_CONNECTION_PASSWORD', None)
+QUEUE_BACKEND = env('QUEUE_BACKEND', 'dummy')
+QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = env('QUEUE_REDIS_DB', 1)
 
 

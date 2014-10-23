@@ -1,4 +1,5 @@
 -load compressed staticfiles
+
 doctype 5
 html(lang="fr")
   head
@@ -9,10 +10,10 @@ html(lang="fr")
       title e-loue
       meta(charset="UTF-8")
       meta(name="viewport", content="width=device-width, initial-scale=1.0")
-      link(rel="shortcut icon", href="#{STATIC_URL}img/favicon.ico")
+      link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
 
     block styles
-      link(rel="stylesheet",    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
+      link(rel="stylesheet", href="http{% if request.is_secure %}s{% endif %}://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
       {% compressed_css "extrastyles" %}
 
     block scripts
