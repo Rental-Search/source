@@ -1,6 +1,6 @@
 .container
-  ul.nav.nav-justified
-    -var insurances_pro = [["payment", "efficace", "Nous vous apportons de nouveaux clients. Vous augmentez vos revenus"], ["serenity", "rapide", "Nous ouvrons votre boutique et intégrons vos produits en moins de 2 semaines"], ["simplicity", "transparent", "Nous vous donnons accès à toutes les statistiques Google de votre boutique"], ["trust", "adaptable", "Vous pouvez modifier ou compléter votre bou8que en toute simplicité"]]
+  ul.nav.nav-justified.text-nowrap
+    -var insurances_pro = [["payment", "efficace", "Nous vous apportons<br>de nouveaux clients.<br>Vous augmentez vos revenus"], ["serenity", "rapide", "Nous ouvrons votre boutique<br>et intégrons vos produits<br>en moins de 2 semaines"], ["simplicity", "transparent", "Nous vous donnons accès<br>à toutes les statistiques<br>Google de votre boutique"], ["trust", "adaptable", "Vous pouvez modifier<br>ou compléter votre boutique<br>en toute simplicité"]]
     each style, title, text in insurances_pro
       li.divide
       li
@@ -11,4 +11,5 @@
           span.text-primary {{ title }}&nbsp;!
         .insurances-img.indent-t-md
           span(class="{{ style }}-black")
-        p {{ text }}
+        p
+          != text|safe
