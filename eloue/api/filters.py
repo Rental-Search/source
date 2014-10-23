@@ -21,16 +21,10 @@ class OrderingFilter(filters.OrderingFilter):
     def remove_invalid_fields(self, queryset, ordering, view):
         valid_fields = getattr(view, 'ordering_fields', self.ordering_fields)
 
-        serializer_class = getattr(view, 'serializer_class', None)
-        if serializer_class is None:
-            msg = ("Cannot use %s on a view which does not have either a "
-                   "'serializer_class' or 'ordering_fields' attribute.")
-            raise ImproperlyConfigured(msg % self.__class__.__name__)
-
         # preapre a dict to map resource attributes to model fields
         trans = {
             field_name: field.source or field_name
-            for field_name, field in serializer_class(context={'request': view.request}).fields.items()
+            for field_name, field in view.get_serializer().fields.items()
             if not getattr(field, 'write_only', False) and (valid_fields == '__all__' or (field.source or field_name) in valid_fields)
         }
 

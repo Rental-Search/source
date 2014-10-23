@@ -71,15 +71,18 @@ class PermissionMixin(object):
         if 'pk' in kwargs:
             instance = self.get_object()
             if not request.user.is_anonymous():
-                owner_field = getattr(self, 'owner_field', None)
-                if owner_field:
-                    if not isinstance(owner_field, basestring):
-                        owner_field = iter(owner_field).next()
-                    owner_field = getattr(instance, owner_field, None)
-                    if isinstance(owner_field, int):
-                        self.owner_mode = (owner_field == request.user.pk)
-                    else:
-                        self.owner_mode = (owner_field == request.user)
+                owner_fields = getattr(self, 'owner_field', None)
+                if owner_fields:
+                    if isinstance(owner_fields, basestring):
+                        owner_fields = [owner_fields]
+                    for owner_field in owner_fields:
+                        owner_field = getattr(instance, owner_field, None)
+                        if isinstance(owner_field, int):
+                            self.owner_mode = (owner_field == request.user.pk)
+                        else:
+                            self.owner_mode = (owner_field == request.user)
+                        if self.owner_mode:
+                            break
         elif action == 'create':
             self.owner_mode = True
 
@@ -168,4 +171,6 @@ class SetOwnerMixin(OwnerListMixin):
                 owner_field_attname = obj._meta.get_field(owner_field).attname
                 if not (user.is_staff and getattr(obj, owner_field_attname)):
                     setattr(obj, owner_field, user)
+                    if owner_field in getattr(obj, '_nested_forward_relations', {}):
+                        obj._nested_forward_relations[owner_field] = user
         return super(SetOwnerMixin, self).pre_save(obj)

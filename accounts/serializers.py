@@ -121,8 +121,8 @@ class UserSerializer(serializers.ModelSerializer):
             'id', 'email', 'company_name', 'username', 'first_name', 'last_name', 
             'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
-            'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url',
-            'date_joined', 'is_active', 'rib', 'password', 'is_subscribed', 'creditcard', 'comment_count'
+            'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url', 'average_note',
+            'date_joined', 'is_active', 'rib', 'password', 'is_subscribed', 'creditcard', 'comment_count',
         )
         public_fields = (
             'id', 'company_name', 'username', 'is_professional', 'slug',

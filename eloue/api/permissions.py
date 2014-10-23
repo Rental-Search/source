@@ -49,7 +49,7 @@ class UserPermissions(DefaultPermissions):
 class IsOwnerOrReadOnly(IsAuthenticatedOrReadOnly):
     def has_object_permission(self, request, view, obj):
         # allow editing for only owned products
-        owner_field = view.owner_field
-        if not isinstance(owner_field, basestring):
-            owner_field = iter(owner_field).next()
-        return request.method in SAFE_METHODS or request.user == getattr(obj, owner_field)
+        owner_fields = view.owner_field
+        if isinstance(owner_fields, basestring):
+            owner_fields = [owner_fields]
+        return request.method in SAFE_METHODS or any(request.user == getattr(obj, owner_field) for owner_field in owner_fields)

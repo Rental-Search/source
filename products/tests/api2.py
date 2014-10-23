@@ -607,7 +607,9 @@ class ProductTest(APITestCase):
         self.assertIn('Location', response)
         self.assertTrue(response['Location'].endswith(_location('product-detail', pk=response.data['id'])))
         # End user can't create record for other person. Owner is force set as current user.
-        self.assertTrue(response.data['owner'].endswith(_location('patron-detail', pk=1)))
+        product = self.model.objects.get(pk=response.data['id'])
+        self.assertEqual(product.owner_id, 1)
+        self.assertEqual(response.data['owner']['id'], 1)
         self.assertTrue(self.model.objects.filter(pk=response.data['id']).exists())
 
     def test_product_create_negative_amount(self):
