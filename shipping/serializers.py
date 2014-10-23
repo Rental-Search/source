@@ -77,7 +77,18 @@ class ProductShippingPointSerializer(ShippingPointSerializer):
         fields = ShippingPointSerializer.Meta.fields + ('product',)
 
 
+class NestedPatronShippingPointSerializer(serializers.NestedModelSerializerMixin, PatronShippingPointSerializer):
+    pass
+
+
+class NestedProductShippingPointSerializer(serializers.NestedModelSerializerMixin, ProductShippingPointSerializer):
+    pass
+
+
 class ShippingSerializer(serializers.ModelSerializer):
+
+    departure_point = NestedProductShippingPointSerializer()
+    arrival_point = NestedPatronShippingPointSerializer()
 
     def from_native(self, data, files):
         instance = super(ShippingSerializer, self).from_native(data, files)
