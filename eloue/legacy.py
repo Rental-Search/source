@@ -22,14 +22,23 @@ from django import forms
 
 class GenerateOnDownload(object):
     def on_content_required(self, file_obj):
-        file_obj.generate()
+        try:
+            file_obj.generate()
+        except IOError:
+            pass
 
 class GenerateOnAnyAccess(GenerateOnDownload):
     def on_existence_required(self, file_obj):
-        file_obj.generate()
+        try:
+            file_obj.generate()
+        except IOError:
+            pass
 
     def on_source_saved(self, file_obj):
-        file_obj.generate()
+        try:
+            file_obj.generate()
+        except IOError:
+            pass
 
 
 def new_message_email(sender, instance, signal,
