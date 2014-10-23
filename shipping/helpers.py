@@ -33,7 +33,6 @@ class FakeShippingPoint(object):
         self.OpeningDates = [
             FakeOpeningDate()
         ]
-        self.price = 3.9
 
 
 SHIPPING_POINT_TO_DICT_MAP = {
@@ -48,7 +47,6 @@ SHIPPING_POINT_TO_DICT_MAP = {
     'Latitude': 'latitude',
     'Longitude': 'longitude',
     'IsOpen': 'is_open',
-    'price': 'price',
 }
 
 OPENING_DATE_TO_DICT_MAP = {

@@ -35,6 +35,7 @@ class PudoSerializer(serializers.SimpleSerializer):
     longitude = DecimalField()
     site_id = IntegerField()
     pudo_id = CharField()
+    price = DecimalField(max_digits=10, decimal_places=2, required=False)
     opening_dates = PudoOpeningDateSerializer(many=True)
 
 
