@@ -828,6 +828,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             'product_type': product_type,
             'product_object': getattr(product, product_type) if product_type != 'product' else product,
             'insurance_available': settings.INSURANCE_AVAILABLE,
+            'shipping_enabled': True,
         }
         context.update(super(ProductDetailView, self).get_context_data(**kwargs))
         return context
@@ -980,11 +981,12 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
                 if 'site_id' in shipping_point:
-                    shipping_point.update({'price': 3.99})
-                    # price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
-                    # token = price.pop('token')
-                    #cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
-                    #shipping_point.update(price)
+                    price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
+                    token = price.pop('token')
+                    cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
+                    price['price'] *= 2
+                    shipping_point.update(price)
+                    # shipping_point.update({'price': 3.99})
             result = PudoSerializer(data=shipping_points, many=True)
             if result.is_valid():
                 return Response(result.data)
