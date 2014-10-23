@@ -33,6 +33,8 @@ class PudoSerializer(serializers.SimpleSerializer):
     is_open = BooleanField()
     latitude = DecimalField()
     longitude = DecimalField()
+    site_id = IntegerField()
+    pudo_id = CharField()
     opening_dates = PudoOpeningDateSerializer(many=True)
 
 

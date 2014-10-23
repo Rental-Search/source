@@ -20,6 +20,7 @@ class FakeShippingPoint(object):
 
     def __init__(self, identifier):
         self.SiteId = identifier
+        self.PudoId = 'identifier'
         self.Name = 'Test'
         self.Zipcode = '123456'
         self.CountryCode = 'Test'
@@ -37,6 +38,7 @@ class FakeShippingPoint(object):
 
 SHIPPING_POINT_TO_DICT_MAP = {
     'SiteId': 'site_id',
+    'PudoId': 'pudo_id',
     'Name': 'name',
     'Zipcode': 'zipcode',
     'CountryCode': 'country',
