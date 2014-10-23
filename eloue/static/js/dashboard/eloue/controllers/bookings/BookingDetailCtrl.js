@@ -84,7 +84,6 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                 }
 
                 ShippingsService.getByBooking($stateParams.uuid).then(function (shippingList) {
-                    console.log(shippingList);
                     if (!!shippingList.results) {
                         $scope.shipping = shippingList.results[0];
                     }

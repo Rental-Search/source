@@ -120,14 +120,14 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
           .col-exposition.text-action
             h3: b.indent-xs-b Relais de départ
             ul.text-uppercase.indent-md-b
-              li KAHLOUCHE PRESSE
-              li 79 BOULEVARD BEAUMARCHAIS
-              li 75003 PARIS
+              li {{shipping.departure_point.name}}
+              li {{shipping.departure_point.address}}
+              li {{shipping.departure_point.zipcode}} {{shipping.departure_point.city}}
             h3: b.indent-xs-b Relais de d’arrivée
             ul.text-uppercase
-              li KAHLOUCHE PRESSE
-              li 79 BOULEVARD BEAUMARCHAIS
-              li 75003 PARIS
+              li {{shipping.arrival_point.name}}
+              li {{shipping.arrival_point.address}}
+              li {{shipping.arrival_point.zipcode}} {{shipping.arrival_point.city}}
             hr
             .text-center: a(href="#").text-success.text-underline-hover Télécharger les étiquettes
 
