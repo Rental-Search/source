@@ -44,8 +44,8 @@ SHIPPING_POINT_TO_DICT_MAP = {
     'CityName': 'city',
     'AddressLine': 'address',
     'DistanceFromSearch': 'distance',
-    'Latitude': 'latitude',
-    'Longitude': 'longitude',
+    'Latitude': 'lat',
+    'Longitude': 'lng',
     'IsOpen': 'is_open',
 }
 
