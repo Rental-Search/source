@@ -45,11 +45,12 @@ class ShippingPointSerializer(serializers.GeoModelSerializer):
 
     def to_native(self, obj):
         result = super(ShippingPointSerializer, self).to_native(obj)
-        shipping_point = helpers.get_shipping_point(obj.site_id, obj.position.x, obj.position.y, obj.type)
-        if shipping_point:
-            extra_info = PudoSerializer(data=shipping_point)
-            if extra_info.is_valid():
-                result.update(extra_info.data)
+        if obj:  # for working of REST framework GUI
+            shipping_point = helpers.get_shipping_point(obj.site_id, obj.position.x, obj.position.y, obj.type)
+            if shipping_point:
+                extra_info = PudoSerializer(data=shipping_point)
+                if extra_info.is_valid():
+                    result.update(extra_info.data)
         return result
 
     def save_object(self, obj, **kwargs):
