@@ -148,12 +148,6 @@ class ShippingSerializer(serializers.ModelSerializer):
             if not token:
                 price = helpers.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
                 token = price.pop('token')
-                if price['price'] != instance.price:
-                    raise ServerException({
-                        'code': ServerErrorEnum.OTHER_ERROR[0],
-                        'description': ServerErrorEnum.OTHER_ERROR[1],
-                        'detail': _(u'Price expired')
-                    })
             shipping_params = helpers.create_shipping(token, order_details)
             # shipping_params = {
             #     'order_number': 'fake order number',
