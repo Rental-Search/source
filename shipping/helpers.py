@@ -1,5 +1,6 @@
 # coding=utf-8
 import datetime
+from decimal import Decimal
 from django.contrib.gis.geos.point import Point
 from eloue.geocoder import GoogleGeocoder
 from shipping.choises import SHIPPING_POINT_TYPE
@@ -117,7 +118,7 @@ def get_shipping_point(site_id, lat, lng, point_type):
 
 def get_shipping_price(departure_point_id, arrival_point_id):
     price = Navette().get_price_from_partner(departure_point_id, arrival_point_id)
-    return {'price': price.Amount, 'token': price.Token}
+    return {'price': Decimal(price.Amount).quantize(Decimal('0.00')), 'token': price.Token}
 
 
 def create_shipping(token, order_params):

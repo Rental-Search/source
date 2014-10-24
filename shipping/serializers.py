@@ -1,5 +1,6 @@
 # coding=utf-8
 import datetime
+from decimal import Decimal
 
 from django.utils.translation import gettext as _
 from django.contrib.gis.geos import Point
@@ -12,6 +13,7 @@ from accounts.choices import COUNTRY_CHOICES
 from eloue.api import serializers
 
 from . import helpers, models
+from eloue.api.exceptions import ServerException, ServerErrorEnum
 from rent.contract import first_or_empty
 
 
@@ -143,6 +145,15 @@ class ShippingSerializer(serializers.ModelSerializer):
             }
             token = cache.get(
                 helpers.build_cache_id(instance.booking.product, instance.booking.borrower, instance.arrival_point.site_id))
+            if not token:
+                price = helpers.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
+                token = price.pop('token')
+                if price['price'] != instance.price:
+                    raise ServerException({
+                        'code': ServerErrorEnum.OTHER_ERROR[0],
+                        'description': ServerErrorEnum.OTHER_ERROR[1],
+                        'detail': _(u'Price expired')
+                    })
             shipping_params = helpers.create_shipping(token, order_details)
             # shipping_params = {
             #     'order_number': 'fake order number',
