@@ -64,25 +64,32 @@ def build_cache_id(product, user, site_id):
 
 def shipping_point_to_dict(shipping_point):
     """Convert shipping point object to dict"""
-    #FIXME: Day of week not always present in response
+    #FIXME: Day of week not always present in response...
     opening_dates = []
     for opening_date in shipping_point.OpeningDates[0]:
         if hasattr(opening_date, 'DayOfWeek'):
             opening_dates.append(opening_date_to_dict(opening_date))
 
-    result = {
-        dict_key: getattr(shipping_point, field_name) for field_name, dict_key in SHIPPING_POINT_TO_DICT_MAP.items()
-    }
+    result = {}
+    for field_name, dict_key in SHIPPING_POINT_TO_DICT_MAP.items():
+        result[dict_key] = None
+        # FIXME: ...and any other field can be absent.
+        if hasattr(shipping_point, field_name):
+            result[dict_key] = getattr(shipping_point, field_name)
     result['opening_dates'] = opening_dates
     return result
 
 
 def opening_date_to_dict(opening_date):
     """Convert opening date object to dict"""
-    return {
-        dict_key: getattr(opening_date, field_name) for field_name, dict_key in OPENING_DATE_TO_DICT_MAP.items()
-    }
 
+    result = {}
+    for field_name, dict_key in OPENING_DATE_TO_DICT_MAP.items():
+        result[dict_key] = None
+        # FIXME: Again, any field in response can be absent.
+        if hasattr(opening_date, field_name):
+            result[dict_key] = getattr(opening_date, field_name)
+    return result
 
 def get_position(address):
     """Identify geo position by address through Google service"""

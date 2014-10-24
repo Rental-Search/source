@@ -16,27 +16,27 @@ from rent.contract import first_or_empty
 
 
 class PudoOpeningDateSerializer(serializers.SimpleSerializer):
-    afternoon_closing_time = TimeField()
-    afternoon_opening_time = TimeField()
-    day_of_week = CharField()
-    morning_closing_time = TimeField()
-    morning_opening_time = TimeField()
+    afternoon_closing_time = TimeField(blank=True)
+    afternoon_opening_time = TimeField(blank=True)
+    day_of_week = CharField(blank=True)
+    morning_closing_time = TimeField(blank=True)
+    morning_opening_time = TimeField(blank=True)
 
 
 class PudoSerializer(serializers.SimpleSerializer):
-    name = CharField()
-    zipcode = CharField()
-    country = CharField()
-    city = CharField()
-    address = CharField()
-    distance = DecimalField()
-    is_open = BooleanField()
-    lat = DecimalField()
-    lng = DecimalField()
-    site_id = IntegerField()
-    pudo_id = CharField()
-    price = DecimalField(max_digits=10, decimal_places=2, required=False)
-    opening_dates = PudoOpeningDateSerializer(many=True)
+    name = CharField(blank=True)
+    zipcode = CharField(blank=True)
+    country = CharField(blank=True)
+    city = CharField(blank=True)
+    address = CharField(blank=True)
+    distance = DecimalField(blank=True)
+    is_open = BooleanField(blank=True)
+    lat = DecimalField(blank=True)
+    lng = DecimalField(blank=True)
+    site_id = IntegerField(blank=True)
+    pudo_id = CharField(blank=True)
+    price = DecimalField(max_digits=10, decimal_places=2, required=False, blank=True)
+    opening_dates = PudoOpeningDateSerializer(many=True, blank=True)
 
 
 class ShippingPointSerializer(serializers.GeoModelSerializer):
