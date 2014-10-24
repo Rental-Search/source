@@ -39,7 +39,7 @@ SHIPPING_POINT_TO_DICT_MAP = {
     'SiteId': 'site_id',
     'PudoId': 'pudo_id',
     'Name': 'name',
-    'Zipcode': 'zipcode',
+    'ZipCode': 'zipcode',
     'CountryCode': 'country',
     'CityName': 'city',
     'AddressLine': 'address',
@@ -64,7 +64,11 @@ def build_cache_id(product, user, site_id):
 
 def shipping_point_to_dict(shipping_point):
     """Convert shipping point object to dict"""
-    opening_dates = [opening_date_to_dict(opening_date) for opening_date in shipping_point.OpeningDates]
+    #FIXME: Day of week not always present in response
+    opening_dates = []
+    for opening_date in shipping_point.OpeningDates[0]:
+        if hasattr(opening_date, 'DayOfWeek'):
+            opening_dates.append(opening_date_to_dict(opening_date))
 
     result = {
         dict_key: getattr(shipping_point, field_name) for field_name, dict_key in SHIPPING_POINT_TO_DICT_MAP.items()
@@ -92,7 +96,7 @@ def get_shipping_points(lat, lng, point_type):
         2: 'Arrival',
     }
     shipping_points = Navette().get_pudo(Point((lat, lng)), point_type_map[point_type])
-    return [shipping_point_to_dict(FakeShippingPoint(identifier)) for identifier in xrange(6)]
+    #return [shipping_point_to_dict(FakeShippingPoint(identifier)) for identifier in xrange(6)]
     return [shipping_point_to_dict(shipping_point) for shipping_point in shipping_points]
 
 
