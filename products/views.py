@@ -820,9 +820,10 @@ class ProductListView(ProductList):
         else:
             product_list = context['product_list']
         for elem in product_list:
-            patron_set.add(elem.object.owner)
-            for picture in elem.object.pictures.all():
-                generate_picture_images(picture)
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
         for patron in patron_set:
             generate_patron_images(patron)
 
