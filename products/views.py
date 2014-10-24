@@ -846,6 +846,8 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         product = self.object.object
+        if not product:
+            raise Http404
         product_type = product.name
         comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
         product_list = self.sqs.more_like_this(product)[:5]
@@ -861,8 +863,6 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
                 patron_set.add(elem.object.owner)
                 for picture in elem.object.pictures.all():
                     generate_picture_images(picture)
-            else:
-                raise Http404
         for comment in chain(product_comment_list, owner_comment_list):
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
