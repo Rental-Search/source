@@ -1,5 +1,10 @@
 "use strict";
-define(["../../common/eloue/commonApp"], function (EloueCommon) {
+define(["../../common/eloue/commonApp",
+    "datejs",
+    "chosen",
+    "bootstrap-datepicker",
+    "bootstrap-datepicker-fr",
+    "custom-scrollbar"], function (EloueCommon) {
     /**
      * Datepicker directive.
      */
