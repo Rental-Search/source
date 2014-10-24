@@ -221,11 +221,12 @@ ui3_urlpatterns = patterns('',
     url(r'^securite/', TemplateView.as_view(template_name='security/index.jade'), name='security'),
     url(r'^conditions-generales/', TemplateView.as_view(template_name='terms/index.jade'), name='terms'),
     url(r'^contrat-de-location/', TemplateView.as_view(template_name='rental_agreement/index.jade'), name='agreement'),
+    url(r'^mentions-legales/', TemplateView.as_view(template_name='imprint/index.jade'), name='notices'),
 )
 
 urlpatterns = patterns('',
 
-    url(r'^faq/', include('faq.urls')),
+    #url(r'^faq/', include('faq.urls')),
 
     #url(r'^loueur/', include('accounts.urls')),
     #url(r'^location/', include('products.urls')),

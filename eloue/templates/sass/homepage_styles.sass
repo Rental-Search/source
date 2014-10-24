@@ -5,7 +5,6 @@
 @import sprites
 @import mixins
 @import src
-@import partners_sprites
 
 @import header-site
 @import nav-home
@@ -19,7 +18,6 @@
 @import professional-renter-content
 @import footer-links
 @import rss
-@import partners
 @import modal
 
 section
@@ -34,4 +32,7 @@ section
 
 .talk-about-us a
   display: inline-block
-  +sprite($s-talk-about-us)
+  +sprite($s-talk-about-us-gray)
+  &:hover
+    +sprite($s-talk-about-us)
+
