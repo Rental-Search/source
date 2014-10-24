@@ -104,15 +104,17 @@ def mobify(view_func=None):
     return wrapper
 
 
-def cached(timeout=None, cache=None, key_prefix=None, key_func=None, **cache_kwargs):
-    if timeout is not None:
-        cache_kwargs['timeout'] = timeout
-    make_key = partial(key_func or cache_key, key_prefix or Site.objects.get_current().domain)
+def cached(
+    cache=None,
+    key_prefix=Site.objects.get_current().domain, key_func=cache_key,
+    **cache_kwargs
+):
+    make_key = partial(key_func, key_prefix)
     cache = default_cache if cache is None else get_cache(cache)
     def decorator(func):
         @wraps(func)
         def wrapper(*func_args, **func_kwargs):
-            key = make_key(func.__name__)
+            key = make_key(func.__name__, *func_args)
             value = cache.get(key)
             if value is None:
                 value = func(*func_args, **func_kwargs)

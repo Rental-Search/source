@@ -746,7 +746,7 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
     @property
-    @method_decorator(cached(10*60))
+    @method_decorator(cached(timeout=10*60))
     def home_context(self):
         product_stats = Product.objects.extra(
             tables=['accounts_address'],

@@ -53,10 +53,12 @@ def form_errors_append(form, field_name, message):
     error_list.append(message)
 
 
+def simple_cache_key(*args):
+    return u':'.join(args)
+
 def cache_key(fragment_name, *args):
     hasher = hashlib.md5(u':'.join([urlquote(arg) for arg in args]))
     return 'template.cache.%s.%s' % (fragment_name, hasher.hexdigest())
-
 
 def create_alternative_email(prefix, context, from_email, recipient_list):
     context.update({
