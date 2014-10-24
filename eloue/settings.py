@@ -572,6 +572,7 @@ QUEUE_BACKEND = env('QUEUE_BACKEND', 'dummy')
 QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = env('QUEUE_REDIS_DB', 1)
 
+
 REST_FRAMEWORK = {
 #     'DEFAULT_RENDERER_CLASSES': (
 #         'rest_framework.renderers.JSONRenderer',
