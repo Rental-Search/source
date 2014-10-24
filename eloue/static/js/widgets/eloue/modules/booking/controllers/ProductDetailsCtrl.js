@@ -20,7 +20,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "BookingsService",
         "PhoneNumbersService",
         "PicturesService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService) {
+        "UtilsService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, UtilsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -387,7 +388,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.currentUser = currentUser;
                     MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
                         angular.forEach(result, function (value, key) {
-                            $scope.threadId = value.id;
+                            $scope.threadId = UtilsService.getIdFromUrl(value.thread);
                             var senderId = $scope.getIdFromUrl(value.sender);
                             UsersService.get(senderId).$promise.then(function (result) {
                                 value.sender = result;
