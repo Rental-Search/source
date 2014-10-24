@@ -33,6 +33,8 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
     pro_owner = indexes.BooleanField(default=False)
+    comment_count = indexes.IntegerField(model_attr='borrowercomments.count', default=0)
+    average_rate = indexes.IntegerField(model_attr='average_note', default=0)
     
     is_highlighted = indexes.BooleanField(model_attr='is_highlighted')
     is_top = indexes.BooleanField(model_attr='is_top')
