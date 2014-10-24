@@ -14,3 +14,6 @@ class S3PipelineStorage(SafeUrlCachedFilesMixin, PipelineMixin, CachedFilesMixin
 
 StaticRootS3BotoStorage = lambda **kwargs: S3PipelineStorage(
 	location='static', **kwargs)
+
+
+MediaRootS3BotoStorage  = lambda: S3BotoStorage(location='media')

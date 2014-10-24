@@ -336,7 +336,7 @@ require([
                 };
 
                 var productMapOptions = {
-                    zoom: 19,
+                    zoom: 16,
                     disableDefaultUI: true,
                     zoomControl: true,
                     center: new google.maps.LatLng(product.lat, product.lng),
@@ -351,7 +351,7 @@ require([
                     fillOpacity: 0.35,
                     map: productMap,
                     center: new google.maps.LatLng(product.lat, product.lng),
-                    radius: 10
+                    radius: 100
                 };
                 var locationCircle = new google.maps.Circle(circleOptions);
             }
@@ -360,7 +360,7 @@ require([
         function load_google_maps() {
             var script = document.createElement("script");
             script.type = "text/javascript";
-            script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
+            script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
             document.body.appendChild(script);
         }
 

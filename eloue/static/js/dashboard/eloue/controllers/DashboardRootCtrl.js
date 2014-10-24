@@ -16,11 +16,11 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             $scope.newBookingRequestsCount = 0;
             $scope.submitInProgress = false;
             $scope.dashboardTabs = [
-                {title: 'Dashboard', icon: 'stroke home', sref: 'dashboard', badge: 0},
+                {title: 'Tableau de bord', icon: 'stroke home', sref: 'dashboard', badge: 0},
                 {title: 'Messages', icon: 'stroke mail', sref: 'messages', badge: 0},
-                {title: 'Bookings', icon: 'stroke calendar-5', sref: 'bookings', badge: 0},
-                {title: 'Items', icon: 'solid menu-list-4', sref: 'items', badge: 0},
-                {title: 'Account', icon: 'stroke user-4', sref: 'account.profile', badge: 0}
+                {title: 'Réservations', icon: 'stroke calendar-5', sref: 'bookings', badge: 0},
+                {title: 'Annonces', icon: 'solid menu-list-4', sref: 'items', badge: 0},
+                {title: 'Compte', icon: 'stroke user-4', sref: 'account.profile', badge: 0}
             ];
 
             if (!!$scope.currentUserToken) {
@@ -154,7 +154,7 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             function loadGoogleMaps() {
                 var script = document.createElement("script");
                 script.type = "text/javascript";
-                script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
+                script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
                 document.body.appendChild(script);
             }
             loadGoogleMaps();

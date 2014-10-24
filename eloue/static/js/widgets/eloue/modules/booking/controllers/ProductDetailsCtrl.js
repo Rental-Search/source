@@ -196,6 +196,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         // Clear message field
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
+                        $scope.loadMessageThread();
                     });
             };
 
@@ -443,15 +444,19 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.loadMessageThread = function () {
-                MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
-                    angular.forEach(result, function (value, key) {
-                        $scope.threadId = value.id;
-                        var senderId = $scope.getIdFromUrl(value.sender);
-                        UsersService.get(senderId).$promise.then(function (result) {
-                            value.sender = result;
+                $scope.currentUserPromise.then(function (currentUser) {
+                    // Save current user in the scope
+                    $scope.currentUser = currentUser;
+                    MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
+                        angular.forEach(result, function (value, key) {
+                            $scope.threadId = value.id;
+                            var senderId = $scope.getIdFromUrl(value.sender);
+                            UsersService.get(senderId).$promise.then(function (result) {
+                                value.sender = result;
+                            });
                         });
+                        $scope.productRelatedMessages = result;
                     });
-                    $scope.loadMessageThread();
                 });
             };
 

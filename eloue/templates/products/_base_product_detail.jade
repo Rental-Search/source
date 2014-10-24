@@ -30,13 +30,14 @@ block append content-body
             .section-body
               .part.picture-tab#tabs
                 ul.nav.nav-justified
-                  -var tabs = [["Photos", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"]]
+                  -var tabs = [["Photos et Localisation", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"]]
                   each title, href in tabs
                     li.spacer
                     li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2 {{ title }}
                   if insurance_available
                     li.spacer
-                    li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 Assurance
+                    li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 Conditions d'assurance
+                //-
                   li.spacer
                   if shipping_enabled
                     li: a(href="#tabs-shipping", ng-click="selectTab('#tabs-shipping')").pad-v-2 Livraison

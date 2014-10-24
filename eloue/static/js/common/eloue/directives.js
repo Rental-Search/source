@@ -72,7 +72,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     google_maps_loaded_def.resolve(google.maps);
                 };
 
-                require(['http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&amp;callback=google_maps_loaded'], function () {
+                require(['https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&amp;callback=google_maps_loaded'], function () {
                 }, function (err) {
                     google_maps_loaded_def.reject();
                 });
