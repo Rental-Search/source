@@ -226,7 +226,7 @@ ui3_urlpatterns = patterns('',
 
 urlpatterns = patterns('',
 
-    #url(r'^faq/', include('faq.urls')),
+    url(r'^faq/', include('faq.urls')),
 
     #url(r'^loueur/', include('accounts.urls')),
     #url(r'^location/', include('products.urls')),
