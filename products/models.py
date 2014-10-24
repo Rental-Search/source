@@ -160,6 +160,14 @@ class Product(models.Model):
     def borrowercomments(self):
         from rent.models import BorrowerComment
         return BorrowerComment.objects.filter(booking__product=self)
+
+    @property
+    def shipping_available(self):
+        try:
+            self.departure_point
+        except models.Model.DoesNotExist:
+            return False
+        return True
     
     def monthly_availability(self, year, month):
 
