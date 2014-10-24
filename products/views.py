@@ -760,9 +760,10 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         from eloue.legacy import generate_patron_images, generate_picture_images
         patron_set = set()
         for elem in product_list:
-            patron_set.add(elem.object.owner)
-            for picture in elem.object.pictures.all():
-                generate_picture_images(picture)
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
         for comment in comment_list:
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
@@ -856,9 +857,12 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         from eloue.legacy import generate_patron_images, generate_picture_images
         patron_set = set()
         for elem in chain(product_list, [self.object]):
-            patron_set.add(elem.object.owner)
-            for picture in elem.object.pictures.all():
-                generate_picture_images(picture)
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
+            else:
+                raise Http404
         for comment in chain(product_comment_list, owner_comment_list):
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
