@@ -132,7 +132,7 @@
       border-color: $brand-primary
     &:valid
       border-color: $gray-medium
-    &:disabled
+    &[disabled]
       border-color: $gray-medium !important
 
   .chosen-container
@@ -290,7 +290,7 @@
         width: 100%
         font-size: inherit
       input
-        font-size: px(14)
+        // font-size: px(14)
         box-shadow: none
         height: 3em
         padding: 0 0 0 1em
@@ -318,5 +318,3 @@
         position: absolute
         left: $padding-base-horizontal
         top: 0
-
-@import pop_up_sections/custom
