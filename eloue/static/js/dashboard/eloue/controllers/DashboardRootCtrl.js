@@ -100,11 +100,11 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             };
 
             $scope.getAvatar = function (uri) {
-                return uri ? uri : '/static/img/profile_img.png';
+                return uri ? uri : STATIC_URL + 'img/profile_img.png';
             };
 
             $scope.getProductImg = function (uri) {
-                return uri ? uri : '/static/img/product_img_full.png';
+                return uri ? uri : STATIC_URL + 'img/product_img_full.png';
             };
 
             $scope.showNotification = function(msg) {
