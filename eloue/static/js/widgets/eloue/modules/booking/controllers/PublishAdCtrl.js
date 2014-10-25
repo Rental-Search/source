@@ -137,6 +137,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     }
                     if ($scope.isAuto) {
                         $scope.product.summary = $scope.product.brand + " " + $scope.product.model;
+                        $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
                     }
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         //TODO: finish and check saving product and price
@@ -186,6 +187,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         }
                     });
                 }
-            }
+            };
+
+            $("#first_registration_date").datepicker({
+                language: "fr",
+                autoclose: true,
+                todayHighlight: true
+            });
         }])
 });
