@@ -158,7 +158,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors) {
+    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin) {
 
         /**
          * New user account data.
@@ -263,7 +263,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
                 });
-                $window.location.href = "/dashboard"
+                if (RedirectAfterLogin.url != "/") {
+                    AuthService.redirectToAttemptedUrl();
+                } else {
+                    $window.location.href = "/dashboard"
+                }
             }
         };
 

@@ -1,11 +1,12 @@
 .container
   h3.text-center Choisissez une catégorie pour votre annonce
-  -var publish_items_categories = [[{"title": "Bricolage", "id": 35, "classname": "eloue-drill"}, {"title": "Jardinage", "id": 390, "classname": "eloue-mower"}, {"title": "High-tech", "id": 253, "classname": "eloue-camera"}, {"title": "Réception", "id": 418, "classname": "eloue-glass"}], [{"title": "Véhicule", "id": 2700, "classname": "eloue-car"}, {"title": "Mode et accessoires", "id": 126, "classname": "eloue-dress"}, {"title": "Santé et bien-etre", "id": 323, "classname": "eloue-basket"}, {"title": "Autres", "id": "", "classname": "eloue-other"}]]
+
+  -var publish_items_categories = [[{"title": "Bricolage", "id": 35, "classname": "drill"}, {"title": "Jardinage", "id": 390, "classname": "mower"}, {"title": "High-tech", "id": 253, "classname": "camera"}, {"title": "Réception", "id": 418, "classname": "glass"}], [{"title": "Véhicule", "id": 2700, "classname": "car"}, {"title": "Mode et accessoires", "id": 126, "classname": "dress"}, {"title": "Santé et bien-etre", "id": 323, "classname": "basket"}, {"title": "Autres", "id": "", "classname": "dots"}]]
   each group in publish_items_categories
     ul.nav.space-between
       each item in group
         li.spacer
         li: span: a(href="#/publish?category={{ item.id }}", data-dismiss="modal")
           span.border-round
-            i(class="{{ item.classname }}")
+            i(class="eloue-{{ item.classname }}")
           span.title {{ item.title }}

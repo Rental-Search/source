@@ -406,20 +406,28 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Load premium phone number using product's phone number id.
              */
             $scope.loadPhoneDetails = function () {
-                PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
-                    if (!result.error || result.error == "0") {
-                        $scope.ownerCallDetails = {
-                            number: result.numero,
-                            tariff: result.tarif
-                        };
-                    } else {
-                        $scope.ownerCallDetailsError = !!result.error_msg ? result.error_msg : "Le numero n'est pas disponible";
-                    }
-                });
+                if ($scope.product && $scope.product.phone && $scope.product.phone.id) {
+                    PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
+                        if (!result.error || result.error == "0") {
+                            $scope.ownerCallDetails = {
+                                number: result.numero,
+                                tariff: result.tarif
+                            };
+                        } else {
+                            $scope.ownerCallDetailsError = !!result.error_msg ? result.error_msg : "Le numero n'est pas disponible";
+                        }
+                    });
+                } else {
+                    $scope.ownerCallDetailsError = "Le numero n'est pas disponible";
+                }
             };
 
             $scope.loadCreditCards = function () {
-                if ($scope.currentUser) {
+                if (!$scope.currentUserPromise) {
+                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                }
+                $scope.currentUserPromise.then(function (currentUser) {
+                    $scope.currentUser = currentUser;
                     CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
                         var cards = result.results;
                         if (!!cards && cards.length > 0) {
@@ -428,7 +436,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             $scope.newCreditCard = false;
                         }
                     });
-                }
+                });
             };
 
             $scope.isAuto = function () {
@@ -436,6 +444,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.loadMessageThread = function () {
+                if (!$scope.currentUserPromise) {
+                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                }
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
