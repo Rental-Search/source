@@ -1907,7 +1907,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * Remove user token.
                  */
                 clearUserData: function () {
-                    document.cookie = "user_token=;expires=" + new Date(0).toGMTString();
+                    document.cookie = "user_token=;expires=" + new Date(0).toGMTString() + ";path=/";
                 },
 
                 /**

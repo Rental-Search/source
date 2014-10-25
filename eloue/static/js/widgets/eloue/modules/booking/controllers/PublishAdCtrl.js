@@ -179,7 +179,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
                     }
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
-                        //TODO: finish and check saving product and price
                         $scope.price.currency = Currency.EUR.name;
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
 
