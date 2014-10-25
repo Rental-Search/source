@@ -542,6 +542,6 @@ class Sinister(models.Model):
 
 post_save.connect(post_save_sites, sender=Booking)
 post_save.connect(post_save_sites, sender=ProBooking)
+post_save.connect(post_save_to_update_product, sender=Comment)
 post_save.connect(post_save_to_update_product, sender=BorrowerComment)
 post_save.connect(post_save_to_update_product, sender=OwnerComment)
-
