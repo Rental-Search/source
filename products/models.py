@@ -611,7 +611,7 @@ class Category(MPTTModel):
         super(Category, self).save(*args, **kwargs)
     
     def get_ancertors_slug(self):
-        return ''.join('%s/' %  el.slug for el in self.get_ancestors()).replace(' ', '')[:-1]
+        return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
     
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()

@@ -15,8 +15,9 @@ mixin category_crumbs(category_list)
         li.active: {{ product.summary|capfirst }}
         {% endcache %}
       else
+        //-if breadcrumbs.categorie
         for crumb in breadcrumbs|facets
-          {% cache 122400 category:breadcrumbs crumb.object.pk %}
+          {% cache 122400 category:breadcrumb crumb.object.pk %}
           +category_crumbs(crumb.object|ancestors)
           {% endcache %}
           if form.cleaned_data.q or form.cleaned_data.l

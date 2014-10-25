@@ -6,7 +6,10 @@ aside.tabs-vertical-static.pull-right.lg(ng-show="messageThread && messageThread
     li.tab-vertical
       .section-content
         {% verbatim %}
-        img(ng-src="{{getProductImg(messageThread.product.picture)}}", alt="", width="100%").lg-p
+        .block-with-thumbnail
+            .col-thumbnail
+                .thumbnail: a(href="#").lg-p
+                    img(style="background-image: url({{messageThread.product.picture}});")
         h3.indent-xs-v: a(ui-sref="items.info({id: messageThread.product.id})").text-underline-hover: b(ng-bind="messageThread.product.summary")
         p.text-gray
           i.icon-lg.flaticon.stroke.location-pin-3 &nbsp;
@@ -20,8 +23,8 @@ aside.tabs-vertical-static.pull-right.lg(ng-show="messageThread && messageThread
         {% verbatim %}
         .block-with-thumbnail
           .col-thumbnail
-            .thumbnail.round: a(href="#")
-              img(ng-src="{{getAvatar(messageThread.product.owner.avatar.thumbnail)}}", alt="", width="40", height="40").sm
+            .thumbnail.round: a(href="#").sm
+              img(style="background-image: url({{messageThread.product.owner.avatar.thumbnail}});")
           .col-exposition
             a(href="#").text-underline-hover.text-gray
               h4.indent-xs-h {{messageThread.product.owner.first_name}} {{messageThread.product.owner.last_name}}

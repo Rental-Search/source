@@ -7,7 +7,7 @@ from getenv import env
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 DEBUG = env('DEBUG', False)
-DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', False)
+DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', DEBUG)
 TEMPLATE_DEBUG = DEBUG
 
 DEBUG_TOOLBAR_PANELS = [

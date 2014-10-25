@@ -35,7 +35,7 @@ block section-content
             {% verbatim %}
             .col-thumbnail
               .thumbnail
-                img(src="{{getProductImg(product.picture)}}", alt="", width="130").lg-p
+                  a(href="").lg-p: img(style="background-image: url({{product.picture}});")
             .col-exposition
               h3.small
                 | Location {{product.summary}}

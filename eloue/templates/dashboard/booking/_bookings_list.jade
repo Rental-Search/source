@@ -19,7 +19,7 @@ section.tabs-vertical-active.lg(ng-show="(bookingList && bookingList.length > 0)
       li.tab-vertical.block-with-thumbnail(ng-repeat="booking in bookingList track by booking.uuid", id="booking-{{booking.uuid}}", ui-sref="bookings.detail({uuid: booking.uuid})", class="{{booking.state}}")
         .col-thumbnail
           .thumbnail
-            a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{getProductImg(booking.picture)}}", alt="", width="130").lg-p
+            a(ui-sref="bookings.detail({uuid: booking.uuid})").lg-p: img(style="background-image: url({{booking.picture}});")
             span(translate="{{booking.state}}").booking-bage
         .col-exposition
           h3.small
