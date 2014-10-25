@@ -1005,17 +1005,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
 
     @link()
     def stats(self, request, *args, **kwargs):
-        obj = self.get_object()
-        # TODO: we would need a better rating calculation in the future
-        qs = obj.borrowercomments.aggregate(Avg('note'), Count('id'))
-        id__count = qs['id__count'] or 0
-        res = {
-            'average_rating': qs['note__avg'] or 0,
-            'ratings_count': id__count,
-            'booking_comments_count': id__count,
-            'bookings_count': Booking.on_site.active().filter(Q(owner=obj) | Q(borrower=obj)).count(),
-        }
-        return Response(res)
+        return Response(self.get_object().stats)
 
     @cached_property
     def _category_from_native(self):

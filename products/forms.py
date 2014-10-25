@@ -88,13 +88,15 @@ class FacetedSearchForm(SearchForm):
             if self.load_all:
                 sqs = sqs.load_all()
             
-            if query:
-                top_products = sqs.filter(is_top=True)[:3]
-            else:
-                top_products = None
-
-            if top_products:
-                sqs = sqs.exclude(id__in=[product.id for product in top_products])
+            # we do not use top products at the moment
+            top_products = None
+#             if query:
+#                 top_products = sqs.filter(is_top=True)[:3]
+#             else:
+#                 top_products = None
+#
+#             if top_products:
+#                 sqs = sqs.exclude(id__in=[product.id for product in top_products])
 
             for key, value in self.cleaned_data.iteritems():
                 if value and key not in ["q", "l", "r", "sort", "renter"]:

@@ -1,5 +1,7 @@
 #-*- coding: utf-8 -*-
-import datetime
+from datetime import datetime, timedelta
+
+from django.utils.functional import memoize
 
 from haystack import indexes
 
@@ -7,7 +9,12 @@ from products.models import Alert, Product, CarProduct, RealEstateProduct
 
 __all__ = ['ProductIndex', 'AlertIndex']
 
-ONE_DAY_DELTA = datetime.timedelta(days=1)
+ONE_DAY_DELTA = timedelta(days=1)
+
+def cached_category(category_id, category):
+    return tuple(category.get_ancestors(ascending=False, include_self=True).values_list('slug', flat=True))
+_category = {}
+cached_category = memoize(cached_category, _category, 1)
 
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
@@ -32,20 +39,23 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
-    pro_owner = indexes.BooleanField(default=False)
-    comment_count = indexes.IntegerField(model_attr='borrowercomments__count', default=0)
-    average_rate = indexes.IntegerField(model_attr='average_note', default=0)
-    
-    is_highlighted = indexes.BooleanField(model_attr='is_highlighted')
-    is_top = indexes.BooleanField(model_attr='is_top')
 
+    is_highlighted = indexes.BooleanField(default=False)#model_attr='is_highlighted')
+    is_top = indexes.BooleanField(default=False)#model_attr='is_top')
+
+    # introduced for UI 3 and API 2.0
+    pro_owner = indexes.BooleanField(default=False, indexed=False)
+    comment_count = indexes.IntegerField(model_attr='comment_count', default=0, indexed=False)
+    average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
     
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
     
     def prepare_categories(self, obj):
-        if obj.category:
-            return [category.slug for category in obj.category.get_ancestors(ascending=False, include_self=True)]
+        category = obj.category
+        if category:
+            # it is safe to cache get_ancestors for categories and cache them by category PK
+            return cached_category(category.pk, category)
 
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]:
@@ -69,11 +79,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     def prepare_price(self, obj):
         # It doesn't play well with season
-        if obj.prices.all()[:1]:
-            now = datetime.datetime.now()
-            unit, amount = obj.calculate_price(now, now + ONE_DAY_DELTA)
-            return amount
-    
+        now = datetime.now()
+        return obj.calculate_price(now, now + ONE_DAY_DELTA)[1]
+
     def prepare_special(self, obj):
         special = hasattr(obj, 'carproduct') or hasattr(obj, 'realestateproduct')
         return special
@@ -85,7 +93,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return Product
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.active().select_related('address', 'owner')#.prefetch_related('pictures', 'prices')
+        return self.get_model().on_site.active().select_related('category', 'address', 'owner')
         
 class CarIndex(ProductIndex):
 
@@ -168,8 +176,7 @@ class AlertIndex(indexes.Indexable, indexes.SearchIndex):
     url = indexes.CharField(model_attr='get_absolute_url', indexed=False)
     
     def prepare_sites(self, obj):
-        res = obj.sites.all().values_list('id', flat=True)
-        return tuple(res)
+        return tuple(obj.sites.values_list('id', flat=True))
 
     def get_model(self):
         return Alert
