@@ -64,12 +64,29 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
-CACHES = {
-    'default': {
-        'BACKEND': env('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
-        'LOCATION': env('CACHE_LOCATION', None),
+
+if env('REDISGREEN_URL', None):
+    from urlparse import urlparse
+
+    redisgreen = urlparse(env("REDISGREEN_URL"))
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': '%s:%i' % (redisgreen.hostname, redisgreen.port),
+            'OPTIONS': {
+                'DB': 1,
+                'PASSWORD': redisgreen.password,
+            }
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': env('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
+            'LOCATION': env('CACHE_LOCATION', None),
+        }
+    }
 
 # Cache configuration
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
