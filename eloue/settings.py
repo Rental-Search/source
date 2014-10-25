@@ -77,7 +77,6 @@ if env('REDISGREEN_URL', None):
             'OPTIONS': {
                 'DB': 1,
                 'PASSWORD': redisgreen.password,
-                'PARSER_CLASS': 'redis.connection.HiredisParser'
             }
         }
     }
