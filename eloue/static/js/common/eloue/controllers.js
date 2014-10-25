@@ -35,7 +35,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             var expire = new Date();
             expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
             document.cookie = "user_token=" + escape(data.access_token) + ";expires="
-                + expire.toGMTString();
+                + expire.toGMTString() + ";path=/";
             $scope.authorize();
         };
 
@@ -221,7 +221,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             var expire = new Date();
             expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
             document.cookie = "user_token=" + escape(data.access_token) + ";expires="
-                + expire.toGMTString();
+                + expire.toGMTString() + ";path=/";
             $scope.authorize();
         };
 
