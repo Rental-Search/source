@@ -7,7 +7,7 @@ block content-view
       li.tab-vertical
          .block-with-thumbnail.indent-xs
           .col-thumbnail
-            .thumbnail.round.indent-sm-r: img(ng-src="{{getAvatar(currentUser.avatar.profil)}}", alt="").lg
+            .thumbnail.round.indent-sm-r: span.lg: img(style="background-image: url({{currentUser.avatar.profil}})")
           .col-exposition
             h2.small.text-black.indent-xs-b {{currentUser.username}}
             {% endverbatim %}
@@ -111,8 +111,8 @@ block content-view
 
               .block-with-thumbnail.indent-md-v
                 .col-thumbnail
-                  .thumbnail: a(href="#")
-                    img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                  .thumbnail.round: a(href="#").sm
+                    img(style="background-image: url(#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail})")
                 .col-exposition.text-gray
                   .indent-xs-h
                     h3.small: a(href="#").text-underline-hover #{booking_detail.lot.owner.first_name} #{booking_detail.lot.owner.name}
@@ -144,12 +144,12 @@ block content-view
                         .thumbnail.indent-sm-r
                           img(src="#{STATIC_URL}/img/money.png", alt="", width="40", height="40")
                       else
-                        .thumbnail.indent-sm-r.round: a(href="#")
+                        .thumbnail.indent-sm-r.round: a(href="#").sm
                           case item.type
                             when "message"
-                              img(src="#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail}", alt="#{booking_detail.lot.owner.name} photo", width="40", height="40")
+                              img(style="background-image: url(#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail})")
                             when "booking"
-                              img(src="#{STATIC_URL}#{tenant.thumbnail}", alt="", width="40", height="40")
+                              img(style="background-image: url(#{STATIC_URL}#{tenant.thumbnail})")
 
                     .col-exposition
                       case item.type

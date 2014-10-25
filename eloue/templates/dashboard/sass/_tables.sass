@@ -1,18 +1,18 @@
 article.dashboard
   table
     width: 100%
-    border-collapse: collapse
+    font-size: $font-size-smaller
+    td
+      padding: $indent-xs
+      vertical-align: middle
     &.calendar
-      font-size: $font-size-smaller
       thead tr
         background-color: $gray-lighter
       tbody
         background-color: darken($gray-lite, 2%)
       tr:nth-of-type(2n)
         background-color: $gray-lite
-      td
-        padding: $indent-xs
-        vertical-align: middle
+      td        
         border-left: 1px solid $gray-medium
         &:first-child
           border-left: none
@@ -24,8 +24,6 @@ article.dashboard
       tbody
         background-color: #fff
     &.bd-wrap
-      td
-        border-left: none
       tr
         border: 1px solid $gray-medium
 
