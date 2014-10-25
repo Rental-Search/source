@@ -747,39 +747,41 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
 
     @property
     @method_decorator(cached(timeout=10*60))
-    def home_context(self):
+    def homepage_stats(self):
         product_stats = Product.objects.extra(
             tables=['accounts_address'],
             where=['"products_product"."address_id" = "accounts_address"."id"'],
             select={'city': 'lower(trim("accounts_address"."city"))'}
         ).values('city').annotate(Count('id')).order_by('-id__count')
+
+        return {
+            'cities_list': product_stats,
+            'total_products': Product.on_site.only('id').count(),
+        }
+
+    def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
         comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images
         patron_set = set()
-        for elem in product_list:
+        for elem in product_list[:PAGINATE_PRODUCTS_BY]:
             if elem.object:
                 patron_set.add(elem.object.owner)
                 for picture in elem.object.pictures.all():
                     generate_picture_images(picture)
-        for comment in comment_list:
+        for comment in comment_list[:PAGINATE_PRODUCTS_BY]:
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
         for patron in patron_set:
             generate_patron_images(patron)
 
-        return {
-            'cities_list': product_stats,
-            'total_products': Product.on_site.only('id').count(),
+        context = {
             'product_list': product_list,
             'comment_list': comment_list,
         }
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        context.update(self.home_context)
+        context.update(self.homepage_stats)
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
 
