@@ -7,15 +7,15 @@ block details
             .col-md-4
                 .form-control
                     select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.1")
-                        option(ng-repeat="category in rootCategories", value="{{category.id}}") {{category.name}}
+                        option(ng-repeat="category in rootCategories", ng-selected="category.id == rootCategory", value="{{category.id}}") {{category.name}}
             .col-md-4
                 .form-control
                     select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", ng-required="isAuto || isRealEstate", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.2")
-                        option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
+                        option(ng-repeat="category in nodeCategories", ng-selected="category.id == nodeCategory", value="{{category.id}}") {{category.name}}
             .col-md-4
                 .form-control
                     select(ng-model="product.category", ng-required="!isAuto && !isRealEstate", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate", data-placeholder="Catégorie Niv.3")
-                        option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
+                        option(ng-repeat="category in leafCategories", ng-selected="(categoriesBaseUrl + category.id + '/') == product.category", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
             {% endverbatim %}
         h2 Titre
         .row
