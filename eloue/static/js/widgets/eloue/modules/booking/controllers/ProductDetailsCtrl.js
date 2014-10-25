@@ -406,16 +406,20 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Load premium phone number using product's phone number id.
              */
             $scope.loadPhoneDetails = function () {
-                PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
-                    if (!result.error || result.error == "0") {
-                        $scope.ownerCallDetails = {
-                            number: result.numero,
-                            tariff: result.tarif
-                        };
-                    } else {
-                        $scope.ownerCallDetailsError = !!result.error_msg ? result.error_msg : "Le numero n'est pas disponible";
-                    }
-                });
+                if ($scope.product && $scope.product.phone && $scope.product.phone.id) {
+                    PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
+                        if (!result.error || result.error == "0") {
+                            $scope.ownerCallDetails = {
+                                number: result.numero,
+                                tariff: result.tarif
+                            };
+                        } else {
+                            $scope.ownerCallDetailsError = !!result.error_msg ? result.error_msg : "Le numero n'est pas disponible";
+                        }
+                    });
+                } else {
+                    $scope.ownerCallDetailsError = "Le numero n'est pas disponible";
+                }
             };
 
             $scope.loadCreditCards = function () {
