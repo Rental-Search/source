@@ -432,6 +432,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             $scope.productShippingPoint = data.results[0];
                             ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
                                 console.log(result);
+                                //TODO: it's temperory, then will call pricing service
+                                angular.forEach(result, function (value, key) {
+                                    value.price = "10.0";
+                                });
                                 $scope.borrowerShippingPoints = result;
                             });
                         }

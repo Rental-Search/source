@@ -98,6 +98,7 @@ define(["angular", "eloue/app"], function (angular) {
                 ProductShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (result) {
                     $scope.productShippingPoint = result;
                     $scope.submitInProgress = false;
+                    $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
                     $scope.showMapPointDetails();
                 });
             };
@@ -109,7 +110,6 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.removeMapPoint = function () {
                 ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function (result) {
                     $scope.productShippingPoint = {};
-                    $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
                     $scope.showMapPointList();
                 });
             };
