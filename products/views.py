@@ -21,7 +21,7 @@ from django.utils.functional import cached_property
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.db.models import Q, Count, Avg
+from django.db.models import Q, Count
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
@@ -876,7 +876,6 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             'product_list': product_list,
             'product_comments': product_comment_list,
             'owner_comments': owner_comment_list,
-            'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
             'product_type': product_type,
             'product_object': getattr(product, product_type) if product_type != 'product' else product,
             'insurance_available': settings.INSURANCE_AVAILABLE,
