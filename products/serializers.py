@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from rest_framework.fields import CharField
 from products import models
 from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer
@@ -24,15 +25,15 @@ class CategorySerializer(ModelSerializer):
 class ProductSerializer(ModelSerializer):
     address = NestedAddressSerializer()
     phone = NestedPhoneNumberSerializer(required=False)
+    slug = CharField(read_only=True, source='slug')
 
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
-                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies')
+                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies', 'slug')
         public_fields = (
             'id', 'summary', 'deposit_amount', 'currency', 'description',
-            'address', 'phone', 'quantity', 'category', 'owner',
-            'pro_agencies')
+            'address', 'phone', 'quantity', 'category', 'owner', 'pro_agencies', 'slug')
         view_name = 'product-detail'
         read_only_fields = ('is_archived', 'created_at')
         immutable_fields = ('owner',)
