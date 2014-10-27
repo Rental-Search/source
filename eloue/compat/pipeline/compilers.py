@@ -3,8 +3,11 @@ from __future__ import unicode_literals
 import os
 from os.path import dirname, commonprefix, relpath, join, exists
 
+from django.dispatch.dispatcher import receiver
+
 from eloue.compat.pipeline.conf import settings
-from pipeline.compilers import sass
+from pipeline.compilers import sass, SubProcessCompiler
+from pipeline.signals import js_compressed
 
 
 class OutputPathMixin(object):
@@ -37,3 +40,26 @@ class AutoprefixerMixin(object):
 
 class AutoprefixerSASSCompiler(OutputPathMixin, AutoprefixerMixin, sass.SASSCompiler):
     pass
+
+class RequireJsCompiler(SubProcessCompiler):
+    output_extension = 'js'
+
+    def match_file(self, filename):
+        return filename.endswith('.js')
+
+    def compile_file(self, infile, outfile, **kwargs):
+        command = "%s %s -o %s out=%s" % (
+            settings.PIPELINE_RJS_BINARY,
+            settings.PIPELINE_RJS_ARGUMENTS,
+            infile,
+            outfile,
+        )
+        return self.execute_command(command, cwd=dirname(outfile))
+
+@receiver(js_compressed, dispatch_uid='pipeline_requirejs_build')
+def requirejs_build(sender, package, **kwargs):
+    if 'requirejs' in package.extra_context:
+        RequireJsCompiler(sender.verbose, sender.storage).compile_file(
+            sender.storage.path(package.extra_context['build']),
+            sender.storage.path(package.output_filename),
+        )

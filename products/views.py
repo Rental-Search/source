@@ -1008,6 +1008,11 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def stats(self, request, *args, **kwargs):
         return Response(self.get_object().stats)
 
+    @link()
+    def absolute_url(self, request, *args, **kwargs):
+        obj = self.get_object()
+        return Response(dict(url=obj.get_absolute_url()))
+
     @cached_property
     def _category_from_native(self):
         return self.serializer_class().fields['category'].from_native
