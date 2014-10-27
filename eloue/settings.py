@@ -290,6 +290,7 @@ PIPELINE_JS_COMPRESSOR = ''
 PIPELINE_COMPILERS = (
     #'pipeline.compilers.less.LessCompiler',
     'eloue.compat.pipeline.compilers.AutoprefixerSASSCompiler',
+    #'eloue.compat.pipeline.compilers.RequireJsCompiler',
 )
 PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = env('PIPELINE_SASS_BINARY', '/usr/bin/sass')
@@ -297,7 +298,7 @@ PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUGLIFY_BINARY = env('PIPELINE_YUGLIFY_BINARY', '/usr/bin/env yuglify')
 PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/home/benoitw/node_modules/autoprefixer/autoprefixer')
 PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
-PIPELINE_CSS = {
+PIPELINE_CSS_ = {
     'extrastyles': {
         'source_filenames': (
             'fonts/flaticons_social/flaticons_social.css',
@@ -477,7 +478,7 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'public_js': {
         'source_filenames': (
-            'node_modules/require.js',
+            'bower_components/requirejs/require.js',
         ),
         'output_filename': 'js/dashboard.js',
         'template_name': 'pipeline/requirejs.html',
@@ -490,7 +491,7 @@ PIPELINE_JS = {
     },
     'dashboard_js': {
         'source_filenames': (
-            'node_modules/require.js',
+            'bower_components/requirejs/require.js',
         ),
         'output_filename': 'js/dashboard.js',
         'template_name': 'pipeline/requirejs.html',
