@@ -10,7 +10,7 @@ h3.col-md-7
 .col-xs-5.layout-switcher
   i.flaticon.stroke.menu-list-4.list
   i.flaticon.stroke.window-1.grid
-  .clear-selector: select.form-control(name="sort", form="detail-search")
+  .clear-selector: select#sort-selector.form-control(name="sort", form="detail-search")
     -var options = [["-created_at", "Les plus récents"], ["distance", "Les plus proches"], ["price", "Les prix les plus bas"], ["-price", "Les prix les plus haut"]]
     for sort, title in options
       if form.sort.data == sort

@@ -1,7 +1,7 @@
 {% verbatim %}
 section.tabs-vertical-static.pull-nothing(ng-show="!!messageThread")
     ul.scrollbar-custom.messages-container
-        li.tab-vertical.block-with-thumbnail(ng-repeat="message in messageThread.messages track by message.id")
+        li.tab-vertical.block-with-thumbnail(ng-repeat="message in messageThread.messages | orderBy:'id'")
             .col-thumbnail
                 .thumbnail.round: a(href="#").sm
                     img(style="background-image: url({{message.sender.avatar.thumbnail}});")
