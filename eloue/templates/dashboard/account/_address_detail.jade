@@ -17,7 +17,7 @@ block section-content
         .row
           .col-xs-12
             label.check-btn.form-control
-              input(type="checkbox", checked, disabled)
+              input(type="checkbox", ng-model="isDefaultAddress")
               span: i(class="{{isDefaultAddress ? 'checkmark' : ''}}").icon-lg.pull-right.flaticon.stroke
               | Addresse par défaut
         .row

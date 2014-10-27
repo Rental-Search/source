@@ -98,6 +98,8 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.updateNewBookingInfo();
                         } else {
                             $scope.booking = booking;
+                            $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
+                            $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
                     });
                 }

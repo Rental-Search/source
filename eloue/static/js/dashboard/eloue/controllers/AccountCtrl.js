@@ -7,10 +7,14 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("AccountCtrl", [
         "$scope",
+        "$state",
         "UsersService",
-        function ($scope, UsersService) {
+        function ($scope, $state, UsersService) {
             UsersService.getMe().$promise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
+                if ($state.current.name == "account") {
+                    $state.go("account.profile");
+                }
             });
         }
     ]);
