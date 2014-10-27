@@ -581,7 +581,7 @@ HAYSTACK_CONNECTIONS = {
         }
     },
 }
-HAYSTACK_SIGNAL_PROCESSOR = 'eloue.search.HaystackSignalProcessor'
+HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 
 # Queue configuration
