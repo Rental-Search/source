@@ -130,8 +130,9 @@ class FacetedSearchForm(SearchForm):
         return sqs
 
 class ProductFacetedSearchForm(FacetedSearchForm):
-    price_from = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.01'), required=False)
-    price_to = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.01'), required=False)
+    # Price slider step is 1, so we can't restrict price with minimum value to be 0.01
+    price_from = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.00'), required=False)
+    price_to = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.00'), required=False)
 #     date_from = forms.DateField(input_formats=DATE_FORMAT, required=False)
 #     date_to = forms.DateField(input_formats=DATE_FORMAT, required=False)
 
