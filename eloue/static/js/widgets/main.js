@@ -159,13 +159,6 @@ require([
             var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
             var min = priceSlider.attr("min-value");
             var max = priceSlider.attr("max-value");
-            var minPrice = 0, maxPrice = 0;
-            if (!priceMinInput.attr("value")) {
-                minPrice = min;
-            }
-            if (!priceMaxInput.attr("value")) {
-                maxPrice = max;
-            }
             if (!min || !max) {
                 priceSlider.hide();
                 $("#price-label").hide();
@@ -181,7 +174,7 @@ require([
                         priceMaxInput.attr("value", Number(values[1]));
                     }
                 });
-                priceSlider.slider("value", minPrice, maxPrice);
+                priceSlider.slider("value", min, max);
             }
 
         }

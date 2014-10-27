@@ -97,7 +97,7 @@ class FacetedSearchForm(SearchForm):
                 sqs = sqs.exclude(id__in=[product.id for product in top_products])
 
             for key, value in self.cleaned_data.iteritems():
-                if value and key not in ["q", "l", "r", "sort", "renter"]:
+                if value and key not in ["q", "l", "r", "sort", "renter", "price_from", "price_to"]:
                     sqs = sqs.narrow("%s_exact:%s" % (key, value))
             
             if self.cleaned_data['sort']:
