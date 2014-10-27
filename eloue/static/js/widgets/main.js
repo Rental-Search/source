@@ -152,6 +152,7 @@ require([
                 var location = $(this).find(":selected").attr("location");
                 detailSearchForm.attr("action", location);
             });
+            detailSearchForm.attr("action", categorySelection.find(":selected").attr("location"));
         }
         var rangeSlider = $("#range-slider");
         var priceSlider = $("#price-slider");
@@ -159,6 +160,15 @@ require([
             var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
             var min = priceSlider.attr("min-value");
             var max = priceSlider.attr("max-value");
+            var filterMin = priceMinInput.attr("value");
+            var filterMax = priceMaxInput.attr("value");
+            var minPrice = min, maxPrice = max;
+            if (filterMin && Number(filterMin) > min) {
+                minPrice = Number(filterMin);
+            }
+            if (filterMax && Number(filterMax) < max) {
+                maxPrice = Number(filterMax);
+            }
             if (!min || !max) {
                 priceSlider.hide();
                 $("#price-label").hide();
@@ -174,7 +184,7 @@ require([
                         priceMaxInput.attr("value", Number(values[1]));
                     }
                 });
-                priceSlider.slider("value", min, max);
+                priceSlider.slider("value", minPrice, maxPrice);
             }
 
         }

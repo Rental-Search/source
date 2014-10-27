@@ -14,7 +14,7 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categor
         if count and value
           {% with value|category as category %}
           if breadcrumbs.categorie
-            if breadcrumbs.categorie.value = category.slug
+            if breadcrumbs.categorie.value == category.slug
               option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
             else
               option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
@@ -25,7 +25,7 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categor
       else
         for category in category_list
           if breadcrumbs.categorie
-            if breadcrumbs.categorie.value = category.slug
+            if breadcrumbs.categorie.value == category.slug
               option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
             else
               option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}

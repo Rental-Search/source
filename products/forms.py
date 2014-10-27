@@ -68,6 +68,7 @@ class FacetedSearchForm(SearchForm):
 
     def search(self):
         if self.is_valid():
+            filter_limits = {}
             sqs = self.searchqueryset
             suggestions = None
             
@@ -82,6 +83,13 @@ class FacetedSearchForm(SearchForm):
                     suggestions = suggestions.strip()
                 if suggestions == query:
                     suggestions = None
+
+            prices = [price[0] for price in sqs.facet_counts()['fields']['price']]
+            if prices:
+                filter_limits.update({
+                    'price_min': min(prices),
+                    'price_max': max(prices),
+                })
 
             sqs = self.filter_queryset(sqs)
             
@@ -104,9 +112,9 @@ class FacetedSearchForm(SearchForm):
                 sqs = sqs.order_by(self.cleaned_data['sort'])
             else:
                 sqs = sqs.order_by(SORT.RECENT)
-            return sqs, suggestions, top_products
+            return sqs, suggestions, top_products, filter_limits
         else:
-            return self.searchqueryset, None, None
+            return self.searchqueryset, None, None, None
 
     def filter_queryset(self, sqs):
         location = self.cleaned_data.get('l', None)

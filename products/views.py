@@ -600,7 +600,7 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
             dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
             searchqueryset=sqs
         )
-        sqs, self.suggestions, self.top_products = self.form.search()
+        sqs, self.suggestions, self.top_products, self.filter_limits = self.form.search()
         # we use canonical_parameters to generate the canonical url in the header
         self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
         self.canonical_parameters.pop('categorie', None)
@@ -808,12 +808,8 @@ class ProductListView(ProductList):
             'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-        prices = [price[0] for price in context['facets']['fields']['price']]
-        if prices:
-            context.update({
-                'price_min': min(prices),
-                'price_max': max(prices),
-            })
+        if self.filter_limits:
+            context.update(self.filter_limits)
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images
