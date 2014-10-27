@@ -1,0 +1,1 @@
+<script{% if async %} async{% endif %}{% if defer %} defer{% endif %} type="{{ type }}" src="{{ url }}" data-main="{{ main }}" {% for k, v in require_args.items %}date-{{ k }}="{{ v }}"{% endfor %} charset="utf-8"></script>

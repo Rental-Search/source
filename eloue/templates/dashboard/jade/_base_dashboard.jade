@@ -5,7 +5,7 @@ block append styles
   {% compressed_css "dashboard_styles" %}
 
 block scripts
-  script(src="{% static 'bower_components/requirejs/require.js' %}", data-main="{% static 'js/dashboard/main.js' %}", data-static-path="{{ STATIC_URL }}")
+  {% compressed_js "dashboard_js" %}
 
 block append content-body
   .container-full-screen(data-ng-controller="DashboardRootCtrl")

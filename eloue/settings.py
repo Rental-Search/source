@@ -475,6 +475,32 @@ PIPELINE_CSS = {
 }
 
 PIPELINE_JS = {
+    'public_js': {
+        'source_filenames': (
+            'node_modules/require.js',
+        ),
+        'output_filename': 'js/dashboard.js',
+        'template_name': 'pipeline/requirejs.html',
+        'extra_context': {
+            'main': 'js/widgets/main.js',
+            'require_args': {'static-path': STATIC_URL },
+            #'defer': False,
+            #'async': False,
+        },
+    },
+    'dashboard_js': {
+        'source_filenames': (
+            'node_modules/require.js',
+        ),
+        'output_filename': 'js/dashboard.js',
+        'template_name': 'pipeline/requirejs.html',
+        'extra_context': {
+            'main': 'js/dashboard/main.js',
+            'require_args': {'static-path': STATIC_URL },
+            #'defer': False,
+            #'async': False,
+        },
+    },
     # 'application': {
     #     'source_filenames': (
     #         'js/jquery-1.7.1.min.js',
