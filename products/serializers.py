@@ -11,13 +11,14 @@ class CategorySerializer(ModelSerializer):
 
     class Meta:
         model = models.Category
-        fields = ('id', 'parent', 'name', 'need_insurance',
+        fields = ('id', 'parent', 'name', 'need_insurance', 'slug',
                   'title', 'description', 'header', 'footer',
                   'is_child_node', 'is_leaf_node', 'is_root_node')
         public_fields = (
-            'id', 'parent', 'name', 'need_insurance',
+            'id', 'parent', 'name', 'need_insurance', 'slug',
             'title', 'description', 'header', 'footer',
             'is_child_node', 'is_leaf_node', 'is_root_node')
+        read_only_fields = ('slug',)
         immutable_fields = ('parent',)
 
 class ProductSerializer(ModelSerializer):
