@@ -298,7 +298,7 @@ PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUGLIFY_BINARY = env('PIPELINE_YUGLIFY_BINARY', '/usr/bin/env yuglify')
 PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/home/benoitw/node_modules/autoprefixer/autoprefixer')
 PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
-PIPELINE_CSS_ = {
+PIPELINE_CSS = {
     'extrastyles': {
         'source_filenames': (
             'fonts/flaticons_social/flaticons_social.css',
