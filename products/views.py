@@ -21,7 +21,7 @@ from django.utils.functional import cached_property
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.db.models import Q, Count, Avg
+from django.db.models import Q, Count
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
@@ -876,7 +876,6 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             'product_list': product_list,
             'product_comments': product_comment_list,
             'owner_comments': owner_comment_list,
-            'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
             'product_type': product_type,
             'product_object': getattr(product, product_type) if product_type != 'product' else product,
             'insurance_available': settings.INSURANCE_AVAILABLE,
@@ -1007,17 +1006,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
 
     @link()
     def stats(self, request, *args, **kwargs):
-        obj = self.get_object()
-        # TODO: we would need a better rating calculation in the future
-        qs = obj.borrowercomments.aggregate(Avg('note'), Count('id'))
-        id__count = qs['id__count'] or 0
-        res = {
-            'average_rating': qs['note__avg'] or 0,
-            'ratings_count': id__count,
-            'booking_comments_count': id__count,
-            'bookings_count': Booking.on_site.active().filter(Q(owner=obj) | Q(borrower=obj)).count(),
-        }
-        return Response(res)
+        return Response(self.get_object().stats)
 
     @link()
     def absolute_url(self, request, *args, **kwargs):

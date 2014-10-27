@@ -1,2 +1,2 @@
 {% load staticfiles %}
-<script{% if async %} async{% endif %}{% if defer %} defer{% endif %} type="{{ type }}" src="{{ url }}" data-main="{% static main %}" {% for k, v in require_args.items %}date-{{ k }}="{{ v }}"{% endfor %} charset="utf-8"></script>
+<script{% if async %} async{% endif %}{% if defer %} defer{% endif %} type="{{ type }}" src="{% static requirejs %}" data-main="{% static url %}" {% for k, v in require_args.items %}data-{{ k }}="{{ v }}"{% endfor %} charset="utf-8"></script>
