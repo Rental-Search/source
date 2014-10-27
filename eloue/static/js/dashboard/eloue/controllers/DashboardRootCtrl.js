@@ -20,7 +20,7 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 {title: 'Messages', icon: 'stroke mail', sref: 'messages', badge: 0},
                 {title: 'Réservations', icon: 'stroke calendar-5', sref: 'bookings', badge: 0},
                 {title: 'Annonces', icon: 'solid menu-list-4', sref: 'items', badge: 0},
-                {title: 'Compte', icon: 'stroke user-4', sref: 'account.profile', badge: 0}
+                {title: 'Compte', icon: 'stroke user-4', sref: 'account', badge: 0}
             ];
 
             if (!!$scope.currentUserToken) {
