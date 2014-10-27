@@ -26,7 +26,7 @@ define(["angular", "eloue/app"], function (angular) {
                 var endOfBookingPeriod = Date.today();
                 var bookingList = [];
                 angular.forEach(bookings, function (value, key) {
-                    if (value.state == "closed" || value.state == "ended") {
+                    if (value.state == "closed" || value.state == "ended" || value.state == "incident") {
                         var bookingStartDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
                         if (bookingStartDay < startOfBookingPeriod) {
                             startOfBookingPeriod = bookingStartDay;
