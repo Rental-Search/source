@@ -38,6 +38,7 @@ p.info
     br
     | Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire devra refuser la location.
 {% verbatim %}
+span.text-danger(ng-show="!!errors.product", ng-bind="errors.product")
 .col-sm-8.col-sm-offset-2: button(type="submit", ng-disabled="bookingForm.$invalid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.indent-t Réservez
 {% endverbatim %}
 

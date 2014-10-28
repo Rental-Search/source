@@ -179,7 +179,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         cvv: !!error.errors.cvv ? error.errors.cvv[0] : "",
                         holder_name: !!error.errors.holder_name ? error.errors.holder_name[0] : "",
                         started_at: !!error.errors.started_at ? error.errors.started_at[0] : "",
-                        ended_at: !!error.errors.ended_at ? error.errors.ended_at[0] : ""
+                        ended_at: !!error.errors.ended_at ? error.errors.ended_at[0] : "",
+                        product: !!error.errors.product ? error.errors.product[0] : ""
                     };
                 }
                 $scope.submitInProgress = false;
