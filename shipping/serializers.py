@@ -1,6 +1,7 @@
 # coding=utf-8
 import datetime
 from decimal import Decimal
+import re
 
 from django.utils.translation import gettext as _
 from django.contrib.gis.geos import Point
@@ -92,6 +93,11 @@ class ShippingSerializer(serializers.ModelSerializer):
     departure_point = NestedProductShippingPointSerializer()
     arrival_point = NestedPatronShippingPointSerializer()
 
+    regexp = re.compile('\d|-|_')
+
+    def preprocess_name(self, name):
+        return self.regexp.sub(' ', name).strip()
+
     def from_native(self, data, files):
         instance = super(ShippingSerializer, self).from_native(data, files)
         if instance and not instance.pk:
@@ -104,8 +110,8 @@ class ShippingSerializer(serializers.ModelSerializer):
             borrower_phone = borrower.default_number or first_or_empty(borrower.phones.all())
 
             order_details = {
-                'DeliveryContactFirstName': owner.first_name,
-                'DeliveryContactLastName': owner.last_name,
+                'DeliveryContactFirstName': self.preprocess_name(owner.first_name),
+                'DeliveryContactLastName': self.preprocess_name(owner.last_name),
                 'DeliveryContactMail': owner.email,
                 'DeliveryContactMobil': owner_phone.number if owner_phone else '',
                 'DeliveryContactPhone': owner_phone.number if owner_phone else '',
@@ -116,8 +122,8 @@ class ShippingSerializer(serializers.ModelSerializer):
                 'DeliverySiteCountryCode': owner_address.country if owner_address else '',
                 'DeliverySiteName': 'test',
                 'DeliverySiteZipCode': owner_address.zipcode if owner_address else '',
-                'DropOffContactFirstName': borrower.first_name,
-                'DropOffContactLastName': borrower.last_name,
+                'DropOffContactFirstName': self.preprocess_name(borrower.first_name),
+                'DropOffContactLastName': self.preprocess_name(borrower.last_name),
                 'DropOffContactMail': borrower.email,
                 'DropOffContactMobil': borrower_phone.number if borrower_phone else '',
                 'DropOffContactPhone': borrower_phone.number if borrower_phone else '',
