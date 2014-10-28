@@ -167,6 +167,37 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     }]);
 
     /**
+     * Factory for managing shippings.
+     */
+    EloueCommon.factory("Shippings", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "shippings/:id/?");
+    }]);
+
+    /**
+     * Factory for managing shipping points.
+     */
+    EloueCommon.factory("ShippingPoints", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "shippingpoints/:id/?", {},
+            {
+                "get": {method: "GET", isArray: true}
+            });
+    }]);
+
+    /**
+     * Factory for managing product shipping points.
+     */
+    EloueCommon.factory("ProductShippingPoints", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "productshippingpoints/:id/?");
+    }]);
+
+    /**
+     * Factory for managing patron shipping points.
+     */
+    EloueCommon.factory("PatronShippingPoints", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "patronshippingpoints/:id/?");
+    }]);
+
+    /**
      * Factory for credit cards.
      */
     EloueCommon.factory("CreditCards", ["$resource", "Endpoints", function ($resource, Endpoints) {
