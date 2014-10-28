@@ -102,6 +102,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
+                    if (!currentUser.default_address) {
+                        $scope.noAddress = true;
+                    }
                 });
             }
 
@@ -152,7 +155,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.publishAd = function () {
                 console.log("Publish ad");
-                if (!$scope.currentUser.default_address) {
+                if ($scope.noAddress) {
+                    $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
                     AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
                         $scope.currentUser.default_address = result;
