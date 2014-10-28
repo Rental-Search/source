@@ -266,9 +266,11 @@ define(["../../common/eloue/commonApp",
                     });
 
                     scope.$on("hideLoading", function () {
+                        $rootScope.routeChangeInProgress = false;
                         loadingWidget.hide();
                     });
                     scope.$on("showLoading", function () {
+                        $rootScope.routeChangeInProgress = true;
                         loadingWidget.show();
                     });
                 }};
