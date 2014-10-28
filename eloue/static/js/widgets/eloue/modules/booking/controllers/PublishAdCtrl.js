@@ -56,6 +56,43 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 id: null, amount: null, unit: Unit.DAY.id
             };
 
+            $scope.errors = {
+                summary: "",
+                brand: "",
+                model: "",
+                category: "",
+                street: "",
+                zipcode: "",
+                amount: "",
+                deposit_amount: "",
+                km_included: "",
+                costs_per_km: "",
+                first_registration_date: "",
+                licence_plate: "",
+                tax_horsepower: ""
+            };
+
+            $scope.handleResponseErrors = function(error) {
+                if (!!error.errors) {
+                    $scope.errors = {
+                        summary: !!error.errors.summary ? error.errors.summary[0] : "",
+                        brand: !!error.errors.brand ? error.errors.brand[0] : "",
+                        model: !!error.errors.model ? error.errors.model[0] : "",
+                        category: !!error.errors.category ? error.errors.category[0] : "",
+                        street: !!error.errors.street ? error.errors.street[0] : "",
+                        zipcode: !!error.errors.zipcode ? error.errors.zipcode[0] : "",
+                        amount: !!error.errors.amount ? error.errors.amount[0] : "",
+                        deposit_amount: !!error.errors.deposit_amount ? error.errors.deposit_amount[0] : "",
+                        km_included: !!error.errors.km_included ? error.errors.km_included[0] : "",
+                        costs_per_km: !!error.errors.costs_per_km ? error.errors.costs_per_km[0] : "",
+                        first_registration_date: !!error.errors.first_registration_date ? error.errors.first_registration_date[0] : "",
+                        licence_plate: !!error.errors.licence_plate ? error.errors.licence_plate[0] : "",
+                        tax_horsepower: !!error.errors.tax_horsepower ? error.errors.tax_horsepower[0] : ""
+                    };
+                }
+                $scope.submitInProgress = false;
+            };
+
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
 
@@ -121,6 +158,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.currentUser.default_address = result;
                         UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
                         $scope.saveProduct();
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
                     });
                 } else {
                     $scope.saveProduct();
@@ -137,9 +176,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     }
                     if ($scope.isAuto) {
                         $scope.product.summary = $scope.product.brand + " " + $scope.product.model;
+                        $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
                     }
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
-                        //TODO: finish and check saving product and price
                         $scope.price.currency = Currency.EUR.name;
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
 
@@ -150,8 +189,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             $(".modal").modal("hide");
                             $window.location.href = "/dashboard/#/items/" + product.id + "/info";
                             $scope.submitInProgress = false;
+                        }, function (error) {
+                            $scope.handleResponseErrors(error);
                         });
 
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
                     });
                 } else {
                     $scope.publishAdError = "All prices should be positive numbers!";
@@ -186,6 +229,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         }
                     });
                 }
-            }
+            };
+
+            $("#first_registration_date").datepicker({
+                language: "fr",
+                autoclose: true,
+                todayHighlight: true
+            });
         }])
 });

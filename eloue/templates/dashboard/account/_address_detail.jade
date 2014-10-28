@@ -17,7 +17,7 @@ block section-content
         .row
           .col-xs-12
             label.check-btn.form-control
-              input(type="checkbox", checked, disabled)
+              input(type="checkbox", ng-model="isDefaultAddress")
               span: i(class="{{isDefaultAddress ? 'checkmark' : ''}}").icon-lg.pull-right.flaticon.stroke
               | Addresse par défaut
         .row
@@ -31,11 +31,11 @@ block section-content
     section.tabs-vertical-active
       ul.block-with-thumbnail
         li.block-with-thumbnail(data-ng-repeat="product in productList track by product.id", ui-sref="items.info({id: product.id})")
-          a(href="#car").tab-vertical
+          a(href="").tab-vertical
             {% verbatim %}
             .col-thumbnail
               .thumbnail
-                img(data-ng-src="{{getProductImg(product.picture)}}", alt="{{product.summary}}", width="130", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
+                  a(href="").lg-p: img(style="background-image: url({{product.picture}});")
             .col-exposition
               h3.small
                 | Location {{product.summary}}

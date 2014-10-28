@@ -88,16 +88,18 @@ class FacetedSearchForm(SearchForm):
             if self.load_all:
                 sqs = sqs.load_all()
             
-            if query:
-                top_products = sqs.filter(is_top=True)[:3]
-            else:
-                top_products = None
-
-            if top_products:
-                sqs = sqs.exclude(id__in=[product.id for product in top_products])
+            # we do not use top products at the moment
+            top_products = None
+#             if query:
+#                 top_products = sqs.filter(is_top=True)[:3]
+#             else:
+#                 top_products = None
+#
+#             if top_products:
+#                 sqs = sqs.exclude(id__in=[product.id for product in top_products])
 
             for key, value in self.cleaned_data.iteritems():
-                if value and key not in ["q", "l", "r", "sort", "renter"]:
+                if value and key not in ["q", "l", "r", "sort", "renter", "price_from", "price_to"]:
                     sqs = sqs.narrow("%s_exact:%s" % (key, value))
             
             if self.cleaned_data['sort']:
@@ -130,10 +132,11 @@ class FacetedSearchForm(SearchForm):
         return sqs
 
 class ProductFacetedSearchForm(FacetedSearchForm):
-    price_from = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.01'), required=False)
-    price_to = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.01'), required=False)
-    date_from = forms.DateField(input_formats=DATE_FORMAT, required=False)
-    date_to = forms.DateField(input_formats=DATE_FORMAT, required=False)
+    # Price slider step is 1, so we can't restrict price with minimum value to be 0.01
+    price_from = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.00'), required=False)
+    price_to = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.00'), required=False)
+#     date_from = forms.DateField(input_formats=DATE_FORMAT, required=False)
+#     date_to = forms.DateField(input_formats=DATE_FORMAT, required=False)
 
     def clean_price_from(self):
         price_from = self.cleaned_data.get('price_from', None)
@@ -157,27 +160,27 @@ class ProductFacetedSearchForm(FacetedSearchForm):
             return
         return price_to
 
-    def clean_date_from(self):
-        date_from = self.cleaned_data.get('date_from', None)
-        if date_from is None:
-            return
-        date_to = self.cleaned_data.get('date_to', None)
-        if (date_to is not None and date_from is not None and
-            date_from > date_to
-        ):
-            return
-        return min(date_from, date.today())
-
-    def clean_date_to(self):
-        date_to = self.cleaned_data.get('date_to', None)
-        if date_to is None:
-            return
-        date_from = self.cleaned_data.get('date_from', None)
-        if (date_to is not None and date_from is not None and
-            date_to < date_from
-        ):
-            return
-        return min(date_to, date.today())
+#     def clean_date_from(self):
+#         date_from = self.cleaned_data.get('date_from', None)
+#         if date_from is None:
+#             return
+#         date_to = self.cleaned_data.get('date_to', None)
+#         if (date_to is not None and date_from is not None and
+#             date_from > date_to
+#         ):
+#             return
+#         return min(date_from, date.today())
+#
+#     def clean_date_to(self):
+#         date_to = self.cleaned_data.get('date_to', None)
+#         if date_to is None:
+#             return
+#         date_from = self.cleaned_data.get('date_from', None)
+#         if (date_to is not None and date_from is not None and
+#             date_to < date_from
+#         ):
+#             return
+#         return min(date_to, date.today())
 
     def filter_queryset(self, sqs):
         sqs = super(ProductFacetedSearchForm, self).filter_queryset(sqs)
@@ -187,10 +190,10 @@ class ProductFacetedSearchForm(FacetedSearchForm):
         if self.cleaned_data['price_to'] is not None:
             sqs = sqs.filter(price__lte=self.cleaned_data['price_to'])
 
-        if self.cleaned_data['date_from'] is not None:
-            sqs = sqs.filter(created_at_date__gte=self.cleaned_data['date_from'])
-        if self.cleaned_data['date_to'] is not None:
-            sqs = sqs.filter(created_at_date__lte=self.cleaned_data['date_to'])
+#         if self.cleaned_data['date_from'] is not None:
+#             sqs = sqs.filter(created_at_date__gte=self.cleaned_data['date_from'])
+#         if self.cleaned_data['date_to'] is not None:
+#             sqs = sqs.filter(created_at_date__lte=self.cleaned_data['date_to'])
 
         return sqs
 

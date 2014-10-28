@@ -39,13 +39,15 @@
                                 option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
                             {% endverbatim %}
                         .col-xs-7
-                            input(type="text", placeholder="Nom *", name="lastName", ng-model="account.lastName", required).form-control
-                            span.errorMsg(ng-show="registrationForm.lastName.$error.required && registrationForm.lastName.$dirty") Required field
-                    -var registration_form_fields = [["text", "Prénom", "firstName"], ["email", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "postalCode"]]
+                            input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
+                            span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationForm.last_name.$dirty") Required field
+                            span.text-danger(ng-show="!!errors.last_name", ng-bind="errors.last_name")
+                    -var registration_form_fields = [["text", "Prénom", "first_name"], ["email", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
                     each type, placeholder, name in registration_form_fields
                         .form-group
                             input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
-                            span.errorMsg(ng-show="registrationForm.#{name}.$error.required && registrationForm.#{name}.$dirty") Required field
+                            span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationForm.#{name}.$dirty") Required field
+                            span.text-danger(ng-show="!!errors.#{name}", ng-bind="errors.#{name}")
                     .checkbox
                         label(for="inform")
                             input(type="checkbox", checked)#inform

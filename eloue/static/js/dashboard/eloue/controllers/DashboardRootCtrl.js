@@ -20,7 +20,7 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 {title: 'Messages', icon: 'stroke mail', sref: 'messages', badge: 0},
                 {title: 'Réservations', icon: 'stroke calendar-5', sref: 'bookings', badge: 0},
                 {title: 'Annonces', icon: 'solid menu-list-4', sref: 'items', badge: 0},
-                {title: 'Compte', icon: 'stroke user-4', sref: 'account.profile', badge: 0}
+                {title: 'Compte', icon: 'stroke user-4', sref: 'account', badge: 0}
             ];
 
             if (!!$scope.currentUserToken) {
@@ -100,11 +100,11 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             };
 
             $scope.getAvatar = function (uri) {
-                return uri ? uri : '/static/img/profile_img.png';
+                return uri ? uri : STATIC_URL + 'img/profile_img.png';
             };
 
             $scope.getProductImg = function (uri) {
-                return uri ? uri : '/static/img/product_img_full.png';
+                return uri ? uri : STATIC_URL + 'img/product_img_full.png';
             };
 
             $scope.showNotification = function(msg) {

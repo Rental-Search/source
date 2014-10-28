@@ -16,6 +16,9 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.products = {};
             $scope.bookings = {};
 
+            if (!$scope.currentUserPromise) {
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+            }
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;

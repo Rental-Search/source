@@ -21,7 +21,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     });
 
     EloueCommon.constant("ServiceErrors", {
-        "invalid_grant": "Bad credentials provided"
+        "invalid_grant": "Bad credentials provided",
+        "invalid_request": "Bad request",
+        "invalid_scope": "Invalid scope",
+        "invalid_client": "Wrong client app"
     });
 
     EloueCommon.constant("ActivityType", {

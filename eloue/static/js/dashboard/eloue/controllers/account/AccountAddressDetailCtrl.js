@@ -9,9 +9,11 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "$state",
         "$stateParams",
+        "Endpoints",
         "AddressesService",
         "ProductsService",
-        function ($scope, $state, $stateParams, AddressesService, ProductsService) {
+        "UsersService",
+        function ($scope, $state, $stateParams, Endpoints, AddressesService, ProductsService, UsersService) {
 
             $scope.address = {};
 
@@ -29,10 +31,23 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.submitInProgress = true;
                 var form = $("#address_detail_form");
                 AddressesService.updateAddress($scope.address.id, form).then(function(result) {
-                    $scope.submitInProgress = false;
-                    $scope.showNotification("Adresse enregistrée");
-                    $state.transitionTo($state.current, $stateParams, { reload: true });
+                    if ($scope.defaultAddressId != $stateParams.id) {
+                        var userPatch = {};
+                        userPatch.default_address = Endpoints.api_url + "addresses/" + $scope.address.id + "/";
+                        UsersService.updateUser(userPatch).$promise.then(function (result) {
+                            $scope.currentUser.default_address = result.default_addres;
+                            $scope.finaliseAddressUpdate();
+                        })
+                    } else {
+                        $scope.finaliseAddressUpdate();
+                    }
                 });
+            };
+
+            $scope.finaliseAddressUpdate = function() {
+                $scope.submitInProgress = false;
+                $scope.showNotification("Adresse enregistrée");
+                $state.transitionTo($state.current, $stateParams, { reload: true });
             };
 
             // Delete address

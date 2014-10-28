@@ -1,12 +1,7 @@
+-load i18n
+
 .container
   ol.breadcrumb
-    -var breadcrumbs = [{'text': "Accueil"}, {'text': "En savoir plus"}, {'text': "Contactez‐nous", 'is_active': true}]
-    {% for item in breadcrumbs %}
-    {% if item.is_active %}
-    li.active: a(href="#")
-        != item.text
-    {% else %}
-    li: a(href="#")
-        != item.text
-    {% endif %}
-    {%endfor%}
+    li: a(href="{% url 'home' %}") {% trans 'Accueil' %}
+    li En savoir plus
+    li.active Contactez‐nous

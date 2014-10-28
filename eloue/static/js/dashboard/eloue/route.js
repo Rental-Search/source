@@ -260,6 +260,7 @@ define(["eloue/app",
             // Route change event listener
             $rootScope.$on('$stateChangeStart',
                 function (event, toState, toParams, fromState, fromParams) {
+                    $rootScope.routeChangeInProgress = true;
                     if (!toState.insecure && !AuthService.isLoggedIn()) {
                         $rootScope.$broadcast("redirectToLogin");
                         event.preventDefault();
@@ -273,6 +274,15 @@ define(["eloue/app",
                             }
                         });
                     }
+                });
+            $rootScope.$on('$stateChangeSuccess',
+                function(event, toState, toParams, fromState, fromParams){
+                    $rootScope.routeChangeInProgress = false;
+                });
+
+            $rootScope.$on('$stateChangeError',
+                function(event, toState, toParams, fromState, fromParams, error){
+                    $rootScope.routeChangeInProgress = false;
                 });
 
             /**

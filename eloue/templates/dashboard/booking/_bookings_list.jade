@@ -11,7 +11,7 @@ section.tabs-vertical-active.lg(ng-show="(bookingList && bookingList.length > 0)
         .select-gradient.without-search
           select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()", eloue-chosen)
               {% verbatim %}
-              option(value="") Statuts
+              option(value="") Tous
               option(ng-repeat="state in stateList", value="{{state}}") {{state | translate}}
 
   ul.scrollbar-custom(eloue-lazy-load, lazy-data="bookingList", lazy-data-provider="BookingsLoadService", lazy-load-method="getBookingList")
@@ -19,7 +19,7 @@ section.tabs-vertical-active.lg(ng-show="(bookingList && bookingList.length > 0)
       li.tab-vertical.block-with-thumbnail(ng-repeat="booking in bookingList track by booking.uuid", id="booking-{{booking.uuid}}", ui-sref="bookings.detail({uuid: booking.uuid})", class="{{booking.state}}")
         .col-thumbnail
           .thumbnail
-            a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{getProductImg(booking.picture)}}", alt="{{booking.product.summary}}", width="130", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
+            a(ui-sref="bookings.detail({uuid: booking.uuid})").lg-p: img(style="background-image: url({{booking.picture}});")
             span(translate="{{booking.state}}").booking-bage
         .col-exposition
           h3.small

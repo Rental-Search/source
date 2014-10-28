@@ -16,7 +16,7 @@ form(ng-submit="requestBooking()", ng-if="booking === null")
         .table-cell.without-search
             select(name="end_time", ng-model="newBooking.end_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen, data-ng-disabled="submitInProgress")
 
-    table(ng-if="booking === null").calendar.bd-wrap.indent-md-t: tbody
+    table(ng-if="booking === null").bd-wrap.indent-md-t: tbody
       {% verbatim %}
       tr
         td Durée

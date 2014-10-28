@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 import re
+
+from django.conf import settings
+
 from payments.paybox_payment import PayboxManager
 
 REPLACE_STRING = settings.REPLACE_STRING
@@ -12,7 +14,6 @@ def pre_delete_creditcard(sender, instance, *args, **kwargs):
     PayboxManager().unsubscribe(instance.subscriber_reference)
 
 def _string_filter(raw_string):
-    
     sub_string = re.sub(r"\+\d{11}", REPLACE_STRING, raw_string, re.I) #phone number filter, for +33698756789
     sub_string = re.sub(r"(\w+(.)\w+@\w+(?:\.\w+)+)", REPLACE_STRING, sub_string, re.I) #e-mail filter lin.liu@gmail.com
     sub_string = re.sub(r"(\w+(.)\w+@\w+\-\w+(?:\.\w+)+)", REPLACE_STRING, sub_string, re.I) #e-mail filter lin.liu@e-loue.com
@@ -47,6 +48,3 @@ def message_site_filter(sender, instance, raw, using, *args, **kwargs):
                 pass
             else:
                 instance.recipient = None
-
-        
-        

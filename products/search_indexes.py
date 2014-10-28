@@ -1,5 +1,7 @@
 #-*- coding: utf-8 -*-
-import datetime
+from datetime import datetime, timedelta
+
+from django.utils.functional import memoize
 
 from haystack import indexes
 
@@ -7,7 +9,12 @@ from products.models import Alert, Product, CarProduct, RealEstateProduct
 
 __all__ = ['ProductIndex', 'AlertIndex']
 
-ONE_DAY_DELTA = datetime.timedelta(days=1)
+ONE_DAY_DELTA = timedelta(days=1)
+
+def cached_category(category_id, category):
+    return tuple(category.get_ancestors(ascending=False, include_self=True).values_list('slug', flat=True))
+_category = {}
+cached_category = memoize(cached_category, _category, 1)
 
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
@@ -32,18 +39,23 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
-    pro_owner = indexes.BooleanField(default=False)
-    
-    is_highlighted = indexes.BooleanField(model_attr='is_highlighted')
-    is_top = indexes.BooleanField(model_attr='is_top')
 
+    is_highlighted = indexes.BooleanField(default=False)#model_attr='is_highlighted')
+    is_top = indexes.BooleanField(default=False)#model_attr='is_top')
+
+    # introduced for UI 3 and API 2.0
+    pro_owner = indexes.BooleanField(default=False, indexed=False)
+    comment_count = indexes.IntegerField(model_attr='comment_count', default=0, indexed=False)
+    average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
     
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
     
     def prepare_categories(self, obj):
-        if obj.category:
-            return [category.slug for category in obj.category.get_ancestors(ascending=False, include_self=True)]
+        category = obj.category
+        if category:
+            # it is safe to cache get_ancestors for categories and cache them by category PK
+            return cached_category(category.pk, category)
 
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]:
@@ -67,11 +79,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     def prepare_price(self, obj):
         # It doesn't play well with season
-        if obj.prices.all()[:1]:
-            now = datetime.datetime.now()
-            unit, amount = obj.calculate_price(now, now + ONE_DAY_DELTA)
-            return amount
-    
+        now = datetime.now()
+        return obj.calculate_price(now, now + ONE_DAY_DELTA)[1]
+
     def prepare_special(self, obj):
         special = hasattr(obj, 'carproduct') or hasattr(obj, 'realestateproduct')
         return special
@@ -83,7 +93,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return Product
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.active().select_related('address', 'owner')#.prefetch_related('pictures', 'prices')
+        return self.get_model().on_site.active().select_related('category', 'address', 'owner')
         
 class CarIndex(ProductIndex):
 
@@ -99,18 +109,18 @@ class CarIndex(ProductIndex):
     consumption = indexes.DecimalField(model_attr='consumption')
 
     # options & accessoires
-    air_conditioning = indexes.BooleanField(model_attr='air_conditioning')
-    power_steering = indexes.BooleanField(model_attr='power_steering')
-    cruise_control = indexes.BooleanField(model_attr='cruise_control')
-    gps = indexes.BooleanField(model_attr='gps')
-    baby_seat = indexes.BooleanField(model_attr='baby_seat')
-    roof_box = indexes.BooleanField(model_attr='roof_box')
-    bike_rack = indexes.BooleanField(model_attr='bike_rack')
-    snow_tires = indexes.BooleanField(model_attr='snow_tires')
-    snow_chains = indexes.BooleanField(model_attr='snow_chains')
-    ski_rack = indexes.BooleanField(model_attr='ski_rack')
-    cd_player = indexes.BooleanField(model_attr='cd_player')
-    audio_input = indexes.BooleanField(model_attr='audio_input')
+    air_conditioning = indexes.BooleanField(model_attr='air_conditioning', null=True)
+    power_steering = indexes.BooleanField(model_attr='power_steering', null=True)
+    cruise_control = indexes.BooleanField(model_attr='cruise_control', null=True)
+    gps = indexes.BooleanField(model_attr='gps', null=True)
+    baby_seat = indexes.BooleanField(model_attr='baby_seat', null=True)
+    roof_box = indexes.BooleanField(model_attr='roof_box', null=True)
+    bike_rack = indexes.BooleanField(model_attr='bike_rack', null=True)
+    snow_tires = indexes.BooleanField(model_attr='snow_tires', null=True)
+    snow_chains = indexes.BooleanField(model_attr='snow_chains', null=True)
+    ski_rack = indexes.BooleanField(model_attr='ski_rack', null=True)
+    cd_player = indexes.BooleanField(model_attr='cd_player', null=True)
+    audio_input = indexes.BooleanField(model_attr='audio_input', null=True)
 
     # informations de l'assurance
     tax_horsepower = indexes.DecimalField(model_attr='tax_horsepower')
@@ -128,27 +138,27 @@ class RealEstateIndex(ProductIndex):
     rules = indexes.CharField(model_attr='rules', null=True)
 
     # services inclus
-    air_conditioning = indexes.BooleanField(model_attr='air_conditioning')
-    breakfast = indexes.BooleanField(model_attr='breakfast')
-    balcony = indexes.BooleanField(model_attr='balcony')
-    lockable_chamber = indexes.BooleanField(model_attr='lockable_chamber')
-    towel = indexes.BooleanField(model_attr='towel')
-    lift = indexes.BooleanField(model_attr='lift')
-    family_friendly = indexes.BooleanField(model_attr='family_friendly')
-    gym = indexes.BooleanField(model_attr='gym')
-    accessible = indexes.BooleanField(model_attr='accessible')
-    heating = indexes.BooleanField(model_attr='heating')
-    jacuzzi = indexes.BooleanField(model_attr='jacuzzi')
-    chimney = indexes.BooleanField(model_attr='chimney')
-    internet_access = indexes.BooleanField(model_attr='internet_access')
-    kitchen = indexes.BooleanField(model_attr='kitchen')
-    parking = indexes.BooleanField(model_attr='parking')
-    smoking_accepted = indexes.BooleanField(model_attr='smoking_accepted')
+    air_conditioning = indexes.BooleanField(model_attr='air_conditioning', null=True)
+    breakfast = indexes.BooleanField(model_attr='breakfast', null=True)
+    balcony = indexes.BooleanField(model_attr='balcony', null=True)
+    lockable_chamber = indexes.BooleanField(model_attr='lockable_chamber', null=True)
+    towel = indexes.BooleanField(model_attr='towel', null=True)
+    lift = indexes.BooleanField(model_attr='lift', null=True)
+    family_friendly = indexes.BooleanField(model_attr='family_friendly', null=True)
+    gym = indexes.BooleanField(model_attr='gym', null=True)
+    accessible = indexes.BooleanField(model_attr='accessible', null=True)
+    heating = indexes.BooleanField(model_attr='heating', null=True)
+    jacuzzi = indexes.BooleanField(model_attr='jacuzzi', null=True)
+    chimney = indexes.BooleanField(model_attr='chimney', null=True)
+    internet_access = indexes.BooleanField(model_attr='internet_access', null=True)
+    kitchen = indexes.BooleanField(model_attr='kitchen', null=True)
+    parking = indexes.BooleanField(model_attr='parking', null=True)
+    smoking_accepted = indexes.BooleanField(model_attr='smoking_accepted', null=True)
     ideal_for_events = indexes.BooleanField(model_attr='ideal_for_events')
-    tv = indexes.BooleanField(model_attr='tv')
-    washing_machine = indexes.BooleanField(model_attr='washing_machine')
-    tumble_dryer = indexes.BooleanField(model_attr='tumble_dryer')
-    computer_with_internet = indexes.BooleanField(model_attr='computer_with_internet')
+    tv = indexes.BooleanField(model_attr='tv', null=True)
+    washing_machine = indexes.BooleanField(model_attr='washing_machine', null=True)
+    tumble_dryer = indexes.BooleanField(model_attr='tumble_dryer', null=True)
+    computer_with_internet = indexes.BooleanField(model_attr='computer_with_internet', null=True)
 
     def get_model(self):
         return RealEstateProduct
@@ -166,8 +176,7 @@ class AlertIndex(indexes.Indexable, indexes.SearchIndex):
     url = indexes.CharField(model_attr='get_absolute_url', indexed=False)
     
     def prepare_sites(self, obj):
-        res = obj.sites.all().values_list('id', flat=True)
-        return tuple(res)
+        return tuple(obj.sites.values_list('id', flat=True))
 
     def get_model(self):
         return Alert

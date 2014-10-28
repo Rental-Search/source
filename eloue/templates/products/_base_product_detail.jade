@@ -30,7 +30,7 @@ block append content-body
             .section-body
               .part.picture-tab#tabs
                 {% with product.object.shipping_available as shipping_available %}
-                ul.nav.nav-justified
+                ul.nav.nav-justified.text-nowrap
                   -var tabs = [["Photos et Localisation", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"]]
                   each title, href in tabs
                     li.spacer

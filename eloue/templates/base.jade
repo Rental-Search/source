@@ -17,7 +17,7 @@ html(lang="fr")
       {% compressed_css "extrastyles" %}
 
     block scripts
-      script(src="{% static 'bower_components/requirejs/require.js' %}", data-main="{% static 'js/widgets/main.js' %}", data-static-path="{{ STATIC_URL }}")
+      {% compressed_js "public_js" %}
 
   body
     block content-body
