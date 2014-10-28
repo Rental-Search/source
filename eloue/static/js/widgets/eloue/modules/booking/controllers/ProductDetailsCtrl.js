@@ -342,21 +342,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         if (!!selectedPoint && !!selectedPoint.site_id) {
                             selectedPoint.type = 2;
                             selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
-                            console.log(selectedPoint);
-
-
                             PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (shippingPoint) {
-                                console.log($scope.productShippingPoint.id);
-                                var shipping = {
-                                    price: selectedPoint.price,
-                                    booking:  Endpoints.api_url + "bookings/" + booking.uuid + "/",
-                                    departure_point: Endpoints.api_url + "productshippingpoints/" + $scope.productShippingPoint.id + "/",
-                                    arrival_point: Endpoints.api_url + "patronshippingpoints/" + shippingPoint.id + "/"
-                                };
-                                ShippingsService.saveShipping(shipping).$promise.then(function (result) {
-                                    console.log(result);
-                                    $scope.payForBooking(booking, paymentInfo);
-                                });
+                                $scope.payForBooking(booking, paymentInfo);
+                            }, function (error) {
+                                $scope.handleResponseErrors(error);
                             });
                         } else {
                             $scope.payForBooking(booking, paymentInfo);
@@ -374,6 +363,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $(".modal").modal("hide");
                     $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                     $scope.submitInProgress = false;
+                }, function (error) {
+                    $scope.handleResponseErrors(error);
                 });
             };
 

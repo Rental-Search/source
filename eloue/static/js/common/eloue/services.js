@@ -1294,6 +1294,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return PatronShippingPoints.save(shippingPoint);
                 };
 
+                patronShippingPointsService.getByPatron = function (userId) {
+                    return PatronShippingPoints.get({_cache: new Date().getTime(), patron: userId}).$promise;
+                };
+
                 return patronShippingPointsService;
             }
         ]);
