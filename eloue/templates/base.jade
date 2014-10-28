@@ -18,10 +18,20 @@ html(lang="fr")
 
     block scripts
       {% compressed_js "public_js" %}
-
+    script
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-8258979-1']);
+      _gaq.push(['_setDomainName', 'www.e-loue.com']);
+      _gaq.push(['_trackPageview']);
   body
     block content-body
-      #ngModals
-          eloue-login-form
-          eloue-registration-form
-          eloue-reset-password-form
+    script
+        (function() {
+             var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
+             ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
+             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+    #ngModals
+        eloue-login-form
+        eloue-registration-form
+        eloue-reset-password-form
