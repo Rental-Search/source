@@ -4,6 +4,7 @@ import os
 from os.path import dirname, commonprefix, relpath, join, exists
 
 from django.dispatch.dispatcher import receiver
+from django.contrib.staticfiles import finders
 
 from eloue.compat.pipeline.conf import settings
 from pipeline.compilers import sass, SubProcessCompiler
@@ -31,6 +32,7 @@ class OutputPathMixin(object):
 class AutoprefixerMixin(object):
     def compile_file(self, infile, outfile, **kwargs):
         super(AutoprefixerMixin, self).compile_file(infile, outfile, **kwargs)
+        print infile, outfile
         command = "%s %s %s" % (
             settings.PIPELINE_AUTOPREFIXER_BINARY,
             settings.PIPELINE_AUTOPREFIXER_ARGUMENTS,
@@ -59,7 +61,18 @@ class RequireJsCompiler(SubProcessCompiler):
 @receiver(js_compressed, dispatch_uid='pipeline_requirejs_build')
 def requirejs_build(sender, package, **kwargs):
     if 'requirejs' in package.extra_context:
-        RequireJsCompiler(sender.verbose, sender.storage).compile_file(
-            sender.storage.path(package.extra_context['build']),
-            sender.storage.path(package.output_filename),
-        )
+        # get full path to the build.js file on local FS
+        input_path = package.extra_context['build']
+        infile = finders.find(input_path)
+
+        # calculate full path to destination file
+        path = input_path
+        output_path = infile
+        while path != '':
+            path = dirname(path)
+            output_path = dirname(output_path)
+        infile = finders.find(input_path)
+        outfile = join(output_path, package.output_filename)
+
+        # run r.js compiler
+        RequireJsCompiler(sender.verbose, sender.storage).compile_file(infile, outfile)
