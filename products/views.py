@@ -808,7 +808,8 @@ class ProductListView(ProductList):
             'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-        prices = [price[0] for price in context['facets']['fields']['price']]
+
+        prices = [price[0] for price in context['facets'].get('fields', {}).get('price', ())]
         if prices:
             context.update({
                 'price_min': min(prices),
