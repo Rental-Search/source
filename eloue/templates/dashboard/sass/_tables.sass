@@ -2,32 +2,30 @@ table
   &.calendar
     width: 100%
     font-size: $font-size-smaller
-    thead tr
-      background-color: $gray-lighter
-    tbody
-      background-color: darken($gray-lite, 2%)
-      tr:nth-of-type(2n)
-        background-color: $gray-lite
     td
       padding: $indent-xs
       vertical-align: middle
-      border-left: 1px solid $gray-medium
-      &:first-child
-        border-left: none
-      &.outages
-        background-color: lighten($brand-danger, 35%)
-      &.booking
-        background-color: lighten($brand-success, 45%)
-  &.bg-light
-    tbody
-      background-color: #fff
-  &.bd-wrap
-    tr
-      position: relative
-    td
-      border: 1px solid $gray-medium !important
-      & + td
-        border-left: 0 !important
+    &.calendar
+      thead tr
+        background-color: $gray-lighter
+      tbody
+        background-color: darken($gray-lite, 2%)
+      tr:nth-of-type(2n)
+        background-color: $gray-lite
+      td        
+        border-left: 1px solid $gray-medium
+        &:first-child
+          border-left: none
+        &.outages
+          background-color: lighten($brand-danger, 35%)
+        &.booking
+          background-color: lighten($brand-success, 45%)
+    &.bg-light
+      tbody
+        background-color: #fff
+    &.bd-wrap
+      tr
+        border: 1px solid $gray-medium
 
   .main-cell
     width: 100%

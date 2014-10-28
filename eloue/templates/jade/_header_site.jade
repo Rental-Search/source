@@ -4,19 +4,19 @@ section.container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser").without-spaces
     li: span
-      | Appelez-nous au 
-      b 0826.800.200 
-      | (0,15&euro; / min)
+      | Bonjour, 
+      a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b inscrivez-vous 
+      | ou 
+      a(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b connectez-vous
     li.divide
     li: span
         | Vous êtes un loueur professionnel, découvrez les 
         a(href="{% url 'subscription' %}"): b offres e-loue Pro
     li.divide
     li: span
-        | Bonjour, 
-        a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b inscrivez-vous 
-        | ou 
-        a(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b connectez-vous
+      | Appelez-nous au 
+      b 0826.800.200 
+      | (0,15&euro; / min)
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser").without-spaces
     li: span

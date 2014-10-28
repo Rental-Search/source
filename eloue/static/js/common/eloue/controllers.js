@@ -35,7 +35,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             var expire = new Date();
             expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
             document.cookie = "user_token=" + escape(data.access_token) + ";expires="
-                + expire.toGMTString();
+                + expire.toGMTString() + ";path=/";
             $scope.authorize();
         };
 
@@ -158,7 +158,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", function ($scope, $http, $window, AuthService, CivilityChoices, UsersService) {
+    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin) {
 
         /**
          * New user account data.
@@ -170,6 +170,15 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          */
         $scope.registrationError = null;
         $scope.civilityOptions = CivilityChoices;
+        $scope.errors = {
+            last_name: "",
+            first_name: "",
+            email: "",
+            username: "",
+            password: "",
+            confirmPassword: "",
+            zipcode: ""
+        };
 
         /**
          * Register new user in the system.
@@ -191,10 +200,19 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     }
                 );
             }, function (error) {
-                if (error.data && error.data.detail) {
-                    $scope.$apply(function () {
-                        $scope.registrationError = error.data.detail;
-                    });
+                if (!!error.message) {
+                    $scope.registrationError = error.message;
+                }
+                if (!!error.errors) {
+                    $scope.errors = {
+                        last_name: !!error.errors.last_name ? error.errors.last_name[0] : "",
+                        first_name: !!error.errors.first_name ? error.errors.first_name[0] : "",
+                        email: !!error.errors.email ? error.errors.email[0] : "",
+                        username: !!error.errors.username ? error.errors.username[0] : "",
+                        password: !!error.errors.password ? error.errors.password[0] : "",
+                        confirmPassword: !!error.errors.confirmPassword ? error.errors.confirmPassword[0] : "",
+                        zipcode: !!error.errors.zipcode ? error.errors.zipcode[0] : ""
+                    };
                 }
             });
         };
@@ -203,7 +221,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             var expire = new Date();
             expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
             document.cookie = "user_token=" + escape(data.access_token) + ";expires="
-                + expire.toGMTString();
+                + expire.toGMTString() + ";path=/";
             $scope.authorize();
         };
 
@@ -245,7 +263,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
                 });
-                $window.location.href = "/dashboard"
+                if (RedirectAfterLogin.url != "/") {
+                    AuthService.redirectToAttemptedUrl();
+                } else {
+                    $window.location.href = "/dashboard"
+                }
             }
         };
 

@@ -80,24 +80,25 @@ define(["angular", "eloue/app"], function (angular) {
                             };
 
                             $scope.requestBooking = function () {
+                                $scope.submitInProgress = true;
 //                                //Get product details
-//                                ProductsLoadService.getProduct($scope.messageThread.product.id).then(function (product) {
-//                                    CategoriesService.getCategory(UtilsService.getIdFromUrl(product.category)).$promise.then(function (rootCategory) {
-//                                        console.log(rootCategory)
-//                                    });
-//                                });
-//                                $window.location.href = "/location/#/booking";
-                                BookingsLoadService.requestBooking($scope.newBooking).then(
-                                    function (booking) {
-                                        $scope.booking = booking;
-                                    }
-                                );
+                                ProductsLoadService.getAbsoluteUrl($scope.messageThread.product.id).$promise.then(function (result) {
+                                    $window.location.href = result.url + "#/booking";
+//                                    $scope.submitInProgress = false;
+                                });
+//                                BookingsLoadService.requestBooking($scope.newBooking).then(
+//                                    function (booking) {
+//                                        $scope.booking = booking;
+//                                    }
+//                                );
                             };
 
                             $scope.booking = booking;
                             $scope.updateNewBookingInfo();
                         } else {
                             $scope.booking = booking;
+                            $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
+                            $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
                     });
                 }

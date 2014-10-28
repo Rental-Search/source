@@ -45,14 +45,16 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categor
   input#range(type="number", data-type="range", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}")
   input#range-slider(type="slider", value="0;{{ form.cleaned_data.r|floatformat:'0' }}", max-value="{{ form.max_range|floatformat:'0' }}", solo)
 
-  label.caption(for="start-date") date de début
-  .date-picker
+  //-label.caption(for="start-date") date de début
+  //-.date-picker
+  //-
     .table-cell.main-cell
       input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
-  label.caption(for="end-date") date de fin
-  .date-picker
+  //-label.caption(for="end-date") date de fin
+  //-.date-picker
+  //-
     .table-cell.main-cell
       input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3

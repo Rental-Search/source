@@ -612,6 +612,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
             };
 
+            utilsService.isToday = function(dateStr) {
+                var date = Date.parse(dateStr);
+                var today = new Date();
+                return !!date && date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear();
+            };
+
             return utilsService;
         }]);
 
@@ -1653,6 +1659,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                productLoadService.getAbsoluteUrl = function(id) {
+                    return Products.getAbsoluteUrl({id: id,cache: new Date().getTime()});
+                };
+
                 productLoadService.isAvailable = function (id, startDate, endDate, quantity) {
                     return CheckAvailability.get({id: id, started_at: startDate, ended_at: endDate, quantity: quantity}).$promise;
                 };
@@ -1850,7 +1860,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     // Parse last message
                     if (!!lastMessageData) {
                         messageThreadResult.last_message = lastMessageData;
-                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.MM.yyyy HH'h'mm");
+                        // if the creation date of the last message is the current day display only the hour
+                        // if the creation date of the last message is before the current day display the date and not the hour
+                        if (UtilsService.isToday(lastMessageData.sent_at)) {
+                            messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "HH'h'mm");
+                        } else {
+                            messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.MM.yyyy");
+                        }
                     }
 
                     return messageThreadResult;
@@ -2009,7 +2025,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * Remove user token.
                  */
                 clearUserData: function () {
-                    document.cookie = "user_token=;expires=" + new Date(0).toGMTString();
+                    document.cookie = "user_token=;expires=" + new Date(0).toGMTString() + ";path=/";
                 },
 
                 /**

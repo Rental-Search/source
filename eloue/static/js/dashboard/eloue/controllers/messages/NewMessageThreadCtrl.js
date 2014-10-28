@@ -35,6 +35,8 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                     // Get booking product
                     BookingsLoadService.getBookingByProduct($stateParams.productId).then(function (booking) {
                         $scope.booking = booking;
+                        $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
+                        $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                     });
                 } else {
                     toastr.options.positionClass = "toast-top-full-width";

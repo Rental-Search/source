@@ -9,8 +9,8 @@ block append scripts
   script(src="{% static 'bower_components/jquery/dist/jquery.min.js' %}")
   script
     $(document).ready(function() {
-      $('.timeline-steps li').on('click', function () {
-        $(this).find('.content').toggleClass('text-overflow');
+      $('.toggle-content').on('click', function () {
+        $(this).closest('li').find('.content').toggleClass('text-overflow');
         });
     });
 

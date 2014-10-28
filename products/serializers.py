@@ -12,27 +12,28 @@ class CategorySerializer(ModelSerializer):
 
     class Meta:
         model = models.Category
-        fields = ('id', 'parent', 'name', 'need_insurance',
+        fields = ('id', 'parent', 'name', 'need_insurance', 'slug',
                   'title', 'description', 'header', 'footer',
                   'is_child_node', 'is_leaf_node', 'is_root_node')
         public_fields = (
-            'id', 'parent', 'name', 'need_insurance',
+            'id', 'parent', 'name', 'need_insurance', 'slug',
             'title', 'description', 'header', 'footer',
             'is_child_node', 'is_leaf_node', 'is_root_node')
+        read_only_fields = ('slug',)
         immutable_fields = ('parent',)
 
 class ProductSerializer(ModelSerializer):
     address = NestedAddressSerializer()
     phone = NestedPhoneNumberSerializer(required=False)
+    slug = CharField(read_only=True, source='slug')
 
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'phone',
-                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies')
+                  'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies', 'slug')
         public_fields = (
             'id', 'summary', 'deposit_amount', 'currency', 'description',
-            'address', 'phone', 'quantity', 'category', 'owner',
-            'pro_agencies')
+            'address', 'phone', 'quantity', 'category', 'owner', 'pro_agencies', 'slug')
         view_name = 'product-detail'
         read_only_fields = ('is_archived', 'created_at')
         immutable_fields = ('owner',)

@@ -8,6 +8,7 @@
         select(name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", eloue-chosen).form-control
     .span(ng-show="fromDate.$dirty && fromDate.$error.required").text-danger From date is required.
     .span(ng-show="fromDate.$dirty && fromDate.$error.pattern").text-danger Invalid date.
+    span.text-danger(ng-show="!!errors.started_at", ng-bind="errors.started_at")
 .row.date-picker
     .table-cell.main-cell
         .table-cell: span Au
@@ -18,3 +19,4 @@
         select(name="toHour", ng-model="bookingDetails.toHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", eloue-chosen).form-control
     .span(ng-show="toDate.$dirty && toDate.$error.required").text-danger To date is required.
     .span(ng-show="toDate.$dirty && toDate.$error.pattern").text-danger Invalid date.
+    span.text-danger(ng-show="!!errors.ended_at", ng-bind="errors.ended_at")

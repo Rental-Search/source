@@ -21,7 +21,7 @@ from django.utils.functional import cached_property
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.db.models import Q, Count, Avg
+from django.db.models import Q, Count
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
@@ -750,39 +750,42 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
     @property
-    @method_decorator(cached(10*60))
-    def home_context(self):
+    @method_decorator(cached(timeout=10*60))
+    def homepage_stats(self):
         product_stats = Product.objects.extra(
             tables=['accounts_address'],
             where=['"products_product"."address_id" = "accounts_address"."id"'],
             select={'city': 'lower(trim("accounts_address"."city"))'}
         ).values('city').annotate(Count('id')).order_by('-id__count')
+
+        return {
+            'cities_list': product_stats,
+            'total_products': Product.on_site.only('id').count(),
+        }
+
+    def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
         comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images
         patron_set = set()
-        for elem in product_list:
-            patron_set.add(elem.object.owner)
-            for picture in elem.object.pictures.all():
-                generate_picture_images(picture)
-        for comment in comment_list:
+        for elem in product_list[:PAGINATE_PRODUCTS_BY]:
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
+        for comment in comment_list[:PAGINATE_PRODUCTS_BY]:
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
         for patron in patron_set:
             generate_patron_images(patron)
 
-        return {
-            'cities_list': product_stats,
-            'total_products': Product.on_site.only('id').count(),
+        context = {
             'product_list': product_list,
             'comment_list': comment_list,
         }
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        context.update(self.home_context)
+        context.update(self.homepage_stats)
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
 
@@ -797,8 +800,8 @@ class ProductListView(ProductList):
     def get_breadcrumbs(self, request):
         breadcrumbs = super(ProductListView, self).get_breadcrumbs(request)
         form = self.form
-        breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date from', 'facet': False}
-        breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date to', 'facet': False}
+        #breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date from', 'facet': False}
+        #breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date to', 'facet': False}
         breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'date from', 'facet': False}
         breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'date to', 'facet': False}
         breadcrumbs['categorie'] = {'name': 'categorie', 'value': None, 'label': 'categorie', 'facet': True}
@@ -824,9 +827,10 @@ class ProductListView(ProductList):
         else:
             product_list = context['product_list']
         for elem in product_list:
-            patron_set.add(elem.object.owner)
-            for picture in elem.object.pictures.all():
-                generate_picture_images(picture)
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
         for patron in patron_set:
             generate_patron_images(patron)
 
@@ -848,6 +852,8 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         product = self.object.object
+        if not product:
+            raise Http404
         product_type = product.name
         comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
         product_list = self.sqs.more_like_this(product)[:5]
@@ -859,9 +865,10 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         from eloue.legacy import generate_patron_images, generate_picture_images
         patron_set = set()
         for elem in chain(product_list, [self.object]):
-            patron_set.add(elem.object.owner)
-            for picture in elem.object.pictures.all():
-                generate_picture_images(picture)
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
         for comment in chain(product_comment_list, owner_comment_list):
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
@@ -873,7 +880,6 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             'product_list': product_list,
             'product_comments': product_comment_list,
             'owner_comments': owner_comment_list,
-            'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
             'product_type': product_type,
             'product_object': getattr(product, product_type) if product_type != 'product' else product,
             'insurance_available': settings.INSURANCE_AVAILABLE,
@@ -1057,17 +1063,12 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
 
     @link()
     def stats(self, request, *args, **kwargs):
+        return Response(self.get_object().stats)
+
+    @link()
+    def absolute_url(self, request, *args, **kwargs):
         obj = self.get_object()
-        # TODO: we would need a better rating calculation in the future
-        qs = obj.borrowercomments.aggregate(Avg('note'), Count('id'))
-        id__count = qs['id__count'] or 0
-        res = {
-            'average_rating': qs['note__avg'] or 0,
-            'ratings_count': id__count,
-            'booking_comments_count': id__count,
-            'bookings_count': Booking.on_site.active().filter(Q(owner=obj) | Q(borrower=obj)).count(),
-        }
-        return Response(res)
+        return Response(dict(url=obj.get_absolute_url()))
 
     @cached_property
     def _category_from_native(self):
