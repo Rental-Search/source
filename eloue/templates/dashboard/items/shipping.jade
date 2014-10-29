@@ -70,7 +70,9 @@ block details
                     br
                     | {{point.zipcode}} {{point.city}}
 
-        .text-center(ng-show="!!shippingPoints && shippingPoints.length > 0"): a(href="", ng-click="saveMapPoint()", ng-disabled="!selectedPointId || submitInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.btn-inline.bg-success-hover.text-white Enregistrer
+        .text-center(ng-show="!!shippingPoints && shippingPoints.length > 0")
+            a(href="", ng-click="cancelPointSelection()").text.text-danger.text-underline-hover.indent-sm-h  Annuler
+            a(href="", ng-click="saveMapPoint()", ng-disabled="!selectedPointId || submitInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.btn-inline.bg-success-hover.text-white Enregistrer
         {% endverbatim %}
 
   .section-content(ng-show="showPointDetails")
