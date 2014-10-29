@@ -101,40 +101,56 @@ define(["angular", "eloue/app"], function (angular) {
                 return $.inArray(status, ["pending", "ongoing", "ended", "incident", "refunded", "closed"]) != -1;
             };
 
+            $scope.handleResponseErrors = function (error) {
+                $scope.serverError = error.errors;
+                $scope.submitInProgress = false;
+            };
+
 
             $scope.acceptBooking = function () {
                 $scope.submitInProgress = true;
                 BookingsLoadService.acceptBooking($stateParams.uuid).$promise.then(function (result) {
                     if ($scope.bookingDetails.with_shipping) {
-
+                        ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
+                            //Show shipping choice only if there are existing product shipping points
+                            if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
+                                var productShippingPoint = productShippingPointData.results[0];
+                                PatronShippingPointsService.getByPatronAndBooking(UtilsService.getIdFromUrl($scope.bookingDetails.borrower), $stateParams.uuid).then(function (patronShippingPointData) {
+                                    if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
+                                        var patronShippingPoint = patronShippingPointData.results[0];
+                                        // TODO: Price is hardcoded for now, will be taken from some third-party pricing service
+                                        var shipping = {
+                                            price: "10.0",
+                                            booking: Endpoints.api_url + "bookings/" + $scope.bookingDetails.uuid + "/",
+                                            departure_point: Endpoints.api_url + "productshippingpoints/" + productShippingPoint.id + "/",
+                                            arrival_point: Endpoints.api_url + "patronshippingpoints/" + patronShippingPoint.id + "/"
+                                        };
+                                        ShippingsService.saveShipping(shipping).$promise.then(function (result) {
+                                            $scope.showNotification(result.detail);
+                                            $window.location.reload();
+                                        }, function (error) {
+                                            $scope.handleResponseErrors(error);
+                                        });
+                                    } else {
+                                        $scope.showNotification(result.detail);
+                                        $window.location.reload();
+                                    }
+                                }, function (error) {
+                                    $scope.handleResponseErrors(error);
+                                });
+                            } else {
+                                $scope.showNotification(result.detail);
+                                $window.location.reload();
+                            }
+                        }, function (error) {
+                            $scope.handleResponseErrors(error);
+                        });
+                    } else {
+                        $scope.showNotification(result.detail);
+                        $window.location.reload();
                     }
-                    ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
-                        //Show shipping choice only if there are existing product shipping points
-                        if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
-                            var productShippingPoint = productShippingPointData.results[0];
-                            PatronShippingPointsService.getByPatronAndBooking(UtilsService.getIdFromUrl($scope.bookingDetails.borrower), $stateParams.uuid).then(function (patronShippingPointData) {
-                                if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
-                                    var patronShippingPoint = patronShippingPointData.results[0];
-                                    console.log(patronShippingPoint);
-                                    var shipping = {
-                                        price: "10.0",
-                                        booking: Endpoints.api_url + "bookings/" + $scope.bookingDetails.uuid + "/",
-                                        departure_point: Endpoints.api_url + "productshippingpoints/" + productShippingPoint.id + "/",
-                                        arrival_point: Endpoints.api_url + "patronshippingpoints/" + patronShippingPoint.id + "/"
-                                    };
-                                    ShippingsService.saveShipping(shipping).$promise.then(function (result) {
-                                        console.log(result);
-                                    });
-                                } else {
-                                    $scope.showNotification(result.detail);
-                                    $window.location.reload();
-                                }
-                            });
-                        } else {
-                            $scope.showNotification(result.detail);
-                            $window.location.reload();
-                        }
-                    });
+                }, function (error) {
+                    $scope.handleResponseErrors(error);
                 })
             };
 

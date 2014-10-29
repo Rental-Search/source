@@ -232,6 +232,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.pricePerDay = result.unit_value;
                     $scope.bookingPrice = result.total_price;
                     $scope.available = result.max_available > 0;
+                }, function (error) {
+                    $scope.available = false;
+                    $scope.handleResponseErrors(error);
                 });
 
             };
