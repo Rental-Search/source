@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from rest_framework.fields import SerializerMethodField
 
 from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
 from rest_framework import fields
@@ -8,6 +9,8 @@ from rest_framework import fields
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api import serializers
+from shipping.models import ShippingPoint
+
 
 class SinisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,7 +44,16 @@ class BookingProductField(HyperlinkedRelatedField):
 
 class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
+    with_shipping = SerializerMethodField('is_shipping_included')
     sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
+
+    def is_shipping_included(self, obj):
+        try:
+            obj.product.departure_point
+            obj.arrival_point
+        except ShippingPoint.DoesNotExist:
+            return False
+        return True
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)
@@ -59,6 +71,7 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = (
             'uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
             'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at', 'sinisters',
+            'with_shipping',
         )
         read_only_fields = (
             'state', 'deposit_amount', 'insurance_amount', 'total_amount',

@@ -70,7 +70,7 @@ class PatronShippingPointSerializer(ShippingPointSerializer):
 
     class Meta(ShippingPointSerializer.Meta):
         model = models.PatronShippingPoint
-        fields = ShippingPointSerializer.Meta.fields + ('patron',)
+        fields = ShippingPointSerializer.Meta.fields + ('patron', 'shipping')
 
 
 class ProductShippingPointSerializer(ShippingPointSerializer):
@@ -90,8 +90,8 @@ class NestedProductShippingPointSerializer(serializers.NestedModelSerializerMixi
 
 class ShippingSerializer(serializers.ModelSerializer):
 
-    departure_point = NestedProductShippingPointSerializer()
-    arrival_point = NestedPatronShippingPointSerializer()
+    departure_point = NestedProductShippingPointSerializer(read_only=True)
+    arrival_point = NestedPatronShippingPointSerializer(read_only=True)
 
     regexp = re.compile('\d|-|_')
 
@@ -101,6 +101,8 @@ class ShippingSerializer(serializers.ModelSerializer):
     def from_native(self, data, files):
         instance = super(ShippingSerializer, self).from_native(data, files)
         if instance and not instance.pk:
+            instance.departure_point = instance.booking.product.departure_point
+            instance.arrival_point = instance.booking.arrival_point
             owner = instance.booking.owner
             borrower = instance.booking.borrower
 
