@@ -397,18 +397,26 @@ require([
         }
 
         function setMarkers(map, locations, markerId) {
+            var staticUrl = "/static/";
+            var scripts = document.getElementsByTagName('script');
+            for (var i = 0, l = scripts.length; i < l; i++) {
+                if (scripts[i].getAttribute('data-static-path')) {
+                    staticUrl = scripts[i].getAttribute('data-static-path');
+                    break;
+                }
+            };
             for (var i = 0; i < locations.length; i++) {
                 var product = locations[i];
 
                 var image, image_hover;
 
                 if (markerId == "li#marker-") {
-                    image = new google.maps.MarkerImage(STATIC_URL + 'images/markers_smooth_aligned.png',
+                    image = new google.maps.MarkerImage(staticUrl + 'images/markers_smooth_aligned.png',
                         new google.maps.Size(26, 28),
                         new google.maps.Point(0, 28 * i),
                         new google.maps.Point(14, 28));
 
-                    image_hover = new google.maps.MarkerImage(STATIC_URL + 'images/markers_smooth_aligned.png',
+                    image_hover = new google.maps.MarkerImage(staticUrl + 'images/markers_smooth_aligned.png',
                         new google.maps.Size(26, 28),
                         new google.maps.Point(29, 28 * i),
                         new google.maps.Point(14, 28));
