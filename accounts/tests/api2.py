@@ -126,7 +126,7 @@ class AnonymousUsersTest(APITestCase):
             'driver_license_number': '123456',
             'date_of_birth': '1980-01-01 00:00',
             'place_of_birth': 'Earth',
-            'rib': 'Some rib',
+            'iban': 'FR14 2004 1010 0505 0001 3M02 606',
             'url': 'http://www.website.com'
         }
         response = self.client.post(_location('patron-list'), post_data)
@@ -153,7 +153,7 @@ class AnonymousUsersTest(APITestCase):
         self.assertEqual(user.drivers_license_number, '123456')
         self.assertEqual(user.date_of_birth, datetime.datetime(1980, 1, 1))
         self.assertEqual(user.place_of_birth, 'Earth')
-        self.assertEqual(user.rib, 'Some rib')
+        self.assertEqual(user.iban, 'FR14 2004 1010 0505 0001 3M02 606')
         self.assertEqual(user.url, 'http://www.website.com')
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
@@ -330,7 +330,7 @@ class UsersTest(APITestCase):
         self.assertNotEqual(user.drivers_license_number, '123456')
         self.assertNotEqual(user.date_of_birth, datetime.datetime(1980, 1, 1))
         self.assertNotEqual(user.place_of_birth, 'Earth')
-        self.assertNotEqual(user.rib, 'Some rib')
+        self.assertNotEqual(user.iban, 'FR14 2004 1010 0505 0001 3M02 606')
         self.assertNotEqual(user.url, 'http://www.website.com')
 
         data = {
@@ -345,7 +345,7 @@ class UsersTest(APITestCase):
             'driver_license_number': '123456',
             'date_of_birth': '1980-01-01 00:00',
             'place_of_birth': 'Earth',
-            'rib': 'Some rib',
+            'iban': 'FR14 2004 1010 0505 0001 3M02 606',
             'url': 'http://www.website.com'
         }
         response = self.client.patch(_location('patron-detail', pk=1), data)
@@ -363,8 +363,26 @@ class UsersTest(APITestCase):
         self.assertEqual(user.drivers_license_number, '123456')
         self.assertEqual(user.date_of_birth, datetime.datetime(1980, 1, 1))
         self.assertEqual(user.place_of_birth, 'Earth')
-        self.assertEqual(user.rib, 'Some rib')
+        self.assertEqual(user.iban, 'FR14 2004 1010 0505 0001 3M02 606')
         self.assertEqual(user.url, 'http://www.website.com')
+
+    def test_account_set_iban(self):
+        data = {
+            'iban': 'FR14 2004 1010 0505 0001 3M02 606',
+        }
+        response = self.client.patch(_location('patron-detail', pk=1), data)
+        self.assertEquals(response.status_code, 200, response.data)
+
+        user = self.model.objects.get(pk=1)
+        self.assertEqual(user.iban, 'FR1420041010050500013M02606')
+
+    def test_account_set_wrong_iban(self):
+        data = {
+            'iban': 'FR14 2004 1010 0505 0001 3M02 6',
+        }
+        response = self.client.patch(_location('patron-detail', pk=1), data)
+        self.assertEquals(response.status_code, 400, response.data)
+        self.assertIn('iban', response.data['errors'], response.data)
 
     def test_filter1(self):
         response = self.client.get(_location('patron-list'), {'is_professional': True})

@@ -131,14 +131,14 @@ class UserSerializer(serializers.ModelSerializer):
             'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url', 'average_note',
-            'date_joined', 'is_active', 'rib', 'password', 'is_subscribed', 'creditcard', 'comment_count',
+            'date_joined', 'is_active', 'iban', 'password', 'is_subscribed', 'creditcard', 'comment_count',
         )
         public_fields = (
             'id', 'company_name', 'username', 'is_professional', 'slug',
             'avatar', 'default_address', 'about', 'school', 'work', 'hobby',
             'languages', 'url', 'date_joined', 'comment_count', 'average_note'
         )
-        read_only_fields = ('slug', 'url', 'date_joined', 'rib')
+        read_only_fields = ('slug', 'url', 'date_joined')
         immutable_fields = ('email', 'password', 'username')
 
 

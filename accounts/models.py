@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 from django.db.models.deletion import PROTECT
+from django_iban.fields import IBANField
 import logbook
 import uuid
 import calendar
@@ -100,6 +101,7 @@ class Patron(AbstractUser):
     on_site = CurrentSiteManager()
 
     rib = models.CharField(max_length=23, blank=True)
+    iban = IBANField(blank=True)
 
     url = models.URLField(_(u"Site internet"), blank=True)
 
