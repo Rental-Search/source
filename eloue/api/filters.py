@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django import forms
 
 from rest_framework import filters
-from mptt.fields import TreeNodeChoiceField
+from mptt.fields import TreeNodeMultipleChoiceField
 
 import django_filters
 
@@ -178,8 +178,8 @@ class MPTTBooleanFilter(MPTTFilterMixin, django_filters.Filter):
         opts = qs.model._mptt_meta
         return (qs.filter if value else qs.exclude)(**{opts.left_attr: (F(opts.right_attr) - 1)})
 
-class MPTTModelFilter(MPTTFilterMixin, django_filters.ModelChoiceFilter):
-    field_class = TreeNodeChoiceField
+class MPTTModelFilter(MPTTFilterMixin, django_filters.ModelMultipleChoiceFilter):
+    field_class = TreeNodeMultipleChoiceField
 
     def filter(self, qs, value):
         if not value:
@@ -190,16 +190,20 @@ class MPTTModelFilter(MPTTFilterMixin, django_filters.ModelChoiceFilter):
         return  '__'.join((self.name,) + args if self.name else args)
 
     def get_descendants(self, qs, value):
-        if  value.is_leaf_node():
+        or_queries = []
+        for category in value:
+            if category.is_leaf_node():
+                continue
+            opts = category._mptt_meta
+            or_queries.append(Q(**{
+                # MPTT descendants
+                self.join_parts(opts.tree_id_attr): getattr(category, opts.tree_id_attr),
+                self.join_parts(opts.left_attr, 'gt'): getattr(category, opts.left_attr),
+                self.join_parts(opts.right_attr, 'lt'): getattr(category, opts.right_attr),
+            }))
+        if not or_queries:
             return qs.none()
-        opts = value._mptt_meta
-        qs = qs.filter(**{
-            # MPTT descendants
-            self.join_parts(opts.tree_id_attr): getattr(value, opts.tree_id_attr),
-            self.join_parts(opts.left_attr, 'gt'): getattr(value, opts.left_attr),
-            self.join_parts(opts.right_attr, 'lt'): getattr(value, opts.right_attr),
-        })
-        return qs
+        return qs.filter(reduce(operator.or_, or_queries))
 
 class MultiFieldFilter(django_filters.Filter):
     def __init__(self, op=None, **kwargs):
