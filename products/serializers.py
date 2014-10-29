@@ -2,7 +2,7 @@
 from rest_framework.fields import FloatField, IntegerField
 from rest_framework.fields import CharField
 from products import models
-from accounts.serializers import NestedAddressSerializer, ProductNestedPhoneNumberSerializer, BooleanField, NestedUserSerializer
+from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
     NestedModelSerializerMixin
 
@@ -24,10 +24,8 @@ class CategorySerializer(ModelSerializer):
         read_only_fields = ('slug',)
         immutable_fields = ('parent',)
 
-
 class NestedCategorySerializer(NestedModelSerializerMixin, CategorySerializer):
     pass
-
 
 class PriceSerializer(ModelSerializer):
     # FIXME: uncomment if we need to provide 'local_currency_amount' instead of 'amount' to clients, remove otherwise
@@ -40,10 +38,8 @@ class PriceSerializer(ModelSerializer):
         public_fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')
         immutable_fields = ('product', 'currency')
 
-
 class NestedPriceSerializer(NestedModelSerializerMixin, PriceSerializer):
     pass
-
 
 class PictureSerializer(ModelSerializer):
     image = EncodedImageField(('thumbnail', 'profile', 'home', 'display'))
@@ -55,10 +51,8 @@ class PictureSerializer(ModelSerializer):
         read_only_fields = ('created_at',)
         immutable_fields = ('product',)
 
-
 class NestedPictureSerializer(NestedModelSerializerMixin, PictureSerializer):
     pass
-
 
 class RequiredBooleanField(BooleanField):
     def __init__(self, required=None, **kwargs):
@@ -81,26 +75,23 @@ class ProductSerializer(ModelSerializer):
     pictures = NestedPictureSerializer(read_only=True, many=True)
     owner = NestedUserSerializer()
     slug = CharField(read_only=True, source='slug')
-    phone = ProductNestedPhoneNumberSerializer()
 
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'average_note', 'prices',
                   'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies', 'comment_count',
-                  'pictures', 'slug', 'phone')
+                  'pictures', 'slug')
         public_fields = (
-            'id', 'summary', 'deposit_amount', 'currency', 'description', 'phone',
+            'id', 'summary', 'deposit_amount', 'currency', 'description',
             'address', 'quantity', 'category', 'owner',  'comment_count',
             'pro_agencies', 'prices', 'pictures', 'average_note', 'slug')
         view_name = 'product-detail'
         read_only_fields = ('is_archived', 'created_at')
         immutable_fields = ('owner',)
 
-
 class NestedProductSerializer(NestedModelSerializerMixin, ProductSerializer):
     class Meta(ProductSerializer.Meta):
         fields = ProductSerializer.Meta.public_fields
-
 
 class CarProductSerializer(ProductSerializer):
     class Meta(ProductSerializer.Meta):
@@ -140,7 +131,6 @@ class RealEstateProductSerializer(ProductSerializer):
             'parking', 'smoking_accepted', 'ideal_for_events', 'tv',
             'washing_machine', 'tumble_dryer', 'computer_with_internet',
         )
-
 
 class CuriositySerializer(ModelSerializer):
     class Meta:

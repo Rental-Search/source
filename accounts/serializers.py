@@ -37,25 +37,15 @@ class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSer
     class Meta(AddressSerializer.Meta):
         public_fields = ('city', 'zipcode')
 
-
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PhoneNumber
         fields = ('id', 'patron', 'number')
         immutable_fields = ('patron',)
 
-
-class ProductNestedPhoneNumberSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
-
-    class Meta:
-        model = models.PhoneNumber
-        fields = ('id',)
-        public_fields = ('id',)
-
-
 class NestedPhoneNumberSerializer(serializers.NestedModelSerializerMixin, PhoneNumberSerializer):
-    pass
-
+    class Meta(PhoneNumberSerializer.Meta):
+        public_fields = ('id',)
 
 class CreditCardSerializer(serializers.ModelSerializer):
     cvv = CharField(max_length=4, min_length=3, write_only=True,
@@ -98,10 +88,8 @@ class CreditCardSerializer(serializers.ModelSerializer):
         write_only_fields = ('card_number',)
         immutable_fields = ('expires', 'holder_name', 'holder', 'card_number', 'cvv')
 
-
 class NestedCreditCardSerializer(NestedModelSerializerMixin, CreditCardSerializer):
     pass
-
 
 class UserSerializer(serializers.ModelSerializer):
     username = CharField(required=False, max_length=30)
@@ -127,25 +115,23 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Patron
         fields = (
-            'id', 'email', 'company_name', 'username', 'first_name', 'last_name', 
+            'id', 'email', 'company_name', 'username', 'first_name', 'last_name',
             'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url', 'average_note',
             'date_joined', 'is_active', 'iban', 'password', 'is_subscribed', 'creditcard', 'comment_count',
         )
         public_fields = (
-            'id', 'company_name', 'username', 'is_professional', 'slug',
-            'avatar', 'default_address', 'about', 'school', 'work', 'hobby',
+            'id', 'company_name', 'username', 'is_professional', 'slug', 'avatar',
+            'default_address', 'default_number', 'about', 'school', 'work', 'hobby',
             'languages', 'url', 'date_joined', 'comment_count', 'average_note'
         )
         read_only_fields = ('slug', 'url', 'date_joined')
         immutable_fields = ('email', 'password', 'username')
 
-
 class NestedUserSerializer(NestedModelSerializerMixin, UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.public_fields
-
 
 class PasswordChangeSerializer(serializers.ModelSerializer):
     current_password = CharField(write_only=True, max_length=128)
