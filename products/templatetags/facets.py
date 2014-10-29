@@ -44,9 +44,9 @@ class FacetUrlNode(Node):
     
     def render(self, context):
         breadcrumbs = self.breadcrumbs.resolve(context).copy()
-        urlbits = dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'] and facet['value'])
+        urlbits = dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'] and facet['value'] is not None)
         #params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS))
-        params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if not facet['facet'])
+        params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if not facet['facet'] and facet['value'] is not None)
         additions = dict([(key.resolve(context), value.resolve(context)) for key, value in self.additions])
         removals = [key.resolve(context) for key in self.removals]
         slugs = []
