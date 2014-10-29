@@ -144,29 +144,36 @@ require([
                 } else {
                     article.removeClass('grid-layout');
                     article.addClass('list-layout')
-
                 }
             });
         }
 
-        var categorySelection = $("#category-selection");
         var detailSearchForm = $("#detail-search");
+
+        var categorySelection = $("#category-selection");
         if (detailSearchForm && categorySelection) {
             categorySelection.change(function () {
                 var location = $(this).find(":selected").attr("location");
                 detailSearchForm.attr("action", location);
             });
         }
-        var rangeSlider = $("#range-slider");
+
         var priceSlider = $("#price-slider");
         if (priceSlider) {
             var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
             var min = priceSlider.attr("min-value");
             var max = priceSlider.attr("max-value");
             if (!min || !max) {
-                priceSlider.hide();
                 $("#price-label").hide();
             } else {
+                var minValue = priceMinInput.attr("value"), maxValue = priceMaxInput.attr("value");
+                if (!minValue) {
+                    minValue = min;
+                }
+                if (!maxValue) {
+                    maxValue = max;
+                }
+                priceSlider.attr("value", minValue + ";" + maxValue);
                 priceSlider.slider({
                     from: Number(min),
                     to: Number(max),
@@ -174,22 +181,22 @@ require([
                     dimension: '&nbsp;&euro;',
                     onstatechange: function (value) {
                         var values = value.split(";");
-                        priceMinInput.attr("value", Number(values[0]));
-                        priceMaxInput.attr("value", Number(values[1]));
+                        // enable inputs so their values could be now posted with a form data
+                        priceMinInput.prop("disabled", false);
+                        priceMaxInput.prop("disabled", false);
+                        // set new values to hidden inputs
+                        priceMinInput.attr("value", values[0]);
+                        priceMaxInput.attr("value", values[1]);
                     }
                 });
-                priceSlider.slider("value", min, max);
             }
-
         }
-
-        var form = $('#detail-search');
 
         var sortSelector = $('#sort-selector');
         if (sortSelector) {
             sortSelector.change(function (e) {
-                if (form) {
-                    form.submit()
+                if (detailSearchForm) {
+                    detailSearchForm.submit()
                 }
             });
         }
@@ -302,20 +309,35 @@ require([
                     }
                 );
 
+                var rangeSlider = $("#range-slider");
                 if (rangeSlider) {
                     var rangeInput = $("#range");
-                    rangeSlider.slider({
-                        from: 1,
-                        to: rangeSlider.attr("max-value"),
-                        limits: false,
-                        dimension: 'km',
-                        onstatechange: function (value) {
-                            var values = value.split(";");
-                            rangeInput.attr("value", values[1]);
-                            map.setZoom(zoom(values[1]));
+                    var range_max = rangeSlider.attr("max-value");
+                    if (!range_max) {
+                        $("#range-label").hide();
+                    } else {
+                        var range_val = rangeInput.attr("value");
+                        if (range_val) {
+                            rangeSlider.attr("value", "1;" + range_val);
+                        } else {
+                            rangeSlider.attr("value", "1;" + range_max);
                         }
-                    });
-                    rangeSlider.slider("value", 0, rangeInput.attr("value"));
+                        rangeSlider.slider({
+                            from: 1,
+                            to:  Number(range_max),
+                            limits: false,
+                            dimension: '&nbsp;km',
+                            onstatechange: function (value) {
+                                var range_value = value.split(";")[1];
+                                // enable the input so its value could be now posted with a form data
+                                rangeInput.prop("disabled", false);
+                                // set new values to the hidden input
+                                rangeInput.attr("value", range_value);
+                                // change map's zoom level
+                                map.setZoom(zoom(range_value));
+                            }
+                        });
+                    }
                 }
 
                 var products = [];
