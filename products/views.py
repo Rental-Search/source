@@ -602,13 +602,14 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         )
         sqs, self.suggestions, self.top_products = self.form.search()
         # we use canonical_parameters to generate the canonical url in the header
-        self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
-        self.canonical_parameters.pop('categorie', None)
-        self.canonical_parameters.pop('r', None)
-        self.canonical_parameters.pop('sort', None)
-        self.canonical_parameters = urllib.urlencode(self.canonical_parameters)
-        if self.canonical_parameters:
-            self.canonical_parameters = '?' + self.canonical_parameters
+        canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
+        canonical_parameters.pop('categorie', None)
+        canonical_parameters.pop('r', None)
+        canonical_parameters.pop('sort', None)
+        canonical_parameters = urllib.urlencode(canonical_parameters)
+        if canonical_parameters:
+            canonical_parameters = '?' + canonical_parameters
+        self.canonical_parameters = canonical_parameters
         self.kwargs.update({'page': page}) # Django 1.5+ ignore *args and **kwargs in View.dispatch()
         return super(ProductList, self).dispatch(request, sqs=sqs, **kwargs)
 

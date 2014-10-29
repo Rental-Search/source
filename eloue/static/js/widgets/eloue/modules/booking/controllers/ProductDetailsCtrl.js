@@ -20,8 +20,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "BookingsService",
         "PhoneNumbersService",
         "PicturesService",
+        "CategoriesService",
         "UtilsService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, UtilsService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, CategoriesService, UtilsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -233,6 +234,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 ProductRelatedMessagesLoadService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
                     $scope.newMessage.body, null, $scope.product.id).then(function (result) {
                         $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
+                        $scope.trackEvent("Réservation", "Message",  $scope.getEventLabel());
+                        $scope.trackPageView();
                         // Clear message field
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
@@ -322,6 +325,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                             $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
+                            $scope.trackEvent("Réservation", "Demande de réservation",  $scope.getEventLabel());
+                            $scope.trackPageView();
                             toastr.options.positionClass = "toast-top-full-width";
                             toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
                             $(".modal").modal("hide");
@@ -334,6 +339,16 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.handleResponseErrors(error);
                     }
                 );
+            };
+
+            $scope.getEventLabel = function() {
+                if ($scope.isAuto()) {
+                    return "Voiture - " + $scope.productCategoryName;
+                } else if ($scope.isRealEstate()) {
+                    return "Logement - " + $scope.productCategoryName;
+                } else {
+                    return "Objet - " + $scope.productCategoryAncestors;
+                }
             };
 
             $scope.clearCreditCard = function () {
@@ -382,8 +397,26 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
                 if (args.name != "login") {
                     $scope.loadPictures();
+                    $scope.loadProductCategoryAncestors(args.name);
                 }
             });
+
+            $scope.loadProductCategoryAncestors = function(modalName) {
+                CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
+                    $scope.productCategoryName  = productCategory.name;
+                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function(ancestors) {
+                        var categoriesStr = "";
+                        angular.forEach(ancestors, function (value, key) {
+                            categoriesStr = categoriesStr + value.name + " - ";
+                        });
+                        $scope.productCategoryAncestors = categoriesStr + productCategory.name;
+                        if (modalName === "phone") {
+                            $scope.trackEvent("Réservation", "Appel",  $scope.getEventLabel());
+                            $scope.trackPageView();
+                        }
+                    });
+                });
+            };
 
             $scope.loadPictures = function () {
                 PicturesService.getPicturesByProduct($scope.productId).$promise.then(function (pictures) {
@@ -444,6 +477,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.isAuto = function () {
                 return ($scope.rootCategory === "automobile");
+            };
+
+            $scope.isRealEstate = function () {
+                return ($scope.rootCategory === "location-saisonniere");
             };
 
             $scope.loadMessageThread = function () {
@@ -580,6 +617,24 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 divConversion.appendChild(imgConversion);
                 noscriptConversion.appendChild(divConversion);
                 document.body.appendChild(noscriptConversion);
+            };
+
+            /**
+             * Push track event to Google Analytics.
+             *
+             * @param category category
+             * @param action action
+             * @param value value
+             */
+            $scope.trackEvent = function(category, action, value) {
+                _gaq.push(["_trackEvent", category, action, value]);
+            };
+
+            /**
+             * Push track page view to Google Analytics.
+             */
+            $scope.trackPageView = function() {
+                _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
             };
         }]);
 });

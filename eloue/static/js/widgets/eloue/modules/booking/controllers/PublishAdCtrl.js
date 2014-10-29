@@ -17,7 +17,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CategoriesService",
         "PricesService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService) {
+        "UtilsService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -187,14 +188,26 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
 
                         PricesService.savePrice($scope.price).$promise.then(function (result) {
-                            $scope.loadPdltrackingScript();
-                            $scope.loadAdWordsTagPublishAd();
-                            //TODO: redirects to the dashboard item detail page.
-                            toastr.options.positionClass = "toast-top-full-width";
-                            toastr.success("Annonce publiée", "");
-                            $(".modal").modal("hide");
-                            $window.location.href = "/dashboard/#/items/" + product.id + "/info";
-                            $scope.submitInProgress = false;
+
+                            CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
+                                if ($scope.isAuto) {
+                                    $scope.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
+                                    $scope.finishProductSaveAndRedirect(product);
+                                } else if ($scope.isRealEstate) {
+                                    $scope.trackEvent("Dépôt annonce", "Logement", productCategory.name);
+                                    $scope.finishProductSaveAndRedirect(product);
+                                } else {
+                                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function(ancestors) {
+                                        var categoriesStr = "";
+                                        angular.forEach(ancestors, function (value, key) {
+                                            categoriesStr = categoriesStr + value.name + " - ";
+                                        });
+                                        categoriesStr = categoriesStr + productCategory.name;
+                                        $scope.trackEvent("Dépôt annonce", "Objet",  categoriesStr);
+                                        $scope.finishProductSaveAndRedirect(product);
+                                    });
+                                }
+                            });
                         }, function (error) {
                             $scope.handleResponseErrors(error);
                         });
@@ -206,6 +219,18 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.publishAdError = "All prices should be positive numbers!";
                     $scope.submitInProgress = false;
                 }
+            };
+
+            $scope.finishProductSaveAndRedirect = function(product) {
+                $scope.trackPageView();
+                $scope.loadPdltrackingScript();
+                $scope.loadAdWordsTagPublishAd();
+                //TODO: redirects to the dashboard item detail page.
+                toastr.options.positionClass = "toast-top-full-width";
+                toastr.success("Annonce publiée", "");
+                $(".modal").modal("hide");
+                $window.location.href = "/dashboard/#/items/" + product.id + "/info";
+                $scope.submitInProgress = false;
             };
 
             $scope.updateFieldSet = function (rootCategory) {
@@ -353,6 +378,24 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 divConversion.appendChild(imgConversion);
                 noscriptConversion.appendChild(divConversion);
                 document.body.appendChild(noscriptConversion);
+            };
+
+            /**
+             * Push track event to Google Analytics.
+             *
+             * @param category category
+             * @param action action
+             * @param value value
+             */
+            $scope.trackEvent = function(category, action, value) {
+                _gaq.push(["_trackEvent", category, action, value]);
+            };
+
+            /**
+             * Push track page view to Google Analytics.
+             */
+            $scope.trackPageView = function() {
+                _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
             };
         }])
 });
