@@ -23,7 +23,7 @@ h2 Vos informations personnelles
   .col-sm-6
       input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
       span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
-.row(ng-show="!!productShippingPoint"): .col-xs-12
+.row(ng-show="shippingAllowed && !shippingPointsRequestInProgress"): .col-xs-12
     .checkbox
         label
             input(type="checkbox", ng-model="addShipping")#particular

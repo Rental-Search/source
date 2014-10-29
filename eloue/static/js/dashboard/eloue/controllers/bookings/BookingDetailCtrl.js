@@ -105,15 +105,19 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.acceptBooking = function () {
                 $scope.submitInProgress = true;
                 BookingsLoadService.acceptBooking($stateParams.uuid).$promise.then(function (result) {
+                    if ($scope.bookingDetails.with_shipping) {
+
+                    }
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
                             var productShippingPoint = productShippingPointData.results[0];
-                            PatronShippingPointsService.getByPatron().then(function (patronShippingPointData) {
+                            PatronShippingPointsService.getByPatronAndBooking(UtilsService.getIdFromUrl($scope.bookingDetails.borrower), $stateParams.uuid).then(function (patronShippingPointData) {
                                 if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
                                     var patronShippingPoint = patronShippingPointData.results[0];
+                                    console.log(patronShippingPoint);
                                     var shipping = {
-                                        price: patronShippingPoint.price,
+                                        price: "10.0",
                                         booking: Endpoints.api_url + "bookings/" + $scope.bookingDetails.uuid + "/",
                                         departure_point: Endpoints.api_url + "productshippingpoints/" + productShippingPoint.id + "/",
                                         arrival_point: Endpoints.api_url + "patronshippingpoints/" + patronShippingPoint.id + "/"

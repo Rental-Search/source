@@ -189,7 +189,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         product: !!error.errors.product ? error.errors.product[0] : ""
                     };
                 }
+                if (!!error.detail) {
+                    $scope.errors.general = error.detail;
+                }
                 $scope.submitInProgress = false;
+                $scope.shippingPointsRequestInProgress = false;
             };
 
             ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
@@ -341,6 +345,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         });
                         if (!!selectedPoint && !!selectedPoint.site_id) {
                             selectedPoint.type = 2;
+                            selectedPoint.shipping = Endpoints.api_url + "bookings/" + booking.uuid + "/";
                             selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
                             PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (shippingPoint) {
                                 $scope.payForBooking(booking, paymentInfo);
@@ -477,20 +482,25 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.loadShippingPoints = function () {
                 $scope.currentUserPromise.then(function (currentUser) {
+                    $scope.shippingPointsRequestInProgress = true;
                     ProductShippingPointsService.getByProduct($scope.productId).then(function(data) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!data.results && data.results.length > 0) {
-                            $scope.shippingAllowed = true;
                             $scope.productShippingPoint = data.results[0];
                             ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
-                                console.log(result);
+                                $scope.shippingAllowed = true;
+                                $scope.shippingPointsRequestInProgress = false;
                                 //TODO: it's temperory, then will call pricing service
                                 angular.forEach(result, function (value, key) {
                                     value.price = "10.0";
                                 });
                                 $scope.borrowerShippingPoints = result;
+                            }, function (error) {
+                                $scope.handleResponseErrors(error);
                             });
                         }
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
                     });
                 });
             };

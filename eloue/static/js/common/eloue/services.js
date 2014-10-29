@@ -1232,6 +1232,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                    return shippingPointsService.searchShippingPointsByAddress(address, 1);
                 };
 
+                shippingPointsService.searchDepartureShippingPointsByCoordinates = function(lat, lng) {
+                    return shippingPointsService.searchShippingPointsByCoordinates(lat, lng, 1);
+                };
+
                 shippingPointsService.searchArrivalShippingPointsByAddress = function(address) {
                     return shippingPointsService.searchShippingPointsByAddress(address, 2);
                 };
@@ -1294,8 +1298,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return PatronShippingPoints.save(shippingPoint);
                 };
 
-                patronShippingPointsService.getByPatron = function (userId) {
-                    return PatronShippingPoints.get({_cache: new Date().getTime(), patron: userId}).$promise;
+                patronShippingPointsService.getByPatronAndBooking = function (userId, bookingId) {
+                    return PatronShippingPoints.get({_cache: new Date().getTime(), patron: userId, shipping: bookingId}).$promise;
                 };
 
                 return patronShippingPointsService;

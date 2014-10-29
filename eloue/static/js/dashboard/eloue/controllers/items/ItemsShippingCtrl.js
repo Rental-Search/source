@@ -138,7 +138,7 @@ define(["angular", "eloue/app"], function (angular) {
                     var searchLat = $("#searchLat").attr("value"), searchLng = $("#searchLng").attr("value");
                     if (!!searchLat && !!searchLng) {
                         $scope.submitInProgress = true;
-                        ShippingPointsService.searchDepartureShippingPointsByAddress($scope.addressQuery).then(function (data) {
+                        ShippingPointsService.searchDepartureShippingPointsByCoordinates(searchLat, searchLng).then(function (data) {
                             $scope.shippingPoints = data;
                             $scope.submitInProgress = false;
                         });
