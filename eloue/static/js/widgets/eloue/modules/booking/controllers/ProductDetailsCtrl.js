@@ -581,5 +581,23 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 noscriptConversion.appendChild(divConversion);
                 document.body.appendChild(noscriptConversion);
             };
+
+            /**
+             * Push track event to Google Analytics.
+             *
+             * @param category category
+             * @param action action
+             * @param value value
+             */
+            $scope.trackEvent = function(category, action, value) {
+                _gaq.push(["_trackEvent", category, action, value]);
+            };
+
+            /**
+             * Push track page view to Google Analytics.
+             */
+            $scope.trackPageView = function() {
+                _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
+            };
         }]);
 });
