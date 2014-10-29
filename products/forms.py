@@ -125,9 +125,9 @@ class FacetedSearchForm(SearchForm):
 
         status = self.cleaned_data.get('renter')
         if status == "particuliers":
-            sqs = sqs.filter(pro=False)
+            sqs = sqs.filter(pro_owner=False)
         elif status == "professionnels":
-            sqs = sqs.filter(pro=True)
+            sqs = sqs.filter(pro_owner=True)
 
         return sqs
 
