@@ -71,8 +71,11 @@ def requirejs_build(sender, package, **kwargs):
         while path != '':
             path = dirname(path)
             output_path = dirname(output_path)
-        infile = finders.find(input_path)
         outfile = join(output_path, package.output_filename)
 
         # run r.js compiler
         RequireJsCompiler(sender.verbose, sender.storage).compile_file(infile, outfile)
+
+        # compress and save to the storage
+        content = sender.compressor.compress_js([package.output_filename], **kwargs)
+        sender.save_file(package.output_filename, content)
