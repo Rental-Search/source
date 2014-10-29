@@ -1557,6 +1557,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
+                productLoadService.getAbsoluteUrl = function(id) {
+                    return Products.getAbsoluteUrl({id: id,cache: new Date().getTime()});
+                };
+
                 productLoadService.isAvailable = function (id, startDate, endDate, quantity) {
                     return CheckAvailability.get({id: id, started_at: startDate, ended_at: endDate, quantity: quantity}).$promise;
                 };

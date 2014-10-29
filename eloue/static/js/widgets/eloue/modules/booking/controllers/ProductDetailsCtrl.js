@@ -179,7 +179,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         cvv: !!error.errors.cvv ? error.errors.cvv[0] : "",
                         holder_name: !!error.errors.holder_name ? error.errors.holder_name[0] : "",
                         started_at: !!error.errors.started_at ? error.errors.started_at[0] : "",
-                        ended_at: !!error.errors.ended_at ? error.errors.ended_at[0] : ""
+                        ended_at: !!error.errors.ended_at ? error.errors.ended_at[0] : "",
+                        product: !!error.errors.product ? error.errors.product[0] : ""
                     };
                 }
                 $scope.submitInProgress = false;
@@ -231,6 +232,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.sendMessage = function sendMessage() {
                 ProductRelatedMessagesLoadService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
                     $scope.newMessage.body, null, $scope.product.id).then(function (result) {
+                        $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
                         // Clear message field
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
@@ -319,8 +321,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         }
 
                         BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                            $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
                             toastr.options.positionClass = "toast-top-full-width";
-                            toastr.success("Réservation enregistré", "");
+                            toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
                             $(".modal").modal("hide");
                             $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                             $scope.submitInProgress = false;
@@ -538,5 +541,45 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.selectTab("#tabs-photos");
+
+            $scope.loadAdWordsTags =  function(googleConversionLabel) {
+                var scriptAdWords = document.createElement("script");
+                scriptAdWords.type = "text/javascript";
+                var code = "/* <![CDATA[ */" +
+                    "var google_conversion_id = 1027691277;" +
+                    "var google_conversion_language = 'en';" +
+                    "var google_conversion_format = '3';" +
+                    "var google_conversion_color = 'ffffff';" +
+                    "var google_conversion_label = '" + googleConversionLabel + "';" +
+                    "var google_conversion_value = 1.00;" +
+                    "var google_conversion_currency = 'EUR';" +
+                    "var google_remarketing_only = false;" +
+                    "/* ]]> */";
+                try {
+                    scriptAdWords.appendChild(document.createTextNode(code));
+                    document.body.appendChild(scriptAdWords);
+                } catch (e) {
+                    scriptAdWords.text = code;
+                    document.body.appendChild(scriptAdWords);
+                }
+
+                var scriptConversion = document.createElement("script");
+                scriptConversion.type = "text/javascript";
+                scriptConversion.src = "//www.googleadservices.com/pagead/conversion.js";
+                document.body.appendChild(scriptConversion);
+
+                var noscriptConversion = document.createElement("noscript");
+                var divConversion = document.createElement("div");
+                divConversion.style = "display:inline;";
+                var imgConversion = document.createElement("img");
+                imgConversion.src = "//www.googleadservices.com/pagead/conversion/1027691277/?value=1.00&amp;currency_code=EUR&amp;label=" + googleConversionLabel + "&amp;guid=ON&amp;script=0";
+                imgConversion.width = "1";
+                imgConversion.height = "1";
+                imgConversion.style = "border-style:none;";
+                imgConversion.alt = "";
+                divConversion.appendChild(imgConversion);
+                noscriptConversion.appendChild(divConversion);
+                document.body.appendChild(noscriptConversion);
+            };
         }]);
 });

@@ -2,15 +2,15 @@
 
 h3 Déscription
 .row
-  {% if product_type != 'product' or rating.id__count or properties %}
+  {% if product_type != 'product' or product.comment_count or properties %}
   .col-sm-6.text {{ product.description|linebreaksp }}
   .col-sm-6.properties
     table.calendar.bd-clear: tbody
-      {% if rating.id__count %}
+      {% if product.comment_count %}
       tr
         td {% trans 'Notation' %}
-        td: b {{ rating.id__count }}&nbsp;&nbsp;
-          {% with rating.note__avg as rate %}
+        td: b {{ product.comment_count }}&nbsp;&nbsp;
+          {% with product.average_rate as rate %}
           include ../../_rate
           {% endwith %}
       {% endif %}

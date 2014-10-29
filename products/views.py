@@ -21,7 +21,7 @@ from django.utils.functional import cached_property
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.db.models import Q, Count, Avg
+from django.db.models import Q, Count
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
@@ -600,7 +600,7 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
             dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
             searchqueryset=sqs
         )
-        sqs, self.suggestions, self.top_products, self.filter_limits = self.form.search()
+        sqs, self.suggestions, self.top_products = self.form.search()
         # we use canonical_parameters to generate the canonical url in the header
         self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
         self.canonical_parameters.pop('categorie', None)
@@ -614,13 +614,18 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductList, self).get_context_data(**kwargs)
-        context['facets'] = self.sqs.facet_counts()
-        context['form'] = self.form
-        context['breadcrumbs'] = self.breadcrumbs
-        context['suggestions'] = self.suggestions
-        context['site_url'] = self.site_url
-        context['canonical_parameters'] = self.canonical_parameters
-        context['top_products'] = self.top_products
+        context.update({
+            'facets': self.sqs.facet_counts(),
+            'form': self.form,
+            'breadcrumbs': self.breadcrumbs,
+            'suggestions': self.suggestions,
+            'site_url': self.site_url,
+            'canonical_parameters': self.canonical_parameters,
+            'top_products': self.top_products,
+        })
+        filter_limits = self.form.filter_limits
+        if filter_limits:
+            context.update(filter_limits)
         return context
 
 @never_cache
@@ -808,8 +813,6 @@ class ProductListView(ProductList):
             'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-        if self.filter_limits:
-            context.update(self.filter_limits)
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images
@@ -872,7 +875,6 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             'product_list': product_list,
             'product_comments': product_comment_list,
             'owner_comments': owner_comment_list,
-            'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
             'product_type': product_type,
             'product_object': getattr(product, product_type) if product_type != 'product' else product,
             'insurance_available': settings.INSURANCE_AVAILABLE,
@@ -1003,17 +1005,12 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
 
     @link()
     def stats(self, request, *args, **kwargs):
+        return Response(self.get_object().stats)
+
+    @link()
+    def absolute_url(self, request, *args, **kwargs):
         obj = self.get_object()
-        # TODO: we would need a better rating calculation in the future
-        qs = obj.borrowercomments.aggregate(Avg('note'), Count('id'))
-        id__count = qs['id__count'] or 0
-        res = {
-            'average_rating': qs['note__avg'] or 0,
-            'ratings_count': id__count,
-            'booking_comments_count': id__count,
-            'bookings_count': Booking.on_site.active().filter(Q(owner=obj) | Q(borrower=obj)).count(),
-        }
-        return Response(res)
+        return Response(dict(url=obj.get_absolute_url()))
 
     @cached_property
     def _category_from_native(self):

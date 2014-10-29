@@ -64,12 +64,29 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
-CACHES = {
-    'default': {
-        'BACKEND': env('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
-        'LOCATION': env('CACHE_LOCATION', None),
+
+if env('REDISGREEN_URL', None):
+    from urlparse import urlparse
+
+    redisgreen = urlparse(env("REDISGREEN_URL"))
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': '%s:%i' % (redisgreen.hostname, redisgreen.port),
+            'OPTIONS': {
+                'DB': 1,
+                'PASSWORD': redisgreen.password,
+            }
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': env('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
+            'LOCATION': env('CACHE_LOCATION', None),
+        }
+    }
 
 # Cache configuration
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
@@ -268,17 +285,19 @@ IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOptimistic' # 'image
 
 #pipeline configuration
 PIPELINE_ENABLED = env('PIPELINE', not DEBUG)
-#PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
-PIPELINE_JS_COMPRESSOR = ''
+PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_COMPILERS = (
     #'pipeline.compilers.less.LessCompiler',
     'eloue.compat.pipeline.compilers.AutoprefixerSASSCompiler',
 )
-PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
+#PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = env('PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUGLIFY_BINARY = env('PIPELINE_YUGLIFY_BINARY', '/usr/bin/env yuglify')
-PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/home/benoitw/node_modules/autoprefixer/autoprefixer')
+PIPELINE_RJS_BINARY = env('PIPELINE_RJS_BINARY', '/app/node_modules/requirejs/bin/r.js')
+PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/app/node_modules/autoprefixer/autoprefixer')
 PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
 PIPELINE_CSS = {
     'extrastyles': {
@@ -458,6 +477,44 @@ PIPELINE_CSS = {
 }
 
 PIPELINE_JS = {
+    'require_js': {
+        'source_filenames': (
+            'bower_components/requirejs/require.js',
+        ),
+        'output_filename': 'js/require.js',
+        'extra_context': {
+            #'defer': False,
+            #'async': False,
+        },
+    },
+    'public_js': {
+        'source_filenames': (
+            'js/widgets/main.js',
+        ),
+        'output_filename': 'js/widgets.js',
+        'template_name': 'pipeline/requirejs.html',
+        'extra_context': {
+            'build': 'js/widgets/build.js',
+            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
+            'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
+            #'defer': False,
+            #'async': False,
+        },
+    },
+    'dashboard_js': {
+        'source_filenames': (
+            'js/dashboard/main.js',
+        ),
+        'output_filename': 'js/dashboard.js',
+        'template_name': 'pipeline/requirejs.html',
+        'extra_context': {
+            'build': 'js/dashboard/build.js',
+            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
+            'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
+            #'defer': False,
+            #'async': False,
+        },
+    },
     # 'application': {
     #     'source_filenames': (
     #         'js/jquery-1.7.1.min.js',
