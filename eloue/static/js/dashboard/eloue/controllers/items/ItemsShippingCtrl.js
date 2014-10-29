@@ -47,7 +47,6 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.fillInSchedule = function (openingDates) {
-                console.log(openingDates);
                 $scope.schedule = {};
                 angular.forEach(openingDates, function (value, key) {
                     $scope.schedule[value.day_of_week] = $scope.filterTime(value.morning_opening_time) + " - "
@@ -73,6 +72,13 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.showWellcome = false;
                 $scope.showPointList = false;
                 $scope.showPointDetails = true;
+            };
+
+            $scope.showWellcomeScreen = function() {
+                $scope.shippingPoints = [];
+                $scope.showWellcome = true;
+                $scope.showPointList = false;
+                $scope.showPointDetails = false;
             };
 
             $scope.saveMapPoint = function () {
@@ -107,10 +113,14 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.selectedPointId = pointId;
             };
 
+            $scope.cancelPointSelection = function() {
+                $scope.showWellcomeScreen();
+            };
+
             $scope.removeMapPoint = function () {
                 ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function (result) {
                     $scope.productShippingPoint = {};
-                    $scope.showMapPointList();
+                    $scope.showWellcomeScreen();
                 });
             };
 
