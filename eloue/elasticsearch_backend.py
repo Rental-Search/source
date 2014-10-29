@@ -58,6 +58,17 @@ class ElasticsearchSearchBackend(BaseSearchBackend):
                         "type": "custom",
                         "tokenizer": "lowercase",
                         "filter": ["haystack_edgengram"]
+                    },
+                    "french": {
+                        "tokenizer":  "standard",
+                        "filter": [
+                            "lowercase",
+                            "french_elision",
+                            "french_stop",
+                            "french_asciifolding"
+#                             "french_keywords",
+#                             "french_stemmer"
+                        ]
                     }
                 },
                 "tokenizer": {
@@ -83,6 +94,30 @@ class ElasticsearchSearchBackend(BaseSearchBackend):
                         "type": "edgeNGram",
                         "min_gram": 2,
                         "max_gram": 15
+                    },
+                    "french_elision": {
+                        "type": "elision",
+                        "articles": [
+                            "l", "m", "t", "qu", "n", "s", "j", "d", "c",
+                            "jusqu", "quoiqu", "lorsqu", "puisqu"
+                        ]
+                    },
+                    "french_stop": {
+                        "type": "stop",
+                        "stopwords": "_french_",
+                        "ignore_case": "true"
+                    },
+#                     "french_keywords": {
+#                         "type": "keyword_marker",
+#                         "keywords": []
+#                     },
+#                     "french_stemmer": {
+#                         "type": "stemmer",
+#                         "language": "light_french"
+#                     },
+                    "french_asciifolding" : {
+                        "type" : "asciifolding",
+                        "preserve_original" : "true"
                     }
                 }
             }
@@ -704,7 +739,7 @@ class ElasticsearchSearchBackend(BaseSearchBackend):
 # DRL_FIXME: Perhaps move to something where, if none of these
 #            match, call a custom method on the form that returns, per-backend,
 #            the right type of storage?
-DEFAULT_FIELD_MAPPING = {'type': 'string', 'analyzer': 'snowball'}
+DEFAULT_FIELD_MAPPING = {'type': 'string', 'analyzer': 'french'}
 FIELD_MAPPINGS = {
     'edge_ngram': {'type': 'string', 'analyzer': 'edgengram_analyzer'},        
     'ngram':      {'type': 'string', 'analyzer': 'ngram_analyzer'},        

@@ -6,8 +6,10 @@ from django.conf import settings as _settings
 from pipeline.conf import DEFAULTS
 
 DEFAULTS.update({
-    'PIPELINE_AUTOPREFIXER_BINARY': '/usr/local/bin/autoprefixer',
+    'PIPELINE_AUTOPREFIXER_BINARY': '/app/node_modules/autoprefixer/autoprefixer',
     'PIPELINE_AUTOPREFIXER_ARGUMENTS': '',
+    'PIPELINE_RJS_BINARY': '/app/node_modules/requirejs/bin/r.js',
+    'PIPELINE_RJS_ARGUMENTS': '',
 })
 
 class PipelineSettings(object):

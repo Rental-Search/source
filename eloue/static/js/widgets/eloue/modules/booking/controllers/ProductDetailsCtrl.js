@@ -20,7 +20,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "BookingsService",
         "PhoneNumbersService",
         "PicturesService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService) {
+        "UtilsService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, UtilsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -141,6 +142,50 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 {"label": "23h", "value": "23:00:00"}
             ];
 
+            $scope.errors = {
+                civility: "",
+                first_name: "",
+                last_name: "",
+                street: "",
+                zipcode: "",
+                city: "",
+                date_of_birth: "",
+                place_of_birth: "",
+                drivers_license_number: "",
+                drivers_license_date: "",
+                card_number: "",
+                expires: "",
+                cvv: "",
+                holder_name: "",
+                started_at: "",
+                ended_at: ""
+            };
+
+            $scope.handleResponseErrors = function(error) {
+                if (!!error.errors) {
+                    $scope.errors = {
+                        civility: !!error.errors.civility ? error.errors.civility[0] : "",
+                        first_name: !!error.errors.first_name ? error.errors.first_name[0] : "",
+                        last_name: !!error.errors.last_name ? error.errors.last_name[0] : "",
+                        street: !!error.errors.street ? error.errors.street[0] : "",
+                        zipcode: !!error.errors.zipcode ? error.errors.zipcode[0] : "",
+                        city: !!error.errors.city ? error.errors.city[0] : "",
+                        date_of_birth: !!error.errors.date_of_birth ? error.errors.date_of_birth[0] : "",
+                        place_of_birth: !!error.errors.place_of_birth ? error.errors.place_of_birth[0] : "",
+                        drivers_license_number: !!error.errors.drivers_license_number ? error.errors.drivers_license_number[0] : "",
+                        drivers_license_date: !!error.errors.drivers_license_date ? error.errors.drivers_license_date[0] : "",
+                        card_number: !!error.errors.card_number ? error.errors.card_number[0] : "",
+                        expires: !!error.errors.expires ? error.errors.expires[0] : "",
+                        cvv: !!error.errors.cvv ? error.errors.cvv[0] : "",
+                        holder_name: !!error.errors.holder_name ? error.errors.holder_name[0] : "",
+                        started_at: !!error.errors.started_at ? error.errors.started_at[0] : "",
+                        ended_at: !!error.errors.ended_at ? error.errors.ended_at[0] : "",
+                        product: !!error.errors.product ? error.errors.product[0] : ""
+                    };
+                }
+                $scope.submitInProgress = false;
+            };
+
             ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
                 $scope.product = result;
 //                $scope.loadCalendar();
@@ -190,6 +235,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         // Clear message field
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
+                        $scope.loadMessageThread();
                     });
             };
 
@@ -225,16 +271,22 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             CreditCardsService.deleteCard($scope.creditCard).$promise.then(function (result) {
                                 CreditCardsService.saveCard($scope.creditCard).$promise.then(function (result) {
                                     $scope.requestBooking();
+                                }, function (error) {
+                                    $scope.handleResponseErrors(error);
                                 });
                             });
                         } else {
                             CreditCardsService.saveCard($scope.creditCard).$promise.then(function (result) {
                                 $scope.requestBooking();
+                            }, function (error) {
+                                $scope.handleResponseErrors(error);
                             });
                         }
                     } else {
                         $scope.requestBooking();
                     }
+                }, function (error) {
+                    $scope.handleResponseErrors(error);
                 });
             };
 
@@ -273,7 +325,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             $(".modal").modal("hide");
                             $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                             $scope.submitInProgress = false;
+                        }, function (error) {
+                            $scope.handleResponseErrors(error);
                         });
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
                     }
                 );
             };
@@ -351,20 +407,28 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Load premium phone number using product's phone number id.
              */
             $scope.loadPhoneDetails = function () {
-                PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
-                    if (!result.error || result.error == "0") {
-                        $scope.ownerCallDetails = {
-                            number: result.numero,
-                            tariff: result.tarif
-                        };
-                    } else {
-                        $scope.ownerCallDetailsError = !!result.error_msg ? result.error_msg : "Le numero n'est pas disponible";
-                    }
-                });
+                if ($scope.product && $scope.product.phone && $scope.product.phone.id) {
+                    PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
+                        if (!result.error || result.error == "0") {
+                            $scope.ownerCallDetails = {
+                                number: result.numero,
+                                tariff: result.tarif
+                            };
+                        } else {
+                            $scope.ownerCallDetailsError = !!result.error_msg ? result.error_msg : "Le numero n'est pas disponible";
+                        }
+                    });
+                } else {
+                    $scope.ownerCallDetailsError = "Le numero n'est pas disponible";
+                }
             };
 
             $scope.loadCreditCards = function () {
-                if ($scope.currentUser) {
+                if (!$scope.currentUserPromise) {
+                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                }
+                $scope.currentUserPromise.then(function (currentUser) {
+                    $scope.currentUser = currentUser;
                     CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
                         var cards = result.results;
                         if (!!cards && cards.length > 0) {
@@ -373,7 +437,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             $scope.newCreditCard = false;
                         }
                     });
-                }
+                });
             };
 
             $scope.isAuto = function () {
@@ -381,15 +445,22 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.loadMessageThread = function () {
-                MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
-                    angular.forEach(result, function (value, key) {
-                        $scope.threadId = value.id;
-                        var senderId = $scope.getIdFromUrl(value.sender);
-                        UsersService.get(senderId).$promise.then(function (result) {
-                            value.sender = result;
+                if (!$scope.currentUserPromise) {
+                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                }
+                $scope.currentUserPromise.then(function (currentUser) {
+                    // Save current user in the scope
+                    $scope.currentUser = currentUser;
+                    MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
+                        angular.forEach(result, function (value, key) {
+                            $scope.threadId = UtilsService.getIdFromUrl(value.thread);
+                            var senderId = $scope.getIdFromUrl(value.sender);
+                            UsersService.get(senderId).$promise.then(function (result) {
+                                value.sender = result;
+                            });
                         });
+                        $scope.productRelatedMessages = result;
                     });
-                    $scope.loadMessageThread();
                 });
             };
 

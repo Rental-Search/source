@@ -73,7 +73,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
         return $resource(Endpoints.api_url + "products/:id/?", {},
             {
                 "update": { method: "PUT" },
-                "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats/?" }
+                "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats/?" },
+                "getAbsoluteUrl": { method: "GET", url: Endpoints.api_url + "products/:id/absolute_url/?" }
             });
     }]);
 

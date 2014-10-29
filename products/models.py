@@ -18,7 +18,7 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
-from django.db.models import permalink, Q, Avg
+from django.db.models import permalink, Q, Avg, Count
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_unicode
@@ -150,12 +150,32 @@ class Product(models.Model):
 
     @property
     def average_note(self):
-        from rent.models import BorrowerComment
-        avg = BorrowerComment.objects.filter(booking__product=self).aggregate(Avg('note'))['note__avg']
-        if avg is None:
-            return 0
-        return avg
-    
+        avg = self.borrowercomments.aggregate(Avg('note'))['note__avg']
+        return avg or 0
+
+    @property
+    def average_rate(self):
+        avg = self.borrowercomments.aggregate(Avg('note'))['note__avg']
+        return 0 if avg is None else int(round(avg))
+
+    @property
+    def comment_count(self):
+        return self.borrowercomments.count()
+
+    @property
+    def stats(self):
+        # TODO: we would need a better rating calculation in the future
+        res = self.borrowercomments.aggregate(Avg('note'), Count('id'))
+        comment_count = res['id__count'] or 0
+        avg = res['note__avg']
+        res = {
+            'average_rating': 0 if avg is None else int(round(avg)),
+            'ratings_count': comment_count,
+            'booking_comments_count': comment_count,
+            'bookings_count': self.bookings.count(), # expecting Booking.on_site is used as the default manager
+        }
+        return res
+
     @property
     def borrowercomments(self):
         from rent.models import BorrowerComment
@@ -276,11 +296,11 @@ class Product(models.Model):
 
     @property
     def is_highlighted(self):
-        return bool(self.producthighlight_set.filter(ended_at__isnull=True)[:1])
+        return bool(self.producthighlight_set.filter(ended_at__isnull=True).only('id')[:1])
 
     @property
     def is_top(self):
-        return bool(self.producttopposition_set.filter(ended_at__isnull=True)[:1])
+        return bool(self.producttopposition_set.filter(ended_at__isnull=True).only('id')[:1])
 
     def calculate_price(self, started_at, ended_at):
         prices = {price.unit: price.day_amount for price in self.prices.all()}
@@ -615,7 +635,7 @@ class Category(MPTTModel):
         super(Category, self).save(*args, **kwargs)
     
     def get_ancertors_slug(self):
-        return ''.join('%s/' %  el.slug for el in self.get_ancestors()).replace(' ', '')[:-1]
+        return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
     
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()

@@ -21,7 +21,7 @@ from django.utils.functional import cached_property
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.db.models import Q, Count, Avg
+from django.db.models import Q, Count
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
@@ -728,7 +728,7 @@ from products.forms import SuggestCategoryViewForm
 
 class NavbarCategoryMixin(object):
     categories = [
-        253, 335, 35, 390, 126, 418, 2700, 495, # first line / nav bar
+        35, 390, 253, 335, 418, 2700, 495, 126, # first line / nav bar
         323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
     ]
 
@@ -746,23 +746,42 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
     @property
-    @method_decorator(cached(10*60))
-    def home_context(self):
+    @method_decorator(cached(timeout=10*60))
+    def homepage_stats(self):
         product_stats = Product.objects.extra(
             tables=['accounts_address'],
             where=['"products_product"."address_id" = "accounts_address"."id"'],
             select={'city': 'lower(trim("accounts_address"."city"))'}
         ).values('city').annotate(Count('id')).order_by('-id__count')
+
         return {
             'cities_list': product_stats,
             'total_products': Product.on_site.only('id').count(),
-            'product_list': last_added(product_search, self.location, limit=8),
-            'comment_list': Comment.objects.select_related('booking__product__address').order_by('-created_at'),
         }
 
     def get_context_data(self, **kwargs):
-        context = {}
-        context.update(self.home_context)
+        product_list = last_added(product_search, self.location, limit=8)
+        comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from eloue.legacy import generate_patron_images, generate_picture_images
+        patron_set = set()
+        for elem in product_list[:PAGINATE_PRODUCTS_BY]:
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
+        for comment in comment_list[:PAGINATE_PRODUCTS_BY]:
+            patron_set.add(comment.booking.owner)
+            patron_set.add(comment.booking.borrower)
+        for patron in patron_set:
+            generate_patron_images(patron)
+
+        context = {
+            'product_list': product_list,
+            'comment_list': comment_list,
+        }
+        context.update(self.homepage_stats)
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
 
@@ -777,8 +796,8 @@ class ProductListView(ProductList):
     def get_breadcrumbs(self, request):
         breadcrumbs = super(ProductListView, self).get_breadcrumbs(request)
         form = self.form
-        breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date from', 'facet': False}
-        breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date to', 'facet': False}
+        #breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date from', 'facet': False}
+        #breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date to', 'facet': False}
         breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'date from', 'facet': False}
         breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'date to', 'facet': False}
         breadcrumbs['categorie'] = {'name': 'categorie', 'value': None, 'label': 'categorie', 'facet': True}
@@ -789,12 +808,29 @@ class ProductListView(ProductList):
             'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-        prices = [price[0] for price in context['facets']['fields']['price']]
+
+        prices = [price[0] for price in context['facets'].get('fields', {}).get('price', ())]
         if prices:
             context.update({
                 'price_min': min(prices),
                 'price_max': max(prices),
             })
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from eloue.legacy import generate_patron_images, generate_picture_images
+        patron_set = set()
+        if context.get('is_paginated', False):
+            product_list = context['page_obj'].object_list
+        else:
+            product_list = context['product_list']
+        for elem in product_list:
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
+        for patron in patron_set:
+            generate_patron_images(patron)
+
         return context
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
@@ -813,14 +849,34 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         product = self.object.object
+        if not product:
+            raise Http404
         product_type = product.name
         comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
+        product_list = self.sqs.more_like_this(product)[:5]
+        product_comment_list = comment_qs.filter(booking__product=product)
+        owner_comment_list = comment_qs.filter(booking__owner=product.owner)
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from itertools import chain
+        from eloue.legacy import generate_patron_images, generate_picture_images
+        patron_set = set()
+        for elem in chain(product_list, [self.object]):
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all():
+                    generate_picture_images(picture)
+        for comment in chain(product_comment_list, owner_comment_list):
+            patron_set.add(comment.booking.owner)
+            patron_set.add(comment.booking.borrower)
+        for patron in patron_set:
+            generate_patron_images(patron)
+
         context = {
             'properties': product.properties.select_related('property'),
-            'product_list': self.sqs.more_like_this(product)[:5],
-            'product_comments': comment_qs.filter(booking__product=product),
-            'owner_comments': comment_qs.filter(booking__owner=product.owner),
-            'rating': Comment.borrowercomments.filter(booking__product=product).aggregate(Avg('note'), Count('id')),
+            'product_list': product_list,
+            'product_comments': product_comment_list,
+            'owner_comments': owner_comment_list,
             'product_type': product_type,
             'product_object': getattr(product, product_type) if product_type != 'product' else product,
             'insurance_available': settings.INSURANCE_AVAILABLE,
@@ -884,7 +940,7 @@ class CategoryFilterSet(filters.FilterSet):
         model = models.Category
         fields = ('parent', 'need_insurance')
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDeletableModelViewSet after merging Category and CategoryDescription
+class CategoryViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product categories to be viewed or edited.
     """
@@ -895,6 +951,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet): # FIXME: change to NonDele
     filter_class = CategoryFilterSet
     ordering_fields = ('name',)
     public_actions = ('list', 'retrieve', 'ancestors', 'children', 'descendants')
+    cache_control = {'max_age': 60*60} # categories are not going to change frequently
 
     @link()
     def ancestors(self, request, *args, **kwargs):
@@ -950,17 +1007,12 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
 
     @link()
     def stats(self, request, *args, **kwargs):
+        return Response(self.get_object().stats)
+
+    @link()
+    def absolute_url(self, request, *args, **kwargs):
         obj = self.get_object()
-        # TODO: we would need a better rating calculation in the future
-        qs = obj.borrowercomments.aggregate(Avg('note'), Count('id'))
-        id__count = qs['id__count'] or 0
-        res = {
-            'average_rating': qs['note__avg'] or 0,
-            'ratings_count': id__count,
-            'booking_comments_count': id__count,
-            'bookings_count': Booking.on_site.active().filter(Q(owner=obj) | Q(borrower=obj)).count(),
-        }
-        return Response(res)
+        return Response(dict(url=obj.get_absolute_url()))
 
     @cached_property
     def _category_from_native(self):

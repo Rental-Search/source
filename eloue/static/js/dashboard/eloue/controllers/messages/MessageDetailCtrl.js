@@ -7,15 +7,18 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("MessageDetailCtrl", [
         "$scope",
+        "$state",
         "$stateParams",
         "$q",
+        "$window",
         "Endpoints",
         "MessageThreadsLoadService",
         "BookingsLoadService",
         "ProductRelatedMessagesLoadService",
         "ProductsLoadService",
+        "CategoriesService",
         "UtilsService",
-        function ($scope, $stateParams, $q, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
+        function ($scope, $state, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, CategoriesService, UtilsService) {
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
@@ -77,17 +80,25 @@ define(["angular", "eloue/app"], function (angular) {
                             };
 
                             $scope.requestBooking = function () {
-                                BookingsLoadService.requestBooking($scope.newBooking).then(
-                                    function (booking) {
-                                        $scope.booking = booking;
-                                    }
-                                );
+                                $scope.submitInProgress = true;
+//                                //Get product details
+                                ProductsLoadService.getAbsoluteUrl($scope.messageThread.product.id).$promise.then(function (result) {
+                                    $window.location.href = result.url + "#/booking";
+//                                    $scope.submitInProgress = false;
+                                });
+//                                BookingsLoadService.requestBooking($scope.newBooking).then(
+//                                    function (booking) {
+//                                        $scope.booking = booking;
+//                                    }
+//                                );
                             };
 
                             $scope.booking = booking;
                             $scope.updateNewBookingInfo();
                         } else {
                             $scope.booking = booking;
+                            $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
+                            $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
                     });
                 }
@@ -96,6 +107,7 @@ define(["angular", "eloue/app"], function (angular) {
 
                 // Post new message
                 $scope.postNewMessage = function () {
+                    $scope.submitInProgress = true;
                     ProductRelatedMessagesLoadService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(function () {
                             // Clear message field
@@ -104,6 +116,7 @@ define(["angular", "eloue/app"], function (angular) {
                             // Reload data
                             MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
                                 $scope.messageThread.messages = messageThread.messages;
+                                $scope.submitInProgress = false;
                             });
                         });
                 };

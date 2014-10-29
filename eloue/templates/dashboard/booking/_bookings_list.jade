@@ -1,25 +1,25 @@
-section.tabs-vertical-active.lg(ng-show="bookingList && bookingList.length > 0")
+section.tabs-vertical-active.lg(ng-show="(bookingList && bookingList.length > 0) || filtered")
   .section-header
     .row
-      .col-xs-9.tabs-horisontal-active
+      .col-xs-8.tabs-horisontal-active
         ul.list-without-spaces.fixed
           -var  booking_detail_horisontal_tabs = [["filterByBoth()", "Tous"], ["filterByOwner()", "Propriétaires"], ["filterByBorrower()", "Emprunteurs"]]
           each filter_func, filter_name in booking_detail_horisontal_tabs
             li.divider
             li.tab-horisontal(ng-click="{{ filter_func }}", id="filter-{{ filter_name }}"): h3.small {{ filter_name }}
-      .col-xs-3.indent-xs-t
+      .col-xs-4.indent-xs-t
         .select-gradient.without-search
           select(name="stateFilter", ng-model="stateFilter", ng-change="filterByState()", eloue-chosen)
               {% verbatim %}
-              option(value="") Statuts
+              option(value="") Tous
               option(ng-repeat="state in stateList", value="{{state}}") {{state | translate}}
 
   ul.scrollbar-custom(eloue-lazy-load, lazy-data="bookingList", lazy-data-provider="BookingsLoadService", lazy-load-method="getBookingList")
       //- we should use class="soon" or class=="in-progress" or class="completed" in the line below
-      li.tab-vertical.block-with-thumbnail(ng-repeat="booking in bookingList | filter:bookingFilter track by booking.uuid", id="booking-{{booking.uuid}}", ui-sref="bookings.detail({uuid: booking.uuid})", class="{{booking.state}}")
+      li.tab-vertical.block-with-thumbnail(ng-repeat="booking in bookingList track by booking.uuid", id="booking-{{booking.uuid}}", ui-sref="bookings.detail({uuid: booking.uuid})", class="{{booking.state}}")
         .col-thumbnail
           .thumbnail
-            a(ui-sref="bookings.detail({uuid: booking.uuid})"): img(ng-src="{{getProductImg(booking.picture)}}", alt="{{booking.product.summary}}", width="130", onerror="$(this).attr('src', '/static/img/product_img_full.png')")
+            a(ui-sref="bookings.detail({uuid: booking.uuid})").lg-p: img(style="background-image: url({{booking.picture}});")
             span(translate="{{booking.state}}").booking-bage
         .col-exposition
           h3.small

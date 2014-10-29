@@ -216,7 +216,7 @@
 				 <ul class="box-tools-tree">
 				{% for value, count in facets.fields|hash:field.name  %}
 					{% with value|category as category %}
-						{% if category.is_root_node %}
+						{% if category and category.is_root_node %}
 						<li>
 							<a href="{% facet_url breadcrumbs field.field.pretty_name category.slug %}">{{ category.name }}</a> 
 						</li>

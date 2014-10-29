@@ -10,7 +10,7 @@ block sections
           //- change photo
           .block-with-thumbnail.form-control.col-sm-12
             .col-thumbnail
-              .thumbnail.round.indent-sm-r: img(data-ng-src="{{getAvatar(currentUser.avatar.profil)}}", alt="{{currentUser.username}}", onerror="$(this).attr('src', '/static/img/profile_img.png')")
+              .thumbnail.round.indent-sm-r: span.lg: img(style="background-image: url({{currentUser.avatar.profil}});")
             .col-exposition
               label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifier mon image
                 input(type="file", name="avatar", file-chooser, on-change="onFileChanged()")#change-img
@@ -113,5 +113,5 @@ block sections
         //- btn submit
         .row
           .col-sm-6.col-sm-offset-3
-            button(type="submit").btn.bg-success-hover.text-white Enregistrez les informations
+            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success-hover.text-white Enregistrez les informations
         {% endverbatim %}

@@ -1,4 +1,4 @@
--load humanize facets
+-load humanize facets product
 
 .container
   h3.text-center.indent-v-lg {{ total_products|intcomma }} annonces de location dans toute la France
@@ -7,7 +7,7 @@
       li.col-sm-3: .product-item
         .product-image
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}")
-          span.badge.price {{ product.price }}&euro; /jour
+          span.badge.price {{ product.price|price:"&euro; /jour" }}
           if product.pro_owner
             span.badge-pro pro
         .product-info

@@ -125,16 +125,18 @@
 
   input[type="text"],
   input[type="email"],
+  input[type="number"],
   input[type="password"]
     &:invalid,
     &:empty
       border-color: $brand-primary
     &:valid
       border-color: $gray-medium
-    &:disabled
-      border-color: $gray-medium
+    &[disabled]
+      border-color: $gray-medium !important
 
   .chosen-container
+    font-size: 14px
     .chosen-choices,
     .chosen-single
       height: 3em
@@ -288,7 +290,7 @@
         width: 100%
         font-size: inherit
       input
-        font-size: px(14)
+        // font-size: px(14)
         box-shadow: none
         height: 3em
         padding: 0 0 0 1em
@@ -316,3 +318,5 @@
         position: absolute
         left: $padding-base-horizontal
         top: 0
+
+@import pop_up_sections/custom

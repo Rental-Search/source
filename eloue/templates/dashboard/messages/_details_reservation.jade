@@ -1,6 +1,10 @@
 {% verbatim %}
 ul.zebra-list.indent-md-b(ng-if="!!booking")
     li.clearfix
+        .col-xs-3 Statut
+        .col-xs-9: span(class="{{booking.state}}")
+            span(translate="{{booking.state}}").booking-bage
+    li.clearfix
       .col-xs-3 Début
       .col-xs-9.text
         span(translate="{{booking.start_date.week_day}}")
@@ -23,11 +27,14 @@ ul.zebra-list.indent-md-b(ng-if="!!booking")
       .col-xs-9.text {{booking.period_days}} jours et {{booking.period_hours}} heures
     li.clearfix
       .col-xs-3 Prix
-      .col-xs-9.text.success {{booking.total_amount}}€
+      .col-xs-9.text-primary {{booking.total_amount}}€
     li.clearfix
       .col-xs-3 Caution
       .col-xs-9.text {{booking.deposit_amount}}€
+    li.clearfix(ng-show="allowDownloadContract")
+        .col-xs-3 Contrat
+        .col-xs-9
+            a(href="{{contractLink}}", target="_blank").text-success.text-underline-hover Télécharger le contrat
 .text-right(ng-if="!!booking")
-  a(href="#").text-success.text-underline-hover.indent-sm-h Annulation
-  a(href="#").btn-inline.bg-success-hover.text-white Télécharger le contrat
+  a(ui-sref="bookings.detail({uuid: booking.uuid})").btn-inline.bg-success-hover.text-white Détails de la réservation
 {% endverbatim %}

@@ -7,7 +7,7 @@ from getenv import env
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 DEBUG = env('DEBUG', False)
-DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', False)
+DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', DEBUG)
 TEMPLATE_DEBUG = DEBUG
 
 DEBUG_TOOLBAR_PANELS = [
@@ -64,12 +64,29 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
-CACHES = {
-    'default': {
-        'BACKEND': env('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
-        'LOCATION': env('CACHE_LOCATION', None),
+
+if env('REDISGREEN_URL', None):
+    from urlparse import urlparse
+
+    redisgreen = urlparse(env("REDISGREEN_URL"))
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': '%s:%i' % (redisgreen.hostname, redisgreen.port),
+            'OPTIONS': {
+                'DB': 1,
+                'PASSWORD': redisgreen.password,
+            }
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': env('CACHE_BACKEND', 'django.core.cache.backends.dummy.DummyCache'),
+            'LOCATION': env('CACHE_LOCATION', None),
+        }
+    }
 
 # Cache configuration
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
@@ -253,32 +270,34 @@ SESSION_COOKIE_DOMAIN = env('SESSION_COOKIE_DOMAIN')
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = env('STATIC_URL', '/static/')
 STATICFILES_DIRS = [local_path('static/'), ]
-STATICFILES_STORAGE = env('STATICFILES_STORAGE', 'pipeline.storage.PipelineCachedStorage')
+STATICFILES_STORAGE = env('STATICFILES_STORAGE', 'eloue.compat.pipeline.storage.PipelineCachedStorage')
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #'eloue.compat.pipeline.finders.FileSystemFinder',
-    #'eloue.compat.pipeline.finders.AppDirectoriesFinder',
+    #'django.contrib.staticfiles.finders.FileSystemFinder',
+    #'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'eloue.compat.pipeline.finders.FileSystemFinder',
+    'eloue.compat.pipeline.finders.AppDirectoriesFinder',
     'eloue.compat.pipeline.finders.TemplatesFileSystemFinder',
 )
 
 #imagekit configuration
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
-IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'imagekit.cachefiles.strategies.Optimistic' # 'eloue.legacy.GenerateOnDownload'
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOptimistic' # 'imagekit.cachefiles.strategies.Optimistic'
 
 #pipeline configuration
 PIPELINE_ENABLED = env('PIPELINE', not DEBUG)
 PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
-PIPELINE_JS_COMPRESSOR = ''
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_COMPILERS = (
     #'pipeline.compilers.less.LessCompiler',
     'eloue.compat.pipeline.compilers.AutoprefixerSASSCompiler',
 )
-PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
+#PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = env('PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUGLIFY_BINARY = env('PIPELINE_YUGLIFY_BINARY', '/usr/bin/env yuglify')
-PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/home/benoitw/node_modules/autoprefixer/autoprefixer')
+PIPELINE_RJS_BINARY = env('PIPELINE_RJS_BINARY', '/app/node_modules/requirejs/bin/r.js')
+PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/app/node_modules/autoprefixer/autoprefixer')
 PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
 PIPELINE_CSS = {
     'extrastyles': {
@@ -316,10 +335,10 @@ PIPELINE_CSS = {
     },
     'product_list_styles': {
         'source_filenames': (
+            'css/jslider.css', # temporary use our own hacked version of jQuery-UI styles to get green sliders
             'sass/product_list_styles.sass',
             #'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css',
             'bower_components/bootstrap-datepicker/css/datepicker3.css',
-            'css/jquery-ui.css', # temporary use our own hacked version of jQuery-UI styles to get green sliders
         ),
         'output_filename': 'css/product_list_styles.css',
         'extra_context': {
@@ -458,6 +477,44 @@ PIPELINE_CSS = {
 }
 
 PIPELINE_JS = {
+    'require_js': {
+        'source_filenames': (
+            'bower_components/requirejs/require.js',
+        ),
+        'output_filename': 'js/require.js',
+        'extra_context': {
+            #'defer': False,
+            #'async': False,
+        },
+    },
+    'public_js': {
+        'source_filenames': (
+            'js/widgets/main.js',
+        ),
+        'output_filename': 'js/widgets.js',
+        'template_name': 'pipeline/requirejs.html',
+        'extra_context': {
+            'build': 'js/widgets/build.js',
+            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
+            'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
+            #'defer': False,
+            #'async': False,
+        },
+    },
+    'dashboard_js': {
+        'source_filenames': (
+            'js/dashboard/main.js',
+        ),
+        'output_filename': 'js/dashboard.js',
+        'template_name': 'pipeline/requirejs.html',
+        'extra_context': {
+            'build': 'js/dashboard/build.js',
+            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
+            'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
+            #'defer': False,
+            #'async': False,
+        },
+    },
     # 'application': {
     #     'source_filenames': (
     #         'js/jquery-1.7.1.min.js',
@@ -568,12 +625,10 @@ HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 
 # Queue configuration
-if DEBUG:
-    QUEUE_BACKEND = 'dummy'
-else:
-    QUEUE_BACKEND = 'redisd'
+QUEUE_BACKEND = env('QUEUE_BACKEND', 'dummy')
 QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = env('QUEUE_REDIS_DB', 1)
+
 
 REST_FRAMEWORK = {
 #     'DEFAULT_RENDERER_CLASSES': (
@@ -640,16 +695,14 @@ USE_HTTPS = env('USE_HTTPS', True)
 SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE', True)
 
 # Storage configuration
-if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-else:
-    DEFAULT_FILE_STORAGE = 'storages.backends.overwrite.OverwriteStorage'
+DEFAULT_FILE_STORAGE = env('DEFAULT_FILE_STORAGE', 'storages.backends.overwrite.OverwriteStorage')
 
 # S3 configuration
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', 'AKIAJ3PXVVKSTM3WSZSQ')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', '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')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', 'eloue')
-AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', 'eloue.s3.amazonaws.com')
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', '')
+AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', '')
+AWS_S3_SECURE_URLS = env('AWS_S3_SECURE_URLS', True)
 AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL', 'public-read')
 AWS_AUTO_CREATE_BUCKET = env('AWS_AUTO_CREATE_BUCKET', False)
 AWS_HEADERS = {

@@ -1,12 +1,12 @@
 .container
-  ul.nav.nav-justified
-    -var insurances = [["payment", "Louez en toute sécurité", "Paiement en ligne sécurisées", "Dépôt de garanti en ligne"], ["serenity", "Louez en toute sérénité", "Assurance incluse et automatique", "Aucun échange d’argent"], ["simplicity", "Louez en toute simplicité", "Contrat de location pré-rempli", "Service client dédié 7j/7"], ["trust", "Louez en toute confiance", "Identité des membres vérifiée", "Notes et commentaires"]]
-    each style, title, text1, text2 in insurances
+  ul.nav.nav-justified.text-nowrap
+
+    -var insurances = [["lock", "success", "Louez en toute sécurité", "Paiement en ligne sécurisées.<br>Dépôt de garanti en ligne."], ["umbrella", "primary", "Louez en toute sérénité", "Assurance incluse et automatique.<br>Aucun échange d’argent."], ["file", "black", "Louez en toute simplicité", "Contrat de location pré-rempli.<br>Service client dédié 7j/7"], ["details", "gray-strong", "Louez en toute confiance", "Identité des membres vérifiée.<br>Notes et commentaires."]]
+    each icon, style, title, text in insurances
       li.divide
       li
-        .insurances-img: span(class="{{ style }}")
+        .insurances-img(class="text-{{ style }}")
+          i(class="eloue-{{ icon }}")
         h5 {{ title }}
-        p 
-          | {{ text1 }}
-          br
-          | {{ text2 }}
+        p
+          != text|safe

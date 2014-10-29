@@ -1,5 +1,10 @@
 "use strict";
-define(["../../common/eloue/commonApp"], function (EloueCommon) {
+define(["../../common/eloue/commonApp",
+    "datejs",
+    "chosen",
+    "bootstrap-datepicker",
+    "bootstrap-datepicker-fr",
+    "custom-scrollbar"], function (EloueCommon) {
     /**
      * Datepicker directive.
      */
@@ -60,56 +65,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             }
         };
     }]);
-
-    EloueCommon.directive("eloueMap", ["$timeout", function ($timeout) {
-        return {
-            restrict: "A",
-            link: function (scope, element, attrs) {
-                var google_maps_loaded_def = $.Deferred();
-
-                window.google_maps_loaded = function () {
-                    console.log("loaded");
-                    google_maps_loaded_def.resolve(google.maps);
-                };
-
-                require(['http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&amp;callback=google_maps_loaded'], function () {
-                }, function (err) {
-                    google_maps_loaded_def.reject();
-                });
-
-                var radius = 10;
-
-                google_maps_loaded_def.promise().then(function (result) {
-                    var myOptions = {
-                        zoom: radius,
-                        center: new google.maps.LatLng(-34.397, 150.644),
-                        disableDefaultUI: true,
-                        zoomControl: true,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    console.log(element);
-                    var map = new google.maps.Map(element, myOptions);
-
-                    var geocoder = new google.maps.Geocoder();
-                    geocoder.geocode(
-                        {address: document.getElementById("where").value},
-                        function (result, status) {
-                            if (status == google.maps.GeocoderStatus.OK) {
-                                map.setCenter(result[0].geometry.location);
-                                var circle = new google.maps.Circle({
-                                    map: map,
-                                    radius: radius * 1000,
-                                    fillColor: '#FFFFFF',
-                                    editable: false
-                                });
-                            }
-                        }
-                    );
-                });
-            }
-        };
-    }]);
-
 
     EloueCommon.directive("eloueDatepickerMonth", function () {
         return {
@@ -229,6 +184,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 link: function (scope, element, attrs, ngModel) {
                     scope.page = 1;
                     scope.hasNextPage = true;
+                    scope.isLoading = false;
                     element.append(
                             "<div class=\"col-md-12 loading\">" +
                             "<div class=\"loading-widget\"></div>" +
@@ -245,7 +201,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                         },
                         callbacks: {
                             onTotalScroll: function () {
-                                if (scope.hasNextPage) {
+                                if (scope.hasNextPage && !scope.isLoading) {
                                     win.requestAnimationFrame(function () {
                                         scope.shouldReloadList = false;
                                         scope.$apply(function () {
@@ -267,6 +223,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
 
 //                    dataProvider[scope.lazyLoadMethod].apply(null,scope.lazyLoadArgs);
                     var lazyLoad = function () {
+                        scope.isLoading = true;
                         var args = scope.lazyLoadArgs.slice(0);
                         args.push(scope.page);
                         lazyLoader.configure({
@@ -291,6 +248,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                                 } else {
                                     scope.lazyData = data.list;
                                 }
+                                scope.isLoading = false;
                             }
                         );
                     };
@@ -308,9 +266,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     });
 
                     scope.$on("hideLoading", function () {
+                        $rootScope.routeChangeInProgress = false;
                         loadingWidget.hide();
                     });
                     scope.$on("showLoading", function () {
+                        $rootScope.routeChangeInProgress = true;
                         loadingWidget.show();
                     });
                 }};

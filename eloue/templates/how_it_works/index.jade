@@ -1,13 +1,12 @@
 extends ../base
--load compressed
+-load compressed staticfiles
 
 block append styles
   {% compressed_css "bootstrap" %}
   {% compressed_css "how_it_works_styles" %}
 
 block append scripts
-  script(src="#{STATIC_URL}bower_components/requirejs/require.js", data-main="#{STATIC_URL}js/widgets/main.js")
-  script(src="#{STATIC_URL}bower_components/jquery/dist/jquery.min.js")
+  script(src="{% static 'bower_components/jquery/dist/jquery.min.js' %}")
   script
     $(document).ready(function() {
       $('p.content').hide();

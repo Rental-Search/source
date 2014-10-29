@@ -1,66 +1,88 @@
-require.config({
-    baseUrl: "/static/js/widgets",
-    paths: {
-        "bootstrap": "/static/bower_components/bootstrap/dist/js/bootstrap.min",
-        "lodash": "/static/bower_components/lodash/dist/lodash.min",
-        "jQuery": "/static/bower_components/jquery/dist/jquery.min",
-        "jquery-ui": "/static/bower_components/jqueryui/jquery-ui.min",
-        "slider": "/static/bower_components/jqueryui/ui/minified/slider.min",
-        "core": "/static/bower_components/jqueryui/ui/minified/core.min",
-        "mouse": "/static/bower_components/jqueryui/ui/minified/mouse.min",
-        "widget": "/static/bower_components/jqueryui/ui/minified/widget.min",
-        "angular": "/static/bower_components/angular/angular.min",
-        "angular-resource": "/static/bower_components/angular-resource/angular-resource.min",
-        "angular-route": "/static/bower_components/angular-route/angular-route.min",
-        "angular-cookies": "/static/bower_components/angular-cookies/angular-cookies.min",
-        "angular-sanitize": "/static/bower_components/angular-sanitize/angular-sanitize.min",
-        "moment": "/static/bower_components/moment/min/moment.min",
-        "angular-moment": "/static/bower_components/angular-moment/angular-moment.min",
-        "bootstrap-datepicker": "/static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
-        "bootstrap-datepicker-fr": "/static/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
-        "jquery-form": "/static/bower_components/jquery-form/jquery.form",
-        "datejs": "/static/bower_components/datejs/build/production/date.min",
-        "chosen": "/static/bower_components/chosen/chosen.jquery.min",
-        "html5shiv": "/static/bower_components/html5shiv/dist/html5shiv.min",
-        "respond": "/static/bower_components/respond/respond.min",
-        "placeholders-utils": "/static/bower_components/placeholders/lib/utils",
-        "placeholders-main": "/static/bower_components/placeholders/lib/main",
-        "placeholders-jquery": "/static/bower_components/placeholders/lib/adapters/placeholders.jquery",
-        "custom-scrollbar": "/static/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
-        "jquery-mousewheel": "/static/bower_components/jquery-mousewheel/jquery.mousewheel",
-        "toastr": "/static/bower_components/toastr/toastr.min",
-        "formmapper": "/static/js/formmapper"
-    },
-    shim: {
-        "angular": {"exports": "angular"},
-        "angular-route": ["angular"],
-        "angular-cookies": ["angular"],
-        "angular-sanitize": ["angular"],
-        "angular-resource": ["angular"],
-        "angular-moment": ["angular"],
-        "angular-mocks": {
-            deps: ["angular"],
-            "exports": "angular.mock"
-        },
-        "jQuery": {exports: "jQuery"},
-        "jquery-ui": ["jQuery"],
-        "slider": ["jQuery"],
-        "core": ["jQuery"],
-        "mouse": ["jQuery"],
-        "widget": ["jQuery"],
-        "bootstrap": ["jQuery"],
-        "jquery-form": ["jQuery"],
-        "moment": ["jQuery"],
-        "bootstrap-datepicker": ["jQuery"],
-        "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
-        "chosen": ["jQuery"],
-        "placeholders-jquery": ["jQuery"],
-        "formmapper": ["jQuery"],
-        "jquery-mousewheel": ["jQuery"],
-        "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
-        "toastr": ["jQuery"]
-    }
-});
+require.config(
+    (function () {
+        var STATIC_URL = "/static/";
+        var scripts = document.getElementsByTagName('script');
+        for (var i = 0, l = scripts.length; i < l; i++) {
+            if (scripts[i].getAttribute('data-static-path')) {
+                STATIC_URL = scripts[i].getAttribute('data-static-path');
+                break;
+            }
+        }
+        return {
+            baseUrl: STATIC_URL + "js/widgets",
+            paths: {
+                "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
+                "lodash": "../../bower_components/lodash/dist/lodash",
+                "jQuery": "../../bower_components/jquery/dist/jquery",
+                "jquery-ui": "../../bower_components/jqueryui/jquery-ui",
+                "jshashtable": "../jshashtable-2.1_src",
+                "jquery.numberformatter": "../jquery.numberformatter-1.2.3",
+                "tmpl": "../tmpl",
+                "jquery.dependClass": "../jquery.dependClass-0.1",
+                "draggable": "../draggable-0.1",
+                "slider": "../jquery.slider",
+                "core": "../../bower_components/jqueryui/ui/core",
+                "mouse": "../../bower_components/jqueryui/ui/mouse",
+                "widget": "../../bower_components/jqueryui/ui/widget",
+                "angular": "../../bower_components/angular/angular",
+                "angular-resource": "../../bower_components/angular-resource/angular-resource",
+                "angular-route": "../../bower_components/angular-route/angular-route",
+                "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
+                "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
+                "moment": "../../bower_components/moment/moment",
+                "angular-moment": "../../bower_components/angular-moment/angular-moment",
+                "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
+                "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
+                "jquery-form": "../../bower_components/jquery-form/jquery.form",
+                "datejs": "../../bower_components/datejs/build/date",
+                "chosen": "../../bower_components/chosen/chosen.jquery",
+                "html5shiv": "../../bower_components/html5shiv/dist/html5shiv",
+                "respond": "../../bower_components/respond/respond.src",
+                "placeholders-utils": "../../bower_components/placeholders/lib/utils",
+                "placeholders-main": "../../bower_components/placeholders/lib/main",
+                "placeholders-jquery": "../../bower_components/placeholders/lib/adapters/placeholders.jquery",
+                "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
+                "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
+                "toastr": "../../bower_components/toastr/toastr",
+                "formmapper": "../formmapper"
+            },
+            shim: {
+                "angular": {"exports": "angular"},
+                "angular-route": ["angular"],
+                "angular-cookies": ["angular"],
+                "angular-sanitize": ["angular"],
+                "angular-resource": ["angular"],
+                "angular-moment": ["angular"],
+                "angular-mocks": {
+                    deps: ["angular"],
+                    "exports": "angular.mock"
+                },
+                "jQuery": {exports: "jQuery"},
+                "jquery-ui": ["jQuery"],
+                "jshashtable": ["jQuery"],
+                "jquery.numberformatter": ["jQuery"],
+                "tmpl": ["jQuery"],
+                "jquery.dependClass": ["jQuery"],
+                "draggable": ["jQuery"],
+                "slider": ["jQuery"],
+                "core": ["jQuery"],
+                "mouse": ["jQuery"],
+                "widget": ["jQuery"],
+                "bootstrap": ["jQuery"],
+                "jquery-form": ["jQuery"],
+                "moment": ["jQuery"],
+                "bootstrap-datepicker": ["jQuery"],
+                "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
+                "chosen": ["jQuery"],
+                "placeholders-jquery": ["jQuery"],
+                "formmapper": ["jQuery"],
+                "jquery-mousewheel": ["jQuery"],
+                "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
+                "toastr": ["jQuery"]
+            }
+        }
+    })()
+);
 
 require([
     "jQuery",
@@ -80,6 +102,11 @@ require([
     "toastr",
     "jquery-form",
 //    "jquery-ui",
+    "jshashtable",
+    "jquery.numberformatter",
+    "tmpl",
+    "jquery.dependClass",
+    "draggable",
     "slider",
     "core",
     "mouse",
@@ -125,7 +152,7 @@ require([
         var categorySelection = $("#category-selection");
         var detailSearchForm = $("#detail-search");
         if (detailSearchForm && categorySelection) {
-            categorySelection.change(function() {
+            categorySelection.change(function () {
                 var location = $(this).find(":selected").attr("location");
                 detailSearchForm.attr("action", location);
             });
@@ -133,16 +160,36 @@ require([
         var rangeSlider = $("#range-slider");
         var priceSlider = $("#price-slider");
         if (priceSlider) {
-            var priceMinInput = $("#price-min");
-            var priceMaxInput = $("#price-max");
-            priceSlider.slider({
-                range: true,
-                min: rangeSlider.attr("min-value"),
-                max: rangeSlider.attr("max-value"),
-                values: [priceMinInput.val(), priceMaxInput.val()],
-                slide: function(event, ui) {
-                    priceMinInput.val(ui.values[0]);
-                    priceMaxInput.val(ui.values[1]);
+            var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
+            var min = priceSlider.attr("min-value");
+            var max = priceSlider.attr("max-value");
+            if (!min || !max) {
+                priceSlider.hide();
+                $("#price-label").hide();
+            } else {
+                priceSlider.slider({
+                    from: Number(min),
+                    to: Number(max),
+                    limits: false,
+                    dimension: '&nbsp;&euro;',
+                    onstatechange: function (value) {
+                        var values = value.split(";");
+                        priceMinInput.attr("value", Number(values[0]));
+                        priceMaxInput.attr("value", Number(values[1]));
+                    }
+                });
+                priceSlider.slider("value", min, max);
+            }
+
+        }
+
+        var form = $('#detail-search');
+
+        var sortSelector = $('#sort-selector');
+        if (sortSelector) {
+            sortSelector.change(function (e) {
+                if (form) {
+                    form.submit()
                 }
             });
         }
@@ -258,15 +305,17 @@ require([
                 if (rangeSlider) {
                     var rangeInput = $("#range");
                     rangeSlider.slider({
-                        range: "min",
-                        value: rangeInput.val(),
-                        min: 1,
-                        max: rangeSlider.attr("max-value"),
-                        slide: function(event, ui) {
-                            rangeInput.val(ui.value);
-                            map.setZoom(zoom(ui.value));
+                        from: 1,
+                        to: rangeSlider.attr("max-value"),
+                        limits: false,
+                        dimension: 'km',
+                        onstatechange: function (value) {
+                            var values = value.split(";");
+                            rangeInput.attr("value", values[1]);
+                            map.setZoom(zoom(values[1]));
                         }
                     });
+                    rangeSlider.slider("value", 0, rangeInput.attr("value"));
                 }
 
                 var products = [];
@@ -295,7 +344,7 @@ require([
                 };
 
                 var productMapOptions = {
-                    zoom: 19,
+                    zoom: 16,
                     disableDefaultUI: true,
                     zoomControl: true,
                     center: new google.maps.LatLng(product.lat, product.lng),
@@ -310,7 +359,7 @@ require([
                     fillOpacity: 0.35,
                     map: productMap,
                     center: new google.maps.LatLng(product.lat, product.lng),
-                    radius: 10
+                    radius: 100
                 };
                 var locationCircle = new google.maps.Circle(circleOptions);
             }
@@ -319,7 +368,7 @@ require([
         function load_google_maps() {
             var script = document.createElement("script");
             script.type = "text/javascript";
-            script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
+            script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
             document.body.appendChild(script);
         }
 
@@ -354,12 +403,12 @@ require([
                 var image, image_hover;
 
                 if (markerId == "li#marker-") {
-                    image = new google.maps.MarkerImage('/static/images/markers_smooth_aligned.png',
+                    image = new google.maps.MarkerImage(STATIC_URL + 'images/markers_smooth_aligned.png',
                         new google.maps.Size(26, 28),
                         new google.maps.Point(0, 28 * i),
                         new google.maps.Point(14, 28));
 
-                    image_hover = new google.maps.MarkerImage('/static/images/markers_smooth_aligned.png',
+                    image_hover = new google.maps.MarkerImage(STATIC_URL + 'images/markers_smooth_aligned.png',
                         new google.maps.Size(26, 28),
                         new google.maps.Point(29, 28 * i),
                         new google.maps.Point(14, 28));

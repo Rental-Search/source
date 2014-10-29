@@ -66,15 +66,12 @@
     <ul class="breadcrumb">
         <li><a href="{% url 'home' %}">{% trans "Accueil" %}</a></li>
         {% for crumb in breadcrumbs|facets %}
+		    {% for category in crumb.object.get_ancestors %}
+   			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
+   			{% endfor %}
 			{% if form.cleaned_data.l or form.cleaned_data.q %}
-			    {% for category in crumb.object.get_ancestors %}
-    			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
-    			{% endfor %}
 				<li><a href="{{ crumb.url }}">{{ crumb.pretty_value|capfirst }}</a></li>
 			{% else %}
-			    {% for category in crumb.object.get_ancestors %}
-    			 <li><a href="{{ category.get_absolute_url }}">{{ category.name|capfirst }}</a></li>
-    			{% endfor %}
 				<li class="lastb">{{ crumb.pretty_value|capfirst }}</a></li>
 			{% endif %}
 		{% endfor %}
@@ -220,7 +217,7 @@
                 {% for value, count in facets.fields.categories %}
                 {% if count > 0 %}
                 {% with value|category as category %}
-                 {% if category != 'None' %}
+                {% if category %}
                     {% if breadcrumbs.categorie %}
                     {% if breadcrumbs.categorie.value != category.slug %}
                     <li>

@@ -1,7 +1,9 @@
 section.pull-nothing(ng-hide="items && (items.length > 0 || !!selectedCategory)")
   .notification-empty
     .notification-container
-      i.icon-5x.indent-sm-b.flaticon.solid.menu-list-4
+      {% verbatim %}
+      i(class="{{routeChangeInProgress ? 'loading' : ''}}").icon-5x.indent-sm-b.flaticon.solid.menu-list-4
+      {% endverbatim %}
       h2 Pas encore d'annonce déposée
       p.indent-md-v.text-black
         | Vas objets peuvent vous rapporter de l'argent : karcher, appareil photo, caméra ...

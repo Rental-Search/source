@@ -1,14 +1,14 @@
 -load category facets
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
-form#detail-search(action="{% facet_url breadcrumbs -'page' %}").section-body
+form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}").section-body
   label.caption(for="what") quoi
   input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
 
   p.caption catégories
   .clear-selector
     select#category-selection.form-control(name="categories")
-      option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}") Tous les catigories
+      option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}") Toutes les catégories
       if form.cleaned_data.q
         {% for value, count in facets.fields.categories %}
         if count and value
@@ -42,25 +42,27 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' %}").section-body
 
   //- .slider
   label.caption(for="range") rayon
-  input#range(type="number", data-type="range", name="r", value="{{ form.cleaned_data.r }}")
-  #range-slider(max-value="{{ form.max_range }}")
+  input#range(type="number", data-type="range", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}")
+  input#range-slider(type="slider", value="0;{{ form.cleaned_data.r|floatformat:'0' }}", max-value="{{ form.max_range|floatformat:'0' }}", solo)
 
-  label.caption(for="start-date") date de début
-  .date-picker
+  //-label.caption(for="start-date") date de début
+  //-.date-picker
+  //-
     .table-cell.main-cell
       input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
-  label.caption(for="end-date") date de fin
-  .date-picker
+  //-label.caption(for="end-date") date de fin
+  //-.date-picker
+  //-
     .table-cell.main-cell
       input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
-  label.caption(for="price") prix
-  input#price-min(type="number", data-type="range", name="price_from", value="{{ form.cleaned_data.price_from|floatformat:'-2' }}")
-  input#price-max(type="number", data-type="range", name="price_to", value="{{ form.cleaned_data.price_to|floatformat:'-2' }}")
-  #price-slider(min-value="{{ price_min|floatformat:'-2' }}", max-value="{{ price_max|floatformat:'-2' }}")
+  label#price-label.caption(for="price") prix
+  input#price-min(type="number", data-type="range", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}")
+  input#price-max(type="number", data-type="range", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}")
+  input#price-slider(type="slider", value="{{ price_min|stringformat:'.2f' }};{{ price_max|stringformat:'.2f' }}", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
 
   p.caption loueur
   .checkbox

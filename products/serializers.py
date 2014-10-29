@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework.fields import FloatField, IntegerField
+from rest_framework.fields import CharField
 from products import models
 from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
@@ -13,13 +14,14 @@ class CategorySerializer(ModelSerializer):
 
     class Meta:
         model = models.Category
-        fields = ('id', 'parent', 'name', 'need_insurance',
+        fields = ('id', 'parent', 'name', 'need_insurance', 'slug',
                   'title', 'description', 'header', 'footer',
                   'is_child_node', 'is_leaf_node', 'is_root_node')
         public_fields = (
-            'id', 'parent', 'name', 'need_insurance',
+            'id', 'parent', 'name', 'need_insurance', 'slug',
             'title', 'description', 'header', 'footer',
             'is_child_node', 'is_leaf_node', 'is_root_node')
+        read_only_fields = ('slug',)
         immutable_fields = ('parent',)
 
 
@@ -78,16 +80,17 @@ class ProductSerializer(ModelSerializer):
     prices = NestedPriceSerializer(read_only=True, many=True)
     pictures = NestedPictureSerializer(read_only=True, many=True)
     owner = NestedUserSerializer()
+    slug = CharField(read_only=True, source='slug')
 
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'average_note', 'prices',
                   'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies', 'comment_count',
-                  'pictures')
+                  'pictures', 'slug')
         public_fields = (
             'id', 'summary', 'deposit_amount', 'currency', 'description',
             'address', 'quantity', 'category', 'owner',  'comment_count',
-            'pro_agencies', 'prices', 'pictures', 'average_note', )
+            'pro_agencies', 'prices', 'pictures', 'average_note', 'slug')
         view_name = 'product-detail'
         read_only_fields = ('is_archived', 'created_at')
         immutable_fields = ('owner',)

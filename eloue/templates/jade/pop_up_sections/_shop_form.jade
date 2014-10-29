@@ -5,13 +5,13 @@ p Nos boutiques sont situées au&nbsp;:
 
 for agency in patron.pro_agencies.all
   .indent-t-sm.text-white.btn-lg.bg-primary: b
-    i.flaticon.stroke.up-2.icon-2x.pull-right(data-toggle="collapse", data-target="#map-{{ forloop.counter }}")
+    i.flaticon.stroke.up-2.icon-2x.pull-right.collapsed(data-toggle="collapse", data-target="#map-{{ forloop.counter }}")
     | {{ agency.address1 }}
     br
     | {{ agency.zipcode }} {{ agency.city|upper }}
   .collapse.map-wrapper(id="map-{{ forloop.counter }}")
     .map(locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}")
-        img(src="http://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&zoom=18&size=910x546&language=fr", width="100%", height="100%")
+        img(src="https://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&zoom=18&size=910x546&language=fr", width="100%", height="100%")
   {% comment %}
   {% empty %}
   {% if patron.default_address %}
@@ -21,6 +21,6 @@ for agency in patron.pro_agencies.all
     | {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
   .map-wrapper
     .map(locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}")
-      img(src="http://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&zoom=18&size=910x546&language=fr", width="100%", height="100%")
+      img(src="https://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&zoom=18&size=910x546&language=fr", width="100%", height="100%")
   {% endif %}
   {% endcomment %}

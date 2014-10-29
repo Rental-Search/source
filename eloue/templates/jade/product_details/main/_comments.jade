@@ -1,13 +1,15 @@
 ul.list-group
   each comment in comment_list
     li.list-group-item.thumbnail
+      {% with comment.author.get_absolute_url as comment_author_url %}
       .thumbnail-img
-        a(href="{{ comment.author.get_absolute_url }}"): img(style="{% if comment.author.product_page.url %}background-image: url({{ comment.author.product_page.url }}){% endif %}").bg-image
+        a(href="{{ comment_author_url }}"): img(style="{% if comment.author.product_page.url %}background-image: url({{ comment.author.product_page.url }}){% endif %}").bg-image
       .thumbnail-content
         h5
-          a(href="#").indent-r-xs {{ comment.author.username }}
+          a(href="{{ comment_author_url }}").indent-r-xs {{ comment.author.username }}
           {% with comment.note as rate %}
           include ../../_rate
           {% endwith %}
         p {{ comment.comment }}
         small {{ comment.created_at|date:"l d F Y" }}
+      {% endwith %}

@@ -5,9 +5,6 @@ block append styles
   {% compressed_css "bootstrap" %}
   {% compressed_css "profile_public_styles" %}
 
-block append scripts
-  script(src="#{STATIC_URL}bower_components/requirejs/require.js" data-main="#{STATIC_URL}js/widgets/main.js")
-
 block append content-body
   -var is_pro = patron.current_subscription is not None 
   #fb-root
@@ -54,3 +51,5 @@ block append content-body
         include ../jade/_footer_links
       section.row-fluid.rss
         include ../jade/_rss
+    script(type="text/ng-template")#modalContainer
+    div(ng-view)

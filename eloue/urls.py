@@ -219,6 +219,9 @@ ui3_urlpatterns = patterns('',
     url(r'^espace-presse/', TemplateView.as_view(template_name='press/index.jade'), name='press_page'),
     url(r'^qui-sommes-nous/', TemplateView.as_view(template_name='who_are_we/index.jade'), name='who_are_we'),
     url(r'^securite/', TemplateView.as_view(template_name='security/index.jade'), name='security'),
+    url(r'^conditions-generales/', TemplateView.as_view(template_name='terms/index.jade'), name='terms'),
+    url(r'^contrat-de-location/', TemplateView.as_view(template_name='rental_agreement/index.jade'), name='agreement'),
+    url(r'^mentions-legales/', TemplateView.as_view(template_name='imprint/index.jade'), name='notices'),
 )
 
 urlpatterns = patterns('',

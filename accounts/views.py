@@ -1063,6 +1063,11 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
 
     def get_context_data(self, **kwargs):
         patron = self.patron
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from eloue.legacy import generate_patron_images
+        generate_patron_images(patron)
+
         context = {
             'patron': patron,
             'breadcrumbs': self.breadcrumbs,

@@ -1,4 +1,4 @@
--load paginator i18n
+-load paginator i18n product
 
 {% if paginator.count %}
 h3.indent-b-xs Les {{ paginator.count }} annonces de {{ patron.username }}{% if is_pro %}&nbsp;Pro{% endif %}
@@ -9,7 +9,7 @@ ol.product-layout
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
-          span.badge.price {{ product.price }}&euro; /jour
+          span.badge.price {{ product.price|price:"&euro; /jour" }}
           //-span.badge-order {{ forloop.counter }}
         .info
           h6
@@ -17,16 +17,13 @@ ol.product-layout
             if is_pro
               span.badge-pro pro
           p: {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
-          //- TODO: need a better solution here to hit SQL DB only once for all products in the list
-          {% with product.object.borrowercomments.count as comments_num %}
-          if comments_num
-            {% with product.object.average_note as rate %}
+          if product.comment_count
+            {% with product.average_rate as rate %}
             include ../jade/_rate
             {% endwith %}
             span.sprite-comment
               i.flaticon.stroke.writing-comment
-              | {{ comments_num }}
-          {% endwith %}
+              != product.comment_count
           p.full_description {{ product.description|truncatechars:145 }}
         .declarer-container
         //-

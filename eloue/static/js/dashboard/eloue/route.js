@@ -22,6 +22,7 @@ define(["eloue/app",
         "eloue/controllers/account/AccountPasswordCtrl",
         "eloue/controllers/account/AccountInvitationCtrl",
         "eloue/controllers/messages/MessageDetailCtrl",
+        "eloue/controllers/messages/NewMessageThreadCtrl",
         "eloue/controllers/bookings/BookingDetailCtrl",
         "eloue/controllers/DashboardLoginCtrl",
         "eloue/directives/FileChooserDirective",
@@ -55,6 +56,11 @@ define(["eloue/app",
                         url: "/messages",
                         templateUrl: "partials/dashboard/messages.html",
                         controller: "MessagesCtrl"
+                    })
+                    .state("messages.new", {
+                        url: "/new_message/:productId",
+                        templateUrl: "partials/dashboard/messages/message_detail.html",
+                        controller: "NewMessageThreadCtrl"
                     })
                     .state("messages.detail", {
                         url: "/:id",
@@ -253,6 +259,7 @@ define(["eloue/app",
             // Route change event listener
             $rootScope.$on('$stateChangeStart',
                 function (event, toState, toParams, fromState, fromParams) {
+                    $rootScope.routeChangeInProgress = true;
                     if (!toState.insecure && !AuthService.isLoggedIn()) {
                         $rootScope.$broadcast("redirectToLogin");
                         event.preventDefault();
@@ -266,6 +273,15 @@ define(["eloue/app",
                             }
                         });
                     }
+                });
+            $rootScope.$on('$stateChangeSuccess',
+                function(event, toState, toParams, fromState, fromParams){
+                    $rootScope.routeChangeInProgress = false;
+                });
+
+            $rootScope.$on('$stateChangeError',
+                function(event, toState, toParams, fromState, fromParams, error){
+                    $rootScope.routeChangeInProgress = false;
                 });
 
             /**

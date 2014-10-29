@@ -12,7 +12,7 @@
         tbody
           tr
             td 1 jours*
-            td {{ product.price|currency }} &euro;
+            td {{ product.price|price:"&euro;" }}
       {% if product_object.km_included %}
       .indent-b-md
       table.calendar.text-center
@@ -36,5 +36,6 @@
           td Caution
           td {{ product_object.deposit_amount }} &euro;
     .col-sm-6
-      p.indent-sm-b Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.
-      p.indent-sm-b Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.
+      p.indent-sm-b Certains propriétaires proposent des prix degressifs pour les locations de plusieurs jours. Si vous effectuez une demande de location pour plusieurs jours, e-loue vous propose automatiquement le prix le plus avantageux.
+      p.indent-sm-b Lorsque vous effectuez une réservation sur e-loue, seul le prix de la location est débité de votre carte bancaire.
+      p.indent-sm-b Si le propriétaire demande une caution, e-loue procédera à une empreinte bancaire au moment du paiement. Cette empreinte ne sera pas débitée, sauf  si vous constatez un sinitre à la fin de la location.

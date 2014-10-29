@@ -1,6 +1,6 @@
 "use strict";
 
-define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
+define(["angular", "eloue/app"], function (angular) {
 
     /**
      * Controller for the booking detail page.
@@ -94,25 +94,25 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
 
 
             $scope.acceptBooking = function () {
+                $scope.submitInProgress = true;
                 BookingsLoadService.acceptBooking($stateParams.uuid).$promise.then(function (result) {
-                    toastr.options.positionClass = "toast-top-full-width";
-                    toastr.success(result.detail, "");
+                    $scope.showNotification(result.detail);
                     $window.location.reload();
                 })
             };
 
             $scope.rejectBooking = function () {
+                $scope.submitInProgress = true;
                 BookingsLoadService.rejectBooking($stateParams.uuid).$promise.then(function (result) {
-                    toastr.options.positionClass = "toast-top-full-width";
-                    toastr.success(result.detail, "");
+                    $scope.showNotification(result.detail);
                     $window.location.reload();
                 })
             };
 
             $scope.cancelBooking = function () {
+                $scope.submitInProgress = true;
                 BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
-                    toastr.options.positionClass = "toast-top-full-width";
-                    toastr.success(result.detail, "");
+                    $scope.showNotification(result.detail);
                     $window.location.reload();
                 })
             };
@@ -123,20 +123,21 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
 
             // Method to post new comment
             $scope.postComment = function () {
+                $scope.submitInProgress = true;
                 CommentsLoadService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).$promise
                     .then(function () {
-                        toastr.options.positionClass = "toast-top-full-width";
-                        toastr.success("Posted comment", "");
+                        $scope.showNotification("Posted comment");
                         $scope.showCommentForm = false;
+                        $scope.submitInProgress = false;
                     });
             };
 
             // Method to post new incident
             $scope.postIncident = function () {
+                $scope.submitInProgress = true;
                 BookingsLoadService.postIncident($stateParams.uuid, $scope.incident.description).$promise
                     .then(function (result) {
-                        toastr.options.positionClass = "toast-top-full-width";
-                        toastr.success(result.detail, "");
+                        $scope.showNotification(result.detail);
                         $scope.showIncidentForm = false;
                         $window.location.reload();
                     });
