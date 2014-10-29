@@ -286,13 +286,14 @@ IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'eloue.legacy.GenerateOptimistic' # 'image
 
 #pipeline configuration
 PIPELINE_ENABLED = env('PIPELINE', not DEBUG)
-#PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
-PIPELINE_JS_COMPRESSOR = ''
+PIPELINE_DISABLE_WRAPPER = True # FIXME: fix collectstatic
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_COMPILERS = (
     #'pipeline.compilers.less.LessCompiler',
     'eloue.compat.pipeline.compilers.AutoprefixerSASSCompiler',
 )
-PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
+#PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = env('PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUGLIFY_BINARY = env('PIPELINE_YUGLIFY_BINARY', '/usr/bin/env yuglify')
@@ -495,7 +496,7 @@ PIPELINE_JS = {
         'template_name': 'pipeline/requirejs.html',
         'extra_context': {
             'build': 'js/widgets/build.js',
-            'require_args': {'static-path': STATIC_URL},
+            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
             'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
             #'defer': False,
             #'async': False,
@@ -509,7 +510,7 @@ PIPELINE_JS = {
         'template_name': 'pipeline/requirejs.html',
         'extra_context': {
             'build': 'js/dashboard/build.js',
-            'require_args': {'static-path': STATIC_URL},
+            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
             'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
             #'defer': False,
             #'async': False,

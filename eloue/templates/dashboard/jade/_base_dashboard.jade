@@ -6,7 +6,18 @@ block append styles
 
 block scripts
   {% compressed_js "dashboard_js" %}
-
+script
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-8258979-1']);
+    _gaq.push(['_setDomainName', 'www.e-loue.com']);
+    _gaq.push(['_trackPageview']);
+    {% spaceless %}
+    {% if request.user.is_authenticated %}
+    _gaq.push(['_setVar', 'authenticated']);
+    {% else %}
+    _gaq.push(['_setVar', 'anonymous']);
+    {% endif %}
+    {% endspaceless %}
 block append content-body
   .container-full-screen(data-ng-controller="DashboardRootCtrl")
     header.header-site
@@ -23,7 +34,21 @@ block append content-body
               | {{tab.title}}
             {% endverbatim %}
       .content-view(ui-view)
+script
+    (function() {
+         var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+{% if not debug %}
+script
 
+    window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+    d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+    _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');
+    $.src='//v2.zopim.com/?WgwK6edNrVndm09BEcS9eHH77YcyszBK';z.t=+new Date;$.
+    type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
+{% endif %}
 #ngModals
     eloue-login-form
     eloue-registration-form
