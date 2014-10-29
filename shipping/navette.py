@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 from suds.client import Client
+from suds.cache import DocumentCache
+
 from django.utils.functional import cached_property
 
 
 class WsdlClientBase(object):
     @cached_property
     def client(self):
-        return Client(self.url)
+        api = Client(self.url)
+        api.set_options(cache=DocumentCache())
+        return api
 
 
 class Navette(WsdlClientBase):
@@ -14,10 +18,10 @@ class Navette(WsdlClientBase):
 
     @cached_property
     def search_pudo_type(self):
-        return self.client.factory.create('ns1:SearchPudoType')
+        return self.client.factory.create('ns2:SearchPudoType')
 
     def get_pudo(self, point, pudo_type):
-        request = self.client.factory.create('ns0:PudoRequest')
+        request = self.client.factory.create('ns1:PudoRequest')
         request.lat = point.x
         request.lng = point.y
         request.SearchPudoType = getattr(self.search_pudo_type, pudo_type)
@@ -28,13 +32,13 @@ class Navette(WsdlClientBase):
             return []
 
     def get_price_from_partner(self, departure_siteid, arrival_siteid):
-        request = self.client.factory.create('ns0:PricesRequestPartner')
+        request = self.client.factory.create('ns1:PricesRequestPartner')
         request.selectedDeparturePudoSiteId = departure_siteid
         request.selectedArrivalPudoSiteId = arrival_siteid
         return self.client.service.GetPricesFromPartner(request)
 
     def _create_order_details(self):
-        return self.client.factory.create('ns0:NavetteInput')
+        return self.client.factory.create('ns1:NavetteInput')
 
     def _get_order_details(self, **kwargs):
         order_details = self._create_order_details()
@@ -43,7 +47,7 @@ class Navette(WsdlClientBase):
         return order_details
 
     def create_from_partner(self, token, order_details=None, insurance_enabled=False, **kwargs):
-        request = self.client.factory.create('ns0:CreateRequest')
+        request = self.client.factory.create('ns1:CreateRequest')
         request.Token = token
         request.WithOption = insurance_enabled
         request.OrderDetails = self._get_order_details(**kwargs) if order_details is None else order_details
