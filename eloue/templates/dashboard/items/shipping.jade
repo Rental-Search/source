@@ -49,8 +49,10 @@ block details
     form(action="choice_point")
         fieldset(ng-disabled="submitInProgress")
           .pickup-input-wrapper
-            input#nickname.form-control(type="text", name="address", placeholder="", ng-model="addressQuery", ng-keyup="searchShippingPoints()")
+            input#product-shipping-address.form-control(type="text", name="address", placeholder="", ng-model="addressQuery", ng-blur="searchShippingPoints()")
             span.sprite-pickup-logo-short-grey
+          input#searchLat(disabled="disabled", name="lat", type="hidden", ng-model="searchLat", ng-change="searchShippingPoints()")
+          input#searchLng(disabled="disabled", name="lng", type="hidden", ng-model="searchLng", ng-change="searchShippingPoints()")
           a(href="", ng-show="submitInProgress").btn.btn-inline.bg-gray-light-hover.text-white.loading &nbsp;&nbsp;&nbsp;
           h3(ng-show="!!shippingPoints && shippingPoints.length > 0") Sélectionner un point relais ci-dessous&nbsp;:
 
@@ -70,9 +72,9 @@ block details
                     br
                     | {{point.zipcode}} {{point.city}}
 
-        .text-center(ng-show="!!shippingPoints && shippingPoints.length > 0")
+        .text-center
             a(href="", ng-click="cancelPointSelection()").text.text-danger.text-underline-hover.indent-sm-h  Annuler
-            a(href="", ng-click="saveMapPoint()", ng-disabled="!selectedPointId || submitInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.btn-inline.bg-success-hover.text-white Enregistrer
+            a(href="", ng-click="saveMapPoint()", ng-show="!!shippingPoints && shippingPoints.length > 0", ng-disabled="!selectedPointId || submitInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.btn-inline.bg-success-hover.text-white Enregistrer
         {% endverbatim %}
 
   .section-content(ng-show="showPointDetails")

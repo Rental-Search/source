@@ -8,14 +8,17 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("ItemsShippingCtrl", [
         "$scope",
         "$stateParams",
+        "$timeout",
         "Endpoints",
         "ProductShippingPointsService",
         "ShippingPointsService",
         "UtilsService",
-        function ($scope, $stateParams, Endpoints, ProductShippingPointsService, ShippingPointsService, UtilsService) {
+        function ($scope, $stateParams, $timeout, Endpoints, ProductShippingPointsService, ShippingPointsService, UtilsService) {
             $scope.markListItemAsSelected("item-tab-", "shipping");
             $scope.initCustomScrollbars();
             $scope.addressQuery = "";
+            $scope.searchLat = "";
+            $scope.searchLng = "";
             $scope.shippingPoints = [];
             $scope.showWellcome = false;
             $scope.showPointList = false;
@@ -36,14 +39,20 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
-                $scope.makeInitialSearchByAddress();
+//                $scope.makeInitialSearchByAddress();
             });
 
             $scope.makeInitialSearchByAddress = function () {
+                var location = false;
                 if ($scope.showPointList && $scope.currentUser.default_address && $scope.currentUser.default_address.street && $scope.currentUser.default_address.city) {
                     $scope.addressQuery = $scope.currentUser.default_address.street + ", " + $scope.currentUser.default_address.city;
-                    $scope.searchShippingPoints();
+                    location = $scope.addressQuery;
                 }
+                $('#product-shipping-address').formmapper({
+                    details: "form",
+                    location: location
+                });
+                $scope.searchShippingPoints();
             };
 
             $scope.fillInSchedule = function (openingDates) {
@@ -56,7 +65,7 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             };
 
-            $scope.filterTime = function(timeStr) {
+            $scope.filterTime = function (timeStr) {
                 var parts = timeStr.split(":");
                 return parts[0] + ":" + parts[1];
             };
@@ -74,7 +83,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.showPointDetails = true;
             };
 
-            $scope.showWellcomeScreen = function() {
+            $scope.showWellcomeScreen = function () {
                 $scope.shippingPoints = [];
                 $scope.showWellcome = true;
                 $scope.showPointList = false;
@@ -113,7 +122,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.selectedPointId = pointId;
             };
 
-            $scope.cancelPointSelection = function() {
+            $scope.cancelPointSelection = function () {
                 $scope.showWellcomeScreen();
             };
 
@@ -125,13 +134,17 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.searchShippingPoints = function () {
-                if (!!$scope.addressQuery && $scope.addressQuery.length > 3) {
-                    $scope.submitInProgress = true;
-                    ShippingPointsService.searchDepartureShippingPointsByAddress($scope.addressQuery).then(function (data) {
-                        $scope.shippingPoints = data;
-                        $scope.submitInProgress = false;
-                    });
-                }
-            }
+                $timeout(function () {
+                    var searchLat = $("#searchLat").attr("value"), searchLng = $("#searchLng").attr("value");
+                    if (!!searchLat && !!searchLng) {
+                        $scope.submitInProgress = true;
+                        ShippingPointsService.searchDepartureShippingPointsByAddress($scope.addressQuery).then(function (data) {
+                            $scope.shippingPoints = data;
+                            $scope.submitInProgress = false;
+                        });
+                    }
+                }, 500);
+            };
+
         }]);
 });
