@@ -44,6 +44,15 @@ class PhoneNumberSerializer(serializers.ModelSerializer):
         fields = ('id', 'patron', 'number')
         immutable_fields = ('patron',)
 
+
+class ProductNestedPhoneNumberSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
+
+    class Meta:
+        model = models.PhoneNumber
+        fields = ('id',)
+        public_fields = ('id',)
+
+
 class NestedPhoneNumberSerializer(serializers.NestedModelSerializerMixin, PhoneNumberSerializer):
     pass
 

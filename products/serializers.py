@@ -2,7 +2,7 @@
 from rest_framework.fields import FloatField, IntegerField
 from rest_framework.fields import CharField
 from products import models
-from accounts.serializers import NestedAddressSerializer, NestedPhoneNumberSerializer, BooleanField, NestedUserSerializer
+from accounts.serializers import NestedAddressSerializer, ProductNestedPhoneNumberSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
     NestedModelSerializerMixin
 
@@ -81,14 +81,15 @@ class ProductSerializer(ModelSerializer):
     pictures = NestedPictureSerializer(read_only=True, many=True)
     owner = NestedUserSerializer()
     slug = CharField(read_only=True, source='slug')
+    phone = ProductNestedPhoneNumberSerializer()
 
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'average_note', 'prices',
                   'quantity', 'is_archived', 'category', 'owner', 'created_at', 'pro_agencies', 'comment_count',
-                  'pictures', 'slug')
+                  'pictures', 'slug', 'phone')
         public_fields = (
-            'id', 'summary', 'deposit_amount', 'currency', 'description',
+            'id', 'summary', 'deposit_amount', 'currency', 'description', 'phone',
             'address', 'quantity', 'category', 'owner',  'comment_count',
             'pro_agencies', 'prices', 'pictures', 'average_note', 'slug')
         view_name = 'product-detail'
