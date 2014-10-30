@@ -47,7 +47,7 @@ block details
     h2 La livraison avec la
       span.sprite-pickup-logo-full.indent-sm-l
     form(action="choice_point")
-        fieldset(ng-disabled="submitInProgress || disableAddressForm")
+        fieldset(ng-disabled="submitInProgress")
           .pickup-input-wrapper
             input#product-shipping-address.form-control(type="text", name="address", placeholder="", ng-model="addressQuery", ng-blur="searchShippingPoints()")
             span.sprite-pickup-logo-short-grey

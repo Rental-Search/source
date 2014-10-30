@@ -348,7 +348,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         });
                         if (!!selectedPoint && !!selectedPoint.site_id) {
                             selectedPoint.type = 2;
-                            selectedPoint.shipping = Endpoints.api_url + "bookings/" + booking.uuid + "/";
+                            selectedPoint.booking = Endpoints.api_url + "bookings/" + booking.uuid + "/";
                             selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
                             PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (shippingPoint) {
                                 $scope.payForBooking(booking, paymentInfo);

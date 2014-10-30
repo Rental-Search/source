@@ -1299,7 +1299,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 patronShippingPointsService.getByPatronAndBooking = function (userId, bookingId) {
-                    return PatronShippingPoints.get({_cache: new Date().getTime(), patron: userId, shipping: bookingId}).$promise;
+                    return PatronShippingPoints.get({_cache: new Date().getTime(), patron: userId, booking: bookingId}).$promise;
                 };
 
                 return patronShippingPointsService;

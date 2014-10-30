@@ -151,8 +151,6 @@ define(["angular", "eloue/app"], function (angular) {
                                 $scope.errors.general = "Search point list fault";
                             }
                             $scope.submitInProgress = false;
-                            $scope.disableAddressForm = true;
-                            $scope.addressQuery = "";
                         });
                     }
                 }, 500);
