@@ -243,4 +243,4 @@ urlpatterns = patterns('',
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 )
 
-handler404 = 'eloue.views.custom404'
+#handler404 = 'eloue.views.custom404'

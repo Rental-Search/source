@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.http import HttpResponseNotFound, Http404
-from django.views.decorators.csrf import requires_csrf_token
+from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
-from django.template import RequestContext, loader
 from django.utils.translation import ugettext_lazy as _
 from django.utils.datastructures import SortedDict
 
@@ -14,20 +12,6 @@ from haystack.constants import DJANGO_ID
 
 from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
-
-@requires_csrf_token
-def custom404(request, template_name='404.html'):
-    """
-    Default 404 handler.
-
-    Templates: `404.html`
-    Context:
-        request_path
-            The path of the requested URL (e.g., '/app/pages/bad_page/')
-    """
-    t = loader.get_template(template_name) # You need to create a 404.html template.
-    #form = FacetedSearchForm()
-    return HttpResponseNotFound()
 
 class LoginRequiredMixin(View):
     @method_decorator(login_required)
