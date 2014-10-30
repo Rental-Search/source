@@ -4,6 +4,7 @@ from rest_framework.decorators import link
 from rest_framework.response import Response
 from eloue.api import filters, mixins, viewsets
 from . import helpers, models, serializers
+from eloue.api.decorators import user_required
 
 
 class ShippingPointViewSet(viewsets.ReadOnlyModelViewSet):
@@ -50,8 +51,12 @@ class PatronShippingPointViewSet(mixins.SetOwnerMixin, viewsets.NonEditableModel
     serializer_class = serializers.PatronShippingPointSerializer
     queryset = models.PatronShippingPoint.objects.select_related('patron')
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
-    owner_field = 'patron'
+    owner_field = ('patron', 'booking__owner')
     filter_fields = ('patron', )
+
+    @user_required('patron')
+    def delete(self, request, *args, **kwargs):
+        super(PatronShippingPointViewSet, self).delete(*args, **kwargs)
 
 
 class ProductShippingPointViewSet(viewsets.NonEditableModelViewSet):
