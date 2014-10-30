@@ -183,7 +183,7 @@ class MPTTModelFilter(MPTTFilterMixin, django_filters.ModelMultipleChoiceFilter)
 
     def filter(self, qs, value):
         if not value:
-            return qs.none()
+            return qs
         return super(MPTTModelFilter, self).filter(qs, value)
 
     def join_parts(self, *args):
