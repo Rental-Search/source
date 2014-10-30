@@ -47,7 +47,7 @@ block details
     h2 La livraison avec la
       span.sprite-pickup-logo-full.indent-sm-l
     form(action="choice_point")
-        fieldset(ng-disabled="submitInProgress")
+        fieldset(ng-disabled="submitInProgress || disableAddressForm")
           .pickup-input-wrapper
             input#product-shipping-address.form-control(type="text", name="address", placeholder="", ng-model="addressQuery", ng-blur="searchShippingPoints()")
             span.sprite-pickup-logo-short-grey
@@ -73,6 +73,8 @@ block details
                     | {{point.zipcode}} {{point.city}}
 
         .text-center
+            span.text-danger(ng-show="!!errors.general", ng-bind="errors.general")
+            br
             a(href="", ng-click="cancelPointSelection()").text.text-danger.text-underline-hover.indent-sm-h  Annuler
             a(href="", ng-click="saveMapPoint()", ng-show="!!shippingPoints && shippingPoints.length > 0", ng-disabled="!selectedPointId || submitInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.btn-inline.bg-success-hover.text-white Enregistrer
         {% endverbatim %}

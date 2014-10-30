@@ -10,10 +10,11 @@ define(["angular", "eloue/app"], function (angular) {
         "$stateParams",
         "$timeout",
         "Endpoints",
+        "ProductsLoadService",
         "ProductShippingPointsService",
         "ShippingPointsService",
         "UtilsService",
-        function ($scope, $stateParams, $timeout, Endpoints, ProductShippingPointsService, ShippingPointsService, UtilsService) {
+        function ($scope, $stateParams, $timeout, Endpoints, ProductsLoadService, ProductShippingPointsService, ShippingPointsService, UtilsService) {
             $scope.markListItemAsSelected("item-tab-", "shipping");
             $scope.initCustomScrollbars();
             $scope.addressQuery = "";
@@ -26,6 +27,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.selectedPointId = "";
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
             $scope.productShippingPoint = {};
+            $scope.errors = {};
 
             ProductShippingPointsService.getByProduct($stateParams.id).then(function (data) {
                 if (!!data.results && data.results.length > 0) {
@@ -39,20 +41,21 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
-//                $scope.makeInitialSearchByAddress();
             });
 
             $scope.makeInitialSearchByAddress = function () {
                 var location = false;
-                if ($scope.showPointList && $scope.currentUser.default_address && $scope.currentUser.default_address.street && $scope.currentUser.default_address.city) {
-                    $scope.addressQuery = $scope.currentUser.default_address.street + ", " + $scope.currentUser.default_address.city;
-                    location = $scope.addressQuery;
-                }
-                $('#product-shipping-address').formmapper({
-                    details: "form",
-                    location: location
+                ProductsLoadService.getProduct($stateParams.id, true, false, false, false).then(function (product) {
+                    if ($scope.showPointList && product.address && product.address.street && product.address.city) {
+                        $scope.addressQuery = product.address.street + ", " + product.address.city;
+                        location = $scope.addressQuery;
+                    }
+                    $('#product-shipping-address').formmapper({
+                        details: "form",
+                        location: location
+                    });
+                    $scope.searchShippingPoints();
                 });
-                $scope.searchShippingPoints();
             };
 
             $scope.fillInSchedule = function (openingDates) {
@@ -141,6 +144,15 @@ define(["angular", "eloue/app"], function (angular) {
                         ShippingPointsService.searchDepartureShippingPointsByCoordinates(searchLat, searchLng).then(function (data) {
                             $scope.shippingPoints = data;
                             $scope.submitInProgress = false;
+                        }, function (error) {
+                            if (!!error.detail) {
+                                $scope.errors.general = error.detail;
+                            } else {
+                                $scope.errors.general = "Search point list fault";
+                            }
+                            $scope.submitInProgress = false;
+                            $scope.disableAddressForm = true;
+                            $scope.addressQuery = "";
                         });
                     }
                 }, 500);
