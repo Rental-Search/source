@@ -22,7 +22,7 @@ ol.product-layout
             span.sprite-comment
               i.flaticon.stroke.writing-comment
               != product.comment_count
-          p.full_description {{ product.description|truncatechars:145 }}
+          p.full_description {% if product.description %}{{ product.description|truncatechars:145 }}{% else %}&nbsp;{% endif %}
         .declarer-container
           .declarer
             span.declarer-name {{ product.owner }}
