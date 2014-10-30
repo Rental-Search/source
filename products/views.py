@@ -615,13 +615,18 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductList, self).get_context_data(**kwargs)
-        context['facets'] = self.sqs.facet_counts()
-        context['form'] = self.form
-        context['breadcrumbs'] = self.breadcrumbs
-        context['suggestions'] = self.suggestions
-        context['site_url'] = self.site_url
-        context['canonical_parameters'] = self.canonical_parameters
-        context['top_products'] = self.top_products
+        context.update({
+            'facets': self.sqs.facet_counts(),
+            'form': self.form,
+            'breadcrumbs': self.breadcrumbs,
+            'suggestions': self.suggestions,
+            'site_url': self.site_url,
+            'canonical_parameters': self.canonical_parameters,
+            'top_products': self.top_products,
+        })
+        filter_limits = self.form.filter_limits
+        if filter_limits:
+            context.update(filter_limits)
         return context
 
 @never_cache
@@ -797,10 +802,10 @@ class ProductListView(ProductList):
     def get_breadcrumbs(self, request):
         breadcrumbs = super(ProductListView, self).get_breadcrumbs(request)
         form = self.form
-        #breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date from', 'facet': False}
-        #breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date to', 'facet': False}
-        breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'date from', 'facet': False}
-        breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'date to', 'facet': False}
+        #breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date_from', 'facet': False}
+        #breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date_to', 'facet': False}
+        breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'price_from', 'facet': False}
+        breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'price_to', 'facet': False}
         breadcrumbs['categorie'] = {'name': 'categorie', 'value': None, 'label': 'categorie', 'facet': True}
         return breadcrumbs
 
@@ -809,13 +814,6 @@ class ProductListView(ProductList):
             'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-
-        prices = [price[0] for price in context['facets'].get('fields', {}).get('price', ())]
-        if prices:
-            context.update({
-                'price_min': min(prices),
-                'price_max': max(prices),
-            })
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images

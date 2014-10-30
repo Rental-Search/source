@@ -45,6 +45,8 @@ class FacetedSearchForm(SearchForm):
     categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     renter = forms.CharField(required=False)
 
+    filter_limits = {}
+
     def clean_r(self):
         location = self.cleaned_data.get('l', None)
         radius = self.cleaned_data.get('r', None)
@@ -82,6 +84,13 @@ class FacetedSearchForm(SearchForm):
                     suggestions = suggestions.strip()
                 if suggestions == query:
                     suggestions = None
+
+            prices = [price[0] for price in sqs.facet_counts().get('fields', {}).get('price', None)]
+            if prices:
+                self.filter_limits.update({
+                    'price_min': min(prices),
+                    'price_max': max(prices),
+                })
 
             sqs = self.filter_queryset(sqs)
             

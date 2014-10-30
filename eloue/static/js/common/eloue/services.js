@@ -995,6 +995,18 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return deferred.promise;
             };
 
+            categoriesService.getAncestors = function (parentId) {
+                var deferred = $q.defer();
+                Categories.getAncestors({id: parentId}).$promise.then(function (categories) {
+                    var categoryList = [];
+                    angular.forEach(categories, function (value, key) {
+                        categoryList.push({id: value.id, name: value.name});
+                    });
+                    deferred.resolve(categoryList);
+                });
+                return deferred.promise;
+            };
+
             return categoriesService;
         }]);
 
