@@ -72,6 +72,8 @@ require([
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
     "formmapper",
+    "jquery-mousewheel",
+    "custom-scrollbar",
     "toastr",
     "../common/eloue/commonApp",
     "eloue/route",

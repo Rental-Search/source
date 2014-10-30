@@ -99,6 +99,8 @@ require([
     "placeholders-main",
     "placeholders-jquery",
     "formmapper",
+    "jquery-mousewheel",
+    "custom-scrollbar",
     "toastr",
     "jquery-form",
 //    "jquery-ui",
@@ -408,10 +410,12 @@ require([
             if (radius <= 25)
                 return 9;
             if (radius <= 100)
-                return 7;
+                return 8;
             if (radius <= 200)
+                return 7;
+            if (radius <= 350)
                 return 6;
-            if (radius <= 300)
+            if (radius <= 500)
                 return 5;
             if (radius <= 700)
                 return 4;
