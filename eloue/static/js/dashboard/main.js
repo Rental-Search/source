@@ -79,7 +79,7 @@ require([
 ], function ($, _, angular, bootstrap, route) {
     "use strict";
     $(function () {
-
+        $(".signs-links").find("ul.without-spaces").show();
         angular.bootstrap(document, ["EloueDashboardApp"]);
     });
 });

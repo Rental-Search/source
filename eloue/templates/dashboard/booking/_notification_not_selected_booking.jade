@@ -4,4 +4,4 @@ section.pull-nothing
       {% verbatim %}
       i(class="{{routeChangeInProgress ? 'loading' : ''}}").icon-5x.indent-sm-b.flaticon.stroke.calendar-5
       {% endverbatim %}
-      h2 Aucune réservation sélectionnée
+      h2(ng-show="!routeChangeInProgress") Aucune réservation sélectionnée
