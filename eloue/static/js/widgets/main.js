@@ -259,6 +259,32 @@ require([
             event.target.playVideo();
         }
 
+        function range(zoom) {
+            if (zoom >= 14)
+                return 0.5;
+            if (zoom >= 13)
+                return 1;
+            if (zoom >= 12)
+                return 3;
+            if (zoom >= 11)
+                return 6;
+            if (zoom >= 10)
+                return 15;
+            if (zoom >= 9)
+                return 25;
+            if (zoom >= 8)
+                return 100;
+            if (zoom >= 7)
+                return 200;
+            if (zoom >= 6)
+                return 350;
+            if (zoom >= 5)
+                return 500;
+            if (zoom >= 4)
+                return 700;
+            return 1000;
+        }
+
 
         window.google_maps_loaded = function () {
             $('#geolocate').formmapper({
@@ -324,20 +350,42 @@ require([
                         } else {
                             rangeSlider.attr("value", "1;" + range_max);
                         }
+
+                        var notUpdateBySlider = false, notUpdateByMap = false;
                         rangeSlider.slider({
                             from: 1,
                             to:  Number(range_max),
                             limits: false,
                             dimension: '&nbsp;km',
                             onstatechange: function (value) {
-                                var range_value = value.split(";")[1];
-                                // enable the input so its value could be now posted with a form data
-                                rangeInput.prop("disabled", false);
-                                // set new values to the hidden input
-                                rangeInput.attr("value", range_value);
-                                // change map's zoom level
-                                map.setZoom(zoom(range_value));
+                                notUpdateByMap = true;
+                                if (!notUpdateBySlider) {
+                                    var range_value = value.split(";")[1];
+                                    // enable the input so its value could be now posted with a form data
+                                    rangeInput.prop("disabled", false);
+                                    // set new values to the hidden input
+                                    rangeInput.attr("value", range_value);
+                                    // change map's zoom level
+                                    map.setZoom(zoom(range_value));
+                                }
+                                setTimeout(function() {
+                                    notUpdateByMap = false;
+                                }, 1000);
                             }
+                        });
+
+                        google.maps.event.addListener(map, 'zoom_changed', function() {
+                            notUpdateBySlider = true;
+                            if (!notUpdateByMap) {
+                                var zoomLevel = map.getZoom();
+                                var calcRange = range(zoomLevel);
+                                if (calcRange && calcRange <= range_max) {
+                                    rangeSlider.slider("value", 1, calcRange)
+                                }
+                            }
+                            setTimeout(function() {
+                                notUpdateBySlider = false;
+                            }, 1000);
                         });
                     }
                 }
