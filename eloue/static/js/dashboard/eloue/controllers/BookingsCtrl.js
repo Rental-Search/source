@@ -9,9 +9,10 @@ define(["angular", "eloue/app"], function (angular) {
         "$q",
         "$scope",
         "$rootScope",
+        "$timeout",
         "Endpoints",
         "BookingsLoadService",
-        function ($q, $scope, $rootScope, Endpoints, BookingsLoadService) {
+        function ($q, $scope, $rootScope, $timeout, Endpoints, BookingsLoadService) {
             $scope.bookingFilter = {};
             $scope.stateList = ["authorized", "rejected", "outdated", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"];
             $scope.bookingList = [];
@@ -60,16 +61,20 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.stateFilter, $scope.bookingFilter.borrower, $scope.bookingFilter.owner], shouldReloadList: true});
             };
 
-            $('.chosen-drop').mCustomScrollbar({
-                scrollInertia: '100',
-                autoHideScrollbar: true,
-                theme: 'dark-thin',
-                scrollbarPosition: 'outside',
-                advanced:{
-                    autoScrollOnFocus: false,
-                    updateOnContentResize: true
-                }
-            });
+            $timeout(function () {
+                $("#stateFilterSelect").chosen();
+                $(".chosen-drop").mCustomScrollbar({
+                    scrollInertia: '100',
+                    autoHideScrollbar: true,
+                    theme: 'dark-thin',
+                    scrollbarPosition: 'outside',
+                    advanced:{
+                        autoScrollOnFocus: false,
+                        updateOnContentResize: true
+                    }
+                });
+            }, 500);
+
         }
     ]);
 });

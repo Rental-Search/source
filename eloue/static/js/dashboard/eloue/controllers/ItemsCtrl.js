@@ -8,8 +8,9 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("ItemsCtrl", [
         "$scope",
         "$rootScope",
+        "$timeout",
         "CategoriesService",
-        function ($scope, $rootScope, CategoriesService) {
+        function ($scope, $rootScope, $timeout, CategoriesService) {
 
             $scope.selectedCategory = "";
             $scope.currentUser = {};
@@ -22,16 +23,19 @@ define(["angular", "eloue/app"], function (angular) {
 
             CategoriesService.getRootCategories().then(function (categories) {
                 $scope.categories = categories;
-                $('.chosen-drop').mCustomScrollbar({
-                    scrollInertia: '100',
-                    autoHideScrollbar: true,
-                    theme: 'dark-thin',
-                    scrollbarPosition: 'outside',
-                    advanced:{
-                        autoScrollOnFocus: false,
-                        updateOnContentResize: true
-                    }
-                });
+                $timeout(function () {
+                    $("#categoryFilterSelect").chosen();
+                    $(".chosen-drop").mCustomScrollbar({
+                        scrollInertia: '100',
+                        autoHideScrollbar: true,
+                        theme: 'dark-thin',
+                        scrollbarPosition: 'outside',
+                        advanced:{
+                            autoScrollOnFocus: false,
+                            updateOnContentResize: true
+                        }
+                    });
+                }, 500);
             });
 
             $scope.filterByCategory = function () {
