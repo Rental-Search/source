@@ -1,8 +1,10 @@
--load staticfiles
+-load staticfiles oauth2
 
 section.container.signs-links
-  //- version of header for anonymous user
-  ul.ng-hide(role="tablist", ng-show="!currentUser").without-spaces
+  ul(role="tablist").without-spaces
+    {% with request|oauth2_user as user %}
+    {% if user.is_anonymous %}
+    //- version of header for anonymous user
     li: span
       | Bonjour, 
       a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b inscrivez-vous 
@@ -17,8 +19,8 @@ section.container.signs-links
       | Appelez-nous au 
       b 0826.800.200 
       | (0,15&euro; / min)
-  //- version of header for authorized user
-  ul.ng-hide(role="tablist", ng-show="!!currentUser").without-spaces
+    {% else %}
+    //- version of header for authorized user
     li: span
       | Appelez-nous au 
       b 0826.800.200 
@@ -79,6 +81,8 @@ section.container.signs-links
              li: a Simulez vos revenus
              li: a Conseils pour les propriétaires
              li: a Conseils pour les locataires
+    {% endif %}
+    {% endwith %}
 
 .framing
   section.container.search-form
