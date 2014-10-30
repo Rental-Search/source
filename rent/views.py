@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import logbook
 import urllib
 from datetime import datetime, date
 
+import logbook
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -21,6 +21,7 @@ from django.template import RequestContext
 
 from accounts.forms import EmailAuthenticationForm
 from accounts.utils import viva_check_phone
+from eloue.api.decorators import user_required
 from payments.models import PayboxDirectPlusPaymentInformation
 from products.models import Product
 from products.choices import UNIT
@@ -29,9 +30,9 @@ from rent.models import Booking, ProBooking, Sinister
 from rent.wizard import BookingWizard, PhoneBookingWizard
 from rent.utils import timesince
 from rent.choices import BOOKING_STATE
-
 from eloue.utils import currency, json
 from eloue.decorators import ownership_required, validate_ipn, secure_required, mobify
+
 
 log = logbook.Logger('eloue.rent')
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
@@ -349,8 +350,6 @@ def booking_incident(request, booking_id):
 
 # REST API 2.0
 
-from django.utils.functional import wraps
-
 from rest_framework.decorators import link, action
 from rest_framework.response import Response
 import django_filters
@@ -359,17 +358,6 @@ from rent import serializers, models
 from eloue.api import viewsets, filters, mixins, exceptions
 from accounts.serializers import CreditCardSerializer, BookingPayCreditCardSerializer
 
-def user_required(attname):
-    def user_required_inner(f):
-        @wraps(f)
-        def wrapper(self, request, *args, **kwargs):
-            obj = self.get_object()
-            if getattr(obj, attname) != request.user:
-                error = getattr(exceptions.PermissionErrorEnum, 'ACTION_%s_REQUIRED' % attname.upper())
-                raise exceptions.PermissionException(error)
-            return f(self, request, *args, **kwargs)
-        return wrapper
-    return user_required_inner
 
 class BookingFilterSet(filters.FilterSet):
     author = filters.MultiFieldFilter(name=('owner', 'borrower'))

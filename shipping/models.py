@@ -13,7 +13,7 @@ class ShippingPoint(models.Model):
 
 class PatronShippingPoint(ShippingPoint):
     patron = models.ForeignKey('accounts.Patron', related_name='shipping_points')
-    shipping = models.OneToOneField('rent.Booking', related_name='arrival_point', null=True)
+    booking = models.OneToOneField('rent.Booking', related_name='arrival_point', null=True)
 
 
 class ProductShippingPoint(ShippingPoint):

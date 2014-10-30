@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from rest_framework.fields import TimeField
+from rest_framework.relations import HyperlinkedRelatedField
 
 from rest_framework.serializers import CharField, BooleanField, DecimalField, IntegerField
 from accounts.choices import COUNTRY_CHOICES
@@ -70,7 +71,7 @@ class PatronShippingPointSerializer(ShippingPointSerializer):
 
     class Meta(ShippingPointSerializer.Meta):
         model = models.PatronShippingPoint
-        fields = ShippingPointSerializer.Meta.fields + ('patron', 'shipping')
+        fields = ShippingPointSerializer.Meta.fields + ('patron', 'booking')
 
 
 class ProductShippingPointSerializer(ShippingPointSerializer):
