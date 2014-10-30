@@ -118,8 +118,11 @@ require([
 ], function ($, _, angular) {
     "use strict";
     $(function () {
-
-        angular.bootstrap(document, ["EloueApp"]);
+        $(".signs-links").find("ul.without-spaces").show();
+        setTimeout(function() {
+            angular.bootstrap(document, ["EloueApp"]);
+        }, 5000);
+//        angular.bootstrap(document, ["EloueApp"]);
 
         var slide_imgs = [].slice.call($('.carousel-wrapper').find('img'));
         for (var index = 0; index < slide_imgs.length; index++) {
