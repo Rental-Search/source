@@ -16,42 +16,29 @@ class WsdlClientBase(object):
 class Navette(WsdlClientBase):
     url = 'http://test-web-navette.pickup.fr/v1/Navette.svc?wsdl'
 
-    @cached_property
-    def search_pudo_type(self):
-        return self.client.factory.create('ns1:SearchPudoType')
-
     def get_pudo(self, point, pudo_type):
-        request = self.client.factory.create('ns0:PudoRequest')
-        request.lat = point.x
-        request.lng = point.y
-        request.SearchPudoType = getattr(self.search_pudo_type, pudo_type)
-        res = self.client.service.GetPudo(request)
+        res = self.client.service.GetPudo({
+            'lat': point.x,
+            'lng': point.y,
+            'SearchPudoType': pudo_type
+        })
         if res.Pudos:
             return res.Pudos.Pudo
         else:
             return []
 
     def get_price_from_partner(self, departure_siteid, arrival_siteid):
-        request = self.client.factory.create('ns0:PricesRequestPartner')
-        request.selectedDeparturePudoSiteId = departure_siteid
-        request.selectedArrivalPudoSiteId = arrival_siteid
-        return self.client.service.GetPricesFromPartner(request)
+        return self.client.service.GetPricesFromPartner({
+            'selectedDeparturePudoSiteId': departure_siteid,
+            'selectedArrivalPudoSiteId': arrival_siteid,
+        })
 
-    def _create_order_details(self):
-        return self.client.factory.create('ns0:NavetteInput')
-
-    def _get_order_details(self, **kwargs):
-        order_details = self._create_order_details()
-        for key, value in kwargs.iteritems():
-            setattr(order_details, key, value)
-        return order_details
-
-    def create_from_partner(self, token, order_details=None, insurance_enabled=False, **kwargs):
-        request = self.client.factory.create('ns0:CreateRequest')
-        request.Token = token
-        request.WithOption = insurance_enabled
-        request.OrderDetails = self._get_order_details(**kwargs) if order_details is None else order_details
-        return self.client.service.CreateFromPartner(request)
+    def create_from_partner(self, token, order_details, insurance_enabled=False):
+        return self.client.service.CreateFromPartner({
+            'Token': token,
+            'WithOption': insurance_enabled,
+            'OrderDetails': order_details
+        })
 
     def get_events(self, ref):
         return self.client.service.GetEventsByReferenceColis(ref).EventColis

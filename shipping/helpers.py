@@ -122,7 +122,7 @@ def get_shipping_price(departure_point_id, arrival_point_id):
 
 
 def create_shipping(token, order_params):
-    shipping_params = Navette().create_from_partner(token, **order_params)
+    shipping_params = Navette().create_from_partner(token, order_params)
     return {
         'order_number': shipping_params.OrderNumber,
         'shuttle_code': shipping_params.NavetteCode,
