@@ -256,12 +256,7 @@ class BorrowerCommentForm(forms.ModelForm):
 
 
 # API 2.0
-# ISO datetime format constant in Django doesn't follow ISO specification and contains ' ' instead of 'T'
-# as date/time separator
-TRUE_ISO_DATETIME_FORMATS = map(lambda x: x.replace(' ', 'T'), formats.ISO_INPUT_FORMATS['DATETIME_INPUT_FORMATS'])
-
 
 class Api20BookingForm(BookingForm):
-    input_formats = TRUE_ISO_DATETIME_FORMATS + DATE_TIME_FORMAT
-    started_at = forms.DateTimeField(required=True, input_formats=input_formats)
-    ended_at = forms.DateTimeField(required=True, input_formats=input_formats)
+    started_at = forms.DateTimeField(required=True, input_formats=DATE_TIME_FORMAT)
+    ended_at = forms.DateTimeField(required=True, input_formats=DATE_TIME_FORMAT)

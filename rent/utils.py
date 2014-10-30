@@ -7,12 +7,17 @@ from django.utils.tzinfo import LocalTimezone
 from django.utils import formats
 from django.utils.translation import ugettext as _, ungettext
 
-DATE_FORMAT = ['%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y']
-TIME_FORMAT = ('%H:%M:%S', '%H:%M')
+DATE_FORMAT = ('%d/%m/%Y', '%d-%m-%Y', '%d %m %Y', '%d %m %y', '%d/%m/%y', '%d-%m-%y', '%Y-%m-%d',)
+TIME_FORMAT = ('%H:%M:%S', '%H:%M', 'H:%M:%S.%f',)
+TIME_ZONE_FORMAT = ('', 'Z', '%z', '%Z',)
+DATE_TIME_SEPARATORS = (' ', 'T',)
 DATE_TIME_FORMAT = [
-    ' '.join([date_part, time_part])
+    '{date_part}{separator}{time_part}{time_zone_part}'.format(
+        date_part=date_part, separator=separator, time_part=time_part, time_zone_part=time_zone_part)
     for date_part in DATE_FORMAT
     for time_part in TIME_FORMAT
+    for time_zone_part in TIME_ZONE_FORMAT
+    for separator in DATE_TIME_SEPARATORS
 ]
 
 def combine(date_part, time_part):
