@@ -495,7 +495,7 @@ PIPELINE_JS = {
         'template_name': 'pipeline/requirejs.html',
         'extra_context': {
             'build': 'js/widgets/build.js',
-            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
+            'require_args': {'static-path': STATIC_URL},
             'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
             #'defer': False,
             #'async': False,
@@ -509,7 +509,7 @@ PIPELINE_JS = {
         'template_name': 'pipeline/requirejs.html',
         'extra_context': {
             'build': 'js/dashboard/build.js',
-            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
+            'require_args': {'static-path': STATIC_URL},
             'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
             #'defer': False,
             #'async': False,
