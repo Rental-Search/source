@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import hashlib
+import random
 import uuid
 
 from django.utils.translation import ugettext_lazy as _
@@ -57,9 +59,19 @@ class UserSerializer(serializers.ModelSerializer):
         # we should allow password setting on initial user registration only
         password = attrs.pop('password', None)
         user = super(UserSerializer, self).restore_object(attrs, instance=instance)
-        if not instance and password:
-            user.set_password(password)
+        if not instance:
+            salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+            user.activation_key = hashlib.sha1(salt + user.email).hexdigest()
+            user.is_active = False
+            if password:
+                user.set_password(password)
         return user
+
+    def save_object(self, obj, **kwargs):
+        send_mail = not obj.pk
+        super(UserSerializer, self).save_object(obj, **kwargs)
+        if send_mail:
+            obj.send_activation_email()
 
     class Meta:
         model = models.Patron
