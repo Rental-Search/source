@@ -36,6 +36,9 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
                 $scope.showIncidentDescription = $scope.bookingDetails.state == 'incident';
+                if (!$scope.currentUserPromise) {
+                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                }
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.contractLink = Endpoints.api_url + "bookings/" + $stateParams.uuid + "/contract/";
