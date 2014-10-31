@@ -13,7 +13,7 @@ from rest_framework_gis.serializers import MapGeometryField
 
 from accounts.forms import CreditCardForm
 from accounts import models
-from eloue.api import serializers, exceptions
+from eloue.api import serializers
 
 class GeoModelSerializer(serializers.ModelSerializer):
     field_mapping = MapGeometryField(serializers.ModelSerializer.field_mapping)
@@ -140,15 +140,15 @@ class CreditCardSerializer(serializers.ModelSerializer):
             attrs.pop('holder', None)
         self.form = form = CreditCardForm(attrs)
         if not form.is_valid():
-            raise exceptions.ValidationException(form.errors)
-        new_attrs = form.clean()
+            raise ValidationError(form.errors)
+        new_attrs = form.cleaned_data
         new_attrs['keep'] = keep
         return new_attrs
 
     def save_object(self, obj, **kwargs):
         if not obj.pk:
             obj.subscriber_reference = uuid.uuid4().hex
-        elif not obj.keep and obj.holder:
+        if not obj.keep:
             obj.holder = None
         self.form.instance = obj
         self.form.save(commit=True)
