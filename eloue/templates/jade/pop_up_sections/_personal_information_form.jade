@@ -23,12 +23,13 @@ h2 Vos informations personnelles
   .col-sm-6
       input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
       span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
-.row(ng-show="shippingAllowed && !shippingPointsRequestInProgress"): .col-xs-12
-    .checkbox
+.row: .col-xs-12
+    .checkbox(ng-show="shippingAllowed")
         label
-            input(type="checkbox", ng-model="addShipping")#particular
+            input(type="checkbox", ng-model="addShipping", ng-change="loadShippingPoints()")#particular
             span.flaticon.stroke.checkmark-1
         b.text-black Option livraison, Recevez cet objet  dans un point relais Pickup à proximiter de ches vous
+    a(href="", ng-show="shippingPointsRequestInProgress").btn.bg-gray-light-hover.text-white.loading &nbsp;&nbsp;&nbsp;
 .row(ng-show="isAuto()")
   .col-sm-6(style="z-index: 1050")
       input(type="text", name="date_of_birth", placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto()", eloue-datepicker).form-control

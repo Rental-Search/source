@@ -40,6 +40,6 @@ p.info
 {% verbatim %}
 span.text-danger(ng-show="!!errors.product", ng-bind="errors.product")
 span.text-danger(ng-show="!!errors.general", ng-bind="errors.general")
-.col-sm-8.col-sm-offset-2: button(type="submit", ng-disabled="bookingForm.$invalid || shippingPointsRequestInProgress", class="{{submitInProgress || shippingPointsRequestInProgress ? 'loading' : ''}}").btn.bg-success.indent-t Réservez
+.col-sm-8.col-sm-offset-2: button(type="submit", ng-disabled="bookingForm.$invalid || shippingPointsRequestInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.indent-t Réservez
 {% endverbatim %}
 

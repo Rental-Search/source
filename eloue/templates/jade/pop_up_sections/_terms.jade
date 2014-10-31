@@ -7,13 +7,18 @@ table.calendar.bd-wrap.indent-t-md.indent-b-md
             td Durée
             td
                 b {{duration}}
+        tr(ng-show="shippingPrice > 0")
+            td Livraison
+            td
+                b {{shippingPrice}}€
         tr
             td Prix
             td
-                b.text-success {{bookingPrice}}
+                b.text-success {{bookingPrice + shippingPrice}}€
         tr
             td Caution
             td
                 b {{product.deposit_amount}}€
+
 p Vestibulum id ligula porta felis euismod semper. Crasilover mattis consectetur purus sit amet fermentum. Doneckea ullamcorper nulla non metus auctor fringilla.
 {% endverbatim %}

@@ -112,6 +112,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             });
             $scope.duration = "0 jour";
             $scope.bookingPrice = 0;
+            $scope.shippingPrice = 0;
             $scope.pricePerDay = 0;
             $scope.caution = 0;
             $scope.productRelatedMessages = [];
@@ -228,15 +229,18 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
                 $scope.dateRangeError = null;
                 ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
+                    var price = result.total_price;
+                    price = price.replace("€","");
+                    price = price.replace(" ","");
+                    price = Number(price);
                     $scope.duration = result.duration;
                     $scope.pricePerDay = result.unit_value;
-                    $scope.bookingPrice = result.total_price;
+                    $scope.bookingPrice = price;
                     $scope.available = result.max_available > 0;
                 }, function (error) {
                     $scope.available = false;
                     $scope.handleResponseErrors(error);
                 });
-
             };
 
             /**
@@ -273,6 +277,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.pointSelected = function(pointId) {
                 $scope.selectedPointId = pointId;
+                $scope.shippingPrice = 10;
             };
 
             $scope.sendBookingRequest = function sendBookingRequest() {
@@ -417,7 +422,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.loadMessageThread();
                 } else if (args.name === "booking") {
                     $scope.loadCreditCards();
-                    $scope.loadShippingPoints();
+                    $scope.loadProductShippingPoint();
                 } else if (args.name === "phone") {
                     $scope.loadPhoneDetails();
                 }
@@ -483,29 +488,50 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             };
 
-            $scope.loadShippingPoints = function () {
+            $scope.loadProductShippingPoint = function() {
                 $scope.currentUserPromise.then(function (currentUser) {
+                    $scope.currentUser = currentUser;
                     $scope.shippingPointsRequestInProgress = true;
                     ProductShippingPointsService.getByProduct($scope.productId).then(function(data) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!data.results && data.results.length > 0) {
                             $scope.productShippingPoint = data.results[0];
-                            ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
-                                $scope.shippingAllowed = true;
-                                $scope.shippingPointsRequestInProgress = false;
-                                //TODO: it's temperory, then will call pricing service
-                                angular.forEach(result, function (value, key) {
-                                    value.price = "10.0";
-                                });
-                                $scope.borrowerShippingPoints = result;
-                            }, function (error) {
-                                $scope.handleResponseErrors(error);
-                            });
+                            $scope.shippingAllowed = true;
+                            $scope.shippingPointsRequestInProgress = false;
                         }
                     }, function (error) {
                         $scope.handleResponseErrors(error);
                     });
                 });
+            };
+
+            $scope.loadShippingPoints = function () {
+                if ($scope.addShipping && $scope.borrowerShippingPoints.length == 0) {
+                    $scope.shippingPointsRequestInProgress = true;
+                    ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
+                        $scope.shippingPointsRequestInProgress = false;
+                        //TODO: it's temperory, then will call pricing service
+                        angular.forEach(result, function (value, key) {
+                            value.price = "10.0";
+                        });
+                        $scope.borrowerShippingPoints = result;
+                        $("#point-contatiner").mCustomScrollbar({
+                            scrollInertia: '100',
+                            autoHideScrollbar: false,
+                            theme: 'dark-thin',
+                            advanced:{
+                                updateOnContentResize: true,
+                                autoScrollOnFocus: false
+                            }
+                        });
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
+                    });
+                }
+                if (!$scope.addShipping) {
+                    $scope.shippingPrice = 0;
+                    $scope.selectedPointId = "";
+                }
             };
 
             $scope.isAuto = function () {
