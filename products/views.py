@@ -846,7 +846,9 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         from itertools import chain
         from eloue.legacy import generate_patron_images, generate_picture_images
         patron_set = set()
-        for elem in chain(product_list, [self.object]):
+        for picture in product.pictures.all():
+            generate_picture_images(picture)
+        for elem in product_list:
             if elem.object:
                 patron_set.add(elem.object.owner)
                 for picture in elem.object.pictures.all()[:1]:
