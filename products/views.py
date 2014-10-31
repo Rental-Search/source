@@ -751,20 +751,6 @@ class NavbarCategoryMixin(object):
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
-    @property
-    @method_decorator(cached(timeout=10*60))
-    def homepage_stats(self):
-        product_stats = Product.objects.extra(
-            tables=['accounts_address'],
-            where=['"products_product"."address_id" = "accounts_address"."id"'],
-            select={'city': 'lower(trim("accounts_address"."city"))'}
-        ).values('city').annotate(Count('id')).order_by('-id__count')
-
-        return {
-            'cities_list': product_stats,
-            'total_products': Product.on_site.only('id').count(),
-        }
-
     def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
         comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
@@ -786,8 +772,8 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         context = {
             'product_list': product_list,
             'comment_list': comment_list,
+            'products_on_site': Product.on_site.only('id'),
         }
-        context.update(self.homepage_stats)
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
 
