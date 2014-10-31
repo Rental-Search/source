@@ -1074,7 +1074,7 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images
-        patron_set = set([patron])
+        patron_set = set([patron.object])
         product_list = context.get('product_list', [])
         for elem in product_list[:PAGINATE_PRODUCTS_BY]:
             if elem.object:
