@@ -15,6 +15,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "ProductRelatedMessagesLoadService",
         "UsersService",
         "AuthService",
+        "AddressesService",
         "CreditCardsService",
         "BookingsLoadService",
         "BookingsService",
@@ -22,7 +23,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "PicturesService",
         "CategoriesService",
         "UtilsService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, CategoriesService, UtilsService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, CategoriesService, UtilsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -72,6 +73,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
+                    if (!currentUser.default_address) {
+                        $scope.noAddress = true;
+                    }
                     $scope.loadCreditCards();
                 });
             }
@@ -270,12 +274,41 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.sendBookingRequest = function sendBookingRequest() {
+                if ($scope.noAddress) {
+                    $scope.submitInProgress = true;
+                    $scope.currentUser.default_address.country = "FR";
+                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
+                        $scope.currentUser.default_address = result;
+                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
+                        $scope.saveCardAndRequestBooking();
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
+                    });
+                } else {
+                    $scope.saveCardAndRequestBooking();
+                }
+
+            };
+
+            $scope.saveCardAndRequestBooking = function() {
                 $scope.submitInProgress = true;
                 // Update user info
                 //TODO: patch more fields
                 var userPatch = {};
                 userPatch.first_name = $scope.currentUser.first_name;
                 userPatch.last_name = $scope.currentUser.last_name;
+                if ($scope.isAuto()) {
+                    userPatch.drivers_license_number = $scope.currentUser.drivers_license_number;
+                    if ($scope.currentUser.drivers_license_date) {
+                        userPatch.drivers_license_date =UtilsService.formatDate($scope.currentUser.drivers_license_date, "yyyy-MM-dd'T'HH:mm");
+                    }
+                    userPatch.place_of_birth = $scope.currentUser.place_of_birth;
+                    if ($scope.currentUser.date_of_birth) {
+                        userPatch.date_of_birth =UtilsService.formatDate($scope.currentUser.date_of_birth, "yyyy-MM-dd'T'HH:mm");
+                    }
+                }
+
+
                 UsersService.updateUser(userPatch).$promise.then(function (result) {
                     // Update credit card info
                     $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
@@ -480,6 +513,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUser = currentUser;
+                    if (!currentUser.default_address) {
+                        $scope.noAddress = true;
+                    }
                     CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
                         var cards = result.results;
                         if (!!cards && cards.length > 0) {
@@ -638,13 +674,15 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $("#date_of_birth").datepicker({
                 language: "fr",
                 autoclose: true,
-                todayHighlight: true
+                todayHighlight: true,
+                dateFormat: "yyyy-MM-dd"
             });
 
             $("#drivers_license_date").datepicker({
                 language: "fr",
                 autoclose: true,
-                todayHighlight: true
+                todayHighlight: true,
+                dateFormat: "yyyy-MM-dd"
             });
 
             /**
