@@ -17,7 +17,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "AuthService",
         "CategoriesService",
         "PricesService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService) {
+        "UtilsService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -72,7 +73,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 tax_horsepower: ""
             };
 
-            $scope.handleResponseErrors = function(error) {
+            $scope.handleResponseErrors = function (error) {
                 if (!!error.errors) {
                     $scope.errors = {
                         summary: !!error.errors.summary ? error.errors.summary[0] : "",
@@ -187,12 +188,26 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
 
                         PricesService.savePrice($scope.price).$promise.then(function (result) {
-                            //TODO: redirects to the dashboard item detail page.
-                            toastr.options.positionClass = "toast-top-full-width";
-                            toastr.success("Annonce publiée", "");
-                            $(".modal").modal("hide");
-                            $window.location.href = "/dashboard/#/items/" + product.id + "/info";
-                            $scope.submitInProgress = false;
+
+                            CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
+                                if ($scope.isAuto) {
+                                    $scope.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
+                                    $scope.finishProductSaveAndRedirect(product);
+                                } else if ($scope.isRealEstate) {
+                                    $scope.trackEvent("Dépôt annonce", "Logement", productCategory.name);
+                                    $scope.finishProductSaveAndRedirect(product);
+                                } else {
+                                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function(ancestors) {
+                                        var categoriesStr = "";
+                                        angular.forEach(ancestors, function (value, key) {
+                                            categoriesStr = categoriesStr + value.name + " - ";
+                                        });
+                                        categoriesStr = categoriesStr + productCategory.name;
+                                        $scope.trackEvent("Dépôt annonce", "Objet",  categoriesStr);
+                                        $scope.finishProductSaveAndRedirect(product);
+                                    });
+                                }
+                            });
                         }, function (error) {
                             $scope.handleResponseErrors(error);
                         });
@@ -204,6 +219,18 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.publishAdError = "All prices should be positive numbers!";
                     $scope.submitInProgress = false;
                 }
+            };
+
+            $scope.finishProductSaveAndRedirect = function(product) {
+                $scope.trackPageView();
+                $scope.loadPdltrackingScript();
+                $scope.loadAdWordsTagPublishAd();
+                //TODO: redirects to the dashboard item detail page.
+                toastr.options.positionClass = "toast-top-full-width";
+                toastr.success("Annonce publiée", "");
+                $(".modal").modal("hide");
+                $window.location.href = "/dashboard/#/items/" + product.id + "/info";
+                $scope.submitInProgress = false;
             };
 
             $scope.updateFieldSet = function (rootCategory) {
@@ -218,7 +245,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.searchCategory = function () {
                 //TODO: enable for auto and real estate
-                if (!$scope.isAuto && !$scope.isRealEstate &&$scope.rootCategory && $scope.product.summary && ($scope.product.summary.length > 1)) {
+                if (!$scope.isAuto && !$scope.isRealEstate && $scope.rootCategory && $scope.product.summary && ($scope.product.summary.length > 1)) {
                     CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function (categories) {
                         if (categories && categories.length > 0) {
                             var nodeCategoryList = [];
@@ -226,7 +253,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             angular.forEach(categories, function (value, key) {
                                 nodeCategoryList.push({id: value[1].id, name: value[1].name});
                                 leafCategoryList.push({id: value[2].id, name: value[2].name});
-
                             });
                             $scope.nodeCategories = nodeCategoryList;
                             $scope.leafCategories = leafCategoryList;
@@ -240,5 +266,136 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 autoclose: true,
                 todayHighlight: true
             });
+
+            /**
+             * Add this tags when a user succeeded to post a new product:
+             * <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}%&tt=javascript&sc=1860"></script>
+             <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}&tt=javascript&sc=1859"></script>
+             <noscript>
+             <img src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}&tt=pixel&sc=1859" width="1" height="1" border="0" />
+             </noscript>
+             <IMG SRC="https://clic.reussissonsensemble.fr/registersale.asp?site=13625&mode=ppl&ltype=1&order=TRACKING_NUMBER" WIDTH="1" HEIGHT="1" />
+             <script type="text/javascript" id="affilinet_advc">
+             var type = "Checkout";
+             var site = "13625";
+             </script>
+             <script type="text/javascript" src="https://clic.reussissonsensemble.fr/art/JS/param.aspx"></script>
+             <script src="//l.adxcore.com/a/track_conversion.php?annonceurid=21679"></script>
+             <noscript>
+             <img src="//l.adxcore.com/a/track_conversion.php?adsy=1&annonceurid=21679">
+             </noscript>
+             */
+            $scope.loadPdltrackingScript = function () {
+                var script1860 = document.createElement("script");
+                script1860.type = "text/javascript";
+                script1860.src = "https://lead.pdltracking.com/?lead_id=" + $scope.currentUser.id + "&tt=javascript&sc=1860";
+                document.body.appendChild(script1860);
+
+                var script1859 = document.createElement("script");
+                script1859.type = "text/javascript";
+                script1859.src = "https://lead.pdltracking.com/?lead_id=" + $scope.currentUser.id + "%&tt=javascript&sc=1859";
+                document.body.appendChild(script1859);
+
+                var noscript1859 = document.createElement("noscript");
+                var img1859 = document.createElement("img");
+                img1859.src = "https://lead.pdltracking.com/?lead_id=" + $scope.currentUser.id + "&tt=pixel&sc=1859";
+                img1859.width = "1";
+                img1859.height = "1";
+                img1859.border = "0";
+                noscript1859.appendChild(img1859);
+                document.body.appendChild(noscript1859);
+
+                var img13625 = document.createElement("img");
+                img13625.src = "https://clic.reussissonsensemble.fr/registersale.asp?site=13625&mode=ppl&ltype=1&order=TRACKING_NUMBER";
+                img13625.width = "1";
+                img13625.height = "1";
+                document.body.appendChild(img13625);
+
+                var scriptAffilinet = document.createElement("script");
+                scriptAffilinet.type = "text/javascript";
+                scriptAffilinet.id = "affilinet_advc";
+                var code = "var type = 'Checkout';" +
+                    "var site = '13625';";
+                try {
+                    scriptAffilinet.appendChild(document.createTextNode(code));
+                    document.body.appendChild(scriptAffilinet);
+                } catch (e) {
+                    scriptAffilinet.text = code;
+                    document.body.appendChild(scriptAffilinet);
+                }
+
+                var scriptClic = document.createElement("script");
+                scriptClic.type = "text/javascript";
+                scriptClic.src = "https://clic.reussissonsensemble.fr/art/JS/param.aspx";
+                document.body.appendChild(scriptClic);
+
+                var scriptAnnonceur = document.createElement("script");
+                scriptAnnonceur.src = "//l.adxcore.com/a/track_conversion.php?annonceurid=21679";
+                document.body.appendChild(scriptAnnonceur);
+
+                var noscriptAnnonceur = document.createElement("noscript");
+                var imgAnnonceur = document.createElement("img");
+                imgAnnonceur.src = "//l.adxcore.com/a/track_conversion.php?adsy=1&annonceurid=21679";
+                noscriptAnnonceur.appendChild(imgAnnonceur);
+                document.body.appendChild(noscriptAnnonceur);
+            };
+
+            $scope.loadAdWordsTagPublishAd =  function() {
+                var scriptAdWords = document.createElement("script");
+                scriptAdWords.type = "text/javascript";
+                var code = "/* <![CDATA[ */" +
+                "var google_conversion_id = 1027691277;" +
+                "var google_conversion_language = 'en';" +
+                "var google_conversion_format = '3';" +
+                "var google_conversion_color = 'ffffff';" +
+                "var google_conversion_label = 'SfnGCMvgrgMQjaaF6gM';" +
+                "var google_conversion_value = 1.00;" +
+                "var google_conversion_currency = 'EUR';" +
+                "var google_remarketing_only = false;" +
+                "/* ]]> */";
+                try {
+                    scriptAdWords.appendChild(document.createTextNode(code));
+                    document.body.appendChild(scriptAdWords);
+                } catch (e) {
+                    scriptAdWords.text = code;
+                    document.body.appendChild(scriptAdWords);
+                }
+
+                var scriptConversion = document.createElement("script");
+                scriptConversion.type = "text/javascript";
+                scriptConversion.src = "//www.googleadservices.com/pagead/conversion.js";
+                document.body.appendChild(scriptConversion);
+
+                var noscriptConversion = document.createElement("noscript");
+                var divConversion = document.createElement("div");
+                divConversion.style = "display:inline;";
+                var imgConversion = document.createElement("img");
+                imgConversion.src = "//www.googleadservices.com/pagead/conversion/1027691277/?value=1.00&amp;currency_code=EUR&amp;label=SfnGCMvgrgMQjaaF6gM&amp;guid=ON&amp;script=0";
+                imgConversion.width = "1";
+                imgConversion.height = "1";
+                imgConversion.style = "border-style:none;";
+                imgConversion.alt = "";
+                divConversion.appendChild(imgConversion);
+                noscriptConversion.appendChild(divConversion);
+                document.body.appendChild(noscriptConversion);
+            };
+
+            /**
+             * Push track event to Google Analytics.
+             *
+             * @param category category
+             * @param action action
+             * @param value value
+             */
+            $scope.trackEvent = function(category, action, value) {
+                _gaq.push(["_trackEvent", category, action, value]);
+            };
+
+            /**
+             * Push track page view to Google Analytics.
+             */
+            $scope.trackPageView = function() {
+                _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
+            };
         }])
 });

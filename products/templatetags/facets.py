@@ -44,38 +44,36 @@ class FacetUrlNode(Node):
     
     def render(self, context):
         breadcrumbs = self.breadcrumbs.resolve(context).copy()
-        urlbits = dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'])
-        params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS))
+        urlbits = dict((facet['label'], facet['value']) for facet in breadcrumbs.values() if facet['facet'] and facet['value'] is not None)
+        #params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if (not facet['facet']) and not (facet['label'] == 'r' and facet['value'] == DEFAULT_RADIUS))
+        params = MultiValueDict((facet['label'], [facet['value']]) for facet in breadcrumbs.values() if not facet['facet'] and facet['value'] is not None)
         additions = dict([(key.resolve(context), value.resolve(context)) for key, value in self.additions])
         removals = [key.resolve(context) for key in self.removals]
         slugs = []
-            
-        
+
         for key, value in additions.iteritems():
             if key in params:
                 params[key] = value
             else:
                 urlbits[key] = value
-                
+
         for key in removals:
             if key in params:
                 del params[key]
             if key in urlbits:
                 del urlbits[key]
-                
+
         for key, value in urlbits.iteritems():
             if key == '':
                 slugs.append(''.join('%s/' % value))
             else:
                 slugs.append(''.join('%s/%s/' % (key, value)))
-                
-        
+
         path = urljoin('/%s' % _("location/"), ''.join(slugs))
         if any([value for key, value in params.iteritems()]):
-            return '%s?%s' % (path, self.urlencode(params))
-        else:
-            return path
-    
+            path = '?'.join([path, self.urlencode(params)])
+        return path
+
 
 @register.tag('facet_url')
 def do_facet_url(parser, token):

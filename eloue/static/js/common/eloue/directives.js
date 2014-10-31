@@ -4,6 +4,7 @@ define(["../../common/eloue/commonApp",
     "chosen",
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
+    "jquery-mousewheel",
     "custom-scrollbar"], function (EloueCommon) {
     /**
      * Datepicker directive.

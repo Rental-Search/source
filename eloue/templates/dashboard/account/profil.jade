@@ -49,7 +49,7 @@ block sections
         .row
           .col-sm-12.without-search.form-control
             p.text-uppercase: b: small adresse par défaut
-            select(name="default_address", eloue-chosen, ng-model="defaultAddress", data-ng-disabled="submitInProgress", data-placeholder="Adresse par défaut *", required)
+            select#defaultAddressSelect(name="default_address", ng-model="defaultAddress", data-ng-disabled="submitInProgress", data-placeholder="Adresse par défaut *", style="width:100%;", required)
                 option(ng-repeat="address in addressList", value="{{addressesBaseUrl}}{{address.id}}/", ng-selected="defaultAddress == (addressesBaseUrl + address.id + '/')")
                   | {{address.street}}, {{address.zipcode}} {{address.city}}
               //-option(value="#{tenant.address}") #{tenant.address}

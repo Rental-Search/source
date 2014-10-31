@@ -72,6 +72,8 @@ require([
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
     "formmapper",
+    "jquery-mousewheel",
+    "custom-scrollbar",
     "toastr",
     "../common/eloue/commonApp",
     "eloue/route",
@@ -79,7 +81,7 @@ require([
 ], function ($, _, angular, bootstrap, route) {
     "use strict";
     $(function () {
-
+        $(".signs-links").find("ul.without-spaces").show();
         angular.bootstrap(document, ["EloueDashboardApp"]);
     });
 });

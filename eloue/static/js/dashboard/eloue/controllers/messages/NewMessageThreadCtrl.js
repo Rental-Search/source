@@ -17,7 +17,12 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
         "ProductRelatedMessagesLoadService",
         "ProductsLoadService",
         "UtilsService",
-        function ($scope, $state, $stateParams, $q, Endpoints, MessageThreadsService, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
+        "UsersService",
+        function ($scope, $state, $stateParams, $q, Endpoints, MessageThreadsService, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService, UsersService) {
+
+            if (!$scope.currentUserPromise) {
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+            }
             $scope.currentUserPromise.then(function (currentUser) {
 
                 $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";

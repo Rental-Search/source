@@ -7,12 +7,13 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("AccountProfileCtrl", [
         "$scope",
+        "$timeout",
         "UsersService",
         "AddressesService",
         "PhoneNumbersService",
         "Endpoints",
         "CivilityChoices",
-        function ($scope, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices) {
+        function ($scope, $timeout, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices) {
             $scope.civilityOptions = CivilityChoices;
             $scope.addressesBaseUrl = Endpoints.api_url + "addresses/";
             $scope.phonesBaseUrl = Endpoints.api_url + "phones/";
@@ -43,6 +44,9 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.markListItemAsSelected("account-part-", "account.profile");
 
+            if (!$scope.currentUserPromise) {
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+            }
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
@@ -52,6 +56,9 @@ define(["angular", "eloue/app"], function (angular) {
                 AddressesService.getAddressesByPatron(currentUser.id).then(function (results) {
                     $scope.addressList = results;
                     $scope.defaultAddress = (!!currentUser.default_address) ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
+                    $timeout(function () {
+                        $("#defaultAddressSelect").chosen();
+                    }, 200);
                 });
                 if (!!$scope.currentUser.drivers_license_date) {
                     var licenceDate = Date.parse($scope.currentUser.drivers_license_date);

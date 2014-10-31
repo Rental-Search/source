@@ -606,25 +606,31 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         )
         sqs, self.suggestions, self.top_products = self.form.search()
         # we use canonical_parameters to generate the canonical url in the header
-        self.canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
-        self.canonical_parameters.pop('categorie', None)
-        self.canonical_parameters.pop('r', None)
-        self.canonical_parameters.pop('sort', None)
-        self.canonical_parameters = urllib.urlencode(self.canonical_parameters)
-        if self.canonical_parameters:
-            self.canonical_parameters = '?' + self.canonical_parameters
+        canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
+        canonical_parameters.pop('categorie', None)
+        canonical_parameters.pop('r', None)
+        canonical_parameters.pop('sort', None)
+        canonical_parameters = urllib.urlencode(canonical_parameters)
+        if canonical_parameters:
+            canonical_parameters = '?' + canonical_parameters
+        self.canonical_parameters = canonical_parameters
         self.kwargs.update({'page': page}) # Django 1.5+ ignore *args and **kwargs in View.dispatch()
         return super(ProductList, self).dispatch(request, sqs=sqs, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ProductList, self).get_context_data(**kwargs)
-        context['facets'] = self.sqs.facet_counts()
-        context['form'] = self.form
-        context['breadcrumbs'] = self.breadcrumbs
-        context['suggestions'] = self.suggestions
-        context['site_url'] = self.site_url
-        context['canonical_parameters'] = self.canonical_parameters
-        context['top_products'] = self.top_products
+        context.update({
+            'facets': self.sqs.facet_counts(),
+            'form': self.form,
+            'breadcrumbs': self.breadcrumbs,
+            'suggestions': self.suggestions,
+            'site_url': self.site_url,
+            'canonical_parameters': self.canonical_parameters,
+            'top_products': self.top_products,
+        })
+        filter_limits = self.form.filter_limits
+        if filter_limits:
+            context.update(filter_limits)
         return context
 
 @never_cache
@@ -749,20 +755,6 @@ class NavbarCategoryMixin(object):
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
-    @property
-    @method_decorator(cached(timeout=10*60))
-    def homepage_stats(self):
-        product_stats = Product.objects.extra(
-            tables=['accounts_address'],
-            where=['"products_product"."address_id" = "accounts_address"."id"'],
-            select={'city': 'lower(trim("accounts_address"."city"))'}
-        ).values('city').annotate(Count('id')).order_by('-id__count')
-
-        return {
-            'cities_list': product_stats,
-            'total_products': Product.on_site.only('id').count(),
-        }
-
     def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
         comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
@@ -784,8 +776,8 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         context = {
             'product_list': product_list,
             'comment_list': comment_list,
+            'products_on_site': Product.on_site.only('id'),
         }
-        context.update(self.homepage_stats)
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
 
@@ -800,10 +792,10 @@ class ProductListView(ProductList):
     def get_breadcrumbs(self, request):
         breadcrumbs = super(ProductListView, self).get_breadcrumbs(request)
         form = self.form
-        #breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date from', 'facet': False}
-        #breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date to', 'facet': False}
-        breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'date from', 'facet': False}
-        breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'date to', 'facet': False}
+        #breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date_from', 'facet': False}
+        #breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date_to', 'facet': False}
+        breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'price_from', 'facet': False}
+        breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'price_to', 'facet': False}
         breadcrumbs['categorie'] = {'name': 'categorie', 'value': None, 'label': 'categorie', 'facet': True}
         return breadcrumbs
 
@@ -812,13 +804,6 @@ class ProductListView(ProductList):
             'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-
-        prices = [price[0] for price in context['facets'].get('fields', {}).get('price', ())]
-        if prices:
-            context.update({
-                'price_min': min(prices),
-                'price_max': max(prices),
-            })
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images
@@ -981,7 +966,7 @@ class ProductFilterSet(filters.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
+        fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'category', 'owner', 'created_at')
 
 class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """

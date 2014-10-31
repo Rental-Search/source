@@ -1,23 +1,26 @@
 -load category facets
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
-form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}").section-body
+form#detail-search(action="{% facet_url breadcrumbs -'page' %}").section-body
   label.caption(for="what") quoi
   input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
 
   p.caption catégories
   .clear-selector
-    select#category-selection.form-control(name="categories")
+    select#category-selection.form-control(name="categories", form="")
       option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}") Toutes les catégories
       if form.cleaned_data.q
         {% for value, count in facets.fields.categories %}
         if count and value
           {% with value|category as category %}
           if breadcrumbs.categorie
-            if breadcrumbs.categorie.value = category.slug
+            if breadcrumbs.categorie.value == category.slug
               option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
             else
-              option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+              if breadcrumbs.categorie.label
+                option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+              else
+                option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
           else
             option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
           {% endwith %}
@@ -25,10 +28,13 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categor
       else
         for category in category_list
           if breadcrumbs.categorie
-            if breadcrumbs.categorie.value = category.slug
+            if breadcrumbs.categorie.value == category.slug
               option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
             else
-              option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+              if breadcrumbs.categorie.label
+                option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+              else
+                option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
           else
             option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
 
@@ -41,9 +47,9 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categor
       //- map here
 
   //- .slider
-  label.caption(for="range") rayon
-  input#range(type="number", data-type="range", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}")
-  input#range-slider(type="slider", value="0;{{ form.cleaned_data.r|floatformat:'0' }}", max-value="{{ form.max_range|floatformat:'0' }}", solo)
+  label.caption(for="range-slider") rayon
+  input#range(type="hidden", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}", disabled)
+  input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
 
   //-label.caption(for="start-date") date de début
   //-.date-picker
@@ -59,10 +65,10 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categor
       input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
-  label#price-label.caption(for="price") prix
-  input#price-min(type="number", data-type="range", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}")
-  input#price-max(type="number", data-type="range", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}")
-  input#price-slider(type="slider", value="{{ price_min|stringformat:'.2f' }};{{ price_max|stringformat:'.2f' }}", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
+  label#price-label.caption(for="price-slider") prix
+  input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
+  input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
+  input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
 
   p.caption loueur
   .checkbox
@@ -89,22 +95,6 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' -breadcrumbs.categor
 
 //-
   p.caption champ 1
-  .clear-selector
-    select.form-control
-      option(value="male") Tous types
-      option(value="female") Du - cher au + cher
-      option(value="female") Du - cher au + cher
-      option(value="female") Du - cher au + cher
-
-  p.caption champ 2
-  .clear-selector
-    select.form-control
-      option(value="male") Tous types
-      option(value="female") Du - cher au + cher
-      option(value="female") Du - cher au + cher
-      option(value="female") Du - cher au + cher
-
-  p.caption champ 3
   .clear-selector
     select.form-control
       option(value="male") Tous types

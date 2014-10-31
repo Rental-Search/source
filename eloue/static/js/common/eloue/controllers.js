@@ -185,6 +185,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          */
         $scope.register = function register() {
             AuthService.register($scope.account).$promise.then(function (response) {
+                $scope.trackEvent("Membre", "Inscription", $scope.getEventLabel());
+                $scope.trackPageView();
                 // Sign in new user automatically
                 var credentials = {
                     username: $scope.account.email,
@@ -215,6 +217,21 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     };
                 }
             });
+        };
+
+        $scope.getEventLabel = function () {
+            var url = RedirectAfterLogin.url;
+            if (url.indexOf("booking") > 0) {
+                return "Réservation";
+            } else if (url.indexOf("message") > 0) {
+                return "Message";
+            } else if (url.indexOf("phone") > 0) {
+                return "Appel";
+            } else if (url.indexOf("publish") > 0) {
+                return "Dépôt annonce";
+            } else {
+                return "Simple";
+            }
         };
 
         $scope.onLoginSuccess = function (data) {
@@ -269,6 +286,24 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     $window.location.href = "/dashboard"
                 }
             }
+        };
+
+        /**
+         * Push track event to Google Analytics.
+         *
+         * @param category category
+         * @param action action
+         * @param value value
+         */
+        $scope.trackEvent = function(category, action, value) {
+            _gaq.push(["_trackEvent", category, action, value]);
+        };
+
+        /**
+         * Push track page view to Google Analytics.
+         */
+        $scope.trackPageView = function() {
+            _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
         };
 
         $("select").attr("eloue-chosen", "");

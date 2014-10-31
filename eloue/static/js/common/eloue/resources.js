@@ -62,7 +62,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("Categories", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "categories/:id/?", {},
             {
-                "getChildren": { method: "GET", url: Endpoints.api_url + "categories/:id/children/?", isArray: true}
+                "getChildren": { method: "GET", url: Endpoints.api_url + "categories/:id/children/?", isArray: true},
+                "getAncestors": { method: "GET", url: Endpoints.api_url + "categories/:id/ancestors/?", isArray: true}
             });
     }]);
 

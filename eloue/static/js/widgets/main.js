@@ -99,6 +99,8 @@ require([
     "placeholders-main",
     "placeholders-jquery",
     "formmapper",
+    "jquery-mousewheel",
+    "custom-scrollbar",
     "toastr",
     "jquery-form",
 //    "jquery-ui",
@@ -118,7 +120,7 @@ require([
 ], function ($, _, angular) {
     "use strict";
     $(function () {
-
+        $(".signs-links").find("ul.without-spaces").show();
         angular.bootstrap(document, ["EloueApp"]);
 
         var slide_imgs = [].slice.call($('.carousel-wrapper').find('img'));
@@ -144,29 +146,36 @@ require([
                 } else {
                     article.removeClass('grid-layout');
                     article.addClass('list-layout')
-
                 }
             });
         }
 
-        var categorySelection = $("#category-selection");
         var detailSearchForm = $("#detail-search");
+
+        var categorySelection = $("#category-selection");
         if (detailSearchForm && categorySelection) {
             categorySelection.change(function () {
                 var location = $(this).find(":selected").attr("location");
                 detailSearchForm.attr("action", location);
             });
         }
-        var rangeSlider = $("#range-slider");
+
         var priceSlider = $("#price-slider");
         if (priceSlider) {
             var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
             var min = priceSlider.attr("min-value");
             var max = priceSlider.attr("max-value");
             if (!min || !max) {
-                priceSlider.hide();
                 $("#price-label").hide();
             } else {
+                var minValue = priceMinInput.attr("value"), maxValue = priceMaxInput.attr("value");
+                if (!minValue) {
+                    minValue = min;
+                }
+                if (!maxValue) {
+                    maxValue = max;
+                }
+                priceSlider.attr("value", minValue + ";" + maxValue);
                 priceSlider.slider({
                     from: Number(min),
                     to: Number(max),
@@ -174,22 +183,22 @@ require([
                     dimension: '&nbsp;&euro;',
                     onstatechange: function (value) {
                         var values = value.split(";");
-                        priceMinInput.attr("value", Number(values[0]));
-                        priceMaxInput.attr("value", Number(values[1]));
+                        // enable inputs so their values could be now posted with a form data
+                        priceMinInput.prop("disabled", false);
+                        priceMaxInput.prop("disabled", false);
+                        // set new values to hidden inputs
+                        priceMinInput.attr("value", values[0]);
+                        priceMaxInput.attr("value", values[1]);
                     }
                 });
-                priceSlider.slider("value", min, max);
             }
-
         }
-
-        var form = $('#detail-search');
 
         var sortSelector = $('#sort-selector');
         if (sortSelector) {
             sortSelector.change(function (e) {
-                if (form) {
-                    form.submit()
+                if (detailSearchForm) {
+                    detailSearchForm.submit()
                 }
             });
         }
@@ -250,6 +259,32 @@ require([
             event.target.playVideo();
         }
 
+        function range(zoom) {
+            if (zoom >= 14)
+                return 0.5;
+            if (zoom >= 13)
+                return 1;
+            if (zoom >= 12)
+                return 3;
+            if (zoom >= 11)
+                return 6;
+            if (zoom >= 10)
+                return 15;
+            if (zoom >= 9)
+                return 25;
+            if (zoom >= 8)
+                return 100;
+            if (zoom >= 7)
+                return 200;
+            if (zoom >= 6)
+                return 350;
+            if (zoom >= 5)
+                return 500;
+            if (zoom >= 4)
+                return 700;
+            return 1000;
+        }
+
 
         window.google_maps_loaded = function () {
             $('#geolocate').formmapper({
@@ -302,20 +337,57 @@ require([
                     }
                 );
 
+                var rangeSlider = $("#range-slider");
                 if (rangeSlider) {
                     var rangeInput = $("#range");
-                    rangeSlider.slider({
-                        from: 1,
-                        to: rangeSlider.attr("max-value"),
-                        limits: false,
-                        dimension: 'km',
-                        onstatechange: function (value) {
-                            var values = value.split(";");
-                            rangeInput.attr("value", values[1]);
-                            map.setZoom(zoom(values[1]));
+                    var range_max = rangeSlider.attr("max-value");
+                    if (!range_max) {
+                        $("#range-label").hide();
+                    } else {
+                        var range_val = rangeInput.attr("value");
+                        if (range_val) {
+                            rangeSlider.attr("value", "1;" + range_val);
+                        } else {
+                            rangeSlider.attr("value", "1;" + range_max);
                         }
-                    });
-                    rangeSlider.slider("value", 0, rangeInput.attr("value"));
+
+                        var notUpdateBySlider = false, notUpdateByMap = false;
+                        rangeSlider.slider({
+                            from: 1,
+                            to:  Number(range_max),
+                            limits: false,
+                            dimension: '&nbsp;km',
+                            onstatechange: function (value) {
+                                notUpdateByMap = true;
+                                if (!notUpdateBySlider) {
+                                    var range_value = value.split(";")[1];
+                                    // enable the input so its value could be now posted with a form data
+                                    rangeInput.prop("disabled", false);
+                                    // set new values to the hidden input
+                                    rangeInput.attr("value", range_value);
+                                    // change map's zoom level
+                                    map.setZoom(zoom(range_value));
+                                }
+                                setTimeout(function() {
+                                    notUpdateByMap = false;
+                                }, 1000);
+                            }
+                        });
+
+                        google.maps.event.addListener(map, 'zoom_changed', function() {
+                            notUpdateBySlider = true;
+                            if (!notUpdateByMap) {
+                                var zoomLevel = map.getZoom();
+                                var calcRange = range(zoomLevel);
+                                if (calcRange && calcRange <= range_max) {
+                                    rangeSlider.slider("value", 1, calcRange)
+                                }
+                            }
+                            setTimeout(function() {
+                                notUpdateBySlider = false;
+                            }, 1000);
+                        });
+                    }
                 }
 
                 var products = [];
@@ -386,10 +458,12 @@ require([
             if (radius <= 25)
                 return 9;
             if (radius <= 100)
-                return 7;
+                return 8;
             if (radius <= 200)
+                return 7;
+            if (radius <= 350)
                 return 6;
-            if (radius <= 300)
+            if (radius <= 500)
                 return 5;
             if (radius <= 700)
                 return 4;
@@ -397,18 +471,26 @@ require([
         }
 
         function setMarkers(map, locations, markerId) {
+            var staticUrl = "/static/";
+            var scripts = document.getElementsByTagName('script');
+            for (var i = 0, l = scripts.length; i < l; i++) {
+                if (scripts[i].getAttribute('data-static-path')) {
+                    staticUrl = scripts[i].getAttribute('data-static-path');
+                    break;
+                }
+            };
             for (var i = 0; i < locations.length; i++) {
                 var product = locations[i];
 
                 var image, image_hover;
 
                 if (markerId == "li#marker-") {
-                    image = new google.maps.MarkerImage(STATIC_URL + 'images/markers_smooth_aligned.png',
+                    image = new google.maps.MarkerImage(staticUrl + 'images/markers_smooth_aligned.png',
                         new google.maps.Size(26, 28),
                         new google.maps.Point(0, 28 * i),
                         new google.maps.Point(14, 28));
 
-                    image_hover = new google.maps.MarkerImage(STATIC_URL + 'images/markers_smooth_aligned.png',
+                    image_hover = new google.maps.MarkerImage(staticUrl + 'images/markers_smooth_aligned.png',
                         new google.maps.Size(26, 28),
                         new google.maps.Point(29, 28 * i),
                         new google.maps.Point(14, 28));

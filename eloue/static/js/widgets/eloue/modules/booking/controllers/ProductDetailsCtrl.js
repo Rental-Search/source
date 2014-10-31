@@ -20,12 +20,13 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "BookingsService",
         "PhoneNumbersService",
         "PicturesService",
+        "CategoriesService",
         "UtilsService",        
         "ShippingsService",
         "ShippingPointsService",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -249,6 +250,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.sendMessage = function sendMessage() {
                 ProductRelatedMessagesLoadService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
                     $scope.newMessage.body, null, $scope.product.id).then(function (result) {
+                        $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
+                        $scope.trackEvent("Réservation", "Message",  $scope.getEventLabel());
+                        $scope.trackPageView();
                         // Clear message field
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
@@ -371,8 +375,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.payForBooking = function (booking, paymentInfo) {
                 BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                    $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
+                    $scope.trackEvent("Réservation", "Demande de réservation",  $scope.getEventLabel());
+                    $scope.trackPageView();
                     toastr.options.positionClass = "toast-top-full-width";
-                    toastr.success("Réservation enregistré", "");
+                    toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
                     $(".modal").modal("hide");
                     $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                     $scope.submitInProgress = false;
@@ -381,6 +388,16 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             };
 
+            $scope.getEventLabel = function() {
+                if ($scope.isAuto()) {
+                    return "Voiture - " + $scope.productCategoryName;
+                } else if ($scope.isRealEstate()) {
+                    return "Logement - " + $scope.productCategoryName;
+                } else {
+                    return "Objet - " + $scope.productCategoryAncestors;
+                }
+            };
+            
             $scope.clearCreditCard = function () {
                 $scope.newCreditCard = true;
                 $scope.creditCard = {
@@ -428,8 +445,33 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
                 if (args.name != "login") {
                     $scope.loadPictures();
+                    if (!$scope.product) {
+                        ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
+                            $scope.product = result;
+                            $scope.loadProductCategoryAncestors(args.name);
+                        });
+                    } else {
+                        $scope.loadProductCategoryAncestors(args.name);
+                    }
                 }
             });
+
+            $scope.loadProductCategoryAncestors = function(modalName) {
+                CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
+                    $scope.productCategoryName  = productCategory.name;
+                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function(ancestors) {
+                        var categoriesStr = "";
+                        angular.forEach(ancestors, function (value, key) {
+                            categoriesStr = categoriesStr + value.name + " - ";
+                        });
+                        $scope.productCategoryAncestors = categoriesStr + productCategory.name;
+                        if (modalName === "phone") {
+                            $scope.trackEvent("Réservation", "Appel",  $scope.getEventLabel());
+                            $scope.trackPageView();
+                        }
+                    });
+                });
+            };
 
             $scope.loadPictures = function () {
                 PicturesService.getPicturesByProduct($scope.productId).$promise.then(function (pictures) {
@@ -538,6 +580,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 return ($scope.rootCategory === "automobile");
             };
 
+            $scope.isRealEstate = function () {
+                return ($scope.rootCategory === "location-saisonniere");
+            };
+
             $scope.loadMessageThread = function () {
                 if (!$scope.currentUserPromise) {
                     $scope.currentUserPromise = UsersService.getMe().$promise;
@@ -633,5 +679,63 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.selectTab("#tabs-photos");
+
+            $scope.loadAdWordsTags =  function(googleConversionLabel) {
+                var scriptAdWords = document.createElement("script");
+                scriptAdWords.type = "text/javascript";
+                var code = "/* <![CDATA[ */" +
+                    "var google_conversion_id = 1027691277;" +
+                    "var google_conversion_language = 'en';" +
+                    "var google_conversion_format = '3';" +
+                    "var google_conversion_color = 'ffffff';" +
+                    "var google_conversion_label = '" + googleConversionLabel + "';" +
+                    "var google_conversion_value = 1.00;" +
+                    "var google_conversion_currency = 'EUR';" +
+                    "var google_remarketing_only = false;" +
+                    "/* ]]> */";
+                try {
+                    scriptAdWords.appendChild(document.createTextNode(code));
+                    document.body.appendChild(scriptAdWords);
+                } catch (e) {
+                    scriptAdWords.text = code;
+                    document.body.appendChild(scriptAdWords);
+                }
+
+                var scriptConversion = document.createElement("script");
+                scriptConversion.type = "text/javascript";
+                scriptConversion.src = "//www.googleadservices.com/pagead/conversion.js";
+                document.body.appendChild(scriptConversion);
+
+                var noscriptConversion = document.createElement("noscript");
+                var divConversion = document.createElement("div");
+                divConversion.style = "display:inline;";
+                var imgConversion = document.createElement("img");
+                imgConversion.src = "//www.googleadservices.com/pagead/conversion/1027691277/?value=1.00&amp;currency_code=EUR&amp;label=" + googleConversionLabel + "&amp;guid=ON&amp;script=0";
+                imgConversion.width = "1";
+                imgConversion.height = "1";
+                imgConversion.style = "border-style:none;";
+                imgConversion.alt = "";
+                divConversion.appendChild(imgConversion);
+                noscriptConversion.appendChild(divConversion);
+                document.body.appendChild(noscriptConversion);
+            };
+
+            /**
+             * Push track event to Google Analytics.
+             *
+             * @param category category
+             * @param action action
+             * @param value value
+             */
+            $scope.trackEvent = function(category, action, value) {
+                _gaq.push(["_trackEvent", category, action, value]);
+            };
+
+            /**
+             * Push track page view to Google Analytics.
+             */
+            $scope.trackPageView = function() {
+                _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
+            };
         }]);
 });
