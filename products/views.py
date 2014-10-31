@@ -837,7 +837,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         if not product:
             raise Http404
         product_type = product.name
-        comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
+        comment_qs = Comment.borrowercomments.select_related('booking__borrower', 'booking_product').order_by('-created_at')
         product_list = self.sqs.more_like_this(product)[:5]
         product_comment_list = comment_qs.filter(booking__product=product)
         owner_comment_list = comment_qs.filter(booking__owner=product.owner)
