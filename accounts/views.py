@@ -1055,6 +1055,19 @@ class PasswordResetConfirmView(TemplateView):
             return JsonResponse({'detail': success_msg})
         return JsonResponse({'errors': form.errors}, status=400)
 
+class ActivationView(TemplateView):
+    template_name='activate/index.jade'
+
+    def get_context_data(self, activation_key=None, **kwargs):
+        activation_key = activation_key.lower()  # Normalize before trying anything with it.
+        is_actived = Patron.objects.activate(activation_key)
+        context = {
+            'is_actived': is_actived,
+            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+        }
+        context.update(super(ActivationView, self).get_context_data(**kwargs))
+        return context
+
 class PatronDetailView(BreadcrumbsMixin, PatronDetail):
     template_name = 'profile_public/index.jade'
 
