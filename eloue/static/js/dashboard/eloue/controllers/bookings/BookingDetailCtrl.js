@@ -134,6 +134,10 @@ define(["angular", "eloue/app"], function (angular) {
                 })
             };
 
+            $scope.showCancelConfirm = function () {
+                $('#confirm').modal();
+            };
+
             $scope.cancelBooking = function () {
                 $scope.submitInProgress = true;
                 BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
