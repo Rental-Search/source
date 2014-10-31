@@ -1,22 +1,26 @@
-{% with borrowercomments|length as comment_count %}
-{% if comment_count %}
-h3.indent-b-xs Les {{ comment_count }} commentaires de {{ patron.username }}
+{% with borrowercomments|length as comments_count %}
+{% if comments_count %}
+h3.indent-b-xs Les {{ comments_count }} commentaires de {{ patron.username }}
 
 ul.list-group
   each comment in borrowercomments
+    {% with comment.booking.product as product %}
     li.list-group-item.thumbnail
       .thumbnail-img
-        a(href="{{ product.url }}").img-wrapper: img(style="{% if product.thumbnail_medium %}background-image: url({{ product.thumbnail_medium }}){% endif %}").bg-image
+        {% with product.pictures.all|first as picture %}
+        a(href="{{ product.get_absolute_url }}").img-wrapper: img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}").bg-image
+        {% endwith %}
       .thumbnail-content
         p
-          a(href="{{ product.url }}").text-success: b {{ comment.summary }} 
+          a(href="{{ product.get_absolute_url }}").text-success: b {{ product.summary }} 
           small loué par 
-          a(href="{{ comment.author.username.get_absolute_url }}").text-success: b {{ comment.author.username }}
+          a(href="{{ comment.author.get_absolute_url }}").text-success: b {{ comment.author.username }}
         .indent-t-xs.indent-b-xs //- this is a change against HTML dev's branch, should be checked that it looks like expected
           {% with comment.note as rate %}
           include ../jade/_rate
           {% endwith %}
         p {{ comment.comment|truncatechars:145 }}
         small Le {{ comment.created_at|date:"d F Y" }}
+    {% endwith %}
 {% endif %}
 {% endwith %}
