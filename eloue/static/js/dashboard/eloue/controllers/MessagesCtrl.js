@@ -8,8 +8,12 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("MessagesCtrl", [
         "$scope",
         "$rootScope",
-        function ($scope, $rootScope) {
+        "UsersService",
+        function ($scope, $rootScope, UsersService) {
             $scope.messageThreadList = [];
+            if (!$scope.currentUserPromise) {
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+            }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
                 $scope.$broadcast("startLoading", {parameters: [true, true], shouldReloadList: true});

@@ -12,7 +12,8 @@ define(["angular", "eloue/app"], function (angular) {
         "$timeout",
         "Endpoints",
         "BookingsLoadService",
-        function ($q, $scope, $rootScope, $timeout, Endpoints, BookingsLoadService) {
+        "UsersService",
+        function ($q, $scope, $rootScope, $timeout, Endpoints, BookingsLoadService, UsersService) {
             $scope.bookingFilter = {};
             $scope.stateList = ["authorized", "rejected", "outdated", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"];
             $scope.bookingList = [];
@@ -30,6 +31,9 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.filter();
             };
 
+            if (!$scope.currentUserPromise) {
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+            }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
                 $scope.filterByBoth();

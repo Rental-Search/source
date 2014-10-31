@@ -44,6 +44,9 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.markListItemAsSelected("account-part-", "account.profile");
 
+            if (!$scope.currentUserPromise) {
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+            }
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
