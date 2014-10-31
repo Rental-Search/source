@@ -163,6 +163,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.handleResponseErrors = function(error) {
+                $scope.submitInProgress = false;
                 if (!!error.errors) {
                     $scope.errors = {
                         civility: !!error.errors.civility ? error.errors.civility[0] : "",
@@ -184,7 +185,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         product: !!error.errors.product ? error.errors.product[0] : ""
                     };
                 }
-                $scope.submitInProgress = false;
+                if (!!error.detail) {
+                    $scope.errors.general = error.detail;
+                }
+                if (!!error.description) {
+                    $scope.errors.general = error.description.replace("[","").replace("]","").replace("{","").replace("}","");
+                }
             };
 
             ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
