@@ -14,7 +14,8 @@ define(["angular", "eloue/app"], function (angular) {
         "ProductShippingPointsService",
         "ShippingPointsService",
         "UtilsService",
-        function ($scope, $stateParams, $timeout, Endpoints, ProductsLoadService, ProductShippingPointsService, ShippingPointsService, UtilsService) {
+        "UsersService",
+        function ($scope, $stateParams, $timeout, Endpoints, ProductsLoadService, ProductShippingPointsService, ShippingPointsService, UtilsService, UsersService) {
             $scope.markListItemAsSelected("item-tab-", "shipping");
             $scope.initCustomScrollbars();
             $scope.addressQuery = "";
@@ -39,6 +40,9 @@ define(["angular", "eloue/app"], function (angular) {
                 }
             });
 
+            if (!$scope.currentUserPromise) {
+                $scope.currentUserPromise = UsersService.getMe().$promise;
+            }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
             });
