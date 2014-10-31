@@ -112,7 +112,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.text-white.bg-gray-light-hover Refuser
                     a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.text-white.bg-success-hover Accepter la Réservation
                     a(href="", ng-click="cancelBooking()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.text-white.bg-gray-light-hover Annuler
-                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident' || bookingDetails.state=='pending'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
+                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
         {% endverbatim %}{% comment %}
         .block-with-thumbnail.notification.indent-md-b

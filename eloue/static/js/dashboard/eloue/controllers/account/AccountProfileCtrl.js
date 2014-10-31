@@ -88,13 +88,18 @@ define(["angular", "eloue/app"], function (angular) {
                 if (!!$scope.currentUser.default_number) {
                     $scope.phoneNumber = !!$scope.currentUser.default_number.number.numero ? $scope.currentUser.default_number.number.numero : $scope.currentUser.default_number.number;
                 }
-                AddressesService.getAddressesByPatron(currentUser.id).then(function (results) {
-                    $scope.addressList = results;
-                    $scope.defaultAddress = (!!currentUser.default_address) ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
-                    $timeout(function () {
-                        $("#defaultAddressSelect").chosen();
-                    }, 200);
-                });
+                if (!currentUser.default_address) {
+                    $scope.noAddress = true;
+                }
+                if (!$scope.noAddress) {
+                    AddressesService.getAddressesByPatron(currentUser.id).then(function (results) {
+                        $scope.addressList = results;
+                        $scope.defaultAddress = (!!currentUser.default_address) ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
+                        $timeout(function () {
+                            $("#defaultAddressSelect").chosen();
+                        }, 200);
+                    });
+                }
                 if (!!$scope.currentUser.drivers_license_date) {
                     var licenceDate = Date.parse($scope.currentUser.drivers_license_date);
                     $scope.licenceDay =  licenceDate.getDate();
@@ -116,6 +121,30 @@ define(["angular", "eloue/app"], function (angular) {
             // Send form with data by submit
             $scope.dataFormSubmit = function () {
                 $scope.submitInProgress = true;
+                if ($scope.noAddress) {
+                    $scope.currentUser.default_address.country = "FR";
+                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
+                        $scope.currentUser.default_address = result;
+                        $scope.defaultAddress = $scope.currentUser.default_address;
+                        $scope.noAddress = false;
+                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"}).$promise.then(function(user) {
+                            AddressesService.getAddressesByPatron($scope.currentUser.id).then(function (results) {
+                                $scope.addressList = results;
+                                $timeout(function () {
+                                    $("#defaultAddressSelect").chosen();
+                                }, 200);
+                            });
+                        });
+                        $scope.saveProfile();
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
+                    });
+                } else {
+                    $scope.saveProfile();
+                }
+            };
+
+            $scope.saveProfile = function() {
                 if (!!$scope.licenceDay && !!$scope.licenceMonth && !!$scope.licenceYear) {
                     var date = new Date();
                     date.setDate($scope.licenceDay);
