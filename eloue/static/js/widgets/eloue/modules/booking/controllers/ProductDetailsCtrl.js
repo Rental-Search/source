@@ -635,6 +635,18 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 document.body.appendChild(noscriptConversion);
             };
 
+            $("#date_of_birth").datepicker({
+                language: "fr",
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $("#drivers_license_date").datepicker({
+                language: "fr",
+                autoclose: true,
+                todayHighlight: true
+            });
+
             /**
              * Push track event to Google Analytics.
              *
