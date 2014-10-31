@@ -8,7 +8,7 @@ ul.list-group
     li.list-group-item.thumbnail
       .thumbnail-img
         {% with product.pictures.all|first as picture %}
-        a(href="{{ product.get_absolute_url }}").img-wrapper: img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}").bg-image
+        a(href="{{ product.get_absolute_url }}").img-wrapper.product-thumbnail: img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}").bg-image
         {% endwith %}
       .thumbnail-content
         p
