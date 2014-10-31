@@ -2,7 +2,7 @@
 
 .container
   {% cache 43200 'products_on_site_count' %}
-  h3.text-center.indent-v-lg {{ products_on_site.count|intcomma }} annonces de location dans toute la France
+  h3.text-center.indent-v-lg 1{{ products_on_site.count|intcomma }} annonces de location dans toute la France
   {% endcache %}
   ul.product-list.row
     each product in product_list
