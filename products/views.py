@@ -975,7 +975,7 @@ class ProductFilterSet(filters.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ('deposit_amount', 'currency', 'address', 'quantity', 'is_archived', 'category', 'owner', 'created_at')
+        fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'category', 'owner', 'created_at')
 
 class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
