@@ -1064,16 +1064,31 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
     def get_context_data(self, **kwargs):
         patron = self.patron
 
-        # FIXME: remove after mass rebuild of all images is done on hosting
-        from eloue.legacy import generate_patron_images
-        generate_patron_images(patron)
-
+        borrowercomments = tuple(Comment.borrowercomments.select_related('booking__borrower', 'booking_product').filter(booking__owner=patron))
         context = {
             'patron': patron,
             'breadcrumbs': self.breadcrumbs,
-            'borrowercomments': Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at'),
+            'borrowercomments': borrowercomments,
         }
         context.update(super(PatronDetail, self).get_context_data(**kwargs))
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from eloue.legacy import generate_patron_images, generate_picture_images
+        patron_set = set([patron])
+        product_list = context.get('product_list', [])
+        for elem in product_list[:PAGINATE_PRODUCTS_BY]:
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all()[:1]:
+                    generate_picture_images(picture)
+        for c in borrowercomments:
+            product = c.booking.product
+            patron_set.add(product.owner)
+            for picture in product.pictures.all()[:1]:
+                generate_picture_images(picture)
+        for patron in patron_set:
+            generate_patron_images(patron)
+
         return context
 
 

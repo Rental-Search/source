@@ -761,7 +761,7 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         for elem in product_list[:PAGINATE_PRODUCTS_BY]:
             if elem.object:
                 patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all():
+                for picture in elem.object.pictures.all()[:1]:
                     generate_picture_images(picture)
         for comment in comment_list[:PAGINATE_PRODUCTS_BY]:
             patron_set.add(comment.booking.owner)
@@ -811,7 +811,7 @@ class ProductListView(ProductList):
         for elem in product_list:
             if elem.object:
                 patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all():
+                for picture in elem.object.pictures.all()[:1]:
                     generate_picture_images(picture)
         for patron in patron_set:
             generate_patron_images(patron)
@@ -837,7 +837,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         if not product:
             raise Http404
         product_type = product.name
-        comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
+        comment_qs = Comment.borrowercomments.select_related('booking__borrower', 'booking_product').order_by('-created_at')
         product_list = self.sqs.more_like_this(product)[:5]
         product_comment_list = comment_qs.filter(booking__product=product)
         owner_comment_list = comment_qs.filter(booking__owner=product.owner)
@@ -849,7 +849,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         for elem in chain(product_list, [self.object]):
             if elem.object:
                 patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all():
+                for picture in elem.object.pictures.all()[:1]:
                     generate_picture_images(picture)
         for comment in chain(product_comment_list, owner_comment_list):
             patron_set.add(comment.booking.owner)
