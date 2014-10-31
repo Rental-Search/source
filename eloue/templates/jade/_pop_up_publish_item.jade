@@ -82,7 +82,7 @@
                             .col-sm-1: b.form-suffix &euro;
                         .row(ng-show="isAuto")
                             .col-sm-3
-                                select(ng-model="product.tax_horsepower", data-placeholder="CV fiscaux *" , eloue-chosen, data-ng-disabled="submitInProgress", ng-required="isAuto").form-control
+                                select(ng-model="product.tax_horsepower", data-placeholder="CV fiscaux *", eloue-chosen, data-ng-disabled="submitInProgress", ng-required="isAuto").form-control
                                     option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
                                 span.text-danger(ng-show="!!errors.tax_horsepower", ng-bind="errors.tax_horsepower")
                             .col-sm-1: b.form-suffix CV
