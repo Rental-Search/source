@@ -397,7 +397,14 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
                 if (args.name != "login") {
                     $scope.loadPictures();
-                    $scope.loadProductCategoryAncestors(args.name);
+                    if (!$scope.product) {
+                        ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
+                            $scope.product = result;
+                            $scope.loadProductCategoryAncestors(args.name);
+                        });
+                    } else {
+                        $scope.loadProductCategoryAncestors(args.name);
+                    }
                 }
             });
 
