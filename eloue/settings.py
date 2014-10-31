@@ -293,12 +293,12 @@ PIPELINE_COMPILERS = (
     #'pipeline.compilers.less.LessCompiler',
     'eloue.compat.pipeline.compilers.AutoprefixerSASSCompiler',
 )
-#PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/benoitw/node_modules/less/bin/lessc')
+#PIPELINE_LESS_BINARY = env('PIPELINE_LESS_BINARY', '/home/mbaev/eloue/node_modules/less/bin/lessc')
 PIPELINE_SASS_BINARY = env('PIPELINE_SASS_BINARY', '/usr/bin/sass')
 PIPELINE_SASS_ARGUMENTS = '-q'
 PIPELINE_YUGLIFY_BINARY = env('PIPELINE_YUGLIFY_BINARY', '/usr/bin/env yuglify')
-PIPELINE_RJS_BINARY = env('PIPELINE_RJS_BINARY', '/app/node_modules/requirejs/bin/r.js')
-PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/app/node_modules/autoprefixer/autoprefixer')
+PIPELINE_RJS_BINARY = env('PIPELINE_RJS_BINARY', '/home/mbaev/eloue/node_modules/requirejs/bin/r.js')
+PIPELINE_AUTOPREFIXER_BINARY = env('PIPELINE_AUTOPREFIXER_BINARY', '/home/mbaev/eloue/node_modules/autoprefixer/autoprefixer')
 PIPELINE_AUTOPREFIXER_ARGUMENTS = '-m --sources-content'
 PIPELINE_CSS = {
     'extrastyles': {
