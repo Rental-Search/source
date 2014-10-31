@@ -222,6 +222,7 @@ ui3_urlpatterns = patterns('',
     url(r'^conditions-generales/', TemplateView.as_view(template_name='terms/index.jade'), name='terms'),
     url(r'^contrat-de-location/', TemplateView.as_view(template_name='rental_agreement/index.jade'), name='agreement'),
     url(r'^mentions-legales/', TemplateView.as_view(template_name='imprint/index.jade'), name='notices'),
+    url(r'^activate/(?P<activation_key>\w+)/$', TemplateView.as_view(template_name='accounts/activate.html'), name='auth_activate'),
 )
 
 urlpatterns = patterns('',
