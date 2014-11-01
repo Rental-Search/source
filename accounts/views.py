@@ -1098,9 +1098,9 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
             product = c.booking.product
             patron_set.add(product.owner)
             for picture in product.pictures.all()[:1]:
-                generate_picture_images(picture)
+                generate_picture_images(picture, ['profile', 'thumbnail'])
         for patron in patron_set:
-            generate_patron_images(patron)
+            generate_patron_images(patron, ['profil'])
 
         return context
 

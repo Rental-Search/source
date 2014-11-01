@@ -762,12 +762,12 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
             if elem.object:
                 patron_set.add(elem.object.owner)
                 for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture, 'profile')
+                    generate_picture_images(picture, ['profile'])
         for comment in comment_list[:PAGINATE_PRODUCTS_BY]:
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
         for patron in patron_set:
-            generate_patron_images(patron, 'thumbnail')
+            generate_patron_images(patron, ['thumbnail'])
 
         context = {
             'product_list': product_list,
@@ -812,9 +812,9 @@ class ProductListView(ProductList):
             if elem.object:
                 patron_set.add(elem.object.owner)
                 for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture, 'profile')
+                    generate_picture_images(picture, ['profile'])
         for patron in patron_set:
-            generate_patron_images(patron, 'thumbnail')
+            generate_patron_images(patron, ['thumbnail'])
 
         return context
 
@@ -852,12 +852,12 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             if elem.object:
                 patron_set.add(elem.object.owner)
                 for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture)
+                    generate_picture_images(picture, ['thumbnail', 'display'])
         for comment in chain(product_comment_list, owner_comment_list):
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
         for patron in patron_set:
-            generate_patron_images(patron)
+            generate_patron_images(patron, ['product_page'])
 
         context = {
             'properties': product.properties.select_related('property'),

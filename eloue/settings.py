@@ -193,6 +193,7 @@ PASSWORD_HASHERS =(
     'django.contrib.auth.hashers.CryptPasswordHasher'
 )
 
+SSLIFY_DISABLE = env('SSLIFY_DISABLE', False)
 
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
