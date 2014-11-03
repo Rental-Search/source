@@ -28,11 +28,11 @@ h2 Vos informations bancaires
             label(for="show-save-card")
                 input(type="checkbox", name="showSaveCard", ng-model="showSaveCard")#show-save-card
                 span.flaticon.stroke.checkmark
-            | Conserves mes coordonnées bancaire
+            | Conserves mes coordonnées bancaires
 .row(ng-show="!newCreditCard")
     .col-sm-5
     .col-sm-7
-        a(href="#", ng-click="clearCreditCard()").text-success.pull-right Modifier mes coordonnées bancaire
+        a(href="#", ng-click="clearCreditCard()").text-success.pull-right Modifier mes coordonnées bancaires
 p.info Vous devrez présenter une carte de paiement à votre nom, au propriétaire, avant le début de la location. Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire pourra refuser la location.
 {% verbatim %}
 span.text-danger(ng-show="!!errors.product", ng-bind="errors.product")
