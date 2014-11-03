@@ -232,7 +232,7 @@ urlpatterns = patterns('',
     #url(r'^loueur/', include('accounts.urls')),
     #url(r'^location/', include('products.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^edit/', include(admin.site.urls)),
 
     # API 2.0
     url(r'^', include(api2_urlpatterns)),
