@@ -15,22 +15,22 @@
 {% block content %}
 <div style="overflow-x: auto; float: left; margin-right: 20px; width: 863px;">
 	<table>
-	{% for key, value in stats.items %}
+	{% for item in stats %}
 		{% if forloop.first %}
 		<thead>
 			<tr>
 				<th></th>
-				{% for item in value %}
-				<th>{{ item.0|date:"M y" }}</th>
+				{% for qss in item.qss %}
+				<th>{{ qss.0|date:"M y" }}</th>
 				{% endfor %}
 			</tr>
 		</thead>
 		<tbody>
 		{% endif %}
 		<tr>
-			<th>{{ key }}</th>
-			{% for item in value %}
-			<td style="text-align: center;">{{ item.1|floatformat:2 }}</td>
+			<th>{{ item.title }}</th>
+			{% for qss in item.qss %}
+			<td style="text-align: center;">{{ qss.1|floatformat:2 }}</td>
 			{% endfor %}
 		</tr>
 		{% if forloop.last %}
