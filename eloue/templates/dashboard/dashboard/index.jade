@@ -30,7 +30,7 @@ block content-view
               big.large.text-success {{userStats.ratings_count}}
               | évaluations
             li
-              big.large.text-success {{ stats.response_rate|floatformat:"0" }}%&nbsp;
+              big.large.text-success {{userStats.response_rate | number: 0}}%&nbsp;
               | de taux de réponse
             li
               big.large.text-success {{userStats.response_time}}
