@@ -233,6 +233,9 @@ urlpatterns = patterns('',
     #url(r'^location/', include('products.urls')),
 
     url(r'^edit/', include(admin.site.urls)),
+    url(r'edit/', include('accounts.admin_urls')),
+    url(r'^edit/stats/', include('reporting.admin_urls')),
+    url(r'^slimpay/', include('payments.slimpay_urls')),
 
     # API 2.0
     url(r'^', include(api2_urlpatterns)),
