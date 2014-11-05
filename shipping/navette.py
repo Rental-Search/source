@@ -8,7 +8,9 @@ from django.utils.functional import cached_property
 class WsdlClientBase(object):
     @cached_property
     def client(self):
+        proxy_hosts = dict(http='ec2-54-77-217-241.eu-west-1.compute.amazonaws.com:8080')
         api = Client(self.url)
+        api.set_options(proxy=proxy_hosts)
         api.set_options(cache=DocumentCache())
         return api
 
