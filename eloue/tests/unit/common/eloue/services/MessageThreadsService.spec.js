@@ -72,22 +72,5 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("MessageThreadsService should be not null", function () {
             expect(!!MessageThreadsService).toBe(true);
         });
-
-        it("MessageThreadsService:getMessageThreads", function () {
-            MessageThreadsService.getMessageThreads();
-            expect(messageThreadsMock.get).toHaveBeenCalledWith({_cache: jasmine.any(Number)});
-        });
-
-        it("MessageThreadsService:getThread", function () {
-            var threadId = 1;
-            MessageThreadsService.getThread(threadId);
-            expect(messageThreadsMock.get).toHaveBeenCalledWith({id: threadId, _cache: jasmine.any(Number)});
-        });
-
-        it("MessageThreadsService:getMessages", function () {
-            var threadId = 1;
-            MessageThreadsService.getMessages(threadId);
-            expect(messageThreadsMock.get).toHaveBeenCalledWith({id: threadId,_cache: jasmine.any(Number)});
-        });
     });
 });

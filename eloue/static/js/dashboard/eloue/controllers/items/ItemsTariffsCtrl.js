@@ -31,19 +31,8 @@ define(["angular", "eloue/app"], function (angular) {
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.product = product;
                 $scope.markListItemAsSelected("item-tab-", "tariffs");
-                CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
-                    if (!nodeCategory.parent) {
-                        $scope.updateFieldSet(nodeCategory);
-                    } else {
-                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
-                            $scope.updateFieldSet(rootCategory);
-                        });
-                    }
-                });
-            });
 
-            PricesService.getPricesByProduct($stateParams.id).$promise.then(function (prices) {
-                angular.forEach(prices.results, function (value, key) {
+                angular.forEach(product.prices, function (value, key) {
                     switch (value.unit) {
                         case Unit.HOUR.id:
                             $scope.prices.hour.amount = value.amount;
@@ -65,6 +54,16 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.prices.fifteen_days.amount = value.amount;
                             $scope.prices.fifteen_days.id = value.id;
                             break;
+                    }
+                });
+
+                CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
+                    if (!nodeCategory.parent) {
+                        $scope.updateFieldSet(nodeCategory);
+                    } else {
+                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                            $scope.updateFieldSet(rootCategory);
+                        });
                     }
                 });
             });

@@ -36,18 +36,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             expect(!!PricesService).toBe(true);
         });
 
-        it("PricesService:getProductPricesPerDay", function () {
-            var productId = 1;
-            PricesService.getProductPricesPerDay(productId);
-            expect(pricesMock.getProductPricesPerDay).toHaveBeenCalledWith({product: productId});
-        });
-
-        it("PricesService:getPricesByProduct:", function () {
-            var productId = 1;
-            PricesService.getPricesByProduct(productId);
-            expect(pricesMock.get).toHaveBeenCalledWith({product: productId});
-        });
-
         it("PricesService:savePrice", function () {
             var price = {id: 1};
             PricesService.savePrice(price);
