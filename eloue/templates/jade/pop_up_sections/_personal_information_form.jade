@@ -29,7 +29,7 @@ h2 Vos informations personnelles
             input(type="checkbox", ng-model="addShipping", ng-change="loadShippingPoints()")#particular
             span.flaticon.stroke.checkmark-1
         b.text-black Option livraison, Recevez cet objet  dans un point relais Pickup à proximiter de ches vous
-    a(href="", ng-show="shippingPointsRequestInProgress").btn.bg-gray-light-hover.text-white.loading &nbsp;&nbsp;&nbsp;
+    a(href="", ng-show="loadingProductShippingPoint").btn.bg-gray-light-hover.text-white.loading2 &nbsp;&nbsp;&nbsp;
 .row(ng-show="isAuto()")
   .col-sm-6(style="z-index: 1050")
       input#date_of_birth(type="text", name="date_of_birth", data-date-format="yyyy-mm-dd" , placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto()").form-control

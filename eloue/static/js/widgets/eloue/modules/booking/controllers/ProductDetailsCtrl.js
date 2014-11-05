@@ -174,8 +174,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.handleResponseErrors = function(error) {
+                // Hide all spinners and enable form controls.
                 $scope.submitInProgress = false;
+                $scope.loadingProductShippingPoint = false;
                 $scope.shippingPointsRequestInProgress = false;
+                // Add specific error fields
                 if (!!error.errors) {
                     $scope.errors = {
                         civility: !!error.errors.civility ? error.errors.civility[0] : "",
@@ -572,17 +575,20 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.loadProductShippingPoint = function() {
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUser = currentUser;
-                    $scope.shippingPointsRequestInProgress = true;
-                    ProductShippingPointsService.getByProduct($scope.productId).then(function(data) {
-                        //Show shipping choice only if there are existing product shipping points
-                        if (!!data.results && data.results.length > 0) {
-                            $scope.productShippingPoint = data.results[0];
-                            $scope.shippingAllowed = true;
-                            $scope.shippingPointsRequestInProgress = false;
-                        }
-                    }, function (error) {
-                        $scope.handleResponseErrors(error);
-                    });
+                    // Not allow to add delivery for user without address
+                    if (!!$scope.currentUser.default_address) {
+                        $scope.loadingProductShippingPoint = true;
+                        ProductShippingPointsService.getByProduct($scope.productId).then(function (data) {
+                            //Show shipping choice only if there are existing product shipping points
+                            if (!!data.results && data.results.length > 0) {
+                                $scope.productShippingPoint = data.results[0];
+                                $scope.shippingAllowed = true;
+                                $scope.loadingProductShippingPoint = false;
+                            }
+                        }, function (error) {
+                            $scope.handleResponseErrors(error);
+                        });
+                    }
                 });
             };
 

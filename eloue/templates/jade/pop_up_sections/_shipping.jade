@@ -3,6 +3,7 @@ h2 Livraison
     p.text-black Sélectionner un point relais ci-dessous :
     .zebra.indent-xs-t-
         {% verbatim %}
+        a(href="", ng-show="shippingPointsRequestInProgress").btn.bg-gray-light-hover.text-white.loading2 &nbsp;&nbsp;&nbsp;
         label(ng-repeat="point in borrowerShippingPoints").zebra-row
             input(type="radio", name="pickup", value="{{point.site_id}}", ng-model="point.selected", ng-change="pointSelected('{{point.site_id}}')")
             .zebra-row-wrapper
