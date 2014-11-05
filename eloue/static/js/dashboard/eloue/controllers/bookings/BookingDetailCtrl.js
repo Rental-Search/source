@@ -82,15 +82,31 @@ define(["angular", "eloue/app"], function (angular) {
                         }
                     });
                 }
-
-                ShippingsService.getByBooking($stateParams.uuid).then(function (shippingList) {
-                    if (!!shippingList.results) {
-                        $scope.shipping = shippingList.results[0];
-                    }
-                });
+                if ($scope.bookingDetails.with_shipping) {
+                    ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
+                        //Show shipping choice only if there are existing product shipping points
+                        if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
+                            $scope.departure_point = productShippingPointData.results[0];
+                            PatronShippingPointsService.getByPatronAndBooking(UtilsService.getIdFromUrl($scope.bookingDetails.borrower), $stateParams.uuid).then(function (patronShippingPointData) {
+                                if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
+                                    $scope.arrival_point = patronShippingPointData.results[0];
+                                }
+                            }, function (error) {
+                                $scope.handleResponseErrors(error);
+                            });
+                        }
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
+                    });
+                    ShippingsService.getByBooking($stateParams.uuid).then(function (shippingList) {
+                        if (!!shippingList.results) {
+                            $scope.shipping = shippingList.results[0];
+                        }
+                    });
+                }
             });
 
-            $scope.loadPhoneNumber = function(phoneObj) {
+            $scope.loadPhoneNumber = function (phoneObj) {
                 if (phoneObj) {
                     if ($scope.showRealPhoneNumber($scope.bookingDetails.state)) {
                         $scope.phoneNumber = !!phoneObj.number.numero ? phoneObj.number.numero : phoneObj.number;
@@ -104,9 +120,9 @@ define(["angular", "eloue/app"], function (angular) {
                 }
             };
 
-            $scope.loadUserInfo = function(userObj) {
+            $scope.loadUserInfo = function (userObj) {
                 $scope.userInfo = userObj;
-                UsersService.getStatistics(userObj.id).$promise.then(function(stats) {
+                UsersService.getStatistics(userObj.id).$promise.then(function (stats) {
                     if (!stats.booking_comments_count) {
                         stats.booking_comments_count = 0;
                     }
@@ -157,14 +173,14 @@ define(["angular", "eloue/app"], function (angular) {
                                             $scope.handleResponseErrors(error);
                                         });
                                     } else {
-                                        $scope.showNotification(result.detail);
+                                        $scope.showNotification(patronShippingPointData.detail);
                                         $window.location.reload();
                                     }
                                 }, function (error) {
                                     $scope.handleResponseErrors(error);
                                 });
                             } else {
-                                $scope.showNotification(result.detail);
+                                $scope.showNotification(productShippingPointData.detail);
                                 $window.location.reload();
                             }
                         }, function (error) {

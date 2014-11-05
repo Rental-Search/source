@@ -116,22 +116,22 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     a(href="", ng-click="showCancelConfirm()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.text-white.bg-gray-light-hover Annuler
                     a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
-        .block-with-thumbnail.notification.indent-md-b(ng-show="!!shipping")
+        .block-with-thumbnail.notification.indent-md-b(ng-show="bookingDetails.with_shipping")
           .col-thumbnail
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
-          .col-exposition.text-action
+          .col-exposition.text-action(ng-show="!!departure_point && !!arrival_point")
             h3: b.indent-xs-b Relais de départ
             ul.text-uppercase.indent-md-b
-              li {{shipping.departure_point.name}}
-              li {{shipping.departure_point.address}}
-              li {{shipping.departure_point.zipcode}} {{shipping.departure_point.city}}
+              li {{departure_point.name}}
+              li {{departure_point.address}}
+              li {{departure_point.zipcode}} {{departure_point.city}}
             h3: b.indent-xs-b Relais de d’arrivée
             ul.text-uppercase
-              li {{shipping.arrival_point.name}}
-              li {{shipping.arrival_point.address}}
-              li {{shipping.arrival_point.zipcode}} {{shipping.arrival_point.city}}
+              li {{arrival_point.name}}
+              li {{arrival_point.address}}
+              li {{arrival_point.zipcode}} {{arrival_point.city}}
             hr
-            .text-center(ng-show="bookingDetails.state!='authorized'"): a(href="#").text-success.text-underline-hover Télécharger les étiquettes
+            .text-center(ng-show="!!shipping && bookingDetails.state!='authorized'"): a(href="{{shipping.shuttle_document_url}}").text-success.text-underline-hover Télécharger les étiquettes
 
         .block-with-thumbnail.text-gray.notification(ng-show="showCommentForm")
             .col-thumbnail
