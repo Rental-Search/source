@@ -10,11 +10,11 @@ table.calendar.bd-wrap.indent-t-md.indent-b-md
         tr(ng-show="shippingPrice > 0")
             td Livraison
             td
-                b {{shippingPrice}}€
+                b {{shippingPrice | number}}€
         tr
             td Prix
             td
-                b.text-success {{bookingPrice + shippingPrice}}€
+                b.text-success {{bookingPrice + shippingPrice | number}}&nbsp;€
         tr
             td Caution
             td

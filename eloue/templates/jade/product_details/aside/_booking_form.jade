@@ -5,7 +5,7 @@ form.form-inline.section-body.text-center
     .part
         p
             small à partir de
-            big.text-primary &nbsp;{{pricePerDay}}&nbsp;/jour
+            big.text-primary &nbsp;{{pricePerDay | number}}&nbsp;/jour
         {% endverbatim %}
         include ../../_date_picker_border
         {% verbatim %}
@@ -23,7 +23,7 @@ form.form-inline.section-body.text-center
             b.period-days {{duration}}
         p.price
             | Prix {% endverbatim %}{% if is_pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
-            big.text-primary &nbsp;{{bookingPrice + shippingPrice}}€
+            big.text-primary &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
         {% endverbatim %}
         if not is_pro
             p Assurance incluse
