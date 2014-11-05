@@ -260,3 +260,34 @@ class BorrowerCommentForm(forms.ModelForm):
 class Api20BookingForm(BookingForm):
     started_at = forms.DateTimeField(required=True, input_formats=DATE_TIME_FORMAT)
     ended_at = forms.DateTimeField(required=True, input_formats=DATE_TIME_FORMAT)
+
+    def clean(self):
+        # TODO: Validation for api is slightly different than validation for form.
+        # TODO: Api action should be rewritten to not use form at all.
+        super(BookingForm, self).clean()
+        started_at = self.cleaned_data.get('started_at')
+        ended_at = self.cleaned_data.get('ended_at')
+        quantity = self.cleaned_data.get('quantity')
+
+        product = self.instance.product
+
+        if started_at and ended_at:
+            self.max_available = Booking.calculate_available_quantity(product, started_at, ended_at)
+
+            if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
+                self.max_available = 0
+            if started_at >= ended_at:
+                raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
+            if (ended_at - started_at) > datetime.timedelta(days=BOOKING_DAYS):
+                raise ValidationError(_(u"La durée d'une location est limitée à %s jours."%BOOKING_DAYS))
+
+            unit = product.calculate_price(started_at, ended_at)
+
+            if not unit[1]:
+                raise ValidationError(_(u"Prix sur devis"))
+
+            self.cleaned_data['price_unit'] = unit[0]
+
+            self.cleaned_data['total_amount'] = unit[1] * (1 if quantity is None else (quantity if self.max_available >= quantity else self.max_available))
+
+        return self.cleaned_data
