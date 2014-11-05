@@ -1,18 +1,23 @@
-{% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "La page demandée est introuvable" %}{% endblock %}
-
-{% block content %}
-<div class="container-main">
-	<div class="one-content">
-		<h1>{% trans "La page est introuvable" %}</h1>
-		<p style="margin-bottom: 20px;">
-			{% url 'contact' as contact_url %}
-        	{% blocktrans %}
-         		Si l'erreur persiste, merci de nous <a href="{{ contact_url }}">contacter</a>.
-        	{% endblocktrans %}
-		</p>
+<!doctype html>
+<html lang="fr">
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{% trans "e-loue - La page demandée est introuvable" %}</title>
+  <meta name="description" content="{% spaceless %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endspaceless %}">
+  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
+ <body>
+	<div class="container-main">
+		<div class="one-content">
+			<h1>{% trans "La page est introuvable" %}</h1>
+			<p style="margin-bottom: 20px;">
+	        	{% blocktrans %}
+	         		Si l'erreur persiste, merci de nous <a href="emailTo:contact@e-loue.com">contacter</a>.
+	        	{% endblocktrans %}
+			</p>
+		</div>
 	</div>
- </div>
-{% endblock content %}
+ </body>
+</html>

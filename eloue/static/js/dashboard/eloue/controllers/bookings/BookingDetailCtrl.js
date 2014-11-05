@@ -22,6 +22,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.comment = {rate: 0};
             $scope.showIncidentForm = false;
             $scope.showIncidentDescription = false;
+            $scope.userInfo = {};
 
             // On rating star click
             $(".star i").click(function () {
@@ -36,34 +37,31 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
                 $scope.showIncidentDescription = $scope.bookingDetails.state == 'incident';
+                if (!$scope.currentUserPromise) {
+                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                }
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.contractLink = Endpoints.api_url + "bookings/" + $stateParams.uuid + "/contract/";
                     $scope.isOwner = bookingDetails.owner.indexOf($scope.currentUserUrl) != -1;
                     $scope.isBorrower = bookingDetails.borrower.indexOf($scope.currentUserUrl) != -1;
+                    UsersService.get(UtilsService.getIdFromUrl(bookingDetails.borrower)).$promise.then(function (result) {
+                        $scope.borrowerName = result.username;
+                        $scope.borrowerSlug = result.slug;
+                        if ($scope.isOwner) {
+                            $scope.loadUserInfo(result);
+                            $scope.loadPhoneNumber(result.default_number);
+                        }
+                    });
+                    UsersService.get(UtilsService.getIdFromUrl(bookingDetails.owner)).$promise.then(function (result) {
+                        $scope.ownerName = result.username;
+                        $scope.ownerSlug = result.slug;
+                        if ($scope.isBorrower) {
+                            $scope.loadUserInfo(result);
+                            $scope.loadPhoneNumber(result.default_number);
+                        }
+                    });
                 });
-
-                UsersService.get(UtilsService.getIdFromUrl(bookingDetails.borrower)).$promise.then(function (result) {
-                    $scope.borrowerName = result.username;
-                    $scope.borrowerSlug = result.slug;
-                });
-
-                UsersService.get(UtilsService.getIdFromUrl(bookingDetails.owner)).$promise.then(function (result) {
-                    $scope.ownerName = result.username;
-                    $scope.ownerSlug = result.slug;
-                });
-
-                if ($scope.bookingDetails.product.phone) {
-                    if ($scope.showRealPhoneNumber($scope.bookingDetails.state)) {
-                        $scope.phoneNumber = !!$scope.bookingDetails.product.phone.number.numero ? $scope.bookingDetails.product.phone.number.numero : $scope.bookingDetails.product.phone.number;
-                    } else {
-                        PhoneNumbersService.getPremiumRateNumber($scope.bookingDetails.product.phone.id).$promise.then(function (result) {
-                            if (!result.error || result.error == "0") {
-                                $scope.phoneNumber = result.numero;
-                            }
-                        });
-                    }
-                }
 
                 $scope.markListItemAsSelected("booking-", $stateParams.uuid);
                 // Initiate custom scrollbars
@@ -82,6 +80,33 @@ define(["angular", "eloue/app"], function (angular) {
                     });
                 }
             });
+
+            $scope.loadPhoneNumber = function(phoneObj) {
+                if (phoneObj) {
+                    if ($scope.showRealPhoneNumber($scope.bookingDetails.state)) {
+                        $scope.phoneNumber = !!phoneObj.number.numero ? phoneObj.number.numero : phoneObj.number;
+                    } else {
+                        PhoneNumbersService.getPremiumRateNumber(phoneObj.id).$promise.then(function (result) {
+                            if (!result.error || result.error == "0") {
+                                $scope.phoneNumber = result.numero;
+                            }
+                        });
+                    }
+                }
+            };
+
+            $scope.loadUserInfo = function(userObj) {
+                $scope.userInfo = userObj;
+                UsersService.getStatistics(userObj.id).$promise.then(function(stats) {
+                    if (!stats.booking_comments_count) {
+                        stats.booking_comments_count = 0;
+                    }
+                    if (!stats.bookings_count) {
+                        stats.bookings_count = 0;
+                    }
+                    $scope.userInfo.stats = stats;
+                });
+            };
 
             /**
              * Show real number of the owner if the booking have the pending status and after.
@@ -107,6 +132,10 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.showNotification(result.detail);
                     $window.location.reload();
                 })
+            };
+
+            $scope.showCancelConfirm = function () {
+                $('#confirm').modal();
             };
 
             $scope.cancelBooking = function () {

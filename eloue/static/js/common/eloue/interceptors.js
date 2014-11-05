@@ -20,7 +20,7 @@ define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr
                 function (errorResponse) {
                     switch (errorResponse.status) {
                         case 400:
-                            showMessage("A required attribute of the API request is missing");
+//                            showMessage("A required attribute of the API request is missing");
                             break;
                         case 401:
                             $rootScope.$broadcast("redirectToLogin");

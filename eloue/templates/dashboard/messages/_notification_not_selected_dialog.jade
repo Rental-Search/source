@@ -4,4 +4,4 @@ section.pull-nothing
       {% verbatim %}
       i(class="{{routeChangeInProgress ? 'loading' : ''}}").icon-5x.indent-sm-b.flaticon.stroke.mail
       {% endverbatim %}
-      h2 Aucune conversation sélectionnée
+      h2(ng-show="!routeChangeInProgress") Aucune conversation sélectionnée

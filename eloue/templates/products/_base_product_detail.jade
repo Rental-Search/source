@@ -31,9 +31,12 @@ block append content-body
               .part.picture-tab#tabs
                 ul.nav.nav-justified.text-nowrap
                   -var tabs = [["Photos et Localisation", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"]]
-                  each title, href in tabs
+                  each title, href, i in tabs
                     li.spacer
-                    li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2 {{ title }}
+                    if i == 0
+                      li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2.current {{ title }}
+                    else
+                      li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2 {{ title }}
                   if insurance_available
                     li.spacer
                     li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 Conditions d'assurance

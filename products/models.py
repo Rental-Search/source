@@ -316,8 +316,11 @@ class Product(models.Model):
             delta -= price_delta
             amount += package(price.day_amount, price_delta, False)
 
-        if (delta.days > 0 or delta.seconds > 0):
-            price = self.prices.get(unit=unit, started_at__isnull=True, ended_at__isnull=True)
+        if delta.days > 0 or delta.seconds > 0:
+            try:
+                price = self.prices.get(unit=unit, started_at__isnull=True, ended_at__isnull=True)
+            except Price.MultipleObjectsReturned:
+                price = self.prices.filter(unit=unit, started_at__isnull=True, ended_at__isnull=True)[0]
             null_delta = timedelta(days=0)
             amount += package(price.day_amount, null_delta if null_delta > delta else delta)
 

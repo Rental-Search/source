@@ -1,5 +1,5 @@
 extends ./base
--load compressed
+-load compressed cache
 
 block append styles
   {% compressed_css "bootstrap" %}
@@ -13,23 +13,33 @@ block append content-body
       include ./jade/_nav_home
 
     article
+      {% cache 43200 'homepage_banner_static' %}
       section.banner
         include ./jade/_homepage_carousel_banner
+      {% endcache %}
+      {% cache 43200 'homepage_insurance_static' %}
       section.insurances.framing
         include ./jade/_insurances
+      {% endcache %}
       section.product-list
         include ./jade/_product_list
       section.float-comments.framing
         include ./jade/_comments
+      {% cache 43200 'homepage_city_list_static' %}
       section.location-list
         include ./jade/_location_list
+      {% endcache %}
 
     main
+      {% cache 43200 'homepage_main_static' %}
       //-section.download-mobile-apps: include ./jade/_download_mobile_apps
       section.watch-video.framing: include ./jade/_watch_video
       section.professional-renter-content: include ./jade/_professional_renter_content
       section.talk-about-us.framing: include ./jade/_talk_about_us
+      {% endcache %}
 
     footer
+      {% cache 43200 'homepage_footer_static' %}
       section.footer-links: include ./jade/_footer_links
       section.rss.framing: include ./jade/_rss
+      {% endcache %}

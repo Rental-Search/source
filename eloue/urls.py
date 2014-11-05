@@ -11,7 +11,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 
 from eloue.api.urls import router
 from products.views import HomepageView
-from accounts.views import PasswordResetView, PasswordResetConfirmView
+from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView
 
 log = logbook.Logger('eloue')
 
@@ -216,12 +216,13 @@ ui3_urlpatterns = patterns('',
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
     url(r'^nos-partenaires/', TemplateView.as_view(template_name='our_partners/index.jade'), name='our_partners'),
     url(r'^contactez-nous/', TemplateView.as_view(template_name='contact_us/index.jade'), name='contact_us'),
-    url(r'^espace-presse/', TemplateView.as_view(template_name='press/index.jade'), name='press_page'),
+    #url(r'^espace-presse/', TemplateView.as_view(template_name='press/index.jade'), name='press_page'),
     url(r'^qui-sommes-nous/', TemplateView.as_view(template_name='who_are_we/index.jade'), name='who_are_we'),
     url(r'^securite/', TemplateView.as_view(template_name='security/index.jade'), name='security'),
     url(r'^conditions-generales/', TemplateView.as_view(template_name='terms/index.jade'), name='terms'),
     url(r'^contrat-de-location/', TemplateView.as_view(template_name='rental_agreement/index.jade'), name='agreement'),
     url(r'^mentions-legales/', TemplateView.as_view(template_name='imprint/index.jade'), name='notices'),
+    url(r'^activate/(?P<activation_key>\w+)/$', ActivationView.as_view(), name='auth_activate'),
 )
 
 urlpatterns = patterns('',
@@ -231,7 +232,10 @@ urlpatterns = patterns('',
     #url(r'^loueur/', include('accounts.urls')),
     #url(r'^location/', include('products.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^edit/', include(admin.site.urls)),
+    url(r'edit/', include('accounts.admin_urls')),
+    url(r'^edit/stats/', include('reporting.admin_urls')),
+    url(r'^slimpay/', include('payments.slimpay_urls')),
 
     # API 2.0
     url(r'^', include(api2_urlpatterns)),
@@ -243,4 +247,4 @@ urlpatterns = patterns('',
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 )
 
-handler404 = 'eloue.views.custom404'
+#handler404 = 'eloue.views.custom404'

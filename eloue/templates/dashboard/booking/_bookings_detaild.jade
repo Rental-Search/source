@@ -18,18 +18,18 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                         .block-with-thumbnail.indent-sm-v
                             .col-thumbnail
                                 .thumbnail.round: a(href="#").sm
-                                    img(style="background-image: url({{bookingDetails.product.owner.avatar.thumbnail}});")
+                                    img(style="background-image: url({{userInfo.avatar.thumbnail}});")
                             .col-exposition.text-gray
                                 .indent-xs-h
-                                    h3.small: a(href="#").text-underline-hover {{bookingDetails.product.owner.username}}
+                                    h3.small: a(href="#").text-underline-hover {{userInfo.username}}
                                     p.indent-xs-v
                                         {% endverbatim %}
-                                        +average-rate("bookingDetails.product.ownerStats.average_rating")
+                                        +average-rate("userInfo.stats.average_rating")
                                         {% verbatim %}
                                     p
                                         {% endverbatim %}
-                                        +number-of-comments("bookingDetails.product.stats.booking_comments_count")
-                                        +number-of-bookings("bookingDetails.product.stats.bookings_count")
+                                        +number-of-comments("userInfo.stats.booking_comments_count")
+                                        +number-of-bookings("userInfo.stats.bookings_count")
                                         {% verbatim %}
 
         .bg-success-light.text-success.text-right.bd-rad
@@ -111,8 +111,8 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 .text-right
                     a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.text-white.bg-gray-light-hover Refuser
                     a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.text-white.bg-success-hover Accepter la Réservation
-                    a(href="", ng-click="cancelBooking()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.text-white.bg-gray-light-hover Annuler
-                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident' || bookingDetails.state=='pending'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
+                    a(href="", ng-click="showCancelConfirm()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.text-white.bg-gray-light-hover Annuler
+                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
         {% endverbatim %}{% comment %}
         .block-with-thumbnail.notification.indent-md-b
@@ -164,6 +164,18 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     b Description de l'incident
                 p(ng-bind="sinister.description")
                 {% endverbatim %}
+#confirm.modal.fade
+    .modal-dialog
+        .modal-content(style="padding: 30px")
+            .modal-body
+                h3 Etes-vous sûr de vouloir annuler la réservation ?
+                .row
+                    .col-xs-6
+                      button(type="button", data-dismiss="modal", ng-click="cancelBooking()").btn
+                        | Oui
+                    .col-xs-6
+                      button(type="button", data-dismiss="modal").btn.bg-success
+                        | Non
 //-
   section.text-gray-strong.bg-lite
     ul.section-content.booking-activity-feed

@@ -79,7 +79,7 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
         location['region_coords'] or location['coordinates'],
         location['region_radius'] or location['radius']
         )
-    last_added = search_index.dwithin('location', region_point, Distance(km=region_radius)
+    last_added = search_index.exclude(thumbnail=None).dwithin('location', region_point, Distance(km=region_radius)
         ).distance('location', region_point
         ).order_by(sort_by_date, SORT.NEAR)
 
@@ -92,14 +92,14 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
             # silently ignore exceptions like country name is missing or incorrect
             pass
         else:
-            last_added = search_index.dwithin('location', country_point, Distance(km=country_radius)
+            last_added = search_index.exclude(thumbnail=None).dwithin('location', country_point, Distance(km=country_radius)
                 ).distance('location', country_point
                 ).order_by(sort_by_date, SORT.NEAR)
 
     # if there are no products found in the same country
     if not last_added.count():
         # do not filter on location, and return full list sorted by the provided date field only
-        last_added = search_index.order_by(sort_by_date)
+        last_added = search_index.exclude(thumbnail=None).order_by(sort_by_date)
 
     return last_added[offset*limit:(offset+1)*limit]
 
@@ -751,20 +751,6 @@ class NavbarCategoryMixin(object):
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
-    @property
-    @method_decorator(cached(timeout=10*60))
-    def homepage_stats(self):
-        product_stats = Product.objects.extra(
-            tables=['accounts_address'],
-            where=['"products_product"."address_id" = "accounts_address"."id"'],
-            select={'city': 'lower(trim("accounts_address"."city"))'}
-        ).values('city').annotate(Count('id')).order_by('-id__count')
-
-        return {
-            'cities_list': product_stats,
-            'total_products': Product.on_site.only('id').count(),
-        }
-
     def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
         comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
@@ -775,19 +761,19 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         for elem in product_list[:PAGINATE_PRODUCTS_BY]:
             if elem.object:
                 patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all():
-                    generate_picture_images(picture)
+                for picture in elem.object.pictures.all()[:1]:
+                    generate_picture_images(picture, ['profile'])
         for comment in comment_list[:PAGINATE_PRODUCTS_BY]:
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
         for patron in patron_set:
-            generate_patron_images(patron)
+            generate_patron_images(patron, ['thumbnail'])
 
         context = {
             'product_list': product_list,
             'comment_list': comment_list,
+            'products_on_site': Product.on_site.only('id'),
         }
-        context.update(self.homepage_stats)
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
 
@@ -825,10 +811,10 @@ class ProductListView(ProductList):
         for elem in product_list:
             if elem.object:
                 patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all():
-                    generate_picture_images(picture)
+                for picture in elem.object.pictures.all()[:1]:
+                    generate_picture_images(picture, ['profile'])
         for patron in patron_set:
-            generate_patron_images(patron)
+            generate_patron_images(patron, ['thumbnail'])
 
         return context
 
@@ -851,7 +837,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         if not product:
             raise Http404
         product_type = product.name
-        comment_qs = Comment.borrowercomments.select_related('booking__borrower').order_by('-created_at')
+        comment_qs = Comment.borrowercomments.select_related('booking__borrower', 'booking_product').order_by('-created_at')
         product_list = self.sqs.more_like_this(product)[:5]
         product_comment_list = comment_qs.filter(booking__product=product)
         owner_comment_list = comment_qs.filter(booking__owner=product.owner)
@@ -860,16 +846,18 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         from itertools import chain
         from eloue.legacy import generate_patron_images, generate_picture_images
         patron_set = set()
-        for elem in chain(product_list, [self.object]):
+        for picture in product.pictures.all():
+            generate_picture_images(picture)
+        for elem in product_list:
             if elem.object:
                 patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all():
-                    generate_picture_images(picture)
+                for picture in elem.object.pictures.all()[:1]:
+                    generate_picture_images(picture, ['thumbnail', 'display'])
         for comment in chain(product_comment_list, owner_comment_list):
             patron_set.add(comment.booking.owner)
             patron_set.add(comment.booking.borrower)
         for patron in patron_set:
-            generate_patron_images(patron)
+            generate_patron_images(patron, ['product_page'])
 
         context = {
             'properties': product.properties.select_related('property'),

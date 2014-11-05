@@ -15,12 +15,13 @@ block sections
               label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifier mon image
                 input(type="file", name="avatar", file-chooser, on-change="onFileChanged()")#change-img
                 input(type="hidden", name="_method", value="PUT")
-      form#profile-information(data-ng-submit="dataFormSubmit()")
+      form(id="profile-information", name="profile-information", data-ng-submit="dataFormSubmit()", novalidate)
        fieldset(data-ng-disabled="submitInProgress")
         //- proffessional radio btns
         .row
           .col-sm-5
             h3.text-black Je suis un professionnel ?
+            span.text-danger(ng-show="!!errors.is_professional", ng-bind="errors.is_professional")
           .col-sm-2
             label.rad-btn.form-control Oui
               input#is_professional(type="radio", name="is_professional", ng-checked="currentUser.is_professional", value="true")
@@ -33,8 +34,10 @@ block sections
         .row
           .col-md-12.col-lg-6
             input#username.form-control(type="text", name="username", placeholder="Pseudo *", required, autofocus, ng-model="currentUser.username")
+            span.text-danger(ng-show="!!errors.username", ng-bind="errors.username")
           .col-md-12.col-lg-6
             input#email.form-control(type="email", name="email", placeholder="Email *", required, ng-model="currentUser.email")
+            span.text-danger(ng-show="!!errors.email", ng-bind="errors.email")
         //- gender, first-name, name
         .row
           .col-sm-2.without-search
@@ -43,27 +46,42 @@ block sections
                 option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
           .col-sm-5
             input#first_name.form-control(type="text", name="first_name", placeholder="Prénom *", required, ng-model="currentUser.first_name")
+            span.text-danger(ng-show="!!errors.first_name", ng-bind="errors.first_name")
           .col-sm-5
             input#last_name.form-control(type="text", name="last_name", placeholder="Nom *", required, ng-model="currentUser.last_name")
+            span.text-danger(ng-show="!!errors.last_name", ng-bind="errors.last_name")
         //- address
-        .row
+        .row(ng-show="!noAddress")
           .col-sm-12.without-search.form-control
             p.text-uppercase: b: small adresse par défaut
-            select(name="default_address", eloue-chosen, ng-model="defaultAddress", data-ng-disabled="submitInProgress", data-placeholder="Adresse par défaut *", required)
+            select#defaultAddressSelect(name="default_address", ng-model="defaultAddress", data-ng-disabled="submitInProgress", data-placeholder="Adresse par défaut *", style="width:100%;", ng-required="!noAddress")
                 option(ng-repeat="address in addressList", value="{{addressesBaseUrl}}{{address.id}}/", ng-selected="defaultAddress == (addressesBaseUrl + address.id + '/')")
                   | {{address.street}}, {{address.zipcode}} {{address.city}}
               //-option(value="#{tenant.address}") #{tenant.address}
+            span.text-danger(ng-show="!!errors.default_address", ng-bind="errors.default_address")
             h4.indent-sm-v.text-right.text-success-hover: a(ui-sref="account.addresses") Ajouter ou modifier une adresse
+        .row(ng-show="noAddress")
+            .col-sm-5
+                input(type="text", name="street", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
+                span.text-danger(ng-show="!!errors.street", ng-bind="errors.street")
+            .col-sm-3
+                input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="currentUser.default_address.zipcode").form-control
+                span.text-danger(ng-show="!!errors.zipcode", ng-bind="errors.zipcode")
+            .col-sm-4
+                input(type="text", name="city", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
+                span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
         //- telephone
         .row
           .col-sm-12
             p.text-uppercase: b: small téléphone par défaut
             input#phone.form-control(type="text", name="phoneNumber", placeholder="Téléphone par défaut", ng-model="phoneNumber")
             input#default_number(type="hidden", name="default_number", ng-model="currentUser.default_number")
+            span.text-danger(ng-show="!!errors.default_number", ng-bind="errors.default_number")
         //- about myself
         .row
           .col-sm-12
             textarea#about-myself.expand.form-control(name="about", tabindex="1", rows="6", placeholder="A propos de vous...", ng-model="currentUser.about")
+            span.text-danger(ng-show="!!errors.about", ng-bind="errors.about")
         //- languages
          .row
           .col-sm-12.without-search.form-control
@@ -75,6 +93,7 @@ block sections
         .row
           .col-sm-8
             h3.text-black J’accepte de recevoir la newsletter e-loue
+            span.text-danger(ng-show="!!errors.is_subscribed", ng-bind="errors.is_subscribed")
           .col-sm-2
             label.rad-btn.form-control Oui
               input(type="radio", name="is_subscribed", ng-checked="currentUser.is_subscribed", value="true")
@@ -113,5 +132,5 @@ block sections
         //- btn submit
         .row
           .col-sm-6.col-sm-offset-3
-            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success-hover.text-white Enregistrez les informations
+            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}", ng-disabled="profile-information.$invalid || !currentUser.default_address").btn.bg-success-hover.text-white Enregistrez les informations
         {% endverbatim %}

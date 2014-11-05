@@ -8,6 +8,7 @@ define([
     "chosen",
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
+    "jquery-mousewheel",
     "custom-scrollbar"
 ], function (angular) {
     // Create module

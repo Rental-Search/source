@@ -168,6 +168,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 
 MIDDLEWARE_CLASSES = (
+    'sslify.middleware.SSLifyMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'eloue.middleware.SpacelessMiddleware',
@@ -192,6 +193,7 @@ PASSWORD_HASHERS =(
     'django.contrib.auth.hashers.CryptPasswordHasher'
 )
 
+SSLIFY_DISABLE = env('SSLIFY_DISABLE', False)
 
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
@@ -495,7 +497,7 @@ PIPELINE_JS = {
         'template_name': 'pipeline/requirejs.html',
         'extra_context': {
             'build': 'js/widgets/build.js',
-            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
+            'require_args': {'static-path': STATIC_URL},
             'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
             #'defer': False,
             #'async': False,
@@ -509,7 +511,7 @@ PIPELINE_JS = {
         'template_name': 'pipeline/requirejs.html',
         'extra_context': {
             'build': 'js/dashboard/build.js',
-            'require_args': {} if PIPELINE_ENABLED else {'static-path': STATIC_URL},
+            'require_args': {'static-path': STATIC_URL},
             'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
             #'defer': False,
             #'async': False,

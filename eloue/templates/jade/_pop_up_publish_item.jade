@@ -10,9 +10,9 @@
                 section.content.clearfix
                     h3 Publiez votre annonce en 1 minute
                     p.text-light
-                        | e-lou vous permet de gagner de l'argent en louant vous biens,
+                        | e-loue vous permet de gagner de l'argent en louant vous biens,
                         br
-                        | en toure sécurité, quand vous ne les utilisez pas
+                        | en toute sécurité, quand vous ne les utilisez pas
                     {% verbatim %}
                     .alert.alert-danger(ng-show="!!publishAdError")
                         button(type="button", data-dismiss="alert", class="close")
@@ -82,7 +82,7 @@
                             .col-sm-1: b.form-suffix &euro;
                         .row(ng-show="isAuto")
                             .col-sm-3
-                                select(ng-model="product.tax_horsepower", data-placeholder="CV fiscaux *" , eloue-chosen, data-ng-disabled="submitInProgress", ng-required="isAuto").form-control
+                                select(ng-model="product.tax_horsepower", data-placeholder="CV fiscaux *", eloue-chosen, data-ng-disabled="submitInProgress", ng-required="isAuto").form-control
                                     option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
                                 span.text-danger(ng-show="!!errors.tax_horsepower", ng-bind="errors.tax_horsepower")
                             .col-sm-1: b.form-suffix CV

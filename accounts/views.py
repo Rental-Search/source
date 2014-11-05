@@ -1055,6 +1055,19 @@ class PasswordResetConfirmView(TemplateView):
             return JsonResponse({'detail': success_msg})
         return JsonResponse({'errors': form.errors}, status=400)
 
+class ActivationView(TemplateView):
+    template_name='activate/index.jade'
+
+    def get_context_data(self, activation_key=None, **kwargs):
+        activation_key = activation_key.lower()  # Normalize before trying anything with it.
+        is_actived = Patron.objects.activate(activation_key)
+        context = {
+            'is_actived': is_actived,
+            'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+        }
+        context.update(super(ActivationView, self).get_context_data(**kwargs))
+        return context
+
 class PatronDetailView(BreadcrumbsMixin, PatronDetail):
     template_name = 'profile_public/index.jade'
 
@@ -1064,16 +1077,31 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
     def get_context_data(self, **kwargs):
         patron = self.patron
 
-        # FIXME: remove after mass rebuild of all images is done on hosting
-        from eloue.legacy import generate_patron_images
-        generate_patron_images(patron)
-
+        borrowercomments = tuple(Comment.borrowercomments.select_related('booking__borrower', 'booking_product').filter(booking__owner=patron))
         context = {
             'patron': patron,
             'breadcrumbs': self.breadcrumbs,
-            'borrowercomments': Comment.borrowercomments.select_related('booking__borrower').filter(booking__owner=patron).order_by('-created_at'),
+            'borrowercomments': borrowercomments,
         }
         context.update(super(PatronDetail, self).get_context_data(**kwargs))
+
+        # FIXME: remove after mass rebuild of all images is done on hosting
+        from eloue.legacy import generate_patron_images, generate_picture_images
+        patron_set = set([patron])
+        product_list = context.get('product_list', [])
+        for elem in product_list[:PAGINATE_PRODUCTS_BY]:
+            if elem.object:
+                patron_set.add(elem.object.owner)
+                for picture in elem.object.pictures.all()[:1]:
+                    generate_picture_images(picture)
+        for c in borrowercomments:
+            product = c.booking.product
+            patron_set.add(product.owner)
+            for picture in product.pictures.all()[:1]:
+                generate_picture_images(picture, ['profile', 'thumbnail'])
+        for patron in patron_set:
+            generate_patron_images(patron, ['profil'])
+
         return context
 
 

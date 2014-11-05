@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import hashlib
+import random
 import uuid
 
 from django.utils.translation import ugettext_lazy as _
@@ -108,9 +110,19 @@ class UserSerializer(serializers.ModelSerializer):
         # we should allow password setting on initial user registration only
         password = attrs.pop('password', None)
         user = super(UserSerializer, self).restore_object(attrs, instance=instance)
-        if not instance and password:
-            user.set_password(password)
+        if not instance:
+#             salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+#             user.activation_key = hashlib.sha1(salt + user.email).hexdigest()
+#             user.is_active = False
+            if password:
+                user.set_password(password)
         return user
+
+    def save_object(self, obj, **kwargs):
+#         send_mail = not obj.pk
+        super(UserSerializer, self).save_object(obj, **kwargs)
+#         if send_mail:
+#             obj.send_activation_email()
 
     class Meta:
         model = models.Patron
@@ -161,6 +173,47 @@ class BookingPayCreditCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Patron
         fields = ('creditcard',)
+
+class CreditCardSerializer(serializers.ModelSerializer):
+    cvv = CharField(max_length=4, min_length=3, write_only=True,
+        label=_(u'Cryptogramme de sécurité'),
+        help_text=_(u'Les 3 derniers chiffres au dos de la carte.'),
+    )
+    keep = BooleanField(default=False, write_only=True)
+
+    def validate_expires(self, attrs, source):
+        try:
+            expires = attrs.pop(source)
+            attrs.update(dict(zip(('expires_0', 'expires_1'), (expires[:2], expires[2:4]))))
+        except (KeyError, IndexError):
+            raise ValidationError("Attribute missed or invalid: 'expires'")
+        return attrs
+
+    def validate(self, attrs):
+        keep = attrs['keep']
+        if not keep:
+            attrs.pop('holder', None)
+        self.form = form = CreditCardForm(attrs)
+        if not form.is_valid():
+            raise ValidationError('Form errors: %s' % dict(form.errors))
+        new_attrs = form.clean()
+        new_attrs['keep'] = keep
+        return new_attrs
+
+    def save_object(self, obj, **kwargs):
+        if not obj.pk:
+            obj.subscriber_reference = uuid.uuid4().hex
+        elif not obj.keep and obj.holder:
+            obj.holder = None
+        self.form.instance = obj
+        self.form.save(commit=True)
+
+    class Meta:
+        model = models.CreditCard
+        fields = ('id', 'masked_number', 'expires', 'holder_name', 'card_number', 'cvv', 'holder', 'keep')
+        read_only_fields = ('masked_number',)
+        write_only_fields = ('card_number',)
+        immutable_fields = ('expires', 'holder_name', 'holder', 'card_number', 'cvv')
 
 class ProAgencySerializer(GeoModelSerializer):
     address = CharField(source='address1')

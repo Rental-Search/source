@@ -16,7 +16,7 @@ from django.utils.datastructures import SortedDict
 from requests.exceptions import MissingSchema, InvalidSchema, InvalidURL
 
 from rest_framework import serializers, status
-from eloue.api.exceptions import ValidationException
+from eloue.api import exceptions
 
 
 class RaiseOnValidateSerializerMixin(object):
@@ -36,7 +36,7 @@ class RaiseOnValidateSerializerMixin(object):
     def is_valid(self):
         is_valid = super(RaiseOnValidateSerializerMixin, self).is_valid()
         if not is_valid and not self.suppress_exception:
-            raise ValidationException(self._errors)
+            raise exceptions.ValidationException(self._errors)
         return is_valid
 
 class NullBooleanField(serializers.BooleanField):
