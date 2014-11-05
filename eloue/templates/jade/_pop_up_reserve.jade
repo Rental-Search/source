@@ -17,10 +17,10 @@
                         a(href="#/phone").btn.bg-gray
                             | Appelez
                 form(id="bookingForm", name="bookingForm", role="form", ng-submit="sendBookingRequest()", ng-model="bookingDetails", novalidate).input-group.change-part.table-cell.top
-                  fieldset(data-ng-disabled="submitInProgress || shippingPointsRequestInProgress")
+                  fieldset(data-ng-disabled="submitInProgress || shippingPointsRequestInProgress || loadingProductShippingPoint")
                     section.table.form-wrapper.personal-information
                         include ./pop_up_sections/_personal_information_form
-                    section.table.form-wrapper.shipping(ng-show="addShipping && ((!!borrowerShippingPoints && borrowerShippingPoints.length > 0) || shippingPointsRequestInProgress)")
+                    section.table.form-wrapper.shipping(ng-show="addShipping")
                             include ./pop_up_sections/_shipping
                     section.table.form-wrapper.bank-information
                         include ./pop_up_sections/_bank_information

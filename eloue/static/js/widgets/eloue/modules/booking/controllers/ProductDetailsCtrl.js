@@ -242,6 +242,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
                     var price = result.total_price;
                     price = price.replace("€","");
+                    price = price.replace("\u20ac","");
                     price = price.replace(" ","");
                     price = Number(price);
                     $scope.duration = result.duration;
@@ -292,6 +293,20 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.pointSelected = function(pointId) {
                 $scope.selectedPointId = pointId;
                 $scope.shippingPrice = 10;
+            };
+
+            $scope.saveDefaultAddress = function() {
+                $scope.submitInProgress = true;
+                $scope.currentUser.default_address.country = "FR";
+                AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
+                    $scope.submitInProgress = false;
+                    $scope.currentUser.default_address = result;
+                    UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
+                    $scope.noAddress = false;
+                    $scope.loadShippingPoints();
+                }, function (error) {
+                    $scope.handleResponseErrors(error);
+                });
             };
 
             $scope.sendBookingRequest = function sendBookingRequest() {
@@ -572,48 +587,47 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             };
 
-            $scope.loadProductShippingPoint = function() {
+            $scope.loadProductShippingPoint = function () {
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUser = currentUser;
-                    // Not allow to add delivery for user without address
-                    if (!!$scope.currentUser.default_address) {
-                        $scope.loadingProductShippingPoint = true;
-                        ProductShippingPointsService.getByProduct($scope.productId).then(function (data) {
-                            //Show shipping choice only if there are existing product shipping points
-                            if (!!data.results && data.results.length > 0) {
-                                $scope.productShippingPoint = data.results[0];
-                                $scope.shippingAllowed = true;
-                                $scope.loadingProductShippingPoint = false;
-                            }
-                        }, function (error) {
-                            $scope.handleResponseErrors(error);
-                        });
-                    }
+                    $scope.loadingProductShippingPoint = true;
+                    ProductShippingPointsService.getByProduct($scope.productId).then(function (data) {
+                        //Show shipping choice only if there are existing product shipping points
+                        if (!!data.results && data.results.length > 0) {
+                            $scope.productShippingPoint = data.results[0];
+                            $scope.shippingAllowed = true;
+                            $scope.loadingProductShippingPoint = false;
+                        }
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
+                    });
                 });
             };
 
             $scope.loadShippingPoints = function () {
                 if ($scope.addShipping && $scope.borrowerShippingPoints.length == 0) {
-                    $scope.shippingPointsRequestInProgress = true;
-                    ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
-                        $scope.shippingPointsRequestInProgress = false;
-                        //TODO: it's temperory, then will call pricing service
-                        angular.forEach(result, function (value, key) {
-                            value.price = "10.0";
+                    if (!!$scope.currentUser.default_address) {
+                        $scope.shippingPointsRequestInProgress = true;
+                        ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
+                            $scope.shippingPointsRequestInProgress = false;
+                            //TODO: it's temperory, then will call pricing service
+                            angular.forEach(result, function (value, key) {
+                                value.price = "10.0";
+                            });
+                            $scope.borrowerShippingPoints = result;
+                            $("#point-contatiner").mCustomScrollbar({
+                                scrollInertia: '100',
+                                autoHideScrollbar: false,
+                                theme: 'dark-thin',
+                                advanced: {
+                                    updateOnContentResize: true,
+                                    autoScrollOnFocus: false
+                                }
+                            });
+                        }, function (error) {
+                            $scope.handleResponseErrors(error);
                         });
-                        $scope.borrowerShippingPoints = result;
-                        $("#point-contatiner").mCustomScrollbar({
-                            scrollInertia: '100',
-                            autoHideScrollbar: false,
-                            theme: 'dark-thin',
-                            advanced:{
-                                updateOnContentResize: true,
-                                autoScrollOnFocus: false
-                            }
-                        });
-                    }, function (error) {
-                        $scope.handleResponseErrors(error);
-                    });
+                    }
                 }
                 if (!$scope.addShipping) {
                     $scope.shippingPrice = 0;
