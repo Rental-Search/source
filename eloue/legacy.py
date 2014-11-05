@@ -387,10 +387,16 @@ def generate_spec(spec):
         import logging
         logging.error('image generation failed: %s' % spec)
 
-def generate_patron_images(patron):
-    for spec in [getattr(patron, k) for k in ('thumbnail', 'profil', 'display', 'product_page')]:
+def generate_patron_images(patron, images=None):
+    if not images:
+        images=('thumbnail', 'profil', 'display', 'product_page')
+
+    for spec in [getattr(patron, k) for k in images]:
         generate_spec(spec)
 
-def generate_picture_images(picture):
-    for spec in [getattr(picture, k) for k in ('thumbnail', 'profile', 'home', 'display')]:
+def generate_picture_images(picture, images=None):
+    if not images:
+        images=('thumbnail', 'profile', 'home', 'display')
+
+    for spec in [getattr(picture, k) for k in images]:
         generate_spec(spec)

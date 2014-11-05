@@ -14,7 +14,7 @@ form.form-inline.section-body.text-center
         {% endverbatim %}
         {% if not is_pro %}
         p(ng-show="available").available Cet article est disponible à ces dates
-        p(ng-show="!available").available.unavailable Cet article est disponible à ces dates
+        p(ng-show="!available").available.unavailable Cet article n'est pas disponible à ces dates
         {% endif %}
         {% verbatim %}
     .part

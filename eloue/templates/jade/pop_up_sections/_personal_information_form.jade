@@ -32,7 +32,7 @@ h2 Vos informations personnelles
     a(href="", ng-show="shippingPointsRequestInProgress").btn.bg-gray-light-hover.text-white.loading &nbsp;&nbsp;&nbsp;
 .row(ng-show="isAuto()")
   .col-sm-6(style="z-index: 1050")
-      input(type="text", name="date_of_birth", placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto()", eloue-datepicker).form-control
+      input#date_of_birth(type="text", name="date_of_birth", data-date-format="yyyy-mm-dd" , placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto()").form-control
       span.text-danger(ng-show="!!errors.date_of_birth", ng-bind="errors.date_of_birth")
   .col-sm-6
       input(type="text", name="place_of_birth", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", ng-required="isAuto()").form-control
@@ -43,7 +43,7 @@ h2 Vos informations personnelles
       span.text-danger(ng-show="!!errors.drivers_license_number", ng-bind="errors.drivers_license_number")
 .row(ng-show="isAuto()")
   .col-sm-6(style="z-index: 1050")
-      input(type="text", name="drivers_license_date", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis", eloue-datepicker).form-control
+      input#drivers_license_date(type="text", name="drivers_license_date", data-date-format="yyyy-mm-dd", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis").form-control
       span.text-danger(ng-show="!!errors.drivers_license_date", ng-bind="errors.drivers_license_date")
   //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
   //  input(type="file", ng-model="bookingDetails.photo")#photo.form-control

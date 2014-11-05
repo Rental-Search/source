@@ -12,7 +12,7 @@ from django.utils.datastructures import SortedDict
 
 from rest_framework import serializers, status
 from rest_framework_gis.serializers import MapGeometryField
-from eloue.api.exceptions import ValidationException
+from eloue.api import exceptions
 
 
 class RaiseOnValidateSerializerMixin(object):
@@ -35,7 +35,7 @@ class RaiseOnValidateSerializerMixin(object):
             info = self._errors
             if isinstance(info, list):
                 info = {'nested_fields_errors': info}
-            raise ValidationException(info)
+            raise exceptions.ValidationException(self._errors)
         return is_valid
 
 class NullBooleanField(serializers.BooleanField):

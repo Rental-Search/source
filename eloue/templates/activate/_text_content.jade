@@ -1,0 +1,13 @@
+.container.text-gray-strong
+  h2.text-uppercase.text-center
+    | Activation
+
+  .row.indent-t-lg
+    .col-sm-6.col-sm-offset-3
+      if is_actived
+        h2 Merci d'avoir activé votre compte !
+        p Vous pouvez vous y connecter dés à présent.
+      else
+        h2 Votre compte n'a pu être activé
+        p
+          | Ceci peut-arriver si le lien que nous vous avons envoyé par email a été coupé, assurez-vous que celui-ci est complet.

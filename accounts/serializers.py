@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import hashlib
+import random
 import uuid
 
 from django.utils.translation import ugettext_lazy as _
@@ -54,9 +56,19 @@ class UserSerializer(serializers.ModelSerializer):
         # we should allow password setting on initial user registration only
         password = attrs.pop('password', None)
         user = super(UserSerializer, self).restore_object(attrs, instance=instance)
-        if not instance and password:
-            user.set_password(password)
+        if not instance:
+#             salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+#             user.activation_key = hashlib.sha1(salt + user.email).hexdigest()
+#             user.is_active = False
+            if password:
+                user.set_password(password)
         return user
+
+    def save_object(self, obj, **kwargs):
+#         send_mail = not obj.pk
+        super(UserSerializer, self).save_object(obj, **kwargs)
+#         if send_mail:
+#             obj.send_activation_email()
 
     class Meta:
         model = models.Patron
@@ -125,15 +137,15 @@ class CreditCardSerializer(serializers.ModelSerializer):
             attrs.pop('holder', None)
         self.form = form = CreditCardForm(attrs)
         if not form.is_valid():
-            raise ValidationError('Form errors: %s' % dict(form.errors))
-        new_attrs = form.clean()
+            raise ValidationError(form.errors)
+        new_attrs = form.cleaned_data
         new_attrs['keep'] = keep
         return new_attrs
 
     def save_object(self, obj, **kwargs):
         if not obj.pk:
             obj.subscriber_reference = uuid.uuid4().hex
-        elif not obj.keep and obj.holder:
+        if not obj.keep:
             obj.holder = None
         self.form.instance = obj
         self.form.save(commit=True)
