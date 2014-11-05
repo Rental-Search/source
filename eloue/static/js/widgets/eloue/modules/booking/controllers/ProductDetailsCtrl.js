@@ -241,9 +241,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.dateRangeError = null;
                 ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
                     var price = result.total_price;
-                    price = price.replace("€","");
-                    price = price.replace("\u20ac","");
-                    price = price.replace(" ","");
+                    price = price.replace("€","").replace("\u20ac","").replace("Eu","").replace(",",".").replace(" ","");
                     price = Number(price);
                     $scope.duration = result.duration;
                     $scope.pricePerDay = result.unit_value;
