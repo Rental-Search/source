@@ -188,26 +188,23 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
 
                         PricesService.savePrice($scope.price).$promise.then(function (result) {
-
-                            CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
-                                if ($scope.isAuto) {
-                                    $scope.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
-                                    $scope.finishProductSaveAndRedirect(product);
-                                } else if ($scope.isRealEstate) {
-                                    $scope.trackEvent("Dépôt annonce", "Logement", productCategory.name);
-                                    $scope.finishProductSaveAndRedirect(product);
-                                } else {
-                                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function(ancestors) {
-                                        var categoriesStr = "";
-                                        angular.forEach(ancestors, function (value, key) {
-                                            categoriesStr = categoriesStr + value.name + " - ";
-                                        });
-                                        categoriesStr = categoriesStr + productCategory.name;
-                                        $scope.trackEvent("Dépôt annonce", "Objet",  categoriesStr);
-                                        $scope.finishProductSaveAndRedirect(product);
+                            if ($scope.isAuto) {
+                                $scope.trackEvent("Dépôt annonce", "Voiture", $scope.product.category.name);
+                                $scope.finishProductSaveAndRedirect(product);
+                            } else if ($scope.isRealEstate) {
+                                $scope.trackEvent("Dépôt annonce", "Logement", $scope.product.category.name);
+                                $scope.finishProductSaveAndRedirect(product);
+                            } else {
+                                CategoriesService.getAncestors($scope.product.category.id).then(function (ancestors) {
+                                    var categoriesStr = "";
+                                    angular.forEach(ancestors, function (value, key) {
+                                        categoriesStr = categoriesStr + value.name + " - ";
                                     });
-                                }
-                            });
+                                    categoriesStr = categoriesStr + productCategory.name;
+                                    $scope.trackEvent("Dépôt annonce", "Objet", categoriesStr);
+                                    $scope.finishProductSaveAndRedirect(product);
+                                });
+                            }
                         }, function (error) {
                             $scope.handleResponseErrors(error);
                         });
@@ -221,7 +218,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
-            $scope.finishProductSaveAndRedirect = function(product) {
+            $scope.finishProductSaveAndRedirect = function (product) {
                 $scope.trackPageView();
                 $scope.loadPdltrackingScript();
                 $scope.loadAdWordsTagPublishAd();
@@ -340,19 +337,19 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 document.body.appendChild(noscriptAnnonceur);
             };
 
-            $scope.loadAdWordsTagPublishAd =  function() {
+            $scope.loadAdWordsTagPublishAd = function () {
                 var scriptAdWords = document.createElement("script");
                 scriptAdWords.type = "text/javascript";
                 var code = "/* <![CDATA[ */" +
-                "var google_conversion_id = 1027691277;" +
-                "var google_conversion_language = 'en';" +
-                "var google_conversion_format = '3';" +
-                "var google_conversion_color = 'ffffff';" +
-                "var google_conversion_label = 'SfnGCMvgrgMQjaaF6gM';" +
-                "var google_conversion_value = 1.00;" +
-                "var google_conversion_currency = 'EUR';" +
-                "var google_remarketing_only = false;" +
-                "/* ]]> */";
+                    "var google_conversion_id = 1027691277;" +
+                    "var google_conversion_language = 'en';" +
+                    "var google_conversion_format = '3';" +
+                    "var google_conversion_color = 'ffffff';" +
+                    "var google_conversion_label = 'SfnGCMvgrgMQjaaF6gM';" +
+                    "var google_conversion_value = 1.00;" +
+                    "var google_conversion_currency = 'EUR';" +
+                    "var google_remarketing_only = false;" +
+                    "/* ]]> */";
                 try {
                     scriptAdWords.appendChild(document.createTextNode(code));
                     document.body.appendChild(scriptAdWords);
@@ -387,14 +384,14 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * @param action action
              * @param value value
              */
-            $scope.trackEvent = function(category, action, value) {
+            $scope.trackEvent = function (category, action, value) {
                 _gaq.push(["_trackEvent", category, action, value]);
             };
 
             /**
              * Push track page view to Google Analytics.
              */
-            $scope.trackPageView = function() {
+            $scope.trackPageView = function () {
                 _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
             };
         }])

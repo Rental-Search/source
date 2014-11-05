@@ -97,14 +97,10 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);
                 $scope.markListItemAsSelected("item-tab-", "info");
                 $scope.product = product;
-                $scope.product.category = $scope.categoriesBaseUrl + $scope.product.categoryDetails.id + "/";
-                $scope.product.addressDetails = $scope.product.address;
-                $scope.product.phoneDetails = $scope.product.phone;
-                // Initiate custom scrollbars
-                $scope.initCustomScrollbars();
-                CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
+                console.log(product.category);
+                CategoriesService.getParentCategory(product.category).$promise.then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
-                        $scope.nodeCategory = $scope.product.categoryDetails.id;
+                        $scope.nodeCategory = product.category.id;
                         $scope.rootCategory = nodeCategory.id;
                         $scope.updateNodeCategories();
                         $scope.updateFieldSet(nodeCategory);
@@ -118,6 +114,12 @@ define(["angular", "eloue/app"], function (angular) {
                         });
                     }
                 });
+                $scope.product.category = $scope.categoriesBaseUrl + $scope.product.category.id + "/";
+                $scope.product.addressDetails = $scope.product.address;
+                $scope.product.phoneDetails = $scope.product.phone;
+                // Initiate custom scrollbars
+                $scope.initCustomScrollbars();
+
 
             });
 

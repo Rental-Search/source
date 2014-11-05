@@ -197,7 +197,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
-            ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
+            ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
                 $scope.product = result;
 //                $scope.loadCalendar();
             });
@@ -439,7 +439,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
                 if (args.name != "login") {
                     if (!$scope.product) {
-                        ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
+                        ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
                             $scope.product = result;
                             $scope.loadPictures();
                             $scope.loadProductCategoryAncestors(args.name);
@@ -451,20 +451,18 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             });
 
-            $scope.loadProductCategoryAncestors = function(modalName) {
-                CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
-                    $scope.productCategoryName  = productCategory.name;
-                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function(ancestors) {
-                        var categoriesStr = "";
-                        angular.forEach(ancestors, function (value, key) {
-                            categoriesStr = categoriesStr + value.name + " - ";
-                        });
-                        $scope.productCategoryAncestors = categoriesStr + productCategory.name;
-                        if (modalName === "phone") {
-                            $scope.trackEvent("Réservation", "Appel",  $scope.getEventLabel());
-                            $scope.trackPageView();
-                        }
+            $scope.loadProductCategoryAncestors = function (modalName) {
+                $scope.productCategoryName = $scope.product.category.name;
+                CategoriesService.getAncestors($scope.product.category.id).then(function (ancestors) {
+                    var categoriesStr = "";
+                    angular.forEach(ancestors, function (value, key) {
+                        categoriesStr = categoriesStr + value.name + " - ";
                     });
+                    $scope.productCategoryAncestors = categoriesStr + $scope.product.category.name;
+                    if (modalName === "phone") {
+                        $scope.trackEvent("Réservation", "Appel", $scope.getEventLabel());
+                        $scope.trackPageView();
+                    }
                 });
             };
 

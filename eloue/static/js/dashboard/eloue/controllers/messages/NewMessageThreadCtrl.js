@@ -33,7 +33,7 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                     };
 
                     //Get product details
-                    ProductsLoadService.getProduct($stateParams.productId, true, true, true, true).then(function (product) {
+                    ProductsLoadService.getProduct($stateParams.productId, true, true).then(function (product) {
                         $scope.messageThread.product = product;
                     });
 
@@ -51,7 +51,7 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                 // Post new message
                 $scope.postNewMessage = function () {
                     $scope.submitInProgress = true;
-                    ProductRelatedMessagesLoadService.postMessage($scope.messageThread.id, currentUser.id, UtilsService.getIdFromUrl($scope.booking.owner),
+                    ProductRelatedMessagesLoadService.postMessage($scope.messageThread.id, currentUser.id, $scope.booking.owner.id,
                         $scope.message, null, $stateParams.productId).then(function (result) {
                             // Clear message field
                             $scope.message = "";

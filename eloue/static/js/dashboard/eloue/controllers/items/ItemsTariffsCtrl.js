@@ -57,7 +57,7 @@ define(["angular", "eloue/app"], function (angular) {
                     }
                 });
 
-                CategoriesService.getParentCategory($scope.product.categoryDetails).$promise.then(function (nodeCategory) {
+                CategoriesService.getParentCategory($scope.product.category).$promise.then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
                         $scope.updateFieldSet(nodeCategory);
                     } else {

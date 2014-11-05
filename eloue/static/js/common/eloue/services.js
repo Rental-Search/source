@@ -147,23 +147,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 var productsService = {};
 
                 productsService.getProductDetails = function (id) {
-                    var deferred = $q.defer();
-                    var self = this;
-                    Products.get({id: id, _cache: new Date().getTime()}).$promise.then(function (result) {
-                        var promises = [];
-                        promises.push(PicturesService.getPicturesByProduct(id).$promise);
-                        var categoryId = UtilsService.getIdFromUrl(result.category);
-                        promises.push(CategoriesService.getCategory(categoryId).$promise);
-                        var ownerId = UtilsService.getIdFromUrl(result.owner);
-                        promises.push(UsersService.get(ownerId).$promise);
-                        $q.all(promises).then(function success(results) {
-                            result.pictures = results[0].results;
-                            result.categoryDetails = results[1];
-                            result.ownerDetails = results[2];
-                            deferred.resolve(result);
-                        });
-                    });
-                    return deferred.promise;
+                    return Products.get({id: id, _cache: new Date().getTime()}).$promise;
                 };
 
                 productsService.getProductsByAddress = function (addressId) {
@@ -184,14 +168,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var productPromises = {};
                             productPromises.stats = Products.getStats({id:  value.id, _cache: new Date().getTime()});
 
-                            // Load pictures
-                            productPromises.pictures = PicturesService.getPicturesByProduct(value.id).$promise;
-
-
                             // When all data loaded
                             $q.all(productPromises).then(function (results) {
-                                var product = ProductsParseService.parseProduct(productData, results.stats, results.owner,
-                                    results.ownerStats, (!!results.pictures) ? results.pictures.results : null);
+                                var product = ProductsParseService.parseProduct(productData, results.stats, results.ownerStats);
                                 productDeferred.resolve(product);
                             });
 
@@ -201,6 +180,77 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         $q.all(promises).then(
                             function (results) {
                                 deferred.resolve(results);
+                            },
+                            function (reasons) {
+                                deferred.reject(reasons);
+                            }
+                        );
+                    });
+
+                    return deferred.promise;
+                };
+
+                productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
+                    var deferred = $q.defer();
+                    var params = {owner: userId, ordering: "-created_at", _cache: new Date().getTime()};
+
+                    if (rootCategoryId) {
+                        params.category__isdescendant = rootCategoryId;
+                    }
+
+                    if (page) {
+                        params.page = page;
+                    }
+
+                    Products.get(params).$promise.then(function (data) {
+                        var promises = [];
+                        angular.forEach(data.results, function (value, key) {
+                            var productDeferred = $q.defer();
+
+                            var product = {
+                                id: value.id,
+                                summary: value.summary,
+                                deposit_amount: value.deposit_amount
+                            };
+
+                            if ($.isArray(product.pictures) && (product.pictures.length > 0)) {
+                                product.picture = product.pictures[0].image.thumbnail;
+                            }
+
+                            if (product.prices && product.prices.length > 0) {
+                                product.pricePerDay = product.prices[0].amount;
+                            } else {
+                                product.pricePerDay = 0;
+                            }
+
+                            var subPromises = [];
+                            subPromises.push(Products.getStats({id: product.id, _cache: new Date().getTime()}).$promise);
+                            $q.all(subPromises).then(
+                                function (results) {
+                                    product.stats = results[2];
+                                    if (product.stats) {
+                                        if (product.stats.average_rating) {
+                                            product.stats.average_rating = Math.round(product.stats.average_rating);
+                                        } else {
+                                            product.stats.average_rating = 0;
+                                        }
+                                    }
+                                    productDeferred.resolve(product);
+                                },
+                                function (reasons) {
+                                    productDeferred.reject(reasons);
+                                }
+                            );
+
+                            promises.push(productDeferred.promise);
+                        });
+
+                        $q.all(promises).then(
+                            function (results) {
+                                deferred.resolve({
+                                    list: results,
+                                    next: data.next
+                                });
                             },
                             function (reasons) {
                                 deferred.reject(reasons);
@@ -701,7 +751,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("ProductsParseService", [function () {
             var productsParseService = {};
 
-            productsParseService.parseProduct = function (productData, statsData, ownerData, ownerStatsData, picturesDataArray) {
+            productsParseService.parseProduct = function (productData, statsData, ownerStatsData) {
                 var productResult = angular.copy(productData);
 
                 productResult.stats = statsData;
@@ -713,18 +763,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     }
                 }
 
-                // Parse owner
-                if (!!ownerData) {
-                    productResult.owner = ownerData;
-                }
-
                 if (!!ownerStatsData) {
                     productResult.ownerStats = ownerStatsData;
-                }
-
-                // Parse pictures
-                if (angular.isArray(picturesDataArray) && picturesDataArray.length > 0) {
-                    productResult.picture = picturesDataArray[0].image.thumbnail;
                 }
 
                 return productResult;
@@ -901,7 +941,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Products, CheckAvailability, AddressesService, UsersService, PicturesService, PhoneNumbersService, UtilsService, ProductsParseService) {
                 var productsLoadService = {};
 
-                productsLoadService.getProduct = function (productId, loadOwner, loadPictures, loadProductStats, loadOwnerStats) {
+                productsLoadService.getProduct = function (productId, loadProductStats, loadOwnerStats) {
                     var deferred = $q.defer();
 
                     // Load product
@@ -911,26 +951,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         if (loadProductStats) {
                             productPromises.stats = Products.getStats({id: productId, _cache: new Date().getTime()});
                         }
-
-                        if (loadOwner) {
-                            // Get owner id
-                            var ownerId = UtilsService.getIdFromUrl(productData.owner);
-                            // Load owner
-                            productPromises.owner = UsersService.get(ownerId).$promise;
                             if (loadOwnerStats) {
-                                productPromises.ownerStats = UsersService.getStatistics(ownerId).$promise;
+                                productPromises.ownerStats = UsersService.getStatistics(productData.owner.id).$promise;
                             }
-                        }
-
-                        if (loadPictures) {
-                            // Load pictures
-                            productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
-                        }
-
                         // When all data loaded
                         $q.all(productPromises).then(function (results) {
-                            var product = ProductsParseService.parseProduct(productData, results.stats, results.owner,
-                                results.ownerStats, (!!results.pictures) ? results.pictures.results : null);
+                            var product = ProductsParseService.parseProduct(productData, results.stats, results.ownerStats);
                             deferred.resolve(product);
                         });
                     });
@@ -1019,6 +1045,53 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService, MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
                 var messageThreadsLoadService = {};
 
+                messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage, page) {
+                    var deferred = $q.defer();
+
+                    // Load message threads
+                    MessageThreads.get({page: page, ordering: "-last_message__sent_at", _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
+                        var messageThreadListPromises = [];
+
+                        // For each message thread
+                        angular.forEach(messageThreadListData.results, function (messageThreadData, key) {
+                            var messageThreadDeferred = $q.defer();
+                            var messageThreadPromises = {};
+
+                            // Get sender id
+                            if (loadSender) {
+                                var senderId = UtilsService.getIdFromUrl(messageThreadData.sender);
+                                // Load sender
+                                messageThreadPromises.sender = UsersService.get(senderId).$promise;
+                            }
+
+                            // Get last message id
+                            if (loadLastMessage && !!messageThreadData.last_message) {
+                                var lastMessageId = UtilsService.getIdFromUrl(messageThreadData.last_message);
+                                // Load last message
+                                messageThreadPromises.last_message = ProductRelatedMessagesService.getMessage(lastMessageId).$promise;
+                            }
+
+                            // When all data loaded
+                            $q.all(messageThreadPromises).then(function (messageThreadResults) {
+                                var messageThread = MessageThreadsParseService.parseMessageThreadListItem(messageThreadData,
+                                    messageThreadResults.sender, messageThreadResults.last_message);
+                                messageThreadDeferred.resolve(messageThread);
+                            });
+
+                            messageThreadListPromises.push(messageThreadDeferred.promise);
+                        });
+
+                        $q.all(messageThreadListPromises).then(function (messageThreadList) {
+                            deferred.resolve({
+                                list: messageThreadList,
+                                next: messageThreadListData.next
+                            });
+                        });
+                    });
+
+                    return deferred.promise;
+                };
+
                 messageThreadsLoadService.getMessageThread = function (threadId) {
                     var deferred = $q.defer();
 
@@ -1040,7 +1113,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // Get product id
                         if (messageThreadData.product) {
                             var productId = UtilsService.getIdFromUrl(messageThreadData.product);
-                            messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true, true, true);
+                            messageThreadPromises.product = ProductsLoadService.getProduct(productId, true, true);
                         }
 
                         $q.all(messageThreadPromises).then(function (results) {
@@ -1080,6 +1153,29 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "UtilsService",
             function (UtilsService) {
                 var messageThreadsParseService = {};
+
+                messageThreadsParseService.parseMessageThreadListItem = function (messageThreadData, senderData, lastMessageData) {
+                    var messageThreadResult = angular.copy(messageThreadData);
+
+                    // Parse sender
+                    if (!!senderData) {
+                        messageThreadResult.sender = senderData;
+                    }
+
+                    // Parse last message
+                    if (!!lastMessageData) {
+                        messageThreadResult.last_message = lastMessageData;
+                        // if the creation date of the last message is the current day display only the hour
+                        // if the creation date of the last message is before the current day display the date and not the hour
+                        if (UtilsService.isToday(lastMessageData.sent_at)) {
+                            messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "HH'h'mm");
+                        } else {
+                            messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.MM.yyyy");
+                        }
+                    }
+
+                    return messageThreadResult;
+                };
 
                 messageThreadsParseService.parseMessageThread = function (messageThreadData, messagesDataArray, productData) {
                     var messageThreadResult = angular.copy(messageThreadData);

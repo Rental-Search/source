@@ -43,8 +43,8 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.contractLink = Endpoints.api_url + "bookings/" + $stateParams.uuid + "/contract/";
-                    $scope.isOwner = bookingDetails.owner.id.indexOf($scope.currentUserUrl) != -1;
-                    $scope.isBorrower = bookingDetails.borrower.id.indexOf($scope.currentUserUrl) != -1;
+                    $scope.isOwner = $scope.currentUserUrl.indexOf(bookingDetails.owner.id) != -1;
+                    $scope.isBorrower = $scope.currentUserUrl.indexOf(bookingDetails.borrower.id) != -1;
                     var borrower = bookingDetails.borrower;
 
                     $scope.borrowerName = borrower.username;
