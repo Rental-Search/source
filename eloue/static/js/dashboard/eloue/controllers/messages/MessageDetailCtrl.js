@@ -84,13 +84,7 @@ define(["angular", "eloue/app"], function (angular) {
 //                                //Get product details
                                 ProductsLoadService.getAbsoluteUrl($scope.messageThread.product.id).$promise.then(function (result) {
                                     $window.location.href = result.url + "#/booking";
-//                                    $scope.submitInProgress = false;
                                 });
-//                                BookingsLoadService.requestBooking($scope.newBooking).then(
-//                                    function (booking) {
-//                                        $scope.booking = booking;
-//                                    }
-//                                );
                             };
 
                             $scope.booking = booking;

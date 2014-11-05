@@ -899,9 +899,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "UtilsService",
             "ProductsParseService",
             function ($q, Products, CheckAvailability, AddressesService, UsersService, PicturesService, PhoneNumbersService, UtilsService, ProductsParseService) {
-                var productLoadService = {};
+                var productsLoadService = {};
 
-                productLoadService.getProduct = function (productId, loadOwner, loadPictures, loadProductStats, loadOwnerStats) {
+                productsLoadService.getProduct = function (productId, loadOwner, loadPictures, loadProductStats, loadOwnerStats) {
                     var deferred = $q.defer();
 
                     // Load product
@@ -938,15 +938,15 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                productLoadService.getAbsoluteUrl = function(id) {
+                productsLoadService.getAbsoluteUrl = function(id) {
                     return Products.getAbsoluteUrl({id: id,cache: new Date().getTime()});
                 };
 
-                productLoadService.isAvailable = function (id, startDate, endDate, quantity) {
+                productsLoadService.isAvailable = function (id, startDate, endDate, quantity) {
                     return CheckAvailability.get({id: id, started_at: startDate, ended_at: endDate, quantity: quantity}).$promise;
                 };
 
-                return productLoadService;
+                return productsLoadService;
             }
         ]);
 
@@ -1019,53 +1019,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService, MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
                 var messageThreadsLoadService = {};
 
-                messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage, page) {
-                    var deferred = $q.defer();
-
-                    // Load message threads
-                    MessageThreads.get({page: page, ordering: "-last_message__sent_at", _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
-                        var messageThreadListPromises = [];
-
-                        // For each message thread
-                        angular.forEach(messageThreadListData.results, function (messageThreadData, key) {
-                            var messageThreadDeferred = $q.defer();
-                            var messageThreadPromises = {};
-
-                            // Get sender id
-                            if (loadSender) {
-                                var senderId = UtilsService.getIdFromUrl(messageThreadData.sender);
-                                // Load sender
-                                messageThreadPromises.sender = UsersService.get(senderId).$promise;
-                            }
-
-                            // Get last message id
-                            if (loadLastMessage && !!messageThreadData.last_message) {
-                                var lastMessageId = UtilsService.getIdFromUrl(messageThreadData.last_message);
-                                // Load last message
-                                messageThreadPromises.last_message = ProductRelatedMessagesService.getMessage(lastMessageId).$promise;
-                            }
-
-                            // When all data loaded
-                            $q.all(messageThreadPromises).then(function (messageThreadResults) {
-                                var messageThread = MessageThreadsParseService.parseMessageThreadListItem(messageThreadData,
-                                    messageThreadResults.sender, messageThreadResults.last_message);
-                                messageThreadDeferred.resolve(messageThread);
-                            });
-
-                            messageThreadListPromises.push(messageThreadDeferred.promise);
-                        });
-
-                        $q.all(messageThreadListPromises).then(function (messageThreadList) {
-                            deferred.resolve({
-                                list: messageThreadList,
-                                next: messageThreadListData.next
-                            });
-                        });
-                    });
-
-                    return deferred.promise;
-                };
-
                 messageThreadsLoadService.getMessageThread = function (threadId) {
                     var deferred = $q.defer();
 
@@ -1127,29 +1080,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "UtilsService",
             function (UtilsService) {
                 var messageThreadsParseService = {};
-
-                messageThreadsParseService.parseMessageThreadListItem = function (messageThreadData, senderData, lastMessageData) {
-                    var messageThreadResult = angular.copy(messageThreadData);
-
-                    // Parse sender
-                    if (!!senderData) {
-                        messageThreadResult.sender = senderData;
-                    }
-
-                    // Parse last message
-                    if (!!lastMessageData) {
-                        messageThreadResult.last_message = lastMessageData;
-                        // if the creation date of the last message is the current day display only the hour
-                        // if the creation date of the last message is before the current day display the date and not the hour
-                        if (UtilsService.isToday(lastMessageData.sent_at)) {
-                            messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "HH'h'mm");
-                        } else {
-                            messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.MM.yyyy");
-                        }
-                    }
-
-                    return messageThreadResult;
-                };
 
                 messageThreadsParseService.parseMessageThread = function (messageThreadData, messagesDataArray, productData) {
                     var messageThreadResult = angular.copy(messageThreadData);
