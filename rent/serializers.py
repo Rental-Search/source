@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from rest_framework.fields import SerializerMethodField
 
 from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
 from rest_framework import fields
@@ -10,6 +11,8 @@ from products.serializers import NestedProductSerializer
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api import serializers
+from rent.utils import timesince
+
 
 class SinisterSerializer(serializers.ModelSerializer):
 
@@ -62,6 +65,10 @@ class BookingSerializer(serializers.ModelSerializer):
     owner = NestedUserSerializer(read_only=True)
     borrower = NestedUserSerializer()
     sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
+    duration = SerializerMethodField('get_duration')
+
+    def get_duration(self, obj):
+        return timesince(obj.started_at, obj.ended_at)
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)
@@ -79,6 +86,7 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = (
             'uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
             'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at', 'sinisters',
+            'duration',
         )
         read_only_fields = (
             'state', 'deposit_amount', 'insurance_amount', 'total_amount',
