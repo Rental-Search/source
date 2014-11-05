@@ -31,43 +31,45 @@ def stats(request):
 
 	booking_transaction_list = [BOOKING_STATE.PENDING, BOOKING_STATE.ONGOING, BOOKING_STATE.ENDED, BOOKING_STATE.INCIDENT, BOOKING_STATE.CLOSING, BOOKING_STATE.CLOSED]
 
-	qss_parameters_list = {
-		'patrons': (Patron.objects.all(), 'date_joined'),
-		'patrons_private': (Patron.objects.filter(Q(is_professional=False) | Q(is_professional=None)) , 'date_joined'),
-		'patrons_professionnal': (Patron.objects.filter(is_professional=True), 'date_joined'),
-		'products': (Product.objects.all(), 'created_at'),
-		'products_pro': (Product.objects.filter(owner__is_professional=True), 'created_at'),
-		'products_private': (Product.objects.filter(owner__is_professional=False), 'created_at'),
-		'car_product': (CarProduct.objects.all(), 'created_at'),
-		'real_estate_product': (RealEstateProduct.objects.all(), 'created_at'),
-		'other_item_product': (Product.objects.filter(carproduct=None).filter(realestateproduct=None), 'created_at'),
-		'asked_booking': (Booking.objects.all(), 'created_at', Count('uuid')),
-		'booking_pro': (Booking.objects.filter(state__in=[BOOKING_STATE.PROFESSIONAL, BOOKING_STATE.PROFESSIONAL_SAW]), 'created_at', Count('uuid')),
-		'booking_private': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Count('uuid')),
-		'car_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__carproduct=None)), 'created_at', Count('uuid')),
-		'real_estate_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__realestateproduct=None)), 'created_at', Count('uuid')),
-		'other_item_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__realestateproduct=None, product__carproduct=None)), 'created_at', Count('uuid')),
-		'average_total_amount_asked_booking': (Booking.objects.all(), 'created_at', Avg('total_amount')),
-		'average_total_amount_booking': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Avg('total_amount')),
-		'sum_total_amount_asked_booking': (Booking.objects.all(), 'created_at', Sum('total_amount')),
-		'sum_total_amount_booking': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Sum('total_amount')),
-		'need_assurancy_asked_booking': (Booking.objects.filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
-		'need_assurancy_booking': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')),
-		'incident_declaration': (Booking.objects.filter(state__in=[BOOKING_STATE.INCIDENT]), 'created_at', Count('uuid')),
-		'messages': (Message.objects.all(), 'sent_at'),
-		'borrower_comment': (BorrowerComment.objects.all(), 'created_at'),
-		'owner_comment': (OwnerComment.objects.all(), 'created_at'),
-	}
+	qss_list = [
+		{'title': 'products_pro', 'qss': (Product.objects.filter(owner__is_professional=True), 'created_at'), 'pos': 1},
+		{'title': 'need_assurancy_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')), 'pos': 2},
+		{'title': 'messages', 'qss': (Message.objects.all(), 'sent_at'), 'pos': 3},
+		{'title': 'borrower_comment', 'qss': (BorrowerComment.objects.all(), 'created_at'), 'pos': 4},
+		{'title': 'booking_pro', 'qss': (Booking.objects.filter(state__in=[BOOKING_STATE.PROFESSIONAL, BOOKING_STATE.PROFESSIONAL_SAW]), 'created_at', Count('uuid')), 'pos': 5},
+		{'title': 'asked_booking', 'qss': (Booking.objects.all(), 'created_at', Count('uuid')), 'pos': 6},
+		{'title': 'car_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__carproduct=None)), 'created_at', Count('uuid')), 'pos': 7},
+		{'title': 'sum_total_amount_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Sum('total_amount')), 'pos': 8},
+		{'title': 'patrons_private', 'qss': (Patron.objects.filter(Q(is_professional=False) | Q(is_professional=None)) , 'date_joined'), 'pos': 9},
+		{'title': 'products_private', 'qss': (Product.objects.filter(owner__is_professional=False), 'created_at'), 'pos': 10},
+		{'title': 'other_item_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list).filter(Q(product__realestateproduct=None, product__carproduct=None)), 'created_at', Count('uuid')), 'pos': 11},
+		{'title': 'patrons_professionnal', 'qss': (Patron.objects.filter(is_professional=True), 'date_joined'), 'pos': 12},
+		{'title': 'products', 'qss': (Product.objects.all(), 'created_at'), 'pos': 13},
+		{'title': 'incident_declaration', 'qss': (Booking.objects.filter(state__in=[BOOKING_STATE.INCIDENT]), 'created_at', Count('uuid')), 'pos': 14},
+		{'title': 'booking_private', 'qss': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Count('uuid')), 'pos': 15},
+		{'title': 'average_total_amount_asked_booking', 'qss': (Booking.objects.all(), 'created_at', Avg('total_amount')), 'pos': 16},
+		{'title': 'real_estate_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__realestateproduct=None)), 'created_at', Count('uuid')), 'pos': 17},
+		{'title': 'sum_total_amount_asked_booking', 'qss': (Booking.objects.all(), 'created_at', Sum('total_amount')), 'pos': 18},
+		{'title': 'patrons', 'qss': (Patron.objects.all(), 'date_joined'), 'pos': 19},
+		{'title': 'need_assurancy_asked_booking', 'qss': (Booking.objects.filter(Q(product__category__need_insurance=True)), 'created_at', Count('uuid')), 'pos': 20},
+		{'title': 'other_item_product', 'qss': (Product.objects.filter(carproduct=None).filter(realestateproduct=None), 'created_at'), 'pos': 21},
+		{'title': 'car_product', 'qss': (CarProduct.objects.all(), 'created_at'), 'pos': 22},
+		{'title': 'real_estate_product', 'qss': (RealEstateProduct.objects.all(), 'created_at'), 'pos': 23},
+		{'title': 'average_total_amount_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Avg('total_amount')), 'pos': 24},
+		{'title': 'owner_comment', 'qss': (OwnerComment.objects.all(), 'created_at'), 'pos': 25},
+	]
 
-	for key, value in qss_parameters_list.items():
-		data[key] = qsstats.QuerySetStats(*value).time_series(datetime.date(year, 1, 1), datetime.date(year, 12, 31), interval='months')
+	new_stat = []
 
+	for qss in qss_list:
+		adata = qss.copy()
+		adata['qss'] = qsstats.QuerySetStats(*qss['qss']).time_series(datetime.date(year, 1, 1), datetime.date(year, 12, 31), interval='months')
+		new_stat.append(adata)
 
-	return render_to_response(
-        "reporting/admin/stats.html",
-		{},
-		RequestContext(request, {'stats': data}),
-    )
+	sorted_list = sorted(new_stat, key=lambda k: k['pos'])
+
+	return render_to_response("reporting/admin/stats.html", {}, RequestContext(request, {'stats': sorted_list}),)
+
 
 
 def stats_by_patron(request):
