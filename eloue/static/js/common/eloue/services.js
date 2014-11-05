@@ -87,224 +87,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, $filter, MessageThreads, Bookings, ProductRelatedMessages, ProductRelatedMessagesService, UsersService, ProductsService, BookingsService, UtilsService) {
                 var messageThreadsService = {};
 
-                /**
-                 * Retrieves list of message threads.
-                 *
-                 * @returns list of message threads
-                 */
-                messageThreadsService.getMessageThreads = function () {
-                    var self = this;
-                    var deferred = $q.defer();
-
-                    MessageThreads.get({_cache: new Date().getTime()}).$promise.then(function (threads) {
-                        var promises = [];
-
-                        // For each message thread
-                        angular.forEach(threads.results, function (value, key) {
-                            var result = {
-                                id: value.id,
-                                subject: value.subject
-                            };
-
-                            var threadDeferred = $q.defer();
-                            var threadPromises = {};
-
-                            if (!value.last_message) {
-                                result.message = "";
-                                result.date = "";
-                            } else {
-                                // Get last message
-                                var messageId = UtilsService.getIdFromUrl(value.last_message);
-                                threadPromises.lastMessage = ProductRelatedMessagesService.getMessage(messageId).$promise;
-                            }
-
-                            // Get sender
-                            // TODO probably the field needs to be changed
-                            var senderId = UtilsService.getIdFromUrl(value.sender);
-                            threadPromises.sender = UsersService.get(senderId).$promise;
-
-                            // Set information in the result object
-                            $q.all(threadPromises).then(function (threadResults) {
-                                if (!!threadResults.lastMessage) {
-                                    result.message = threadResults.lastMessage.body;
-                                    result.date = UtilsService.formatDate(threadResults.lastMessage.sent_at, "HH'h'mm");
-                                }
-                                result.icon = threadResults.sender.avatar.thumbnail;
-                                result.username = threadResults.sender.username;
-
-                                threadDeferred.resolve(result);
-                            });
-                            promises.push(threadDeferred.promise);
-                        });
-
-                        $q.all(promises).then(function (results) {
-                            deferred.resolve(results);
-                        });
-                    });
-
-                    return deferred.promise;
-                };
-
-                /**
-                 * Retrieves thread's data.
-                 *
-                 * @param threadId identifier of a thread
-                 */
-                messageThreadsService.getThread = function (threadId) {
-                    var deferred = $q.defer();
-
-                    // Send a request for a thread
-                    MessageThreads.get({id: threadId, _cache: new Date().getTime()}).$promise.then(function (thread) {
-                        var rootPromises = {};
-
-                        // Get message list
-                        var messagePromises = [];
-                        angular.forEach(thread.messages, function (value, key) {
-                            var messageDeferred = $q.defer();
-
-                            // Get message
-                            var messageId = UtilsService.getIdFromUrl(value);
-                            ProductRelatedMessagesService.getMessage(messageId).$promise.then(function (data) {
-                                var result = {
-                                    id: data.id,
-                                    body: data.body,
-                                    date: UtilsService.formatDate(data.sent_at, "dd.MM.yyyy HH'h'mm")
-                                };
-
-                                // Get sender
-                                var senderId = UtilsService.getIdFromUrl(data.sender);
-                                UsersService.get(senderId).$promise.then(function (sender) {
-                                    result.username = sender.username;
-                                    result.icon = sender.avatar.thumbnail;
-                                    messageDeferred.resolve(result);
-                                });
-                            });
-
-                            messagePromises.push(messageDeferred.promise);
-                        });
-                        rootPromises.messages = $q.all(messagePromises);
-
-                        // If product exists
-                        if (!!thread.product) {
-                            var productDeferred = $q.defer();
-                            var ownerDeferred = $q.defer();
-
-                            var productId = UtilsService.getIdFromUrl(thread.product);
-
-                            // Get product
-                            BookingsService.getBookingDetailProduct(productId).then(
-                                function (product) {
-                                    UsersService.get(product.ownerId).$promise.then(
-                                        function (owner) {
-                                            ownerDeferred.resolve(owner);
-                                        },
-                                        function (reason) {
-                                            ownerDeferred.reject(reason);
-                                        }
-                                    );
-                                    productDeferred.resolve(product);
-                                },
-                                function (reason) {
-                                    productDeferred.reject(reason);
-                                }
-                            );
-                            rootPromises.product = productDeferred.promise;
-                            rootPromises.owner = ownerDeferred.promise;
-
-                            /*Bookings.get({product: productId}).$promise.then(function (data) {
-                             if ($.isArray(data.results) && (data.results.length > 0)) {
-                             // If booking exists
-                             var bookingData = data.results[data.results.length - 1];
-                             BookingsService.parseBookingDetail(bookingData, function (booking) {
-                             productDeferred.resolve(booking);
-                             });
-                             productDeferred.resolve("Booking");
-                             } else {
-                             // If no booking
-                             // TODO no booking
-                             productDeferred.resolve();
-                             }
-                             });*/
-                        }
-
-                        $q.all(rootPromises).then(function (results) {
-                            var result = {
-                                users: [],
-                                messages: results.messages,
-                                product: results.product,
-                                owner: results.owner
-                            };
-
-                            // Push ids of users from a conversation
-                            result.users.push(UtilsService.getIdFromUrl(thread.sender));
-                            if (!!thread.recipient) {
-                                result.users.push(UtilsService.getIdFromUrl(thread.recipient));
-                            }
-
-                            deferred.resolve(result);
-                        });
-                    });
-
-                    return deferred.promise;
-                };
-
-                /**
-                 * Retrieves list messages for a specific thread.
-                 *
-                 * @param threadId identifier of a thread
-                 */
-                messageThreadsService.getMessages = function (threadId) {
-                    var self = this;
-                    var deferred = $q.defer();
-
-                    MessageThreads.get({id: threadId, _cache: new Date().getTime()}).$promise.then(function (thread) {
-                        var promises = [];
-
-                        // For each message
-                        angular.forEach(thread.messages, function (value, key) {
-                            var messageDeferred = $q.defer();
-
-                            // Get message
-                            var messageId = UtilsService.getIdFromUrl(value);
-                            ProductRelatedMessagesService.getMessage(messageId).$promise.then(function (data) {
-                                var result = {
-                                    id: data.id,
-                                    body: data.body,
-                                    date: UtilsService.formatMessageDate(data.sent_at,
-                                        "HH'h'mm", "dd.MM.yyyy HH'h'mm")
-                                };
-
-                                // Get sender
-                                var senderId = UtilsService.getIdFromUrl(data.sender);
-                                UsersService.get(senderId).$promise.then(function (sender) {
-                                    result.username = sender.username;
-                                    result.icon = sender.avatar.thumbnail;
-                                    messageDeferred.resolve(result);
-                                });
-                            });
-
-                            promises.push(messageDeferred.promise);
-                        });
-
-                        $q.all(promises).then(function (results) {
-                            var result = {
-                                users: [],
-                                messages: results
-                            };
-
-                            // Push ids of users from a conversation
-                            result.users.push(UtilsService.getIdFromUrl(thread.sender));
-                            if (!!thread.recipient) {
-                                result.users.push(UtilsService.getIdFromUrl(thread.recipient));
-                            }
-
-                            deferred.resolve(result);
-                        });
-                    });
-
-                    return deferred.promise;
-                };
-
                 messageThreadsService.getMessageThread = function (productId, participantId) {
                     var deferred = $q.defer();
                     var self = this;
@@ -318,37 +100,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         });
                         $q.all(promises).then(function success(results) {
                             deferred.resolve(results);
-                        });
-                    });
-                    return deferred.promise;
-                };
-
-                messageThreadsService.sendMessage = function (message, productId) {
-                    var threadDef = $q.defer();
-                    var self = this;
-                    if (!message.thread) {
-                        var messageThread = {
-                            "sender": message.sender,
-                            "recipient": message.recipient,
-                            "product": Endpoints.api_url + "products/" + productId + "/",
-                            "subject": "Question",
-                            "messages": []
-                        };
-                        MessageThreads.save({}, messageThread, function (response) {
-                            threadDef.resolve(Endpoints.api_url + "messagethreads/" + response.id + "/");
-                        });
-                    } else {
-                        threadDef.resolve(message.thread);
-                    }
-                    var deferred = $q.defer();
-                    threadDef.promise.then(function (result) {
-                        message.thread = result;
-                        ProductRelatedMessages.save({}, message, function (response) {
-                            var senderId = UtilsService.getIdFromUrl(response.sender);
-                            UsersService.get(senderId).$promise.then(function (result) {
-                                response.sender = result;
-                                deferred.resolve(response);
-                            });
                         });
                     });
                     return deferred.promise;
@@ -369,17 +120,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 productRelatedMessagesService.getMessage = function (id) {
                     return ProductRelatedMessages.get({id: id, _cache: new Date().getTime()});
-                };
-
-                productRelatedMessagesService.postMessage = function (threadId, recipientId, text, offerid) {
-                    var message = {
-                        thread: Endpoints.api_url + "messagethreads/" + threadId + "/",
-                        recipient: Endpoints.api_url + "users/" + recipientId + "/",
-                        body: (!!text) ? text : "",
-                        offer: (!!offerid) ? Endpoints.api_url + "bookings/" + offerid + "/" : null
-                    };
-
-                    return new ProductRelatedMessages(message).$save();
                 };
 
                 return productRelatedMessagesService;
@@ -405,10 +145,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "ProductsParseService",
             function ($q, $timeout, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, UsersService, MessageThreads, ProductsParseService) {
                 var productsService = {};
-
-                productsService.getProduct = function (id) {
-                    return Products.get({id: id, _cache: new Date().getTime()});
-                };
 
                 productsService.getProductDetails = function (id) {
                     var deferred = $q.defer();
@@ -465,84 +201,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         $q.all(promises).then(
                             function (results) {
                                 deferred.resolve(results);
-                            },
-                            function (reasons) {
-                                deferred.reject(reasons);
-                            }
-                        );
-                    });
-
-                    return deferred.promise;
-                };
-
-                productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
-                    var deferred = $q.defer();
-                    var params = {owner: userId, ordering: "-created_at", _cache: new Date().getTime()};
-
-                    if (rootCategoryId) {
-                        params.category__isdescendant = rootCategoryId;
-                    }
-
-                    if (page) {
-                        params.page = page;
-                    }
-
-                    Products.get(params).$promise.then(function (data) {
-                        var promises = [];
-                        angular.forEach(data.results, function (value, key) {
-                            var productDeferred = $q.defer();
-
-                            var product = {
-                                id: value.id,
-                                summary: value.summary,
-                                deposit_amount: value.deposit_amount
-                            };
-
-                            var subPromises = [];
-
-                            subPromises.push(PicturesService.getPicturesByProduct(product.id).$promise);
-                            subPromises.push(PricesService.getProductPricesPerDay(product.id).$promise);
-                            subPromises.push(Products.getStats({id: product.id, _cache: new Date().getTime()}).$promise);
-                            $q.all(subPromises).then(
-                                function (results) {
-
-                                    var pictures = results[0];
-                                    if ($.isArray(pictures.results) && (pictures.results.length > 0)) {
-                                        product.picture = pictures.results[0].image.thumbnail;
-                                    }
-
-                                    var prices = results[1];
-                                    if (prices.results && prices.results.length > 0) {
-                                        product.pricePerDay = prices.results[0].amount;
-                                    } else {
-                                        product.pricePerDay = 0;
-                                    }
-
-                                    product.stats = results[2];
-                                    if (product.stats) {
-                                        if (product.stats.average_rating) {
-                                            product.stats.average_rating = Math.round(product.stats.average_rating);
-                                        } else {
-                                            product.stats.average_rating = 0;
-                                        }
-                                    }
-
-                                    productDeferred.resolve(product);
-                                },
-                                function (reasons) {
-                                    productDeferred.reject(reasons);
-                                }
-                            );
-
-                            promises.push(productDeferred.promise);
-                        });
-
-                        $q.all(promises).then(
-                            function (results) {
-                                deferred.resolve({
-                                    list: results,
-                                    next: data.next
-                                });
                             },
                             function (reasons) {
                                 deferred.reject(reasons);
@@ -638,67 +296,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, Bookings, Products, ProductsService, PicturesService, AddressesService, UsersService, PhoneNumbersService, CommentsService, UtilsService) {
                 var bookingsService = {};
 
-                bookingsService.getBookings = function (page) {
-                    var deferred = $q.defer();
-
-                    Bookings.get({page: page, _cache: new Date().getTime()}).$promise.then(function (data) {
-                        var promises = [];
-
-                        angular.forEach(data.results, function (value, key) {
-                            var bookingDeferred = $q.defer();
-                            var booking = {
-                                state: value.state,
-                                total_amount: value.total_amount,
-                                uuid: value.uuid,
-                                start_date: {
-                                    day: UtilsService.formatDate(value.started_at, "dd"),
-                                    month: UtilsService.formatDate(value.started_at, "MMMM"),
-                                    year: UtilsService.formatDate(value.started_at, "yyyy")
-                                },
-                                end_date: {
-                                    day: UtilsService.formatDate(value.ended_at, "dd"),
-                                    month: UtilsService.formatDate(value.ended_at, "MMMM"),
-                                    year: UtilsService.formatDate(value.ended_at, "yyyy")
-                                }
-                            };
-
-                            var bookingPromises = {};
-
-                            // Get product id
-                            var productId = UtilsService.getIdFromUrl(value.product);
-
-                            // Get product
-                            bookingPromises.product = ProductsService.getProduct(productId).$promise;
-
-                            // Get picture
-                            bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
-
-                            $q.all(bookingPromises).then(function (results) {
-                                booking.title = results.product.summary;
-                                if (jQuery(results.pictures.results).size() > 0) {
-                                    booking.picture = results.pictures.results[0].image.thumbnail;
-                                }
-                                bookingDeferred.resolve(booking);
-                            });
-                            promises.push(bookingDeferred.promise);
-                        });
-
-                        $q.all(promises).then(function (results) {
-                            deferred.resolve(results);
-                        });
-                    });
-
-                    return deferred.promise;
-                };
-
                 bookingsService.getBookingsByProduct = function (productId) {
                     var deferred = $q.defer();
-
+                    var bookingList = [];
                     Bookings.get({product: productId, _cache: new Date().getTime()}).$promise.then(function (data) {
-                        var promises = [];
 
                         angular.forEach(data.results, function (value, key) {
-                            var bookingDeferred = $q.defer();
                             var booking = {
                                 state: value.state,
                                 total_amount: value.total_amount,
@@ -715,200 +318,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 }
                             };
 
-                            var bookingPromises = {};
-
-                            // Get product id
-                            var productId = UtilsService.getIdFromUrl(value.product);
-
-                            // Get product
-                            bookingPromises.product = ProductsService.getProduct(productId).$promise;
-
-                            var borrowerId = UtilsService.getIdFromUrl(value.borrower);
-                            bookingPromises.borrower = UsersService.get(borrowerId).$promise;
-
-                            // Get picture
-                            bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
-
-                            $q.all(bookingPromises).then(function (results) {
-                                booking.title = results.product.summary;
-                                if (jQuery(results.pictures.results).size() > 0) {
-                                    booking.picture = results.pictures.results[0].image.thumbnail;
-                                }
-                                booking.borrower = results.borrower;
-                                bookingDeferred.resolve(booking);
-                            });
-                            promises.push(bookingDeferred.promise);
-                        });
-
-                        $q.all(promises).then(function (results) {
-                            deferred.resolve(results);
+                            booking.title = booking.product.summary;
+                            if (jQuery(booking.product.pictures).size() > 0) {
+                                booking.picture = booking.product.pictures[0].image.thumbnail;
+                            }
+                            bookingList.push(booking);
                         });
                     });
-
-                    return deferred.promise;
-                };
-
-                bookingsService.getBooking = function (uuid) {
-                    var deferred = $q.defer();
-
-                    Bookings.get({uuid: uuid, _cache: new Date().getTime()}).$promise.then(
-                        function (booking) {
-                            var resultBooking = {
-                                total_amount: booking.total_amount,
-                                deposit_amount: booking.deposit_amount,
-                                start_date: {
-                                    week_day: UtilsService.formatDate(booking.started_at, "EEEE"),
-                                    day: UtilsService.formatDate(booking.started_at, "dd"),
-                                    month: UtilsService.formatDate(booking.started_at, "MMMM"),
-                                    year: UtilsService.formatDate(booking.started_at, "yyyy")
-                                },
-                                end_date: {
-                                    week_day: UtilsService.formatDate(booking.ended_at, "EEEE"),
-                                    day: UtilsService.formatDate(booking.ended_at, "dd"),
-                                    month: UtilsService.formatDate(booking.ended_at, "MMMM"),
-                                    year: UtilsService.formatDate(booking.ended_at, "yyyy")
-                                },
-                                start_time: UtilsService.formatDate(booking.started_at, "HH'h'mm"),
-                                end_time: UtilsService.formatDate(booking.ended_at, "HH'h'mm")
-                            };
-
-                            // Set period
-                            var period = UtilsService.calculatePeriodBetweenDates(booking.started_at, booking.ended_at);
-
-                            resultBooking.period_days = period.period_days;
-                            resultBooking.period_hours = period.period_hours;
-
-                            // Set product id
-                            resultBooking.productId = UtilsService.getIdFromUrl(booking.product);
-
-                            // Get owner and borrower
-                            var promises = {};
-                            // Get owner
-                            var ownerId = UtilsService.getIdFromUrl(booking.owner);
-                            promises.owner = UsersService.get(ownerId).$promise;
-
-                            // Get borrower
-                            var borrowerId = UtilsService.getIdFromUrl(booking.borrower);
-                            promises.borrower = UsersService.get(borrowerId).$promise;
-
-                            $q.all(promises).then(
-                                function (data) {
-                                    resultBooking.owner = data.owner;
-                                    resultBooking.borrower = data.borrower;
-                                    deferred.resolve(resultBooking);
-                                },
-                                function (reason) {
-                                    deferred.reject(reason);
-                                }
-                            );
-                        },
-                        function (reason) {
-                            deferred.reject(reason);
-                        }
-                    );
-
-                    return deferred.promise;
-                };
-
-                bookingsService.getBookingDetailProduct = function (productId) {
-                    var productDeferred = $q.defer();
-
-                    Products.get({id: productId, _cache: new Date().getTime()}).$promise.then(
-                        function (product) {
-                            var resultProduct = {
-                                summary: product.summary
-                            };
-
-                            var productPromises = {};
-
-                            // Get picture
-                            productPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
-
-                            // Get owner id
-                            resultProduct.ownerId = UtilsService.getIdFromUrl(product.owner);
-
-                            $q.all(productPromises).then(
-                                function (results) {
-
-                                    // Set picture
-                                    if ($.isArray(results.pictures.results) && $(results.pictures.results).size() > 0) {
-                                        resultProduct.picture = results.pictures.results[0].image.thumbnail;
-                                    }
-
-                                    productDeferred.resolve(resultProduct);
-                                },
-                                function (reason) {
-                                    productDeferred.reject(reason);
-                                }
-                            );
-                        },
-                        function (reason) {
-                            productDeferred.reject(reason);
-                        });
-
-                    return productDeferred.promise;
-                };
-
-                bookingsService.getBookingDetailInformation = function (uuid) {
-                    var deferred = $q.defer();
-                    var self = this;
-
-                    self.getBooking(uuid).then(
-                        function (booking) {
-                            var bookingDetail = {
-                                booking: booking
-                            };
-
-                            var promises = {};
-
-                            // Get product
-                            var productDeferred = $q.defer();
-                            self.getBookingDetailProduct(booking.productId).then(
-                                function (product) {
-                                    bookingDetail.product = product;
-                                    bookingDetail.phone = product.phone;
-                                    productDeferred.resolve(bookingDetail);
-                                },
-                                function (reason) {
-                                    productDeferred.reject(reason);
-                                }
-                            );
-                            promises.product = productDeferred.promise;
-
-                            // Get comments
-                            var commentsDeferred = $q.defer();
-
-                            CommentsService.getCommentList(uuid).then(
-                                function (comments) {
-                                    var commentList = comments.results;
-
-                                    angular.forEach(commentList, function (value, key) {
-                                        value.author = (value.type == 0) ? booking.owner : booking.borrower
-                                    });
-
-                                    bookingDetail.comments = commentList;
-                                    commentsDeferred.resolve(bookingDetail);
-                                },
-                                function (reason) {
-                                    commentsDeferred.reject(reason);
-                                }
-                            );
-
-                            promises.comments = commentsDeferred.promise;
-
-                            $q.all(promises).then(
-                                function () {
-                                    deferred.resolve(bookingDetail);
-                                },
-                                function (reasons) {
-                                    deferred.reject(reasons);
-                                }
-                            );
-                        },
-                        function (reason) {
-                            deferred.reject(reason);
-                        }
-                    );
+                    deferred.resolve(bookingList);
 
                     return deferred.promise;
                 };
@@ -925,10 +342,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
             categoriesService.getCategory = function (categoryId) {
                 return Categories.get({id: categoryId, _cache: new Date().getTime()});
-            };
-
-            categoriesService.getCategoryByName = function (categoryName) {
-                return Categories.get({name: categoryName, _cache: new Date().getTime()});
             };
 
             categoriesService.getParentCategory = function (category) {
@@ -1015,14 +428,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("PricesService", ["Prices", function (Prices) {
             var pricesService = {};
-
-            pricesService.getProductPricesPerDay = function (productId) {
-                return Prices.getProductPricesPerDay({product: productId, _cache: new Date().getTime()});
-            };
-
-            pricesService.getPricesByProduct = function (productId) {
-                return Prices.get({product: productId, _cache: new Date().getTime()});
-            };
 
             pricesService.savePrice = function (price) {
                 return Prices.save(price);
@@ -1142,10 +547,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("PhoneNumbersService", ["PhoneNumbers", function (PhoneNumbers) {
             var phoneNumbersService = {};
 
-            phoneNumbersService.getPhoneNumber = function (phoneNumberId) {
-                return PhoneNumbers.get({id: phoneNumberId, _cache: new Date().getTime()});
-            };
-
             phoneNumbersService.savePhoneNumber = function (phoneNumber) {
                 return PhoneNumbers.save(phoneNumber);
             };
@@ -1156,10 +557,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
             phoneNumbersService.getPremiumRateNumber = function (phoneNumberId) {
                 return PhoneNumbers.getPremiumRateNumber({id: phoneNumberId, _cache: new Date().getTime()});
-            };
-
-            phoneNumbersService.deletePhoneNumber = function (phoneNumberId) {
-                return PhoneNumbers.delete({id: phoneNumberId});
             };
 
             return phoneNumbersService;
@@ -1217,16 +614,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function (CreditCards, Endpoints) {
                 var creditCardsService = {};
 
-                creditCardsService.getCardsByHolder = function (holderId) {
-                    return CreditCards.get({holder: holderId, _cache: new Date().getTime()}).$promise;
-                };
-
                 creditCardsService.saveCard = function (card) {
                     return CreditCards.save(card);
-                };
-
-                creditCardsService.updateCard = function (card) {
-                    return CreditCards.update({id: card.id}, card);
                 };
 
                 creditCardsService.deleteCard = function (card) {
@@ -1403,22 +792,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // For each booking
                         angular.forEach(bookingListData.results, function (bookingData, key) {
                             var bookingDeferred = $q.defer();
-                            var bookingPromises = {};
 
-                            // Get product id
-                            var productId = UtilsService.getIdFromUrl(bookingData.product);
-
-                            // Load product
-                            bookingPromises.product = ProductsLoadService.getProduct(productId);
-
-                            // Load pictures
-                            bookingPromises.pictures = PicturesService.getPicturesByProduct(productId).$promise;
-
-                            // When all data loaded
-                            $q.all(bookingPromises).then(function (bookingResults) {
-                                var booking = BookingsParseService.parseBookingListItem(bookingData, bookingResults.product, bookingResults.pictures.results);
-                                bookingDeferred.resolve(booking);
-                            });
+                            var booking = BookingsParseService.parseBookingListItem(bookingData, bookingData.product, bookingData.product.pictures);
+                            bookingDeferred.resolve(booking);
 
                             bookingListPromises.push(bookingDeferred.promise);
                         });
@@ -1452,18 +828,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                     // Load booking
                     this.getBooking(bookingUUID).then(function (booking) {
-                        // Get product id
-                        var productId = UtilsService.getIdFromUrl(booking.product);
-                        // Load product
-                        ProductsLoadService.getProduct(productId, true, true, true, true).then(function (product) {
-                            booking.product = product;
-                            MessageThreadsService.getMessageThread(product.id, UtilsService.getIdFromUrl(booking.borrower)).then(function (threads) {
-                                if (threads && threads.length > 0) {
-                                    booking.lastThreadId = UtilsService.getIdFromUrl(threads[threads.length - 1].thread);
-                                }
-                                deferred.resolve(booking);
-                            });
-
+                        MessageThreadsService.getMessageThread(booking.product.id, booking.borrower.id).then(function (threads) {
+                            if (threads && threads.length > 0) {
+                                booking.lastThreadId = UtilsService.getIdFromUrl(threads[threads.length - 1].thread);
+                            }
+                            deferred.resolve(booking);
                         });
                     });
 

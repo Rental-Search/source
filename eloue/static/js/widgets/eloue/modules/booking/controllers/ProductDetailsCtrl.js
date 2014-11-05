@@ -438,13 +438,14 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.loadPhoneDetails();
                 }
                 if (args.name != "login") {
-                    $scope.loadPictures();
                     if (!$scope.product) {
                         ProductsLoadService.getProduct($scope.productId, true, false, false, false).then(function (result) {
                             $scope.product = result;
+                            $scope.loadPictures();
                             $scope.loadProductCategoryAncestors(args.name);
                         });
                     } else {
+                        $scope.loadPictures();
                         $scope.loadProductCategoryAncestors(args.name);
                     }
                 }
@@ -468,13 +469,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.loadPictures = function () {
-                PicturesService.getPicturesByProduct($scope.productId).$promise.then(function (pictures) {
-                    var picturesDataArray = pictures.results;
-                    // Parse pictures
-                    if (angular.isArray(picturesDataArray) && picturesDataArray.length > 0) {
-                        $scope.product.picture = picturesDataArray[0].image.thumbnail;
-                    }
-                });
+                var picturesDataArray = $scope.product.pictures;
+                // Parse pictures
+                if (angular.isArray(picturesDataArray) && picturesDataArray.length > 0) {
+                    $scope.product.picture = picturesDataArray[0].image.thumbnail;
+                }
             };
 
             /**
@@ -516,14 +515,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     if (!currentUser.default_address) {
                         $scope.noAddress = true;
                     }
-                    CreditCardsService.getCardsByHolder($scope.currentUser.id).then(function (result) {
-                        var cards = result.results;
-                        if (!!cards && cards.length > 0) {
-                            $scope.creditCard = cards[0];
-                            $scope.creditCard.expires = $scope.creditCard.expires.slice(0, 2) + "/" + $scope.creditCard.expires.slice(2);
-                            $scope.newCreditCard = false;
-                        }
-                    });
+                    if (!!$scope.currentUser.creditcard) {
+                        var card = $scope.currentUser.creditcard;
+                        $scope.creditCard = card;
+                        $scope.creditCard.expires = card.expires.slice(0, 2) + "/" + card.expires.slice(2);
+                        $scope.newCreditCard = false;
+                    }
                 });
             };
 

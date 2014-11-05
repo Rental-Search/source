@@ -39,12 +39,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             expect(!!PicturesService).toBe(true);
         });
 
-        it("PicturesService:getPicturesByProduct", function () {
-            var productId = 1;
-            PicturesService.getPicturesByProduct(productId);
-            expect(picturesMock.get).toHaveBeenCalledWith({product: productId});
-        });
-
         it("PicturesService:savePicture", function () {
             var productId = 1;
             PicturesService.savePicture(productId, {}, undefined, undefined);
