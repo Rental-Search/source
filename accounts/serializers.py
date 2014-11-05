@@ -61,7 +61,7 @@ class CreditCardSerializer(serializers.ModelSerializer):
             expires = attrs.pop(source)
             attrs.update(dict(zip(('expires_0', 'expires_1'), (expires[:2], expires[2:4]))))
         except (KeyError, IndexError):
-            raise ValidationError("Attribute missed or invalid: 'expires'")
+            raise ValidationError(_("Attribute missed or invalid: 'expires'"))
         return attrs
 
     def validate(self, attrs):
@@ -186,7 +186,7 @@ class CreditCardSerializer(serializers.ModelSerializer):
             expires = attrs.pop(source)
             attrs.update(dict(zip(('expires_0', 'expires_1'), (expires[:2], expires[2:4]))))
         except (KeyError, IndexError):
-            raise ValidationError("Attribute missed or invalid: 'expires'")
+            raise ValidationError(_("Attribute missed or invalid: 'expires'"))
         return attrs
 
     def validate(self, attrs):
@@ -195,7 +195,7 @@ class CreditCardSerializer(serializers.ModelSerializer):
             attrs.pop('holder', None)
         self.form = form = CreditCardForm(attrs)
         if not form.is_valid():
-            raise ValidationError('Form errors: %s' % dict(form.errors))
+            raise ValidationError(_('Form errors: %s') % dict(form.errors))
         new_attrs = form.clean()
         new_attrs['keep'] = keep
         return new_attrs

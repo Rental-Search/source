@@ -188,7 +188,7 @@ class EmailAuthenticationForm(forms.Form):
                 access_token_data = self.request.session[(idn_id, idn_access_token)]
             except KeyError:
                 self.request.session.pop('idn_info', None)
-                raise forms.ValidationError('Activate cookies')
+                raise forms.ValidationError(_('Activate cookies'))
 
             # We kept here the fb_session variable name, though we should change it to something
             # more general, like self.oauth_session. In order to do that, we need to change it
@@ -218,7 +218,7 @@ class EmailAuthenticationForm(forms.Form):
 
         else:
             if email is None or email == u'':
-                raise forms.ValidationError('Empty email') # TODO: more meaningful error message
+                raise forms.ValidationError(_('Empty email')) # TODO: more meaningful error message
             exists = self.cleaned_data.get('exists')
             if exists:
                 self.user_cache = authenticate(username=email, password=password)

@@ -18,10 +18,10 @@ from rest_framework.views import exception_handler
 class ErrorGroupEnum(object):
     """Enum for error groups."""
     VALIDATION_ERRORS = ('10', _(u'Model validation error.'))
-    AUTHENTICATION_ERROR = ('20', u'Authentication error.')
-    PERMISSION_ERROR = ('30', u'Permission error.')
-    URL_ERROR = ('40', u'URL error.')
-    SERVER_ERROR = ('50', u'Server error.')
+    AUTHENTICATION_ERROR = ('20', _(u'Authentication error.'))
+    PERMISSION_ERROR = ('30', _(u'Permission error.'))
+    URL_ERROR = ('40', _(u'URL error.'))
+    SERVER_ERROR = ('50', _(u'Server error.'))
 
 
 class ValidationErrorEnum(object):

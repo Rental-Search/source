@@ -183,14 +183,14 @@ class ExistingBookingCreditCardForm(CreditCardForm):
         if self.errors:
             return self.cleaned_data
         if not self.instance or self.instance.pk is None:
-            raise forms.ValidationError('You have to bind an existing instance to this form')
+            raise forms.ValidationError(_('You have to bind an existing instance to this form'))
         cvv = self.cleaned_data.get('cvv')
         holder_name = self.cleaned_data.get('holder_name')
         card_number = self.cleaned_data.get('card_number')
         expires = self.cleaned_data.get('expires')
         if any((cvv, holder_name, card_number, expires)):
             if not all((cvv, holder_name, card_number, expires)):
-                raise forms.ValidationError('You have to fill out all the fields')
+                raise forms.ValidationError(_('You have to fill out all the fields'))
             return super(ExistingBookingCreditCardForm, self).clean()
         return self.cleaned_data
 
@@ -231,7 +231,7 @@ class BookingAcceptForm(forms.ModelForm):
         
         max_available = Booking.calculate_available_quantity(product, started_at, ended_at)
         if (quantity > max_available):
-            raise ValidationError(u'Quantité disponible à cette période: %s' % max_available)
+            raise ValidationError(_(u'Quantité disponible à cette période: %s') % max_available)
         if (started_at and ended_at):
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
                 raise ValidationError(_(u"Vous ne pouvez pas louer à ces dates"))
