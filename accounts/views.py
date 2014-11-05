@@ -46,6 +46,7 @@ from accounts.forms import (EmailAuthenticationForm, PatronEditForm,
 from accounts.models import Patron, FacebookSession, CreditCard, Billing, ProPackage, BillingHistory
 from accounts.wizard import AuthenticationWizard
 from accounts.choices import GEOLOCATION_SOURCE
+from eloue.api.decorators import list_action
 from eloue.api.exceptions import ServerErrorEnum, DocumentedServerException
 
 from products.models import ProductRelatedMessage, MessageThread, Product
@@ -1149,6 +1150,15 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
             serializer.save()
             return Response({'detail': _(u"Votre mot de passe à bien été modifié")})
         return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    @list_action(methods=['post'])
+    def forgot_password(self, request, *args, **kwargs):
+        form = EmailPasswordResetForm(request.DATA)
+        if form.is_valid():
+            form.save(request=request, use_https=request.is_secure(), email_template_name='accounts/emails/password_reset_email', **kwargs)
+            success_msg = _("We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly.")
+            return Response({'detail': success_msg})
+        return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     @link()
     def stats(self, request, *args, **kwargs):

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url, include
 
-from rest_framework import routers
-
 from eloue.api.resources import api_v1
 from eloue.api import views
+from eloue.api import routers
 
 urlpatterns = patterns('',
     url(r'^1.0/update_product_prices/$', views.update_product_prices, name='update_product_prices'),
@@ -16,7 +15,7 @@ from products import views as products_api
 from rent import views as rent_api
 
 # See http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#restful
-router = routers.DefaultRouter()
+router = routers.Api20Router()
 router.register(r'users', accounts_api.UserViewSet, base_name='patron')
 router.register(r'addresses', accounts_api.AddressViewSet, base_name='address')
 router.register(r'phones', accounts_api.PhoneNumberViewSet, base_name='phonenumber')
