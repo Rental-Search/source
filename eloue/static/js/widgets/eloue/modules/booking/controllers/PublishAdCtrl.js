@@ -188,23 +188,25 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
 
                         PricesService.savePrice($scope.price).$promise.then(function (result) {
-                            if ($scope.isAuto) {
-                                $scope.trackEvent("Dépôt annonce", "Voiture", $scope.product.category.name);
-                                $scope.finishProductSaveAndRedirect(product);
-                            } else if ($scope.isRealEstate) {
-                                $scope.trackEvent("Dépôt annonce", "Logement", $scope.product.category.name);
-                                $scope.finishProductSaveAndRedirect(product);
-                            } else {
-                                CategoriesService.getAncestors($scope.product.category.id).then(function (ancestors) {
-                                    var categoriesStr = "";
-                                    angular.forEach(ancestors, function (value, key) {
-                                        categoriesStr = categoriesStr + value.name + " - ";
-                                    });
-                                    categoriesStr = categoriesStr + productCategory.name;
-                                    $scope.trackEvent("Dépôt annonce", "Objet", categoriesStr);
+                            CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
+                                if ($scope.isAuto) {
+                                    $scope.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
                                     $scope.finishProductSaveAndRedirect(product);
-                                });
-                            }
+                                } else if ($scope.isRealEstate) {
+                                    $scope.trackEvent("Dépôt annonce", "Logement", productCategory.name);
+                                    $scope.finishProductSaveAndRedirect(product);
+                                } else {
+                                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function(ancestors) {
+                                        var categoriesStr = "";
+                                        angular.forEach(ancestors, function (value, key) {
+                                            categoriesStr = categoriesStr + value.name + " - ";
+                                        });
+                                        categoriesStr = categoriesStr + productCategory.name;
+                                        $scope.trackEvent("Dépôt annonce", "Objet",  categoriesStr);
+                                        $scope.finishProductSaveAndRedirect(product);
+                                    });
+                                }
+                            });
                         }, function (error) {
                             $scope.handleResponseErrors(error);
                         });

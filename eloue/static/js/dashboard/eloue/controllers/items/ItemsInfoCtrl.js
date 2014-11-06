@@ -97,10 +97,10 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);
                 $scope.markListItemAsSelected("item-tab-", "info");
                 $scope.product = product;
-                console.log(product.category);
+                var initialCategoryId = product.category.id;
                 CategoriesService.getParentCategory(product.category).$promise.then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
-                        $scope.nodeCategory = product.category.id;
+                        $scope.nodeCategory = initialCategoryId;
                         $scope.rootCategory = nodeCategory.id;
                         $scope.updateNodeCategories();
                         $scope.updateFieldSet(nodeCategory);
