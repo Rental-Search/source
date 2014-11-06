@@ -7,9 +7,8 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("MessagesCtrl", [
         "$scope",
-        "$rootScope",
         "UsersService",
-        function ($scope, $rootScope, UsersService) {
+        function ($scope, UsersService) {
             $scope.messageThreadList = [];
             if (!$scope.currentUserPromise) {
                 $scope.currentUserPromise = UsersService.getMe().$promise;
