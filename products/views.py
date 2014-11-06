@@ -37,7 +37,8 @@ from products.forms import (
     RealEstateEditForm, CarProductEditForm, ProductEditForm,
     ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
 )
-from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread
+from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread, CarProduct, \
+    RealEstateProduct
 from products.choices import UNIT, SORT, PRODUCT_TYPE
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
@@ -842,7 +843,19 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             raise Http404
         product_type = product.name
         comment_qs = Comment.borrowercomments.select_related('booking__borrower', 'booking_product').order_by('-created_at')
-        product_list = self.sqs.more_like_this(product)[:5]
+        # FIXME: It seems to be that `more_like_this` don't support filtration, but we need only products in response.
+        # http://stackoverflow.com/questions/17537787/haystack-more-like-this-ignores-filters
+        product_list = []
+        chunk_size = 5
+        i = 0
+        while len(product_list) < 5:
+            chunk = self.sqs.more_like_this(product)[i*chunk_size:(i+1)*chunk_size]
+            if not chunk:
+                break
+            product_list.extend(filter(lambda x: isinstance(x.object, (Product, CarProduct, RealEstateProduct)), chunk))
+            i += 1
+        product_list = product_list[:5]
+
         product_comment_list = comment_qs.filter(booking__product=product)
         owner_comment_list = comment_qs.filter(booking__owner=product.owner)
 
