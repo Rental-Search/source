@@ -65,6 +65,7 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.updateFieldSet(rootCategory);
                         });
                     }
+                    $scope.product.category = Endpoints.api_url + "categories/" + $scope.product.category.id + "/";
                 });
             });
 
