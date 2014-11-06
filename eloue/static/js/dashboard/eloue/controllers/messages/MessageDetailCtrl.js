@@ -7,7 +7,6 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("MessageDetailCtrl", [
         "$scope",
-        "$state",
         "$stateParams",
         "$q",
         "$window",
@@ -16,9 +15,8 @@ define(["angular", "eloue/app"], function (angular) {
         "BookingsLoadService",
         "ProductRelatedMessagesLoadService",
         "ProductsLoadService",
-        "CategoriesService",
         "UtilsService",
-        function ($scope, $state, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, CategoriesService, UtilsService) {
+        function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
 
             var promises = {
                 currentUser: $scope.currentUserPromise,

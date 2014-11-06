@@ -9,8 +9,7 @@ define(["angular", "eloue/app"], function (angular) {
         "$scope",
         "UsersService",
         "AddressesService",
-        "UtilsService",
-        function ($scope, UsersService, AddressesService, UtilsService) {
+        function ($scope, UsersService, AddressesService) {
 
             $scope.markListItemAsSelected("account-part-", "account.addresses");
 

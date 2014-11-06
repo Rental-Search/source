@@ -4,7 +4,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         var BookingsLoadService,
             bookingsMock,
-            picturesServiceMock,
             utilsServiceMock,
             bookingsParseServiceMock,
             productsLoadServiceMock;
@@ -16,11 +15,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 get: function () {
                 },
                 save: function () {
-                }
-            };
-            picturesServiceMock = {
-                getPicturesByProduct: function (productId) {
-
                 }
             };
             utilsServiceMock = {
@@ -44,7 +38,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
             module(function ($provide) {
                 $provide.value("Bookings", bookingsMock);
-                $provide.value("PicturesService", picturesServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
                 $provide.value("BookingsParseService", bookingsParseServiceMock);
                 $provide.value("ProductsLoadService", productsLoadServiceMock);
@@ -55,7 +48,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             BookingsLoadService = _BookingsLoadService_;
             spyOn(bookingsMock, "get").andCallThrough();
             spyOn(bookingsMock, "save").andCallThrough();
-            spyOn(picturesServiceMock, "getPicturesByProduct").andCallThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
             spyOn(bookingsParseServiceMock, "parseBookingListItem").andCallThrough();
             spyOn(bookingsParseServiceMock, "parseBooking").andCallThrough();

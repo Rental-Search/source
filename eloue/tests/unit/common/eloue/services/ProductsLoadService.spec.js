@@ -7,7 +7,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             checkAvailabilityMock,
             addressesServiceMock,
             usersServiceMock,
-            picturesServiceMock,
             phoneNumbersServiceMock,
             utilsServiceMock,
             productsParseServiceMock;
@@ -32,11 +31,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 get: function (userId) {
                 }
             };
-            picturesServiceMock = {
-                getPicturesByProduct: function (productId) {
-
-                }
-            };
             phoneNumbersServiceMock = {
                 getPhoneNumber: function (phoneId) {
 
@@ -56,7 +50,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 $provide.value("CheckAvailability", checkAvailabilityMock);
                 $provide.value("AddressesService", addressesServiceMock);
                 $provide.value("UsersService", usersServiceMock);
-                $provide.value("PicturesService", picturesServiceMock);
                 $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
                 $provide.value("ProductsParseService", productsParseServiceMock);
@@ -69,7 +62,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             spyOn(checkAvailabilityMock, "get").andCallThrough();
             spyOn(addressesServiceMock, "getAddress").andCallThrough();
             spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(picturesServiceMock, "getPicturesByProduct").andCallThrough();
             spyOn(phoneNumbersServiceMock, "getPhoneNumber").andCallThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
             spyOn(productsParseServiceMock, "parseProduct").andCallThrough();

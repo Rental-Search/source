@@ -6,14 +6,10 @@ define(["angular", "eloue/app"], function (angular) {
      * Controller for the bookings page.
      */
     angular.module("EloueDashboardApp").controller("BookingsCtrl", [
-        "$q",
         "$scope",
-        "$rootScope",
         "$timeout",
-        "Endpoints",
-        "BookingsLoadService",
         "UsersService",
-        function ($q, $scope, $rootScope, $timeout, Endpoints, BookingsLoadService, UsersService) {
+        function ($scope, $timeout, UsersService) {
             $scope.bookingFilter = {};
             $scope.stateList = ["authorized", "rejected", "outdated", "canceled", "pending", "ongoing", "ended", "incident", "refunded", "closed"];
             $scope.bookingList = [];

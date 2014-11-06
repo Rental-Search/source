@@ -7,11 +7,10 @@ define(["angular", "eloue/app"], function (angular) {
      */
     angular.module("EloueDashboardApp").controller("ItemsCtrl", [
         "$scope",
-        "$rootScope",
         "$timeout",
         "CategoriesService",
         "UsersService",
-        function ($scope, $rootScope, $timeout, CategoriesService, UsersService) {
+        function ($scope, $timeout, CategoriesService, UsersService) {
 
             $scope.selectedCategory = "";
             $scope.currentUser = {};
