@@ -113,7 +113,7 @@ LANGUAGES = (
     ('en-gb', ugettext('English')),
 )
 
-LOCALE_PATHS = (local_path('locale/'), )
+LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
