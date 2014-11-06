@@ -22,6 +22,12 @@ class DefaultPermissions(permissions.DjangoModelPermissions):
         # can't make a decision; pass to other permission checkers if there any, otherwise deny access
         return None
 
+
+class PublicAccessPermission(permissions.DjangoModelPermissions):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated() or view.public_mode
+
+
 class IsAuthenticatedOrReadOnly(DefaultPermissions):
     def has_permission(self, request, view):
         if request.user.is_anonymous():

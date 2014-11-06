@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import patch_cache_control
 from rest_framework.permissions import SAFE_METHODS
+from eloue.api.permissions import PublicAccessPermission
 from eloue.api.serializers import NestedModelSerializerMixin
 
 from .filters import OwnerFilter
@@ -87,6 +88,11 @@ class PermissionMixin(object):
                             break
         elif action == 'create':
             self.owner_mode = True
+
+    def get_permissions(self):
+        permissions = super(PermissionMixin, self).get_permissions()
+        permissions.append(PublicAccessPermission())
+        return permissions
 
     def check_permissions(self, request):
         """
