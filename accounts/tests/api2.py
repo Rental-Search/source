@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import date
 from operator import itemgetter
 import os.path
 import base64
@@ -23,9 +24,9 @@ class AnonymousUsersTest(APITestCase):
 
     public_fields = (
         'id', 'company_name', 'username', 'is_professional', 'slug', 'avatar', 'default_address', 'about', 'work',
-        'school', 'hobby', 'languages', 'url', 'date_joined', 'average_note', 'comment_count')
+        'school', 'hobby', 'languages', 'url', 'date_joined', 'average_note', 'comment_count', 'default_number')
     private_fields = (
-        'email', 'first_name', 'last_name', 'default_number', 'driver_license_date', 'driver_license_number',
+        'email', 'first_name', 'last_name', 'driver_license_date', 'driver_license_number',
         'date_of_birth', 'place_of_birth', 'is_active', 'creditcard')
 
     def setUp(self):
@@ -1381,6 +1382,71 @@ class ProPackageTest(APITestCase):
         self.model = get_model('accounts', 'ProPackage')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
+    def test_pro_package_create_forbidden(self):
+        response = self.client.post(_location('propackage-list'))
+        self.assertEquals(response.status_code, 403)
+
+    def test_pro_package_update_forbidden(self):
+        response = self.client.put(_location('propackage-detail', pk=1))
+        self.assertEquals(response.status_code, 403)
+
+    def test_pro_package_get_by_id(self):
+        response = self.client.get(_location('propackage-detail', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+
+    def test_pro_package_list_paginated(self):
+        response = self.client.get(_location('propackage-list'))
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 5,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
+    def test_ordering(self):
+        response = self.client.get(_location('propackage-list'), {'ordering': 'name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('name')))
+
+    def test_reverse_ordering(self):
+        response = self.client.get(_location('propackage-list'), {'ordering': '-name'})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(
+            response.data['results'],
+            sorted(response.data['results'], key=itemgetter('name'), reverse=True))
+
+    def test_filter1(self):
+        response = self.client.get(_location('propackage-list'), {'price': 30})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['price'] == 30, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['price'] != 30, response.data['results']))
+
+    def test_filter2(self):
+        response = self.client.get(_location('propackage-list'), {'price': 54})
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertGreater(response.data['count'], 0)
+        self.assertEqual(response.data['results'], filter(lambda x: x['price'] == 54, response.data['results']))
+        self.assertEqual([], filter(lambda x: x['price'] != 54, response.data['results']))
+
+
+class StaffProPackageTest(APITestCase):
+    fixtures = ['patron_staff', 'propackages']
+
+    def setUp(self):
+        self.model = get_model('accounts', 'ProPackage')
+        user = get_user_model().objects.get(pk=1)
+        permissions = get_model('auth', 'Permission').objects.filter(codename__contains='propackage')
+        for permission in permissions:
+            user.user_permissions.add(permission)
+        user.save()
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
     def test_pro_package_create_no_fields(self):
         response = self.client.post(_location('propackage-list'))
         self.assertEquals(response.status_code, 400, response.data)
@@ -1493,64 +1559,13 @@ class ProPackageTest(APITestCase):
 
     def test_pro_package_edit(self):
         response = self.client.patch(_location('propackage-detail', pk=1), {
-            'valid_until': '2014-10-31',
+            'valid_until': date.today().strftime('%Y-%m-%d'),
         })
         self.assertEquals(response.status_code, 200, response.data)
         self.assertIn('id', response.data)
 
         package = self.model.objects.get(pk=response.data['id'])
-        self.assertEqual(package.valid_until, datetime.date(2014, 10, 31))
-
-    def test_pro_package_get_by_id(self):
-        response = self.client.get(_location('propackage-detail', pk=1))
-        self.assertEquals(response.status_code, 200, response.data)
-
-    def test_pro_package_list_paginated(self):
-        response = self.client.get(_location('propackage-list'))
-        self.assertEquals(response.status_code, 200, response.data)
-        # check pagination data format in the response
-        expected = {
-            'count': 5,
-            'previous': None,
-            'next': None,
-        }
-        self.assertDictContainsSubset(expected, response.data)
-        self.assertIn('results', response.data)
-        # check data
-        self.assertEquals(response.data['count'], len(response.data['results']))
-
-    def test_ordering(self):
-        response = self.client.get(_location('propackage-list'), {'ordering': 'name'})
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertEqual(response.data['results'], sorted(response.data['results'], key=itemgetter('name')))
-
-    def test_reverse_ordering(self):
-        response = self.client.get(_location('propackage-list'), {'ordering': '-name'})
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertEqual(
-            response.data['results'],
-            sorted(response.data['results'], key=itemgetter('name'), reverse=True))
-
-    def test_filter1(self):
-        response = self.client.get(_location('propackage-list'), {'price': 30})
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertGreater(response.data['count'], 0)
-        self.assertEqual(response.data['results'], filter(lambda x: x['price'] == 30, response.data['results']))
-        self.assertEqual([], filter(lambda x: x['price'] != 30, response.data['results']))
-
-    def test_filter2(self):
-        response = self.client.get(_location('propackage-list'), {'price': 54})
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertGreater(response.data['count'], 0)
-        self.assertEqual(response.data['results'], filter(lambda x: x['price'] == 54, response.data['results']))
-        self.assertEqual([], filter(lambda x: x['price'] != 54, response.data['results']))
-
-
-class StaffProPackageTest(APITestCase):
-    fixtures = ['patron_staff', 'propackages']
-
-    def setUp(self):
-        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        self.assertEqual(package.valid_until, date.today())
 
     def test_ordering(self):
         response = self.client.get(_location('propackage-list'), {'ordering': 'name'})
