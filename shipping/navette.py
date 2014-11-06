@@ -16,7 +16,11 @@ class WsdlClientBase(object):
 
 
 class Navette(WsdlClientBase):
-    url = 'http://test-web-navette.pickup.fr/v1/Navette.svc?wsdl'
+    from django.conf import settings
+    url = getattr(settings, 'NAVETTE_ENDPOINT', None)
+
+    if not url:
+        raise InvalidBackend("NAVETTE_ENDPOINT not set.")
 
     def get_pudo(self, point, pudo_type):
         res = self.client.service.GetPudo({

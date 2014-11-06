@@ -835,6 +835,10 @@ else:
     PAYBOX_CLE = env('PAYBOX_CLE', 'IJEDEDBC')
 
 
+## NAVETTE PICKCUP CONFIGURATION
+NAVETTE_ENDPOINT = env('NAVETTE_ENDPOINT', 'http://test-web-navette.pickup.fr/v1/Navette.svc?wsdl')
+
+
 PRODUCTHIGHLIGHT_PRICE = decimal.Decimal('7.5')
 PRODUCTTOPPOSITION_PRICE = decimal.Decimal('5.5')
 EMAILNOTIFICATION_PRICE = decimal.Decimal('0.01')
