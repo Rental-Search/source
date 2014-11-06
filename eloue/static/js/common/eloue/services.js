@@ -213,12 +213,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 deposit_amount: value.deposit_amount
                             };
 
-                            if ($.isArray(product.pictures) && (product.pictures.length > 0)) {
-                                product.picture = product.pictures[0].image.thumbnail;
+                            if ($.isArray(value.pictures) && (value.pictures.length > 0)) {
+                                product.picture = value.pictures[0].image.thumbnail;
                             }
 
-                            if (product.prices && product.prices.length > 0) {
-                                product.pricePerDay = product.prices[0].amount;
+                            if (value.prices && value.prices.length > 0) {
+                                product.pricePerDay = value.prices[0].amount;
                             } else {
                                 product.pricePerDay = 0;
                             }
@@ -227,7 +227,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             subPromises.push(Products.getStats({id: product.id, _cache: new Date().getTime()}).$promise);
                             $q.all(subPromises).then(
                                 function (results) {
-                                    product.stats = results[2];
+                                    product.stats = results[0];
                                     if (product.stats) {
                                         if (product.stats.average_rating) {
                                             product.stats.average_rating = Math.round(product.stats.average_rating);
@@ -368,9 +368,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                                 }
                             };
 
-                            booking.title = booking.product.summary;
-                            if (jQuery(booking.product.pictures).size() > 0) {
-                                booking.picture = booking.product.pictures[0].image.thumbnail;
+                            booking.title = value.product.summary;
+                            if (jQuery(value.product.pictures).size() > 0) {
+                                booking.picture = value.product.pictures[0].image.thumbnail;
                             }
                             bookingList.push(booking);
                         });
@@ -857,6 +857,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     // Load booking
                     Bookings.get({uuid: bookingUUID, _cache: new Date().getTime()}).$promise.then(function (bookingData) {
                         var booking = BookingsParseService.parseBooking(bookingData);
+                        if (jQuery(bookingData.product.pictures).size() > 0) {
+                            booking.product.picture = bookingData.product.pictures[0].image.thumbnail;
+                        }
                         deferred.resolve(booking);
                     });
 
@@ -872,6 +875,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             if (threads && threads.length > 0) {
                                 booking.lastThreadId = UtilsService.getIdFromUrl(threads[threads.length - 1].thread);
                             }
+                            console.log(booking);
                             deferred.resolve(booking);
                         });
                     });
