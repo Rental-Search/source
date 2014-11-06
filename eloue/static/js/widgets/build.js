@@ -20,6 +20,7 @@
         "angular-route": "../../bower_components/angular-route/angular-route",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
+        "angular-i18n": "../../bower_components/angular-i18n/angular-locale_fr-fr",
         "moment": "../../bower_components/moment/moment",
         "angular-moment": "../../bower_components/angular-moment/angular-moment",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
@@ -42,6 +43,7 @@
         "angular-route": ["angular"],
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
+        "angular-i18n": ["angular"],
         "angular-resource": ["angular"],
         "angular-moment": ["angular"],
         "angular-mocks": {
