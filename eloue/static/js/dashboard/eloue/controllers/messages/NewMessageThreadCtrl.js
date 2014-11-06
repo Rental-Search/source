@@ -9,7 +9,6 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
         "$scope",
         "$state",
         "$stateParams",
-        "$q",
         "Endpoints",
         "MessageThreadsService",
         "MessageThreadsLoadService",
@@ -18,7 +17,7 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
         "ProductsLoadService",
         "UtilsService",
         "UsersService",
-        function ($scope, $state, $stateParams, $q, Endpoints, MessageThreadsService, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService, UsersService) {
+        function ($scope, $state, $stateParams, Endpoints, MessageThreadsService, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService, UsersService) {
 
             if (!$scope.currentUserPromise) {
                 $scope.currentUserPromise = UsersService.getMe().$promise;

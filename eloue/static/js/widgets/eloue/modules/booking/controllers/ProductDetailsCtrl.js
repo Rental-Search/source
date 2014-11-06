@@ -20,10 +20,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "BookingsLoadService",
         "BookingsService",
         "PhoneNumbersService",
-        "PicturesService",
         "CategoriesService",
         "UtilsService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, PicturesService, CategoriesService, UtilsService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService) {
 
             $scope.creditCard = {
                 id: null,

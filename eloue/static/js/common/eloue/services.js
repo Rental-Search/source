@@ -137,13 +137,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "Products",
             "CategoriesService",
             "PhoneNumbersService",
-            "PicturesService",
-            "PricesService",
             "UtilsService",
             "UsersService",
             "MessageThreads",
             "ProductsParseService",
-            function ($q, $timeout, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, PicturesService, PricesService, UtilsService, UsersService, MessageThreads, ProductsParseService) {
+            function ($q, $timeout, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, UtilsService, UsersService, MessageThreads, ProductsParseService) {
                 var productsService = {};
 
                 productsService.getProductDetails = function (id) {
@@ -337,13 +335,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "Bookings",
             "Products",
             "ProductsService",
-            "PicturesService",
             "AddressesService",
             "UsersService",
             "PhoneNumbersService",
             "CommentsService",
             "UtilsService",
-            function ($q, Bookings, Products, ProductsService, PicturesService, AddressesService, UsersService, PhoneNumbersService, CommentsService, UtilsService) {
+            function ($q, Bookings, Products, ProductsService, AddressesService, UsersService, PhoneNumbersService, CommentsService, UtilsService) {
                 var bookingsService = {};
 
                 bookingsService.getBookingsByProduct = function (productId) {
@@ -495,10 +492,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("PicturesService", ["Pictures", "Endpoints", "FormService", function (Pictures, Endpoints, FormService) {
             var picturesService = {};
-
-            picturesService.getPicturesByProduct = function (productId) {
-                return Pictures.get({product: productId, _cache: new Date().getTime()});
-            };
 
             picturesService.savePicture = function (productId, form, successCallback, errorCallback) {
                 // Calculate current user url
@@ -799,12 +792,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("BookingsLoadService", [
             "$q",
             "Bookings",
-            "PicturesService",
             "UtilsService",
             "BookingsParseService",
             "ProductsLoadService",
             "MessageThreadsService",
-            function ($q, Bookings, PicturesService, UtilsService, BookingsParseService, ProductsLoadService, MessageThreadsService) {
+            function ($q, Bookings, UtilsService, BookingsParseService, ProductsLoadService, MessageThreadsService) {
                 var bookingsLoadService = {};
 
                 bookingsLoadService.getBookingList = function (author, state, borrowerId, ownerId, page) {
@@ -938,11 +930,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "CheckAvailability",
             "AddressesService",
             "UsersService",
-            "PicturesService",
             "PhoneNumbersService",
             "UtilsService",
             "ProductsParseService",
-            function ($q, Products, CheckAvailability, AddressesService, UsersService, PicturesService, PhoneNumbersService, UtilsService, ProductsParseService) {
+            function ($q, Products, CheckAvailability, AddressesService, UsersService, PhoneNumbersService, UtilsService, ProductsParseService) {
                 var productsLoadService = {};
 
                 productsLoadService.getProduct = function (productId, loadProductStats, loadOwnerStats) {
