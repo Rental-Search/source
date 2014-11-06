@@ -92,7 +92,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("BookingsService:getBookingsByProduct", function () {
             var productId = 1;
             BookingsService.getBookingsByProduct(productId);
-            expect(bookingsMock.get).toHaveBeenCalledWith({product: productId});
+            expect(bookingsMock.get).toHaveBeenCalledWith({product: productId, _cache: jasmine.any(Number)});
         });
     });
 });

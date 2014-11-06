@@ -49,7 +49,6 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
 
             BookingDetailCtrl = $controller('BookingDetailCtrl', { $scope: scope, $stateParams: stateParams, BookingsLoadService: bookingsLoadServiceMock, CommentsLoadService: commentsLoadServiceMock });
             expect(bookingsLoadServiceMock.getBookingDetails).toHaveBeenCalled();
-            expect(commentsLoadServiceMock.getCommentList).toHaveBeenCalled();
         }));
 
         it("BookingDetailCtrl should be not null", function () {

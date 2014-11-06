@@ -21,9 +21,15 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
                 },
                 updateAddress: function (addressId, formData) {
                     console.log("addressesServiceMock:updateAddress called with addressId = " + addressId + ", formData = " + formData);
+                    return {then: function () {
+                        return {result: {}}
+                    }}
                 },
                 deleteAddress: function (addressId) {
                     console.log("addressesServiceMock:deleteAddress called with addressId = " + addressId);
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
                 }
             };
             productsServiceMock = {

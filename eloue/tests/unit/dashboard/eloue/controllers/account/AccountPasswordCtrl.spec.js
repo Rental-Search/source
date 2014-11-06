@@ -12,6 +12,8 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
             usersServiceMock = {
                 resetPassword: function (userId, form) {
                     console.log("usersServiceMock:resetPassword called with userId = " + userId + ", form = " + form);
+                    return {then: function () {
+                    }}
                 }
             };
 
@@ -22,7 +24,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
-
+            scope.markListItemAsSelected = function(prefix, id) {};
             spyOn(usersServiceMock, "resetPassword").andCallThrough();
 
             AccountPasswordCtrl = $controller('AccountPasswordCtrl', { $scope: scope, UsersService: usersServiceMock });

@@ -9,7 +9,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountPhonesCtrl"], functio
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
-
+            scope.markListItemAsSelected = function(prefix, id) {};
             AccountPhonesCtrl = $controller('AccountPhonesCtrl', { $scope: scope});
         }));
 

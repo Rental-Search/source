@@ -13,9 +13,9 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
             categoriesServiceMock = {
                 getRootCategories: function () {
                     console.log("categoriesServiceMock:getRootCategories called");
-                    return {$promise: {then: function () {
+                    return {then: function () {
                         return {result: {}}
-                    }}}
+                    }}
                 }
             };
 

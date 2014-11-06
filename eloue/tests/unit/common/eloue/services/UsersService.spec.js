@@ -46,7 +46,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("UsersService:get", function () {
             var userId = 1;
             UsersService.get(userId);
-            expect(usersMock.get).toHaveBeenCalledWith({id: userId}, undefined, undefined);
+            expect(usersMock.get).toHaveBeenCalledWith({id: userId, _cache: jasmine.any(Number)}, undefined, undefined);
         });
 
         it("UsersService:getMe", function () {

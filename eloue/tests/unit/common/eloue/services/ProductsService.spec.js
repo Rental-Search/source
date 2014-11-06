@@ -98,13 +98,13 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("ProductsService:getProductDetails", function () {
             var id = 1;
             ProductsService.getProductDetails(id);
-            expect(productsMock.get).toHaveBeenCalledWith({id: id});
+            expect(productsMock.get).toHaveBeenCalledWith({id: id, _cache: jasmine.any(Number)});
         });
 
         it("ProductsService:getProductsByAddress", function () {
             var addressId = 2;
             ProductsService.getProductsByAddress(addressId);
-            expect(productsMock.get).toHaveBeenCalledWith({address: addressId});
+            expect(productsMock.get).toHaveBeenCalledWith({address: addressId, _cache: jasmine.any(Number)});
         });
 
         it("ProductsService:updateProduct", function () {

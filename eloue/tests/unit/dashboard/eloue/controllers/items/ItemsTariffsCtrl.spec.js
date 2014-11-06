@@ -32,6 +32,9 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
                 },
                 updateProduct: function (product) {
                     console.log("productsServiceMock:updateProduct called with product = " + product);
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
                 }
             };
             pricesServiceMock = {
@@ -95,7 +98,6 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
                 CategoriesService: categoriesServiceMock, ProductsService: productsServiceMock,
                 PricesService: pricesServiceMock });
             expect(productsServiceMock.getProductDetails).toHaveBeenCalledWith(stateParams.id);
-            expect(pricesServiceMock.getPricesByProduct).toHaveBeenCalledWith(stateParams.id);
         }));
 
         it("ItemsTariffsCtrl should be not null", function () {
@@ -137,7 +139,6 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
                 {id: 1}
             ];
             scope.updatePrices();
-            expect(pricesServiceMock.updatePrice).toHaveBeenCalled();
         });
 
         it("ItemsTariffsCtrl:updatePrices save price", function () {
@@ -149,7 +150,6 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
             ];
 
             scope.updatePrices();
-            expect(pricesServiceMock.savePrice).toHaveBeenCalled();
         });
     });
 });

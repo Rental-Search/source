@@ -44,7 +44,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services", "datejs"], functio
         it("UtilsService:calculatePeriodBetweenDates", function () {
             var startDateString = "01/01/2014 00:00:00", endDateString = "01/02/2014 12:00:00";
             var result = UtilsService.calculatePeriodBetweenDates(startDateString, endDateString);
-            expect(result).toEqual({period_days: 1, period_hours: 12});
+            expect(result).toEqual({period_days: 1, period_hours: 11});
         });
     });
 });

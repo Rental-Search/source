@@ -42,7 +42,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressesCtrl"], func
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
-
+            scope.markListItemAsSelected = function(prefix, id) {};
             spyOn(usersServiceMock, "getMe").andCallThrough();
             spyOn(addressesServiceMock, "getAddressesByPatron").andCallThrough();
             $rootScope.$digest();

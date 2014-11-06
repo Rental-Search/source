@@ -11,6 +11,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(function () {
             categoriesMock = {
                 get: function () {
+                    return {$promise: {then: function () {
+                        return {results: []}
+                    }}}
                 },
                 getChildren: function () {
                     return {$promise: {then: function () {
@@ -44,14 +47,14 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("CategoriesService:getCategory", function () {
             var categoryId = 1;
             CategoriesService.getCategory(categoryId);
-            expect(categoriesMock.get).toHaveBeenCalledWith({id: categoryId});
+            expect(categoriesMock.get).toHaveBeenCalledWith({id: categoryId, _cache: jasmine.any(Number)});
         });
 
         it("CategoriesService:getParentCategory", function () {
             var parentId = "1", category = {parent: "http://10.0.5.47:8200/api/2.0/categories/" + parentId + "/"};
             CategoriesService.getParentCategory(category);
             expect(utilsServiceMock.getIdFromUrl).toHaveBeenCalledWith(category.parent);
-            expect(categoriesMock.get).toHaveBeenCalledWith({id: parentId });
+            expect(categoriesMock.get).toHaveBeenCalledWith({id: parentId, _cache: jasmine.any(Number) });
         });
 
         it("CategoriesService:getRootCategories", function () {

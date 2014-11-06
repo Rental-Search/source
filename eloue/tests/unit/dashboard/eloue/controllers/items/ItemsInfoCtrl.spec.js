@@ -42,9 +42,9 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
                 },
                 getRootCategories: function () {
                     console.log("categoriesServiceMock:getRootCategories called ");
-                    return {$promise: {then: function () {
+                    return {then: function () {
                         return {result: {}}
-                    }}}
+                    }}
                 },
                 getChildCategories: function (parentId) {
                     console.log("categoriesServiceMock:getChildCategories called with parentId = " + parentId);

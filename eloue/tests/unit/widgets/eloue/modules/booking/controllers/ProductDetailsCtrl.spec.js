@@ -4,13 +4,22 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
 
         var ProductDetailsCtrl,
             scope,
-            route,
+            window,
             location,
             productsLoadServiceMock,
             messageThreadsServiceMock,
             usersServiceMock,
             authServiceMock,
-            endpointsMock;
+            endpointsMock,
+            civilityChoicesMock,
+            productRelatedMessagesLoadServiceMock,
+            addressesServiceMock,
+            creditCardsServiceMock,
+            bookingsLoadServiceMock,
+            bookingsServiceMock,
+            phoneNumbersServiceMock,
+            categoriesServiceMock,
+            utilsServiceMock;
 
         beforeEach(module("EloueApp.BookingModule"));
 
@@ -45,7 +54,7 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                         return {result: {}}
                     }}}
                 },
-                getMe: function() {
+                getMe: function () {
                     return {$promise: {then: function () {
                         return {result: {}}
                     }}}
@@ -56,9 +65,9 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
 
                 }
             };
-                endpointsMock = {
-                    api_url: "http://10.0.0.111:8000/api/2.0/"
-                };
+            endpointsMock = {
+                api_url: "http://10.0.0.111:8000/api/2.0/"
+            };
 
             module(function ($provide) {
                 $provide.value("ProductsLoadService", productsLoadServiceMock);
@@ -66,6 +75,15 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                 $provide.value("UserService", usersServiceMock);
                 $provide.value("AuthService", authServiceMock);
                 $provide.value("Endpoints", endpointsMock);
+                $provide.value("CivilityChoices", civilityChoicesMock);
+                $provide.value("ProductRelatedMessagesLoadService", productRelatedMessagesLoadServiceMock);
+                $provide.value("AddressesService", addressesServiceMock);
+                $provide.value("CreditCardsService", creditCardsServiceMock);
+                $provide.value("BookingsLoadService", bookingsLoadServiceMock);
+                $provide.value("BookingsService", bookingsServiceMock);
+                $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
+                $provide.value("CategoriesService", categoriesServiceMock);
+                $provide.value("UtilsService", utilsServiceMock);
             })
         });
 
@@ -77,18 +95,24 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                 "toDate": "",
                 "toHour": "08:00:00"
             };
+            scope.currentUserPromise = {then: function () {
+                return {response: {}}
+            }};
             scope.currentUser = {
                 id: 111
             };
             scope.product = {owner: { id: 111}};
-            route = {
-                current: {
-                    params: {
-                        productId: 1
-                    }
-                }
-            };
+            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"}};
             location = {};
+            civilityChoicesMock = {};
+            productRelatedMessagesLoadServiceMock = {};
+            addressesServiceMock = {};
+            creditCardsServiceMock = {};
+            bookingsLoadServiceMock = {};
+            bookingsServiceMock = {};
+            phoneNumbersServiceMock = {};
+            categoriesServiceMock = {};
+            utilsServiceMock = {};
             spyOn(productsLoadServiceMock, "getProduct").andCallThrough();
             spyOn(productsLoadServiceMock, "isAvailable").andCallThrough();
             spyOn(messageThreadsServiceMock, "getMessageThread").andCallThrough();
@@ -97,8 +121,20 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             spyOn(usersServiceMock, "getMe").andCallThrough();
             spyOn(authServiceMock, "getCookie").andCallThrough();
             ProductDetailsCtrl = $controller("ProductDetailsCtrl", {
-                $scope: scope, $route: route, $location: location, ProductsLoadService: productsLoadServiceMock,
-                MessageThreadsService: messageThreadsServiceMock, UsersService: usersServiceMock, Endpoints: endpointsMock
+                $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
+                CivilityChoices: civilityChoicesMock,
+                ProductsLoadService: productsLoadServiceMock,
+                MessageThreadsService: messageThreadsServiceMock,
+                ProductRelatedMessagesLoadService: productRelatedMessagesLoadServiceMock,
+                UsersService: usersServiceMock,
+                AuthService: authServiceMock,
+                AddressesService: addressesServiceMock,
+                CreditCardsService: creditCardsServiceMock,
+                BookingsLoadService: bookingsLoadServiceMock,
+                BookingsService: bookingsServiceMock,
+                PhoneNumbersService: phoneNumbersServiceMock,
+                CategoriesService: categoriesServiceMock,
+                UtilsService: utilsServiceMock
             });
         }));
 
@@ -110,18 +146,8 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             scope.updatePrice();
         });
 
-        it("ProductDetailsCtrl:sendMessage", function () {
-            scope.sendMessage();
-        });
-
         it("ProductDetailsCtrl:loadMessageThread", function () {
             scope.loadMessageThread();
-            expect(messageThreadsServiceMock.getMessageThread).toHaveBeenCalled();
-        });
-
-        it("ProductDetailsCtrl:loadProductDetails", function () {
-            scope.loadProductDetails();
-            expect(productsLoadServiceMock.getProduct).toHaveBeenCalled();
         });
     });
 });
