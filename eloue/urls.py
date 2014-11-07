@@ -6,6 +6,7 @@ from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.utils import translation
 from django.views.generic import TemplateView
+from django.contrib.sitemaps.views import index, sitemap
 
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
@@ -223,6 +224,8 @@ ui3_urlpatterns = patterns('',
     url(r'^contrat-de-location/', TemplateView.as_view(template_name='rental_agreement/index.jade'), name='agreement'),
     url(r'^mentions-legales/', TemplateView.as_view(template_name='imprint/index.jade'), name='notices'),
     url(r'^activate/(?P<activation_key>\w+)/$', ActivationView.as_view(), name='auth_activate'),
+    url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
+    url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
 )
 
 urlpatterns = patterns('',
