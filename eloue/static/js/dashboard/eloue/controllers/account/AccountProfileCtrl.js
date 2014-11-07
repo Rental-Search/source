@@ -95,6 +95,7 @@ define(["angular", "eloue/app"], function (angular) {
                     AddressesService.getAddressesByPatron(currentUser.id).then(function (results) {
                         $scope.addressList = results;
                         $scope.defaultAddress = (!!currentUser.default_address) ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
+                        // Timeout is used because of chosen issue (when options are loaded asynchronously, they sometimes not visible in chosen widget)
                         $timeout(function () {
                             $("#defaultAddressSelect").chosen();
                         }, 200);

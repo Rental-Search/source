@@ -79,6 +79,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             }
 
+            /**
+             * Retrieve product ID from url. Url usually is like /location/{{root_category_slug}}/{{node_category_slug}}/{{leaf_category_slug}}/{{product_slug}}-{{product_id}}
+             * @returns {string|*}
+             */
             $scope.getProductIdFromUrl = function () {
                 var href = $window.location.href;
                 href = href.substr(href.lastIndexOf("location/") + 8);
@@ -91,6 +95,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
             $scope.productId = $scope.getProductIdFromUrl();
 
+            /**
+             * Initial booking dates are 1 nad 2 days after todat, 8a.m.
+             */
             $scope.bookingDetails = {
                 "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy"),
                 "fromHour": "08:00:00",
@@ -165,6 +172,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 ended_at: ""
             };
 
+            /**
+             * Show response errors on booking form under appropriate field.
+             * @param error JSON object with error details
+             */
             $scope.handleResponseErrors = function(error) {
                 $scope.submitInProgress = false;
                 if (!!error.errors) {
@@ -198,6 +209,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
                 $scope.product = result;
+                //TODO: uncomment, when calendar tab is displayed on product details page
 //                $scope.loadCalendar();
             });
 
@@ -227,6 +239,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
                 }
                 $scope.dateRangeError = null;
+                // check if product is available for selected dates
                 ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
                     $scope.duration = result.duration;
                     $scope.pricePerDay = result.unit_value;
@@ -256,23 +269,15 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             /**
-             * Get avatar url or default url if user has no avatar.
-             * @param uri
+             * Handler for call owner button.
              */
-            $scope.getAvatar = function getAvatar(uri) {
-                return uri ? uri : '/static/img/profile_img.png';
-            };
-
-            $scope.getProductImg = function (uri) {
-                return uri ? uri : '/static/img/product_img.png';
-            };
-
             $scope.callOwner = function callOwner() {
                 //TODO: call real service
                 console.log("Calling product owner..");
             };
 
-            $scope.sendBookingRequest = function sendBookingRequest() {
+            $scope.sendBookingRequest = function () {
+                //if user has no default addrees, firstly save his address
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
@@ -289,6 +294,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             };
 
+            /**
+             * Save payment info and request product booking.
+             */
             $scope.saveCardAndRequestBooking = function() {
                 $scope.submitInProgress = true;
                 // Update user info
@@ -307,10 +315,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     }
                 }
 
-
                 UsersService.updateUser(userPatch).$promise.then(function (result) {
                     // Update credit card info
                     $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
+                    // If credit card exists now it is deleted and saved again
                     if ($scope.creditCard.masked_number == "") {
                         if (!!$scope.creditCard.id) {
                             CreditCardsService.deleteCard($scope.creditCard).$promise.then(function (result) {
@@ -335,6 +343,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             };
 
+            /**
+             * Save booking and make payment request.
+             */
             $scope.requestBooking = function () {
                 var booking = {};
                 var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
@@ -382,6 +393,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 );
             };
 
+            /**
+             * Get label for google analytics event base on product category.
+             * @returns event tag label
+             */
             $scope.getEventLabel = function() {
                 if ($scope.isAuto()) {
                     return "Voiture - " + $scope.productCategoryName;
@@ -392,6 +407,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
+            /**
+             * Clears credit card data, when user clicks link to modify payment info.
+             */
             $scope.clearCreditCard = function () {
                 $scope.newCreditCard = true;
                 $scope.creditCard = {
@@ -450,6 +468,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             });
 
+            /**
+             * Loads all ancestors of product category for analytics tags.
+             * @param modalName name of modal window
+             */
             $scope.loadProductCategoryAncestors = function (modalName) {
                 $scope.productCategoryName = $scope.product.category.name;
                 CategoriesService.getAncestors($scope.product.category.id).then(function (ancestors) {
@@ -503,6 +525,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
+            /**
+             * Parses user creadit card info.
+             */
             $scope.loadCreditCards = function () {
                 if (!$scope.currentUserPromise) {
                     $scope.currentUserPromise = UsersService.getMe().$promise;
@@ -529,6 +554,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 return ($scope.rootCategory === "location-saisonniere");
             };
 
+            /**
+             * Loads message thread for send message to owner modal window.
+             */
             $scope.loadMessageThread = function () {
                 if (!$scope.currentUserPromise) {
                     $scope.currentUserPromise = UsersService.getMe().$promise;
@@ -549,6 +577,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             };
 
+            /**
+             * Used to load calendar with prodcut booking data.
+             */
             $scope.loadCalendar = function () {
                 BookingsService.getBookingsByProduct($scope.product.id).then(function (bookings) {
 
@@ -602,14 +633,15 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 console.log("onShowBookings");
             };
 
+            /**
+             * Select tab in main product detail page content part.
+             */
             $scope.selectTab = function (tabName) {
                 $('[id^=tabs-]').each(function () {
                     var item = $(this);
                     if (("#" + item.attr("id")) == tabName) {
-//                        item.show();
                         item.removeClass("ng-hide");
                     } else {
-//                        item.hide();
                         item.addClass("ng-hide");
                     }
                 });
@@ -625,6 +657,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.selectTab("#tabs-photos");
 
+            /**
+             * Add Google ad scripts.
+             */
             $scope.loadAdWordsTags =  function(googleConversionLabel) {
                 var scriptAdWords = document.createElement("script");
                 scriptAdWords.type = "text/javascript";

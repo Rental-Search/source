@@ -3,7 +3,7 @@
 define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
 
     /**
-     * Controller for the message detail page.
+     * Controller for the page to create new message thread for previously selected booking.
      */
     angular.module("EloueDashboardApp").controller("NewMessageThreadCtrl", [
         "$scope",

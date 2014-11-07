@@ -73,6 +73,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 tax_horsepower: ""
             };
 
+            /**
+             * Show response errors on publish ad form under appropriate field.
+             * @param error JSON object with error details
+             */
             $scope.handleResponseErrors = function (error) {
                 if (!!error.errors) {
                     $scope.errors = {
@@ -120,6 +124,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     id: null, amount: null, unit: Unit.DAY.id
                 };
                 $scope.publishAdError = null;
+                // load categories for comboboxes
                 CategoriesService.getRootCategories().then(function (categories) {
                     $scope.rootCategories = categories;
                     if (!!rootCategoryId) {
@@ -139,6 +144,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.$apply();
             });
 
+            /**
+             * Update options for node category combobox
+             */
             $scope.updateNodeCategories = function () {
                 CategoriesService.getChildCategories($scope.rootCategory).then(function (categories) {
                     $scope.nodeCategories = categories;
@@ -148,14 +156,20 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             };
 
+            /**
+             * Update options for leaf category combobox
+             */
             $scope.updateLeafCategories = function () {
                 CategoriesService.getChildCategories($scope.nodeCategory).then(function (categories) {
                     $scope.leafCategories = categories;
                 });
             };
 
+            /**
+             * Publish product ad.
+             */
             $scope.publishAd = function () {
-                console.log("Publish ad");
+                //if user has no default addrees, firstly save his address
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
@@ -171,6 +185,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
+            /**
+             * Save product and price info.
+             */
             $scope.saveProduct = function () {
                 $scope.submitInProgress = true;
                 $scope.product.description = "";
@@ -220,6 +237,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
+            /**
+             * Add analytics tags on the page and redirect to dashboard item info page.
+             * @param product product
+             */
             $scope.finishProductSaveAndRedirect = function (product) {
                 $scope.trackPageView();
                 $scope.loadPdltrackingScript();
@@ -232,6 +253,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.submitInProgress = false;
             };
 
+            /**
+             * Update publish ad form according to selected root category.
+             * @param rootCategory product root category
+             */
             $scope.updateFieldSet = function (rootCategory) {
                 $scope.isAuto = false;
                 $scope.isRealEstate = false;
@@ -242,6 +267,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
+            /**
+             * Search for node and leaf categories suggestions based on entered product title.
+             */
             $scope.searchCategory = function () {
                 //TODO: enable for auto and real estate
                 if (!$scope.isAuto && !$scope.isRealEstate && $scope.rootCategory && $scope.product.summary && ($scope.product.summary.length > 1)) {
@@ -339,6 +367,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 document.body.appendChild(noscriptAnnonceur);
             };
 
+            /**
+             * Add Google ad scripts.
+             */
             $scope.loadAdWordsTagPublishAd = function () {
                 var scriptAdWords = document.createElement("script");
                 scriptAdWords.type = "text/javascript";
