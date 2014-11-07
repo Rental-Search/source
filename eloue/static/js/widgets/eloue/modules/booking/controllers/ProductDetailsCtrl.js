@@ -22,7 +22,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "PhoneNumbersService",
         "CategoriesService",
         "UtilsService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService) {
+        "ShippingsService",
+        "ShippingPointsService",
+        "ProductShippingPointsService",
+        "PatronShippingPointsService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService) {
 
             $scope.creditCard = {
                 id: null,
@@ -36,6 +40,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 subscriber_reference: ""
             };
             $scope.newCreditCard = true;
+            $scope.addShipping = false;
+            $scope.borrowerShippingPoints = [];
             $scope.submitInProgress = false;
             $scope.showSaveCard = true;
             $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
@@ -117,6 +123,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             });
             $scope.duration = "0 jour";
             $scope.bookingPrice = 0;
+            $scope.shippingPrice = 0;
             $scope.pricePerDay = 0;
             $scope.caution = 0;
             $scope.productRelatedMessages = [];
@@ -177,7 +184,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * @param error JSON object with error details
              */
             $scope.handleResponseErrors = function(error) {
+                // Hide all spinners and enable form controls.
                 $scope.submitInProgress = false;
+                $scope.loadingProductShippingPoint = false;
+                $scope.shippingPointsRequestInProgress = false;
+                // Add specific error fields
                 if (!!error.errors) {
                     $scope.errors = {
                         civility: !!error.errors.civility ? error.errors.civility[0] : "",
@@ -241,15 +252,17 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.dateRangeError = null;
                 // check if product is available for selected dates
                 ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
+                    var price = result.total_price;
+                    price = price.replace("€","").replace("\u20ac","").replace("Eu","").replace(",",".").replace(" ","");
+                    price = Number(price);
                     $scope.duration = result.duration;
                     $scope.pricePerDay = result.unit_value;
-                    $scope.bookingPrice = result.total_price;
+                    $scope.bookingPrice = price;
                     $scope.available = result.max_available > 0;
                 }, function (error) {
                     $scope.available = false;
                     $scope.handleResponseErrors(error);
                 });
-
             };
 
             /**
@@ -276,6 +289,27 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 console.log("Calling product owner..");
             };
 
+            $scope.selectedPointId = "";
+
+            $scope.pointSelected = function(pointId) {
+                $scope.selectedPointId = pointId;
+                $scope.shippingPrice = 10;
+            };
+
+            $scope.saveDefaultAddress = function() {
+                $scope.submitInProgress = true;
+                $scope.currentUser.default_address.country = "FR";
+                AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
+                    $scope.submitInProgress = false;
+                    $scope.currentUser.default_address = result;
+                    UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
+                    $scope.noAddress = false;
+                    $scope.loadShippingPoints();
+                }, function (error) {
+                    $scope.handleResponseErrors(error);
+                });
+            };
+            
             $scope.sendBookingRequest = function () {
                 //if user has no default addrees, firstly save his address
                 if ($scope.noAddress) {
@@ -375,24 +409,47 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             };
                         }
 
-                        BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
-                            $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
-                            $scope.trackEvent("Réservation", "Demande de réservation",  $scope.getEventLabel());
-                            $scope.trackPageView();
-                            toastr.options.positionClass = "toast-top-full-width";
-                            toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
-                            $(".modal").modal("hide");
-                            $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
-                            $scope.submitInProgress = false;
-                        }, function (error) {
-                            $scope.handleResponseErrors(error);
+                        //TODO: save user shipping point and product shipping
+                        console.log($scope.borrowerShippingPoints);
+                        var selectedPoint = {};
+                        angular.forEach($scope.borrowerShippingPoints, function (value, key) {
+                            if($scope.selectedPointId == value.site_id) {
+                                selectedPoint = value;
+                            }
                         });
+                        if (!!selectedPoint && !!selectedPoint.site_id) {
+                            selectedPoint.type = 2;
+                            selectedPoint.booking = Endpoints.api_url + "bookings/" + booking.uuid + "/";
+                            selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
+                            PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (shippingPoint) {
+                                $scope.payForBooking(booking, paymentInfo);
+                            }, function (error) {
+                                $scope.handleResponseErrors(error);
+                            });
+                        } else {
+                            $scope.payForBooking(booking, paymentInfo);
+                        }
                     }, function (error) {
                         $scope.handleResponseErrors(error);
                     }
                 );
             };
 
+            $scope.payForBooking = function (booking, paymentInfo) {
+                BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                    $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
+                    $scope.trackEvent("Réservation", "Demande de réservation",  $scope.getEventLabel());
+                    $scope.trackPageView();
+                    toastr.options.positionClass = "toast-top-full-width";
+                    toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
+                    $(".modal").modal("hide");
+                    $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
+                    $scope.submitInProgress = false;
+                }, function (error) {
+                    $scope.handleResponseErrors(error);
+                });
+            };
+            
             /**
              * Get label for google analytics event base on product category.
              * @returns event tag label
@@ -451,6 +508,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.loadMessageThread();
                 } else if (args.name === "booking") {
                     $scope.loadCreditCards();
+                    $scope.loadProductShippingPoint();
                 } else if (args.name === "phone") {
                     $scope.loadPhoneDetails();
                 }
@@ -544,6 +602,54 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.newCreditCard = false;
                     }
                 });
+            };
+
+            $scope.loadProductShippingPoint = function () {
+                $scope.currentUserPromise.then(function (currentUser) {
+                    $scope.currentUser = currentUser;
+                    $scope.loadingProductShippingPoint = true;
+                    ProductShippingPointsService.getByProduct($scope.productId).then(function (data) {
+                        //Show shipping choice only if there are existing product shipping points
+                        if (!!data.results && data.results.length > 0) {
+                            $scope.productShippingPoint = data.results[0];
+                            $scope.shippingAllowed = true;
+                        }
+                        $scope.loadingProductShippingPoint = false;
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
+                    });
+                });
+            };
+
+            $scope.loadShippingPoints = function () {
+                if ($scope.addShipping && $scope.borrowerShippingPoints.length == 0) {
+                    if (!!$scope.currentUser.default_address) {
+                        $scope.shippingPointsRequestInProgress = true;
+                        ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
+                            $scope.shippingPointsRequestInProgress = false;
+                            //TODO: it's temperory, then will call pricing service
+                            angular.forEach(result, function (value, key) {
+                                value.price = "10.0";
+                            });
+                            $scope.borrowerShippingPoints = result;
+                            $("#point-contatiner").mCustomScrollbar({
+                                scrollInertia: '100',
+                                autoHideScrollbar: false,
+                                theme: 'dark-thin',
+                                advanced: {
+                                    updateOnContentResize: true,
+                                    autoScrollOnFocus: false
+                                }
+                            });
+                        }, function (error) {
+                            $scope.handleResponseErrors(error);
+                        });
+                    }
+                }
+                if (!$scope.addShipping) {
+                    $scope.shippingPrice = 0;
+                    $scope.selectedPointId = "";
+                }
             };
 
             $scope.isAuto = function () {
