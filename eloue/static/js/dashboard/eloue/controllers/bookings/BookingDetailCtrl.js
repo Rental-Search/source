@@ -99,8 +99,9 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.handleResponseErrors(error);
                     });
                     ShippingsService.getByBooking($stateParams.uuid).then(function (shippingList) {
-                        if (!!shippingList.results) {
+                        if (!!shippingList.results && shippingList.results.length > 0) {
                             $scope.shipping = shippingList.results[0];
+                            $scope.voucherLink = Endpoints.api_url + "shippings/" + $scope.shipping.id + "/document/";
                         }
                     });
                 }

@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.http.response import Http404
+from django.http.response import Http404, HttpResponse
 from rest_framework.decorators import link
 from rest_framework.response import Response
 from eloue.api import filters, mixins, viewsets
@@ -78,3 +78,12 @@ class ShippingViewSet(viewsets.NonEditableModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
     owner_field = ('booking__owner', 'booking__borrower')
     filter_fields = ('booking', )
+
+    @link()
+    def document(self, request, *args, **kwargs):
+        shipping = self.get_object()
+        file_content = helpers.get_shipping_document(shipping.shuttle_document_url)
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % shipping.shuttle_document_url
+        response.write(file_content)
+        return response

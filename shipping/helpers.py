@@ -4,7 +4,7 @@ from decimal import Decimal
 from django.contrib.gis.geos.point import Point
 from eloue.geocoder import GoogleGeocoder
 from shipping.choises import SHIPPING_POINT_TYPE
-from shipping.navette import Navette
+from shipping.navette import Navette, FileTransfer
 
 
 class FakeOpeningDate(object):
@@ -128,3 +128,7 @@ def create_shipping(token, order_params):
         'shuttle_code': shipping_params.NavetteCode,
         'shuttle_document_url': shipping_params.NavettePDFUrl
     }
+
+
+def get_shipping_document(filename):
+    return FileTransfer().download_etiquette(filename)
