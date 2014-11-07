@@ -131,7 +131,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
               li {{arrival_point.address}}
               li {{arrival_point.zipcode}} {{arrival_point.city}}
             hr
-            .text-center(ng-show="!!shipping && bookingDetails.state!='authorized'"): a(href="{{shipping.shuttle_document_url}}").text-success.text-underline-hover Télécharger les étiquettes
+            .text-center(ng-show="!!shipping && bookingDetails.state!='authorized'"): a(href="{{voucherLink}}", target="_blank").text-success.text-underline-hover Télécharger les étiquettes
 
         .block-with-thumbnail.text-gray.notification(ng-show="showCommentForm")
             .col-thumbnail
