@@ -594,8 +594,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         if (!!data.results && data.results.length > 0) {
                             $scope.productShippingPoint = data.results[0];
                             $scope.shippingAllowed = true;
-                            $scope.loadingProductShippingPoint = false;
                         }
+                        $scope.loadingProductShippingPoint = false;
                     }, function (error) {
                         $scope.handleResponseErrors(error);
                     });
