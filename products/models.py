@@ -894,7 +894,7 @@ if "notification" not in settings.INSTALLED_APPS:
     signals.post_save.disconnect(utils.new_message_email, sender=Message)
 
     # add our handler to send messages in both .txt/.html variants
-    from eloue.legacy import new_message_email
+    from products.signals import new_message_email
     signals.post_save.connect(
         new_message_email, sender=Message,
         dispatch_uid='django_messagee.Message-post_save-eloue.legacy.new_message_email'

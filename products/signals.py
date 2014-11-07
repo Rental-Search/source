@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.core.cache import cache
 from django.contrib.sites.models import Site
 
-from eloue.utils import cache_key
+from eloue.utils import cache_key, create_alternative_email
 from django.db.models import signals
 from django.core import exceptions
 
@@ -74,3 +75,18 @@ def post_save_message(sender, instance, created, **kwargs):
     if parent_msg:
         parent_msg.replied_at = instance.sent_at
         parent_msg.save()
+
+
+def new_message_email(sender, instance, created, **kwargs):
+    """
+    This function sends an email and is called via Django's signal framework.
+    Optional arguments:
+        ``template_name``: the template to use
+        ``subject_prefix``: prefix for the email subject.
+        ``default_protocol``: default protocol in site URL passed to template
+    """
+    if created and instance.recipient.email:
+        context = {'message': instance}
+        message = create_alternative_email(
+            'django_messages/new_message', context, settings.DEFAULT_FROM_EMAIL, [instance.recipient.email])
+        message.send()
