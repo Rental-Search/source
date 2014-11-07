@@ -121,6 +121,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 };
                 $scope.publishAdError = null;
                 CategoriesService.getRootCategories().then(function (categories) {
+                    if ($scope.currentUser && !$scope.currentUser.default_address) {
+                        $scope.noAddress = true;
+                    }
                     $scope.rootCategories = categories;
                     if (!!rootCategoryId) {
                         $scope.rootCategory = rootCategoryId;

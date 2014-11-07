@@ -1260,6 +1260,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Products.getShippingPoints({id: productId, lat: lat, lng: lng, search_type: 2, _cache: new Date().getTime()}).$promise;
                 };
 
+                shippingPointsService.searchArrivalShippingPointsByAddressAndProduct = function(address, productId) {
+                    return Products.getShippingPoints({id: productId, address: address, search_type: 2, _cache: new Date().getTime()}).$promise;
+                };
+
                 shippingPointsService.searchShippingPointsByCoordinates = function(lat, lng, searchType) {
                     return ShippingPoints.get({lat: lat, lng: lng, search_type: searchType, _cache: new Date().getTime()}).$promise;
                 };
