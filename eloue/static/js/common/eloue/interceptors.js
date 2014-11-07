@@ -2,10 +2,9 @@
 define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr) {
 
     /**
-     * Controller for the login form.
+     * Generic error handler interceptor.
      */
     EloueCommon.factory("ErrorHandlerInterceptor", ["$q", "$rootScope", function ($q, $rootScope) {
-
 
         // this message will appear for a defined amount of time and then vanish again
         var showMessage = function (content) {

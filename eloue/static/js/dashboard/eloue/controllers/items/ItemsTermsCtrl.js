@@ -32,6 +32,10 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             });
 
+            /**
+             * Product terms are dependent on root category.
+             * @param rootCategory root category
+             */
             $scope.updateTermsBlocks = function (rootCategory) {
                 $scope.isAuto = false;
                 $scope.isRealEstate = false;

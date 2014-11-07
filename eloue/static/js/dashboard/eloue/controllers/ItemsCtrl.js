@@ -26,6 +26,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             CategoriesService.getRootCategories().then(function (categories) {
                 $scope.categories = categories;
+                // Timeout is used because of chosen issue (when options are loaded asynchronously, they sometimes not visible in chosen widget)
                 $timeout(function () {
                     $("#categoryFilterSelect").chosen();
                     $(".chosen-drop").mCustomScrollbar({

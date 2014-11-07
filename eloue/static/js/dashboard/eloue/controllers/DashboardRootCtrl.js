@@ -99,14 +99,6 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 $(window).trigger('resize');
             };
 
-            $scope.getAvatar = function (uri) {
-                return uri ? uri : STATIC_URL + 'img/profile_img.png';
-            };
-
-            $scope.getProductImg = function (uri) {
-                return uri ? uri : STATIC_URL + 'img/product_img_full.png';
-            };
-
             $scope.showNotification = function(msg) {
                 toastr.options.positionClass = "toast-top-full-width";
                 toastr.success(msg, "");

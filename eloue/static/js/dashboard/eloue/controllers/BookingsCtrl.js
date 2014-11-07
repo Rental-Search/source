@@ -61,6 +61,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.stateFilter, $scope.bookingFilter.borrower, $scope.bookingFilter.owner], shouldReloadList: true});
             };
 
+            // Timeout is used because of chosen issue (when options are loaded asynchronously, they sometimes not visible in chosen widget)
             $timeout(function () {
                 $("#stateFilterSelect").chosen();
                 $(".chosen-drop").mCustomScrollbar({

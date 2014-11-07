@@ -1397,6 +1397,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             };
         }]);
 
+        /**
+         * List lazy loading service (used fot lazy load lists of messages, bookings and items in dashboard).
+         */
         EloueCommon.factory("LazyLoader", ["$timeout", "$rootScope", "$q", function ($timeout, $rootScope, $q) {
             var config,
                 data,

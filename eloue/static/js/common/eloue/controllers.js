@@ -219,6 +219,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             });
         };
 
+        /**
+         * Get label for google analytics event base on product category.
+         * @returns event tag label
+         */
         $scope.getEventLabel = function () {
             var url = RedirectAfterLogin.url;
             if (url.indexOf("booking") > 0) {
@@ -309,6 +313,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $("select").attr("eloue-chosen", "");
     }]);
 
+    /**
+     * Controller handles modal window open/close event, checks user authentication and triggers specific handlers in controllers depend on scope.
+     */
     EloueCommon.controller("ModalCtrl", [
         "$scope",
         "$rootScope",
