@@ -11,6 +11,7 @@ from products.serializers import NestedProductSerializer
 from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api import serializers
+from shipping.models import ShippingPoint
 from rent.utils import timesince
 
 
@@ -64,8 +65,17 @@ class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
     owner = NestedUserSerializer(read_only=True)
     borrower = NestedUserSerializer()
+    with_shipping = SerializerMethodField('is_shipping_included')
     sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
     duration = SerializerMethodField('get_duration')
+
+    def is_shipping_included(self, obj):
+        try:
+            obj.product.departure_point
+            obj.arrival_point
+        except ShippingPoint.DoesNotExist:
+            return False
+        return True
 
     def get_duration(self, obj):
         return timesince(obj.started_at, obj.ended_at)
@@ -86,7 +96,7 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = (
             'uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
             'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at', 'sinisters',
-            'duration',
+            'with_shipping', 'duration',
         )
         read_only_fields = (
             'state', 'deposit_amount', 'insurance_amount', 'total_amount',

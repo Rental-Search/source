@@ -4,6 +4,7 @@ define([
     "angular-cookies",
     "angular-resource",
     "angular-route",
+    "angular-i18n",
     "eloue/modules/booking/BookingModule",
     "../../common/eloue/commonApp"
 ], function (angular) {

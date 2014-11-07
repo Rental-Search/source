@@ -7,13 +7,17 @@ table.calendar.bd-wrap.indent-t-md.indent-b-md
             td Durée
             td
                 b {{duration}}
+        tr(ng-show="shippingPrice > 0")
+            td Livraison
+            td
+                b {{shippingPrice | number}}&nbsp;€
         tr
             td Prix
             td
-                b.text-success {{bookingPrice}}
+                b.text-success {{bookingPrice + shippingPrice | number}}&nbsp;€
         tr
             td Caution
             td
-                b {{product.deposit_amount}}€
+                b {{product.deposit_amount}}&nbsp;€
 p En cliquant sur "Réservez", vous enverrez une demande de location au propriétaire. Vous serez débité du montant de la location dès qu'il  acceptera votre demande. La caution ne sera pas débitée de votre compte (e-loue prendra simplement une empreinte de votre carte bancaire en cas de problème pendant la location).
 {% endverbatim %}

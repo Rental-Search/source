@@ -70,7 +70,7 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' %}").section-body
   input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
   input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
 
-  p.caption loueur
+  p.caption loueurs
   .checkbox
     label(for="particular")
       {% if form.cleaned_data.renter == 'particuliers' %}
@@ -79,7 +79,7 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' %}").section-body
       input(type="checkbox", name="renter", value="particuliers")#particular
       {% endif %}
       span.flaticon.stroke.checkmark-1
-    | Particulier
+    | Particuliers
   .checkbox
     label(for="professional")
       {% if form.cleaned_data.renter == 'professionnels' %}
@@ -88,7 +88,7 @@ form#detail-search(action="{% facet_url breadcrumbs -'page' %}").section-body
       input(type="checkbox", name="renter", value="professionnels")#professional
       {% endif %}
       span.flaticon.stroke.checkmark-1
-    | Professionel
+    | Professionels
 
   .indent-t-md
     input(type="submit", style="width: 100%", value="Filtrer").btn.btn-lg.btn-advertise.bg-success

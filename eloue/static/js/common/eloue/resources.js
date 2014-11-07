@@ -75,7 +75,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
             {
                 "update": { method: "PUT" },
                 "getStats": { method: "GET", url: Endpoints.api_url + "products/:id/stats/?" },
-                "getAbsoluteUrl": { method: "GET", url: Endpoints.api_url + "products/:id/absolute_url/?" }
+                "getAbsoluteUrl": { method: "GET", url: Endpoints.api_url + "products/:id/absolute_url/?" },
+                "getShippingPoints": { method: "GET", url: Endpoints.api_url + "products/:id/shipping_points/?", isArray: true }
             });
     }]);
 
@@ -164,6 +165,37 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      */
     EloueCommon.factory("Sinisters", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "sinisters/:id/?");
+    }]);
+
+    /**
+     * Factory for managing shippings.
+     */
+    EloueCommon.factory("Shippings", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "shippings/:id/?");
+    }]);
+
+    /**
+     * Factory for managing shipping points.
+     */
+    EloueCommon.factory("ShippingPoints", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "shippingpoints/:id/?", {},
+            {
+                "get": {method: "GET", isArray: true}
+            });
+    }]);
+
+    /**
+     * Factory for managing product shipping points.
+     */
+    EloueCommon.factory("ProductShippingPoints", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "productshippingpoints/:id/?");
+    }]);
+
+    /**
+     * Factory for managing patron shipping points.
+     */
+    EloueCommon.factory("PatronShippingPoints", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "patronshippingpoints/:id/?");
     }]);
 
     /**

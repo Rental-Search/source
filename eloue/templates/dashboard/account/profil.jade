@@ -12,7 +12,7 @@ block sections
             .col-thumbnail
               .thumbnail.round.indent-sm-r: span.lg: img(style="background-image: url({{currentUser.avatar.profil}});")
             .col-exposition
-              label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifier mon image
+              label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifiez mon image
                 input(type="file", name="avatar", file-chooser, on-change="onFileChanged()")#change-img
                 input(type="hidden", name="_method", value="PUT")
       form(id="profile-information", name="profile-information", data-ng-submit="dataFormSubmit()", novalidate)

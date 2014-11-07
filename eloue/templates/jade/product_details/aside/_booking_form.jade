@@ -23,12 +23,12 @@ form.form-inline.section-body.text-center
             b.period-days {{duration}}
         p.price
             | Prix {% endverbatim %}{% if is_pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
-            big.text-primary &nbsp;{{bookingPrice}}
+            big.text-primary &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
         {% endverbatim %}
         if not is_pro
             p Assurance incluse
     .part
-        a(href = "#/booking", data-dismiss="modal").btn.bg-success.calendar-ok
+        a(href = "#/booking", data-dismiss="modal", data-ng-disabled="!available").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2
             | {% if is_pro %}Envoyez{% else %}Réservez{% endif %}
         p.mrg-v-1

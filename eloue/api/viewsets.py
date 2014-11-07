@@ -4,6 +4,14 @@ from rest_framework import viewsets, mixins
 from .mixins import LocationHeaderMixin, ErrorMixin, PermissionMixin, CacheControlMixin
 
 
+class SimpleViewSet(
+    PermissionMixin,
+    ErrorMixin,
+    viewsets.ViewSet
+):
+    pass
+
+
 class ModelViewSet(
     CacheControlMixin,
     PermissionMixin,

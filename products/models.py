@@ -185,6 +185,15 @@ class Product(models.Model):
     def comment_count(self):
         return self.borrowercomments.count()
 
+
+    @property
+    def shipping_available(self):
+        try:
+            self.departure_point
+        except models.Model.DoesNotExist:
+            return False
+        return True
+    
     def monthly_availability(self, year, month):
 
         year = int(year)

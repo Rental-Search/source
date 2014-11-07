@@ -29,6 +29,7 @@ block append content-body
           section
             .section-body
               .part.picture-tab#tabs
+                {% with product.object.shipping_available as shipping_available %}
                 ul.nav.nav-justified.text-nowrap
                   -var tabs = [["Photos et Localisation", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"]]
                   each title, href, i in tabs
@@ -40,15 +41,19 @@ block append content-body
                   if insurance_available
                     li.spacer
                     li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 Conditions d'assurance
-                //-
                   li.spacer
+                  {% if shipping_available %}
                   li: a(href="#tabs-shipping", ng-click="selectTab('#tabs-shipping')").pad-v-2 Livraison
+                  {% endif %}
                 include ./product_detail
                 include ./tab_tarifs
                 //-include ./tab_available
                 if insurance_available
                   include ./tab_terms
-                //-include ./tab_shipping
+                {% if shipping_available %}
+                include ./tab_shipping
+                {% endif %}
+                {% endwith %}
               .part.description
                 include ../jade/product_details/main/_description
               if product_comments and not is_pro

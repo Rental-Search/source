@@ -12,17 +12,24 @@ h2 Vos informations personnelles
   .col-sm-5
       input(type="text", name="last_name", placeholder="Nom *", ng-model="currentUser.last_name", required).form-control
       span.text-danger(ng-show="!!errors.last_name", ng-bind="errors.last_name")
-.row
+.row(ng-show="!addShipping || (addShipping && !noAddress)")
   .col-sm-12
       input(type="text", name="street", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
       span.text-danger(ng-show="!!errors.street", ng-bind="errors.street")
-.row
+.row(ng-show="!addShipping || (addShipping && !noAddress)")
   .col-sm-6
       input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
       span.text-danger(ng-show="!!errors.zipcode", ng-bind="errors.zipcode")
   .col-sm-6
       input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
       span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
+.row: .col-xs-12
+    .checkbox(ng-show="shippingAllowed")
+        label
+            input(type="checkbox", ng-model="addShipping", ng-change="loadShippingPoints()")#particular
+            span.flaticon.stroke.checkmark-1
+        b.text-black Option livraison, Recevez cet objet  dans un point relais Pickup à proximiter de ches vous
+    a(href="", ng-show="loadingProductShippingPoint").btn.bg-gray-light-hover.text-white.loading2 &nbsp;&nbsp;&nbsp;
 .row(ng-show="isAuto()")
   .col-sm-6(style="z-index: 1050")
       input#date_of_birth(type="text", name="date_of_birth", data-date-format="yyyy-mm-dd" , placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto()").form-control

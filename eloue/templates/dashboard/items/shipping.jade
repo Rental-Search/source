@@ -1,66 +1,123 @@
 block details
-  .section-content
+  .section-content(ng-show="showWellcome")
     h2 La livraison avec la
       span.sprite-pickup-logo-full.indent-sm-l
+    h2.small La navette pickup disponible partout en France
+        p
+            | Vous pouvez proposer  grâce à notre partenaire La Navette Pickup une 
+            | option de livraison à votre objet.
+            br
+            | L’objet sera transporté via une pochette de relais pickup à relais pickup 
+            | à travers toute la France. Il faut donc que votre objet rentre dans une 
+            | pochette de ce type :
 
-    if True
-        h2.small La navette pickup disponible partout en France
+        .indent-md-v: img(src="#{STATIC_URL}img/pickup_instruction.jpg", alt="", width="100%")
         ul
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.sprite-pickup-logo-short-black
-            .col-xs-11 Il y aura dès l’ouverture 1500 point relais partenaires partout en France, et rapidement cela montera à 6000.
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.sprite-calendar
-            .col-xs-11 La livraison sera en général de 24 ou 48h (non garanti).
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.sprite-euro
-            .col-xs-11 Les coûts de livraison seront très faibles et à la charge du locataire, donc en tant que propriétaire vous n’aurez rien à payer.
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.sprite-pickup-logo-short-black
+            .col-xs-11: p
+              | 7000 points relais partenaires partout en France : vous 
+              | choisissez le relais le plus proche de chez vous.
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.sprite-calendar
+            .col-xs-11: p
+              | La livraison sera en général de 24 ou 48h (non garanti).
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.sprite-euro
+            .col-xs-11: p
+              | Les coûts de livraison sont à la charge du locataire.
 
-        h2.small Comment se passeront les locations sur e-loue avec la Navette pickup&nbsp;?
+        h2.small.indent-lg-t Comment se passeront les locations sur e-loue avec la Navette pickup&nbsp;?
         ol.ordered-list-big
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.counter
-            .col-xs-11 Si j'accepte une demande de réservation, je me rends dans un point relais navette pickup pour envoyer l'objet.
-          li.row.indent-lg-v
-            .col-xs-1.text-right: span.counter
-            .col-xs-11 En fin de location, je suis averti par sms pour récupérer l'objet
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.counter
+            .col-xs-11: p
+              | Si j’accepte une demande de réservation avec l’option 
+              | livraison, je me rends dans un point relais La Navette Pickup 
+              | pour envoyer l’objet.
+          li.row.indent-md-v
+            .col-xs-1.text-center: span.counter
+            .col-xs-11: p
+              | En fin de location vous êtes prévenu par email de la livraison 
+              | de votre navette dans votre relais d’arrivée.
 
-    if True
-        form(action="choice_point")
+        .text-center: a(href="", ng-click="showMapPointList()").btn.btn-inline.bg-success-hover.text-white J’accepte les  livraisons
+
+  .section-content(ng-show="showPointList")
+    h2 La livraison avec la
+      span.sprite-pickup-logo-full.indent-sm-l
+    form(action="choice_point")
+        fieldset(ng-disabled="submitInProgress")
           .pickup-input-wrapper
-            input#nickname.form-control(type="text", name="address", placeholder="")
+            input#product-shipping-address.form-control(type="text", name="address", placeholder="", ng-model="addressQuery", ng-blur="searchShippingPoints()")
             span.sprite-pickup-logo-short-grey
-          h3 Sélectionner un point relais ci-dessous&nbsp;:
+          input#searchLat(disabled="disabled", name="lat", type="hidden", ng-model="searchLat", ng-change="searchShippingPoints()")
+          input#searchLng(disabled="disabled", name="lng", type="hidden", ng-model="searchLng", ng-change="searchShippingPoints()")
+          a(href="", ng-show="submitInProgress").btn.btn-inline.bg-gray-light-hover.text-white.loading &nbsp;&nbsp;&nbsp;
+          h3(ng-show="!!shippingPoints && shippingPoints.length > 0") Sélectionner un point relais ci-dessous&nbsp;:
 
-          table.calendar.bd-wrap
-            -var range = "123"
-            for i in range
-              tr: td
-                span.sprite-pickup-logo.pull-left
-                .ovy-h.pad-xs-l
-                  | KAHLOUCHE PRESSE
-                  br
-                  | 79 BOULEVARD BEAUMARCHAIS
-                  br
-                  | 75003 PARIS
+          .zebra.indent-md-v(ng-show="!!shippingPoints && shippingPoints.length > 0")
+              {% verbatim %}
+              label(ng-repeat="point in shippingPoints").zebra-row
+                input(type="radio", name="pickup", value="{{point.site_id}}", ng-model="point.selected", ng-change="pointSelected('{{point.site_id}}')")
+                .zebra-row-wrapper
+                  .zebra-col
+                    span.radio-indicator
+                  .zebra-col
+                    span.sprite-pickup-logo
+                  .zebra-col.main-cell
+                    | {{point.name}}
+                    br
+                    | {{point.address}}
+                    br
+                    | {{point.zipcode}} {{point.city}}
 
-    if True
-        .block-with-thumbnail.notification.indent-md-v
+        .text-center
+            span.text-danger(ng-show="!!errors.general", ng-bind="errors.general")
+            br
+            a(href="", ng-click="cancelPointSelection()").text.text-danger.text-underline-hover.indent-sm-h  Annuler
+            a(href="", ng-click="saveMapPoint()", ng-show="!!shippingPoints && shippingPoints.length > 0", ng-disabled="!selectedPointId || submitInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.btn-inline.bg-success-hover.text-white Enregistrer
+        {% endverbatim %}
+
+  .section-content(ng-show="showPointDetails")
+    h2 La livraison avec la
+      span.sprite-pickup-logo-full.indent-sm-l
+    .block-with-thumbnail.notification.indent-md-v
           .col-thumbnail
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
           .col-exposition.text-action
             h3: b.indent-xs-b Relais de départ
+            {% verbatim %}
             ul.text-uppercase.indent-md-b
-              li KAHLOUCHE PRESSE
-              li 79 BOULEVARD BEAUMARCHAIS
-              li 75003 PARIS
+              li {{productShippingPoint.name}}
+              li {{productShippingPoint.address}}
+              li {{productShippingPointzipcode}} {{productShippingPoint.city}}
 
             table.calendar.bd-wrap
-              -var data = [["Lundi", "08:15 - 14:00, 15:30 - 20:30"], ["Mardi", "08:15 - 14:00, 15:30 - 20:30"], ["Mercredi", "08:15 - 14:00, 15:30 - 20:30"], ["Jeudi", "08:15 - 14:00, 15:30 - 20:30"], ["Vendredi", "08:15 - 14:00, 15:30 - 20:30"], ["Samedi", "08:15 - 14:00, 15:30 - 20:30"], ["Dimanche", "Fermé"]]
-              each title, info in data
-                tr
-                  td {{ title }}
-                  td {{ info }}
+              //-var data = [["Lundi", "08:15 - 14:00, 15:30 - 20:30"], ["Mardi", "08:15 - 14:00, 15:30 - 20:30"], ["Mercredi", "08:15 - 14:00, 15:30 - 20:30"], ["Jeudi", "08:15 - 14:00, 15:30 - 20:30"], ["Vendredi", "08:15 - 14:00, 15:30 - 20:30"], ["Samedi", "08:15 - 14:00, 15:30 - 20:30"], ["Dimanche", "Fermé"]]
+              //each title, info in data
+              tr
+                  td Lundi
+                  td {{schedule['Monday'] ? schedule['Monday']: 'Fermé'}}
+              tr
+                  td Mardi
+                  td {{schedule['Tuesday'] ? schedule['Tuesday']: 'Fermé'}}
+              tr
+                  td Mercredi
+                  td {{schedule['Wednesday'] ? schedule['Wednesday']: 'Fermé'}}
+              tr
+                  td Jeudi
+                  td {{schedule['Thursday'] ? schedule['Thursday']: 'Fermé'}}
+              tr
+                  td Vendredi
+                  td {{schedule['Friday'] ? schedule['Friday']: 'Fermé'}}
+              tr
+                  td Samedi
+                  td {{schedule['Saturday'] ? schedule['Saturday']: 'Fermé'}}
+              tr
+                  td Dimanche
+                  td {{schedule['Sunday'] ? schedule['Sunday']: 'Fermé'}}
             .indent-sm-t.clearfix
-              .pull-left.indent-sm-t: a(href="#").text-gray-light.text-underline-hover Supprimer
-              .pull-right: a(href="#").btn-inline.btn-default.text-success Modifier le point relais
+              .pull-left.indent-sm-t: a(href="", ng-click="removeMapPoint()", class="{{submitInProgress ? 'loading' : ''}}", ng-disabled="submitInProgress").text-gray-light.text-underline-hover Supprimer
+              .pull-right: a(href="", ng-click="showMapPointList()").btn-inline.btn-default.text-success Modifier le point relais
+            {% endverbatim %}

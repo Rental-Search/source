@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext as _
-from rest_framework.fields import FloatField, IntegerField
-from rest_framework.fields import CharField
+from rest_framework.fields import FloatField
+from rest_framework.fields import IntegerField, DecimalField, CharField
 from products import models
 from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
-    NestedModelSerializerMixin
+    NestedModelSerializerMixin, SimpleSerializer
 
 
 class CategorySerializer(ModelSerializer):
@@ -162,3 +162,12 @@ class ProductRelatedMessageSerializer(ModelSerializer):
         fields = ('id', 'thread', 'sender', 'recipient', 'body', 'sent_at', 'read_at', 'replied_at', 'offer')
         read_only_fields = ('sent_at',)
         immutable_fields = ('thread', 'sender', 'recipient', 'offer')
+
+
+class ShippingPriceParamsSerializer(SimpleSerializer):
+    arrival_point_id = IntegerField(required=True)
+
+
+class ShippingPriceSerializer(SimpleSerializer):
+    price = DecimalField(required=True, decimal_places=2, max_digits=10)
+    token = CharField(required=True)

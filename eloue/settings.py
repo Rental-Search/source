@@ -238,6 +238,7 @@ INSTALLED_APPS = (
     'accounts',
     'products',
     'rent',
+    'shipping',
     'payments',
     'contest',
     'eloue.api',
@@ -686,6 +687,11 @@ try:
 except ImportError:
     pass
 
+logging.getLogger('suds.client').setLevel(logging.ERROR)
+logging.getLogger('suds.transport').setLevel(logging.ERROR)
+logging.getLogger('suds.xsd.schema').setLevel(logging.ERROR)
+logging.getLogger('suds.wsdl').setLevel(logging.ERROR)
+
 # Lean configuration
 LEAN_ENGAGEMENT_CALCULATOR = 'eloue.lean.PatronEngagementScoreCalculator'
 
@@ -827,6 +833,10 @@ else:
     PAYBOX_ENDPOINT = env('PAYBOX_ENDPOINT', "https://ppps.paybox.com/PPPS.php")
     PAYBOX_VERSION = env('PAYBOX_VERSION', '00104')
     PAYBOX_CLE = env('PAYBOX_CLE', 'IJEDEDBC')
+
+
+## NAVETTE PICKCUP CONFIGURATION
+NAVETTE_ENDPOINT = env('NAVETTE_ENDPOINT', 'http://test-web-navette.pickup.fr/v1/Navette.svc?wsdl')
 
 
 PRODUCTHIGHLIGHT_PRICE = decimal.Decimal('7.5')

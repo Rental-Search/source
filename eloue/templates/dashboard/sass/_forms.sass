@@ -26,7 +26,7 @@
   text-align: center
   border: 1px solid transparent
   &.disabled,
-  &:disabled,
+  &[disabled],
   fieldset:disabled &
     pointer-events: none // Future-proof disabling of clicks
     @include opacity(.65)
@@ -129,8 +129,11 @@ label.check-btn
     font-size: 0
     width: 0
     padding: 0
-    &:checked + span > i
-      color: $gray-strong
+    &:checked
+      + span > i
+        color: $gray-strong
+      ~ .check-bg-indicator
+        background-color: $gray-lighter
   span
     display: inline-block
     margin-right: $indent-xs
@@ -145,6 +148,7 @@ label.check-btn
       width: 1em
       height: 1em
       +centred-abs()
+
 
 .chosen-container
   font-weight: inherit
@@ -255,7 +259,7 @@ label.check-btn
 // custom select
 select
   &.disabled,
-  &:disabled,
+  &[disabled],
   fieldset:disabled &
     + .chosen-container
       @include opacity(1)
@@ -307,7 +311,7 @@ input[type="email"],
     width: 5em
     color: $gray-dark !important
   &.disabled,
-  &:disabled,
+  &[disabled],
   fieldset:disabled &
     @include opacity(1)
     @include box-shadow(none)

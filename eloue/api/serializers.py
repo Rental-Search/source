@@ -16,6 +16,7 @@ from django.utils.datastructures import SortedDict
 from requests.exceptions import MissingSchema, InvalidSchema, InvalidURL
 
 from rest_framework import serializers, status
+from rest_framework_gis.serializers import MapGeometryField
 from eloue.api import exceptions
 
 
@@ -36,6 +37,9 @@ class RaiseOnValidateSerializerMixin(object):
     def is_valid(self):
         is_valid = super(RaiseOnValidateSerializerMixin, self).is_valid()
         if not is_valid and not self.suppress_exception:
+            info = self._errors
+            if isinstance(info, list):
+                info = {'nested_fields_errors': info}
             raise exceptions.ValidationException(self._errors)
         return is_valid
 
@@ -250,3 +254,11 @@ class NestedModelSerializerMixin(object):
                 view_name=self.opts.view_name,
                 queryset=self.opts.model.objects.all()
             ).from_native(value)
+
+
+class SimpleSerializer(RaiseOnValidateSerializerMixin, serializers.Serializer):
+    pass
+
+
+class GeoModelSerializer(ModelSerializer):
+    field_mapping = MapGeometryField(ModelSerializer.field_mapping)

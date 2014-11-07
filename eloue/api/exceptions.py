@@ -13,6 +13,7 @@ from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
+from suds import WebFault
 
 
 class ErrorGroupEnum(object):
@@ -54,6 +55,7 @@ class ServerErrorEnum(object):
     """Enum for server errors"""
     PROTECTED_ERROR = ('100', _(u'The Object is referenced by other objects and can\'t be deleted.'))
     REQUEST_FAILED = ('101', _(u'A request to external server has failed.'))
+    PICKUP_REQUEST_ERROR = ('102', _(u'A request to Pickup service has failed.'))
     OTHER_ERROR = ('199', _(u'Other error occurred.'))
 
 
@@ -191,6 +193,11 @@ def api_exception_handler(exception):
         error = ServerErrorEnum.REQUEST_FAILED
         exception = ServerException(
             {'code': error[0], 'description': error[1], 'detail': smart_unicode(exception.response.reason)})
+    # ... and also soap request exceptions
+    elif isinstance(exception, WebFault):
+        error = ServerErrorEnum.PICKUP_REQUEST_ERROR
+        exception = ServerException(
+            {'code': error[0], 'description': error[1], 'detail': smart_unicode(exception)})
     # ... and also any other not REST Framework exception
     elif not isinstance(exception, (exceptions.APIException, ApiException)) and not settings.DEBUG:
         error = ServerErrorEnum.OTHER_ERROR

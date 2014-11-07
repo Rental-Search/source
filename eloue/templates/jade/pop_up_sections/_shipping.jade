@@ -1,0 +1,38 @@
+h2 Livraison
+{% verbatim %}
+p(ng-show="noAddress").text-black Vous devez mettre une adresse dans le formulaire ci-dessus
+.row(ng-show="noAddress")
+    .col-sm-12
+        input(type="text", name="street", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
+        span.text-danger(ng-show="!!errors.street", ng-bind="errors.street")
+.row(ng-show="noAddress")
+    .col-sm-6
+        input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
+        span.text-danger(ng-show="!!errors.zipcode", ng-bind="errors.zipcode")
+    .col-sm-6
+        input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
+        span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
+.row(ng-show="noAddress")
+    .col-sm-8
+    .col-sm-4
+        button(type="button", class="{{submitInProgress ? 'loading' : ''}}", ng-click="saveDefaultAddress()").btn.bg-success.indent-t Enregistrer
+
+#point-contatiner.indent-b-md(style="max-height: 300px;")
+    p(ng-show="!noAddress").text-black Sélectionner un point relais ci-dessous :
+    .zebra.indent-xs-t-
+        a(href="", ng-show="shippingPointsRequestInProgress").btn.bg-gray-light-hover.text-white.loading2 &nbsp;&nbsp;&nbsp;
+        label(ng-repeat="point in borrowerShippingPoints").zebra-row
+            input(type="radio", name="pickup", value="{{point.site_id}}", ng-model="point.selected", ng-change="pointSelected('{{point.site_id}}')")
+            .zebra-row-wrapper
+                .zebra-col
+                    span.radio-indicator
+                .zebra-col
+                    span.sprite-pickup-logo
+                .zebra-col.main-cell: p
+                    | {{point.name}}
+                    br
+                    | {{point.address}}
+                    br
+                    | {{point.zipcode}} {{point.city}}
+                .zebra-col: p.indent-r-md +{{point.price}}&euro;
+        {% endverbatim %}
