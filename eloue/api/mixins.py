@@ -184,7 +184,8 @@ class SetOwnerMixin(OwnerListMixin):
         return super(SetOwnerMixin, self).pre_save(obj)
 
 class CacheControlMixin(object):
-    cache_control = {'no-cache': True}
+    # FIXME: Django internal cache don't understand 'no-cache', only 'max-age'
+    cache_control = {'no-cache': True, 'max-age': 0}
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
