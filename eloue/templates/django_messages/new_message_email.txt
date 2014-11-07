@@ -9,4 +9,4 @@ Bonjour {{ recipient }},
 {{ message.body|safe }}
 
 
-{% trans "Voici le lien pour répondre :"%} {{ site_url }}{{ message.thread.get_absolute_url }}
+{% trans "Voici le lien pour répondre :"%} {{ protocol }}://{{ site.domain }}{{ message.thread.get_absolute_url }}

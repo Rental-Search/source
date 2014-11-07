@@ -39,7 +39,7 @@
                     <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
                         <div style="color: #505050;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: right;">
                             {% with message.thread.get_absolute_url as thread_url %}
-                            <a href="{{ site_url }}{{ thread_url }}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                            <a href="{{ protocol }}://{{ site.domain }}{{ thread_url }}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
                                     {% trans "Répondre au message" %}
                             </a>
                             {% endwith %}
