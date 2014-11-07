@@ -33,15 +33,6 @@ class PriceSerializer(ModelSerializer):
     def _transform_amount(self, obj, value):
         return self.fields['amount'].field_to_native(obj, 'local_currency_amount')
 
-    def full_clean(self, instance):
-        instance = super(PriceSerializer, self).full_clean(instance)
-        if instance and instance.deposit_amount < 0:
-            self._errors.update({
-                'deposit_amount': _(u'Value can\'t be negative')
-            })
-            return None
-        return instance
-
     class Meta:
         model = models.Price
         fields = ('id', 'product', 'name', 'amount', 'currency', 'unit')
@@ -85,6 +76,15 @@ class ProductSerializer(ModelSerializer):
     pictures = NestedPictureSerializer(read_only=True, many=True)
     owner = NestedUserSerializer()
     slug = CharField(read_only=True, source='slug')
+
+    def full_clean(self, instance):
+        instance = super(ProductSerializer, self).full_clean(instance)
+        if instance and instance.deposit_amount < 0:
+            self._errors.update({
+                'deposit_amount': _(u'Value can\'t be negative')
+            })
+            return None
+        return instance
 
     class Meta:
         model = models.Product
