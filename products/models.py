@@ -868,7 +868,11 @@ class MessageThread(models.Model):
     
     def __unicode__(self):
         return unicode(self.subject)
-    
+
+    @permalink
+    def get_absolute_url(self):
+        return 'messages', [self.pk]
+
     def new_recipient(self):
         """Returns True if self.recipient has unread message in the thread
         """

@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% blocktrans with message.recipient.username as recipient and message.sender.username as sender and message.sent_at as sent_at %}
+{% blocktrans with message.recipient.username as recipient and message.sender.username as sender and message.sent_at as sent_at%}
 Envoyé par {{ sender }} :
 
 Bonjour {{ recipient }},
@@ -9,4 +9,4 @@ Bonjour {{ recipient }},
 {{ message.body|safe }}
 
 
-{% trans "Voici le lien pour répondre :"%} {{ site_url }}
+{% trans "Voici le lien pour répondre :"%} {{ site_url }}{{ message.thread.get_absolute_url }}
