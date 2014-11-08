@@ -30,6 +30,7 @@ from haystack.query import SearchQuerySet
 from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
 from accounts.search import patron_search
+from eloue.api.decorators import ignore_filters
 from eloue.api.exceptions import ValidationException, ServerException, ServerErrorEnum
 
 from products.forms import (
@@ -1016,6 +1017,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                 return Response(result.data)
 
     @link()
+    @ignore_filters([filters.DjangoFilterBackend])
     def shipping_points(self, request, *args, **kwargs):
         try:
             product = self.get_object()
@@ -1034,6 +1036,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             lng = params['lng']
             if lat is None or lng is None:
                 lat, lng = helpers.get_position(params['address'])
+                if not all((lat, lng)):
+                    return Response([])
             shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
                 if 'site_id' in shipping_point:

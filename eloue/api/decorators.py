@@ -14,3 +14,18 @@ def user_required(attname):
             return f(self, request, *args, **kwargs)
         return wrapper
     return user_required_inner
+
+
+def ignore_filters(filter_list):
+    def ignore_filters_inner(f):
+        def wrapper(self, request, *args, **kwargs):
+            self.ignore_filters = filter_list
+            try:
+                result = f(self, request, *args, **kwargs)
+            except:
+                raise
+            finally:
+                self.ignore_filters = []
+            return result
+        return wrapper
+    return ignore_filters_inner

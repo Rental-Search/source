@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import viewsets, mixins
+from eloue.api.mixins import IgnoreFilterMixin
 from .mixins import LocationHeaderMixin, ErrorMixin, PermissionMixin, CacheControlMixin
 
 
@@ -13,6 +14,7 @@ class SimpleViewSet(
 
 
 class ModelViewSet(
+    IgnoreFilterMixin,
     CacheControlMixin,
     PermissionMixin,
     ErrorMixin,
@@ -23,6 +25,7 @@ class ModelViewSet(
 
 
 class ReadOnlyModelViewSet(
+    IgnoreFilterMixin,
     CacheControlMixin,
     PermissionMixin,
     ErrorMixin,
@@ -33,6 +36,7 @@ class ReadOnlyModelViewSet(
 
 
 class ImmutableModelViewSet(
+    IgnoreFilterMixin,
     CacheControlMixin,
     PermissionMixin,
     ErrorMixin,

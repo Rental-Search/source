@@ -149,3 +149,13 @@ class CacheControlMixin(object):
             cache_control[key] = True
         patch_cache_control(response, **cache_control)
         return response
+
+
+class IgnoreFilterMixin(object):
+    ignore_filters = []
+
+    def get_filter_backends(self):
+        backends = super(IgnoreFilterMixin, self).get_filter_backends()
+        if self.ignore_filters:
+            backends = filter(lambda x: x not in self.ignore_filters, backends)
+        return backends
