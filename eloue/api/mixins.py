@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+import logging
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import patch_cache_control
+from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR
+import sys
 
 from .filters import OwnerFilter
 from .permissions import IsOwnerOrReadOnly
@@ -50,6 +53,22 @@ class ErrorMixin(object):
         self.validation_exception_expected = False
         return super(ErrorMixin, self).finalize_response(
             request, response, *args, **kwargs)
+
+    def handle_exception(self, exc):
+        response = super(ErrorMixin, self).handle_exception(exc)
+        if response.status_code == HTTP_500_INTERNAL_SERVER_ERROR:
+            logger = logging.getLogger('django.request')
+            logger.error(
+                'Internal Server Error: %s',
+                self.request.path,
+                exc_info=sys.exc_info(),
+                extra={
+                    'status_code': 500,
+                    'request': self.request
+                }
+            )
+        return response
+
 
 class PermissionMixin(object):
     """
