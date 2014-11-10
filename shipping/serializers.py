@@ -99,80 +99,91 @@ class ShippingSerializer(serializers.ModelSerializer):
     def preprocess_name(self, name):
         return self.regexp.sub(' ', name).strip()
 
+    def _fill_order_detail(self, sender, receiver, send_point, receive_point):
+        sender_address = sender.default_address or first_or_empty(sender.addresses.all())
+        sender_phone = sender.default_number or first_or_empty(sender.phones.all())
+        receiver_address = receiver.default_address or first_or_empty(receiver.addresses.all())
+        receiver_phone = receiver.default_number or first_or_empty(receiver.phones.all())
+
+        return {
+            'DeliveryContactFirstName': self.preprocess_name(sender.first_name),
+            'DeliveryContactLastName': self.preprocess_name(sender.last_name),
+            'DeliveryContactMail': sender.email.replace('-', ''),
+            'DeliveryContactMobil': sender_phone.number if sender_phone else '',
+            'DeliveryContactPhone': sender_phone.number if sender_phone else '',
+            'DeliverySiteAdress1': sender_address.address1 if sender_address else '',
+            'DeliverySiteAdress2': sender_address.address2 if sender_address else '',
+            'DeliverySiteCity': sender_address.city if sender_address else '',
+            'DeliverySiteCountry': getattr(COUNTRY_CHOICES, sender_address.country) if sender_address else '',
+            'DeliverySiteCountryCode': sender_address.country if sender_address else '',
+            'DeliverySiteName': send_point.pudo_id,
+            'DeliverySiteZipCode': sender_address.zipcode if sender_address else '',
+            'DropOffContactFirstName': self.preprocess_name(receiver.first_name),
+            'DropOffContactLastName': self.preprocess_name(receiver.last_name),
+            'DropOffContactMail': receiver.email.replace('-', ''),
+            'DropOffContactMobil': receiver_phone.number if receiver_phone else '',
+            'DropOffContactPhone': receiver_phone.number if receiver_phone else '',
+            'DropOffSiteAdress1': receiver_address.address1 if receiver_address else '',
+            'DropOffSiteAdress2': receiver_address.address2 if receiver_address else '',
+            'DropOffSiteCity': receiver_address.city if receiver_address else '',
+            'DropOffSiteCountry': getattr(COUNTRY_CHOICES, receiver_address.country) if receiver_address else '',
+            'DropOffSiteCountryCode': receiver_address.country if receiver_address else '',
+            'DropOffSiteName': receive_point.pudo_id,
+            'DropOffSiteZipCode': receiver_address.zipcode if receiver_address else '',
+            'OrderContactFirstName': 'TEST',
+            'OrderContactLastName': 'Test',
+            'OrderContactMail': 'test@test.com',
+            'OrderOrderContactMobil': '0648484848',
+            'OrderContactCivility': 1,
+            'OrderSiteAdress1': 'test',
+            'OrderSiteAdress2': 'test',
+            'OrderSiteCity': 'test',
+            'OrderSiteCountry': 'france',
+            'OrderSiteZipCode': '75011',
+            'OrderDate': datetime.datetime.now(),
+            'OrderId': 'B400003a-abcd',
+            'DeliverySiteId': send_point.site_id,
+            'DropOffSiteId': receive_point.site_id,
+        }
+
     def from_native(self, data, files):
         instance = super(ShippingSerializer, self).from_native(data, files)
         if instance and not instance.pk:
             instance.departure_point = instance.booking.product.departure_point
             instance.arrival_point = instance.booking.arrival_point
-            owner = instance.booking.owner
-            borrower = instance.booking.borrower
 
-            owner_address = owner.default_address or first_or_empty(owner.addresses.all())
-            owner_phone = owner.default_number or first_or_empty(owner.phones.all())
-            borrower_address = borrower.default_address or first_or_empty(borrower.addresses.all())
-            borrower_phone = borrower.default_number or first_or_empty(borrower.phones.all())
-
-            order_details = {
-                'DeliveryContactFirstName': self.preprocess_name(owner.first_name),
-                'DeliveryContactLastName': self.preprocess_name(owner.last_name),
-                'DeliveryContactMail': owner.email,
-                'DeliveryContactMobil': owner_phone.number if owner_phone else '',
-                'DeliveryContactPhone': owner_phone.number if owner_phone else '',
-                'DeliverySiteAdress1': owner_address.address1 if owner_address else '',
-                'DeliverySiteAdress2': owner_address.address2 if owner_address else '',
-                'DeliverySiteCity': owner_address.city if owner_address else '',
-                'DeliverySiteCountry': getattr(COUNTRY_CHOICES, owner_address.country) if owner_address else '',
-                'DeliverySiteCountryCode': owner_address.country if owner_address else '',
-                'DeliverySiteName': 'test',
-                'DeliverySiteZipCode': owner_address.zipcode if owner_address else '',
-                'DropOffContactFirstName': self.preprocess_name(borrower.first_name),
-                'DropOffContactLastName': self.preprocess_name(borrower.last_name),
-                'DropOffContactMail': borrower.email,
-                'DropOffContactMobil': borrower_phone.number if borrower_phone else '',
-                'DropOffContactPhone': borrower_phone.number if borrower_phone else '',
-                'DropOffSiteAdress1': borrower_address.address1 if borrower_address else '',
-                'DropOffSiteAdress2': borrower_address.address2 if borrower_address else '',
-                'DropOffSiteCity': borrower_address.city if borrower_address else '',
-                'DropOffSiteCountry': getattr(COUNTRY_CHOICES, borrower_address.country) if borrower_address else '',
-                'DropOffSiteCountryCode': borrower_address.country if borrower_address else '',
-                'DropOffSiteName': 'test',
-                'DropOffSiteZipCode': borrower_address.zipcode if borrower_address else '',
-                'OrderContactFirstName': 'TEST',
-                'OrderContactLastName': 'Test',
-                'OrderContactMail': 'test@test.com',
-                'OrderOrderContactMobil': '0648484848',
-                'OrderContactCivility': 1,
-                'OrderSiteAdress1': 'test',
-                'OrderSiteAdress2': 'test',
-                'OrderSiteCity': 'test',
-                'OrderSiteCountry': 'france',
-                'OrderSiteZipCode': '75011',
-                'OrderDate': datetime.datetime.now(),
-                'OrderId': 'B400003a-abcd',
-                'DeliverySiteId': instance.departure_point.site_id,
-                'DropOffSiteId': instance.arrival_point.site_id,
-            }
             token = cache.get(
                 helpers.build_cache_id(instance.booking.product, instance.booking.borrower, instance.arrival_point.site_id))
             if not token:
                 price = helpers.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
                 token = price.pop('token')
+
+            order_details = self._fill_order_detail(
+                instance.booking.owner, instance.booking.borrower,
+                instance.booking.product.departure_point, instance.booking.arrival_point)
             shipping_params = helpers.create_shipping(token, order_details)
-            # shipping_params = {
-            #     'order_number': 'fake order number',
-            #     'shuttle_code': 'fake shuttle code',
-            #     'shuttle_document_url': 'fake shuttle document url'
-            # }
+
             instance.order_number = shipping_params['order_number']
             instance.shuttle_code = shipping_params['shuttle_code']
             instance.shuttle_document_url = shipping_params['shuttle_document_url']
+
+            order_details = self._fill_order_detail(
+                instance.booking.borrower, instance.booking.owner,
+                instance.booking.arrival_point, instance.booking.product.departure_point)
+            shipping_params = helpers.create_shipping(token, order_details)
+
+            instance.order_number2 = shipping_params['order_number']
+            instance.shuttle_code2 = shipping_params['shuttle_code']
+            instance.shuttle_document_url2 = shipping_params['shuttle_document_url']
+
             return instance
 
     class Meta:
         model = models.Shipping
         fields = ('id', 'booking', 'departure_point', 'arrival_point', 'price', 'order_number', 'shuttle_code',
-                  'shuttle_document_url')
-        read_only_fields = ('order_number', 'shuttle_code', 'shuttle_document_url')
+                  'shuttle_document_url', 'order_number2', 'shuttle_code2', 'shuttle_document_url2')
+        read_only_fields = ('order_number', 'shuttle_code', 'shuttle_document_url',
+                            'order_number2', 'shuttle_code2', 'shuttle_document_url2')
 
 
 class ShippingPointListParamsSerializer(serializers.SimpleSerializer):
@@ -191,3 +202,7 @@ class ShippingPointListParamsSerializer(serializers.SimpleSerializer):
             self._errors['lat'] = msg
             self._errors['address'] = msg
         return attrs
+
+
+class ShippingDocumentParamsSerializer(serializers.SimpleSerializer):
+    back = BooleanField(required=True, default=False)

@@ -97,6 +97,15 @@ class AddressAdmin(admin.ModelAdmin):
     )
 
 
+class PhoneNumberAdmin(admin.ModelAdmin):
+    list_display = ('patron', 'number')
+    search_fields = ('patron__username', 'number')
+    readonly_fields = ('patron', )
+    fieldsets = (
+        (None, {'fields': ('patron', 'number', 'kind')}),
+    )
+
+
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment')
     raw_id_fields = ("patron",)
@@ -137,6 +146,7 @@ class ProPackageAdmin(admin.ModelAdmin):
 
 try:
     admin.site.register(Address, AddressAdmin)
+    admin.site.register(PhoneNumber, PhoneNumberAdmin)
     admin.site.register(Patron, PatronAdmin)
     admin.site.register(PatronAccepted)
     admin.site.register(ProPackage, ProPackageAdmin)

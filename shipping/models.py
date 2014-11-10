@@ -28,3 +28,6 @@ class Shipping(models.Model):
     order_number = models.CharField(max_length=128, default='')
     shuttle_code = models.CharField(max_length=128, default='')
     shuttle_document_url = models.CharField(max_length=1024, default='')
+    order_number2 = models.CharField(max_length=128, default='')
+    shuttle_code2 = models.CharField(max_length=128, default='')
+    shuttle_document_url2 = models.CharField(max_length=1024, default='')

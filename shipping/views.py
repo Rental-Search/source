@@ -82,8 +82,13 @@ class ShippingViewSet(viewsets.NonEditableModelViewSet):
     @link()
     def document(self, request, *args, **kwargs):
         shipping = self.get_object()
-        file_content = helpers.get_shipping_document(shipping.shuttle_document_url)
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % shipping.shuttle_document_url
-        response.write(file_content)
-        return response
+        params = serializers.ShippingDocumentParamsSerializer(data=request.QUERY_PARAMS)
+        if params.is_valid():
+            params = params.data
+            file_content = helpers.get_shipping_document(
+                shipping.shuttle_document_url if not params['back'] else shipping.shuttle_document_url2)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % shipping.shuttle_document_url
+            response.write(file_content)
+            return response
+        raise Http404

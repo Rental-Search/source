@@ -41,8 +41,11 @@ urlpatterns = patterns('',
 product_extra_context = {'sqs': product_search}
 
 from products.views import SuggestCategoryView
+from django.views.generic.base  import RedirectView
+from django.core.urlresolvers import reverse
 
 ui3_urlpatterns = patterns('',
+    url(r'^%s/$' % _('deposer'), PublishItemView.as_view(), name='publish_item2'),
     url(r'^%s/category/$' % _('ajouter'), SuggestCategoryView.as_view(), name='suggest_category'),
     url(r'^%s/$' % _('ajouter'), PublishItemView.as_view(), name='publish_item'),
     url(r'^([^/].+/)(?P<slug>[-\w]+)-(?P<pk>\d+)/$', ProductDetailView.as_view(), product_extra_context, name='booking_create'),

@@ -67,8 +67,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
+                    AuthService.redirectToAttemptedUrl();
                 });
-                AuthService.redirectToAttemptedUrl();
             }
         }
     }]);
@@ -283,12 +283,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
+                    if (RedirectAfterLogin.url != "/") {
+                        AuthService.redirectToAttemptedUrl();
+                    } else {
+                        $window.location.href = "/dashboard"
+                    }
                 });
-                if (RedirectAfterLogin.url != "/") {
-                    AuthService.redirectToAttemptedUrl();
-                } else {
-                    $window.location.href = "/dashboard"
-                }
             }
         };
 

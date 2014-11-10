@@ -513,6 +513,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.loadPhoneDetails();
                 }
                 if (args.name != "login") {
+                    $scope.loadPictures();
+                    if ($scope.currentUser && !$scope.currentUser.default_address) {
+                        $scope.noAddress = true;
+                    }
                     if (!$scope.product) {
                         ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
                             $scope.product = result;
@@ -625,7 +629,14 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 if ($scope.addShipping && $scope.borrowerShippingPoints.length == 0) {
                     if (!!$scope.currentUser.default_address) {
                         $scope.shippingPointsRequestInProgress = true;
-                        ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId).then(function (result) {
+                        var shippingPointsPromise = {};
+                        if (!$scope.currentUser.default_address.position) {
+                            var addressString = $scope.currentUser.default_address.zipcode + " " + $scope.currentUser.default_address.street + " " + $scope.currentUser.default_address.city;
+                            shippingPointsPromise = ShippingPointsService.searchArrivalShippingPointsByAddressAndProduct(addressString, $scope.productId);
+                        } else {
+                            shippingPointsPromise = ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId);
+                        }
+                        shippingPointsPromise.then(function (result) {
                             $scope.shippingPointsRequestInProgress = false;
                             //TODO: it's temperory, then will call pricing service
                             angular.forEach(result, function (value, key) {
