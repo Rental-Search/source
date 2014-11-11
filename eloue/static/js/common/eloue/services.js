@@ -1554,4 +1554,31 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 }
             }
         }]);
+
+        /**
+         * Service to store server side validation errors.
+         */
+        EloueCommon.factory("ServerValidationService", function () {
+            var formErrors={};
+            return {
+                addErrors:function(formTag, messageError, fieldErrors) {
+                    formErrors[formTag] = {
+                        message: messageError,
+                        fields: fieldErrors
+                    };
+                },
+                removeErrors:function(formTag){
+                    delete formErrors[formTag];
+                },
+                getFormErrorMessage:function(formTag){
+                     return !!formErrors[formTag]? formErrors[formTag].message : undefined;
+                },
+                getFieldError:function(formTag, fieldName){
+                    if(!formErrors[formTag] || !formErrors[formTag].fields){
+                        return undefined;
+                    }
+                    return formErrors[formTag].fields[fieldName];
+                }
+            }
+        });
     });

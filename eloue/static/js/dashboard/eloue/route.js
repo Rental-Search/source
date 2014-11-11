@@ -226,9 +226,9 @@ define(["eloue/app",
                     });
 
 
-                // push function to the responseInterceptors which will intercept
+                // push function to the interceptors which will intercept
                 // the http responses of the whole application
-                $httpProvider.responseInterceptors.push("ErrorHandlerInterceptor");
+                $httpProvider.interceptors.push("ErrorHandlerInterceptor");
             }
         ]);
 

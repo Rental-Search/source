@@ -165,20 +165,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          */
         $scope.account = {};
 
-        /**
-         * Error occurred during registration.
-         */
-        $scope.registrationError = null;
         $scope.civilityOptions = CivilityChoices;
-        $scope.errors = {
-            last_name: "",
-            first_name: "",
-            email: "",
-            username: "",
-            password: "",
-            confirmPassword: "",
-            zipcode: ""
-        };
 
         /**
          * Register new user in the system.
@@ -202,20 +189,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     }
                 );
             }, function (error) {
-                if (!!error.message) {
-                    $scope.registrationError = error.message;
-                }
-                if (!!error.errors) {
-                    $scope.errors = {
-                        last_name: !!error.errors.last_name ? error.errors.last_name[0] : "",
-                        first_name: !!error.errors.first_name ? error.errors.first_name[0] : "",
-                        email: !!error.errors.email ? error.errors.email[0] : "",
-                        username: !!error.errors.username ? error.errors.username[0] : "",
-                        password: !!error.errors.password ? error.errors.password[0] : "",
-                        confirmPassword: !!error.errors.confirmPassword ? error.errors.confirmPassword[0] : "",
-                        zipcode: !!error.errors.zipcode ? error.errors.zipcode[0] : ""
-                    };
-                }
+
             });
         };
 
