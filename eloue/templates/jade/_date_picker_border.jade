@@ -6,9 +6,16 @@
             input(type="text", placeholder="", name="fromDate", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
     .table-cell
-        select(name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", eloue-chosen, data-ng-disabled="submitInProgress").form-control
-    .span(ng-show="fromDate.$dirty && fromDate.$error.required").text-danger From date is required.
-    .span(ng-show="fromDate.$dirty && fromDate.$error.pattern").text-danger Invalid date.
+        select(ng-show="!bookingDetails.fromHour", name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", eloue-chosen, data-ng-disabled="submitInProgress").form-control.ng-cloak
+        //this only for show selector befor angular ready to process directive.
+        div(ng-if="!bookingDetails.fromHour").chosen-container.chosen-container-single.chosen-container-active
+            a.chosen-single
+               span
+               div
+                b
+
+    .span(ng-show="fromDate.$dirty && fromDate.$error.required").ng-cloak.text-danger From date is required.
+    .span(ng-show="fromDate.$dirty && fromDate.$error.pattern").ng-cloak.text-danger Invalid date.
     span.text-danger(ng-show="!!errors.started_at", ng-bind="errors.started_at")
 .date-picker.form-wrapper
     .table-cell.main-cell
@@ -18,7 +25,13 @@
             input(type="text", placeholder="", name="toDate", ng-model="bookingDetails.toDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
     .table-cell
-        select(name="toHour", ng-model="bookingDetails.toHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", eloue-chosen, data-ng-disabled="submitInProgress").form-control
-    .span(ng-show="toDate.$dirty && toDate.$error.required").text-danger To date is required.
-    .span(ng-show="toDate.$dirty && toDate.$error.pattern").text-danger Invalid date.
+        select(ng-show="!!bookingDetails.toHour", name="toHour", ng-model="bookingDetails.toHour", ng-options="h.value as h.label for h in hours", ng-change="updatePrice()", eloue-chosen, data-ng-disabled="submitInProgress").form-control.ng-cloak
+        //this only for show selector befor angular ready to process directive.
+        div(ng-if="!bookingDetails.toHour").chosen-container.chosen-container-single.chosen-container-active
+            a.chosen-single
+                span
+                div
+                    b
+    .span(ng-show="toDate.$dirty && toDate.$error.required").ng-cloak.text-danger To date is required.
+    .span(ng-show="toDate.$dirty && toDate.$error.pattern").ng-cloak.text-danger Invalid date.
     span.text-danger(ng-show="!!errors.ended_at", ng-bind="errors.ended_at")

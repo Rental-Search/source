@@ -124,7 +124,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.duration = "0 jour";
             $scope.bookingPrice = 0;
             $scope.shippingPrice = 0;
-            $scope.pricePerDay = 0;
+            //not show zero price before request ended
+            //$scope.pricePerDay = 0;
             $scope.caution = 0;
             $scope.productRelatedMessages = [];
             $scope.ownerCallDetails = {};

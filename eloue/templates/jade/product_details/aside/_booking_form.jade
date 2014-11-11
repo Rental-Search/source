@@ -5,25 +5,25 @@ form.form-inline.section-body.text-center
     .part
         p
             small à partir de
-            big.text-primary &nbsp;{{pricePerDay}}&nbsp;/jour
+            big.ng-cloak.text-primary &nbsp;{{pricePerDay}}&nbsp;/jour
         {% endverbatim %}
         include ../../_date_picker_border
         {% verbatim %}
         // p.available.unavailable Cet article est disponible à ces dates
-        span(ng-show="dateRangeError").text-danger {{dateRangeError}}
+        span(ng-show="dateRangeError").ng-cloak.text-danger {{dateRangeError}}
         {% endverbatim %}
         {% if not is_pro %}
-        p(ng-show="available").available Cet article est disponible à ces dates
-        p(ng-show="!available").available.unavailable Cet article n'est pas disponible à ces dates
+        p(ng-show="available").ng-cloak.available Cet article est disponible à ces dates
+        p(ng-show="!available").ng-cloak.available.unavailable Cet article n'est pas disponible à ces dates
         {% endif %}
         {% verbatim %}
     .part
         p
             | Durée de la location&nbsp;:&nbsp;
-            b.period-days {{duration}}
+            b.period-days.ng-cloak {{duration}}
         p.price
             | Prix {% endverbatim %}{% if is_pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
-            big.text-primary &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
+            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
         {% endverbatim %}
         if not is_pro
             p Assurance incluse
