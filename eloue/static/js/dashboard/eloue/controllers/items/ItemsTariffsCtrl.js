@@ -83,14 +83,19 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.submitInProgress = true;
                 var promises = [];
                 angular.forEach($scope.prices, function (value, key) {
+                    var promise;
                     if (value.amount && value.amount > 0) {
                         value.currency = Currency.EUR.name;
                         value.product = Endpoints.api_url + "products/" + $scope.product.id + "/";
                         if (value.id) {
-                            promises.push(PricesService.updatePrice(value).$promise);
+                            promise=PricesService.updatePrice(value).$promise;
                         } else {
-                            promises.push(PricesService.savePrice(value).$promise);
+                            promise=PricesService.savePrice(value).$promise;
                         }
+                        promise.then(function(result){
+                            $scope.prices[key].amount=parseFloat(result.amount).toFixed(2);
+                        });
+                        promises.push(promise);
                     }
                 });
                 var addressId, phoneId;
