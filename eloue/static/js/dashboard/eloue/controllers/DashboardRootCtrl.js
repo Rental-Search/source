@@ -51,7 +51,14 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 }
             });
 
+            $scope.clearCurrentItemSelection=function(){
+                $scope.selectedItemId = undefined;
+            };
+
             $scope.markListItemAsSelected = function(prefix, id) {
+                if(!!id && prefix==="item-"){
+                    $scope.selectedItemId=parseInt(id);
+                }
                 $('li[id^=' + prefix + ']').each(function () {
                     var item = $(this);
                     if (item.attr("id") == (prefix + id)) {
