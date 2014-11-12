@@ -34,8 +34,10 @@ define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr
                 switch (errorResponse.status) {
                     case 400:
                         if (!!errorResponse.config && !!errorResponse.data && !!errorResponse.config.formTag) {
-                            ServerValidationService.addErrors(errorResponse.config.formTag,
+                            ServerValidationService.addErrors(
+                                errorResponse.config.formTag,
                                 errorResponse.data.message,
+                                errorResponse.data.description,
                                 errorResponse.data.errors);
                         }
 //                            showMessage("A required attribute of the API request is missing");

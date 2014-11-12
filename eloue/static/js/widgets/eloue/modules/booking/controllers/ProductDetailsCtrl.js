@@ -161,25 +161,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 {"label": "23h", "value": "23:00:00"}
             ];
 
-            $scope.errors = {
-                civility: "",
-                first_name: "",
-                last_name: "",
-                street: "",
-                zipcode: "",
-                city: "",
-                date_of_birth: "",
-                place_of_birth: "",
-                drivers_license_number: "",
-                drivers_license_date: "",
-                card_number: "",
-                expires: "",
-                cvv: "",
-                holder_name: "",
-                started_at: "",
-                ended_at: ""
-            };
-
             /**
              * Show response errors on booking form under appropriate field.
              * @param error JSON object with error details
@@ -189,34 +170,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.submitInProgress = false;
                 $scope.loadingProductShippingPoint = false;
                 $scope.shippingPointsRequestInProgress = false;
-                // Add specific error fields
-                if (!!error.errors) {
-                    $scope.errors = {
-                        civility: !!error.errors.civility ? error.errors.civility[0] : "",
-                        first_name: !!error.errors.first_name ? error.errors.first_name[0] : "",
-                        last_name: !!error.errors.last_name ? error.errors.last_name[0] : "",
-                        street: !!error.errors.street ? error.errors.street[0] : "",
-                        zipcode: !!error.errors.zipcode ? error.errors.zipcode[0] : "",
-                        city: !!error.errors.city ? error.errors.city[0] : "",
-                        date_of_birth: !!error.errors.date_of_birth ? error.errors.date_of_birth[0] : "",
-                        place_of_birth: !!error.errors.place_of_birth ? error.errors.place_of_birth[0] : "",
-                        drivers_license_number: !!error.errors.drivers_license_number ? error.errors.drivers_license_number[0] : "",
-                        drivers_license_date: !!error.errors.drivers_license_date ? error.errors.drivers_license_date[0] : "",
-                        card_number: !!error.errors.card_number ? error.errors.card_number[0] : "",
-                        expires: !!error.errors.expires ? error.errors.expires[0] : "",
-                        cvv: !!error.errors.cvv ? error.errors.cvv[0] : "",
-                        holder_name: !!error.errors.holder_name ? error.errors.holder_name[0] : "",
-                        started_at: !!error.errors.started_at ? error.errors.started_at[0] : "",
-                        ended_at: !!error.errors.ended_at ? error.errors.ended_at[0] : "",
-                        product: !!error.errors.product ? error.errors.product[0] : ""
-                    };
-                }
-                if (!!error.detail) {
-                    $scope.errors.general = error.detail;
-                }
-                if (!!error.description) {
-                    $scope.errors.general = error.description.replace("[","").replace("]","").replace("{","").replace("}","");
-                }
             };
 
             ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
@@ -252,7 +205,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
                 $scope.dateRangeError = null;
                 // check if product is available for selected dates
-                ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
+                ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1", "bookingForm").then(function (result) {
                     var price = result.total_price;
                     price = price.replace("€","").replace("\u20ac","").replace("Eu","").replace(",",".").replace(" ","");
                     price = Number(price);
@@ -300,6 +253,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.saveDefaultAddress = function() {
                 $scope.submitInProgress = true;
                 $scope.currentUser.default_address.country = "FR";
+                $scope.currentUser.default_address.formTag="bookingForm";
                 AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
                     $scope.submitInProgress = false;
                     $scope.currentUser.default_address = result;
@@ -316,6 +270,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
+                    $scope.currentUser.default_address.formTag="bookingForm";
                     AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
                         $scope.currentUser.default_address = result;
                         UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
@@ -353,6 +308,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 UsersService.updateUser(userPatch).$promise.then(function (result) {
                     // Update credit card info
                     $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
+                    $scope.creditCard.formTag = "bookingForm";
                     // If credit card exists now it is deleted and saved again
                     if ($scope.creditCard.masked_number == "") {
                         if (!!$scope.creditCard.id) {
@@ -392,6 +348,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 booking.owner = Endpoints.api_url + "users/" + $scope.product.owner.id + "/";
                 booking.borrower = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
                 booking.product = Endpoints.api_url + "products/" + $scope.product.id + "/";
+                booking.formTag = "bookingForm";
                 // Create booking
                 BookingsLoadService.requestBooking(booking).then(
                     function (booking) {
@@ -422,6 +379,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             selectedPoint.type = 2;
                             selectedPoint.booking = Endpoints.api_url + "bookings/" + booking.uuid + "/";
                             selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
+                            selectedPoint.formTag="bookingForm";
                             PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (shippingPoint) {
                                 $scope.payForBooking(booking, paymentInfo);
                             }, function (error) {
@@ -437,7 +395,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.payForBooking = function (booking, paymentInfo) {
-                BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                BookingsLoadService.payForBooking(booking.uuid, paymentInfo, "bookingForm").then(function (result) {
                     $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
                     $scope.trackEvent("Réservation", "Demande de réservation",  $scope.getEventLabel());
                     $scope.trackPageView();
@@ -613,7 +571,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUser = currentUser;
                     $scope.loadingProductShippingPoint = true;
-                    ProductShippingPointsService.getByProduct($scope.productId).then(function (data) {
+                    ProductShippingPointsService.getByProduct($scope.productId, "bookingForm").then(function (data) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!data.results && data.results.length > 0) {
                             $scope.productShippingPoint = data.results[0];
@@ -633,9 +591,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         var shippingPointsPromise = {};
                         if (!$scope.currentUser.default_address.position) {
                             var addressString = $scope.currentUser.default_address.zipcode + " " + $scope.currentUser.default_address.street + " " + $scope.currentUser.default_address.city;
-                            shippingPointsPromise = ShippingPointsService.searchArrivalShippingPointsByAddressAndProduct(addressString, $scope.productId);
+                            shippingPointsPromise = ShippingPointsService.searchArrivalShippingPointsByAddressAndProduct(addressString, $scope.productId, "bookingForm");
                         } else {
-                            shippingPointsPromise = ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId);
+                            shippingPointsPromise = ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId, "bookingForm");
                         }
                         shippingPointsPromise.then(function (result) {
                             $scope.shippingPointsRequestInProgress = false;

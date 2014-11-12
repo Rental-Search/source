@@ -696,12 +696,12 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return shippingPointsService.searchShippingPointsByCoordinates(lat, lng, 2);
                 };
 
-                shippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct = function(lat, lng, productId) {
-                    return Products.getShippingPoints({id: productId, lat: lat, lng: lng, search_type: 2, _cache: new Date().getTime()}).$promise;
+                shippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct = function(lat, lng, productId, formTag) {
+                    return Products.getShippingPoints({id: productId, lat: lat, lng: lng, search_type: 2, _cache: new Date().getTime(), formTag: formTag}).$promise;
                 };
 
-                shippingPointsService.searchArrivalShippingPointsByAddressAndProduct = function(address, productId) {
-                    return Products.getShippingPoints({id: productId, address: address, search_type: 2, _cache: new Date().getTime()}).$promise;
+                shippingPointsService.searchArrivalShippingPointsByAddressAndProduct = function(address, productId, formTag) {
+                    return Products.getShippingPoints({id: productId, address: address, search_type: 2, _cache: new Date().getTime(), formTag: formTag}).$promise;
                 };
 
                 shippingPointsService.searchShippingPointsByCoordinates = function(lat, lng, searchType) {
@@ -733,8 +733,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return ProductShippingPoints.delete({id: shippingPointId});
                 };
 
-                productShippingPointsService.getByProduct = function (productId) {
-                    return ProductShippingPoints.get({_cache: new Date().getTime(), product: productId}).$promise;
+                productShippingPointsService.getByProduct = function (productId, formTag) {
+                    return ProductShippingPoints.get({_cache: new Date().getTime(), product: productId, formTag: formTag}).$promise;
                 };
 
                 return productShippingPointsService;
@@ -1028,8 +1028,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Bookings.save(booking).$promise;
                 };
 
-                bookingsLoadService.payForBooking = function (uuid, paymentInfo) {
-                    return Bookings.pay({uuid: uuid}, paymentInfo).$promise;
+                bookingsLoadService.payForBooking = function (uuid, paymentInfo, formTag) {
+                    return Bookings.pay({uuid: uuid, formTag: formTag}, paymentInfo).$promise;
                 };
                 return bookingsLoadService;
             }
@@ -1077,8 +1077,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Products.getAbsoluteUrl({id: id,cache: new Date().getTime()});
                 };
 
-                productsLoadService.isAvailable = function (id, startDate, endDate, quantity) {
-                    return CheckAvailability.get({id: id, started_at: startDate, ended_at: endDate, quantity: quantity}).$promise;
+                productsLoadService.isAvailable = function (id, startDate, endDate, quantity, formTag) {
+                    return CheckAvailability.get({id: id, started_at: startDate, ended_at: endDate, quantity: quantity, formTag: formTag}).$promise;
                 };
 
                 return productsLoadService;
@@ -1561,23 +1561,29 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("ServerValidationService", function () {
             var formErrors={};
             return {
-                addErrors:function(formTag, messageError, fieldErrors) {
+                addErrors:function(formTag, messageError, description, fieldErrors) {
                     formErrors[formTag] = {
                         message: messageError,
                         fields: fieldErrors
                     };
+                    if(!!description){
+                        formErrors[formTag].description=(""+description).replace("[","").replace("]","").replace("{","").replace("}","");
+                    }
                 },
                 removeErrors:function(formTag){
                     delete formErrors[formTag];
                 },
                 getFormErrorMessage:function(formTag){
-                     return !!formErrors[formTag]? formErrors[formTag].message : undefined;
+                     return !!formErrors[formTag]? { message: formErrors[formTag].message, description: formErrors[formTag].description}: undefined;
                 },
                 getFieldError:function(formTag, fieldName){
                     if(!formErrors[formTag] || !formErrors[formTag].fields){
                         return undefined;
                     }
                     return formErrors[formTag].fields[fieldName];
+                },
+                getErrors:function(formTag){
+                    return formErrors[formTag];
                 }
             }
         });

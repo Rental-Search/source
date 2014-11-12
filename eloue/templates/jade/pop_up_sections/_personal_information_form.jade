@@ -4,25 +4,20 @@ h2 Vos informations personnelles
       {% verbatim %}
       select(ng-model="currentUser.civility", name="", data-placeholder="Civilité", eloue-chosen, data-ng-disabled="submitInProgress").form-control
           option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
-      span.text-danger(ng-show="!!errors.civility", ng-bind="errors.civility")
+      span.text-danger(eloue-form-field-message, form-tag="bookingForm", field-name="civility") {{value}}
       {% endverbatim %}
   .col-sm-5
       input(type="text", name="first_name", placeholder="Prénom *", ng-model="currentUser.first_name", required).form-control
-      span.text-danger(ng-show="!!errors.first_name", ng-bind="errors.first_name")
   .col-sm-5
       input(type="text", name="last_name", placeholder="Nom *", ng-model="currentUser.last_name", required).form-control
-      span.text-danger(ng-show="!!errors.last_name", ng-bind="errors.last_name")
 .row(ng-show="!addShipping || (addShipping && !noAddress)")
   .col-sm-12
       input(type="text", name="street", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
-      span.text-danger(ng-show="!!errors.street", ng-bind="errors.street")
 .row(ng-show="!addShipping || (addShipping && !noAddress)")
   .col-sm-6
       input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
-      span.text-danger(ng-show="!!errors.zipcode", ng-bind="errors.zipcode")
   .col-sm-6
       input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
-      span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
 .row: .col-xs-12
     .checkbox(ng-show="shippingAllowed")
         label
@@ -33,18 +28,14 @@ h2 Vos informations personnelles
 .row(ng-show="isAuto()")
   .col-sm-6(style="z-index: 1050")
       input#date_of_birth(type="text", name="date_of_birth", data-date-format="yyyy-mm-dd" , placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto()").form-control
-      span.text-danger(ng-show="!!errors.date_of_birth", ng-bind="errors.date_of_birth")
   .col-sm-6
       input(type="text", name="place_of_birth", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", ng-required="isAuto()").form-control
-      span.text-danger(ng-show="!!errors.place_of_birth", ng-bind="errors.place_of_birth")
 .row(ng-show="isAuto()")
   .col-sm-12
       input(type="text", name="drivers_license_number", placeholder="Numéro de permis *", ng-model="currentUser.drivers_license_number", ng-required="isAuto()").form-control
-      span.text-danger(ng-show="!!errors.drivers_license_number", ng-bind="errors.drivers_license_number")
 .row(ng-show="isAuto()")
   .col-sm-6(style="z-index: 1050")
       input#drivers_license_date(type="text", name="drivers_license_date", data-date-format="yyyy-mm-dd", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis").form-control
-      span.text-danger(ng-show="!!errors.drivers_license_date", ng-bind="errors.drivers_license_date")
   //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
   //  input(type="file", ng-model="bookingDetails.photo")#photo.form-control
 p.info Vous devrez présenter votre pièce d'identité, au propriétaire, avant le début de la location. Si les coordonnées que vous saisissez ici ne sont pas les mêmes que celles de votre pièce d'identité,  le propriétaire pourra refuser la transaction. Les champs marqués d'une étoile (*) sont obligatoires.

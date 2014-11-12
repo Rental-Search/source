@@ -4,14 +4,11 @@ p(ng-show="noAddress").text-black Vous devez mettre une adresse dans le formulai
 .row(ng-show="noAddress")
     .col-sm-12
         input(type="text", name="street", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
-        span.text-danger(ng-show="!!errors.street", ng-bind="errors.street")
 .row(ng-show="noAddress")
     .col-sm-6
         input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
-        span.text-danger(ng-show="!!errors.zipcode", ng-bind="errors.zipcode")
     .col-sm-6
         input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
-        span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
 .row(ng-show="noAddress")
     .col-sm-8
     .col-sm-4
