@@ -52,21 +52,21 @@
                                 span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
                         .row
                             .col-sm-3
-                                input(type="number", name="amount", placeholder="{{isRealEstate ? 'Prix à la nuit *' : 'Prix à la journée *'}}", required, ng-model="price.amount").form-control
+                                input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="amount", placeholder="{{isRealEstate ? 'Prix à la nuit *' : 'Prix à la journée *'}}", required, ng-model="price.amount").form-control
                                 span.text-danger(ng-show="!!errors.amount", ng-bind="errors.amount")
                             .col-sm-1: b.form-suffix &euro;
                             .col-sm-3(ng-show="!isAuto")
-                                input(type="number", name="deposit_amount", placeholder="Caution demandée *", ng-required="!isAuto", ng-model="product.deposit_amount").form-control
+                                input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="deposit_amount", placeholder="Caution demandée *", ng-required="!isAuto", ng-model="product.deposit_amount").form-control
                                 span.text-danger(ng-show="!!errors.deposit_amount", ng-bind="errors.deposit_amount")
                             .col-sm-1(ng-show="!isAuto"): b.form-suffix &euro;
                             .col-sm-3(ng-show="isAuto")
-                                input(type="number", name="km_included", placeholder="Kilomètres inclus *", ng-required="isAuto", ng-model="product.km_included").form-control
+                                input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="km_included", placeholder="Kilomètres inclus *", ng-required="isAuto", ng-model="product.km_included").form-control
                                 span.text-danger(ng-show="!!errors.km_included", ng-bind="errors.km_included")
                             .col-sm-1(ng-show="isAuto"): b.form-suffix Km
                             .col-sm-4(ng-show="!isAuto")
                                 button(type="submit", ng-disabled="publishAdForm.$invalid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
                             .col-sm-3(ng-show="isAuto")
-                                input(type="number", name="costs_per_km", placeholder="Prix km supp *", ng-required="isAuto", ng-model="product.costs_per_km").form-control
+                                input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="costs_per_km", placeholder="Prix km supp *", ng-required="isAuto", ng-model="product.costs_per_km").form-control
                                 span.text-danger(ng-show="!!errors.costs_per_km", ng-bind="errors.costs_per_km")
                              .col-sm-1(ng-show="isAuto"): b.form-suffix &euro;
                         .row(ng-show="isAuto")
@@ -77,7 +77,7 @@
                                 input(type="text", name="licence_plate", ng-model="product.licence_plate", placeholder="N° d'immatriculation *", ng-required="isAuto").form-control
                                 span.text-danger(ng-show="!!errors.licence_plate", ng-bind="errors.licence_plate")
                             .col-sm-3
-                                input(type="number", name="deposit_amount", placeholder="Caution demandée *", ng-required="isAuto", ng-model="product.deposit_amount").form-control
+                                input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="deposit_amount", placeholder="Caution demandée *", ng-required="isAuto", ng-model="product.deposit_amount").form-control
                                 span.text-danger(ng-show="!!errors.deposit_amount", ng-bind="errors.deposit_amount")
                             .col-sm-1: b.form-suffix &euro;
                         .row(ng-show="isAuto")
