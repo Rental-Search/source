@@ -49,7 +49,7 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             };
             $scope.$on('$destroy', function iVeBeenDismissed() {
-                $scope.clearCurrentItemSelection();
+                $scope.clearSelectedItem("item-");
             })
 
         }]);
