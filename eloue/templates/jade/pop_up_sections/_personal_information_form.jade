@@ -4,7 +4,7 @@ h2 Vos informations personnelles
       {% verbatim %}
       select(ng-model="currentUser.civility", name="", data-placeholder="Civilité", eloue-chosen, data-ng-disabled="submitInProgress").form-control
           option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
-      span.text-danger(eloue-form-field-message, form-tag="bookingForm", field-name="civility") {{value}}
+      span.text-danger(eloue-form-field-message, field-name="civility") {{value}}
       {% endverbatim %}
   .col-sm-5
       input(type="text", name="first_name", placeholder="Prénom *", ng-model="currentUser.first_name", required).form-control

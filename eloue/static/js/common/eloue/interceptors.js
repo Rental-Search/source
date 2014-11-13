@@ -26,6 +26,7 @@ define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr
                     ServerValidationService.removeErrors(formTag);
                     return $q.when(resultConfig);
                 } else {
+                    ServerValidationService.removeErrors();
                     return $q.when(config);
                 }
             },
@@ -33,12 +34,12 @@ define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr
                 // if the message returns unsuccessful we display the error
                 switch (errorResponse.status) {
                     case 400:
-                        if (!!errorResponse.config && !!errorResponse.data && !!errorResponse.config.formTag) {
+                        if (!!errorResponse.config && !!errorResponse.data) {
                             ServerValidationService.addErrors(
-                                errorResponse.config.formTag,
                                 errorResponse.data.message,
                                 errorResponse.data.description,
-                                errorResponse.data.errors);
+                                errorResponse.data.errors,
+                                errorResponse.config.formTag);
                         }
 //                            showMessage("A required attribute of the API request is missing");
                         break;

@@ -26,7 +26,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.nodeCategories = {};
             $scope.leafCategories = {};
             $scope.rootCategory = {};
-            //$scope.nodeCategory = {};
+            $scope.nodeCategory = {};
             $scope.capacityOptions = [
                 {id: 1, name: "1"},
                 {id: 2, name: "2"},
@@ -159,7 +159,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
-                    $scope.currentUser.default_address.formTag="publishAdForm";
                     AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
                         $scope.currentUser.default_address = result;
                         UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
@@ -187,11 +186,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.product.summary = $scope.product.brand + " " + $scope.product.model;
                         $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
                     }
-                    $scope.product.formTag="publishAdForm";
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         $scope.price.currency = Currency.EUR.name;
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
-                        $scope.price.formTag="publishAdForm";
                         PricesService.savePrice($scope.price).$promise.then(function (result) {
                             CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
                                 if ($scope.isAuto) {

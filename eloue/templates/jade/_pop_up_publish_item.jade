@@ -17,7 +17,7 @@
                     .alert.alert-danger(ng-show="!!publishAdError")
                         button(type="button", data-dismiss="alert", class="close")
                         | {{publishAdError}}
-                    form(name="publishAdForm", ng-submit="publishAd()", role="form", novalidate, eloue-form-field-error-manager, form-tag="publishAdForm").input-group.form-wrapper.col-sm-10.col-sm-offset-1
+                    form(name="publishAdForm", ng-submit="publishAd()", role="form", novalidate, eloue-form-field-error-manager).input-group.form-wrapper.col-sm-10.col-sm-offset-1
                       fieldset(data-ng-disabled="submitInProgress")
                         .row
                             .col-sm-12
