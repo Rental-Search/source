@@ -1,0 +1,10 @@
+[
+    {
+        "fields": {
+            "domain": "www.gosport-location.com",
+            "name": "Go Sport"
+        },
+        "model": "sites.site",
+        "pk": 13
+    }
+]

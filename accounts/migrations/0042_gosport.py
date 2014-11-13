@@ -7,6 +7,9 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
+        from django.core.management import call_command
+        call_command("loaddata", "gosport.json")
+
         eloue_siteid = 1
         gosport_site_id = 13
         site = orm['sites.Site'].objects.get(pk=gosport_site_id)
