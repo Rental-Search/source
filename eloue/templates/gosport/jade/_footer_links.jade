@@ -1,0 +1,10 @@
+.container
+  ul.nav.nav-justified
+    -var footer_links = [["Le concept GO Sport Location", [["Comment ça marche ?", "/comment-ca-marche/"]]], ["Pourquoi choisir GO Sport Location ?", [["GO Sport Location et la sécurité", "/securite/"], ["Contrats de location", "/contrat-de-location/"], ["L’offre GO Sport Location Pro", "/offre-professionnel/"]]], ["L’entreprise GO Sport Location", [["Nos partenaires", "/nos-partenaires/"], ["Conditions générales", "/conditions-generales/"], ["Mentions légales", "/mentions-legales/"]]], ["En savoir plus", [["Contactez-nous", "/contactez-nous/"], ["Blog e-loue", "http://blog.e-loue.com/"]]]]
+    each header, group in footer_links
+      li.divide
+      li.ul-wrapper: .centering
+        h4.text-nowrap {{ header }}
+        ul.nav
+          each title, link in group
+            li.link-wrapper: a(href="{{ link }}") {{ title }}
