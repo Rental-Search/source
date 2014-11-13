@@ -33,7 +33,7 @@ block details
               fieldset(data-ng-disabled="submitInProgress")
                 {% verbatim %}
                 ul.text-gray.container-with-square-thumbnail.indent-xs-b
-                    li(ng-show="product.pictures.length < 3").block-with-thumbnail
+                    li(ng-show="(product.pictures.length+loadingPicture) <3").block-with-thumbnail
                         label(for="image").file-input-drag
                             i.icon-3x.flaticon.solid.plus
                             input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image
@@ -42,6 +42,10 @@ block details
                          .col-thumbnail
                            .thumbnail: span.lg-p
                              img(style="background-image: url({{picture.image.thumbnail}});")
+                    li(ng-repeat="t in getTimes(loadingPicture) track by $index", style="padding-top: 0;").block-with-thumbnail
+                         .col-thumbnail
+                           .thumbnail: span.lg-p
+                             img(style="background-image: url('/static/img/preloader2.gif');")
                 {% endverbatim %}
         form(name="itemInfoForm", ng-submit="updateProduct()")
           fieldset(data-ng-disabled="submitInProgress")
