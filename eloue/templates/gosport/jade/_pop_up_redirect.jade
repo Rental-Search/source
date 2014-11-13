@@ -1,0 +1,18 @@
+.modal.fade#redirect(tabindex="-1", role="dialog", aria-hidden="true")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title Merci, inscription en cours
+      .modal-body
+        section.clearfix.indent-h-sm
+          .col-xs-4
+            a(href="#").bg-wrapper: img(style="background-image: url(#{STATIC_URL}img/logo.png);", alt="")
+            p Vous naviguiez sur Gosport Location
+          .col-xs-4
+            span.bg-wrapper.redirection-arrows: img(src="#{STATIC_URL}img/redirection.gif", alt="")
+            p Nous vous redirigeons sur le site e-loue
+          .col-xs-4
+            a(href="#").bg-wrapper: img(style="background-image: url(#{STATIC_URL}img/e-loue.png);", alt="")
+            p Effectuez à present votre location sur e-loue
+        section.indent-h-sm
+          h4.text-primary Gosport Location utilize e-loue comme outil technique pour gérer vos locations.
