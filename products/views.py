@@ -808,7 +808,8 @@ class ProductListView(ProductList):
 
     def get_context_data(self, **kwargs):
         context = {
-            'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
+            'category_list': Category.on_site.filter(
+                Q(parent__isnull=True) | ~Q(parent__sites__id=settings.SITE_ID)).exclude(slug='divers'),
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
 
