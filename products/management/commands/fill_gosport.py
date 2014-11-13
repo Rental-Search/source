@@ -12,7 +12,13 @@ class Command(BaseCommand):
         eloue_site_id = 1
         gosport_site_id = 13
 
-        print u'Search categories...'
+        print u'Import categories...'
+        category_ids = [176, 181, 251, 585, 247]
+        for category in Category.objects.filter(pk__in=category_ids):
+            category.sites.add(gosport_site_id)
+            for descendant in Category.objects.filter(tree_id=category.tree_id, lft__gt=category.lft, rght__lt=category.rght):
+                descendant.sites.add(gosport_site_id)
+
         categories = Category.objects.filter(sites__id=gosport_site_id).all()
         print u'\tCategories found: %d' % categories.count()
 

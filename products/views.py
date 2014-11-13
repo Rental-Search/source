@@ -739,14 +739,19 @@ from eloue.decorators import ajax_required
 from products.forms import SuggestCategoryViewForm
 
 class NavbarCategoryMixin(object):
-    categories = [
-        35, 390, 253, 335, 418, 2700, 495, 126, # first line / nav bar
-        323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
-    ]
+    categories = {
+        1: [
+            35, 390, 253, 335, 418, 2700, 495, 126, # first line / nav bar
+            323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
+        ],
+        13: [
+            176, 181, 251, 585, 247,
+        ]
+    }
 
     def get_context_data(self, **kwargs):
-        category_list = list(Category.on_site.filter(pk__in=self.categories))
-        index = self.categories.index
+        category_list = list(Category.on_site.filter(pk__in=self.categories[settings.SITE_ID]))
+        index = self.categories[settings.SITE_ID].index
         category_list.sort(key=lambda obj: index(obj.pk))
         context = {
             'category_list': category_list,
