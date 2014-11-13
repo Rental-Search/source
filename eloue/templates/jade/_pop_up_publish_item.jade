@@ -17,18 +17,15 @@
                     .alert.alert-danger(ng-show="!!publishAdError")
                         button(type="button", data-dismiss="alert", class="close")
                         | {{publishAdError}}
-                    form(name="publishAdForm", ng-submit="publishAd()", role="form", novalidate).input-group.form-wrapper.col-sm-10.col-sm-offset-1
+                    form(name="publishAdForm", ng-submit="publishAd()", role="form", novalidate, eloue-form-field-error-manager, form-tag="publishAdForm").input-group.form-wrapper.col-sm-10.col-sm-offset-1
                       fieldset(data-ng-disabled="submitInProgress")
                         .row
                             .col-sm-12
                                 input(type="text", name="summary", placeholder="Titre", ng-required="!isAuto", ng-model="product.summary", ng-blur="searchCategory()", ng-show="!isAuto").form-control
-                                span.text-danger(ng-show="!!errors.summary", ng-bind="errors.summary")
                             .col-sm-6
                                 input(type="text", name="brand", placeholder="Marque *", ng-required="isAuto", ng-model="product.brand", ng-show="isAuto").form-control
-                                span.text-danger(ng-show="!!errors.brand", ng-bind="errors.brand")
                             .col-sm-6
                                 input(type="text", name="model", placeholder="Modèle *", ng-required="isAuto", ng-model="product.model", ng-show="isAuto").form-control
-                                span.text-danger(ng-show="!!errors.model", ng-bind="errors.model")
                         .row
                             .col-sm-4
                                 select(ng-model="rootCategory", name="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-placeholder="Catégorie Niv.1 *", data-ng-disabled="submitInProgress", style="z-index: 1051").form-control
@@ -39,52 +36,40 @@
                             .col-sm-4
                                 select(ng-model="product.category", name="category", opts="leafCategories", eloue-chosen, data-placeholder="Catégorie Niv.3 *", ng-required="!isAuto && !isRealEstate", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate").form-control
                                     option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
-                                span.text-danger(ng-show="!!errors.category", ng-bind="errors.category")
                         .row(ng-show="noAddress")
                             .col-sm-5
                                 input(type="text", name="street", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
-                                span.text-danger(ng-show="!!errors.street", ng-bind="errors.street")
                             .col-sm-3
                                 input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="currentUser.default_address.zipcode").form-control
-                                span.text-danger(ng-show="!!errors.zipcode", ng-bind="errors.zipcode")
                             .col-sm-4
                                 input(type="text", name="city", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
-                                span.text-danger(ng-show="!!errors.city", ng-bind="errors.city")
                         .row
                             .col-sm-3
                                 input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="amount", placeholder="{{isRealEstate ? 'Prix à la nuit *' : 'Prix à la journée *'}}", required, ng-model="price.amount").form-control
-                                span.text-danger(ng-show="!!errors.amount", ng-bind="errors.amount")
                             .col-sm-1: b.form-suffix &euro;
                             .col-sm-3(ng-show="!isAuto")
                                 input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="deposit_amount", placeholder="Caution demandée *", ng-required="!isAuto", ng-model="product.deposit_amount").form-control
-                                span.text-danger(ng-show="!!errors.deposit_amount", ng-bind="errors.deposit_amount")
                             .col-sm-1(ng-show="!isAuto"): b.form-suffix &euro;
                             .col-sm-3(ng-show="isAuto")
                                 input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="km_included", placeholder="Kilomètres inclus *", ng-required="isAuto", ng-model="product.km_included").form-control
-                                span.text-danger(ng-show="!!errors.km_included", ng-bind="errors.km_included")
                             .col-sm-1(ng-show="isAuto"): b.form-suffix Km
                             .col-sm-4(ng-show="!isAuto")
                                 button(type="submit", ng-disabled="publishAdForm.$invalid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
                             .col-sm-3(ng-show="isAuto")
                                 input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="costs_per_km", placeholder="Prix km supp *", ng-required="isAuto", ng-model="product.costs_per_km").form-control
-                                span.text-danger(ng-show="!!errors.costs_per_km", ng-bind="errors.costs_per_km")
                              .col-sm-1(ng-show="isAuto"): b.form-suffix &euro;
                         .row(ng-show="isAuto")
                             .col-sm-4(style="z-index: 1050")
                                 input#first_registration_date(type="text", name="first_registration_date", ng-model="product.first_registration_date", placeholder="1er mise en circulation *", ng-required="isAuto").form-control.date
-                                span.text-danger(ng-show="!!errors.first_registration_date", ng-bind="errors.first_registration_date")
                             .col-sm-4
                                 input(type="text", name="licence_plate", ng-model="product.licence_plate", placeholder="N° d'immatriculation *", ng-required="isAuto").form-control
-                                span.text-danger(ng-show="!!errors.licence_plate", ng-bind="errors.licence_plate")
                             .col-sm-3
                                 input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="deposit_amount", placeholder="Caution demandée *", ng-required="isAuto", ng-model="product.deposit_amount").form-control
-                                span.text-danger(ng-show="!!errors.deposit_amount", ng-bind="errors.deposit_amount")
                             .col-sm-1: b.form-suffix &euro;
                         .row(ng-show="isAuto")
                             .col-sm-3
                                 select(ng-model="product.tax_horsepower", data-placeholder="CV fiscaux *", eloue-chosen, data-ng-disabled="submitInProgress", ng-required="isAuto").form-control
                                     option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
-                                span.text-danger(ng-show="!!errors.tax_horsepower", ng-bind="errors.tax_horsepower")
                             .col-sm-1: b.form-suffix CV
                             .col-sm-4
                             .col-sm-4

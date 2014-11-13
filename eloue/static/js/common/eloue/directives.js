@@ -344,7 +344,6 @@ define(["../../common/eloue/commonApp",
         }
         return {
             restrict: "AE",
-            scope:true,
             link: function (scope, element, attrs) {
                 var formTag = attrs.formTag;
                    if(!!formTag) {

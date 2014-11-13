@@ -26,7 +26,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.nodeCategories = {};
             $scope.leafCategories = {};
             $scope.rootCategory = {};
-            $scope.nodeCategory = {};
+            //$scope.nodeCategory = {};
             $scope.capacityOptions = [
                 {id: 1, name: "1"},
                 {id: 2, name: "2"},
@@ -78,23 +78,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * @param error JSON object with error details
              */
             $scope.handleResponseErrors = function (error) {
-                if (!!error.errors) {
-                    $scope.errors = {
-                        summary: !!error.errors.summary ? error.errors.summary[0] : "",
-                        brand: !!error.errors.brand ? error.errors.brand[0] : "",
-                        model: !!error.errors.model ? error.errors.model[0] : "",
-                        category: !!error.errors.category ? error.errors.category[0] : "",
-                        street: !!error.errors.street ? error.errors.street[0] : "",
-                        zipcode: !!error.errors.zipcode ? error.errors.zipcode[0] : "",
-                        amount: !!error.errors.amount ? error.errors.amount[0] : "",
-                        deposit_amount: !!error.errors.deposit_amount ? error.errors.deposit_amount[0] : "",
-                        km_included: !!error.errors.km_included ? error.errors.km_included[0] : "",
-                        costs_per_km: !!error.errors.costs_per_km ? error.errors.costs_per_km[0] : "",
-                        first_registration_date: !!error.errors.first_registration_date ? error.errors.first_registration_date[0] : "",
-                        licence_plate: !!error.errors.licence_plate ? error.errors.licence_plate[0] : "",
-                        tax_horsepower: !!error.errors.tax_horsepower ? error.errors.tax_horsepower[0] : ""
-                    };
-                }
                 $scope.submitInProgress = false;
             };
 
@@ -176,6 +159,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
+                    $scope.currentUser.default_address.formTag="publishAdForm";
                     AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
                         $scope.currentUser.default_address = result;
                         UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
@@ -203,10 +187,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.product.summary = $scope.product.brand + " " + $scope.product.model;
                         $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
                     }
+                    $scope.product.formTag="publishAdForm";
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         $scope.price.currency = Currency.EUR.name;
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
-
+                        $scope.price.formTag="publishAdForm";
                         PricesService.savePrice($scope.price).$promise.then(function (result) {
                             CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
                                 if ($scope.isAuto) {
