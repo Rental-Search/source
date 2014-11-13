@@ -32,12 +32,12 @@ section.container.signs-links
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
             {% endverbatim %}
-            li: a(href="{% url 'dashboard:dashboard' %}") Tableau de bord
-            li: a(href="{% url 'dashboard:messages' %}") Messages
-            li: a(href="{% url 'dashboard:bookings' %}") Réservations
-            li: a(href="{% url 'dashboard:items' %}") Annonces
-            li: a(href="{% url 'dashboard:account' %}") Compte
-            li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()") Déconnexion
+            li: a(href="{% url 'dashboard:dashboard' %}").signs-links-black Tableau de bord
+            li: a(href="{% url 'dashboard:messages' %}").signs-links-black Messages
+            li: a(href="{% url 'dashboard:bookings' %}").signs-links-black Réservations
+            li: a(href="{% url 'dashboard:items' %}").signs-links-black Annonces
+            li: a(href="{% url 'dashboard:account' %}").signs-links-black Compte
+            li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()").signs-links-black Déconnexion
             {% verbatim %}
         //-
          .dropdown
@@ -74,7 +74,7 @@ section.container.signs-links
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
             {% endverbatim %}
-            li: a(href="{% url 'howto' %}") Comment ça marche ?
+            li: a(href="{% url 'howto' %}").signs-links-black Comment ça marche ?
             //-
              li: a Simulez vos revenus
              li: a Conseils pour les propriétaires
