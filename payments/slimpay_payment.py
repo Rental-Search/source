@@ -12,9 +12,10 @@ class SlimPayManager(object):
 
     def execute_command(self, arguments):
         content = '\n'.join('{0}="{1}"'.format(key, val) for key, val in arguments.items())
+
         pipe = subprocess.Popen(self.PREFIX_COMMAND, shell=True, stdout=subprocess.PIPE,
                  stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        
+
         blob = pipe.communicate(content)[0]
 
         return blob
