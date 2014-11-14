@@ -764,7 +764,11 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
-        comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
+        comment_list = Comment.objects.select_related(
+            'booking__product__address'
+        ).filter(
+            booking__sites__id=settings.SITE_ID
+        ).order_by('-created_at')
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images
