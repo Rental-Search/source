@@ -364,4 +364,23 @@ define(["../../common/eloue/commonApp",
         }
     }]);
 
+
+    EloueCommon.directive("eloueDashboardRedirect", ["ToDashboardRedirectService", function (ToDashboardRedirectService) {
+
+
+        return {
+            restrict: "A",
+            link: function (scope, element, attrs) {
+                var href=attrs.eloueDashboardRedirect;
+                element.on('click', function(event){
+                    event.preventDefault();
+
+                    ToDashboardRedirectService.showPopupAndRedirect(href);
+
+                });
+            }
+        }
+    }]);
+
+
 });

@@ -18,7 +18,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "CategoriesService",
         "PricesService",
         "UtilsService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService) {
+        "ToDashboardRedirectService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -234,8 +235,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 toastr.options.positionClass = "toast-top-full-width";
                 toastr.success("Annonce publiée", "");
                 $(".modal").modal("hide");
-                $window.location.href = "/dashboard/#/items/" + product.id + "/info";
+                //$window.location.href = "/dashboard/#/items/" + product.id + "/info";
                 $scope.submitInProgress = false;
+                ToDashboardRedirectService.showPopupAndRedirect("/dashboard/#/items/" + product.id + "/info");
             };
 
             /**

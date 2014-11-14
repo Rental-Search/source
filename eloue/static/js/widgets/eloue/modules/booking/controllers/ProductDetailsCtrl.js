@@ -26,7 +26,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "ShippingPointsService",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService) {
+        "ToDashboardRedirectService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService) {
 
             $scope.creditCard = {
                 id: null,
@@ -397,8 +398,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     toastr.options.positionClass = "toast-top-full-width";
                     toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
                     $(".modal").modal("hide");
-                    $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
+                    //$window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                     $scope.submitInProgress = false;
+                    ToDashboardRedirectService.showPopupAndRedirect("/dashboard/#/bookings/" + booking.uuid);
                 }, function (error) {
                     $scope.handleResponseErrors(error);
                 });

@@ -1614,4 +1614,22 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 }
             }
         });
+
+
+        EloueCommon.factory("ToDashboardRedirectService",["$window", function ($window) {
+
+            return {
+                showPopupAndRedirect:function (href){
+                   var delay, modalView=$('#redirect');
+                    if(!modalView || modalView.length==0){
+                        delay=0;
+                    }else{
+                        delay=5000;
+                        modalView.modal('show');
+                    }
+                   setTimeout(function(){ $window.location.href = href; }, delay);
+                }
+
+            }
+        }]);
     });
