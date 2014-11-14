@@ -74,7 +74,8 @@ class BreadcrumbsMixin(object):
     def get_breadcrumbs(self, request):
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         query_data = request.GET.copy()
-        query_data.setdefault('l', location['country'])
+        if 'l' not in query_data or not query_data['l']:
+            query_data['l'] = location['country']
         form = self.form_class(query_data)
         if not form.is_valid():
             raise Http404
