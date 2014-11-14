@@ -15,6 +15,8 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             $scope.unreadMessageThreadsCount = 0;
             $scope.newBookingRequestsCount = 0;
             $scope.submitInProgress = false;
+            $scope.selectedItem={}
+
             $scope.dashboardTabs = [
                 {title: 'Tableau de bord', icon: 'stroke home', sref: 'dashboard', badge: 0},
                 {title: 'Messages', icon: 'stroke mail', sref: 'messages', badge: 0},
@@ -51,7 +53,16 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 }
             });
 
+            $scope.clearSelectedItem = function(prefix){
+                delete $scope.selectedItem[prefix];
+            };
+
+            $scope.isItemSelected = function(prefix, id){
+                return !!$scope.selectedItem[prefix] && parseInt($scope.selectedItem[prefix]) == parseInt(id);
+            };
+
             $scope.markListItemAsSelected = function(prefix, id) {
+                $scope.selectedItem[prefix] = id;
                 $('li[id^=' + prefix + ']').each(function () {
                     var item = $(this);
                     if (item.attr("id") == (prefix + id)) {

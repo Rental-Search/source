@@ -287,18 +287,17 @@ define(["../../common/eloue/commonApp",
             scope:true,
             link: function (scope, element, attrs) {
                 var formTag=attrs.formTag;
-                if(!!formTag){
-                   scope.$watch(function(){
-                      return ServerValidationService.getFormErrorMessage(formTag);
-                   },function(value){
-                       if(!!value) {
-                           $animate['removeClass'](element, 'ng-hide');
-                           scope.value = value;
-                       } else{
-                           $animate['addClass'](element, 'ng-hide');
-                       }
-                   });
-                }
+                scope.$watchCollection(function(){
+                    return ServerValidationService.getFormErrorMessage(formTag);
+                },function(value){
+                    if(!!value) {
+                        $animate['removeClass'](element, 'ng-hide');
+                        scope.message = value.message;
+                        scope.description = value.description;
+                    } else{
+                        $animate['addClass'](element, 'ng-hide');
+                    }
+                });
             }
         }
     }]);
@@ -315,9 +314,9 @@ define(["../../common/eloue/commonApp",
                 var formTag, fieldName;
                 formTag=attrs.formTag;
                 fieldName=attrs.fieldName;
-                if(!!formTag && !!fieldName){
+                if(!!fieldName){
                     scope.$watch(function(){
-                        return ServerValidationService.getFieldError(formTag, fieldName);
+                        return ServerValidationService.getFieldError(fieldName, formTag);
                     },function(value){
                         if(!!value) {
                             $animate['removeClass'](element, 'ng-hide');
@@ -330,5 +329,58 @@ define(["../../common/eloue/commonApp",
             }
         }
     }]);
+
+
+    /**
+     * When the validation error occurred this directive try to find all field with errors by name and add error block.
+     * If block contain "eloueFormFieldMessage" with error field name, directive dose not add error block.
+     */
+    EloueCommon.directive("eloueFormFieldErrorManager", ["$animate", "ServerValidationService", function ($animate, ServerValidationService) {
+        var className = "server-validation-error";
+        function prepareErrorElement(message){
+            return "<span class='text-danger " + className + "'>"+message+"</span>"
+        }
+        return {
+            restrict: "AE",
+            link: function (scope, element, attrs) {
+                var formTag = attrs.formTag;
+                scope.$watch(function () {
+                    return ServerValidationService.getErrors(formTag);
+                }, function (value) {
+                    var el = element;
+                    el.find("." + className).remove();
+                    if(!!value){
+                        angular.forEach(value.fields, function(value, key) {
+                            var checkItem, input;
+                            checkItem = el.find("[field-name='" + key + "']");
+                            if(checkItem.length === 0) {
+                                input = el.find("[name='" + key + "']");
+                                input.parent().append(prepareErrorElement(value));
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    }]);
+
+
+    EloueCommon.directive("eloueDashboardRedirect", ["ToDashboardRedirectService", function (ToDashboardRedirectService) {
+
+
+        return {
+            restrict: "A",
+            link: function (scope, element, attrs) {
+                var href=attrs.eloueDashboardRedirect;
+                element.on('click', function(event){
+                    event.preventDefault();
+
+                    ToDashboardRedirectService.showPopupAndRedirect(href);
+
+                });
+            }
+        }
+    }]);
+
 
 });

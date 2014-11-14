@@ -25,7 +25,10 @@
         "formmapper": "../formmapper"
     },
     shim: {
-        "angular": {"exports": "angular"},
+        "angular": {
+            deps: ["jQuery"],
+            "exports": "angular"
+        },
         "angular-route": ["angular"],
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],

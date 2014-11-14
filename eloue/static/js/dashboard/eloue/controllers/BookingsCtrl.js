@@ -76,6 +76,9 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             }, 500);
 
+            $scope.$on('$destroy', function iVeBeenDismissed() {
+                $scope.clearSelectedItem("booking-");
+            })
         }
     ]);
 });

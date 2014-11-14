@@ -17,6 +17,10 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.address = {};
 
+            function onRequestFailed(){
+                $scope.submitInProgress = false;
+            }
+
             // Get
             AddressesService.getAddress($stateParams.id).$promise.then(function (address) {
                 // Current address
@@ -41,7 +45,7 @@ define(["angular", "eloue/app"], function (angular) {
                     } else {
                         $scope.finaliseAddressUpdate();
                     }
-                });
+                }, onRequestFailed);
             };
 
             $scope.finaliseAddressUpdate = function() {
@@ -63,6 +67,7 @@ define(["angular", "eloue/app"], function (angular) {
             ProductsService.getProductsByAddress($stateParams.id).then(function (products) {
                 $scope.productList = products;
             });
+
         }
     ]);
 });

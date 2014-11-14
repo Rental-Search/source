@@ -5,15 +5,23 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Service for uploading forms.
          */
-        EloueCommon.factory("FormService", [function () {
+        EloueCommon.factory("FormService", ["ServerValidationService", function (ServerValidationService) {
             var formService = {};
 
             formService.send = function (method, url, $form, successCallback, errorCallback) {
+                ServerValidationService.removeErrors();
                 $form.ajaxSubmit({
                     type: method,
                     url: url,
                     success: successCallback,
-                    error: errorCallback
+                    error: function(jqXHR, status, message, form){
+                        if(jqXHR.status == 400 && !!jqXHR.responseJSON){
+                            ServerValidationService.addErrors(undefined, undefined, jqXHR.responseJSON.errors);
+                        }else{
+                            ServerValidationService.addErrors("An error occured!", "An error occured!");
+                        }
+                        errorCallback.call(null, jqXHR, status, message, form);
+                    }
                 });
             };
 
@@ -1559,26 +1567,69 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          * Service to store server side validation errors.
          */
         EloueCommon.factory("ServerValidationService", function () {
-            var formErrors={};
+            var formErrors={}, rootErrors="rootErrors";
+
             return {
-                addErrors:function(formTag, messageError, fieldErrors) {
+                addErrors:function(messageError, description, fieldErrors, formTag) {
+                    if(!formTag){
+                        formTag = rootErrors;
+                    }
                     formErrors[formTag] = {
                         message: messageError,
                         fields: fieldErrors
                     };
+                    if(!!description){
+                        formErrors[formTag].description=(""+description).replace("[","").replace("]","").replace("{","").replace("}","");
+                    }
                 },
                 removeErrors:function(formTag){
+                    if(!formTag){
+                        formTag = rootErrors;
+                    }
                     delete formErrors[formTag];
                 },
                 getFormErrorMessage:function(formTag){
-                     return !!formErrors[formTag]? formErrors[formTag].message : undefined;
+                    if(!formTag){
+                        formTag = rootErrors;
+                    }
+                    if((!formErrors[formTag] || (!formErrors[formTag].message && !formErrors[formTag].description))) {
+                        return undefined;
+                    }
+                    return { message: formErrors[formTag].message, description: formErrors[formTag].description};
                 },
-                getFieldError:function(formTag, fieldName){
+                getFieldError:function(fieldName, formTag){
+                    if(!formTag){
+                        formTag = rootErrors;
+                    }
                     if(!formErrors[formTag] || !formErrors[formTag].fields){
                         return undefined;
                     }
                     return formErrors[formTag].fields[fieldName];
+                },
+                getErrors:function(formTag){
+                    if(!formTag){
+                        formTag = rootErrors;
+                    }
+                    return formErrors[formTag];
                 }
             }
         });
+
+
+        EloueCommon.factory("ToDashboardRedirectService",["$window", function ($window) {
+
+            return {
+                showPopupAndRedirect:function (href){
+                   var delay, modalView=$('#redirect');
+                    if(!modalView || modalView.length==0){
+                        delay=0;
+                    }else{
+                        delay=5000;
+                        modalView.modal('show');
+                    }
+                   setTimeout(function(){ $window.location.href = href; }, delay);
+                }
+
+            }
+        }]);
     });

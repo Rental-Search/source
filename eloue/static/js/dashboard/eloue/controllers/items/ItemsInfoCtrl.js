@@ -25,6 +25,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.leafCategories = {};
             $scope.rootCategory = {};
             $scope.nodeCategory = {};
+            $scope.loadingPicture=0;
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
             $scope.categoriesBaseUrl = Endpoints.api_url + "categories/";
             $scope.isAuto = false;
@@ -128,9 +129,17 @@ define(["angular", "eloue/app"], function (angular) {
             });
 
             $scope.onPictureAdded = function () {
+                    $scope.$apply(function () {
+                        $scope.loadingPicture++;
+                    });
                 PicturesService.savePicture($scope.product.id, $("#add-picture"), function (data) {
                     $scope.$apply(function () {
+                        $scope.loadingPicture--;
                         $scope.product.pictures.push(data);
+                    });
+                }, function(){
+                    $scope.$apply(function () {
+                        $scope.loadingPicture--;
                     });
                 });
             };
@@ -178,7 +187,11 @@ define(["angular", "eloue/app"], function (angular) {
                 } else if (rootCategory.name === "Location saisonnière") {
                     $scope.isRealEstate = true;
                 }
-            }
+            };
+
+            $scope.getTimes=function(n){
+                return new Array(n);
+            };
         }
     ]);
 });

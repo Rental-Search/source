@@ -43,7 +43,16 @@ define(["angular", "eloue/app"], function (angular) {
             });
 
             $scope.filterByCategory = function () {
-                $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.selectedCategory], shouldReloadList: true});
-            }
+                $scope.$broadcast("startLoading", {
+                    parameters: [$scope.currentUser.id, $scope.selectedCategory],
+                    shouldReloadList: true
+                });
+            };
+            $scope.$on('$destroy', function iVeBeenDismissed() {
+                $scope.clearSelectedItem("item-");
+            })
+
         }]);
+
+
 });
