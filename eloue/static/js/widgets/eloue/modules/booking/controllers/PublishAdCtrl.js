@@ -18,7 +18,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "CategoriesService",
         "PricesService",
         "UtilsService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService) {
+        "ToDashboardRedirectService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -78,23 +79,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * @param error JSON object with error details
              */
             $scope.handleResponseErrors = function (error) {
-                if (!!error.errors) {
-                    $scope.errors = {
-                        summary: !!error.errors.summary ? error.errors.summary[0] : "",
-                        brand: !!error.errors.brand ? error.errors.brand[0] : "",
-                        model: !!error.errors.model ? error.errors.model[0] : "",
-                        category: !!error.errors.category ? error.errors.category[0] : "",
-                        street: !!error.errors.street ? error.errors.street[0] : "",
-                        zipcode: !!error.errors.zipcode ? error.errors.zipcode[0] : "",
-                        amount: !!error.errors.amount ? error.errors.amount[0] : "",
-                        deposit_amount: !!error.errors.deposit_amount ? error.errors.deposit_amount[0] : "",
-                        km_included: !!error.errors.km_included ? error.errors.km_included[0] : "",
-                        costs_per_km: !!error.errors.costs_per_km ? error.errors.costs_per_km[0] : "",
-                        first_registration_date: !!error.errors.first_registration_date ? error.errors.first_registration_date[0] : "",
-                        licence_plate: !!error.errors.licence_plate ? error.errors.licence_plate[0] : "",
-                        tax_horsepower: !!error.errors.tax_horsepower ? error.errors.tax_horsepower[0] : ""
-                    };
-                }
                 $scope.submitInProgress = false;
             };
 
@@ -206,7 +190,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         $scope.price.currency = Currency.EUR.name;
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
-
                         PricesService.savePrice($scope.price).$promise.then(function (result) {
                             CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
                                 if ($scope.isAuto) {
@@ -252,8 +235,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 toastr.options.positionClass = "toast-top-full-width";
                 toastr.success("Annonce publiée", "");
                 $(".modal").modal("hide");
-                $window.location.href = "/dashboard/#/items/" + product.id + "/info";
+                //$window.location.href = "/dashboard/#/items/" + product.id + "/info";
                 $scope.submitInProgress = false;
+                ToDashboardRedirectService.showPopupAndRedirect("/dashboard/#/items/" + product.id + "/info");
             };
 
             /**

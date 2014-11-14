@@ -43,36 +43,8 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.licenceYear = null;
 
             $scope.markListItemAsSelected("account-part-", "account.profile");
-            $scope.errors = {
-                is_professional: "",
-                username: "",
-                email: "",
-                first_name: "",
-                last_name: "",
-                default_address: "",
-                default_number: "",
-                about: "",
-                is_subscribed: "",
-                drivers_license_date: "",
-                drivers_license_number: ""
-            };
 
             $scope.handleResponseErrors = function(error) {
-                if (!!error.errors) {
-                    $scope.errors = {
-                        is_professional: !!error.errors.is_professional ? error.errors.is_professional[0] : "",
-                        username: !!error.errors.username ? error.errors.username[0] : "",
-                        email: !!error.errors.email ? error.errors.email[0] : "",
-                        first_name: !!error.errors.first_name ? error.errors.first_name[0] : "",
-                        last_name: !!error.errors.last_name ? error.errors.last_name[0] : "",
-                        default_address: !!error.errors.default_address ? error.errors.default_address[0] : "",
-                        default_number: !!error.errors.default_number ? error.errors.default_number[0] : "",
-                        about: !!error.errors.about ? error.errors.about[0] : "",
-                        is_subscribed: !!error.errors.is_subscribed ? error.errors.is_subscribed[0] : "",
-                        drivers_license_date: !!error.errors.drivers_license_date ? error.errors.drivers_license_date[0] : "",
-                        drivers_license_number: !!error.errors.drivers_license_number ? error.errors.drivers_license_number[0] : ""
-                    };
-                }
                 $scope.$apply(function () {
                     $scope.submitInProgress = false;
                 });

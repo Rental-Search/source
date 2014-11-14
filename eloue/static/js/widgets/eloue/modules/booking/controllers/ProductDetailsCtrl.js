@@ -26,7 +26,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "ShippingPointsService",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService) {
+        "ToDashboardRedirectService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService) {
 
             $scope.creditCard = {
                 id: null,
@@ -161,25 +162,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 {"label": "23h", "value": "23:00:00"}
             ];
 
-            $scope.errors = {
-                civility: "",
-                first_name: "",
-                last_name: "",
-                street: "",
-                zipcode: "",
-                city: "",
-                date_of_birth: "",
-                place_of_birth: "",
-                drivers_license_number: "",
-                drivers_license_date: "",
-                card_number: "",
-                expires: "",
-                cvv: "",
-                holder_name: "",
-                started_at: "",
-                ended_at: ""
-            };
-
             /**
              * Show response errors on booking form under appropriate field.
              * @param error JSON object with error details
@@ -189,34 +171,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.submitInProgress = false;
                 $scope.loadingProductShippingPoint = false;
                 $scope.shippingPointsRequestInProgress = false;
-                // Add specific error fields
-                if (!!error.errors) {
-                    $scope.errors = {
-                        civility: !!error.errors.civility ? error.errors.civility[0] : "",
-                        first_name: !!error.errors.first_name ? error.errors.first_name[0] : "",
-                        last_name: !!error.errors.last_name ? error.errors.last_name[0] : "",
-                        street: !!error.errors.street ? error.errors.street[0] : "",
-                        zipcode: !!error.errors.zipcode ? error.errors.zipcode[0] : "",
-                        city: !!error.errors.city ? error.errors.city[0] : "",
-                        date_of_birth: !!error.errors.date_of_birth ? error.errors.date_of_birth[0] : "",
-                        place_of_birth: !!error.errors.place_of_birth ? error.errors.place_of_birth[0] : "",
-                        drivers_license_number: !!error.errors.drivers_license_number ? error.errors.drivers_license_number[0] : "",
-                        drivers_license_date: !!error.errors.drivers_license_date ? error.errors.drivers_license_date[0] : "",
-                        card_number: !!error.errors.card_number ? error.errors.card_number[0] : "",
-                        expires: !!error.errors.expires ? error.errors.expires[0] : "",
-                        cvv: !!error.errors.cvv ? error.errors.cvv[0] : "",
-                        holder_name: !!error.errors.holder_name ? error.errors.holder_name[0] : "",
-                        started_at: !!error.errors.started_at ? error.errors.started_at[0] : "",
-                        ended_at: !!error.errors.ended_at ? error.errors.ended_at[0] : "",
-                        product: !!error.errors.product ? error.errors.product[0] : ""
-                    };
-                }
-                if (!!error.detail) {
-                    $scope.errors.general = error.detail;
-                }
-                if (!!error.description) {
-                    $scope.errors.general = error.description.replace("[","").replace("]","").replace("{","").replace("}","");
-                }
             };
 
             ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
@@ -310,7 +264,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.handleResponseErrors(error);
                 });
             };
-            
+
             $scope.sendBookingRequest = function () {
                 //if user has no default addrees, firstly save his address
                 if ($scope.noAddress) {
@@ -444,13 +398,14 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     toastr.options.positionClass = "toast-top-full-width";
                     toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
                     $(".modal").modal("hide");
-                    $window.location.href = "/dashboard/#/bookings/" + booking.uuid;
+                    //$window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                     $scope.submitInProgress = false;
+                    ToDashboardRedirectService.showPopupAndRedirect("/dashboard/#/bookings/" + booking.uuid);
                 }, function (error) {
                     $scope.handleResponseErrors(error);
                 });
             };
-            
+
             /**
              * Get label for google analytics event base on product category.
              * @returns event tag label

@@ -30,6 +30,10 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.productShippingPoint = {};
             $scope.errors = {};
 
+            function onRequestFailed(){
+                $scope.submitInProgress = false;
+            }
+
             ProductShippingPointsService.getByProduct($stateParams.id).then(function (data) {
                 if (!!data.results && data.results.length > 0) {
                     $scope.productShippingPoint = data.results[0];
@@ -102,7 +106,7 @@ define(["angular", "eloue/app"], function (angular) {
                 if (!!$scope.productShippingPoint && !!$scope.productShippingPoint.id) {
                     ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function (result) {
                         $scope.savePoint();
-                    });
+                    }, onRequestFailed);
                 } else {
                     $scope.savePoint();
                 }
@@ -122,7 +126,7 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.submitInProgress = false;
                     $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
                     $scope.showMapPointDetails();
-                });
+                }, onRequestFailed);
             };
 
             $scope.pointSelected = function (pointId) {

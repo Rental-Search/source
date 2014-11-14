@@ -22,14 +22,14 @@
                  form(action="")
                     .form-group: a( href = "#classic-form", data-toggle="modal", data-target="#classic-form", data-dismiss="modal").btn.bg-success Inscription via Email
                 {% verbatim %}
-                .alert.alert-danger(eloue-form-message form-tag="registrationFrom")
+                .alert.alert-danger(eloue-form-message)
                     button(type="button", data-dismiss="alert", class="close")
-                    | {{value}}
+                    | {{message}}
                 .alert.alert-danger(ng-show="!!loginError")
                     button(type="button", data-dismiss="alert", class="close")
                     | {{loginError}}
                 {% endverbatim %}
-                form(name="registrationForm", ng-submit="register()", novalidate, ng-init="account.formTag='registrationFrom'")
+                form(name="registrationForm", ng-submit="register()", novalidate, eloue-form-field-error-manager)
                     //-
                      h3 Inscription 30 secondes
                     .form-group: .row
@@ -41,19 +41,12 @@
                         .col-xs-7
                             input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
                             span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationForm.last_name.$dirty") Required field
-                            span.text-danger(eloue-form-field-message form-tag="registrationFrom" field-name="last_name")
-                                {% verbatim %}
-                                | {{value}}
-                                {% endverbatim %}
                     -var registration_form_fields = [["text", "Prénom", "first_name"], ["email", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
                     each type, placeholder, name in registration_form_fields
                         .form-group
                             input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
                             span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationForm.#{name}.$dirty") Required field
-                            span.text-danger(eloue-form-field-message form-tag="registrationFrom" field-name="#{name}")
-                                {% verbatim %}
-                                | {{value}}
-                                {% endverbatim %}
+
                     .checkbox
                         label(for="inform")
                             input(type="checkbox", checked)#inform

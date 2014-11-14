@@ -200,7 +200,7 @@ define(["angular", "eloue/app"], function (angular) {
                 BookingsLoadService.rejectBooking($stateParams.uuid).$promise.then(function (result) {
                     $scope.showNotification(result.detail);
                     $window.location.reload();
-                })
+                }, $scope.handleResponseErrors)
             };
 
             $scope.showCancelConfirm = function () {
@@ -212,7 +212,7 @@ define(["angular", "eloue/app"], function (angular) {
                 BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
                     $scope.showNotification(result.detail);
                     $window.location.reload();
-                })
+                }, $scope.handleResponseErrors)
             };
 
             $scope.declareIncident = function () {
@@ -227,7 +227,7 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.showNotification("Posted comment");
                         $scope.showCommentForm = false;
                         $scope.submitInProgress = false;
-                    });
+                    }, $scope.handleResponseErrors);
             };
 
             // Method to post new incident
@@ -238,7 +238,7 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.showNotification(result.detail);
                         $scope.showIncidentForm = false;
                         $window.location.reload();
-                    });
+                    }, $scope.handleResponseErrors);
             };
         }
     ]);
