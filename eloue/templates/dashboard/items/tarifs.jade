@@ -4,6 +4,7 @@ block details
         form(name="itemTariffsForm", ng-submit="updatePrices()")
           fieldset(ng-disabled="submitInProgress")
             h2 Grille tarifaire
+            .text-danger(eloue-form-field-message field-name="amount") {{value}}
             .row
                 .col-lg-12
                     table.calendar(ng-show="!isAuto && !isRealEstate")

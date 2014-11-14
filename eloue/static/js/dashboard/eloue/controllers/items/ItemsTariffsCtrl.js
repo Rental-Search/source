@@ -17,6 +17,10 @@ define(["angular", "eloue/app"], function (angular) {
         "PricesService",
         function ($q, $scope, $stateParams, Endpoints, Currency, Unit, CategoriesService, ProductsService, PricesService) {
 
+            function onRequestFailed(){
+                $scope.submitInProgress = false;
+            }
+
             $scope.units = Unit;
             $scope.prices = {
                 hour: {id: null, amount: null, unit: Unit.HOUR.id},
@@ -124,7 +128,7 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.product.phone = {
                         id: phoneId
                     };
-                });
+                }, onRequestFailed);
             }
         }]);
 });

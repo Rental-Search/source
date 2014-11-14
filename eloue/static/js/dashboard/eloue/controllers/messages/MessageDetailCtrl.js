@@ -18,6 +18,9 @@ define(["angular", "eloue/app"], function (angular) {
         "UtilsService",
         function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
 
+            function onRequestFailed(){
+                $scope.submitInProgress = false;
+            }
             var promises = {
                 currentUser: $scope.currentUserPromise,
                 messageThread: MessageThreadsLoadService.getMessageThread($stateParams.id)
@@ -82,7 +85,7 @@ define(["angular", "eloue/app"], function (angular) {
 //                                //Get product details
                                 ProductsLoadService.getAbsoluteUrl($scope.messageThread.product.id).$promise.then(function (result) {
                                     $window.location.href = result.url + "#/booking";
-                                });
+                                }, onRequestFailed);
                             };
 
                             $scope.booking = booking;
@@ -109,7 +112,7 @@ define(["angular", "eloue/app"], function (angular) {
                             MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
                                 $scope.messageThread.messages = messageThread.messages;
                                 $scope.submitInProgress = false;
-                            });
+                            }, onRequestFailed);
                         });
                 };
 

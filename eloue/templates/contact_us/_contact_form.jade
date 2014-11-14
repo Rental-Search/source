@@ -7,7 +7,7 @@
 
     .row.indent-v-sm
       .col-xs-4.text-right: label Catégorie*&nbsp;:
-      .col-xs-8.col-sm-6.col-md-4: select(data-placeholder="Sélectionner une catégorie", required)
+      .col-xs-8.col-sm-6.col-md-4: select(data-placeholder="Sélectionner une catégorie", required).form-control
         option(value="")
         {% for item in select_items %}
         option(value="{{item.value}}") {{item.text}}
