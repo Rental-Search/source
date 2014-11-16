@@ -14,7 +14,7 @@
                         include ./pop_up_sections/_product_info.jade
                     section.terms
                         include ./pop_up_sections/_terms
-                        a(eloue-dashboard-redirect="{% eloue_url 'dashboard:bookings' %}").btn.bg-success
+                        a(href="{% eloue_url 'dashboard:bookings' %}").btn.bg-success#create-booking
                             | Réservez
                         a(href="#/message").btn.bg-gray
                             | Envoyez un message
