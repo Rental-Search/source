@@ -994,6 +994,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet
+    ordering = '-created_at'
     ordering_fields = ('quantity', 'is_archived', 'category')
     public_actions = ('retrieve', 'search', 'is_available')
 
