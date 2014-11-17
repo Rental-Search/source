@@ -32,11 +32,11 @@ section.container.signs-links
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
             {% endverbatim %}
-            li: a(eloue-dashboard-redirect="{% eloue_url 'dashboard:dashboard' %}").signs-links-black Tableau de bord
-            li: a(eloue-dashboard-redirect="{% eloue_url 'dashboard:messages' %}").signs-links-black Messages
-            li: a(eloue-dashboard-redirect="{% eloue_url 'dashboard:bookings' %}").signs-links-black Réservations
-            li: a(eloue-dashboard-redirect="{% eloue_url 'dashboard:items' %}").signs-links-black Annonces
-            li: a(eloue-dashboard-redirect="{% eloue_url 'dashboard:account' %}").signs-links-black Compte
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:dashboard' %}").signs-links-black Tableau de bord
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:messages' %}").signs-links-black Messages
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:bookings' %}").signs-links-black Réservations
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:items' %}").signs-links-black Annonces
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:account' %}").signs-links-black Compte
             li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()").signs-links-black Déconnexion
             {% verbatim %}
         //-

@@ -400,7 +400,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $(".modal").modal("hide");
                     //$window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                     $scope.submitInProgress = false;
-                    ToDashboardRedirectService.showPopupAndRedirect($("#create-booking").attr('href') + '/' + booking.uuid);
+                    ToDashboardRedirectService.showPopupAndRedirect("/dashboard/#/bookings/" + booking.uuid);
                 }, function (error) {
                     $scope.handleResponseErrors(error);
                 });

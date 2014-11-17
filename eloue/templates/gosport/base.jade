@@ -1,4 +1,5 @@
 -load compressed staticfiles
+-load staticfiles eloue_url
 
 doctype 5
 html(lang="fr")
@@ -32,6 +33,7 @@ html(lang="fr")
       {% endif %}
       {% endspaceless %}
   body
+    input(id="eloue_url_home", value="{% eloue_url 'home' %}", type="hidden")
     block content-body
       include jade/_pop_up_redirect
     script
