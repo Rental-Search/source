@@ -77,6 +77,7 @@ class Product(models.Model):
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
+    categories = models.ManyToManyField('Category', related_name='product_categories')
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False) # FIXME should be auto_now_add=True
     sites = models.ManyToManyField(Site, related_name='products')
@@ -101,7 +102,7 @@ class Product(models.Model):
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
         super(Product, self).save(*args, **kwargs)
-    
+
     @permalink
     def get_absolute_url(self):
         encestors_slug = self.category.get_ancertors_slug()
@@ -612,7 +613,7 @@ class Category(MPTTModel):
     """A category"""
     parent = models.ForeignKey('self', related_name='childrens', blank=True, null=True)
     name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True, db_index=True)
+    slug = models.SlugField(db_index=True)
     need_insurance = models.BooleanField(default=True, db_index=True)
     sites = models.ManyToManyField(Site, related_name='categories')
 
@@ -656,6 +657,11 @@ class Category(MPTTModel):
         else:
             return u"/location/%(slug)s/" % {'slug': self.slug}
             
+
+class CategoryConformity(models.Model):
+    eloue_category = models.OneToOneField('Category', related_name='+')
+    gosport_category = models.OneToOneField('Category', related_name='+')
+
 
 class Property(models.Model):
     """A property"""
