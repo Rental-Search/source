@@ -1,0 +1,12 @@
+.container
+  h3.text-center Choisissez une catégorie pour votre annonce
+
+  -var publish_items_categories = [[{"title": "Sports d'hiver et de glace", "id": 2846, "classname": "drill"}, {"title": "Sports de raquette", "id": 2769, "classname": "mower"}, {"title": "Cycles", "id": 2774, "classname": "camera"}, {"title": "Sports d'extérieur", "id": 2762, "classname": "glass"}], [{"title": "Sports d'équipe", "id": 2848, "classname": "car"}, {"title": "Fitness, Gym et Danse", "id": 2823, "classname": "dress"}, {"title": "Loisirs", "id": 2808, "classname": "basket"}, {"title": "Autres", "id": "", "classname": "dots"}]]
+  each group in publish_items_categories
+    ul.nav.space-between
+      each item in group
+        li.spacer
+        li: span: a(href="#/publish?category={{ item.id }}", data-dismiss="modal")
+          span.border-round
+            i(class="eloue-{{ item.classname }}")
+          span.title {{ item.title }}
