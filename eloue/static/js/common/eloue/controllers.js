@@ -158,7 +158,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin) {
+    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", "ToDashboardRedirectService", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService) {
 
         /**
          * New user account data.
@@ -260,7 +260,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     if (RedirectAfterLogin.url != "/") {
                         AuthService.redirectToAttemptedUrl();
                     } else {
-                        $window.location.href = "/dashboard"
+                        //$window.location.href = "/dashboard"
+                        ToDashboardRedirectService.showPopupAndRedirect("/dashboard");
                     }
                 });
             }
