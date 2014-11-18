@@ -15,3 +15,8 @@ TEMPLATE_DIRS = env('TEMPLATE_DIRS', (
     local_path('templates/gosport'),
     local_path('templates/'),
 ))
+
+NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
+    2846, 2769, 2774, 2762, 2848, 2823, 2808,  # first line / nav bar
+    2783, 2840, 2857, 2835,  # others / dropdown selection
+])

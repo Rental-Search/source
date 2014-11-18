@@ -867,3 +867,8 @@ try:
     GDAL_LIBRARY_PATH = os.path.join(env('GDAL_LIBRARY_PATH'), 'libgdal.so')
 except:
     pass
+
+NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
+    35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
+    323, 432, 297, 379, 2713, 512, 3,  # others / dropdown selection
+])
