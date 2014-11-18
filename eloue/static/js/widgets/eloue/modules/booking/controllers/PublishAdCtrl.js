@@ -26,7 +26,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.rootCategories = {};
             $scope.nodeCategories = {};
             $scope.leafCategories = {};
-            $scope.rootCategory = {};
+            //$scope.rootCategory = {};
             $scope.nodeCategory = {};
             $scope.capacityOptions = [
                 {id: 1, name: "1"},
@@ -97,12 +97,28 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             }
 
+            $scope.setCategoryByLvl = function(categoryId, level){
+                switch (level){
+                    case 1:
+                        $scope.nodeCategory=categoryId;
+                        $scope.updateLeafCategories();
+                        break;
+                    case 2:
+                        $scope.product.category=categoryId;
+                        break;
+                    default :
+                        $scope.rootCategory=categoryId;
+                        $scope.updateNodeCategories();
+                }
+            };
+
             /**
              * Load necessary data on modal window open event based on modal name.
              */
             $scope.$on("openModal", function (event, args) {
                 var params = args.params;
                 var rootCategoryId = params.category;
+                var categoryId = params.category;
                 $scope.product = {};
                 $scope.price = {
                     id: null, amount: null, unit: Unit.DAY.id
@@ -114,11 +130,22 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.noAddress = true;
                     }
                     $scope.rootCategories = categories;
-                    if (!!rootCategoryId) {
-                        $scope.rootCategory = rootCategoryId;
+
+                    if(!!categoryId) {
+                        CategoriesService.getAncestors(categoryId).then(function (categories) {
+                            var level = 0;
+                            angular.forEach(categories, function (value, key) {
+                                $scope.setCategoryByLvl(value.id, level);
+                                level++;
+                            });
+                            $scope.setCategoryByLvl(categoryId, level);
+                        });
+                    } else if(!!$scope.rootCategory){
                         $scope.updateNodeCategories();
                     }
+
                 });
+
             });
 
             /**
