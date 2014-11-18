@@ -801,9 +801,15 @@ class ProductListView(ProductList):
         return breadcrumbs
 
     def get_context_data(self, **kwargs):
+        if settings.FILTER_CATEGORIES:
+            category_list = Category.on_site.filter(id__in=settings.FILTER_CATEGORIES)
+        else:
+            category_list = Category.on_site.filter(
+                Q(parent__isnull=True) | ~Q(parent__sites__id=settings.SITE_ID)
+            ).exclude(slug='divers')
+
         context = {
-            'category_list': Category.on_site.filter(
-                Q(parent__isnull=True) | ~Q(parent__sites__id=settings.SITE_ID)).exclude(slug='divers'),
+            'category_list': category_list
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
 

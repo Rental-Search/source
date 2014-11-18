@@ -872,3 +872,5 @@ NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
     35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
     323, 432, 297, 379, 2713, 512, 3,  # others / dropdown selection
 ])
+
+FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())
