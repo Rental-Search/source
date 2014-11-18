@@ -741,15 +741,20 @@ from products.forms import SuggestCategoryViewForm
 class NavbarCategoryMixin(object):
     categories = {
         1: [
-            35, 390, 253, 335, 418, 2700, 495, 126, # first line / nav bar
-            323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
+            35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
+            323, 432, 297, 379, 2713, 512, 3,  # others / dropdown selection
         ],
         13: [
-            176, 181, 251, 585, 247,
+            2846, 2769, 2774, 2762, 2848, 2823, 2808,  # first line / nav bar
+            2783, 2840, 2857, 2835,  # others / dropdown selection
         ]
     }
 
     def get_context_data(self, **kwargs):
+        # categories = map(lambda x: x - 1, self.categories[settings.SITE_ID])
+        # category_list = list(Category.on_site.filter(pk__in=categories))
+        # index = categories.index
+
         category_list = list(Category.on_site.filter(pk__in=self.categories[settings.SITE_ID]))
         index = self.categories[settings.SITE_ID].index
         category_list.sort(key=lambda obj: index(obj.pk))
