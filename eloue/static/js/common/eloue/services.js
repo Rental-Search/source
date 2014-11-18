@@ -1616,24 +1616,28 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         });
 
 
-        EloueCommon.factory("ToDashboardRedirectService", ["$window", function ($window) {
+        EloueCommon.factory("ToDashboardRedirectService", ["$window", "$cookies", function ($window, $cookies) {
 
             return {
                 showPopupAndRedirect: function (href) {
-                    var delay, modalView = $('#redirect'), eloueUrlHome = $('#eloue_url_home'), resultHref;
+                    var delay,
+                        modalView = $('#redirect'),
+                        eloueRedirectUrl = $('#eloue_url_redirect'),
+                        redirectResult;
                     if (!modalView || modalView.length == 0) {
                         delay = 0;
                     } else {
                         delay = 5000;
                         modalView.modal('show');
                     }
-                    if (!eloueUrlHome && eloueUrlHome.length == 0) {
-                        resultHref = href;
+                    if(!eloueRedirectUrl || eloueRedirectUrl.length == 0){
+                        redirectResult=href;
                     } else {
-                        resultHref = eloueUrlHome.val() + href;
+                        redirectResult=eloueRedirectUrl.val()+"?url="+encodeURIComponent(href)+"&user_token="+$cookies.user_token;
                     }
+
                     setTimeout(function () {
-                        $window.location.href = resultHref;
+                        $window.location.href = redirectResult;
                     }, delay);
                 }
             }
