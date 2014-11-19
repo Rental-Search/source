@@ -6,7 +6,7 @@
                 a(href="{{message.sender.url}}"): img(style="background-image: url({{ message.sender.avatar.thumbnail }})").bg-image
             .thumbnail-content
                 .thumbnail-frame
-                    h4 {{message.sender.first_name}} {{message.sender.last_name}}
+                    h4 {{message.sender.username}}
                     p(ng-bind="message.body")
                 p(ng-bind="message.sent_at | date : 'Le dd.MM.yyyy à HH:mm'").time
             div(ng-show="product.owner.id != message.sender.id").thumbnail-img

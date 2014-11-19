@@ -19,15 +19,16 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "PricesService",
         "UtilsService",
         "ToDashboardRedirectService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService) {
+        "ServerValidationService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
-            $scope.rootCategories = {};
-            $scope.nodeCategories = {};
-            $scope.leafCategories = {};
-            $scope.rootCategory = {};
-            $scope.nodeCategory = {};
+            $scope.rootCategories = [];
+            $scope.nodeCategories = [];
+            $scope.leafCategories = [];
+            //$scope.rootCategory = {};
+            //$scope.nodeCategory = {};
             $scope.capacityOptions = [
                 {id: 1, name: "1"},
                 {id: 2, name: "2"},
@@ -97,12 +98,28 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             }
 
+            $scope.setCategoryByLvl = function(categoryId, level){
+                switch (level){
+                    case 1:
+                        $scope.nodeCategory=categoryId;
+                        $scope.updateLeafCategories();
+                        break;
+                    case 2:
+                        $scope.product.category=categoryId;
+                        break;
+                    default :
+                        $scope.rootCategory=categoryId;
+                        $scope.updateNodeCategories();
+                }
+            };
+
             /**
              * Load necessary data on modal window open event based on modal name.
              */
             $scope.$on("openModal", function (event, args) {
                 var params = args.params;
                 var rootCategoryId = params.category;
+                var categoryId = params.category;
                 $scope.product = {};
                 $scope.price = {
                     id: null, amount: null, unit: Unit.DAY.id
@@ -114,11 +131,22 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.noAddress = true;
                     }
                     $scope.rootCategories = categories;
-                    if (!!rootCategoryId) {
-                        $scope.rootCategory = rootCategoryId;
+
+                    if(!!categoryId) {
+                        CategoriesService.getAncestors(categoryId).then(function (categories) {
+                            var level = 0;
+                            angular.forEach(categories, function (value, key) {
+                                $scope.setCategoryByLvl(value.id, level);
+                                level++;
+                            });
+                            $scope.setCategoryByLvl(categoryId, level);
+                        });
+                    } else if(!!$scope.rootCategory){
                         $scope.updateNodeCategories();
                     }
+
                 });
+
             });
 
             /**
@@ -135,6 +163,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Update options for node category combobox
              */
             $scope.updateNodeCategories = function () {
+                $scope.nodeCategory = undefined;
                 CategoriesService.getChildCategories($scope.rootCategory).then(function (categories) {
                     $scope.nodeCategories = categories;
                 });
@@ -147,9 +176,19 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Update options for leaf category combobox
              */
             $scope.updateLeafCategories = function () {
+                $scope.product.category = undefined;
                 CategoriesService.getChildCategories($scope.nodeCategory).then(function (categories) {
                     $scope.leafCategories = categories;
                 });
+            };
+
+
+            $scope.isCategorySelectorsValid = function() {
+               return !!$scope.rootCategories && !!$scope.rootCategory
+                   && (!!$scope.nodeCategories && $scope.nodeCategories.length>0 && !!$scope.nodeCategory
+                   || (!$scope.nodeCategories || $scope.nodeCategories.length == 0))
+                   && (!!$scope.leafCategories && $scope.leafCategories.length>0 && !!$scope.product.category
+                   || (!$scope.leafCategories || $scope.leafCategories.length == 0))
             };
 
             /**
@@ -180,6 +219,13 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.product.description = "";
                 $scope.product.address = Endpoints.api_url + "addresses/" + $scope.currentUser.default_address.id + "/";
                 if ($scope.price.amount > 0) {
+                    if(!$scope.leafCategories || $scope.leafCategories.length == 0){
+                        if(!!$scope.nodeCategories && $scope.nodeCategories.length>0) {
+                            $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
+                        }else{
+                            $scope.product.category = $scope.categoriesBaseUrl + $scope.rootCategory + "/";
+                        }
+                    }
                     if ($scope.isAuto || $scope.isRealEstate) {
                         $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
                     }
@@ -187,6 +233,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.product.summary = $scope.product.brand + " " + $scope.product.model;
                         $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
                     }
+
+
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         $scope.price.currency = Currency.EUR.name;
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
@@ -218,7 +266,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.handleResponseErrors(error);
                     });
                 } else {
-                    $scope.publishAdError = "All prices should be positive numbers!";
+                    //$scope.publishAdError = "All prices should be positive numbers!";
+                    ServerValidationService.removeErrors();
+                    ServerValidationService.addError("amount" ,"Value can't be negative");
+
                     $scope.submitInProgress = false;
                 }
             };
