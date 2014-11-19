@@ -1570,7 +1570,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             var formErrors={}, rootErrors="rootErrors";
 
             return {
-                addErrors:function(messageError, description, fieldErrors, formTag) {
+                addErrors: function(messageError, description, fieldErrors, formTag) {
                     if(!formTag){
                         formTag = rootErrors;
                     }
@@ -1582,13 +1582,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         formErrors[formTag].description=(""+description).replace("[","").replace("]","").replace("{","").replace("}","");
                     }
                 },
-                removeErrors:function(formTag){
+                removeErrors: function(formTag){
                     if(!formTag){
                         formTag = rootErrors;
                     }
                     delete formErrors[formTag];
                 },
-                getFormErrorMessage:function(formTag){
+                getFormErrorMessage: function(formTag){
                     if(!formTag){
                         formTag = rootErrors;
                     }
@@ -1597,7 +1597,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     }
                     return { message: formErrors[formTag].message, description: formErrors[formTag].description};
                 },
-                getFieldError:function(fieldName, formTag){
+                getFieldError: function(fieldName, formTag){
                     if(!formTag){
                         formTag = rootErrors;
                     }
@@ -1606,30 +1606,52 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     }
                     return formErrors[formTag].fields[fieldName];
                 },
-                getErrors:function(formTag){
+                getErrors: function(formTag){
                     if(!formTag){
                         formTag = rootErrors;
                     }
                     return formErrors[formTag];
+                },
+                addError: function(field, message, formTag){
+                    if(!formTag){
+                        formTag = rootErrors;
+                    }
+                    if(!formErrors[formTag]){
+                        formErrors[formTag] = {};
+                    }
+                    if(!formErrors[formTag].fields){
+                        formErrors[formTag].fields = {};
+                    }
+                    formErrors[formTag].fields[field] = message;
                 }
             }
         });
 
 
-        EloueCommon.factory("ToDashboardRedirectService",["$window", function ($window) {
+        EloueCommon.factory("ToDashboardRedirectService", ["$window", "$cookies", function ($window, $cookies) {
 
             return {
-                showPopupAndRedirect:function (href){
-                   var delay, modalView=$('#redirect');
-                    if(!modalView || modalView.length==0){
-                        delay=0;
-                    }else{
-                        delay=5000;
+                showPopupAndRedirect: function (href) {
+                    var delay,
+                        modalView = $('#redirect'),
+                        eloueRedirectUrl = $('#eloue_url_redirect'),
+                        redirectResult;
+                    if (!modalView || modalView.length == 0) {
+                        delay = 0;
+                    } else {
+                        delay = 5000;
                         modalView.modal('show');
                     }
-                   setTimeout(function(){ $window.location.href = href; }, delay);
-                }
+                    if(!eloueRedirectUrl || eloueRedirectUrl.length == 0){
+                        redirectResult=href;
+                    } else {
+                        redirectResult=eloueRedirectUrl.val()+"?url="+encodeURIComponent(href)+"&user_token="+$cookies.user_token;
+                    }
 
+                    setTimeout(function () {
+                        $window.location.href = redirectResult;
+                    }, delay);
+                }
             }
         }]);
     });
