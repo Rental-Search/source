@@ -4,7 +4,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the login form.
      */
-    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, AuthService, UsersService, ServiceErrors) {
+    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, $window, AuthService, UsersService, ServiceErrors) {
         /**
          * User credentials.
          */
@@ -67,7 +67,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
-                    AuthService.redirectToAttemptedUrl();
+                    //AuthService.redirectToAttemptedUrl();
+                    if($window.location.href.indexOf("dashboard") !== -1) {
+                        $window.location.href = "/dashboard";
+                    }else{
+                        $window.location.reload();
+                    }
                 });
             }
         }
