@@ -4,9 +4,12 @@ import django.forms as forms
 
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.shortcuts import redirect
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.translation import ugettext as _
+from django.core import urlresolvers
 
 
 from accounts.forms import make_missing_data_form
@@ -56,6 +59,16 @@ def patron_create_subscription(request):
 	            )
 	        )
 
+		
+		def clean_email(self):
+			if Patron.objects.filter(email=self.cleaned_data['email']).exists():
+				raise forms.ValidationError(_(u"Cett email est déjà pris."))
+			return self.cleaned_data['email']
+
+		def clean_subscription(self):
+			print form.cleaned_data['subscription'].pk
+			return form.cleaned_data['subscription']
+
 	form = NewSubscriptionForm(request.POST or None)
 
 	if form.is_valid():
@@ -72,14 +85,18 @@ def patron_create_subscription(request):
 		patron.subscribe(form.cleaned_data['subscription'])
 		patron.current_subscription.save()
 
-		slimpay_mandate_info = SlimPayMandateInformation.objects.create(patron=new_patron)
-
-		blob = slimpay_mandate_info.blob()
+		#redirect to to slimplay only if it's not free
+		if form.cleaned_data['subscription'].pk == 9:
+			return redirect(urlresolvers.reverse('admin:accounts_subscription_change', args=(patron.current_subscription.pk,)))
 		
+		else:
+			slimpay_mandate_info = SlimPayMandateInformation.objects.create(patron=new_patron)
 
-		bridge_form = BridgeForm(initial={'blob': blob})
+			blob = slimpay_mandate_info.blob()
 
-		return render_to_response('payments/admin/slimpay_bridge.html', RequestContext(request, {'form': bridge_form}))
+			bridge_form = BridgeForm(initial={'blob': blob})
+
+			return render_to_response('payments/admin/slimpay_bridge.html', RequestContext(request, {'form': bridge_form}))
 
 		
 
