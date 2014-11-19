@@ -1,12 +1,8 @@
 extends ../base
 -load compressed i18n staticfiles
 
-block head
-    title {% trans "Location"%} {{ product.summary }} - {{ product.city }}
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    meta(name="description", content="{{ product.summary }} {{ product.description }}")
-    link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
+{% block title %}{% trans "Location"%} {{ product.summary }} - {{ product.city }}{% endblock %}
+{% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
 block append styles
   {% compressed_css "bootstrap" %}

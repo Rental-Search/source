@@ -1,5 +1,9 @@
 extends ../base
--load compressed
+-load compressed i18n l10n
+
+{% block title %}Location entre particulier : loueur {{ patron.username }}{% endblock %}
+
+{% block description %}{% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}{% endblock %}
 
 block append styles
   {% compressed_css "bootstrap" %}
