@@ -19,7 +19,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "PricesService",
         "UtilsService",
         "ToDashboardRedirectService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService) {
+        "ServerValidationService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -245,7 +246,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.handleResponseErrors(error);
                     });
                 } else {
-                    $scope.publishAdError = "All prices should be positive numbers!";
+                    //$scope.publishAdError = "All prices should be positive numbers!";
+                    ServerValidationService.removeErrors();
+                    ServerValidationService.addError("amount" ,"Value can't be negative");
+
                     $scope.submitInProgress = false;
                 }
             };
