@@ -1130,7 +1130,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
-    public_actions = ('retrieve', 'search', 'create')
+    public_actions = ('retrieve', 'search', 'create', 'forgot_password')
 
     def initial(self, request, *args, **kwargs):
         pk_field = getattr(self, 'pk_url_kwarg', 'pk')
