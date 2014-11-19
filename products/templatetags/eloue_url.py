@@ -10,7 +10,7 @@ register = template.Library()
 
 @register.simple_tag
 def eloue_url(value):
-    site = Site.objects.get(pk=1).domain
+    site = settings.DASHBOARD_REDIRECT_DOMAIN
     protocol = 'https' if settings.USE_HTTPS else 'http'
     path = reverse(value)
     return '%s://%s%s' % (protocol, site, path)
