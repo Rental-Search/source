@@ -4,6 +4,7 @@ import socket
 import datetime
 import urllib
 import itertools
+from django.middleware.csrf import rotate_token
 
 from logbook import Logger
 
@@ -39,6 +40,7 @@ from django.contrib.auth.tokens import default_token_generator
 
 from oauth_provider.models import Token
 from django.shortcuts import redirect
+from provider.oauth2.models import AccessToken
 
 from accounts.forms import (EmailAuthenticationForm, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, CompanyEditForm, SubscriptionEditForm,
@@ -1104,6 +1106,25 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
             generate_patron_images(patron, ['profil'])
 
         return context
+
+
+class LoginAndRedirectView(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        response = redirect(request.GET['url'])
+        user_token = request.GET.get('user_token', '')
+        if user_token:
+            try:
+                AccessToken.objects.get(token=user_token, expires__gte=datetime.datetime.now())
+            except AccessToken.DoesNotExist:
+                pass
+            else:
+                max_age = 30 * 24 * 60 * 60
+                expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age)
+                rotate_token(request)
+                response.set_cookie(
+                    'user_token', user_token, max_age=max_age, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"))
+        return response
 
 
 # REST API 2.0
