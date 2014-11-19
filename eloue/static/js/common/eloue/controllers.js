@@ -158,7 +158,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", "ToDashboardRedirectService", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService) {
+    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", "ToDashboardRedirectService", "ServerValidationService", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService, ServerValidationService) {
 
         /**
          * New user account data.
@@ -171,26 +171,31 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          * Register new user in the system.
          */
         $scope.register = function register() {
-            AuthService.register($scope.account).$promise.then(function (response) {
-                $scope.trackEvent("Membre", "Inscription", $scope.getEventLabel());
-                $scope.trackPageView();
-                // Sign in new user automatically
-                var credentials = {
-                    username: $scope.account.email,
-                    password: $scope.account.password
-                };
-                AuthService.clearUserData();
-                AuthService.login(credentials,
-                    function (data) {
-                        $scope.onLoginSuccess(data);
-                    },
-                    function (jqXHR) {
-                        $scope.onLoginError(jqXHR);
-                    }
-                );
-            }, function (error) {
+            if($scope.account.confirmPassword !== $scope.account.password){
+                ServerValidationService.removeErrors();
+                ServerValidationService.addError("confirmPassword", "Passwords not match");
+            } else {
+                AuthService.register($scope.account).$promise.then(function (response) {
+                    $scope.trackEvent("Membre", "Inscription", $scope.getEventLabel());
+                    $scope.trackPageView();
+                    // Sign in new user automatically
+                    var credentials = {
+                        username: $scope.account.email,
+                        password: $scope.account.password
+                    };
+                    AuthService.clearUserData();
+                    AuthService.login(credentials,
+                        function (data) {
+                            $scope.onLoginSuccess(data);
+                        },
+                        function (jqXHR) {
+                            $scope.onLoginError(jqXHR);
+                        }
+                    );
+                }, function (error) {
 
-            });
+                });
+            }
         };
 
         /**
