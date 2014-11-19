@@ -31,10 +31,10 @@
                                 select(ng-model="rootCategory", name="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-placeholder="Catégorie Niv.1 *", data-ng-disabled="submitInProgress", style="z-index: 1051").form-control
                                     option(ng-repeat="category in rootCategories", value="{{category.id}}", ng-selected="category.id == rootCategory") {{category.name}}
                             .col-sm-4
-                                select(ng-model="nodeCategory", name="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", data-placeholder="Catégorie Niv.2 *", data-ng-disabled="submitInProgress", ng-required="isAuto || isRealEstate").form-control
+                                select(ng-model="nodeCategory", name="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", data-placeholder="Catégorie Niv.2 *", data-ng-disabled="submitInProgress").form-control
                                     option(ng-repeat="category in nodeCategories", value="{{category.id}}", ng-selected="category.id == nodeCategory") {{category.name}}
                             .col-sm-4
-                                select(ng-model="product.category", name="category", opts="leafCategories", eloue-chosen, data-placeholder="Catégorie Niv.3 *", ng-required="!isAuto && !isRealEstate", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate").form-control
+                                select(ng-model="product.category", name="category", opts="leafCategories", eloue-chosen, data-placeholder="Catégorie Niv.3 *", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate").form-control
                                     option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/", ng-selected="category.id == product.category") {{category.name}}
                         .row(ng-show="noAddress")
                             .col-sm-5
@@ -54,7 +54,7 @@
                                 input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="km_included", placeholder="Kilomètres inclus *", ng-required="isAuto", ng-model="product.km_included").form-control
                             .col-sm-1(ng-show="isAuto"): b.form-suffix Km
                             .col-sm-4(ng-show="!isAuto")
-                                button(type="submit", ng-disabled="publishAdForm.$invalid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
+                                button(type="submit", ng-disabled="publishAdForm.$invalid || !isCategorySelectorsValid()", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
                             .col-sm-3(ng-show="isAuto")
                                 input(type="text", onfocus="this.type='number';", onBlur="this.type='text';", name="costs_per_km", placeholder="Prix km supp *", ng-required="isAuto", ng-model="product.costs_per_km").form-control
                              .col-sm-1(ng-show="isAuto"): b.form-suffix &euro;
@@ -73,5 +73,5 @@
                             .col-sm-1: b.form-suffix CV
                             .col-sm-4
                             .col-sm-4
-                                button(type="submit", ng-disabled="publishAdForm.$invalid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
+                                button(type="submit", ng-disabled="publishAdForm.$invalid || !isCategorySelectorsValid()", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
                         {% endverbatim %}
