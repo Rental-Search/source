@@ -32,10 +32,10 @@
                                     option(ng-repeat="category in rootCategories", value="{{category.id}}", ng-selected="category.id == rootCategory") {{category.name}}
                             .col-sm-4
                                 select(ng-model="nodeCategory", name="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", data-placeholder="Catégorie Niv.2 *", data-ng-disabled="submitInProgress", ng-required="isAuto || isRealEstate").form-control
-                                    option(ng-repeat="category in nodeCategories", value="{{category.id}}") {{category.name}}
+                                    option(ng-repeat="category in nodeCategories", value="{{category.id}}", ng-selected="category.id == nodeCategory") {{category.name}}
                             .col-sm-4
                                 select(ng-model="product.category", name="category", opts="leafCategories", eloue-chosen, data-placeholder="Catégorie Niv.3 *", ng-required="!isAuto && !isRealEstate", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate").form-control
-                                    option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
+                                    option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/", ng-selected="category.id == product.category") {{category.name}}
                         .row(ng-show="noAddress")
                             .col-sm-5
                                 input(type="text", name="street", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
