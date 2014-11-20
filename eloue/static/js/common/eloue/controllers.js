@@ -4,7 +4,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the login form.
      */
-    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, $window, AuthService, UsersService, ServiceErrors) {
+    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "$routeParams", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, $window, $routeParams, AuthService, UsersService, ServiceErrors) {
         /**
          * User credentials.
          */
@@ -67,11 +67,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
-                    //AuthService.redirectToAttemptedUrl();
                     if($window.location.href.indexOf("dashboard") !== -1) {
                         $window.location.href = "/dashboard";
                     }else{
-                        $window.location.reload();
+                        if(!!$routeParams.redirect) {
+                            AuthService.redirectToAttemptedUrl();
+                        }
                     }
                 });
             }
@@ -311,13 +312,13 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         function($scope, $rootScope, $route, $location, $timeout, AuthService) {
             var currentUserToken = AuthService.getCookie("user_token");
             var currentRoute = $route.current.$$route;
-            var path =  $route.current.$$route.originalPath;
-            var prefix =path.slice(1,path.length);
+            var path = $route.current.$$route.originalPath;
+            var prefix = path.slice(1, path.length);
             if (prefix != "login") {
                 AuthService.saveAttemptUrl();
             }
             if (!!currentRoute.secure && !currentUserToken) {
-                $location.path("/login");
+                $location.path("/login").search({redirect: true});
             } else {
                 $rootScope.$broadcast("openModal", { name : prefix, params: $route.current.params});
                 $(".modal").modal("hide");
