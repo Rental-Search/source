@@ -7,6 +7,7 @@ from calendar import monthrange, weekday
 
 import operator
 import itertools
+from django.core.exceptions import ValidationError
 from django.db.models.deletion import PROTECT
 
 from imagekit.models import ImageSpecField
@@ -649,7 +650,10 @@ class Category(MPTTModel):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            slug = slugify(self.name)
+            if Category.on_site.filter(slug=slug).exists():
+                raise ValidationError({'name': _(u'Category with such name already exists.')})
+            self.slug = slug
         super(Category, self).save(*args, **kwargs)
     
     def get_ancertors_slug(self):
