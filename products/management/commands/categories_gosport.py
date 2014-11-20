@@ -214,6 +214,10 @@ class Command(BaseCommand):
                         'name': u'Ski alpin',
                         'from': [273, ]
                     },
+                    {
+                        'name': u'Snowboard',
+                        'from': [599, ]
+                    },
                 ]
             },
             {
@@ -284,15 +288,6 @@ class Command(BaseCommand):
                     {
                         'name': u'Alpinisme',
                         'from': [210, ]
-                    }
-                ]
-            },
-            {
-                'name': u'Sports d\'hiver et de glace',
-                'children': [
-                    {
-                        'name': u'Snowboard',
-                        'from': [599, ]
                     }
                 ]
             },
