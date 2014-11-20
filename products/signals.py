@@ -6,9 +6,15 @@ from django.contrib.sites.models import Site
 from eloue.utils import cache_key, create_alternative_email
 from django.db.models import signals
 from django.core import exceptions
+from products.models import Category, CategoryConformity
+
 
 def post_save_answer(sender, instance, created, **kwargs):
     instance.question.save()
+
+
+ELOUE_SITE_ID = 1
+GOSPORT_SITE_ID = 13
 
 
 def post_save_product(sender, instance, created, **kwargs):
@@ -19,6 +25,24 @@ def post_save_product(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:details:before_csrf', instance.pk, Site.objects.get_current().pk))
     cache.delete(cache_key('product:details:after_csrf', instance.pk, Site.objects.get_current().pk))
     cache.delete(cache_key('product:details:after_dates', instance.pk))
+
+    fields_to_search = {
+        ELOUE_SITE_ID: 'eloue_category',
+        GOSPORT_SITE_ID: 'gosport_category',
+    }
+
+    fields_to_copy = {
+        ELOUE_SITE_ID: ['gosport_category'],
+        GOSPORT_SITE_ID: ['eloue_category'],
+    }
+    
+    try:
+        conformity = CategoryConformity.objects.get(**{fields_to_search[settings.SITE_ID]: instance.category_id})
+    except CategoryConformity.DoesNotExist:
+        pass
+    else:
+        for field in fields_to_copy[settings.SITE_ID]:
+            instance.categories.add(getattr(conformity, field))
 
 
 def post_save_to_update_product(sender, instance, created, **kwargs):
