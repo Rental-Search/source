@@ -2,11 +2,11 @@
 from django.conf import settings
 from django.core.cache import cache
 from django.contrib.sites.models import Site
+from django.db.models import get_model
 
 from eloue.utils import cache_key, create_alternative_email
 from django.db.models import signals
 from django.core import exceptions
-from products.models import Category, CategoryConformity
 
 
 def post_save_answer(sender, instance, created, **kwargs):
@@ -16,6 +16,15 @@ def post_save_answer(sender, instance, created, **kwargs):
 ELOUE_SITE_ID = 1
 GOSPORT_SITE_ID = 13
 
+FIELDS_TO_SEARCH = {
+    ELOUE_SITE_ID: 'eloue_category',
+    GOSPORT_SITE_ID: 'gosport_category',
+}
+
+FIELDS_TO_COPY = {
+    ELOUE_SITE_ID: ['gosport_category'],
+    GOSPORT_SITE_ID: ['eloue_category'],
+}
 
 def post_save_product(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:patron:row', instance.id))
@@ -26,22 +35,13 @@ def post_save_product(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:details:after_csrf', instance.pk, Site.objects.get_current().pk))
     cache.delete(cache_key('product:details:after_dates', instance.pk))
 
-    fields_to_search = {
-        ELOUE_SITE_ID: 'eloue_category',
-        GOSPORT_SITE_ID: 'gosport_category',
-    }
-
-    fields_to_copy = {
-        ELOUE_SITE_ID: ['gosport_category'],
-        GOSPORT_SITE_ID: ['eloue_category'],
-    }
-    
+    CategoryConformity = get_model('products', 'CategoryConformity')
     try:
-        conformity = CategoryConformity.objects.get(**{fields_to_search[settings.SITE_ID]: instance.category_id})
+        conformity = CategoryConformity.objects.get(**{FIELDS_TO_SEARCH[settings.SITE_ID]: instance.category_id})
     except CategoryConformity.DoesNotExist:
         pass
     else:
-        for field in fields_to_copy[settings.SITE_ID]:
+        for field in FIELDS_TO_COPY[settings.SITE_ID]:
             instance.categories.add(getattr(conformity, field))
 
 
