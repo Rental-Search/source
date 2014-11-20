@@ -4,7 +4,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the login form.
      */
-    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, AuthService, UsersService, ServiceErrors) {
+    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "$routeParams", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, $window, $routeParams, AuthService, UsersService, ServiceErrors) {
         /**
          * User credentials.
          */
@@ -67,7 +67,13 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
-                    AuthService.redirectToAttemptedUrl();
+                    if($window.location.href.indexOf("dashboard") !== -1) {
+                        $window.location.href = "/dashboard";
+                    }else{
+                        if(!!$routeParams.redirect) {
+                            AuthService.redirectToAttemptedUrl();
+                        }
+                    }
                 });
             }
         }
@@ -158,7 +164,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin) {
+    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", "ToDashboardRedirectService", "ServerValidationService", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService, ServerValidationService) {
 
         /**
          * New user account data.
@@ -171,26 +177,31 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          * Register new user in the system.
          */
         $scope.register = function register() {
-            AuthService.register($scope.account).$promise.then(function (response) {
-                $scope.trackEvent("Membre", "Inscription", $scope.getEventLabel());
-                $scope.trackPageView();
-                // Sign in new user automatically
-                var credentials = {
-                    username: $scope.account.email,
-                    password: $scope.account.password
-                };
-                AuthService.clearUserData();
-                AuthService.login(credentials,
-                    function (data) {
-                        $scope.onLoginSuccess(data);
-                    },
-                    function (jqXHR) {
-                        $scope.onLoginError(jqXHR);
-                    }
-                );
-            }, function (error) {
+            if($scope.account.confirmPassword !== $scope.account.password){
+                ServerValidationService.removeErrors();
+                ServerValidationService.addError("confirmPassword", "Passwords not match");
+            } else {
+                AuthService.register($scope.account).$promise.then(function (response) {
+                    $scope.trackEvent("Membre", "Inscription", $scope.getEventLabel());
+                    $scope.trackPageView();
+                    // Sign in new user automatically
+                    var credentials = {
+                        username: $scope.account.email,
+                        password: $scope.account.password
+                    };
+                    AuthService.clearUserData();
+                    AuthService.login(credentials,
+                        function (data) {
+                            $scope.onLoginSuccess(data);
+                        },
+                        function (jqXHR) {
+                            $scope.onLoginError(jqXHR);
+                        }
+                    );
+                }, function (error) {
 
-            });
+                });
+            }
         };
 
         /**
@@ -260,7 +271,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     if (RedirectAfterLogin.url != "/") {
                         AuthService.redirectToAttemptedUrl();
                     } else {
-                        $window.location.href = "/dashboard"
+                        //$window.location.href = "/dashboard"
+                        ToDashboardRedirectService.showPopupAndRedirect("/dashboard");
                     }
                 });
             }
@@ -300,13 +312,13 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         function($scope, $rootScope, $route, $location, $timeout, AuthService) {
             var currentUserToken = AuthService.getCookie("user_token");
             var currentRoute = $route.current.$$route;
-            var path =  $route.current.$$route.originalPath;
-            var prefix =path.slice(1,path.length);
+            var path = $route.current.$$route.originalPath;
+            var prefix = path.slice(1, path.length);
             if (prefix != "login") {
                 AuthService.saveAttemptUrl();
             }
             if (!!currentRoute.secure && !currentUserToken) {
-                $location.path("/login");
+                $location.path("/login").search({redirect: true});
             } else {
                 $rootScope.$broadcast("openModal", { name : prefix, params: $route.current.params});
                 $(".modal").modal("hide");
@@ -344,7 +356,12 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
 
             $scope.logout = function() {
                 AuthService.clearUserData();
-                $window.location.href = "/";
+                if($window.location.href.indexOf("dashboard") !== -1) {
+                    $window.location.href = "/";
+                }else{
+                    $window.location.reload();
+                }
+
             };
         }]);
 });
