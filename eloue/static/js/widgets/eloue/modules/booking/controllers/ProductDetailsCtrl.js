@@ -392,7 +392,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.payForBooking = function (booking, paymentInfo) {
                 BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
-                    $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
+                    $scope.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
                     $scope.trackEvent("Réservation", "Demande de réservation",  $scope.getEventLabel());
                     $scope.trackPageView();
                     toastr.options.positionClass = "toast-top-full-width";
@@ -734,43 +734,16 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Add Google ad scripts.
              */
             $scope.loadAdWordsTags =  function(googleConversionLabel) {
-                var scriptAdWords = document.createElement("script");
-                scriptAdWords.type = "text/javascript";
-                var code = "/* <![CDATA[ */" +
-                    "var google_conversion_id = 1027691277;" +
-                    "var google_conversion_language = 'en';" +
-                    "var google_conversion_format = '3';" +
-                    "var google_conversion_color = 'ffffff';" +
-                    "var google_conversion_label = '" + googleConversionLabel + "';" +
-                    "var google_conversion_value = 1.00;" +
-                    "var google_conversion_currency = 'EUR';" +
-                    "var google_remarketing_only = false;" +
-                    "/* ]]> */";
-                try {
-                    scriptAdWords.appendChild(document.createTextNode(code));
-                    document.body.appendChild(scriptAdWords);
-                } catch (e) {
-                    scriptAdWords.text = code;
-                    document.body.appendChild(scriptAdWords);
-                }
-
-                var scriptConversion = document.createElement("script");
-                scriptConversion.type = "text/javascript";
-                scriptConversion.src = "//www.googleadservices.com/pagead/conversion.js";
-                document.body.appendChild(scriptConversion);
-
-                var noscriptConversion = document.createElement("noscript");
-                var divConversion = document.createElement("div");
-                divConversion.style = "display:inline;";
-                var imgConversion = document.createElement("img");
-                imgConversion.src = "//www.googleadservices.com/pagead/conversion/1027691277/?value=1.00&amp;currency_code=EUR&amp;label=" + googleConversionLabel + "&amp;guid=ON&amp;script=0";
-                imgConversion.width = "1";
-                imgConversion.height = "1";
-                imgConversion.style = "border-style:none;";
-                imgConversion.alt = "";
-                divConversion.appendChild(imgConversion);
-                noscriptConversion.appendChild(divConversion);
-                document.body.appendChild(noscriptConversion);
+                window.google_trackConversion({
+                    google_conversion_id: 1027691277,
+                    google_conversion_language: "en",
+                    google_conversion_format: "3",
+                    google_conversion_color: "ffffff",
+                    google_conversion_label: googleConversionLabel,
+                    google_conversion_value: 1.00,
+                    google_conversion_currency: "EUR",
+                    google_remarketing_only: false
+                });
             };
 
             $("#date_of_birth").datepicker({

@@ -409,43 +409,16 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Add Google ad scripts.
              */
             $scope.loadAdWordsTagPublishAd = function () {
-                var scriptAdWords = document.createElement("script");
-                scriptAdWords.type = "text/javascript";
-                var code = "/* <![CDATA[ */" +
-                    "var google_conversion_id = 1027691277;" +
-                    "var google_conversion_language = 'en';" +
-                    "var google_conversion_format = '3';" +
-                    "var google_conversion_color = 'ffffff';" +
-                    "var google_conversion_label = 'SfnGCMvgrgMQjaaF6gM';" +
-                    "var google_conversion_value = 1.00;" +
-                    "var google_conversion_currency = 'EUR';" +
-                    "var google_remarketing_only = false;" +
-                    "/* ]]> */";
-                try {
-                    scriptAdWords.appendChild(document.createTextNode(code));
-                    document.body.appendChild(scriptAdWords);
-                } catch (e) {
-                    scriptAdWords.text = code;
-                    document.body.appendChild(scriptAdWords);
-                }
-
-                var scriptConversion = document.createElement("script");
-                scriptConversion.type = "text/javascript";
-                scriptConversion.src = "//www.googleadservices.com/pagead/conversion.js";
-                document.body.appendChild(scriptConversion);
-
-                var noscriptConversion = document.createElement("noscript");
-                var divConversion = document.createElement("div");
-                divConversion.style = "display:inline;";
-                var imgConversion = document.createElement("img");
-                imgConversion.src = "//www.googleadservices.com/pagead/conversion/1027691277/?value=1.00&amp;currency_code=EUR&amp;label=SfnGCMvgrgMQjaaF6gM&amp;guid=ON&amp;script=0";
-                imgConversion.width = "1";
-                imgConversion.height = "1";
-                imgConversion.style = "border-style:none;";
-                imgConversion.alt = "";
-                divConversion.appendChild(imgConversion);
-                noscriptConversion.appendChild(divConversion);
-                document.body.appendChild(noscriptConversion);
+                window.google_trackConversion({
+                        google_conversion_id: 1027691277,
+                        google_conversion_language: "en",
+                        google_conversion_format: "3",
+                        google_conversion_color: "ffffff",
+                        google_conversion_label: "EO41CNPrpQMQjaaF6gM",
+                        google_conversion_value: 1.00,
+                        google_conversion_currency: "EUR",
+                        google_remarketing_only: false
+                    });
             };
 
             /**

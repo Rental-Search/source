@@ -8,6 +8,9 @@ block append styles
   {% compressed_css "bootstrap" %}
   {% compressed_css "product_detail_styles" %}
 
+block append scripts
+  script(type="text/javascript", src="https://www.googleadservices.com/pagead/conversion_async.js", charset="utf-8")
+
 block append content-body
   -var is_pro = product.pro_owner
   #fb-root
