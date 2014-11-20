@@ -127,8 +127,9 @@
   input[type="email"],
   input[type="number"],
   input[type="password"]
-    &:invalid,
     &:empty
+      border-color: $gray-medium
+    &:invalid.ng-dirty
       border-color: $brand-primary
     &:valid
       border-color: $gray-medium

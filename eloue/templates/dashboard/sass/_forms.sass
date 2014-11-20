@@ -296,10 +296,10 @@ input[type="email"],
   &:focus
     border-color: $gray-medium
     z-index: 5
-  &:invalid
+  &:invalid.ng-dirty
     border-color: lighten($brand-danger, 20%)
-  &:invalid:focus,
-  &:invalid:hover
+  &:invalid:focus.ng-dirty,
+  &:invalid:hover.ng-dirty
     border-color: $brand-danger
   &.table-form
     background-color: transparent
