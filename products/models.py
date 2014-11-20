@@ -84,7 +84,7 @@ class Product(models.Model):
     payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
     objects = ProductManager() # FIXME: this should be first manager in the class
-    
+
     modified_at = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     pro_agencies = models.ManyToManyField(ProAgency, related_name='products', blank=True, null=True)
@@ -103,21 +103,26 @@ class Product(models.Model):
             self.created_at = datetime.now()
         super(Product, self).save(*args, **kwargs)
 
+    def _get_category(self):
+        assert self.categories.filter(sites__id=settings.SITE_ID).count() == 1
+        return self.categories.filter(sites__id=settings.SITE_ID)[0]
+
     @permalink
     def get_absolute_url(self):
-        encestors_slug = self.category.get_ancertors_slug()
-        if encestors_slug:
-            path = '%s/%s/' % (encestors_slug, self.category.slug)
+        category = self._get_category()
+        ancestors_slug = category.get_ancertors_slug()
+        if ancestors_slug:
+            path = '%s/%s/' % (ancestors_slug, category.slug)
         else:
             path = '%s/' % self.category.slug
-        return ('booking_create', [path, self.slug, self.pk])
+        return 'booking_create', [path, self.slug, self.pk]
     
     def more_like_this(self):
         from products.search import product_search
         sqs = product_search.dwithin(
-		    'location', self.address.position,
-		    Distance(km=DEFAULT_RADIUS)
-		) #.distance('location', self.address.position)
+            'location', self.address.position,
+            Distance(km=DEFAULT_RADIUS)
+        ) #.distance('location', self.address.position)
         return sqs.more_like_this(self)[:3]
     
     @property
