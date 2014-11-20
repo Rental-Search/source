@@ -1,4 +1,5 @@
 # coding=utf-8
+import base64
 from django.http.response import Http404, HttpResponse
 from rest_framework.decorators import link
 from rest_framework.response import Response
@@ -89,6 +90,6 @@ class ShippingViewSet(viewsets.NonEditableModelViewSet):
                 shipping.shuttle_document_url if not params['back'] else shipping.shuttle_document_url2)
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % shipping.shuttle_document_url
-            response.write(file_content)
+            response.write(base64.b64decode(file_content))
             return response
         raise Http404
