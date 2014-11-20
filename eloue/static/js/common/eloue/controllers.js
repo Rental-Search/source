@@ -15,6 +15,28 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
         /**
+         * Sign in user with facebook.
+         */
+        $scope.loginFacebook = function(){
+            FB.login(function(response){
+                if(!!response.authResponse) {
+                    var redirect;
+                    if($window.location.href.indexOf("dashboard") !== -1) {
+                        redirect = $window.location.href.substring(0, $window.location.href.indexOf("dashboard")) + "dashboard";
+                    }else{
+                        if(!!$routeParams.redirect) {
+                            redirect = RedirectAfterLogin.url;
+                        } else{
+                            redirect = $window.location.href;
+                        }
+                    }
+
+                    $window.location.href = $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&url=" + redirect;
+                }
+            }, {scope: 'public_profile, email'});
+        };
+
+        /**
          * Sign in user.
          */
         $scope.login = function login() {
