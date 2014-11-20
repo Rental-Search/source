@@ -474,7 +474,7 @@ msgstr ""
 msgid ""
 "That email address doesn't have an associated user account. Are you sure "
 "you've registered?"
-msgstr ""
+msgstr "L'adresse e-mail indiquée n'est pas associée à un utilisateur connu. Etes-vous sûr de vous être inscrit ?"
 
 #: accounts/forms.py:244
 msgid ""
@@ -1079,7 +1079,7 @@ msgstr ""
 msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
-msgstr ""
+msgstr "Les instructions pour réinitialiser votre mot de passe ont été envoyées à l'adresse indiquée. Vous devriez les recevoir rapidement."
 
 #: accounts/views.py:1055
 #: eloue/templates/accounts/password_reset_complete.html:10
@@ -1226,7 +1226,7 @@ msgstr ""
 
 #: eloue/api/exceptions.py:55
 msgid "The Object is referenced by other objects and can't be deleted."
-msgstr ""
+msgstr "Vous ne pouvez ni supprimer une information par défaut, ni une information liée à une réservation"
 
 #: eloue/api/exceptions.py:56
 msgid "A request to external server has failed."
