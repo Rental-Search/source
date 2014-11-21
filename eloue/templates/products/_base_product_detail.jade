@@ -1,7 +1,7 @@
 extends ../base
 -load compressed i18n staticfiles
 
-{% block title %}{% trans "Location"%} {{ product.summary }} - {{ product.city }}{% endblock %}
+{% block title %}Location {{ product.summary }} - {{ product.city }}{% endblock %}
 {% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
 
 block append styles
