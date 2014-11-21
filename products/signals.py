@@ -37,12 +37,13 @@ def post_save_product(sender, instance, created, **kwargs):
 
     CategoryConformity = get_model('products', 'CategoryConformity')
     try:
-        conformity = CategoryConformity.objects.get(**{FIELDS_TO_SEARCH[settings.SITE_ID]: instance.category_id})
-    except CategoryConformity.DoesNotExist:
+        conformity = CategoryConformity.objects.filter(**{FIELDS_TO_SEARCH[settings.SITE_ID]: instance.category_id})[0]
+    except IndexError:
         pass
     else:
         for field in FIELDS_TO_COPY[settings.SITE_ID]:
             instance.categories.add(getattr(conformity, field))
+        instance.categories.add(instance.category)
 
 
 def post_save_to_update_product(sender, instance, created, **kwargs):

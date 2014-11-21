@@ -668,8 +668,8 @@ class Category(MPTTModel):
             
 
 class CategoryConformity(models.Model):
-    eloue_category = models.OneToOneField('Category', related_name='+')
-    gosport_category = models.OneToOneField('Category', related_name='+')
+    eloue_category = models.ForeignKey('Category', related_name='+')
+    gosport_category = models.ForeignKey('Category', related_name='+')
 
 
 class Property(models.Model):
