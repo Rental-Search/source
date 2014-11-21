@@ -3,6 +3,7 @@ include ../jade/_mixins
 block section-content
   if True
     .section-content
+      .text-danger(eloue-form-message) {% verbatim %}{{!!description?description:message}}{% endverbatim %}
       form#address_detail_form(name="addressDetailForm", data-ng-submit="addressSubmitted=true; addressDetailForm.$valid && submitAddress()", ng-class="{'submitted':addressSubmitted }", novalidate, eloue-form-field-error-manager).indent-md-b
        fieldset(data-ng-disabled="submitInProgress")
         {% verbatim %}

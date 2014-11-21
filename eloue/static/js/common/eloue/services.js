@@ -16,7 +16,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     success: successCallback,
                     error: function(jqXHR, status, message, form){
                         if(jqXHR.status == 400 && !!jqXHR.responseJSON){
-                            ServerValidationService.addErrors(undefined, undefined, jqXHR.responseJSON.errors);
+                            ServerValidationService.addErrors(jqXHR.responseJSON.message, jqXHR.description, jqXHR.responseJSON.errors);
                         }else{
                             ServerValidationService.addErrors("An error occured!", "An error occured!");
                         }

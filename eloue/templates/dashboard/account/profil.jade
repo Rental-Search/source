@@ -15,6 +15,7 @@ block sections
               label(for="change-img").file-input-btn.btn.bg-gray-hover.text-white Modifiez mon image
                 input(type="file", name="avatar", file-chooser, on-change="onFileChanged()")#change-img
                 input(type="hidden", name="_method", value="PUT")
+      .text-danger(eloue-form-message) {{!!description?description:message}}
       form(id="profileInformation", name="profileInformation", data-ng-submit="profileSubmitted=true;profileInformation.$valid && dataFormSubmit()", ng-class="{'submitted':profileSubmitted}", novalidate, eloue-form-field-error-manager)
        fieldset(data-ng-disabled="submitInProgress")
         //- proffessional radio btns
