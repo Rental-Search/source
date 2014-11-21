@@ -202,6 +202,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 ServerValidationService.removeErrors();
                 ServerValidationService.addError("confirmPassword", "Passwords not match");
             } else {
+                $scope.submitting = true;
                 AuthService.register($scope.account).$promise.then(function (response) {
                     $scope.trackEvent("Membre", "Inscription", $scope.getEventLabel());
                     $scope.trackPageView();
@@ -214,13 +215,15 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     AuthService.login(credentials,
                         function (data) {
                             $scope.onLoginSuccess(data);
+                            $scope.submitting = false;
                         },
                         function (jqXHR) {
                             $scope.onLoginError(jqXHR);
+                            $scope.submitting = false;
                         }
                     );
                 }, function (error) {
-
+                    $scope.submitting = false;
                 });
             }
         };

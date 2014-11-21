@@ -61,7 +61,7 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.submitInProgress = false;
                     $scope.showNotification("Adresse supprimée");
                     $state.transitionTo("account.addresses", $stateParams, { reload: true });
-                });
+                }, onRequestFailed);
             };
 
             ProductsService.getProductsByAddress($stateParams.id).then(function (products) {

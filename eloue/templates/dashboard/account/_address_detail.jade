@@ -3,18 +3,21 @@ include ../jade/_mixins
 block section-content
   if True
     .section-content
-      form#address_detail_form(name="addressDetailForm", data-ng-submit="submitAddress()", novalidate, eloue-form-field-error-manager).indent-md-b
+      form#address_detail_form(name="addressDetailForm", data-ng-submit="addressSubmitted=true; addressDetailForm.$valid && submitAddress()", ng-class="{'submitted':addressSubmitted }", novalidate, eloue-form-field-error-manager).indent-md-b
        fieldset(data-ng-disabled="submitInProgress")
         {% verbatim %}
         .row
           .col-sm-12
             input#street.form-control(type="text", name="street", ng-model="address.street", placeholder="Rue *", required, autofocus)
+            .text-danger(data-ng-show="addressDetailForm.street.$error.required && !!addressSubmitted") Required field
             .text-danger(eloue-form-field-message field-name="address1") {{value}}
         .row
           .col-sm-6
             input#zipcode.form-control(type="text", name="zipcode", ng-model="address.zipcode", placeholder="Code postal *", required, autofocus)
+            .text-danger(data-ng-show="addressDetailForm.zipcode.$error.required && !!addressSubmitted") Required field
           .col-sm-6
             input#city.form-control(type="text", name="city", ng-model="address.city", placeholder="Ville *", required, autofocus)
+            .text-danger(data-ng-show="addressDetailForm.city.$error.required && !!addressSubmitted") Required field
         .row
           .col-xs-12
             label.check-btn.form-control
@@ -24,7 +27,7 @@ block section-content
         .row
           .col-xs-12.text-right
             button(type="reset", data-ng-click="deleteAddress()", onclick="return false;", ng-hide="productList.length > 0 || isDefaultAddress", class="{{submitInProgress ? 'loading' : ''}}").text.text-danger.text-underline-hover.indent-sm-h Supprimer
-            button(type="submit", data-ng-disabled="addressDetailForm.$invalid || !addressDetailForm.$dirty", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.bg-success-hover.text-white Enregistrer
+            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.bg-success-hover.text-white Enregistrer
         input(type="hidden", name="country", value="{{address.country}}")
         input(type="hidden", name="_method", value="PUT")
         {% endverbatim %}

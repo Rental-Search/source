@@ -16,6 +16,7 @@
   display: block
   +clearfix()
 
+
 // custom buttons for anchor, buttons and input[type="file"] tags
 .btn,
 .btn-inline
@@ -272,6 +273,10 @@ select
         background-color: $gray-lighter !important
 
 // custom areas
+.submitted input.input-invalid
+  border-color: $input-invalid-color
+.submitted input.ng-invalid
+  border-color: $input-invalid-color
 textarea,
 input[type="text"],
 input[type="password"],
@@ -292,15 +297,6 @@ input[type="email"],
   transition: border-color $trns-fast
   overflow: visible
   +border-radius($bdrs)
-  &:hover,
-  &:focus
-    border-color: $gray-medium
-    z-index: 5
-  &:invalid.ng-dirty
-    border-color: lighten($brand-danger, 20%)
-  &:invalid:focus.ng-dirty,
-  &:invalid:hover.ng-dirty
-    border-color: $brand-danger
   &.table-form
     background-color: transparent
     text-align: right

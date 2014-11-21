@@ -176,13 +176,18 @@
 
   input[type="text"],
   input[type="email"],
+  input[type="number"],
   input[type="password"]
     &:empty
-      border-color: $brand-primary
-    &:invalid.ng-dirty
-      border-color: $brand-primary
+      border-color: $gray-medium
     &:valid
       border-color: $gray-medium
+    &[disabled]
+      border-color: $gray-medium !important
+  .submitted input.input-invalid
+    border-color: $input-invalid-color
+  .submitted input.ng-invalid
+    border-color: $input-invalid-color
 
   .large
     $bd-property: px(1) solid $gray-lighter

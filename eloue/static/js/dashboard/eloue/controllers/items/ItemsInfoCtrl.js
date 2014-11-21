@@ -161,6 +161,8 @@ define(["angular", "eloue/app"], function (angular) {
                 $q.all(promises).then(function (results) {
                     $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
+                },function(){
+                    $scope.submitInProgress = false;
                 });
             };
 

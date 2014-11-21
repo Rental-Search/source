@@ -129,12 +129,14 @@
   input[type="password"]
     &:empty
       border-color: $gray-medium
-    &:invalid.ng-dirty
-      border-color: $brand-primary
     &:valid
       border-color: $gray-medium
     &[disabled]
       border-color: $gray-medium !important
+  .submitted input.input-invalid
+    border-color: $input-invalid-color
+  .submitted input.ng-invalid
+    border-color: $input-invalid-color
 
   .chosen-container
     font-size: 14px

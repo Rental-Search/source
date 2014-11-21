@@ -24,12 +24,13 @@
                 {% verbatim %}
                 .alert.alert-danger(eloue-form-message)
                     button(type="button", data-dismiss="alert", class="close")
-                    | {{message}}
+                    | {{!!description?description:message}}
                 .alert.alert-danger(ng-show="!!loginError")
                     button(type="button", data-dismiss="alert", class="close")
                     | {{loginError}}
                 {% endverbatim %}
-                form(name="registrationForm", ng-submit="register()", novalidate, eloue-form-field-error-manager)
+                form(name="registrationForm", ng-submit="registrationSubmitted=true; registrationForm.$valid && register()", novalidate, eloue-form-field-error-manager, ng-class="{'submitted':registrationSubmitted}")
+                  fieldset(data-ng-disabled="!!submitting")
                     //-
                      h3 Inscription 30 secondes
                     .form-group: .row
@@ -40,19 +41,19 @@
                             {% endverbatim %}
                         .col-xs-7
                             input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
-                            span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationForm.last_name.$dirty") Required field
-                    -var registration_form_fields = [["text", "Prénom", "first_name"], ["email", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
+                            span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted") Required field
+                    -var registration_form_fields = [["text", "Prénom", "first_name"], ["text", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
                     each type, placeholder, name in registration_form_fields
                         .form-group
                             input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
-                            span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationForm.#{name}.$dirty") Required field
+                            span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationSubmitted") Required field
 
                     .checkbox
                         label(for="inform")
                             input(type="checkbox", checked)#inform
                             span.flaticon.stroke.checkmark
                         | Tenez moi informé de l'actualité et des bonnes affaires e-loue
-                    .form-group: button(type="submit", data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty").btn.bg-success Inscription via Email
+                    .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success Inscription via Email
                     p
                         | En créant un compte e-loue, vous acceptez les &nbsp;
                         a(href="{% url 'terms' %}") Conditions Générales

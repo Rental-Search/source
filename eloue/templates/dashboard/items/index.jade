@@ -1,5 +1,6 @@
 block details
     .section-content
+     form(name="itemInfoForm", ng-submit="itemInfoSubmitted=true;itemInfoForm.$valid && updateProduct()", novalidate, ng-class="{'submitted':itemInfoSubmitted}")
       fieldset(data-ng-disabled="submitInProgress")
         h2 Catégories
         .row
@@ -23,10 +24,16 @@ block details
                 input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary")
         h2 Adresse
         .row
-            .col-sm-12: input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
+            .col-sm-12
+             input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
+             span.text-danger(ng-show="itemInfoForm.street.$error.required && itemInfoSubmitted") Required field
         .row
-            .col-sm-6: input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
-            .col-sm-6: input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
+            .col-sm-6
+                input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
+                span.text-danger(ng-show="itemInfoForm.zipcode.$error.required && itemInfoSubmitted") Required field
+            .col-sm-6
+                input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
+                span.text-danger(ng-show="itemInfoForm.city.$error.required && itemInfoSubmitted") Required field
         h2 Photos
         .row
             form#add-picture
@@ -47,7 +54,7 @@ block details
                            .thumbnail: span.lg-p
                              img(style="background-image: url('/static/img/preloader2.gif');")
                 {% endverbatim %}
-        form(name="itemInfoForm", ng-submit="updateProduct()")
+
           fieldset(data-ng-disabled="submitInProgress")
             h2(ng-show="isAuto || isRealEstate") Caractéristiques
             include ./_item_characteristics

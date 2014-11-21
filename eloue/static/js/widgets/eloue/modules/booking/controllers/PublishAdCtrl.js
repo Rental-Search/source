@@ -118,7 +118,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              */
             $scope.$on("openModal", function (event, args) {
                 var params = args.params;
-                var rootCategoryId = params.category;
+                //var rootCategoryId = params.category;
                 var categoryId = params.category;
                 $scope.product = {};
                 $scope.price = {
@@ -132,7 +132,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     }
                     $scope.rootCategories = categories;
 
-                    if(!!categoryId) {
+                    if(!!categoryId && categoryId!=="") {
                         CategoriesService.getAncestors(categoryId).then(function (categories) {
                             var level = 0;
                             angular.forEach(categories, function (value, key) {
