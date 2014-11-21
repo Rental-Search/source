@@ -30,8 +30,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                             redirect = $window.location.href;
                         }
                     }
-
-                    $window.location.href = $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&url=" + encodeURIComponent(redirect);
+                    $window.location.href = $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&url=" + encodeURIComponent(redirect);
                 }
             }, {scope: 'public_profile, email'});
         };
