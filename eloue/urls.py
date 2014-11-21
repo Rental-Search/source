@@ -12,7 +12,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 
 from eloue.api.urls import router
 from products.views import HomepageView
-from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView
+from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginFacebookView
 
 log = logbook.Logger('eloue')
 
@@ -206,6 +206,7 @@ from accounts.urls import ui3_urlpatterns as accounts_urlpatterns
 
 ui3_urlpatterns = patterns('',
     url(r'^$', HomepageView.as_view(), name='home'),
+    url(r'^login_facebook/', LoginFacebookView.as_view(), name='login_facebook'),
     url(r'^loueur/', include(accounts_urlpatterns)),
     url(r'^reset/', include(reset_urlpatterns)),
     url(r'^location/', include(products_urlpatterns)),
