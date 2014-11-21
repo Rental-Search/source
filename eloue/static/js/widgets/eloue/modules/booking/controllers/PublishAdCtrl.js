@@ -351,6 +351,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              </noscript>
              */
             $scope.loadPdltrackingScript = function () {
+
                 var script1860 = document.createElement("script");
                 script1860.type = "text/javascript";
                 script1860.src = "https://lead.pdltracking.com/?lead_id=" + $scope.currentUser.id + "&tt=javascript&sc=1860";
@@ -389,10 +390,22 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     document.body.appendChild(scriptAffilinet);
                 }
 
-                var scriptClic = document.createElement("script");
-                scriptClic.type = "text/javascript";
-                scriptClic.src = "https://clic.reussissonsensemble.fr/art/JS/param.aspx";
-                document.body.appendChild(scriptClic);
+                //var scriptClic = document.createElement("script");
+                //scriptClic.type = "text/javascript";
+                //scriptClic.src = "https://clic.reussissonsensemble.fr/art/JS/param.aspx";
+                //document.body.appendChild(scriptClic);
+
+                var oldDocumentWrite = document.write;
+                // change document.write temporary
+                document.write = function(node){
+                    $("body").append(node)
+                };
+                $.getScript( "https://clic.reussissonsensemble.fr/art/JS/param.aspx", function() {
+                    // replace the temp document.write with the original version
+                    setTimeout(function() {
+                        document.write = oldDocumentWrite
+                    }, 500)
+                });
 
                 var scriptAnnonceur = document.createElement("script");
                 scriptAnnonceur.src = "//l.adxcore.com/a/track_conversion.php?annonceurid=21679";
