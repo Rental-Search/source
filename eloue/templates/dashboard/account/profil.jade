@@ -119,6 +119,11 @@ block sections
         .row
           .col-sm-12
             input#drivers_license_number.form-control(type="text", name="drivers_license_number", placeholder="Numéro de permis", ng-model="currentUser.drivers_license_number")
+        h2.text-black IBAN
+        .row
+          .col-sm-12
+            input#iban.form-control(type="text", name="iban", placeholder="IBAN", ng-model="currentUser.iban")
+            span.text-danger(ng-show="profileInformation.iban.$error.required && profileSubmitted") Required field
         //- drag photo
          .row
           .col-sm-12.form-control
