@@ -144,7 +144,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                             span
                                 | Notes :&nbsp;&nbsp;
                                 {% endverbatim %}
-                                +average-rate("comment.rate")
+                                +average-rate-editable("comment.rate")
                             {% verbatim %}
                             button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.bg-success-hover.text-white Envoyer
         .block-with-thumbnail.text-gray.notification(ng-show="showIncidentForm")
