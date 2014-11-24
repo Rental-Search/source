@@ -324,39 +324,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     }]);
 
     /**
-     * Controller handles modal window open/close event, checks user authentication and triggers specific handlers in controllers depend on scope.
-     */
-    EloueCommon.controller("ModalCtrl", [
-        "$scope",
-        "$rootScope",
-        "$route",
-        "$location",
-        "$timeout",
-        "AuthService",
-        function($scope, $rootScope, $route, $location, $timeout, AuthService) {
-            var currentUserToken = AuthService.getCookie("user_token");
-            var currentRoute = $route.current.$$route;
-            var path = $route.current.$$route.originalPath;
-            var prefix = path.slice(1, path.length);
-            if (prefix != "login") {
-                AuthService.saveAttemptUrl();
-            }
-            if (!!currentRoute.secure && !currentUserToken) {
-                $location.path("/login").search({redirect: true});
-            } else {
-                $rootScope.$broadcast("openModal", { name : prefix, params: $route.current.params});
-                $(".modal").modal("hide");
-                $timeout(function() {
-                    var modalContainer = $("#" + prefix + "Modal");
-                    modalContainer.modal("show");
-                    modalContainer.on( "hidden.bs.modal", function() {
-                        $rootScope.$broadcast("closeModal", { name : prefix, params: $route.current.params});
-                    });
-                }, 300);
-            }
-        }]);
-
-    /**
      * Root controller for pages which content depends on user authorized (e.g. Home page).
      */
     EloueCommon.controller("AuthCtrl", [

@@ -460,15 +460,25 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Load necessary data on modal window open event based on modal name.
              */
             $scope.$on("openModal", function (event, args) {
-                if ((args.name === "message") && $scope.productRelatedMessages.length == 0) {
-                    $scope.loadMessageThread();
-                } else if (args.name === "booking") {
-                    $scope.loadCreditCards();
-                    $scope.loadProductShippingPoint();
-                } else if (args.name === "phone") {
-                    $scope.loadPhoneDetails();
+                $scope.openModal(args.name);
+            });
+
+            $scope.openModal = function (name) {
+                var currentUserToken = AuthService.getCookie("user_token");
+                if (!currentUserToken && name != "login") {
+                    AuthService.saveAttemptUrl(name);
+                    name = "login";
+                } else {
+                    if ((name === "message") && $scope.productRelatedMessages.length == 0) {
+                        $scope.loadMessageThread();
+                    } else if (name === "booking") {
+                        $scope.loadCreditCards();
+                        $scope.loadProductShippingPoint();
+                    } else if (name === "phone") {
+                        $scope.loadPhoneDetails();
+                    }
                 }
-                if (args.name != "login") {
+                if (name != "login") {
                     $scope.loadPictures();
                     if ($scope.currentUser && !$scope.currentUser.default_address) {
                         $scope.noAddress = true;
@@ -477,14 +487,20 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
                             $scope.product = result;
                             $scope.loadPictures();
-                            $scope.loadProductCategoryAncestors(args.name);
+                            $scope.loadProductCategoryAncestors(name);
                         });
                     } else {
                         $scope.loadPictures();
-                        $scope.loadProductCategoryAncestors(args.name);
+                        $scope.loadProductCategoryAncestors(name);
                     }
                 }
-            });
+
+                if (!!name) {
+                    $(".modal").modal("hide");
+                    var modalContainer = $("#" + name + "Modal");
+                    modalContainer.modal("show");
+                }
+            };
 
             /**
              * Loads all ancestors of product category for analytics tags.

@@ -117,7 +117,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Load necessary data on modal window open event based on modal name.
              */
             $scope.$on("openModal", function (event, args) {
-                var params = args.params;
+                $scope.openModal(args.name, args.params);
+            });
+
+            $scope.openModal = function (name, params) {
                 //var rootCategoryId = params.category;
                 var categoryId = params.category;
                 $scope.product = {};
@@ -146,8 +149,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     }
 
                 });
-
-            });
+                if (!!name) {
+                    $(".modal").modal("hide");
+                    var modalContainer = $("#" + name + "Modal");
+                    modalContainer.modal("show");
+                }
+            };
 
             /**
              * Restore path when closing modal window.

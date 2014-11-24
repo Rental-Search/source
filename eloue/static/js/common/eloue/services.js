@@ -1458,14 +1458,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * Redirect to attempted URL.
                  */
                 redirectToAttemptedUrl: function () {
-                    $window.location.href = RedirectAfterLogin.url;
+                    $rootScope.$broadcast("openModal", { name : RedirectAfterLogin.url});
                 },
 
                 /**
                  * Save URL that user attempts to access.
                  */
-                saveAttemptUrl: function () {
-                    RedirectAfterLogin.url = $window.location.href;
+                saveAttemptUrl: function (name) {
+                    RedirectAfterLogin.url = name;
                 },
 
                 /**
