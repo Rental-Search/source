@@ -509,6 +509,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 FormService.send("POST", url, form, successCallback, errorCallback);
             };
 
+            picturesService.deletePicture = function (pictureId) {
+                return Pictures.delete({id: pictureId});
+            };
+
             return picturesService;
         }]);
 

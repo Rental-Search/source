@@ -194,6 +194,21 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.getTimes=function(n){
                 return new Array(n);
             };
+
+            $scope.showRemoveConfirm = function (pictureId) {
+                $scope.selectedPictureId = pictureId;
+                $('#confirm').modal();
+            };
+
+            $scope.deletePicture = function () {
+                $scope.submitInProgress = true;
+                PicturesService.deletePicture($scope.selectedPictureId).$promise.then(function(data) {
+                    ProductsService.getProductDetails($stateParams.id).then(function (product) {
+                        $scope.submitInProgress = false;
+                        $scope.product.pictures = product.pictures;
+                    });
+                });
+            };
         }
     ]);
 });

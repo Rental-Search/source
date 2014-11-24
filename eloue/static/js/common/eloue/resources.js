@@ -150,7 +150,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing pictures.
      */
     EloueCommon.factory("Pictures", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "pictures/?");
+        return $resource(Endpoints.api_url + "pictures/:id/?");
     }]);
 
     /**
