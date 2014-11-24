@@ -27,13 +27,13 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.showIncidentDescription = false;
             $scope.userInfo = {};
 
-            // On rating star click
-            $(".star i").click(function () {
-                var self = $(this);
-                $scope.$apply(function () {
-                    $scope.comment.rate = self.attr("rate");
-                });
-            });
+            /**
+             * On rating star click
+             * @param star star icon index
+             */
+            $scope.starClicked = function(star) {
+                $scope.comment.rate = star;
+            };
 
             // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {

@@ -3,6 +3,11 @@ mixin average-rate(account_var)
     span.star(ng-init="stars=[1, 2, 3, 4, 5]")
       i.icon-lg.flaticon.solid.star-2(ng-repeat="star in stars", class="{{!#{account_var} ? 'disabled' : (star === #{account_var} ? 'current' : '')}}")
 
+mixin average-rate-editable(account_var)
+  span.average-rate.ng-hide(ng-show="true")
+    span.star(ng-init="stars=[1, 2, 3, 4, 5]")
+        i.icon-lg.flaticon.solid.star-2(ng-repeat="star in stars", ng-click="starClicked(star)", class="{{!#{account_var} ? 'disabled' : (star === #{account_var} ? 'current' : '')}}", style="cursor: pointer;")
+
 mixin rate-counter(account_var)
   span.rate-counter(ng-show="!!#{account_var}", ng-bind="#{account_var}")
 
