@@ -86,7 +86,7 @@ define(["angular", "eloue/app"], function (angular) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
                             $scope.departure_point = productShippingPointData.results[0];
-                            PatronShippingPointsService.getByPatronAndBooking(UtilsService.getIdFromUrl($scope.bookingDetails.borrower), $stateParams.uuid).then(function (patronShippingPointData) {
+                            PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
                                 if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
                                     $scope.arrival_point = patronShippingPointData.results[0];
                                 }
@@ -156,7 +156,7 @@ define(["angular", "eloue/app"], function (angular) {
                             //Show shipping choice only if there are existing product shipping points
                             if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
                                 var productShippingPoint = productShippingPointData.results[0];
-                                PatronShippingPointsService.getByPatronAndBooking(UtilsService.getIdFromUrl($scope.bookingDetails.borrower), $stateParams.uuid).then(function (patronShippingPointData) {
+                                PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
                                     if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
                                         var patronShippingPoint = patronShippingPointData.results[0];
                                         // TODO: Price is hardcoded for now, will be taken from some third-party pricing service
