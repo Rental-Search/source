@@ -247,6 +247,27 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             }
         };
 
+        /**
+         * Sign in user with facebook.
+         */
+        $scope.loginFacebook = function(){
+            FB.login(function(response){
+                if(!!response.authResponse) {
+                    var redirect;
+                    if($window.location.href.indexOf("dashboard") !== -1) {
+                        redirect = $window.location.href.substring(0, $window.location.href.indexOf("dashboard")) + "dashboard";
+                    }else{
+                        if(!!$routeParams.redirect) {
+                            redirect = RedirectAfterLogin.url;
+                        } else{
+                            redirect = $window.location.href;
+                        }
+                    }
+                    $window.location.href = $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&url=" + encodeURIComponent(redirect);
+                }
+            }, {scope: 'public_profile, email'});
+        };
+
         $scope.onLoginSuccess = function (data) {
             var expire = new Date();
             expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
