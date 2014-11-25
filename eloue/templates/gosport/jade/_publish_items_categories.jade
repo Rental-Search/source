@@ -1,12 +1,11 @@
 .container
   h3.text-center Choisissez une catégorie pour votre annonce
 
-  -var publish_items_categories = [[{"title": "Sports d'hiver", "id": 2846, "classname": "ski"}, {"title": "Sports de raquette", "id": 2769, "classname": "tennis"}, {"title": "Cycles", "id": 2774, "classname": "bike"}, {"title": "Sports d'extérieur", "id": 2762, "classname": "golf"}], [{"title": "Sports d'équipe", "id": 2848, "classname": "football"}, {"title": "Fitness, Gym et Danse", "id": 2823, "classname": "pool2"}, {"title": "Loisirs", "id": 2808, "classname": "pool"}, {"title": "Autres", "id": "", "classname": "dots"}]]
-  each group in publish_items_categories
-    ul.nav.space-between
-      each item in group
-        li.spacer
-        li: span: a(href="#/publish?category={{ item.id }}", data-dismiss="modal")
-          span.border-round
-            i(class="eloue-{{ item.classname }}")
-          span.title {{ item.title }}
+  ul.nav.space-between
+  {% for item in publish_category_list%}
+  li.spacer
+  li: span: a(href="#/publish?category={{ item.1 }}", data-dismiss="modal")
+    span.border-round
+      i(class="eloue-{{ item.2 }}")
+    span.title {{ item.0 }}
+  {% endfor %}

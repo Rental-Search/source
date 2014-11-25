@@ -749,6 +749,14 @@ class NavbarCategoryMixin(object):
         context.update(super(NavbarCategoryMixin, self).get_context_data(**kwargs))
         return context
 
+class PublishCategoryMixin(object):
+    def get_context_data(self, **kwargs):
+        context = dict()
+        if settings.PUBLISH_CATEGORIES:
+            context['publish_category_list'] = settings.PUBLISH_CATEGORIES
+        context.update(super(PublishCategoryMixin, self).get_context_data(**kwargs))
+        return context
+
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
@@ -896,7 +904,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         context.update(super(ProductDetailView, self).get_context_data(**kwargs))
         return context
 
-class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
+class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, PublishCategoryMixin, TemplateView):
     template_name = 'publich_item/index.jade'
 
 class SuggestCategoryView(AjaxResponseMixin, View):
@@ -984,11 +992,22 @@ class CategoryViewSet(viewsets.NonDeletableModelViewSet):
         return Response(serializer.data)
 
 class ProductFilterSet(filters.FilterSet):
-    category__isdescendant = filters.MPTTModelFilter(name='category', lookup_type='descendants', queryset=Category.objects.all())
+    category__isdescendant = filters.MPTTModelFilter(name='categories', lookup_type='descendants', queryset=Category.objects.all())
+    category = django_filters.ModelChoiceFilter(name='categories', queryset=Category.objects.all())
 
     class Meta:
         model = models.Product
-        fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'category', 'owner', 'created_at')
+        fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'owner', 'created_at')
+
+class ProductOrderingFilter(filters.OrderingFilter):
+
+    def get_ordering(self, request):
+        ordering = super(ProductOrderingFilter, self).get_ordering(request)
+        if ordering:
+            for i, param in enumerate(ordering):
+                if 'category' in param:
+                    ordering[i] = param.replace('category', 'categories__id')
+        return ordering
 
 class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
@@ -996,7 +1015,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     """
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
-    filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, ProductOrderingFilter)
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet

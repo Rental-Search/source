@@ -7,24 +7,8 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        categories = [
-            [172, 585, 217, 238, 173, 232, ],
-            [590, 247, ],
-            [575, 176, 179, 180, 251, 252, 591, ],
-            [178, 574, ],
-            [185, 207, 197, 584, 192, 189, 734, 187, 182, 183, 191, 194, 186, 580, 184, 188, 190, 193, 576, 577, 578, 579, 581, 181, 206, 195, 205, 203, 204, 196, 198, 199, 200, 201, 202, 582, 583, 735],
-            [573, 175, ],
-            [174, 220, ],
-            [216, 227, ],
-            [225, 587, 596, ],
-        ]
-        for category_group in categories:
-            conformity = orm.CategoryConformity.objects.get(eloue_category=category_group[0])
-            for category in category_group[1:]:
-                orm.CategoryConformity.objects.create(
-                    eloue_category_id=category,
-                    gosport_category=conformity.gosport_category
-                )
+        # moved to management command
+        pass
 
     def backwards(self, orm):
         "Write your backwards methods here."
