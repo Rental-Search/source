@@ -326,12 +326,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
-            $("#first_registration_date").datepicker({
-                language: "fr",
-                autoclose: true,
-                todayHighlight: true
-            });
-
             /**
              * Add this tags when a user succeeded to post a new product:
              * <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}%&tt=javascript&sc=1860"></script>

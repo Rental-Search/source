@@ -28,6 +28,26 @@ define(["../../common/eloue/commonApp",
     });
 
     /**
+     * Datepicker directive.
+     */
+    EloueCommon.directive("eloueExtendedDatepicker", function () {
+        return {
+            restrict: "A",
+            replace: true,
+            require: "?ngModel",
+            transclude: true,
+            link: function (scope, element, attrs, ngModel) {
+                if (!ngModel) return;
+                element.datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true
+                });
+            }
+        };
+    });
+
+    /**
      * Directive allows to set "eloue-err-src" attribute on <img> tag to be applied if calling path defined in "src" returns 404 error.
      */
     EloueCommon.directive("eloueErrSrc", function () {
