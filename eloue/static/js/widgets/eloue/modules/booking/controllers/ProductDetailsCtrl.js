@@ -365,7 +365,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         }
 
                         //TODO: save user shipping point and product shipping
-                        console.log($scope.borrowerShippingPoints);
                         var selectedPoint = {};
                         angular.forEach($scope.borrowerShippingPoints, function (value, key) {
                             if($scope.selectedPointId == value.site_id) {
@@ -453,7 +452,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Catch "redirectToLogin" event
              */
             $scope.$on("redirectToLogin", function () {
-                $location.path("/login");
+                $scope.openModal("login");
             });
 
             /**
@@ -462,6 +461,28 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.$on("openModal", function (event, args) {
                 $scope.openModal(args.name);
             });
+
+            $scope.openModal = function (name) {
+                var currentUserToken = AuthService.getCookie("user_token");
+                if (!currentUserToken && name != "login") {
+                    AuthService.saveAttemptUrl(name);
+                    name = "login";
+                } else {
+                    if ((name === "message") && $scope.productRelatedMessages.length == 0) {
+                        $scope.loadMessageThread();
+                    } else if (name === "booking") {
+                        $scope.loadCreditCards();
+                    } else if (name === "phone") {
+                        $scope.loadPhoneDetails();
+                    }
+                }
+
+                if (!!name) {
+                    $(".modal").modal("hide");
+                    var modalContainer = $("#" + name + "Modal");
+                    modalContainer.modal("show");
+                }
+            };
 
             $scope.openModal = function (name) {
                 var currentUserToken = AuthService.getCookie("user_token");

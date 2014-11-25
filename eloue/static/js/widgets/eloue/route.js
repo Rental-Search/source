@@ -11,7 +11,7 @@ define(["eloue/app",
         EloueApp.config([
             "$httpProvider",
             function ($httpProvider) {
-                // push function to the response interceptors which will intercept
+                // push function to the responseInterceptors which will intercept
                 // the http responses of the whole application
                 $httpProvider.responseInterceptors.push("ErrorHandlerInterceptor");
                 // use the HTML5 History API

@@ -1421,7 +1421,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             return productRelatedMessagesParseService;
         }]);
 
-        EloueCommon.factory("AuthService", ["$q", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", "FormService", function ($q, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration, FormService) {
+        EloueCommon.factory("AuthService", ["$q", "$rootScope", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", "FormService", function ($q, $rootScope, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration, FormService) {
             return {
 
                 /**
