@@ -13,7 +13,7 @@ define(["eloue/app",
             function ($httpProvider) {
                 // push function to the responseInterceptors which will intercept
                 // the http responses of the whole application
-                $httpProvider.responseInterceptors.push("ErrorHandlerInterceptor");
+                $httpProvider.interceptors.push("ErrorHandlerInterceptor");
                 // use the HTML5 History API
 //                $locationProvider.html5Mode(true);
             }

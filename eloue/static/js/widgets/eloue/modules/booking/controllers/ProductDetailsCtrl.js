@@ -472,28 +472,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.loadMessageThread();
                     } else if (name === "booking") {
                         $scope.loadCreditCards();
-                    } else if (name === "phone") {
-                        $scope.loadPhoneDetails();
-                    }
-                }
-
-                if (!!name) {
-                    $(".modal").modal("hide");
-                    var modalContainer = $("#" + name + "Modal");
-                    modalContainer.modal("show");
-                }
-            };
-
-            $scope.openModal = function (name) {
-                var currentUserToken = AuthService.getCookie("user_token");
-                if (!currentUserToken && name != "login") {
-                    AuthService.saveAttemptUrl(name);
-                    name = "login";
-                } else {
-                    if ((name === "message") && $scope.productRelatedMessages.length == 0) {
-                        $scope.loadMessageThread();
-                    } else if (name === "booking") {
-                        $scope.loadCreditCards();
                         $scope.loadProductShippingPoint();
                     } else if (name === "phone") {
                         $scope.loadPhoneDetails();

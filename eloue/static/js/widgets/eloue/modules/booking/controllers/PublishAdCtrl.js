@@ -149,12 +149,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     }
 
                 });
-                if (!!name) {
-                    $(".modal").modal("hide");
-                    var modalContainer = $("#" + name + "Modal");
-                    modalContainer.modal("show");
-                }
-            };
 
                 if (!!name) {
                     $(".modal").modal("hide");
