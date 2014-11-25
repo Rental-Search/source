@@ -21,6 +21,11 @@ block details
         .row
             .col-xs-12
                 input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary")
+        h2 Caution
+        .row
+            .col-xs-12
+                input#caution.form-control(type="text", name="caution", placeholder="Caution *", ng-model="product.deposit_amount", required)
+                span.text-danger(eloue-form-field-message, field-name="deposit_amount", ng-bind="value")
         h2 Adresse
         .row
             .col-sm-12

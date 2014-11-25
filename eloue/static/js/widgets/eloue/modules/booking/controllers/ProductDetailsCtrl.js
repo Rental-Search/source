@@ -469,7 +469,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.loadPhoneDetails();
                 }
                 if (args.name != "login") {
-                    $scope.loadPictures();
                     if ($scope.currentUser && !$scope.currentUser.default_address) {
                         $scope.noAddress = true;
                     }
