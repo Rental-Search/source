@@ -15,16 +15,14 @@
                      .form-group: a(href="#").btn.bg-danger
                         i.flaticon.social.google-plus
                         | Connexion via Google
-                //-
-                 p.info
+                p.info
                     | Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez)
                     br
                     | Vos données personnelles ne seront jamais cédées ou vendues.
                 .alert.alert-danger(ng-show="!!loginError")
                     button(type="button", data-dismiss="alert", class="close")
                     | {% verbatim %} {{loginError}} {% endverbatim %}
-                //-
-                 span.or
+                span.or
                 form(name="loginForm", ng-submit="loginSubmitted=true; login()", novalidate, ng-class="{'submitted':!!loginSubmitted}")
                     .form-group
                         input(type="text", placeholder="E-mail *", name="username", data-ng-model="credentials.username", required).form-control
