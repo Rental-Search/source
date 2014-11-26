@@ -2,10 +2,10 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from products.models import Category, Product, CategoryConformity
+from rent.models import Booking
 
 
 class Command(BaseCommand):
-    help = "Make existing products with proper category to be available on GoSport."
 
     new_categories = {
         'name': u'Sports & Loisirs',
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 'from': [249, ],
                 'new_children': [
                     u'Tricycle - Rosalie',
-                    u'Protections',
+                    # u'Protections',
                     u'Vélo électrique',
                 ],
                 'children': [
@@ -206,7 +206,7 @@ class Command(BaseCommand):
                     u'Ski de fond',
                     u'Raquette',
                     u'Luge',
-                    u'Protections',
+                    # u'Protections',
                     u'Patinage artistique',
                 ],
                 'children': [
@@ -224,7 +224,6 @@ class Command(BaseCommand):
                 'name': u'Fitness, Gym et Danse',
                 'new_children': [
                     u'Petit Matériel',
-                    u'Banc de musculation',
                     u'Rameur',
                     u'Stepper',
                     u'Vélo d\'appartement',
@@ -253,7 +252,7 @@ class Command(BaseCommand):
             {
                 'name': u'Glisse urbaine',
                 'new_children': [
-                    u'Protections',
+                    # u'Protections',
                 ],
                 'children': [
                     {
@@ -295,7 +294,7 @@ class Command(BaseCommand):
                 'name': u'Sports d\'équipe',
                 'new_children': [
                     u'Hockey sur glace',
-                    u'Protections',
+                    # u'Protections',
                 ],
                 'children': [
                     {
@@ -327,7 +326,7 @@ class Command(BaseCommand):
             {
                 'name': u'Sports de combat',
                 'new_children': [
-                    u'Protections',
+                    # u'Protections',
                 ],
                 'children': [
                     {
@@ -349,8 +348,8 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
-
         gosport_site_id = 13
+        eloue_site_id = 1
 
         def create_category(description, parent_category=None):
             category = Category.objects.create(
@@ -360,15 +359,10 @@ class Command(BaseCommand):
             category.sites.clear()
             category.sites.add(gosport_site_id)
 
-            if description.get('from', []):
-                for product in Product.objects.filter(sites__id=gosport_site_id, category__in=description['from']):
-                    product.categories.add(product.category)
-                    product.categories.add(category)
-                    product.save()
+            for eloue_category in description.get('from', []):
                 CategoryConformity.objects.create(
-                    eloue_category_id=description['from'][0],
-                    gosport_category=category
-                )
+                    eloue_category_id=eloue_category,
+                    gosport_category=category)
 
             for child_category_name in description.get('new_children', []):
                 child_category = Category.objects.create(
@@ -382,3 +376,15 @@ class Command(BaseCommand):
                 create_category(child_category_description, category)
 
         create_category(self.new_categories)
+        gosport_categories = Category.objects.filter(sites__id=gosport_site_id).all()
+
+        for gosport_category in gosport_categories:
+            for conformity in CategoryConformity.objects.filter(gosport_category=gosport_category):
+                products_to_import = Product.objects.filter(sites__id=eloue_site_id, category=conformity.eloue_category)
+                bookings_to_import = Booking.objects.filter(product__in=products_to_import)
+
+                for product in products_to_import:
+                    product.sites.add(gosport_site_id)
+
+                for booking in bookings_to_import:
+                    booking.sites.add(gosport_site_id)

@@ -1,17 +1,39 @@
 # -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # moved to management command
-        pass
+        # Adding model 'Product2Category'
+        db.create_table(u'products_product2category', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.Product'])),
+            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.Category'])),
+            ('site', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['sites.Site'])),
+        ))
+        db.send_create_signal(u'products', ['Product2Category'])
+
+        # Removing M2M table for field categories on 'Product'
+        db.delete_table(db.shorten_name(u'products_product_categories'))
+
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Deleting model 'Product2Category'
+        db.delete_table(u'products_product2category')
+
+        # Adding M2M table for field categories on 'Product'
+        m2m_table_name = db.shorten_name(u'products_product_categories')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('product', models.ForeignKey(orm[u'products.product'], null=False)),
+            ('category', models.ForeignKey(orm[u'products.category'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['product_id', 'category_id'])
+
 
     models = {
         u'accounts.address': {
@@ -271,7 +293,7 @@ class Migration(DataMigration):
         u'products.product': {
             'Meta': {'object_name': 'Product'},
             'address': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'on_delete': 'models.PROTECT', 'to': u"orm['accounts.Address']"}),
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'product_categories'", 'symmetrical': 'False', 'to': u"orm['products.Category']"}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'product_categories'", 'symmetrical': 'False', 'through': u"orm['products.Product2Category']", 'to': u"orm['products.Category']"}),
             'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': u"orm['products.Category']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
@@ -289,6 +311,13 @@ class Migration(DataMigration):
             'shipping': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': u"orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        u'products.product2category': {
+            'Meta': {'object_name': 'Product2Category'},
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['products.Category']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['products.Product']"}),
+            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"})
         },
         u'products.producthighlight': {
             'Meta': {'object_name': 'ProductHighlight'},
@@ -407,4 +436,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['products']
-    symmetrical = True

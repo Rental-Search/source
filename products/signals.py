@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.contrib.sites.models import Site
 from django.db.models import get_model
+from django.db.models.query_utils import Q
 
 from eloue.utils import cache_key, create_alternative_email
 from django.db.models import signals
@@ -16,15 +17,6 @@ def post_save_answer(sender, instance, created, **kwargs):
 ELOUE_SITE_ID = 1
 GOSPORT_SITE_ID = 13
 
-FIELDS_TO_SEARCH = {
-    ELOUE_SITE_ID: 'eloue_category',
-    GOSPORT_SITE_ID: 'gosport_category',
-}
-
-FIELDS_TO_COPY = {
-    ELOUE_SITE_ID: ['gosport_category'],
-    GOSPORT_SITE_ID: ['eloue_category'],
-}
 
 def post_save_product(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:patron:row', instance.id))
@@ -36,14 +28,17 @@ def post_save_product(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:details:after_dates', instance.pk))
 
     CategoryConformity = get_model('products', 'CategoryConformity')
+    Product2Category = get_model('products', 'Product2Category')
     try:
-        conformity = CategoryConformity.objects.filter(**{FIELDS_TO_SEARCH[settings.SITE_ID]: instance.category_id})[0]
+        conformity = CategoryConformity.objects.filter(
+            Q(gosport_category=instance.category_id) | Q(eloue_category=instance.category_id)
+        )[0]
     except IndexError:
         pass
     else:
-        for field in FIELDS_TO_COPY[settings.SITE_ID]:
-            instance.categories.add(getattr(conformity, field))
-        instance.categories.add(instance.category)
+        Product2Category.objects.filter(product=instance).delete()
+        Product2Category.objects.create(product=instance, category=conformity.gosport_category, site_id=GOSPORT_SITE_ID)
+        Product2Category.objects.create(product=instance, category=conformity.eloue_category, site_id=ELOUE_SITE_ID)
 
 
 def post_save_to_update_product(sender, instance, created, **kwargs):

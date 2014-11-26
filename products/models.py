@@ -78,7 +78,7 @@ class Product(models.Model):
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
-    categories = models.ManyToManyField('Category', related_name='product_categories')
+    categories = models.ManyToManyField('Category', related_name='product_categories', through='Product2Category')
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False) # FIXME should be auto_now_add=True
     sites = models.ManyToManyField(Site, related_name='products')
@@ -105,8 +105,8 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
-        assert self.categories.filter(sites__id=settings.SITE_ID).count() == 1
-        return self.categories.filter(sites__id=settings.SITE_ID)[0]
+        assert self.categories.count() == 1
+        return self.categories.all()[0]
 
     @permalink
     def get_absolute_url(self):
@@ -665,7 +665,14 @@ class Category(MPTTModel):
             return u"/location/%(ancestors_slug)s/%(slug)s/" % {'ancestors_slug': ancestors_slug, 'slug': self.slug }
         else:
             return u"/location/%(slug)s/" % {'slug': self.slug}
-            
+
+class Product2Category(models.Model):
+    product = models.ForeignKey('Product')
+    category = models.ForeignKey('Category')
+    site = models.ForeignKey('sites.Site')
+
+    on_site = CurrentSiteManager()
+    objects = models.Manager()
 
 class CategoryConformity(models.Model):
     eloue_category = models.ForeignKey('Category', related_name='+')
