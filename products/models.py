@@ -105,8 +105,8 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
-        assert self.categories.filter(sites__id=settings.SITE_ID).count() == 1
-        return self.categories.filter(sites__id=settings.SITE_ID)[0]
+        assert self.categories.count() == 1
+        return self.categories.all()[0]
 
     @permalink
     def get_absolute_url(self):
