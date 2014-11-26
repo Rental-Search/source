@@ -137,16 +137,20 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.downloadContract = function() {
                 BookingsLoadService.downloadContract($stateParams.uuid).$promise.then(function (data) {
-                    //TODO: return data as PdF attachment
-                    console.log(data);
+                    $scope.saveAttachedPdfFile(data, "contrat_" + $stateParams.uuid + ".pdf");
                 });
             };
 
             $scope.downloadVoucher = function() {
                 ShippingsService.downloadVoucher($scope.shipping.id).$promise.then(function (data) {
-                    //TODO: return data as PdF attachment
-                    console.log(data);
+                    $scope.saveAttachedPdfFile(data, "voucher_" + $scope.shipping.id + ".pdf");
                 });
+            };
+
+            $scope.saveAttachedPdfFile = function(data, fileName) {
+                //TODO: fix encoding data
+                var file = new Blob([btoa(data)], { type: "application/pdf" });
+                saveAs(file, fileName);
             };
 
             /**
