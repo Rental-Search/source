@@ -119,13 +119,14 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
         .block-with-thumbnail.notification.indent-md-b(ng-show="bookingDetails.with_shipping")
           .col-thumbnail
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
-          .col-exposition.text-action(ng-show="!!departure_point && !!arrival_point")
-            h3: b.indent-xs-b Relais de départ
-            ul.text-uppercase.indent-md-b
+          .col-exposition.text-action
+            a(href="", ng-show="searchShippingPointsInProgres").btn.btn-inline.bg-gray-light-hover.text-white.loading &nbsp;&nbsp;&nbsp;
+            h3(ng-show="!!departure_point"): b.indent-xs-b Relais de départ
+            ul(ng-show="!!departure_point").text-uppercase.indent-md-b
               li {{departure_point.name}}
               li {{departure_point.address}}
               li {{departure_point.zipcode}} {{departure_point.city}}
-            h3: b.indent-xs-b Relais de d’arrivée
+            h3(ng-show="!!arrival_point"): b.indent-xs-b Relais de d’arrivée
             ul.text-uppercase
               li {{arrival_point.name}}
               li {{arrival_point.address}}
