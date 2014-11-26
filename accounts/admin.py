@@ -107,12 +107,12 @@ class PhoneNumberAdmin(admin.ModelAdmin):
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment')
+    list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment',)
     raw_id_fields = ("patron",)
-    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count')
+    readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email', 'slimpay_code', 'slimpay_link')
     fieldsets = (
-        (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', 'annual_payment_date', 'free', 'number_of_free_month', 'comment')}),
-        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count')})
+        (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', 'annual_payment_date', 'free', 'number_of_free_month', 'comment',)}),
+        (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email', 'slimpay_code', 'slimpay_link',)}),
     )
     ordering = ['-subscription_started']
     list_filter = ('payment_type', 'propackage',)
@@ -130,6 +130,9 @@ class SubscriptionAdmin(admin.ModelAdmin):
     def phone(self, obj):
         return obj.patron.default_number
 
+    def email(self, obj):
+        return obj.patron.email
+
     def online_date(self, obj):
         try:
             return obj.patron.products.all().order_by('-created_at')[0].created_at.strftime("%d/%m/%y")
@@ -138,6 +141,19 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
     def products_count(self, obj):
         return obj.patron.products.all().count()
+
+    def slimpay_code(self, obj):
+        try:
+            slimpay = obj.patron.slimpaymandateinformation_set.latest('pk')
+            return slimpay[0].RUM
+        except:
+            return None
+
+    def slimpay_link(self, obj):
+        slimpay_link = '<a href="/edit/accounts/slimpay/%s/"">Ajouter un iban</a>' % obj.patron.pk
+        return slimpay_link
+
+    slimpay_link.allow_tags = True
 
 
 class ProPackageAdmin(admin.ModelAdmin):
