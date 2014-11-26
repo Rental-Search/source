@@ -24,12 +24,12 @@ NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
 FILTER_CATEGORIES = env('FILTER_CATEGORIES', NAVBAR_CATEGORIES)
 
 PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', (
-    ("Sports d'hiver", NAVBAR_CATEGORIES[0], "ski"),
+    (("Sports d'hiver", NAVBAR_CATEGORIES[0], "ski"),
     ("Sports de raquette", NAVBAR_CATEGORIES[1], "tennis"),
     ("Cycles", NAVBAR_CATEGORIES[2], "bike"),
-    ("Sports d'extérieur", NAVBAR_CATEGORIES[3], "golf"),
-    ("Sports d'équipe", NAVBAR_CATEGORIES[4], "football"),
+    ("Sports d'extérieur", NAVBAR_CATEGORIES[3], "golf")),
+    (("Sports d'équipe", NAVBAR_CATEGORIES[4], "football"),
     ("Fitness, Gym et Danse", NAVBAR_CATEGORIES[5], "pool2"),
     ("Loisirs", NAVBAR_CATEGORIES[6], "pool"),
-    ("Autres", "", "dots")
+    ("Autres", "", "dots"))
 ))
