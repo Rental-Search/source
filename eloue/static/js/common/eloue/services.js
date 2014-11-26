@@ -677,6 +677,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return Shippings.save(shipping);
                 };
 
+                shippingsService.downloadVoucher = function (id) {
+                    return Shippings.voucher({id: id});
+                };
+
                 return shippingsService;
             }
         ]);
@@ -1015,6 +1019,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 bookingsLoadService.postIncident = function (uuid, description) {
                     return Bookings.incident({uuid: uuid}, {description: description});
+                };
+
+                bookingsLoadService.downloadContract = function (uuid) {
+                    return Bookings.contract({uuid: uuid});
                 };
 
                 bookingsLoadService.getBookingByProduct = function (productId) {

@@ -82,6 +82,7 @@ define(["angular", "eloue/app"], function (angular) {
                     });
                 }
                 if ($scope.bookingDetails.with_shipping) {
+                    $scope.searchShippingPointsInProgres = true;
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
@@ -89,6 +90,7 @@ define(["angular", "eloue/app"], function (angular) {
                             PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
                                 if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
                                     $scope.arrival_point = patronShippingPointData.results[0];
+                                    $scope.searchShippingPointsInProgres = false;
                                 }
                             }, function (error) {
                                 $scope.handleResponseErrors(error);
@@ -133,6 +135,20 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             };
 
+            $scope.downloadContract = function() {
+                BookingsLoadService.downloadContract($stateParams.uuid).$promise.then(function (data) {
+                    //TODO: return data as PdF attachment
+                    console.log(data);
+                });
+            };
+
+            $scope.downloadVoucher = function() {
+                ShippingsService.downloadVoucher($scope.shipping.id).$promise.then(function (data) {
+                    //TODO: return data as PdF attachment
+                    console.log(data);
+                });
+            };
+
             /**
              * Show real number of the owner if the booking have the pending status and after.
              * @param status booking status
@@ -145,6 +161,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.handleResponseErrors = function (error) {
                 $scope.serverError = error.errors;
                 $scope.submitInProgress = false;
+                $scope.searchShippingPointsInProgres = false;
             };
 
 
