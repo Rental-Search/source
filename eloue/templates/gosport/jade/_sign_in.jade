@@ -51,15 +51,15 @@
                         label(for="inform")
                             input(type="checkbox", checked)#inform
                             span.flaticon.stroke.checkmark
-                        | Tenez moi informé de l'actualité et des bonnes affaires Go Sport Location
+                        | Tenez moi informé de l'actualité et des bonnes affaires GO Sport Location
                     .form-group: button(type="submit", data-ng-disabled="registrationForm.$invalid || !registrationForm.$dirty").btn.bg-success Inscription via Email
                     p
-                        | En créant un compte Go Sport Location, vous acceptez les &nbsp;
+                        | En créant un compte GO Sport Location, vous acceptez les &nbsp;
                         a(href="{% url 'terms' %}") Conditions Générales
                         br
                         | et la &nbsp;
                         a(href="/respect-vie-privee/") Politique de Confidentialité
                         | de notre site
                 span.or
-                h4 Vous êtes déjà membre Go Sport Location ?
+                h4 Vous êtes déjà membre GO Sport Location ?
                 a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion Connexion
