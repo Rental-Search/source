@@ -135,6 +135,20 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             };
 
+            $scope.downloadContract = function() {
+                BookingsLoadService.downloadContract($stateParams.uuid).$promise.then(function (data) {
+                    //TODO: return data as PdF attachment
+                    console.log(data);
+                });
+            };
+
+            $scope.downloadVoucher = function() {
+                ShippingsService.downloadVoucher($scope.shipping.id).$promise.then(function (data) {
+                    //TODO: return data as PdF attachment
+                    console.log(data);
+                });
+            };
+
             /**
              * Show real number of the owner if the booking have the pending status and after.
              * @param status booking status
