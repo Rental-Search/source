@@ -36,7 +36,8 @@
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
         "toastr": "../../bower_components/toastr/toastr",
-        "formmapper": "../formmapper"
+        "formmapper": "../formmapper",
+        "filesaver": "../FileSaver.min"
     },
     shim: {
         "angular": {

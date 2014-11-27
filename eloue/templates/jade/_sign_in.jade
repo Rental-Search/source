@@ -20,7 +20,7 @@
                  span.or
                  h3 Inscrivez-vous en 30 secondes
                  form(action="")
-                    .form-group: a( href = "#classic-form", data-toggle="modal", data-target="#classic-form", data-dismiss="modal").btn.bg-success Inscription via Email
+                    .form-group: a( href = "", ng-click="openRegistrationForm()").btn.bg-success Inscription via Email
                 {% verbatim %}
                 .alert.alert-danger(eloue-form-message)
                     button(type="button", data-dismiss="alert", class="close")
@@ -32,7 +32,7 @@
                 form(name="registrationForm", ng-submit="registrationSubmitted=true; registrationForm.$valid && register()", novalidate, eloue-form-field-error-manager, ng-class="{'submitted':registrationSubmitted}")
                   fieldset(data-ng-disabled="!!submitting")
                     //-
-                     h3 Inscription 30 secondes
+                    h3 Inscription 30 secondes
                     .form-group: .row
                         .col-xs-5.clear-selector
                             {% verbatim %}

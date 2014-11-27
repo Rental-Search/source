@@ -282,7 +282,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         /**
          * Utils service.
          */
-        EloueCommon.factory("UtilsService", ["$filter", function ($filter) {
+        EloueCommon.factory("UtilsService", ["$filter", "AuthService", function ($filter, AuthService) {
             var utilsService = {};
 
             utilsService.formatDate = function (date, format) {
@@ -330,6 +330,30 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 var date = Date.parse(dateStr);
                 var today = new Date();
                 return !!date && date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear();
+            };
+
+            utilsService.downloadPdfFile = function (url, filename) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                var userToken = AuthService.getCookie("user_token");
+                if (userToken && userToken.length > 0) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + userToken);
+                }
+
+                var csrftoken = AuthService.getCookie('csrftoken');
+                if (csrftoken && csrftoken.length > 0) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                xhr.responseType = 'blob';
+
+                xhr.onload = function(e) {
+                    if (this.status == 200) {
+                        var file = new Blob([this.response], {type: 'application/pdf'});
+                        saveAs(file, filename);
+                    }
+                };
+
+                xhr.send();
             };
 
             return utilsService;
@@ -666,7 +690,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("ShippingsService", [
             "Shippings",
             "Endpoints",
-            function (Shippings, Endpoints) {
+            "UtilsService",
+            function (Shippings, Endpoints, UtilsService) {
                 var shippingsService = {};
 
                 shippingsService.getByBooking = function (uuid) {
@@ -675,6 +700,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 shippingsService.saveShipping = function (shipping) {
                     return Shippings.save(shipping);
+                };
+
+                shippingsService.downloadVoucher = function (id) {
+                    UtilsService.downloadPdfFile(Endpoints.api_url + "shippings/" + id + "/document/", "voucher.pdf");
                 };
 
                 return shippingsService;
@@ -917,12 +946,13 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("BookingsLoadService", [
             "$q",
+            "Endpoints",
             "Bookings",
             "UtilsService",
             "BookingsParseService",
             "ProductsLoadService",
             "MessageThreadsService",
-            function ($q, Bookings, UtilsService, BookingsParseService, ProductsLoadService, MessageThreadsService) {
+            function ($q, Endpoints, Bookings, UtilsService, BookingsParseService, ProductsLoadService, MessageThreadsService) {
                 var bookingsLoadService = {};
 
                 bookingsLoadService.getBookingList = function (author, state, borrowerId, ownerId, page) {
@@ -1015,6 +1045,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 bookingsLoadService.postIncident = function (uuid, description) {
                     return Bookings.incident({uuid: uuid}, {description: description});
+                };
+
+                bookingsLoadService.downloadContract = function (uuid) {
+                    UtilsService.downloadPdfFile(Endpoints.api_url + "bookings/" + uuid + "/contract/", "contrat.pdf");
                 };
 
                 bookingsLoadService.getBookingByProduct = function (productId) {

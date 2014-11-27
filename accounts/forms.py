@@ -683,7 +683,7 @@ class CreditCardForm(forms.ModelForm):
     def clean(self):
         try:
             pm = PayboxManager()
-            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data.get('card_number', ''))
             pm.authorize(self.cleaned_data['card_number'], 
                 self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
             )
