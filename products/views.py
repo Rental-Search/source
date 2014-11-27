@@ -554,7 +554,7 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
     @method_decorator(mobify)
     @method_decorator(cache_page(900))
     @method_decorator(vary_on_cookie)
-    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet(), suggestions=None, page=None, **kwargs):
+    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet().filter(is_archived=False), suggestions=None, page=None, **kwargs):
         self.breadcrumbs = self.get_breadcrumbs(request)
         urlbits = urlbits or ''
         urlbits = filter(None, urlbits.split('/')[::-1])
@@ -990,7 +990,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     API endpoint that allows products to be viewed or edited.
     """
     serializer_class = serializers.ProductSerializer
-    queryset = models.Product.on_site.select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
+    queryset = models.Product.on_site.filter(is_archived=False).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
     filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
     search_index = product_search
