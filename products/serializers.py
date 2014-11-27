@@ -149,13 +149,6 @@ class CuriositySerializer(ModelSerializer):
         public_fields = ('id', 'product')
         immutable_fields = ('product',)
 
-class MessageThreadSerializer(ModelSerializer):
-    class Meta:
-        model = models.MessageThread
-        fields = ('id', 'sender', 'recipient', 'product', 'last_message', 'subject', 'sender_archived', 'recipient_archived', 'messages')
-        read_only_fields = ('last_message', 'sender_archived', 'recipient_archived', 'messages')
-        immutable_fields = ('sender', 'recipient', 'product')
-
 class ProductRelatedMessageSerializer(ModelSerializer):
     class Meta:
         model = models.ProductRelatedMessage
@@ -163,6 +156,19 @@ class ProductRelatedMessageSerializer(ModelSerializer):
         read_only_fields = ('sent_at',)
         immutable_fields = ('thread', 'sender', 'recipient', 'offer')
 
+class NestedProductRelatedMessageSerializer(NestedModelSerializerMixin, ProductRelatedMessageSerializer):
+    pass
+
+class MessageThreadSerializer(ModelSerializer):
+    sender = NestedUserSerializer()
+    recipient = NestedUserSerializer()
+    last_message = NestedProductRelatedMessageSerializer(read_only=True)
+
+    class Meta:
+        model = models.MessageThread
+        fields = ('id', 'sender', 'recipient', 'product', 'last_message', 'subject', 'sender_archived', 'recipient_archived', 'messages')
+        read_only_fields = ('sender_archived', 'recipient_archived', 'messages')
+        immutable_fields = ('sender', 'recipient', 'product')
 
 class ShippingPriceParamsSerializer(SimpleSerializer):
     arrival_point_id = IntegerField(required=True)

@@ -51,7 +51,9 @@ block details
                                     td
                                         input(type="text", placeholder="Prix...", ng-model="prices.day.amount", required).table-form
                                         | €
-                        table.calendar(ng-show="isAuto")
+            .row
+                          .col-lg-12
+                           table.calendar(ng-show="isAuto")
                             tbody
                                 tr
                                     td Kilomètres inclus par jour
@@ -86,14 +88,16 @@ block details
                                         input(type="text", placeholder="Prix...", ng-model="prices.fifteen_days.amount").table-form
                                         | €
 
-                        table.calendar(ng-show="isAuto")
-                            tbody
-                                tr
-                                    td Caution
-                                    td
-                                        input(type="text", ng-model="product.deposit_amount").table-form
-                                        | €
-                        | * : Tarif obligatoire
+            .row
+                     .col-lg-12
+                      table.calendar
+                        tbody
+                            tr
+                                td Caution
+                                td
+                                    input(type="text", name="caution", placeholder="Caution demandée *", ng-model="product.deposit_amount", required).table-form
+                                    | €
+            | * : Tarif obligatoire
             .row
                 button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
         {% endverbatim %}
