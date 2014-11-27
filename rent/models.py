@@ -17,6 +17,7 @@ from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import models
+from django.db import connection
 from django.db.models import permalink
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
@@ -101,7 +102,11 @@ class Booking(models.Model):
             else:
                 self.insurance_amount = D(0)
         super(Booking, self).save(*args, **kwargs)
-        
+
+    def set_state(self, state):
+        cursor = connection.cursor()
+        cursor.execute("UPDATE rent_booking SET state = %s WHERE uuid = %s", [state, str(self.uuid).replace('-', '')])
+
     @permalink
     def get_absolute_url(self):
         return ('booking_detail', [self.pk.hex])

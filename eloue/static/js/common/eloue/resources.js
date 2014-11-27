@@ -142,8 +142,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
                 "accept": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/accept/?"},
                 "reject": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/reject/?"},
                 "cancel": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/cancel/?"},
-                "incident": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/incident/?"},
-                "contract": { method: "GET", url: Endpoints.api_url + "bookings/:uuid/contract/?"}
+                "incident": { method: "PUT", url: Endpoints.api_url + "bookings/:uuid/incident/?"}
             });
     }]);
 
@@ -172,10 +171,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
      * Factory for managing shippings.
      */
     EloueCommon.factory("Shippings", ["$resource", "Endpoints", function ($resource, Endpoints) {
-        return $resource(Endpoints.api_url + "shippings/:id/?", {},
-            {
-                "voucher": { method: "GET", url: Endpoints.api_url + "shippings/:id/document/?"}
-            });
+        return $resource(Endpoints.api_url + "shippings/:id/?");
     }]);
 
     /**
