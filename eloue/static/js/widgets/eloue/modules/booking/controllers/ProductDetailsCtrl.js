@@ -465,6 +465,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.openModal = function (name) {
                 var currentUserToken = AuthService.getCookie("user_token");
                 if (!currentUserToken && name != "login") {
+                    console.log(name);
                     AuthService.saveAttemptUrl(name);
                     name = "login";
                 } else {

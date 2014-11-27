@@ -1492,14 +1492,19 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * Redirect to attempted URL.
                  */
                 redirectToAttemptedUrl: function () {
-                    $rootScope.$broadcast("openModal", { name : RedirectAfterLogin.url});
+                    if ($window.location.href.indexOf("dashboard") !== -1) {
+                        $window.location.href = RedirectAfterLogin.url;
+                    } else {
+                        $rootScope.$broadcast("openModal", { name : RedirectAfterLogin.url, params: RedirectAfterLogin.params});
+                    }
                 },
 
                 /**
                  * Save URL that user attempts to access.
                  */
-                saveAttemptUrl: function (name) {
+                saveAttemptUrl: function (name, params) {
                     RedirectAfterLogin.url = name;
+                    RedirectAfterLogin.params = params;
                 },
 
                 /**

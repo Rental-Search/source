@@ -4,7 +4,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the login form.
      */
-    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "$routeParams", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, $window, $routeParams, AuthService, UsersService, ServiceErrors) {
+    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "UsersService", "ToDashboardRedirectService", "ServiceErrors", "RedirectAfterLogin", function ($scope, $rootScope, $http, $window, AuthService, UsersService, ToDashboardRedirectService, ServiceErrors, RedirectAfterLogin) {
         /**
          * User credentials.
          */
@@ -24,7 +24,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     if($window.location.href.indexOf("dashboard") !== -1) {
                         redirect = $window.location.href.substring(0, $window.location.href.indexOf("dashboard")) + "dashboard";
                     }else{
-                        if(!!$routeParams.redirect) {
+                        if(!!RedirectAfterLogin.url && RedirectAfterLogin.url != "/") {
                             redirect = RedirectAfterLogin.url;
                         } else{
                             redirect = $window.location.href;
@@ -88,12 +88,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
-                    if($window.location.href.indexOf("dashboard") !== -1) {
-                        $window.location.href = "/dashboard";
-                    }else{
-                        if(!!$routeParams.redirect) {
-                            AuthService.redirectToAttemptedUrl();
-                        }
+                    if (RedirectAfterLogin.url != "/") {
+                        AuthService.redirectToAttemptedUrl();
+                    } else {
+                        //$window.location.href = "/dashboard"
+                        ToDashboardRedirectService.showPopupAndRedirect("/dashboard");
                     }
                 });
             }
@@ -257,7 +256,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     if($window.location.href.indexOf("dashboard") !== -1) {
                         redirect = $window.location.href.substring(0, $window.location.href.indexOf("dashboard")) + "dashboard";
                     }else{
-                        if(!!$routeParams.redirect) {
+                        if(!!RedirectAfterLogin.url && RedirectAfterLogin.url != "/") {
                             redirect = RedirectAfterLogin.url;
                         } else{
                             redirect = $window.location.href;
