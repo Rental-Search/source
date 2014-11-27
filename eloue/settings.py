@@ -234,7 +234,7 @@ INSTALLED_APPS = (
 #    'oauth2_provider', # django-oauth-toolkit
     'provider', 'provider.oauth2', # django-oauth2-provider
     'rest_framework',
-    'faq',
+    # 'faq',
     'accounts',
     'products',
     'rent',
