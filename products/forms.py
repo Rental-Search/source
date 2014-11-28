@@ -85,7 +85,7 @@ class FacetedSearchForm(SearchForm):
                 if suggestions == query:
                     suggestions = None
 
-            prices = [price[0] for price in sqs.facet_counts().get('fields', {}).get('price', None)]
+            prices = [price[0] for price in sqs.facet_counts().get('fields', {}).get('price', [])]
             if prices:
                 self.filter_limits.update({
                     'price_min': min(prices),
