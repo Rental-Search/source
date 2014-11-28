@@ -41,12 +41,12 @@
                             {% endverbatim %}
                         .col-xs-7
                             input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
-                            span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted") Required field
+                            span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted", translate="required_field")
                     -var registration_form_fields = [["text", "Prénom", "first_name"], ["text", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
                     each type, placeholder, name in registration_form_fields
                         .form-group
                             input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
-                            span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationSubmitted") Required field
+                            span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationSubmitted", translate="required_field")
 
                     .checkbox
                         label(for="inform")
