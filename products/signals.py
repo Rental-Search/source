@@ -34,7 +34,8 @@ def post_save_product(sender, instance, created, **kwargs):
             Q(gosport_category=instance.category_id) | Q(eloue_category=instance.category_id)
         )[0]
     except IndexError:
-        pass
+        Product2Category.objects.filter(product=instance).delete()
+        Product2Category.objects.create(product=instance, category=instance.category, site_id=GOSPORT_SITE_ID)
     else:
         Product2Category.objects.filter(product=instance).delete()
         Product2Category.objects.create(product=instance, category=conformity.gosport_category, site_id=GOSPORT_SITE_ID)
