@@ -35,10 +35,10 @@ block sections
         .row
           .col-md-12.col-lg-6
             input#username.form-control(type="text", name="username", placeholder="Pseudo *", required, autofocus, ng-model="currentUser.username")
-            span.text-danger(ng-show="profileInformation.username.$error.required && profileSubmitted") Required field
+            span.text-danger(ng-show="profileInformation.username.$error.required && profileSubmitted", translate="required_field")
           .col-md-12.col-lg-6
             input#email.form-control(type="email", name="email", placeholder="Email *", required, ng-model="currentUser.email")
-            span.text-danger(ng-show="profileInformation.email.$error.required && profileSubmitted") Required field
+            span.text-danger(ng-show="profileInformation.email.$error.required && profileSubmitted", translate="required_field")
         //- gender, first-name, name
         .row
           .col-sm-2.without-search
@@ -47,10 +47,10 @@ block sections
                 option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
           .col-sm-5
             input#first_name.form-control(type="text", name="first_name", placeholder="Prénom *", required, ng-model="currentUser.first_name")
-            span.text-danger(ng-show="profileInformation.first_name.$error.required && profileSubmitted") Required field
+            span.text-danger(ng-show="profileInformation.first_name.$error.required && profileSubmitted", translate="required_field")
           .col-sm-5
             input#last_name.form-control(type="text", name="last_name", placeholder="Nom *", required, ng-model="currentUser.last_name")
-            span.text-danger(ng-show="profileInformation.last_name.$error.required && profileSubmitted") Required field
+            span.text-danger(ng-show="profileInformation.last_name.$error.required && profileSubmitted", translate="required_field")
         //- address
         .row(ng-show="!noAddress")
           .col-sm-12.without-search.form-control
@@ -60,18 +60,18 @@ block sections
                   | {{address.street}}, {{address.zipcode}} {{address.city}}
               //-option(value="#{tenant.address}") #{tenant.address}
             span.text-danger(eloue-form-field-message field-name="default_address") {{value}}
-            span.text-danger(ng-show="profileInformation.default_address.$error.required && profileSubmitted") Required field
+            span.text-danger(ng-show="profileInformation.default_address.$error.required && profileSubmitted", translate="required_field")
             h4.indent-sm-v.text-right.text-success-hover: a(ui-sref="account.addresses") Ajouter ou modifier une adresse
         .row(ng-show="noAddress")
             .col-sm-5
                 input(type="text", name="street", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
-                span.text-danger(ng-show="profileInformation.street.$error.required && profileSubmitted") Required field
+                span.text-danger(ng-show="profileInformation.street.$error.required && profileSubmitted", translate="required_field")
             .col-sm-3
                 input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="currentUser.default_address.zipcode").form-control
-                span.text-danger(ng-show="profileInformation.zipcode.$error.required && profileSubmitted") Required field
+                span.text-danger(ng-show="profileInformation.zipcode.$error.required && profileSubmitted", translate="required_field")
             .col-sm-4
                 input(type="text", name="city", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
-                span.text-danger(ng-show="profileInformation.city.$error.required && profileSubmitted") Required field
+                span.text-danger(ng-show="profileInformation.city.$error.required && profileSubmitted", translate="required_field")
         //- telephone
         .row
           .col-sm-12
@@ -124,7 +124,7 @@ block sections
         .row
           .col-sm-12
             input#iban.form-control(type="text", name="iban", placeholder="IBAN", ng-model="currentUser.iban")
-            span.text-danger(ng-show="profileInformation.iban.$error.required && profileSubmitted") Required field
+            span.text-danger(ng-show="profileInformation.iban.$error.required && profileSubmitted", translate="required_field")
         //- drag photo
          .row
           .col-sm-12.form-control

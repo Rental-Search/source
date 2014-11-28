@@ -44,7 +44,10 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             closed: "Clôture",
             incident: "Incident",
             refunded: "Remboursé",
-            outdated: "Dépassée"
+            outdated: "Dépassée",
+
+            //Validation errors
+            required_field: "Ce champ est obligatoire."
         });
 
         $translateProvider.preferredLanguage("fr");

@@ -21,6 +21,7 @@
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
         "angular-i18n": "../../bower_components/angular-i18n/angular-locale_fr-fr",
+        "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
         "moment": "../../bower_components/moment/moment",
         "angular-moment": "../../bower_components/angular-moment/angular-moment",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
@@ -36,7 +37,8 @@
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
         "toastr": "../../bower_components/toastr/toastr",
-        "formmapper": "../formmapper"
+        "formmapper": "../formmapper",
+        "filesaver": "../FileSaver.min"
     },
     shim: {
         "angular": {
@@ -47,6 +49,7 @@
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-i18n": ["angular"],
+        "angular-translate": ["angular"],
         "angular-resource": ["angular"],
         "angular-moment": ["angular"],
         "angular-mocks": {

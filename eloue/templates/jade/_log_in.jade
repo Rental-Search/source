@@ -8,28 +8,31 @@
                 h4.modal-title Connexion
             .modal-body
                 h3 Connectez-vous à votre compte
-                .form-group: a(ng-click="loginFacebook()").btn.bg-info
+                //-
+                  .form-group: a(ng-click="loginFacebook()").btn.bg-info
                     i.flaticon.social.facebook
                     | Connexion via Facebook
                     //-
                      .form-group: a(href="#").btn.bg-danger
                         i.flaticon.social.google-plus
                         | Connexion via Google
-                p.info
+                //-
+                 p.info
                     | Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez)
                     br
                     | Vos données personnelles ne seront jamais cédées ou vendues.
                 .alert.alert-danger(ng-show="!!loginError")
                     button(type="button", data-dismiss="alert", class="close")
                     | {% verbatim %} {{loginError}} {% endverbatim %}
-                span.or
+                //-
+                 span.or
                 form(name="loginForm", ng-submit="loginSubmitted=true; login()", novalidate, ng-class="{'submitted':!!loginSubmitted}")
                     .form-group
                         input(type="text", placeholder="E-mail *", name="username", data-ng-model="credentials.username", required).form-control
-                        span.text-danger(data-ng-show="loginForm.username.$error.required && !!loginSubmitted") Required field
+                        span.text-danger(data-ng-show="loginForm.username.$error.required && !!loginSubmitted", translate="required_field")
                     .form-group
                         input(type="password", placeholder="Mot de passe *", name="password", data-ng-model="credentials.password", required).form-control
-                        span.text-danger(data-ng-show="loginForm.password.$error.required && !!loginSubmitted") Required field
+                        span.text-danger(data-ng-show="loginForm.password.$error.required && !!loginSubmitted", translate="required_field")
                     .form-group.clearfix
                         .checkbox.pull-left
                             label(for="remember-me")
