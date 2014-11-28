@@ -127,7 +127,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
               li {{departure_point.address}}
               li {{departure_point.zipcode}} {{departure_point.city}}
             h3(ng-show="!!arrival_point"): b.indent-xs-b Relais de d’arrivée
-            ul.text-uppercase
+            ul(ng-show="!!arrival_point").text-uppercase
               li {{arrival_point.name}}
               li {{arrival_point.address}}
               li {{arrival_point.zipcode}} {{arrival_point.city}}
