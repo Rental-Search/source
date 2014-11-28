@@ -25,14 +25,14 @@ block details
         .row
             .col-sm-12
              input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
-             span.text-danger(ng-show="itemInfoForm.street.$error.required && itemInfoSubmitted") Required field
+             span.text-danger(ng-show="itemInfoForm.street.$error.required && itemInfoSubmitted", translate="required_field")
         .row
             .col-sm-6
                 input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
-                span.text-danger(ng-show="itemInfoForm.zipcode.$error.required && itemInfoSubmitted") Required field
+                span.text-danger(ng-show="itemInfoForm.zipcode.$error.required && itemInfoSubmitted", translate="required_field")
             .col-sm-6
                 input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
-                span.text-danger(ng-show="itemInfoForm.city.$error.required && itemInfoSubmitted") Required field
+                span.text-danger(ng-show="itemInfoForm.city.$error.required && itemInfoSubmitted", translate="required_field")
         h2 Photos
         .row
             form#add-picture
