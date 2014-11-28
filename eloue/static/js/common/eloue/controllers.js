@@ -23,7 +23,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     AuthService.loginFacebook(
                             $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken + "&user_id=" + response.authResponse.userID + "&expires_in=" + response.authResponse.expiresIn,
                         function (data) {
-                            $scope.onLoginSuccess(data);
+                            $scope.authorize();
                             $scope.submitting = false;
                         },
                         function (jqXHR) {
@@ -255,7 +255,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     AuthService.loginFacebook(
                             $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&create_user=true",
                         function (data) {
-                            $scope.onLoginSuccess(data);
+                            $scope.authorize();
                             $scope.submitting = false;
                         },
                         function (jqXHR) {
