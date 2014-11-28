@@ -4,6 +4,7 @@ define([
     "angular-cookies",
     "angular-resource",
     "angular-route",
+    "angular-translate",
     "angular-i18n",
     "eloue/modules/booking/BookingModule",
     "../../common/eloue/commonApp"
@@ -14,6 +15,7 @@ define([
         "EloueApp.BookingModule",
         "ngCookies",
         "ngResource",
-        "ngRoute"
+        "ngRoute",
+        "pascalprecht.translate"
     ]);
 });

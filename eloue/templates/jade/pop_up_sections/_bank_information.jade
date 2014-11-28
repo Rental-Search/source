@@ -2,7 +2,7 @@ h2 Vos informations bancaires
 .row
     .col-sm-8.card
         input(type="text", name="card_number", placeholder="Numéro de carte *", ng-model="creditCard.card_number", ng-required="newCreditCard", ng-show="newCreditCard").form-control
-        span.text-danger(ng-show="bookingForm.card_number.$error.required && bookingSubmitted") Required field
+        span.text-danger(ng-show="bookingForm.card_number.$error.required && bookingSubmitted", translate="required_field")
         span.text-danger(eloue-form-field-message, field-name="card_number")
             {% verbatim %}
             | {{value}}
@@ -12,21 +12,21 @@ h2 Vos informations bancaires
     .col-sm-4(style="z-index: 1050")
         input(type="text", name="expires", placeholder="MM/AA *", ng-model="creditCard.expires", ng-required="newCreditCard", eloue-datepicker-month, ng-disabled="!newCreditCard").form-control
         i.flaticon.stroke.calendar-4
-        span.text-danger(ng-show="bookingForm.expires.$error.required && bookingSubmitted") Required field
+        span.text-danger(ng-show="bookingForm.expires.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-if="newCreditCard")
     .col-sm-5
         input(type="text", name="cvv", placeholder="Code de sécurité *", ng-model="creditCard.cvv", ng-required="newCreditCard").form-control
         i.flaticon.stroke.lock-3
-        span.text-danger(ng-show="bookingForm.cvv.$error.required && bookingSubmitted") Required field
+        span.text-danger(ng-show="bookingForm.cvv.$error.required && bookingSubmitted", translate="required_field")
     .col-sm-7
         input(type="text", name="holder_name", placeholder="Nom et prénom du titulaire *", ng-model="creditCard.holder_name", ng-required="newCreditCard").form-control
         i.flaticon.stroke.user-4
-        span.text-danger(ng-show="bookingForm.holder_name.$error.required && bookingSubmitted") Required field
+        span.text-danger(ng-show="bookingForm.holder_name.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-if="!newCreditCard")
     .col-sm-12
         input(type="text", name="holder_name", placeholder="Nom et prénom du titulaire *", disabled, ng-model="creditCard.holder_name").form-control
         i.flaticon.stroke.user-4
-        span.text-danger(ng-show="bookingForm.holder_name.$error.required && bookingSubmitted") Required field
+        span.text-danger(ng-show="bookingForm.holder_name.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-show="newCreditCard")
     .col-sm-12
         .checkbox.pull-left

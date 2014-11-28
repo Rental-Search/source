@@ -81,8 +81,8 @@ require([
     "custom-scrollbar",
     "toastr",
     "../common/eloue/commonApp",
-    "eloue/route",
-    "eloue/i18n"
+    "../common/eloue/i18n",
+    "eloue/route"
 ], function ($, _, angular, bootstrap, route) {
     "use strict";
     $(function () {
