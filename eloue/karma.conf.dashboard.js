@@ -17,7 +17,6 @@ module.exports = function (config) {
             {pattern: 'static/bower_components/angular/angular.min.js', included: false },
             {pattern: 'static/bower_components/angular-mocks/angular-mocks.js', included: false },
             {pattern: 'static/bower_components/angular-resource/angular-resource.min.js', included: false },
-            {pattern: 'static/bower_components/angular-route/angular-route.min.js', included: false },
             {pattern: 'static/bower_components/angular-cookies/angular-cookies.min.js', included: false },
             {pattern: 'static/bower_components/angular-sanitize/angular-sanitize.min.js', included: false },
             {pattern: 'static/bower_components/angular-ui-router/release/angular-ui-router.min.js', included: false },

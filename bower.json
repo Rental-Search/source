@@ -14,7 +14,6 @@
     "angular-resource": "1.2.11",
     "angular-cookies": "1.2.11",
     "angular-sanitize": "1.2.11",
-    "angular-route": "1.2.11",
     "angular-moment": "0.6.2",
     "angular-i18n": " 1.2.11",
     "ng-stripe-payments": "0.1.1",

@@ -3,7 +3,6 @@ define([
     "angular",
     "angular-cookies",
     "angular-resource",
-    "angular-route",
     "angular-translate",
     "datejs",
     "chosen",
@@ -14,5 +13,5 @@ define([
     "filesaver"
 ], function (angular) {
     // Create module
-    return angular.module("EloueCommon", ["ngCookies", "ngResource", "ngRoute"]);
+    return angular.module("EloueCommon", ["ngCookies", "ngResource"]);
 });

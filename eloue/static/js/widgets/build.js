@@ -17,7 +17,6 @@
         "widget": "../../bower_components/jqueryui/ui/widget",
         "angular": "../../bower_components/angular/angular",
         "angular-resource": "../../bower_components/angular-resource/angular-resource",
-        "angular-route": "../../bower_components/angular-route/angular-route",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
         "angular-i18n": "../../bower_components/angular-i18n/angular-locale_fr-fr",
@@ -45,7 +44,6 @@
             deps: ["jQuery"],
             "exports": "angular"
         },
-        "angular-route": ["angular"],
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-i18n": ["angular"],
