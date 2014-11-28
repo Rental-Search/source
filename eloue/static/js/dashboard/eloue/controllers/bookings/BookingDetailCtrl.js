@@ -140,7 +140,7 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.downloadVoucher = function() {
-                ShippingsService.downloadVoucher($scope.shipping.id);
+                ShippingsService.downloadVoucher($scope.shipping.id, $scope.isOwner);
             };
 
             /**
