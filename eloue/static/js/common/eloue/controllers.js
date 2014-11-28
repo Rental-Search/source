@@ -20,17 +20,17 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.loginFacebook = function(){
             FB.login(function(response){
                 if(!!response.authResponse) {
-                    var redirect;
-                    if($window.location.href.indexOf("dashboard") !== -1) {
-                        redirect = $window.location.href.substring(0, $window.location.href.indexOf("dashboard")) + "dashboard";
-                    }else{
-                        if(!!RedirectAfterLogin.url && RedirectAfterLogin.url != "/") {
-                            redirect = RedirectAfterLogin.url;
-                        } else{
-                            redirect = $window.location.href;
+                    AuthService.loginFacebook(
+                            $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken + "&user_id=" + response.authResponse.userID + "&expires_in=" + response.authResponse.expiresIn,
+                        function (data) {
+                            $scope.onLoginSuccess(data);
+                            $scope.submitting = false;
+                        },
+                        function (jqXHR) {
+                            $scope.onLoginError(jqXHR);
+                            $scope.submitting = false;
                         }
-                    }
-                    $window.location.href = $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&url=" + encodeURIComponent(redirect);
+                    );
                 }
             }, {scope: 'public_profile, email'});
         };
@@ -252,17 +252,17 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.loginFacebook = function(){
             FB.login(function(response){
                 if(!!response.authResponse) {
-                    var redirect;
-                    if($window.location.href.indexOf("dashboard") !== -1) {
-                        redirect = $window.location.href.substring(0, $window.location.href.indexOf("dashboard")) + "dashboard";
-                    }else{
-                        if(!!RedirectAfterLogin.url && RedirectAfterLogin.url != "/") {
-                            redirect = RedirectAfterLogin.url;
-                        } else{
-                            redirect = $window.location.href;
+                    AuthService.loginFacebook(
+                            $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&create_user=true",
+                        function (data) {
+                            $scope.onLoginSuccess(data);
+                            $scope.submitting = false;
+                        },
+                        function (jqXHR) {
+                            $scope.onLoginError(jqXHR);
+                            $scope.submitting = false;
                         }
-                    }
-                    $window.location.href = $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&url=" + encodeURIComponent(redirect);
+                    );
                 }
             }, {scope: 'public_profile, email'});
         };
