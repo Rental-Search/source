@@ -12,7 +12,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 
 from eloue.api.urls import router
 from products.views import HomepageView
-from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, , LoginFacebookView
+from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView
 
 log = logbook.Logger('eloue')
 
