@@ -91,8 +91,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     if (RedirectAfterLogin.url != "/") {
                         AuthService.redirectToAttemptedUrl();
                     } else {
-                        //$window.location.href = "/dashboard"
-                        ToDashboardRedirectService.showPopupAndRedirect("/dashboard");
+                        $window.location.reload();
                     }
                 });
             }
@@ -315,7 +314,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     if (RedirectAfterLogin.url != "/") {
                         AuthService.redirectToAttemptedUrl();
                     } else {
-                        //$window.location.href = "/dashboard"
                         ToDashboardRedirectService.showPopupAndRedirect("/dashboard");
                     }
                 });
@@ -372,7 +370,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 }else{
                     $window.location.reload();
                 }
-
             };
         }]);
 });
