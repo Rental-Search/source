@@ -30,15 +30,13 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
 
-                ProductRelatedMessagesLoadService.getMessage(UtilsService.getIdFromUrl($scope.messageThread.last_message)).then(function (message) {
-                    if (!message.read_at) {
-                        message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
-                        ProductRelatedMessagesLoadService.updateMessage(message).$promise.then(function (result) {
-                            $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
-                            $scope.updateStatistics();
-                        });
-                    }
-                });
+                if (!$scope.messageThread.last_message.read_at) {
+                    $scope.messageThread.last_message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
+                    ProductRelatedMessagesLoadService.updateMessage($scope.messageThread.last_message).$promise.then(function (result) {
+                        $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
+                        $scope.updateStatistics();
+                    });
+                }
 
                 if ($scope.messageThread.product) {
 

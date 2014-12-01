@@ -15,7 +15,7 @@ define(["angular", "eloue/app"], function (angular) {
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
-                $scope.$broadcast("startLoading", {parameters: [true, true], shouldReloadList: true});
+                $scope.$broadcast("startLoading", {parameters: [], shouldReloadList: true});
             });
         }
     ]);
