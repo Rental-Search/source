@@ -29,8 +29,7 @@ define(["angular", "eloue/app"], function (angular) {
             $q.all(promises).then(function (results) {
                 $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
-
-                if (!$scope.messageThread.last_message.read_at) {
+                if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
                     $scope.messageThread.last_message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
                     ProductRelatedMessagesLoadService.updateMessage($scope.messageThread.last_message).$promise.then(function (result) {
                         $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
