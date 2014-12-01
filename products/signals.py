@@ -35,7 +35,7 @@ def post_save_product(sender, instance, created, **kwargs):
         )[0]
     except IndexError:
         Product2Category.objects.filter(product=instance).delete()
-        Product2Category.objects.create(product=instance, category=instance.category, site_id=GOSPORT_SITE_ID)
+        Product2Category.objects.create(product=instance, category=instance.category, site_id=settings.SITE_ID)
     else:
         Product2Category.objects.filter(product=instance).delete()
         Product2Category.objects.create(product=instance, category=conformity.gosport_category, site_id=GOSPORT_SITE_ID)
