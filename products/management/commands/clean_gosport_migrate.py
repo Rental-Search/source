@@ -1,4 +1,5 @@
 # coding=utf-8
+from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from products.models import Category, Product, CategoryConformity
@@ -348,6 +349,7 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
+        assert Site.objects.get_current().pk == 13
         gosport_site_id = 13
         eloue_site_id = 1
 
