@@ -652,7 +652,7 @@ class Category(MPTTModel):
         if not self.slug:
             slug = slugify(self.name)
             if Category.on_site.filter(slug=slug).exists():
-                raise ValidationError({'name': _(u'Category with name %s (%s) already exists.') % (self.name, slug)})
+                raise ValidationError({'name': _(u'Category with name %s (%s) already exists. Site_id is %d.') % (self.name, slug, Site.objects.get_current())})
             self.slug = slug
         super(Category, self).save(*args, **kwargs)
     
