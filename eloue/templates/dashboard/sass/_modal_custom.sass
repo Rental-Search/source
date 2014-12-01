@@ -165,9 +165,9 @@
     width: $item-width
     +center-block()
     input
-      color: inherit
+      color: $gray-dark
       height: 3em
-      +placeholder(inherit)
+      +placeholder($placeholder_color)
   .forgot-password
     font-size: px(12)
     min-height: 20px
@@ -176,12 +176,18 @@
 
   input[type="text"],
   input[type="email"],
+  input[type="number"],
   input[type="password"]
-    &:invalid,
     &:empty
-      border-color: $brand-primary
+      border-color: $gray-medium
     &:valid
       border-color: $gray-medium
+    &[disabled]
+      border-color: $gray-medium !important
+  .submitted input.input-invalid
+    border-color: $input-invalid-color
+  .submitted input.ng-invalid
+    border-color: $input-invalid-color
 
   .large
     $bd-property: px(1) solid $gray-lighter

@@ -19,15 +19,16 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "PricesService",
         "UtilsService",
         "ToDashboardRedirectService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService) {
+        "ServerValidationService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
-            $scope.rootCategories = {};
-            $scope.nodeCategories = {};
-            $scope.leafCategories = {};
+            $scope.rootCategories = [];
+            $scope.nodeCategories = [];
+            $scope.leafCategories = [];
             //$scope.rootCategory = {};
-            $scope.nodeCategory = {};
+            //$scope.nodeCategory = {};
             $scope.capacityOptions = [
                 {id: 1, name: "1"},
                 {id: 2, name: "2"},
@@ -117,7 +118,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              */
             $scope.$on("openModal", function (event, args) {
                 var params = args.params;
-                var rootCategoryId = params.category;
+                //var rootCategoryId = params.category;
                 var categoryId = params.category;
                 $scope.product = {};
                 $scope.price = {
@@ -131,7 +132,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     }
                     $scope.rootCategories = categories;
 
-                    if(!!categoryId) {
+                    if(!!categoryId && categoryId!=="") {
                         CategoriesService.getAncestors(categoryId).then(function (categories) {
                             var level = 0;
                             angular.forEach(categories, function (value, key) {
@@ -162,6 +163,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Update options for node category combobox
              */
             $scope.updateNodeCategories = function () {
+                $scope.nodeCategory = undefined;
                 CategoriesService.getChildCategories($scope.rootCategory).then(function (categories) {
                     $scope.nodeCategories = categories;
                 });
@@ -174,9 +176,19 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Update options for leaf category combobox
              */
             $scope.updateLeafCategories = function () {
+                $scope.product.category = undefined;
                 CategoriesService.getChildCategories($scope.nodeCategory).then(function (categories) {
                     $scope.leafCategories = categories;
                 });
+            };
+
+
+            $scope.isCategorySelectorsValid = function() {
+               return !!$scope.rootCategories && !!$scope.rootCategory
+                   && (!!$scope.nodeCategories && $scope.nodeCategories.length>0 && !!$scope.nodeCategory
+                   || (!$scope.nodeCategories || $scope.nodeCategories.length == 0))
+                   && (!!$scope.leafCategories && $scope.leafCategories.length>0 && !!$scope.product.category
+                   || (!$scope.leafCategories || $scope.leafCategories.length == 0))
             };
 
             /**
@@ -207,6 +219,13 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.product.description = "";
                 $scope.product.address = Endpoints.api_url + "addresses/" + $scope.currentUser.default_address.id + "/";
                 if ($scope.price.amount > 0) {
+                    if(!$scope.leafCategories || $scope.leafCategories.length == 0){
+                        if(!!$scope.nodeCategories && $scope.nodeCategories.length>0) {
+                            $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
+                        }else{
+                            $scope.product.category = $scope.categoriesBaseUrl + $scope.rootCategory + "/";
+                        }
+                    }
                     if ($scope.isAuto || $scope.isRealEstate) {
                         $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
                     }
@@ -214,6 +233,8 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.product.summary = $scope.product.brand + " " + $scope.product.model;
                         $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
                     }
+
+
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         $scope.price.currency = Currency.EUR.name;
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
@@ -245,7 +266,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.handleResponseErrors(error);
                     });
                 } else {
-                    $scope.publishAdError = "All prices should be positive numbers!";
+                    //$scope.publishAdError = "All prices should be positive numbers!";
+                    ServerValidationService.removeErrors();
+                    ServerValidationService.addError("amount" ,"Value can't be negative");
+
                     $scope.submitInProgress = false;
                 }
             };
@@ -302,12 +326,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
             };
 
-            $("#first_registration_date").datepicker({
-                language: "fr",
-                autoclose: true,
-                todayHighlight: true
-            });
-
             /**
              * Add this tags when a user succeeded to post a new product:
              * <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}%&tt=javascript&sc=1860"></script>
@@ -327,6 +345,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              </noscript>
              */
             $scope.loadPdltrackingScript = function () {
+
                 var script1860 = document.createElement("script");
                 script1860.type = "text/javascript";
                 script1860.src = "https://lead.pdltracking.com/?lead_id=" + $scope.currentUser.id + "&tt=javascript&sc=1860";
@@ -365,10 +384,22 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     document.body.appendChild(scriptAffilinet);
                 }
 
-                var scriptClic = document.createElement("script");
-                scriptClic.type = "text/javascript";
-                scriptClic.src = "https://clic.reussissonsensemble.fr/art/JS/param.aspx";
-                document.body.appendChild(scriptClic);
+                //var scriptClic = document.createElement("script");
+                //scriptClic.type = "text/javascript";
+                //scriptClic.src = "https://clic.reussissonsensemble.fr/art/JS/param.aspx";
+                //document.body.appendChild(scriptClic);
+
+                var oldDocumentWrite = document.write;
+                // change document.write temporary
+                document.write = function(node){
+                    $("body").append(node)
+                };
+                $.getScript( "https://clic.reussissonsensemble.fr/art/JS/param.aspx", function() {
+                    // replace the temp document.write with the original version
+                    setTimeout(function() {
+                        document.write = oldDocumentWrite
+                    }, 500)
+                });
 
                 var scriptAnnonceur = document.createElement("script");
                 scriptAnnonceur.src = "//l.adxcore.com/a/track_conversion.php?annonceurid=21679";
@@ -385,43 +416,16 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Add Google ad scripts.
              */
             $scope.loadAdWordsTagPublishAd = function () {
-                var scriptAdWords = document.createElement("script");
-                scriptAdWords.type = "text/javascript";
-                var code = "/* <![CDATA[ */" +
-                    "var google_conversion_id = 1027691277;" +
-                    "var google_conversion_language = 'en';" +
-                    "var google_conversion_format = '3';" +
-                    "var google_conversion_color = 'ffffff';" +
-                    "var google_conversion_label = 'SfnGCMvgrgMQjaaF6gM';" +
-                    "var google_conversion_value = 1.00;" +
-                    "var google_conversion_currency = 'EUR';" +
-                    "var google_remarketing_only = false;" +
-                    "/* ]]> */";
-                try {
-                    scriptAdWords.appendChild(document.createTextNode(code));
-                    document.body.appendChild(scriptAdWords);
-                } catch (e) {
-                    scriptAdWords.text = code;
-                    document.body.appendChild(scriptAdWords);
-                }
-
-                var scriptConversion = document.createElement("script");
-                scriptConversion.type = "text/javascript";
-                scriptConversion.src = "//www.googleadservices.com/pagead/conversion.js";
-                document.body.appendChild(scriptConversion);
-
-                var noscriptConversion = document.createElement("noscript");
-                var divConversion = document.createElement("div");
-                divConversion.style = "display:inline;";
-                var imgConversion = document.createElement("img");
-                imgConversion.src = "//www.googleadservices.com/pagead/conversion/1027691277/?value=1.00&amp;currency_code=EUR&amp;label=SfnGCMvgrgMQjaaF6gM&amp;guid=ON&amp;script=0";
-                imgConversion.width = "1";
-                imgConversion.height = "1";
-                imgConversion.style = "border-style:none;";
-                imgConversion.alt = "";
-                divConversion.appendChild(imgConversion);
-                noscriptConversion.appendChild(divConversion);
-                document.body.appendChild(noscriptConversion);
+                window.google_trackConversion({
+                        google_conversion_id: 1027691277,
+                        google_conversion_language: "en",
+                        google_conversion_format: "3",
+                        google_conversion_color: "ffffff",
+                        google_conversion_label: "EO41CNPrpQMQjaaF6gM",
+                        google_conversion_value: 1.00,
+                        google_conversion_currency: "EUR",
+                        google_remarketing_only: false
+                    });
             };
 
             /**

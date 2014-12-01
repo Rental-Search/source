@@ -27,13 +27,13 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.showIncidentDescription = false;
             $scope.userInfo = {};
 
-            // On rating star click
-            $(".star i").click(function () {
-                var self = $(this);
-                $scope.$apply(function () {
-                    $scope.comment.rate = self.attr("rate");
-                });
-            });
+            /**
+             * On rating star click
+             * @param star star icon index
+             */
+            $scope.starClicked = function(star) {
+                $scope.comment.rate = star;
+            };
 
             // Load booking details
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
@@ -82,13 +82,15 @@ define(["angular", "eloue/app"], function (angular) {
                     });
                 }
                 if ($scope.bookingDetails.with_shipping) {
+                    $scope.searchShippingPointsInProgres = true;
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
                             $scope.departure_point = productShippingPointData.results[0];
-                            PatronShippingPointsService.getByPatronAndBooking(UtilsService.getIdFromUrl($scope.bookingDetails.borrower), $stateParams.uuid).then(function (patronShippingPointData) {
+                            PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
                                 if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
                                     $scope.arrival_point = patronShippingPointData.results[0];
+                                    $scope.searchShippingPointsInProgres = false;
                                 }
                             }, function (error) {
                                 $scope.handleResponseErrors(error);
@@ -133,6 +135,14 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             };
 
+            $scope.downloadContract = function() {
+                BookingsLoadService.downloadContract($stateParams.uuid);
+            };
+
+            $scope.downloadVoucher = function() {
+                ShippingsService.downloadVoucher($scope.shipping.id);
+            };
+
             /**
              * Show real number of the owner if the booking have the pending status and after.
              * @param status booking status
@@ -145,6 +155,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.handleResponseErrors = function (error) {
                 $scope.serverError = error.errors;
                 $scope.submitInProgress = false;
+                $scope.searchShippingPointsInProgres = false;
             };
 
 
@@ -156,7 +167,7 @@ define(["angular", "eloue/app"], function (angular) {
                             //Show shipping choice only if there are existing product shipping points
                             if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
                                 var productShippingPoint = productShippingPointData.results[0];
-                                PatronShippingPointsService.getByPatronAndBooking(UtilsService.getIdFromUrl($scope.bookingDetails.borrower), $stateParams.uuid).then(function (patronShippingPointData) {
+                                PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
                                     if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
                                         var patronShippingPoint = patronShippingPointData.results[0];
                                         // TODO: Price is hardcoded for now, will be taken from some third-party pricing service

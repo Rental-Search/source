@@ -22,7 +22,8 @@
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize",
         "toastr": "../../bower_components/toastr/toastr",
-        "formmapper": "../formmapper"
+        "formmapper": "../formmapper",
+        "filesaver": "../FileSaver.min"
     },
     shim: {
         "angular": {

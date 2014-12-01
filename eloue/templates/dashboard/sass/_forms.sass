@@ -16,6 +16,7 @@
   display: block
   +clearfix()
 
+
 // custom buttons for anchor, buttons and input[type="file"] tags
 .btn,
 .btn-inline
@@ -272,6 +273,10 @@ select
         background-color: $gray-lighter !important
 
 // custom areas
+.submitted input.input-invalid
+  border-color: $input-invalid-color
+.submitted input.ng-invalid
+  border-color: $input-invalid-color
 textarea,
 input[type="text"],
 input[type="password"],
@@ -279,11 +284,11 @@ input[type="email"],
 .chosen-container .chosen-choices,
 .chosen-container .chosen-single
   font-size: inherit
-  +placeholder($gray-medium)
+  +placeholder($placeholder_color)
   background: white
   font-family: inherit !important
   font-weight: $fw-semibold 
-  color: $gray-medium
+  color: $gray-dark
   min-height: $form-height
   padding: 0 1em
   padding-top: .8em\9
@@ -292,15 +297,6 @@ input[type="email"],
   transition: border-color $trns-fast
   overflow: visible
   +border-radius($bdrs)
-  &:hover,
-  &:focus
-    border-color: $gray-medium
-    z-index: 5
-  &:invalid
-    border-color: lighten($brand-danger, 20%)
-  &:invalid:focus,
-  &:invalid:hover
-    border-color: $brand-danger
   &.table-form
     background-color: transparent
     text-align: right

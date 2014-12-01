@@ -4,6 +4,7 @@ import socket
 import datetime
 import urllib
 import itertools
+from django.db import transaction
 from django.middleware.csrf import rotate_token
 
 from logbook import Logger
@@ -41,6 +42,7 @@ from django.contrib.auth.tokens import default_token_generator
 from oauth_provider.models import Token
 from django.shortcuts import redirect
 from provider.oauth2.models import AccessToken
+from oauth_provider.store import store as oauth_store
 
 from accounts.forms import (EmailAuthenticationForm, PatronEditForm, 
     PatronPasswordChangeForm, ContactForm, CompanyEditForm, SubscriptionEditForm,
@@ -1127,6 +1129,45 @@ class LoginAndRedirectView(View):
         return response
 
 
+class LoginFacebookView(View):
+
+    @transaction.atomic
+    def dispatch(self, request, *args, **kwargs):
+        response = redirect(request.GET['url'])
+        access_token = request.GET['access_token']
+        uid = request.GET['user_id']
+        expires = datetime.datetime.now() + datetime.timedelta(seconds=int(request.GET['expires_in']))
+        try:
+            session = FacebookSession.objects.get(uid=uid)
+            user = session.user
+        except FacebookSession.DoesNotExist:
+            session = FacebookSession.objects.create(access_token=access_token, uid=uid, expires=expires)
+            user_data = session.me
+            try:
+                user = Patron.objects.get(email=user_data['email'])
+            except Patron.DoesNotExist:
+                user = Patron.objects.create(
+                    username=uid,
+                    email=user_data['email'],
+                    first_name=user_data['first_name'],
+                    last_name=user_data['last_name'])
+            session.user = user
+            session.save()
+        else:
+            session.access_token = access_token
+            session.uid = uid
+            session.save()
+
+        user_token = AccessToken.objects.create(user=user, client_id=1, scope=2)
+        max_age = 30 * 24 * 60 * 60
+        expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age)
+        rotate_token(request)
+        response.set_cookie(
+            'user_token', user_token, max_age=max_age, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"))
+
+        return response
+
+
 # REST API 2.0
 
 from rest_framework import status
@@ -1151,7 +1192,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
-    public_actions = ('retrieve', 'search', 'create')
+    public_actions = ('retrieve', 'search', 'create', 'forgot_password')
 
     def initial(self, request, *args, **kwargs):
         pk_field = getattr(self, 'pk_url_kwarg', 'pk')

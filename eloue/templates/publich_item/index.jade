@@ -5,6 +5,9 @@ block append styles
     {% compressed_css "bootstrap" %}
     {% compressed_css "publish_item_styles" %}
 
+block append scripts
+    script(type="text/javascript", src="https://www.googleadservices.com/pagead/conversion_async.js", charset="utf-8")
+
 block append content-body
     .container-flex(data-ng-controller="PublishAdCtrl")
         header.header-site

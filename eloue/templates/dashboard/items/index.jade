@@ -23,10 +23,16 @@ block details
                 input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary")
         h2 Adresse
         .row
-            .col-sm-12: input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
+            .col-sm-12
+             input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
+             span.text-danger(ng-show="itemInfoForm.street.$error.required && itemInfoSubmitted") Required field
         .row
-            .col-sm-6: input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
-            .col-sm-6: input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
+            .col-sm-6
+                input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
+                span.text-danger(ng-show="itemInfoForm.zipcode.$error.required && itemInfoSubmitted") Required field
+            .col-sm-6
+                input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
+                span.text-danger(ng-show="itemInfoForm.city.$error.required && itemInfoSubmitted") Required field
         h2 Photos
         .row
             form#add-picture
@@ -41,13 +47,14 @@ block details
                     li(ng-repeat="picture in product.pictures track by picture.id", style="padding-top: 0;").block-with-thumbnail
                          .col-thumbnail
                            .thumbnail: span.lg-p
-                             img(style="background-image: url({{picture.image.thumbnail}});")
+                             div(style="background-image: url({{picture.image.thumbnail}});")
+                                 a(href="", ng-click="showRemoveConfirm(picture.id)").delete x
                     li(ng-repeat="t in getTimes(loadingPicture) track by $index", style="padding-top: 0;").block-with-thumbnail
                          .col-thumbnail
                            .thumbnail: span.lg-p
                              img(style="background-image: url('/static/img/preloader2.gif');")
                 {% endverbatim %}
-        form(name="itemInfoForm", ng-submit="updateProduct()")
+        form(name="itemInfoForm", ng-submit="itemInfoSubmitted=true;itemInfoForm.$valid && updateProduct()", novalidate, ng-class="{'submitted':itemInfoSubmitted}")
           fieldset(data-ng-disabled="submitInProgress")
             h2(ng-show="isAuto || isRealEstate") Caractéristiques
             include ./_item_characteristics
@@ -59,3 +66,16 @@ block details
                 {% verbatim %}
                 button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 Enregistrez les modifications
                 {% endverbatim %}
+
+#confirm.modal.fade
+    .modal-dialog
+        .modal-content(style="padding: 30px")
+            .modal-body
+                h3 Etes-vous sûr de vouloir supprimer l'image?
+                .row
+                    .col-xs-6
+                        button(type="button", data-dismiss="modal", ng-click="deletePicture()").btn
+                            | Oui
+                    .col-xs-6
+                        button(type="button", data-dismiss="modal").btn.bg-success
+                            | Non

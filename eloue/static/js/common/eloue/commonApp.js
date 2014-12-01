@@ -9,7 +9,8 @@ define([
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
     "jquery-mousewheel",
-    "custom-scrollbar"
+    "custom-scrollbar",
+    "filesaver"
 ], function (angular) {
     // Create module
     return angular.module("EloueCommon", ["ngCookies", "ngResource", "ngRoute"]);

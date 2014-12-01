@@ -1,4 +1,4 @@
--load compressed staticfiles
+-load compressed staticfiles seo i18n
 
 doctype 5
 html(lang="fr")
@@ -8,9 +8,10 @@ html(lang="fr")
       include jade/variables
 
     block head
-      title e-loue
+      title {% filter striplinebreak %}{% block title %}{% endblock %}{% if is_paginated and page_obj.has_previous %} - {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}
       meta(charset="UTF-8")
       meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      meta(name="description", content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}")
       link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
 
     block styles
@@ -32,6 +33,7 @@ html(lang="fr")
       {% endif %}
       {% endspaceless %}
   body
+    input(id="eloue_url_redirect_facebook", value="{% url 'login_facebook' %}", type="hidden")
     block content-body
     script
         (function() {

@@ -26,6 +26,7 @@ from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
 
 from haystack.query import SearchQuerySet
+from suds import WebFault
 
 from accounts.forms import EmailAuthenticationForm
 from accounts.models import Patron
@@ -1019,6 +1020,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet
+    ordering = '-created_at'
     ordering_fields = ('quantity', 'is_archived', 'category')
     public_actions = ('retrieve', 'search', 'is_available')
 
@@ -1066,12 +1068,16 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
                 if 'site_id' in shipping_point:
-                    price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
-                    token = price.pop('token')
-                    cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
-                    price['price'] *= 2
-                    shipping_point.update(price)
-                    # shipping_point.update({'price': 3.99})
+                    try:
+                        price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
+                    except WebFault:
+                        shipping_points.remove(shipping_point)
+                    else:
+                        token = price.pop('token')
+                        cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
+                        price['price'] *= 2
+                        shipping_point.update(price)
+                        # shipping_point.update({'price': 3.99})
             result = PudoSerializer(data=shipping_points, many=True)
             if result.is_valid():
                 return Response(result.data)

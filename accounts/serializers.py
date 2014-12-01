@@ -2,6 +2,7 @@
 import hashlib
 import random
 import uuid
+from django.template.defaultfilters import slugify
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -13,6 +14,7 @@ from rest_framework.serializers import (
 
 from accounts.forms import CreditCardForm
 from accounts import models
+from accounts.models import Patron
 from eloue.api import serializers
 from eloue.api.serializers import NestedModelSerializerMixin
 from eloue.api.serializers import GeoModelSerializer
@@ -102,6 +104,21 @@ class UserSerializer(serializers.ModelSerializer):
     average_note = FloatField(read_only=True)
     comment_count = IntegerField(read_only=True)
     creditcard = NestedCreditCardSerializer(read_only=True, required=False)
+
+    def full_clean(self, instance):
+        instance = super(UserSerializer, self).full_clean(instance)
+        if instance and not instance.slug:
+            if instance.is_professional:
+                instance.slug = slugify(instance.company_name)
+                field, message = 'company_name', _(u'Account for company with this name already exists.')
+            else:
+                instance.slug = slugify(instance.username)
+                field, message = 'username', _(u'This username is already used.')
+
+            if Patron.objects.filter(slug=instance.slug).exists():
+                self._errors.update({field: message})
+                return None
+        return instance
 
     def restore_object(self, attrs, instance=None):
         # we should allow password setting on initial user registration only

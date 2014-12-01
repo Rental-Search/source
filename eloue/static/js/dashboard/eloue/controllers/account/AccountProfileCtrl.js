@@ -161,7 +161,7 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.sendUserForm = function () {
-                UsersService.sendForm($scope.currentUser.id, $("#profile-information"), function (data) {
+                UsersService.sendForm($scope.currentUser.id, $("#profileInformation"), function (data) {
                     $scope.$apply(function () {
                         $scope.submitInProgress = false;
                     });

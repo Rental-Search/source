@@ -7,7 +7,7 @@ import uuid
 import calendar
 from decimal import Decimal as D
 
-#import facebook
+import facebook
 
 from imagekit.models import ImageSpecField
 from pilkit import processors

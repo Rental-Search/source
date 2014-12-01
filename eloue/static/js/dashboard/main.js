@@ -31,7 +31,8 @@ require.config(
                 "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
                 "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
                 "toastr": "../../bower_components/toastr/toastr.min",
-                "formmapper": "../formmapper"
+                "formmapper": "../formmapper",
+                "filesaver": "../FileSaver.min"
             },
             shim: {
                 "angular": {
@@ -75,6 +76,7 @@ require([
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
     "formmapper",
+    "filesaver",
     "jquery-mousewheel",
     "custom-scrollbar",
     "toastr",
@@ -87,4 +89,12 @@ require([
         $(".signs-links").find("ul.without-spaces").show();
         angular.bootstrap(document, ["EloueDashboardApp"]);
     });
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0&appId=197983240245844";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 });

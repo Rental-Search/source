@@ -16,7 +16,9 @@
                             | Envoyez un message
                         a(href="#/phone").btn.bg-gray
                             | Appelez
-                form(id="bookingForm", name="bookingForm", role="form", ng-submit="sendBookingRequest()", ng-model="bookingDetails", novalidate, eloue-form-field-error-manager).input-group.change-part.table-cell.top
+                {% verbatim %}
+                form(id="bookingForm", name="bookingForm", role="form", ng-submit="bookingSubmitted=true; bookingForm.$valid && sendBookingRequest()", ng-class="{'submitted': bookingSubmitted}", ng-model="bookingDetails", novalidate, eloue-form-field-error-manager).input-group.change-part.table-cell.top
+                  {% endverbatim %}
                   fieldset(data-ng-disabled="submitInProgress || shippingPointsRequestInProgress || loadingProductShippingPoint")
                     section.table.form-wrapper.personal-information
                         include ./pop_up_sections/_personal_information_form
