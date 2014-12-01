@@ -32,9 +32,6 @@ build/
 analytics.dat
 SqH8kAUnFOJrgYlgUT1oVU3C
 scim.log
-SCIMProperties.properties
-myKeyStore.jks
-slimpayKeyStore.jks
 **/sass/*.css
 **/sass/*.css.map
 **/sass/.sass-cache/

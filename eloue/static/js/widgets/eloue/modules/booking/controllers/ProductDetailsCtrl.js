@@ -437,15 +437,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 };
             };
 
-            /**
-             * Retrieves identifier of the object from provided url, that ends with "../{%ID%}/"
-             * @param url URL
-             * @returns ID
-             */
-            $scope.getIdFromUrl = function getIdFromUrl(url) {
-                return url.slice(0, url.length - 1).substring(url.slice(0, url.length - 1).lastIndexOf("/") + 1, url.length);
-            };
-
             $scope.updatePrice();
 
             /**
@@ -655,10 +646,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
                         angular.forEach(result, function (value, key) {
                             $scope.threadId = UtilsService.getIdFromUrl(value.thread);
-                            var senderId = $scope.getIdFromUrl(value.sender);
-                            UsersService.get(senderId).$promise.then(function (result) {
-                                value.sender = result;
-                            });
                         });
                         $scope.productRelatedMessages = result;
                     });

@@ -1028,7 +1028,6 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             if (threads && threads.length > 0) {
                                 booking.lastThreadId = UtilsService.getIdFromUrl(threads[threads.length - 1].thread);
                             }
-                            console.log(booking);
                             deferred.resolve(booking);
                         });
                     });
@@ -1205,7 +1204,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService, MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
                 var messageThreadsLoadService = {};
 
-                messageThreadsLoadService.getMessageThreadList = function (loadSender, loadLastMessage, page) {
+                messageThreadsLoadService.getMessageThreadList = function (page) {
                     var deferred = $q.defer();
 
                     // Load message threads
@@ -1215,28 +1214,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         // For each message thread
                         angular.forEach(messageThreadListData.results, function (messageThreadData, key) {
                             var messageThreadDeferred = $q.defer();
-                            var messageThreadPromises = {};
 
-                            // Get sender id
-                            if (loadSender) {
-                                var senderId = UtilsService.getIdFromUrl(messageThreadData.sender);
-                                // Load sender
-                                messageThreadPromises.sender = UsersService.get(senderId).$promise;
-                            }
-
-                            // Get last message id
-                            if (loadLastMessage && !!messageThreadData.last_message) {
-                                var lastMessageId = UtilsService.getIdFromUrl(messageThreadData.last_message);
-                                // Load last message
-                                messageThreadPromises.last_message = ProductRelatedMessagesService.getMessage(lastMessageId).$promise;
-                            }
-
-                            // When all data loaded
-                            $q.all(messageThreadPromises).then(function (messageThreadResults) {
-                                var messageThread = MessageThreadsParseService.parseMessageThreadListItem(messageThreadData,
-                                    messageThreadResults.sender, messageThreadResults.last_message);
-                                messageThreadDeferred.resolve(messageThread);
-                            });
+                            var messageThread = MessageThreadsParseService.parseMessageThreadListItem(messageThreadData,
+                                messageThreadData.last_message);
+                            messageThreadDeferred.resolve(messageThread);
 
                             messageThreadListPromises.push(messageThreadDeferred.promise);
                         });
@@ -1286,8 +1267,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 messageThreadsLoadService.getUsersRoles = function (messageThread, currentUserId) {
-                    var senderId = UtilsService.getIdFromUrl(messageThread.sender);
-                    var recipientId = UtilsService.getIdFromUrl(messageThread.recipient);
+                    var senderId = messageThread.sender.id;
+                    var recipientId = messageThread.recipient.id;
 
                     var result = {
                         senderId: currentUserId
@@ -1314,17 +1295,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function (UtilsService) {
                 var messageThreadsParseService = {};
 
-                messageThreadsParseService.parseMessageThreadListItem = function (messageThreadData, senderData, lastMessageData) {
+                messageThreadsParseService.parseMessageThreadListItem = function (messageThreadData, lastMessageData) {
                     var messageThreadResult = angular.copy(messageThreadData);
-
-                    // Parse sender
-                    if (!!senderData) {
-                        messageThreadResult.sender = senderData;
-                    }
 
                     // Parse last message
                     if (!!lastMessageData) {
-                        messageThreadResult.last_message = lastMessageData;
                         // if the creation date of the last message is the current day display only the hour
                         // if the creation date of the last message is before the current day display the date and not the hour
                         if (UtilsService.isToday(lastMessageData.sent_at)) {
@@ -1381,14 +1356,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     this.getMessage(messageId).then(function (messageData) {
-                        // Get sender id
-                        var senderId = UtilsService.getIdFromUrl(messageData.sender);
-                        // Load sender
-                        UsersService.get(senderId).$promise.then(function (senderData) {
-                            var message = ProductRelatedMessagesParseService.parseMessage(messageData, senderData);
-                            deferred.resolve(message);
-                        });
-
+                        var message = ProductRelatedMessagesParseService.parseMessage(messageData, messageData.sender);
+                        deferred.resolve(message);
                     });
 
                     return deferred.promise;
@@ -1420,7 +1389,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             body: (!!text) ? text : "",
                             offer: (!!offerId) ? Endpoints.api_url + "bookings/" + offerId + "/" : null
                         };
-                        ProductRelatedMessages.save({}, message, function (response) {
+                        ProductRelatedMessages.save(message).$promise.then(function (response) {
                             var senderId = UtilsService.getIdFromUrl(response.sender);
                             UsersService.get(senderId).$promise.then(function (result) {
                                 response.sender = result;

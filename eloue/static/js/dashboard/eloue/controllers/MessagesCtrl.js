@@ -8,15 +8,20 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("MessagesCtrl", [
         "$scope",
         "UsersService",
-        function ($scope, UsersService) {
+        "UtilsService",
+        function ($scope, UsersService, UtilsService) {
             $scope.messageThreadList = [];
             if (!$scope.currentUserPromise) {
                 $scope.currentUserPromise = UsersService.getMe().$promise;
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
-                $scope.$broadcast("startLoading", {parameters: [true, true], shouldReloadList: true});
+                $scope.$broadcast("startLoading", {parameters: [], shouldReloadList: true});
             });
+
+            $scope.shouldMarkAsUnread = function (lastMessage) {
+                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) == $scope.currentUser.id)
+            };
         }
     ]);
 });
