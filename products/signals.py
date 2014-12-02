@@ -29,11 +29,18 @@ def post_save_product(sender, instance, created, **kwargs):
 
     CategoryConformity = get_model('products', 'CategoryConformity')
     Product2Category = get_model('products', 'Product2Category')
-    try:
-        conformity = CategoryConformity.objects.filter(
-            Q(gosport_category=instance.category_id) | Q(eloue_category=instance.category_id)
-        )[0]
-    except IndexError:
+
+    category = instance.category
+    conformity = None
+    while category and not conformity:
+        try:
+            conformity = CategoryConformity.objects.filter(
+                Q(gosport_category=category) | Q(eloue_category=category)
+            )[0]
+        except IndexError:
+            category = category.parent
+
+    if not conformity:
         Product2Category.objects.filter(product=instance).delete()
         Product2Category.objects.create(product=instance, category=instance.category, site_id=settings.SITE_ID)
     else:
