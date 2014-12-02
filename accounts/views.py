@@ -1203,6 +1203,16 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
             return Response({'detail': success_msg})
         return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+    @list_action(methods=['post'])
+    def activation_mail(self, request, *args, **kwargs):
+        try:
+            Patron.objects.get(email=request.GET['email']).send_activation_email()
+        except Patron.DoesNotExist:
+            return Response({'errors': _(u'User with this email not registered')}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            success_msg = _(u"We've e-mailed you instructions for activating your account to the e-mail address you submitted. You should be receiving it shortly.")
+            return Response({'detail': success_msg})
+
     @link()
     def stats(self, request, *args, **kwargs):
         return Response(self.get_object().stats)
