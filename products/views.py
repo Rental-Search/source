@@ -1015,7 +1015,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     API endpoint that allows products to be viewed or edited.
     """
     serializer_class = serializers.ProductSerializer
-    queryset = models.Product.on_site.filter(is_archived=False).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
+    queryset = models.Product.on_site.filter(is_archived=False, product2category__site_id=settings.SITE_ID).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
     filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
     search_index = product_search
