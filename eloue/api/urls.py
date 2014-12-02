@@ -40,3 +40,4 @@ router.register(r'shippingpoints', shipping_api.ShippingPointViewSet, base_name=
 router.register(r'patronshippingpoints', shipping_api.PatronShippingPointViewSet, base_name='patronshippingpoint')
 router.register(r'productshippingpoints', shipping_api.ProductShippingPointViewSet, base_name='productshippingpoint')
 router.register(r'shippings', shipping_api.ShippingViewSet, base_name='shipping')
+router.register(r'unavailabilityperiods', products_api.UnavailabilityPeriodViewSet, base_name='unavailabilityperiod')

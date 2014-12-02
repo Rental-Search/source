@@ -6,6 +6,7 @@ from products import models
 from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
     NestedModelSerializerMixin, SimpleSerializer
+from products.helpers import calculate_available_quantity
 
 
 class CategorySerializer(ModelSerializer):
@@ -177,3 +178,21 @@ class ShippingPriceParamsSerializer(SimpleSerializer):
 class ShippingPriceSerializer(SimpleSerializer):
     price = DecimalField(required=True, decimal_places=2, max_digits=10)
     token = CharField(required=True)
+
+
+class UnavailabilityPeriodSerializer(ModelSerializer):
+
+    def full_clean(self, instance):
+        instance = super(UnavailabilityPeriodSerializer, self).full_clean(instance)
+        if instance and instance.quantity > calculate_available_quantity(instance.product, instance.started_at, instance.ended_at):
+            self._errors.update({
+                'quantity': _(u'You can\'t make unavailable such quantity.')
+            })
+            return None
+        return instance
+
+    class Meta:
+        model = models.UnavailabilityPeriod
+        fields = ('id', 'product', 'quantity', 'started_at', 'ended_at',)
+        public_fields = ('id', 'product', 'quantity', 'started_at', 'ended_at',)
+        immutable_fields = ('product',)

@@ -1145,6 +1145,17 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     ordering_fields = ('name', 'amount')
     public_actions = ('retrieve',)
 
+class UnavailabilityPeriodViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows product unavailability periods to be viewed or edited.
+    """
+    model = models.UnavailabilityPeriod
+    serializer_class = serializers.UnavailabilityPeriodSerializer
+    filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, )
+    owner_field = 'product__owner'
+    filter_fields = ('product', )
+    public_actions = ('list', 'retrieve')
+
 class PictureViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows product images to be viewed or edited.
