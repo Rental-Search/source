@@ -1497,6 +1497,22 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     FormService.send("POST", url, form, successCallback, errorCallback);
                 },
 
+
+                /**
+                 * Sends user account activation email.
+                 * @param email user email address
+                 * @param successCallback success callback
+                 * @param errorCallback error callback
+                 */
+                sendActivationLink: function (email, successCallback, errorCallback) {
+                    $.ajax({
+                        url: Endpoints.api_url + "users/activation_mail?email=" + email,
+                        type: "GET",
+                        success: successCallback,
+                        error: errorCallback
+                    });
+                },
+
                 /**
                  * Register new account
                  * @param account new account

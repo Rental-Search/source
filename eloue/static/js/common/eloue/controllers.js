@@ -12,6 +12,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
 
         $scope.loginError = null;
 
+        $scope.inactiveUserError = null;
+
+        $scope.activationLinkSentMsg = null;
+
         $scope.emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
         /**
@@ -63,6 +67,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.onLoginError = function (jqXHR) {
             var errorText = "";
             if (jqXHR.status == 400) {
+                if (jqXHR.responseJSON.error == "user_inactive") {
+                    $scope.$apply(function () {
+                        $scope.inactiveUserError = "Cliquez ici pour recevoir le lien d'activation.";
+                    });
+                }
                 if (!!ServiceErrors[jqXHR.responseJSON.error]) {
                     errorText = ServiceErrors[jqXHR.responseJSON.error];
                 } else {
@@ -73,6 +82,29 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             }
             $scope.$apply(function () {
                 $scope.loginError = errorText;
+            });
+        };
+
+        /**
+         * Send activation link to user email.
+         */
+        $scope.sendActivationLink = function() {
+            AuthService.sendActivationLink($scope.credentials.username, $scope.onSendActivationLinkSuccess, $scope.onSendActivationLinkError);
+        };
+
+        $scope.onSendActivationLinkSuccess = function (data) {
+            $scope.$apply(function () {
+                $scope.loginError = null;
+                $scope.inactiveUserError = null;
+                $scope.activationLinkSentMsg = data.detail;
+            });
+        };
+
+        $scope.onSendActivationLinkError = function (jqXHR) {
+            $scope.$apply(function () {
+                $scope.loginError = null;
+                $scope.inactiveUserError = null;
+                $scope.activationLinkSentMsg = jqXHR.responseJSON.error;
             });
         };
 

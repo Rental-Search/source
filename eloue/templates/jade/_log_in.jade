@@ -21,9 +21,13 @@
                     | Nous ne publierons jamais rien sur votre profil (sauf si vous le demandez)
                     br
                     | Vos données personnelles ne seront jamais cédées ou vendues.
+                {% verbatim %}
                 .alert.alert-danger(ng-show="!!loginError")
-                    button(type="button", data-dismiss="alert", class="close")
-                    | {% verbatim %} {{loginError}} {% endverbatim %}
+                    | {{loginError}}&nbsp;
+                    a(ng-show="!!inactiveUserError", href="", ng-click="sendActivationLink()") {{inactiveUserError}}
+                .alert.alert-info(ng-show="!!activationLinkSentMsg")
+                    | {{activationLinkSentMsg}}
+                {% endverbatim %}
                 //-
                  span.or
                 form(name="loginForm", ng-submit="loginSubmitted=true; login()", novalidate, ng-class="{'submitted':!!loginSubmitted}")
