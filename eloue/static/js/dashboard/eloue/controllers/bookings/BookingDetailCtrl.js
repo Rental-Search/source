@@ -86,10 +86,18 @@ define(["angular", "eloue/app"], function (angular) {
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
                         //Show shipping choice only if there are existing product shipping points
                         if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
-                            $scope.departure_point = productShippingPointData.results[0];
+                            if ($scope.isOwner) {
+                                $scope.departure_point = productShippingPointData.results[0];
+                            } else {
+                                $scope.arrival_point = productShippingPointData.results[0];
+                            }
                             PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
                                 if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
-                                    $scope.arrival_point = patronShippingPointData.results[0];
+                                    if ($scope.isOwner) {
+                                        $scope.arrival_point = patronShippingPointData.results[0];
+                                    } else {
+                                        $scope.departure_point = patronShippingPointData.results[0];
+                                    }
                                     $scope.searchShippingPointsInProgres = false;
                                 }
                             }, function (error) {
@@ -140,7 +148,7 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.downloadVoucher = function() {
-                ShippingsService.downloadVoucher($scope.shipping.id);
+                ShippingsService.downloadVoucher($scope.shipping.id, $scope.isOwner);
             };
 
             /**

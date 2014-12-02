@@ -4,6 +4,7 @@ define([
     "angular-cookies",
     "angular-resource",
     "angular-route",
+    "angular-translate",
     "datejs",
     "chosen",
     "bootstrap-datepicker",

@@ -40,6 +40,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
+    is_archived = indexes.BooleanField(model_attr='is_archived')
 
     is_highlighted = indexes.BooleanField(default=False)#model_attr='is_highlighted')
     is_top = indexes.BooleanField(default=False)#model_attr='is_top')
