@@ -1203,7 +1203,7 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
             return Response({'detail': success_msg})
         return Response({'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-    @list_action(methods=['post'])
+    @list_action(methods=['post', 'get'])
     def activation_mail(self, request, *args, **kwargs):
         try:
             Patron.objects.get(email=request.GET['email']).send_activation_email()
