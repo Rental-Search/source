@@ -1249,7 +1249,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             messagesPromises.push(ProductRelatedMessagesLoadService.getMessageListItem(messageId));
                         });
                         // When all messages loaded
-                        messageThreadPromises.messages = $q.all(messagesPromises);
+                        var suppress = function(x) { return x.catch(function(){}); };
+                        messageThreadPromises.messages = $q.all(messagesPromises.map(suppress));
 
                         // Get product id
                         if (messageThreadData.product) {
@@ -1318,9 +1319,17 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     // Parse messages
                     if (!!messagesDataArray) {
                         messageThreadResult.messages = messagesDataArray;
+                        var messageKeysToRemove = [];
                         angular.forEach(messageThreadResult.messages, function (message, key) {
-                            message.sent_at = UtilsService.formatDate(message.sent_at, "dd.MM.yyyy HH'h'mm");
+                            if (!!message) {
+                                message.sent_at = UtilsService.formatDate(message.sent_at, "dd.MM.yyyy HH'h'mm");
+                            } else {
+                                messageKeysToRemove.push(key);
+                            }
                         });
+                        angular.forEach(messageKeysToRemove, function (index, key) {
+                            messageThreadResult.messages.splice(index, 1);
+                        })
                     }
 
                     // Parse product
@@ -1358,6 +1367,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     this.getMessage(messageId).then(function (messageData) {
                         var message = ProductRelatedMessagesParseService.parseMessage(messageData, messageData.sender);
                         deferred.resolve(message);
+                    }, function (reason) {
+                        deferred.reject(reason);
                     });
 
                     return deferred.promise;
