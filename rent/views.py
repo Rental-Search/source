@@ -414,8 +414,9 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
                 raise exceptions.ValidationException(serializer.errors)
             credit_card = serializer.save()
 
-        payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
-        obj.payment = payment
+        if not settings.TEST_MODE:
+            payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
+            obj.payment = payment
         return self._perform_transition(request, instance=obj, action='preapproval', cvv=credit_card.cvv)
 
     @action(methods=['put'])
