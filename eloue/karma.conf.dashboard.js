@@ -64,15 +64,15 @@ module.exports = function (config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ['Chrome'],
-//      plugins: ['karma-coverage'],
-//      reporters: ['progress', 'coverage'],
-//      preprocessors: {
-//          // source files, that you wanna generate coverage for
-//          // do not include tests or libraries
-//          // (these files will be instrumented by Istanbul)
-//          'static/js/**/*.js': ['coverage']
-//      },
+        browsers: ['PhantomJS'],
+//        plugins: ['karma-coverage'],
+//        reporters: ['progress', 'coverage'],
+//        preprocessors: {
+//            // source files, that you wanna generate coverage for
+//            // do not include tests or libraries
+//            // (these files will be instrumented by Istanbul)
+//            'static/js/**/*.js': ['coverage']
+//        },
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
         singleRun: false
