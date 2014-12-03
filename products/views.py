@@ -854,7 +854,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             chunk = self.sqs.more_like_this(product)[i*chunk_size:(i+1)*chunk_size]
             if not chunk:
                 break
-            product_list.extend(filter(lambda x: isinstance(x.object, (Product, CarProduct, RealEstateProduct)), chunk))
+            product_list.extend(filter(lambda x: x and isinstance(x.object, (Product, CarProduct, RealEstateProduct)), chunk))
             i += 1
         product_list = product_list[:5]
 
