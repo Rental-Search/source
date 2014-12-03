@@ -15,7 +15,9 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
             addressesServiceMock,
             authServiceMock,
             categoriesServiceMock,
-            pricesServiceMock;
+            pricesServiceMock,
+            toDashboardRedirectServiceMock,
+            serverValidationServiceMock;
 
         beforeEach(module("EloueApp.BookingModule"));
 
@@ -35,6 +37,8 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
             };
             categoriesServiceMock = {};
             pricesServiceMock = {};
+            toDashboardRedirectServiceMock = {};
+            serverValidationServiceMock = {};
 
             module(function ($provide) {
                 $provide.value("Endpoints", endpointsMock);
@@ -47,6 +51,8 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
                 $provide.value("CategoriesService", categoriesServiceMock);
                 $provide.value("PricesService", pricesServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
+                $provide.value("ToDashboardRedirectService", toDashboardRedirectServiceMock);
+                $provide.value("ServerValidationService", serverValidationServiceMock);
             })
         });
 
@@ -71,7 +77,9 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
                 AuthService: authServiceMock,
                 CategoriesService: categoriesServiceMock,
                 PricesService: pricesServiceMock,
-                UtilsService: utilsServiceMock
+                UtilsService: utilsServiceMock,
+                ToDashboardRedirectService: toDashboardRedirectServiceMock,
+                ServerValidationService: serverValidationServiceMock
             });
         }));
 

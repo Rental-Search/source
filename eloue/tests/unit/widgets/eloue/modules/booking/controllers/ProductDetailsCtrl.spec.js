@@ -6,20 +6,25 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             scope,
             window,
             location,
-            productsLoadServiceMock,
-            messageThreadsServiceMock,
-            usersServiceMock,
-            authServiceMock,
             endpointsMock,
             civilityChoicesMock,
+            productsLoadServiceMock,
+            messageThreadsServiceMock,
             productRelatedMessagesLoadServiceMock,
+            usersServiceMock,
+            authServiceMock,
             addressesServiceMock,
             creditCardsServiceMock,
             bookingsLoadServiceMock,
             bookingsServiceMock,
             phoneNumbersServiceMock,
             categoriesServiceMock,
-            utilsServiceMock;
+            utilsServiceMock,
+            shippingsServiceMock,
+            shippingPointsServiceMock,
+            productShippingPointsServiceMock,
+            patronShippingPointsServiceMock,
+            toDashboardRedirectServiceMock;
 
         beforeEach(module("EloueApp.BookingModule"));
 
@@ -69,6 +74,12 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                 api_url: "http://10.0.0.111:8000/api/2.0/"
             };
 
+            shippingsServiceMock = {};
+            shippingPointsServiceMock = {};
+            productShippingPointsServiceMock = {};
+            patronShippingPointsServiceMock = {};
+            toDashboardRedirectServiceMock = {};
+
             module(function ($provide) {
                 $provide.value("ProductsLoadService", productsLoadServiceMock);
                 $provide.value("MessageThreadsService", messageThreadsServiceMock);
@@ -84,6 +95,11 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                 $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
                 $provide.value("CategoriesService", categoriesServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
+                $provide.value("ShippingsService", shippingsServiceMock);
+                $provide.value("ShippingPointsService", shippingPointsServiceMock);
+                $provide.value("ProductShippingPointsService", productShippingPointsServiceMock);
+                $provide.value("PatronShippingPointsService", patronShippingPointsServiceMock);
+                $provide.value("ToDashboardRedirectService", toDashboardRedirectServiceMock);
             })
         });
 
@@ -134,7 +150,12 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                 BookingsService: bookingsServiceMock,
                 PhoneNumbersService: phoneNumbersServiceMock,
                 CategoriesService: categoriesServiceMock,
-                UtilsService: utilsServiceMock
+                UtilsService: utilsServiceMock,
+                ShippingsService: shippingsServiceMock,
+                ShippingPointsService: shippingPointsServiceMock,
+                ProductShippingPointsService: productShippingPointsServiceMock,
+                PatronShippingPointsService: patronShippingPointsServiceMock,
+                ToDashboardRedirectService: toDashboardRedirectServiceMock
             });
         }));
 

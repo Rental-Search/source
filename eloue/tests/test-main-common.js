@@ -22,6 +22,7 @@ requirejs.config({
         "angular-mocks": "../../bower_components/angular-mocks/angular-mocks",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
+        "angular-i18n": "../../bower_components/angular-i18n/angular-locale_fr-fr",
         "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
         "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
@@ -33,7 +34,8 @@ requirejs.config({
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "toastr": "../../bower_components/toastr/toastr.min",
-        "formmapper": "../formmapper"
+        "formmapper": "../formmapper",
+        "filesaver": "../FileSaver.min"
     },
 
     shim: {
@@ -43,6 +45,7 @@ requirejs.config({
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],
         "angular-ui-router": ["angular"],
+        "angular-i18n": ["angular"],
         "angular-translate": ["angular"],
         "angular-mocks": {
             deps: ["angular"],

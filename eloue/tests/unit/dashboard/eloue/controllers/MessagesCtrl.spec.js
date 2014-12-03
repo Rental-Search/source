@@ -4,7 +4,8 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
 
         var MessagesCtrl,
             scope,
-            rootScope;
+            usersServiceMock,
+            utilsServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -16,8 +17,11 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
                     return {response: {}}
                 }
             };
+            usersServiceMock = {};
+            utilsServiceMock = {};
 
-            MessagesCtrl = $controller('MessagesCtrl', { $scope: scope, $rootScope: rootScope});
+            MessagesCtrl = $controller('MessagesCtrl', { $scope: scope, UsersService: usersServiceMock,
+                UtilsService: utilsServiceMock});
         }));
 
         it("MessagesCtrl should be not null", function () {

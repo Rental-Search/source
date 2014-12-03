@@ -24,6 +24,8 @@ module.exports = function (config) {
             {pattern: 'static/bower_components/angular-route/angular-route.js', included: false },
             {pattern: 'static/bower_components/angular-cookies/angular-cookies.js', included: false },
             {pattern: 'static/bower_components/angular-sanitize/angular-sanitize.js', included: false },
+            {pattern: 'static/bower_components/angular-i18n/angular-locale_fr-fr.js', included: false },
+            {pattern: 'static/bower_components/angular-translate/angular-translate.min.js', included: false },
             {pattern: 'static/bower_components/moment/moment.js', included: false },
             {pattern: 'static/bower_components/angular-moment/angular-moment.js', included: false },
             {pattern: 'static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', included: false },
