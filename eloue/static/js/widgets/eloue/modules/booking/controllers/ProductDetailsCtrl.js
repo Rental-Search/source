@@ -517,8 +517,17 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Load premium phone number using product's phone number id.
              */
             $scope.loadPhoneDetails = function () {
-                if ($scope.product && $scope.product.phone && $scope.product.phone.id) {
-                    PhoneNumbersService.getPremiumRateNumber($scope.product.phone.id).$promise.then(function (result) {
+                var phoneId = null;
+                if ($scope.product) {
+                    // Try to get owner default number first. Use product phone otherwise.
+                    if ($scope.product.owner.default_number && $scope.product.owner.default_number.id) {
+                        phoneId = $scope.product.owner.default_number.id;
+                    } else if ($scope.product.phone && $scope.product.phone.id) {
+                        phoneId = $scope.product.phone.id
+                    }
+                }
+                if (phoneId) {
+                    PhoneNumbersService.getPremiumRateNumber(phoneId).$promise.then(function (result) {
                         if (!result.error || result.error == "0") {
                             $scope.ownerCallDetails = {
                                 number: result.numero,
