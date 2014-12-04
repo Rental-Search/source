@@ -30,7 +30,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/items/ItemsCalendarCtrl"],
                 id: 1
             };
 
-            spyOn(bookingsServiceMock, "getBookingsByProduct").andCallThrough();
+            spyOn(bookingsServiceMock, "getBookingsByProduct").and.callThrough();
 
             ItemsCalendarCtrl = $controller('ItemsCalendarCtrl', { $scope: scope, $stateParams: stateParams, BookingsService: bookingsServiceMock });
             expect(bookingsServiceMock.getBookingsByProduct).toHaveBeenCalled();

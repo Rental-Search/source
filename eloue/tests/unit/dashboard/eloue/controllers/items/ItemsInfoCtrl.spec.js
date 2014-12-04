@@ -96,15 +96,15 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
                 id: 1
             };
 
-            spyOn(addressesServiceMock, "update").andCallThrough();
-            spyOn(categoriesServiceMock, "getParentCategory").andCallThrough();
-            spyOn(categoriesServiceMock, "getRootCategories").andCallThrough();
-            spyOn(categoriesServiceMock, "getChildCategories").andCallThrough();
-            spyOn(categoriesServiceMock, "getCategory").andCallThrough();
-            spyOn(picturesServiceMock, "savePicture").andCallThrough();
-            spyOn(productsServiceMock, "getProductDetails").andCallThrough();
-            spyOn(productsServiceMock, "updateProduct").andCallThrough();
-            spyOn(phoneNumbersServiceMock, "updatePhoneNumber").andCallThrough();
+            spyOn(addressesServiceMock, "update").and.callThrough();
+            spyOn(categoriesServiceMock, "getParentCategory").and.callThrough();
+            spyOn(categoriesServiceMock, "getRootCategories").and.callThrough();
+            spyOn(categoriesServiceMock, "getChildCategories").and.callThrough();
+            spyOn(categoriesServiceMock, "getCategory").and.callThrough();
+            spyOn(picturesServiceMock, "savePicture").and.callThrough();
+            spyOn(productsServiceMock, "getProductDetails").and.callThrough();
+            spyOn(productsServiceMock, "updateProduct").and.callThrough();
+            spyOn(phoneNumbersServiceMock, "updatePhoneNumber").and.callThrough();
 
             ItemsInfoCtrl = $controller('ItemsInfoCtrl', { $scope: scope, $stateParams: stateParams, Endpoints: endpointsMock,
                 PrivateLife: privateLifeMock, SeatNumber: seatNumberMock, DoorNumber: doorNumberMock, Fuel: fuelMock,

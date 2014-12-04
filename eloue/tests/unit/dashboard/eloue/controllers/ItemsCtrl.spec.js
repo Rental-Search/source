@@ -36,7 +36,7 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
                 id: 1190
             };
 
-            spyOn(categoriesServiceMock, "getRootCategories").andCallThrough();
+            spyOn(categoriesServiceMock, "getRootCategories").and.callThrough();
 
             ItemsCtrl = $controller('ItemsCtrl', { $scope: scope, $rootScope: rootScope, CategoriesService: categoriesServiceMock });
             expect(categoriesServiceMock.getRootCategories).toHaveBeenCalled();

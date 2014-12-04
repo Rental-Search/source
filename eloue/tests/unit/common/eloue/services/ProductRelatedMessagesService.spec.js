@@ -25,8 +25,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_ProductRelatedMessagesService_) {
             ProductRelatedMessagesService = _ProductRelatedMessagesService_;
-            spyOn(productRelatedMessagesMock, "get").andCallThrough();
-            spyOn(productRelatedMessagesMock, "save").andCallThrough();
+            spyOn(productRelatedMessagesMock, "get").and.callThrough();
+            spyOn(productRelatedMessagesMock, "save").and.callThrough();
         }));
 
         it("ProductRelatedMessagesService should be not null", function () {

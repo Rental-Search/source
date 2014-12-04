@@ -79,16 +79,16 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_ProductsService_) {
             ProductsService = _ProductsService_;
-            spyOn(addressesServiceMock, "getAddress").andCallThrough();
-            spyOn(bookingsMock, "get").andCallThrough();
-            spyOn(productsMock, "get").andCallThrough();
-            spyOn(productsMock, "update").andCallThrough();
-            spyOn(categoriesServiceMock, "getCategory").andCallThrough();
-            spyOn(phoneNumbersServiceMock, "getPhoneNumber").andCallThrough();
-            spyOn(pricesServiceMock, "getProductPricesPerDay").andCallThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
-            spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(messageThreadsMock, "list").andCallThrough();
+            spyOn(addressesServiceMock, "getAddress").and.callThrough();
+            spyOn(bookingsMock, "get").and.callThrough();
+            spyOn(productsMock, "get").and.callThrough();
+            spyOn(productsMock, "update").and.callThrough();
+            spyOn(categoriesServiceMock, "getCategory").and.callThrough();
+            spyOn(phoneNumbersServiceMock, "getPhoneNumber").and.callThrough();
+            spyOn(pricesServiceMock, "getProductPricesPerDay").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(usersServiceMock, "get").and.callThrough();
+            spyOn(messageThreadsMock, "list").and.callThrough();
         }));
 
         it("ProductsService should be not null", function () {

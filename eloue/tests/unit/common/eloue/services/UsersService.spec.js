@@ -33,10 +33,10 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_UsersService_) {
             UsersService = _UsersService_;
-            spyOn(usersMock, "get").andCallThrough();
-            spyOn(usersMock, "getMe").andCallThrough();
-            spyOn(usersMock, "getStats").andCallThrough();
-            spyOn(formServiceMock, "send").andCallThrough();
+            spyOn(usersMock, "get").and.callThrough();
+            spyOn(usersMock, "getMe").and.callThrough();
+            spyOn(usersMock, "getStats").and.callThrough();
+            spyOn(formServiceMock, "send").and.callThrough();
         }));
 
         it("UsersService should be not null", function () {

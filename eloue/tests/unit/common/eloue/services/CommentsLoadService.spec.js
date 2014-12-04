@@ -46,11 +46,11 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_CommentsLoadService_) {
             CommentsLoadService = _CommentsLoadService_;
-            spyOn(commentsMock, "get").andCallThrough();
-            spyOn(commentsMock, "save").andCallThrough();
-            spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
-            spyOn(commentsParseServiceMock, "parseComment").andCallThrough();
+            spyOn(commentsMock, "get").and.callThrough();
+            spyOn(commentsMock, "save").and.callThrough();
+            spyOn(usersServiceMock, "get").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(commentsParseServiceMock, "parseComment").and.callThrough();
         }));
 
         it("CommentsLoadService should be not null", function () {

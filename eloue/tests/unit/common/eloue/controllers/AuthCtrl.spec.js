@@ -38,7 +38,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
             scope = $rootScope.$new();
             window = {location:{}};
 
-            spyOn(authServiceMock, "clearUserData").andCallThrough();
+            spyOn(authServiceMock, "clearUserData").and.callThrough();
 
             AuthCtrl = $controller('AuthCtrl', { $scope: scope, $window: window, AuthService: authServiceMock, UsersService: usersServiceMock});
         }));

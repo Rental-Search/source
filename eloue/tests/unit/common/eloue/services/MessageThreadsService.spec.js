@@ -61,12 +61,12 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_MessageThreadsService_) {
             MessageThreadsService = _MessageThreadsService_;
-            spyOn(messageThreadsMock, "get").andCallThrough();
-            spyOn(productRelatedMessagesServiceMock, "getMessage").andCallThrough();
-            spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(bookingsServiceMock, "getBookingDetailProduct").andCallThrough();
-            spyOn(utilsServiceMock, "formatDate").andCallThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
+            spyOn(messageThreadsMock, "get").and.callThrough();
+            spyOn(productRelatedMessagesServiceMock, "getMessage").and.callThrough();
+            spyOn(usersServiceMock, "get").and.callThrough();
+            spyOn(bookingsServiceMock, "getBookingDetailProduct").and.callThrough();
+            spyOn(utilsServiceMock, "formatDate").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
         }));
 
         it("MessageThreadsService should be not null", function () {

@@ -24,7 +24,7 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
 
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
 
             MessageDetailCtrl = $controller('MessageDetailCtrl', { $scope: scope, UsersService: usersServiceMock });
         }));

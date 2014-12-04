@@ -22,8 +22,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_PhoneNumbersService_) {
             PhoneNumbersService = _PhoneNumbersService_;
-            spyOn(phoneNumbersMock, "get").andCallThrough();
-            spyOn(phoneNumbersMock, "update").andCallThrough();
+            spyOn(phoneNumbersMock, "get").and.callThrough();
+            spyOn(phoneNumbersMock, "update").and.callThrough();
         }));
 
         it("PhoneNumbersService should be not null", function () {

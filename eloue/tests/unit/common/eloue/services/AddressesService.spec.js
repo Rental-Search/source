@@ -36,10 +36,10 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_AddressesService_) {
             AddressesService = _AddressesService_;
-            spyOn(addressesMock, "get").andCallThrough();
-            spyOn(addressesMock, "update").andCallThrough();
-            spyOn(addressesMock, "delete").andCallThrough();
-            spyOn(formServiceMock, "send").andCallThrough();
+            spyOn(addressesMock, "get").and.callThrough();
+            spyOn(addressesMock, "update").and.callThrough();
+            spyOn(addressesMock, "delete").and.callThrough();
+            spyOn(formServiceMock, "send").and.callThrough();
         }));
 
         it("AddressesService should be not null", function () {

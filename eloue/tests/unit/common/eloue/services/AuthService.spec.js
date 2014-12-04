@@ -32,9 +32,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
             AuthService.redirectToAttemptedUrl = function () {
 
             };
-            spyOn(AuthService, "getCookie").andCallThrough();
-            spyOn(AuthService, "redirectToAttemptedUrl").andCallThrough();
-            spyOn(registrationResourceMock, "register").andCallThrough();
+            spyOn(AuthService, "getCookie").and.callThrough();
+            spyOn(AuthService, "redirectToAttemptedUrl").and.callThrough();
+            spyOn(registrationResourceMock, "register").and.callThrough();
         }));
 
         it("AuthService should be not null", function() {

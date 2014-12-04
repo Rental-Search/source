@@ -26,7 +26,7 @@ define(["angular-mocks", "eloue/controllers/AccountCtrl"], function() {
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
 
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
 
             AccountCtrl = $controller('AccountCtrl', { $scope: scope, UsersService: usersServiceMock });
             expect(usersServiceMock.getMe).toHaveBeenCalled();

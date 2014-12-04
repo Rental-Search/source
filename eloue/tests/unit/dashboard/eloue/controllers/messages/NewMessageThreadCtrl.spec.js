@@ -28,7 +28,7 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
                 }
             };
 
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
 
             NewMessageThreadCtrl = $controller('NewMessageThreadCtrl', { $scope: scope, UsersService: usersServiceMock });
         }));

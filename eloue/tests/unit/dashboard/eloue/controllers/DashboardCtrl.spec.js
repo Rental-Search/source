@@ -28,7 +28,7 @@ define(["angular-mocks", "eloue/controllers/DashboardCtrl"], function() {
                 }
             };
             scope.currentUser = { id: 1};
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
 
             DashboardCtrl = $controller('DashboardCtrl', { $scope: scope, UsersService: usersServiceMock });
         }));

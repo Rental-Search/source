@@ -40,8 +40,8 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
                 id: 1
             };
 
-            spyOn(productsServiceMock, "getProductDetails").andCallThrough();
-            spyOn(categoriesServiceMock, "getParentCategory").andCallThrough();
+            spyOn(productsServiceMock, "getProductDetails").and.callThrough();
+            spyOn(categoriesServiceMock, "getParentCategory").and.callThrough();
 
             ItemsTermsCtrl = $controller('ItemsTermsCtrl', { $scope: scope, $stateParams: stateParams, CategoriesService: categoriesServiceMock, ProductsService: productsServiceMock });
             expect(productsServiceMock.getProductDetails).toHaveBeenCalledWith(stateParams.id);

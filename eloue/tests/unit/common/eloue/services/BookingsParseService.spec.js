@@ -20,7 +20,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_BookingsParseService_) {
             BookingsParseService = _BookingsParseService_;
-            spyOn(utilsServiceMock, "formatDate").andCallThrough();
+            spyOn(utilsServiceMock, "formatDate").and.callThrough();
         }));
 
         it("BookingsParseService should be not null", function () {

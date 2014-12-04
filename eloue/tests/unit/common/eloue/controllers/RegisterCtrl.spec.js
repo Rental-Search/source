@@ -24,7 +24,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function() {
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
 
-            spyOn(authServiceMock, "register").andCallThrough();
+            spyOn(authServiceMock, "register").and.callThrough();
 
             RegisterCtrl = $controller('RegisterCtrl', { $scope:scope, AuthService: authServiceMock});
         }));

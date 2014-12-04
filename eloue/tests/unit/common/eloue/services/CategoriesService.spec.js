@@ -35,9 +35,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_CategoriesService_) {
             CategoriesService = _CategoriesService_;
-            spyOn(categoriesMock, "get").andCallThrough();
-            spyOn(categoriesMock, "getChildren").andCallThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
+            spyOn(categoriesMock, "get").and.callThrough();
+            spyOn(categoriesMock, "getChildren").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
         }));
 
         it("CategoriesService should be not null", function () {

@@ -30,7 +30,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
                 id: 1
             };
 
-            spyOn(bookingsServiceMock, "getBookingsByProduct").andCallThrough();
+            spyOn(bookingsServiceMock, "getBookingsByProduct").and.callThrough();
 
             ItemsProfitsCtrl = $controller('ItemsProfitsCtrl', { $scope: scope, $stateParams: stateParams, BookingsService: bookingsServiceMock });
             expect(bookingsServiceMock.getBookingsByProduct).toHaveBeenCalledWith(stateParams.id);

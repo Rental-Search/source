@@ -26,8 +26,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_CreditCardsService_) {
             CreditCardsService = _CreditCardsService_;
-            spyOn(creditCardsMock, "delete").andCallThrough();
-            spyOn(creditCardsMock, "save").andCallThrough();
+            spyOn(creditCardsMock, "delete").and.callThrough();
+            spyOn(creditCardsMock, "save").and.callThrough();
         }));
 
         it("CreditCardsService should be not null", function () {

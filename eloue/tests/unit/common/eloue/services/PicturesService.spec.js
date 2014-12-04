@@ -31,8 +31,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_PicturesService_) {
             PicturesService = _PicturesService_;
-            spyOn(picturesMock, "get").andCallThrough();
-            spyOn(formServiceMock, "send").andCallThrough();
+            spyOn(picturesMock, "get").and.callThrough();
+            spyOn(formServiceMock, "send").and.callThrough();
         }));
 
         it("PicturesService should be not null", function () {

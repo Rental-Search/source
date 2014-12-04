@@ -43,9 +43,9 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
             stateParams = {};
-            spyOn(bookingsLoadServiceMock, "getBookingDetails").andCallThrough();
-            spyOn(commentsLoadServiceMock, "getCommentList").andCallThrough();
-            spyOn(commentsLoadServiceMock, "postComment").andCallThrough();
+            spyOn(bookingsLoadServiceMock, "getBookingDetails").and.callThrough();
+            spyOn(commentsLoadServiceMock, "getCommentList").and.callThrough();
+            spyOn(commentsLoadServiceMock, "postComment").and.callThrough();
 
             BookingDetailCtrl = $controller('BookingDetailCtrl', { $scope: scope, $stateParams: stateParams, BookingsLoadService: bookingsLoadServiceMock, CommentsLoadService: commentsLoadServiceMock });
             expect(bookingsLoadServiceMock.getBookingDetails).toHaveBeenCalled();

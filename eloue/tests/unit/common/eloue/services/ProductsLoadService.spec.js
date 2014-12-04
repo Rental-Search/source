@@ -58,13 +58,13 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_ProductsLoadService_) {
             ProductsLoadService = _ProductsLoadService_;
-            spyOn(productsMock, "get").andCallThrough();
-            spyOn(checkAvailabilityMock, "get").andCallThrough();
-            spyOn(addressesServiceMock, "getAddress").andCallThrough();
-            spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(phoneNumbersServiceMock, "getPhoneNumber").andCallThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
-            spyOn(productsParseServiceMock, "parseProduct").andCallThrough();
+            spyOn(productsMock, "get").and.callThrough();
+            spyOn(checkAvailabilityMock, "get").and.callThrough();
+            spyOn(addressesServiceMock, "getAddress").and.callThrough();
+            spyOn(usersServiceMock, "get").and.callThrough();
+            spyOn(phoneNumbersServiceMock, "getPhoneNumber").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(productsParseServiceMock, "parseProduct").and.callThrough();
         }));
 
         it("ProductsLoadService should be not null", function () {

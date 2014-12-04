@@ -129,13 +129,13 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             phoneNumbersServiceMock = {};
             categoriesServiceMock = {};
             utilsServiceMock = {};
-            spyOn(productsLoadServiceMock, "getProduct").andCallThrough();
-            spyOn(productsLoadServiceMock, "isAvailable").andCallThrough();
-            spyOn(messageThreadsServiceMock, "getMessageThread").andCallThrough();
-            spyOn(messageThreadsServiceMock, "sendMessage").andCallThrough();
-            spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(usersServiceMock, "getMe").andCallThrough();
-            spyOn(authServiceMock, "getCookie").andCallThrough();
+            spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
+            spyOn(productsLoadServiceMock, "isAvailable").and.callThrough();
+            spyOn(messageThreadsServiceMock, "getMessageThread").and.callThrough();
+            spyOn(messageThreadsServiceMock, "sendMessage").and.callThrough();
+            spyOn(usersServiceMock, "get").and.callThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(authServiceMock, "getCookie").and.callThrough();
             ProductDetailsCtrl = $controller("ProductDetailsCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
                 CivilityChoices: civilityChoicesMock,

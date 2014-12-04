@@ -46,12 +46,12 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_BookingsLoadService_) {
             BookingsLoadService = _BookingsLoadService_;
-            spyOn(bookingsMock, "get").andCallThrough();
-            spyOn(bookingsMock, "save").andCallThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
-            spyOn(bookingsParseServiceMock, "parseBookingListItem").andCallThrough();
-            spyOn(bookingsParseServiceMock, "parseBooking").andCallThrough();
-            spyOn(productsLoadServiceMock, "getProduct").andCallThrough();
+            spyOn(bookingsMock, "get").and.callThrough();
+            spyOn(bookingsMock, "save").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(bookingsParseServiceMock, "parseBookingListItem").and.callThrough();
+            spyOn(bookingsParseServiceMock, "parseBooking").and.callThrough();
+            spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
         }));
 
         it("BookingsLoadService should be not null", function () {

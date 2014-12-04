@@ -26,8 +26,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_CommentsService_) {
             CommentsService = _CommentsService_;
-            spyOn(commentsMock, "get").andCallThrough();
-            spyOn(commentsMock, "save").andCallThrough();
+            spyOn(commentsMock, "get").and.callThrough();
+            spyOn(commentsMock, "save").and.callThrough();
         }));
 
         it("CommentsService should be not null", function () {

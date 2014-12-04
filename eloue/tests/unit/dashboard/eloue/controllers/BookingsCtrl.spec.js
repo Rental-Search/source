@@ -37,7 +37,7 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
             scope.markListItemAsSelected = function(prefix, id) {};
             scope.currentUser = { id: 1};
             scope.currentUserUrl = endpointsMock.api_url + "users/" + scope.currentUser.id + "/";
-            spyOn(bookingsLoadServiceMock, "getBookingList").andCallThrough();
+            spyOn(bookingsLoadServiceMock, "getBookingList").and.callThrough();
 
             BookingsCtrl = $controller('BookingsCtrl', { $scope: scope, Endpoints: endpointsMock, BookingsLoadService: bookingsLoadServiceMock });
         }));

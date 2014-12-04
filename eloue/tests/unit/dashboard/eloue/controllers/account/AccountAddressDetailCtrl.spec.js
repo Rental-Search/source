@@ -52,10 +52,10 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
             stateParams = {
                 id: 1
             };
-            spyOn(addressesServiceMock, "getAddress").andCallThrough();
-            spyOn(addressesServiceMock, "updateAddress").andCallThrough();
-            spyOn(addressesServiceMock, "deleteAddress").andCallThrough();
-            spyOn(productsServiceMock, "getProductsByAddress").andCallThrough();
+            spyOn(addressesServiceMock, "getAddress").and.callThrough();
+            spyOn(addressesServiceMock, "updateAddress").and.callThrough();
+            spyOn(addressesServiceMock, "deleteAddress").and.callThrough();
+            spyOn(productsServiceMock, "getProductsByAddress").and.callThrough();
 
             AccountAddressDetailCtrl = $controller('AccountAddressDetailCtrl', { $scope: scope, $stateParams: stateParams, AddressesService: addressesServiceMock, ProductsService: productsServiceMock });
         }));
