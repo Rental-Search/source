@@ -105,7 +105,10 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
-        assert self.product2category_set.count() == 1
+        category_count = self.product2category_set.count()
+        site_id = Site.objects.get_current().id
+        product_id = self.id
+        assert self.product2category_set.count() == 1, 'product_id: %d; category_count: %d; site_id: %d' % (product_id, category_count, site_id)
         return self.product2category_set.all()[0].category
 
     @permalink
