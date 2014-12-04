@@ -943,33 +943,14 @@ class CategoryTest(APITestCase):
             'need_insurance': False,
         })
 
-        self.assertEquals(response.status_code, 201, response.data)
-
-        self.assertIn('id', response.data)
-        self.assertIn('Location', response)
-        self.assertTrue(response['Location'].endswith(_location('category-detail', pk=response.data['id'])))
-
-        Category = get_model('products', 'Category')
-        category = Category.objects.get(pk=response.data['id'])
-        self.assertEqual(category.name, 'Test')
-        self.assertFalse(category.need_insurance)
-        self.assertIsNone(category.parent_id)
-        self.assertEqual(category.lft, 1)
-        self.assertEqual(category.rght, 2)
-        self.assertEqual(category.level, 0)
+        self.assertEquals(response.status_code, 403, response.data)
 
     def test_category_edit(self):
         response = self.client.patch(_location('category-detail', pk=1), {
             'title': 'Title',
             'description': 'Description',
         })
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertIn('id', response.data)
-
-        Category = get_model('products', 'Category')
-        category = Category.objects.get(pk=response.data['id'])
-        self.assertEquals(category.title, 'Title')
-        self.assertEquals(category.description, 'Description')
+        self.assertEquals(response.status_code, 403, response.data)
 
     def test_category_get_ancestor(self):
         response = self.client.get(_location('category-ancestors', pk=475))
@@ -1043,7 +1024,45 @@ class StaffCategoryTest(APITestCase):
     fixtures = ['patron_staff', 'category']
 
     def setUp(self):
+        user = get_user_model().objects.get(pk=1)
+        permissions = get_model('auth', 'Permission').objects.filter(codename__contains='category')
+        for permission in permissions:
+            user.user_permissions.add(permission)
+        user.save()
+        self.model = get_model('products', 'Category')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+    def test_category_create(self):
+        response = self.client.post(_location('category-list'), {
+            'name': 'Test',
+            'need_insurance': False,
+        })
+
+        self.assertEquals(response.status_code, 201, response.data)
+
+        self.assertIn('id', response.data)
+        self.assertIn('Location', response)
+        self.assertTrue(response['Location'].endswith(_location('category-detail', pk=response.data['id'])))
+
+        category = self.model.objects.get(pk=response.data['id'])
+        self.assertEqual(category.name, 'Test')
+        self.assertFalse(category.need_insurance)
+        self.assertIsNone(category.parent_id)
+        self.assertEqual(category.lft, 1)
+        self.assertEqual(category.rght, 2)
+        self.assertEqual(category.level, 0)
+
+    def test_category_edit(self):
+        response = self.client.patch(_location('category-detail', pk=1), {
+            'title': 'Title',
+            'description': 'Description',
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('id', response.data)
+
+        category = self.model.objects.get(pk=response.data['id'])
+        self.assertEquals(category.title, 'Title')
+        self.assertEquals(category.description, 'Description')
 
     def test_ordering(self):
         response = self.client.get(_location('category-list'), {'ordering': 'name'})
@@ -1308,7 +1327,7 @@ class StaffPriceTest(APITestCase):
 class AnonymousCuriosityTest(APITestCase):
 
     fixtures = ['patron', 'address', 'category', 'product', 'curiosity']
-    public_fields = ('product', 'summary', 'city', 'price', 'owner_username', 'owner_thumbnail')
+    public_fields = ('product', )
     private_fields = tuple()
 
     def test_curiosity_list_allowed(self):
