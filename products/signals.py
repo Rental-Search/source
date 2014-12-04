@@ -27,26 +27,16 @@ def post_save_product(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:details:after_csrf', instance.pk, Site.objects.get_current().pk))
     cache.delete(cache_key('product:details:after_dates', instance.pk))
 
-    CategoryConformity = get_model('products', 'CategoryConformity')
     Product2Category = get_model('products', 'Product2Category')
 
-    category = instance.category
-    conformity = None
-    while category and not conformity:
-        try:
-            conformity = CategoryConformity.objects.filter(
-                Q(gosport_category=category) | Q(eloue_category=category)
-            )[0]
-        except IndexError:
-            category = category.parent
-
-    if not conformity:
-        Product2Category.objects.filter(product=instance).delete()
-        Product2Category.objects.create(product=instance, category=instance.category, site_id=settings.SITE_ID)
-    else:
-        Product2Category.objects.filter(product=instance).delete()
-        Product2Category.objects.create(product=instance, category=conformity.gosport_category, site_id=GOSPORT_SITE_ID)
-        Product2Category.objects.create(product=instance, category=conformity.eloue_category, site_id=ELOUE_SITE_ID)
+    Product2Category.objects.filter(product=instance).delete()
+    for site_id in settings.DEFAULT_SITES:
+        category = instance.category.get_conformity(site_id)
+        if category:
+            Product2Category.objects.create(product=instance, category=category, site_id=site_id)
+            instance.sites.add(site_id)
+        else:
+            instance.sites.remove(site_id)
 
 
 def post_save_to_update_product(sender, instance, created, **kwargs):

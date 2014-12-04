@@ -655,10 +655,31 @@ class Category(MPTTModel):
         if not self.slug:
             slug = slugify(self.name)
             if Category.on_site.filter(slug=slug).exists():
-                raise ValidationError({'name': _(u'Category with name %s (%s) already exists. Site_id is %d.') % (self.name, slug, Site.objects.get_current())})
+                raise ValidationError(_(u'Category with name %s (%s) already exists. Site_id is %d.') % (self.name, slug, Site.objects.get_current().id))
             self.slug = slug
         super(Category, self).save(*args, **kwargs)
-    
+
+    def get_conformity(self, site_id):
+        if site_id in self.sites.all().values_list('id', flat=True):
+            return self
+
+        category = self
+        conformity = None
+        eloue_site_id = 1
+        gosport_site_id = 13
+        while category and not conformity:
+            try:
+                conformity = CategoryConformity.objects.filter(
+                    Q(gosport_category=category) | Q(eloue_category=category)
+                )[0]
+            except IndexError:
+                category = category.parent
+
+        if not conformity:
+            return None
+        else:
+            return conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else None
+
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
     
@@ -1042,14 +1063,13 @@ class ProductTopPosition(models.Model):
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
+post_save.connect(post_save_product, sender=CarProduct)
+post_save.connect(post_save_product, sender=RealEstateProduct)
 post_save.connect(post_save_curiosity, sender=Curiosity)
 
 post_save.connect(post_save_sites, sender=Alert)
 post_save.connect(post_save_sites, sender=Curiosity)
-post_save.connect(post_save_sites, sender=Product)
-post_save.connect(post_save_sites, sender=Category)
-post_save.connect(post_save_sites, sender=CarProduct)
-post_save.connect(post_save_sites, sender=RealEstateProduct)
+# post_save.connect(post_save_sites, sender=Category)
 
 post_save.connect(post_save_to_update_product, sender=Price)
 post_save.connect(post_save_to_update_product, sender=Picture)
