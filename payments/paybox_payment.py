@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from collections import OrderedDict
 import httplib, urllib, urlparse, ssl, os
 import datetime, random, contextlib, uuid
 from decimal import Decimal as D
@@ -49,14 +50,14 @@ class PayboxManager(object):
     
     def __init__(self, ):
         self.PAYBOX_ENDPOINT = urlparse.urlparse(settings.PAYBOX_ENDPOINT)
-        self.permanent_data = {
-            'VERSION': settings.PAYBOX_VERSION,
-            'SITE': settings.PAYBOX_SITE,
-            'RANG': settings.PAYBOX_RANG,
-            'CLE': settings.PAYBOX_CLE,
-            'DEVISE': settings.PAYBOX_DEVISE,
-            'ACTIVITE': settings.PAYBOX_ACTIVITE,
-        }
+        self.permanent_data = OrderedDict((
+            ('VERSION', settings.PAYBOX_VERSION),
+            ('SITE', settings.PAYBOX_SITE),
+            ('RANG', settings.PAYBOX_RANG),
+            ('CLE', settings.PAYBOX_CLE),
+            ('DEVISE', settings.PAYBOX_DEVISE),
+            ('ACTIVITE', settings.PAYBOX_ACTIVITE),
+        ))
 
     def _request(self, **kwargs):
         data = self.permanent_data.copy()
