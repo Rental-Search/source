@@ -65,14 +65,15 @@ module.exports = function (config) {
         // - PhantomJS
         // - IE (only Windows)
         browsers: ['PhantomJS'],
-//        plugins: ['karma-coverage'],
-//        reporters: ['progress', 'coverage'],
-//        preprocessors: {
-//            // source files, that you wanna generate coverage for
-//            // do not include tests or libraries
-//            // (these files will be instrumented by Istanbul)
-//            'static/js/**/*.js': ['coverage']
-//        },
+        plugins: ['karma-jasmine', 'karma-requirejs', 'karma-coverage', 'karma-phantomjs-launcher'],
+        reporters: ['progress', 'coverage'],
+        preprocessors: {
+            'static/js/**/*.js': ['coverage']
+        },
+        coverageReporter: {
+            type : 'html',
+            dir : 'coverage/'
+        },
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
         singleRun: true
