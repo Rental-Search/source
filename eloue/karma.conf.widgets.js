@@ -78,11 +78,11 @@ module.exports = function (config) {
         plugins: ['karma-jasmine', 'karma-requirejs', 'karma-coverage', 'karma-phantomjs-launcher'],
         reporters: ['progress', 'coverage'],
         preprocessors: {
-            'static/js/**/*.js': ['coverage']
+            'static/js/widgets/**/*.js': ['coverage']
         },
         coverageReporter: {
             type : 'html',
-            dir : 'coverage/'
+            dir : '../coverage/'
         },
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
