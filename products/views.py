@@ -998,7 +998,7 @@ class ProductFilterSet(filters.FilterSet):
 
     class Meta:
         model = models.Product
-        fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'owner', 'created_at')
+        fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'owner', 'created_at', 'quantity')
 
 class ProductOrderingFilter(filters.OrderingFilter):
 
@@ -1084,6 +1084,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return Response([])
 
     @link()
+    @ignore_filters([filters.DjangoFilterBackend])
     def is_available(self, request, *args, **kwargs):
         obj = self.get_object()
 
