@@ -171,7 +171,7 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                     country: "FR"
                 }
             };
-            scope.product = {owner: { id: 111}, category: {name: "Vehicule"}};
+            scope.product = {owner: { id: 111}, category: {name: "Automobile"}};
             window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"},
                 google_trackConversion: function() {
 
@@ -256,6 +256,12 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             scope.sendBookingRequest();
         });
 
+        it("ProductDetailsCtrl:sendBookingRequest(no default address)", function () {
+            scope.noAddress = true;
+            scope.rootCategory = "automobile";
+            scope.sendBookingRequest();
+        });
+
         it("ProductDetailsCtrl:saveCardAndRequestBooking", function () {
             scope.saveCardAndRequestBooking();
         });
@@ -271,6 +277,17 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
 
         it("ProductDetailsCtrl:getEventLabel", function () {
             scope.getEventLabel();
+        });
+
+        it("ProductDetailsCtrl:getEventLabel (auto)", function () {
+            scope.rootCategory = "automobile";
+            scope.productCategoryName = "renault";
+            expect(scope.getEventLabel()).toEqual("Voiture - " + scope.productCategoryName);
+        });
+        it("ProductDetailsCtrl:getEventLabel (real estate)", function () {
+            scope.rootCategory = "location-saisonniere";
+            scope.productCategoryName = "condominium";
+            expect(scope.getEventLabel()).toEqual("Logement - " + scope.productCategoryName);
         });
 
         it("ProductDetailsCtrl:clearCreditCard", function () {
