@@ -63,11 +63,25 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                     return {$promise: {then: function () {
                         return {result: {}}
                     }}}
+                },
+                updateUser: function(user) {
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
                 }
             };
             authServiceMock = {
                 getCookie: function (cookieName) {
 
+                }
+            };
+            productRelatedMessagesLoadServiceMock = {
+                postMessage: function(threadId, senderId, recipientId, text, offerId, productId) {
+                    return {
+                        then: function () {
+                            return {result: {}}
+                        }
+                    }
                 }
             };
             endpointsMock = {
@@ -79,6 +93,43 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             productShippingPointsServiceMock = {};
             patronShippingPointsServiceMock = {};
             toDashboardRedirectServiceMock = {};
+            civilityChoicesMock = {};
+            addressesServiceMock = {
+                saveAddress:  function(address) {
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                }
+            };
+            creditCardsServiceMock = {};
+            bookingsLoadServiceMock = {
+                requestBooking: function(booking) {
+                    return {then: function () {
+                        return {result: {}}
+                    }}
+                },
+                payForBooking: function(uuid, paymentInfo) {
+                    return {then: function () {
+                        return {result: {}}
+                    }}
+                }
+            };
+            bookingsServiceMock = {
+                getBookingsByProduct: function(productId) {
+                    return {then: function () {
+                        return {result: {}}
+                    }}
+                }
+            };
+            phoneNumbersServiceMock = {};
+            categoriesServiceMock = {
+                getAncestors: function (categoryId) {
+                    return {then: function () {
+                        return {result: {}}
+                    }}
+                }
+            };
+            utilsServiceMock = {};
 
             module(function ($provide) {
                 $provide.value("ProductsLoadService", productsLoadServiceMock);
@@ -115,27 +166,33 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                 return {response: {}}
             }};
             scope.currentUser = {
-                id: 111
+                id: 111,
+                default_address: {
+                    country: "FR"
+                }
             };
-            scope.product = {owner: { id: 111}};
-            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"}};
+            scope.product = {owner: { id: 111}, category: {name: "Vehicule"}};
+            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"},
+                google_trackConversion: function() {
+
+                }};
             location = {};
-            civilityChoicesMock = {};
-            productRelatedMessagesLoadServiceMock = {};
-            addressesServiceMock = {};
-            creditCardsServiceMock = {};
-            bookingsLoadServiceMock = {};
-            bookingsServiceMock = {};
-            phoneNumbersServiceMock = {};
-            categoriesServiceMock = {};
-            utilsServiceMock = {};
+
             spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
             spyOn(productsLoadServiceMock, "isAvailable").and.callThrough();
             spyOn(messageThreadsServiceMock, "getMessageThread").and.callThrough();
             spyOn(messageThreadsServiceMock, "sendMessage").and.callThrough();
             spyOn(usersServiceMock, "get").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(usersServiceMock, "updateUser").and.callThrough();
             spyOn(authServiceMock, "getCookie").and.callThrough();
+            spyOn(productRelatedMessagesLoadServiceMock, "postMessage").and.callThrough();
+            spyOn(addressesServiceMock, "saveAddress").and.callThrough();
+            spyOn(bookingsLoadServiceMock, "requestBooking").and.callThrough();
+            spyOn(bookingsLoadServiceMock, "payForBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "getBookingsByProduct").and.callThrough();
+            spyOn(categoriesServiceMock, "getAncestors").and.callThrough();
+            spyOn(window, "google_trackConversion").and.callThrough();
             ProductDetailsCtrl = $controller("ProductDetailsCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
                 CivilityChoices: civilityChoicesMock,
@@ -169,6 +226,103 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
 
         it("ProductDetailsCtrl:loadMessageThread", function () {
             scope.loadMessageThread();
+        });
+
+        it("ProductDetailsCtrl:getProductIdFromUrl", function () {
+            scope.getProductIdFromUrl();
+        });
+
+        it("ProductDetailsCtrl:handleResponseErrors", function () {
+            scope.handleResponseErrors();
+        });
+
+        it("ProductDetailsCtrl:sendMessage", function () {
+            scope.sendMessage();
+        });
+
+        it("ProductDetailsCtrl:callOwner", function () {
+            scope.callOwner();
+        });
+
+        it("ProductDetailsCtrl:pointSelected", function () {
+            scope.pointSelected();
+        });
+
+        it("ProductDetailsCtrl:saveDefaultAddress", function () {
+            scope.saveDefaultAddress();
+        });
+
+        it("ProductDetailsCtrl:sendBookingRequest", function () {
+            scope.sendBookingRequest();
+        });
+
+        it("ProductDetailsCtrl:saveCardAndRequestBooking", function () {
+            scope.saveCardAndRequestBooking();
+        });
+
+        it("ProductDetailsCtrl:requestBooking", function () {
+            scope.requestBooking();
+        });
+
+        it("ProductDetailsCtrl:payForBooking", function () {
+            var booking = { uuid: 1}, paymentInfo = {};
+            scope.payForBooking(booking, paymentInfo);
+        });
+
+        it("ProductDetailsCtrl:getEventLabel", function () {
+            scope.getEventLabel();
+        });
+
+        it("ProductDetailsCtrl:clearCreditCard", function () {
+            scope.clearCreditCard();
+        });
+
+        it("ProductDetailsCtrl:loadProductCategoryAncestors", function () {
+            scope.loadProductCategoryAncestors();
+        });
+
+        it("ProductDetailsCtrl:loadPictures", function () {
+            scope.loadPictures();
+        });
+
+        it("ProductDetailsCtrl:loadPhoneDetails", function () {
+            scope.loadPhoneDetails();
+        });
+
+        it("ProductDetailsCtrl:loadCreditCards", function () {
+            scope.loadCreditCards();
+        });
+
+        it("ProductDetailsCtrl:loadProductShippingPoint", function () {
+            scope.loadProductShippingPoint();
+        });
+
+        it("ProductDetailsCtrl:loadShippingPoints", function () {
+            scope.loadShippingPoints();
+        });
+
+        it("ProductDetailsCtrl:isAuto", function () {
+            scope.isAuto();
+        });
+
+        it("ProductDetailsCtrl:isRealEstate", function () {
+            scope.isRealEstate();
+        });
+
+        it("ProductDetailsCtrl:loadCalendar", function () {
+            scope.loadCalendar();
+        });
+
+        it("ProductDetailsCtrl:updateCalendar", function () {
+            scope.updateCalendar();
+        });
+
+        it("ProductDetailsCtrl:selectTab", function () {
+            scope.selectTab();
+        });
+
+        it("ProductDetailsCtrl:loadAdWordsTags", function () {
+            scope.loadAdWordsTags();
         });
     });
 });
