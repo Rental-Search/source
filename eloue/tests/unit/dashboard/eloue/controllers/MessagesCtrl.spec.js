@@ -9,6 +9,25 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
 
         beforeEach(module('EloueDashboardApp'));
 
+        beforeEach(function () {
+            usersServiceMock = {
+                getMe: function (successCallback, errorCallback) {
+                    console.log("usersServiceMock:getMe");
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                }
+            };
+            utilsServiceMock = {
+                getIdFromUrl: function (url) {}
+            };
+
+            module(function ($provide) {
+                $provide.value("UsersService", usersServiceMock);
+                $provide.value("UtilsService", utilsServiceMock);
+            });
+        });
+
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
 
@@ -17,8 +36,9 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
                     return {response: {}}
                 }
             };
-            usersServiceMock = {};
-            utilsServiceMock = {};
+
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
 
             MessagesCtrl = $controller('MessagesCtrl', { $scope: scope, UsersService: usersServiceMock,
                 UtilsService: utilsServiceMock});

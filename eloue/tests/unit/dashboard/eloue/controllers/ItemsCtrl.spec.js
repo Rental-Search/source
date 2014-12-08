@@ -4,8 +4,9 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
 
         var ItemsCtrl,
             scope,
-            rootScope,
-            categoriesServiceMock;
+            timeout,
+            categoriesServiceMock,
+            usersServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -19,14 +20,24 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
                 }
             };
 
+            usersServiceMock = {
+                getMe: function (successCallback, errorCallback) {
+                    console.log("usersServiceMock:getMe");
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                }
+            };
+
             module(function ($provide) {
                 $provide.value("CategoriesService", categoriesServiceMock);
+                $provide.value("UsersService", usersServiceMock);
             })
         });
 
-        beforeEach(inject(function ($rootScope, $controller) {
+        beforeEach(inject(function ($rootScope, $timeout, $controller) {
             scope = $rootScope.$new();
-            rootScope = $rootScope;
+            timeout = $timeout;
             scope.currentUserPromise = {
                 then: function () {
                     return {result: {}}
@@ -37,8 +48,9 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
             };
 
             spyOn(categoriesServiceMock, "getRootCategories").and.callThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
 
-            ItemsCtrl = $controller('ItemsCtrl', { $scope: scope, $rootScope: rootScope, CategoriesService: categoriesServiceMock });
+            ItemsCtrl = $controller('ItemsCtrl', { $scope: scope, $timeout: timeout, CategoriesService: categoriesServiceMock, UsersService: usersServiceMock });
             expect(categoriesServiceMock.getRootCategories).toHaveBeenCalled();
         }));
 

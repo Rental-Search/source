@@ -4,6 +4,7 @@ define(["angular-mocks", "eloue/controllers/AccountCtrl"], function() {
 
         var AccountCtrl,
             scope,
+            state,
             usersServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
@@ -23,12 +24,13 @@ define(["angular-mocks", "eloue/controllers/AccountCtrl"], function() {
             })
         });
 
-        beforeEach(inject(function ($rootScope, $controller) {
+        beforeEach(inject(function ($rootScope, $state, $controller) {
             scope = $rootScope.$new();
+            state = $state;
 
             spyOn(usersServiceMock, "getMe").and.callThrough();
 
-            AccountCtrl = $controller('AccountCtrl', { $scope: scope, UsersService: usersServiceMock });
+            AccountCtrl = $controller('AccountCtrl', { $scope: scope, $state: state, UsersService: usersServiceMock });
             expect(usersServiceMock.getMe).toHaveBeenCalled();
         }));
 

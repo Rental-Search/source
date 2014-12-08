@@ -4,7 +4,8 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
 
         var DashboardRootCtrl,
             scope,
-            usersServiceMock;
+            usersServiceMock,
+            authServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -12,12 +13,21 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                }
+            };
+
+            authServiceMock = {
+                getCookie: function(name) {
+                    return "token";
                 }
             };
 
             module(function($provide) {
                 $provide.value("UsersService", usersServiceMock);
+                $provide.value("AuthService", authServiceMock);
             })
         });
 
@@ -25,8 +35,9 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
             scope = $rootScope.$new();
 
             spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(authServiceMock, "getCookie").and.callThrough();
 
-            DashboardRootCtrl = $controller('DashboardRootCtrl', { $scope: scope, UsersService: usersServiceMock });
+            DashboardRootCtrl = $controller('DashboardRootCtrl', { $scope: scope, UsersService: usersServiceMock, AuthService: authServiceMock });
         }));
 
         it("DashboardRootCtrl should be not null", function () {
