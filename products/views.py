@@ -740,14 +740,9 @@ from eloue.decorators import ajax_required
 from products.forms import SuggestCategoryViewForm
 
 class NavbarCategoryMixin(object):
-    categories = [
-        35, 390, 253, 335, 418, 2700, 495, 126, # first line / nav bar
-        323, 432, 297, 379, 2713, 512, 3, # others / dropdown selection
-    ]
-
     def get_context_data(self, **kwargs):
-        category_list = list(Category.on_site.filter(pk__in=self.categories))
-        index = self.categories.index
+        category_list = list(Category.on_site.filter(pk__in=settings.NAVBAR_CATEGORIES))
+        index = settings.NAVBAR_CATEGORIES.index
         category_list.sort(key=lambda obj: index(obj.pk))
         context = {
             'category_list': category_list,
@@ -755,12 +750,24 @@ class NavbarCategoryMixin(object):
         context.update(super(NavbarCategoryMixin, self).get_context_data(**kwargs))
         return context
 
+class PublishCategoryMixin(object):
+    def get_context_data(self, **kwargs):
+        context = dict()
+        if settings.PUBLISH_CATEGORIES:
+            context['publish_category_list'] = settings.PUBLISH_CATEGORIES
+        context.update(super(PublishCategoryMixin, self).get_context_data(**kwargs))
+        return context
+
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
     def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
-        comment_list = Comment.objects.select_related('booking__product__address').order_by('-created_at')
+        comment_list = Comment.objects.select_related(
+            'booking__product__address'
+        ).filter(
+            booking__sites__id=settings.SITE_ID
+        ).order_by('-created_at')
 
         # FIXME: remove after mass rebuild of all images is done on hosting
         from eloue.legacy import generate_patron_images, generate_picture_images
@@ -803,8 +810,15 @@ class ProductListView(ProductList):
         return breadcrumbs
 
     def get_context_data(self, **kwargs):
+        if settings.FILTER_CATEGORIES:
+            category_list = Category.on_site.filter(id__in=settings.FILTER_CATEGORIES)
+        else:
+            category_list = Category.on_site.filter(
+                Q(parent__isnull=True) | ~Q(parent__sites__id=settings.SITE_ID)
+            ).exclude(slug='divers')
+
         context = {
-            'category_list': Category.on_site.filter(parent__isnull=True).exclude(slug='divers'),
+            'category_list': category_list
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
 
@@ -854,7 +868,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
             chunk = self.sqs.more_like_this(product)[i*chunk_size:(i+1)*chunk_size]
             if not chunk:
                 break
-            product_list.extend(filter(lambda x: isinstance(x.object, (Product, CarProduct, RealEstateProduct)), chunk))
+            product_list.extend(filter(lambda x: x and isinstance(x.object, (Product, CarProduct, RealEstateProduct)), chunk))
             i += 1
         product_list = product_list[:5]
 
@@ -891,7 +905,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         context.update(super(ProductDetailView, self).get_context_data(**kwargs))
         return context
 
-class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
+class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, PublishCategoryMixin, TemplateView):
     template_name = 'publich_item/index.jade'
 
 class SuggestCategoryView(AjaxResponseMixin, View):
@@ -979,18 +993,29 @@ class CategoryViewSet(viewsets.NonDeletableModelViewSet):
         return Response(serializer.data)
 
 class ProductFilterSet(filters.FilterSet):
-    category__isdescendant = filters.MPTTModelFilter(name='category', lookup_type='descendants', queryset=Category.objects.all())
+    category__isdescendant = filters.MPTTModelFilter(name='categories', lookup_type='descendants', queryset=Category.objects.all())
+    category = django_filters.ModelChoiceFilter(name='categories', queryset=Category.objects.all())
 
     class Meta:
         model = models.Product
-        fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'category', 'owner', 'created_at')
+        fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'owner', 'created_at', 'quantity')
+
+class ProductOrderingFilter(filters.OrderingFilter):
+
+    def get_ordering(self, request):
+        ordering = super(ProductOrderingFilter, self).get_ordering(request)
+        if ordering:
+            for i, param in enumerate(ordering):
+                if 'category' in param:
+                    ordering[i] = param.replace('category', 'categories__id')
+        return ordering
 
 class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows products to be viewed or edited.
     """
     serializer_class = serializers.ProductSerializer
-    queryset = models.Product.on_site.filter(is_archived=False).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
+    queryset = models.Product.on_site.filter(is_archived=False, product2category__site_id=settings.SITE_ID).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
     filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
     search_index = product_search
@@ -1059,6 +1084,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return Response([])
 
     @link()
+    @ignore_filters([filters.DjangoFilterBackend])
     def is_available(self, request, *args, **kwargs):
         obj = self.get_object()
 

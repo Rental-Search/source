@@ -117,7 +117,7 @@ LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
-DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4])
+DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -872,3 +872,14 @@ NON_ACTIVE_LOGIN_COUNT = 1
 AUTHENTICATION_BACKENDS = (
     'eloue.backends.EloueAuthBackend',
 )
+
+NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
+    35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
+    323, 432, 297, 379, 2713, 512, 3,  # others / dropdown selection
+])
+
+FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())
+
+PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
+
+TEST_MODE = False

@@ -1,0 +1,13 @@
+.container
+  h3.text-center Choisissez une catégorie pour votre annonce
+
+  {% for item_row in publish_category_list %}
+  ul.nav.space-between
+    {% for item in item_row %}
+    li.spacer
+    li: span: a(href="#/publish?category={{ item.1 }}", data-dismiss="modal")
+      span.border-round
+        i(class="eloue-{{ item.2 }}")
+      span.title {{ item.0 }}
+    {% endfor %}
+  {% endfor %}

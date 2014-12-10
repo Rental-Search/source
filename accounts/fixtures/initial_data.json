@@ -97,6 +97,14 @@
     },
     {
         "fields": {
+            "domain": "www.gosport-location.com",
+            "name": "Go Sport"
+        },
+        "model": "sites.site",
+        "pk": 13
+    },
+    {
+        "fields": {
             "url": "/api/1.0/",
             "name": "all",
             "is_readonly": false

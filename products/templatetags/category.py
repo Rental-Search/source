@@ -20,9 +20,7 @@ def category(value):
         except Category.DoesNotExist:
             return
     if is_iterable(value):
-        res = list(Category.on_site.filter(slug__in=value).iterator())
-        index = value.index
-        res.sort(key=lambda obj: index(obj.slug))
+        res = list(Category.on_site.filter(slug__in=value).order_by('lft').iterator())
         return res
 
 

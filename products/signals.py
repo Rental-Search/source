@@ -2,13 +2,20 @@
 from django.conf import settings
 from django.core.cache import cache
 from django.contrib.sites.models import Site
+from django.db.models import get_model
+from django.db.models.query_utils import Q
 
 from eloue.utils import cache_key, create_alternative_email
 from django.db.models import signals
 from django.core import exceptions
 
+
 def post_save_answer(sender, instance, created, **kwargs):
     instance.question.save()
+
+
+ELOUE_SITE_ID = 1
+GOSPORT_SITE_ID = 13
 
 
 def post_save_product(sender, instance, created, **kwargs):
@@ -19,6 +26,17 @@ def post_save_product(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:details:before_csrf', instance.pk, Site.objects.get_current().pk))
     cache.delete(cache_key('product:details:after_csrf', instance.pk, Site.objects.get_current().pk))
     cache.delete(cache_key('product:details:after_dates', instance.pk))
+
+    Product2Category = get_model('products', 'Product2Category')
+
+    Product2Category.objects.filter(product=instance).delete()
+    for site_id in settings.DEFAULT_SITES:
+        category = instance.category.get_conformity(site_id)
+        if category:
+            Product2Category.objects.create(product=instance, category=category, site_id=site_id)
+            instance.sites.add(site_id)
+        else:
+            instance.sites.remove(site_id)
 
 
 def post_save_to_update_product(sender, instance, created, **kwargs):

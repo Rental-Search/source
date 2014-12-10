@@ -5,7 +5,7 @@ extends ../base
 {% if breadcrumbs.categorie.object.title %}
 {{ breadcrumbs.categorie.object.title }}
 {% else %}
-{% trans "Location" %}{% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
+|Location {% if not form.cleaned_data.q %}{% for crumb in breadcrumbs|facets %} {{ crumb.pretty_value|capfirst }}{% endfor %}{% endif %}{% if form.cleaned_data.q %} {{ form.cleaned_data.q }}{% endif %}{% if form.cleaned_data.l %} {{ form.cleaned_data.l|capfirst }}{% endif %}
 {% endif %}
 {% endblock %}
 

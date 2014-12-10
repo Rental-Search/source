@@ -7,6 +7,7 @@ from calendar import monthrange, weekday
 
 import operator
 import itertools
+from django.core.exceptions import ValidationError
 from django.db.models.deletion import PROTECT
 
 from imagekit.models import ImageSpecField
@@ -77,13 +78,14 @@ class Product(models.Model):
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
+    categories = models.ManyToManyField('Category', related_name='product_categories', through='Product2Category')
     owner = models.ForeignKey(Patron, related_name='products')
     created_at = models.DateTimeField(blank=True, editable=False) # FIXME should be auto_now_add=True
     sites = models.ManyToManyField(Site, related_name='products')
     payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
     objects = ProductManager() # FIXME: this should be first manager in the class
-    
+
     modified_at = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     pro_agencies = models.ManyToManyField(ProAgency, related_name='products', blank=True, null=True)
@@ -101,22 +103,30 @@ class Product(models.Model):
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
         super(Product, self).save(*args, **kwargs)
-    
+
+    def _get_category(self):
+        category_count = self.product2category_set.count()
+        site_id = Site.objects.get_current().id
+        product_id = self.id
+        assert self.product2category_set.count() == 1, 'product_id: %d; category_count: %d; site_id: %d' % (product_id, category_count, site_id)
+        return self.product2category_set.all()[0].category
+
     @permalink
     def get_absolute_url(self):
-        encestors_slug = self.category.get_ancertors_slug()
-        if encestors_slug:
-            path = '%s/%s/' % (encestors_slug, self.category.slug)
+        category = self._get_category()
+        ancestors_slug = category.get_ancertors_slug()
+        if ancestors_slug:
+            path = '%s/%s/' % (ancestors_slug, category.slug)
         else:
             path = '%s/' % self.category.slug
-        return ('booking_create', [path, self.slug, self.pk])
+        return 'booking_create', [path, self.slug, self.pk]
     
     def more_like_this(self):
         from products.search import product_search
         sqs = product_search.dwithin(
-		    'location', self.address.position,
-		    Distance(km=DEFAULT_RADIUS)
-		) #.distance('location', self.address.position)
+            'location', self.address.position,
+            Distance(km=DEFAULT_RADIUS)
+        ) #.distance('location', self.address.position)
         return sqs.more_like_this(self)[:3]
     
     @property
@@ -612,7 +622,7 @@ class Category(MPTTModel):
     """A category"""
     parent = models.ForeignKey('self', related_name='childrens', blank=True, null=True)
     name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True, db_index=True)
+    slug = models.SlugField(db_index=True)
     need_insurance = models.BooleanField(default=True, db_index=True)
     sites = models.ManyToManyField(Site, related_name='categories')
 
@@ -643,9 +653,33 @@ class Category(MPTTModel):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            slug = slugify(self.name)
+            if Category.on_site.filter(slug=slug).exists():
+                raise ValidationError(_(u'Category with name %s (%s) already exists. Site_id is %d.') % (self.name, slug, Site.objects.get_current().id))
+            self.slug = slug
         super(Category, self).save(*args, **kwargs)
-    
+
+    def get_conformity(self, site_id):
+        if site_id in self.sites.all().values_list('id', flat=True):
+            return self
+
+        category = self
+        conformity = None
+        eloue_site_id = 1
+        gosport_site_id = 13
+        while category and not conformity:
+            try:
+                conformity = CategoryConformity.objects.filter(
+                    Q(gosport_category=category) | Q(eloue_category=category)
+                )[0]
+            except IndexError:
+                category = category.parent
+
+        if not conformity:
+            return None
+        else:
+            return conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else None
+
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
     
@@ -655,7 +689,19 @@ class Category(MPTTModel):
             return u"/location/%(ancestors_slug)s/%(slug)s/" % {'ancestors_slug': ancestors_slug, 'slug': self.slug }
         else:
             return u"/location/%(slug)s/" % {'slug': self.slug}
-            
+
+class Product2Category(models.Model):
+    product = models.ForeignKey('Product')
+    category = models.ForeignKey('Category')
+    site = models.ForeignKey('sites.Site')
+
+    on_site = CurrentSiteManager()
+    objects = models.Manager()
+
+class CategoryConformity(models.Model):
+    eloue_category = models.ForeignKey('Category', related_name='+')
+    gosport_category = models.ForeignKey('Category', related_name='+')
+
 
 class Property(models.Model):
     """A property"""
@@ -1023,13 +1069,13 @@ class ProductTopPosition(models.Model):
 
 post_save.connect(post_save_answer, sender=Answer)
 post_save.connect(post_save_product, sender=Product)
+post_save.connect(post_save_product, sender=CarProduct)
+post_save.connect(post_save_product, sender=RealEstateProduct)
 post_save.connect(post_save_curiosity, sender=Curiosity)
+
 post_save.connect(post_save_sites, sender=Alert)
 post_save.connect(post_save_sites, sender=Curiosity)
-post_save.connect(post_save_sites, sender=Product)
-post_save.connect(post_save_sites, sender=Category)
-post_save.connect(post_save_sites, sender=CarProduct)
-post_save.connect(post_save_sites, sender=RealEstateProduct)
+# post_save.connect(post_save_sites, sender=Category)
 
 post_save.connect(post_save_to_update_product, sender=Price)
 post_save.connect(post_save_to_update_product, sender=Picture)

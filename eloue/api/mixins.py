@@ -91,7 +91,7 @@ class PermissionMixin(object):
 
         self.owner_mode = False
         if 'pk' in kwargs:
-            instance = self.get_object()
+            instance = self.get_object(self.get_queryset())
             if not request.user.is_anonymous():
                 owner_fields = getattr(self, 'owner_field', None)
                 if owner_fields:

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from operator import itemgetter
 
 from django.core.urlresolvers import reverse
+from django.test.utils import override_settings
 from django.utils.translation import ugettext as _
 from django.db.models import get_model
 from django.db import connection
@@ -48,9 +49,6 @@ class AnonymousBookingTest(APITestCase):
         response = self.client.put(_location('booking-cancel', pk='87ee8e9dec1d47c29ebb27e09bda8fc3'))
         self.assertEquals(response.status_code, 401)
 
-    def test_booking_comments_forbidden(self):
-        self.fail('Not implemented!')
-
 
 class BookingTest(APITransactionTestCase):
     reset_sequences = True
@@ -68,7 +66,7 @@ class BookingTest(APITransactionTestCase):
         self.assertEquals(response.status_code, 200, response.data)
         # check pagination data format in the response
         expected = {
-            'count': 16,
+            'count': 14,
             'previous': None,
         }
         self.assertDictContainsSubset(expected, response.data)
@@ -144,9 +142,6 @@ class BookingTest(APITransactionTestCase):
             'product': _location('product-detail', pk=1),
         })
         self.assertEquals(response.status_code, 400, response.data)
-
-    def test_booking_comments(self):
-        self.fail('Not implemented!')
 
     def test_booking_cancel_not_mine(self):
         response = self.client.put(_location('booking-cancel', '349ce9ba628abfdfc9cb3a72608dab68'))
@@ -238,6 +233,7 @@ class BookingTest(APITransactionTestCase):
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
 
+    @override_settings(TEST_MODE=True)
     def test_booking_pay_existing_card(self):
         response = self.client.put(_location('booking-pay', '87ee8e9dec1d47c29ebb27e09bdada43'), {
             'credit_card': _location('creditcard-detail', 3)
