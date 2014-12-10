@@ -4,13 +4,20 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
 
         var AccountAddressDetailCtrl,
             scope,
+            state,
             stateParams,
+            endpointsMock,
             addressesServiceMock,
-            productsServiceMock;
+            productsServiceMock,
+            usersServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
+
+            endpointsMock = {
+                api_url: "/api/2.0/"
+            };
 
             addressesServiceMock = {
                 getAddress: function (addressId) {
@@ -41,14 +48,25 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
                 }
             };
 
+            usersServiceMock = {
+                updateUser: function (user) {
+                    console.log("usersServiceMock:updateUser");
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                }
+            };
+
             module(function ($provide) {
                 $provide.value("AddressesService", addressesServiceMock);
                 $provide.value("ProductsService", productsServiceMock);
+                $provide.value("UsersService", usersServiceMock);
             })
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            state = {};
             stateParams = {
                 id: 1
             };
@@ -56,8 +74,9 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
             spyOn(addressesServiceMock, "updateAddress").and.callThrough();
             spyOn(addressesServiceMock, "deleteAddress").and.callThrough();
             spyOn(productsServiceMock, "getProductsByAddress").and.callThrough();
+            spyOn(usersServiceMock, "updateUser").and.callThrough();
 
-            AccountAddressDetailCtrl = $controller('AccountAddressDetailCtrl', { $scope: scope, $stateParams: stateParams, AddressesService: addressesServiceMock, ProductsService: productsServiceMock });
+            AccountAddressDetailCtrl = $controller('AccountAddressDetailCtrl', { $scope: scope, $state: state, $stateParams: stateParams, Endpoints: endpointsMock, AddressesService: addressesServiceMock, ProductsService: productsServiceMock, UsersService: usersServiceMock });
         }));
 
         it("AccountAddressDetailCtrl should be not null", function () {
