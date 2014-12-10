@@ -1,0 +1,23 @@
+#add-period.modal.fade
+   .modal-dialog
+      .modal-content(style="padding: 30px")
+         .modal-body
+            h3 Ajoutez une nouvelle disponibilité
+            form
+               .row
+                   .col-sm-12
+                       input(type="number", name="quantity", ng-model="newUnavailabilityPeriod.quantity", required).form-control
+               .row
+                   .col-sm-12(style="z-index: 1050")
+                       input(type="text", name="started_at", ng-model="newUnavailabilityPeriod.started_at", eloue-extended-datepicker, required).form-control
+               .row
+                    .col-sm-12(style="z-index: 1050")
+                        input(type="text", name="ended_at", ng-model="newUnavailabilityPeriod.ended_at", eloue-extended-datepicker, required).form-control
+               .row
+                 .col-xs-6
+                   button(type="button", data-dismiss="modal", ng-click="saveUnavailabilityPeriod()").btn
+                     | Enregistrer
+                 .col-xs-6
+                   button(type="button", data-dismiss="modal").btn.bg-success
+                     | Annuler
+

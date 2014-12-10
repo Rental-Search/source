@@ -197,6 +197,16 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     }]);
 
     /**
+     * Factory for managing product unavailability periods.
+     */
+    EloueCommon.factory("UnavailabilityPeriods", ["$resource", "Endpoints", function ($resource, Endpoints) {
+        return $resource(Endpoints.api_url + "unavailabilityperiods/:id/?", {},
+            {
+                "update": { method: "PUT" }
+            });
+    }]);
+
+    /**
      * Factory for credit cards.
      */
     EloueCommon.factory("CreditCards", ["$resource", "Endpoints", function ($resource, Endpoints) {
