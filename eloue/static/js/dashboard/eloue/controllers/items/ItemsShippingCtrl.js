@@ -13,9 +13,8 @@ define(["angular", "eloue/app"], function (angular) {
         "ProductsLoadService",
         "ProductShippingPointsService",
         "ShippingPointsService",
-        "UtilsService",
         "UsersService",
-        function ($scope, $stateParams, $timeout, Endpoints, ProductsLoadService, ProductShippingPointsService, ShippingPointsService, UtilsService, UsersService) {
+        function ($scope, $stateParams, $timeout, Endpoints, ProductsLoadService, ProductShippingPointsService, ShippingPointsService, UsersService) {
             $scope.markListItemAsSelected("item-tab-", "shipping");
             $scope.initCustomScrollbars();
             $scope.addressQuery = "";

@@ -99,6 +99,10 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
 
             module(function ($provide) {
                 $provide.value("UtilsService", utilsServiceMock);
+                $provide.value("MessageThreadsLoadService", messageThreadsLoadServiceMock);
+                $provide.value("BookingsLoadService", bookingsLoadServiceMock);
+                $provide.value("ProductRelatedMessagesLoadService", productRelatedMessagesLoadServiceMock);
+                $provide.value("ProductsLoadService", productsLoadServiceMock);
             })
         });
 

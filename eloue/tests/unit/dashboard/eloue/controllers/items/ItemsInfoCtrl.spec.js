@@ -3,17 +3,14 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
     describe("Controller: ItemsInfoCtrl", function () {
 
         var ItemsInfoCtrl,
+            q,
             scope,
             stateParams,
             endpointsMock,
             privateLifeMock,
-            seatNumberMock,
-            doorNumberMock,
             fuelMock,
             transmissionMock,
             mileageMock,
-            consumptionMock,
-            capacityMock,
             addressesServiceMock,
             categoriesServiceMock,
             picturesServiceMock,
@@ -23,6 +20,14 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
+
+            q = {
+                all: function (obj) {
+                    return {then: function () {
+                    }}
+                }
+            };
+
             endpointsMock = {
                 oauth_url: "http://10.0.5.47:8200/oauth2/",
                 api_url: "http://10.0.5.47:8200/api/2.0/"
@@ -62,6 +67,11 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
             picturesServiceMock = {
                 savePicture: function (productId, form, successCallback, errorCallback) {
                     console.log("picturesServiceMock:savePicture called with productId = " + productId);
+                },
+                deletePicture: function (pictureId) {
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
                 }
             };
             productsServiceMock = {
@@ -102,15 +112,14 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
             spyOn(categoriesServiceMock, "getChildCategories").and.callThrough();
             spyOn(categoriesServiceMock, "getCategory").and.callThrough();
             spyOn(picturesServiceMock, "savePicture").and.callThrough();
+            spyOn(picturesServiceMock, "deletePicture").and.callThrough();
             spyOn(productsServiceMock, "getProductDetails").and.callThrough();
             spyOn(productsServiceMock, "updateProduct").and.callThrough();
-            spyOn(phoneNumbersServiceMock, "updatePhoneNumber").and.callThrough();
 
-            ItemsInfoCtrl = $controller('ItemsInfoCtrl', { $scope: scope, $stateParams: stateParams, Endpoints: endpointsMock,
-                PrivateLife: privateLifeMock, SeatNumber: seatNumberMock, DoorNumber: doorNumberMock, Fuel: fuelMock,
-                Transmission: transmissionMock, Mileage: mileageMock, Consumption: consumptionMock, Capacity: capacityMock,
-                AddressesService: addressesServiceMock, CategoriesService: categoriesServiceMock, PicturesService: picturesServiceMock,
-                ProductsService: productsServiceMock, PhoneNumbersService: phoneNumbersServiceMock});
+            ItemsInfoCtrl = $controller('ItemsInfoCtrl', { $q: q, $scope: scope, $stateParams: stateParams, Endpoints: endpointsMock,
+                PrivateLife: privateLifeMock, Fuel: fuelMock, Transmission: transmissionMock, Mileage: mileageMock,
+                AddressesService: addressesServiceMock, CategoriesService: categoriesServiceMock,
+                PicturesService: picturesServiceMock, ProductsService: productsServiceMock});
             expect(productsServiceMock.getProductDetails).toHaveBeenCalledWith(stateParams.id);
             expect(categoriesServiceMock.getRootCategories).toHaveBeenCalled();
         }));
