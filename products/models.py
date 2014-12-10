@@ -106,11 +106,11 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
-        qs = self.categories.all()
+        qs = self.product2category_set.all().select_related('category')
         if settings.DEBUG:
             category_count = qs.count()
             assert category_count == 1, 'product_id: %d; category_count: %d; site_id: %d' % (self.id, category_count, Site.objects.get_current().id)
-        return qs[0]
+        return qs[0].category
 
     @permalink
     def get_absolute_url(self):
@@ -693,8 +693,8 @@ class Category(MPTTModel):
 
 class Product2Category(models.Model):
     product = models.ForeignKey('Product')
-    category = models.ForeignKey('Category')
-    site = models.ForeignKey('sites.Site')
+    category = models.ForeignKey('Category', related_name='+')
+    site = models.ForeignKey('sites.Site', related_name='+')
 
     on_site = CurrentSiteProduct2CategoryManager()
     objects = models.Manager()
