@@ -34,7 +34,7 @@ from django.db.models import signals
 
 from accounts.models import Patron, Address, ProAgency, PhoneNumber
 from products.fields import SimpleDateField
-from products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, TreeManager
+from products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, CurrentSiteProduct2CategoryManager, TreeManager
 from products.signals import (post_save_answer, post_save_product, 
     post_save_curiosity, post_save_to_update_product, post_save_message)
 from products.choices import UNIT, CURRENCY, STATUS, PAYMENT_TYPE, SEAT_NUMBER, DOOR_NUMBER, CONSUMPTION, FUEL, TRANSMISSION, MILEAGE, CAPACITY, TAX_HORSEPOWER, PRIVATE_LIFE
@@ -77,6 +77,7 @@ class Product(models.Model):
 
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
     is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
+    # FIXME: 'category' attribute is obsoleted by 'categories' and must be removed
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
     categories = models.ManyToManyField('Category', related_name='product_categories', through='Product2Category')
     owner = models.ForeignKey(Patron, related_name='products')
@@ -105,11 +106,11 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
-        category_count = self.product2category_set.count()
-        site_id = Site.objects.get_current().id
-        product_id = self.id
-        assert self.product2category_set.count() == 1, 'product_id: %d; category_count: %d; site_id: %d' % (product_id, category_count, site_id)
-        return self.product2category_set.all()[0].category
+        qs = self.categories.all()
+        if settings.DEBUG:
+            category_count = qs.count()
+            assert category_count == 1, 'product_id: %d; category_count: %d; site_id: %d' % (self.id, category_count, Site.objects.get_current().id)
+        return qs[0]
 
     @permalink
     def get_absolute_url(self):
@@ -695,8 +696,12 @@ class Product2Category(models.Model):
     category = models.ForeignKey('Category')
     site = models.ForeignKey('sites.Site')
 
-    on_site = CurrentSiteManager()
+    on_site = CurrentSiteProduct2CategoryManager()
     objects = models.Manager()
+
+# TODO: enable unique SQL DB constraint
+#    class Meta:
+#        unique_together = ('product', 'category', 'site')
 
 class CategoryConformity(models.Model):
     eloue_category = models.ForeignKey('Category', related_name='+')

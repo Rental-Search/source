@@ -1,6 +1,5 @@
 #-*- coding: utf-8 -*-
 from datetime import datetime, timedelta
-from django.conf import settings
 
 from django.utils.functional import memoize
 
@@ -54,13 +53,10 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return tuple(obj.sites.values_list('id', flat=True))
     
     def prepare_categories(self, obj):
-        category = obj.category
+        category = obj._get_category()
         if category:
             # it is safe to cache get_ancestors for categories and cache them by category PK
-            categories = set(cached_category(category.pk, category))
-            for category in obj.categories.filter(sites__id=settings.SITE_ID):
-                categories.update(cached_category(category.pk, category))
-            return tuple(categories)
+            return cached_category(category.pk, category)
 
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]:
