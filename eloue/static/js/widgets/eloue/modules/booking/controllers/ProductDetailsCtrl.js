@@ -224,8 +224,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Send new message to the owner.
              */
             $scope.sendMessage = function sendMessage() {
+                $scope.submitInProgress = true;
                 ProductRelatedMessagesLoadService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
                     $scope.newMessage.body, null, $scope.product.id).then(function (result) {
+                        $scope.submitInProgress = false;
                         $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
                         $scope.trackEvent("Réservation", "Message",  $scope.getEventLabel());
                         $scope.trackPageView();
@@ -233,6 +235,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
                         $scope.loadMessageThread();
+                    }, function (error) {
+                        $scope.available = false;
+                        $scope.handleResponseErrors(error);
                     });
             };
 
