@@ -6,7 +6,7 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
             scope,
             q,
             window,
-            usersServiceMock,
+            utilsServiceMock,
             stateParams,
             endpointsMock,
             messageThreadsLoadServiceMock,
@@ -17,10 +17,15 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
-            usersServiceMock = {
-                getMe: function (successCallback, errorCallback) {
-                    console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+            utilsServiceMock = {
+                getIdFromUrl: function (url) {
+
+                },
+                calculatePeriodBetweenDates: function (startDateString, endDateString) {
+
+                },
+                formatDate: function (date, format) {
+
                 }
             };
 
@@ -49,15 +54,40 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
 
             productRelatedMessagesLoadServiceMock = {
                 updateMessage: function (message) {
-
+                    return {
+                        $promise: {
+                            then: function () {
+                                return {result: {}}
+                            }
+                        }
+                    }
                 },
-            postMessage: function (threadId, senderId, recipientId, text, offerId, productId) {
-
-            }
+                postMessage: function (threadId, senderId, recipientId, text, offerId, productId) {
+                    return {
+                        then: function (productId) {
+                            return {result: {}}
+                        }
+                    }
+                }
             };
 
             productsLoadServiceMock = {
-
+                getAbsoluteUrl: function (id) {
+                    return {
+                        $promise: {
+                            then: function () {
+                                return {result: {}}
+                            }
+                        }
+                    }
+                },
+                isAvailable: function (id, startDate, endDate, quantity) {
+                    return {
+                        then: function (productId) {
+                            return {result: {}}
+                        }
+                    }
+                }
             };
 
             q = {
@@ -68,7 +98,7 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
             };
 
             module(function ($provide) {
-                $provide.value("UsersService", usersServiceMock);
+                $provide.value("UtilsService", utilsServiceMock);
             })
         });
 
@@ -83,12 +113,22 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
                 id: 1
             };
 
-            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(utilsServiceMock, "calculatePeriodBetweenDates").and.callThrough();
+            spyOn(utilsServiceMock, "formatDate").and.callThrough();
+            spyOn(messageThreadsLoadServiceMock, "getMessageThread").and.callThrough();
+            spyOn(messageThreadsLoadServiceMock, "getUsersRoles").and.callThrough();
+            spyOn(bookingsLoadServiceMock, "getBookingByProduct").and.callThrough();
+            spyOn(productRelatedMessagesLoadServiceMock, "updateMessage").and.callThrough();
+            spyOn(productRelatedMessagesLoadServiceMock, "postMessage").and.callThrough();
+            spyOn(productsLoadServiceMock, "getAbsoluteUrl").and.callThrough();
+            spyOn(productsLoadServiceMock, "isAvailable").and.callThrough();
+            spyOn(q, "all").and.callThrough();
 
             MessageDetailCtrl = $controller('MessageDetailCtrl', { $scope: scope, $stateParams: stateParams, $q: q, $window: window,
                 Endpoints: endpointsMock, MessageThreadsLoadService: messageThreadsLoadServiceMock,
                 BookingsLoadService: bookingsLoadServiceMock, ProductRelatedMessagesLoadService: productRelatedMessagesLoadServiceMock,
-                ProductsLoadService: productsLoadServiceMock, UsersService: usersServiceMock });
+                ProductsLoadService: productsLoadServiceMock, UtilsService: utilsServiceMock });
         }));
 
         it("MessageDetailCtrl should be not null", function () {
