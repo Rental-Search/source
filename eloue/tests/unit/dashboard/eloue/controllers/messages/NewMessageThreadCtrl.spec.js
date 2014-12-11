@@ -54,7 +54,7 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+                    return {id: 1190};
                 }
             };
 
@@ -85,15 +85,24 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
 
-            NewMessageThreadCtrl = $controller('NewMessageThreadCtrl', { $scope: scope, $state: state,
+            NewMessageThreadCtrl = $controller('NewMessageThreadCtrl', {
+                $scope: scope, $state: state,
                 $stateParams: stateParams, Endpoints: endpointsMock, BookingsLoadService: bookingsLoadServiceMock,
                 ProductRelatedMessagesLoadService: productRelatedMessagesLoadServiceMock,
                 ProductsLoadService: productsLoadServiceMock, UtilsService: utilsServiceMock,
-                UsersService: usersServiceMock });
+                UsersService: usersServiceMock
+            });
         }));
 
         it("NewMessageThreadCtrl should be not null", function () {
             expect(!!NewMessageThreadCtrl).toBe(true);
+        });
+
+        it("NewMessageThreadCtrl:postNewMessage", function () {
+            scope.currentUser = {id: 1};
+            scope.messageThread = {id: 1};
+            scope.booking = {owner: {}};
+            scope.postNewMessage();
         });
     });
 });

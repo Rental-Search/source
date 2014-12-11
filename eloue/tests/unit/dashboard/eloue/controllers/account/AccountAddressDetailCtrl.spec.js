@@ -88,6 +88,12 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
             expect(addressesServiceMock.updateAddress).toHaveBeenCalled();
         });
 
+        it("AccountAddressDetailCtrl:finaliseAddressUpdate", function () {
+            scope.showNotification = function(notification){};
+            state.transitionTo = function(current, stateParams, opts) {};
+            scope.finaliseAddressUpdate();
+        });
+
         it("AccountAddressDetailCtrl:deleteAddress", function () {
             scope.deleteAddress();
             expect(addressesServiceMock.deleteAddress).toHaveBeenCalled();

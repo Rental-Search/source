@@ -119,5 +119,21 @@ define(["angular-mocks", "eloue/controllers/account/AccountProfileCtrl"], functi
             scope.dataFormSubmit();
             expect(usersServiceMock.sendForm).toHaveBeenCalled();
         });
+
+        it("AccountProfileCtrl:handleResponseErrors", function () {
+            scope.handleResponseErrors();
+        });
+
+        it("AccountProfileCtrl:saveProfile", function () {
+            scope.saveProfile();
+        });
+
+        it("AccountProfileCtrl:saveNewPhone", function () {
+            scope.saveNewPhone();
+        });
+
+        it("AccountProfileCtrl:sendUserForm", function () {
+            scope.sendUserForm();
+        });
     });
 });

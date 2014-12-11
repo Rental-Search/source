@@ -16,6 +16,12 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
                     return {$promise: {then: function () {
                         return {result: {}}
                     }}}
+                },
+
+                getStatistics: function (userId) {
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
                 }
             };
 
@@ -35,6 +41,7 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
             scope = $rootScope.$new();
 
             spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(usersServiceMock, "getStatistics").and.callThrough();
             spyOn(authServiceMock, "getCookie").and.callThrough();
 
             DashboardRootCtrl = $controller('DashboardRootCtrl', { $scope: scope, UsersService: usersServiceMock, AuthService: authServiceMock });
@@ -42,6 +49,33 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
 
         it("DashboardRootCtrl should be not null", function () {
             expect(!!DashboardRootCtrl).toBe(true);
+        });
+
+        it("DashboardRootCtrl:updateStatistics", function () {
+            scope.currentUser = {
+                id: 1
+            };
+            scope.updateStatistics();
+        });
+
+        it("DashboardRootCtrl:clearSelectedItem", function () {
+            scope.clearSelectedItem();
+        });
+
+        it("DashboardRootCtrl:isItemSelected", function () {
+            scope.isItemSelected();
+        });
+
+        it("DashboardRootCtrl:markListItemAsSelected", function () {
+            scope.markListItemAsSelected();
+        });
+
+        it("DashboardRootCtrl:initCustomScrollbars", function () {
+            scope.initCustomScrollbars();
+        });
+
+        it("DashboardRootCtrl:showNotification", function () {
+            scope.showNotification();
         });
     });
 });

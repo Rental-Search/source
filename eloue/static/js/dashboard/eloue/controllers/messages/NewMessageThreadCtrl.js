@@ -22,6 +22,7 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
             }
             $scope.currentUserPromise.then(function (currentUser) {
 
+                $scope.currentUser = currentUser;
                 $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
 
                 if ($stateParams.productId) {
@@ -45,22 +46,24 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                     toastr.error("No product selected", "");
                 }
 
-                // Post new message
-                $scope.postNewMessage = function () {
-                    $scope.submitInProgress = true;
-                    ProductRelatedMessagesLoadService.postMessage($scope.messageThread.id, currentUser.id, $scope.booking.owner.id,
-                        $scope.message, null, $stateParams.productId).then(function (result) {
-                            // Clear message field
-                            $scope.message = "";
-                            $scope.submitInProgress = false;
-                            $stateParams.id = UtilsService.getIdFromUrl(result.thread);
-                            $state.transitionTo("messages.detail", $stateParams, { reload: true });
-                        });
-                };
+
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
             });
+
+            // Post new message
+            $scope.postNewMessage = function () {
+                $scope.submitInProgress = true;
+                ProductRelatedMessagesLoadService.postMessage($scope.messageThread.id, $scope.currentUser.id, $scope.booking.owner.id,
+                    $scope.message, null, $stateParams.productId).then(function (result) {
+                        // Clear message field
+                        $scope.message = "";
+                        $scope.submitInProgress = false;
+                        $stateParams.id = UtilsService.getIdFromUrl(result.thread);
+                        $state.transitionTo("messages.detail", $stateParams, { reload: true });
+                    });
+            };
         }
     ]);
 });

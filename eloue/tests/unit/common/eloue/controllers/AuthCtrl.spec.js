@@ -11,18 +11,29 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
-            authServiceMock = {clearUserData: function () {
-                console.log("Auth service mock called");
-            }};
+            authServiceMock = {
+                clearUserData: function () {
+                    console.log("Auth service mock called");
+                },
+                getCookie: function (cookieName) {
+                    return "U_token";
+                }
+            };
 
             usersServiceMock = {
                 getMe: function () {
                     console.log("Users service mock called");
-                    return {$promise: {then: function () {
-                        return {results: [
-                            {}
-                        ]}
-                    }}}
+                    return {
+                        $promise: {
+                            then: function () {
+                                return {
+                                    results: [
+                                        {}
+                                    ]
+                                }
+                            }
+                        }
+                    }
                 },
                 getStatistics: function () {
                     console.log("Users service mock called");
@@ -36,11 +47,23 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
-            window = {location:{}};
+            window = {location: {
+                href: "url",
+                reload: function() {}
+            }};
 
             spyOn(authServiceMock, "clearUserData").and.callThrough();
 
-            AuthCtrl = $controller('AuthCtrl', { $scope: scope, $window: window, AuthService: authServiceMock, UsersService: usersServiceMock});
+            AuthCtrl = $controller('AuthCtrl', {
+                $scope: scope,
+                $window: window,
+                AuthService: authServiceMock,
+                UsersService: usersServiceMock
+            });
         }));
+
+        it("AuthCtrl:logout", function () {
+            scope.logout();
+        });
     });
 });

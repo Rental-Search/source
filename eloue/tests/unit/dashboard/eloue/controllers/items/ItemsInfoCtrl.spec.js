@@ -36,6 +36,9 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
             addressesServiceMock = {
                 update: function (address) {
                     console.log("addressesServiceMock:update called with address = " + address);
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
                 }
             };
             categoriesServiceMock = {
@@ -83,6 +86,9 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
                 },
                 updateProduct: function (product) {
                     console.log("productsServiceMock:updateProduct called with product = " + product);
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
                 }
             };
             phoneNumbersServiceMock = {
@@ -126,6 +132,37 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
 
         it("ItemsInfoCtrl should be not null", function () {
             expect(!!ItemsInfoCtrl).toBe(true);
+        });
+
+        it("ItemsInfoCtrl:onPictureAdded", function () {
+            scope.product = {id: 1};
+            scope.onPictureAdded();
+        });
+
+        it("ItemsInfoCtrl:updateProduct", function () {
+            scope.product = {addressDetails: {} };
+            scope.updateProduct();
+        });
+
+        it("ItemsInfoCtrl:updateNodeCategories", function () {
+            scope.updateNodeCategories();
+        });
+
+        it("ItemsInfoCtrl:updateLeafCategories", function () {
+            scope.updateLeafCategories();
+        });
+
+        it("ItemsInfoCtrl:updateFieldSet", function () {
+            var rootCategory = {name: "Automobile"};
+            scope.updateFieldSet(rootCategory);
+        });
+
+        it("ItemsInfoCtrl:getTimes", function () {
+            scope.getTimes();
+        });
+
+        it("ItemsInfoCtrl:deletePicture", function () {
+            scope.deletePicture();
         });
     });
 });

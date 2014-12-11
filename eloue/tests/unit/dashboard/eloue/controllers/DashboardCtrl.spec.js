@@ -39,5 +39,9 @@ define(["angular-mocks", "eloue/controllers/DashboardCtrl"], function() {
         it("DashboardCtrl should be not null", function () {
             expect(!!DashboardCtrl).toBe(true);
         });
+
+        it("DashboardCtrl:filterByActivityType", function () {
+            scope.filterByActivityType();
+        });
     });
 });

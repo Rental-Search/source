@@ -47,5 +47,13 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
         it("MessagesCtrl should be not null", function () {
             expect(!!MessagesCtrl).toBe(true);
         });
+
+        it("MessagesCtrl:shouldMarkAsUnread", function () {
+            scope.currentUser = {
+                id: 1
+            };
+            var lastMessage= {};
+            scope.shouldMarkAsUnread(lastMessage);
+        });
     });
 });

@@ -64,5 +64,9 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
             scope.filterByState();
             expect(scope.bookingFilter.state).toEqual(scope.stateFilter);
         });
+
+        it("BookingsCtrl:filter", function () {
+            scope.filter();
+        });
     });
 });
