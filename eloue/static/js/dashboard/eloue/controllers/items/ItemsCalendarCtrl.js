@@ -116,10 +116,10 @@ define(["angular", "eloue/app"], function (angular) {
                 console.log("saveUnavailabilityPeriod");
                 console.log($scope.newUnavailabilityPeriod);
                 $scope.submitInProgress = true;
-                $scope.newUnavailabilityPeriod.started_at +=  " 00:00:00";
-                $scope.newUnavailabilityPeriod.ended_at +=  " 00:00:00";
-                //$scope.newUnavailabilityPeriod.started_at = Date.parseExact($scope.newUnavailabilityPeriod.started_at, "dd/MM/yyyy HH:mm:ss").getTime();
-                //$scope.newUnavailabilityPeriod.ended_at = Date.parseExact($scope.newUnavailabilityPeriod.ended_at, "dd/MM/yyyy HH:mm:ss").getTime();
+                var startDate = Date.parseExact($scope.newUnavailabilityPeriod.started_at, "dd/MM/yyyy"),
+                    endDate = Date.parseExact($scope.newUnavailabilityPeriod.ended_at, "dd/MM/yyyy");
+                $scope.newUnavailabilityPeriod.started_at =  32 * startDate.getMonth() + startDate.getDate();
+                $scope.newUnavailabilityPeriod.ended_at =  32 * endDate.getMonth() + endDate.getDate();
                 $scope.newUnavailabilityPeriod.product =  Endpoints.api_url + "products/" + $stateParams.id + "/";
 
                 UnavailabilityPeriodsService.savePeriod($scope.newUnavailabilityPeriod).$promise.then(function (result) {
