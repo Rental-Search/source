@@ -1662,7 +1662,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     if (!modalView || modalView.length == 0) {
                         delay = 0;
                     } else {
-                        delay = 5000;
+                        delay = 10000;
                         modalView.modal('show');
                     }
                     if(!eloueRedirectUrl || eloueRedirectUrl.length == 0){
