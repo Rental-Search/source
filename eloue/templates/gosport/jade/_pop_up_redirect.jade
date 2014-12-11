@@ -2,17 +2,17 @@
   .modal-dialog
     .modal-content
       .modal-header
-        h4.modal-title Merci, inscription en cours
+        h4.modal-title Redirection en cours
       .modal-body
         section.clearfix.indent-h-sm
           .col-xs-4
-            a(href="#").bg-wrapper: img(style="background-image: url(#{STATIC_URL}img/logo_gosport.png);", alt="")
+            .bg-wrapper: img(style="background-image: url(#{STATIC_URL}img/logo_gosport.png);", alt="")
             p Vous naviguiez sur GO Sport Location
           .col-xs-4
             span.bg-wrapper.redirection-arrows: img(src="#{STATIC_URL}img/redirection.gif", alt="")
             p Nous vous redirigeons sur le site e-loue
           .col-xs-4
-            a(href="#").bg-wrapper: img(style="background-image: url(#{STATIC_URL}img/logo.png);", alt="")
+            .bg-wrapper: img(style="background-image: url(#{STATIC_URL}img/logo.png);", alt="")
             p Effectuez à present votre location sur e-loue
         section.indent-h-sm
           h4.text-primary GO Sport Location utilise e-loue comme outil technique pour gérer vos locations.
