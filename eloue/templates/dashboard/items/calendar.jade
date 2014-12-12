@@ -43,7 +43,7 @@ block details
                 td Motifs
                 td Action 
             tbody
-              tr(ng-repeat="period in productUnavailablePeriods", ng-show="(showBookings && period.reason=='booked') || (showUnavailable && period.reason=='unavailable')")
+              tr(ng-repeat="period in productUnavailablePeriods track by period.id", ng-show="(showBookings && period.reason=='booked') || (showUnavailable && period.reason=='unavailable')")
                 td {{period.startDay | date:'dd/MM/yyyy'}}
                 td {{period.endDay | date:'dd/MM/yyyy'}}
                 td(ng-show="showBookings && period.reason=='booked'").text-success-light Réservé

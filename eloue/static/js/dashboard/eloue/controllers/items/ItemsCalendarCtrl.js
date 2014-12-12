@@ -48,11 +48,10 @@ define(["angular", "eloue/app"], function (angular) {
                 });
                 $scope.bookings = bookings;
                 UnavailabilityPeriodsService.getByProduct($stateParams.id).then(function (periods) {
-                    console.log(periods.results);
                     $scope.unavailablePeriods = periods.results;
                     angular.forEach($scope.unavailablePeriods, function (value, key) {
-                        value.startDay = Date.parse(value.started_at);
-                        value.endDay = Date.parse(value.ended_at);
+                        value.startDay = Date.parseExact(value.started_at, "yyyy-MM-ddTHH:mm:ss");
+                        value.endDay = Date.parseExact(value.ended_at, "yyyy-MM-ddTHH:mm:ss");
                     });
                     $scope.updateCalendar();
                 });
@@ -76,15 +75,19 @@ define(["angular", "eloue/app"], function (angular) {
                             if (currentDay.between(value.startDay, value.endDay)) {
                                 isBooked = true;
                                 value.reason = "booked";
-                                $scope.productUnavailablePeriods.push(value);
+                                if ($.inArray(value, $scope.productUnavailablePeriods) == -1) {
+                                    $scope.productUnavailablePeriods.push(value);
+                                }
                             }
                         });
 
                         angular.forEach($scope.unavailablePeriods, function (value, key) {
-                            if (currentDay.between(value.started_at, value.ended_at)) {
+                            if (currentDay.between(value.startDay, value.endDay)) {
                                 isUnavailable = true;
                                 value.reason = "unavailable";
-                                $scope.productUnavailablePeriods.push(value);
+                                if ($.inArray(value, $scope.productUnavailablePeriods) == -1) {
+                                    $scope.productUnavailablePeriods.push(value);
+                                }
                             }
                         });
 
@@ -118,8 +121,8 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.submitInProgress = true;
                 var startDate = Date.parseExact($scope.newUnavailabilityPeriod.started_at, "dd/MM/yyyy"),
                     endDate = Date.parseExact($scope.newUnavailabilityPeriod.ended_at, "dd/MM/yyyy");
-                $scope.newUnavailabilityPeriod.started_at =  32 * startDate.getMonth() + startDate.getDate();
-                $scope.newUnavailabilityPeriod.ended_at =  32 * endDate.getMonth() + endDate.getDate();
+                $scope.newUnavailabilityPeriod.started_at = startDate.toString("yyyy-MM-dd HH:mm:ss");
+                $scope.newUnavailabilityPeriod.ended_at =  endDate.toString("yyyy-MM-dd HH:mm:ss");
                 $scope.newUnavailabilityPeriod.product =  Endpoints.api_url + "products/" + $stateParams.id + "/";
 
                 UnavailabilityPeriodsService.savePeriod($scope.newUnavailabilityPeriod).$promise.then(function (result) {
