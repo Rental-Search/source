@@ -20,6 +20,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.productUnavailablePeriods = [];
             $scope.weeks = {};
             $scope.newUnavailabilityPeriod = {};
+            $scope.unavailabilityPeriodValidationError = "";
 
             var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
@@ -56,6 +57,10 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.updateCalendar();
                 });
             });
+
+            $scope.handleResponseErrors = function(error) {
+                $scope.submitInProgress = false;
+            };
 
             $scope.updateCalendar = function () {
                 $scope.productUnavailablePeriods = [];
@@ -116,21 +121,31 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.saveUnavailabilityPeriod = function() {
-                console.log("saveUnavailabilityPeriod");
-                console.log($scope.newUnavailabilityPeriod);
-                $scope.submitInProgress = true;
-                var startDate = Date.parseExact($scope.newUnavailabilityPeriod.started_at, "dd/MM/yyyy"),
-                    endDate = Date.parseExact($scope.newUnavailabilityPeriod.ended_at, "dd/MM/yyyy");
-                $scope.newUnavailabilityPeriod.started_at = startDate.toString("yyyy-MM-dd HH:mm:ss");
-                $scope.newUnavailabilityPeriod.ended_at =  endDate.toString("yyyy-MM-dd HH:mm:ss");
-                $scope.newUnavailabilityPeriod.product =  Endpoints.api_url + "products/" + $stateParams.id + "/";
+                if ($scope.validateUnavailabilityPeriod()) {
+                    console.log("saveUnavailabilityPeriod");
+                    console.log($scope.newUnavailabilityPeriod);
+                    $scope.submitInProgress = true;
+                    var startDate = Date.parseExact($scope.newUnavailabilityPeriod.started_at, "dd/MM/yyyy"),
+                        endDate = Date.parseExact($scope.newUnavailabilityPeriod.ended_at, "dd/MM/yyyy");
+                    $scope.newUnavailabilityPeriod.started_at = startDate.toString("yyyy-MM-dd HH:mm:ss");
+                    $scope.newUnavailabilityPeriod.ended_at = endDate.toString("yyyy-MM-dd HH:mm:ss");
+                    $scope.newUnavailabilityPeriod.product = Endpoints.api_url + "products/" + $stateParams.id + "/";
 
-                UnavailabilityPeriodsService.savePeriod($scope.newUnavailabilityPeriod).$promise.then(function (result) {
-                    console.log(result);
-                    $scope.updateCalendar();
-                    $scope.newUnavailabilityPeriod = {};
-                    $scope.submitInProgress = false;
-                });
-            }
+                    UnavailabilityPeriodsService.savePeriod($scope.newUnavailabilityPeriod).$promise.then(function (result) {
+                        $scope.updateCalendar();
+                        $("#add-period").modal('hide');
+                        $scope.newUnavailabilityPeriod = {};
+                        $scope.submitInProgress = false;
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
+                    });
+                }
+            };
+
+            $scope.validateUnavailabilityPeriod = function() {
+                //TODO: The user can't create an unavailability period if the product is already booked
+                // TODO: The user can't create an unavailability period if the start or end date is between an other unavailability period.
+                return true;
+            };
         }]);
 });
