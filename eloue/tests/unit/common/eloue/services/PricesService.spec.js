@@ -9,10 +9,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(function () {
             pricesMock = {
-                getProductPricesPerDay: function () {
-                },
-                get: function () {
-                },
                 save: function () {
                 },
                 update: function () {
@@ -26,8 +22,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_PricesService_) {
             PricesService = _PricesService_;
-            spyOn(pricesMock, "getProductPricesPerDay").and.callThrough();
-            spyOn(pricesMock, "get").and.callThrough();
             spyOn(pricesMock, "save").and.callThrough();
             spyOn(pricesMock, "update").and.callThrough();
         }));

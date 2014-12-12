@@ -3,6 +3,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: AddressesService", function () {
 
         var AddressesService,
+            q,
             addressesMock,
             endpointsMock,
             formServiceMock;
@@ -13,7 +14,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             endpointsMock = {};
             addressesMock = {
                 get: function () {
-
+                    return {$promise: {then: function () {
+                        return {results: []}
+                    }}}
                 },
                 update: function () {
 
@@ -34,8 +37,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             });
         });
 
-        beforeEach(inject(function (_AddressesService_) {
+        beforeEach(inject(function (_AddressesService_, $q) {
             AddressesService = _AddressesService_;
+            q = $q;
             spyOn(addressesMock, "get").and.callThrough();
             spyOn(addressesMock, "update").and.callThrough();
             spyOn(addressesMock, "delete").and.callThrough();
@@ -44,6 +48,18 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         it("AddressesService should be not null", function () {
             expect(!!AddressesService).toBe(true);
+        });
+
+        it("AddressesService:getAddress", function () {
+            var addressId = 1;
+            AddressesService.getAddress(addressId);
+            expect(addressesMock.get).toHaveBeenCalledWith({id: addressId, _cache: jasmine.any(Number)});
+        });
+
+        it("AddressesService:getAddressesByPatron", function () {
+            var patronId = 1;
+            AddressesService.getAddressesByPatron(patronId);
+            expect(addressesMock.get).toHaveBeenCalledWith({patron: patronId, _cache: jasmine.any(Number)});
         });
 
         it("AddressesService:deleteAddress", function () {

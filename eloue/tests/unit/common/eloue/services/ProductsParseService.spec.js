@@ -21,7 +21,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         it("ProductsParseService:parseProduct", function () {
             var statsData = {id: 1}, ownerStatsData = {id: 3};
-            var result = ProductsParseService.parseProduct({}, statsData, ownerStatsData, {});
+            var result = ProductsParseService.parseProduct({}, statsData, ownerStatsData);
             expect(result).toEqual({stats: statsData, ownerStats: ownerStatsData});
         });
     });

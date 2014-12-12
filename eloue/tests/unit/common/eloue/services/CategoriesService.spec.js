@@ -3,6 +3,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: CategoriesService", function () {
 
         var CategoriesService,
+            q,
             categoriesMock,
             utilsServiceMock;
 
@@ -16,6 +17,11 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                     }}}
                 },
                 getChildren: function () {
+                    return {$promise: {then: function () {
+                        return {results: []}
+                    }}}
+                },
+                getAncestors: function () {
                     return {$promise: {then: function () {
                         return {results: []}
                     }}}
@@ -33,10 +39,12 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             });
         });
 
-        beforeEach(inject(function (_CategoriesService_) {
+        beforeEach(inject(function (_CategoriesService_, $q) {
             CategoriesService = _CategoriesService_;
+            q = $q;
             spyOn(categoriesMock, "get").and.callThrough();
             spyOn(categoriesMock, "getChildren").and.callThrough();
+            spyOn(categoriesMock, "getAncestors").and.callThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
         }));
 
@@ -66,6 +74,12 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             var parentId = 1;
             CategoriesService.getChildCategories(parentId);
             expect(categoriesMock.getChildren).toHaveBeenCalledWith({id: parentId});
+        });
+
+        it("CategoriesService:getAncestors", function () {
+            var parentId = 1;
+            CategoriesService.getAncestors(parentId);
+            expect(categoriesMock.getAncestors).toHaveBeenCalledWith({id: parentId});
         });
     });
 });

@@ -83,16 +83,14 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("MessageThreadsService", [
             "$q",
-            "$filter",
             "MessageThreads",
             "ProductRelatedMessagesService",
             "UtilsService",
-            function ($q, $filter, MessageThreads, ProductRelatedMessagesService, UtilsService) {
+            function ($q, MessageThreads, ProductRelatedMessagesService, UtilsService) {
                 var messageThreadsService = {};
 
                 messageThreadsService.getMessageThread = function (productId, participantId) {
                     var deferred = $q.defer();
-                    var self = this;
                     MessageThreads.list({product: productId, participant: participantId, _cache: new Date().getTime()}).$promise.then(function (result) {
                         var promises = [];
                         angular.forEach(result.results, function (value, key) {

@@ -12,7 +12,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(function () {
             picturesMock = {
                 get: function () {
-                }
+                },
+                delete: function(id) {}
             };
             endpointsMock = {
 
@@ -32,6 +33,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(inject(function (_PicturesService_) {
             PicturesService = _PicturesService_;
             spyOn(picturesMock, "get").and.callThrough();
+            spyOn(picturesMock, "delete").and.callThrough();
             spyOn(formServiceMock, "send").and.callThrough();
         }));
 
@@ -43,6 +45,12 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             var productId = 1;
             PicturesService.savePicture(productId, {}, undefined, undefined);
             expect(formServiceMock.send).toHaveBeenCalled();
+        });
+
+        it("PicturesService:deletePicture", function () {
+            var pictureId = 1;
+            PicturesService.deletePicture(pictureId);
+            expect(picturesMock.delete).toHaveBeenCalledWith({id: pictureId});
         });
     });
 });

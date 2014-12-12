@@ -3,92 +3,41 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: ProductsService", function () {
 
         var ProductsService,
-            addressesServiceMock,
-            bookingsMock,
+            q,
             productsMock,
-            categoriesServiceMock,
-            phoneNumbersServiceMock,
-            pricesServiceMock,
-            utilsServiceMock,
-            usersServiceMock,
-            messageThreadsMock;
+            productsParseServiceMock;
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
-            addressesServiceMock = {
-                getAddress: function (addressId) {
-
-                }
-            };
-            bookingsMock = {
-                get: function () {
-                }
-            };
             productsMock = {
                 get: function () {
                     return {$promise: {then: function () {
                         return {results: []}
                     }}}
                 },
-                update: function () {
+                update: function (id, product) {
 
-                }
+                },
+                save: function(product) {}
             };
-            categoriesServiceMock = {
-                getCategory: function (categoryId) {
-
-                }
-            };
-            phoneNumbersServiceMock = {
-                getPhoneNumber: function (phoneId) {
-
-                }
-            };
-            pricesServiceMock = {
-                getProductPricesPerDay: function (productId) {
-
-                }
-            };
-            utilsServiceMock = {
-                getIdFromUrl: function (url) {
-                }
-            };
-            usersServiceMock = {
-                get: function (userId) {
-
-                }
-            };
-            messageThreadsMock = {
-                list: function () {
-                }
+            productsParseServiceMock = {
+                parseProduct: function(productData, stats, ownerStats) {}
             };
 
             module(function ($provide) {
-                $provide.value("AddressesService", addressesServiceMock);
-                $provide.value("Bookings", bookingsMock);
                 $provide.value("Products", productsMock);
-                $provide.value("CategoriesService", categoriesServiceMock);
-                $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
-                $provide.value("PricesService", pricesServiceMock);
-                $provide.value("UtilsService", utilsServiceMock);
-                $provide.value("UsersService", usersServiceMock);
-                $provide.value("MessageThreads", messageThreadsMock);
+                $provide.value("ProductsParseService", productsParseServiceMock);
             });
         });
 
-        beforeEach(inject(function (_ProductsService_) {
+        beforeEach(inject(function (_ProductsService_, $q) {
             ProductsService = _ProductsService_;
-            spyOn(addressesServiceMock, "getAddress").and.callThrough();
-            spyOn(bookingsMock, "get").and.callThrough();
+            q = $q;
             spyOn(productsMock, "get").and.callThrough();
+            spyOn(productsMock, "save").and.callThrough();
             spyOn(productsMock, "update").and.callThrough();
-            spyOn(categoriesServiceMock, "getCategory").and.callThrough();
-            spyOn(phoneNumbersServiceMock, "getPhoneNumber").and.callThrough();
-            spyOn(pricesServiceMock, "getProductPricesPerDay").and.callThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
-            spyOn(usersServiceMock, "get").and.callThrough();
-            spyOn(messageThreadsMock, "list").and.callThrough();
+            spyOn(productsParseServiceMock, "parseProduct").and.callThrough();
         }));
 
         it("ProductsService should be not null", function () {
@@ -105,6 +54,18 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             var addressId = 2;
             ProductsService.getProductsByAddress(addressId);
             expect(productsMock.get).toHaveBeenCalledWith({address: addressId, _cache: jasmine.any(Number)});
+        });
+
+        it("ProductsService:getProductsByOwnerAndRootCategory", function () {
+            var userId = 1, rootCategoryId = 2, page = 3;
+            ProductsService.getProductsByOwnerAndRootCategory(userId, rootCategoryId, page);
+            expect(productsMock.get).toHaveBeenCalledWith({owner: userId, ordering: "-created_at", _cache: jasmine.any(Number), category__isdescendant: rootCategoryId, page: page});
+        });
+
+        it("ProductsService:saveProduct", function () {
+            var product = {id: 2};
+            ProductsService.saveProduct(product);
+            expect(productsMock.save).toHaveBeenCalledWith(product);
         });
 
         it("ProductsService:updateProduct", function () {

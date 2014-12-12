@@ -3,8 +3,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: CreditCardsService", function () {
 
         var CreditCardsService,
-            creditCardsMock,
-            endpointsMock;
+            creditCardsMock;
 
         beforeEach(module("EloueCommon"));
 
@@ -16,11 +15,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 save: function () {
                 }
             };
-            endpointsMock = {
-            };
             module(function ($provide) {
                 $provide.value("CreditCards", creditCardsMock);
-                $provide.value("Endpoints", endpointsMock);
             });
         });
 
