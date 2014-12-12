@@ -85,14 +85,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "$q",
             "$filter",
             "MessageThreads",
-            "Bookings",
-            "ProductRelatedMessages",
             "ProductRelatedMessagesService",
-            "UsersService",
-            "ProductsService",
-            "BookingsService",
             "UtilsService",
-            function ($q, $filter, MessageThreads, Bookings, ProductRelatedMessages, ProductRelatedMessagesService, UsersService, ProductsService, BookingsService, UtilsService) {
+            function ($q, $filter, MessageThreads, ProductRelatedMessagesService, UtilsService) {
                 var messageThreadsService = {};
 
                 messageThreadsService.getMessageThread = function (productId, participantId) {
@@ -122,8 +117,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("ProductRelatedMessagesService", [
             "ProductRelatedMessages",
-            "Endpoints",
-            function (ProductRelatedMessages, Endpoints) {
+            function (ProductRelatedMessages) {
                 var productRelatedMessagesService = {};
 
                 productRelatedMessagesService.getMessage = function (id) {
@@ -139,17 +133,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("ProductsService", [
             "$q",
-            "$timeout",
-            "AddressesService",
-            "Bookings",
             "Products",
-            "CategoriesService",
-            "PhoneNumbersService",
-            "UtilsService",
-            "UsersService",
-            "MessageThreads",
             "ProductsParseService",
-            function ($q, $timeout, AddressesService, Bookings, Products, CategoriesService, PhoneNumbersService, UtilsService, UsersService, MessageThreads, ProductsParseService) {
+            function ($q, Products, ProductsParseService) {
                 var productsService = {};
 
                 productsService.getProductDetails = function (id) {
@@ -365,14 +351,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("BookingsService", [
             "$q",
             "Bookings",
-            "Products",
-            "ProductsService",
-            "AddressesService",
-            "UsersService",
-            "PhoneNumbersService",
-            "CommentsService",
             "UtilsService",
-            function ($q, Bookings, Products, ProductsService, AddressesService, UsersService, PhoneNumbersService, CommentsService, UtilsService) {
+            function ($q, Bookings, UtilsService) {
                 var bookingsService = {};
 
                 bookingsService.getBookingsByProduct = function (productId) {
@@ -672,8 +652,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("SinistersService", [
             "Sinisters",
-            "Endpoints",
-            function (Sinisters, Endpoints) {
+            function (Sinisters) {
                 var sinistersService = {};
 
                 sinistersService.getSinisterList = function (bookingUUID) {
@@ -722,8 +701,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("ShippingPointsService", [
             "ShippingPoints",
             "Products",
-            "Endpoints",
-            function (ShippingPoints, Products, Endpoints) {
+            function (ShippingPoints, Products) {
                 var shippingPointsService = {};
 
                 shippingPointsService.searchDepartureShippingPointsByAddress = function(address) {
@@ -767,8 +745,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("ProductShippingPointsService", [
             "ProductShippingPoints",
-            "Endpoints",
-            function (ProductShippingPoints, Endpoints) {
+            function (ProductShippingPoints) {
                 var productShippingPointsService = {};
 
                 productShippingPointsService.saveShippingPoint = function (shippingPoint) {
@@ -792,8 +769,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("PatronShippingPointsService", [
             "PatronShippingPoints",
-            "Endpoints",
-            function (PatronShippingPoints, Endpoints) {
+            function (PatronShippingPoints) {
                 var patronShippingPointsService = {};
 
                 patronShippingPointsService.saveShippingPoint = function (shippingPoint) {
@@ -813,8 +789,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
          */
         EloueCommon.factory("CreditCardsService", [
             "CreditCards",
-            "Endpoints",
-            function (CreditCards, Endpoints) {
+            function (CreditCards) {
                 var creditCardsService = {};
 
                 creditCardsService.saveCard = function (card) {
@@ -955,9 +930,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "Bookings",
             "UtilsService",
             "BookingsParseService",
-            "ProductsLoadService",
             "MessageThreadsService",
-            function ($q, Endpoints, Bookings, UtilsService, BookingsParseService, ProductsLoadService, MessageThreadsService) {
+            function ($q, Endpoints, Bookings, UtilsService, BookingsParseService, MessageThreadsService) {
                 var bookingsLoadService = {};
 
                 bookingsLoadService.getBookingList = function (author, state, borrowerId, ownerId, page) {
@@ -1092,12 +1066,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             "$q",
             "Products",
             "CheckAvailability",
-            "AddressesService",
             "UsersService",
-            "PhoneNumbersService",
-            "UtilsService",
             "ProductsParseService",
-            function ($q, Products, CheckAvailability, AddressesService, UsersService, PhoneNumbersService, UtilsService, ProductsParseService) {
+            function ($q, Products, CheckAvailability, UsersService, ProductsParseService) {
                 var productsLoadService = {};
 
                 productsLoadService.getProduct = function (productId, loadProductStats, loadOwnerStats) {
@@ -1195,13 +1166,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
         EloueCommon.factory("MessageThreadsLoadService", [
             "$q",
             "MessageThreads",
-            "UsersService",
-            "ProductRelatedMessagesService",
             "UtilsService",
             "MessageThreadsParseService",
             "ProductRelatedMessagesLoadService",
             "ProductsLoadService",
-            function ($q, MessageThreads, UsersService, ProductRelatedMessagesService, UtilsService, MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
+            function ($q, MessageThreads, UtilsService, MessageThreadsParseService, ProductRelatedMessagesLoadService, ProductsLoadService) {
                 var messageThreadsLoadService = {};
 
                 messageThreadsLoadService.getMessageThreadList = function (page) {
