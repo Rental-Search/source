@@ -94,6 +94,11 @@ define(["angular", "eloue/app"], function (angular) {
                 {id: 19, name: "19+"}
             ];
 
+            $scope.handleResponseErrors = function(error, object, action){
+                $scope.submitInProgress = false;
+                $scope.showNotification(object, action, false);
+            };
+
             ProductsService.getProductDetails($stateParams.id).then(function (product) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);
                 $scope.markListItemAsSelected("item-tab-", "info");
@@ -137,10 +142,12 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.loadingPicture--;
                         $scope.product.pictures.push(data);
                     });
+                    $scope.showNotification("picture", "upload", true);
                 }, function(){
                     $scope.$apply(function () {
                         $scope.loadingPicture--;
                     });
+                    $scope.showNotification("picture", "upload", false);
                 });
             };
 
@@ -161,8 +168,9 @@ define(["angular", "eloue/app"], function (angular) {
                 $q.all(promises).then(function (results) {
                     $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
-                },function(){
-                    $scope.submitInProgress = false;
+                    $scope.showNotification("item_info", "save", true);
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "item_info", "save");
                 });
             };
 
@@ -207,6 +215,8 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.submitInProgress = false;
                         $scope.product.pictures = product.pictures;
                     });
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "picture", "delete");
                 });
             };
         }

@@ -17,9 +17,10 @@ define(["angular", "eloue/app"], function (angular) {
         "PricesService",
         function ($q, $scope, $stateParams, Endpoints, Currency, Unit, CategoriesService, ProductsService, PricesService) {
 
-            function onRequestFailed(){
+            $scope.handleResponseErrors = function(error, object, action){
                 $scope.submitInProgress = false;
-            }
+                $scope.showNotification(object, action, false);
+            };
 
             $scope.units = Unit;
             $scope.prices = {
@@ -122,13 +123,16 @@ define(["angular", "eloue/app"], function (angular) {
                 $q.all(promises).then(function(results) {
                     $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
+                    $scope.showNotification("item_prices", "save", true);
                     $scope.product.address = {
                         id: addressId
                     };
                     $scope.product.phone = {
                         id: phoneId
                     };
-                }, onRequestFailed);
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "item_prices", "save");
+                });
             }
         }]);
 });

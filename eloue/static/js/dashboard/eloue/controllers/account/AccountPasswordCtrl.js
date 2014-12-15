@@ -24,7 +24,7 @@ define(["angular", "eloue/app"], function (angular) {
                 if (!!$scope.currentUser) {
                     UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form")).then(function(result) {
                         $scope.submitInProgress = false;
-                        $scope.showNotification(result.detail);
+                        $scope.showNotification("password", "reset", true);
                         $state.transitionTo($state.current, $stateParams, { reload: true });
                     }, function(error) {
                         if (!!error.responseJSON && !!error.responseJSON.errors) {
@@ -35,6 +35,7 @@ define(["angular", "eloue/app"], function (angular) {
                             };
                         }
                         $scope.submitInProgress = false;
+                        $scope.showNotification("password", "reset", false);
                     });
                 }
             };

@@ -44,11 +44,11 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.markListItemAsSelected("account-part-", "account.profile");
 
-            $scope.handleResponseErrors = function(error) {
+            $scope.handleResponseErrors = function(error, object, action) {
                 $scope.$apply(function () {
                     $scope.submitInProgress = false;
                 });
-
+                $scope.showNotification(object, action, false);
             };
 
             if (!$scope.currentUserPromise) {
@@ -110,7 +110,7 @@ define(["angular", "eloue/app"], function (angular) {
                         });
                         $scope.saveProfile();
                     }, function (error) {
-                        $scope.handleResponseErrors(error);
+                        $scope.handleResponseErrors(error, "profile", "save");
                     });
                 } else {
                     $scope.saveProfile();
@@ -136,7 +136,7 @@ define(["angular", "eloue/app"], function (angular) {
                             $("#default_number").val($scope.phonesBaseUrl + number.id + "/");
                             $scope.sendUserForm();
                         }, function (error) {
-                            $scope.handleResponseErrors(error);
+                            $scope.handleResponseErrors(error, "profile", "save");
                         });
                     }
                 } else {
@@ -156,7 +156,7 @@ define(["angular", "eloue/app"], function (angular) {
                     $("#default_number").val($scope.phonesBaseUrl + number.id + "/");
                     $scope.sendUserForm();
                 }, function (error) {
-                    $scope.handleResponseErrors(error);
+                    $scope.handleResponseErrors(error, "profile", "save");
                 })
             };
 
@@ -164,9 +164,10 @@ define(["angular", "eloue/app"], function (angular) {
                 UsersService.sendForm($scope.currentUser.id, $("#profileInformation"), function (data) {
                     $scope.$apply(function () {
                         $scope.submitInProgress = false;
+                        $scope.showNotification("profile", "save", true);
                     });
                 }, function (error) {
-                    $scope.handleResponseErrors(error.responseJSON);
+                    $scope.handleResponseErrors(error.responseJSON, "profile", "save");
                 });
             }
         }

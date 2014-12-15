@@ -289,6 +289,15 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 return $filter("date")(date, format);
             };
 
+            /**
+             * Translates message using provided key.
+             * @param msgKey message key for eloue/static/js/common/eloue/i18n.js
+             * @returns Translation
+             */
+            utilsService.translate = function(msgKey) {
+                return $filter("translate")(msgKey);
+            };
+
             utilsService.formatMessageDate = function (dateString, shortFormat, fullFormat) {
                 var sentDate = new Date(dateString);
                 var nowDate = new Date();

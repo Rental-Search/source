@@ -101,11 +101,11 @@ define(["angular", "eloue/app"], function (angular) {
                                     $scope.searchShippingPointsInProgres = false;
                                 }
                             }, function (error) {
-                                $scope.handleResponseErrors(error);
+                                $scope.handleResponseErrors(error, "shipping_point", "get");
                             });
                         }
                     }, function (error) {
-                        $scope.handleResponseErrors(error);
+                        $scope.handleResponseErrors(error, "shipping_point", "get");
                     });
                     ShippingsService.getByBooking($stateParams.uuid).then(function (shippingList) {
                         if (!!shippingList.results && shippingList.results.length > 0) {
@@ -160,12 +160,12 @@ define(["angular", "eloue/app"], function (angular) {
                 return $.inArray(status, ["pending", "ongoing", "ended", "incident", "refunded", "closed"]) != -1;
             };
 
-            $scope.handleResponseErrors = function (error) {
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.serverError = error.errors;
                 $scope.submitInProgress = false;
                 $scope.searchShippingPointsInProgres = false;
+                $scope.showNotification(object, action, false);
             };
-
 
             $scope.acceptBooking = function () {
                 $scope.submitInProgress = true;
@@ -189,28 +189,28 @@ define(["angular", "eloue/app"], function (angular) {
                                             $scope.showNotification(result.detail);
                                             $window.location.reload();
                                         }, function (error) {
-                                            $scope.handleResponseErrors(error);
+                                            $scope.handleResponseErrors(error, "booking", "accept");
                                         });
                                     } else {
                                         $scope.showNotification(patronShippingPointData.detail);
                                         $window.location.reload();
                                     }
                                 }, function (error) {
-                                    $scope.handleResponseErrors(error);
+                                    $scope.handleResponseErrors(error, "booking", "accept");
                                 });
                             } else {
                                 $scope.showNotification(productShippingPointData.detail);
                                 $window.location.reload();
                             }
                         }, function (error) {
-                            $scope.handleResponseErrors(error);
+                            $scope.handleResponseErrors(error, "booking", "accept");
                         });
                     } else {
                         $scope.showNotification(result.detail);
                         $window.location.reload();
                     }
                 }, function (error) {
-                    $scope.handleResponseErrors(error);
+                    $scope.handleResponseErrors(error, "booking", "accept");
                 })
             };
 
@@ -219,7 +219,9 @@ define(["angular", "eloue/app"], function (angular) {
                 BookingsLoadService.rejectBooking($stateParams.uuid).$promise.then(function (result) {
                     $scope.showNotification(result.detail);
                     $window.location.reload();
-                }, $scope.handleResponseErrors)
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "booking", "reject");
+                })
             };
 
             $scope.showCancelConfirm = function () {
@@ -231,7 +233,9 @@ define(["angular", "eloue/app"], function (angular) {
                 BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
                     $scope.showNotification(result.detail);
                     $window.location.reload();
-                }, $scope.handleResponseErrors)
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "booking", "cancel");
+                })
             };
 
             $scope.declareIncident = function () {
@@ -246,7 +250,9 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.showNotification("Posted comment");
                         $scope.showCommentForm = false;
                         $scope.submitInProgress = false;
-                    }, $scope.handleResponseErrors);
+                    }, function (error) {
+                        $scope.handleResponseErrors(error, "comment", "post");
+                    });
             };
 
             // Method to post new incident
@@ -257,7 +263,9 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.showNotification(result.detail);
                         $scope.showIncidentForm = false;
                         $window.location.reload();
-                    }, $scope.handleResponseErrors);
+                    }, function (error) {
+                        $scope.handleResponseErrors(error, "sinister", "post");
+                    });
             };
         }
     ]);

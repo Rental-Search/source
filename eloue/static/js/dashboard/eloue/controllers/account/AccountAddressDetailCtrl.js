@@ -17,9 +17,11 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.address = {};
 
-            function onRequestFailed(){
+            $scope.handleResponseErrors = function(error, object, action){
+                $scope.serverError = error.errors;
                 $scope.submitInProgress = false;
-            }
+                $scope.showNotification(object, action, false);
+            };
 
             // Get
             AddressesService.getAddress($stateParams.id).$promise.then(function (address) {
@@ -45,12 +47,14 @@ define(["angular", "eloue/app"], function (angular) {
                     } else {
                         $scope.finaliseAddressUpdate();
                     }
-                }, onRequestFailed);
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "address", "save");
+                });
             };
 
             $scope.finaliseAddressUpdate = function() {
                 $scope.submitInProgress = false;
-                $scope.showNotification("Adresse enregistrée");
+                $scope.showNotification("address", "save", true);
                 $state.transitionTo($state.current, $stateParams, { reload: true });
             };
 
@@ -59,9 +63,11 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.submitInProgress = true;
                 AddressesService.deleteAddress($scope.address.id).$promise.then(function(result) {
                     $scope.submitInProgress = false;
-                    $scope.showNotification("Adresse supprimée");
+                    $scope.showNotification("address", "delete", true);
                     $state.transitionTo("account.addresses", $stateParams, { reload: true });
-                }, onRequestFailed);
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "address", "delete");
+                });
             };
 
             ProductsService.getProductsByAddress($stateParams.id).then(function (products) {

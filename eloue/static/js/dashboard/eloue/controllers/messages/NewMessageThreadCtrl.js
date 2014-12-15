@@ -53,8 +53,12 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                             // Clear message field
                             $scope.message = "";
                             $scope.submitInProgress = false;
+                            $scope.showNotification("message", "send", true);
                             $stateParams.id = UtilsService.getIdFromUrl(result.thread);
                             $state.transitionTo("messages.detail", $stateParams, { reload: true });
+                        }, function (error) {
+                            $scope.submitInProgress = false;
+                            $scope.showNotification("message", "send", false);
                         });
                 };
 

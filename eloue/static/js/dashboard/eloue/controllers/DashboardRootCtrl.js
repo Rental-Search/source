@@ -9,7 +9,8 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
         "$scope",
         "UsersService",
         "AuthService",
-        function ($scope, UsersService, AuthService) {
+        "UtilsService",
+        function ($scope, UsersService, AuthService, UtilsService) {
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
             $scope.unreadMessageThreadsCount = 0;
@@ -110,9 +111,15 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 $(window).trigger('resize');
             };
 
-            $scope.showNotification = function(msg) {
+            $scope.showNotification = function(object, action, succeed) {
                 toastr.options.positionClass = "toast-top-full-width";
-                toastr.success(msg, "");
+                var msg = UtilsService.translate(object) + " " + UtilsService.translate(action) +
+                    " " + UtilsService.translate(!succeed ? "fail" : "success");
+                if (!succeed) {
+                    toastr.error(msg, "");
+                } else {
+                    toastr.success(msg, "");
+                }
             };
 
             // Nav bar autoresizing
