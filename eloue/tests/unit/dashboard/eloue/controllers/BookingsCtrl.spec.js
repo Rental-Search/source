@@ -34,6 +34,7 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
             scope.markListItemAsSelected = function(prefix, id) {};
             scope.currentUser = { id: 1};
             spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(scope, "$broadcast").and.callThrough();
 
             BookingsCtrl = $controller('BookingsCtrl', { $scope: scope, $timeout: timeout, UsersService: usersServiceMock });
         }));
@@ -67,6 +68,11 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
 
         it("BookingsCtrl:filter", function () {
             scope.filter();
+            expect(scope.$broadcast).toHaveBeenCalledWith("startLoading",
+                {
+                    parameters: [scope.currentUser.id, scope.stateFilter, scope.bookingFilter.borrower, scope.bookingFilter.owner],
+                    shouldReloadList: true
+                });
         });
     });
 });

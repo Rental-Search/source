@@ -19,7 +19,9 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
                 }
             };
             utilsServiceMock = {
-                getIdFromUrl: function (url) {}
+                getIdFromUrl: function (url) {
+                    return url;
+                }
             };
 
             module(function ($provide) {
@@ -48,12 +50,28 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
             expect(!!MessagesCtrl).toBe(true);
         });
 
-        it("MessagesCtrl:shouldMarkAsUnread", function () {
+        it("MessagesCtrl:shouldMarkAsUnread:true", function () {
             scope.currentUser = {
                 id: 1
             };
-            var lastMessage= {};
-            scope.shouldMarkAsUnread(lastMessage);
+            var lastMessage= {
+                read_at: null,
+                recipient: scope.currentUser.id
+            };
+            var result = scope.shouldMarkAsUnread(lastMessage);
+            expect(result).toBeTruthy();
+        });
+
+        it("MessagesCtrl:shouldMarkAsUnread:false", function () {
+            scope.currentUser = {
+                id: 1
+            };
+            var lastMessage= {
+                read_at: "2014-11-30 12:00:00",
+                recipient: scope.currentUser.id
+            };
+            var result = scope.shouldMarkAsUnread(lastMessage);
+            expect(result).toBeFalsy();
         });
     });
 });
