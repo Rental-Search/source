@@ -12,9 +12,9 @@ class Migration(SchemaMigration):
         db.create_table(u'products_unavailabilityperiod', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['products.Product'])),
-            ('started_at', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('ended_at', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('quantity', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('started_at', self.gf('django.db.models.fields.DateTimeField')()),
+            ('ended_at', self.gf('django.db.models.fields.DateTimeField')()),
+            ('quantity', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
         ))
         db.send_create_signal(u'products', ['UnavailabilityPeriod'])
 
@@ -223,9 +223,15 @@ class Migration(SchemaMigration):
             'product': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'category_product'", 'unique': 'True', 'null': 'True', 'to': u"orm['products.Product']"}),
             u'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'categories'", 'symmetrical': 'False', 'to': u"orm['sites.Site']"}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
             u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
+        },
+        u'products.categoryconformity': {
+            'Meta': {'object_name': 'CategoryConformity'},
+            'eloue_category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': u"orm['products.Category']"}),
+            'gosport_category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': u"orm['products.Category']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'products.curiosity': {
             'Meta': {'object_name': 'Curiosity'},
@@ -277,6 +283,7 @@ class Migration(SchemaMigration):
         u'products.product': {
             'Meta': {'object_name': 'Product'},
             'address': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'on_delete': 'models.PROTECT', 'to': u"orm['accounts.Address']"}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'product_categories'", 'symmetrical': 'False', 'through': u"orm['products.Product2Category']", 'to': u"orm['products.Category']"}),
             'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': u"orm['products.Category']"}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             'currency': ('django.db.models.fields.CharField', [], {'default': "'EUR'", 'max_length': '3'}),
@@ -294,6 +301,13 @@ class Migration(SchemaMigration):
             'shipping': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'sites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'products'", 'symmetrical': 'False', 'to': u"orm['sites.Site']"}),
             'summary': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        u'products.product2category': {
+            'Meta': {'object_name': 'Product2Category'},
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': u"orm['products.Category']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['products.Product']"}),
+            'site': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': u"orm['sites.Site']"})
         },
         u'products.producthighlight': {
             'Meta': {'object_name': 'ProductHighlight'},
@@ -380,11 +394,11 @@ class Migration(SchemaMigration):
         },
         u'products.unavailabilityperiod': {
             'Meta': {'object_name': 'UnavailabilityPeriod'},
-            'ended_at': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'ended_at': ('django.db.models.fields.DateTimeField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['products.Product']"}),
-            'quantity': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'started_at': ('django.db.models.fields.PositiveSmallIntegerField', [], {})
+            'quantity': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
+            'started_at': ('django.db.models.fields.DateTimeField', [], {})
         },
         u'rent.booking': {
             'Meta': {'object_name': 'Booking'},
