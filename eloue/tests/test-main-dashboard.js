@@ -17,7 +17,6 @@ requirejs.config({
         "jQuery": "../../bower_components/jquery/dist/jquery.min",
         "angular": "../../bower_components/angular/angular.min",
         "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
-        "angular-route": "../../bower_components/angular-route/angular-route.min",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
         "angular-mocks": "../../bower_components/angular-mocks/angular-mocks",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
@@ -38,7 +37,6 @@ requirejs.config({
 
     shim: {
         "angular": {"exports": "angular"},
-        "angular-route": ["angular"],
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],

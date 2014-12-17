@@ -27,7 +27,6 @@ requirejs.config({
         "widget": "../../bower_components/jqueryui/ui/widget",
         "angular": "../../bower_components/angular/angular",
         "angular-resource": "../../bower_components/angular-resource/angular-resource",
-        "angular-route": "../../bower_components/angular-route/angular-route",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
         "angular-mocks": "../../bower_components/angular-mocks/angular-mocks",
@@ -51,7 +50,6 @@ requirejs.config({
 
     shim: {
         "angular": {"exports": "angular"},
-        "angular-route": ["angular"],
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],

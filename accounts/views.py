@@ -1131,40 +1131,61 @@ class LoginAndRedirectView(View):
 
 class LoginFacebookView(View):
 
-    @transaction.atomic
-    def dispatch(self, request, *args, **kwargs):
-        response = redirect(request.GET['url'])
-        access_token = request.GET['access_token']
-        uid = request.GET['user_id']
-        expires = datetime.datetime.now() + datetime.timedelta(seconds=int(request.GET['expires_in']))
+    def _get_session(self, uid, facebook_token, expires):
         try:
             session = FacebookSession.objects.get(uid=uid)
-            user = session.user
         except FacebookSession.DoesNotExist:
-            session = FacebookSession.objects.create(access_token=access_token, uid=uid, expires=expires)
+            session = FacebookSession.objects.create(access_token=facebook_token, uid=uid, expires=expires)
+        else:
+            session.access_token = facebook_token
+            session.expires = expires
+            session.save()
+        return session
+
+    def _get_user(self, session):
+        user = session.user
+        if not user:
             user_data = session.me
             try:
                 user = Patron.objects.get(email=user_data['email'])
             except Patron.DoesNotExist:
-                user = Patron.objects.create(
-                    username=uid,
-                    email=user_data['email'],
-                    first_name=user_data['first_name'],
-                    last_name=user_data['last_name'])
+                user = None
+            else:
+                session.user = user
+                session.save()
+        return user
+
+    def _get_or_create_user(self, session):
+        user = self._get_user(session)
+        if not user:
+            user_data = session.me
+            user = Patron.objects.create(
+                username=session.uid,
+                email=user_data['email'],
+                first_name=user_data['first_name'],
+                last_name=user_data['last_name'])
             session.user = user
             session.save()
+        return user
+
+    @transaction.atomic
+    def dispatch(self, request, *args, **kwargs):
+        session = self._get_session(
+            request.GET['user_id'], request.GET['access_token'],
+            datetime.datetime.now() + datetime.timedelta(seconds=int(request.GET['expires_in'])))
+        if request.GET.get('create_user', False):
+            user = self._get_or_create_user(session)
         else:
-            session.access_token = access_token
-            session.uid = uid
-            session.save()
+            user = self._get_user(session)
 
-        user_token = AccessToken.objects.create(user=user, client_id=1, scope=2)
-        max_age = 30 * 24 * 60 * 60
-        expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age)
-        rotate_token(request)
-        response.set_cookie(
-            'user_token', user_token, max_age=max_age, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"))
-
+        response = HttpResponse()
+        if user:
+            user_token = AccessToken.objects.create(user=user, client_id=1, scope=2)
+            max_age = 30 * 24 * 60 * 60
+            expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age)
+            rotate_token(request)
+            response.set_cookie(
+                'user_token', user_token, max_age=max_age, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"))
         return response
 
 

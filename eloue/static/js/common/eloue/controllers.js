@@ -4,7 +4,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Controller for the login form.
      */
-    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "$routeParams", "AuthService", "UsersService", "ServiceErrors", function ($scope, $rootScope, $http, $window, $routeParams, AuthService, UsersService, ServiceErrors) {
+    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "UsersService", "ToDashboardRedirectService", "ServiceErrors", "RedirectAfterLogin", function ($scope, $rootScope, $http, $window, AuthService, UsersService, ToDashboardRedirectService, ServiceErrors, RedirectAfterLogin) {
         /**
          * User credentials.
          */
@@ -20,17 +20,17 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.loginFacebook = function(){
             FB.login(function(response){
                 if(!!response.authResponse) {
-                    var redirect;
-                    if($window.location.href.indexOf("dashboard") !== -1) {
-                        redirect = $window.location.href.substring(0, $window.location.href.indexOf("dashboard")) + "dashboard";
-                    }else{
-                        if(!!$routeParams.redirect) {
-                            redirect = RedirectAfterLogin.url;
-                        } else{
-                            redirect = $window.location.href;
+                    AuthService.loginFacebook(
+                            $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken + "&user_id=" + response.authResponse.userID + "&expires_in=" + response.authResponse.expiresIn,
+                        function (data) {
+                            $scope.authorize();
+                            $scope.submitting = false;
+                        },
+                        function (jqXHR) {
+                            $scope.onLoginError(jqXHR);
+                            $scope.submitting = false;
                         }
-                    }
-                    $window.location.href = $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&url=" + encodeURIComponent(redirect);
+                    );
                 }
             }, {scope: 'public_profile, email'});
         };
@@ -88,12 +88,10 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
-                    if($window.location.href.indexOf("dashboard") !== -1) {
-                        $window.location.href = "/dashboard";
-                    }else{
-                        if(!!$routeParams.redirect) {
-                            AuthService.redirectToAttemptedUrl();
-                        }
+                    if (RedirectAfterLogin.url != "/") {
+                        AuthService.redirectToAttemptedUrl();
+                    } else {
+                        $window.location.reload();
                     }
                 });
             }
@@ -253,17 +251,17 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.loginFacebook = function(){
             FB.login(function(response){
                 if(!!response.authResponse) {
-                    var redirect;
-                    if($window.location.href.indexOf("dashboard") !== -1) {
-                        redirect = $window.location.href.substring(0, $window.location.href.indexOf("dashboard")) + "dashboard";
-                    }else{
-                        if(!!$routeParams.redirect) {
-                            redirect = RedirectAfterLogin.url;
-                        } else{
-                            redirect = $window.location.href;
+                    AuthService.loginFacebook(
+                            $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&create_user=true",
+                        function (data) {
+                            $scope.authorize();
+                            $scope.submitting = false;
+                        },
+                        function (jqXHR) {
+                            $scope.onLoginError(jqXHR);
+                            $scope.submitting = false;
                         }
-                    }
-                    $window.location.href = $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&url=" + encodeURIComponent(redirect);
+                    );
                 }
             }, {scope: 'public_profile, email'});
         };
@@ -316,7 +314,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     if (RedirectAfterLogin.url != "/") {
                         AuthService.redirectToAttemptedUrl();
                     } else {
-                        //$window.location.href = "/dashboard"
                         ToDashboardRedirectService.showPopupAndRedirect("/dashboard");
                     }
                 });
@@ -343,39 +340,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
 
         $("select").attr("eloue-chosen", "");
     }]);
-
-    /**
-     * Controller handles modal window open/close event, checks user authentication and triggers specific handlers in controllers depend on scope.
-     */
-    EloueCommon.controller("ModalCtrl", [
-        "$scope",
-        "$rootScope",
-        "$route",
-        "$location",
-        "$timeout",
-        "AuthService",
-        function($scope, $rootScope, $route, $location, $timeout, AuthService) {
-            var currentUserToken = AuthService.getCookie("user_token");
-            var currentRoute = $route.current.$$route;
-            var path = $route.current.$$route.originalPath;
-            var prefix = path.slice(1, path.length);
-            if (prefix != "login") {
-                AuthService.saveAttemptUrl();
-            }
-            if (!!currentRoute.secure && !currentUserToken) {
-                $location.path("/login").search({redirect: true});
-            } else {
-                $rootScope.$broadcast("openModal", { name : prefix, params: $route.current.params});
-                $(".modal").modal("hide");
-                $timeout(function() {
-                    var modalContainer = $("#" + prefix + "Modal");
-                    modalContainer.modal("show");
-                    modalContainer.on( "hidden.bs.modal", function() {
-                        $rootScope.$broadcast("closeModal", { name : prefix, params: $route.current.params});
-                    });
-                }, 300);
-            }
-        }]);
 
     /**
      * Root controller for pages which content depends on user authorized (e.g. Home page).
@@ -406,7 +370,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 }else{
                     $window.location.reload();
                 }
-
             };
         }]);
 });

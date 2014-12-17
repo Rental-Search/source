@@ -117,37 +117,53 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Load necessary data on modal window open event based on modal name.
              */
             $scope.$on("openModal", function (event, args) {
-                var params = args.params;
-                //var rootCategoryId = params.category;
-                var categoryId = params.category;
-                $scope.product = {};
-                $scope.price = {
-                    id: null, amount: null, unit: Unit.DAY.id
-                };
-                $scope.publishAdError = null;
-                // load categories for comboboxes
-                CategoriesService.getRootCategories().then(function (categories) {
-                    if ($scope.currentUser && !$scope.currentUser.default_address) {
-                        $scope.noAddress = true;
-                    }
-                    $scope.rootCategories = categories;
-
-                    if(!!categoryId && categoryId!=="") {
-                        CategoriesService.getAncestors(categoryId).then(function (categories) {
-                            var level = 0;
-                            angular.forEach(categories, function (value, key) {
-                                $scope.setCategoryByLvl(value.id, level);
-                                level++;
-                            });
-                            $scope.setCategoryByLvl(categoryId, level);
-                        });
-                    } else if(!!$scope.rootCategory){
-                        $scope.updateNodeCategories();
-                    }
-
-                });
-
+                $scope.openModal(args.name, args.params.category);
             });
+
+            $scope.openModal = function (name, categoryId) {
+                var currentUserToken = AuthService.getCookie("user_token");
+                if (!currentUserToken && name != "login") {
+                    console.log(name);
+                    AuthService.saveAttemptUrl(name, {category: categoryId});
+                    name = "login";
+                } else {
+                    console.log(categoryId);
+                    //var rootCategoryId = params.category;
+                    $scope.product = {};
+                    $scope.price = {
+                        id: null, amount: null, unit: Unit.DAY.id
+                    };
+                    $scope.publishAdError = null;
+                    // load categories for comboboxes
+                    CategoriesService.getRootCategories().then(function (categories) {
+                        if ($scope.currentUser && !$scope.currentUser.default_address) {
+                            $scope.noAddress = true;
+                        }
+                        $scope.rootCategories = categories;
+
+                        if(!!categoryId && categoryId!=="") {
+                            CategoriesService.getAncestors(categoryId).then(function (categories) {
+                                var level = 0;
+                                angular.forEach(categories, function (value, key) {
+                                    $scope.setCategoryByLvl(value.id, level);
+                                    level++;
+                                });
+                                $scope.setCategoryByLvl(categoryId, level);
+                            });
+                        } else if(!!$scope.rootCategory){
+                            $scope.updateNodeCategories();
+                        }
+
+                    });
+                }
+
+
+                if (!!name) {
+                    $(".modal").modal("hide");
+                    var modalContainer = $("#" + name + "Modal");
+                    modalContainer.modal("show");
+                }
+            };
 
             /**
              * Restore path when closing modal window.

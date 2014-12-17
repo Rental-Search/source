@@ -21,7 +21,6 @@ module.exports = function (config) {
             {pattern: 'static/bower_components/angular/angular.js', included: false },
             {pattern: 'static/bower_components/angular-mocks/angular-mocks.js', included: false },
             {pattern: 'static/bower_components/angular-resource/angular-resource.js', included: false },
-            {pattern: 'static/bower_components/angular-route/angular-route.js', included: false },
             {pattern: 'static/bower_components/angular-cookies/angular-cookies.js', included: false },
             {pattern: 'static/bower_components/angular-sanitize/angular-sanitize.js', included: false },
             {pattern: 'static/bower_components/moment/moment.js', included: false },

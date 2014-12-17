@@ -1449,7 +1449,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             return productRelatedMessagesParseService;
         }]);
 
-        EloueCommon.factory("AuthService", ["$q", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", "FormService", function ($q, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration, FormService) {
+        EloueCommon.factory("AuthService", ["$q", "$rootScope", "$window", "Endpoints", "AuthConstants", "RedirectAfterLogin", "Registration", "FormService", function ($q, $rootScope, $window, Endpoints, AuthConstants, RedirectAfterLogin, Registration, FormService) {
             return {
 
                 /**
@@ -1476,6 +1476,22 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 },
 
                 /**
+                 * Sign in user after logging in Facebok account.
+                 * @param url login facebook url
+                 * @returns Signed in user object
+                 * @param successCallback success callback function
+                 * @param errorCallback error callback function
+                 */
+                loginFacebook: function (url, successCallback, errorCallback) {
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        success: successCallback,
+                        error: errorCallback
+                    });
+                },
+
+                /**
                  * Remove user token.
                  */
                 clearUserData: function () {
@@ -1486,14 +1502,19 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  * Redirect to attempted URL.
                  */
                 redirectToAttemptedUrl: function () {
-                    $window.location.href = RedirectAfterLogin.url;
+                    if ($window.location.href.indexOf("dashboard") !== -1) {
+                        $window.location.href = RedirectAfterLogin.url;
+                    } else {
+                        $rootScope.$broadcast("openModal", { name : RedirectAfterLogin.url, params: RedirectAfterLogin.params});
+                    }
                 },
 
                 /**
                  * Save URL that user attempts to access.
                  */
-                saveAttemptUrl: function () {
-                    RedirectAfterLogin.url = $window.location.href;
+                saveAttemptUrl: function (name, params) {
+                    RedirectAfterLogin.url = name;
+                    RedirectAfterLogin.params = params;
                 },
 
                 /**

@@ -232,9 +232,9 @@ define(["eloue/app",
             }
         ]);
 
-        EloueApp.run(["$rootScope", "$route", "$http", "$state", "AuthService", function ($rootScope, $route, $http, $state, AuthService) {
+        EloueApp.run(["$rootScope", "$http", "$state", "$window", "AuthService", function ($rootScope, $http, $state, $window, AuthService) {
             $(".container-full-screen").show();
-            AuthService.saveAttemptUrl();
+            AuthService.saveAttemptUrl($window.location.href);
             var navRoutes = ["dashboard", "messages", "bookings", "items", "account"];
             var userToken = "";
             var name = "user_token=";
