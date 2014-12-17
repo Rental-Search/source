@@ -1069,6 +1069,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         }
 
                         deferred.resolve(booking);
+                    }, function (reason) {
+                        deferred.reject(reason);
                     });
 
                     return deferred.promise;

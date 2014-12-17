@@ -40,7 +40,7 @@ define(["angular", "eloue/app"], function (angular) {
                 if ($scope.messageThread.product) {
 
                     // Get booking product
-                    BookingsLoadService.getBookingByProduct($scope.messageThread.product.id).then(function (booking) {
+                    BookingsLoadService.getBookingByProduct("sfsdf").then(function (booking) {
                         if (!booking) {
                             // Options for the select element
                             $scope.availableHours = [
@@ -92,6 +92,8 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
                             $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
+                    }, function (reason) {
+                        console.log(reason);
                     });
                 }
                 // Get users' roles
