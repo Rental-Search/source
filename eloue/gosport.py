@@ -35,3 +35,9 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', (
 ))
 
 DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')
+
+URL_REDIRECTS = (
+        (r'www\.go-sport-location\.com$', 'http://location.go-sport.com'),
+    )
+
+MIDDLEWARE_CLASSES += ('eloue.middleware.UrlRedirectMiddleware',)

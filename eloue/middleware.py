@@ -5,7 +5,7 @@ import urlparse
 import random
 import time, datetime
 
-#import redis
+from django.http import HttpResponsePermanentRedirect
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -34,40 +34,31 @@ class RequireLoginMiddleware(object):
         if view_func in [authenticate, serve, logout_then_login, password_reset, password_reset_confirm, password_reset_confirm_uidb36, password_reset_done, password_reset_complete, contact]:
             return None
         return login_required(view_func)(request, *view_args, **view_kwargs)
-    
 
-# class SearchBotReportMiddleware(object):
-#     def process_request(self, request):
-#         var_cookie = 'UA-36530163-1'
-#         http_user_agent = request.META.get('HTTP_USER_AGENT', '')
-#         for http_user_agent_re in http_user_agents:
-#             if re.match(http_user_agent_re, http_user_agent):
-#                 request_dict = {
-#                     'utmwv': 1,
-#                     'utmn': random.randint(1000000000,9999999999), #Nb au hasard
-#                     'utmsr': '', #Resolution ecran
-#                     'utmsc': '', #Qualite ecran
-#                     'utmul': '', #Langue du navigateur
-#                     'utmje': '0', #Java enabled
-#                     'utmfl': '', #Flash version
-#                     'utmdt': '', #Nom de la page visitée
-#                     'utmhn': 'e-loue.com', #Nom du site Web
-#                     'utmr': '', #pas de referer
-#                     'utmp': request.path, #Page Vue par le visiteur
-#                     'utme': '', #Nombre???(Objet*Action*Label) ': '> 5(Robots*Bot Name*Pathname)
-#                     'utmac': '', #Numero de compte analytics
-#                     'utmcc': '__utma%3D{var_cookie}.{var_random}.{var_now}.{var_now}.{var_now}.1%3B%2B''__utmb%3D{var_cookie}%3B%2B__utmc%3D{var_cookie}%3B%2B__utmz%3D{var_cookie}''.{var_now}.1.1.utmccn%3D(organic)%7Cutmcsr%3D{botname}%7Cutmctr%3D{uri}%7Cutmcmd%3Dorganic%3B%2B__utmv%3D{var_cookie}.Robot%20hostname%3A%20{var_server}%3B'.format(
-#                         var_cookie=var_cookie,
-#                         var_random=random.randint(1000000000,2000000000),
-#                         var_now=int(time.mktime(datetime.datetime.now().timetuple())),
-#                         botname=http_user_agents[http_user_agent_re],
-#                         uri=request.path,
-#                         var_server=request.META['REMOTE_HOST'] or '',
-#                     )
-#                 }
-#                 request_string = urllib.urlencode(request_dict)
-#                 ping_url = urlparse.urlunparse(('http', 'www.google-analytics.com', '__utm.gif', None, request_string, None))
-#                 r = redis.Redis(*settings.GA_PING_QUEUE_CONNECTION)
-#                 r.lpush(settings.GA_PING_QUEUE_NAME, ping_url)
-#                 break
-#         return None
+
+class UrlRedirectMiddleware:
+    """
+    This middleware lets you match a specific url and redirect the request to a
+    new url.
+
+    You keep a tuple of url regex pattern/url redirect tuples on your site
+    settings, example:
+
+    URL_REDIRECTS = (
+        (r'www\.example\.com/hello/$', 'http://hello.example.com/'),
+        (r'www\.example2\.com/$', 'http://www.example.com/example2/'),
+    )
+
+    """
+    def process_request(self, request):
+        host = request.META['HTTP_HOST']
+        path = request.META['PATH_INFO']
+        print host
+        print path
+        
+        for url_pattern, redirect_domain in settings.URL_REDIRECTS:
+            redirect_url = '%s%s' % (redirect_domain, path)
+            print redirect_url
+            regex = re.compile(url_pattern)
+            if regex.match(host):
+                return HttpResponsePermanentRedirect(redirect_url)
