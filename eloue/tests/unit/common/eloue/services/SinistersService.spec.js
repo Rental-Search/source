@@ -24,7 +24,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_SinistersService_) {
             SinistersService = _SinistersService_;
-            spyOn(sinistersMock, "get").andCallThrough();
+            spyOn(sinistersMock, "get").and.callThrough();
         }));
 
         it("SinistersService should be not null", function () {

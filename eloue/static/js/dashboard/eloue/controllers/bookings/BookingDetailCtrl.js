@@ -15,11 +15,10 @@ define(["angular", "eloue/app"], function (angular) {
         "PhoneNumbersService",
         "SinistersService",
         "UsersService",
-        "UtilsService",
         "ShippingsService",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
-        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, SinistersService, UsersService, UtilsService, ShippingsService, ProductShippingPointsService, PatronShippingPointsService) {        
+        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, SinistersService, UsersService, ShippingsService, ProductShippingPointsService, PatronShippingPointsService) {
 
             // Initial comment data
             $scope.comment = {rate: 0};

@@ -5,8 +5,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressesCtrl"], func
         var AccountAddressesCtrl,
             scope,
             usersServiceMock,
-            addressesServiceMock,
-            utilsServiceMock;
+            addressesServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -29,24 +28,20 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressesCtrl"], func
                 }
             };
 
-            utilsServiceMock = {getIdFromUrl: function (url) {
-                return 1;
-            }};
 
             module(function ($provide) {
                 $provide.value("UsersService", usersServiceMock);
                 $provide.value("AddressesService", addressesServiceMock);
-                $provide.value("UtilsService", utilsServiceMock);
             })
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
             scope.markListItemAsSelected = function(prefix, id) {};
-            spyOn(usersServiceMock, "getMe").andCallThrough();
-            spyOn(addressesServiceMock, "getAddressesByPatron").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(addressesServiceMock, "getAddressesByPatron").and.callThrough();
             $rootScope.$digest();
-            AccountAddressesCtrl = $controller('AccountAddressesCtrl', { $scope: scope, UsersService: usersServiceMock, AddressesService: addressesServiceMock, UtilsService: utilsServiceMock });
+            AccountAddressesCtrl = $controller('AccountAddressesCtrl', { $scope: scope, UsersService: usersServiceMock, AddressesService: addressesServiceMock });
             expect(usersServiceMock.getMe).toHaveBeenCalled();
         }));
 

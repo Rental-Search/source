@@ -3,9 +3,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: MessageThreadsLoadService", function () {
 
         var MessageThreadsLoadService,
+            q,
             messageThreadsMock,
-            usersServiceMock,
-            productRelatedMessagesServiceMock,
             utilsServiceMock,
             messageThreadsParseServiceMock,
             productRelatedMessagesLoadServiceMock,
@@ -16,14 +15,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(function () {
             messageThreadsMock = {
                 get: function () {
-                }
-            };
-            usersServiceMock = {
-                get: function (userId) {
-                }
-            };
-            productRelatedMessagesServiceMock = {
-                getMessage: function (messageId) {
+                    return {$promise: {then: function () {
+                        return {results: []}
+                    }}}
                 }
             };
             utilsServiceMock = {
@@ -45,8 +39,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
             module(function ($provide) {
                 $provide.value("MessageThreads", messageThreadsMock);
-                $provide.value("UsersService", usersServiceMock);
-                $provide.value("ProductRelatedMessagesService", productRelatedMessagesServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
                 $provide.value("MessageThreadsParseService", messageThreadsParseServiceMock);
                 $provide.value("ProductRelatedMessagesLoadService", productRelatedMessagesLoadServiceMock);
@@ -54,19 +46,36 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             });
         });
 
-        beforeEach(inject(function (_MessageThreadsLoadService_) {
+        beforeEach(inject(function (_MessageThreadsLoadService_, $q) {
             MessageThreadsLoadService = _MessageThreadsLoadService_;
-            spyOn(messageThreadsMock, "get").andCallThrough();
-            spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(productRelatedMessagesServiceMock, "getMessage").andCallThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
-            spyOn(messageThreadsParseServiceMock, "parseMessageThread").andCallThrough();
-            spyOn(productRelatedMessagesLoadServiceMock, "getMessageListItem").andCallThrough();
-            spyOn(productsLoadServiceMock, "getProduct").andCallThrough();
+            q = $q;
+            spyOn(messageThreadsMock, "get").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(messageThreadsParseServiceMock, "parseMessageThread").and.callThrough();
+            spyOn(productRelatedMessagesLoadServiceMock, "getMessageListItem").and.callThrough();
+            spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
         }));
 
         it("MessageThreadsLoadService should be not null", function () {
             expect(!!MessageThreadsLoadService).toBe(true);
+        });
+
+        it("MessageThreadsLoadService:getMessageThreadList", function () {
+            var page = 1;
+            MessageThreadsLoadService.getMessageThreadList(page);
+        });
+
+        it("MessageThreadsLoadService:getMessageThread", function () {
+            var threadId = 1;
+            MessageThreadsLoadService.getMessageThread(threadId);
+        });
+
+        it("MessageThreadsLoadService:getUsersRoles", function () {
+            var messageThread = {
+                sender: {id : 1},
+                recipient: {id : 2}
+            }, currentUserId = 1;
+            MessageThreadsLoadService.getUsersRoles(messageThread, currentUserId);
         });
     });
 });

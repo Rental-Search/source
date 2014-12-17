@@ -4,6 +4,8 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
 
         var AccountPasswordCtrl,
             scope,
+            state,
+            stateParams,
             usersServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
@@ -24,10 +26,14 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            stateParams = {
+                id: 1
+            };
+            state = {};
             scope.markListItemAsSelected = function(prefix, id) {};
-            spyOn(usersServiceMock, "resetPassword").andCallThrough();
+            spyOn(usersServiceMock, "resetPassword").and.callThrough();
 
-            AccountPasswordCtrl = $controller('AccountPasswordCtrl', { $scope: scope, UsersService: usersServiceMock });
+            AccountPasswordCtrl = $controller('AccountPasswordCtrl', { $scope: scope, $state: state, $stateParams: stateParams, UsersService: usersServiceMock });
         }));
 
         it("AccountPasswordCtrl should be not null", function () {

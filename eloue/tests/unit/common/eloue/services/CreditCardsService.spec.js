@@ -3,8 +3,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: CreditCardsService", function () {
 
         var CreditCardsService,
-            creditCardsMock,
-            endpointsMock;
+            creditCardsMock;
 
         beforeEach(module("EloueCommon"));
 
@@ -16,18 +15,15 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 save: function () {
                 }
             };
-            endpointsMock = {
-            };
             module(function ($provide) {
                 $provide.value("CreditCards", creditCardsMock);
-                $provide.value("Endpoints", endpointsMock);
             });
         });
 
         beforeEach(inject(function (_CreditCardsService_) {
             CreditCardsService = _CreditCardsService_;
-            spyOn(creditCardsMock, "delete").andCallThrough();
-            spyOn(creditCardsMock, "save").andCallThrough();
+            spyOn(creditCardsMock, "delete").and.callThrough();
+            spyOn(creditCardsMock, "save").and.callThrough();
         }));
 
         it("CreditCardsService should be not null", function () {

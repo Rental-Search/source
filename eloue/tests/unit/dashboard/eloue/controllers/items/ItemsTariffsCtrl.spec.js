@@ -3,6 +3,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
     describe("Controller: ItemsTariffsCtrl", function () {
 
         var ItemsTariffsCtrl,
+            q,
             scope,
             stateParams,
             endpointsMock,
@@ -15,6 +16,14 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
+
+            q = {
+                all: function (obj) {
+                    return {then: function () {
+                    }}
+                }
+            };
+
             categoriesServiceMock = {
                 getParentCategory: function (category) {
                     console.log("categoriesServiceMock:getParentCategory called with category = " + category);
@@ -86,14 +95,14 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
                 "XPF": {name: "XPF", symbol: "F"}
             };
 
-            spyOn(categoriesServiceMock, "getParentCategory").andCallThrough();
-            spyOn(productsServiceMock, "getProductDetails").andCallThrough();
-            spyOn(productsServiceMock, "updateProduct").andCallThrough();
-            spyOn(pricesServiceMock, "getPricesByProduct").andCallThrough();
-            spyOn(pricesServiceMock, "updatePrice").andCallThrough();
-            spyOn(pricesServiceMock, "savePrice").andCallThrough();
+            spyOn(categoriesServiceMock, "getParentCategory").and.callThrough();
+            spyOn(productsServiceMock, "getProductDetails").and.callThrough();
+            spyOn(productsServiceMock, "updateProduct").and.callThrough();
+            spyOn(pricesServiceMock, "getPricesByProduct").and.callThrough();
+            spyOn(pricesServiceMock, "updatePrice").and.callThrough();
+            spyOn(pricesServiceMock, "savePrice").and.callThrough();
 
-            ItemsTariffsCtrl = $controller('ItemsTariffsCtrl', { $scope: scope, $stateParams: stateParams,
+            ItemsTariffsCtrl = $controller('ItemsTariffsCtrl', { $q: q, $scope: scope, $stateParams: stateParams,
                 Endpoints: endpointsMock, Currency: currencyMock, Unit: unitMock,
                 CategoriesService: categoriesServiceMock, ProductsService: productsServiceMock,
                 PricesService: pricesServiceMock });

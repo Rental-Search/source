@@ -3,13 +3,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: BookingsService", function () {
 
         var BookingsService,
+            q,
             bookingsMock,
-            productsMock,
-            productsServiceMock,
-            addressesServiceMock,
-            usersServiceMock,
-            phoneNumbersServiceMock,
-            commentsServiceMock,
             utilsServiceMock;
 
         beforeEach(module("EloueCommon"));
@@ -23,38 +18,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                     }}}
                 }
             };
-            productsMock = {
-                get: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
-                }
-            };
-            productsServiceMock = {
-                getProduct: function (productId) {
 
-                }
-            };
-            addressesServiceMock = {
-                getAddress: function (addressId) {
-
-                }
-            };
-            usersServiceMock = {
-                get: function (userId) {
-
-                }
-            };
-            phoneNumbersServiceMock = {
-                getPhoneNumber: function (phoneId) {
-
-                }
-            };
-            commentsServiceMock = {
-                getCommentList: function (bookingUUID) {
-
-                }
-            };
             utilsServiceMock = {
                 formatDate: function (date, format) {
 
@@ -63,26 +27,15 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
             module(function ($provide) {
                 $provide.value("Bookings", bookingsMock);
-                $provide.value("Products", productsMock);
-                $provide.value("ProductsService", productsServiceMock);
-                $provide.value("AddressesService", addressesServiceMock);
-                $provide.value("UsersService", usersServiceMock);
-                $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
-                $provide.value("CommentsService", commentsServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
             });
         });
 
-        beforeEach(inject(function (_BookingsService_) {
+        beforeEach(inject(function (_BookingsService_, $q) {
             BookingsService = _BookingsService_;
-            spyOn(bookingsMock, "get").andCallThrough();
-            spyOn(productsMock, "get").andCallThrough();
-            spyOn(productsServiceMock, "getProduct").andCallThrough();
-            spyOn(addressesServiceMock, "getAddress").andCallThrough();
-            spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(phoneNumbersServiceMock, "getPhoneNumber").andCallThrough();
-            spyOn(commentsServiceMock, "getCommentList").andCallThrough();
-            spyOn(utilsServiceMock, "formatDate").andCallThrough();
+            q = $q;
+            spyOn(bookingsMock, "get").and.callThrough();
+            spyOn(utilsServiceMock, "formatDate").and.callThrough();
         }));
 
         it("BookingsService should be not null", function () {

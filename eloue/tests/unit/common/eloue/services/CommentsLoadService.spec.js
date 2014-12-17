@@ -3,6 +3,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: CommentsLoadService", function () {
 
         var CommentsLoadService,
+            q,
             commentsMock,
             endpointsMock,
             usersServiceMock,
@@ -14,6 +15,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(function () {
             commentsMock = {
                 get: function () {
+                    return {$promise: {then: function () {
+                        return {results: []}
+                    }}}
                 },
                 save: function () {
                 }
@@ -44,17 +48,28 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             });
         });
 
-        beforeEach(inject(function (_CommentsLoadService_) {
+        beforeEach(inject(function (_CommentsLoadService_, $q) {
             CommentsLoadService = _CommentsLoadService_;
-            spyOn(commentsMock, "get").andCallThrough();
-            spyOn(commentsMock, "save").andCallThrough();
-            spyOn(usersServiceMock, "get").andCallThrough();
-            spyOn(utilsServiceMock, "getIdFromUrl").andCallThrough();
-            spyOn(commentsParseServiceMock, "parseComment").andCallThrough();
+            q= $q;
+            spyOn(commentsMock, "get").and.callThrough();
+            spyOn(commentsMock, "save").and.callThrough();
+            spyOn(usersServiceMock, "get").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(commentsParseServiceMock, "parseComment").and.callThrough();
         }));
 
         it("CommentsLoadService should be not null", function () {
             expect(!!CommentsLoadService).toBe(true);
+        });
+
+        it("CommentsLoadService:getCommentList", function () {
+            var uuid = 1;
+            CommentsLoadService.getCommentList(uuid);
+        });
+
+        it("CommentsLoadService:postComment", function () {
+            var uuid = 1, comment = "msg", rate = 5;
+            CommentsLoadService.postComment(uuid, comment, rate);
         });
     });
 });

@@ -2,17 +2,28 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services", "datejs"], functio
 
     describe("Service: UtilsService", function () {
 
-        var UtilsService;
+        var UtilsService,
+            filter,
+            authServiceMock;
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
 
+            authServiceMock = {
+                getCookie: function(name) {
+                    return "U_token"
+                }
+            };
+
             module(function ($provide) {
+                $provide.value("AuthService", authServiceMock);
             });
         });
 
-        beforeEach(inject(function (_UtilsService_) {
+        beforeEach(inject(function (_UtilsService_, $filter) {
+            filter = $filter;
+            spyOn(authServiceMock, "getCookie").and.callThrough();
             UtilsService = _UtilsService_;
         }));
 
@@ -29,11 +40,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services", "datejs"], functio
             expect(result).toEqual("01.09.2014");
         });
 
-        it("UtilsService:formatMessageDate", function () {
-            var result = UtilsService.formatMessageDate("08.01.2014", "dd/MM/yyyy", "dd/MM/yyyy hh:mm:ss");
-            expect(result).toEqual("01/08/2014 12:00:00");
-        });
-
         it("UtilsService:getIdFromUrl", function () {
             var id = "1208";
             var url = "http://10.0.5.47:8200/api/2.0/users/" + id + "/";
@@ -41,10 +47,12 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services", "datejs"], functio
             expect(result).toEqual(id);
         });
 
-        it("UtilsService:calculatePeriodBetweenDates", function () {
-            var startDateString = "01/01/2014 00:00:00", endDateString = "01/02/2014 12:00:00";
-            var result = UtilsService.calculatePeriodBetweenDates(startDateString, endDateString);
-            expect(result).toEqual({period_days: 1, period_hours: 11});
+        it("UtilsService:downloadPdfFile", function () {
+            var filename = "voucher.pdf";
+            var url = "http://10.0.5.47:8200/api/2.0/shippings/1/";
+            UtilsService.downloadPdfFile(url, filename);
+            expect(authServiceMock.getCookie).toHaveBeenCalledWith("user_token");
+            expect(authServiceMock.getCookie).toHaveBeenCalledWith("csrftoken");
         });
     });
 });

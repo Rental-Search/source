@@ -15,7 +15,9 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
             addressesServiceMock,
             authServiceMock,
             categoriesServiceMock,
-            pricesServiceMock;
+            pricesServiceMock,
+            toDashboardRedirectServiceMock,
+            serverValidationServiceMock;
 
         beforeEach(module("EloueApp.BookingModule"));
 
@@ -27,14 +29,36 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
             currencyMock = {};
             productsServiceMock = {};
             usersServiceMock = {};
-            addressesServiceMock = {};
+            addressesServiceMock = {
+                saveAddress:  function(address) {
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                }
+            };
             authServiceMock = {
                 getCookie: function (cookieName) {
 
                 }
             };
-            categoriesServiceMock = {};
+            categoriesServiceMock = {
+                getChildCategories: function(rootCategory) {
+                    return {then: function () {
+                        return {result: {}}
+                    }}
+                },
+                getCategory: function(rootCategory) {
+                    return {$promise: {then: function () {
+                        return {result: {}}
+                    }}}
+                }
+            };
             pricesServiceMock = {};
+            toDashboardRedirectServiceMock = {};
+            serverValidationServiceMock = {
+                removeErrors: function() {},
+                addError: function(field, description) {}
+            };
 
             module(function ($provide) {
                 $provide.value("Endpoints", endpointsMock);
@@ -47,6 +71,8 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
                 $provide.value("CategoriesService", categoriesServiceMock);
                 $provide.value("PricesService", pricesServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
+                $provide.value("ToDashboardRedirectService", toDashboardRedirectServiceMock);
+                $provide.value("ServerValidationService", serverValidationServiceMock);
             })
         });
 
@@ -56,11 +82,20 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
                 return {response: {}}
             }};
             scope.currentUser = {
-                id: 111
+                id: 111,
+                default_address: {
+                    country: "FR"
+                }
             };
-            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"}};
+            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"},
+                google_trackConversion: function() {}};
             location = {};
             utilsServiceMock = {};
+            spyOn(categoriesServiceMock, "getChildCategories").and.callThrough();
+            spyOn(categoriesServiceMock, "getCategory").and.callThrough();
+            spyOn(serverValidationServiceMock, "removeErrors").and.callThrough();
+            spyOn(addressesServiceMock, "saveAddress").and.callThrough();
+            spyOn(serverValidationServiceMock, "addError").and.callThrough();
             PublishAdCtrl = $controller("PublishAdCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
                 Unit: unitMock,
@@ -71,12 +106,71 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
                 AuthService: authServiceMock,
                 CategoriesService: categoriesServiceMock,
                 PricesService: pricesServiceMock,
-                UtilsService: utilsServiceMock
+                UtilsService: utilsServiceMock,
+                ToDashboardRedirectService: toDashboardRedirectServiceMock,
+                ServerValidationService: serverValidationServiceMock
             });
         }));
 
         it("PublishAdCtrl should be not null", function () {
             expect(!!PublishAdCtrl).toBe(true);
+        });
+
+        it("PublishAdCtrl:handleResponseErrors", function () {
+            scope.handleResponseErrors();
+        });
+
+        it("PublishAdCtrl:setCategoryByLvl", function () {
+            scope.setCategoryByLvl();
+        });
+
+        it("PublishAdCtrl:updateNodeCategories", function () {
+            scope.updateNodeCategories();
+        });
+
+        it("PublishAdCtrl:updateLeafCategories", function () {
+            scope.updateLeafCategories();
+        });
+
+        it("PublishAdCtrl:isCategorySelectorsValid", function () {
+            scope.isCategorySelectorsValid();
+        });
+
+        it("PublishAdCtrl:publishAd(no default address)", function () {
+            scope.noAddress = true;
+            scope.publishAd();
+        });
+
+        it("PublishAdCtrl:publishAd", function () {
+            scope.publishAd();
+        });
+
+        it("PublishAdCtrl:saveProduct", function () {
+            scope.saveProduct();
+        });
+
+        it("PublishAdCtrl:updateFieldSet(auto)", function () {
+            scope.updateFieldSet({name: "Automobile"});
+            expect(scope.isAuto).toBeTruthy();
+            expect(scope.isRealEstate).toBeFalsy();
+        });
+
+        it("PublishAdCtrl:updateFieldSet(real estate)", function () {
+            scope.updateFieldSet({name: "Location saisonnière"});
+            expect(scope.isAuto).toBeFalsy();
+            expect(scope.isRealEstate).toBeTruthy();
+        });
+
+        it("PublishAdCtrl:searchCategory", function () {
+            scope.searchCategory();
+        });
+
+        it("PublishAdCtrl:loadPdltrackingScript", function () {
+            scope.loadPdltrackingScript();
+        });
+
+        it("PublishAdCtrl:loadAdWordsTagPublishAd", function () {
+            scope.loadAdWordsTagPublishAd();
         });
     });
 });

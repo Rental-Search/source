@@ -3,6 +3,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
     describe("Service: UsersService", function () {
 
         var UsersService,
+            q,
             usersMock,
             formServiceMock,
             endpointsMock;
@@ -16,6 +17,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 getMe: function () {
                 },
                 getStats: function () {
+                },
+                update: function (id, user) {
                 }
             };
             formServiceMock = {
@@ -31,12 +34,14 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             });
         });
 
-        beforeEach(inject(function (_UsersService_) {
+        beforeEach(inject(function (_UsersService_, $q) {
             UsersService = _UsersService_;
-            spyOn(usersMock, "get").andCallThrough();
-            spyOn(usersMock, "getMe").andCallThrough();
-            spyOn(usersMock, "getStats").andCallThrough();
-            spyOn(formServiceMock, "send").andCallThrough();
+            q = $q;
+            spyOn(usersMock, "get").and.callThrough();
+            spyOn(usersMock, "getMe").and.callThrough();
+            spyOn(usersMock, "getStats").and.callThrough();
+            spyOn(usersMock, "update").and.callThrough();
+            spyOn(formServiceMock, "send").and.callThrough();
         }));
 
         it("UsersService should be not null", function () {
@@ -70,6 +75,14 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             var userId = 1;
             UsersService.resetPassword(userId);
             expect(formServiceMock.send).toHaveBeenCalled();
+        });
+
+        it("UsersService:updateUser", function () {
+            var user = {
+                id: 1
+            };
+            UsersService.updateUser(user);
+            expect(usersMock.update).toHaveBeenCalledWith({id: "me"}, user);
         });
     });
 });

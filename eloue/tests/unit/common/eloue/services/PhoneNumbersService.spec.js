@@ -9,10 +9,11 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(function () {
             phoneNumbersMock = {
-                get: function () {
+                save: function () {
                 },
                 update: function () {
-                }
+                },
+                getPremiumRateNumber: function() {}
             };
 
             module(function ($provide) {
@@ -22,18 +23,31 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_PhoneNumbersService_) {
             PhoneNumbersService = _PhoneNumbersService_;
-            spyOn(phoneNumbersMock, "get").andCallThrough();
-            spyOn(phoneNumbersMock, "update").andCallThrough();
+            spyOn(phoneNumbersMock, "save").and.callThrough();
+            spyOn(phoneNumbersMock, "update").and.callThrough();
+            spyOn(phoneNumbersMock, "getPremiumRateNumber").and.callThrough();
         }));
 
         it("PhoneNumbersService should be not null", function () {
             expect(!!PhoneNumbersService).toBe(true);
         });
 
+        it("PhoneNumbersService:savePhoneNumber", function () {
+            var phoneNumber = {};
+            PhoneNumbersService.savePhoneNumber(phoneNumber);
+            expect(phoneNumbersMock.save).toHaveBeenCalledWith(phoneNumber);
+        });
+
         it("PhoneNumbersService:updatePhoneNumber", function () {
             var phoneNumbersId = 1;
             PhoneNumbersService.updatePhoneNumber({id: phoneNumbersId});
             expect(phoneNumbersMock.update).toHaveBeenCalledWith({id: phoneNumbersId}, {id: phoneNumbersId});
+        });
+
+        it("PhoneNumbersService:getPremiumRateNumber", function () {
+            var phoneNumberId = 1;
+            PhoneNumbersService.getPremiumRateNumber(phoneNumberId);
+            expect(phoneNumbersMock.getPremiumRateNumber).toHaveBeenCalledWith({id: phoneNumberId, _cache: jasmine.any(Number)});
         });
     });
 });
