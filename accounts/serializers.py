@@ -152,7 +152,7 @@ class UserSerializer(serializers.ModelSerializer):
             'default_address', 'default_number', 'about', 'school', 'work', 'hobby',
             'languages', 'url', 'date_joined', 'comment_count', 'average_note'
         )
-        read_only_fields = ('slug', 'url', 'date_joined')
+        read_only_fields = ('slug', 'date_joined')
         immutable_fields = ('email', 'password', 'username')
 
 class NestedUserSerializer(NestedModelSerializerMixin, UserSerializer):

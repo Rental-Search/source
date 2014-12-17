@@ -1,0 +1,19 @@
+extends ../base
+
+block prepend variables
+  -var STATIC_URL = "../../static/"
+  -var message_type = "message"
+  //- -var message_type = "ativation"
+
+block append styles
+  link(rel="stylesheet", href="#{STATIC_URL}css/bootstrap.css")
+  link(rel="stylesheet", href="#{STATIC_URL}css/message_styles.css")
+
+block append scripts
+  script(src="#{STATIC_URL}js/scripts.js")
+
+block content-body
+  .container-flex
+    header.header-site: include _header
+    article.message:    include _content
+    footer.rss:         include _footer

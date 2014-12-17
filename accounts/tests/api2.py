@@ -26,7 +26,7 @@ class AnonymousUsersTest(APITestCase):
         'id', 'company_name', 'username', 'is_professional', 'slug', 'avatar', 'default_address', 'about', 'work',
         'school', 'hobby', 'languages', 'url', 'date_joined', 'average_note', 'comment_count', 'default_number')
     private_fields = (
-        'email', 'first_name', 'last_name', 'driver_license_date', 'driver_license_number',
+        'email', 'first_name', 'last_name', 'drivers_license_date', 'drivers_license_number',
         'date_of_birth', 'place_of_birth', 'is_active', 'creditcard')
 
     def setUp(self):
@@ -123,8 +123,8 @@ class AnonymousUsersTest(APITestCase):
             'about': 'Some text',
             'work': 'Some work',
             'school': 'Some school',
-            'driver_license_date': '2010-01-01 00:00',
-            'driver_license_number': '123456',
+            'drivers_license_date': '2010-01-01 00:00',
+            'drivers_license_number': '123456',
             'date_of_birth': '1980-01-01 00:00',
             'place_of_birth': 'Earth',
             'iban': 'FR14 2004 1010 0505 0001 3M02 606',
@@ -154,7 +154,7 @@ class AnonymousUsersTest(APITestCase):
         self.assertEqual(user.drivers_license_number, '123456')
         self.assertEqual(user.date_of_birth, datetime.datetime(1980, 1, 1))
         self.assertEqual(user.place_of_birth, 'Earth')
-        self.assertEqual(user.iban, 'FR14 2004 1010 0505 0001 3M02 606')
+        self.assertEqual(user.iban, 'FR1420041010050500013M02606')
         self.assertEqual(user.url, 'http://www.website.com')
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
@@ -320,8 +320,6 @@ class UsersTest(APITestCase):
 
     def test_account_update_all_fields(self):
         user = self.model.objects.get(pk=1)
-        self.assertNotEquals(user.username, 'test_user')
-        self.assertNotEquals(user.email, 'mailbox@mailserver.com')
         self.assertNotEqual(user.company_name, 'ACME')
         self.assertFalse(user.is_professional)
         self.assertNotEqual(user.about, 'Some text')
@@ -331,19 +329,17 @@ class UsersTest(APITestCase):
         self.assertNotEqual(user.drivers_license_number, '123456')
         self.assertNotEqual(user.date_of_birth, datetime.datetime(1980, 1, 1))
         self.assertNotEqual(user.place_of_birth, 'Earth')
-        self.assertNotEqual(user.iban, 'FR14 2004 1010 0505 0001 3M02 606')
+        self.assertNotEqual(user.iban, 'FR1420041010050500013M02606')
         self.assertNotEqual(user.url, 'http://www.website.com')
 
         data = {
-            'username': 'test_user',
-            'email': 'mailbox@mailserver.com',
             'company_name': 'ACME',
             'is_professional': True,
             'about': 'Some text',
             'work': 'Some work',
             'school': 'Some school',
-            'driver_license_date': '2010-01-01 00:00',
-            'driver_license_number': '123456',
+            'drivers_license_date': '2010-01-01 00:00',
+            'drivers_license_number': '123456',
             'date_of_birth': '1980-01-01 00:00',
             'place_of_birth': 'Earth',
             'iban': 'FR14 2004 1010 0505 0001 3M02 606',
@@ -353,8 +349,6 @@ class UsersTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
 
         user = self.model.objects.get(pk=1)
-        self.assertEquals(user.username, 'test_user')
-        self.assertEquals(user.email, 'mailbox@mailserver.com')
         self.assertEqual(user.company_name, 'ACME')
         self.assertTrue(user.is_professional)
         self.assertEqual(user.about, 'Some text')
@@ -364,7 +358,7 @@ class UsersTest(APITestCase):
         self.assertEqual(user.drivers_license_number, '123456')
         self.assertEqual(user.date_of_birth, datetime.datetime(1980, 1, 1))
         self.assertEqual(user.place_of_birth, 'Earth')
-        self.assertEqual(user.iban, 'FR14 2004 1010 0505 0001 3M02 606')
+        self.assertEqual(user.iban, 'FR1420041010050500013M02606')
         self.assertEqual(user.url, 'http://www.website.com')
 
     def test_account_set_iban(self):
@@ -485,7 +479,7 @@ class AnonymousPhoneNumbersTest(APITestCase):
 
 
 class PhoneNumberTest(APITestCase):
-    fixtures = ['phone_patron', 'phone_api2', 'address', 'phone_product', 'category']
+    fixtures = ['phone_patron', 'phone_api2', 'address', 'category', 'phone_product']
 
     def setUp(self):
         self.model = get_model('accounts', 'PhoneNumber')
@@ -698,7 +692,7 @@ class AnonymousAddressesTest(APITestCase):
 
 
 class AddressTest(APITestCase):
-    fixtures = ['address_patron', 'address_api2', 'product', 'category']
+    fixtures = ['address_patron', 'address_api2', 'category', 'product']
 
     def setUp(self):
         self.model = get_model('accounts', 'Address')
@@ -1112,6 +1106,7 @@ class ProAgencyTest(APITestCase):
         response = self.client.post(_location('proagency-list'), {
             'name': 'Agency',
             'address': '2, rue debelleyme',
+            'phone_number': '123456',
             'zipcode': '75003',
             'city': 'Paris',
             'country': 'FR',
@@ -1128,6 +1123,7 @@ class ProAgencyTest(APITestCase):
         self.assertEqual(agency.name, 'Agency')
         self.assertEqual(agency.address1, '2, rue debelleyme')
         self.assertEqual(agency.zipcode, '75003')
+        self.assertEqual(agency.phone_number, '123456')
         self.assertEqual(agency.city, 'Paris')
         self.assertEqual(agency.country, 'FR')
 
@@ -1451,7 +1447,7 @@ class StaffProPackageTest(APITestCase):
         response = self.client.post(_location('propackage-list'))
         self.assertEquals(response.status_code, 400, response.data)
 
-        required_fields = {'name', 'maximum_items', 'price', 'valid_from'}
+        required_fields = {'name', 'price', 'valid_from'}
         default_fields = {'valid_from'}
         for field in required_fields - default_fields:
             self.assertIn(field, response.data['errors'], response.data)
@@ -1627,7 +1623,7 @@ class SubscriptionTest(APITestCase):
         response = self.client.post(_location('subscription-list'))
         self.assertEquals(response.status_code, 400, response.data)
 
-        required_fields = {'patron', 'propackage', 'payment_type', }
+        required_fields = {'patron', 'propackage', }
         default_fields = {'patron'}
         for field in required_fields - default_fields:
             self.assertIn(field, response.data['errors'], response.data)

@@ -41,6 +41,10 @@
             "started_at": "2010-08-17 09:00:10",
             "contract_id": 100,
             "quantity": 1,
+            "content_type": [
+                "payments",
+                "nonpaymentinformation"
+            ],
             "object_id": 1
         },
         "model": "rent.booking",

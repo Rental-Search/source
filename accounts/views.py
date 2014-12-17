@@ -1110,6 +1110,25 @@ class PatronDetailView(BreadcrumbsMixin, PatronDetail):
         return context
 
 
+class LoginAndRedirectView(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        response = redirect(request.GET['url'])
+        user_token = request.GET.get('user_token', '')
+        if user_token:
+            try:
+                AccessToken.objects.get(token=user_token, expires__gte=datetime.datetime.now())
+            except AccessToken.DoesNotExist:
+                pass
+            else:
+                max_age = 30 * 24 * 60 * 60
+                expires = datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age)
+                rotate_token(request)
+                response.set_cookie(
+                    'user_token', user_token, max_age=max_age, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S GMT"))
+        return response
+
+
 class LoginFacebookView(View):
 
     @transaction.atomic

@@ -1,0 +1,227 @@
+header
+  background-color: white
+  .signs-links
+    padding-top: 1em
+    padding-bottom: 1em
+    height: 50px
+  i
+    display: inline-block
+    font-style: normal
+    font-weight: normal
+    line-height: 1
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+  .nav.without-spaces
+    font-weight: $fw-semibold
+    font-size: $font-size-small
+    color: $gray-stronger
+    overflow: visible
+    li
+      vertical-align: middle
+      &.divide:before
+        bottom: -.75em
+        height: 1.5em
+    a
+      color: $brand-primary
+      &:hover
+        text-decoration: underline
+  .btn-advertise
+    color: white
+    @extend .bg-success-hover
+
+  .framing
+    border-top: $bd-lighter
+  .search-form
+    padding-top: $indent-sm
+    padding-bottom: $indent-sm
+    display: table
+    img
+      top: 5px
+      position: relative
+    form
+      padding: 0 2em
+      width: 100%
+  .table-cell
+    display: table-cell
+    width: 1%
+    vertical-align: middle
+    &.main-cell
+      width: 100%
+  .form-control
+    height: $form-height
+    margin: 0
+  .what-field
+    color: $brand-success !important
+    position: relative
+    right: -1px
+    border-color: $gray-light !important
+    font-weight: $fw-bold !important
+    +border-radius($bdrs 0 0 $bdrs !important)
+    +placeholder($brand-success !important)
+    &:hover
+      border-color: $gray-medium !important
+  .where-field
+    position: relative
+    width: 40%
+    z-index: 3
+    input
+      width: 100%
+      padding-left: 3em
+      font-weight: $fw-semibold
+      +border-radius(0)
+      border-color: $gray-light $gray-lighter !important
+      &:hover
+        border-color: $gray-medium !important
+    i
+      font-size: 1.4em
+      color: $gray-medium
+      &:before
+        content: "\f041"
+        width: 1em
+        height: 1em
+        +centred-abs()
+        right: auto
+        left: .75em
+  .btn-search
+    position: relative
+    left: -1px
+    background-color: white
+    border-color: $gray-light
+    +border-radius(0 $bdrs $bdrs 0 !important)
+    width: 0
+    padding: 0 $form-height 0 0
+    i
+      font-size: 1.4em
+      &:before
+        content: "\f002"
+        width: 1em
+        height: 1em
+        +centred-abs()
+        top: 1em\9
+    &:hover
+      background-color: $gray-lighter
+
+  .guest-veiw
+    margin-top: -.5em
+    margin-bottom: -.5em
+  .badge-count
+    font-weight: $fw-bold
+    padding: .25em .75em
+    color: white
+    display: inline-block
+    position: absolute
+    top: -.5em
+    right: -1em
+    background-color: $brand-primary
+    border-radius: 1em
+    font-size: .75em
+  .dropdown
+    display: table-cell
+    vertical-align: middle
+    width: 1%
+    & + .dropdown
+      padding-left: $indent-md
+    .dropdown-menu
+      margin-top: 1em
+      left: auto
+      width: 280px
+      right: -.75em
+      // triangle
+      &:before,
+      &:after
+        content: ""
+        position: absolute
+        border: .75em solid
+        top: -1.5em
+        right: .75em
+        border-top-color: transparent
+        border-left-color: transparent
+        border-right-color: transparent
+      &:before
+        color: $gray-medium
+      &:after
+        color: white
+        margin-top: 1px
+      // end triangle
+      > li
+        padding: px(20)
+        & + li
+          border-top: px(1) solid $gray-lighter
+        a
+          color: inherit
+          text-decoration: none
+        > div
+          vertical-align: middle
+          display: table-cell
+        .middle-round span
+          width: px(10)
+          height: px(10)
+          background-color: $gray-lighter
+          display: inline-block
+          border-radius: 50%
+        .autor-img
+          padding-left: px(20)
+          padding-right: px(10)
+          a
+            display: block
+            border-radius: 50%
+            overflow: hidden
+            +opacity(.9)
+            width: $thumbnail-smx
+            height: $thumbnail-smx
+            +default-user
+
+        .content
+          width: 100%
+          max-width: 0px
+          font-weight: $fw-semibold
+          a:hover
+            text-decoration: underline
+          h5,
+          p
+            font-size: px(11)
+          h4
+            font-size: px(12)
+            margin-bottom: .25em
+            color: $gray-dark
+          h5
+            color: $gray-strong
+          p
+            margin-top: .125em
+            line-height: $line-height-base
+            color: $gray-light
+          &,
+          > *
+            +text-overflow
+          > *
+            margin: 0
+        &:hover
+          .middle-round span
+            background-color: $brand-success
+          .autor-img a
+            +opacity(1)
+          .content
+            h4
+              color: darken($gray-dark, 30%)
+            h5
+              color: darken($gray-strong, 20%)
+            p
+              color: darken($gray-light, 20%)
+    .dropdown-toggle
+      font-weight: bolder
+      cursor: pointer
+      i
+        font-size: 2em
+    .caret
+      color: $gray-strong
+      margin-left: .5em
+    .dropdown-img
+      margin: 0 $indent-xs
+      a
+        display: inline-block
+        vertical-align: middle
+        overflow: hidden
+        border-radius: 50%
+        width: $thumbnail-smx
+        height: $thumbnail-smx
+        +default-user

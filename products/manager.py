@@ -21,7 +21,15 @@ class ProductManager(GeoManager):
         return self.filter(*args, is_archived=True, is_allowed=True, **kwargs)
 
 class CurrentSiteProductManager(CurrentSiteManager, ProductManager):
-    pass
+    def get_queryset(self):
+        qs = super(CurrentSiteProductManager, self).get_queryset()
+        qs = qs.filter(product2category__site_id=settings.SITE_ID)
+        return qs.distinct()
+
+class CurrentSiteProduct2CategoryManager(CurrentSiteManager):
+    def get_queryset(self):
+        qs = super(CurrentSiteProduct2CategoryManager, self).get_queryset()
+        return qs.distinct()
 
 class PriceManager(Manager):
     def __init__(self):

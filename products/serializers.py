@@ -86,6 +86,10 @@ class ProductSerializer(ModelSerializer):
             return None
         return instance
 
+    def to_native(self, obj):
+        obj.category = obj._get_category()
+        return super(ProductSerializer, self).to_native(obj)
+
     class Meta:
         model = models.Product
         fields = ('id', 'summary', 'deposit_amount', 'currency', 'description', 'address', 'average_note', 'prices',

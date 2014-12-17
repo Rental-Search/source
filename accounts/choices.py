@@ -73,6 +73,7 @@ PHONE_TYPES = Enum([
 SUBSCRIPTION_PAYMENT_TYPE_CHOICES = Enum([
     (0, 'CREDIT_CARD', _(u'Carte de crédit')),
     (1, 'CHECK', _(u'Chèque')),
+    (2, 'CHECK', _(u'IBAN')),
 ])
 
 GEOLOCATION_SOURCE = Enum([

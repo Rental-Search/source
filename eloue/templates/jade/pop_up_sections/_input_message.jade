@@ -1,5 +1,7 @@
 form(name="sendMessageForm", ng-submit="sendMessage()", novalidate)
+    {% verbatim %}
     .table-cell.main-cell
-        textarea(name="", rows="4", placeholder="Rédigez votre message ici...", ng-model="newMessage.body", required)
+        textarea(name="", rows="4", placeholder="Rédigez votre message ici...", ng-model="newMessage.body", ng-disabled="submitInProgress", required)
     .table-cell
-        button(ng-disabled="sendMessageForm.$invalid || !sendMessageForm.$dirty").btn.bg-success Envoyez
+        button(ng-disabled="sendMessageForm.$invalid || !sendMessageForm.$dirty", ng-disabled="submitInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success Envoyez
+    {% endverbatim %}
