@@ -53,7 +53,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return tuple(obj.sites.values_list('id', flat=True))
     
     def prepare_categories(self, obj):
-        category = obj.category
+        category = obj._get_category()
         if category:
             # it is safe to cache get_ancestors for categories and cache them by category PK
             return cached_category(category.pk, category)

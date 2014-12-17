@@ -1,0 +1,368 @@
+.sr-only
+  position: absolute
+  width: 1px
+  height: 1px
+  margin: -1px
+  padding: 0
+  overflow: hidden
+  clip: rect(0,0,0,0)
+  border: 0
+
+.modal
+  .checkbox
+    span
+      cursor: pointer
+      border-radius: .2em
+      border: 1px solid #ccc
+      width: 1.3em
+      height: 1.3em
+      line-height: 1.1
+      font-size: 1.1em
+      vertical-align: middle
+      display: inline-block
+      &:hover
+        background-color: $gray-lighter
+      &:before
+        visibility: hidden
+        color: $gray-strong
+    input
+      position: fixed
+      left: 100%
+      top: 100%
+      &:checked + span:before
+        visibility: visible
+  $bor-rad: px(3)
+  $item-width: 50%
+  .modal-dialog
+    margin-top: 4em
+  .modal-content
+    +box-shadow(none)
+    border-color: transparent
+    border: none
+    text-align: center
+    +border-left-radius(0)
+    +border-right-radius(0)
+  .modal-header
+    background-color: $brand-primary
+    color: white
+  .modal-title
+    font-size: px(17)
+    font-weight: $fw-regular
+    color: inherit
+  .close
+    font-size: px(21)
+    color: inherit
+    text-shadow: none
+    background-color: lighten($brand-primary, 15%)
+    padding: .2em .4em
+
+    float: right
+    line-height: 1
+    cursor: pointer
+    border: 0
+    -webkit-appearance: none
+    +border-left-radius($bor-rad)
+    +border-right-radius($bor-rad)
+
+    &:hover,
+    &:focus
+      background-color: lighten($brand-primary, 7.5%)
+      text-decoration: none
+      cursor: pointer
+  .modal-body
+    padding-top: 3em
+    padding-bottom: 3em
+    padding-left: 0
+    color: $gray-medium
+    padding-right: 0
+    font-weight: $fw-semibold
+  .btn
+    font-size: 1em
+    display: block
+    text-align: center
+    font-weight: $fw-bold
+    color: white
+    padding: .8em 0
+    border-radius: $bor-rad
+    width: 100%
+    &:hover
+      &.bg-info
+        background-color: darken($brand-info, 10%)
+      &.bg-danger
+        background-color: darken($brand-danger, 10%)
+    i
+      padding-left: .25em
+      padding-right: .25em
+      +border-left-radius($bor-rad/2)
+      +border-right-radius($bor-rad/2)
+      background-color: white
+      margin-right: 1em
+    &.bg-info i
+      color: $brand-info
+    &.bg-danger i
+      color: $brand-danger
+  p
+    font-size: px(12)
+    line-height: 1.8em
+    color: inherit
+    &.info
+      position: relative
+      padding-left: 2.5em
+      display: inline-block
+      margin-bottom: 0
+      &:before
+        position: absolute
+        top: 0
+        left: 0
+        text-align: center
+        content: "i"
+        font-weight: bold
+        border: px(3) solid $gray-medium
+        border-radius: 50%
+        line-height: 1.1em
+        vertical-align: top
+        width: 1.5em
+        height: 1.5em
+  h3
+    font-size: px(26)
+    font-weight: $fw-light
+    color: $gray-dark
+    margin: 0 0 .5em
+    line-height: 1.5em
+  h4
+    font-weight: $fw-semibold
+    font-size: px(17)
+  .checkbox
+    font-size: px(12)
+    margin: 0
+  .modal-fotter-link
+    color: $brand-success
+    font-size: px(17)
+    font-weight: $fw-regular
+  .or
+    $width: 2.5em
+    $height: 1em
+    position: relative
+    display: block
+    margin: px(30) 0
+    border-top: px(1) solid $gray-lighter
+    color: inherit
+    font-weight: $fw-semibold
+    &:before
+      background-color: white
+      width: $width
+      font-size: px(12)
+      content: "ou"
+      text-transform: uppercase
+      position: absolute
+      left: 50%
+      line-height: $height
+      top: -($height / 2)
+      margin-left: -($width / 2)
+  .form-group
+    margin: 1.5em auto
+    clear: both
+    width: $item-width
+    +center-block()
+    input
+      color: inherit
+      height: 3em
+      +placeholder(inherit)
+  .forgot-password
+    font-size: px(12)
+    min-height: 20px
+    a:hover
+      text-decoration: underline
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"]
+    &:invalid,
+    &:empty
+      border-color: $brand-primary
+    &:valid
+      border-color: $gray-medium
+
+  .large
+    $bd-property: px(1) solid $gray-lighter
+    // width: $modal-large-width
+    .modal-body
+      padding: 0
+    section
+      padding: 2em
+
+    .static-part
+      width: auto
+      border-right: $bd-property
+      vertical-align: top
+
+    .change-part
+      width: 100%
+      height: 100%
+      position: relative
+
+    .product-info
+      border-bottom: $bd-property
+      // @import pop_up_sections/product-info
+
+    .terms
+      font-size: px(13)
+      color: $gray-dark
+      text-align: left
+      .list-group
+        margin: 2em 0
+      p
+        font-size: px(12,13)
+        color: $gray-medium
+        margin-bottom: 1.5em
+      .btn
+        margin-top: 1em
+        font-size: px(14,13)
+
+    .dialogs
+      padding-bottom: 12em
+      height: 100%
+      width: 100%
+      left: 0
+      bottom: 0
+      position: absolute
+      // @import pop_up_sections/dialogs
+
+    .input-message
+      border-top: $bd-property
+      position: absolute
+      width: 100%
+      height: 10em
+      bottom: 0
+      left: 0
+
+      .table-cell
+        vertical-align: bottom
+        height: 100%
+      textarea
+        width: 100%
+        border-color: transparent
+        resize: none
+      .btn
+        width: auto
+        padding-left: 2em
+        padding-right: 2em
+        margin-left: 1em
+
+    .variant-call
+      padding: 0
+      ul
+        margin: 0
+        padding: 0
+        counter-reset: variants
+        .table-cell
+          padding: 2em
+          border-top: px(1) solid $gray-lighter
+          width: 100%
+          text-align: left
+          position: relative
+        // .text
+        //   +block-with-thumbnail(3em, 50%)
+        .thumbnail-img
+          &:before
+            counter-increment: variants
+            content: counter(variants)
+            display: block
+            font-size: px(18)
+            width: 3em
+            height: 3em
+            line-height: 2.6em
+            text-align: center
+            // border: px(2) solid $gray
+            border-radius: 50%
+          &.text-gray:before
+            // color: $gray
+          &.text-primary:before
+            border-color: $brand-primary
+          &.text-success:before
+            border-color: $brand-success
+        .thumbnail-content
+          padding: 1em 2em 0 !important
+          h3
+            font-size: inherit
+            font-weight: $fw-bold
+          p
+            margin-top: 1em
+          .btn
+            display: inline-block
+            width: auto
+            padding-left: 5em
+            padding-right: 5em
+    .form-wrapper
+      text-align: left
+      $pad-form: .75em
+      .table-row
+        margin: 0 (-$pad-form/2)
+      .table-cell
+        width: auto
+      h2
+        color: $gray-dark
+        margin: 0 0 1em
+        font-size: px(26)
+      .chosen-container
+        display: table-cell
+        float: left
+        padding: 0 !important
+        width: 100% !important
+        border-width: 0 !important
+      .chosen-single
+        background: transparent
+        color: $gray-medium
+        text-align: center
+        box-shadow: none
+        height: 100%
+        border: px(1) solid $gray-medium !important
+        span,
+        div b
+          margin-top: .5em
+        div b
+          height: 20px
+      .chosen-drop
+        border: px(1) solid $gray-medium
+        text-align: center
+        border-top-width: 0
+      .row
+        margin-top: $pad-form
+        margin-bottom: ($pad-form*2)
+      .btn
+        height: 3em
+        padding: 0
+        width: 100%
+        font-size: inherit
+      input,
+      select,
+      .chosen-container
+        font-size: px(14)
+        box-shadow: none
+        height: 3em
+        padding: 0 0 0 1em
+        color: $gray-medium
+        +placeholder($gray-medium)
+        // +border-top-radius($bd-rad)
+        // +border-bottom-radius($bd-rad)
+      input[type="file"],
+      select
+        display: table-cell !important
+        height: 0
+        border-width: 0
+        overflow: hidden
+        padding: 0
+      .indent-t
+        margin-top: ($pad-form*2)
+    .bank-information
+      border-top: $bd-property
+      input
+        padding-left: 2.75em
+      i
+        z-index: 50
+        line-height: (3/1.1)
+        margin-left: 1em
+        font-size: 1.1em
+        position: absolute
+        // left: $padding-base-horizontal
+        top: 0

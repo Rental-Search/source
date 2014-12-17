@@ -7,6 +7,8 @@ from payments.slimpay_payment import SlimPayManager
 from accounts.models import CreditCard
 from accounts.models import Patron
 
+from django.utils.encoding import smart_str
+
 
 class PaymentInformation(models.Model, abstract_payment.AbstractPayment):
     # I did not used a generic reverse relation here, because of a bug in django 1.2
@@ -62,10 +64,10 @@ class SlimPayMandateInformation(models.Model):
         blob = slimpay_manager.transactionRequest(
             requestType='mandate', 
             clientReference=self.patron.pk, 
-            contactFN=self.patron.first_name, 
-            contactLN=self.patron.last_name,
-            Iline1=address.address1,
-            Icity=address.city,
+            contactFN=smart_str(self.patron.first_name), 
+            contactLN=smart_str(self.patron.last_name),
+            Iline1=smart_str(address.address1),
+            Icity=smart_str(address.city),
             IpostalCode=address.zipcode,
             Icountry=address.country,
             contactEmail=self.patron.email,

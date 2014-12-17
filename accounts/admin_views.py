@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.translation import ugettext as _
 from django.core import urlresolvers
+from django.shortcuts import get_object_or_404
 
 
 from accounts.forms import make_missing_data_form
@@ -111,4 +112,14 @@ def patron_create_subscription(request):
 				RequestContext(request, {'form': form,}),)
 
 
+def add_iban(request, patron_id):
+	patron = get_object_or_404(Patron, pk=patron_id)
+
+	slimpay_mandate_info = SlimPayMandateInformation.objects.create(patron=patron)
+	blob = slimpay_mandate_info.blob()
+	bridge_form = BridgeForm(initial={'blob': blob})
+
+	return render_to_response('payments/admin/slimpay_bridge.html', RequestContext(request, {'form': bridge_form}))
+
 patron_create_subscription = staff_member_required(patron_create_subscription)
+add_iban = staff_member_required(add_iban)
