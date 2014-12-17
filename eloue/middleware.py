@@ -53,12 +53,9 @@ class UrlRedirectMiddleware:
     def process_request(self, request):
         host = request.META['HTTP_HOST']
         path = request.META['PATH_INFO']
-        print host
-        print path
         
         for url_pattern, redirect_domain in settings.URL_REDIRECTS:
             redirect_url = '%s%s' % (redirect_domain, path)
-            print redirect_url
             regex = re.compile(url_pattern)
             if regex.match(host):
                 return HttpResponsePermanentRedirect(redirect_url)
