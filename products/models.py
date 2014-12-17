@@ -741,6 +741,12 @@ class PropertyValue(models.Model):
         """
         return smart_unicode(self.value)
 
+class UnavailabilityPeriod(models.Model):
+
+    product = models.ForeignKey('Product')
+    started_at = SimpleDateField()
+    ended_at = SimpleDateField()
+    quantity = models.PositiveIntegerField()
 
 class Price(models.Model):
     """A price"""

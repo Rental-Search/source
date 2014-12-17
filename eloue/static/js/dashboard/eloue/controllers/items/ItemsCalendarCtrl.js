@@ -8,15 +8,19 @@ define(["angular", "eloue/app"], function (angular) {
     angular.module("EloueDashboardApp").controller("ItemsCalendarCtrl", [
         "$scope",
         "$stateParams",
+        "Endpoints",
         "BookingsService",
-        function ($scope, $stateParams, BookingsService) {
+        "UnavailabilityPeriodsService",
+        function ($scope, $stateParams, Endpoints, BookingsService, UnavailabilityPeriodsService) {
 
             $scope.selectedMonthAndYear = Date.today().getMonth()+ " " + Date.today().getFullYear();
             $scope.showUnavailable = true;
             $scope.showBookings = true;
             $scope.bookings = [];
-            $scope.currentBookings = [];
+            $scope.productUnavailablePeriods = [];
             $scope.weeks = {};
+            $scope.newUnavailabilityPeriod = {};
+            $scope.unavailabilityPeriodValidationError = "";
 
             var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
@@ -44,12 +48,22 @@ define(["angular", "eloue/app"], function (angular) {
                     value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);
                 });
                 $scope.bookings = bookings;
-
-                $scope.updateCalendar();
+                UnavailabilityPeriodsService.getByProduct($stateParams.id).then(function (periods) {
+                    $scope.unavailablePeriods = periods.results;
+                    angular.forEach($scope.unavailablePeriods, function (value, key) {
+                        value.startDay = Date.parseExact(value.started_at, "yyyy-MM-ddTHH:mm:ss");
+                        value.endDay = Date.parseExact(value.ended_at, "yyyy-MM-ddTHH:mm:ss");
+                    });
+                    $scope.updateCalendar();
+                });
             });
 
+            $scope.handleResponseErrors = function(error) {
+                $scope.submitInProgress = false;
+            };
+
             $scope.updateCalendar = function () {
-                $scope.currentBookings = [];
+                $scope.productUnavailablePeriods = [];
                 var s = $scope.selectedMonthAndYear.split(" ");
                 var date = new Date();
                 date.setMonth(s[0]);
@@ -61,14 +75,28 @@ define(["angular", "eloue/app"], function (angular) {
                     var days = [];
                     for (var j = 0; j < 7; j++) {
                         var isBooked = false;
+                        var isUnavailable = false;
                         angular.forEach($scope.bookings, function (value, key) {
                             if (currentDay.between(value.startDay, value.endDay)) {
                                 isBooked = true;
-                                $scope.currentBookings.push(value);
+                                value.reason = "booked";
+                                if ($.inArray(value, $scope.productUnavailablePeriods) == -1) {
+                                    $scope.productUnavailablePeriods.push(value);
+                                }
                             }
                         });
 
-                        days.push({dayOfMonth: currentDay.getDate(), isBooked: isBooked});
+                        angular.forEach($scope.unavailablePeriods, function (value, key) {
+                            if (currentDay.between(value.startDay, value.endDay)) {
+                                isUnavailable = true;
+                                value.reason = "unavailable";
+                                if ($.inArray(value, $scope.productUnavailablePeriods) == -1) {
+                                    $scope.productUnavailablePeriods.push(value);
+                                }
+                            }
+                        });
+
+                        days.push({dayOfMonth: currentDay.getDate(), isBooked: isBooked, isUnavailable: isUnavailable});
                         currentDay.add(1).days();
                     }
 
@@ -81,11 +109,43 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.onShowUnavailable = function () {
-                //TODO: implement when product availability is added to the model
+                console.log("onShowUnavailable");
             };
 
             $scope.onShowBookings = function () {
                 console.log("onShowBookings");
-            }
+            };
+
+            $scope.showAddPeriodForm = function() {
+                $("#add-period").modal();
+            };
+
+            $scope.saveUnavailabilityPeriod = function() {
+                if ($scope.validateUnavailabilityPeriod()) {
+                    console.log("saveUnavailabilityPeriod");
+                    console.log($scope.newUnavailabilityPeriod);
+                    $scope.submitInProgress = true;
+                    var startDate = Date.parseExact($scope.newUnavailabilityPeriod.started_at, "dd/MM/yyyy"),
+                        endDate = Date.parseExact($scope.newUnavailabilityPeriod.ended_at, "dd/MM/yyyy");
+                    $scope.newUnavailabilityPeriod.started_at = startDate.toString("yyyy-MM-dd HH:mm:ss");
+                    $scope.newUnavailabilityPeriod.ended_at = endDate.toString("yyyy-MM-dd HH:mm:ss");
+                    $scope.newUnavailabilityPeriod.product = Endpoints.api_url + "products/" + $stateParams.id + "/";
+
+                    UnavailabilityPeriodsService.savePeriod($scope.newUnavailabilityPeriod).$promise.then(function (result) {
+                        $scope.updateCalendar();
+                        $("#add-period").modal('hide');
+                        $scope.newUnavailabilityPeriod = {};
+                        $scope.submitInProgress = false;
+                    }, function (error) {
+                        $scope.handleResponseErrors(error);
+                    });
+                }
+            };
+
+            $scope.validateUnavailabilityPeriod = function() {
+                //TODO: The user can't create an unavailability period if the product is already booked
+                // TODO: The user can't create an unavailability period if the start or end date is between an other unavailability period.
+                return true;
+            };
         }]);
 });

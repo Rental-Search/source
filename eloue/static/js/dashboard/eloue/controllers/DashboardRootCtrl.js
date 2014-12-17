@@ -16,7 +16,7 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             $scope.unreadMessageThreadsCount = 0;
             $scope.newBookingRequestsCount = 0;
             $scope.submitInProgress = false;
-            $scope.selectedItem={}
+            $scope.selectedItem={};
 
             $scope.dashboardTabs = [
                 {title: 'Tableau de bord', icon: 'stroke home', sref: 'dashboard', badge: 0},

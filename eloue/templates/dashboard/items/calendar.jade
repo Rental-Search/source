@@ -21,7 +21,7 @@ block details
             {% verbatim %}
             tbody
                   tr(ng-repeat="week in weeks")
-                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : ''}}") {{day.dayOfMonth}}
+                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : '' || day.isUnavailable && showUnavailable ? 'outages' : ''}}") {{day.dayOfMonth}}
       .row
         .col-xs-4
           label.check-btn.form-control.text-danger-light
@@ -43,12 +43,14 @@ block details
                 td Motifs
                 td Action 
             tbody
-              tr(ng-repeat="booking in currentBookings", ng-show="showBookings")
-                td {{booking.startDay | date:'dd/MM/yyyy'}}
-                td {{booking.endDay | date:'dd/MM/yyyy'}}
-                td.text-success-light Réservé
+              tr(ng-repeat="period in productUnavailablePeriods track by period.id", ng-show="(showBookings && period.reason=='booked') || (showUnavailable && period.reason=='unavailable')")
+                td {{period.startDay | date:'dd/MM/yyyy'}}
+                td {{period.endDay | date:'dd/MM/yyyy'}}
+                td(ng-show="showBookings && period.reason=='booked'").text-success-light Réservé
+                td(ng-show="showUnavailable && period.reason=='unavailable'").text-danger-light Indisponible
                 td
       .row
         .col-xs-8.col-xs-offset-2
-          button(type="submit").btn.bg-success-hover.text-white Ajoutez une nouvelle disponibilité
+          button(type="button", ng-click="showAddPeriodForm()").btn.bg-success-hover.text-white Ajoutez une nouvelle disponibilité
     {% endverbatim %}
+include add_period

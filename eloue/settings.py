@@ -173,7 +173,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
     'eloue.middleware.SpacelessMiddleware',
     'django.middleware.common.CommonMiddleware',
-	'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -647,8 +647,7 @@ REST_FRAMEWORK = {
 #         'rest_framework_plist.parsers.PlistParser',
 #     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-#        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework.authentication.OAuth2Authentication',
+        'eloue.backends.EloueRestAuthBackend',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -867,6 +866,12 @@ try:
     GDAL_LIBRARY_PATH = os.path.join(env('GDAL_LIBRARY_PATH'), 'libgdal.so')
 except:
     pass
+
+NON_ACTIVE_LOGIN_COUNT = 1
+
+AUTHENTICATION_BACKENDS = (
+    'eloue.backends.EloueAuthBackend',
+)
 
 NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
     35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
