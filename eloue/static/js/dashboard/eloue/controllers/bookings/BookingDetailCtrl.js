@@ -185,27 +185,27 @@ define(["angular", "eloue/app"], function (angular) {
                                             arrival_point: Endpoints.api_url + "patronshippingpoints/" + patronShippingPoint.id + "/"
                                         };
                                         ShippingsService.saveShipping(shipping).$promise.then(function (result) {
-                                            $scope.showNotification(result.detail);
+                                            $scope.showNotification("shipping", "save", true);
                                             $window.location.reload();
                                         }, function (error) {
                                             $scope.handleResponseErrors(error, "booking", "accept");
                                         });
                                     } else {
-                                        $scope.showNotification(patronShippingPointData.detail);
+                                        $scope.showNotification("booking", "accept", true);
                                         $window.location.reload();
                                     }
                                 }, function (error) {
                                     $scope.handleResponseErrors(error, "booking", "accept");
                                 });
                             } else {
-                                $scope.showNotification(productShippingPointData.detail);
+                                $scope.showNotification("booking", "accept", true);
                                 $window.location.reload();
                             }
                         }, function (error) {
                             $scope.handleResponseErrors(error, "booking", "accept");
                         });
                     } else {
-                        $scope.showNotification(result.detail);
+                        $scope.showNotification("booking", "accept", true);
                         $window.location.reload();
                     }
                 }, function (error) {
@@ -216,7 +216,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.rejectBooking = function () {
                 $scope.submitInProgress = true;
                 BookingsLoadService.rejectBooking($stateParams.uuid).$promise.then(function (result) {
-                    $scope.showNotification(result.detail);
+                    $scope.showNotification("booking", "reject", true);
                     $window.location.reload();
                 }, function (error) {
                     $scope.handleResponseErrors(error, "booking", "reject");
@@ -230,7 +230,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.cancelBooking = function () {
                 $scope.submitInProgress = true;
                 BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
-                    $scope.showNotification(result.detail);
+                    $scope.showNotification("booking", "cancel", true);
                     $window.location.reload();
                 }, function (error) {
                     $scope.handleResponseErrors(error, "booking", "cancel");
@@ -246,7 +246,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.submitInProgress = true;
                 CommentsLoadService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).$promise
                     .then(function () {
-                        $scope.showNotification("Posted comment");
+                        $scope.showNotification("comment", "post", true);
                         $scope.showCommentForm = false;
                         $scope.submitInProgress = false;
                     }, function (error) {
@@ -259,7 +259,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.submitInProgress = true;
                 BookingsLoadService.postIncident($stateParams.uuid, $scope.incident.description).$promise
                     .then(function (result) {
-                        $scope.showNotification(result.detail);
+                        $scope.showNotification("sinister", "post", true);
                         $scope.showIncidentForm = false;
                         $window.location.reload();
                     }, function (error) {

@@ -126,7 +126,7 @@ define(["angular", "eloue/app"], function (angular) {
                 ProductShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (result) {
                     $scope.productShippingPoint = result;
                     $scope.submitInProgress = false;
-                    $scope.showNotification("shipping_point", "save", false);
+                    $scope.showNotification("shipping_point", "save", true);
                     $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
                     $scope.showMapPointDetails();
                 }, function (error) {
