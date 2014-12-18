@@ -38,6 +38,13 @@ DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')
 
 URL_REDIRECTS = (
         (r'www\.go-sport-location\.com$', 'https://location.go-sport.com'),
+        (r'www\.go-sport-location\.fr$', 'https://location.go-sport.com'),
+        (r'www\.gosportlocation\.fr$', 'https://location.go-sport.com'),
+        (r'gosportlocation\.com$', 'https://location.go-sport.com'),
+        (r'www\.gosportlocation\.com$', 'https://location.go-sport.com'),
+        (r'go-sport-location\.fr$', 'https://location.go-sport.com'),
+        (r'gosportlocation\.fr$', 'https://location.go-sport.com'),
+        (r'go-sport-location\.com$', 'https://location.go-sport.com'),
     )
 
 MIDDLEWARE_CLASSES = (
