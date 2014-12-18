@@ -186,6 +186,7 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.showNotification = function(object, action, bool){};
             stateParams = {};
             spyOn(bookingsLoadServiceMock, "getBookingDetails").and.callThrough();
             spyOn(bookingsLoadServiceMock, "downloadContract").and.callThrough();

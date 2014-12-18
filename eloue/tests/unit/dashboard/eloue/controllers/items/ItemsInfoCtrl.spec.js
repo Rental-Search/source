@@ -108,6 +108,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.showNotification = function(object, action, bool){};
             stateParams = {
                 id: 1
             };

@@ -26,6 +26,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.showNotification = function(object, action, bool){};
             stateParams = {
                 id: 1
             };

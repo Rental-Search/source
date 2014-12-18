@@ -92,6 +92,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountProfileCtrl"], functi
             scope.currentUser = { id: 1};
             scope.markListItemAsSelected = function (prefix, id) {
             };
+            scope.showNotification = function(object, action, bool){};
             spyOn(usersServiceMock, "sendForm").and.callThrough();
             spyOn(usersServiceMock, "updateUser").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();

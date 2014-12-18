@@ -108,6 +108,7 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.showNotification = function(object, action, bool){};
             window = {
                 location: {
                     href: ""

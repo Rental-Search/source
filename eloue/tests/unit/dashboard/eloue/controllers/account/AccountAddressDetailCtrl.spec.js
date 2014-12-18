@@ -66,6 +66,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.showNotification = function(object, action, bool){};
             state = {};
             stateParams = {
                 id: 1

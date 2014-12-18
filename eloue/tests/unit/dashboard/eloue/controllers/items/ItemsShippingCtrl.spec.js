@@ -82,7 +82,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
             stateParams = {
                 id: 1
             };
-
+            scope.showNotification = function(object, action, bool){};
             spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
             spyOn(productShippingPointsServiceMock, "getByProduct").and.callThrough();
             spyOn(productShippingPointsServiceMock, "deleteShippingPoint").and.callThrough();

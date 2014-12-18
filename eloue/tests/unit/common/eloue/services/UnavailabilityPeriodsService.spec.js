@@ -10,16 +10,16 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(function () {
             unavailabilityPeriodsMock = {
                 get: function (params) {
-
+                    return {$promise: {}}
                 },
                 save: function (obj) {
-
+                    return {$promise: {}}
                 },
                 update: function (id, obj) {
-
+                    return {$promise: {}}
                 },
                 delete: function (id) {
-
+                    return {$promise: {}}
                 }
             };
 
@@ -30,10 +30,10 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_UnavailabilityPeriodsService_) {
             UnavailabilityPeriodsService = _UnavailabilityPeriodsService_;
-            spyOn(unavailabilityPeriodsMock, "get").andCallThrough();
-            spyOn(unavailabilityPeriodsMock, "save").andCallThrough();
-            spyOn(unavailabilityPeriodsMock, "update").andCallThrough();
-            spyOn(unavailabilityPeriodsMock, "delete").andCallThrough();
+            spyOn(unavailabilityPeriodsMock, "get").and.callThrough();
+            spyOn(unavailabilityPeriodsMock, "save").and.callThrough();
+            spyOn(unavailabilityPeriodsMock, "update").and.callThrough();
+            spyOn(unavailabilityPeriodsMock, "delete").and.callThrough();
         }));
 
         it("UnavailabilityPeriodsService should be not null", function () {
@@ -57,9 +57,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         });
 
         it("UnavailabilityPeriodsService:deletePeriod", function () {
-            var periodId = 1;
-            UnavailabilityPeriodsService.deletePeriod(periodId);
-            expect(unavailabilityPeriodsMock.delete).toHaveBeenCalledWith({id: periodId});
+            var period = {id: 1};
+            UnavailabilityPeriodsService.deletePeriod(period);
+            expect(unavailabilityPeriodsMock.delete).toHaveBeenCalledWith({id: period.id});
         });
 
         it("UnavailabilityPeriodsService:getByProduct", function () {

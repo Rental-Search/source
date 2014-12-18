@@ -74,6 +74,7 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
                 then: function () {
                 }
             };
+            scope.showNotification = function(object, action, bool){};
             state = {};
             stateParams = {
                 id: 1

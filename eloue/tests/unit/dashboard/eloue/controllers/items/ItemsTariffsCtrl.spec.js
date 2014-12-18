@@ -70,6 +70,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.showNotification = function(object, action, bool){};
             stateParams = {
                 id: 1
             };
