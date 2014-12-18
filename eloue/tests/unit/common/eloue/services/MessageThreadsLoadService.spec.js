@@ -63,11 +63,13 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("MessageThreadsLoadService:getMessageThreadList", function () {
             var page = 1;
             MessageThreadsLoadService.getMessageThreadList(page);
+            expect(messageThreadsMock.get).toHaveBeenCalledWith({page: page, ordering: "-last_message__sent_at", _cache: jasmine.any(Number)});
         });
 
         it("MessageThreadsLoadService:getMessageThread", function () {
             var threadId = 1;
             MessageThreadsLoadService.getMessageThread(threadId);
+            expect(messageThreadsMock.get).toHaveBeenCalledWith({id: threadId, _cache: jasmine.any(Number)});
         });
 
         it("MessageThreadsLoadService:getUsersRoles", function () {
@@ -75,7 +77,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 sender: {id : 1},
                 recipient: {id : 2}
             }, currentUserId = 1;
-            MessageThreadsLoadService.getUsersRoles(messageThread, currentUserId);
+            var result = MessageThreadsLoadService.getUsersRoles(messageThread, currentUserId);
+            expect(result.recipientId).toEqual(messageThread.recipient.id);
         });
     });
 });

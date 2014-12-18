@@ -65,11 +65,17 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("CommentsLoadService:getCommentList", function () {
             var uuid = 1;
             CommentsLoadService.getCommentList(uuid);
+            expect(commentsMock.get).toHaveBeenCalledWith({booking: uuid, _cache: jasmine.any(Number)})
         });
 
         it("CommentsLoadService:postComment", function () {
             var uuid = 1, comment = "msg", rate = 5;
             CommentsLoadService.postComment(uuid, comment, rate);
+            expect(commentsMock.save).toHaveBeenCalledWith({
+                booking: "/api/2.0/bookings/" + uuid + "/",
+                comment: comment,
+                rate: rate
+            })
         });
     });
 });

@@ -79,6 +79,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             spyOn(bookingsMock, "cancel").and.callThrough();
             spyOn(bookingsMock, "reject").and.callThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(utilsServiceMock, "downloadPdfFile").and.callThrough();
             spyOn(bookingsParseServiceMock, "parseBookingListItem").and.callThrough();
             spyOn(bookingsParseServiceMock, "parseBooking").and.callThrough();
             spyOn(messageThreadsServiceMock, "getMessageThread").and.callThrough();
@@ -91,11 +92,13 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("BookingsLoadService:getBookingList", function () {
             var author, state, borrowerId, ownerId, page;
             BookingsLoadService.getBookingList(author, state, borrowerId, ownerId, page);
+            expect(bookingsMock.get).toHaveBeenCalled();
         });
 
         it("BookingsLoadService:getBooking", function () {
             var uuid = 1;
             BookingsLoadService.getBooking(uuid);
+            expect(bookingsMock.get).toHaveBeenCalledWith({uuid: uuid, _cache: jasmine.any(Number)});
         });
 
         it("BookingsLoadService:getBookingDetails", function () {
@@ -106,41 +109,49 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("BookingsLoadService:acceptBooking", function () {
             var uuid = 1;
             BookingsLoadService.acceptBooking(uuid);
+            expect(bookingsMock.accept).toHaveBeenCalledWith({uuid: uuid}, {uuid: uuid});
         });
 
         it("BookingsLoadService:cancelBooking", function () {
             var uuid = 1;
-            BookingsLoadService.cancelBooking(uuid)
+            BookingsLoadService.cancelBooking(uuid);
+            expect(bookingsMock.cancel).toHaveBeenCalledWith({uuid: uuid}, {uuid: uuid});
         });
 
         it("BookingsLoadService:rejectBooking", function () {
             var uuid = 1;
-            BookingsLoadService.rejectBooking(uuid)
+            BookingsLoadService.rejectBooking(uuid);
+            expect(bookingsMock.reject).toHaveBeenCalledWith({uuid: uuid}, {uuid: uuid});
         });
 
         it("BookingsLoadService:postIncident", function () {
             var uuid = 1, description = "";
-            BookingsLoadService.postIncident(uuid, description)
+            BookingsLoadService.postIncident(uuid, description);
+            expect(bookingsMock.incident).toHaveBeenCalledWith({uuid: uuid}, {description: description});
         });
 
         it("BookingsLoadService:downloadContract", function () {
             var uuid = 1;
             BookingsLoadService.downloadContract(uuid);
+            expect(utilsServiceMock.downloadPdfFile).toHaveBeenCalled();
         });
 
         it("BookingsLoadService:getBookingByProduct", function () {
             var productId = 1;
             BookingsLoadService.getBookingByProduct(productId);
+            expect(bookingsMock.get).toHaveBeenCalled();
         });
 
         it("BookingsLoadService:requestBooking", function () {
             var booking = {};
             BookingsLoadService.requestBooking(booking);
+            expect(bookingsMock.save).toHaveBeenCalledWith(booking);
         });
 
         it("BookingsLoadService:payForBooking", function () {
             var uuid = 1, paymentInfo = {};
             BookingsLoadService.payForBooking(uuid, paymentInfo);
+            expect(bookingsMock.pay).toHaveBeenCalledWith({uuid: uuid}, paymentInfo);
         });
     });
 });

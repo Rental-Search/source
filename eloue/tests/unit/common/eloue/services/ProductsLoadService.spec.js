@@ -69,18 +69,19 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         it("ProductsLoadService:getProduct", function () {
             var productId = 1, loadProductStats = true, loadOwnerStats = true;
             ProductsLoadService.getProduct(productId, loadProductStats, loadOwnerStats);
+            expect(productsMock.get).toHaveBeenCalledWith({id: productId, _cache: jasmine.any(Number)});
         });
 
         it("ProductsLoadService:getAbsoluteUrl", function () {
             var id = 1;
             ProductsLoadService.getAbsoluteUrl(id);
+            expect(productsMock.getAbsoluteUrl).toHaveBeenCalledWith({id: id, _cache: jasmine.any(Number)});
         });
 
         it("ProductsLoadService:isAvailable", function () {
             var id = 1, startDate = "2014-11-01 12:00:00", endDate = "2014-11-07 12:00:00", quantity = 1;
             ProductsLoadService.isAvailable(id, startDate, endDate, quantity);
+            expect(checkAvailabilityMock.get).toHaveBeenCalledWith({id: id, started_at: startDate, ended_at: endDate, quantity: quantity});
         });
-
-
     });
 });

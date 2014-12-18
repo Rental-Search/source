@@ -1130,7 +1130,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 productsLoadService.getAbsoluteUrl = function(id) {
-                    return Products.getAbsoluteUrl({id: id,cache: new Date().getTime()});
+                    return Products.getAbsoluteUrl({id: id, _cache: new Date().getTime()});
                 };
 
                 productsLoadService.isAvailable = function (id, startDate, endDate, quantity) {
