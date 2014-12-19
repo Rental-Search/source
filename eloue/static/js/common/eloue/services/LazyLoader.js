@@ -1,5 +1,5 @@
 "use strict";
-define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values"], function (EloueCommon) {
     /**
      * List lazy loading service (used fot lazy load lists of messages, bookings and items in dashboard).
      */

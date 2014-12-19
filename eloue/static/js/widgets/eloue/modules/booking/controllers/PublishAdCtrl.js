@@ -1,6 +1,14 @@
 define(["angular", "toastr", "eloue/modules/booking/BookingModule",
     "../../../../../common/eloue/values",
-    "../../../../../common/eloue/services"
+    "../../../../../common/eloue/services/ProductsService",
+    "../../../../../common/eloue/services/UsersService",
+    "../../../../../common/eloue/services/AddressesService",
+    "../../../../../common/eloue/services/AuthService",
+    "../../../../../common/eloue/services/CategoriesService",
+    "../../../../../common/eloue/services/PricesService",
+    "../../../../../common/eloue/services/UtilsService",
+    "../../../../../common/eloue/services/ToDashboardRedirectService",
+    "../../../../../common/eloue/services/ServerValidationService"
 ], function (angular, toastr) {
     "use strict";
 

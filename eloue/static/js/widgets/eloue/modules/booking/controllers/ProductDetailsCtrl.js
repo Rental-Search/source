@@ -1,6 +1,22 @@
 define(["angular", "toastr", "eloue/modules/booking/BookingModule",
     "../../../../../common/eloue/values",
-    "../../../../../common/eloue/services"
+    "../../../../../common/eloue/services/ProductsLoadService",
+    "../../../../../common/eloue/services/MessageThreadsService",
+    "../../../../../common/eloue/services/ProductRelatedMessagesLoadService",
+    "../../../../../common/eloue/services/UsersService",
+    "../../../../../common/eloue/services/AuthService",
+    "../../../../../common/eloue/services/AddressesService",
+    "../../../../../common/eloue/services/CreditCardsService",
+    "../../../../../common/eloue/services/BookingsLoadService",
+    "../../../../../common/eloue/services/BookingsService",
+    "../../../../../common/eloue/services/PhoneNumbersService",
+    "../../../../../common/eloue/services/CategoriesService",
+    "../../../../../common/eloue/services/UtilsService",
+    "../../../../../common/eloue/services/ShippingsService",
+    "../../../../../common/eloue/services/ShippingPointsService",
+    "../../../../../common/eloue/services/ProductShippingPointsService",
+    "../../../../../common/eloue/services/PatronShippingPointsService",
+    "../../../../../common/eloue/services/ToDashboardRedirectService"
     ], function (angular, toastr) {
     "use strict";
 

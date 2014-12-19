@@ -1,5 +1,5 @@
 "use strict";
-define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values"], function (EloueCommon) {
     /**
      * Service for redirection from Go Sport public page to e-loue dashboard app.
      */

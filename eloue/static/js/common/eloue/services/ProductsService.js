@@ -1,5 +1,6 @@
 "use strict";
-define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
+    "../../../common/eloue/services/ProductsParseService"], function (EloueCommon) {
     /**
      * Service for managing products.
      */

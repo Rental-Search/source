@@ -1,5 +1,6 @@
 "use strict";
-define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+define(["../../../common/eloue/commonApp",
+    "../../../common/eloue/services/UtilsService"], function (EloueCommon) {
     /**
      * Service for parsing message threads.
      */
