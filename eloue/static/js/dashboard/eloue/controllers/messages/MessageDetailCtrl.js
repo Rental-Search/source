@@ -40,7 +40,7 @@ define(["angular", "eloue/app"], function (angular) {
                 if ($scope.messageThread.product) {
 
                     // Get booking product
-                    BookingsLoadService.getBookingByProduct("sfsdf").then(function (booking) {
+                    BookingsLoadService.getBookingByProduct($scope.messageThread.product.id).then(function (booking) {
                         if (!booking) {
                             // Options for the select element
                             $scope.availableHours = [
