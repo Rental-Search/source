@@ -44,6 +44,6 @@ define(["angular", "eloue/app"], function (angular) {
                 } else if (rootCategory.name === "Location saisonnière") {
                     $scope.isRealEstate = true;
                 }
-            }
+            };
         }]);
 });

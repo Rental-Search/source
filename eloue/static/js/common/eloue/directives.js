@@ -49,22 +49,6 @@ define(["../../common/eloue/commonApp",
         };
     });
 
-    /**
-     * Directive allows to set "eloue-err-src" attribute on <img> tag to be applied if calling path defined in "src" returns 404 error.
-     */
-    EloueCommon.directive("eloueErrSrc", function () {
-        return {
-            restrict: "A",
-            link: function (scope, element, attrs) {
-                element.bind("error", function () {
-                    if (attrs.src != attrs.errSrc) {
-                        attrs.$set("src", attrs.errSrc);
-                    }
-                });
-            }
-        };
-    });
-
     EloueCommon.directive("eloueChosen", ["$timeout", function ($timeout) {
         return {
             restrict: "A",

@@ -27,7 +27,7 @@ define(["eloue/app",
         "eloue/controllers/bookings/BookingDetailCtrl",
         "eloue/controllers/DashboardLoginCtrl",
         "eloue/directives/FileChooserDirective",
-        "../../common/eloue/interceptors"],
+        "../../common/eloue/interceptors/ErrorHandlerInterceptor"],
     function (EloueApp) {
 
         /**

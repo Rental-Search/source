@@ -1,5 +1,5 @@
 "use strict";
-define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr) {
+define(["../../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr) {
 
     /**
      * Generic error handler interceptor.

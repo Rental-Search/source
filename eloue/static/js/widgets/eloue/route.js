@@ -1,7 +1,7 @@
 define(["eloue/app",
         "eloue/modules/booking/controllers/ProductDetailsCtrl",
         "eloue/modules/booking/controllers/PublishAdCtrl",
-        "../../common/eloue/services", "../../common/eloue/controllers", "../../common/eloue/directives", "../../common/eloue/interceptors"],
+        "../../common/eloue/services", "../../common/eloue/controllers", "../../common/eloue/directives", "../../common/eloue/interceptors/ErrorHandlerInterceptor"],
     function (EloueApp) {
         "use strict";
 
