@@ -25,7 +25,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.leafCategories = {};
             $scope.rootCategory = {};
             $scope.nodeCategory = {};
-            $scope.loadingPicture=0;
+            $scope.loadingPicture = 0;
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
             $scope.categoriesBaseUrl = Endpoints.api_url + "categories/";
             $scope.isAuto = false;
@@ -94,7 +94,7 @@ define(["angular", "eloue/app"], function (angular) {
                 {id: 19, name: "19+"}
             ];
 
-            $scope.handleResponseErrors = function(error, object, action){
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
                 $scope.showNotification(object, action, false);
             };
@@ -134,16 +134,16 @@ define(["angular", "eloue/app"], function (angular) {
             });
 
             $scope.onPictureAdded = function () {
-                    $scope.$apply(function () {
-                        $scope.loadingPicture++;
-                    });
+                $scope.$apply(function () {
+                    $scope.loadingPicture++;
+                });
                 PicturesService.savePicture($scope.product.id, $("#add-picture"), function (data) {
                     $scope.$apply(function () {
                         $scope.loadingPicture--;
                         $scope.product.pictures.push(data);
                     });
                     $scope.showNotification("picture", "upload", true);
-                }, function(){
+                }, function () {
                     $scope.$apply(function () {
                         $scope.loadingPicture--;
                     });
@@ -199,18 +199,18 @@ define(["angular", "eloue/app"], function (angular) {
                 }
             };
 
-            $scope.getTimes=function(n){
+            $scope.getTimes = function (n) {
                 return new Array(n);
             };
 
             $scope.showRemoveConfirm = function (pictureId) {
                 $scope.selectedPictureId = pictureId;
-                $('#confirm').modal();
+                $("#confirm").modal();
             };
 
             $scope.deletePicture = function () {
                 $scope.submitInProgress = true;
-                PicturesService.deletePicture($scope.selectedPictureId).$promise.then(function(data) {
+                PicturesService.deletePicture($scope.selectedPictureId).$promise.then(function (data) {
                     ProductsService.getProductDetails($stateParams.id).then(function (product) {
                         $scope.submitInProgress = false;
                         $scope.product.pictures = product.pictures;

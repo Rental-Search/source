@@ -1,10 +1,10 @@
 require.config(
     (function () {
         var STATIC_URL = "/static/";
-        var scripts = document.getElementsByTagName('script');
+        var scripts = document.getElementsByTagName("script");
         for (var i = 0, l = scripts.length; i < l; i++) {
-            if (scripts[i].getAttribute('data-static-path')) {
-                STATIC_URL = scripts[i].getAttribute('data-static-path');
+            if (scripts[i].getAttribute("data-static-path")) {
+                STATIC_URL = scripts[i].getAttribute("data-static-path");
                 break;
             }
         }
@@ -60,7 +60,7 @@ require.config(
                 "toastr": ["jQuery"],
                 "formmapper": ["jQuery"]
             }
-        }
+        };
     })()
 );
 
@@ -94,5 +94,5 @@ require([
         js.id = id;
         js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0&appId=197983240245844";
         fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    }(document, "script", "facebook-jssdk"));
 });

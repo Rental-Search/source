@@ -21,7 +21,10 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
-                $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.selectedCategory], shouldReloadList: true});
+                $scope.$broadcast("startLoading", {
+                    parameters: [$scope.currentUser.id, $scope.selectedCategory],
+                    shouldReloadList: true
+                });
             });
 
             CategoriesService.getRootCategories().then(function (categories) {
@@ -30,29 +33,25 @@ define(["angular", "eloue/app"], function (angular) {
                 $timeout(function () {
                     $("#categoryFilterSelect").chosen();
                     $(".chosen-drop").mCustomScrollbar({
-                        scrollInertia: '100',
+                        scrollInertia: "100",
                         autoHideScrollbar: true,
-                        theme: 'dark-thin',
-                        scrollbarPosition: 'outside',
-                        advanced:{
+                        theme: "dark-thin",
+                        scrollbarPosition: "outside",
+                        advanced: {
                             autoScrollOnFocus: false,
                             updateOnContentResize: true
                         }
                     });
                 }, 500);
             });
-
             $scope.filterByCategory = function () {
                 $scope.$broadcast("startLoading", {
                     parameters: [$scope.currentUser.id, $scope.selectedCategory],
                     shouldReloadList: true
                 });
             };
-            $scope.$on('$destroy', function iVeBeenDismissed() {
+            $scope.$on("$destroy", function iVeBeenDismissed() {
                 $scope.clearSelectedItem("item-");
-            })
-
+            });
         }]);
-
-
 });

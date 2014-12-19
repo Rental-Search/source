@@ -10,7 +10,7 @@ define(["angular", "eloue/app"], function (angular) {
         "$state",
         "$stateParams",
         "UsersService",
-        function ($scope,$state, $stateParams, UsersService) {
+        function ($scope, $state, $stateParams, UsersService) {
             $scope.markListItemAsSelected("account-part-", "account.password");
 
             $scope.errors = {
@@ -22,11 +22,11 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.resetPassword = function () {
                 $scope.submitInProgress = true;
                 if (!!$scope.currentUser) {
-                    UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form")).then(function(result) {
+                    UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form")).then(function (result) {
                         $scope.submitInProgress = false;
                         $scope.showNotification("password", "reset", true);
-                        $state.transitionTo($state.current, $stateParams, { reload: true });
-                    }, function(error) {
+                        $state.transitionTo($state.current, $stateParams, {reload: true});
+                    }, function (error) {
                         if (!!error.responseJSON && !!error.responseJSON.errors) {
                             $scope.errors = {
                                 current_password: !!error.responseJSON.errors.current_password ? error.responseJSON.errors.current_password[0] : "",

@@ -38,13 +38,13 @@ define(["angular", "eloue/app"], function (angular) {
             for (var i = 0; i < 99; i++) {
                 $scope.yearOptions.push(currentYear - i);
             }
-            $scope.licenceDay =  null;
+            $scope.licenceDay = null;
             $scope.licenceMonth = null;
             $scope.licenceYear = null;
 
             $scope.markListItemAsSelected("account-part-", "account.profile");
 
-            $scope.handleResponseErrors = function(error, object, action) {
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.$apply(function () {
                     $scope.submitInProgress = false;
                 });
@@ -75,7 +75,7 @@ define(["angular", "eloue/app"], function (angular) {
                 }
                 if (!!$scope.currentUser.drivers_license_date) {
                     var licenceDate = Date.parse($scope.currentUser.drivers_license_date);
-                    $scope.licenceDay =  licenceDate.getDate();
+                    $scope.licenceDay = licenceDate.getDate();
                     $scope.licenceMonth = licenceDate.getMonth();
                     $scope.licenceYear = licenceDate.getFullYear();
                 }
@@ -100,7 +100,7 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.currentUser.default_address = result;
                         $scope.defaultAddress = $scope.currentUser.default_address;
                         $scope.noAddress = false;
-                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"}).$promise.then(function(user) {
+                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"}).$promise.then(function (user) {
                             AddressesService.getAddressesByPatron($scope.currentUser.id).then(function (results) {
                                 $scope.addressList = results;
                                 $timeout(function () {
@@ -117,7 +117,7 @@ define(["angular", "eloue/app"], function (angular) {
                 }
             };
 
-            $scope.saveProfile = function() {
+            $scope.saveProfile = function () {
                 if (!!$scope.licenceDay && !!$scope.licenceMonth && !!$scope.licenceYear) {
                     var date = new Date();
                     date.setDate($scope.licenceDay);
@@ -157,7 +157,7 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.sendUserForm();
                 }, function (error) {
                     $scope.handleResponseErrors(error, "profile", "save");
-                })
+                });
             };
 
             $scope.sendUserForm = function () {
@@ -169,7 +169,7 @@ define(["angular", "eloue/app"], function (angular) {
                 }, function (error) {
                     $scope.handleResponseErrors(error.responseJSON, "profile", "save");
                 });
-            }
+            };
         }
     ]);
 });

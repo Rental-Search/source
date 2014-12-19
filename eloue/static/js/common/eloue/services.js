@@ -14,10 +14,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     type: method,
                     url: url,
                     success: successCallback,
-                    error: function(jqXHR, status, message, form){
-                        if(jqXHR.status == 400 && !!jqXHR.responseJSON){
+                    error: function (jqXHR, status, message, form) {
+                        if (jqXHR.status == 400 && !!jqXHR.responseJSON) {
                             ServerValidationService.addErrors(jqXHR.responseJSON.message, jqXHR.description, jqXHR.responseJSON.errors);
-                        }else{
+                        } else {
                             ServerValidationService.addErrors("An error occured!", "An error occured!");
                         }
                         errorCallback.call(null, jqXHR, status, message, form);
@@ -91,7 +91,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                 messageThreadsService.getMessageThread = function (productId, participantId) {
                     var deferred = $q.defer();
-                    MessageThreads.list({product: productId, participant: participantId, _cache: new Date().getTime()}).$promise.then(function (result) {
+                    MessageThreads.list({
+                        product: productId,
+                        participant: participantId,
+                        _cache: new Date().getTime()
+                    }).$promise.then(function (result) {
                         var promises = [];
                         angular.forEach(result.results, function (value, key) {
                             angular.forEach(value.messages, function (messageLink, idx) {
@@ -156,7 +160,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             };
 
                             var productPromises = {};
-                            productPromises.stats = Products.getStats({id:  value.id, _cache: new Date().getTime()});
+                            productPromises.stats = Products.getStats({id: value.id, _cache: new Date().getTime()});
 
                             // When all data loaded
                             $q.all(productPromises).then(function (results) {
@@ -214,7 +218,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             }
 
                             var subPromises = [];
-                            subPromises.push(Products.getStats({id: product.id, _cache: new Date().getTime()}).$promise);
+                            subPromises.push(Products.getStats({
+                                id: product.id,
+                                _cache: new Date().getTime()
+                            }).$promise);
                             $q.all(subPromises).then(
                                 function (results) {
                                     product.stats = results[0];
@@ -278,7 +285,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
              * @param msgKey message key for eloue/static/js/common/eloue/i18n.js
              * @returns Translation
              */
-            utilsService.translate = function(msgKey) {
+            utilsService.translate = function (msgKey) {
                 return $filter("translate")(msgKey);
             };
 
@@ -319,7 +326,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
             };
 
-            utilsService.isToday = function(dateStr) {
+            utilsService.isToday = function (dateStr) {
                 var date = Date.parse(dateStr);
                 var today = new Date();
                 return !!date && date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear();
@@ -327,21 +334,21 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
             utilsService.downloadPdfFile = function (url, filename) {
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', url, true);
+                xhr.open("GET", url, true);
                 var userToken = AuthService.getCookie("user_token");
                 if (userToken && userToken.length > 0) {
                     xhr.setRequestHeader("Authorization", "Bearer " + userToken);
                 }
 
-                var csrftoken = AuthService.getCookie('csrftoken');
+                var csrftoken = AuthService.getCookie("csrftoken");
                 if (csrftoken && csrftoken.length > 0) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
-                xhr.responseType = 'blob';
+                xhr.responseType = "blob";
 
-                xhr.onload = function(e) {
+                xhr.onload = function (e) {
                     if (this.status == 200) {
-                        var file = new Blob([this.response], {type: 'application/pdf'});
+                        var file = new Blob([this.response], {type: "application/pdf"});
                         saveAs(file, filename);
                     }
                 };
@@ -554,7 +561,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             var adrPromises = [];
 
                             for (var i = 1; i <= pagesCount; i++) {
-                                adrPromises.push(Addresses.get({patron: patronId, _cache: new Date().getTime(), page: i}).$promise);
+                                adrPromises.push(Addresses.get({
+                                    patron: patronId,
+                                    _cache: new Date().getTime(),
+                                    page: i
+                                }).$promise);
                             }
 
                             $q.all(adrPromises).then(
@@ -692,7 +703,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var documentUrl = Endpoints.api_url + "shippings/" + id + "/document/";
                     // return shipping document from borrower to owner if current user is owner
                     if (isOwner) {
-                        documentUrl += "?back=true"
+                        documentUrl += "?back=true";
                     }
                     UtilsService.downloadPdfFile(documentUrl, "voucher.pdf");
                 };
@@ -711,36 +722,56 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             function (ShippingPoints, Products) {
                 var shippingPointsService = {};
 
-                shippingPointsService.searchDepartureShippingPointsByAddress = function(address) {
-                   return shippingPointsService.searchShippingPointsByAddress(address, 1);
+                shippingPointsService.searchDepartureShippingPointsByAddress = function (address) {
+                    return shippingPointsService.searchShippingPointsByAddress(address, 1);
                 };
 
-                shippingPointsService.searchDepartureShippingPointsByCoordinates = function(lat, lng) {
+                shippingPointsService.searchDepartureShippingPointsByCoordinates = function (lat, lng) {
                     return shippingPointsService.searchShippingPointsByCoordinates(lat, lng, 1);
                 };
 
-                shippingPointsService.searchArrivalShippingPointsByAddress = function(address) {
+                shippingPointsService.searchArrivalShippingPointsByAddress = function (address) {
                     return shippingPointsService.searchShippingPointsByAddress(address, 2);
                 };
 
-                shippingPointsService.searchArrivalShippingPointsByCoordinates = function(lat, lng) {
+                shippingPointsService.searchArrivalShippingPointsByCoordinates = function (lat, lng) {
                     return shippingPointsService.searchShippingPointsByCoordinates(lat, lng, 2);
                 };
 
-                shippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct = function(lat, lng, productId) {
-                    return Products.getShippingPoints({id: productId, lat: lat, lng: lng, search_type: 2, _cache: new Date().getTime()}).$promise;
+                shippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct = function (lat, lng, productId) {
+                    return Products.getShippingPoints({
+                        id: productId,
+                        lat: lat,
+                        lng: lng,
+                        search_type: 2,
+                        _cache: new Date().getTime()
+                    }).$promise;
                 };
 
-                shippingPointsService.searchArrivalShippingPointsByAddressAndProduct = function(address, productId) {
-                    return Products.getShippingPoints({id: productId, address: address, search_type: 2, _cache: new Date().getTime()}).$promise;
+                shippingPointsService.searchArrivalShippingPointsByAddressAndProduct = function (address, productId) {
+                    return Products.getShippingPoints({
+                        id: productId,
+                        address: address,
+                        search_type: 2,
+                        _cache: new Date().getTime()
+                    }).$promise;
                 };
 
-                shippingPointsService.searchShippingPointsByCoordinates = function(lat, lng, searchType) {
-                    return ShippingPoints.get({lat: lat, lng: lng, search_type: searchType, _cache: new Date().getTime()}).$promise;
+                shippingPointsService.searchShippingPointsByCoordinates = function (lat, lng, searchType) {
+                    return ShippingPoints.get({
+                        lat: lat,
+                        lng: lng,
+                        search_type: searchType,
+                        _cache: new Date().getTime()
+                    }).$promise;
                 };
 
-                shippingPointsService.searchShippingPointsByAddress = function(address, searchType) {
-                    return ShippingPoints.get({address: address, search_type: searchType, _cache: new Date().getTime()}).$promise;
+                shippingPointsService.searchShippingPointsByAddress = function (address, searchType) {
+                    return ShippingPoints.get({
+                        address: address,
+                        search_type: searchType,
+                        _cache: new Date().getTime()
+                    }).$promise;
                 };
 
                 return shippingPointsService;
@@ -784,7 +815,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                 };
 
                 patronShippingPointsService.getByPatronAndBooking = function (userId, bookingId) {
-                    return PatronShippingPoints.get({_cache: new Date().getTime(), patron: userId, booking: bookingId}).$promise;
+                    return PatronShippingPoints.get({
+                        _cache: new Date().getTime(),
+                        patron: userId,
+                        booking: bookingId
+                    }).$promise;
                 };
 
                 return patronShippingPointsService;
@@ -1017,7 +1052,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load booking
-                    Bookings.get({uuid: bookingUUID, _cache: new Date().getTime()}).$promise.then(function (bookingData) {
+                    Bookings.get({
+                        uuid: bookingUUID,
+                        _cache: new Date().getTime()
+                    }).$promise.then(function (bookingData) {
                         var booking = BookingsParseService.parseBooking(bookingData);
                         if (jQuery(bookingData.product.pictures).size() > 0) {
                             booking.product.picture = bookingData.product.pictures[0].image.thumbnail;
@@ -1068,7 +1106,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load all bookings for this product
-                    Bookings.get({product: productId, _cache: new Date().getTime()}).$promise.then(function (bookingListData) {
+                    Bookings.get({
+                        product: productId,
+                        _cache: new Date().getTime()
+                    }).$promise.then(function (bookingListData) {
                         var bookingsCount = bookingListData.results.length;
                         var booking = null;
 
@@ -1116,9 +1157,9 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         if (loadProductStats) {
                             productPromises.stats = Products.getStats({id: productId, _cache: new Date().getTime()});
                         }
-                            if (loadOwnerStats) {
-                                productPromises.ownerStats = UsersService.getStatistics(productData.owner.id).$promise;
-                            }
+                        if (loadOwnerStats) {
+                            productPromises.ownerStats = UsersService.getStatistics(productData.owner.id).$promise;
+                        }
                         // When all data loaded
                         $q.all(productPromises).then(function (results) {
                             var product = ProductsParseService.parseProduct(productData, results.stats, results.ownerStats);
@@ -1129,12 +1170,17 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     return deferred.promise;
                 };
 
-                productsLoadService.getAbsoluteUrl = function(id) {
+                productsLoadService.getAbsoluteUrl = function (id) {
                     return Products.getAbsoluteUrl({id: id, _cache: new Date().getTime()});
                 };
 
                 productsLoadService.isAvailable = function (id, startDate, endDate, quantity) {
-                    return CheckAvailability.get({id: id, started_at: startDate, ended_at: endDate, quantity: quantity}).$promise;
+                    return CheckAvailability.get({
+                        id: id,
+                        started_at: startDate,
+                        ended_at: endDate,
+                        quantity: quantity
+                    }).$promise;
                 };
 
                 return productsLoadService;
@@ -1159,7 +1205,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var commentListPromises = [];
 
                     // Load comments
-                    Comments.get({booking: bookingUUID, _cache: new Date().getTime()}).$promise.then(function (commentListData) {
+                    Comments.get({
+                        booking: bookingUUID,
+                        _cache: new Date().getTime()
+                    }).$promise.then(function (commentListData) {
                         angular.forEach(commentListData.results, function (commentData, key) {
                             var commentDeferred = $q.defer();
 
@@ -1212,7 +1261,11 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load message threads
-                    MessageThreads.get({page: page, ordering: "-last_message__sent_at", _cache: new Date().getTime()}).$promise.then(function (messageThreadListData) {
+                    MessageThreads.get({
+                        page: page,
+                        ordering: "-last_message__sent_at",
+                        _cache: new Date().getTime()
+                    }).$promise.then(function (messageThreadListData) {
                         var messageThreadListPromises = [];
 
                         // For each message thread
@@ -1241,7 +1294,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     var deferred = $q.defer();
 
                     // Load message thread
-                    MessageThreads.get({id: threadId, _cache: new Date().getTime()}).$promise.then(function (messageThreadData) {
+                    MessageThreads.get({
+                        id: threadId,
+                        _cache: new Date().getTime()
+                    }).$promise.then(function (messageThreadData) {
                         var messageThreadPromises = {};
 
                         // Load messages
@@ -1253,7 +1309,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             messagesPromises.push(ProductRelatedMessagesLoadService.getMessageListItem(messageId));
                         });
                         // When all messages loaded
-                        var suppress = function(x) { return x.catch(function(){}); };
+                        var suppress = function (x) {
+                            return x.catch(function () {
+                            });
+                        };
                         messageThreadPromises.messages = $q.all(messagesPromises.map(suppress));
 
                         // Get product id
@@ -1333,7 +1392,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                         });
                         angular.forEach(messageKeysToRemove, function (index, key) {
                             messageThreadResult.messages.splice(index, 1);
-                        })
+                        });
                     }
 
                     // Parse product
@@ -1405,8 +1464,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                             offer: (!!offerId) ? Endpoints.api_url + "bookings/" + offerId + "/" : null
                         };
                         ProductRelatedMessages.save(message).$promise.then(function (response) {
-                            var senderId = UtilsService.getIdFromUrl(response.sender);
-                            UsersService.get(senderId).$promise.then(function (result) {
+                            var responseSenderId = UtilsService.getIdFromUrl(response.sender);
+                            UsersService.get(responseSenderId).$promise.then(function (result) {
                                 response.sender = result;
                                 deferred.resolve(response);
                             });
@@ -1500,7 +1559,10 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                     if ($window.location.href.indexOf("dashboard") !== -1) {
                         $window.location.href = RedirectAfterLogin.url;
                     } else {
-                        $rootScope.$broadcast("openModal", { name : RedirectAfterLogin.url, params: RedirectAfterLogin.params});
+                        $rootScope.$broadcast("openModal", {
+                            name: RedirectAfterLogin.url,
+                            params: RedirectAfterLogin.params
+                        });
                     }
                 },
 
@@ -1556,11 +1618,15 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
                  */
                 getCookie: function getCookie(cname) {
                     var name = cname + "=";
-                    var ca = document.cookie.split(';');
+                    var ca = document.cookie.split(";");
                     for (var i = 0; i < ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0) == ' ') c = c.substring(1);
-                        if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+                        while (c.charAt(0) == " ") {
+                            c = c.substring(1);
+                        }
+                        if (c.indexOf(name) != -1) {
+                            return c.substring(name.length, c.length);
+                        }
                     }
                     return "";
                 }
@@ -1608,71 +1674,71 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
 
                     return deferred.promise;
                 }
-            }
+            };
         }]);
 
         /**
          * Service to store server side validation errors.
          */
         EloueCommon.factory("ServerValidationService", function () {
-            var formErrors={}, rootErrors="rootErrors";
+            var formErrors = {}, rootErrors = "rootErrors";
 
             return {
-                addErrors: function(messageError, description, fieldErrors, formTag) {
-                    if(!formTag){
+                addErrors: function (messageError, description, fieldErrors, formTag) {
+                    if (!formTag) {
                         formTag = rootErrors;
                     }
                     formErrors[formTag] = {
                         message: messageError,
                         fields: fieldErrors
                     };
-                    if(!!description){
-                        formErrors[formTag].description=(""+description).replace("[","").replace("]","").replace("{","").replace("}","");
+                    if (!!description) {
+                        formErrors[formTag].description = ("" + description).replace("[", "").replace("]", "").replace("{", "").replace("}", "");
                     }
                 },
-                removeErrors: function(formTag){
-                    if(!formTag){
+                removeErrors: function (formTag) {
+                    if (!formTag) {
                         formTag = rootErrors;
                     }
                     delete formErrors[formTag];
                 },
-                getFormErrorMessage: function(formTag){
-                    if(!formTag){
+                getFormErrorMessage: function (formTag) {
+                    if (!formTag) {
                         formTag = rootErrors;
                     }
-                    if((!formErrors[formTag] || (!formErrors[formTag].message && !formErrors[formTag].description))) {
+                    if ((!formErrors[formTag] || (!formErrors[formTag].message && !formErrors[formTag].description))) {
                         return undefined;
                     }
-                    return { message: formErrors[formTag].message, description: formErrors[formTag].description};
+                    return {message: formErrors[formTag].message, description: formErrors[formTag].description};
                 },
-                getFieldError: function(fieldName, formTag){
-                    if(!formTag){
+                getFieldError: function (fieldName, formTag) {
+                    if (!formTag) {
                         formTag = rootErrors;
                     }
-                    if(!formErrors[formTag] || !formErrors[formTag].fields){
+                    if (!formErrors[formTag] || !formErrors[formTag].fields) {
                         return undefined;
                     }
                     return formErrors[formTag].fields[fieldName];
                 },
-                getErrors: function(formTag){
-                    if(!formTag){
+                getErrors: function (formTag) {
+                    if (!formTag) {
                         formTag = rootErrors;
                     }
                     return formErrors[formTag];
                 },
-                addError: function(field, message, formTag){
-                    if(!formTag){
+                addError: function (field, message, formTag) {
+                    if (!formTag) {
                         formTag = rootErrors;
                     }
-                    if(!formErrors[formTag]){
+                    if (!formErrors[formTag]) {
                         formErrors[formTag] = {};
                     }
-                    if(!formErrors[formTag].fields){
+                    if (!formErrors[formTag].fields) {
                         formErrors[formTag].fields = {};
                     }
                     formErrors[formTag].fields[field] = message;
                 }
-            }
+            };
         });
 
 
@@ -1681,25 +1747,26 @@ define(["../../common/eloue/commonApp", "../../common/eloue/resources", "../../c
             return {
                 showPopupAndRedirect: function (href) {
                     var delay,
-                        modalView = $('#redirect'),
-                        eloueRedirectUrl = $('#eloue_url_redirect'),
+                        modalView = $("#redirect"),
+                        eloueRedirectUrl = $("#eloue_url_redirect"),
                         redirectResult;
                     if (!modalView || modalView.length == 0) {
                         delay = 0;
                     } else {
                         delay = 10000;
-                        modalView.modal('show');
+                        modalView.modal("show");
                     }
-                    if(!eloueRedirectUrl || eloueRedirectUrl.length == 0){
-                        redirectResult=href;
+                    if (!eloueRedirectUrl || eloueRedirectUrl.length == 0) {
+                        redirectResult = href;
                     } else {
-                        redirectResult=eloueRedirectUrl.val()+"?url="+encodeURIComponent(href)+"&user_token="+$cookies.user_token;
+                        redirectResult = eloueRedirectUrl.val() + "?url=" + encodeURIComponent(href) + "&user_token=" + $cookies.user_token;
                     }
 
                     setTimeout(function () {
                         $window.location.href = redirectResult;
                     }, delay);
                 }
-            }
+            };
         }]);
-    });
+    }
+);

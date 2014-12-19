@@ -29,7 +29,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.productShippingPoint = {};
             $scope.errors = {};
 
-            $scope.handleResponseErrors = function(error, object, action){
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
                 $scope.showNotification(object, action, false);
             };
@@ -58,7 +58,7 @@ define(["angular", "eloue/app"], function (angular) {
                         $scope.addressQuery = product.address.street + ", " + product.address.city;
                         location = $scope.addressQuery;
                     }
-                    $('#product-shipping-address').formmapper({
+                    $("#product-shipping-address").formmapper({
                         details: "form",
                         location: location
                     });
@@ -69,10 +69,10 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.fillInSchedule = function (openingDates) {
                 $scope.schedule = {};
                 angular.forEach(openingDates, function (value, key) {
-                    $scope.schedule[value.day_of_week] = $scope.filterTime(value.morning_opening_time) + " - "
-                        + $scope.filterTime(value.morning_closing_time) + ", "
-                        + $scope.filterTime(value.afternoon_opening_time) + " - "
-                        + $scope.filterTime(value.afternoon_closing_time)
+                    $scope.schedule[value.day_of_week] = $scope.filterTime(value.morning_opening_time) + " - " +
+                        $scope.filterTime(value.morning_closing_time) + ", " +
+                        $scope.filterTime(value.afternoon_opening_time) + " - " +
+                        $scope.filterTime(value.afternoon_closing_time);
                 });
             };
 

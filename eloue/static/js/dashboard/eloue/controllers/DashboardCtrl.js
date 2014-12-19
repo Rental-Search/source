@@ -33,6 +33,6 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.filterByActivityType = function () {
                 console.log($scope.selectedActivityType);
                 //TODO: filter activity feed
-            }
+            };
         }]);
 });

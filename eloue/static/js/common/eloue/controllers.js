@@ -17,11 +17,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         /**
          * Sign in user with facebook.
          */
-        $scope.loginFacebook = function(){
-            FB.login(function(response){
-                if(!!response.authResponse) {
+        $scope.loginFacebook = function () {
+            FB.login(function (response) {
+                if (!!response.authResponse) {
                     AuthService.loginFacebook(
-                            $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken + "&user_id=" + response.authResponse.userID + "&expires_in=" + response.authResponse.expiresIn,
+                        $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken + "&user_id=" + response.authResponse.userID + "&expires_in=" + response.authResponse.expiresIn,
                         function (data) {
                             $scope.authorize();
                             $scope.submitting = false;
@@ -32,7 +32,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                         }
                     );
                 }
-            }, {scope: 'public_profile, email'});
+            }, {scope: "public_profile, email"});
         };
 
         /**
@@ -55,8 +55,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.onLoginSuccess = function (data) {
             var expire = new Date();
             expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
-            document.cookie = "user_token=" + escape(data.access_token) + ";expires="
-                + expire.toGMTString() + ";path=/";
+            document.cookie = "user_token=" + encodeURIComponent(data.access_token) + ";expires=" +
+                expire.toGMTString() + ";path=/";
             $scope.authorize();
         };
 
@@ -84,7 +84,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             if (!!userToken) {
                 $http.defaults.headers.common.authorization = "Bearer " + userToken;
                 $(".modal-backdrop").hide();
-                $('.modal').modal('hide');
+                $(".modal").modal("hide");
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
@@ -95,19 +95,19 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                     }
                 });
             }
-        }
+        };
     }]);
 
     /**
      * Controller for the reset password form.
      */
-    EloueCommon.controller("ResetPasswordCtrl", ["$scope", "$window", "AuthService", "ServiceErrors", function ($scope, $window, AuthService, ServiceErrors) {
+    EloueCommon.controller("ResetPasswordCtrl", ["$scope", "$window", "AuthService", function ($scope, $window, AuthService) {
 
         $scope.passwdResetStage = true;
         $scope.passwdResetSuccess = false;
         $scope.resetPasswordError = null;
 
-        $scope.sendResetRequest = function() {
+        $scope.sendResetRequest = function () {
             var form = $("#request-reset-password-form");
             AuthService.sendResetPasswordRequest(
                 form,
@@ -116,7 +116,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 },
                 function (jqXHR) {
                     $scope.onSendResetRequestError(jqXHR);
-                });
+                }
+            );
         };
 
         $scope.onSendResetRequestSuccess = function (data) {
@@ -141,7 +142,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             });
         };
 
-        $scope.resetPassword = function() {
+        $scope.resetPassword = function () {
             var form = $("#reset-password-form");
             AuthService.resetPassword(
                 form,
@@ -151,7 +152,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 },
                 function (jqXHR) {
                     $scope.onResetPasswordError(jqXHR);
-                });
+                }
+            );
         };
 
         $scope.onResetPasswordSuccess = function (data) {
@@ -163,7 +165,6 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         $scope.onResetPasswordError = function (jqXHR) {
             var errorText = "";
             if (jqXHR.status == 400) {
-                console.log(jqXHR.responseJSON);
                 if (!!jqXHR.responseJSON.errors.__all__) {
                     errorText = jqXHR.responseJSON.errors.__all__[0];
                 } else {
@@ -196,7 +197,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          * Register new user in the system.
          */
         $scope.register = function register() {
-            if($scope.account.confirmPassword !== $scope.account.password){
+            if ($scope.account.confirmPassword !== $scope.account.password) {
                 ServerValidationService.removeErrors();
                 ServerValidationService.addError("confirmPassword", "Passwords not match");
             } else {
@@ -234,25 +235,27 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             var url = RedirectAfterLogin.url;
             if (url.indexOf("booking") > 0) {
                 return "Réservation";
-            } else if (url.indexOf("message") > 0) {
-                return "Message";
-            } else if (url.indexOf("phone") > 0) {
-                return "Appel";
-            } else if (url.indexOf("publish") > 0) {
-                return "Dépôt annonce";
-            } else {
-                return "Simple";
             }
+            if (url.indexOf("message") > 0) {
+                return "Message";
+            }
+            if (url.indexOf("phone") > 0) {
+                return "Appel";
+            }
+            if (url.indexOf("publish") > 0) {
+                return "Dépôt annonce";
+            }
+            return "Simple";
         };
 
         /**
          * Sign in user with facebook.
          */
-        $scope.loginFacebook = function(){
-            FB.login(function(response){
-                if(!!response.authResponse) {
+        $scope.loginFacebook = function () {
+            FB.login(function (response) {
+                if (!!response.authResponse) {
                     AuthService.loginFacebook(
-                            $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken +"&user_id="+response.authResponse.userID + "&expires_in="+response.authResponse.expiresIn + "&create_user=true",
+                        $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken + "&user_id=" + response.authResponse.userID + "&expires_in=" + response.authResponse.expiresIn + "&create_user=true",
                         function (data) {
                             $scope.authorize();
                             $scope.submitting = false;
@@ -263,14 +266,14 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                         }
                     );
                 }
-            }, {scope: 'public_profile, email'});
+            }, {scope: "public_profile, email"});
         };
 
         $scope.onLoginSuccess = function (data) {
             var expire = new Date();
             expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
-            document.cookie = "user_token=" + escape(data.access_token) + ";expires="
-                + expire.toGMTString() + ";path=/";
+            document.cookie = "user_token=" + encodeURIComponent(data.access_token) + ";expires=" +
+                expire.toGMTString() + ";path=/";
             $scope.authorize();
         };
 
@@ -294,9 +297,9 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          * Opens registration via email form.
          */
         $scope.openRegistrationForm = function openRegistrationForm() {
-            var classic_form = $('.classic-form');
-            classic_form.slideDown();
-            $('.registration.email').slideUp();
+            var classicForm = $(".classic-form");
+            classicForm.slideDown();
+            $(".registration.email").slideUp();
         };
 
         /**
@@ -307,7 +310,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
             if (!!userToken) {
                 $http.defaults.headers.common.authorization = "Bearer " + userToken;
                 $(".modal-backdrop").hide();
-                $('.modal').modal('hide');
+                $(".modal").modal("hide");
                 UsersService.getMe(function (currentUser) {
                     // Save current user in the root scope
                     $rootScope.currentUser = currentUser;
@@ -327,14 +330,14 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
          * @param action action
          * @param value value
          */
-        $scope.trackEvent = function(category, action, value) {
+        $scope.trackEvent = function (category, action, value) {
             _gaq.push(["_trackEvent", category, action, value]);
         };
 
         /**
          * Push track page view to Google Analytics.
          */
-        $scope.trackPageView = function() {
+        $scope.trackPageView = function () {
             _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
         };
 
@@ -349,7 +352,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         "$window",
         "AuthService",
         "UsersService",
-        function($scope, $window, AuthService, UsersService) {
+        function ($scope, $window, AuthService, UsersService) {
             var currentUserToken = AuthService.getCookie("user_token");
             if (currentUserToken) {
                 // Get current user
@@ -363,11 +366,11 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
                 });
             }
 
-            $scope.logout = function() {
+            $scope.logout = function () {
                 AuthService.clearUserData();
-                if($window.location.href.indexOf("dashboard") !== -1) {
+                if ($window.location.href.indexOf("dashboard") !== -1) {
                     $window.location.href = "/";
-                }else{
+                } else {
                     $window.location.reload();
                 }
             };

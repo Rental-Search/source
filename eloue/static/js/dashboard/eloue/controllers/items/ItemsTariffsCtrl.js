@@ -17,7 +17,7 @@ define(["angular", "eloue/app"], function (angular) {
         "PricesService",
         function ($q, $scope, $stateParams, Endpoints, Currency, Unit, CategoriesService, ProductsService, PricesService) {
 
-            $scope.handleResponseErrors = function(error, object, action){
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
                 $scope.showNotification(object, action, false);
             };
@@ -93,12 +93,12 @@ define(["angular", "eloue/app"], function (angular) {
                         value.currency = Currency.EUR.name;
                         value.product = Endpoints.api_url + "products/" + $scope.product.id + "/";
                         if (value.id) {
-                            promise=PricesService.updatePrice(value).$promise;
+                            promise = PricesService.updatePrice(value).$promise;
                         } else {
-                            promise=PricesService.savePrice(value).$promise;
+                            promise = PricesService.savePrice(value).$promise;
                         }
-                        promise.then(function(result){
-                            $scope.prices[key].amount=parseFloat(result.amount).toFixed(2);
+                        promise.then(function (result) {
+                            $scope.prices[key].amount = parseFloat(result.amount).toFixed(2);
                         });
                         promises.push(promise);
                     }
@@ -120,7 +120,7 @@ define(["angular", "eloue/app"], function (angular) {
                 }
 
                 promises.push(ProductsService.updateProduct($scope.product).$promise);
-                $q.all(promises).then(function(results) {
+                $q.all(promises).then(function (results) {
                     $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_prices", "save", true);
@@ -133,6 +133,6 @@ define(["angular", "eloue/app"], function (angular) {
                 }, function (error) {
                     $scope.handleResponseErrors(error, "item_prices", "save");
                 });
-            }
+            };
         }]);
 });

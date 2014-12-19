@@ -80,4 +80,4 @@
     removeCombined: true,
     findNestedDependencies: true,
     name: "main"
-})
+});

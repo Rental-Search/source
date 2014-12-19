@@ -17,7 +17,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.address = {};
 
-            $scope.handleResponseErrors = function(error, object, action){
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.serverError = error.errors;
                 $scope.submitInProgress = false;
                 $scope.showNotification(object, action, false);
@@ -36,14 +36,14 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.submitAddress = function () {
                 $scope.submitInProgress = true;
                 var form = $("#address_detail_form");
-                AddressesService.updateAddress($scope.address.id, form).then(function(result) {
+                AddressesService.updateAddress($scope.address.id, form).then(function (result) {
                     if ($scope.defaultAddressId != $stateParams.id) {
                         var userPatch = {};
                         userPatch.default_address = Endpoints.api_url + "addresses/" + $scope.address.id + "/";
                         UsersService.updateUser(userPatch).$promise.then(function (result) {
                             $scope.currentUser.default_address = result.default_addres;
                             $scope.finaliseAddressUpdate();
-                        })
+                        });
                     } else {
                         $scope.finaliseAddressUpdate();
                     }
@@ -52,19 +52,19 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             };
 
-            $scope.finaliseAddressUpdate = function() {
+            $scope.finaliseAddressUpdate = function () {
                 $scope.submitInProgress = false;
                 $scope.showNotification("address", "save", true);
-                $state.transitionTo($state.current, $stateParams, { reload: true });
+                $state.transitionTo($state.current, $stateParams, {reload: true});
             };
 
             // Delete address
             $scope.deleteAddress = function () {
                 $scope.submitInProgress = true;
-                AddressesService.deleteAddress($scope.address.id).$promise.then(function(result) {
+                AddressesService.deleteAddress($scope.address.id).$promise.then(function (result) {
                     $scope.submitInProgress = false;
                     $scope.showNotification("address", "delete", true);
-                    $state.transitionTo("account.addresses", $stateParams, { reload: true });
+                    $state.transitionTo("account.addresses", $stateParams, {reload: true});
                 }, function (error) {
                     $scope.handleResponseErrors(error, "address", "delete");
                 });

@@ -16,14 +16,14 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             $scope.unreadMessageThreadsCount = 0;
             $scope.newBookingRequestsCount = 0;
             $scope.submitInProgress = false;
-            $scope.selectedItem={};
+            $scope.selectedItem = {};
 
             $scope.dashboardTabs = [
-                {title: 'Tableau de bord', icon: 'stroke home', sref: 'dashboard', badge: 0},
-                {title: 'Messages', icon: 'stroke mail', sref: 'messages', badge: 0},
-                {title: 'Réservations', icon: 'stroke calendar-5', sref: 'bookings', badge: 0},
-                {title: 'Annonces', icon: 'solid menu-list-4', sref: 'items', badge: 0},
-                {title: 'Compte', icon: 'stroke user-4', sref: 'account', badge: 0}
+                {title: "Tableau de bord", icon: "stroke home", sref: "dashboard", badge: 0},
+                {title: "Messages", icon: "stroke mail", sref: "messages", badge: 0},
+                {title: "Réservations", icon: "stroke calendar-5", sref: "bookings", badge: 0},
+                {title: "Annonces", icon: "solid menu-list-4", sref: "items", badge: 0},
+                {title: "Compte", icon: "stroke user-4", sref: "account", badge: 0}
             ];
 
             if (!!$scope.currentUserToken) {
@@ -36,7 +36,7 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 });
             }
 
-            $scope.updateStatistics = function() {
+            $scope.updateStatistics = function () {
                 UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
                     $scope.unreadMessageThreadsCount = stats.unread_message_threads_count;
                     $scope.newBookingRequestsCount = stats.booking_requests_count;
@@ -54,17 +54,17 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 }
             });
 
-            $scope.clearSelectedItem = function(prefix){
+            $scope.clearSelectedItem = function (prefix) {
                 delete $scope.selectedItem[prefix];
             };
 
-            $scope.isItemSelected = function(prefix, id){
+            $scope.isItemSelected = function (prefix, id) {
                 return !!$scope.selectedItem[prefix] && parseInt($scope.selectedItem[prefix]) == parseInt(id);
             };
 
-            $scope.markListItemAsSelected = function(prefix, id) {
+            $scope.markListItemAsSelected = function (prefix, id) {
                 $scope.selectedItem[prefix] = id;
-                $('li[id^=' + prefix + ']').each(function () {
+                $("li[id^=" + prefix + "]").each(function () {
                     var item = $(this);
                     if (item.attr("id") == (prefix + id)) {
                         item.addClass("current");
@@ -80,38 +80,38 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             $scope.initCustomScrollbars = function () {
 
                 // custom scrollbar
-                $('.chosen-drop').mCustomScrollbar({
-                    scrollInertia: '100',
+                $(".chosen-drop").mCustomScrollbar({
+                    scrollInertia: "100",
                     autoHideScrollbar: true,
-                    theme: 'dark-thin',
-                    scrollbarPosition: 'outside',
-                    advanced:{
+                    theme: "dark-thin",
+                    scrollbarPosition: "outside",
+                    advanced: {
                         autoScrollOnFocus: false,
                         updateOnContentResize: true
                     }
                 });
-                $('.scrollbar-custom').mCustomScrollbar({
-                    scrollInertia: '100',
+                $(".scrollbar-custom").mCustomScrollbar({
+                    scrollInertia: "100",
                     autoHideScrollbar: true,
-                    theme: 'dark-thin',
-                    advanced:{
+                    theme: "dark-thin",
+                    advanced: {
                         updateOnContentResize: true,
                         autoScrollOnFocus: false
                     }
                 });
-                $('.textarea-wrapper').mCustomScrollbar({
-                    scrollInertia: '100',
+                $(".textarea-wrapper").mCustomScrollbar({
+                    scrollInertia: "100",
                     autoHideScrollbar: true,
-                    theme: 'dark-thin',
-                    mouseWheel:{
+                    theme: "dark-thin",
+                    mouseWheel: {
                         updateOnContentResize: true,
                         disableOver: false
                     }
                 });
-                $(window).trigger('resize');
+                $(window).trigger("resize");
             };
 
-            $scope.showNotification = function(object, action, succeed) {
+            $scope.showNotification = function (object, action, succeed) {
                 toastr.options.positionClass = "toast-top-full-width";
                 var msg = UtilsService.translate(object) + " " + UtilsService.translate(action) +
                     " " + UtilsService.translate(!succeed ? "fail" : "success");
@@ -123,40 +123,40 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
             };
 
             // Nav bar autoresizing
-            var dashboardElement = $('.dashboard');
+            var dashboardElement = $(".dashboard");
             var dashboard = {
                 article: dashboardElement,
-                nav: dashboardElement.find('nav ul')
+                nav: dashboardElement.find("nav ul")
             };
 
             function setProperties() {
-                var article_height = $(window).height() - $('header').height(),
-                    nav_fz = {
-                        current: parseFloat(dashboard.nav.css('font-size')),
+                var articleHeight = $(window).height() - $("header").height(),
+                    navFz = {
+                        current: parseFloat(dashboard.nav.css("font-size")),
                         max: 12
                     };
 
                 // set article height
-                dashboard.article.height(article_height);
+                dashboard.article.height(articleHeight);
 
                 // set nav font-size
-                while(dashboard.nav.height() < article_height && nav_fz.max > nav_fz.current) {
-                    dashboard.nav.css('font-size', ++nav_fz.current + 'px');
+                while (dashboard.nav.height() < articleHeight && navFz.max > navFz.current) {
+                    dashboard.nav.css("font-size", ++navFz.current + "px");
                 }
-                while(dashboard.nav.height() >= article_height) {
-                    dashboard.nav.css('font-size', --nav_fz.current + 'px');
+                while (dashboard.nav.height() >= articleHeight) {
+                    dashboard.nav.css("font-size", --navFz.current + "px");
                 }
             }
 
             setProperties();
 
-            $(window).on('resize', function() {
+            $(window).on("resize", function () {
                 setProperties();
             });
 
             window.googleMapsLoaded = function () {
                 //Activate geolocation search
-                $('#geolocate').formmapper({
+                $("#geolocate").formmapper({
                     details: "form"
                 });
             };
@@ -167,6 +167,7 @@ define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../
                 script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
                 document.body.appendChild(script);
             }
+
             loadGoogleMaps();
         }
     ]);

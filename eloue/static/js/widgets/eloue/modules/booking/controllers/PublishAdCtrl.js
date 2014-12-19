@@ -98,17 +98,17 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 });
             }
 
-            $scope.setCategoryByLvl = function(categoryId, level){
-                switch (level){
+            $scope.setCategoryByLvl = function (categoryId, level) {
+                switch (level) {
                     case 1:
-                        $scope.nodeCategory=categoryId;
+                        $scope.nodeCategory = categoryId;
                         $scope.updateLeafCategories();
                         break;
                     case 2:
-                        $scope.product.category=categoryId;
+                        $scope.product.category = categoryId;
                         break;
                     default :
-                        $scope.rootCategory=categoryId;
+                        $scope.rootCategory = categoryId;
                         $scope.updateNodeCategories();
                 }
             };
@@ -123,15 +123,15 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.openModal = function (name, categoryId) {
                 var currentUserToken = AuthService.getCookie("user_token");
                 if (!currentUserToken && name != "login") {
-                    console.log(name);
                     AuthService.saveAttemptUrl(name, {category: categoryId});
                     name = "login";
                 } else {
-                    console.log(categoryId);
                     //var rootCategoryId = params.category;
                     $scope.product = {};
                     $scope.price = {
-                        id: null, amount: null, unit: Unit.DAY.id
+                        id: null,
+                        amount: null,
+                        unit: Unit.DAY.id
                     };
                     $scope.publishAdError = null;
                     // load categories for comboboxes
@@ -141,7 +141,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         }
                         $scope.rootCategories = categories;
 
-                        if(!!categoryId && categoryId!=="") {
+                        if (!!categoryId && categoryId !== "") {
                             CategoriesService.getAncestors(categoryId).then(function (categories) {
                                 var level = 0;
                                 angular.forEach(categories, function (value, key) {
@@ -150,7 +150,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                                 });
                                 $scope.setCategoryByLvl(categoryId, level);
                             });
-                        } else if(!!$scope.rootCategory){
+                        } else if (!!$scope.rootCategory) {
                             $scope.updateNodeCategories();
                         }
 
@@ -199,19 +199,19 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
 
-            $scope.isCategorySelectorsValid = function() {
-               return !!$scope.rootCategories && !!$scope.rootCategory
-                   && (!!$scope.nodeCategories && $scope.nodeCategories.length>0 && !!$scope.nodeCategory
-                   || (!$scope.nodeCategories || $scope.nodeCategories.length == 0))
-                   && (!!$scope.leafCategories && $scope.leafCategories.length>0 && !!$scope.product.category
-                   || (!$scope.leafCategories || $scope.leafCategories.length == 0))
+            $scope.isCategorySelectorsValid = function () {
+                return !!$scope.rootCategories && !!$scope.rootCategory
+                    && (!!$scope.nodeCategories && $scope.nodeCategories.length > 0 && !!$scope.nodeCategory
+                    || (!$scope.nodeCategories || $scope.nodeCategories.length == 0))
+                    && (!!$scope.leafCategories && $scope.leafCategories.length > 0 && !!$scope.product.category
+                    || (!$scope.leafCategories || $scope.leafCategories.length == 0))
             };
 
             /**
              * Publish product ad.
              */
             $scope.publishAd = function () {
-                //if user has no default addrees, firstly save his address
+                //if user has no default address, firstly save his address
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
@@ -235,10 +235,10 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.product.description = "";
                 $scope.product.address = Endpoints.api_url + "addresses/" + $scope.currentUser.default_address.id + "/";
                 if ($scope.price.amount > 0) {
-                    if(!$scope.leafCategories || $scope.leafCategories.length == 0){
-                        if(!!$scope.nodeCategories && $scope.nodeCategories.length>0) {
+                    if (!$scope.leafCategories || $scope.leafCategories.length == 0) {
+                        if (!!$scope.nodeCategories && $scope.nodeCategories.length > 0) {
                             $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
-                        }else{
+                        } else {
                             $scope.product.category = $scope.categoriesBaseUrl + $scope.rootCategory + "/";
                         }
                     }
@@ -263,13 +263,13 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                                     $scope.trackEvent("Dépôt annonce", "Logement", productCategory.name);
                                     $scope.finishProductSaveAndRedirect(product);
                                 } else {
-                                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function(ancestors) {
+                                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function (ancestors) {
                                         var categoriesStr = "";
                                         angular.forEach(ancestors, function (value, key) {
                                             categoriesStr = categoriesStr + value.name + " - ";
                                         });
                                         categoriesStr = categoriesStr + productCategory.name;
-                                        $scope.trackEvent("Dépôt annonce", "Objet",  categoriesStr);
+                                        $scope.trackEvent("Dépôt annonce", "Objet", categoriesStr);
                                         $scope.finishProductSaveAndRedirect(product);
                                     });
                                 }
@@ -284,7 +284,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 } else {
                     //$scope.publishAdError = "All prices should be positive numbers!";
                     ServerValidationService.removeErrors();
-                    ServerValidationService.addError("amount" ,"Value can't be negative");
+                    ServerValidationService.addError("amount", "Value can't be negative");
 
                     $scope.submitInProgress = false;
                 }
@@ -407,12 +407,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
                 var oldDocumentWrite = document.write;
                 // change document.write temporary
-                document.write = function(node){
+                document.write = function (node) {
                     $("body").append(node)
                 };
-                $.getScript( "https://clic.reussissonsensemble.fr/art/JS/param.aspx", function() {
+                $.getScript("https://clic.reussissonsensemble.fr/art/JS/param.aspx", function () {
                     // replace the temp document.write with the original version
-                    setTimeout(function() {
+                    setTimeout(function () {
                         document.write = oldDocumentWrite
                     }, 500)
                 });
@@ -433,15 +433,15 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              */
             $scope.loadAdWordsTagPublishAd = function () {
                 $window.google_trackConversion({
-                        google_conversion_id: 1027691277,
-                        google_conversion_language: "en",
-                        google_conversion_format: "3",
-                        google_conversion_color: "ffffff",
-                        google_conversion_label: "EO41CNPrpQMQjaaF6gM",
-                        google_conversion_value: 1.00,
-                        google_conversion_currency: "EUR",
-                        google_remarketing_only: false
-                    });
+                    google_conversion_id: 1027691277,
+                    google_conversion_language: "en",
+                    google_conversion_format: "3",
+                    google_conversion_color: "ffffff",
+                    google_conversion_label: "EO41CNPrpQMQjaaF6gM",
+                    google_conversion_value: 1.00,
+                    google_conversion_currency: "EUR",
+                    google_remarketing_only: false
+                });
             };
 
             /**

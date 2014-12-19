@@ -30,7 +30,7 @@ define(["angular", "eloue/app"], function (angular) {
              * On rating star click
              * @param star star icon index
              */
-            $scope.starClicked = function(star) {
+            $scope.starClicked = function (star) {
                 $scope.comment.rate = star;
             };
 
@@ -38,7 +38,7 @@ define(["angular", "eloue/app"], function (angular) {
             BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
-                $scope.showIncidentDescription = $scope.bookingDetails.state == 'incident';
+                $scope.showIncidentDescription = $scope.bookingDetails.state == "incident";
                 if (!$scope.currentUserPromise) {
                     $scope.currentUserPromise = UsersService.getMe().$promise;
                 }
@@ -142,11 +142,11 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             };
 
-            $scope.downloadContract = function() {
+            $scope.downloadContract = function () {
                 BookingsLoadService.downloadContract($stateParams.uuid);
             };
 
-            $scope.downloadVoucher = function() {
+            $scope.downloadVoucher = function () {
                 ShippingsService.downloadVoucher($scope.shipping.id, $scope.isOwner);
             };
 
@@ -210,7 +210,7 @@ define(["angular", "eloue/app"], function (angular) {
                     }
                 }, function (error) {
                     $scope.handleResponseErrors(error, "booking", "accept");
-                })
+                });
             };
 
             $scope.rejectBooking = function () {
@@ -220,11 +220,11 @@ define(["angular", "eloue/app"], function (angular) {
                     $window.location.reload();
                 }, function (error) {
                     $scope.handleResponseErrors(error, "booking", "reject");
-                })
+                });
             };
 
             $scope.showCancelConfirm = function () {
-                $('#confirm').modal();
+                $("#confirm").modal();
             };
 
             $scope.cancelBooking = function () {
@@ -234,7 +234,7 @@ define(["angular", "eloue/app"], function (angular) {
                     $window.location.reload();
                 }, function (error) {
                     $scope.handleResponseErrors(error, "booking", "cancel");
-                })
+                });
             };
 
             $scope.declareIncident = function () {

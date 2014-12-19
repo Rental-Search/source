@@ -151,5 +151,5 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * URL to redirect user after logging in.
      */
-    EloueCommon.value("RedirectAfterLogin", { url: "/"});
+    EloueCommon.value("RedirectAfterLogin", {url: "/"});
 });

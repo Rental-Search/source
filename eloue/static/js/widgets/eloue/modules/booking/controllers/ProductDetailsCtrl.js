@@ -1,7 +1,7 @@
 define(["angular", "toastr", "eloue/modules/booking/BookingModule",
     "../../../../../common/eloue/values",
     "../../../../../common/eloue/services"
-], function (angular, toastr) {
+    ], function (angular, toastr) {
     "use strict";
 
     angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", [
@@ -54,20 +54,62 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
             $scope.monthOptions = [
-                {name: months[Date.today().add(-1).months().getMonth()] + " " + Date.today().add(-1).months().getFullYear(), value: Date.today().add(-1).months().getMonth() + " " + Date.today().add(-1).months().getFullYear()},
-                {name: months[Date.today().getMonth()] + " " + Date.today().getFullYear(), value: Date.today().getMonth() + " " + Date.today().getFullYear()},
-                {name: months[Date.today().add(1).months().getMonth()] + " " + Date.today().add(1).months().getFullYear(), value: Date.today().add(1).months().getMonth() + " " + Date.today().add(1).months().getFullYear()},
-                {name: months[Date.today().add(2).months().getMonth()] + " " + Date.today().add(2).months().getFullYear(), value: Date.today().add(2).months().getMonth() + " " + Date.today().add(2).months().getFullYear()},
-                {name: months[Date.today().add(3).months().getMonth()] + " " + Date.today().add(3).months().getFullYear(), value: Date.today().add(3).months().getMonth() + " " + Date.today().add(3).months().getFullYear()},
-                {name: months[Date.today().add(4).months().getMonth()] + " " + Date.today().add(4).months().getFullYear(), value: Date.today().add(4).months().getMonth() + " " + Date.today().add(4).months().getFullYear()},
-                {name: months[Date.today().add(5).months().getMonth()] + " " + Date.today().add(5).months().getFullYear(), value: Date.today().add(5).months().getMonth() + " " + Date.today().add(5).months().getFullYear()},
-                {name: months[Date.today().add(6).months().getMonth()] + " " + Date.today().add(6).months().getFullYear(), value: Date.today().add(6).months().getMonth() + " " + Date.today().add(6).months().getFullYear()},
-                {name: months[Date.today().add(7).months().getMonth()] + " " + Date.today().add(7).months().getFullYear(), value: Date.today().add(7).months().getMonth() + " " + Date.today().add(7).months().getFullYear()},
-                {name: months[Date.today().add(8).months().getMonth()] + " " + Date.today().add(8).months().getFullYear(), value: Date.today().add(8).months().getMonth() + " " + Date.today().add(8).months().getFullYear()},
-                {name: months[Date.today().add(9).months().getMonth()] + " " + Date.today().add(9).months().getFullYear(), value: Date.today().add(9).months().getMonth() + " " + Date.today().add(9).months().getFullYear()},
-                {name: months[Date.today().add(10).months().getMonth()] + " " + Date.today().add(10).months().getFullYear(), value: Date.today().add(10).months().getMonth() + " " + Date.today().add(10).months().getFullYear()},
-                {name: months[Date.today().add(11).months().getMonth()] + " " + Date.today().add(11).months().getFullYear(), value: Date.today().add(11).months().getMonth() + " " + Date.today().add(11).months().getFullYear()},
-                {name: months[Date.today().add(12).months().getMonth()] + " " + Date.today().add(12).months().getFullYear(), value: Date.today().add(12).months().getMonth() + " " + Date.today().add(12).months().getFullYear()}
+                {
+                    name: months[Date.today().add(-1).months().getMonth()] + " " + Date.today().add(-1).months().getFullYear(),
+                    value: Date.today().add(-1).months().getMonth() + " " + Date.today().add(-1).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().getMonth()] + " " + Date.today().getFullYear(),
+                    value: Date.today().getMonth() + " " + Date.today().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(1).months().getMonth()] + " " + Date.today().add(1).months().getFullYear(),
+                    value: Date.today().add(1).months().getMonth() + " " + Date.today().add(1).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(2).months().getMonth()] + " " + Date.today().add(2).months().getFullYear(),
+                    value: Date.today().add(2).months().getMonth() + " " + Date.today().add(2).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(3).months().getMonth()] + " " + Date.today().add(3).months().getFullYear(),
+                    value: Date.today().add(3).months().getMonth() + " " + Date.today().add(3).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(4).months().getMonth()] + " " + Date.today().add(4).months().getFullYear(),
+                    value: Date.today().add(4).months().getMonth() + " " + Date.today().add(4).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(5).months().getMonth()] + " " + Date.today().add(5).months().getFullYear(),
+                    value: Date.today().add(5).months().getMonth() + " " + Date.today().add(5).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(6).months().getMonth()] + " " + Date.today().add(6).months().getFullYear(),
+                    value: Date.today().add(6).months().getMonth() + " " + Date.today().add(6).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(7).months().getMonth()] + " " + Date.today().add(7).months().getFullYear(),
+                    value: Date.today().add(7).months().getMonth() + " " + Date.today().add(7).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(8).months().getMonth()] + " " + Date.today().add(8).months().getFullYear(),
+                    value: Date.today().add(8).months().getMonth() + " " + Date.today().add(8).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(9).months().getMonth()] + " " + Date.today().add(9).months().getFullYear(),
+                    value: Date.today().add(9).months().getMonth() + " " + Date.today().add(9).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(10).months().getMonth()] + " " + Date.today().add(10).months().getFullYear(),
+                    value: Date.today().add(10).months().getMonth() + " " + Date.today().add(10).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(11).months().getMonth()] + " " + Date.today().add(11).months().getFullYear(),
+                    value: Date.today().add(11).months().getMonth() + " " + Date.today().add(11).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(12).months().getMonth()] + " " + Date.today().add(12).months().getFullYear(),
+                    value: Date.today().add(12).months().getMonth() + " " + Date.today().add(12).months().getFullYear()
+                }
             ];
 
             // Read authorization token
@@ -166,7 +208,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Show response errors on booking form under appropriate field.
              * @param error JSON object with error details
              */
-            $scope.handleResponseErrors = function(error) {
+            $scope.handleResponseErrors = function (error) {
                 // Hide all spinners and enable form controls.
                 $scope.submitInProgress = false;
                 $scope.loadingProductShippingPoint = false;
@@ -189,7 +231,6 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 toDateSelector.datepicker("setStartDate", fromDateTime);
                 toDateSelector.datepicker("update");
-                var today = Date.today().set({hour: 8, minute: 0});
                 $scope.dateRangeError = "";
                 if (fromDateTime > toDateTime) {
                     //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
@@ -208,7 +249,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 // check if product is available for selected dates
                 ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
                     var price = result.total_price;
-                    price = price.replace("€","").replace("\u20ac","").replace("Eu","").replace(",",".").replace(" ","");
+                    price = price.replace("€", "").replace("\u20ac", "").replace("Eu", "").replace(",", ".").replace(" ", "");
                     price = Number(price);
                     $scope.duration = result.duration;
                     $scope.pricePerDay = result.unit_value;
@@ -229,7 +270,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.newMessage.body, null, $scope.product.id).then(function (result) {
                         $scope.submitInProgress = false;
                         $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
-                        $scope.trackEvent("Réservation", "Message",  $scope.getEventLabel());
+                        $scope.trackEvent("Réservation", "Message", $scope.getEventLabel());
                         $scope.trackPageView();
                         // Clear message field
                         $scope.newMessage = {};
@@ -251,12 +292,12 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
 
             $scope.selectedPointId = "";
 
-            $scope.pointSelected = function(pointId) {
+            $scope.pointSelected = function (pointId) {
                 $scope.selectedPointId = pointId;
                 $scope.shippingPrice = 10;
             };
 
-            $scope.saveDefaultAddress = function() {
+            $scope.saveDefaultAddress = function () {
                 $scope.submitInProgress = true;
                 $scope.currentUser.default_address.country = "FR";
                 AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
@@ -291,7 +332,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             /**
              * Save payment info and request product booking.
              */
-            $scope.saveCardAndRequestBooking = function() {
+            $scope.saveCardAndRequestBooking = function () {
                 $scope.submitInProgress = true;
                 // Update user info
                 //TODO: patch more fields
@@ -301,11 +342,11 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 if ($scope.isAuto()) {
                     userPatch.drivers_license_number = $scope.currentUser.drivers_license_number;
                     if ($scope.currentUser.drivers_license_date) {
-                        userPatch.drivers_license_date =UtilsService.formatDate($scope.currentUser.drivers_license_date, "yyyy-MM-dd'T'HH:mm");
+                        userPatch.drivers_license_date = UtilsService.formatDate($scope.currentUser.drivers_license_date, "yyyy-MM-dd'T'HH:mm");
                     }
                     userPatch.place_of_birth = $scope.currentUser.place_of_birth;
                     if ($scope.currentUser.date_of_birth) {
-                        userPatch.date_of_birth =UtilsService.formatDate($scope.currentUser.date_of_birth, "yyyy-MM-dd'T'HH:mm");
+                        userPatch.date_of_birth = UtilsService.formatDate($scope.currentUser.date_of_birth, "yyyy-MM-dd'T'HH:mm");
                     }
                 }
 
@@ -372,7 +413,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         //TODO: save user shipping point and product shipping
                         var selectedPoint = {};
                         angular.forEach($scope.borrowerShippingPoints, function (value, key) {
-                            if($scope.selectedPointId == value.site_id) {
+                            if ($scope.selectedPointId == value.site_id) {
                                 selectedPoint = value;
                             }
                         });
@@ -397,7 +438,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.payForBooking = function (booking, paymentInfo) {
                 BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                     $scope.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
-                    $scope.trackEvent("Réservation", "Demande de réservation",  $scope.getEventLabel());
+                    $scope.trackEvent("Réservation", "Demande de réservation", $scope.getEventLabel());
                     $scope.trackPageView();
                     toastr.options.positionClass = "toast-top-full-width";
                     toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
@@ -414,7 +455,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Get label for google analytics event base on product category.
              * @returns event tag label
              */
-            $scope.getEventLabel = function() {
+            $scope.getEventLabel = function () {
                 if ($scope.isAuto()) {
                     return "Voiture - " + $scope.productCategoryName;
                 } else if ($scope.isRealEstate()) {
@@ -620,9 +661,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                             });
                             $scope.borrowerShippingPoints = result;
                             $("#point-contatiner").mCustomScrollbar({
-                                scrollInertia: '100',
+                                scrollInertia: "100",
                                 autoHideScrollbar: false,
-                                theme: 'dark-thin',
+                                theme: "dark-thin",
                                 advanced: {
                                     updateOnContentResize: true,
                                     autoScrollOnFocus: false
@@ -667,7 +708,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             /**
-             * Used to load calendar with prodcut booking data.
+             * Used to load calendar with product booking data.
              */
             $scope.loadCalendar = function () {
                 BookingsService.getBookingsByProduct($scope.product.id).then(function (bookings) {
@@ -726,7 +767,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Select tab in main product detail page content part.
              */
             $scope.selectTab = function (tabName) {
-                $('[id^=tabs-]').each(function () {
+                $("[id^=tabs-]").each(function () {
                     var item = $(this);
                     if (("#" + item.attr("id")) == tabName) {
                         item.removeClass("ng-hide");
@@ -734,7 +775,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         item.addClass("ng-hide");
                     }
                 });
-                $('a[href^=#tabs-]').each(function () {
+                $("a[href^=#tabs-]").each(function () {
                     var item = $(this);
                     if (item.attr("href") == tabName) {
                         item.addClass("current");
@@ -749,7 +790,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             /**
              * Add Google ad scripts.
              */
-            $scope.loadAdWordsTags =  function(googleConversionLabel) {
+            $scope.loadAdWordsTags = function (googleConversionLabel) {
                 $window.google_trackConversion({
                     google_conversion_id: 1027691277,
                     google_conversion_language: "en",
@@ -783,14 +824,14 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * @param action action
              * @param value value
              */
-            $scope.trackEvent = function(category, action, value) {
+            $scope.trackEvent = function (category, action, value) {
                 _gaq.push(["_trackEvent", category, action, value]);
             };
 
             /**
              * Push track page view to Google Analytics.
              */
-            $scope.trackPageView = function() {
+            $scope.trackPageView = function () {
                 _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
             };
         }]);

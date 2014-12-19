@@ -18,7 +18,7 @@ define(["angular", "eloue/app"], function (angular) {
         "UtilsService",
         function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
 
-            $scope.handleResponseErrors = function(error, object, action){
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
                 $scope.showNotification(object, action, false);
             };

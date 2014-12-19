@@ -56,7 +56,7 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                             $scope.submitInProgress = false;
                             $scope.showNotification("message", "send", true);
                             $stateParams.id = UtilsService.getIdFromUrl(result.thread);
-                            $state.transitionTo("messages.detail", $stateParams, { reload: true });
+                            $state.transitionTo("messages.detail", $stateParams, {reload: true});
                         }, function (error) {
                             $scope.submitInProgress = false;
                             $scope.showNotification("message", "send", false);
@@ -77,7 +77,7 @@ define(["angular", "toastr", "eloue/app"], function (angular, toastr) {
                         $scope.message = "";
                         $scope.submitInProgress = false;
                         $stateParams.id = UtilsService.getIdFromUrl(result.thread);
-                        $state.transitionTo("messages.detail", $stateParams, { reload: true });
+                        $state.transitionTo("messages.detail", $stateParams, {reload: true});
                     });
             };
         }

@@ -1,10 +1,10 @@
 require.config(
     (function () {
         var STATIC_URL = "/static/";
-        var scripts = document.getElementsByTagName('script');
+        var scripts = document.getElementsByTagName("script");
         for (var i = 0, l = scripts.length; i < l; i++) {
-            if (scripts[i].getAttribute('data-static-path')) {
-                STATIC_URL = scripts[i].getAttribute('data-static-path');
+            if (scripts[i].getAttribute("data-static-path")) {
+                STATIC_URL = scripts[i].getAttribute("data-static-path");
                 break;
             }
         }
@@ -86,7 +86,7 @@ require.config(
                 "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
                 "toastr": ["jQuery"]
             }
-        }
+        };
     })()
 );
 
@@ -131,29 +131,29 @@ require([
         $(".signs-links").find("ul.without-spaces").show();
         angular.bootstrap(document, ["EloueApp"]);
 
-        var slide_imgs = [].slice.call($('.carousel-wrapper').find('img'));
-        for (var index = 0; index < slide_imgs.length; index++) {
-            var proportions = $(slide_imgs[index]).width() / $(slide_imgs[index]).height(),
-                parent = $(slide_imgs[index]).parent(),
-                parent_proportions = $(parent).width() / $(parent).height();
+        var slideImgs = [].slice.call($(".carousel-wrapper").find("img"));
+        for (var index = 0; index < slideImgs.length; index++) {
+            var proportions = $(slideImgs[index]).width() / $(slideImgs[index]).height(),
+                parent = $(slideImgs[index]).parent(),
+                parentProportions = $(parent).width() / $(parent).height();
 
-            if (proportions < parent_proportions) {
-                $(slide_imgs[index]).addClass('expand-v');
+            if (proportions < parentProportions) {
+                $(slideImgs[index]).addClass("expand-v");
             } else {
-                $(slide_imgs[index]).addClass('expand-h');
+                $(slideImgs[index]).addClass("expand-h");
             }
         }
 
-        var layout_switcher = $('.layout-switcher'), article = $('article');
-        if (layout_switcher && article) {
+        var layoutSwitcher = $(".layout-switcher"), article = $("article");
+        if (layoutSwitcher && article) {
             // switch grid/list layouts
-            $(layout_switcher).on('click', 'i', function () {
-                if ($(this).hasClass('grid')) {
-                    article.removeClass('list-layout');
-                    article.addClass('grid-layout')
+            $(layoutSwitcher).on("click", "i", function () {
+                if ($(this).hasClass("grid")) {
+                    article.removeClass("list-layout");
+                    article.addClass("grid-layout");
                 } else {
-                    article.removeClass('grid-layout');
-                    article.addClass('list-layout')
+                    article.removeClass("grid-layout");
+                    article.addClass("list-layout");
                 }
             });
         }
@@ -188,7 +188,7 @@ require([
                     from: Number(min),
                     to: Number(max),
                     limits: false,
-                    dimension: '&nbsp;&euro;',
+                    dimension: "&nbsp;&euro;",
                     onstatechange: function (value) {
                         var values = value.split(";");
                         // enable inputs so their values could be now posted with a form data
@@ -202,11 +202,11 @@ require([
             }
         }
 
-        var sortSelector = $('#sort-selector');
+        var sortSelector = $("#sort-selector");
         if (sortSelector) {
             sortSelector.change(function (e) {
                 if (detailSearchForm) {
-                    detailSearchForm.submit()
+                    detailSearchForm.submit();
                 }
             });
         }
@@ -218,110 +218,122 @@ require([
             js.id = id;
             js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0&appId=197983240245844";
             fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+        }(document, "script", "facebook-jssdk"));
 
-        window.___gcfg = {lang: 'fr'};
+        window.___gcfg = {lang: "fr"};
         (function () {
-            var po = document.createElement('script');
-            po.type = 'text/javascript';
+            var po = document.createElement("script");
+            po.type = "text/javascript";
             po.async = true;
-            po.src = 'https://apis.google.com/js/platform.js';
-            var s = document.getElementsByTagName('script')[0];
+            po.src = "https://apis.google.com/js/platform.js";
+            var s = document.getElementsByTagName("script")[0];
             s.parentNode.insertBefore(po, s);
         })();
 
         !function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? "http" : "https";
             if (!d.getElementById(id)) {
                 js = d.createElement(s);
                 js.id = id;
-                js.src = p + '://platform.twitter.com/widgets.js';
+                js.src = p + "://platform.twitter.com/widgets.js";
                 fjs.parentNode.insertBefore(js, fjs);
             }
-        }(document, 'script', 'twitter-wjs');
+        }(document, "script", "twitter-wjs");
 
         // Insert YouTube video into defined container, add play on modal open and stop on modal hide
-        var tag = document.createElement('script');
+        var tag = document.createElement("script");
 
         tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
+        var firstScriptTag = document.getElementsByTagName("script")[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        var videoModal = $('#videoModal');
+        var videoModal = $("#videoModal");
         var player;
 
-        videoModal.on('shown.bs.modal', function () {
-            player = new YT.Player('videoContainer', {
-                height: '480',
-                width: '640',
-                videoId: 'nERu_2pSSb0',
+        videoModal.on("shown.bs.modal", function () {
+            player = new YT.Player("videoContainer", {
+                height: "480",
+                width: "640",
+                videoId: "nERu_2pSSb0",
                 events: {
-                    'onReady': onPlayerReady
+                    "onReady": onPlayerReady
                 }
             });
         });
-        videoModal.on('hidden.bs.modal', function () {
+        videoModal.on("hidden.bs.modal", function () {
             player.destroy();
         });
 
-        function onPlayerReady(event) {
+        var onPlayerReady = function(event) {
             event.target.playVideo();
-        }
+        };
 
-        function range(zoom) {
-            if (zoom >= 14)
+        var range = function(zoom) {
+            if (zoom >= 14) {
                 return 0.5;
-            if (zoom >= 13)
+            }
+            if (zoom >= 13) {
                 return 1;
-            if (zoom >= 12)
+            }
+            if (zoom >= 12) {
                 return 3;
-            if (zoom >= 11)
+            }
+            if (zoom >= 11) {
                 return 6;
-            if (zoom >= 10)
+            }
+            if (zoom >= 10) {
                 return 15;
-            if (zoom >= 9)
+            }
+            if (zoom >= 9) {
                 return 25;
-            if (zoom >= 8)
+            }
+            if (zoom >= 8) {
                 return 100;
-            if (zoom >= 7)
+            }
+            if (zoom >= 7) {
                 return 200;
-            if (zoom >= 6)
+            }
+            if (zoom >= 6) {
                 return 350;
-            if (zoom >= 5)
+            }
+            if (zoom >= 5) {
                 return 500;
-            if (zoom >= 4)
+            }
+            if (zoom >= 4) {
                 return 700;
+            }
             return 1000;
-        }
+        };
 
 
         window.google_maps_loaded = function () {
-            $('#geolocate').formmapper({
+            $("#geolocate").formmapper({
                 details: "form"
             });
 
             var mapCanvas = document.getElementById("map-canvas");
 
-            if (!!mapCanvas) {
+            if (mapCanvas) {
 
-                $('#where').formmapper({
+                $("#where").formmapper({
                     details: "form"
                 });
 
-                $('#start-date').datepicker({
+                $("#start-date").datepicker({
                     language: "fr",
                     autoclose: true,
                     todayHighlight: true,
                     startDate: Date.today()
                 });
 
-                $('#end-date').datepicker({
+                $("#end-date").datepicker({
                     language: "fr",
                     autoclose: true,
                     todayHighlight: true,
                     startDate: Date.today()
                 });
 
-                var radius = Number($("#range").val().replace(',', '.'));
+                var rangeEl = $("#range");
+                var radius = Number(rangeEl.val().replace(",", "."));
                 var mapOptions = {
                     zoom: zoom(radius),
                     disableDefaultUI: true,
@@ -338,7 +350,7 @@ require([
                             var circle = new google.maps.Circle({
                                 map: map,
                                 radius: radius * 1000,
-                                fillColor: '#FFFFFF',
+                                fillColor: "#FFFFFF",
                                 editable: false
                             });
                         }
@@ -347,24 +359,24 @@ require([
 
                 var rangeSlider = $("#range-slider");
                 if (rangeSlider) {
-                    var rangeInput = $("#range");
-                    var range_max = rangeSlider.attr("max-value");
-                    if (!range_max) {
+                    var rangeInput = rangeEl;
+                    var rangeMax = rangeSlider.attr("max-value");
+                    if (!rangeMax) {
                         $("#range-label").hide();
                     } else {
-                        var range_val = rangeInput.attr("value");
-                        if (range_val) {
-                            rangeSlider.attr("value", "1;" + range_val);
+                        var rangeVal = rangeInput.attr("value");
+                        if (rangeVal) {
+                            rangeSlider.attr("value", "1;" + rangeVal);
                         } else {
-                            rangeSlider.attr("value", "1;" + range_max);
+                            rangeSlider.attr("value", "1;" + rangeMax);
                         }
 
                         var notUpdateBySlider = false, notUpdateByMap = false;
                         rangeSlider.slider({
                             from: 1,
-                            to:  Number(range_max),
+                            to: Number(rangeMax),
                             limits: false,
-                            dimension: '&nbsp;km',
+                            dimension: "&nbsp;km",
                             onstatechange: function (value) {
                                 notUpdateByMap = true;
                                 if (!notUpdateBySlider) {
@@ -382,12 +394,12 @@ require([
                             }
                         });
 
-                        google.maps.event.addListener(map, 'zoom_changed', function() {
+                        google.maps.event.addListener(map, "zoom_changed", function() {
                             notUpdateBySlider = true;
                             if (!notUpdateByMap) {
                                 var zoomLevel = map.getZoom();
                                 var calcRange = range(zoomLevel);
-                                if (calcRange && calcRange <= range_max) {
+                                if (calcRange && calcRange <= rangeMax) {
                                     rangeSlider.slider("value", 1, calcRange)
                                 }
                             }
@@ -399,7 +411,7 @@ require([
                 }
 
                 var products = [];
-                $('li[id^="marker-"]').each(function () {
+                $("li[id^='marker-']").each(function () {
                     var item = $(this);
                     var product = {
                         title: item.attr("name"),
@@ -411,12 +423,12 @@ require([
                 });
 
 
-                setMarkers(map, products, 'li#marker-');
+                setMarkers(map, products, "li#marker-");
             }
 
             var mapCanvasSmall = document.getElementById("map-canvas-small");
 
-            if (!!mapCanvasSmall) {
+            if (mapCanvasSmall) {
                 var mapContainer = $("#map-canvas-small");
                 var product = {
                     lat: mapContainer.attr("locationX"),
@@ -445,60 +457,71 @@ require([
             }
         };
 
-        function load_google_maps() {
+        var loadGoogleMaps = function() {
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
             document.body.appendChild(script);
-        }
+        };
 
-        function zoom(radius) {
-            if (radius <= 0.5)
+        var zoom = function(radius) {
+            if (radius <= 0.5) {
                 return 14;
-            if (radius <= 1)
+            }
+            if (radius <= 1) {
                 return 13;
-            if (radius <= 3)
+            }
+            if (radius <= 3) {
                 return 12;
-            if (radius <= 6)
+            }
+            if (radius <= 6) {
                 return 11;
-            if (radius <= 15)
+            }
+            if (radius <= 15) {
                 return 10;
-            if (radius <= 25)
+            }
+            if (radius <= 25) {
                 return 9;
-            if (radius <= 100)
+            }
+            if (radius <= 100) {
                 return 8;
-            if (radius <= 200)
+            }
+            if (radius <= 200) {
                 return 7;
-            if (radius <= 350)
+            }
+            if (radius <= 350) {
                 return 6;
-            if (radius <= 500)
+            }
+            if (radius <= 500) {
                 return 5;
-            if (radius <= 700)
+            }
+            if (radius <= 700) {
                 return 4;
+            }
             return 3;
-        }
+        };
 
-        function setMarkers(map, locations, markerId) {
+        var setMarkers = function(map, locations, markerId) {
             var staticUrl = "/static/";
-            var scripts = document.getElementsByTagName('script');
+            var scripts = document.getElementsByTagName("script");
             for (var i = 0, l = scripts.length; i < l; i++) {
-                if (scripts[i].getAttribute('data-static-path')) {
-                    staticUrl = scripts[i].getAttribute('data-static-path');
+                if (scripts[i].getAttribute("data-static-path")) {
+                    staticUrl = scripts[i].getAttribute("data-static-path");
                     break;
                 }
-            };
+            }
             for (var i = 0; i < locations.length; i++) {
                 var product = locations[i];
 
-                var image, image_hover;
+                var image, imageHover;
 
                 if (markerId == "li#marker-") {
-                    image = new google.maps.MarkerImage(staticUrl + 'images/markers_smooth_aligned.png',
+                    image = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
                         new google.maps.Size(26, 28),
                         new google.maps.Point(0, 28 * i),
                         new google.maps.Point(14, 28));
 
-                    image_hover = new google.maps.MarkerImage(staticUrl + 'images/markers_smooth_aligned.png',
+                    imageHover = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
                         new google.maps.Size(26, 28),
                         new google.maps.Point(29, 28 * i),
                         new google.maps.Point(14, 28));
@@ -516,7 +539,7 @@ require([
 
                 marker.set("myZIndex", marker.getZIndex());
 
-                google.maps.event.addListener(marker, "mouseover", mouseOverListenerGenerator(image_hover, marker, markerId));
+                google.maps.event.addListener(marker, "mouseover", mouseOverListenerGenerator(imageHover, marker, markerId));
                 google.maps.event.addListener(marker, "click", mouseClickListenerGenerator(marker, markerId));
                 google.maps.event.addListener(marker, "mouseout", mouseOutListenerGenerator(image, marker, markerId));
 
@@ -524,27 +547,27 @@ require([
 
                 $(markerId + marker.get("myZIndex")).mouseout(triggerMouseOutGenerator(marker));
             }
-        }
+        };
 
         function mouseClickListenerGenerator(marker, markerId) {
             return function () {
                 // Jump to product item
-                $('html, body').animate({
+                $("html, body").animate({
                     scrollTop: $(markerId + marker.get("myZIndex")).offset().top - 20
                 }, 1000);
-            }
+            };
         }
 
-        function mouseOverListenerGenerator(image_hover, marker, markerId) {
+        function mouseOverListenerGenerator(imageHover, marker, markerId) {
             return function () {
                 this.setOptions({
-                    icon: image_hover,
+                    icon: imageHover,
                     zIndex: 200
                 });
 
                 //TODO: toggle ":hover" styles
 //                $(markerId + marker.get("myZIndex")).find(".declarer-container")[0].trigger("hover");
-            }
+            };
         }
 
         function mouseOutListenerGenerator(image, marker, markerId) {
@@ -554,23 +577,23 @@ require([
                     zIndex: this.get("myZIndex")
                 });
                 $(markerId + marker.get("myZIndex")).removeAttr("style");
-            }
+            };
         }
 
         function triggerMouseOverGenerator(marker) {
             return function () {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
-                google.maps.event.trigger(marker, 'mouseover');
-            }
+                google.maps.event.trigger(marker, "mouseover");
+            };
         }
 
         function triggerMouseOutGenerator(marker) {
             return function () {
                 marker.setAnimation(null);
-                google.maps.event.trigger(marker, 'mouseout');
-            }
+                google.maps.event.trigger(marker, "mouseout");
+            };
         }
 
-        load_google_maps();
+        loadGoogleMaps();
     });
 });

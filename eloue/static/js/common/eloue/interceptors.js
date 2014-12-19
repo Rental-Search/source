@@ -13,7 +13,7 @@ define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr
         };
 
         return {
-            'request': function (config) {
+            "request": function (config) {
                 if (!!config.data && !!config.data.formTag) {
                     var formTag = config.data.formTag, resultConfig;
                     // copy config to not change object in controllers.
@@ -30,7 +30,7 @@ define(["../../common/eloue/commonApp", "toastr"], function (EloueCommon, toastr
                     return $q.when(config);
                 }
             },
-            'responseError': function (errorResponse) {
+            "responseError": function (errorResponse) {
                 // if the message returns unsuccessful we display the error
                 switch (errorResponse.status) {
                     case 400:

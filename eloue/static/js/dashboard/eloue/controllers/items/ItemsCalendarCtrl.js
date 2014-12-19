@@ -13,7 +13,7 @@ define(["angular", "eloue/app"], function (angular) {
         "UnavailabilityPeriodsService",
         function ($scope, $stateParams, Endpoints, BookingsService, UnavailabilityPeriodsService) {
 
-            $scope.selectedMonthAndYear = Date.today().getMonth()+ " " + Date.today().getFullYear();
+            $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
             $scope.showUnavailable = true;
             $scope.showBookings = true;
             $scope.bookings = [];
@@ -25,20 +25,62 @@ define(["angular", "eloue/app"], function (angular) {
             var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
             $scope.monthOptions = [
-                {name: months[Date.today().add(-1).months().getMonth()] + " " + Date.today().add(-1).months().getFullYear(), value: Date.today().add(-1).months().getMonth() + " " + Date.today().add(-1).months().getFullYear()},
-                {name: months[Date.today().getMonth()] + " " + Date.today().getFullYear(), value: Date.today().getMonth() + " " + Date.today().getFullYear()},
-                {name: months[Date.today().add(1).months().getMonth()] + " " + Date.today().add(1).months().getFullYear(), value: Date.today().add(1).months().getMonth() + " " + Date.today().add(1).months().getFullYear()},
-                {name: months[Date.today().add(2).months().getMonth()] + " " + Date.today().add(2).months().getFullYear(), value: Date.today().add(2).months().getMonth() + " " + Date.today().add(2).months().getFullYear()},
-                {name: months[Date.today().add(3).months().getMonth()] + " " + Date.today().add(3).months().getFullYear(), value: Date.today().add(3).months().getMonth() + " " + Date.today().add(3).months().getFullYear()},
-                {name: months[Date.today().add(4).months().getMonth()] + " " + Date.today().add(4).months().getFullYear(), value: Date.today().add(4).months().getMonth() + " " + Date.today().add(4).months().getFullYear()},
-                {name: months[Date.today().add(5).months().getMonth()] + " " + Date.today().add(5).months().getFullYear(), value: Date.today().add(5).months().getMonth() + " " + Date.today().add(5).months().getFullYear()},
-                {name: months[Date.today().add(6).months().getMonth()] + " " + Date.today().add(6).months().getFullYear(), value: Date.today().add(6).months().getMonth() + " " + Date.today().add(6).months().getFullYear()},
-                {name: months[Date.today().add(7).months().getMonth()] + " " + Date.today().add(7).months().getFullYear(), value: Date.today().add(7).months().getMonth() + " " + Date.today().add(7).months().getFullYear()},
-                {name: months[Date.today().add(8).months().getMonth()] + " " + Date.today().add(8).months().getFullYear(), value: Date.today().add(8).months().getMonth() + " " + Date.today().add(8).months().getFullYear()},
-                {name: months[Date.today().add(9).months().getMonth()] + " " + Date.today().add(9).months().getFullYear(), value: Date.today().add(9).months().getMonth() + " " + Date.today().add(9).months().getFullYear()},
-                {name: months[Date.today().add(10).months().getMonth()] + " " + Date.today().add(10).months().getFullYear(), value: Date.today().add(10).months().getMonth() + " " + Date.today().add(10).months().getFullYear()},
-                {name: months[Date.today().add(11).months().getMonth()] + " " + Date.today().add(11).months().getFullYear(), value: Date.today().add(11).months().getMonth() + " " + Date.today().add(11).months().getFullYear()},
-                {name: months[Date.today().add(12).months().getMonth()] + " " + Date.today().add(12).months().getFullYear(), value: Date.today().add(12).months().getMonth() + " " + Date.today().add(12).months().getFullYear()}
+                {
+                    name: months[Date.today().add(-1).months().getMonth()] + " " + Date.today().add(-1).months().getFullYear(),
+                    value: Date.today().add(-1).months().getMonth() + " " + Date.today().add(-1).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().getMonth()] + " " + Date.today().getFullYear(),
+                    value: Date.today().getMonth() + " " + Date.today().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(1).months().getMonth()] + " " + Date.today().add(1).months().getFullYear(),
+                    value: Date.today().add(1).months().getMonth() + " " + Date.today().add(1).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(2).months().getMonth()] + " " + Date.today().add(2).months().getFullYear(),
+                    value: Date.today().add(2).months().getMonth() + " " + Date.today().add(2).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(3).months().getMonth()] + " " + Date.today().add(3).months().getFullYear(),
+                    value: Date.today().add(3).months().getMonth() + " " + Date.today().add(3).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(4).months().getMonth()] + " " + Date.today().add(4).months().getFullYear(),
+                    value: Date.today().add(4).months().getMonth() + " " + Date.today().add(4).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(5).months().getMonth()] + " " + Date.today().add(5).months().getFullYear(),
+                    value: Date.today().add(5).months().getMonth() + " " + Date.today().add(5).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(6).months().getMonth()] + " " + Date.today().add(6).months().getFullYear(),
+                    value: Date.today().add(6).months().getMonth() + " " + Date.today().add(6).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(7).months().getMonth()] + " " + Date.today().add(7).months().getFullYear(),
+                    value: Date.today().add(7).months().getMonth() + " " + Date.today().add(7).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(8).months().getMonth()] + " " + Date.today().add(8).months().getFullYear(),
+                    value: Date.today().add(8).months().getMonth() + " " + Date.today().add(8).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(9).months().getMonth()] + " " + Date.today().add(9).months().getFullYear(),
+                    value: Date.today().add(9).months().getMonth() + " " + Date.today().add(9).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(10).months().getMonth()] + " " + Date.today().add(10).months().getFullYear(),
+                    value: Date.today().add(10).months().getMonth() + " " + Date.today().add(10).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(11).months().getMonth()] + " " + Date.today().add(11).months().getFullYear(),
+                    value: Date.today().add(11).months().getMonth() + " " + Date.today().add(11).months().getFullYear()
+                },
+                {
+                    name: months[Date.today().add(12).months().getMonth()] + " " + Date.today().add(12).months().getFullYear(),
+                    value: Date.today().add(12).months().getMonth() + " " + Date.today().add(12).months().getFullYear()
+                }
             ];
 
             BookingsService.getBookingsByProduct($stateParams.id).then(function (bookings) {
@@ -51,7 +93,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.updateUnavailabilityPeriods();
             });
 
-            $scope.updateUnavailabilityPeriods = function() {
+            $scope.updateUnavailabilityPeriods = function () {
                 UnavailabilityPeriodsService.getByProduct($stateParams.id).then(function (periods) {
                     $scope.unavailablePeriods = periods.results;
                     angular.forEach($scope.unavailablePeriods, function (value, key) {
@@ -62,7 +104,7 @@ define(["angular", "eloue/app"], function (angular) {
                 });
             };
 
-            $scope.handleResponseErrors = function(error) {
+            $scope.handleResponseErrors = function (error) {
                 $scope.submitInProgress = false;
             };
 
@@ -121,11 +163,11 @@ define(["angular", "eloue/app"], function (angular) {
                 console.log("onShowBookings");
             };
 
-            $scope.showAddPeriodForm = function() {
+            $scope.showAddPeriodForm = function () {
                 $("#add-period").modal();
             };
 
-            $scope.showUpdatePeriodForm = function(period) {
+            $scope.showUpdatePeriodForm = function (period) {
                 $scope.newUnavailabilityPeriod.id = period.id;
                 $scope.newUnavailabilityPeriod.started_at = Date.parseExact(period.started_at, "yyyy-MM-ddTHH:mm:ss").toString("dd/MM/yyyy");
                 $scope.newUnavailabilityPeriod.ended_at = Date.parseExact(period.ended_at, "yyyy-MM-ddTHH:mm:ss").toString("dd/MM/yyyy");
@@ -133,12 +175,12 @@ define(["angular", "eloue/app"], function (angular) {
                 $("#add-period").modal();
             };
 
-            $scope.showConfirmForm = function(period) {
+            $scope.showConfirmForm = function (period) {
                 $scope.selectedPeriod = period;
                 $("#confirm-delete-period").modal();
             };
 
-            $scope.saveUnavailabilityPeriod = function() {
+            $scope.saveUnavailabilityPeriod = function () {
                 var initialStartDateStr = angular.copy($scope.newUnavailabilityPeriod.started_at), startDate = Date.parseExact(initialStartDateStr, "dd/MM/yyyy"),
                     initialEndDateStr = angular.copy($scope.newUnavailabilityPeriod.ended_at), endDate = Date.parseExact(initialEndDateStr, "dd/MM/yyyy");
                 if ($scope.validateUnavailabilityPeriod(startDate, endDate)) {
@@ -154,7 +196,7 @@ define(["angular", "eloue/app"], function (angular) {
                     }
                     promise.then(function (result) {
                         $scope.updateCalendar();
-                        $("#add-period").modal('hide');
+                        $("#add-period").modal("hide");
                         $scope.newUnavailabilityPeriod = {};
                         $scope.submitInProgress = false;
                         $scope.unavailabilityPeriodValidationError = "";
@@ -167,7 +209,7 @@ define(["angular", "eloue/app"], function (angular) {
                 }
             };
 
-            $scope.validateUnavailabilityPeriod = function(startDate, endDate) {
+            $scope.validateUnavailabilityPeriod = function (startDate, endDate) {
                 $scope.unavailabilityPeriodValidationError = "";
                 var msPerDay = 1000 * 60 * 60 * 24;
                 var dayDiff = Math.floor((endDate.getTime() - startDate.getTime()) / msPerDay);
@@ -185,7 +227,7 @@ define(["angular", "eloue/app"], function (angular) {
                     angular.forEach($scope.unavailablePeriods, function (value, key) {
                         if (currentDay.between(value.startDay, value.endDay)) {
                             if (!$scope.newUnavailabilityPeriod.id || $scope.newUnavailabilityPeriod.id != value.id)
-                            $scope.unavailabilityPeriodValidationError = "Can't create an unavailability period if the start or end date is between an other unavailability period.";
+                                $scope.unavailabilityPeriodValidationError = "Can't create an unavailability period if the start or end date is between an other unavailability period.";
                         }
                     });
                     if (!!$scope.unavailabilityPeriodValidationError) {
@@ -195,11 +237,11 @@ define(["angular", "eloue/app"], function (angular) {
                 return true;
             };
 
-            $scope.deleteUnavailabilityPeriod = function(period) {
+            $scope.deleteUnavailabilityPeriod = function (period) {
                 UnavailabilityPeriodsService.deletePeriod(period).$promise.then(function (result) {
                     $scope.updateUnavailabilityPeriods();
                 });
-            }
+            };
 
         }]);
 });

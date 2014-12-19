@@ -16,7 +16,9 @@ define(["../../common/eloue/commonApp",
             require: "?ngModel",
             transclude: true,
             link: function (scope, element, attrs, ngModel) {
-                if (!ngModel) return;
+                if (!ngModel) {
+                    return;
+                }
                 element.datepicker({
                     language: "fr",
                     autoclose: true,
@@ -60,7 +62,7 @@ define(["../../common/eloue/commonApp",
                     }
                 });
             }
-        }
+        };
     });
 
     EloueCommon.directive("eloueChosen", ["$timeout", function ($timeout) {
@@ -68,15 +70,15 @@ define(["../../common/eloue/commonApp",
             restrict: "A",
             link: function (scope, element, attrs) {
 
-                scope.$watch(attrs["chosen"], function () {
+                scope.$watch(attrs.chosen, function () {
                     element.trigger("chosen:updated");
                 });
 
-                scope.$watch(attrs["ngModel"], function () {
+                scope.$watch(attrs.ngModel, function () {
                     element.trigger("chosen:updated");
                 });
 
-                scope.$watch(attrs["opts"], function () {
+                scope.$watch(attrs.opts, function () {
                     $timeout(function () {
                         element.trigger("chosen:updated");
                     }, 300);
@@ -94,7 +96,9 @@ define(["../../common/eloue/commonApp",
             require: "?ngModel",
             transclude: true,
             link: function (scope, element, attrs, ngModel) {
-                if (!ngModel) return;
+                if (!ngModel) {
+                    return;
+                }
                 element.datepicker({
                     language: "fr",
                     format: "mm/yy",
@@ -155,9 +159,9 @@ define(["../../common/eloue/commonApp",
                     var noMatch = viewValue != scope.registrationForm.password.$viewValue;
                     ngModel.$setValidity("noMatch", !noMatch);
                     return viewValue;
-                })
+                });
             }
-        }
+        };
     }]);
 
     EloueCommon.directive("eloueLazyLoad", ["$injector", "$window", "$document", "$timeout", "$rootScope", "LazyLoader",
@@ -166,13 +170,13 @@ define(["../../common/eloue/commonApp",
             var appendAnimations = function () {
                 var style = document.createElement("style");
                 style.innerHTML = "@-webkit-keyframes spin {\n" +
-                    "\t0%{-webkit-transform: rotate(0deg);}\n" +
-                    "\t100%{-webkit-transform: rotate(360deg);}\n" +
-                    "}\n" +
-                    "@keyframes spin{\n" +
-                    "\t0%{transform: rotate(0deg);}\n" +
-                    "\t100%{transform: rotate(360deg);}\n" +
-                    "}";
+                "\t0%{-webkit-transform: rotate(0deg);}\n" +
+                "\t100%{-webkit-transform: rotate(360deg);}\n" +
+                "}\n" +
+                "@keyframes spin{\n" +
+                "\t0%{transform: rotate(0deg);}\n" +
+                "\t100%{transform: rotate(360deg);}\n" +
+                "}";
                 document.head.appendChild(style);
             };
 
@@ -207,9 +211,9 @@ define(["../../common/eloue/commonApp",
                     scope.hasNextPage = true;
                     scope.isLoading = false;
                     element.append(
-                            "<div class=\"col-md-12 loading\">" +
-                            "<div class=\"loading-widget\"></div>" +
-                            "</div>"
+                        "<div class=\"col-md-12 loading\">" +
+                        "<div class=\"loading-widget\"></div>" +
+                        "</div>"
                     );
 
                     element.mCustomScrollbar({
@@ -294,32 +298,33 @@ define(["../../common/eloue/commonApp",
                         $rootScope.routeChangeInProgress = true;
                         loadingWidget.show();
                     });
-                }};
+                }
+            };
         }]);
 
     /**
      * Directive to show global error message for form.
      * If it's have not message set ng-hide to container.
      */
-    EloueCommon.directive("eloueFormMessage", ["$animate","ServerValidationService", function ( $animate, ServerValidationService) {
+    EloueCommon.directive("eloueFormMessage", ["$animate", "ServerValidationService", function ($animate, ServerValidationService) {
         return {
             restrict: "A",
-            scope:true,
+            scope: true,
             link: function (scope, element, attrs) {
-                var formTag=attrs.formTag;
-                scope.$watchCollection(function(){
+                var formTag = attrs.formTag;
+                scope.$watchCollection(function () {
                     return ServerValidationService.getFormErrorMessage(formTag);
-                },function(value){
-                    if(!!value) {
-                        $animate['removeClass'](element, 'ng-hide');
+                }, function (value) {
+                    if (!!value) {
+                        $animate["removeClass"](element, "ng-hide");
                         scope.message = value.message;
                         scope.description = value.description;
-                    } else{
-                        $animate['addClass'](element, 'ng-hide');
+                    } else {
+                        $animate["addClass"](element, "ng-hide");
                     }
                 });
             }
-        }
+        };
     }]);
 
     /**
@@ -329,25 +334,25 @@ define(["../../common/eloue/commonApp",
     EloueCommon.directive("eloueFormFieldMessage", ["$animate", "ServerValidationService", function ($animate, ServerValidationService) {
         return {
             restrict: "A",
-            scope:true,
+            scope: true,
             link: function (scope, element, attrs) {
                 var formTag, fieldName;
-                formTag=attrs.formTag;
-                fieldName=attrs.fieldName;
-                if(!!fieldName){
-                    scope.$watch(function(){
+                formTag = attrs.formTag;
+                fieldName = attrs.fieldName;
+                if (!!fieldName) {
+                    scope.$watch(function () {
                         return ServerValidationService.getFieldError(fieldName, formTag);
-                    },function(value){
-                        if(!!value) {
-                            $animate['removeClass'](element, 'ng-hide');
+                    }, function (value) {
+                        if (!!value) {
+                            $animate["removeClass"](element, "ng-hide");
                             scope.value = value[0];
-                        } else{
-                            $animate['addClass'](element, 'ng-hide');
+                        } else {
+                            $animate["addClass"](element, "ng-hide");
                         }
                     });
                 }
             }
-        }
+        };
     }]);
 
 
@@ -358,9 +363,11 @@ define(["../../common/eloue/commonApp",
     EloueCommon.directive("eloueFormFieldErrorManager", ["$animate", "ServerValidationService", function ($animate, ServerValidationService) {
         var className = "server-validation-error";
         var classInputName = "input-invalid";
-        function prepareErrorElement(message){
-            return "<span class='text-danger " + className + "'>"+message+"</span>"
+
+        function prepareErrorElement(message) {
+            return "<span class='text-danger " + className + "'>" + message + "</span>"
         }
+
         return {
             restrict: "AE",
             link: function (scope, element, attrs) {
@@ -371,13 +378,13 @@ define(["../../common/eloue/commonApp",
                     var el = element;
                     el.find("." + className).remove();
                     el.find("." + classInputName).removeClass(classInputName);
-                    if(!!value){
-                        angular.forEach(value.fields, function(value, key) {
+                    if (!!value) {
+                        angular.forEach(value.fields, function (value, key) {
                             var checkItem, input;
                             checkItem = el.find("[field-name='" + key + "']");
                             input = el.find("[name='" + key + "']");
                             input.addClass(classInputName);
-                            if(checkItem.length === 0) {
+                            if (checkItem.length === 0) {
                                 input = el.find("[name='" + key + "']");
                                 input.parent().append(prepareErrorElement(value));
                             }
@@ -385,25 +392,23 @@ define(["../../common/eloue/commonApp",
                     }
                 });
             }
-        }
+        };
     }]);
 
 
     EloueCommon.directive("eloueDashboardRedirect", ["ToDashboardRedirectService", function (ToDashboardRedirectService) {
-
-
         return {
             restrict: "A",
             link: function (scope, element, attrs) {
-                var href=attrs.eloueDashboardRedirect;
-                element.on('click', function(event){
+                var href = attrs.eloueDashboardRedirect;
+                element.on("click", function (event) {
                     event.preventDefault();
 
                     ToDashboardRedirectService.showPopupAndRedirect(href);
 
                 });
             }
-        }
+        };
     }]);
 
 

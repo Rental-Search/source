@@ -57,8 +57,11 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.filter();
             };
 
-            $scope.filter = function() {
-                $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.stateFilter, $scope.bookingFilter.borrower, $scope.bookingFilter.owner], shouldReloadList: true});
+            $scope.filter = function () {
+                $scope.$broadcast("startLoading", {
+                    parameters: [$scope.currentUser.id, $scope.stateFilter, $scope.bookingFilter.borrower, $scope.bookingFilter.owner],
+                    shouldReloadList: true
+                });
             };
 
             // Timeout is used because of chosen issue (when options are loaded asynchronously, they sometimes not visible in chosen widget)
@@ -69,7 +72,7 @@ define(["angular", "eloue/app"], function (angular) {
                     autoHideScrollbar: true,
                     theme: 'dark-thin',
                     scrollbarPosition: 'outside',
-                    advanced:{
+                    advanced: {
                         autoScrollOnFocus: false,
                         updateOnContentResize: true
                     }
@@ -78,7 +81,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.$on('$destroy', function iVeBeenDismissed() {
                 $scope.clearSelectedItem("booking-");
-            })
+            });
         }
     ]);
 });
