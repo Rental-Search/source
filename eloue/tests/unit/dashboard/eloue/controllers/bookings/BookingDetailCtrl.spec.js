@@ -3,7 +3,7 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
     describe("Controller: BookingDetailCtrl", function () {
 
         var BookingDetailCtrl,
-            scope, stateParams, window, endpointsMock, bookingsLoadServiceMock, commentsLoadServiceMock, phoneNumbersServiceMock,
+            scope, stateParams, window, endpointsMock, bookingsServiceMock, commentsServiceMock, phoneNumbersServiceMock,
             sinistersServiceMock, usersServiceMock, shippingsServiceMock,
             productShippingPointsServiceMock, patronShippingPointsServiceMock;
 
@@ -14,9 +14,9 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
                 api_url: "/api/2.0/"
             };
 
-            bookingsLoadServiceMock = {
+            bookingsServiceMock = {
                 getBookingDetails: function (bookingUUID) {
-                    console.log("bookingsLoadServiceMock:getBookingDetails called with bookingUUID = " + bookingUUID);
+                    console.log("bookingsServiceMock:getBookingDetails called with bookingUUID = " + bookingUUID);
                     return {
                         then: function () {
                             return {response: {}}
@@ -63,9 +63,9 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
                     }
                 }
             };
-            commentsLoadServiceMock = {
+            commentsServiceMock = {
                 getCommentList: function (bookingUUID) {
-                    console.log("commentsLoadServiceMock:getCommentList called with bookingUUID = " + bookingUUID);
+                    console.log("commentsServiceMock:getCommentList called with bookingUUID = " + bookingUUID);
                     return {
                         then: function () {
                             return {response: {}}
@@ -73,7 +73,7 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
                     }
                 },
                 postComment: function (bookingUUID, comment, rate) {
-                    console.log("commentsLoadServiceMock:postComment called with bookingUUID = " + bookingUUID + ", comment = " + comment + ", rate = " + rate);
+                    console.log("commentsServiceMock:postComment called with bookingUUID = " + bookingUUID + ", comment = " + comment + ", rate = " + rate);
                     return {
                         $promise: {
                             then: function () {
@@ -173,8 +173,8 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
 
             module(function ($provide) {
                 $provide.value("Endpoints", endpointsMock);
-                $provide.value("BookingsLoadService", bookingsLoadServiceMock);
-                $provide.value("CommentsLoadService", commentsLoadServiceMock);
+                $provide.value("BookingsService", bookingsServiceMock);
+                $provide.value("CommentsService", commentsServiceMock);
                 $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
                 $provide.value("SinistersService", sinistersServiceMock);
                 $provide.value("UsersService", usersServiceMock);
@@ -188,14 +188,14 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
             scope = $rootScope.$new();
             scope.showNotification = function(object, action, bool){};
             stateParams = {};
-            spyOn(bookingsLoadServiceMock, "getBookingDetails").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "downloadContract").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "acceptBooking").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "rejectBooking").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "cancelBooking").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "postIncident").and.callThrough();
-            spyOn(commentsLoadServiceMock, "getCommentList").and.callThrough();
-            spyOn(commentsLoadServiceMock, "postComment").and.callThrough();
+            spyOn(bookingsServiceMock, "getBookingDetails").and.callThrough();
+            spyOn(bookingsServiceMock, "downloadContract").and.callThrough();
+            spyOn(bookingsServiceMock, "acceptBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "rejectBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "cancelBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "postIncident").and.callThrough();
+            spyOn(commentsServiceMock, "getCommentList").and.callThrough();
+            spyOn(commentsServiceMock, "postComment").and.callThrough();
             spyOn(phoneNumbersServiceMock, "getPremiumRateNumber").and.callThrough();
             spyOn(sinistersServiceMock, "getSinisterList").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
@@ -211,8 +211,8 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
                 $stateParams: stateParams,
                 $window: window,
                 Endpoints: endpointsMock,
-                BookingsLoadService: bookingsLoadServiceMock,
-                CommentsLoadService: commentsLoadServiceMock,
+                BookingsService: bookingsServiceMock,
+                CommentsService: commentsServiceMock,
                 PhoneNumbersService: phoneNumbersServiceMock,
                 SinistersService: sinistersServiceMock,
                 UsersService: usersServiceMock,
@@ -220,7 +220,7 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
                 ProductShippingPointsService: productShippingPointsServiceMock,
                 PatronShippingPointsService: patronShippingPointsServiceMock
             });
-            expect(bookingsLoadServiceMock.getBookingDetails).toHaveBeenCalled();
+            expect(bookingsServiceMock.getBookingDetails).toHaveBeenCalled();
         }));
 
         it("BookingDetailCtrl should be not null", function () {
@@ -234,7 +234,7 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
                 rate: 1
             };
             scope.postComment();
-            expect(commentsLoadServiceMock.postComment).toHaveBeenCalledWith(stateParams.uuid, scope.comment.text, scope.comment.rate);
+            expect(commentsServiceMock.postComment).toHaveBeenCalledWith(stateParams.uuid, scope.comment.text, scope.comment.rate);
         });
 
         it("BookingDetailCtrl:starClicked", function () {

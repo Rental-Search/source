@@ -8,14 +8,14 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             location,
             endpointsMock,
             civilityChoicesMock,
-            productsLoadServiceMock,
+            productsServiceMock,
             messageThreadsServiceMock,
-            productRelatedMessagesLoadServiceMock,
+            productRelatedMessagesServiceMock,
             usersServiceMock,
             authServiceMock,
             addressesServiceMock,
             creditCardsServiceMock,
-            bookingsLoadServiceMock,
+            bookingsServiceMock,
             bookingsServiceMock,
             phoneNumbersServiceMock,
             categoriesServiceMock,
@@ -29,7 +29,7 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
         beforeEach(module("EloueApp.BookingModule"));
 
         beforeEach(function () {
-            productsLoadServiceMock = {getProduct: function () {
+            productsServiceMock = {getProduct: function () {
                 return {
                     then: function () {
                         return {result: {}}
@@ -75,7 +75,7 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
 
                 }
             };
-            productRelatedMessagesLoadServiceMock = {
+            productRelatedMessagesServiceMock = {
                 postMessage: function(threadId, senderId, recipientId, text, offerId, productId) {
                     return {
                         then: function () {
@@ -102,19 +102,19 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                 }
             };
             creditCardsServiceMock = {};
-            bookingsLoadServiceMock = {
+            bookingsServiceMock = {
                 requestBooking: function(booking) {
                     return {then: function () {
                         return {result: {}}
                     }}
                 },
                 payForBooking: function(uuid, paymentInfo) {
-                    return {then: function () {
-                        return {result: {}}
-                    }}
-                }
-            };
-            bookingsServiceMock = {
+                    return {
+                        then: function () {
+                            return {result: {}}
+                        }
+                    }
+                },
                 getBookingsByProduct: function(productId) {
                     return {then: function () {
                         return {result: {}}
@@ -132,16 +132,15 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             utilsServiceMock = {};
 
             module(function ($provide) {
-                $provide.value("ProductsLoadService", productsLoadServiceMock);
+                $provide.value("ProductsService", productsServiceMock);
                 $provide.value("MessageThreadsService", messageThreadsServiceMock);
                 $provide.value("UserService", usersServiceMock);
                 $provide.value("AuthService", authServiceMock);
                 $provide.value("Endpoints", endpointsMock);
                 $provide.value("CivilityChoices", civilityChoicesMock);
-                $provide.value("ProductRelatedMessagesLoadService", productRelatedMessagesLoadServiceMock);
+                $provide.value("ProductRelatedMessagesService", productRelatedMessagesServiceMock);
                 $provide.value("AddressesService", addressesServiceMock);
                 $provide.value("CreditCardsService", creditCardsServiceMock);
-                $provide.value("BookingsLoadService", bookingsLoadServiceMock);
                 $provide.value("BookingsService", bookingsServiceMock);
                 $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
                 $provide.value("CategoriesService", categoriesServiceMock);
@@ -178,32 +177,31 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
                 }};
             location = {};
 
-            spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
-            spyOn(productsLoadServiceMock, "isAvailable").and.callThrough();
+            spyOn(productsServiceMock, "getProduct").and.callThrough();
+            spyOn(productsServiceMock, "isAvailable").and.callThrough();
             spyOn(messageThreadsServiceMock, "getMessageThread").and.callThrough();
             spyOn(messageThreadsServiceMock, "sendMessage").and.callThrough();
             spyOn(usersServiceMock, "get").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
             spyOn(usersServiceMock, "updateUser").and.callThrough();
             spyOn(authServiceMock, "getCookie").and.callThrough();
-            spyOn(productRelatedMessagesLoadServiceMock, "postMessage").and.callThrough();
+            spyOn(productRelatedMessagesServiceMock, "postMessage").and.callThrough();
             spyOn(addressesServiceMock, "saveAddress").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "requestBooking").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "payForBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "requestBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "payForBooking").and.callThrough();
             spyOn(bookingsServiceMock, "getBookingsByProduct").and.callThrough();
             spyOn(categoriesServiceMock, "getAncestors").and.callThrough();
             spyOn(window, "google_trackConversion").and.callThrough();
             ProductDetailsCtrl = $controller("ProductDetailsCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
                 CivilityChoices: civilityChoicesMock,
-                ProductsLoadService: productsLoadServiceMock,
+                ProductsService: productsServiceMock,
                 MessageThreadsService: messageThreadsServiceMock,
-                ProductRelatedMessagesLoadService: productRelatedMessagesLoadServiceMock,
+                ProductRelatedMessagesService: productRelatedMessagesServiceMock,
                 UsersService: usersServiceMock,
                 AuthService: authServiceMock,
                 AddressesService: addressesServiceMock,
                 CreditCardsService: creditCardsServiceMock,
-                BookingsLoadService: bookingsLoadServiceMock,
                 BookingsService: bookingsServiceMock,
                 PhoneNumbersService: phoneNumbersServiceMock,
                 CategoriesService: categoriesServiceMock,

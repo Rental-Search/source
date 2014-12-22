@@ -9,10 +9,10 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
             utilsServiceMock,
             stateParams,
             endpointsMock,
-            messageThreadsLoadServiceMock,
-            bookingsLoadServiceMock,
-            productRelatedMessagesLoadServiceMock,
-            productsLoadServiceMock;
+            messageThreadsServiceMock,
+            bookingsServiceMock,
+            productRelatedMessagesServiceMock,
+            productsServiceMock;
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -33,9 +33,9 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
                 api_url: "/api/2.0/"
             };
 
-            messageThreadsLoadServiceMock = {
-                getMessageThread: function (threadId) {
-                    console.log("messageThreadsLoadServiceMock:getMessageThread called with threadId = " + threadId);
+            messageThreadsServiceMock = {
+                getMessageThreadById: function (threadId) {
+                    console.log("messageThreadsServiceMock:getMessageThreadById called with threadId = " + threadId);
                     return {then: function () {
                     }}
                 },
@@ -44,15 +44,15 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
                 }
             };
 
-            bookingsLoadServiceMock = {
+            bookingsServiceMock = {
                 getBookingByProduct: function (productId) {
-                    console.log("bookingsLoadServiceMock:getBookingByProduct called with productId = " + productId);
+                    console.log("bookingsServiceMock:getBookingByProduct called with productId = " + productId);
                     return {then: function () {
                     }}
                 }
             };
 
-            productRelatedMessagesLoadServiceMock = {
+            productRelatedMessagesServiceMock = {
                 updateMessage: function (message) {
                     return {
                         $promise: {
@@ -71,7 +71,7 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
                 }
             };
 
-            productsLoadServiceMock = {
+            productsServiceMock = {
                 getAbsoluteUrl: function (id) {
                     return {
                         $promise: {
@@ -99,10 +99,10 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
 
             module(function ($provide) {
                 $provide.value("UtilsService", utilsServiceMock);
-                $provide.value("MessageThreadsLoadService", messageThreadsLoadServiceMock);
-                $provide.value("BookingsLoadService", bookingsLoadServiceMock);
-                $provide.value("ProductRelatedMessagesLoadService", productRelatedMessagesLoadServiceMock);
-                $provide.value("ProductsLoadService", productsLoadServiceMock);
+                $provide.value("MessageThreadsService", messageThreadsServiceMock);
+                $provide.value("BookingsService", bookingsServiceMock);
+                $provide.value("ProductRelatedMessagesService", productRelatedMessagesServiceMock);
+                $provide.value("ProductsService", productsServiceMock);
             })
         });
 
@@ -121,19 +121,19 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
             spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
             spyOn(utilsServiceMock, "calculatePeriodBetweenDates").and.callThrough();
             spyOn(utilsServiceMock, "formatDate").and.callThrough();
-            spyOn(messageThreadsLoadServiceMock, "getMessageThread").and.callThrough();
-            spyOn(messageThreadsLoadServiceMock, "getUsersRoles").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "getBookingByProduct").and.callThrough();
-            spyOn(productRelatedMessagesLoadServiceMock, "updateMessage").and.callThrough();
-            spyOn(productRelatedMessagesLoadServiceMock, "postMessage").and.callThrough();
-            spyOn(productsLoadServiceMock, "getAbsoluteUrl").and.callThrough();
-            spyOn(productsLoadServiceMock, "isAvailable").and.callThrough();
+            spyOn(messageThreadsServiceMock, "getMessageThreadById").and.callThrough();
+            spyOn(messageThreadsServiceMock, "getUsersRoles").and.callThrough();
+            spyOn(bookingsServiceMock, "getBookingByProduct").and.callThrough();
+            spyOn(productRelatedMessagesServiceMock, "updateMessage").and.callThrough();
+            spyOn(productRelatedMessagesServiceMock, "postMessage").and.callThrough();
+            spyOn(productsServiceMock, "getAbsoluteUrl").and.callThrough();
+            spyOn(productsServiceMock, "isAvailable").and.callThrough();
             spyOn(q, "all").and.callThrough();
 
             MessageDetailCtrl = $controller('MessageDetailCtrl', { $scope: scope, $stateParams: stateParams, $q: q, $window: window,
-                Endpoints: endpointsMock, MessageThreadsLoadService: messageThreadsLoadServiceMock,
-                BookingsLoadService: bookingsLoadServiceMock, ProductRelatedMessagesLoadService: productRelatedMessagesLoadServiceMock,
-                ProductsLoadService: productsLoadServiceMock, UtilsService: utilsServiceMock });
+                Endpoints: endpointsMock, MessageThreadsService: messageThreadsServiceMock,
+                BookingsService: bookingsServiceMock, ProductRelatedMessagesService: productRelatedMessagesServiceMock,
+                ProductsService: productsServiceMock, UtilsService: utilsServiceMock });
         }));
 
         it("MessageDetailCtrl should be not null", function () {

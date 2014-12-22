@@ -7,9 +7,9 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             state,
             stateParams,
             endpointsMock,
-            bookingsLoadServiceMock,
-            productRelatedMessagesLoadServiceMock,
-            productsLoadServiceMock,
+            bookingsServiceMock,
+            productRelatedMessagesServiceMock,
+            productsServiceMock,
             utilsServiceMock,
             usersServiceMock;
 
@@ -19,7 +19,7 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             endpointsMock = {
                 api_url: "/api/2.0/"
             };
-            bookingsLoadServiceMock = {
+            bookingsServiceMock = {
                 getBookingByProduct: function (productId) {
                     return {
                         then: function (productId) {
@@ -28,7 +28,7 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
                     }
                 }
             };
-            productRelatedMessagesLoadServiceMock = {
+            productRelatedMessagesServiceMock = {
                 postMessage: function (threadId, senderId, recipientId, text, offerId, productId) {
                     return {
                         then: function (productId) {
@@ -37,7 +37,7 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
                     }
                 }
             };
-            productsLoadServiceMock = {
+            productsServiceMock = {
                 getProduct: function (productId, loadProductStats, loadOwnerStats) {
                     return {
                         then: function (productId) {
@@ -60,9 +60,9 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
 
             module(function ($provide) {
                 $provide.value("Endpoints", endpointsMock);
-                $provide.value("BookingsLoadService", bookingsLoadServiceMock);
-                $provide.value("ProductRelatedMessagesLoadService", productRelatedMessagesLoadServiceMock);
-                $provide.value("ProductsLoadService", productsLoadServiceMock);
+                $provide.value("BookingsService", bookingsServiceMock);
+                $provide.value("ProductRelatedMessagesService", productRelatedMessagesServiceMock);
+                $provide.value("ProductsService", productsServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
                 $provide.value("UsersService", usersServiceMock);
             })
@@ -81,16 +81,16 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             };
 
             spyOn(usersServiceMock, "getMe").and.callThrough();
-            spyOn(bookingsLoadServiceMock, "getBookingByProduct").and.callThrough();
-            spyOn(productRelatedMessagesLoadServiceMock, "postMessage").and.callThrough();
-            spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
+            spyOn(bookingsServiceMock, "getBookingByProduct").and.callThrough();
+            spyOn(productRelatedMessagesServiceMock, "postMessage").and.callThrough();
+            spyOn(productsServiceMock, "getProduct").and.callThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
 
             NewMessageThreadCtrl = $controller('NewMessageThreadCtrl', {
                 $scope: scope, $state: state,
-                $stateParams: stateParams, Endpoints: endpointsMock, BookingsLoadService: bookingsLoadServiceMock,
-                ProductRelatedMessagesLoadService: productRelatedMessagesLoadServiceMock,
-                ProductsLoadService: productsLoadServiceMock, UtilsService: utilsServiceMock,
+                $stateParams: stateParams, Endpoints: endpointsMock, BookingsService: bookingsServiceMock,
+                ProductRelatedMessagesService: productRelatedMessagesServiceMock,
+                ProductsService: productsServiceMock, UtilsService: utilsServiceMock,
                 UsersService: usersServiceMock
             });
         }));

@@ -7,7 +7,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
             stateParams,
             timeout,
             endpointsMock,
-            productsLoadServiceMock,
+            productsServiceMock,
             productShippingPointsServiceMock,
             sippingPointsServiceMock,
             usersServiceMock;
@@ -21,7 +21,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
                 api_url: "http://10.0.5.47:8200/api/2.0/"
             };
 
-            productsLoadServiceMock = {
+            productsServiceMock = {
                 getProduct: function (productId, loadProductStats, loadOwnerStats) {
                     return {then: function () {
                         return {response: {}}
@@ -65,7 +65,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
             };
 
             module(function ($provide) {
-                $provide.value("ProductsLoadService", productsLoadServiceMock);
+                $provide.value("ProductsService", productsServiceMock);
                 $provide.value("ProductShippingPointsService", productShippingPointsServiceMock);
                 $provide.value("SippingPointsService", sippingPointsServiceMock);
                 $provide.value("UsersService", usersServiceMock);
@@ -83,7 +83,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
                 id: 1
             };
             scope.showNotification = function(object, action, bool){};
-            spyOn(productsLoadServiceMock, "getProduct").and.callThrough();
+            spyOn(productsServiceMock, "getProduct").and.callThrough();
             spyOn(productShippingPointsServiceMock, "getByProduct").and.callThrough();
             spyOn(productShippingPointsServiceMock, "deleteShippingPoint").and.callThrough();
             spyOn(productShippingPointsServiceMock, "saveShippingPoint").and.callThrough();
@@ -91,7 +91,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
             spyOn(usersServiceMock, "getMe").and.callThrough();
 
             ItemsShippingCtrl = $controller('ItemsShippingCtrl', { $scope: scope, $stateParams: stateParams, $timeout: timeout,
-                Endpoints: endpointsMock, ProductsLoadService: productsLoadServiceMock, ProductShippingPointsService: productShippingPointsServiceMock,
+                Endpoints: endpointsMock, ProductsService: productsServiceMock, ProductShippingPointsService: productShippingPointsServiceMock,
                 ShippingPointsService: sippingPointsServiceMock, UsersService: usersServiceMock});
         }));
 
