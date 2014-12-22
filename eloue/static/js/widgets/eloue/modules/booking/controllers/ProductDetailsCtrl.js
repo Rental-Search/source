@@ -1,13 +1,12 @@
 define(["angular", "toastr", "eloue/modules/booking/BookingModule",
     "../../../../../common/eloue/values",
-    "../../../../../common/eloue/services/ProductsLoadService",
+    "../../../../../common/eloue/services/ProductsService",
     "../../../../../common/eloue/services/MessageThreadsService",
-    "../../../../../common/eloue/services/ProductRelatedMessagesLoadService",
+    "../../../../../common/eloue/services/ProductRelatedMessagesService",
     "../../../../../common/eloue/services/UsersService",
     "../../../../../common/eloue/services/AuthService",
     "../../../../../common/eloue/services/AddressesService",
     "../../../../../common/eloue/services/CreditCardsService",
-    "../../../../../common/eloue/services/BookingsLoadService",
     "../../../../../common/eloue/services/BookingsService",
     "../../../../../common/eloue/services/PhoneNumbersService",
     "../../../../../common/eloue/services/CategoriesService",
@@ -26,14 +25,13 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "$location",
         "Endpoints",
         "CivilityChoices",
-        "ProductsLoadService",
+        "ProductsService",
         "MessageThreadsService",
-        "ProductRelatedMessagesLoadService",
+        "ProductRelatedMessagesService",
         "UsersService",
         "AuthService",
         "AddressesService",
         "CreditCardsService",
-        "BookingsLoadService",
         "BookingsService",
         "PhoneNumbersService",
         "CategoriesService",
@@ -43,7 +41,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
         "ToDashboardRedirectService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsService, MessageThreadsService, ProductRelatedMessagesService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService) {
 
             $scope.creditCard = {
                 id: null,
@@ -231,7 +229,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.shippingPointsRequestInProgress = false;
             };
 
-            ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
+            ProductsService.getProduct($scope.productId, false, false).then(function (result) {
                 $scope.product = result;
                 //TODO: uncomment, when calendar tab is displayed on product details page
 //                $scope.loadCalendar();
@@ -263,7 +261,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 }
                 $scope.dateRangeError = null;
                 // check if product is available for selected dates
-                ProductsLoadService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
+                ProductsService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(function (result) {
                     var price = result.total_price;
                     price = price.replace("€", "").replace("\u20ac", "").replace("Eu", "").replace(",", ".").replace(" ", "");
                     price = Number(price);
@@ -282,7 +280,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              */
             $scope.sendMessage = function sendMessage() {
                 $scope.submitInProgress = true;
-                ProductRelatedMessagesLoadService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
+                ProductRelatedMessagesService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
                     $scope.newMessage.body, null, $scope.product.id).then(function (result) {
                         $scope.submitInProgress = false;
                         $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
@@ -409,7 +407,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 booking.borrower = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
                 booking.product = Endpoints.api_url + "products/" + $scope.product.id + "/";
                 // Create booking
-                BookingsLoadService.requestBooking(booking).then(
+                BookingsService.requestBooking(booking).then(
                     function (booking) {
                         var paymentInfo = {};
                         if ($scope.creditCard.card_number && $scope.creditCard.cvv) {
@@ -452,7 +450,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.payForBooking = function (booking, paymentInfo) {
-                BookingsLoadService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                BookingsService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
                     $scope.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
                     $scope.trackEvent("Réservation", "Demande de réservation", $scope.getEventLabel());
                     $scope.trackPageView();
@@ -536,7 +534,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                         $scope.noAddress = true;
                     }
                     if (!$scope.product) {
-                        ProductsLoadService.getProduct($scope.productId, false, false).then(function (result) {
+                        ProductsService.getProduct($scope.productId, false, false).then(function (result) {
                             $scope.product = result;
                             $scope.loadPictures();
                             $scope.loadProductCategoryAncestors(name);

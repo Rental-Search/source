@@ -1,11 +1,15 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/services/CategoriesService",
+    "../../../../common/eloue/services/ProductsService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the items terms tab.
      */
-    angular.module("EloueDashboardApp").controller("ItemsTermsCtrl", [
+    EloueDashboardApp.controller("ItemsTermsCtrl", [
         "$scope",
         "$stateParams",
         "CategoriesService",

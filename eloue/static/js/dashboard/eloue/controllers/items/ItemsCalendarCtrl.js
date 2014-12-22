@@ -1,11 +1,16 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/BookingsService",
+    "../../../../common/eloue/services/UnavailabilityPeriodsService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the items calendar tab.
      */
-    angular.module("EloueDashboardApp").controller("ItemsCalendarCtrl", [
+    EloueDashboardApp.controller("ItemsCalendarCtrl", [
         "$scope",
         "$stateParams",
         "Endpoints",

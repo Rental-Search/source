@@ -1,11 +1,14 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../common/eloue/services/UsersService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the bookings page.
      */
-    angular.module("EloueDashboardApp").controller("BookingsCtrl", [
+    EloueDashboardApp.controller("BookingsCtrl", [
         "$scope",
         "$timeout",
         "UsersService",

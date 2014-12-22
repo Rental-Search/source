@@ -1,5 +1,8 @@
 "use strict";
-define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+define([
+    "../../../common/eloue/commonApp",
+    "../../../common/eloue/services/AuthService"
+], function (EloueCommon) {
     /**
      * Controller for the reset password form.
      */

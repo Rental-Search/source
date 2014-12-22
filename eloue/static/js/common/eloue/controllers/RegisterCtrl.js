@@ -1,9 +1,25 @@
 "use strict";
-define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+define([
+    "../../../common/eloue/commonApp",
+    "../../../common/eloue/values",
+    "../../../common/eloue/services/AuthService",
+    "../../../common/eloue/services/UsersService",
+    "../../../common/eloue/services/ToDashboardRedirectService",
+    "../../../common/eloue/services/ServerValidationService"
+], function (EloueCommon) {
     /**
      * Controller for the registration form.
      */
-    EloueCommon.controller("RegisterCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "CivilityChoices", "UsersService", "ServiceErrors", "RedirectAfterLogin", "ToDashboardRedirectService", "ServerValidationService", function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService, ServerValidationService) {
+    EloueCommon.controller("RegisterCtrl", [
+        "$scope", "$rootScope", "$http", "$window",
+        "AuthService",
+        "CivilityChoices",
+        "UsersService",
+        "ServiceErrors",
+        "RedirectAfterLogin",
+        "ToDashboardRedirectService",
+        "ServerValidationService",
+        function ($scope, $rootScope, $http, $window, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService, ServerValidationService) {
 
         /**
          * New user account data.

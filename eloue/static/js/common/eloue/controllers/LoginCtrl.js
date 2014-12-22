@@ -1,9 +1,25 @@
 "use strict";
-define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+define([
+    "../../../common/eloue/commonApp",
+    "../../../common/eloue/values",
+    "../../../common/eloue/services/AuthService",
+    "../../../common/eloue/services/UsersService",
+    "../../../common/eloue/services/ToDashboardRedirectService"
+], function (EloueCommon) {
     /**
      * Controller for the login form.
      */
-    EloueCommon.controller("LoginCtrl", ["$scope", "$rootScope", "$http", "$window", "AuthService", "UsersService", "ToDashboardRedirectService", "ServiceErrors", "RedirectAfterLogin", function ($scope, $rootScope, $http, $window, AuthService, UsersService, ToDashboardRedirectService, ServiceErrors, RedirectAfterLogin) {
+    EloueCommon.controller("LoginCtrl", [
+        "$scope",
+        "$rootScope",
+        "$http",
+        "$window",
+        "AuthService",
+        "UsersService",
+        "ToDashboardRedirectService",
+        "ServiceErrors",
+        "RedirectAfterLogin",
+        function ($scope, $rootScope, $http, $window, AuthService, UsersService, ToDashboardRedirectService, ServiceErrors, RedirectAfterLogin) {
         /**
          * User credentials.
          */

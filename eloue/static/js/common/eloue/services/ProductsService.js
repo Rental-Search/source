@@ -1,14 +1,14 @@
 "use strict";
-define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
-    "../../../common/eloue/services/ProductsParseService"], function (EloueCommon) {
+define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values"], function (EloueCommon) {
     /**
      * Service for managing products.
      */
     EloueCommon.factory("ProductsService", [
         "$q",
         "Products",
-        "ProductsParseService",
-        function ($q, Products, ProductsParseService) {
+        "CheckAvailability",
+        "UsersService",
+        function ($q, Products) {
             var productsService = {};
 
             productsService.getProductDetails = function (id) {
@@ -35,7 +35,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                         // When all data loaded
                         $q.all(productPromises).then(function (results) {
-                            var product = ProductsParseService.parseProduct(productData, results.stats, results.ownerStats);
+                            var product = productsService.parseProduct(productData, results.stats, results.ownerStats);
                             productDeferred.resolve(product);
                         });
 
@@ -135,6 +135,61 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
             productsService.updateProduct = function (product) {
                 return Products.update({id: product.id}, product);
+            };
+
+            productsService.getProduct = function (productId, loadProductStats, loadOwnerStats) {
+                var deferred = $q.defer();
+
+                // Load product
+                Products.get({id: productId, _cache: new Date().getTime()}).$promise.then(function (productData) {
+                    var productPromises = {};
+
+                    if (loadProductStats) {
+                        productPromises.stats = Products.getStats({id: productId, _cache: new Date().getTime()});
+                    }
+                    if (loadOwnerStats) {
+                        productPromises.ownerStats = UsersService.getStatistics(productData.owner.id).$promise;
+                    }
+                    // When all data loaded
+                    $q.all(productPromises).then(function (results) {
+                        var product = productsService.parseProduct(productData, results.stats, results.ownerStats);
+                        deferred.resolve(product);
+                    });
+                });
+
+                return deferred.promise;
+            };
+
+            productsService.getAbsoluteUrl = function (id) {
+                return Products.getAbsoluteUrl({id: id, _cache: new Date().getTime()});
+            };
+
+            productsService.isAvailable = function (id, startDate, endDate, quantity) {
+                return CheckAvailability.get({
+                    id: id,
+                    started_at: startDate,
+                    ended_at: endDate,
+                    quantity: quantity
+                }).$promise;
+            };
+
+            productsService.parseProduct = function (productData, statsData, ownerStatsData) {
+                var productResult = angular.copy(productData);
+
+                productResult.stats = statsData;
+                if (productResult.stats) {
+                    if (productResult.stats && productResult.stats.average_rating) {
+                        productResult.stats.average_rating = Math.round(productResult.stats.average_rating);
+                    } else {
+                        productResult.stats.average_rating = 0;
+                    }
+                }
+
+                if (!!ownerStatsData) {
+                    productResult.ownerStats = ownerStatsData;
+                }
+
+                return productResult;
             };
 
             return productsService;

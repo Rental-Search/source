@@ -1,11 +1,11 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define(["eloue/app"], function (EloueDashboardApp) {
 
     /**
      * Controller for the items page.
      */
-    angular.module("EloueDashboardApp").controller("DashboardLoginCtrl", [
+    EloueDashboardApp.controller("DashboardLoginCtrl", [
         "$scope", "$timeout",
         function ($scope, $timeout) {
             $timeout(function () {

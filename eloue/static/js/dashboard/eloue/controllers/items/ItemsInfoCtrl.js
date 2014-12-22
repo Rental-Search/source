@@ -1,11 +1,18 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/AddressesService",
+    "../../../../common/eloue/services/CategoriesService",
+    "../../../../common/eloue/services/PicturesService",
+    "../../../../common/eloue/services/ProductsService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the items photos and info page.
      */
-    angular.module("EloueDashboardApp").controller("ItemsInfoCtrl", [
+    EloueDashboardApp.controller("ItemsInfoCtrl", [
         "$q",
         "$scope",
         "$stateParams",

@@ -1,24 +1,35 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/BookingsService",
+    "../../../../common/eloue/services/CommentsService",
+    "../../../../common/eloue/services/PhoneNumbersService",
+    "../../../../common/eloue/services/SinistersService",
+    "../../../../common/eloue/services/UsersService",
+    "../../../../common/eloue/services/ShippingsService",
+    "../../../../common/eloue/services/ProductShippingPointsService",
+    "../../../../common/eloue/services/PatronShippingPointsService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the booking detail page.
      */
-    angular.module("EloueDashboardApp").controller("BookingDetailCtrl", [
+    EloueDashboardApp.controller("BookingDetailCtrl", [
         "$scope",
         "$stateParams",
         "$window",
         "Endpoints",
-        "BookingsLoadService",
-        "CommentsLoadService",
+        "BookingsService",
+        "CommentsService",
         "PhoneNumbersService",
         "SinistersService",
         "UsersService",
         "ShippingsService",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
-        function ($scope, $stateParams, $window, Endpoints, BookingsLoadService, CommentsLoadService, PhoneNumbersService, SinistersService, UsersService, ShippingsService, ProductShippingPointsService, PatronShippingPointsService) {
+        function ($scope, $stateParams, $window, Endpoints, BookingsService, CommentsService, PhoneNumbersService, SinistersService, UsersService, ShippingsService, ProductShippingPointsService, PatronShippingPointsService) {
 
             // Initial comment data
             $scope.comment = {rate: 0};
@@ -35,7 +46,7 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             // Load booking details
-            BookingsLoadService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
+            BookingsService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
                 $scope.showIncidentDescription = $scope.bookingDetails.state == "incident";
@@ -68,7 +79,7 @@ define(["angular", "eloue/app"], function (angular) {
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
                 // Load comments
-                CommentsLoadService.getCommentList($stateParams.uuid).then(function (commentList) {
+                CommentsService.getCommentList($stateParams.uuid).then(function (commentList) {
                     $scope.commentList = commentList;
                     $scope.showCommentForm = $scope.commentList.length == 0 && $scope.bookingDetails.state == "ended";
                 });
@@ -143,7 +154,7 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             $scope.downloadContract = function () {
-                BookingsLoadService.downloadContract($stateParams.uuid);
+                BookingsService.downloadContract($stateParams.uuid);
             };
 
             $scope.downloadVoucher = function () {
@@ -168,7 +179,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.acceptBooking = function () {
                 $scope.submitInProgress = true;
-                BookingsLoadService.acceptBooking($stateParams.uuid).$promise.then(function (result) {
+                BookingsService.acceptBooking($stateParams.uuid).$promise.then(function (result) {
                     if ($scope.bookingDetails.with_shipping) {
                         ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
                             //Show shipping choice only if there are existing product shipping points
@@ -215,7 +226,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.rejectBooking = function () {
                 $scope.submitInProgress = true;
-                BookingsLoadService.rejectBooking($stateParams.uuid).$promise.then(function (result) {
+                BookingsService.rejectBooking($stateParams.uuid).$promise.then(function (result) {
                     $scope.showNotification("booking", "reject", true);
                     $window.location.reload();
                 }, function (error) {
@@ -229,7 +240,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.cancelBooking = function () {
                 $scope.submitInProgress = true;
-                BookingsLoadService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
+                BookingsService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
                     $scope.showNotification("booking", "cancel", true);
                     $window.location.reload();
                 }, function (error) {
@@ -244,7 +255,7 @@ define(["angular", "eloue/app"], function (angular) {
             // Method to post new comment
             $scope.postComment = function () {
                 $scope.submitInProgress = true;
-                CommentsLoadService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).$promise
+                CommentsService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).$promise
                     .then(function () {
                         $scope.showNotification("comment", "post", true);
                         $scope.showCommentForm = false;
@@ -257,7 +268,7 @@ define(["angular", "eloue/app"], function (angular) {
             // Method to post new incident
             $scope.postIncident = function () {
                 $scope.submitInProgress = true;
-                BookingsLoadService.postIncident($stateParams.uuid, $scope.incident.description).$promise
+                BookingsService.postIncident($stateParams.uuid, $scope.incident.description).$promise
                     .then(function (result) {
                         $scope.showNotification("sinister", "post", true);
                         $scope.showIncidentForm = false;

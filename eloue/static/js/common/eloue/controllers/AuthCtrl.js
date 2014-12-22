@@ -1,5 +1,9 @@
 "use strict";
-define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+define([
+    "../../../common/eloue/commonApp",
+    "../../../common/eloue/services/AuthService",
+    "../../../common/eloue/services/UsersService"
+], function (EloueCommon) {
     /**
      * Root controller for pages which content depends on user authorized (e.g. Home page).
      */

@@ -1,22 +1,30 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/MessageThreadsService",
+    "../../../../common/eloue/services/BookingsService",
+    "../../../../common/eloue/services/ProductRelatedMessagesService",
+    "../../../../common/eloue/services/ProductsService",
+    "../../../../common/eloue/services/UtilsService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the message detail page.
      */
-    angular.module("EloueDashboardApp").controller("MessageDetailCtrl", [
+    EloueDashboardApp.controller("MessageDetailCtrl", [
         "$scope",
         "$stateParams",
         "$q",
         "$window",
         "Endpoints",
-        "MessageThreadsLoadService",
-        "BookingsLoadService",
-        "ProductRelatedMessagesLoadService",
-        "ProductsLoadService",
+        "MessageThreadsService",
+        "BookingsService",
+        "ProductRelatedMessagesService",
+        "ProductsService",
         "UtilsService",
-        function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
+        function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsService, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService) {
 
             $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
@@ -25,7 +33,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
-                messageThread: MessageThreadsLoadService.getMessageThread($stateParams.id)
+                messageThread: MessageThreadsService.getMessageThread($stateParams.id)
             };
 
             $q.all(promises).then(function (results) {
@@ -33,7 +41,7 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.messageThread = results.messageThread;
                 if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
                     $scope.messageThread.last_message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
-                    ProductRelatedMessagesLoadService.updateMessage($scope.messageThread.last_message).$promise.then(function (result) {
+                    ProductRelatedMessagesService.updateMessage($scope.messageThread.last_message).$promise.then(function (result) {
                         $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
                         $scope.updateStatistics();
                     });
@@ -42,7 +50,7 @@ define(["angular", "eloue/app"], function (angular) {
                 if ($scope.messageThread.product) {
 
                     // Get booking product
-                    BookingsLoadService.getBookingByProduct($scope.messageThread.product.id).then(function (booking) {
+                    BookingsService.getBookingByProduct($scope.messageThread.product.id).then(function (booking) {
                         if (!booking) {
                             // Options for the select element
                             $scope.availableHours = [
@@ -82,7 +90,7 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.requestBooking = function () {
                                 $scope.submitInProgress = true;
 //                                //Get product details
-                                ProductsLoadService.getAbsoluteUrl($scope.messageThread.product.id).$promise.then(function (result) {
+                                ProductsService.getAbsoluteUrl($scope.messageThread.product.id).$promise.then(function (result) {
                                     $window.location.href = result.url + "#/booking";
                                 }, function (error) {
                                     $scope.handleResponseErrors(error, "booking", "redirect");
@@ -99,18 +107,18 @@ define(["angular", "eloue/app"], function (angular) {
                     });
                 }
                 // Get users' roles
-                var usersRoles = MessageThreadsLoadService.getUsersRoles($scope.messageThread, results.currentUser.id);
+                var usersRoles = MessageThreadsService.getUsersRoles($scope.messageThread, results.currentUser.id);
 
                 // Post new message
                 $scope.postNewMessage = function () {
                     $scope.submitInProgress = true;
-                    ProductRelatedMessagesLoadService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
+                    ProductRelatedMessagesService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(function () {
                             // Clear message field
                             $scope.message = "";
 
                             // Reload data
-                            MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
+                            MessageThreadsService.getMessageThread($stateParams.id).then(function (messageThread) {
                                 $scope.messageThread.messages = messageThread.messages;
                                 $scope.submitInProgress = false;
                                 $scope.showNotification("message", "send", true);
@@ -127,7 +135,7 @@ define(["angular", "eloue/app"], function (angular) {
                     var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                     var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
 
-                    ProductsLoadService.isAvailable($scope.messageThread.product.id,
+                    ProductsService.isAvailable($scope.messageThread.product.id,
                         fromDateTimeStr, toDateTimeStr, 1).then(
                         function (data) {
                             var period = UtilsService.calculatePeriodBetweenDates(fromDateTime.toString(), toDateTime.toString());

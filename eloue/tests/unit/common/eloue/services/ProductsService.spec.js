@@ -5,7 +5,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         var ProductsService,
             q,
             productsMock,
-            productsParseServiceMock;
+            checkAvailabilityMock,
+            usersServiceMock;
 
         beforeEach(module("EloueCommon"));
 
@@ -19,15 +20,31 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 update: function (id, product) {
 
                 },
-                save: function(product) {}
+                save: function(product) {},
+
+                getStats: function () {
+                    return {$promise: {}}
+                },
+
+                getAbsoluteUrl: function () {
+                    return {$promise: {}}
+                }
             };
-            productsParseServiceMock = {
-                parseProduct: function(productData, stats, ownerStats) {}
+            checkAvailabilityMock = {
+                get: function () {
+                    return {$promise: {}}
+                }
+            };
+            usersServiceMock = {
+                getStatistics: function (userId) {
+                    return {$promise: {}}
+                }
             };
 
             module(function ($provide) {
                 $provide.value("Products", productsMock);
-                $provide.value("ProductsParseService", productsParseServiceMock);
+                $provide.value("CheckAvailability", checkAvailabilityMock);
+                $provide.value("UsersService", usersServiceMock);
             });
         });
 
@@ -37,7 +54,10 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             spyOn(productsMock, "get").and.callThrough();
             spyOn(productsMock, "save").and.callThrough();
             spyOn(productsMock, "update").and.callThrough();
-            spyOn(productsParseServiceMock, "parseProduct").and.callThrough();
+            spyOn(productsMock, "getStats").and.callThrough();
+            spyOn(productsMock, "getAbsoluteUrl").and.callThrough();
+            spyOn(checkAvailabilityMock, "get").and.callThrough();
+            spyOn(usersServiceMock, "getStatistics").and.callThrough();
         }));
 
         it("ProductsService should be not null", function () {
@@ -72,6 +92,30 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             var product = {id: 2};
             ProductsService.updateProduct(product);
             expect(productsMock.update).toHaveBeenCalledWith({id: product.id}, product);
+        });
+
+        it("ProductsService:getProduct", function () {
+            var productId = 1, loadProductStats = true, loadOwnerStats = true;
+            ProductsService.getProduct(productId, loadProductStats, loadOwnerStats);
+            expect(productsMock.get).toHaveBeenCalledWith({id: productId, _cache: jasmine.any(Number)});
+        });
+
+        it("ProductsService:getAbsoluteUrl", function () {
+            var id = 1;
+            ProductsService.getAbsoluteUrl(id);
+            expect(productsMock.getAbsoluteUrl).toHaveBeenCalledWith({id: id, _cache: jasmine.any(Number)});
+        });
+
+        it("ProductsService:isAvailable", function () {
+            var id = 1, startDate = "2014-11-01 12:00:00", endDate = "2014-11-07 12:00:00", quantity = 1;
+            ProductsService.isAvailable(id, startDate, endDate, quantity);
+            expect(checkAvailabilityMock.get).toHaveBeenCalledWith({id: id, started_at: startDate, ended_at: endDate, quantity: quantity});
+        });
+
+        it("ProductsService:parseProduct", function () {
+            var statsData = {id: 1}, ownerStatsData = {id: 3};
+            var result = ProductsService.parseProduct({}, statsData, ownerStatsData);
+            expect(result).toEqual({stats: statsData, ownerStats: ownerStatsData});
         });
     });
 });

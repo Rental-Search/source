@@ -1,11 +1,14 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/services/BookingsService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the items profits tab.
      */
-    angular.module("EloueDashboardApp").controller("ItemsProfitsCtrl", [
+    EloueDashboardApp.controller("ItemsProfitsCtrl", [
         "$scope",
         "$stateParams",
         "BookingsService",

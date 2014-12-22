@@ -1,11 +1,11 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define(["eloue/app"], function (EloueDashboardApp) {
 
     /**
      * Controller for the account's payments page.
      */
-    angular.module("EloueDashboardApp").controller("AccountPaymentsCtrl", ["$scope", function ($scope) {
+    EloueDashboardApp.controller("AccountPaymentsCtrl", ["$scope", function ($scope) {
         $scope.markListItemAsSelected("account-part-", "account.payments");
         $scope.title = "Payments title";
     }]);

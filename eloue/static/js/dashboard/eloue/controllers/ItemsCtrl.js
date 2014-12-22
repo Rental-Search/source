@@ -1,11 +1,15 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../common/eloue/services/CategoriesService",
+    "../../../common/eloue/services/UsersService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the items page.
      */
-    angular.module("EloueDashboardApp").controller("ItemsCtrl", [
+    EloueDashboardApp.controller("ItemsCtrl", [
         "$scope",
         "$timeout",
         "CategoriesService",

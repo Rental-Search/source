@@ -1,11 +1,17 @@
 "use strict";
 
-define(["angular", "toastr", "eloue/app", "../../../common/eloue/services", "../../../common/eloue/controllers", "../../../common/eloue/directives"], function (angular, toastr) {
+define([
+    "eloue/app",
+    "toastr",
+    "../../../common/eloue/services/UsersService",
+    "../../../common/eloue/services/AuthService",
+    "../../../common/eloue/services/UtilsService"
+], function (EloueDashboardApp, toastr) {
 
     /**
      * Root controller for the dashboard app.
      */
-    angular.module("EloueDashboardApp").controller("DashboardRootCtrl", [
+    EloueDashboardApp.controller("DashboardRootCtrl", [
         "$scope",
         "UsersService",
         "AuthService",

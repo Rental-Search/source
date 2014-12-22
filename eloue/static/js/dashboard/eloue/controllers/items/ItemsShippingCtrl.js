@@ -1,20 +1,27 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/ProductsService",
+    "../../../../common/eloue/services/ProductShippingPointsService",
+    "../../../../common/eloue/services/ShippingPointsService",
+    "../../../../common/eloue/services/UsersService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the items shipping tab.
      */
-    angular.module("EloueDashboardApp").controller("ItemsShippingCtrl", [
+    EloueDashboardApp.controller("ItemsShippingCtrl", [
         "$scope",
         "$stateParams",
         "$timeout",
         "Endpoints",
-        "ProductsLoadService",
+        "ProductsService",
         "ProductShippingPointsService",
         "ShippingPointsService",
         "UsersService",
-        function ($scope, $stateParams, $timeout, Endpoints, ProductsLoadService, ProductShippingPointsService, ShippingPointsService, UsersService) {
+        function ($scope, $stateParams, $timeout, Endpoints, ProductsService, ProductShippingPointsService, ShippingPointsService, UsersService) {
             $scope.markListItemAsSelected("item-tab-", "shipping");
             $scope.initCustomScrollbars();
             $scope.addressQuery = "";
@@ -53,7 +60,7 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.makeInitialSearchByAddress = function () {
                 var location = false;
-                ProductsLoadService.getProduct($stateParams.id, true, false, false, false).then(function (product) {
+                ProductsService.getProduct($stateParams.id, true, false, false, false).then(function (product) {
                     if ($scope.showPointList && product.address && product.address.street && product.address.city) {
                         $scope.addressQuery = product.address.street + ", " + product.address.city;
                         location = $scope.addressQuery;

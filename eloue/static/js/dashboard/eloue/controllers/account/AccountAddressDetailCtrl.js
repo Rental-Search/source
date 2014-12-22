@@ -1,11 +1,17 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/AddressesService",
+    "../../../../common/eloue/services/ProductsService",
+    "../../../../common/eloue/services/UsersService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the account's address detail page.
      */
-    angular.module("EloueDashboardApp").controller("AccountAddressDetailCtrl", [
+    EloueDashboardApp.controller("AccountAddressDetailCtrl", [
         "$scope",
         "$state",
         "$stateParams",

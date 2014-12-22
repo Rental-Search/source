@@ -1,11 +1,17 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/UsersService",
+    "../../../../common/eloue/services/AddressesService",
+    "../../../../common/eloue/services/PhoneNumbersService"
+], function (EloueDashboardApp) {
 
     /**
      * Controller for the account's profile page.
      */
-    angular.module("EloueDashboardApp").controller("AccountProfileCtrl", [
+    EloueDashboardApp.controller("AccountProfileCtrl", [
         "$scope",
         "$timeout",
         "UsersService",
