@@ -1,4 +1,4 @@
-define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdCtrl"], function () {
+define(["angular-mocks", "datejs", "eloue/controllers/PublishAdCtrl"], function () {
 
     describe("Controller: PublishAdCtrl", function () {
 
@@ -19,7 +19,7 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/PublishAdC
             toDashboardRedirectServiceMock,
             serverValidationServiceMock;
 
-        beforeEach(module("EloueApp.BookingModule"));
+        beforeEach(module("EloueWidgetsApp"));
 
         beforeEach(function () {
             endpointsMock = {

@@ -1,4 +1,4 @@
-define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDetailsCtrl"], function () {
+define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], function () {
 
     describe("Controller: ProductDetailsCtrl", function () {
 
@@ -16,7 +16,6 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             addressesServiceMock,
             creditCardsServiceMock,
             bookingsServiceMock,
-            bookingsServiceMock,
             phoneNumbersServiceMock,
             categoriesServiceMock,
             utilsServiceMock,
@@ -26,7 +25,7 @@ define(["angular-mocks", "datejs", "eloue/modules/booking/controllers/ProductDet
             patronShippingPointsServiceMock,
             toDashboardRedirectServiceMock;
 
-        beforeEach(module("EloueApp.BookingModule"));
+        beforeEach(module("EloueWidgetsApp"));
 
         beforeEach(function () {
             productsServiceMock = {getProduct: function () {

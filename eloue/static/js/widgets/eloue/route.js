@@ -1,6 +1,6 @@
 define(["eloue/app",
-        "eloue/modules/booking/controllers/ProductDetailsCtrl",
-        "eloue/modules/booking/controllers/PublishAdCtrl",
+        "eloue/controllers/ProductDetailsCtrl",
+        "eloue/controllers/PublishAdCtrl",
         "../../common/eloue/controllers/AuthCtrl",
         "../../common/eloue/controllers/LoginCtrl",
         "../../common/eloue/controllers/RegisterCtrl",

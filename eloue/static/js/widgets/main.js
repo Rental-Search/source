@@ -129,7 +129,7 @@ require([
     "use strict";
     $(function () {
         $(".signs-links").find("ul.without-spaces").show();
-        angular.bootstrap(document, ["EloueApp"]);
+        angular.bootstrap(document, ["EloueWidgetsApp"]);
 
         var slideImgs = [].slice.call($(".carousel-wrapper").find("img"));
         for (var index = 0; index < slideImgs.length; index++) {

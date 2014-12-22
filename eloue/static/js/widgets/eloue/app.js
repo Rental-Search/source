@@ -5,13 +5,11 @@ define([
     "angular-resource",
     "angular-translate",
     "angular-i18n",
-    "eloue/modules/booking/BookingModule",
     "../../common/eloue/commonApp"
 ], function (angular) {
     // Create application module
-    return angular.module("EloueApp", [
+    return angular.module("EloueWidgetsApp", [
         "EloueCommon",
-        "EloueApp.BookingModule",
         "ngCookies",
         "ngResource",
         "pascalprecht.translate"

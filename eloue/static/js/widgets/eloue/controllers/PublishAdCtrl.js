@@ -1,18 +1,20 @@
-define(["angular", "toastr", "eloue/modules/booking/BookingModule",
-    "../../../../../common/eloue/values",
-    "../../../../../common/eloue/services/ProductsService",
-    "../../../../../common/eloue/services/UsersService",
-    "../../../../../common/eloue/services/AddressesService",
-    "../../../../../common/eloue/services/AuthService",
-    "../../../../../common/eloue/services/CategoriesService",
-    "../../../../../common/eloue/services/PricesService",
-    "../../../../../common/eloue/services/UtilsService",
-    "../../../../../common/eloue/services/ToDashboardRedirectService",
-    "../../../../../common/eloue/services/ServerValidationService"
-], function (angular, toastr) {
+define([
+    "eloue/app",
+    "../../../../bower_components/toastr/toastr",
+    "../../../common/eloue/values",
+    "../../../common/eloue/services/ProductsService",
+    "../../../common/eloue/services/UsersService",
+    "../../../common/eloue/services/AddressesService",
+    "../../../common/eloue/services/AuthService",
+    "../../../common/eloue/services/CategoriesService",
+    "../../../common/eloue/services/PricesService",
+    "../../../common/eloue/services/UtilsService",
+    "../../../common/eloue/services/ToDashboardRedirectService",
+    "../../../common/eloue/services/ServerValidationService"
+], function (EloueWidgetsApp, toastr) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("PublishAdCtrl", [
+    EloueWidgetsApp.controller("PublishAdCtrl", [
         "$scope",
         "$window",
         "$location",

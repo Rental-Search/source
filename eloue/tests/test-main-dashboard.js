@@ -8,8 +8,8 @@ for (var file in window.__karma__.files) {
 }
 
 requirejs.config({
-    // Karma serves files from '/base'
-    baseUrl: '/base/static/js/dashboard',
+    // Karma serves files from "/base"
+    baseUrl: "/base/static/js/dashboard",
 
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",

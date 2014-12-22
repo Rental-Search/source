@@ -1,25 +1,27 @@
-define(["angular", "toastr", "eloue/modules/booking/BookingModule",
-    "../../../../../common/eloue/values",
-    "../../../../../common/eloue/services/ProductsService",
-    "../../../../../common/eloue/services/MessageThreadsService",
-    "../../../../../common/eloue/services/ProductRelatedMessagesService",
-    "../../../../../common/eloue/services/UsersService",
-    "../../../../../common/eloue/services/AuthService",
-    "../../../../../common/eloue/services/AddressesService",
-    "../../../../../common/eloue/services/CreditCardsService",
-    "../../../../../common/eloue/services/BookingsService",
-    "../../../../../common/eloue/services/PhoneNumbersService",
-    "../../../../../common/eloue/services/CategoriesService",
-    "../../../../../common/eloue/services/UtilsService",
-    "../../../../../common/eloue/services/ShippingsService",
-    "../../../../../common/eloue/services/ShippingPointsService",
-    "../../../../../common/eloue/services/ProductShippingPointsService",
-    "../../../../../common/eloue/services/PatronShippingPointsService",
-    "../../../../../common/eloue/services/ToDashboardRedirectService"
-    ], function (angular, toastr) {
+define([
+    "eloue/app",
+    "../../../../bower_components/toastr/toastr",
+    "../../../common/eloue/values",
+    "../../../common/eloue/services/ProductsService",
+    "../../../common/eloue/services/MessageThreadsService",
+    "../../../common/eloue/services/ProductRelatedMessagesService",
+    "../../../common/eloue/services/UsersService",
+    "../../../common/eloue/services/AuthService",
+    "../../../common/eloue/services/AddressesService",
+    "../../../common/eloue/services/CreditCardsService",
+    "../../../common/eloue/services/BookingsService",
+    "../../../common/eloue/services/PhoneNumbersService",
+    "../../../common/eloue/services/CategoriesService",
+    "../../../common/eloue/services/UtilsService",
+    "../../../common/eloue/services/ShippingsService",
+    "../../../common/eloue/services/ShippingPointsService",
+    "../../../common/eloue/services/ProductShippingPointsService",
+    "../../../common/eloue/services/PatronShippingPointsService",
+    "../../../common/eloue/services/ToDashboardRedirectService"
+], function (EloueWidgetsApp, toastr) {
     "use strict";
 
-    angular.module("EloueApp.BookingModule").controller("ProductDetailsCtrl", [
+    EloueWidgetsApp.controller("ProductDetailsCtrl", [
         "$scope",
         "$window",
         "$location",
