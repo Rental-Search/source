@@ -8,7 +8,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
         "Products",
         "CheckAvailability",
         "UsersService",
-        function ($q, Products) {
+        function ($q, Products, CheckAvailability, UsersService) {
             var productsService = {};
 
             productsService.getProductDetails = function (id) {

@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/services/MessageThreadsService"], function () {
 
     describe("Service: MessageThreadsService", function () {
 
@@ -40,7 +40,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 formatDate: function (date, format) {
                 },
                 getIdFromUrl: function (url) {
-                }
+                },
+                isToday: function(date) {}
             };
             productsServiceMock = {
                 getProduct: function (productId, loadOwner, loadPictures) {
@@ -59,9 +60,11 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             q = $q;
             MessageThreadsService = _MessageThreadsService_;
             spyOn(messageThreadsMock, "list").and.callThrough();
+            spyOn(messageThreadsMock, "get").and.callThrough();
             spyOn(productRelatedMessagesServiceMock, "getMessage").and.callThrough();
             spyOn(utilsServiceMock, "formatDate").and.callThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(utilsServiceMock, "isToday").and.callThrough();
             spyOn(productRelatedMessagesServiceMock, "getMessageListItem").and.callThrough();
             spyOn(productsServiceMock, "getProduct").and.callThrough();
         }));
@@ -70,9 +73,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             expect(!!MessageThreadsService).toBe(true);
         });
 
-        it("MessageThreadsService:getMessageThread", function () {
+        it("MessageThreadsService:getMessageThreadByProductAndParticipant", function () {
             var productId = 1, participantId = 2;
-            MessageThreadsService.getMessageThread(productId, participantId);
+            MessageThreadsService.getMessageThreadByProductAndParticipant(productId, participantId);
             expect(messageThreadsMock.list).toHaveBeenCalledWith({product: productId, participant: participantId, _cache: jasmine.any(Number)});
         });
 
@@ -82,9 +85,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             expect(messageThreadsMock.get).toHaveBeenCalledWith({page: page, ordering: "-last_message__sent_at", _cache: jasmine.any(Number)});
         });
 
-        it("MessageThreadsService:getMessageThread", function () {
+        it("MessageThreadsService:getMessageThreadById", function () {
             var threadId = 1;
-            MessageThreadsService.getMessageThread(threadId);
+            MessageThreadsService.getMessageThreadById(threadId);
             expect(messageThreadsMock.get).toHaveBeenCalledWith({id: threadId, _cache: jasmine.any(Number)});
         });
 

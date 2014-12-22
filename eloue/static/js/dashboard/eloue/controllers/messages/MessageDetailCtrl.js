@@ -33,7 +33,7 @@ define([
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
-                messageThread: MessageThreadsService.getMessageThread($stateParams.id)
+                messageThread: MessageThreadsService.getMessageThreadById($stateParams.id)
             };
 
             $q.all(promises).then(function (results) {
@@ -118,7 +118,7 @@ define([
                             $scope.message = "";
 
                             // Reload data
-                            MessageThreadsService.getMessageThread($stateParams.id).then(function (messageThread) {
+                            MessageThreadsService.getMessageThreadById($stateParams.id).then(function (messageThread) {
                                 $scope.messageThread.messages = messageThread.messages;
                                 $scope.submitInProgress = false;
                                 $scope.showNotification("message", "send", true);

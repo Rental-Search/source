@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/services/CommentsService"], function () {
 
     describe("Service: CommentsService", function () {
 
@@ -14,7 +14,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         beforeEach(function () {
             commentsMock = {
                 get: function () {
-                    return {$promise: {}}
+                    return {$promise: {then: function () {
+                        return {results: []}
+                    }}}
                 },
                 save: function () {
                 }
@@ -46,7 +48,6 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
             spyOn(commentsMock, "save").and.callThrough();
             spyOn(usersServiceMock, "get").and.callThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
-            spyOn(commentsParseServiceMock, "parseComment").and.callThrough();
         }));
 
         it("CommentsService should be not null", function () {

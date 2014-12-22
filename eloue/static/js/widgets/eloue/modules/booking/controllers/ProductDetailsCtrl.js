@@ -712,7 +712,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
-                    MessageThreadsService.getMessageThread($scope.productId, $scope.currentUser.id).then(function (result) {
+                    MessageThreadsService.getMessageThreadByProductAndParticipant($scope.productId, $scope.currentUser.id).then(function (result) {
                         angular.forEach(result, function (value, key) {
                             $scope.threadId = UtilsService.getIdFromUrl(value.thread);
                         });

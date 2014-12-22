@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services", "datejs"], function () {
+define(["angular-mocks", "eloue/services/UtilsService", "datejs"], function () {
 
     describe("Service: UtilsService", function () {
 

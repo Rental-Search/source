@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
+define(["angular-mocks", "eloue/controllers/ResetPasswordCtrl"], function () {
 
     describe("Controller: ResetPasswordCtrl", function () {
 
@@ -11,8 +11,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
 
         beforeEach(function () {
             authServiceMock = {
-                sendResetPasswordRequest: function (form, successCallback, errorCallback) {},
-
+                sendResetPasswordRequest: function (form, successCallback, errorCallback) {}
             };
 
             module(function ($provide) {

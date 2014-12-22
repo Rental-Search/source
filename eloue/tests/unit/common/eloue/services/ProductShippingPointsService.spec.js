@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/services/ProductShippingPointsService"], function () {
 
     describe("Service: ProductShippingPointsService", function () {
 

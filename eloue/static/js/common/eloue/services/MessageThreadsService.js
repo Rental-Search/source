@@ -15,7 +15,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
         function ($q, MessageThreads, ProductsService, ProductRelatedMessagesService, UtilsService) {
             var messageThreadsService = {};
 
-            messageThreadsService.getMessageThread = function (productId, participantId) {
+            messageThreadsService.getMessageThreadByProductAndParticipant = function (productId, participantId) {
                 var deferred = $q.defer();
                 MessageThreads.list({
                     product: productId,
@@ -69,7 +69,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 return deferred.promise;
             };
 
-            messageThreadsService.getMessageThread = function (threadId) {
+            messageThreadsService.getMessageThreadById = function (threadId) {
                 var deferred = $q.defer();
 
                 // Load message thread

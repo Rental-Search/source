@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/services/CategoriesService"], function () {
 
     describe("Service: CategoriesService", function () {
 

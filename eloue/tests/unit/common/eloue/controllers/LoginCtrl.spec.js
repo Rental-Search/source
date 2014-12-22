@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
+define(["angular-mocks", "eloue/controllers/LoginCtrl"], function () {
 
     describe("Controller: LoginCtrl", function () {
 

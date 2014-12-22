@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
+define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
 
     describe("Controller: RegisterCtrl", function () {
 
