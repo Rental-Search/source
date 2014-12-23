@@ -8,6 +8,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "$scope",
         "$window",
         "$location",
+        "$timeout",
         "Endpoints",
         "CivilityChoices",
         "ProductsLoadService",
@@ -27,7 +28,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
         "ToDashboardRedirectService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService) {
+        function ($scope, $window, $location, $timeout, Endpoints, CivilityChoices, ProductsLoadService, MessageThreadsService, ProductRelatedMessagesLoadService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsLoadService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService) {
 
             $scope.creditCard = {
                 id: null,
@@ -102,14 +103,41 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
             $scope.productId = $scope.getProductIdFromUrl();
 
+            $scope.hours = [
+                {label: "00h", value: "00:00:00"},
+                {label: "01h", value: "01:00:00"},
+                {label: "02h", value: "02:00:00"},
+                {label: "03h", value: "03:00:00"},
+                {label: "04h", value: "04:00:00"},
+                {label: "05h", value: "05:00:00"},
+                {label: "06h", value: "06:00:00"},
+                {label: "07h", value: "07:00:00"},
+                {label: "08h", value: "08:00:00"},
+                {label: "09h", value: "09:00:00"},
+                {label: "10h", value: "10:00:00"},
+                {label: "11h", value: "11:00:00"},
+                {label: "12h", value: "12:00:00"},
+                {label: "13h", value: "13:00:00"},
+                {label: "14h", value: "14:00:00"},
+                {label: "15h", value: "15:00:00"},
+                {label: "16h", value: "16:00:00"},
+                {label: "17h", value: "17:00:00"},
+                {label: "18h", value: "18:00:00"},
+                {label: "19h", value: "19:00:00"},
+                {label: "20h", value: "20:00:00"},
+                {label: "21h", value: "21:00:00"},
+                {label: "22h", value: "22:00:00"},
+                {label: "23h", value: "23:00:00"}
+            ];
+
             /**
              * Initial booking dates are 1 nad 2 days after todat, 8a.m.
              */
             $scope.bookingDetails = {
                 "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy"),
-                "fromHour": "08:00:00",
+                "fromHour": $scope.hours[8],
                 "toDate": Date.today().add(2).days().toString("dd/MM/yyyy"),
-                "toHour": "08:00:00"
+                "toHour": $scope.hours[9]
             };
             var fromDateSelector = $("input[name='fromDate']"), toDateSelector = $("input[name='toDate']");
             fromDateSelector.val(Date.today().add(1).days().toString("dd/MM/yyyy")).datepicker({
@@ -135,32 +163,7 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             $scope.newMessage = {};
             $scope.threadId = null;
             $scope.civilityOptions = CivilityChoices;
-            $scope.hours = [
-                {"label": "00h", "value": "00:00:00"},
-                {"label": "01h", "value": "01:00:00"},
-                {"label": "02h", "value": "02:00:00"},
-                {"label": "03h", "value": "03:00:00"},
-                {"label": "04h", "value": "04:00:00"},
-                {"label": "05h", "value": "05:00:00"},
-                {"label": "06h", "value": "06:00:00"},
-                {"label": "07h", "value": "07:00:00"},
-                {"label": "08h", "value": "08:00:00"},
-                {"label": "09h", "value": "09:00:00"},
-                {"label": "10h", "value": "10:00:00"},
-                {"label": "11h", "value": "11:00:00"},
-                {"label": "12h", "value": "12:00:00"},
-                {"label": "13h", "value": "13:00:00"},
-                {"label": "14h", "value": "14:00:00"},
-                {"label": "15h", "value": "15:00:00"},
-                {"label": "16h", "value": "16:00:00"},
-                {"label": "17h", "value": "17:00:00"},
-                {"label": "18h", "value": "18:00:00"},
-                {"label": "19h", "value": "19:00:00"},
-                {"label": "20h", "value": "20:00:00"},
-                {"label": "21h", "value": "21:00:00"},
-                {"label": "22h", "value": "22:00:00"},
-                {"label": "23h", "value": "23:00:00"}
-            ];
+
 
             /**
              * Show response errors on booking form under appropriate field.
@@ -183,26 +186,32 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              * Update the product booking price based on selected duration.
              */
             $scope.updatePrice = function updatePrice() {
-                var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
-                var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
+                var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
+                var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
                 var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 toDateSelector.datepicker("setStartDate", fromDateTime);
                 toDateSelector.datepicker("update");
-                var today = Date.today().set({hour: 8, minute: 0});
                 $scope.dateRangeError = "";
-                if (fromDateTime > toDateTime) {
+                if (fromDateTime >= toDateTime) {
                     //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
                     $scope.dateRangeError = "La date de début ne peut pas être après la date de fin";
                     if (fromDateTime.getHours() < 23) {
                         $scope.bookingDetails.toDate = fromDateTime.toString("dd/MM/yyyy");
-                        $scope.bookingDetails.toHour = fromDateTime.add(1).hours().toString("HH:mm:ss");
+                        $scope.bookingDetails.toHour = $scope.findHour(fromDateTime.add(1).hours().toString("HH:mm:ss"));
                     } else {
                         $scope.bookingDetails.toDate = fromDateTime.add(1).days().toString("dd/MM/yyyy");
-                        $scope.bookingDetails.toHour = fromDateTime.add(1).hours().toString("HH:mm:ss");
+                        $scope.bookingDetails.toHour = $scope.findHour(fromDateTime.add(1).hours().toString("HH:mm:ss"));
                     }
-                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
-                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
+
+                    // Fix for very strange eloueChosen directive behaviour. Sometimes directive doesn't get fired and
+                    // UI doesn't change, but scope value was changed successfully.
+                    $timeout(function () {
+                        $("#toHour").trigger("chosen:updated");
+                    }, 0);
+
+                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
+                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
                 }
                 $scope.dateRangeError = null;
                 // check if product is available for selected dates
@@ -218,6 +227,14 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
                     $scope.available = false;
                     $scope.handleResponseErrors(error);
                 });
+            };
+
+            $scope.findHour = function(hourValue) {
+                for (var i = 0; i < $scope.hours.length; i++) {
+                    if ($scope.hours[i].value === hourValue) {
+                        return $scope.hours[i];
+                    }
+                }
             };
 
             /**
