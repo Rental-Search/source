@@ -23,7 +23,7 @@ require.config(
                 "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
                 "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
                 "jquery-form": "../../bower_components/jquery-form/jquery.form",
-                "datejs": "../../bower_components/datejs/build/production/date",
+                "datejs": "../../bower_components/datejs/build/date",
                 "chosen": "../../bower_components/chosen/chosen.jquery",
                 "selectivizr": "../../bower_components/selectivizr/selectivizr",
                 "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",

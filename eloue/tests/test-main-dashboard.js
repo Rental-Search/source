@@ -14,7 +14,7 @@ requirejs.config({
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",
         "underscore": "../../bower_components/lodash/dist/lodash.min",
-        "jQuery": "../../bower_components/jquery/dist/jquery.min",
+        "jquery": "../../bower_components/jquery/dist/jquery.min",
         "angular": "../../bower_components/angular/angular.min",
         "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
@@ -47,18 +47,18 @@ requirejs.config({
             deps: ["angular"],
             "exports": "angular.mock"
         },
-        "jQuery": {exports: "jQuery"},
-        "bootstrap": ["jQuery"],
-        "jquery-form": ["jQuery"],
-        "selectivizr": ["jQuery"],
-        "jquery-mousewheel": ["jQuery"],
-        "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
-        "jquery-autosize": ["jQuery"],
-        "bootstrap-datepicker": ["jQuery"],
-        "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
-        "chosen": ["jQuery"],
-        "toastr": ["jQuery"],
-        "formmapper": ["jQuery"]
+        "jquery": {exports: "jquery"},
+        "bootstrap": ["jquery"],
+        "jquery-form": ["jquery"],
+        "selectivizr": ["jquery"],
+        "jquery-mousewheel": ["jquery"],
+        "custom-scrollbar": ["jquery", "jquery-mousewheel"],
+        "jquery-autosize": ["jquery"],
+        "bootstrap-datepicker": ["jquery"],
+        "bootstrap-datepicker-fr": ["jquery", "bootstrap-datepicker"],
+        "chosen": ["jquery"],
+        "toastr": ["jquery"],
+        "formmapper": ["jquery"]
     },
 
     // ask Require.js to load these files (all our tests)

@@ -341,9 +341,5 @@ define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], func
         it("ProductDetailsCtrl:selectTab", function () {
             scope.selectTab();
         });
-
-        it("ProductDetailsCtrl:loadAdWordsTags", function () {
-            scope.loadAdWordsTags();
-        });
     });
 });

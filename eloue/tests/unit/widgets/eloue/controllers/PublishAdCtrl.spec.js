@@ -95,8 +95,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/PublishAdCtrl"], function 
                     country: "FR"
                 }
             };
-            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"},
-                google_trackConversion: function() {}};
+            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"}};
             location = {};
             utilsServiceMock = {};
             spyOn(categoriesServiceMock, "getChildCategories").and.callThrough();
@@ -175,14 +174,6 @@ define(["angular-mocks", "datejs", "eloue/controllers/PublishAdCtrl"], function 
 
         it("PublishAdCtrl:searchCategory", function () {
             scope.searchCategory();
-        });
-
-        it("PublishAdCtrl:loadPdltrackingScript", function () {
-            scope.loadPdltrackingScript();
-        });
-
-        it("PublishAdCtrl:loadAdWordsTagPublishAd", function () {
-            scope.loadAdWordsTagPublishAd();
         });
     });
 });

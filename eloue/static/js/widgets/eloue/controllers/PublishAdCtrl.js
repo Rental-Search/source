@@ -12,10 +12,10 @@ define([
     "../../../common/eloue/services/ToDashboardRedirectService",
     "../../../common/eloue/services/ServerValidationService",
     "../../../common/eloue/services/ScriptTagService"
-], function (EloueApp, toastr) {
+], function (EloueWidgetsApp, toastr) {
     "use strict";
 
-    EloueApp.controller("PublishAdCtrl", [
+    EloueWidgetsApp.controller("PublishAdCtrl", [
         "$scope",
         "$window",
         "$location",

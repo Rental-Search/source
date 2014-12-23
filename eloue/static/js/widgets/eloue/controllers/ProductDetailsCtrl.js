@@ -19,10 +19,10 @@ define([
     "../../../common/eloue/services/PatronShippingPointsService",
     "../../../common/eloue/services/ToDashboardRedirectService",
     "../../../common/eloue/services/ScriptTagService"
-], function (EloueApp, toastr) {
+], function (EloueWidgetsApp, toastr) {
     "use strict";
 
-    EloueApp.controller("ProductDetailsCtrl", [
+    EloueWidgetsApp.controller("ProductDetailsCtrl", [
         "$scope",
         "$window",
         "$location",

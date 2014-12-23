@@ -1,11 +1,11 @@
 "use strict";
 
-define(["angular", "eloue/app"], function (angular) {
+define(["eloue/app"], function (EloueDashboardApp) {
 
     /**
      * Controller for the messages page.
      */
-    angular.module("EloueDashboardApp").directive("fileChooser", [function () {
+    EloueDashboardApp.directive("fileChooser", [function () {
         return {
             restrict: "A",
             scope: {

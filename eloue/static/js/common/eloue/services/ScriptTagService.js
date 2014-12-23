@@ -72,7 +72,7 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
             $document[0].body.appendChild(script1859);
 
             var noscript1859 = $document[0].createElement("noscript");
-            var img1859 = $document.createElement("img");
+            var img1859 = $document[0].createElement("img");
             img1859.src = "https://lead.pdltracking.com/?lead_id=" + currentUserId + "&tt=pixel&sc=1859";
             img1859.width = "1";
             img1859.height = "1";
