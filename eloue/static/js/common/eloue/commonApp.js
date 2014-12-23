@@ -6,7 +6,6 @@ define([
     "angular-translate",
     "datejs",
     "chosen",
-    "jQuery",
     "bootstrap-datepicker",
     "bootstrap-datepicker-fr",
     "jquery-mousewheel",

@@ -20,7 +20,7 @@
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
         "angular-i18n": "../../bower_components/angular-i18n/angular-locale_fr-fr",
-        "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
+        "angular-translate": "../../bower_components/angular-translate/angular-translate",
         "moment": "../../bower_components/moment/moment",
         "angular-moment": "../../bower_components/angular-moment/angular-moment",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",

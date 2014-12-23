@@ -10,11 +10,12 @@ define([
     "../../../common/eloue/services/PricesService",
     "../../../common/eloue/services/UtilsService",
     "../../../common/eloue/services/ToDashboardRedirectService",
-    "../../../common/eloue/services/ServerValidationService"
-], function (EloueWidgetsApp, toastr) {
+    "../../../common/eloue/services/ServerValidationService",
+    "../../../common/eloue/services/ScriptTagService"
+], function (EloueApp, toastr) {
     "use strict";
 
-    EloueWidgetsApp.controller("PublishAdCtrl", [
+    EloueApp.controller("PublishAdCtrl", [
         "$scope",
         "$window",
         "$location",
@@ -30,7 +31,8 @@ define([
         "UtilsService",
         "ToDashboardRedirectService",
         "ServerValidationService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService) {
+        "ScriptTagService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService, ScriptTagService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -267,10 +269,10 @@ define([
                         PricesService.savePrice($scope.price).$promise.then(function (result) {
                             CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
                                 if ($scope.isAuto) {
-                                    $scope.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
+                                    ScriptTagService.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
                                     $scope.finishProductSaveAndRedirect(product);
                                 } else if ($scope.isRealEstate) {
-                                    $scope.trackEvent("Dépôt annonce", "Logement", productCategory.name);
+                                    ScriptTagService.trackEvent("Dépôt annonce", "Logement", productCategory.name);
                                     $scope.finishProductSaveAndRedirect(product);
                                 } else {
                                     CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function (ancestors) {
@@ -279,7 +281,7 @@ define([
                                             categoriesStr = categoriesStr + value.name + " - ";
                                         });
                                         categoriesStr = categoriesStr + productCategory.name;
-                                        $scope.trackEvent("Dépôt annonce", "Objet", categoriesStr);
+                                        ScriptTagService.trackEvent("Dépôt annonce", "Objet", categoriesStr);
                                         $scope.finishProductSaveAndRedirect(product);
                                     });
                                 }
@@ -305,9 +307,9 @@ define([
              * @param product product
              */
             $scope.finishProductSaveAndRedirect = function (product) {
-                $scope.trackPageView();
-                $scope.loadPdltrackingScript();
-                $scope.loadAdWordsTagPublishAd();
+                ScriptTagService.trackPageView();
+                ScriptTagService.loadPdltrackingScript($scope.currentUser.id);
+                ScriptTagService.loadAdWordsTags("EO41CNPrpQMQjaaF6gM");
                 //TODO: redirects to the dashboard item detail page.
                 toastr.options.positionClass = "toast-top-full-width";
                 toastr.success("Annonce publiée", "");
@@ -351,125 +353,5 @@ define([
                     });
                 }
             };
-
-            /**
-             * Add this tags when a user succeeded to post a new product:
-             * <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}%&tt=javascript&sc=1860"></script>
-             <script type="text/javascript" src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}&tt=javascript&sc=1859"></script>
-             <noscript>
-             <img src="https://lead.pdltracking.com/?lead_id={{product.owner.pk}}&tt=pixel&sc=1859" width="1" height="1" border="0" />
-             </noscript>
-             <IMG SRC="https://clic.reussissonsensemble.fr/registersale.asp?site=13625&mode=ppl&ltype=1&order=TRACKING_NUMBER" WIDTH="1" HEIGHT="1" />
-             <script type="text/javascript" id="affilinet_advc">
-             var type = "Checkout";
-             var site = "13625";
-             </script>
-             <script type="text/javascript" src="https://clic.reussissonsensemble.fr/art/JS/param.aspx"></script>
-             <script src="//l.adxcore.com/a/track_conversion.php?annonceurid=21679"></script>
-             <noscript>
-             <img src="//l.adxcore.com/a/track_conversion.php?adsy=1&annonceurid=21679">
-             </noscript>
-             */
-            $scope.loadPdltrackingScript = function () {
-
-                var script1860 = document.createElement("script");
-                script1860.type = "text/javascript";
-                script1860.src = "https://lead.pdltracking.com/?lead_id=" + $scope.currentUser.id + "&tt=javascript&sc=1860";
-                document.body.appendChild(script1860);
-
-                var script1859 = document.createElement("script");
-                script1859.type = "text/javascript";
-                script1859.src = "https://lead.pdltracking.com/?lead_id=" + $scope.currentUser.id + "%&tt=javascript&sc=1859";
-                document.body.appendChild(script1859);
-
-                var noscript1859 = document.createElement("noscript");
-                var img1859 = document.createElement("img");
-                img1859.src = "https://lead.pdltracking.com/?lead_id=" + $scope.currentUser.id + "&tt=pixel&sc=1859";
-                img1859.width = "1";
-                img1859.height = "1";
-                img1859.border = "0";
-                noscript1859.appendChild(img1859);
-                document.body.appendChild(noscript1859);
-
-                var img13625 = document.createElement("img");
-                img13625.src = "https://clic.reussissonsensemble.fr/registersale.asp?site=13625&mode=ppl&ltype=1&order=TRACKING_NUMBER";
-                img13625.width = "1";
-                img13625.height = "1";
-                document.body.appendChild(img13625);
-
-                var scriptAffilinet = document.createElement("script");
-                scriptAffilinet.type = "text/javascript";
-                scriptAffilinet.id = "affilinet_advc";
-                var code = "var type = 'Checkout';" +
-                    "var site = '13625';";
-                try {
-                    scriptAffilinet.appendChild(document.createTextNode(code));
-                    document.body.appendChild(scriptAffilinet);
-                } catch (e) {
-                    scriptAffilinet.text = code;
-                    document.body.appendChild(scriptAffilinet);
-                }
-
-                //var scriptClic = document.createElement("script");
-                //scriptClic.type = "text/javascript";
-                //scriptClic.src = "https://clic.reussissonsensemble.fr/art/JS/param.aspx";
-                //document.body.appendChild(scriptClic);
-
-                var oldDocumentWrite = document.write;
-                // change document.write temporary
-                document.write = function (node) {
-                    $("body").append(node)
-                };
-                $.getScript("https://clic.reussissonsensemble.fr/art/JS/param.aspx", function () {
-                    // replace the temp document.write with the original version
-                    setTimeout(function () {
-                        document.write = oldDocumentWrite
-                    }, 500)
-                });
-
-                var scriptAnnonceur = document.createElement("script");
-                scriptAnnonceur.src = "//l.adxcore.com/a/track_conversion.php?annonceurid=21679";
-                document.body.appendChild(scriptAnnonceur);
-
-                var noscriptAnnonceur = document.createElement("noscript");
-                var imgAnnonceur = document.createElement("img");
-                imgAnnonceur.src = "//l.adxcore.com/a/track_conversion.php?adsy=1&annonceurid=21679";
-                noscriptAnnonceur.appendChild(imgAnnonceur);
-                document.body.appendChild(noscriptAnnonceur);
-            };
-
-            /**
-             * Add Google ad scripts.
-             */
-            $scope.loadAdWordsTagPublishAd = function () {
-                $window.google_trackConversion({
-                    google_conversion_id: 1027691277,
-                    google_conversion_language: "en",
-                    google_conversion_format: "3",
-                    google_conversion_color: "ffffff",
-                    google_conversion_label: "EO41CNPrpQMQjaaF6gM",
-                    google_conversion_value: 1.00,
-                    google_conversion_currency: "EUR",
-                    google_remarketing_only: false
-                });
-            };
-
-            /**
-             * Push track event to Google Analytics.
-             *
-             * @param category category
-             * @param action action
-             * @param value value
-             */
-            $scope.trackEvent = function (category, action, value) {
-                _gaq.push(["_trackEvent", category, action, value]);
-            };
-
-            /**
-             * Push track page view to Google Analytics.
-             */
-            $scope.trackPageView = function () {
-                _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
-            };
-        }])
+        }]);
 });

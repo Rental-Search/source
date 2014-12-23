@@ -17,11 +17,12 @@ define([
     "../../../common/eloue/services/ShippingPointsService",
     "../../../common/eloue/services/ProductShippingPointsService",
     "../../../common/eloue/services/PatronShippingPointsService",
-    "../../../common/eloue/services/ToDashboardRedirectService"
-], function (EloueWidgetsApp, toastr) {
+    "../../../common/eloue/services/ToDashboardRedirectService",
+    "../../../common/eloue/services/ScriptTagService"
+], function (EloueApp, toastr) {
     "use strict";
 
-    EloueWidgetsApp.controller("ProductDetailsCtrl", [
+    EloueApp.controller("ProductDetailsCtrl", [
         "$scope",
         "$window",
         "$location",
@@ -43,7 +44,8 @@ define([
         "ProductShippingPointsService",
         "PatronShippingPointsService",
         "ToDashboardRedirectService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsService, MessageThreadsService, ProductRelatedMessagesService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService) {
+        "ScriptTagService",
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsService, MessageThreadsService, ProductRelatedMessagesService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService, ScriptTagService) {
 
             $scope.creditCard = {
                 id: null,
@@ -285,9 +287,9 @@ define([
                 ProductRelatedMessagesService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
                     $scope.newMessage.body, null, $scope.product.id).then(function (result) {
                         $scope.submitInProgress = false;
-                        $scope.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
-                        $scope.trackEvent("Réservation", "Message", $scope.getEventLabel());
-                        $scope.trackPageView();
+                        ScriptTagService.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
+                        ScriptTagService.trackEvent("Réservation", "Message", $scope.getEventLabel());
+                        ScriptTagService.trackPageView();
                         // Clear message field
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
@@ -453,11 +455,11 @@ define([
 
             $scope.payForBooking = function (booking, paymentInfo) {
                 BookingsService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
-                    $scope.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
-                    $scope.trackEvent("Réservation", "Demande de réservation", $scope.getEventLabel());
-                    $scope.trackPageView();
+                    ScriptTagService.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
+                    ScriptTagService.trackEvent("Réservation", "Demande de réservation", $scope.getEventLabel());
+                    ScriptTagService.trackPageView();
                     toastr.options.positionClass = "toast-top-full-width";
-                    toastr.success("Réservation enregistré", "-XHsCMvspQMQjaaF6gM");
+                    toastr.success("Réservation enregistré");
                     $(".modal").modal("hide");
                     //$window.location.href = "/dashboard/#/bookings/" + booking.uuid;
                     $scope.submitInProgress = false;
@@ -567,8 +569,8 @@ define([
                     });
                     $scope.productCategoryAncestors = categoriesStr + $scope.product.category.name;
                     if (modalName === "phone") {
-                        $scope.trackEvent("Réservation", "Appel", $scope.getEventLabel());
-                        $scope.trackPageView();
+                        ScriptTagService.trackEvent("Réservation", "Appel", $scope.getEventLabel());
+                        ScriptTagService.trackPageView();
                     }
                 });
             };
@@ -832,23 +834,5 @@ define([
                 todayHighlight: true,
                 dateFormat: "yyyy-MM-dd"
             });
-
-            /**
-             * Push track event to Google Analytics.
-             *
-             * @param category category
-             * @param action action
-             * @param value value
-             */
-            $scope.trackEvent = function (category, action, value) {
-                _gaq.push(["_trackEvent", category, action, value]);
-            };
-
-            /**
-             * Push track page view to Google Analytics.
-             */
-            $scope.trackPageView = function () {
-                _gaq.push(["_trackPageview", $window.location.href + "/success/"]);
-            };
         }]);
 });

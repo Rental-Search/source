@@ -23,7 +23,8 @@ define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], func
             shippingPointsServiceMock,
             productShippingPointsServiceMock,
             patronShippingPointsServiceMock,
-            toDashboardRedirectServiceMock;
+            toDashboardRedirectServiceMock,
+            scriptTagServiceMock;
 
         beforeEach(module("EloueWidgetsApp"));
 
@@ -129,6 +130,11 @@ define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], func
                 }
             };
             utilsServiceMock = {};
+            scriptTagServiceMock = {
+                trackEvent: function (category, action, value) {},
+                trackPageView: function () {},
+                loadAdWordsTags: function (googleConversionLabel) {}
+            };
 
             module(function ($provide) {
                 $provide.value("ProductsService", productsServiceMock);
@@ -149,6 +155,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], func
                 $provide.value("ProductShippingPointsService", productShippingPointsServiceMock);
                 $provide.value("PatronShippingPointsService", patronShippingPointsServiceMock);
                 $provide.value("ToDashboardRedirectService", toDashboardRedirectServiceMock);
+                $provide.value("ScriptTagService", scriptTagServiceMock);
             })
         });
 
@@ -170,10 +177,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], func
                 }
             };
             scope.product = {owner: { id: 111}, category: {name: "Automobile"}};
-            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"},
-                google_trackConversion: function() {
-
-                }};
+            window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"}};
             location = {};
 
             spyOn(productsServiceMock, "getProduct").and.callThrough();
@@ -190,7 +194,10 @@ define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], func
             spyOn(bookingsServiceMock, "payForBooking").and.callThrough();
             spyOn(bookingsServiceMock, "getBookingsByProduct").and.callThrough();
             spyOn(categoriesServiceMock, "getAncestors").and.callThrough();
-            spyOn(window, "google_trackConversion").and.callThrough();
+            spyOn(scriptTagServiceMock, "trackEvent").and.callThrough();
+            spyOn(scriptTagServiceMock, "trackPageView").and.callThrough();
+            spyOn(scriptTagServiceMock, "loadAdWordsTags").and.callThrough();
+
             ProductDetailsCtrl = $controller("ProductDetailsCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
                 CivilityChoices: civilityChoicesMock,

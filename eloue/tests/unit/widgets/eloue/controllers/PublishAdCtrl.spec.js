@@ -17,7 +17,8 @@ define(["angular-mocks", "datejs", "eloue/controllers/PublishAdCtrl"], function 
             categoriesServiceMock,
             pricesServiceMock,
             toDashboardRedirectServiceMock,
-            serverValidationServiceMock;
+            serverValidationServiceMock,
+            scriptTagServiceMock;
 
         beforeEach(module("EloueWidgetsApp"));
 
@@ -59,6 +60,12 @@ define(["angular-mocks", "datejs", "eloue/controllers/PublishAdCtrl"], function 
                 removeErrors: function() {},
                 addError: function(field, description) {}
             };
+            scriptTagServiceMock = {
+                trackEvent: function (category, action, value) {},
+                trackPageView: function () {},
+                loadAdWordsTags: function (googleConversionLabel) {},
+                loadPdltrackingScript: function (currentUserId) {}
+            };
 
             module(function ($provide) {
                 $provide.value("Endpoints", endpointsMock);
@@ -73,6 +80,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/PublishAdCtrl"], function 
                 $provide.value("UtilsService", utilsServiceMock);
                 $provide.value("ToDashboardRedirectService", toDashboardRedirectServiceMock);
                 $provide.value("ServerValidationService", serverValidationServiceMock);
+                $provide.value("ScriptTagService", scriptTagServiceMock);
             })
         });
 
@@ -96,6 +104,10 @@ define(["angular-mocks", "datejs", "eloue/controllers/PublishAdCtrl"], function 
             spyOn(serverValidationServiceMock, "removeErrors").and.callThrough();
             spyOn(addressesServiceMock, "saveAddress").and.callThrough();
             spyOn(serverValidationServiceMock, "addError").and.callThrough();
+            spyOn(scriptTagServiceMock, "trackEvent").and.callThrough();
+            spyOn(scriptTagServiceMock, "trackPageView").and.callThrough();
+            spyOn(scriptTagServiceMock, "loadAdWordsTags").and.callThrough();
+            spyOn(scriptTagServiceMock, "loadPdltrackingScript").and.callThrough();
             PublishAdCtrl = $controller("PublishAdCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
                 Unit: unitMock,

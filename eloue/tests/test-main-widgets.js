@@ -8,13 +8,13 @@ for (var file in window.__karma__.files) {
 }
 
 requirejs.config({
-    // Karma serves files from "/base"
-    baseUrl: "/base/static/js/widgets",
+    // Karma serves files from '/base'
+    baseUrl: '/base/static/js/widgets',
 
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
         "lodash": "../../bower_components/lodash/dist/lodash",
-        "jQuery": "../../bower_components/jquery/dist/jquery.min",
+        "jQuery": "../../bower_components/jquery/dist/jquery",
         "jquery-ui": "../../bower_components/jqueryui/jquery-ui",
         "jshashtable": "../jshashtable-2.1_src",
         "jquery.numberformatter": "../jquery.numberformatter-1.2.3",
