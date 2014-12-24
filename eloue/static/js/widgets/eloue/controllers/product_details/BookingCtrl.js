@@ -1,28 +1,28 @@
 define([
     "eloue/app",
-    "../../../../bower_components/toastr/toastr",
-    "../../../common/eloue/values",
-    "../../../common/eloue/services/ProductsService",
-    "../../../common/eloue/services/MessageThreadsService",
-    "../../../common/eloue/services/ProductRelatedMessagesService",
-    "../../../common/eloue/services/UsersService",
-    "../../../common/eloue/services/AuthService",
-    "../../../common/eloue/services/AddressesService",
-    "../../../common/eloue/services/CreditCardsService",
-    "../../../common/eloue/services/BookingsService",
-    "../../../common/eloue/services/PhoneNumbersService",
-    "../../../common/eloue/services/CategoriesService",
-    "../../../common/eloue/services/UtilsService",
-    "../../../common/eloue/services/ShippingsService",
-    "../../../common/eloue/services/ShippingPointsService",
-    "../../../common/eloue/services/ProductShippingPointsService",
-    "../../../common/eloue/services/PatronShippingPointsService",
-    "../../../common/eloue/services/ToDashboardRedirectService",
-    "../../../common/eloue/services/ScriptTagService"
+    "../../../../../bower_components/toastr/toastr",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/ProductsService",
+    "../../../../common/eloue/services/MessageThreadsService",
+    "../../../../common/eloue/services/ProductRelatedMessagesService",
+    "../../../../common/eloue/services/UsersService",
+    "../../../../common/eloue/services/AuthService",
+    "../../../../common/eloue/services/AddressesService",
+    "../../../../common/eloue/services/CreditCardsService",
+    "../../../../common/eloue/services/BookingsService",
+    "../../../../common/eloue/services/PhoneNumbersService",
+    "../../../../common/eloue/services/CategoriesService",
+    "../../../../common/eloue/services/UtilsService",
+    "../../../../common/eloue/services/ShippingsService",
+    "../../../../common/eloue/services/ShippingPointsService",
+    "../../../../common/eloue/services/ProductShippingPointsService",
+    "../../../../common/eloue/services/PatronShippingPointsService",
+    "../../../../common/eloue/services/ToDashboardRedirectService",
+    "../../../../common/eloue/services/ScriptTagService"
 ], function (EloueWidgetsApp, toastr) {
     "use strict";
 
-    EloueWidgetsApp.controller("ProductDetailsCtrl", [
+    EloueWidgetsApp.controller("BookingCtrl", [
         "$scope",
         "$window",
         "$location",
@@ -63,72 +63,8 @@ define([
             $scope.borrowerShippingPoints = [];
             $scope.submitInProgress = false;
             $scope.showSaveCard = true;
-            $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
-            $scope.showUnavailable = true;
-            $scope.showBookings = true;
             $scope.bookings = [];
             $scope.currentBookings = [];
-            $scope.weeks = {};
-            var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-
-            $scope.monthOptions = [
-                {
-                    name: months[Date.today().add(-1).months().getMonth()] + " " + Date.today().add(-1).months().getFullYear(),
-                    value: Date.today().add(-1).months().getMonth() + " " + Date.today().add(-1).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().getMonth()] + " " + Date.today().getFullYear(),
-                    value: Date.today().getMonth() + " " + Date.today().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(1).months().getMonth()] + " " + Date.today().add(1).months().getFullYear(),
-                    value: Date.today().add(1).months().getMonth() + " " + Date.today().add(1).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(2).months().getMonth()] + " " + Date.today().add(2).months().getFullYear(),
-                    value: Date.today().add(2).months().getMonth() + " " + Date.today().add(2).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(3).months().getMonth()] + " " + Date.today().add(3).months().getFullYear(),
-                    value: Date.today().add(3).months().getMonth() + " " + Date.today().add(3).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(4).months().getMonth()] + " " + Date.today().add(4).months().getFullYear(),
-                    value: Date.today().add(4).months().getMonth() + " " + Date.today().add(4).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(5).months().getMonth()] + " " + Date.today().add(5).months().getFullYear(),
-                    value: Date.today().add(5).months().getMonth() + " " + Date.today().add(5).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(6).months().getMonth()] + " " + Date.today().add(6).months().getFullYear(),
-                    value: Date.today().add(6).months().getMonth() + " " + Date.today().add(6).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(7).months().getMonth()] + " " + Date.today().add(7).months().getFullYear(),
-                    value: Date.today().add(7).months().getMonth() + " " + Date.today().add(7).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(8).months().getMonth()] + " " + Date.today().add(8).months().getFullYear(),
-                    value: Date.today().add(8).months().getMonth() + " " + Date.today().add(8).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(9).months().getMonth()] + " " + Date.today().add(9).months().getFullYear(),
-                    value: Date.today().add(9).months().getMonth() + " " + Date.today().add(9).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(10).months().getMonth()] + " " + Date.today().add(10).months().getFullYear(),
-                    value: Date.today().add(10).months().getMonth() + " " + Date.today().add(10).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(11).months().getMonth()] + " " + Date.today().add(11).months().getFullYear(),
-                    value: Date.today().add(11).months().getMonth() + " " + Date.today().add(11).months().getFullYear()
-                },
-                {
-                    name: months[Date.today().add(12).months().getMonth()] + " " + Date.today().add(12).months().getFullYear(),
-                    value: Date.today().add(12).months().getMonth() + " " + Date.today().add(12).months().getFullYear()
-                }
-            ];
 
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
@@ -520,7 +456,6 @@ define([
             $scope.openModal = function (name) {
                 var currentUserToken = AuthService.getCookie("user_token");
                 if (!currentUserToken && name != "login") {
-                    console.log(name);
                     AuthService.saveAttemptUrl(name);
                     name = "login";
                 } else {
@@ -726,62 +661,6 @@ define([
             };
 
             /**
-             * Used to load calendar with product booking data.
-             */
-            $scope.loadCalendar = function () {
-                BookingsService.getBookingsByProduct($scope.product.id).then(function (bookings) {
-
-                    angular.forEach(bookings, function (value, key) {
-                        value.startDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
-                        value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);
-                    });
-                    $scope.bookings = bookings;
-
-                    $scope.updateCalendar();
-                });
-            };
-
-            $scope.updateCalendar = function () {
-                $scope.currentBookings = [];
-                var s = $scope.selectedMonthAndYear.split(" ");
-                var date = new Date();
-                date.setMonth(s[0]);
-                date.setFullYear(s[1]);
-                var weeks = [];
-                var start = new Date(date.moveToFirstDayOfMonth());
-                for (var i = 0; i < 6; i++) {
-                    var currentDay = start.moveToDayOfWeek(1, -1);
-                    var days = [];
-                    for (var j = 0; j < 7; j++) {
-                        var isBooked = false;
-                        angular.forEach($scope.bookings, function (value, key) {
-                            if (currentDay.between(value.startDay, value.endDay)) {
-                                isBooked = true;
-                                $scope.currentBookings.push(value);
-                            }
-                        });
-
-                        days.push({dayOfMonth: currentDay.getDate(), isBooked: isBooked});
-                        currentDay.add(1).days();
-                    }
-
-                    var week = {};
-                    week.weekDays = days;
-                    weeks.push(week);
-                    start.add(1).weeks();
-                }
-                $scope.weeks = weeks;
-            };
-
-            $scope.onShowUnavailable = function () {
-                //TODO: implement when product availability is added to the model
-            };
-
-            $scope.onShowBookings = function () {
-                console.log("onShowBookings");
-            };
-
-            /**
              * Select tab in main product detail page content part.
              */
             $scope.selectTab = function (tabName) {
@@ -804,22 +683,6 @@ define([
             };
 
             $scope.selectTab("#tabs-photos");
-
-            /**
-             * Add Google ad scripts.
-             */
-            $scope.loadAdWordsTags = function (googleConversionLabel) {
-                $window.google_trackConversion({
-                    google_conversion_id: 1027691277,
-                    google_conversion_language: "en",
-                    google_conversion_format: "3",
-                    google_conversion_color: "ffffff",
-                    google_conversion_label: googleConversionLabel,
-                    google_conversion_value: 1.00,
-                    google_conversion_currency: "EUR",
-                    google_remarketing_only: false
-                });
-            };
 
             $("#date_of_birth").datepicker({
                 language: "fr",

@@ -1,4 +1,4 @@
-define(["angular-mocks", "datejs", "eloue/controllers/PublishAdCtrl"], function () {
+define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl"], function () {
 
     describe("Controller: PublishAdCtrl", function () {
 

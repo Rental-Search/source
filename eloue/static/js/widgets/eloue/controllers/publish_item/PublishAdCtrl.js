@@ -1,17 +1,17 @@
 define([
     "eloue/app",
-    "../../../../bower_components/toastr/toastr",
-    "../../../common/eloue/values",
-    "../../../common/eloue/services/ProductsService",
-    "../../../common/eloue/services/UsersService",
-    "../../../common/eloue/services/AddressesService",
-    "../../../common/eloue/services/AuthService",
-    "../../../common/eloue/services/CategoriesService",
-    "../../../common/eloue/services/PricesService",
-    "../../../common/eloue/services/UtilsService",
-    "../../../common/eloue/services/ToDashboardRedirectService",
-    "../../../common/eloue/services/ServerValidationService",
-    "../../../common/eloue/services/ScriptTagService"
+    "../../../../../bower_components/toastr/toastr",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/ProductsService",
+    "../../../../common/eloue/services/UsersService",
+    "../../../../common/eloue/services/AddressesService",
+    "../../../../common/eloue/services/AuthService",
+    "../../../../common/eloue/services/CategoriesService",
+    "../../../../common/eloue/services/PricesService",
+    "../../../../common/eloue/services/UtilsService",
+    "../../../../common/eloue/services/ToDashboardRedirectService",
+    "../../../../common/eloue/services/ServerValidationService",
+    "../../../../common/eloue/services/ScriptTagService"
 ], function (EloueWidgetsApp, toastr) {
     "use strict";
 

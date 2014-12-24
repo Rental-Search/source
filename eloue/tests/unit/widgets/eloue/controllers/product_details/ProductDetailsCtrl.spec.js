@@ -1,4 +1,4 @@
-define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], function () {
+define(["angular-mocks", "datejs", "eloue/controllers/product_details/ProductDetailsCtrl"], function () {
 
     describe("Controller: ProductDetailsCtrl", function () {
 
@@ -328,14 +328,6 @@ define(["angular-mocks", "datejs", "eloue/controllers/ProductDetailsCtrl"], func
 
         it("ProductDetailsCtrl:isRealEstate", function () {
             scope.isRealEstate();
-        });
-
-        it("ProductDetailsCtrl:loadCalendar", function () {
-            scope.loadCalendar();
-        });
-
-        it("ProductDetailsCtrl:updateCalendar", function () {
-            scope.updateCalendar();
         });
 
         it("ProductDetailsCtrl:selectTab", function () {
