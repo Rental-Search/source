@@ -14,7 +14,7 @@ section.tabs-vertical-active.lg(ng-show="(bookingList && bookingList.length > 0)
               option(value="") Tous
               option(ng-repeat="state in stateList", value="{{state}}") {{state | translate}}
 
-  ul.scrollbar-custom(eloue-lazy-load, lazy-data="bookingList", lazy-data-provider="BookingsLoadService", lazy-load-method="getBookingList")
+  ul.scrollbar-custom(eloue-lazy-load, lazy-data="bookingList", lazy-data-provider="BookingsService", lazy-load-method="getBookingList")
       //- we should use class="soon" or class=="in-progress" or class="completed" in the line below
       li.tab-vertical.block-with-thumbnail(ng-repeat="booking in bookingList track by booking.uuid", id="booking-{{booking.uuid}}", ui-sref="bookings.detail({uuid: booking.uuid})", class="{{booking.state}}", ng-class="{current: isItemSelected('booking-', booking.uuid)}")
         .col-thumbnail
