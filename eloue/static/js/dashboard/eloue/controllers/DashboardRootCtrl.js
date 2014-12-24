@@ -5,7 +5,8 @@ define([
     "toastr",
     "../../../common/eloue/services/UsersService",
     "../../../common/eloue/services/AuthService",
-    "../../../common/eloue/services/UtilsService"
+    "../../../common/eloue/services/UtilsService",
+    "../../../common/eloue/services/MapsService"
 ], function (EloueDashboardApp, toastr) {
 
     /**
@@ -13,10 +14,13 @@ define([
      */
     EloueDashboardApp.controller("DashboardRootCtrl", [
         "$scope",
+        "$window",
+        "$document",
         "UsersService",
         "AuthService",
         "UtilsService",
-        function ($scope, UsersService, AuthService, UtilsService) {
+        "MapsService",
+        function ($scope, $window, $document, UsersService, AuthService, UtilsService, MapsService) {
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
             $scope.unreadMessageThreadsCount = 0;
@@ -114,7 +118,7 @@ define([
                         disableOver: false
                     }
                 });
-                $(window).trigger("resize");
+                $($window).trigger("resize");
             };
 
             $scope.showNotification = function (object, action, succeed) {
@@ -136,7 +140,7 @@ define([
             };
 
             function setProperties() {
-                var articleHeight = $(window).height() - $("header").height(),
+                var articleHeight = $($window).height() - $("header").height(),
                     navFz = {
                         current: parseFloat(dashboard.nav.css("font-size")),
                         max: 12
@@ -156,34 +160,29 @@ define([
 
             setProperties();
 
-            $(window).on("resize", function () {
+            $($window).on("resize", function () {
                 setProperties();
             });
 
-            window.googleMapsLoaded = function () {
+            $window.googleMapsLoaded = function () {
                 //Activate geolocation search
                 $("#geolocate").formmapper({
                     details: "form"
                 });
             };
 
-            function loadGoogleMaps() {
-                var script = document.createElement("script");
-                script.type = "text/javascript";
-                script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
-                document.body.appendChild(script);
-            }
-
-            loadGoogleMaps();
+            MapsService.loadGoogleMaps();
 
             (function (d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
+                if (d.getElementById(id)) {
+                    return;
+                }
                 js = d.createElement(s);
                 js.id = id;
                 js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0&appId=197983240245844";
                 fjs.parentNode.insertBefore(js, fjs);
-            }(document, "script", "facebook-jssdk"));
+            }($document[0], "script", "facebook-jssdk"));
         }
     ]);
 });

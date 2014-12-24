@@ -1,10 +1,14 @@
 define([
-    "eloue/app"
+    "eloue/app",
+    "../../../common/eloue/services/MapsService"
 ], function (EloueWidgetsApp) {
     "use strict";
     EloueWidgetsApp.controller("WidgetsRootCtrl", [
         "$scope",
-        function ($scope) {
+        "$window",
+        "$document",
+        "MapsService",
+        function ($scope, $window, $document, MapsService) {
             var slideImgs = [].slice.call($(".carousel-wrapper").find("img"));
             for (var index = 0; index < slideImgs.length; index++) {
                 var proportions = $(slideImgs[index]).width() / $(slideImgs[index]).height(),
@@ -92,15 +96,15 @@ define([
                 js.id = id;
                 js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0&appId=197983240245844";
                 fjs.parentNode.insertBefore(js, fjs);
-            }(document, "script", "facebook-jssdk"));
+            }($document[0], "script", "facebook-jssdk"));
 
-            window.___gcfg = {lang: "fr"};
+            $window.___gcfg = {lang: "fr"};
             (function () {
-                var po = document.createElement("script");
+                var po = $document[0].createElement("script");
                 po.type = "text/javascript";
                 po.async = true;
                 po.src = "https://apis.google.com/js/platform.js";
-                var s = document.getElementsByTagName("script")[0];
+                var s = $document[0].getElementsByTagName("script")[0];
                 s.parentNode.insertBefore(po, s);
             })();
 
@@ -112,13 +116,13 @@ define([
                     js.src = p + "://platform.twitter.com/widgets.js";
                     fjs.parentNode.insertBefore(js, fjs);
                 }
-            }(document, "script", "twitter-wjs");
+            }(document[0], "script", "twitter-wjs");
 
             // Insert YouTube video into defined container, add play on modal open and stop on modal hide
-            var tag = document.createElement("script");
+            var tag = $document[0].createElement("script");
 
             tag.src = "https://www.youtube.com/iframe_api";
-            var firstScriptTag = document.getElementsByTagName("script")[0];
+            var firstScriptTag = $document[0].getElementsByTagName("script")[0];
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
             var videoModal = $("#videoModal");
             var player;
@@ -141,51 +145,12 @@ define([
                 event.target.playVideo();
             };
 
-            var range = function(zoom) {
-                if (zoom >= 14) {
-                    return 0.5;
-                }
-                if (zoom >= 13) {
-                    return 1;
-                }
-                if (zoom >= 12) {
-                    return 3;
-                }
-                if (zoom >= 11) {
-                    return 6;
-                }
-                if (zoom >= 10) {
-                    return 15;
-                }
-                if (zoom >= 9) {
-                    return 25;
-                }
-                if (zoom >= 8) {
-                    return 100;
-                }
-                if (zoom >= 7) {
-                    return 200;
-                }
-                if (zoom >= 6) {
-                    return 350;
-                }
-                if (zoom >= 5) {
-                    return 500;
-                }
-                if (zoom >= 4) {
-                    return 700;
-                }
-                return 1000;
-            };
-
-
-            window.google_maps_loaded = function () {
+            $window.googleMapsLoaded = function () {
                 $("#geolocate").formmapper({
                     details: "form"
                 });
 
-                var mapCanvas = document.getElementById("map-canvas");
-
+                var mapCanvas = $document[0].getElementById("map-canvas");
                 if (mapCanvas) {
 
                     $("#where").formmapper({
@@ -209,7 +174,7 @@ define([
                     var rangeEl = $("#range");
                     var radius = Number(rangeEl.val().replace(",", "."));
                     var mapOptions = {
-                        zoom: zoom(radius),
+                        zoom: MapsService.zoom(radius),
                         disableDefaultUI: true,
                         zoomControl: true,
                         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -217,7 +182,7 @@ define([
                     var map = new google.maps.Map(mapCanvas, mapOptions);
                     var geocoder = new google.maps.Geocoder();
                     geocoder.geocode(
-                        {address: document.getElementById("where").value},
+                        {address: $document[0].getElementById("where").value},
                         function (result, status) {
                             if (status == google.maps.GeocoderStatus.OK) {
                                 map.setCenter(result[0].geometry.location);
@@ -260,7 +225,7 @@ define([
                                         // set new values to the hidden input
                                         rangeInput.attr("value", range_value);
                                         // change map's zoom level
-                                        map.setZoom(zoom(range_value));
+                                        map.setZoom(MapsService.zoom(range_value));
                                     }
                                     setTimeout(function() {
                                         notUpdateByMap = false;
@@ -272,9 +237,9 @@ define([
                                 notUpdateBySlider = true;
                                 if (!notUpdateByMap) {
                                     var zoomLevel = map.getZoom();
-                                    var calcRange = range(zoomLevel);
+                                    var calcRange = MapsService.range(zoomLevel);
                                     if (calcRange && calcRange <= rangeMax) {
-                                        rangeSlider.slider("value", 1, calcRange)
+                                        rangeSlider.slider("value", 1, calcRange);
                                     }
                                 }
                                 setTimeout(function() {
@@ -300,7 +265,7 @@ define([
                     setMarkers(map, products, "li#marker-");
                 }
 
-                var mapCanvasSmall = document.getElementById("map-canvas-small");
+                var mapCanvasSmall = $document[0].getElementById("map-canvas-small");
 
                 if (mapCanvasSmall) {
                     var mapContainer = $("#map-canvas-small");
@@ -331,73 +296,29 @@ define([
                 }
             };
 
-            var loadGoogleMaps = function() {
-                var script = document.createElement("script");
-                script.type = "text/javascript";
-                script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=google_maps_loaded";
-                document.body.appendChild(script);
-            };
-
-            var zoom = function(radius) {
-                if (radius <= 0.5) {
-                    return 14;
-                }
-                if (radius <= 1) {
-                    return 13;
-                }
-                if (radius <= 3) {
-                    return 12;
-                }
-                if (radius <= 6) {
-                    return 11;
-                }
-                if (radius <= 15) {
-                    return 10;
-                }
-                if (radius <= 25) {
-                    return 9;
-                }
-                if (radius <= 100) {
-                    return 8;
-                }
-                if (radius <= 200) {
-                    return 7;
-                }
-                if (radius <= 350) {
-                    return 6;
-                }
-                if (radius <= 500) {
-                    return 5;
-                }
-                if (radius <= 700) {
-                    return 4;
-                }
-                return 3;
-            };
-
             var setMarkers = function(map, locations, markerId) {
                 var staticUrl = "/static/";
-                var scripts = document.getElementsByTagName("script");
+                var scripts = $document[0].getElementsByTagName("script");
                 for (var i = 0, l = scripts.length; i < l; i++) {
                     if (scripts[i].getAttribute("data-static-path")) {
                         staticUrl = scripts[i].getAttribute("data-static-path");
                         break;
                     }
                 }
-                for (var i = 0; i < locations.length; i++) {
-                    var product = locations[i];
+                for (var j = 0; j < locations.length; j++) {
+                    var product = locations[j];
 
                     var image, imageHover;
 
                     if (markerId == "li#marker-") {
                         image = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
                             new google.maps.Size(26, 28),
-                            new google.maps.Point(0, 28 * i),
+                            new google.maps.Point(0, 28 * j),
                             new google.maps.Point(14, 28));
 
                         imageHover = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
                             new google.maps.Size(26, 28),
-                            new google.maps.Point(29, 28 * i),
+                            new google.maps.Point(29, 28 * j),
                             new google.maps.Point(14, 28));
                     }
 
@@ -468,7 +389,7 @@ define([
                 };
             }
 
-            loadGoogleMaps();
+            MapsService.loadGoogleMaps();
         }
     ]);
 });

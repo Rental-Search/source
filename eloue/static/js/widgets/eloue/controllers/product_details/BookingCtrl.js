@@ -65,6 +65,8 @@ define([
             $scope.showSaveCard = true;
             $scope.bookings = [];
             $scope.currentBookings = [];
+            $scope.isAuto = false;
+            $scope.isRealEstate = false;
 
             // Read authorization token
             $scope.currentUserToken = AuthService.getCookie("user_token");
@@ -89,12 +91,14 @@ define([
             $scope.getProductIdFromUrl = function () {
                 var href = $window.location.href;
                 href = href.substr(href.lastIndexOf("location/") + 8);
-
+                // "cut" URL to last hash index or to last slash index
+                var lastIndex = href.indexOf("#") > 0 ? href.lastIndexOf("#") - 1 : (href.length - 1);
+                href = href.substr(0, lastIndex);
                 $scope.rootCategory = href.split("/")[1];
+                $scope.isAuto =($scope.rootCategory === "automobile");
+                $scope.isRealEstate = ($scope.rootCategory === "location-saisonniere");
                 var subparts = href.split("-");
-                var productId = subparts[subparts.length - 1];
-                var lastIndex = productId.indexOf("/") > 0 ? productId.indexOf("/") : (productId.length - 1);
-                return productId.substr(0, lastIndex);
+                return subparts[subparts.length - 1];
             };
             $scope.productId = $scope.getProductIdFromUrl();
 
@@ -171,8 +175,6 @@ define([
 
             ProductsService.getProduct($scope.productId, false, false).then(function (result) {
                 $scope.product = result;
-                //TODO: uncomment, when calendar tab is displayed on product details page
-//                $scope.loadCalendar();
             });
 
             /**
@@ -293,7 +295,7 @@ define([
                 var userPatch = {};
                 userPatch.first_name = $scope.currentUser.first_name;
                 userPatch.last_name = $scope.currentUser.last_name;
-                if ($scope.isAuto()) {
+                if ($scope.isAuto) {
                     userPatch.drivers_license_number = $scope.currentUser.drivers_license_number;
                     if ($scope.currentUser.drivers_license_date) {
                         userPatch.drivers_license_date = UtilsService.formatDate($scope.currentUser.drivers_license_date, "yyyy-MM-dd'T'HH:mm");
@@ -410,9 +412,9 @@ define([
              * @returns event tag label
              */
             $scope.getEventLabel = function () {
-                if ($scope.isAuto()) {
+                if ($scope.isAuto) {
                     return "Voiture - " + $scope.productCategoryName;
-                } else if ($scope.isRealEstate()) {
+                } else if ($scope.isRealEstate) {
                     return "Logement - " + $scope.productCategoryName;
                 } else {
                     return "Objet - " + $scope.productCategoryAncestors;
@@ -633,14 +635,6 @@ define([
                 }
             };
 
-            $scope.isAuto = function () {
-                return ($scope.rootCategory === "automobile");
-            };
-
-            $scope.isRealEstate = function () {
-                return ($scope.rootCategory === "location-saisonniere");
-            };
-
             /**
              * Loads message thread for send message to owner modal window.
              */
@@ -660,42 +654,15 @@ define([
                 });
             };
 
-            /**
-             * Select tab in main product detail page content part.
-             */
-            $scope.selectTab = function (tabName) {
-                $("[id^=tabs-]").each(function () {
-                    var item = $(this);
-                    if (("#" + item.attr("id")) == tabName) {
-                        item.removeClass("ng-hide");
-                    } else {
-                        item.addClass("ng-hide");
-                    }
-                });
-                $("a[href^=#tabs-]").each(function () {
-                    var item = $(this);
-                    if (item.attr("href") == tabName) {
-                        item.addClass("current");
-                    } else {
-                        item.removeClass("current");
-                    }
+            $scope.applyDatePicker = function(fieldId) {
+                $("#" + fieldId).datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true,
+                    dateFormat: "yyyy-MM-dd"
                 });
             };
-
-            $scope.selectTab("#tabs-photos");
-
-            $("#date_of_birth").datepicker({
-                language: "fr",
-                autoclose: true,
-                todayHighlight: true,
-                dateFormat: "yyyy-MM-dd"
-            });
-
-            $("#drivers_license_date").datepicker({
-                language: "fr",
-                autoclose: true,
-                todayHighlight: true,
-                dateFormat: "yyyy-MM-dd"
-            });
+            $scope.applyDatePicker("date_of_birth");
+            $scope.applyDatePicker("drivers_license_date");
         }]);
 });

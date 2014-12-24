@@ -32,7 +32,7 @@ html(lang="fr")
       _gaq.push(['_setVar', 'anonymous']);
       {% endif %}
       {% endspaceless %}
-  body(data-ng-controller="WidgetsRootCtrl")
+  body
     input(id="eloue_url_redirect_facebook", value="{% url 'login_facebook' %}", type="hidden")
     block content-body
     script
