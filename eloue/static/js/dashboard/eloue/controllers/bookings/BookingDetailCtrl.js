@@ -48,16 +48,16 @@ define([
             // Load booking details
             BookingsService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
-                $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
-                $scope.showIncidentDescription = $scope.bookingDetails.state == "incident";
+                $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
+                $scope.showIncidentDescription = $scope.bookingDetails.state === "incident";
                 if (!$scope.currentUserPromise) {
                     $scope.currentUserPromise = UsersService.getMe().$promise;
                 }
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.contractLink = Endpoints.api_url + "bookings/" + $stateParams.uuid + "/contract/";
-                    $scope.isOwner = $scope.currentUserUrl.indexOf(bookingDetails.owner.id) != -1;
-                    $scope.isBorrower = $scope.currentUserUrl.indexOf(bookingDetails.borrower.id) != -1;
+                    $scope.isOwner = $scope.currentUserUrl.indexOf(bookingDetails.owner.id) !== -1;
+                    $scope.isBorrower = $scope.currentUserUrl.indexOf(bookingDetails.borrower.id) !== -1;
                     var borrower = bookingDetails.borrower;
 
                     $scope.borrowerName = borrower.username;
@@ -81,7 +81,7 @@ define([
                 // Load comments
                 CommentsService.getCommentList($stateParams.uuid).then(function (commentList) {
                     $scope.commentList = commentList;
-                    $scope.showCommentForm = $scope.commentList.length == 0 && $scope.bookingDetails.state == "ended";
+                    $scope.showCommentForm = $scope.commentList.length === 0 && $scope.bookingDetails.state === "ended";
                 });
 
                 if ($scope.showIncidentDescription) {
@@ -132,7 +132,7 @@ define([
                         $scope.phoneNumber = !!phoneObj.number.numero ? phoneObj.number.numero : phoneObj.number;
                     } else {
                         PhoneNumbersService.getPremiumRateNumber(phoneObj.id).$promise.then(function (result) {
-                            if (!result.error || result.error == "0") {
+                            if (!result.error || result.error === "0") {
                                 $scope.phoneNumber = result.numero;
                             }
                         });

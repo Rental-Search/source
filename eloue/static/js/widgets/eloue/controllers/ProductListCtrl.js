@@ -14,6 +14,9 @@ define([
         "MapsService",
         function ($scope, $window, $document, MapsService) {
 
+            /**
+             * Callback function for Google maps script loaded event.
+             */
             $window.googleMapsLoaded = function () {
                 $("#geolocate").formmapper({
                     details: "form"
@@ -26,28 +29,17 @@ define([
                         details: "form"
                     });
 
-                    $("#start-date").datepicker({
-                        language: "fr",
-                        autoclose: true,
-                        todayHighlight: true,
-                        startDate: Date.today()
-                    });
+                    $scope.applyDatePicker("start-date");
+                    $scope.applyDatePicker("end-date");
 
-                    $("#end-date").datepicker({
-                        language: "fr",
-                        autoclose: true,
-                        todayHighlight: true,
-                        startDate: Date.today()
-                    });
-
-                    var rangeEl = $("#range");
-                    var radius = Number(rangeEl.val().replace(",", "."));
-                    var mapOptions = {
-                        zoom: MapsService.zoom(radius),
-                        disableDefaultUI: true,
-                        zoomControl: true,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
+                    var rangeEl = $("#range"),
+                        radius = Number(rangeEl.val().replace(",", ".")),
+                        mapOptions = {
+                            zoom: MapsService.zoom(radius),
+                            disableDefaultUI: true,
+                            zoomControl: true,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP
+                        };
                     var map = new google.maps.Map(mapCanvas, mapOptions);
                     var geocoder = new google.maps.Geocoder();
                     geocoder.geocode(
@@ -131,8 +123,17 @@ define([
                     });
 
 
-                    setMarkers(map, products, "li#marker-");
+                    $scope.setMarkers(map, products, "li#marker-");
                 }
+            };
+
+            $scope.applyDatePicker = function (fieldId) {
+                $("#" + fieldId).datepicker({
+                    language: "fr",
+                    autoclose: true,
+                    todayHighlight: true,
+                    startDate: Date.today()
+                });
             };
 
             $scope.activateLayoutSwitcher = function () {
@@ -151,61 +152,63 @@ define([
                 }
             };
 
-            var detailSearchForm = $("#detail-search");
+            $scope.activateCategoryAndSortSelector = function () {
+                var detailSearchForm = $("#detail-search");
 
-            var categorySelection = $("#category-selection");
-            if (detailSearchForm && categorySelection) {
-                categorySelection.change(function () {
-                    var location = $(this).find(":selected").attr("location");
-                    detailSearchForm.attr("action", location);
-                });
-            }
-
-            var priceSlider = $("#price-slider");
-            if (priceSlider) {
-                var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
-                var min = priceSlider.attr("min-value");
-                var max = priceSlider.attr("max-value");
-                if (!min || !max) {
-                    $("#price-label").hide();
-                } else {
-                    var minValue = priceMinInput.attr("value"), maxValue = priceMaxInput.attr("value");
-                    if (!minValue) {
-                        minValue = min;
-                    }
-                    if (!maxValue) {
-                        maxValue = max;
-                    }
-                    priceSlider.attr("value", minValue + ";" + maxValue);
-                    priceSlider.slider({
-                        from: Number(min),
-                        to: Number(max),
-                        limits: false,
-                        dimension: "&nbsp;&euro;",
-                        onstatechange: function (value) {
-                            var values = value.split(";");
-                            // enable inputs so their values could be now posted with a form data
-                            priceMinInput.prop("disabled", false);
-                            priceMaxInput.prop("disabled", false);
-                            // set new values to hidden inputs
-                            priceMinInput.attr("value", values[0]);
-                            priceMaxInput.attr("value", values[1]);
+                var categorySelection = $("#category-selection");
+                if (detailSearchForm && categorySelection) {
+                    categorySelection.change(function () {
+                        var location = $(this).find(":selected").attr("location");
+                        detailSearchForm.attr("action", location);
+                    });
+                }
+                var sortSelector = $("#sort-selector");
+                if (sortSelector) {
+                    sortSelector.change(function (e) {
+                        if (detailSearchForm) {
+                            detailSearchForm.submit();
                         }
                     });
                 }
-            }
+            };
 
-            var sortSelector = $("#sort-selector");
-            if (sortSelector) {
-                sortSelector.change(function (e) {
-                    if (detailSearchForm) {
-                        detailSearchForm.submit();
+            $scope.activatePriceSlider = function () {
+                var priceSlider = $("#price-slider");
+                if (priceSlider) {
+                    var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
+                    var min = priceSlider.attr("min-value");
+                    var max = priceSlider.attr("max-value");
+                    if (!min || !max) {
+                        $("#price-label").hide();
+                    } else {
+                        var minValue = priceMinInput.attr("value"), maxValue = priceMaxInput.attr("value");
+                        if (!minValue) {
+                            minValue = min;
+                        }
+                        if (!maxValue) {
+                            maxValue = max;
+                        }
+                        priceSlider.attr("value", minValue + ";" + maxValue);
+                        priceSlider.slider({
+                            from: Number(min),
+                            to: Number(max),
+                            limits: false,
+                            dimension: "&nbsp;&euro;",
+                            onstatechange: function (value) {
+                                var values = value.split(";");
+                                // enable inputs so their values could be now posted with a form data
+                                priceMinInput.prop("disabled", false);
+                                priceMaxInput.prop("disabled", false);
+                                // set new values to hidden inputs
+                                priceMinInput.attr("value", values[0]);
+                                priceMaxInput.attr("value", values[1]);
+                            }
+                        });
                     }
-                });
-            }
+                }
+            };
 
-
-            var setMarkers = function (map, locations, markerId) {
+            $scope.setMarkers = function (map, locations, markerId) {
                 var staticUrl = "/static/";
                 var scripts = $document[0].getElementsByTagName("script");
                 for (var i = 0, l = scripts.length; i < l; i++) {
@@ -243,26 +246,26 @@ define([
 
                     marker.set("myZIndex", marker.getZIndex());
 
-                    google.maps.event.addListener(marker, "mouseover", mouseOverListenerGenerator(imageHover, marker, markerId));
-                    google.maps.event.addListener(marker, "click", mouseClickListenerGenerator(marker, markerId));
-                    google.maps.event.addListener(marker, "mouseout", mouseOutListenerGenerator(image, marker, markerId));
+                    google.maps.event.addListener(marker, "mouseover", $scope.mouseOverListenerGenerator(imageHover, marker, markerId));
+                    google.maps.event.addListener(marker, "click", $scope.mouseClickListenerGenerator(marker, markerId));
+                    google.maps.event.addListener(marker, "mouseout", $scope.mouseOutListenerGenerator(image, marker, markerId));
 
-                    $(markerId + marker.get("myZIndex")).mouseover(triggerMouseOverGenerator(marker));
+                    $(markerId + marker.get("myZIndex")).mouseover($scope.triggerMouseOverGenerator(marker));
 
-                    $(markerId + marker.get("myZIndex")).mouseout(triggerMouseOutGenerator(marker));
+                    $(markerId + marker.get("myZIndex")).mouseout($scope.triggerMouseOutGenerator(marker));
                 }
             };
 
-            function mouseClickListenerGenerator(marker, markerId) {
+            $scope.mouseClickListenerGenerator = function (marker, markerId) {
                 return function () {
                     // Jump to product item
                     $("html, body").animate({
                         scrollTop: $(markerId + marker.get("myZIndex")).offset().top - 20
                     }, 1000);
                 };
-            }
+            };
 
-            function mouseOverListenerGenerator(imageHover, marker, markerId) {
+            $scope.mouseOverListenerGenerator = function (imageHover, marker, markerId) {
                 return function () {
                     this.setOptions({
                         icon: imageHover,
@@ -272,9 +275,9 @@ define([
                     //TODO: toggle ":hover" styles
 //                $(markerId + marker.get("myZIndex")).find(".declarer-container")[0].trigger("hover");
                 };
-            }
+            };
 
-            function mouseOutListenerGenerator(image, marker, markerId) {
+            $scope.mouseOutListenerGenerator = function (image, marker, markerId) {
                 return function () {
                     this.setOptions({
                         icon: image,
@@ -282,24 +285,25 @@ define([
                     });
                     $(markerId + marker.get("myZIndex")).removeAttr("style");
                 };
-            }
+            };
 
-            function triggerMouseOverGenerator(marker) {
+            $scope.triggerMouseOverGenerator = function (marker) {
                 return function () {
                     marker.setAnimation(google.maps.Animation.BOUNCE);
                     google.maps.event.trigger(marker, "mouseover");
                 };
-            }
+            };
 
-            function triggerMouseOutGenerator(marker) {
+            $scope.triggerMouseOutGenerator = function (marker) {
                 return function () {
                     marker.setAnimation(null);
                     google.maps.event.trigger(marker, "mouseout");
                 };
-            }
+            };
 
             MapsService.loadGoogleMaps();
-
             $scope.activateLayoutSwitcher();
+            $scope.activateCategoryAndSortSelector();
+            $scope.activatePriceSlider();
         }]);
 });

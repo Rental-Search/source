@@ -2,6 +2,9 @@ define([
     "eloue/app",
     "../../../../common/eloue/services/BookingsService"
 ], function (EloueWidgetsApp) {
+    /**
+     * Controller for calendar tab on product details page (currently it is hidden).
+     */
     "use strict";
     EloueWidgetsApp.controller("CalendarCtrl", [
         "$scope", "BookingsService",

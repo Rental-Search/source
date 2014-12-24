@@ -15,14 +15,13 @@ define([
              * Insert YouTube video into defined container, add play on modal open and stop on modal hide
              */
             $scope.addVideoPlayer = function () {
-                var tag = $document[0].createElement("script");
+                var tag = $document[0].createElement("script"),
+                    firstScriptTag = $document[0].getElementsByTagName("script")[0],
+                    videoModal = $("#videoModal"),
+                    player;
 
                 tag.src = "https://www.youtube.com/iframe_api";
-                var firstScriptTag = $document[0].getElementsByTagName("script")[0];
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                var videoModal = $("#videoModal");
-                var player;
-
                 videoModal.on("shown.bs.modal", function () {
                     player = new YT.Player("videoContainer", {
                         height: "480",

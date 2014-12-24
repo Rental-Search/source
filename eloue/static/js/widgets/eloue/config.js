@@ -38,14 +38,14 @@ define(["eloue/app",
             }
         ]);
 
-        EloueApp.run(["$location", "$http", "AuthService", function ($location, $http, AuthService) {
-            var userToken = AuthService.getCookie("user_token");
+        EloueApp.run(["$http", "AuthService", function ($http, AuthService) {
+            var userToken = AuthService.getCookie("user_token"),
+                csrftoken = AuthService.getCookie("csrftoken");
             $http.defaults.useXDomain = true;
-            delete $http.defaults.headers.common['X-Requested-With'];
+            delete $http.defaults.headers.common["X-Requested-With"];
             if (userToken && userToken.length > 0) {
                 $http.defaults.headers.common.authorization = "Bearer " + userToken;
             }
-            var csrftoken = AuthService.getCookie('csrftoken');
             if (csrftoken && csrftoken.length > 0) {
                 $http.defaults.headers.common["X-CSRFToken"] = csrftoken;
             }

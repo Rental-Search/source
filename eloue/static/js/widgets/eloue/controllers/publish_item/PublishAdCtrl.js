@@ -212,11 +212,11 @@ define([
 
 
             $scope.isCategorySelectorsValid = function () {
-                return !!$scope.rootCategories && !!$scope.rootCategory
-                    && (!!$scope.nodeCategories && $scope.nodeCategories.length > 0 && !!$scope.nodeCategory
-                    || (!$scope.nodeCategories || $scope.nodeCategories.length == 0))
-                    && (!!$scope.leafCategories && $scope.leafCategories.length > 0 && !!$scope.product.category
-                    || (!$scope.leafCategories || $scope.leafCategories.length == 0))
+                return !!$scope.rootCategories && !!$scope.rootCategory &&
+                    (!!$scope.nodeCategories && $scope.nodeCategories.length > 0 && !!$scope.nodeCategory ||
+                    (!$scope.nodeCategories || $scope.nodeCategories.length === 0)) &&
+                    (!!$scope.leafCategories && $scope.leafCategories.length > 0 && !!$scope.product.category ||
+                    (!$scope.leafCategories || $scope.leafCategories.length === 0));
             };
 
             /**
@@ -247,7 +247,7 @@ define([
                 $scope.product.description = "";
                 $scope.product.address = Endpoints.api_url + "addresses/" + $scope.currentUser.default_address.id + "/";
                 if ($scope.price.amount > 0) {
-                    if (!$scope.leafCategories || $scope.leafCategories.length == 0) {
+                    if (!$scope.leafCategories || $scope.leafCategories.length === 0) {
                         if (!!$scope.nodeCategories && $scope.nodeCategories.length > 0) {
                             $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
                         } else {
@@ -310,7 +310,6 @@ define([
                 ScriptTagService.trackPageView();
                 ScriptTagService.loadPdltrackingScript($scope.currentUser.id);
                 ScriptTagService.loadAdWordsTags("EO41CNPrpQMQjaaF6gM");
-                //TODO: redirects to the dashboard item detail page.
                 toastr.options.positionClass = "toast-top-full-width";
                 toastr.success("Annonce publiée", "");
                 $(".modal").modal("hide");

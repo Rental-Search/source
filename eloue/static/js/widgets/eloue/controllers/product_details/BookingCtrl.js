@@ -20,8 +20,11 @@ define([
     "../../../../common/eloue/services/ToDashboardRedirectService",
     "../../../../common/eloue/services/ScriptTagService"
 ], function (EloueWidgetsApp, toastr) {
-    "use strict";
 
+    /**
+     * Controller for widgets on product details page that are related to booking.
+     */
+    "use strict";
     EloueWidgetsApp.controller("BookingCtrl", [
         "$scope",
         "$window",
@@ -461,7 +464,7 @@ define([
                     AuthService.saveAttemptUrl(name);
                     name = "login";
                 } else {
-                    if ((name === "message") && $scope.productRelatedMessages.length == 0) {
+                    if ((name === "message") && $scope.productRelatedMessages.length === 0) {
                         $scope.loadMessageThread();
                     } else if (name === "booking") {
                         $scope.loadCreditCards();
@@ -598,7 +601,7 @@ define([
             };
 
             $scope.loadShippingPoints = function () {
-                if ($scope.addShipping && $scope.borrowerShippingPoints.length == 0) {
+                if ($scope.addShipping && $scope.borrowerShippingPoints.length === 0) {
                     if (!!$scope.currentUser.default_address) {
                         $scope.shippingPointsRequestInProgress = true;
                         var shippingPointsPromise = {};

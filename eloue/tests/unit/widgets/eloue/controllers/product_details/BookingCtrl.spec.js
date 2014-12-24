@@ -1,8 +1,8 @@
-define(["angular-mocks", "datejs", "eloue/controllers/product_details/ProductDetailsCtrl"], function () {
+define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtrl"], function () {
 
-    describe("Controller: ProductDetailsCtrl", function () {
+    describe("Controller: BookingCtrl", function () {
 
-        var ProductDetailsCtrl,
+        var BookingCtrl,
             scope,
             window,
             location,
@@ -198,7 +198,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/ProductDet
             spyOn(scriptTagServiceMock, "trackPageView").and.callThrough();
             spyOn(scriptTagServiceMock, "loadAdWordsTags").and.callThrough();
 
-            ProductDetailsCtrl = $controller("ProductDetailsCtrl", {
+            BookingCtrl = $controller("BookingCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
                 CivilityChoices: civilityChoicesMock,
                 ProductsService: productsServiceMock,
@@ -220,118 +220,106 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/ProductDet
             });
         }));
 
-        it("ProductDetailsCtrl should be not null", function () {
-            expect(!!ProductDetailsCtrl).toBe(true);
+        it("BookingCtrl should be not null", function () {
+            expect(!!BookingCtrl).toBe(true);
         });
 
-        it("ProductDetailsCtrl:updatePrice", function () {
+        it("BookingCtrl:updatePrice", function () {
             scope.updatePrice();
         });
 
-        it("ProductDetailsCtrl:loadMessageThread", function () {
+        it("BookingCtrl:loadMessageThread", function () {
             scope.loadMessageThread();
         });
 
-        it("ProductDetailsCtrl:getProductIdFromUrl", function () {
+        it("BookingCtrl:getProductIdFromUrl", function () {
             scope.getProductIdFromUrl();
         });
 
-        it("ProductDetailsCtrl:handleResponseErrors", function () {
+        it("BookingCtrl:handleResponseErrors", function () {
             scope.handleResponseErrors();
         });
 
-        it("ProductDetailsCtrl:sendMessage", function () {
+        it("BookingCtrl:sendMessage", function () {
             scope.sendMessage();
         });
 
-        it("ProductDetailsCtrl:callOwner", function () {
+        it("BookingCtrl:callOwner", function () {
             scope.callOwner();
         });
 
-        it("ProductDetailsCtrl:pointSelected", function () {
+        it("BookingCtrl:pointSelected", function () {
             scope.pointSelected();
         });
 
-        it("ProductDetailsCtrl:saveDefaultAddress", function () {
+        it("BookingCtrl:saveDefaultAddress", function () {
             scope.saveDefaultAddress();
         });
 
-        it("ProductDetailsCtrl:sendBookingRequest", function () {
+        it("BookingCtrl:sendBookingRequest", function () {
             scope.sendBookingRequest();
         });
 
-        it("ProductDetailsCtrl:sendBookingRequest(no default address)", function () {
+        it("BookingCtrl:sendBookingRequest(no default address)", function () {
             scope.noAddress = true;
             scope.rootCategory = "automobile";
             scope.sendBookingRequest();
         });
 
-        it("ProductDetailsCtrl:saveCardAndRequestBooking", function () {
+        it("BookingCtrl:saveCardAndRequestBooking", function () {
             scope.saveCardAndRequestBooking();
         });
 
-        it("ProductDetailsCtrl:requestBooking", function () {
+        it("BookingCtrl:requestBooking", function () {
             scope.requestBooking();
         });
 
-        it("ProductDetailsCtrl:payForBooking", function () {
+        it("BookingCtrl:payForBooking", function () {
             var booking = { uuid: 1}, paymentInfo = {};
             scope.payForBooking(booking, paymentInfo);
         });
 
-        it("ProductDetailsCtrl:getEventLabel", function () {
+        it("BookingCtrl:getEventLabel", function () {
             scope.getEventLabel();
         });
 
-        it("ProductDetailsCtrl:getEventLabel (auto)", function () {
-            scope.rootCategory = "automobile";
+        it("BookingCtrl:getEventLabel (auto)", function () {
+            scope.isAuto = true;
             scope.productCategoryName = "renault";
             expect(scope.getEventLabel()).toEqual("Voiture - " + scope.productCategoryName);
         });
-        it("ProductDetailsCtrl:getEventLabel (real estate)", function () {
-            scope.rootCategory = "location-saisonniere";
+        it("BookingCtrl:getEventLabel (real estate)", function () {
+            scope.isRealEstate = true;
             scope.productCategoryName = "condominium";
             expect(scope.getEventLabel()).toEqual("Logement - " + scope.productCategoryName);
         });
 
-        it("ProductDetailsCtrl:clearCreditCard", function () {
+        it("BookingCtrl:clearCreditCard", function () {
             scope.clearCreditCard();
         });
 
-        it("ProductDetailsCtrl:loadProductCategoryAncestors", function () {
+        it("BookingCtrl:loadProductCategoryAncestors", function () {
             scope.loadProductCategoryAncestors();
         });
 
-        it("ProductDetailsCtrl:loadPictures", function () {
+        it("BookingCtrl:loadPictures", function () {
             scope.loadPictures();
         });
 
-        it("ProductDetailsCtrl:loadPhoneDetails", function () {
+        it("BookingCtrl:loadPhoneDetails", function () {
             scope.loadPhoneDetails();
         });
 
-        it("ProductDetailsCtrl:loadCreditCards", function () {
+        it("BookingCtrl:loadCreditCards", function () {
             scope.loadCreditCards();
         });
 
-        it("ProductDetailsCtrl:loadProductShippingPoint", function () {
+        it("BookingCtrl:loadProductShippingPoint", function () {
             scope.loadProductShippingPoint();
         });
 
-        it("ProductDetailsCtrl:loadShippingPoints", function () {
+        it("BookingCtrl:loadShippingPoints", function () {
             scope.loadShippingPoints();
-        });
-
-        it("ProductDetailsCtrl:isAuto", function () {
-            scope.isAuto();
-        });
-
-        it("ProductDetailsCtrl:isRealEstate", function () {
-            scope.isRealEstate();
-        });
-
-        it("ProductDetailsCtrl:selectTab", function () {
-            scope.selectTab();
         });
     });
 });
