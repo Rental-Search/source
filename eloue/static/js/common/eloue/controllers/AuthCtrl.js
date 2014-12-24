@@ -10,9 +10,10 @@ define([
     EloueCommon.controller("AuthCtrl", [
         "$scope",
         "$window",
+        "$document",
         "AuthService",
         "UsersService",
-        function ($scope, $window, AuthService, UsersService) {
+        function ($scope, $window, $document, AuthService, UsersService) {
             var currentUserToken = AuthService.getCookie("user_token");
             if (currentUserToken) {
                 // Get current user
@@ -34,5 +35,14 @@ define([
                     $window.location.reload();
                 }
             };
+
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0&appId=197983240245844";
+                fjs.parentNode.insertBefore(js, fjs);
+            }($document[0], "script", "facebook-jssdk"));
         }]);
 });

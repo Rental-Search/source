@@ -6,7 +6,7 @@ define([
 
     EloueWidgetsApp.controller("ProductDetailsCtrl", [
         "$scope", "$window", "$document", "MapsService",
-        function ($scope, MapsService) {
+        function ($scope, $window, $document, MapsService) {
 
             $window.googleMapsLoaded = function () {
                 $("#geolocate").formmapper({
