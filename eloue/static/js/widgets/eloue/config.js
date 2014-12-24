@@ -1,5 +1,7 @@
 define(["eloue/app",
         "eloue/controllers/WidgetsRootCtrl",
+        "eloue/controllers/HomePageCtrl",
+        "eloue/controllers/ProductListCtrl",
         "eloue/controllers/product_details/BookingCtrl",
         "eloue/controllers/product_details/ProductDetailsCtrl",
         "eloue/controllers/product_details/CalendarCtrl",

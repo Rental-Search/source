@@ -124,7 +124,7 @@ require([
     "bootstrap-datepicker-fr",
     "../common/eloue/commonApp",
     "../common/eloue/i18n",
-    "eloue/route"
+    "eloue/config"
 ], function ($, _, angular) {
     "use strict";
     $(function () {
