@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+    "use strict";
     /**
      * Directive to show global error message for form.
      * If it's have not message set ng-hide to container.

@@ -1,6 +1,6 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
     "../../../common/eloue/services/FormService"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing users.
      */
@@ -29,8 +29,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             usersService.resetPassword = function (userId, form) {
-                var resetPasswordUrl = Endpoints.api_url + "users/" + userId + "/reset_password/";
-                var deferred = $q.defer();
+                var resetPasswordUrl = Endpoints.api_url + "users/" + userId + "/reset_password/",
+                    deferred = $q.defer();
 
                 FormService.send("POST", resetPasswordUrl, form,
                     function (data) {
@@ -48,6 +48,5 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             return usersService;
-        }
-    ]);
+        }]);
 });

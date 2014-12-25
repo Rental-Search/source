@@ -1,8 +1,8 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
     "../../../common/eloue/services/UtilsService",
     "../../../common/eloue/services/MessageThreadsService"
 ], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing bookings.
      */
@@ -16,11 +16,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             var bookingsService = {};
 
             bookingsService.getBookingsByProduct = function (productId) {
-                var deferred = $q.defer();
-                var bookingList = [];
+                var deferred = $q.defer(), bookingList = [];
                 Bookings.get({product: productId, _cache: new Date().getTime()}).$promise.then(function (data) {
 
-                    angular.forEach(data.results, function (value, key) {
+                    angular.forEach(data.results, function (value) {
                         var booking = {
                             state: value.state,
                             total_amount: value.total_amount,
@@ -57,13 +56,13 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     ordering: "-created_at",
                     _cache: new Date().getTime()
                 };
-                if (!!state) {
+                if (state) {
                     params.state = state;
                 }
-                if (!!borrowerId) {
+                if (borrowerId) {
                     params.borrower = borrowerId;
                 }
-                if (!!ownerId) {
+                if (ownerId) {
                     params.owner = ownerId;
                 }
 
@@ -100,13 +99,15 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 Bookings.get({
                     uuid: bookingUUID,
                     _cache: new Date().getTime()
-                }).$promise.then(function (bookingData) {
+                }).$promise.then(
+                    function (bookingData) {
                         var booking = bookingsService.parseBooking(bookingData);
                         if (jQuery(bookingData.product.pictures).size() > 0) {
                             booking.product.picture = bookingData.product.pictures[0].image.thumbnail;
                         }
                         deferred.resolve(booking);
-                    });
+                    }
+                );
 
                 return deferred.promise;
             };
@@ -154,17 +155,18 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 Bookings.get({
                     product: productId,
                     _cache: new Date().getTime()
-                }).$promise.then(function (bookingListData) {
-                        var bookingsCount = bookingListData.results.length;
-                        var booking = null;
+                }).$promise.then(
+                    function (bookingListData) {
+                        var bookingsCount = bookingListData.results.length, booking = null, bookingData;
 
                         if (bookingsCount > 0) {
-                            var bookingData = bookingListData.results[bookingsCount - 1];
+                            bookingData = bookingListData.results[bookingsCount - 1];
                             booking = bookingsService.parseBooking(bookingData);
                         }
 
                         deferred.resolve(booking);
-                    });
+                    }
+                );
 
                 return deferred.promise;
             };

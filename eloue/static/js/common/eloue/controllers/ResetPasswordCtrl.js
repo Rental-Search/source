@@ -1,8 +1,8 @@
-"use strict";
 define([
     "../../../common/eloue/commonApp",
     "../../../common/eloue/services/AuthService"
 ], function (EloueCommon) {
+    "use strict";
     /**
      * Controller for the reset password form.
      */
@@ -33,14 +33,14 @@ define([
 
         $scope.onSendResetRequestError = function (jqXHR) {
             var errorText = "";
-            if (jqXHR.status == 400) {
+            if (jqXHR.status === 400) {
                 if (!!jqXHR.responseJSON.errors.email) {
                     errorText = jqXHR.responseJSON.errors.email[0];
                 } else {
                     errorText = "Bad request.";
                 }
             } else {
-                errorText = "An error occured!";
+                errorText = "An error occurred!";
             }
             $scope.$apply(function () {
                 $scope.resetPasswordError = errorText;
@@ -69,14 +69,14 @@ define([
 
         $scope.onResetPasswordError = function (jqXHR) {
             var errorText = "";
-            if (jqXHR.status == 400) {
-                if (!!jqXHR.responseJSON.errors.__all__) {
+            if (jqXHR.status === 400) {
+                if (jqXHR.responseJSON.errors.__all__) {
                     errorText = jqXHR.responseJSON.errors.__all__[0];
                 } else {
                     errorText = "Bad request.";
                 }
             } else {
-                errorText = "An error occured!";
+                errorText = "An error occurred!";
             }
             $scope.$apply(function () {
                 $scope.resetPasswordError = errorText;

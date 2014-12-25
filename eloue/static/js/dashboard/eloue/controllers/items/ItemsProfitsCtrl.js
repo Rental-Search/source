@@ -1,10 +1,8 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/services/BookingsService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the items profits tab.
      */
@@ -24,19 +22,15 @@ define([
                 $scope.markListItemAsSelected("item-tab-", "profits");
                 $scope.initCustomScrollbars();
 
-                var sum = 0;
-                var startOfBookingPeriod = Date.today();
-                var endOfBookingPeriod = Date.today();
-                var bookingList = [];
+                var sum = 0, startOfBookingPeriod = Date.today(), endOfBookingPeriod = Date.today(), bookingList = [],
+                    durationAsDate;
                 angular.forEach(bookings, function (value, key) {
-                    if (value.state == "closed" || value.state == "ended" || value.state == "incident") {
+                    if (value.state === "closed" || value.state === "ended" || value.state === "incident") {
                         var bookingStartDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
                         if (bookingStartDay < startOfBookingPeriod) {
                             startOfBookingPeriod = bookingStartDay;
                         }
-
-                        //TODO: maybe should be fixed to sum of transferred amounts
-                        sum += parseInt(value.total_amount);
+                        sum += parseInt(value.total_amount, 10);
                         bookingList.push(value);
                     }
                 });
@@ -45,7 +39,7 @@ define([
                 $scope.numberOfBookings = bookingList.length;
 
                 //Get duration as difference between actual duration in milliseconds represented as new date and calendar start date - 1.01.1970
-                var durationAsDate = new Date(endOfBookingPeriod.getTime() - startOfBookingPeriod.getTime()).add(-1970).years();
+                durationAsDate = new Date(endOfBookingPeriod.getTime() - startOfBookingPeriod.getTime()).add(-1970).years();
                 $scope.durationYears = durationAsDate.getFullYear();
                 $scope.durationMonths = durationAsDate.getMonth() + 1;
                 $scope.durationDays = durationAsDate.getDate();

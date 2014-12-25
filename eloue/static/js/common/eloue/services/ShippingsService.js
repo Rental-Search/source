@@ -1,6 +1,6 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
     "../../../common/eloue/services/UtilsService"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing shippings.
      */

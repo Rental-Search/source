@@ -1,5 +1,3 @@
-"use strict";
-
 define(["eloue/app",
         "eloue/controllers/DashboardRootCtrl",
         "eloue/controllers/DashboardCtrl",
@@ -45,7 +43,7 @@ define(["eloue/app",
         "../../common/eloue/directives/ResetPasswordForm",
         "../../common/eloue/interceptors/ErrorHandlerInterceptor"],
     function (EloueApp) {
-
+        "use strict";
         /**
          * Routing configuration for app.
          */
@@ -248,19 +246,17 @@ define(["eloue/app",
             }
         ]);
 
-        EloueApp.run(["$rootScope", "$http", "$state", "$window", "AuthService", function ($rootScope, $http, $state, $window, AuthService) {
+        EloueApp.run(["$rootScope", "$http", "$state", "$window", "$document", "AuthService", function ($rootScope, $http, $state, $window, $document, AuthService) {
             $(".container-full-screen").show();
             AuthService.saveAttemptUrl($window.location.href);
-            var navRoutes = ["dashboard", "messages", "bookings", "items", "account"];
-            var userToken = "";
-            var name = "user_token=";
-            var ca = document.cookie.split(";");
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == " ") {
+            var i, c, navRoutes = ["dashboard", "messages", "bookings", "items", "account"], userToken = "",
+                name = "user_token=", ca = $document[0].cookie.split(";");
+            for (i = 0; i < ca.length; i += 1) {
+                c = ca[i];
+                while (c.charAt(0) === " ") {
                     c = c.substring(1);
                 }
-                if (c.indexOf(name) != -1) {
+                if (c.indexOf(name) !== -1) {
                     userToken = c.substring(name.length, c.length);
                 }
             }
@@ -271,7 +267,7 @@ define(["eloue/app",
                 $http.defaults.headers.common.Authorization = "Bearer " + userToken;
             }
 
-            var csrftoken = AuthService.getCookie("csrftoken");
+            var csrftoken = AuthService.getCSRFToken();
             if (csrftoken && csrftoken.length > 0) {
                 $http.defaults.headers.common["X-CSRFToken"] = csrftoken;
             }
@@ -285,8 +281,8 @@ define(["eloue/app",
                         event.preventDefault();
                     } else {
                         var stateName = toState.name;
-                        angular.forEach(navRoutes, function (route, key) {
-                            if (stateName.indexOf(route) == 0) {
+                        angular.forEach(navRoutes, function (route) {
+                            if (stateName.indexOf(route) === 0) {
                                 $("[ui-sref='" + route + "']").addClass("current");
                             } else {
                                 $("[ui-sref='" + route + "']").removeClass("current");

@@ -1,11 +1,9 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/services/UsersService",
     "../../../../common/eloue/services/AddressesService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the account's addresses  page.
      */
@@ -22,7 +20,7 @@ define([
 
                 AddressesService.getAddressesByPatron(currentUserId).then(function (results) {
                     $scope.addressList = results;
-                    $scope.defaultAddressId = !!currentUser.default_address ? currentUser.default_address.id : null;
+                    $scope.defaultAddressId = currentUser.default_address ? currentUser.default_address.id : null;
                 });
             });
         }

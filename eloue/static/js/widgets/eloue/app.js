@@ -1,4 +1,3 @@
-"use strict";
 define([
     "angular",
     "angular-cookies",
@@ -7,6 +6,7 @@ define([
     "angular-i18n",
     "../../common/eloue/commonApp"
 ], function (angular) {
+    "use strict";
     // Create application module
     return angular.module("EloueWidgetsApp", [
         "EloueCommon",

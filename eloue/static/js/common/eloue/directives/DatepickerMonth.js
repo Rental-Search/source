@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+    "use strict";
     /**
      * Month+year datepicker component.
      */

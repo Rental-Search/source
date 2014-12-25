@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for uploading forms.
      */

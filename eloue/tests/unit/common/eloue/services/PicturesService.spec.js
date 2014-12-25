@@ -42,8 +42,7 @@ define(["angular-mocks", "eloue/services/PicturesService"], function () {
         });
 
         it("PicturesService:savePicture", function () {
-            var productId = 1;
-            PicturesService.savePicture(productId, {}, undefined, undefined);
+            PicturesService.savePicture({}, undefined, undefined);
             expect(formServiceMock.send).toHaveBeenCalled();
         });
 

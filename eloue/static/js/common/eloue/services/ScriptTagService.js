@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for redirection from Go Sport public page to e-loue dashboard app.
      */
@@ -60,19 +60,21 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
          </noscript>
          */
         scriptTagService.loadPdltrackingScript = function (currentUserId) {
+            var script1860, script1859, noscript1859, img1859, img13625, scriptAffilinet, code, oldDocumentWrite,
+                scriptAnnonceur, noscriptAnnonceur, imgAnnonceur;
 
-            var script1860 = $document[0].createElement("script");
+            script1860 = $document[0].createElement("script");
             script1860.type = "text/javascript";
             script1860.src = "https://lead.pdltracking.com/?lead_id=" + currentUserId + "&tt=javascript&sc=1860";
             $document[0].body.appendChild(script1860);
 
-            var script1859 = $document[0].createElement("script");
+            script1859 = $document[0].createElement("script");
             script1859.type = "text/javascript";
             script1859.src = "https://lead.pdltracking.com/?lead_id=" + currentUserId + "%&tt=javascript&sc=1859";
             $document[0].body.appendChild(script1859);
 
-            var noscript1859 = $document[0].createElement("noscript");
-            var img1859 = $document[0].createElement("img");
+            noscript1859 = $document[0].createElement("noscript");
+            img1859 = $document[0].createElement("img");
             img1859.src = "https://lead.pdltracking.com/?lead_id=" + currentUserId + "&tt=pixel&sc=1859";
             img1859.width = "1";
             img1859.height = "1";
@@ -80,16 +82,16 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
             noscript1859.appendChild(img1859);
             $document[0].body.appendChild(noscript1859);
 
-            var img13625 = $document[0].createElement("img");
+            img13625 = $document[0].createElement("img");
             img13625.src = "https://clic.reussissonsensemble.fr/registersale.asp?site=13625&mode=ppl&ltype=1&order=TRACKING_NUMBER";
             img13625.width = "1";
             img13625.height = "1";
             $document[0].body.appendChild(img13625);
 
-            var scriptAffilinet = $document[0].createElement("script");
+            scriptAffilinet = $document[0].createElement("script");
             scriptAffilinet.type = "text/javascript";
             scriptAffilinet.id = "affilinet_advc";
-            var code = "var type = 'Checkout';" +
+            code = "var type = 'Checkout';" +
                 "var site = '13625';";
             try {
                 scriptAffilinet.appendChild($document[0].createTextNode(code));
@@ -99,12 +101,7 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
                 $document[0].body.appendChild(scriptAffilinet);
             }
 
-            //var scriptClic = document.createElement("script");
-            //scriptClic.type = "text/javascript";
-            //scriptClic.src = "https://clic.reussissonsensemble.fr/art/JS/param.aspx";
-            //document.body.appendChild(scriptClic);
-
-            var oldDocumentWrite = $document[0].write;
+            oldDocumentWrite = $document[0].write;
             // change document.write temporary
             $document[0].write = function (node) {
                 $("body").append(node);
@@ -116,12 +113,12 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
                 }, 500);
             });
 
-            var scriptAnnonceur = $document[0].createElement("script");
+            scriptAnnonceur = $document[0].createElement("script");
             scriptAnnonceur.src = "//l.adxcore.com/a/track_conversion.php?annonceurid=21679";
             $document[0].body.appendChild(scriptAnnonceur);
 
-            var noscriptAnnonceur = $document[0].createElement("noscript");
-            var imgAnnonceur = $document[0].createElement("img");
+            noscriptAnnonceur = $document[0].createElement("noscript");
+            imgAnnonceur = $document[0].createElement("img");
             imgAnnonceur.src = "//l.adxcore.com/a/track_conversion.php?adsy=1&annonceurid=21679";
             noscriptAnnonceur.appendChild(imgAnnonceur);
             $document[0].body.appendChild(noscriptAnnonceur);

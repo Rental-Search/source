@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/values",
@@ -7,7 +5,7 @@ define([
     "../../../../common/eloue/services/AddressesService",
     "../../../../common/eloue/services/PhoneNumbersService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the account's profile page.
      */
@@ -40,8 +38,8 @@ define([
                 {id: 11, value: "December"}
             ];
             $scope.yearOptions = [];
-            var currentYear = Date.today().getFullYear();
-            for (var i = 0; i < 99; i++) {
+            var currentYear = Date.today().getFullYear(), i;
+            for (i = 0; i < 99; i += 1) {
                 $scope.yearOptions.push(currentYear - i);
             }
             $scope.licenceDay = null;
@@ -63,8 +61,8 @@ define([
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
-                if (!!$scope.currentUser.default_number) {
-                    $scope.phoneNumber = !!$scope.currentUser.default_number.number.numero ? $scope.currentUser.default_number.number.numero : $scope.currentUser.default_number.number;
+                if ($scope.currentUser.default_number) {
+                    $scope.phoneNumber = $scope.currentUser.default_number.number.numero || $scope.currentUser.default_number.number;
                 }
                 if (!currentUser.default_address) {
                     $scope.noAddress = true;
@@ -72,14 +70,14 @@ define([
                 if (!$scope.noAddress) {
                     AddressesService.getAddressesByPatron(currentUser.id).then(function (results) {
                         $scope.addressList = results;
-                        $scope.defaultAddress = (!!currentUser.default_address) ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
+                        $scope.defaultAddress = currentUser.default_address ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
                         // Timeout is used because of chosen issue (when options are loaded asynchronously, they sometimes not visible in chosen widget)
                         $timeout(function () {
                             $("#defaultAddressSelect").chosen();
                         }, 200);
                     });
                 }
-                if (!!$scope.currentUser.drivers_license_date) {
+                if ($scope.currentUser.drivers_license_date) {
                     var licenceDate = Date.parse($scope.currentUser.drivers_license_date);
                     $scope.licenceDay = licenceDate.getDate();
                     $scope.licenceMonth = licenceDate.getMonth();
@@ -132,8 +130,8 @@ define([
                     $scope.currentUser.drivers_license_date = date.toString("yyyy-MM-ddTHH:mm");
                     $("#drivers_license_date").val($scope.currentUser.drivers_license_date);
                 }
-                var initialNumber = !!$scope.currentUser.default_number ? (!!$scope.currentUser.default_number.number.numero ? $scope.currentUser.default_number.number.numero : $scope.currentUser.default_number.number) : null;
-                if ($scope.phoneNumber != initialNumber) {
+                var initialNumber = $scope.currentUser.default_number ? ($scope.currentUser.default_number.number.numero || $scope.currentUser.default_number.number) : null;
+                if ($scope.phoneNumber !== initialNumber) {
                     if (!initialNumber) {
                         $scope.saveNewPhone();
                     } else {
@@ -146,7 +144,7 @@ define([
                         });
                     }
                 } else {
-                    if (!!$scope.currentUser.default_number) {
+                    if ($scope.currentUser.default_number) {
                         $("#default_number").val($scope.phonesBaseUrl + $scope.currentUser.default_number.id + "/");
                     }
                     $scope.sendUserForm();

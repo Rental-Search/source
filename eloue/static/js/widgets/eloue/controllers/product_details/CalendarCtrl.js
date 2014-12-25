@@ -79,7 +79,7 @@ define([
             $scope.loadCalendar = function () {
                 BookingsService.getBookingsByProduct($scope.product.id).then(function (bookings) {
 
-                    angular.forEach(bookings, function (value, key) {
+                    angular.forEach(bookings, function (value) {
                         value.startDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
                         value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);
                     });
@@ -91,28 +91,25 @@ define([
 
             $scope.updateCalendar = function () {
                 $scope.currentBookings = [];
-                var s = $scope.selectedMonthAndYear.split(" "), date = new Date();
+                var s = $scope.selectedMonthAndYear.split(" "), date = new Date(), i, j, week, weeks = [],
+                    start = new Date(date.moveToFirstDayOfMonth()), currentDay, days, isBooked;
                 date.setMonth(s[0]);
                 date.setFullYear(s[1]);
-                var weeks = [];
-                var start = new Date(date.moveToFirstDayOfMonth());
-                for (var i = 0; i < 6; i++) {
-                    var currentDay = start.moveToDayOfWeek(1, -1);
-                    var days = [];
-                    for (var j = 0; j < 7; j++) {
-                        var isBooked = false;
-                        angular.forEach($scope.bookings, function (value, key) {
+                for (i = 0; i < 6; i += 1) {
+                    currentDay = start.moveToDayOfWeek(1, -1);
+                    days = [];
+                    for (j = 0; j < 7; j += 1) {
+                        isBooked = false;
+                        angular.forEach($scope.bookings, function (value) {
                             if (currentDay.between(value.startDay, value.endDay)) {
                                 isBooked = true;
                                 $scope.currentBookings.push(value);
                             }
                         });
-
                         days.push({dayOfMonth: currentDay.getDate(), isBooked: isBooked});
                         currentDay.add(1).days();
                     }
-
-                    var week = {};
+                    week = {};
                     week.weekDays = days;
                     weeks.push(week);
                     start.add(1).weeks();

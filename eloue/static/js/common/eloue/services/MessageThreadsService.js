@@ -1,8 +1,8 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
     "../../../common/eloue/services/ProductsService",
     "../../../common/eloue/services/ProductRelatedMessagesService",
     "../../../common/eloue/services/UtilsService"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing message threads.
      */
@@ -21,7 +21,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     product: productId,
                     participant: participantId,
                     _cache: new Date().getTime()
-                }).$promise.then(function (result) {
+                }).$promise.then(
+                    function (result) {
                         var promises = [];
                         angular.forEach(result.results, function (value, key) {
                             angular.forEach(value.messages, function (messageLink, idx) {
@@ -32,7 +33,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                         $q.all(promises).then(function success(results) {
                             deferred.resolve(results);
                         });
-                    });
+                    }
+                );
                 return deferred.promise;
             };
 
@@ -44,7 +46,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     page: page,
                     ordering: "-last_message__sent_at",
                     _cache: new Date().getTime()
-                }).$promise.then(function (messageThreadListData) {
+                }).$promise.then(
+                    function (messageThreadListData) {
                         var messageThreadListPromises = [];
 
                         // For each message thread
@@ -64,8 +67,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                                 next: messageThreadListData.next
                             });
                         });
-                    });
-
+                    }
+                );
                 return deferred.promise;
             };
 
@@ -76,7 +79,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 MessageThreads.get({
                     id: threadId,
                     _cache: new Date().getTime()
-                }).$promise.then(function (messageThreadData) {
+                }).$promise.then(
+                    function (messageThreadData) {
                         var messageThreadPromises = {};
 
                         // Load messages
@@ -104,20 +108,19 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                             var messageThread = messageThreadsService.parseMessageThread(messageThreadData, results.messages, results.product);
                             deferred.resolve(messageThread);
                         });
-                    });
-
+                    }
+                );
                 return deferred.promise;
             };
 
             messageThreadsService.getUsersRoles = function (messageThread, currentUserId) {
-                var senderId = messageThread.sender.id;
-                var recipientId = messageThread.recipient.id;
+                var senderId = messageThread.sender.id,
+                    recipientId = messageThread.recipient.id,
+                    result = {
+                        senderId: currentUserId
+                    };
 
-                var result = {
-                    senderId: currentUserId
-                };
-
-                if (senderId == currentUserId) {
+                if (senderId === currentUserId) {
                     result.recipientId = recipientId;
                 } else {
                     result.recipientId = senderId;
@@ -130,7 +133,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 var messageThreadResult = angular.copy(messageThreadData);
 
                 // Parse last message
-                if (!!lastMessageData) {
+                if (lastMessageData) {
                     // if the creation date of the last message is the current day display only the hour
                     // if the creation date of the last message is before the current day display the date and not the hour
                     if (UtilsService.isToday(lastMessageData.sent_at)) {
@@ -139,19 +142,18 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                         messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.MM.yyyy");
                     }
                 }
-
                 return messageThreadResult;
             };
 
             messageThreadsService.parseMessageThread = function (messageThreadData, messagesDataArray, productData) {
-                var messageThreadResult = angular.copy(messageThreadData);
+                var messageThreadResult = angular.copy(messageThreadData), messageKeysToRemove;
 
                 // Parse messages
-                if (!!messagesDataArray) {
+                if (messagesDataArray) {
                     messageThreadResult.messages = messagesDataArray;
-                    var messageKeysToRemove = [];
+                    messageKeysToRemove = [];
                     angular.forEach(messageThreadResult.messages, function (message, key) {
-                        if (!!message) {
+                        if (message) {
                             message.sent_at = UtilsService.formatDate(message.sent_at, "dd.MM.yyyy HH'h'mm");
                         } else {
                             messageKeysToRemove.push(key);
@@ -163,10 +165,9 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 }
 
                 // Parse product
-                if (!!productData) {
+                if (productData) {
                     messageThreadResult.product = productData;
                 }
-
                 return messageThreadResult;
             };
 

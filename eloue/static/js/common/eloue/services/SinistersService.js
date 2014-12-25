@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing sinisters.
      */

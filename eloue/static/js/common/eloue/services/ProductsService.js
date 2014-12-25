@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing products.
      */
@@ -20,17 +20,14 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                 Products.get({address: addressId, _cache: new Date().getTime()}).$promise.then(function (data) {
                     var promises = [];
-
                     angular.forEach(data.results, function (value, key) {
-                        var productDeferred = $q.defer();
-
-                        var productData = {
-                            id: value.id,
-                            summary: value.summary,
-                            deposit_amount: value.deposit_amount
-                        };
-
-                        var productPromises = {};
+                        var productDeferred = $q.defer(),
+                            productData = {
+                                id: value.id,
+                                summary: value.summary,
+                                deposit_amount: value.deposit_amount
+                            },
+                            productPromises = {};
                         productPromises.stats = Products.getStats({id: value.id, _cache: new Date().getTime()});
 
                         // When all data loaded
@@ -56,8 +53,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             productsService.getProductsByOwnerAndRootCategory = function (userId, rootCategoryId, page) {
-                var deferred = $q.defer();
-                var params = {owner: userId, ordering: "-created_at", _cache: new Date().getTime()};
+                var deferred = $q.defer(),
+                    params = {owner: userId, ordering: "-created_at", _cache: new Date().getTime()};
 
                 if (rootCategoryId) {
                     params.category__isdescendant = rootCategoryId;
@@ -69,8 +66,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                 Products.get(params).$promise.then(function (data) {
                     var promises = [];
-                    angular.forEach(data.results, function (value, key) {
-                        var productDeferred = $q.defer();
+                    angular.forEach(data.results, function (value) {
+                        var productDeferred = $q.defer(), subPromises = [];
 
                         var product = {
                             id: value.id,
@@ -88,7 +85,6 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                             product.pricePerDay = 0;
                         }
 
-                        var subPromises = [];
                         subPromises.push(Products.getStats({
                             id: product.id,
                             _cache: new Date().getTime()
@@ -185,7 +181,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     }
                 }
 
-                if (!!ownerStatsData) {
+                if (ownerStatsData) {
                     productResult.ownerStats = ownerStatsData;
                 }
 

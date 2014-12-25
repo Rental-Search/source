@@ -1,8 +1,8 @@
-"use strict";
 define([
     "../../../common/eloue/commonApp",
     "../../../common/eloue/services/LazyLoader"
 ], function (EloueCommon) {
+    "use strict";
     /**
      * Lazy loading list components.
      */
@@ -10,7 +10,7 @@ define([
         function ($injector, $window, $document, $timeout, $rootScope, LazyLoader) {
 
             var appendAnimations = function () {
-                var style = document.createElement("style");
+                var style = $document[0].createElement("style");
                 style.innerHTML = "@-webkit-keyframes spin {\n" +
                 "\t0%{-webkit-transform: rotate(0deg);}\n" +
                 "\t100%{-webkit-transform: rotate(360deg);}\n" +
@@ -19,10 +19,8 @@ define([
                 "\t0%{transform: rotate(0deg);}\n" +
                 "\t100%{transform: rotate(360deg);}\n" +
                 "}";
-                document.head.appendChild(style);
-            };
-
-            var makeSpinner = function (el, color) {
+                $document[0].head.appendChild(style);
+            }, makeSpinner = function (el, color) {
                 el.css({
                     WebkitBoxSizing: "border-box",
                     boxSizing: "border-box",
@@ -49,6 +47,13 @@ define([
                     lazyLoadMethod: "@"
                 },
                 link: function (scope, element, attrs, ngModel) {
+                    var winEl = angular.element($window),
+                        win = winEl[0],
+                        loadingWidget = angular.element($document[0].querySelector(".loading-widget")),
+                        lazyLoader = LazyLoader,
+                        dataProvider = $injector.get(scope.lazyDataProvider),
+                        lazyLoad;
+
                     scope.page = 1;
                     scope.hasNextPage = true;
                     scope.isLoading = false;
@@ -79,17 +84,10 @@ define([
                             }
                         }
                     });
-
-                    var winEl = angular.element($window),
-                        win = winEl[0],
-                        loadingWidget = angular.element(document.querySelector(".loading-widget")),
-                        lazyLoader = LazyLoader,
-                        dataProvider = $injector.get(scope.lazyDataProvider);
                     appendAnimations();
                     makeSpinner(loadingWidget, "transparent rgb(44, 44, 44) rgb(44, 44, 44) rgb(44, 44, 44)");
 
-//                    dataProvider[scope.lazyLoadMethod].apply(null,scope.lazyLoadArgs);
-                    var lazyLoad = function () {
+                    lazyLoad = function () {
                         scope.isLoading = true;
                         var args = scope.lazyLoadArgs.slice(0);
                         args.push(scope.page);
@@ -101,12 +99,11 @@ define([
                         });
 
                         lazyLoader.load()
-                            .then(
-                            function (data) {
+                            .then(function (data) {
                                 if (!data.next) {
                                     scope.hasNextPage = false;
                                 } else {
-                                    scope.page++;
+                                    scope.page += 1;
                                 }
                                 if (!scope.shouldReloadList) {
                                     angular.forEach(Object.keys(data.list), function (key) {
@@ -116,8 +113,7 @@ define([
                                     scope.lazyData = data.list;
                                 }
                                 scope.isLoading = false;
-                            }
-                        );
+                            });
                     };
 
                     scope.$on("startLoading", function (event, args) {

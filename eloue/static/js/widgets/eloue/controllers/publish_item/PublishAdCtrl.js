@@ -39,8 +39,6 @@ define([
             $scope.rootCategories = [];
             $scope.nodeCategories = [];
             $scope.leafCategories = [];
-            //$scope.rootCategory = {};
-            //$scope.nodeCategory = {};
             $scope.capacityOptions = [
                 {id: 1, name: "1"},
                 {id: 2, name: "2"},
@@ -68,7 +66,9 @@ define([
             $scope.isAuto = false;
             $scope.isRealEstate = false;
             $scope.price = {
-                id: null, amount: null, unit: Unit.DAY.id
+                id: null,
+                amount: null,
+                unit: Unit.DAY.id
             };
 
             $scope.errors = {
@@ -96,7 +96,7 @@ define([
             };
 
             // Read authorization token
-            $scope.currentUserToken = AuthService.getCookie("user_token");
+            $scope.currentUserToken = AuthService.getUserToken();
 
             if (!!$scope.currentUserToken) {
                 // Get current user
@@ -119,7 +119,7 @@ define([
                     case 2:
                         $scope.product.category = categoryId;
                         break;
-                    default :
+                    default:
                         $scope.rootCategory = categoryId;
                         $scope.updateNodeCategories();
                 }
@@ -133,8 +133,8 @@ define([
             });
 
             $scope.openModal = function (name, categoryId) {
-                var currentUserToken = AuthService.getCookie("user_token");
-                if (!currentUserToken && name != "login") {
+                var currentUserToken = AuthService.getUserToken(), modalContainer;
+                if (!currentUserToken && name !== "login") {
                     AuthService.saveAttemptUrl(name, {category: categoryId});
                     name = "login";
                 } else {
@@ -158,21 +158,18 @@ define([
                                 var level = 0;
                                 angular.forEach(categories, function (value, key) {
                                     $scope.setCategoryByLvl(value.id, level);
-                                    level++;
+                                    level += 1;
                                 });
                                 $scope.setCategoryByLvl(categoryId, level);
                             });
-                        } else if (!!$scope.rootCategory) {
+                        } else if ($scope.rootCategory) {
                             $scope.updateNodeCategories();
                         }
-
                     });
                 }
-
-
-                if (!!name) {
+                if (name) {
                     $(".modal").modal("hide");
-                    var modalContainer = $("#" + name + "Modal");
+                    modalContainer = $("#" + name + "Modal");
                     modalContainer.modal("show");
                 }
             };
@@ -181,8 +178,7 @@ define([
              * Restore path when closing modal window.
              */
             $scope.$on("closeModal", function (event, args) {
-                var currentPath = $location.path();
-                var newPath = currentPath.slice(0, currentPath.indexOf(args.name));
+                var currentPath = $location.path(), newPath = currentPath.slice(0, currentPath.indexOf(args.name));
                 $location.path(newPath);
                 $scope.$apply();
             });
@@ -213,9 +209,9 @@ define([
 
             $scope.isCategorySelectorsValid = function () {
                 return !!$scope.rootCategories && !!$scope.rootCategory &&
-                    (!!$scope.nodeCategories && $scope.nodeCategories.length > 0 && !!$scope.nodeCategory ||
+                    ((!!$scope.nodeCategories && $scope.nodeCategories.length > 0 && !!$scope.nodeCategory) ||
                     (!$scope.nodeCategories || $scope.nodeCategories.length === 0)) &&
-                    (!!$scope.leafCategories && $scope.leafCategories.length > 0 && !!$scope.product.category ||
+                    ((!!$scope.leafCategories && $scope.leafCategories.length > 0 && !!$scope.product.category) ||
                     (!$scope.leafCategories || $scope.leafCategories.length === 0));
             };
 
@@ -266,7 +262,7 @@ define([
                     ProductsService.saveProduct($scope.product).$promise.then(function (product) {
                         $scope.price.currency = Currency.EUR.name;
                         $scope.price.product = $scope.productsBaseUrl + product.id + "/";
-                        PricesService.savePrice($scope.price).$promise.then(function (result) {
+                        PricesService.savePrice($scope.price).$promise.then(function () {
                             CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
                                 if ($scope.isAuto) {
                                     ScriptTagService.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
@@ -336,13 +332,11 @@ define([
              * Search for node and leaf categories suggestions based on entered product title.
              */
             $scope.searchCategory = function () {
-                //TODO: enable for auto and real estate
                 if (!$scope.isAuto && !$scope.isRealEstate && $scope.rootCategory && $scope.product.summary && ($scope.product.summary.length > 1)) {
                     CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function (categories) {
                         if (categories && categories.length > 0) {
-                            var nodeCategoryList = [];
-                            var leafCategoryList = [];
-                            angular.forEach(categories, function (value, key) {
+                            var nodeCategoryList = [], leafCategoryList = [];
+                            angular.forEach(categories, function (value) {
                                 nodeCategoryList.push({id: value[1].id, name: value[1].name});
                                 leafCategoryList.push({id: value[2].id, name: value[2].name});
                             });

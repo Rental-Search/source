@@ -1,11 +1,9 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/services/CategoriesService",
     "../../../../common/eloue/services/ProductsService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the items terms tab.
      */

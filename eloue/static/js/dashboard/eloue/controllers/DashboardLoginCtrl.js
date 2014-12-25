@@ -1,13 +1,11 @@
-"use strict";
-
 define(["eloue/app"], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the items page.
      */
     EloueDashboardApp.controller("DashboardLoginCtrl", [
-        "$scope", "$timeout",
-        function ($scope, $timeout) {
+        "$timeout",
+        function ($timeout) {
             $timeout(function () {
                 $("#loginModal").modal("show");
             }, 300);

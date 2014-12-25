@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values", "../../../common/eloue/services/FormService"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing addresses.
      */
@@ -19,14 +19,14 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 var deferred = $q.defer();
 
                 Addresses.get({patron: patronId, _cache: new Date().getTime()}).$promise.then(function (result) {
-                    var total = result.count;
+                    var total = result.count, pagesCount, adrPromises, i;
                     if (total <= 10) {
                         deferred.resolve(result.results);
                     } else {
-                        var pagesCount = Math.floor(total / 10) + 1;
-                        var adrPromises = [];
+                        pagesCount = Math.floor(total / 10) + 1;
+                        adrPromises = [];
 
-                        for (var i = 1; i <= pagesCount; i++) {
+                        for (i = 1; i <= pagesCount; i += 1) {
                             adrPromises.push(Addresses.get({
                                 patron: patronId,
                                 _cache: new Date().getTime(),
@@ -53,9 +53,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             addressesService.updateAddress = function (addressId, formData) {
-                var deferred = $q.defer();
-
-                var currentAddressUrl = Endpoints.api_url + "addresses/" + addressId + "/";
+                var deferred = $q.defer(),
+                    currentAddressUrl = Endpoints.api_url + "addresses/" + addressId + "/";
                 FormService.send("POST", currentAddressUrl, formData,
                     function (data) {
                         deferred.resolve(data);

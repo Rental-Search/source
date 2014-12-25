@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/values",
@@ -9,7 +7,7 @@ define([
     "../../../../common/eloue/services/ProductsService",
     "../../../../common/eloue/services/UtilsService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the message detail page.
      */
@@ -41,7 +39,7 @@ define([
                 $scope.messageThread = results.messageThread;
                 if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
                     $scope.messageThread.last_message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
-                    ProductRelatedMessagesService.updateMessage($scope.messageThread.last_message).$promise.then(function (result) {
+                    ProductRelatedMessagesService.updateMessage($scope.messageThread.last_message).$promise.then(function () {
                         $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
                         $scope.updateStatistics();
                     });
@@ -113,7 +111,8 @@ define([
                 $scope.postNewMessage = function () {
                     $scope.submitInProgress = true;
                     ProductRelatedMessagesService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
-                        $scope.message, null, $scope.messageThread.product.id).then(function () {
+                        $scope.message, null, $scope.messageThread.product.id).then(
+                        function () {
                             // Clear message field
                             $scope.message = "";
 
@@ -125,15 +124,15 @@ define([
                             }, function (error) {
                                 $scope.handleResponseErrors(error, "message", "send");
                             });
-                        });
+                        }
+                    );
                 };
 
                 $scope.updateNewBookingInfo = function () {
-                    var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value;
-                    var toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value;
-
-                    var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
-                    var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+                    var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value,
+                        toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value,
+                        fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
+                        toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
 
                     ProductsService.isAvailable($scope.messageThread.product.id,
                         fromDateTimeStr, toDateTimeStr, 1).then(
@@ -143,7 +142,7 @@ define([
                             $scope.newBooking.period_days = period.period_days;
                             $scope.newBooking.period_hours = period.period_hours;
                             $scope.newBooking.total_amount = data.total_price;
-                            // TODO set deposit_amount field value
+                            //TODO set deposit_amount field value
                             // Set data for request
                             $scope.newBooking.started_at = fromDateTime.toString("yyyy-MM-ddThh:mm:ss");
                             $scope.newBooking.ended_at = toDateTime.toString("yyyy-MM-ddThh:mm:ss");
@@ -152,9 +151,8 @@ define([
 
                             $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
                         },
-                        function (reason) {
-                            // TODO bad date handling
-                            console.log(reason);
+                        function (error) {
+                            $scope.handleResponseErrors(error, "booking", "update");
                         }
                     );
                 };

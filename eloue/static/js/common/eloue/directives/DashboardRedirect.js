@@ -1,7 +1,7 @@
-"use strict";
 define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+    "use strict";
     /**
-     * For redirect from Go Sport public part to E-loue dashbooard.
+     * For redirect from Go Sport public part to E-loue dashboard.
      */
     EloueCommon.directive("eloueDashboardRedirect", ["ToDashboardRedirectService", function (ToDashboardRedirectService) {
         return {

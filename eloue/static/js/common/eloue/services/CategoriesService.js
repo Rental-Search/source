@@ -1,6 +1,6 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
     "../../../common/eloue/services/UtilsService"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing categories.
      */
@@ -34,14 +34,14 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             var deferred = $q.defer();
 
             Categories.get({parent__isnull: true}).$promise.then(function (result) {
-                var total = result.count;
+                var total = result.count, pagesCount, catPromises, i;
                 if (total <= 10) {
                     deferred.resolve(result.results);
                 } else {
-                    var pagesCount = Math.floor(total / 10) + 1;
-                    var catPromises = [];
+                    pagesCount = Math.floor(total / 10) + 1;
+                    catPromises = [];
 
-                    for (var i = 1; i <= pagesCount; i++) {
+                    for (i = 1; i <= pagesCount; i += 1) {
                         catPromises.push(Categories.get({parent__isnull: true, page: i}).$promise);
                     }
 
@@ -79,7 +79,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             var deferred = $q.defer();
             Categories.getAncestors({id: parentId}).$promise.then(function (categories) {
                 var categoryList = [];
-                angular.forEach(categories, function (value, key) {
+                angular.forEach(categories, function (value) {
                     categoryList.push({id: value.id, name: value.name});
                 });
                 deferred.resolve(categoryList);

@@ -1,7 +1,5 @@
-"use strict";
-
 define(["eloue/app"], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the tabs on item details pages.
      */

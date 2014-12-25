@@ -1,10 +1,8 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../common/eloue/services/UsersService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the bookings page.
      */
@@ -71,10 +69,10 @@ define([
             $timeout(function () {
                 $("#stateFilterSelect").chosen();
                 $(".chosen-drop").mCustomScrollbar({
-                    scrollInertia: '100',
+                    scrollInertia: "100",
                     autoHideScrollbar: true,
-                    theme: 'dark-thin',
-                    scrollbarPosition: 'outside',
+                    theme: "dark-thin",
+                    scrollbarPosition: "outside",
                     advanced: {
                         autoScrollOnFocus: false,
                         updateOnContentResize: true
@@ -82,7 +80,7 @@ define([
                 });
             }, 500);
 
-            $scope.$on('$destroy', function iVeBeenDismissed() {
+            $scope.$on("$destroy", function iVeBeenDismissed() {
                 $scope.clearSelectedItem("booking-");
             });
         }

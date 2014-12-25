@@ -1,6 +1,6 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
     "../../../common/eloue/services/ServerValidationService"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for uploading forms.
      */
@@ -14,10 +14,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 url: url,
                 success: successCallback,
                 error: function (jqXHR, status, message, form) {
-                    if (jqXHR.status == 400 && !!jqXHR.responseJSON) {
+                    if (jqXHR.status === 400 && !!jqXHR.responseJSON) {
                         ServerValidationService.addErrors(jqXHR.responseJSON.message, jqXHR.description, jqXHR.responseJSON.errors);
                     } else {
-                        ServerValidationService.addErrors("An error occured!", "An error occured!");
+                        ServerValidationService.addErrors("An error occurred!", "An error occurred!");
                     }
                     errorCallback.call(null, jqXHR, status, message, form);
                 }

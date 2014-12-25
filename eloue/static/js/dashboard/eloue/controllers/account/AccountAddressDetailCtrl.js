@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/values",
@@ -7,7 +5,7 @@ define([
     "../../../../common/eloue/services/ProductsService",
     "../../../../common/eloue/services/UsersService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the account's address detail page.
      */
@@ -42,8 +40,8 @@ define([
             $scope.submitAddress = function () {
                 $scope.submitInProgress = true;
                 var form = $("#address_detail_form");
-                AddressesService.updateAddress($scope.address.id, form).then(function (result) {
-                    if ($scope.defaultAddressId != $stateParams.id) {
+                AddressesService.updateAddress($scope.address.id, form).then(function () {
+                    if ($scope.defaultAddressId !== $stateParams.id) {
                         var userPatch = {};
                         userPatch.default_address = Endpoints.api_url + "addresses/" + $scope.address.id + "/";
                         UsersService.updateUser(userPatch).$promise.then(function (result) {
@@ -67,7 +65,7 @@ define([
             // Delete address
             $scope.deleteAddress = function () {
                 $scope.submitInProgress = true;
-                AddressesService.deleteAddress($scope.address.id).$promise.then(function (result) {
+                AddressesService.deleteAddress($scope.address.id).$promise.then(function () {
                     $scope.submitInProgress = false;
                     $scope.showNotification("address", "delete", true);
                     $state.transitionTo("account.addresses", $stateParams, {reload: true});

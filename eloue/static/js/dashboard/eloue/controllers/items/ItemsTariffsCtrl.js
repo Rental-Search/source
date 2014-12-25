@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/values",
@@ -7,7 +5,7 @@ define([
     "../../../../common/eloue/services/ProductsService",
     "../../../../common/eloue/services/PricesService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the items tariffs tab.
      */

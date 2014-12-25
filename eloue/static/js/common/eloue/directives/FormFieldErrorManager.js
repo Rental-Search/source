@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+    "use strict";
     /**
      * When the validation error occurred this directive try to find all field with errors by name and add error block.
      * If block contain "eloueFormFieldMessage" with error field name, directive dose not add error block.

@@ -2,7 +2,6 @@ define([
     "eloue/app"
 ], function (EloueWidgetsApp) {
     "use strict";
-
     /**
      * Controller to run scripts necessary for home page.
      */

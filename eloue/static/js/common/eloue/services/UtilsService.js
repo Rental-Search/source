@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthService"], function (EloueCommon) {
+    "use strict";
     /**
      * Utils service.
      */
@@ -20,10 +20,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
         };
 
         utilsService.formatMessageDate = function (dateString, shortFormat, fullFormat) {
-            var sentDate = new Date(dateString);
-            var nowDate = new Date();
-            var dateFormat;
-
+            var sentDate = new Date(dateString), nowDate = new Date(), dateFormat;
             // If date is today
             if (sentDate.setHours(0, 0, 0, 0) === nowDate.setHours(0, 0, 0, 0)) {
                 dateFormat = shortFormat;
@@ -39,17 +36,13 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
         };
 
         utilsService.calculatePeriodBetweenDates = function (startDateString, endDateString) {
-            var hourTime = 60 * 60 * 1000;
-            var dayTime = 24 * hourTime;
-
-            var startTime = Date.parse(startDateString).getTime();
-            var endTime = Date.parse(endDateString).getTime();
-
-            var diffTime = endTime - startTime;
-
-            var periodDays = Math.floor(diffTime / dayTime);
-            var periodHours = Math.floor((diffTime - dayTime * periodDays) / hourTime);
-
+            var hourTime = 60 * 60 * 1000,
+                dayTime = 24 * hourTime,
+                startTime = Date.parse(startDateString).getTime(),
+                endTime = Date.parse(endDateString).getTime(),
+                diffTime = endTime - startTime,
+                periodDays = Math.floor(diffTime / dayTime),
+                periodHours = Math.floor((diffTime - dayTime * periodDays) / hourTime);
             return {
                 period_days: periodDays,
                 period_hours: periodHours
@@ -63,21 +56,20 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
         };
 
         utilsService.downloadPdfFile = function (url, filename) {
-            var xhr = new XMLHttpRequest();
+            var xhr = new XMLHttpRequest(),
+                userToken = AuthService.getUserToken(),
+                csrftoken = AuthService.getCSRFToken();
             xhr.open("GET", url, true);
-            var userToken = AuthService.getCookie("user_token");
             if (userToken && userToken.length > 0) {
                 xhr.setRequestHeader("Authorization", "Bearer " + userToken);
             }
-
-            var csrftoken = AuthService.getCookie("csrftoken");
             if (csrftoken && csrftoken.length > 0) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
             xhr.responseType = "blob";
 
             xhr.onload = function (e) {
-                if (this.status == 200) {
+                if (this.status === 200) {
                     var file = new Blob([this.response], {type: "application/pdf"});
                     saveAs(file, filename);
                 }

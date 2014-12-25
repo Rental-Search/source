@@ -1,8 +1,7 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", "../../../common/eloue/values",
     "../../../common/eloue/services/UsersService",
-    "../../../common/eloue/services/UtilsService"
-], function (EloueCommon) {
+    "../../../common/eloue/services/UtilsService"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing comments.
      */
@@ -32,12 +31,11 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 Comments.get({
                     booking: bookingUUID,
                     _cache: new Date().getTime()
-                }).$promise.then(function (commentListData) {
+                }).$promise.then(
+                    function (commentListData) {
                         angular.forEach(commentListData.results, function (commentData, key) {
-                            var commentDeferred = $q.defer();
-
-                            // Get author id
-                            var authorId = UtilsService.getIdFromUrl(commentData.author);
+                            var commentDeferred = $q.defer(),
+                                authorId = UtilsService.getIdFromUrl(commentData.author);
                             // Load author
                             UsersService.get(authorId).$promise.then(function (authorData) {
                                 var comment = commentsService.parseComment(commentData, authorData);
@@ -50,19 +48,17 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                         $q.all(commentListPromises).then(function (results) {
                             deferred.resolve(results);
                         });
-                    });
-
+                    }
+                );
                 return deferred.promise;
             };
 
             commentsService.parseComment = function (commentData, authorData) {
                 var commentResult = angular.copy(commentData);
-
                 // Parse author
-                if (!!authorData) {
+                if (authorData) {
                     commentResult.author = authorData;
                 }
-
                 return commentResult;
             };
 

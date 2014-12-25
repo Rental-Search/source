@@ -1,6 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "toastr", "../../../common/eloue/services/ServerValidationService"], function (EloueCommon, toastr) {
-
+    "use strict";
     /**
      * Generic error handler interceptor.
      */

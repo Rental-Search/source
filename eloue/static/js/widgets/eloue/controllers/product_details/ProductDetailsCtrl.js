@@ -13,23 +13,24 @@ define([
                     details: "form"
                 });
 
-                var canvasId = "map-canvas-small", mapCanvasSmall = $document[0].getElementById(canvasId);
+                var canvasId = "map-canvas-small", mapCanvasSmall = $document[0].getElementById(canvasId), mapContainer,
+                    product, productMapOptions, productMap, circleOptions;
                 if (mapCanvasSmall) {
-                    var mapContainer = $("#" + canvasId);
-                    var product = {
+                    mapContainer = $("#" + canvasId);
+                    product = {
                         lat: mapContainer.attr("locationX"),
                         lng: mapContainer.attr("locationY")
                     };
 
-                    var productMapOptions = {
+                    productMapOptions = {
                         zoom: 16,
                         disableDefaultUI: true,
                         zoomControl: true,
                         center: new google.maps.LatLng(product.lat, product.lng),
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                     };
-                    var productMap = new google.maps.Map(mapCanvasSmall, productMapOptions);
-                    var circleOptions = {
+                    productMap = new google.maps.Map(mapCanvasSmall, productMapOptions);
+                    circleOptions = {
                         strokeColor: "#3c763d",
                         strokeOpacity: 0.8,
                         strokeWeight: 2,
@@ -44,12 +45,12 @@ define([
             };
 
             $scope.activateProductImageAnimation = function () {
-                var slideImgs = [].slice.call($(".carousel-wrapper").find("img"));
-                for (var index = 0; index < slideImgs.length; index++) {
-                    var proportions = $(slideImgs[index]).width() / $(slideImgs[index]).height(),
-                        parent = $(slideImgs[index]).parent(),
-                        parentProportions = $(parent).width() / $(parent).height();
-
+                var slideImgs = [].slice.call($(".carousel-wrapper").find("img")), index, proportions, parent,
+                    parentProportions;
+                for (index = 0; index < slideImgs.length; index += 1) {
+                    proportions = $(slideImgs[index]).width() / $(slideImgs[index]).height();
+                    parent = $(slideImgs[index]).parent();
+                    parentProportions = $(parent).width() / $(parent).height();
                     if (proportions < parentProportions) {
                         $(slideImgs[index]).addClass("expand-v");
                     } else {
@@ -58,7 +59,7 @@ define([
                 }
             };
 
-            $scope.activateSocialButtons = function() {
+            $scope.activateSocialButtons = function () {
                 $window.___gcfg = {lang: "fr"};
                 (function () {
                     var po = $document[0].createElement("script");
@@ -86,7 +87,7 @@ define([
             $scope.selectTab = function (tabName) {
                 $("[id^=tabs-]").each(function () {
                     var item = $(this);
-                    if (("#" + item.attr("id")) == tabName) {
+                    if (("#" + item.attr("id")) === tabName) {
                         item.removeClass("ng-hide");
                     } else {
                         item.addClass("ng-hide");
@@ -94,7 +95,7 @@ define([
                 });
                 $("a[href^=#tabs-]").each(function () {
                     var item = $(this);
-                    if (item.attr("href") == tabName) {
+                    if (item.attr("href") === tabName) {
                         item.addClass("current");
                     } else {
                         item.removeClass("current");

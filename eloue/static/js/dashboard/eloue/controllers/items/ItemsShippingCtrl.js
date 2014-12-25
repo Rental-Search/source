@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/values",
@@ -8,7 +6,7 @@ define([
     "../../../../common/eloue/services/ShippingPointsService",
     "../../../../common/eloue/services/UsersService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the items shipping tab.
      */
@@ -111,7 +109,7 @@ define([
             $scope.saveMapPoint = function () {
                 $scope.submitInProgress = true;
                 if (!!$scope.productShippingPoint && !!$scope.productShippingPoint.id) {
-                    ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function (result) {
+                    ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function () {
                         $scope.savePoint();
                     }, function (error) {
                         $scope.handleResponseErrors(error, "shipping_point", "delete");
@@ -150,7 +148,7 @@ define([
             };
 
             $scope.removeMapPoint = function () {
-                ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function (result) {
+                ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function () {
                     $scope.productShippingPoint = {};
                     $scope.showWellcomeScreen();
                 });
@@ -165,7 +163,7 @@ define([
                             $scope.shippingPoints = data;
                             $scope.submitInProgress = false;
                         }, function (error) {
-                            if (!!error.detail) {
+                            if (error.detail) {
                                 $scope.errors.general = error.detail;
                             } else {
                                 $scope.errors.general = "Search point list fault";

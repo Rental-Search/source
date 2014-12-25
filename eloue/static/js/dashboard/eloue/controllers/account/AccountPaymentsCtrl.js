@@ -1,7 +1,5 @@
-"use strict";
-
 define(["eloue/app"], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the account's payments page.
      */

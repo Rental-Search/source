@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/values",
@@ -12,7 +10,7 @@ define([
     "../../../../common/eloue/services/ProductShippingPointsService",
     "../../../../common/eloue/services/PatronShippingPointsService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the booking detail page.
      */
@@ -187,9 +185,9 @@ define([
                                 var productShippingPoint = productShippingPointData.results[0];
                                 PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
                                     if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
-                                        var patronShippingPoint = patronShippingPointData.results[0];
+                                        var patronShippingPoint = patronShippingPointData.results[0], shipping;
                                         // TODO: Price is hardcoded for now, will be taken from some third-party pricing service
-                                        var shipping = {
+                                        shipping = {
                                             price: "10.0",
                                             booking: Endpoints.api_url + "bookings/" + $scope.bookingDetails.uuid + "/",
                                             departure_point: Endpoints.api_url + "productshippingpoints/" + productShippingPoint.id + "/",

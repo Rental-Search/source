@@ -1,7 +1,5 @@
-"use strict";
-
 define(["eloue/app"], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the messages page.
      */
@@ -11,7 +9,7 @@ define(["eloue/app"], function (EloueDashboardApp) {
             scope: {
                 onChange: "&"
             },
-            link: function (scope, element, attrs) {
+            link: function (scope, element) {
                 element.bind("change", function () {
                     scope.onChange();
                 });

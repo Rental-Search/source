@@ -1,6 +1,5 @@
-"use strict";
 define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (EloueCommon) {
-
+    "use strict";
     /**
      * Factory for managing users.
      */

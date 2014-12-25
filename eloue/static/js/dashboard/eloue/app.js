@@ -1,4 +1,3 @@
-"use strict";
 define(["angular",
         "angular-cookies",
         "angular-resource",
@@ -15,8 +14,8 @@ define(["angular",
         "chosen",
         "../../common/eloue/commonApp"],
     function (angular) {
+        "use strict";
         // Create dashboard application
         return angular.module("EloueDashboardApp", ["EloueCommon", "ngCookies", "ngResource", "ui.router",
             "pascalprecht.translate"]);
-    }
-);
+    });

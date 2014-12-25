@@ -1,11 +1,9 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../common/eloue/services/CategoriesService",
     "../../../common/eloue/services/UsersService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the items page.
      */

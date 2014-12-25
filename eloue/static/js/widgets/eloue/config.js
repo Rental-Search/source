@@ -39,8 +39,8 @@ define(["eloue/app",
         ]);
 
         EloueApp.run(["$http", "AuthService", function ($http, AuthService) {
-            var userToken = AuthService.getCookie("user_token"),
-                csrftoken = AuthService.getCookie("csrftoken");
+            var userToken = AuthService.getUserToken(),
+                csrftoken = AuthService.getCSRFToken();
             $http.defaults.useXDomain = true;
             delete $http.defaults.headers.common["X-Requested-With"];
             if (userToken && userToken.length > 0) {

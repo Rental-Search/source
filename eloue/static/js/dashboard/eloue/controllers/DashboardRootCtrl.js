@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "toastr",
@@ -8,7 +6,7 @@ define([
     "../../../common/eloue/services/UtilsService",
     "../../../common/eloue/services/MapsService"
 ], function (EloueDashboardApp, toastr) {
-
+    "use strict";
     /**
      * Root controller for the dashboard app.
      */
@@ -22,7 +20,7 @@ define([
         "MapsService",
         function ($scope, $window, $document, UsersService, AuthService, UtilsService, MapsService) {
             // Read authorization token
-            $scope.currentUserToken = AuthService.getCookie("user_token");
+            $scope.currentUserToken = AuthService.getUserToken();
             $scope.unreadMessageThreadsCount = 0;
             $scope.newBookingRequestsCount = 0;
             $scope.submitInProgress = false;
@@ -36,7 +34,7 @@ define([
                 {title: "Compte", icon: "stroke user-4", sref: "account", badge: 0}
             ];
 
-            if (!!$scope.currentUserToken) {
+            if ($scope.currentUserToken) {
                 // Get current user
                 $scope.currentUserPromise = UsersService.getMe().$promise;
                 $scope.currentUserPromise.then(function (currentUser) {
@@ -58,7 +56,7 @@ define([
             // Set jQuery ajax interceptors
             $.ajaxSetup({
                 beforeSend: function (jqXHR) {
-                    if (!!$scope.currentUserToken) {
+                    if ($scope.currentUserToken) {
                         jqXHR.setRequestHeader("Authorization", "Bearer " + $scope.currentUserToken);
                     }
                 }
@@ -69,14 +67,14 @@ define([
             };
 
             $scope.isItemSelected = function (prefix, id) {
-                return !!$scope.selectedItem[prefix] && parseInt($scope.selectedItem[prefix]) == parseInt(id);
+                return !!$scope.selectedItem[prefix] && (parseInt($scope.selectedItem[prefix], 10) === parseInt(id, 10));
             };
 
             $scope.markListItemAsSelected = function (prefix, id) {
                 $scope.selectedItem[prefix] = id;
                 $("li[id^=" + prefix + "]").each(function () {
                     var item = $(this);
-                    if (item.attr("id") == (prefix + id)) {
+                    if (item.attr("id") === (prefix + id)) {
                         item.addClass("current");
                         item.find(".tab-vertical").addClass("current");
                     } else {
@@ -133,11 +131,11 @@ define([
             };
 
             // Nav bar autoresizing
-            var dashboardElement = $(".dashboard");
-            var dashboard = {
-                article: dashboardElement,
-                nav: dashboardElement.find("nav ul")
-            };
+            var dashboardElement = $(".dashboard"),
+                dashboard = {
+                    article: dashboardElement,
+                    nav: dashboardElement.find("nav ul")
+                };
 
             function setProperties() {
                 var articleHeight = $($window).height() - $("header").height(),

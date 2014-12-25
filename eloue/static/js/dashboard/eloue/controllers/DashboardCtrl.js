@@ -1,11 +1,9 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../common/eloue/values",
     "../../../common/eloue/services/UsersService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the dashboard page.
      */
@@ -33,10 +31,5 @@ define([
                     $scope.userStats = stats;
                 });
             });
-
-            $scope.filterByActivityType = function () {
-                console.log($scope.selectedActivityType);
-                //TODO: filter activity feed
-            };
         }]);
 });

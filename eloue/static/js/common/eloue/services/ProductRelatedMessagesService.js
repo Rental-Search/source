@@ -1,8 +1,7 @@
-"use strict";
 define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
     "../../../common/eloue/services/UsersService",
-    "../../../common/eloue/services/UtilsService"
-], function (EloueCommon) {
+    "../../../common/eloue/services/UtilsService"], function (EloueCommon) {
+    "use strict";
     /**
      * Service for managing product related messages.
      */
@@ -29,15 +28,13 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
                 }, function (reason) {
                     deferred.reject(reason);
                 });
-
                 return deferred.promise;
             };
 
             productRelatedMessagesService.postMessage = function (threadId, senderId, recipientId, text, offerId, productId) {
-                var threadDef = $q.defer();
-                var self = this;
+                var threadDef = $q.defer(), messageThread, deferred;
                 if (!threadId) {
-                    var messageThread = {
+                    messageThread = {
                         sender: Endpoints.api_url + "users/" + senderId + "/",
                         recipient: Endpoints.api_url + "users/" + recipientId + "/",
                         product: Endpoints.api_url + "products/" + productId + "/",
@@ -50,14 +47,14 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
                 } else {
                     threadDef.resolve(threadId);
                 }
-                var deferred = $q.defer();
+                deferred = $q.defer();
                 threadDef.promise.then(function (result) {
                     var message = {
                         thread: Endpoints.api_url + "messagethreads/" + result + "/",
                         sender: Endpoints.api_url + "users/" + senderId + "/",
                         recipient: Endpoints.api_url + "users/" + recipientId + "/",
-                        body: (!!text) ? text : "",
-                        offer: (!!offerId) ? Endpoints.api_url + "bookings/" + offerId + "/" : null
+                        body: text || "",
+                        offer: offerId ? Endpoints.api_url + "bookings/" + offerId + "/" : null
                     };
                     ProductRelatedMessages.save(message).$promise.then(function (response) {
                         var responseSenderId = UtilsService.getIdFromUrl(response.sender);
@@ -78,10 +75,9 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
                 var messageResults = angular.copy(messageData);
 
                 // Parse sender
-                if (!!senderData) {
+                if (senderData) {
                     messageResults.sender = senderData;
                 }
-
                 return messageResults;
             };
 

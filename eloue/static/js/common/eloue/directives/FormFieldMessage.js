@@ -1,5 +1,5 @@
-"use strict";
 define(["../../../common/eloue/commonApp"], function (EloueCommon) {
+    "use strict";
     /**
      * Directive to show field error message for form's field.
      * If it's have not message set ng-hide to container.

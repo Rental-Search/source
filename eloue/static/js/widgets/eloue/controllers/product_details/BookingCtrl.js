@@ -20,11 +20,10 @@ define([
     "../../../../common/eloue/services/ToDashboardRedirectService",
     "../../../../common/eloue/services/ScriptTagService"
 ], function (EloueWidgetsApp, toastr) {
-
+    "use strict";
     /**
      * Controller for widgets on product details page that are related to booking.
      */
-    "use strict";
     EloueWidgetsApp.controller("BookingCtrl", [
         "$scope",
         "$window",
@@ -72,9 +71,9 @@ define([
             $scope.isRealEstate = false;
 
             // Read authorization token
-            $scope.currentUserToken = AuthService.getCookie("user_token");
+            $scope.currentUserToken = AuthService.getUserToken();
 
-            if (!!$scope.currentUserToken) {
+            if ($scope.currentUserToken) {
                 // Get current user
                 $scope.currentUserPromise = UsersService.getMe().$promise;
                 $scope.currentUserPromise.then(function (currentUser) {
@@ -98,7 +97,7 @@ define([
                 var lastIndex = href.indexOf("#") > 0 ? href.lastIndexOf("#") - 1 : (href.length - 1);
                 href = href.substr(0, lastIndex);
                 $scope.rootCategory = href.split("/")[1];
-                $scope.isAuto =($scope.rootCategory === "automobile");
+                $scope.isAuto = ($scope.rootCategory === "automobile");
                 $scope.isRealEstate = ($scope.rootCategory === "location-saisonniere");
                 var subparts = href.split("-");
                 return subparts[subparts.length - 1];
@@ -184,10 +183,10 @@ define([
              * Update the product booking price based on selected duration.
              */
             $scope.updatePrice = function updatePrice() {
-                var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
-                var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
-                var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
-                var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+                var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour,
+                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour,
+                    fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
+                    toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 toDateSelector.datepicker("setStartDate", fromDateTime);
                 toDateSelector.datepicker("update");
                 $scope.dateRangeError = "";
@@ -226,7 +225,8 @@ define([
             $scope.sendMessage = function sendMessage() {
                 $scope.submitInProgress = true;
                 ProductRelatedMessagesService.postMessage($scope.threadId, $scope.currentUser.id, $scope.product.owner.id,
-                    $scope.newMessage.body, null, $scope.product.id).then(function (result) {
+                    $scope.newMessage.body, null, $scope.product.id).then(
+                    function (result) {
                         $scope.submitInProgress = false;
                         ScriptTagService.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
                         ScriptTagService.trackEvent("Réservation", "Message", $scope.getEventLabel());
@@ -235,19 +235,18 @@ define([
                         $scope.newMessage = {};
                         $scope.productRelatedMessages.push(result);
                         $scope.loadMessageThread();
-                    }, function (error) {
+                    },
+                    function (error) {
                         $scope.available = false;
                         $scope.handleResponseErrors(error);
-                    });
+                    }
+                );
             };
 
             /**
              * Handler for call owner button.
              */
-            $scope.callOwner = function callOwner() {
-                //TODO: call real service
-                console.log("Calling product owner..");
-            };
+            $scope.callOwner = function () {};
 
             $scope.selectedPointId = "";
 
@@ -294,7 +293,6 @@ define([
             $scope.saveCardAndRequestBooking = function () {
                 $scope.submitInProgress = true;
                 // Update user info
-                //TODO: patch more fields
                 var userPatch = {};
                 userPatch.first_name = $scope.currentUser.first_name;
                 userPatch.last_name = $scope.currentUser.last_name;
@@ -313,17 +311,17 @@ define([
                     // Update credit card info
                     $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
                     // If credit card exists now it is deleted and saved again
-                    if ($scope.creditCard.masked_number == "") {
+                    if ($scope.creditCard.masked_number === "") {
                         if (!!$scope.creditCard.id) {
-                            CreditCardsService.deleteCard($scope.creditCard).$promise.then(function (result) {
-                                CreditCardsService.saveCard($scope.creditCard).$promise.then(function (result) {
+                            CreditCardsService.deleteCard($scope.creditCard).$promise.then(function () {
+                                CreditCardsService.saveCard($scope.creditCard).$promise.then(function () {
                                     $scope.requestBooking();
                                 }, function (error) {
                                     $scope.handleResponseErrors(error);
                                 });
                             });
                         } else {
-                            CreditCardsService.saveCard($scope.creditCard).$promise.then(function (result) {
+                            CreditCardsService.saveCard($scope.creditCard).$promise.then(function () {
                                 $scope.requestBooking();
                             }, function (error) {
                                 $scope.handleResponseErrors(error);
@@ -341,11 +339,11 @@ define([
              * Save booking and make payment request.
              */
             $scope.requestBooking = function () {
-                var booking = {};
-                var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
-                var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
-                var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
-                var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+                var booking = {},
+                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour,
+                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour,
+                    fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
+                    toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 booking.started_at = fromDateTime.toString("yyyy-MM-ddTHH:mm");
                 booking.ended_at = toDateTime.toString("yyyy-MM-ddTHH:mm");
                 booking.owner = Endpoints.api_url + "users/" + $scope.product.owner.id + "/";
@@ -354,7 +352,7 @@ define([
                 // Create booking
                 BookingsService.requestBooking(booking).then(
                     function (booking) {
-                        var paymentInfo = {};
+                        var paymentInfo = {}, selectedPoint = {};
                         if ($scope.creditCard.card_number && $scope.creditCard.cvv) {
                             paymentInfo = {
                                 card_number: $scope.creditCard.card_number,
@@ -368,11 +366,8 @@ define([
                                 credit_card: Endpoints.api_url + "credit_cards/" + $scope.creditCard.id + "/"
                             };
                         }
-
-                        //TODO: save user shipping point and product shipping
-                        var selectedPoint = {};
-                        angular.forEach($scope.borrowerShippingPoints, function (value, key) {
-                            if ($scope.selectedPointId == value.site_id) {
+                        angular.forEach($scope.borrowerShippingPoints, function (value) {
+                            if ($scope.selectedPointId === value.site_id) {
                                 selectedPoint = value;
                             }
                         });
@@ -380,7 +375,7 @@ define([
                             selectedPoint.type = 2;
                             selectedPoint.booking = Endpoints.api_url + "bookings/" + booking.uuid + "/";
                             selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
-                            PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (shippingPoint) {
+                            PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function () {
                                 $scope.payForBooking(booking, paymentInfo);
                             }, function (error) {
                                 $scope.handleResponseErrors(error);
@@ -388,14 +383,15 @@ define([
                         } else {
                             $scope.payForBooking(booking, paymentInfo);
                         }
-                    }, function (error) {
+                    },
+                    function (error) {
                         $scope.handleResponseErrors(error);
                     }
                 );
             };
 
             $scope.payForBooking = function (booking, paymentInfo) {
-                BookingsService.payForBooking(booking.uuid, paymentInfo).then(function (result) {
+                BookingsService.payForBooking(booking.uuid, paymentInfo).then(function () {
                     ScriptTagService.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
                     ScriptTagService.trackEvent("Réservation", "Demande de réservation", $scope.getEventLabel());
                     ScriptTagService.trackPageView();
@@ -417,11 +413,11 @@ define([
             $scope.getEventLabel = function () {
                 if ($scope.isAuto) {
                     return "Voiture - " + $scope.productCategoryName;
-                } else if ($scope.isRealEstate) {
-                    return "Logement - " + $scope.productCategoryName;
-                } else {
-                    return "Objet - " + $scope.productCategoryAncestors;
                 }
+                if ($scope.isRealEstate) {
+                    return "Logement - " + $scope.productCategoryName;
+                }
+                return "Objet - " + $scope.productCategoryAncestors;
             };
 
             /**
@@ -459,8 +455,8 @@ define([
             });
 
             $scope.openModal = function (name) {
-                var currentUserToken = AuthService.getCookie("user_token");
-                if (!currentUserToken && name != "login") {
+                var currentUserToken = AuthService.getUserToken(), modalContainer;
+                if (!currentUserToken && name !== "login") {
                     AuthService.saveAttemptUrl(name);
                     name = "login";
                 } else {
@@ -473,7 +469,7 @@ define([
                         $scope.loadPhoneDetails();
                     }
                 }
-                if (name != "login") {
+                if (name !== "login") {
                     if ($scope.currentUser && !$scope.currentUser.default_address) {
                         $scope.noAddress = true;
                     }
@@ -489,9 +485,9 @@ define([
                     }
                 }
 
-                if (!!name) {
+                if (name) {
                     $(".modal").modal("hide");
-                    var modalContainer = $("#" + name + "Modal");
+                    modalContainer = $("#" + name + "Modal");
                     modalContainer.modal("show");
                 }
             };
@@ -504,7 +500,7 @@ define([
                 $scope.productCategoryName = $scope.product.category.name;
                 CategoriesService.getAncestors($scope.product.category.id).then(function (ancestors) {
                     var categoriesStr = "";
-                    angular.forEach(ancestors, function (value, key) {
+                    angular.forEach(ancestors, function (value) {
                         categoriesStr = categoriesStr + value.name + " - ";
                     });
                     $scope.productCategoryAncestors = categoriesStr + $scope.product.category.name;
@@ -527,8 +523,8 @@ define([
              * Restore path when closing modal window.
              */
             $scope.$on("closeModal", function (event, args) {
-                var currentPath = $location.path();
-                var newPath = currentPath.slice(0, currentPath.indexOf(args.name));
+                var currentPath = $location.path(),
+                    newPath = currentPath.slice(0, currentPath.indexOf(args.name));
                 $location.path(newPath);
                 $scope.$apply();
             });
@@ -543,12 +539,12 @@ define([
                     if ($scope.product.owner.default_number && $scope.product.owner.default_number.id) {
                         phoneId = $scope.product.owner.default_number.id;
                     } else if ($scope.product.phone && $scope.product.phone.id) {
-                        phoneId = $scope.product.phone.id
+                        phoneId = $scope.product.phone.id;
                     }
                 }
                 if (phoneId) {
                     PhoneNumbersService.getPremiumRateNumber(phoneId).$promise.then(function (result) {
-                        if (!result.error || result.error == "0") {
+                        if (!result.error || result.error === "0") {
                             $scope.ownerCallDetails = {
                                 number: result.numero,
                                 tariff: result.tarif
@@ -602,11 +598,11 @@ define([
 
             $scope.loadShippingPoints = function () {
                 if ($scope.addShipping && $scope.borrowerShippingPoints.length === 0) {
-                    if (!!$scope.currentUser.default_address) {
+                    if ($scope.currentUser.default_address) {
                         $scope.shippingPointsRequestInProgress = true;
-                        var shippingPointsPromise = {};
+                        var shippingPointsPromise = {}, addressString;
                         if (!$scope.currentUser.default_address.position) {
-                            var addressString = $scope.currentUser.default_address.zipcode + " " + $scope.currentUser.default_address.street + " " + $scope.currentUser.default_address.city;
+                            addressString = $scope.currentUser.default_address.zipcode + " " + $scope.currentUser.default_address.street + " " + $scope.currentUser.default_address.city;
                             shippingPointsPromise = ShippingPointsService.searchArrivalShippingPointsByAddressAndProduct(addressString, $scope.productId);
                         } else {
                             shippingPointsPromise = ShippingPointsService.searchArrivalShippingPointsByCoordinatesAndProduct($scope.currentUser.default_address.position.coordinates[0], $scope.currentUser.default_address.position.coordinates[1], $scope.productId);
@@ -614,7 +610,7 @@ define([
                         shippingPointsPromise.then(function (result) {
                             $scope.shippingPointsRequestInProgress = false;
                             //TODO: it's temperory, then will call pricing service
-                            angular.forEach(result, function (value, key) {
+                            angular.forEach(result, function (value) {
                                 value.price = "10.0";
                             });
                             $scope.borrowerShippingPoints = result;
@@ -649,7 +645,7 @@ define([
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
                     MessageThreadsService.getMessageThreadByProductAndParticipant($scope.productId, $scope.currentUser.id).then(function (result) {
-                        angular.forEach(result, function (value, key) {
+                        angular.forEach(result, function (value) {
                             $scope.threadId = UtilsService.getIdFromUrl(value.thread);
                         });
                         $scope.productRelatedMessages = result;
@@ -657,7 +653,7 @@ define([
                 });
             };
 
-            $scope.applyDatePicker = function(fieldId) {
+            $scope.applyDatePicker = function (fieldId) {
                 $("#" + fieldId).datepicker({
                     language: "fr",
                     autoclose: true,

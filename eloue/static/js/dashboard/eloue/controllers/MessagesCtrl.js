@@ -1,11 +1,9 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../common/eloue/services/UsersService",
     "../../../common/eloue/services/UtilsService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the messages page.
      */

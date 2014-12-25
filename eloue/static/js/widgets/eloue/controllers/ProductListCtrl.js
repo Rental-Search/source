@@ -3,7 +3,6 @@ define([
     "../../../common/eloue/services/MapsService"
 ], function (EloueWidgetsApp) {
     "use strict";
-
     /**
      * Controller to run scripts necessary for product list page.
      */
@@ -22,7 +21,8 @@ define([
                     details: "form"
                 });
 
-                var mapCanvas = $document[0].getElementById("map-canvas");
+                var mapCanvas = $document[0].getElementById("map-canvas"), rangeEl, radius, mapOptions, map, geocoder,
+                    rangeSlider, rangeInput, rangeMax, rangeVal, notUpdateBySlider, notUpdateByMap, products;
                 if (mapCanvas) {
 
                     $("#where").formmapper({
@@ -32,20 +32,20 @@ define([
                     $scope.applyDatePicker("start-date");
                     $scope.applyDatePicker("end-date");
 
-                    var rangeEl = $("#range"),
-                        radius = Number(rangeEl.val().replace(",", ".")),
-                        mapOptions = {
-                            zoom: MapsService.zoom(radius),
-                            disableDefaultUI: true,
-                            zoomControl: true,
-                            mapTypeId: google.maps.MapTypeId.ROADMAP
-                        };
-                    var map = new google.maps.Map(mapCanvas, mapOptions);
-                    var geocoder = new google.maps.Geocoder();
+                    rangeEl = $("#range");
+                    radius = Number(rangeEl.val().replace(",", "."));
+                    mapOptions = {
+                        zoom: MapsService.zoom(radius),
+                        disableDefaultUI: true,
+                        zoomControl: true,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    map = new google.maps.Map(mapCanvas, mapOptions);
+                    geocoder = new google.maps.Geocoder();
                     geocoder.geocode(
                         {address: $document[0].getElementById("where").value},
                         function (result, status) {
-                            if (status == google.maps.GeocoderStatus.OK) {
+                            if (status === google.maps.GeocoderStatus.OK) {
                                 map.setCenter(result[0].geometry.location);
                                 var circle = new google.maps.Circle({
                                     map: map,
@@ -57,21 +57,21 @@ define([
                         }
                     );
 
-                    var rangeSlider = $("#range-slider");
+                    rangeSlider = $("#range-slider");
                     if (rangeSlider) {
-                        var rangeInput = rangeEl;
-                        var rangeMax = rangeSlider.attr("max-value");
+                        rangeInput = rangeEl;
+                        rangeMax = rangeSlider.attr("max-value");
                         if (!rangeMax) {
                             $("#range-label").hide();
                         } else {
-                            var rangeVal = rangeInput.attr("value");
+                            rangeVal = rangeInput.attr("value");
                             if (rangeVal) {
                                 rangeSlider.attr("value", "1;" + rangeVal);
                             } else {
                                 rangeSlider.attr("value", "1;" + rangeMax);
                             }
-
-                            var notUpdateBySlider = false, notUpdateByMap = false;
+                            notUpdateBySlider = false;
+                            notUpdateByMap = false;
                             rangeSlider.slider({
                                 from: 1,
                                 to: Number(rangeMax),
@@ -80,13 +80,13 @@ define([
                                 onstatechange: function (value) {
                                     notUpdateByMap = true;
                                     if (!notUpdateBySlider) {
-                                        var range_value = value.split(";")[1];
+                                        var rangeValue = value.split(";")[1];
                                         // enable the input so its value could be now posted with a form data
                                         rangeInput.prop("disabled", false);
                                         // set new values to the hidden input
-                                        rangeInput.attr("value", range_value);
+                                        rangeInput.attr("value", rangeValue);
                                         // change map's zoom level
-                                        map.setZoom(MapsService.zoom(range_value));
+                                        map.setZoom(MapsService.zoom(rangeValue));
                                     }
                                     setTimeout(function () {
                                         notUpdateByMap = false;
@@ -97,8 +97,8 @@ define([
                             google.maps.event.addListener(map, "zoom_changed", function () {
                                 notUpdateBySlider = true;
                                 if (!notUpdateByMap) {
-                                    var zoomLevel = map.getZoom();
-                                    var calcRange = MapsService.range(zoomLevel);
+                                    var zoomLevel = map.getZoom(),
+                                        calcRange = MapsService.range(zoomLevel);
                                     if (calcRange && calcRange <= rangeMax) {
                                         rangeSlider.slider("value", 1, calcRange);
                                     }
@@ -110,15 +110,15 @@ define([
                         }
                     }
 
-                    var products = [];
+                    products = [];
                     $("li[id^='marker-']").each(function () {
-                        var item = $(this);
-                        var product = {
-                            title: item.attr("name"),
-                            lat: item.attr("locationX"),
-                            lng: item.attr("locationY"),
-                            zIndex: Number(item.attr("id").replace("marker-", ""))
-                        };
+                        var item = $(this),
+                            product = {
+                                title: item.attr("name"),
+                                lat: item.attr("locationX"),
+                                lng: item.attr("locationY"),
+                                zIndex: Number(item.attr("id").replace("marker-", ""))
+                            };
                         products.push(product);
                     });
 
@@ -153,16 +153,14 @@ define([
             };
 
             $scope.activateCategoryAndSortSelector = function () {
-                var detailSearchForm = $("#detail-search");
-
-                var categorySelection = $("#category-selection");
+                var detailSearchForm = $("#detail-search"), categorySelection = $("#category-selection"),
+                    sortSelector = $("#sort-selector");
                 if (detailSearchForm && categorySelection) {
                     categorySelection.change(function () {
                         var location = $(this).find(":selected").attr("location");
                         detailSearchForm.attr("action", location);
                     });
                 }
-                var sortSelector = $("#sort-selector");
                 if (sortSelector) {
                     sortSelector.change(function (e) {
                         if (detailSearchForm) {
@@ -173,15 +171,17 @@ define([
             };
 
             $scope.activatePriceSlider = function () {
-                var priceSlider = $("#price-slider");
+                var priceSlider = $("#price-slider"), priceMinInput, priceMaxInput, min, max, minValue, maxValue;
                 if (priceSlider) {
-                    var priceMinInput = $("#price-min"), priceMaxInput = $("#price-max");
-                    var min = priceSlider.attr("min-value");
-                    var max = priceSlider.attr("max-value");
+                    priceMinInput = $("#price-min");
+                    priceMaxInput = $("#price-max");
+                    min = priceSlider.attr("min-value");
+                    max = priceSlider.attr("max-value");
                     if (!min || !max) {
                         $("#price-label").hide();
                     } else {
-                        var minValue = priceMinInput.attr("value"), maxValue = priceMaxInput.attr("value");
+                        minValue = priceMinInput.attr("value");
+                        maxValue = priceMaxInput.attr("value");
                         if (!minValue) {
                             minValue = min;
                         }
@@ -209,20 +209,17 @@ define([
             };
 
             $scope.setMarkers = function (map, locations, markerId) {
-                var staticUrl = "/static/";
-                var scripts = $document[0].getElementsByTagName("script");
-                for (var i = 0, l = scripts.length; i < l; i++) {
+                var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
+                    product, image, imageHover, myLatLng, marker;
+                for (i = 0, l = scripts.length; i < l; i += 1) {
                     if (scripts[i].getAttribute("data-static-path")) {
                         staticUrl = scripts[i].getAttribute("data-static-path");
                         break;
                     }
                 }
-                for (var j = 0; j < locations.length; j++) {
-                    var product = locations[j];
-
-                    var image, imageHover;
-
-                    if (markerId == "li#marker-") {
+                for (j = 0; j < locations.length; j += 1) {
+                    product = locations[j];
+                    if (markerId === "li#marker-") {
                         image = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
                             new google.maps.Size(26, 28),
                             new google.maps.Point(0, 28 * j),
@@ -233,25 +230,20 @@ define([
                             new google.maps.Point(29, 28 * j),
                             new google.maps.Point(14, 28));
                     }
-
-                    var myLatLng = new google.maps.LatLng(product.lat, product.lng);
-
-                    var marker = new google.maps.Marker({
+                    myLatLng = new google.maps.LatLng(product.lat, product.lng);
+                    marker = new google.maps.Marker({
                         position: myLatLng,
                         map: map,
                         title: product.title,
                         zIndex: product.zIndex,
                         icon: image
                     });
-
                     marker.set("myZIndex", marker.getZIndex());
-
                     google.maps.event.addListener(marker, "mouseover", $scope.mouseOverListenerGenerator(imageHover, marker, markerId));
                     google.maps.event.addListener(marker, "click", $scope.mouseClickListenerGenerator(marker, markerId));
                     google.maps.event.addListener(marker, "mouseout", $scope.mouseOutListenerGenerator(image, marker, markerId));
 
                     $(markerId + marker.get("myZIndex")).mouseover($scope.triggerMouseOverGenerator(marker));
-
                     $(markerId + marker.get("myZIndex")).mouseout($scope.triggerMouseOutGenerator(marker));
                 }
             };

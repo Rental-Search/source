@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "toastr",
@@ -9,8 +7,8 @@ define([
     "../../../../common/eloue/services/ProductsService",
     "../../../../common/eloue/services/UtilsService",
     "../../../../common/eloue/services/UsersService"
-    ], function (EloueDashboardApp, toastr) {
-
+], function (EloueDashboardApp, toastr) {
+    "use strict";
     /**
      * Controller for the page to create new message thread for previously selected booking.
      */
@@ -47,7 +45,7 @@ define([
                     // Get booking product
                     BookingsService.getBookingByProduct($stateParams.productId).then(function (booking) {
                         $scope.booking = booking;
-                        $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
+                        $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                         $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                     });
                 } else {
@@ -59,17 +57,20 @@ define([
                 $scope.postNewMessage = function () {
                     $scope.submitInProgress = true;
                     ProductRelatedMessagesService.postMessage($scope.messageThread.id, currentUser.id, $scope.booking.owner.id,
-                        $scope.message, null, $stateParams.productId).then(function (result) {
+                        $scope.message, null, $stateParams.productId).then(
+                        function (result) {
                             // Clear message field
                             $scope.message = "";
                             $scope.submitInProgress = false;
                             $scope.showNotification("message", "send", true);
                             $stateParams.id = UtilsService.getIdFromUrl(result.thread);
                             $state.transitionTo("messages.detail", $stateParams, {reload: true});
-                        }, function (error) {
+                        },
+                        function () {
                             $scope.submitInProgress = false;
                             $scope.showNotification("message", "send", false);
-                        });
+                        }
+                    );
                 };
 
 
@@ -81,13 +82,15 @@ define([
             $scope.postNewMessage = function () {
                 $scope.submitInProgress = true;
                 ProductRelatedMessagesService.postMessage($scope.messageThread.id, $scope.currentUser.id, $scope.booking.owner.id,
-                    $scope.message, null, $stateParams.productId).then(function (result) {
+                    $scope.message, null, $stateParams.productId).then(
+                    function (result) {
                         // Clear message field
                         $scope.message = "";
                         $scope.submitInProgress = false;
                         $stateParams.id = UtilsService.getIdFromUrl(result.thread);
                         $state.transitionTo("messages.detail", $stateParams, {reload: true});
-                    });
+                    }
+                );
             };
         }
     ]);

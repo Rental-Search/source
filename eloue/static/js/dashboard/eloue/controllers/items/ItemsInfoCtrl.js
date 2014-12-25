@@ -1,5 +1,3 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/values",
@@ -8,7 +6,7 @@ define([
     "../../../../common/eloue/services/PicturesService",
     "../../../../common/eloue/services/ProductsService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the items photos and info page.
      */
@@ -142,17 +140,17 @@ define([
 
             $scope.onPictureAdded = function () {
                 $scope.$apply(function () {
-                    $scope.loadingPicture++;
+                    $scope.loadingPicture += 1;
                 });
-                PicturesService.savePicture($scope.product.id, $("#add-picture"), function (data) {
+                PicturesService.savePicture($("#add-picture"), function (data) {
                     $scope.$apply(function () {
-                        $scope.loadingPicture--;
+                        $scope.loadingPicture -= 1;
                         $scope.product.pictures.push(data);
                     });
                     $scope.showNotification("picture", "upload", true);
                 }, function () {
                     $scope.$apply(function () {
-                        $scope.loadingPicture--;
+                        $scope.loadingPicture -= 1;
                     });
                     $scope.showNotification("picture", "upload", false);
                 });
@@ -172,7 +170,7 @@ define([
                 var promises = [];
                 promises.push(AddressesService.update($scope.product.addressDetails).$promise);
                 promises.push(ProductsService.updateProduct($scope.product).$promise);
-                $q.all(promises).then(function (results) {
+                $q.all(promises).then(function () {
                     $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_info", "save", true);
@@ -217,7 +215,7 @@ define([
 
             $scope.deletePicture = function () {
                 $scope.submitInProgress = true;
-                PicturesService.deletePicture($scope.selectedPictureId).$promise.then(function (data) {
+                PicturesService.deletePicture($scope.selectedPictureId).$promise.then(function () {
                     ProductsService.getProductDetails($stateParams.id).then(function (product) {
                         $scope.submitInProgress = false;
                         $scope.product.pictures = product.pictures;

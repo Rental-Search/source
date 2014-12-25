@@ -1,12 +1,10 @@
-"use strict";
-
 define([
     "eloue/app",
     "../../../../common/eloue/values",
     "../../../../common/eloue/services/BookingsService",
     "../../../../common/eloue/services/UnavailabilityPeriodsService"
 ], function (EloueDashboardApp) {
-
+    "use strict";
     /**
      * Controller for the items calendar tab.
      */
@@ -90,7 +88,7 @@ define([
 
             BookingsService.getBookingsByProduct($stateParams.id).then(function (bookings) {
                 $scope.markListItemAsSelected("item-tab-", "calendar");
-                angular.forEach(bookings, function (value, key) {
+                angular.forEach(bookings, function (value) {
                     value.startDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
                     value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);
                 });
@@ -115,24 +113,23 @@ define([
 
             $scope.updateCalendar = function () {
                 $scope.productUnavailablePeriods = [];
-                var s = $scope.selectedMonthAndYear.split(" ");
-                var date = new Date();
+                var s = $scope.selectedMonthAndYear.split(" "), date = new Date(), weeks = [], start, i, j, currentDay,
+                    days, isBooked, isUnavailable, week;
                 date.setMonth(s[0]);
                 date.setFullYear(s[1]);
-                var weeks = [];
-                var start = new Date(date.moveToFirstDayOfMonth());
+                start = new Date(date.moveToFirstDayOfMonth());
                 start.clearTime();
-                for (var i = 0; i < 6; i++) {
-                    var currentDay = start.moveToDayOfWeek(1, -1);
-                    var days = [];
-                    for (var j = 0; j < 7; j++) {
-                        var isBooked = false;
-                        var isUnavailable = false;
-                        angular.forEach($scope.bookings, function (value, key) {
+                for (i = 0; i < 6; i += 1) {
+                    currentDay = start.moveToDayOfWeek(1, -1);
+                    days = [];
+                    for (j = 0; j < 7; j += 1) {
+                        isBooked = false;
+                        isUnavailable = false;
+                        angular.forEach($scope.bookings, function (value) {
                             if (currentDay.between(value.startDay, value.endDay)) {
                                 isBooked = true;
                                 value.reason = "booked";
-                                if ($.inArray(value, $scope.productUnavailablePeriods) == -1) {
+                                if ($.inArray(value, $scope.productUnavailablePeriods) === -1) {
                                     $scope.productUnavailablePeriods.push(value);
                                 }
                             }
@@ -142,7 +139,7 @@ define([
                             if (currentDay.between(value.startDay, value.endDay)) {
                                 isUnavailable = true;
                                 value.reason = "unavailable";
-                                if ($.inArray(value, $scope.productUnavailablePeriods) == -1) {
+                                if ($.inArray(value, $scope.productUnavailablePeriods) === -1) {
                                     $scope.productUnavailablePeriods.push(value);
                                 }
                             }
@@ -151,8 +148,7 @@ define([
                         days.push({dayOfMonth: currentDay.getDate(), isBooked: isBooked, isUnavailable: isUnavailable});
                         currentDay.add(1).days();
                     }
-
-                    var week = {};
+                    week = {};
                     week.weekDays = days;
                     weeks.push(week);
                     start.add(1).weeks();
@@ -160,13 +156,9 @@ define([
                 $scope.weeks = weeks;
             };
 
-            $scope.onShowUnavailable = function () {
-                console.log("onShowUnavailable");
-            };
+            $scope.onShowUnavailable = function () {};
 
-            $scope.onShowBookings = function () {
-                console.log("onShowBookings");
-            };
+            $scope.onShowBookings = function () {};
 
             $scope.showAddPeriodForm = function () {
                 $("#add-period").modal();
@@ -199,7 +191,7 @@ define([
                     } else {
                         promise = UnavailabilityPeriodsService.updatePeriod($scope.newUnavailabilityPeriod).$promise;
                     }
-                    promise.then(function (result) {
+                    promise.then(function () {
                         $scope.updateCalendar();
                         $("#add-period").modal("hide");
                         $scope.newUnavailabilityPeriod = {};
@@ -216,26 +208,27 @@ define([
 
             $scope.validateUnavailabilityPeriod = function (startDate, endDate) {
                 $scope.unavailabilityPeriodValidationError = "";
-                var msPerDay = 1000 * 60 * 60 * 24;
-                var dayDiff = Math.floor((endDate.getTime() - startDate.getTime()) / msPerDay);
-                var start = angular.copy(endDate).add(1).days();
+                var i, msPerDay = 1000 * 60 * 60 * 24,
+                    dayDiff = Math.floor((endDate.getTime() - startDate.getTime()) / msPerDay),
+                    start = angular.copy(endDate).add(1).days();
                 start.clearTime();
-                for (var i = 0; i <= dayDiff; i++) {
+                for (i = 0; i <= dayDiff; i += 1) {
                     var currentDay = start.add(-1).days();
 
-                    angular.forEach($scope.bookings, function (value, key) {
+                    angular.forEach($scope.bookings, function (value) {
                         if (currentDay.between(value.startDay, value.endDay)) {
                             $scope.unavailabilityPeriodValidationError = "Can't create an unavailability period if the product is already booked";
                         }
                     });
 
-                    angular.forEach($scope.unavailablePeriods, function (value, key) {
+                    angular.forEach($scope.unavailablePeriods, function (value) {
                         if (currentDay.between(value.startDay, value.endDay)) {
-                            if (!$scope.newUnavailabilityPeriod.id || $scope.newUnavailabilityPeriod.id != value.id)
+                            if (!$scope.newUnavailabilityPeriod.id || $scope.newUnavailabilityPeriod.id !== value.id) {
                                 $scope.unavailabilityPeriodValidationError = "Can't create an unavailability period if the start or end date is between an other unavailability period.";
+                            }
                         }
                     });
-                    if (!!$scope.unavailabilityPeriodValidationError) {
+                    if ($scope.unavailabilityPeriodValidationError) {
                         return false;
                     }
                 }
@@ -243,10 +236,9 @@ define([
             };
 
             $scope.deleteUnavailabilityPeriod = function (period) {
-                UnavailabilityPeriodsService.deletePeriod(period).$promise.then(function (result) {
+                UnavailabilityPeriodsService.deletePeriod(period).$promise.then(function () {
                     $scope.updateUnavailabilityPeriods();
                 });
             };
-
         }]);
 });
