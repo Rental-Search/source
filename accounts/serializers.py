@@ -36,7 +36,7 @@ class AddressSerializer(GeoModelSerializer):
 
 class NestedAddressSerializer(serializers.NestedModelSerializerMixin, AddressSerializer):
     class Meta(AddressSerializer.Meta):
-        public_fields = ('city', 'zipcode')
+        public_fields = ('city', 'zipcode', 'position')
 
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
