@@ -63,7 +63,7 @@ class SearchQuerySetMixin(object):
 
         if obj.object is None:
             raise Http404(_(
-                "Product with pk %(pk)s and slug \"%(slug)s\" doesn't exists") %
+                'Product with pk %(pk)s and slug "%(slug)s" does not exist') %
                 {'pk': pk,
                  'slug': slug, })
 
