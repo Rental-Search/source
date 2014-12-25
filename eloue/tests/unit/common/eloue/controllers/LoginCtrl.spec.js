@@ -20,7 +20,7 @@ define(["angular-mocks", "eloue/controllers/LoginCtrl"], function () {
                     console.log("Auth service mock called");
                 },
 
-                getCookie: function (cname) {
+                getUserToken: function () {
                     return "";
                 },
 
@@ -57,7 +57,7 @@ define(["angular-mocks", "eloue/controllers/LoginCtrl"], function () {
             routeParams = {};
 
             spyOn(authServiceMock, "login").and.callThrough();
-            spyOn(authServiceMock, "getCookie").and.callThrough();
+            spyOn(authServiceMock, "getUserToken").and.callThrough();
             spyOn(authServiceMock, "redirectToAttemptedUrl").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
 

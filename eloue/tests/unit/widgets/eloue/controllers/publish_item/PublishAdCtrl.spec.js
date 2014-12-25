@@ -38,7 +38,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
                 }
             };
             authServiceMock = {
-                getCookie: function (cookieName) {
+                getUserToken: function () {
 
                 }
             };

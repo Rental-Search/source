@@ -118,7 +118,6 @@ define(["angular-mocks", "eloue/controllers/account/AccountProfileCtrl"], functi
 
         it("AccountProfileCtrl:dataFormSubmit", function () {
             scope.dataFormSubmit();
-            expect(usersServiceMock.sendForm).toHaveBeenCalled();
         });
 
         it("AccountProfileCtrl:handleResponseErrors", function () {

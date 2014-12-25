@@ -26,7 +26,7 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
             };
 
             authServiceMock = {
-                getCookie: function(name) {
+                getUserToken: function() {
                     return "token";
                 }
             };
@@ -42,7 +42,7 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
 
             spyOn(usersServiceMock, "getMe").and.callThrough();
             spyOn(usersServiceMock, "getStatistics").and.callThrough();
-            spyOn(authServiceMock, "getCookie").and.callThrough();
+            spyOn(authServiceMock, "getUserToken").and.callThrough();
 
             DashboardRootCtrl = $controller('DashboardRootCtrl', { $scope: scope, UsersService: usersServiceMock, AuthService: authServiceMock });
         }));

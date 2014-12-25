@@ -71,7 +71,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
                 }
             };
             authServiceMock = {
-                getCookie: function (cookieName) {
+                getUserToken: function () {
 
                 }
             };
@@ -187,7 +187,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
             spyOn(usersServiceMock, "get").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
             spyOn(usersServiceMock, "updateUser").and.callThrough();
-            spyOn(authServiceMock, "getCookie").and.callThrough();
+            spyOn(authServiceMock, "getUserToken").and.callThrough();
             spyOn(productRelatedMessagesServiceMock, "postMessage").and.callThrough();
             spyOn(addressesServiceMock, "saveAddress").and.callThrough();
             spyOn(bookingsServiceMock, "requestBooking").and.callThrough();

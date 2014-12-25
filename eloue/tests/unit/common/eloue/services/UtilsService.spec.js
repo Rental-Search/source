@@ -11,8 +11,11 @@ define(["angular-mocks", "eloue/services/UtilsService", "datejs"], function () {
         beforeEach(function () {
 
             authServiceMock = {
-                getCookie: function(name) {
-                    return "U_token"
+                getUserToken: function () {
+                    return "U_token";
+                },
+                getCSRFToken: function () {
+                    return "U_token";
                 }
             };
 
@@ -23,7 +26,8 @@ define(["angular-mocks", "eloue/services/UtilsService", "datejs"], function () {
 
         beforeEach(inject(function (_UtilsService_, $filter) {
             filter = $filter;
-            spyOn(authServiceMock, "getCookie").and.callThrough();
+            spyOn(authServiceMock, "getUserToken").and.callThrough();
+            spyOn(authServiceMock, "getCSRFToken").and.callThrough();
             UtilsService = _UtilsService_;
         }));
 
@@ -51,8 +55,8 @@ define(["angular-mocks", "eloue/services/UtilsService", "datejs"], function () {
             var filename = "voucher.pdf";
             var url = "http://10.0.5.47:8200/api/2.0/shippings/1/";
             UtilsService.downloadPdfFile(url, filename);
-            expect(authServiceMock.getCookie).toHaveBeenCalledWith("user_token");
-            expect(authServiceMock.getCookie).toHaveBeenCalledWith("csrftoken");
+            expect(authServiceMock.getUserToken).toHaveBeenCalled();
+            expect(authServiceMock.getCSRFToken).toHaveBeenCalled();
         });
     });
 });

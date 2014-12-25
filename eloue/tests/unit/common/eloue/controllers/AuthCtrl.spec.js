@@ -15,7 +15,7 @@ define(["angular-mocks", "eloue/controllers/AuthCtrl"], function () {
                 clearUserData: function () {
                     console.log("Auth service mock called");
                 },
-                getCookie: function (cookieName) {
+                getUserToken: function () {
                     return "U_token";
                 }
             };

@@ -38,7 +38,7 @@ define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
 
                 },
 
-                getCookie: function (cname) {
+                getUserToken: function () {
                     return "";
                 },
 
@@ -91,7 +91,7 @@ define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
             spyOn(authServiceMock, "register").and.callThrough();
             spyOn(authServiceMock, "clearUserData").and.callThrough();
             spyOn(authServiceMock, "login").and.callThrough();
-            spyOn(authServiceMock, "getCookie").and.callThrough();
+            spyOn(authServiceMock, "getUserToken").and.callThrough();
             spyOn(authServiceMock, "redirectToAttemptedUrl").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
             spyOn(toDashboardRedirectServiceMock, "showPopupAndRedirect").and.callThrough();
