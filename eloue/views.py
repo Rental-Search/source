@@ -60,6 +60,13 @@ class SearchQuerySetMixin(object):
         except IndexError:
             raise Http404(_("No %(verbose_name)s found matching the query") %
                           {'verbose_name': self.model._meta.verbose_name})
+
+        if obj.object is None:
+            raise Http404(_(
+                "Product with pk %(pk)s and slug \"%(slug)s\" doesn't exists") %
+                {'pk': pk,
+                 'slug': slug, })
+
         return obj
 
 class AjaxResponseMixin(object):
