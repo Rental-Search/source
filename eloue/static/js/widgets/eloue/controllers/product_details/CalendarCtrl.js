@@ -77,16 +77,17 @@ define([
              * Used to load calendar with product booking data.
              */
             $scope.loadCalendar = function () {
-                BookingsService.getBookingsByProduct($scope.product.id).then(function (bookings) {
+                BookingsService.getBookingsByProduct($scope.product.id).then($scope.processBookingsResponse);
+            };
 
-                    angular.forEach(bookings, function (value) {
-                        value.startDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
-                        value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);
-                    });
-                    $scope.bookings = bookings;
-
-                    $scope.updateCalendar();
+            $scope.processBookingsResponse = function (bookings) {
+                angular.forEach(bookings, function (value) {
+                    value.startDay = Date.parse(value.start_date.day + " " + value.start_date.month + " " + value.start_date.year);
+                    value.endDay = Date.parse(value.end_date.day + " " + value.end_date.month + " " + value.end_date.year);
                 });
+                $scope.bookings = bookings;
+
+                $scope.updateCalendar();
             };
 
             $scope.updateCalendar = function () {

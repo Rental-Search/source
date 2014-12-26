@@ -154,14 +154,7 @@ define([
                         $scope.rootCategories = categories;
 
                         if (!!categoryId && categoryId !== "") {
-                            CategoriesService.getAncestors(categoryId).then(function (categories) {
-                                var level = 0;
-                                angular.forEach(categories, function (value, key) {
-                                    $scope.setCategoryByLvl(value.id, level);
-                                    level += 1;
-                                });
-                                $scope.setCategoryByLvl(categoryId, level);
-                            });
+                            CategoriesService.getAncestors(categoryId).then($scope.processCategoryAncestors);
                         } else if ($scope.rootCategory) {
                             $scope.updateNodeCategories();
                         }
@@ -172,6 +165,15 @@ define([
                     modalContainer = $("#" + name + "Modal");
                     modalContainer.modal("show");
                 }
+            };
+
+            $scope.processCategoryAncestors = function (categories) {
+                var level = 0;
+                angular.forEach(categories, function (value) {
+                    $scope.setCategoryByLvl(value.id, level);
+                    level += 1;
+                });
+                $scope.setCategoryByLvl(categoryId, level);
             };
 
             /**
@@ -223,16 +225,19 @@ define([
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
-                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
-                        $scope.currentUser.default_address = result;
-                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
-                        $scope.saveProduct();
-                    }, function (error) {
-                        $scope.handleResponseErrors(error);
-                    });
+                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(
+                        $scope.applyUserAddress,
+                        $scope.handleResponseErrors
+                    );
                 } else {
                     $scope.saveProduct();
                 }
+            };
+
+            $scope.applyUserAddress = function (result) {
+                $scope.currentUser.default_address = result;
+                UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
+                $scope.saveProduct();
             };
 
             /**
@@ -259,36 +264,22 @@ define([
                     }
 
 
-                    ProductsService.saveProduct($scope.product).$promise.then(function (product) {
-                        $scope.price.currency = Currency.EUR.name;
-                        $scope.price.product = $scope.productsBaseUrl + product.id + "/";
-                        PricesService.savePrice($scope.price).$promise.then(function () {
-                            CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
-                                if ($scope.isAuto) {
-                                    ScriptTagService.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
-                                    $scope.finishProductSaveAndRedirect(product);
-                                } else if ($scope.isRealEstate) {
-                                    ScriptTagService.trackEvent("Dépôt annonce", "Logement", productCategory.name);
-                                    $scope.finishProductSaveAndRedirect(product);
-                                } else {
-                                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(function (ancestors) {
-                                        var categoriesStr = "";
-                                        angular.forEach(ancestors, function (value, key) {
-                                            categoriesStr = categoriesStr + value.name + " - ";
-                                        });
-                                        categoriesStr = categoriesStr + productCategory.name;
-                                        ScriptTagService.trackEvent("Dépôt annonce", "Objet", categoriesStr);
-                                        $scope.finishProductSaveAndRedirect(product);
+                    ProductsService.saveProduct($scope.product).$promise.then(
+                        function (product) {
+                            $scope.price.currency = Currency.EUR.name;
+                            $scope.price.product = $scope.productsBaseUrl + product.id + "/";
+                            PricesService.savePrice($scope.price).$promise.then(
+                                function () {
+                                    CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
+                                        $scope.trackPublishAdEvent(product, productCategory);
                                     });
-                                }
-                            });
-                        }, function (error) {
-                            $scope.handleResponseErrors(error);
-                        });
+                                },
+                                $scope.handleResponseErrors
+                            );
 
-                    }, function (error) {
-                        $scope.handleResponseErrors(error);
-                    });
+                        },
+                        $scope.handleResponseErrors
+                    );
                 } else {
                     //$scope.publishAdError = "All prices should be positive numbers!";
                     ServerValidationService.removeErrors();
@@ -296,6 +287,30 @@ define([
 
                     $scope.submitInProgress = false;
                 }
+            };
+
+            $scope.trackPublishAdEvent = function (product, productCategory) {
+                if ($scope.isAuto) {
+                    ScriptTagService.trackEvent("Dépôt annonce", "Voiture", productCategory.name);
+                    $scope.finishProductSaveAndRedirect(product);
+                } else if ($scope.isRealEstate) {
+                    ScriptTagService.trackEvent("Dépôt annonce", "Logement", productCategory.name);
+                    $scope.finishProductSaveAndRedirect(product);
+                } else {
+                    CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(
+                        $scope.trackPublishSimpleAdEvent
+                    );
+                }
+            };
+
+            $scope.trackPublishSimpleAdEvent = function (ancestors) {
+                var categoriesStr = "";
+                angular.forEach(ancestors, function (value) {
+                    categoriesStr = categoriesStr + value.name + " - ";
+                });
+                categoriesStr = categoriesStr + productCategory.name;
+                ScriptTagService.trackEvent("Dépôt annonce", "Objet", categoriesStr);
+                $scope.finishProductSaveAndRedirect(product);
             };
 
             /**
@@ -333,17 +348,21 @@ define([
              */
             $scope.searchCategory = function () {
                 if (!$scope.isAuto && !$scope.isRealEstate && $scope.rootCategory && $scope.product.summary && ($scope.product.summary.length > 1)) {
-                    CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(function (categories) {
-                        if (categories && categories.length > 0) {
-                            var nodeCategoryList = [], leafCategoryList = [];
-                            angular.forEach(categories, function (value) {
-                                nodeCategoryList.push({id: value[1].id, name: value[1].name});
-                                leafCategoryList.push({id: value[2].id, name: value[2].name});
-                            });
-                            $scope.nodeCategories = nodeCategoryList;
-                            $scope.leafCategories = leafCategoryList;
-                        }
+                    CategoriesService.searchByProductTitle($scope.product.summary, $scope.rootCategory).then(
+                        $scope.applySuggestedCategories
+                    );
+                }
+            };
+
+            $scope.applySuggestedCategories = function (categories) {
+                if (categories && categories.length > 0) {
+                    var nodeCategoryList = [], leafCategoryList = [];
+                    angular.forEach(categories, function (value) {
+                        nodeCategoryList.push({id: value[1].id, name: value[1].name});
+                        leafCategoryList.push({id: value[2].id, name: value[2].name});
                     });
+                    $scope.nodeCategories = nodeCategoryList;
+                    $scope.leafCategories = leafCategoryList;
                 }
             };
         }]);
