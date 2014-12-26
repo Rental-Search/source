@@ -683,7 +683,7 @@ define([
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
-                    MessageThreadsService.getMessageThreadByProductAndParticipant($scope.applyMessageThread);
+                    MessageThreadsService.getMessageThreadByProductAndParticipant($scope.productId, $scope.currentUser.id).then($scope.applyMessageThread);
                 });
             };
 

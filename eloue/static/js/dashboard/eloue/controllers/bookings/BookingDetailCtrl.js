@@ -49,7 +49,6 @@ define([
             });
 
             $scope.applyBookingDetails = function (bookingDetails) {
-                console.log(bookingDetails);
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                 $scope.showIncidentDescription = $scope.bookingDetails.state === "incident";

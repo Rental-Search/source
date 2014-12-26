@@ -154,7 +154,11 @@ define([
                         $scope.rootCategories = categories;
 
                         if (!!categoryId && categoryId !== "") {
-                            CategoriesService.getAncestors(categoryId).then($scope.processCategoryAncestors);
+                            CategoriesService.getAncestors(categoryId).then(
+                                function (categories) {
+                                    $scope.processCategoryAncestors(categories, categoryId);
+                                }
+                            );
                         } else if ($scope.rootCategory) {
                             $scope.updateNodeCategories();
                         }
@@ -167,7 +171,7 @@ define([
                 }
             };
 
-            $scope.processCategoryAncestors = function (categories) {
+            $scope.processCategoryAncestors = function (categories, categoryId) {
                 var level = 0;
                 angular.forEach(categories, function (value) {
                     $scope.setCategoryByLvl(value.id, level);
@@ -300,12 +304,14 @@ define([
                     $scope.finishProductSaveAndRedirect(product);
                 } else {
                     CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(
-                        $scope.trackPublishSimpleAdEvent
+                        function (ancestors) {
+                            $scope.trackPublishSimpleAdEvent(ancestors, productCategory);
+                        }
                     );
                 }
             };
 
-            $scope.trackPublishSimpleAdEvent = function (ancestors) {
+            $scope.trackPublishSimpleAdEvent = function (ancestors, productCategory) {
                 var categoriesStr = "";
                 angular.forEach(ancestors, function (value) {
                     categoriesStr = categoriesStr + value.name + " - ";

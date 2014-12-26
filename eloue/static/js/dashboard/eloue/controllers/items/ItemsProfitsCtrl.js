@@ -18,7 +18,11 @@ define([
             $scope.durationMonths = 0;
             $scope.durationYears = 0;
 
-            BookingsService.getBookingsByProduct($stateParams.id).then($scope.applyBookings);
+            BookingsService.getBookingsByProduct($stateParams.id).then(
+                function (bookings) {
+                    $scope.applyBookings(bookings);
+                }
+            );
 
             $scope.applyBookings = function (bookings) {
                 $scope.markListItemAsSelected("item-tab-", "profits");

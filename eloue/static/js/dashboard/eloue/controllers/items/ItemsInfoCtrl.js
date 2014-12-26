@@ -104,7 +104,11 @@ define([
                 $scope.showNotification(object, action, false);
             };
 
-            ProductsService.getProductDetails($stateParams.id).then($scope.applyProductDetails);
+            ProductsService.getProductDetails($stateParams.id).then(
+                function (product) {
+                    $scope.applyProductDetails(product);
+                }
+            );
 
             $scope.applyProductDetails = function (product) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);

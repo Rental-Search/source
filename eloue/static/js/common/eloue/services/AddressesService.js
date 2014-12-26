@@ -18,7 +18,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             addressesService.getAddressesByPatron = function (patronId) {
                 var deferred = $q.defer();
 
-                Addresses.get({patron: patronId, _cache: new Date().getTime()}).then(function (result) {
+                Addresses.get({patron: patronId, _cache: new Date().getTime()}).$promise.then(function (result) {
                     var total = result.count, pagesCount, adrPromises, i;
                     if (total <= 10) {
                         deferred.resolve(result.results);

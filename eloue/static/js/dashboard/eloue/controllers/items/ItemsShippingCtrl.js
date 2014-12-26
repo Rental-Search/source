@@ -39,7 +39,11 @@ define([
                 $scope.showNotification(object, action, false);
             };
 
-            ProductShippingPointsService.getByProduct($stateParams.id).then($scope.applyProductShippingPoints);
+            ProductShippingPointsService.getByProduct($stateParams.id).then(
+                function (data) {
+                    $scope.applyProductShippingPoints(data);
+                }
+            );
 
             $scope.applyProductShippingPoints = function (data) {
                 if (!!data.results && data.results.length > 0) {
@@ -59,7 +63,11 @@ define([
             });
 
             $scope.makeInitialSearchByAddress = function () {
-                ProductsService.getProduct($stateParams.id, true, false, false, false).then($scope.applyProductDetails);
+                ProductsService.getProduct($stateParams.id, true, false, false, false).then(
+                    function (product) {
+                        $scope.applyProductDetails(product);
+                    }
+                );
             };
 
             $scope.applyProductDetails = function (product) {
@@ -125,8 +133,8 @@ define([
 
             $scope.savePoint = function () {
                 var selectedPoint = {};
-                angular.forEach($scope.shippingPoints, function (value, key) {
-                    if ($scope.selectedPointId === value.site_id) {
+                angular.forEach($scope.shippingPoints, function (value) {
+                    if ($scope.selectedPointId == value.site_id) {
                         selectedPoint = value;
                     }
                 });

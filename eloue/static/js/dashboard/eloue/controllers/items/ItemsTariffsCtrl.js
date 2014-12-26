@@ -37,7 +37,11 @@ define([
             $scope.isAuto = false;
             $scope.isRealEstate = false;
 
-            ProductsService.getProductDetails($stateParams.id).then($scope.applyProductDetails);
+            ProductsService.getProductDetails($stateParams.id).then(
+                function (product) {
+                    $scope.applyProductDetails(product);
+                }
+            );
 
             $scope.applyProductDetails = function (product) {
                 $scope.product = product;
