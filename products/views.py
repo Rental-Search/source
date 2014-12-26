@@ -741,7 +741,12 @@ from products.forms import SuggestCategoryViewForm
 
 class NavbarCategoryMixin(object):
     def get_context_data(self, **kwargs):
-        category_list = list(Category.on_site.filter(pk__in=settings.NAVBAR_CATEGORIES))
+        categories_list = cache.get('navbar_categories_list')
+
+        if categories_list is None:
+            category_list = list(Category.on_site.filter(pk__in=settings.NAVBAR_CATEGORIES))
+            cache.set('navbar_categories_list', category_list, 43200)
+
         index = settings.NAVBAR_CATEGORIES.index
         category_list.sort(key=lambda obj: index(obj.pk))
         context = {
@@ -757,6 +762,7 @@ class PublishCategoryMixin(object):
             context['publish_category_list'] = settings.PUBLISH_CATEGORIES
         context.update(super(PublishCategoryMixin, self).get_context_data(**kwargs))
         return context
+
 
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
@@ -780,6 +786,7 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         self.location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         return super(HomepageView, self).get(request, *args, **kwargs)
+
 
 class ProductListView(ProductList):
     template_name = 'products/product_list.jade'

@@ -1,5 +1,5 @@
--load humanize product
-
+-load humanize product cache
+{% cache 600 'comment_list' %}
 .float-comments-wrapper.container
   {% for columns in comment_list|takeby_transposed:"2:10" %}
   ul.row.col-sm-6
@@ -17,4 +17,5 @@
         {{ product.summary|capfirst }} - {{ product.address.city|title }}{% if product.address.zipcode %}, {{ product.address.zipcode }}{%endif %}
       {% endwith %}
   {% endfor %}
+{% endcache %}
 .decorated-houses
