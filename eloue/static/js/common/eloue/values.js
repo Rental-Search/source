@@ -24,7 +24,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         "invalid_grant": "Bad credentials provided",
         "invalid_request": "Bad request",
         "invalid_scope": "Invalid scope",
-        "invalid_client": "Wrong client app"
+        "invalid_client": "Wrong client app",
+        "user_inactive": "Votre compte est inactif."
     });
 
     EloueCommon.constant("ActivityType", {
