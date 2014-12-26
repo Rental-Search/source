@@ -144,7 +144,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                         productPromises.stats = Products.getStats({id: productId, _cache: new Date().getTime()});
                     }
                     if (loadOwnerStats) {
-                        productPromises.ownerStats = UsersService.getStatistics(productData.owner.id).$promise;
+                        productPromises.ownerStats = UsersService.getStatistics(productData.owner.id);
                     }
                     // When all data loaded
                     $q.all(productPromises).then(function (results) {

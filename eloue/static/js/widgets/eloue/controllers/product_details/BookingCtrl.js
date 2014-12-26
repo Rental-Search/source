@@ -410,12 +410,14 @@ define([
 
             $scope.payForBooking = function (booking, paymentInfo) {
                 BookingsService.payForBooking(booking.uuid, paymentInfo).then(
-                    $scope.processBookingPaymentResponse,
+                    function () {
+                        $scope.processBookingPaymentResponse(booking);
+                    },
                     $scope.handleResponseErrors
                 );
             };
 
-            $scope.processBookingPaymentResponse = function () {
+            $scope.processBookingPaymentResponse = function (booking) {
                 ScriptTagService.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
                 ScriptTagService.trackEvent("Réservation", "Demande de réservation", $scope.getEventLabel());
                 ScriptTagService.trackPageView();

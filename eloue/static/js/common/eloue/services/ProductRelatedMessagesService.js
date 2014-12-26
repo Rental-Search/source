@@ -22,7 +22,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
             productRelatedMessagesService.getMessageListItem = function (messageId) {
                 var deferred = $q.defer();
 
-                this.getMessage(messageId).$promise.then(function (messageData) {
+                this.getMessage(messageId).then(function (messageData) {
                     var message = productRelatedMessagesService.parseMessage(messageData, messageData.sender);
                     deferred.resolve(message);
                 }, function (reason) {
@@ -58,7 +58,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
                     };
                     ProductRelatedMessages.save(message).$promise.then(function (response) {
                         var responseSenderId = UtilsService.getIdFromUrl(response.sender);
-                        UsersService.get(responseSenderId).$promise.then(function (result) {
+                        UsersService.get(responseSenderId).then(function (result) {
                             response.sender = result;
                             deferred.resolve(response);
                         });

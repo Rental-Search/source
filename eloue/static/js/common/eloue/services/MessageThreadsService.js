@@ -24,10 +24,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 }).$promise.then(
                     function (result) {
                         var promises = [];
-                        angular.forEach(result.results, function (value, key) {
-                            angular.forEach(value.messages, function (messageLink, idx) {
+                        angular.forEach(result.results, function (value) {
+                            angular.forEach(value.messages, function (messageLink) {
                                 var messageId = UtilsService.getIdFromUrl(messageLink);
-                                promises.push(ProductRelatedMessagesService.getMessage(messageId).$promise);
+                                promises.push(ProductRelatedMessagesService.getMessage(messageId));
                             });
                         });
                         $q.all(promises).then(function success(results) {

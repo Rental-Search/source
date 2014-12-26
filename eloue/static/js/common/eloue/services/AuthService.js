@@ -104,7 +104,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
              * @returns user promise object.
              */
             authService.register = function (account) {
-                return Registration.register(account);
+                return Registration.register(account).$promise;
             };
 
             /**

@@ -34,7 +34,9 @@ define([
                 messageThread: MessageThreadsService.getMessageThreadById($stateParams.id)
             };
 
-            $q.all(promises).then($scope.applyUserAndMessageThread);
+            $q.all(promises).then(function (results) {
+                $scope.applyUserAndMessageThread(results);
+            });
 
             $scope.applyUserAndMessageThread = function (results) {
                 $scope.markListItemAsSelected("thread-", $stateParams.id);

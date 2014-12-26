@@ -37,7 +37,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                             var commentDeferred = $q.defer(),
                                 authorId = UtilsService.getIdFromUrl(commentData.author);
                             // Load author
-                            UsersService.get(authorId).$promise.then(function (authorData) {
+                            UsersService.get(authorId).then(function (authorData) {
                                 var comment = commentsService.parseComment(commentData, authorData);
                                 commentDeferred.resolve(comment);
                             });
