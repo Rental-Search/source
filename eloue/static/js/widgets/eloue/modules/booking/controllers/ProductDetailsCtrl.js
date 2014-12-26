@@ -359,8 +359,9 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
              */
             $scope.requestBooking = function () {
                 var booking = {};
-                var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
-                var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
+                console.log($scope.bookingDetails.fromHour);
+                var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
+                var toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
                 var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 booking.started_at = fromDateTime.toString("yyyy-MM-ddTHH:mm");
