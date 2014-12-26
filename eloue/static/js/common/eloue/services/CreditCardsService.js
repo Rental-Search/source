@@ -9,11 +9,11 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], f
             var creditCardsService = {};
 
             creditCardsService.saveCard = function (card) {
-                return CreditCards.save(card);
+                return CreditCards.save(card).$promise;
             };
 
             creditCardsService.deleteCard = function (card) {
-                return CreditCards.delete({id: card.id});
+                return CreditCards.delete({id: card.id}).$promise;
             };
 
             return creditCardsService;

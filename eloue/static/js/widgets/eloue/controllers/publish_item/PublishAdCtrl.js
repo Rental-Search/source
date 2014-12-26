@@ -100,7 +100,7 @@ define([
 
             if (!!$scope.currentUserToken) {
                 // Get current user
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
@@ -193,7 +193,7 @@ define([
                 CategoriesService.getChildCategories($scope.rootCategory).then(function (categories) {
                     $scope.nodeCategories = categories;
                 });
-                CategoriesService.getCategory($scope.rootCategory).$promise.then(function (rootCategory) {
+                CategoriesService.getCategory($scope.rootCategory).then(function (rootCategory) {
                     $scope.updateFieldSet(rootCategory);
                 });
             };
@@ -225,7 +225,7 @@ define([
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
-                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(
+                    AddressesService.saveAddress($scope.currentUser.default_address).then(
                         $scope.applyUserAddress,
                         $scope.handleResponseErrors
                     );
@@ -264,15 +264,17 @@ define([
                     }
 
 
-                    ProductsService.saveProduct($scope.product).$promise.then(
+                    ProductsService.saveProduct($scope.product).then(
                         function (product) {
                             $scope.price.currency = Currency.EUR.name;
                             $scope.price.product = $scope.productsBaseUrl + product.id + "/";
-                            PricesService.savePrice($scope.price).$promise.then(
+                            PricesService.savePrice($scope.price).then(
                                 function () {
-                                    CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).$promise.then(function (productCategory) {
-                                        $scope.trackPublishAdEvent(product, productCategory);
-                                    });
+                                    CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).then(
+                                        function (productCategory) {
+                                            $scope.trackPublishAdEvent(product, productCategory);
+                                        }
+                                    );
                                 },
                                 $scope.handleResponseErrors
                             );

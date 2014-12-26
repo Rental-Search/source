@@ -17,11 +17,11 @@ define([
             var currentUserToken = AuthService.getUserToken();
             if (currentUserToken) {
                 // Get current user
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
-                    UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
+                    UsersService.getStatistics($scope.currentUser.id).then(function (stats) {
                         $scope.userStats = stats;
                     });
                 });

@@ -39,7 +39,9 @@ define([
                 $scope.showNotification(object, action, false);
             };
 
-            ProductShippingPointsService.getByProduct($stateParams.id).then(function (data) {
+            ProductShippingPointsService.getByProduct($stateParams.id).then($scope.applyProductShippingPoints);
+
+            $scope.applyProductShippingPoints = function (data) {
                 if (!!data.results && data.results.length > 0) {
                     $scope.productShippingPoint = data.results[0];
                     $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
@@ -47,28 +49,30 @@ define([
                 } else {
                     $scope.showWellcome = true;
                 }
-            });
+            };
 
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
             });
 
             $scope.makeInitialSearchByAddress = function () {
+                ProductsService.getProduct($stateParams.id, true, false, false, false).then($scope.applyProductDetails);
+            };
+
+            $scope.applyProductDetails = function (product) {
                 var location = false;
-                ProductsService.getProduct($stateParams.id, true, false, false, false).then(function (product) {
-                    if ($scope.showPointList && product.address && product.address.street && product.address.city) {
-                        $scope.addressQuery = product.address.street + ", " + product.address.city;
-                        location = $scope.addressQuery;
-                    }
-                    $("#product-shipping-address").formmapper({
-                        details: "form",
-                        location: location
-                    });
-                    $scope.searchShippingPoints();
+                if ($scope.showPointList && product.address && product.address.street && product.address.city) {
+                    $scope.addressQuery = product.address.street + ", " + product.address.city;
+                    location = $scope.addressQuery;
+                }
+                $("#product-shipping-address").formmapper({
+                    details: "form",
+                    location: location
                 });
+                $scope.searchShippingPoints();
             };
 
             $scope.fillInSchedule = function (openingDates) {
@@ -109,7 +113,7 @@ define([
             $scope.saveMapPoint = function () {
                 $scope.submitInProgress = true;
                 if (!!$scope.productShippingPoint && !!$scope.productShippingPoint.id) {
-                    ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function () {
+                    ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).then(function () {
                         $scope.savePoint();
                     }, function (error) {
                         $scope.handleResponseErrors(error, "shipping_point", "delete");
@@ -122,21 +126,26 @@ define([
             $scope.savePoint = function () {
                 var selectedPoint = {};
                 angular.forEach($scope.shippingPoints, function (value, key) {
-                    if ($scope.selectedPointId == value.site_id) {
+                    if ($scope.selectedPointId === value.site_id) {
                         selectedPoint = value;
                     }
                 });
                 selectedPoint.product = $scope.productsBaseUrl + $stateParams.id + "/";
                 selectedPoint.type = 1;
-                ProductShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function (result) {
-                    $scope.productShippingPoint = result;
-                    $scope.submitInProgress = false;
-                    $scope.showNotification("shipping_point", "save", true);
-                    $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
-                    $scope.showMapPointDetails();
-                }, function (error) {
-                    $scope.handleResponseErrors(error, "shipping_point", "save");
-                });
+                ProductShippingPointsService.saveShippingPoint(selectedPoint).then(
+                    $scope.parseShippingPointResult,
+                    function (error) {
+                        $scope.handleResponseErrors(error, "shipping_point", "save");
+                    }
+                );
+            };
+
+            $scope.parseShippingPointResult = function (result) {
+                $scope.productShippingPoint = result;
+                $scope.submitInProgress = false;
+                $scope.showNotification("shipping_point", "save", true);
+                $scope.fillInSchedule($scope.productShippingPoint.opening_dates);
+                $scope.showMapPointDetails();
             };
 
             $scope.pointSelected = function (pointId) {
@@ -148,7 +157,7 @@ define([
             };
 
             $scope.removeMapPoint = function () {
-                ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).$promise.then(function () {
+                ProductShippingPointsService.deleteShippingPoint($scope.productShippingPoint.id).then(function () {
                     $scope.productShippingPoint = {};
                     $scope.showWellcomeScreen();
                 });
@@ -173,6 +182,5 @@ define([
                     }
                 }, 500);
             };
-
         }]);
 });

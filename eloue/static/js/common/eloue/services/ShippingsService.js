@@ -16,7 +16,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             shippingsService.saveShipping = function (shipping) {
-                return Shippings.save(shipping);
+                return Shippings.save(shipping).$promise;
             };
 
             shippingsService.downloadVoucher = function (id, isOwner) {

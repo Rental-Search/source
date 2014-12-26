@@ -8,7 +8,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
         var categoriesService = {};
 
         categoriesService.getCategory = function (categoryId) {
-            return Categories.get({id: categoryId, _cache: new Date().getTime()});
+            return Categories.get({id: categoryId, _cache: new Date().getTime()}).$promise;
         };
 
         categoriesService.getParentCategory = function (category) {

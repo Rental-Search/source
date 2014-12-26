@@ -187,9 +187,9 @@ define([
                     $scope.newUnavailabilityPeriod.product = Endpoints.api_url + "products/" + $stateParams.id + "/";
                     var promise = null;
                     if (!$scope.newUnavailabilityPeriod.id) {
-                        promise = UnavailabilityPeriodsService.savePeriod($scope.newUnavailabilityPeriod).$promise;
+                        promise = UnavailabilityPeriodsService.savePeriod($scope.newUnavailabilityPeriod);
                     } else {
-                        promise = UnavailabilityPeriodsService.updatePeriod($scope.newUnavailabilityPeriod).$promise;
+                        promise = UnavailabilityPeriodsService.updatePeriod($scope.newUnavailabilityPeriod);
                     }
                     promise.then(function () {
                         $scope.updateCalendar();
@@ -236,7 +236,7 @@ define([
             };
 
             $scope.deleteUnavailabilityPeriod = function (period) {
-                UnavailabilityPeriodsService.deletePeriod(period).$promise.then(function () {
+                UnavailabilityPeriodsService.deletePeriod(period).then(function () {
                     $scope.updateUnavailabilityPeriods();
                 });
             };

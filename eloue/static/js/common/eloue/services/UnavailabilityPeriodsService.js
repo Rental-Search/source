@@ -9,15 +9,15 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], f
             var unavailabilityPeriodsService = {};
 
             unavailabilityPeriodsService.savePeriod = function (period) {
-                return UnavailabilityPeriods.save(period);
+                return UnavailabilityPeriods.save(period).$promise;
             };
 
             unavailabilityPeriodsService.updatePeriod = function (period) {
-                return UnavailabilityPeriods.update({id: period.id}, period);
+                return UnavailabilityPeriods.update({id: period.id}, period).$promise;
             };
 
             unavailabilityPeriodsService.deletePeriod = function (period) {
-                return UnavailabilityPeriods.delete({id: period.id});
+                return UnavailabilityPeriods.delete({id: period.id}).$promise;
             };
 
             unavailabilityPeriodsService.getByProduct = function (productId) {

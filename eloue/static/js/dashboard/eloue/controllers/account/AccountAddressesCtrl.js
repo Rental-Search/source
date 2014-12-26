@@ -15,7 +15,7 @@ define([
 
             $scope.markListItemAsSelected("account-part-", "account.addresses");
 
-            UsersService.getMe().$promise.then(function (currentUser) {
+            UsersService.getMe().then(function (currentUser) {
                 var currentUserId = currentUser.id;
 
                 AddressesService.getAddressesByPatron(currentUserId).then(function (results) {

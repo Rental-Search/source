@@ -23,7 +23,7 @@ define([
             $scope.resetPassword = function () {
                 $scope.submitInProgress = true;
                 if ($scope.currentUser) {
-                    UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form")).then(function (result) {
+                    UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form")).then(function () {
                         $scope.submitInProgress = false;
                         $scope.showNotification("password", "reset", true);
                         $state.transitionTo($state.current, $stateParams, {reload: true});

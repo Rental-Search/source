@@ -9,15 +9,15 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             var usersService = {};
 
             usersService.get = function (userId, successCallback, errorCallback) {
-                return Users.get({id: userId, _cache: new Date().getTime()}, successCallback, errorCallback);
+                return Users.get({id: userId, _cache: new Date().getTime()}, successCallback, errorCallback).$promise;
             };
 
             usersService.getMe = function (successCallback, errorCallback) {
-                return Users.getMe({_cache: new Date().getTime()}, successCallback, errorCallback);
+                return Users.getMe({_cache: new Date().getTime()}, successCallback, errorCallback).$promise;
             };
 
             usersService.getStatistics = function (userId) {
-                return Users.getStats({id: userId, _cache: new Date().getTime()});
+                return Users.getStats({id: userId, _cache: new Date().getTime()}).$promise;
             };
 
             usersService.sendForm = function (userId, form, successCallback, errorCallback) {
@@ -44,7 +44,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             usersService.updateUser = function (user) {
-                return Users.update({id: "me"}, user);
+                return Users.update({id: "me"}, user).$promise;
             };
 
             return usersService;

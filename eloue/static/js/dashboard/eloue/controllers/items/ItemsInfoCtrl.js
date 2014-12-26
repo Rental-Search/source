@@ -104,12 +104,14 @@ define([
                 $scope.showNotification(object, action, false);
             };
 
-            ProductsService.getProductDetails($stateParams.id).then(function (product) {
+            ProductsService.getProductDetails($stateParams.id).then($scope.applyProductDetails);
+
+            $scope.applyProductDetails = function (product) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);
                 $scope.markListItemAsSelected("item-tab-", "info");
                 $scope.product = product;
                 var initialCategoryId = product.category.id;
-                CategoriesService.getParentCategory(product.category).$promise.then(function (nodeCategory) {
+                CategoriesService.getParentCategory(product.category).then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
                         $scope.nodeCategory = initialCategoryId;
                         $scope.rootCategory = nodeCategory.id;
@@ -118,7 +120,7 @@ define([
                     } else {
                         $scope.nodeCategory = nodeCategory.id;
                         $scope.updateLeafCategories();
-                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                        CategoriesService.getParentCategory(nodeCategory).then(function (rootCategory) {
                             $scope.rootCategory = rootCategory.id;
                             $scope.updateNodeCategories();
                             $scope.updateFieldSet(rootCategory);
@@ -130,9 +132,7 @@ define([
                 $scope.product.phoneDetails = $scope.product.phone;
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
-
-
-            });
+            };
 
             CategoriesService.getRootCategories().then(function (categories) {
                 $scope.rootCategories = categories;
@@ -168,8 +168,8 @@ define([
                     $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
                 }
                 var promises = [];
-                promises.push(AddressesService.update($scope.product.addressDetails).$promise);
-                promises.push(ProductsService.updateProduct($scope.product).$promise);
+                promises.push(AddressesService.update($scope.product.addressDetails));
+                promises.push(ProductsService.updateProduct($scope.product));
                 $q.all(promises).then(function () {
                     $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
@@ -183,7 +183,7 @@ define([
                 CategoriesService.getChildCategories($scope.rootCategory).then(function (categories) {
                     $scope.nodeCategories = categories;
                 });
-                CategoriesService.getCategory($scope.rootCategory).$promise.then(function (rootCategory) {
+                CategoriesService.getCategory($scope.rootCategory).then(function (rootCategory) {
                     $scope.updateFieldSet(rootCategory);
                 });
             };
@@ -215,7 +215,7 @@ define([
 
             $scope.deletePicture = function () {
                 $scope.submitInProgress = true;
-                PicturesService.deletePicture($scope.selectedPictureId).$promise.then(function () {
+                PicturesService.deletePicture($scope.selectedPictureId).then(function () {
                     ProductsService.getProductDetails($stateParams.id).then(function (product) {
                         $scope.submitInProgress = false;
                         $scope.product.pictures = product.pictures;

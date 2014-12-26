@@ -7,11 +7,11 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], f
         var pricesService = {};
 
         pricesService.savePrice = function (price) {
-            return Prices.save(price);
+            return Prices.save(price).$promise;
         };
 
         pricesService.updatePrice = function (price) {
-            return Prices.update({id: price.id}, price);
+            return Prices.update({id: price.id}, price).$promise;
         };
 
         return pricesService;

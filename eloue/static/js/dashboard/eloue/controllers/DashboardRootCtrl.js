@@ -36,7 +36,7 @@ define([
 
             if ($scope.currentUserToken) {
                 // Get current user
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
@@ -45,12 +45,14 @@ define([
             }
 
             $scope.updateStatistics = function () {
-                UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
-                    $scope.unreadMessageThreadsCount = stats.unread_message_threads_count;
-                    $scope.newBookingRequestsCount = stats.booking_requests_count;
-                    $scope.dashboardTabs[1].badge = $scope.unreadMessageThreadsCount;
-                    $scope.dashboardTabs[2].badge = $scope.newBookingRequestsCount;
-                });
+                UsersService.getStatistics($scope.currentUser.id).then($scope.applyUserStats);
+            };
+
+            $scope.applyUserStats = function (stats) {
+                $scope.unreadMessageThreadsCount = stats.unread_message_threads_count;
+                $scope.newBookingRequestsCount = stats.booking_requests_count;
+                $scope.dashboardTabs[1].badge = $scope.unreadMessageThreadsCount;
+                $scope.dashboardTabs[2].badge = $scope.newBookingRequestsCount;
             };
 
             // Set jQuery ajax interceptors

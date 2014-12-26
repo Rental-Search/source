@@ -75,7 +75,7 @@ define([
 
             if ($scope.currentUserToken) {
                 // Get current user
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
@@ -273,7 +273,7 @@ define([
             $scope.saveDefaultAddress = function () {
                 $scope.submitInProgress = true;
                 $scope.currentUser.default_address.country = "FR";
-                AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(
+                AddressesService.saveAddress($scope.currentUser.default_address).then(
                     $scope.applyDefaultAddress,
                     $scope.handleResponseErrors
                 );
@@ -292,7 +292,7 @@ define([
                 if ($scope.noAddress) {
                     $scope.submitInProgress = true;
                     $scope.currentUser.default_address.country = "FR";
-                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(
+                    AddressesService.saveAddress($scope.currentUser.default_address).then(
                         $scope.saveCardAndRequestBooking,
                         $scope.handleResponseErrors
                     );
@@ -326,13 +326,13 @@ define([
                     }
                 }
 
-                UsersService.updateUser(userPatch).$promise.then(function (result) {
+                UsersService.updateUser(userPatch).then(function (result) {
                     // Update credit card info
                     $scope.creditCard.expires = $scope.creditCard.expires.replace("/", "");
                     // If credit card exists now it is deleted and saved again
                     if ($scope.creditCard.masked_number === "") {
                         if (!!$scope.creditCard.id) {
-                            CreditCardsService.deleteCard($scope.creditCard).$promise.then(function () {
+                            CreditCardsService.deleteCard($scope.creditCard).then(function () {
                                 $scope.saveCreditCard();
                             });
                         } else {
@@ -347,7 +347,7 @@ define([
             };
 
             $scope.saveCreditCard = function () {
-                CreditCardsService.saveCard($scope.creditCard).$promise.then(
+                CreditCardsService.saveCard($scope.creditCard).then(
                     $scope.requestBooking(),
                     $scope.handleResponseErrors
                 );
@@ -398,7 +398,7 @@ define([
                     selectedPoint.type = 2;
                     selectedPoint.booking = Endpoints.api_url + "bookings/" + booking.uuid + "/";
                     selectedPoint.patron = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
-                    PatronShippingPointsService.saveShippingPoint(selectedPoint).$promise.then(function () {
+                    PatronShippingPointsService.saveShippingPoint(selectedPoint).then(function () {
                         $scope.payForBooking(booking, paymentInfo);
                     }, function (error) {
                         $scope.handleResponseErrors(error);
@@ -568,7 +568,7 @@ define([
                     }
                 }
                 if (phoneId) {
-                    PhoneNumbersService.getPremiumRateNumber(phoneId).$promise.then(
+                    PhoneNumbersService.getPremiumRateNumber(phoneId).then(
                         $scope.applyPremiumRateNumberResponse
                     );
                 } else {
@@ -592,7 +592,7 @@ define([
              */
             $scope.loadCreditCards = function () {
                 if (!$scope.currentUserPromise) {
-                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                    $scope.currentUserPromise = UsersService.getMe();
                 }
                 $scope.currentUserPromise.then($scope.applyUserCreditCard);
             };
@@ -676,7 +676,7 @@ define([
              */
             $scope.loadMessageThread = function () {
                 if (!$scope.currentUserPromise) {
-                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                    $scope.currentUserPromise = UsersService.getMe();
                 }
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope

@@ -9,11 +9,11 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], f
             var productShippingPointsService = {};
 
             productShippingPointsService.saveShippingPoint = function (shippingPoint) {
-                return ProductShippingPoints.save(shippingPoint);
+                return ProductShippingPoints.save(shippingPoint).$promise;
             };
 
             productShippingPointsService.deleteShippingPoint = function (shippingPointId) {
-                return ProductShippingPoints.delete({id: shippingPointId});
+                return ProductShippingPoints.delete({id: shippingPointId}).$promise;
             };
 
             productShippingPointsService.getByProduct = function (productId) {

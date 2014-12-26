@@ -85,7 +85,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                             {
                                 list: bookingList,
                                 next: bookingListData.next
-                            });
+                            }
+                        );
                     });
                 });
 
@@ -129,19 +130,19 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             bookingsService.acceptBooking = function (uuid) {
-                return Bookings.accept({uuid: uuid}, {uuid: uuid});
+                return Bookings.accept({uuid: uuid}, {uuid: uuid}).$promise;
             };
 
             bookingsService.cancelBooking = function (uuid) {
-                return Bookings.cancel({uuid: uuid}, {uuid: uuid});
+                return Bookings.cancel({uuid: uuid}, {uuid: uuid}).$promise;
             };
 
             bookingsService.rejectBooking = function (uuid) {
-                return Bookings.reject({uuid: uuid}, {uuid: uuid});
+                return Bookings.reject({uuid: uuid}, {uuid: uuid}).$promise;
             };
 
             bookingsService.postIncident = function (uuid, description) {
-                return Bookings.incident({uuid: uuid}, {description: description});
+                return Bookings.incident({uuid: uuid}, {description: description}).$promise;
             };
 
             bookingsService.downloadContract = function (uuid) {

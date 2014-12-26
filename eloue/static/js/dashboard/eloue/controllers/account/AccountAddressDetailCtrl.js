@@ -28,7 +28,7 @@ define([
             };
 
             // Get
-            AddressesService.getAddress($stateParams.id).$promise.then(function (address) {
+            AddressesService.getAddress($stateParams.id).then(function (address) {
                 // Current address
                 $scope.address = address;
                 $scope.markListItemAsSelected("account-address-", $stateParams.id);
@@ -40,20 +40,25 @@ define([
             $scope.submitAddress = function () {
                 $scope.submitInProgress = true;
                 var form = $("#address_detail_form");
-                AddressesService.updateAddress($scope.address.id, form).then(function () {
-                    if ($scope.defaultAddressId !== $stateParams.id) {
-                        var userPatch = {};
-                        userPatch.default_address = Endpoints.api_url + "addresses/" + $scope.address.id + "/";
-                        UsersService.updateUser(userPatch).$promise.then(function (result) {
-                            $scope.currentUser.default_address = result.default_addres;
-                            $scope.finaliseAddressUpdate();
-                        });
-                    } else {
-                        $scope.finaliseAddressUpdate();
+                AddressesService.updateAddress($scope.address.id, form).then(
+                    $scope.processAddressUpdateResponse,
+                    function (error) {
+                        $scope.handleResponseErrors(error, "address", "save");
                     }
-                }, function (error) {
-                    $scope.handleResponseErrors(error, "address", "save");
-                });
+                );
+            };
+
+            $scope.processAddressUpdateResponse = function () {
+                if ($scope.defaultAddressId !== $stateParams.id) {
+                    var userPatch = {};
+                    userPatch.default_address = Endpoints.api_url + "addresses/" + $scope.address.id + "/";
+                    UsersService.updateUser(userPatch).then(function (result) {
+                        $scope.currentUser.default_address = result.default_addres;
+                        $scope.finaliseAddressUpdate();
+                    });
+                } else {
+                    $scope.finaliseAddressUpdate();
+                }
             };
 
             $scope.finaliseAddressUpdate = function () {
@@ -65,7 +70,7 @@ define([
             // Delete address
             $scope.deleteAddress = function () {
                 $scope.submitInProgress = true;
-                AddressesService.deleteAddress($scope.address.id).$promise.then(function () {
+                AddressesService.deleteAddress($scope.address.id).then(function () {
                     $scope.submitInProgress = false;
                     $scope.showNotification("address", "delete", true);
                     $state.transitionTo("account.addresses", $stateParams, {reload: true});

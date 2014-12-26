@@ -18,7 +18,9 @@ define([
             $scope.durationMonths = 0;
             $scope.durationYears = 0;
 
-            BookingsService.getBookingsByProduct($stateParams.id).then(function (bookings) {
+            BookingsService.getBookingsByProduct($stateParams.id).then($scope.applyBookings);
+
+            $scope.applyBookings = function (bookings) {
                 $scope.markListItemAsSelected("item-tab-", "profits");
                 $scope.initCustomScrollbars();
 
@@ -45,6 +47,6 @@ define([
                 $scope.durationDays = durationAsDate.getDate();
 
                 $scope.totalProfit = sum;
-            });
+            };
         }]);
 });

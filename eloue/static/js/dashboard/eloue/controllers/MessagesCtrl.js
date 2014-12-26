@@ -14,7 +14,7 @@ define([
         function ($scope, UsersService, UtilsService) {
             $scope.messageThreadList = [];
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
@@ -22,7 +22,7 @@ define([
             });
 
             $scope.shouldMarkAsUnread = function (lastMessage) {
-                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) == $scope.currentUser.id);
+                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) === $scope.currentUser.id);
             };
         }
     ]);

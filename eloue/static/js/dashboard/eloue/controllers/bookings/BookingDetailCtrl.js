@@ -44,19 +44,21 @@ define([
             };
 
             // Load booking details
-            BookingsService.getBookingDetails($stateParams.uuid).then(function (bookingDetails) {
+            BookingsService.getBookingDetails($stateParams.uuid).then($scope.applyBookingDetails);
+
+            $scope.applyBookingDetails = function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                 $scope.showIncidentDescription = $scope.bookingDetails.state === "incident";
                 if (!$scope.currentUserPromise) {
-                    $scope.currentUserPromise = UsersService.getMe().$promise;
+                    $scope.currentUserPromise = UsersService.getMe();
                 }
                 $scope.currentUserPromise.then(function (currentUser) {
                     $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
                     $scope.contractLink = Endpoints.api_url + "bookings/" + $stateParams.uuid + "/contract/";
                     $scope.isOwner = $scope.currentUserUrl.indexOf(bookingDetails.owner.id) !== -1;
                     $scope.isBorrower = $scope.currentUserUrl.indexOf(bookingDetails.borrower.id) !== -1;
-                    var borrower = bookingDetails.borrower;
+                    var borrower = bookingDetails.borrower, owner = bookingDetails.owner;
 
                     $scope.borrowerName = borrower.username;
                     $scope.borrowerSlug = borrower.slug;
@@ -64,7 +66,6 @@ define([
                         $scope.loadUserInfo(borrower);
                         $scope.loadPhoneNumber(borrower.default_number);
                     }
-                    var owner = bookingDetails.owner;
                     $scope.ownerName = owner.username;
                     $scope.ownerSlug = owner.slug;
                     if ($scope.isBorrower) {
@@ -84,7 +85,7 @@ define([
 
                 if ($scope.showIncidentDescription) {
                     SinistersService.getSinisterList($stateParams.uuid).then(function (sinisterList) {
-                        if (!!sinisterList.results) {
+                        if (sinisterList.results) {
                             $scope.sinister = sinisterList.results[0];
                         }
                     });
@@ -122,14 +123,14 @@ define([
                         }
                     });
                 }
-            });
+            };
 
             $scope.loadPhoneNumber = function (phoneObj) {
                 if (phoneObj) {
                     if ($scope.showRealPhoneNumber($scope.bookingDetails.state)) {
-                        $scope.phoneNumber = !!phoneObj.number.numero ? phoneObj.number.numero : phoneObj.number;
+                        $scope.phoneNumber = phoneObj.number.numero || phoneObj.number;
                     } else {
-                        PhoneNumbersService.getPremiumRateNumber(phoneObj.id).$promise.then(function (result) {
+                        PhoneNumbersService.getPremiumRateNumber(phoneObj.id).then(function (result) {
                             if (!result.error || result.error === "0") {
                                 $scope.phoneNumber = result.numero;
                             }
@@ -140,7 +141,7 @@ define([
 
             $scope.loadUserInfo = function (userObj) {
                 $scope.userInfo = userObj;
-                UsersService.getStatistics(userObj.id).$promise.then(function (stats) {
+                UsersService.getStatistics(userObj.id).then(function (stats) {
                     if (!stats.booking_comments_count) {
                         stats.booking_comments_count = 0;
                     }
@@ -165,7 +166,7 @@ define([
              * @returns show be real number shown
              */
             $scope.showRealPhoneNumber = function (status) {
-                return $.inArray(status, ["pending", "ongoing", "ended", "incident", "refunded", "closed"]) != -1;
+                return $.inArray(status, ["pending", "ongoing", "ended", "incident", "refunded", "closed"]) !== -1;
             };
 
             $scope.handleResponseErrors = function (error, object, action) {
@@ -177,54 +178,71 @@ define([
 
             $scope.acceptBooking = function () {
                 $scope.submitInProgress = true;
-                BookingsService.acceptBooking($stateParams.uuid).$promise.then(function (result) {
-                    if ($scope.bookingDetails.with_shipping) {
-                        ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
-                            //Show shipping choice only if there are existing product shipping points
-                            if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
-                                var productShippingPoint = productShippingPointData.results[0];
-                                PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
-                                    if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
-                                        var patronShippingPoint = patronShippingPointData.results[0], shipping;
-                                        // TODO: Price is hardcoded for now, will be taken from some third-party pricing service
-                                        shipping = {
-                                            price: "10.0",
-                                            booking: Endpoints.api_url + "bookings/" + $scope.bookingDetails.uuid + "/",
-                                            departure_point: Endpoints.api_url + "productshippingpoints/" + productShippingPoint.id + "/",
-                                            arrival_point: Endpoints.api_url + "patronshippingpoints/" + patronShippingPoint.id + "/"
-                                        };
-                                        ShippingsService.saveShipping(shipping).$promise.then(function (result) {
-                                            $scope.showNotification("shipping", "save", true);
-                                            $window.location.reload();
-                                        }, function (error) {
-                                            $scope.handleResponseErrors(error, "booking", "accept");
-                                        });
-                                    } else {
-                                        $scope.showNotification("booking", "accept", true);
-                                        $window.location.reload();
-                                    }
-                                }, function (error) {
-                                    $scope.handleResponseErrors(error, "booking", "accept");
-                                });
-                            } else {
-                                $scope.showNotification("booking", "accept", true);
-                                $window.location.reload();
-                            }
-                        }, function (error) {
-                            $scope.handleResponseErrors(error, "booking", "accept");
-                        });
-                    } else {
-                        $scope.showNotification("booking", "accept", true);
-                        $window.location.reload();
+                BookingsService.acceptBooking($stateParams.uuid).then(
+                    $scope.processAcceptBookingResponse,
+                    function (error) {
+                        $scope.handleResponseErrors(error, "booking", "accept");
                     }
-                }, function (error) {
-                    $scope.handleResponseErrors(error, "booking", "accept");
-                });
+                );
+            };
+
+            $scope.processAcceptBookingResponse = function () {
+                if ($scope.bookingDetails.with_shipping) {
+                    ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(
+                        $scope.processProductShippingPointsResponse,
+                        function (error) {
+                            $scope.handleResponseErrors(error, "booking", "accept");
+                        }
+                    );
+                } else {
+                    $scope.showNotification("booking", "accept", true);
+                    $window.location.reload();
+                }
+            };
+
+            $scope.processProductShippingPointsResponse = function (productShippingPointData) {
+                //Show shipping choice only if there are existing product shipping points
+                if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
+                    var productShippingPoint = productShippingPointData.results[0];
+                    PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(
+                        function(patronShippingPointData) {
+                            $scope.processPatronShippingPointsResponse(patronShippingPointData, productShippingPoint);
+                        },
+                        function (error) {
+                            $scope.handleResponseErrors(error, "booking", "accept");
+                        }
+                    );
+                } else {
+                    $scope.showNotification("booking", "accept", true);
+                    $window.location.reload();
+                }
+            };
+
+            $scope.processPatronShippingPointsResponse = function (patronShippingPointData, productShippingPoint) {
+                if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
+                    var patronShippingPoint = patronShippingPointData.results[0], shipping;
+                    // TODO: Price is hardcoded for now, will be taken from some third-party pricing service
+                    shipping = {
+                        price: "10.0",
+                        booking: Endpoints.api_url + "bookings/" + $scope.bookingDetails.uuid + "/",
+                        departure_point: Endpoints.api_url + "productshippingpoints/" + productShippingPoint.id + "/",
+                        arrival_point: Endpoints.api_url + "patronshippingpoints/" + patronShippingPoint.id + "/"
+                    };
+                    ShippingsService.saveShipping(shipping).then(function () {
+                        $scope.showNotification("shipping", "save", true);
+                        $window.location.reload();
+                    }, function (error) {
+                        $scope.handleResponseErrors(error, "booking", "accept");
+                    });
+                } else {
+                    $scope.showNotification("booking", "accept", true);
+                    $window.location.reload();
+                }
             };
 
             $scope.rejectBooking = function () {
                 $scope.submitInProgress = true;
-                BookingsService.rejectBooking($stateParams.uuid).$promise.then(function (result) {
+                BookingsService.rejectBooking($stateParams.uuid).then(function () {
                     $scope.showNotification("booking", "reject", true);
                     $window.location.reload();
                 }, function (error) {
@@ -238,7 +256,7 @@ define([
 
             $scope.cancelBooking = function () {
                 $scope.submitInProgress = true;
-                BookingsService.cancelBooking($stateParams.uuid).$promise.then(function (result) {
+                BookingsService.cancelBooking($stateParams.uuid).then(function () {
                     $scope.showNotification("booking", "cancel", true);
                     $window.location.reload();
                 }, function (error) {
@@ -253,27 +271,31 @@ define([
             // Method to post new comment
             $scope.postComment = function () {
                 $scope.submitInProgress = true;
-                CommentsService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).$promise
-                    .then(function () {
+                CommentsService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).then(
+                    function () {
                         $scope.showNotification("comment", "post", true);
                         $scope.showCommentForm = false;
                         $scope.submitInProgress = false;
-                    }, function (error) {
+                    },
+                    function (error) {
                         $scope.handleResponseErrors(error, "comment", "post");
-                    });
+                    }
+                );
             };
 
             // Method to post new incident
             $scope.postIncident = function () {
                 $scope.submitInProgress = true;
-                BookingsService.postIncident($stateParams.uuid, $scope.incident.description).$promise
-                    .then(function (result) {
+                BookingsService.postIncident($stateParams.uuid, $scope.incident.description).then(
+                    function () {
                         $scope.showNotification("sinister", "post", true);
                         $scope.showIncidentForm = false;
                         $window.location.reload();
-                    }, function (error) {
+                    },
+                    function (error) {
                         $scope.handleResponseErrors(error, "sinister", "post");
-                    });
+                    }
+                );
             };
         }
     ]);

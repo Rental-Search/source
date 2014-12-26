@@ -18,21 +18,23 @@ define([
             $scope.isAuto = false;
             $scope.isRealEstate = false;
 
-            ProductsService.getProductDetails($stateParams.id).then(function (product) {
+            ProductsService.getProductDetails($stateParams.id).then($scope.applyProductDetails);
+
+            $scope.applyProductDetails = function (product) {
                 $scope.product = product;
                 $scope.markListItemAsSelected("item-tab-", "terms");
                 $scope.isProfessional = product.owner.is_professional;
                 $scope.initCustomScrollbars();
-                CategoriesService.getParentCategory($scope.product.category).$promise.then(function (nodeCategory) {
+                CategoriesService.getParentCategory($scope.product.category).then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
                         $scope.updateTermsBlocks(nodeCategory);
                     } else {
-                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                        CategoriesService.getParentCategory(nodeCategory).then(function (rootCategory) {
                             $scope.updateTermsBlocks(rootCategory);
                         });
                     }
                 });
-            });
+            };
 
             /**
              * Product terms are dependent on root category.

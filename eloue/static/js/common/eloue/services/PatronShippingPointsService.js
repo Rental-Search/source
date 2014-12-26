@@ -9,7 +9,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], f
             var patronShippingPointsService = {};
 
             patronShippingPointsService.saveShippingPoint = function (shippingPoint) {
-                return PatronShippingPoints.save(shippingPoint);
+                return PatronShippingPoints.save(shippingPoint).$promise;
             };
 
             patronShippingPointsService.getByPatronAndBooking = function (userId, bookingId) {

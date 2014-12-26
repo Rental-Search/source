@@ -34,12 +34,15 @@ define([
                 messageThread: MessageThreadsService.getMessageThreadById($stateParams.id)
             };
 
-            $q.all(promises).then(function (results) {
+            $q.all(promises).then($scope.applyUserAndMessageThread);
+
+            $scope.applyUserAndMessageThread = function (results) {
                 $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
-                if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
+                $scope.currentuser = results.currentUser;
+                if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) === results.currentUser.id)) {
                     $scope.messageThread.last_message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
-                    ProductRelatedMessagesService.updateMessage($scope.messageThread.last_message).$promise.then(function () {
+                    ProductRelatedMessagesService.updateMessage($scope.messageThread.last_message).then(function () {
                         $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
                         $scope.updateStatistics();
                     });
@@ -88,18 +91,17 @@ define([
                             $scope.requestBooking = function () {
                                 $scope.submitInProgress = true;
 //                                //Get product details
-                                ProductsService.getAbsoluteUrl($scope.messageThread.product.id).$promise.then(function (result) {
+                                ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
                                     $window.location.href = result.url + "#/booking";
                                 }, function (error) {
                                     $scope.handleResponseErrors(error, "booking", "redirect");
                                 });
                             };
-
                             $scope.booking = booking;
                             $scope.updateNewBookingInfo();
                         } else {
                             $scope.booking = booking;
-                            $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
+                            $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                             $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
                     });
@@ -128,38 +130,39 @@ define([
                     );
                 };
 
-                $scope.updateNewBookingInfo = function () {
-                    var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value,
-                        toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value,
-                        fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
-                        toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
-
-                    ProductsService.isAvailable($scope.messageThread.product.id,
-                        fromDateTimeStr, toDateTimeStr, 1).then(
-                        function (data) {
-                            var period = UtilsService.calculatePeriodBetweenDates(fromDateTime.toString(), toDateTime.toString());
-                            // Set data for displaying
-                            $scope.newBooking.period_days = period.period_days;
-                            $scope.newBooking.period_hours = period.period_hours;
-                            $scope.newBooking.total_amount = data.total_price;
-                            //TODO set deposit_amount field value
-                            // Set data for request
-                            $scope.newBooking.started_at = fromDateTime.toString("yyyy-MM-ddThh:mm:ss");
-                            $scope.newBooking.ended_at = toDateTime.toString("yyyy-MM-ddThh:mm:ss");
-
-                            $scope.newBooking.borrower = Endpoints.api_url + "users/" + results.currentUser.id + "/";
-
-                            $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
-                        },
-                        function (error) {
-                            $scope.handleResponseErrors(error, "booking", "update");
-                        }
-                    );
-                };
-
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
-            });
+            };
+
+            $scope.updateNewBookingInfo = function () {
+                var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value,
+                    toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value,
+                    fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
+                    toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+
+                ProductsService.isAvailable($scope.messageThread.product.id,
+                    fromDateTimeStr, toDateTimeStr, 1).then(
+                    function (data) {
+                        $scope.parseProductAvailabilityResponse(data, fromDateTime, toDateTime);
+                    },
+                    function (error) {
+                        $scope.handleResponseErrors(error, "booking", "update");
+                    }
+                );
+            };
+
+            $scope.parseProductAvailabilityResponse = function (data, fromDateTime, toDateTime) {
+                var period = UtilsService.calculatePeriodBetweenDates(fromDateTime.toString(), toDateTime.toString());
+                // Set data for displaying
+                $scope.newBooking.period_days = period.period_days;
+                $scope.newBooking.period_hours = period.period_hours;
+                $scope.newBooking.total_amount = data.total_price;
+                // Set data for request
+                $scope.newBooking.started_at = fromDateTime.toString("yyyy-MM-ddThh:mm:ss");
+                $scope.newBooking.ended_at = toDateTime.toString("yyyy-MM-ddThh:mm:ss");
+                $scope.newBooking.borrower = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
+                $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
+            };
         }
     ]);
 });

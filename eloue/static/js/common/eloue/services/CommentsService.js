@@ -20,7 +20,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     booking: bookingUrl,
                     comment: comment,
                     rate: rate
-                });
+                }).$promise;
             };
 
             commentsService.getCommentList = function (bookingUUID) {

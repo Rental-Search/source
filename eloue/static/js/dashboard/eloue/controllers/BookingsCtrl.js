@@ -29,7 +29,7 @@ define([
             };
 
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;

@@ -16,7 +16,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
         };
 
         picturesService.deletePicture = function (pictureId) {
-            return Pictures.delete({id: pictureId});
+            return Pictures.delete({id: pictureId}).$promise;
         };
 
         return picturesService;

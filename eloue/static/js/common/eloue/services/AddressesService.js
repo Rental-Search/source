@@ -12,13 +12,13 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             var addressesService = {};
 
             addressesService.getAddress = function (addressId) {
-                return Addresses.get({id: addressId, _cache: new Date().getTime()});
+                return Addresses.get({id: addressId, _cache: new Date().getTime()}).$promise;
             };
 
             addressesService.getAddressesByPatron = function (patronId) {
                 var deferred = $q.defer();
 
-                Addresses.get({patron: patronId, _cache: new Date().getTime()}).$promise.then(function (result) {
+                Addresses.get({patron: patronId, _cache: new Date().getTime()}).then(function (result) {
                     var total = result.count, pagesCount, adrPromises, i;
                     if (total <= 10) {
                         deferred.resolve(result.results);
@@ -68,15 +68,15 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
             //TODO: leave only 1 update method for addresses
             addressesService.update = function (address) {
-                return Addresses.update({id: address.id}, address);
+                return Addresses.update({id: address.id}, address).$promise;
             };
 
             addressesService.saveAddress = function (address) {
-                return Addresses.save(address);
+                return Addresses.save(address).$promise;
             };
 
             addressesService.deleteAddress = function (addressId) {
-                return Addresses.delete({id: addressId});
+                return Addresses.delete({id: addressId}).$promise;
             };
 
             return addressesService;

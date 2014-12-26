@@ -16,7 +16,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
             var productRelatedMessagesService = {};
 
             productRelatedMessagesService.getMessage = function (id) {
-                return ProductRelatedMessages.get({id: id, _cache: new Date().getTime()});
+                return ProductRelatedMessages.get({id: id, _cache: new Date().getTime()}).$promise;
             };
 
             productRelatedMessagesService.getMessageListItem = function (messageId) {
@@ -68,7 +68,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
             };
 
             productRelatedMessagesService.updateMessage = function (message) {
-                return ProductRelatedMessages.update({id: message.id}, message);
+                return ProductRelatedMessages.update({id: message.id}, message).$promise;
             };
 
             productRelatedMessagesService.parseMessage = function (messageData, senderData) {

@@ -50,9 +50,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
         };
 
         utilsService.isToday = function (dateStr) {
-            var date = Date.parse(dateStr);
-            var today = new Date();
-            return !!date && date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear();
+            var date = Date.parse(dateStr), today = new Date();
+            return !!date && date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
         };
 
         utilsService.downloadPdfFile = function (url, filename) {

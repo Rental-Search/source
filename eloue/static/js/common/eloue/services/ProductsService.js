@@ -126,11 +126,11 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             productsService.saveProduct = function (product) {
-                return Products.save(product);
+                return Products.save(product).$promise;
             };
 
             productsService.updateProduct = function (product) {
-                return Products.update({id: product.id}, product);
+                return Products.update({id: product.id}, product).$promise;
             };
 
             productsService.getProduct = function (productId, loadProductStats, loadOwnerStats) {
@@ -157,7 +157,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             };
 
             productsService.getAbsoluteUrl = function (id) {
-                return Products.getAbsoluteUrl({id: id, _cache: new Date().getTime()});
+                return Products.getAbsoluteUrl({id: id, _cache: new Date().getTime()}).$promise;
             };
 
             productsService.isAvailable = function (id, startDate, endDate, quantity) {

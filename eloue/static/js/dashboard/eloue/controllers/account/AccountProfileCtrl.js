@@ -56,9 +56,11 @@ define([
             };
 
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
-            $scope.currentUserPromise.then(function (currentUser) {
+            $scope.currentUserPromise.then($scope.applyUserDetails);
+
+            $scope.applyUserDetails = function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
                 if ($scope.currentUser.default_number) {
@@ -84,7 +86,7 @@ define([
                     $scope.licenceYear = licenceDate.getFullYear();
                 }
                 $scope.initCustomScrollbars();
-            });
+            };
 
             // Send form when a file changes
             $scope.onFileChanged = function () {
@@ -100,25 +102,30 @@ define([
                 $scope.submitInProgress = true;
                 if ($scope.noAddress) {
                     $scope.currentUser.default_address.country = "FR";
-                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
-                        $scope.currentUser.default_address = result;
-                        $scope.defaultAddress = $scope.currentUser.default_address;
-                        $scope.noAddress = false;
-                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"}).$promise.then(function (user) {
-                            AddressesService.getAddressesByPatron($scope.currentUser.id).then(function (results) {
-                                $scope.addressList = results;
-                                $timeout(function () {
-                                    $("#defaultAddressSelect").chosen();
-                                }, 200);
-                            });
-                        });
-                        $scope.saveProfile();
-                    }, function (error) {
-                        $scope.handleResponseErrors(error, "profile", "save");
-                    });
+                    AddressesService.saveAddress($scope.currentUser.default_address).then(
+                        $scope.processAddressSaveResponse,
+                        function (error) {
+                            $scope.handleResponseErrors(error, "profile", "save");
+                        }
+                    );
                 } else {
                     $scope.saveProfile();
                 }
+            };
+
+            $scope.processAddressSaveResponse = function (result) {
+                $scope.currentUser.default_address = result;
+                $scope.defaultAddress = $scope.currentUser.default_address;
+                $scope.noAddress = false;
+                UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"}).then(function () {
+                    AddressesService.getAddressesByPatron($scope.currentUser.id).then(function (results) {
+                        $scope.addressList = results;
+                        $timeout(function () {
+                            $("#defaultAddressSelect").chosen();
+                        }, 200);
+                    });
+                });
+                $scope.saveProfile();
             };
 
             $scope.saveProfile = function () {
@@ -136,7 +143,7 @@ define([
                         $scope.saveNewPhone();
                     } else {
                         $scope.currentUser.default_number.number = $scope.phoneNumber;
-                        PhoneNumbersService.updatePhoneNumber($scope.currentUser.default_number).$promise.then(function (number) {
+                        PhoneNumbersService.updatePhoneNumber($scope.currentUser.default_number).then(function (number) {
                             $("#default_number").val($scope.phonesBaseUrl + number.id + "/");
                             $scope.sendUserForm();
                         }, function (error) {
@@ -156,7 +163,7 @@ define([
                     patron: $scope.usersBaseUrl + $scope.currentUser.id + "/",
                     number: $scope.phoneNumber
                 };
-                PhoneNumbersService.savePhoneNumber(newPhone).$promise.then(function (number) {
+                PhoneNumbersService.savePhoneNumber(newPhone).then(function (number) {
                     $("#default_number").val($scope.phonesBaseUrl + number.id + "/");
                     $scope.sendUserForm();
                 }, function (error) {

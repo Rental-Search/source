@@ -18,7 +18,7 @@ define([
             $scope.currentUser = {};
             $scope.items = [];
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
@@ -29,7 +29,9 @@ define([
                 });
             });
 
-            CategoriesService.getRootCategories().then(function (categories) {
+            CategoriesService.getRootCategories().then($scope.applyCategories);
+
+            $scope.applyCategories = function (categories) {
                 $scope.categories = categories;
                 // Timeout is used because of chosen issue (when options are loaded asynchronously, they sometimes not visible in chosen widget)
                 $timeout(function () {
@@ -45,7 +47,8 @@ define([
                         }
                     });
                 }, 500);
-            });
+            };
+
             $scope.filterByCategory = function () {
                 $scope.$broadcast("startLoading", {
                     parameters: [$scope.currentUser.id, $scope.selectedCategory],

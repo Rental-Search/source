@@ -37,7 +37,7 @@ define([
                     ServerValidationService.addError("confirmPassword", "Passwords not match");
                 } else {
                     $scope.submitting = true;
-                    AuthService.register($scope.account).$promise.then(function () {
+                    AuthService.register($scope.account).then(function () {
                         $scope.trackEvent("Membre", "Inscription", $scope.getEventLabel());
                         $scope.trackPageView();
                         // Sign in new user automatically

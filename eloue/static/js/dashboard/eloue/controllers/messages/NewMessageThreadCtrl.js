@@ -25,7 +25,7 @@ define([
         function ($scope, $state, $stateParams, Endpoints, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService, UsersService) {
 
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
 
@@ -53,27 +53,6 @@ define([
                     toastr.error("No product selected", "");
                 }
 
-                // Post new message
-                $scope.postNewMessage = function () {
-                    $scope.submitInProgress = true;
-                    ProductRelatedMessagesService.postMessage($scope.messageThread.id, currentUser.id, $scope.booking.owner.id,
-                        $scope.message, null, $stateParams.productId).then(
-                        function (result) {
-                            // Clear message field
-                            $scope.message = "";
-                            $scope.submitInProgress = false;
-                            $scope.showNotification("message", "send", true);
-                            $stateParams.id = UtilsService.getIdFromUrl(result.thread);
-                            $state.transitionTo("messages.detail", $stateParams, {reload: true});
-                        },
-                        function () {
-                            $scope.submitInProgress = false;
-                            $scope.showNotification("message", "send", false);
-                        }
-                    );
-                };
-
-
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
             });
@@ -83,14 +62,21 @@ define([
                 $scope.submitInProgress = true;
                 ProductRelatedMessagesService.postMessage($scope.messageThread.id, $scope.currentUser.id, $scope.booking.owner.id,
                     $scope.message, null, $stateParams.productId).then(
-                    function (result) {
-                        // Clear message field
-                        $scope.message = "";
+                    $scope.redirectAfterMessagePost,
+                    function () {
                         $scope.submitInProgress = false;
-                        $stateParams.id = UtilsService.getIdFromUrl(result.thread);
-                        $state.transitionTo("messages.detail", $stateParams, {reload: true});
+                        $scope.showNotification("message", "send", false);
                     }
                 );
+            };
+
+            $scope.redirectAfterMessagePost = function (result) {
+                // Clear message field
+                $scope.message = "";
+                $scope.submitInProgress = false;
+                $scope.showNotification("message", "send", true);
+                $stateParams.id = UtilsService.getIdFromUrl(result.thread);
+                $state.transitionTo("messages.detail", $stateParams, {reload: true});
             };
         }
     ]);
