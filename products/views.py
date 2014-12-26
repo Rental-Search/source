@@ -849,21 +849,21 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         owner_comment_list = comment_qs.filter(booking__owner=product.owner)
 
         # FIXME: remove after mass rebuild of all images is done on hosting
-        from itertools import chain
-        from eloue.legacy import generate_patron_images, generate_picture_images
-        patron_set = set()
-        for picture in product.pictures.all():
-            generate_picture_images(picture)
-        for elem in product_list:
-            if elem.object:
-                patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture, ['thumbnail', 'display'])
-        for comment in chain(product_comment_list, owner_comment_list):
-            patron_set.add(comment.booking.owner)
-            patron_set.add(comment.booking.borrower)
-        for patron in patron_set:
-            generate_patron_images(patron, ['product_page'])
+        # from itertools import chain
+        # from eloue.legacy import generate_patron_images, generate_picture_images
+        # patron_set = set()
+        # for picture in product.pictures.all():
+            # generate_picture_images(picture)
+        # for elem in product_list:
+            # if elem.object:
+                # patron_set.add(elem.object.owner)
+                # for picture in elem.object.pictures.all()[:1]:
+                    # generate_picture_images(picture, ['thumbnail', 'display'])
+        # for comment in chain(product_comment_list, owner_comment_list):
+            # patron_set.add(comment.booking.owner)
+            # patron_set.add(comment.booking.borrower)
+        # for patron in patron_set:
+            # generate_patron_images(patron, ['product_page'])
 
         context = {
             'properties': product.properties.select_related('property'),
