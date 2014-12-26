@@ -741,12 +741,7 @@ from products.forms import SuggestCategoryViewForm
 
 class NavbarCategoryMixin(object):
     def get_context_data(self, **kwargs):
-        categories_list = cache.get('navbar_categories_list')
-
-        if categories_list is None:
-            category_list = list(Category.on_site.filter(pk__in=settings.NAVBAR_CATEGORIES))
-            cache.set('navbar_categories_list', category_list, 43200)
-
+        category_list = list(Category.on_site.filter(pk__in=settings.NAVBAR_CATEGORIES))
         index = settings.NAVBAR_CATEGORIES.index
         category_list.sort(key=lambda obj: index(obj.pk))
         context = {
