@@ -769,20 +769,6 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
             booking__product__sites__id=settings.SITE_ID
         ).order_by('-created_at')
 
-        # FIXME: remove after mass rebuild of all images is done on hosting
-        from eloue.legacy import generate_patron_images, generate_picture_images
-        patron_set = set()
-        for elem in product_list[:PAGINATE_PRODUCTS_BY]:
-            if elem.object:
-                patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture, ['profile'])
-        for comment in comment_list[:PAGINATE_PRODUCTS_BY]:
-            patron_set.add(comment.booking.owner)
-            patron_set.add(comment.booking.borrower)
-        for patron in patron_set:
-            generate_patron_images(patron, ['thumbnail'])
-
         context = {
             'product_list': product_list,
             'comment_list': comment_list,
@@ -821,21 +807,6 @@ class ProductListView(ProductList):
             'category_list': category_list
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-
-        # FIXME: remove after mass rebuild of all images is done on hosting
-        from eloue.legacy import generate_patron_images, generate_picture_images
-        patron_set = set()
-        if context.get('is_paginated', False):
-            product_list = context['page_obj'].object_list
-        else:
-            product_list = context['product_list']
-        for elem in product_list:
-            if elem.object:
-                patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture, ['profile'])
-        for patron in patron_set:
-            generate_patron_images(patron, ['thumbnail'])
 
         return context
 
