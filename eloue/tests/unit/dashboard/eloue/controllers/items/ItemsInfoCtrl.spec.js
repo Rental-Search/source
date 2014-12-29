@@ -157,5 +157,9 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
         it("ItemsInfoCtrl:deletePicture", function () {
             scope.deletePicture();
         });
+
+        it("ItemsInfoCtrl:applyProductDetails", function () {
+            scope.applyProductDetails();
+        });
     });
 });

@@ -94,5 +94,9 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
             scope.deleteAddress();
             expect(addressesServiceMock.deleteAddress).toHaveBeenCalled();
         });
+
+        it("AccountAddressDetailCtrl:processAddressUpdateResponse", function () {
+            scope.processAddressUpdateResponse();
+        });
     });
 });

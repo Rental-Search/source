@@ -8,7 +8,6 @@ define(["angular-mocks", "eloue/services/MapsService"], function () {
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
-
             module(function ($provide) {
                 $provide.value("$document", document);
             });

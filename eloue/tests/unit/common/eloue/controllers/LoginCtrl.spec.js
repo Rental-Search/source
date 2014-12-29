@@ -82,15 +82,23 @@ define(["angular-mocks", "eloue/controllers/LoginCtrl"], function () {
                 access_token: "token"
             };
             scope.onLoginSuccess(data);
+            expect(document.cookie).toEqual("user_token=" + data.access_token);
         });
 
         it("LoginCtrl:onLoginError", function () {
-            var jqXHR = {};
+            var jqXHR = {
+                status: 400,
+                responseJSON: {
+                    error: "user_inactive"
+                }
+            };
             scope.onLoginError(jqXHR);
+            expect(scope.inactiveUserError).toEqual("Cliquez ici pour recevoir le lien d'activation.");
         });
 
         it("LoginCtrl:authorize", function () {
             scope.authorize();
+            expect(authServiceMock.getUserToken).toHaveBeenCalled();
         });
     });
 });

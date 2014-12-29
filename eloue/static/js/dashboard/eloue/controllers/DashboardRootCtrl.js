@@ -139,7 +139,7 @@ define([
                     nav: dashboardElement.find("nav ul")
                 };
 
-            function setProperties() {
+            $scope.setProperties = function () {
                 var articleHeight = $($window).height() - $("header").height(),
                     navFz = {
                         current: parseFloat(dashboard.nav.css("font-size")),
@@ -156,12 +156,12 @@ define([
                 while (dashboard.nav.height() >= articleHeight) {
                     dashboard.nav.css("font-size", --navFz.current + "px");
                 }
-            }
+            };
 
-            setProperties();
+            $scope.setProperties();
 
             $($window).on("resize", function () {
-                setProperties();
+                $scope.setProperties();
             });
 
             $window.googleMapsLoaded = function () {

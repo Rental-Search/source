@@ -219,5 +219,29 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
         it("PublishAdCtrl:searchCategory", function () {
             scope.searchCategory();
         });
+
+        it("PublishAdCtrl:processCategoryAncestors", function () {
+            scope.processCategoryAncestors();
+        });
+
+        it("PublishAdCtrl:applyUserAddress", function () {
+            scope.applyUserAddress();
+        });
+
+        it("PublishAdCtrl:trackPublishAdEvent", function () {
+            scope.trackPublishAdEvent();
+        });
+
+        it("PublishAdCtrl:trackPublishSimpleAdEvent", function () {
+            scope.trackPublishSimpleAdEvent();
+        });
+
+        it("PublishAdCtrl:finishProductSaveAndRedirect", function () {
+            scope.finishProductSaveAndRedirect();
+        });
+
+        it("PublishAdCtrl:applySuggestedCategories", function () {
+            scope.applySuggestedCategories();
+        });
     });
 });

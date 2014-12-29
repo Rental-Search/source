@@ -140,5 +140,17 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
         it("ItemsShippingCtrl:searchShippingPoints", function () {
             scope.searchShippingPoints();
         });
+
+        it("ItemsShippingCtrl:applyProductDetails", function () {
+            scope.applyProductDetails();
+        });
+
+        it("ItemsShippingCtrl:applyProductDetails", function () {
+            scope.applyProductDetails();
+        });
+
+        it("ItemsShippingCtrl:parseShippingPointResult", function () {
+            scope.parseShippingPointResult();
+        });
     });
 });

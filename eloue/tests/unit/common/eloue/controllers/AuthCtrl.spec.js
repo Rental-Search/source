@@ -49,6 +49,7 @@ define(["angular-mocks", "eloue/controllers/AuthCtrl"], function () {
             }};
 
             spyOn(authServiceMock, "clearUserData").and.callThrough();
+            spyOn(window.location, "reload").and.callThrough();
 
             AuthCtrl = $controller('AuthCtrl', {
                 $scope: scope,
@@ -58,8 +59,14 @@ define(["angular-mocks", "eloue/controllers/AuthCtrl"], function () {
             });
         }));
 
-        it("AuthCtrl:logout", function () {
+        it("AuthCtrl:logout from dashboard", function () {
+            var initialUrl = "http://e-loue.com/dashboard/";
+            window.location = {
+                href : initialUrl
+            };
             scope.logout();
+            expect(authServiceMock.clearUserData).toHaveBeenCalled();
+            expect(window.location.href).toEqual("/");
         });
     });
 });

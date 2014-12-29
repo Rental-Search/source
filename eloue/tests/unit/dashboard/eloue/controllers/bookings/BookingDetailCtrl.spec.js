@@ -223,5 +223,21 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
             };
             scope.postIncident();
         });
+
+        it("BookingDetailCtrl:applyBookingDetails", function () {
+            scope.applyBookingDetails();
+        });
+
+        it("BookingDetailCtrl:processAcceptBookingResponse", function () {
+            scope.processAcceptBookingResponse();
+        });
+
+        it("BookingDetailCtrl:processProductShippingPointsResponse", function () {
+            scope.processProductShippingPointsResponse();
+        });
+
+        it("BookingDetailCtrl:processPatronShippingPointsResponse", function () {
+            scope.processPatronShippingPointsResponse();
+        });
     });
 });

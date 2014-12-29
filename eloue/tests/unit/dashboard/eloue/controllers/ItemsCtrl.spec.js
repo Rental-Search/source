@@ -68,5 +68,9 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
                 shouldReloadList: true
             });
         });
+
+        it('ItemsCtrl:applyCategories', function () {
+            scope.applyCategories();
+        });
     });
 });

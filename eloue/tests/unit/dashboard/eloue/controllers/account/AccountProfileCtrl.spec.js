@@ -128,5 +128,13 @@ define(["angular-mocks", "eloue/controllers/account/AccountProfileCtrl"], functi
         it("AccountProfileCtrl:sendUserForm", function () {
             scope.sendUserForm();
         });
+
+        it("AccountProfileCtrl:applyUserDetails", function () {
+            scope.applyUserDetails();
+        });
+
+        it("AccountProfileCtrl:processAddressSaveResponse", function () {
+            scope.processAddressSaveResponse();
+        });
     });
 });

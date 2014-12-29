@@ -78,5 +78,9 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
         it("DashboardRootCtrl:showNotification", function () {
             scope.showNotification();
         });
+
+        it("DashboardRootCtrl:applyUserStats", function () {
+            scope.applyUserStats();
+        });
     });
 });

@@ -331,5 +331,58 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
         it("BookingCtrl:loadShippingPoints", function () {
             scope.loadShippingPoints();
         });
+
+        it("BookingCtrl:parseProductAvailabilityResponse", function () {
+            scope.parseProductAvailabilityResponse();
+        });
+
+        it("BookingCtrl:updateThreadWithNewMessage", function () {
+            scope.updateThreadWithNewMessage();
+        });
+
+        it("BookingCtrl:pointSelected", function () {
+            scope.pointSelected();
+        });
+
+        it("BookingCtrl:applyDefaultAddress", function () {
+            scope.applyDefaultAddress();
+        });
+
+        it("BookingCtrl:saveCreditCard", function () {
+            scope.saveCreditCard();
+        });
+
+        it("BookingCtrl:processBookingResponse", function () {
+            scope.processBookingResponse();
+        });
+
+        it("BookingCtrl:processBookingPaymentResponse", function () {
+            scope.processBookingPaymentResponse();
+        });
+
+        it("BookingCtrl:applyProductCategoryAncestors", function () {
+            scope.applyProductCategoryAncestors();
+        });
+
+        it("BookingCtrl:applyPremiumRateNumberResponse", function () {
+            scope.applyPremiumRateNumberResponse();
+        });
+
+        it("BookingCtrl:applyUserCreditCard", function () {
+            scope.applyUserCreditCard();
+        });
+
+        it("BookingCtrl:applyProductShippingPoint", function () {
+            scope.applyProductShippingPoint();
+        });
+
+        it("BookingCtrl:applyArrivalShippingPoint", function () {
+            scope.applyArrivalShippingPoint();
+        });
+
+        it("BookingCtrl:applyMessageThread", function () {
+            var threads = {};
+            scope.applyMessageThread(threads);
+        });
     });
 });

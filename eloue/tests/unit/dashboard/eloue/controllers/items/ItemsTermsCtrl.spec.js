@@ -78,5 +78,9 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
             expect(scope.isAuto).toBe(false);
             expect(scope.isRealEstate).toBe(false);
         });
+
+        it("ItemsTermsCtrl:applyProductDetails", function () {
+            scope.applyProductDetails();
+        });
     });
 });

@@ -98,5 +98,9 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             scope.booking = {owner: {}};
             scope.postNewMessage();
         });
+
+        it("NewMessageThreadCtrl:redirectAfterMessagePost", function () {
+            scope.redirectAfterMessagePost();
+        });
     });
 });

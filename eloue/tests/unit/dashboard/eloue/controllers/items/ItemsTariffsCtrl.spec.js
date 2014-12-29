@@ -160,5 +160,9 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
 
             scope.updatePrices();
         });
+
+        it("ItemsTariffsCtrl:applyProductDetails", function () {
+            scope.applyProductDetails();
+        });
     });
 });

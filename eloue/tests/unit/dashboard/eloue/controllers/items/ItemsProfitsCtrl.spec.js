@@ -42,5 +42,9 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
         it("ItemsProfitsCtrl should be not null", function () {
             expect(!!ItemsProfitsCtrl).toBe(true);
         });
+
+        it("ItemsProfitsCtrl:applyBookings", function () {
+            scope.applyBookings();
+        });
     });
 });

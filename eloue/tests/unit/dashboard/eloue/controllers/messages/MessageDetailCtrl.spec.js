@@ -121,5 +121,29 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
         it("MessageDetailCtrl should be not null", function () {
             expect(!!MessageDetailCtrl).toBe(true);
         });
+
+        it("MessageDetailCtrl:handleResponseErrors", function () {
+            scope.handleResponseErrors();
+        });
+
+        it("MessageDetailCtrl:applyUserAndMessageThread", function () {
+            scope.applyUserAndMessageThread();
+        });
+
+        it("MessageDetailCtrl:requestBooking", function () {
+            scope.requestBooking();
+        });
+
+        it("MessageDetailCtrl:postNewMessage", function () {
+            scope.postNewMessage();
+        });
+
+        it("MessageDetailCtrl:updateNewBookingInfo", function () {
+            scope.updateNewBookingInfo();
+        });
+
+        it("MessageDetailCtrl:parseProductAvailabilityResponse", function () {
+            scope.parseProductAvailabilityResponse();
+        });
     });
 });

@@ -112,7 +112,24 @@ define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
         });
 
         it("RegisterCtrl:getEventLabel", function () {
-            scope.getEventLabel();
+            var result = scope.getEventLabel();
+            expect(result).toEqual("Simple");
+
+            redirectAfterLoginMock.url = "#booking";
+            result = scope.getEventLabel();
+            expect(result).toEqual("Réservation");
+
+            redirectAfterLoginMock.url = "#message";
+            result = scope.getEventLabel();
+            expect(result).toEqual("Message");
+
+            redirectAfterLoginMock.url = "#phone";
+            result = scope.getEventLabel();
+            expect(result).toEqual("Appel");
+
+            redirectAfterLoginMock.url = "#publish";
+            result = scope.getEventLabel();
+            expect(result).toEqual("Dépôt annonce");
         });
 
         it("RegisterCtrl:onLoginSuccess", function () {
@@ -120,11 +137,18 @@ define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
                 access_token: "token"
             };
             scope.onLoginSuccess(data);
+            expect(document.cookie).toEqual("user_token=" + data.access_token);
         });
 
         it("RegisterCtrl:onLoginError", function () {
-            var jqXHR = {};
+            var jqXHR = {
+                status: 400,
+                responseJSON: {
+                    error: "user_inactive"
+                }
+            };
             scope.onLoginError(jqXHR);
+            expect(scope.loginError).toEqual("Bad request.");
         });
 
         it("RegisterCtrl:openRegistrationForm", function () {
@@ -133,6 +157,7 @@ define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
 
         it("RegisterCtrl:authorize", function () {
             scope.authorize();
+            expect(authServiceMock.getUserToken).toHaveBeenCalled();
         });
     });
 });
