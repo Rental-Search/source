@@ -47,8 +47,8 @@ block details
                     li(ng-repeat="picture in product.pictures track by picture.id", style="padding-top: 0;").block-with-thumbnail
                          .col-thumbnail
                            .thumbnail: span.lg-p
-                             div(style="background-image: url({{picture.image.thumbnail}});")
-                                 a(href="", ng-click="showRemoveConfirm(picture.id)").delete x
+                             img(style="background-image: url({{picture.image.thumbnail}});")
+                             a(href="", ng-click="showRemoveConfirm(picture.id)").delete x
                     li(ng-repeat="t in getTimes(loadingPicture) track by $index", style="padding-top: 0;").block-with-thumbnail
                          .col-thumbnail
                            .thumbnail: span.lg-p
