@@ -9,7 +9,12 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
             endpointsMock,
             addressesServiceMock,
             productsServiceMock,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -22,38 +27,28 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
             addressesServiceMock = {
                 getAddress: function (addressId) {
                     console.log("addressesServiceMock:getAddress called with addressId = " + addressId);
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 },
                 updateAddress: function (addressId, formData) {
                     console.log("addressesServiceMock:updateAddress called with addressId = " + addressId + ", formData = " + formData);
-                    return {then: function () {
-                        return {result: {}}
-                    }}
+                    return simpleServiceResponse;
                 },
                 deleteAddress: function (addressId) {
                     console.log("addressesServiceMock:deleteAddress called with addressId = " + addressId);
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
             productsServiceMock = {
                 getProductsByAddress: function (addressId) {
                     console.log("productsServiceMock:getProductsByAddress called with addressId = " + addressId);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 
             usersServiceMock = {
                 updateUser: function (user) {
                     console.log("usersServiceMock:updateUser");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 

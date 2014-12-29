@@ -5,17 +5,24 @@ define(["angular-mocks", "eloue/services/ShippingsService"], function () {
         var ShippingsService,
             shippingsMock,
             endpointsMock,
-            utilsServiceMock;
+            utilsServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             shippingsMock = {
                 get: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 save: function() {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 }
             };
             endpointsMock = {

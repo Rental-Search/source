@@ -5,7 +5,12 @@ define(["angular-mocks", "eloue/controllers/ResetPasswordCtrl"], function () {
         var ResetPasswordCtrl,
             scope,
             window,
-            authServiceMock;
+            authServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 

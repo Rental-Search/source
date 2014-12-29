@@ -5,7 +5,12 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
         var BookingsCtrl,
             scope,
             timeout,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -13,9 +18,7 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
             usersServiceMock = {
                 getMe: function () {
                     console.log("usersServiceMock:getMe called");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 

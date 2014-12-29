@@ -6,7 +6,12 @@ define(["angular-mocks", "eloue/controllers/AuthCtrl"], function () {
             scope,
             window,
             authServiceMock,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
@@ -23,20 +28,11 @@ define(["angular-mocks", "eloue/controllers/AuthCtrl"], function () {
             usersServiceMock = {
                 getMe: function () {
                     console.log("Users service mock called");
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {
-                                    results: [
-                                        {}
-                                    ]
-                                }
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 getStatistics: function () {
                     console.log("Users service mock called");
+                    return simpleServiceResponse;
                 }
             };
 

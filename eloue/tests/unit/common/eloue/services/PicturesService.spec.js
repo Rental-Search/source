@@ -5,15 +5,25 @@ define(["angular-mocks", "eloue/services/PicturesService"], function () {
         var PicturesService,
             picturesMock,
             endpointsMock,
-            formServiceMock;
+            formServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             picturesMock = {
                 get: function () {
+                    return simpleResourceResponse;
                 },
-                delete: function(id) {}
+                delete: function(id) {
+                    return simpleResourceResponse;
+                }
             };
             endpointsMock = {
 

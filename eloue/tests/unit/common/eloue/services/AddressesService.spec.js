@@ -6,7 +6,14 @@ define(["angular-mocks", "eloue/services/AddressesService"], function () {
             q,
             addressesMock,
             endpointsMock,
-            formServiceMock;
+            formServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
@@ -14,15 +21,13 @@ define(["angular-mocks", "eloue/services/AddressesService"], function () {
             endpointsMock = {};
             addressesMock = {
                 get: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 update: function () {
-
+                    return simpleResourceResponse;
                 },
                 delete: function () {
-
+                    return simpleResourceResponse;
                 }
             };
             formServiceMock = {

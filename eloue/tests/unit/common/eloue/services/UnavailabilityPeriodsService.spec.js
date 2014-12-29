@@ -3,7 +3,14 @@ define(["angular-mocks", "eloue/services/UnavailabilityPeriodsService"], functio
     describe("Service: UnavailabilityPeriodsService", function () {
 
         var UnavailabilityPeriodsService,
-            unavailabilityPeriodsMock;
+            unavailabilityPeriodsMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 

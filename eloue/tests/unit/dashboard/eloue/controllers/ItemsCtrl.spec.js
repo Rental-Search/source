@@ -6,7 +6,12 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
             scope,
             timeout,
             categoriesServiceMock,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -14,18 +19,14 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
             categoriesServiceMock = {
                 getRootCategories: function () {
                     console.log("categoriesServiceMock:getRootCategories called");
-                    return {then: function () {
-                        return {result: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 

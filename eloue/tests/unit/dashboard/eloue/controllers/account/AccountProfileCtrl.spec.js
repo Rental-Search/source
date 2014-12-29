@@ -9,7 +9,12 @@ define(["angular-mocks", "eloue/controllers/account/AccountProfileCtrl"], functi
             addressesServiceMock,
             phoneNumbersServiceMock,
             endpointsMock,
-            civilityChoicesMock;
+            civilityChoicesMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -21,47 +26,35 @@ define(["angular-mocks", "eloue/controllers/account/AccountProfileCtrl"], functi
 
                 updateUser: function (user) {
                     console.log("usersServiceMock:updateUser");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 },
 
                 getMe: function () {
                     console.log("usersServiceMock:getMe called");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 
             addressesServiceMock = {
                 getAddressesByPatron: function (patronId) {
                     console.log("addressesServiceMock:getAddressesByPatron called with patronId = " + patronId);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 },
 
                 saveAddress: function (address) {
                     console.log("addressesServiceMock:saveAddress called");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 
             phoneNumbersServiceMock = {
                 savePhoneNumber: function (phoneNumber) {
                     console.log("phoneNumbersServiceMock:savePhoneNumber called");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 },
                 updatePhoneNumber: function (phoneNumber) {
                     console.log("phoneNumbersServiceMock:updatePhoneNumber called");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 

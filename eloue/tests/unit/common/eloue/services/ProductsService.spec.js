@@ -6,38 +6,45 @@ define(["angular-mocks", "eloue/services/ProductsService"], function () {
             q,
             productsMock,
             checkAvailabilityMock,
-            usersServiceMock;
+            usersServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             productsMock = {
                 get: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 update: function (id, product) {
-
+                    return simpleResourceResponse;
                 },
-                save: function(product) {},
+                save: function(product) {
+                    return simpleResourceResponse;
+                },
 
                 getStats: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
 
                 getAbsoluteUrl: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 }
             };
             checkAvailabilityMock = {
                 get: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 }
             };
             usersServiceMock = {
                 getStatistics: function (userId) {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 }
             };
 

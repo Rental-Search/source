@@ -11,7 +11,12 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
             unitMock,
             categoriesServiceMock,
             productsServiceMock,
-            pricesServiceMock;
+            pricesServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -27,37 +32,31 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
             categoriesServiceMock = {
                 getParentCategory: function (category) {
                     console.log("categoriesServiceMock:getParentCategory called with category = " + category);
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
             productsServiceMock = {
                 getProductDetails: function (id) {
                     console.log("productsServiceMock:getProductDetails called with id = " + id);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 },
                 updateProduct: function (product) {
                     console.log("productsServiceMock:updateProduct called with product = " + product);
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
             pricesServiceMock = {
                 getPricesByProduct: function (productId) {
                     console.log("pricesServiceMock:getPricesByProduct called with productId = " + productId);
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 },
                 updatePrice: function (price) {
-                    console.log("pricesServiceMock:updatePrice called with price = " + price)
+                    console.log("pricesServiceMock:updatePrice called with price = " + price);
+                    return simpleServiceResponse;
                 },
                 savePrice: function (price) {
-                    console.log("pricesServiceMock:savePrice called with price = " + price)
+                    console.log("pricesServiceMock:savePrice called with price = " + price);
+                    return simpleServiceResponse;
                 }
             };
 

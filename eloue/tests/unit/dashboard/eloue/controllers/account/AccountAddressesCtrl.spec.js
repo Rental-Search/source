@@ -5,7 +5,12 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressesCtrl"], func
         var AccountAddressesCtrl,
             scope,
             usersServiceMock,
-            addressesServiceMock;
+            addressesServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -13,18 +18,14 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressesCtrl"], func
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return {$promise: {then: function () {
-                        return {result: {id: 1}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 
             addressesServiceMock = {
                 getAddressesByPatron: function (patronId) {
                     console.log("addressesServiceMock:getAddressesByPatron called with patronId = " + patronId);
-                    return {$promise: {then: function () {
-                        return {result: {id: 1}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 

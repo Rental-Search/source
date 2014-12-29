@@ -5,7 +5,12 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
         var MessagesCtrl,
             scope,
             usersServiceMock,
-            utilsServiceMock;
+            utilsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -13,9 +18,7 @@ define(["angular-mocks", "eloue/controllers/MessagesCtrl"], function () {
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
             utilsServiceMock = {

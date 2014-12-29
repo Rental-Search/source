@@ -6,19 +6,30 @@ define(["angular-mocks", "eloue/services/UsersService"], function () {
             q,
             usersMock,
             formServiceMock,
-            endpointsMock;
+            endpointsMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             usersMock = {
                 get: function () {
+                    return simpleResourceResponse;
                 },
                 getMe: function () {
+                    return simpleResourceResponse;
                 },
                 getStats: function () {
+                    return simpleResourceResponse;
                 },
                 update: function (id, user) {
+                    return simpleResourceResponse;
                 }
             };
             formServiceMock = {

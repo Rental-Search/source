@@ -10,7 +10,12 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
             productsServiceMock,
             productShippingPointsServiceMock,
             sippingPointsServiceMock,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -23,44 +28,32 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
 
             productsServiceMock = {
                 getProduct: function (productId, loadProductStats, loadOwnerStats) {
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 
             productShippingPointsServiceMock = {
                 getByProduct: function (productId) {
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 },
                 deleteShippingPoint: function (shippingPointId) {
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 },
                 saveShippingPoint: function (shippingPoint) {
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 
             sippingPointsServiceMock = {
                 searchDepartureShippingPointsByCoordinates: function(lat, lng) {
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 
             usersServiceMock = {
                 getMe: function () {
                     console.log("usersServiceMock:getMe called");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 

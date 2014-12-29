@@ -7,18 +7,24 @@ define(["angular-mocks", "eloue/services/CommentsService"], function () {
             commentsMock,
             endpointsMock,
             usersServiceMock,
-            utilsServiceMock;
+            utilsServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             commentsMock = {
                 get: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 save: function () {
+                    return simpleResourceResponse;
                 }
             };
             endpointsMock = {
@@ -26,6 +32,7 @@ define(["angular-mocks", "eloue/services/CommentsService"], function () {
 
             usersServiceMock = {
                 get: function (userId) {
+                    return simpleResourceResponse;
                 }
             };
             utilsServiceMock = {

@@ -12,7 +12,12 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
             messageThreadsServiceMock,
             bookingsServiceMock,
             productRelatedMessagesServiceMock,
-            productsServiceMock;
+            productsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -36,8 +41,7 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
             messageThreadsServiceMock = {
                 getMessageThreadById: function (threadId) {
                     console.log("messageThreadsServiceMock:getMessageThreadById called with threadId = " + threadId);
-                    return {then: function () {
-                    }}
+                    return simpleServiceResponse;
                 },
                 getUsersRoles: function (messageThread, currentUserId) {
                     return {recipientId: 1, senderId: 1};
@@ -47,53 +51,31 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
             bookingsServiceMock = {
                 getBookingByProduct: function (productId) {
                     console.log("bookingsServiceMock:getBookingByProduct called with productId = " + productId);
-                    return {then: function () {
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 
             productRelatedMessagesServiceMock = {
                 updateMessage: function (message) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 postMessage: function (threadId, senderId, recipientId, text, offerId, productId) {
-                    return {
-                        then: function (productId) {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             productsServiceMock = {
                 getAbsoluteUrl: function (id) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 isAvailable: function (id, startDate, endDate, quantity) {
-                    return {
-                        then: function (productId) {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             q = {
                 all: function (obj) {
-                    return {then: function () {
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 

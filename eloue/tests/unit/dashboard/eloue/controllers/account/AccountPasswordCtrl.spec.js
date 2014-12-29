@@ -6,7 +6,12 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
             scope,
             state,
             stateParams,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -14,8 +19,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountPasswordCtrl"], funct
             usersServiceMock = {
                 resetPassword: function (userId, form) {
                     console.log("usersServiceMock:resetPassword called with userId = " + userId + ", form = " + form);
-                    return {then: function () {
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 

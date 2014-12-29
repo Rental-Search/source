@@ -3,20 +3,27 @@ define(["angular-mocks", "eloue/services/PatronShippingPointsService"], function
     describe("Service: PatronShippingPointsService", function () {
 
         var PatronShippingPointsService,
-            patronShippingPointsMock;
+            patronShippingPointsMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             patronShippingPointsMock = {
                 get: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 save: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 delete: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 }
             };
             module(function ($provide) {

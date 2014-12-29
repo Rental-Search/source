@@ -13,7 +13,6 @@ define([
     "../../../../common/eloue/services/PhoneNumbersService",
     "../../../../common/eloue/services/CategoriesService",
     "../../../../common/eloue/services/UtilsService",
-    "../../../../common/eloue/services/ShippingsService",
     "../../../../common/eloue/services/ShippingPointsService",
     "../../../../common/eloue/services/ProductShippingPointsService",
     "../../../../common/eloue/services/PatronShippingPointsService",
@@ -41,13 +40,12 @@ define([
         "PhoneNumbersService",
         "CategoriesService",
         "UtilsService",
-        "ShippingsService",
         "ShippingPointsService",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
         "ToDashboardRedirectService",
         "ScriptTagService",
-        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsService, MessageThreadsService, ProductRelatedMessagesService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService, ScriptTagService) {
+        function ($scope, $window, $location, Endpoints, CivilityChoices, ProductsService, MessageThreadsService, ProductRelatedMessagesService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService, ScriptTagService) {
 
             $scope.creditCard = {
                 id: null,

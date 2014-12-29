@@ -3,16 +3,24 @@ define(["angular-mocks", "eloue/services/CreditCardsService"], function () {
     describe("Service: CreditCardsService", function () {
 
         var CreditCardsService,
-            creditCardsMock;
+            creditCardsMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             creditCardsMock = {
                 delete: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 save: function () {
+                    return simpleResourceResponse;
                 }
             };
             module(function ($provide) {

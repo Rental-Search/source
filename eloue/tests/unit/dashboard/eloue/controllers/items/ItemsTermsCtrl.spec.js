@@ -6,7 +6,12 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
             scope,
             stateParams,
             categoriesServiceMock,
-            productsServiceMock;
+            productsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -14,17 +19,13 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
             categoriesServiceMock = {
                 getParentCategory: function (category) {
                     console.log("categoriesServiceMock:getParentCategory called with category = " + category);
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
             productsServiceMock = {
                 getProductDetails: function (id) {
                     console.log("productsServiceMock:getProductDetails called with id = " + id);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 

@@ -3,15 +3,24 @@ define(["angular-mocks", "eloue/services/PricesService"], function () {
     describe("Service: PricesService", function () {
 
         var PricesService,
-            pricesMock;
+            pricesMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             pricesMock = {
                 save: function () {
+                    return simpleResourceResponse;
                 },
                 update: function () {
+                    return simpleResourceResponse;
                 }
             };
 

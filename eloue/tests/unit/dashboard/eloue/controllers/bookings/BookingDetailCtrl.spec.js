@@ -5,7 +5,12 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
         var BookingDetailCtrl,
             scope, stateParams, window, endpointsMock, bookingsServiceMock, commentsServiceMock, phoneNumbersServiceMock,
             sinistersServiceMock, usersServiceMock, shippingsServiceMock,
-            productShippingPointsServiceMock, patronShippingPointsServiceMock;
+            productShippingPointsServiceMock, patronShippingPointsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -17,157 +22,79 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
             bookingsServiceMock = {
                 getBookingDetails: function (bookingUUID) {
                     console.log("bookingsServiceMock:getBookingDetails called with bookingUUID = " + bookingUUID);
-                    return {
-                        then: function () {
-                            return {response: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 downloadContract: function (uuid) {
                     return null;
                 },
                 acceptBooking: function (uuid) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 rejectBooking: function (uuid) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 cancelBooking: function (uuid) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 postIncident: function (uuid, description) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
             commentsServiceMock = {
                 getCommentList: function (bookingUUID) {
                     console.log("commentsServiceMock:getCommentList called with bookingUUID = " + bookingUUID);
-                    return {
-                        then: function () {
-                            return {response: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 postComment: function (bookingUUID, comment, rate) {
                     console.log("commentsServiceMock:postComment called with bookingUUID = " + bookingUUID + ", comment = " + comment + ", rate = " + rate);
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             phoneNumbersServiceMock = {
                 getPremiumRateNumber: function (phoneId) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             sinistersServiceMock = {
                 getSinisterList: function (uuid) {
-                    return {
-                        then: function () {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
 
                 getStatistics: function (userId) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             shippingsServiceMock = {
                 getByBooking: function (uuid) {
-                    return {
-                        then: function () {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
                 downloadVoucher: function (shippingId, isOwner) {
                     return null;
                 },
                 saveShipping: function (shipping) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             productShippingPointsServiceMock = {
                 getByProduct: function () {
-                    return {
-                        then: function (productId) {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             patronShippingPointsServiceMock = {
                 getByPatronAndBooking: function (borrowerId, uuid) {
-                    return {
-                        then: function () {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 

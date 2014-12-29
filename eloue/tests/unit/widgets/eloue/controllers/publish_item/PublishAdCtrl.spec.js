@@ -18,7 +18,12 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
             pricesServiceMock,
             toDashboardRedirectServiceMock,
             serverValidationServiceMock,
-            scriptTagServiceMock;
+            scriptTagServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module("EloueWidgetsApp"));
 
@@ -28,43 +33,70 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
             };
             unitMock = {DAY: {id: 1}};
             currencyMock = {};
-            productsServiceMock = {};
-            usersServiceMock = {};
+            productsServiceMock = {
+                saveProduct: function(product) {
+                    return simpleServiceResponse;
+                }
+            };
+            usersServiceMock = {
+                getMe: function () {
+                    return simpleServiceResponse;
+                },
+                updateUser: function(user) {
+                    return simpleServiceResponse;
+                }
+            };
             addressesServiceMock = {
-                saveAddress:  function(address) {
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                saveAddress: function (address) {
+                    return simpleServiceResponse;
                 }
             };
             authServiceMock = {
                 getUserToken: function () {
-
-                }
+                    return "uToken";
+                },
+                saveAttemptUrl: function (url) {}
             };
             categoriesServiceMock = {
-                getChildCategories: function(rootCategory) {
-                    return {then: function () {
-                        return {result: {}}
-                    }}
+                getChildCategories: function (rootCategory) {
+                    return simpleServiceResponse;
                 },
-                getCategory: function(rootCategory) {
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                getCategory: function (rootCategory) {
+                    return simpleServiceResponse;
+                },
+                getRootCategories: function (category) {
+                    return simpleServiceResponse;
+                },
+                getAncestors: function (category) {
+                    return simpleServiceResponse;
+                },
+                searchByProductTitle: function (title) {
+                    return simpleServiceResponse;
                 }
             };
-            pricesServiceMock = {};
-            toDashboardRedirectServiceMock = {};
+            pricesServiceMock = {
+                savePrice: function(price) {
+                    return simpleServiceResponse;
+                }
+            };
+            toDashboardRedirectServiceMock = {
+                showPopupAndRedirect: function(url) {}
+            };
             serverValidationServiceMock = {
-                removeErrors: function() {},
-                addError: function(field, description) {}
+                removeErrors: function () {
+                },
+                addError: function (field, description) {
+                }
             };
             scriptTagServiceMock = {
-                trackEvent: function (category, action, value) {},
-                trackPageView: function () {},
-                loadAdWordsTags: function (googleConversionLabel) {},
-                loadPdltrackingScript: function (currentUserId) {}
+                trackEvent: function (category, action, value) {
+                },
+                trackPageView: function () {
+                },
+                loadAdWordsTags: function (googleConversionLabel) {
+                },
+                loadPdltrackingScript: function (currentUserId) {
+                }
             };
 
             module(function ($provide) {
@@ -81,14 +113,16 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
                 $provide.value("ToDashboardRedirectService", toDashboardRedirectServiceMock);
                 $provide.value("ServerValidationService", serverValidationServiceMock);
                 $provide.value("ScriptTagService", scriptTagServiceMock);
-            })
+            });
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
-            scope.currentUserPromise = {then: function () {
-                return {response: {}}
-            }};
+            scope.currentUserPromise = {
+                then: function () {
+                    return {response: {}};
+                }
+            };
             scope.currentUser = {
                 id: 111,
                 default_address: {
@@ -98,8 +132,17 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
             window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"}};
             location = {};
             utilsServiceMock = {};
+            spyOn(productsServiceMock, "saveProduct").and.callThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(usersServiceMock, "updateUser").and.callThrough();
+            spyOn(authServiceMock, "getUserToken").and.callThrough();
+            spyOn(authServiceMock, "saveAttemptUrl").and.callThrough();
+            spyOn(pricesServiceMock, "savePrice").and.callThrough();
             spyOn(categoriesServiceMock, "getChildCategories").and.callThrough();
+            spyOn(categoriesServiceMock, "getAncestors").and.callThrough();
+            spyOn(categoriesServiceMock, "getRootCategories").and.callThrough();
             spyOn(categoriesServiceMock, "getCategory").and.callThrough();
+            spyOn(categoriesServiceMock, "searchByProductTitle").and.callThrough();
             spyOn(serverValidationServiceMock, "removeErrors").and.callThrough();
             spyOn(addressesServiceMock, "saveAddress").and.callThrough();
             spyOn(serverValidationServiceMock, "addError").and.callThrough();
@@ -107,6 +150,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
             spyOn(scriptTagServiceMock, "trackPageView").and.callThrough();
             spyOn(scriptTagServiceMock, "loadAdWordsTags").and.callThrough();
             spyOn(scriptTagServiceMock, "loadPdltrackingScript").and.callThrough();
+            spyOn(toDashboardRedirectServiceMock, "showPopupAndRedirect").and.callThrough();
             PublishAdCtrl = $controller("PublishAdCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
                 Unit: unitMock,

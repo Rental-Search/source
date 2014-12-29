@@ -7,7 +7,14 @@ define(["angular-mocks", "eloue/services/MessageThreadsService"], function () {
             messageThreadsMock,
             utilsServiceMock,
             productRelatedMessagesServiceMock,
-            productsServiceMock;
+            productsServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
@@ -15,25 +22,19 @@ define(["angular-mocks", "eloue/services/MessageThreadsService"], function () {
 
             messageThreadsMock = {
                 get: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 list: function () {
-                    return {$promise: {then: function () {
-                        return {results: [
-                            {messages: [
-                                "http://10.0.0.111:8000/api/2.0/productrelatedmessages/28394/"
-                            ]}
-                        ]}
-                    }}}
+                    return simpleResourceResponse;
                 }
             };
             productRelatedMessagesServiceMock = {
                 getMessage: function (messageId) {
+                    return simpleResourceResponse;
                 },
 
                 getMessageListItem: function (messageId) {
+                    return simpleResourceResponse;
                 }
             };
             utilsServiceMock = {
@@ -45,6 +46,7 @@ define(["angular-mocks", "eloue/services/MessageThreadsService"], function () {
             };
             productsServiceMock = {
                 getProduct: function (productId, loadOwner, loadPictures) {
+                    return simpleResourceResponse;
                 }
             };
 

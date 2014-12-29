@@ -5,7 +5,12 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
         var ItemsProfitsCtrl,
             scope,
             stateParams,
-            bookingsServiceMock;
+            bookingsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -13,9 +18,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
             bookingsServiceMock = {
                 getBookingsByProduct: function (productId) {
                     console.log("bookingsServiceMock:getBookingsByProduct called with productId = " + productId);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 

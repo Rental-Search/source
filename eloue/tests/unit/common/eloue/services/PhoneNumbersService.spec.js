@@ -3,17 +3,28 @@ define(["angular-mocks", "eloue/services/PhoneNumbersService"], function () {
     describe("Service: PhoneNumbersService", function () {
 
         var PhoneNumbersService,
-            phoneNumbersMock;
+            phoneNumbersMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             phoneNumbersMock = {
                 save: function () {
+                    return simpleResourceResponse;
                 },
                 update: function () {
+                    return simpleResourceResponse;
                 },
-                getPremiumRateNumber: function() {}
+                getPremiumRateNumber: function() {
+                    return simpleResourceResponse;
+                }
             };
 
             module(function ($provide) {

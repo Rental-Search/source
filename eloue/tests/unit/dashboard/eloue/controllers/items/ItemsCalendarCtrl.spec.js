@@ -7,7 +7,12 @@ define(["angular-mocks", "datejs", "eloue/controllers/items/ItemsCalendarCtrl", 
             stateParams,
             endpointsMock,
             bookingsServiceMock,
-            unavailabilityPeriodsServiceMock;
+            unavailabilityPeriodsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -17,51 +22,25 @@ define(["angular-mocks", "datejs", "eloue/controllers/items/ItemsCalendarCtrl", 
             bookingsServiceMock = {
                 getBookingsByProduct: function (productId) {
                     console.log("bookingsServiceMock:getBookingsByProduct called with productId = " + productId);
-                    return {
-                        then: function () {
-                            return {response: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 
             unavailabilityPeriodsServiceMock = {
                 savePeriod: function (period) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
 
                 updatePeriod: function (period) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
 
                 deletePeriod: function (period) {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
 
                 getByProduct: function (productId) {
-                    return {
-                        then: function () {
-                            return {response: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 

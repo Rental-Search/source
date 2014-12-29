@@ -5,7 +5,12 @@ define(["angular-mocks", "eloue/controllers/DashboardCtrl"], function() {
         var DashboardCtrl,
             scope,
             activityTypeMock,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -14,7 +19,7 @@ define(["angular-mocks", "eloue/controllers/DashboardCtrl"], function() {
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+                    return simpleServiceResponse;
                 }
             };
 

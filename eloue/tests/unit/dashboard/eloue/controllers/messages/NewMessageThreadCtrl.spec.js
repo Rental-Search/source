@@ -11,7 +11,12 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             productRelatedMessagesServiceMock,
             productsServiceMock,
             utilsServiceMock,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -21,29 +26,17 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             };
             bookingsServiceMock = {
                 getBookingByProduct: function (productId) {
-                    return {
-                        then: function (productId) {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
             productRelatedMessagesServiceMock = {
                 postMessage: function (threadId, senderId, recipientId, text, offerId, productId) {
-                    return {
-                        then: function (productId) {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
             productsServiceMock = {
                 getProduct: function (productId, loadProductStats, loadOwnerStats) {
-                    return {
-                        then: function (productId) {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
             utilsServiceMock = {

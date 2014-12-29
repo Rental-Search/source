@@ -19,117 +19,120 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
             phoneNumbersServiceMock,
             categoriesServiceMock,
             utilsServiceMock,
-            shippingsServiceMock,
             shippingPointsServiceMock,
             productShippingPointsServiceMock,
             patronShippingPointsServiceMock,
             toDashboardRedirectServiceMock,
-            scriptTagServiceMock;
+            scriptTagServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module("EloueWidgetsApp"));
 
         beforeEach(function () {
-            productsServiceMock = {getProduct: function () {
-                return {
-                    then: function () {
-                        return {result: {}}
-                    }
+            productsServiceMock = {
+                getProduct: function () {
+                    return simpleServiceResponse;
+                },
+                isAvailable: function () {
+                    return simpleServiceResponse;
                 }
-            }, isAvailable: function () {
-                return {then: function () {
-                    return {result: {}}
-                }}
-            }};
-            messageThreadsServiceMock = {getMessageThread: function () {
-                return {
-                    then: function () {
-                        return {result: {}}
-                    }
+            };
+            messageThreadsServiceMock = {
+                getMessageThreadByProductAndParticipant: function () {
+                    return simpleServiceResponse;
                 }
-            }, sendMessage: function () {
-                return {
-                    then: function () {
-                        return {result: {}}
-                    }
-                }
-            }};
+            };
             usersServiceMock = {
                 get: function (userId) {
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 },
                 getMe: function () {
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 },
                 updateUser: function(user) {
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
             authServiceMock = {
                 getUserToken: function () {
-
-                }
+                    return "uToken";
+                },
+                saveAttemptUrl: function (url) {}
             };
             productRelatedMessagesServiceMock = {
                 postMessage: function(threadId, senderId, recipientId, text, offerId, productId) {
-                    return {
-                        then: function () {
-                            return {result: {}}
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
             endpointsMock = {
                 api_url: "http://10.0.0.111:8000/api/2.0/"
             };
 
-            shippingsServiceMock = {};
-            shippingPointsServiceMock = {};
-            productShippingPointsServiceMock = {};
-            patronShippingPointsServiceMock = {};
-            toDashboardRedirectServiceMock = {};
+            shippingPointsServiceMock = {
+                searchArrivalShippingPointsByAddressAndProduct: function (address, productId) {
+                    return simpleServiceResponse;
+                },
+                searchArrivalShippingPointsByCoordinatesAndProduct: function(lat, lng, productId) {
+                    return simpleServiceResponse;
+                }
+            };
+            productShippingPointsServiceMock = {
+                getByProduct: function (productId) {
+                    return simpleServiceResponse;
+                }
+            };
+            patronShippingPointsServiceMock = {
+                saveShippingPoint: function(point) {
+                    return simpleServiceResponse;
+                }
+            };
+            toDashboardRedirectServiceMock = {
+                showPopupAndRedirect: function(url) {}
+            };
             civilityChoicesMock = {};
             addressesServiceMock = {
                 saveAddress:  function(address) {
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
-            creditCardsServiceMock = {};
+            creditCardsServiceMock = {
+                saveCard: function (card) {
+                    return simpleServiceResponse;
+                },
+                deleteCard: function (card) {
+                    return simpleServiceResponse;
+                }
+            };
             bookingsServiceMock = {
                 requestBooking: function(booking) {
-                    return {then: function () {
-                        return {result: {}}
-                    }}
+                    return simpleServiceResponse;
                 },
                 payForBooking: function(uuid, paymentInfo) {
-                    return {
-                        then: function () {
-                            return {result: {}}
-                        }
-                    }
-                },
-                getBookingsByProduct: function(productId) {
-                    return {then: function () {
-                        return {result: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
-            phoneNumbersServiceMock = {};
+            phoneNumbersServiceMock = {
+                getPremiumRateNumber: function(phoneId) {
+                    return simpleServiceResponse;
+                }
+            };
             categoriesServiceMock = {
                 getAncestors: function (categoryId) {
-                    return {then: function () {
-                        return {result: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
-            utilsServiceMock = {};
+            utilsServiceMock = {
+                formatDate: function(date) {
+                    return "";
+                },
+                getIdFromUrl: function(url) {
+                    return url;
+                }
+            };
             scriptTagServiceMock = {
                 trackEvent: function (category, action, value) {},
                 trackPageView: function () {},
@@ -150,13 +153,12 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
                 $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
                 $provide.value("CategoriesService", categoriesServiceMock);
                 $provide.value("UtilsService", utilsServiceMock);
-                $provide.value("ShippingsService", shippingsServiceMock);
                 $provide.value("ShippingPointsService", shippingPointsServiceMock);
                 $provide.value("ProductShippingPointsService", productShippingPointsServiceMock);
                 $provide.value("PatronShippingPointsService", patronShippingPointsServiceMock);
                 $provide.value("ToDashboardRedirectService", toDashboardRedirectServiceMock);
                 $provide.value("ScriptTagService", scriptTagServiceMock);
-            })
+            });
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
@@ -168,7 +170,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
                 "toHour": "08:00:00"
             };
             scope.currentUserPromise = {then: function () {
-                return {response: {}}
+                return {response: {}};
             }};
             scope.currentUser = {
                 id: 111,
@@ -182,17 +184,26 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
 
             spyOn(productsServiceMock, "getProduct").and.callThrough();
             spyOn(productsServiceMock, "isAvailable").and.callThrough();
-            spyOn(messageThreadsServiceMock, "getMessageThread").and.callThrough();
-            spyOn(messageThreadsServiceMock, "sendMessage").and.callThrough();
+            spyOn(messageThreadsServiceMock, "getMessageThreadByProductAndParticipant").and.callThrough();
             spyOn(usersServiceMock, "get").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
             spyOn(usersServiceMock, "updateUser").and.callThrough();
             spyOn(authServiceMock, "getUserToken").and.callThrough();
+            spyOn(authServiceMock, "saveAttemptUrl").and.callThrough();
             spyOn(productRelatedMessagesServiceMock, "postMessage").and.callThrough();
             spyOn(addressesServiceMock, "saveAddress").and.callThrough();
+            spyOn(creditCardsServiceMock, "saveCard").and.callThrough();
+            spyOn(creditCardsServiceMock, "deleteCard").and.callThrough();
+            spyOn(phoneNumbersServiceMock, "getPremiumRateNumber").and.callThrough();
+            spyOn(utilsServiceMock, "formatDate").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(shippingPointsServiceMock, "searchArrivalShippingPointsByAddressAndProduct").and.callThrough();
+            spyOn(shippingPointsServiceMock, "searchArrivalShippingPointsByCoordinatesAndProduct").and.callThrough();
+            spyOn(productShippingPointsServiceMock, "getByProduct").and.callThrough();
+            spyOn(patronShippingPointsServiceMock, "saveShippingPoint").and.callThrough();
+            spyOn(toDashboardRedirectServiceMock, "showPopupAndRedirect").and.callThrough();
             spyOn(bookingsServiceMock, "requestBooking").and.callThrough();
             spyOn(bookingsServiceMock, "payForBooking").and.callThrough();
-            spyOn(bookingsServiceMock, "getBookingsByProduct").and.callThrough();
             spyOn(categoriesServiceMock, "getAncestors").and.callThrough();
             spyOn(scriptTagServiceMock, "trackEvent").and.callThrough();
             spyOn(scriptTagServiceMock, "trackPageView").and.callThrough();
@@ -212,7 +223,6 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
                 PhoneNumbersService: phoneNumbersServiceMock,
                 CategoriesService: categoriesServiceMock,
                 UtilsService: utilsServiceMock,
-                ShippingsService: shippingsServiceMock,
                 ShippingPointsService: shippingPointsServiceMock,
                 ProductShippingPointsService: productShippingPointsServiceMock,
                 PatronShippingPointsService: patronShippingPointsServiceMock,

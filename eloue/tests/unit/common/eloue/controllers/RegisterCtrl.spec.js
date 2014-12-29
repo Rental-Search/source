@@ -13,7 +13,12 @@ define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
             serviceErrorsMock,
             redirectAfterLoginMock,
             toDashboardRedirectServiceMock,
-            serverValidationServiceMock;
+            serverValidationServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
@@ -21,13 +26,7 @@ define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
             authServiceMock = {
                 register: function () {
                     console.log("Auth service mock called");
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {response: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 },
 
                 clearUserData: function () {
@@ -50,13 +49,7 @@ define(["angular-mocks", "eloue/controllers/RegisterCtrl"], function () {
 
             usersServiceMock = {
                 getMe: function () {
-                    return {
-                        $promise: {
-                            then: function () {
-                                return {result: {}}
-                            }
-                        }
-                    }
+                    return simpleServiceResponse;
                 }
             };
 

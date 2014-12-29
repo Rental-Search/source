@@ -5,26 +5,27 @@ define(["angular-mocks", "eloue/services/CategoriesService"], function () {
         var CategoriesService,
             q,
             categoriesMock,
-            utilsServiceMock;
+            utilsServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             categoriesMock = {
                 get: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 getChildren: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 getAncestors: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 }
             };
             utilsServiceMock = {

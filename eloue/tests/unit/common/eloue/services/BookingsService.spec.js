@@ -7,7 +7,14 @@ define(["angular-mocks", "eloue/services/BookingsService"], function () {
             endpointsMock,
             bookingsMock,
             utilsServiceMock,
-            messageThreadsServiceMock;
+            messageThreadsServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
@@ -15,27 +22,25 @@ define(["angular-mocks", "eloue/services/BookingsService"], function () {
             endpointsMock = {};
             bookingsMock = {
                 get: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 save: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 pay: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 incident: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 accept: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 cancel: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 reject: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 }
             };
 
@@ -53,7 +58,7 @@ define(["angular-mocks", "eloue/services/BookingsService"], function () {
             };
             messageThreadsServiceMock = {
                 getMessageThread: function (productId, userId) {
-
+                    return simpleResourceResponse;
                 }
             };
 

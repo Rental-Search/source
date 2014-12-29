@@ -8,38 +8,39 @@ define(["angular-mocks", "eloue/services/ProductRelatedMessagesService"], functi
             endpointsMock,
             messageThreadsMock,
             usersServiceMock,
-            utilsServiceMock;
+            utilsServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             productRelatedMessagesMock = {
                 get: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 save: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 },
                 update: function () {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 }
             };
             endpointsMock = {
             };
             messageThreadsMock = {
-                save: function(){}
+                save: function(){
+                    return simpleResourceResponse;
+                }
             };
             usersServiceMock = {
                 get: function (userId) {
-                    return {$promise: {then: function () {
-                        return {results: []}
-                    }}}
+                    return simpleResourceResponse;
                 }
             };
             utilsServiceMock = {

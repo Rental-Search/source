@@ -2,7 +2,14 @@ define(["angular-mocks", "eloue/services/AuthService"], function() {
 
     describe("Service: AuthService", function () {
 
-        var AuthService, endpointsMock, authConstantsMock, redirectAfterLoginMock, registrationResourceMock;
+        var AuthService, endpointsMock, authConstantsMock, redirectAfterLoginMock, registrationResourceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
