@@ -1,5 +1,6 @@
 -load humanize product cache
 {% cache 600 'comment_list' %}
+
 .float-comments-wrapper.container
   {% for columns in comment_list|takeby_transposed:"2:10" %}
   ul.row.col-sm-6
