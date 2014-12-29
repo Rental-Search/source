@@ -758,6 +758,7 @@ class PublishCategoryMixin(object):
         context.update(super(PublishCategoryMixin, self).get_context_data(**kwargs))
         return context
 
+
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
@@ -768,20 +769,6 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         ).filter(
             booking__product__sites__id=settings.SITE_ID
         ).order_by('-created_at')
-
-        # FIXME: remove after mass rebuild of all images is done on hosting
-        from eloue.legacy import generate_patron_images, generate_picture_images
-        patron_set = set()
-        for elem in product_list[:PAGINATE_PRODUCTS_BY]:
-            if elem.object:
-                patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture, ['profile'])
-        for comment in comment_list[:PAGINATE_PRODUCTS_BY]:
-            patron_set.add(comment.booking.owner)
-            patron_set.add(comment.booking.borrower)
-        for patron in patron_set:
-            generate_patron_images(patron, ['thumbnail'])
 
         context = {
             'product_list': product_list,
@@ -794,6 +781,7 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         self.location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         return super(HomepageView, self).get(request, *args, **kwargs)
+
 
 class ProductListView(ProductList):
     template_name = 'products/product_list.jade'
@@ -821,21 +809,6 @@ class ProductListView(ProductList):
             'category_list': category_list
         }
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-
-        # FIXME: remove after mass rebuild of all images is done on hosting
-        from eloue.legacy import generate_patron_images, generate_picture_images
-        patron_set = set()
-        if context.get('is_paginated', False):
-            product_list = context['page_obj'].object_list
-        else:
-            product_list = context['product_list']
-        for elem in product_list:
-            if elem.object:
-                patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture, ['profile'])
-        for patron in patron_set:
-            generate_patron_images(patron, ['thumbnail'])
 
         return context
 
@@ -876,21 +849,21 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         owner_comment_list = comment_qs.filter(booking__owner=product.owner)
 
         # FIXME: remove after mass rebuild of all images is done on hosting
-        from itertools import chain
-        from eloue.legacy import generate_patron_images, generate_picture_images
-        patron_set = set()
-        for picture in product.pictures.all():
-            generate_picture_images(picture)
-        for elem in product_list:
-            if elem.object:
-                patron_set.add(elem.object.owner)
-                for picture in elem.object.pictures.all()[:1]:
-                    generate_picture_images(picture, ['thumbnail', 'display'])
-        for comment in chain(product_comment_list, owner_comment_list):
-            patron_set.add(comment.booking.owner)
-            patron_set.add(comment.booking.borrower)
-        for patron in patron_set:
-            generate_patron_images(patron, ['product_page'])
+        # from itertools import chain
+        # from eloue.legacy import generate_patron_images, generate_picture_images
+        # patron_set = set()
+        # for picture in product.pictures.all():
+            # generate_picture_images(picture)
+        # for elem in product_list:
+            # if elem.object:
+                # patron_set.add(elem.object.owner)
+                # for picture in elem.object.pictures.all()[:1]:
+                    # generate_picture_images(picture, ['thumbnail', 'display'])
+        # for comment in chain(product_comment_list, owner_comment_list):
+            # patron_set.add(comment.booking.owner)
+            # patron_set.add(comment.booking.borrower)
+        # for patron in patron_set:
+            # generate_patron_images(patron, ['product_page'])
 
         context = {
             'properties': product.properties.select_related('property'),
