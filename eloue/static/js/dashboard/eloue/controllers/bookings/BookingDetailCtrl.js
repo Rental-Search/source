@@ -93,7 +93,8 @@ define([
                         }
                     });
                 }
-                if ($scope.bookingDetails.with_shipping) {
+                if ($scope.bookingDetails.shipping.enabled) {
+                    console.log($scope.bookingDetails.shipping);
                     $scope.searchShippingPointsInProgres = true;
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
                         //Show shipping choice only if there are existing product shipping points
@@ -185,12 +186,54 @@ define([
                     $scope.processAcceptBookingResponse,
                     function (error) {
                         $scope.handleResponseErrors(error, "booking", "accept");
+/*
+                BookingsLoadService.acceptBooking($stateParams.uuid).$promise.then(function (result) {
+                    if ($scope.bookingDetails.shipping.enabled) {
+                        ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
+                            //Show shipping choice only if there are existing product shipping points
+                            if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
+                                var productShippingPoint = productShippingPointData.results[0];
+                                PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
+                                    if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
+                                        var patronShippingPoint = patronShippingPointData.results[0];
+                                        // TODO: Price is hardcoded for now, will be taken from some third-party pricing service
+                                        var shipping = {
+                                            price: "10.0",
+                                            booking: Endpoints.api_url + "bookings/" + $scope.bookingDetails.uuid + "/",
+                                            departure_point: Endpoints.api_url + "productshippingpoints/" + productShippingPoint.id + "/",
+                                            arrival_point: Endpoints.api_url + "patronshippingpoints/" + patronShippingPoint.id + "/"
+                                        };
+                                        ShippingsService.saveShipping(shipping).$promise.then(function (result) {
+                                            $scope.showNotification(result.detail);
+                                            $window.location.reload();
+                                        }, function (error) {
+                                            $scope.handleResponseErrors(error);
+                                        });
+                                    } else {
+                                        $scope.showNotification(patronShippingPointData.detail);
+                                        $window.location.reload();
+                                    }
+                                }, function (error) {
+                                    $scope.handleResponseErrors(error);
+                                });
+                            } else {
+                                $scope.showNotification(productShippingPointData.detail);
+                                $window.location.reload();
+                            }
+                        }, function (error) {
+                            $scope.handleResponseErrors(error);
+                        });
+                    } else {
+                        $scope.showNotification(result.detail);
+                        $window.location.reload();
+>>>>>>> #450 added hardcoded shipping price
+*/
                     }
                 );
             };
 
             $scope.processAcceptBookingResponse = function () {
-                if ($scope.bookingDetails.with_shipping) {
+                if ($scope.bookingDetails.shipping.enabled) {
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(
                         $scope.processProductShippingPointsResponse,
                         function (error) {
@@ -198,6 +241,7 @@ define([
                         }
                     );
                 } else {
+                    console.log('oooops');
                     $scope.showNotification("booking", "accept", true);
                     $window.location.reload();
                 }
