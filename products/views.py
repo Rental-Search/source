@@ -766,7 +766,7 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         comment_list = Comment.objects.select_related(
             'booking__product__address'
         ).filter(
-            booking__sites__id=settings.SITE_ID
+            booking__product__sites__id=settings.SITE_ID
         ).order_by('-created_at')
 
         # FIXME: remove after mass rebuild of all images is done on hosting

@@ -1,9 +1,9 @@
 extends ../base
--load compressed staticfiles
+-load compressed
 
 block append styles
-  {% compressed_css "bootstrap" %}
-  {% compressed_css "security_styles" %}
+    {% compressed_css "bootstrap" %}
+    {% compressed_css "security_styles" %}
 
 block append content-body
   .container-flex
@@ -12,7 +12,7 @@ block append content-body
     nav.bd-b
       include _breadcrumbs
     article.indent-v-lg
-      section: include _text_content
+      section: include _text_content.html
 
     footer
       section.row-fluid.footer-links.framing

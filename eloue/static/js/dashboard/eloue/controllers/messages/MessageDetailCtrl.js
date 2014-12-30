@@ -106,6 +106,8 @@ define([
                             $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                             $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
+                    }, function (reason) {
+                        console.log(reason);
                     });
                 }
                 // Get users' roles
