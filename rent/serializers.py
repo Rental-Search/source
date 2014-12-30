@@ -5,7 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 
-from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
+from rest_framework.serializers import (
+        HyperlinkedRelatedField, RelatedField,
+        BooleanField, DecimalField, get_component)
 from rest_framework import fields
 from accounts.serializers import NestedUserSerializer
 from products.serializers import NestedProductSerializer
@@ -14,7 +16,7 @@ from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api import serializers
 from shipping.models import ShippingPoint
-from shipping import helpers
+#from shipping import helpers
 from rent.utils import timesince
 
 
@@ -48,11 +50,11 @@ class NestedSinisterSerializer(serializers.NestedModelSerializerMixin, serialize
         fields = ('uuid', 'description')
 
 
-class ShippingPriceSerializer(serializers.SimpleSerializer):
-    enabled = SerializerMethodField('is_shipping_enabled')
-    price = SerializerMethodField('get_shipping_price')
+class NestedShippingPriceSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
+    enabled = BooleanField(source='uuid', default=False)
+    price = DecimalField(source='uuid', max_digits=10, decimal_places=2)
 
-    def is_shipping_enabled(self, obj):
+    def _is_shipping_enabled(self, obj):
         try:
             obj.product.departure_point
             obj.arrival_point
@@ -60,14 +62,21 @@ class ShippingPriceSerializer(serializers.SimpleSerializer):
             return False
         return True
 
-    def get_shipping_price(self, obj):
-        if self.is_shipping_enabled(obj):
+    def transform_enabled(self, obj, value):
+        return self._is_shipping_enabled(obj)
+
+    def transform_price(self, obj, value):
+        if self._is_shipping_enabled(obj):
             # TODO hardcoded instead getting réal price
             return Decimal('10.0')
 #            return helpers.get_shipping_price(
 #                obj.product.departure_point.site_id,
 #                obj.arrival_point.site_id).get('price')
         return Decimal('0')
+
+    class Meta:
+        model = models.Booking
+        fields = ('enabled', 'price')
 
 
 class BookingProductField(NestedProductSerializer):
@@ -91,15 +100,12 @@ class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
     owner = NestedUserSerializer(read_only=True)
     borrower = NestedUserSerializer()
-    shipping = SerializerMethodField('get_shipping')
+    shipping = NestedShippingPriceSerializer(source='*', required=False)
     sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
     duration = SerializerMethodField('get_duration')
 
     def get_duration(self, obj):
         return timesince(obj.started_at, obj.ended_at)
-
-    def get_shipping(self, obj):
-        return ShippingPriceSerializer(obj).data
 
     def restore_object(self, attrs, instance=None):
         obj = super(BookingSerializer, self).restore_object(attrs, instance=instance)
