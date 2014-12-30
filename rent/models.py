@@ -310,6 +310,15 @@ class Booking(models.Model):
         """
         return self.insurance_fee * self.product.subtype.insurance_taxes
     
+    @property
+    def get_total_amount(self):
+        """Return total price including shipping price"""
+        from shipping.models import Shipping
+        try:
+            return self.total_amount + self.shipping.price
+        except Shipping.DoesNotExist:
+            return self.total_amount
+
     # FSM conditions
     
     def not_need_ipn(self):
@@ -322,7 +331,7 @@ class Booking(models.Model):
     
     @transition(field=state, source=BOOKING_STATE.AUTHORIZING, target=BOOKING_STATE.AUTHORIZED, conditions=[not_need_ipn])
     def preapproval(self, *args, **kwargs):
-        self.payment.preapproval(self.pk, self.total_amount, self.currency, *args, **kwargs) # 'cvv'
+        self.payment.preapproval(self.pk, self.get_total_amount, self.currency, *args, **kwargs) # 'cvv'
         self.payment.save()
         self.send_ask_email()
     
@@ -336,7 +345,7 @@ class Booking(models.Model):
     
     @transition(field=state, source=BOOKING_STATE.AUTHORIZED, target=BOOKING_STATE.PENDING)
     def accept(self):
-        self.payment.pay(self.pk, self.total_amount, self.currency)
+        self.payment.pay(self.pk, self.get_total_amount, self.currency)
         self.payment.save()
         self.send_acceptation_email()
         self.send_borrower_receipt()
