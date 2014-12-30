@@ -58,7 +58,9 @@ define([
             if (!$scope.currentUserPromise) {
                 $scope.currentUserPromise = UsersService.getMe();
             }
-            $scope.currentUserPromise.then($scope.applyUserDetails);
+            $scope.currentUserPromise.then(function (currentUser) {
+                $scope.applyUserDetails(currentUser);
+            });
 
             $scope.applyUserDetails = function (currentUser) {
                 // Save current user in the scope

@@ -29,7 +29,9 @@ define([
                 });
             });
 
-            CategoriesService.getRootCategories().then($scope.applyCategories);
+            CategoriesService.getRootCategories().then(function (categories) {
+                $scope.applyCategories(categories);
+            });
 
             $scope.applyCategories = function (categories) {
                 $scope.categories = categories;
