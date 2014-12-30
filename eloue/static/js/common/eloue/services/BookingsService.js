@@ -166,6 +166,9 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                         }
 
                         deferred.resolve(booking);
+                    },
+                    function (reason) {
+                        deferred.reject(reason);
                     }
                 );
 
