@@ -27,7 +27,7 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
 
                 },
                 calculatePeriodBetweenDates: function (startDateString, endDateString) {
-
+                    return {};
                 },
                 formatDate: function (date, format) {
 
@@ -91,6 +91,8 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
             scope.showNotification = function(object, action, bool){};
+            scope.markListItemAsSelected = function() {};
+            scope.initCustomScrollbars = function() {};
             window = {
                 location: {
                     href: ""
@@ -127,23 +129,42 @@ define(["angular-mocks", "eloue/controllers/messages/MessageDetailCtrl"], functi
         });
 
         it("MessageDetailCtrl:applyUserAndMessageThread", function () {
-            scope.applyUserAndMessageThread();
-        });
-
-        it("MessageDetailCtrl:requestBooking", function () {
-            scope.requestBooking();
-        });
-
-        it("MessageDetailCtrl:postNewMessage", function () {
-            scope.postNewMessage();
+            var results = {
+                messageThread: {
+                    last_message: {
+                        read_at: ""
+                    }
+                },
+                currentUser: {
+                    id: 1
+                }
+            };
+            scope.applyUserAndMessageThread(results);
         });
 
         it("MessageDetailCtrl:updateNewBookingInfo", function () {
+            scope.newBooking = {
+                start_date: " ",
+                start_time: {value: ""},
+                end_date: " ",
+                end_time: {value: ""}
+            };
+            scope.messageThread = {
+                product: {
+                    id: 2
+                }
+        };
             scope.updateNewBookingInfo();
+            expect(productsServiceMock.isAvailable).toHaveBeenCalled();
         });
 
         it("MessageDetailCtrl:parseProductAvailabilityResponse", function () {
-            scope.parseProductAvailabilityResponse();
+            scope.newBooking = {};
+            scope.currentUser = {id: 1};
+            scope.messageThread = {product: { id: 2}};
+            var data = {total_price: 2}, fromDateTime = new Date(), toDateTime = new Date();
+            scope.parseProductAvailabilityResponse(data, fromDateTime, toDateTime);
+            expect(scope.newBooking.total_amount).toEqual(data.total_price);
         });
     });
 });

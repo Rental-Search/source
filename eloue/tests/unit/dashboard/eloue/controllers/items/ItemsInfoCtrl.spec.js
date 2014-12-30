@@ -101,6 +101,8 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
             scope.showNotification = function(object, action, bool){};
+            scope.markListItemAsSelected = function(){};
+            scope.initCustomScrollbars = function(){};
             stateParams = {
                 id: 1
             };
@@ -159,7 +161,13 @@ define(["angular-mocks", "eloue/controllers/items/ItemsInfoCtrl"], function () {
         });
 
         it("ItemsInfoCtrl:applyProductDetails", function () {
-            scope.applyProductDetails();
+            var product = {
+                category: {
+                    id: 1
+                }
+            };
+            scope.applyProductDetails(product);
+            expect(categoriesServiceMock.getParentCategory).toHaveBeenCalled();
         });
     });
 });

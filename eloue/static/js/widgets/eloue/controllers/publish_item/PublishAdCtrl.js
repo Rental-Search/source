@@ -305,13 +305,13 @@ define([
                 } else {
                     CategoriesService.getAncestors(UtilsService.getIdFromUrl($scope.product.category)).then(
                         function (ancestors) {
-                            $scope.trackPublishSimpleAdEvent(ancestors, productCategory);
+                            $scope.trackPublishSimpleAdEvent(ancestors, productCategory, product);
                         }
                     );
                 }
             };
 
-            $scope.trackPublishSimpleAdEvent = function (ancestors, productCategory) {
+            $scope.trackPublishSimpleAdEvent = function (ancestors, productCategory, product) {
                 var categoriesStr = "";
                 angular.forEach(ancestors, function (value) {
                     categoriesStr = categoriesStr + value.name + " - ";

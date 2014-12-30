@@ -80,7 +80,13 @@ define(["angular-mocks", "eloue/controllers/DashboardRootCtrl"], function() {
         });
 
         it("DashboardRootCtrl:applyUserStats", function () {
-            scope.applyUserStats();
+            var stats = {
+                unread_message_threads_count: 2,
+                booking_requests_count: 3
+            };
+            scope.applyUserStats(stats);
+            expect(scope.unreadMessageThreadsCount).toEqual(stats.unread_message_threads_count);
+            expect(scope.newBookingRequestsCount).toEqual(stats.booking_requests_count);
         });
     });
 });

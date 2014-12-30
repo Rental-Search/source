@@ -33,8 +33,13 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
             };
             unitMock = {DAY: {id: 1}};
             currencyMock = {};
+            utilsServiceMock = {
+                getIdFromUrl: function (url) {
+                    return url;
+                }
+            };
             productsServiceMock = {
-                saveProduct: function(product) {
+                saveProduct: function (product) {
                     return simpleServiceResponse;
                 }
             };
@@ -42,7 +47,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
                 getMe: function () {
                     return simpleServiceResponse;
                 },
-                updateUser: function(user) {
+                updateUser: function (user) {
                     return simpleServiceResponse;
                 }
             };
@@ -55,7 +60,8 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
                 getUserToken: function () {
                     return "uToken";
                 },
-                saveAttemptUrl: function (url) {}
+                saveAttemptUrl: function (url) {
+                }
             };
             categoriesServiceMock = {
                 getChildCategories: function (rootCategory) {
@@ -75,12 +81,13 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
                 }
             };
             pricesServiceMock = {
-                savePrice: function(price) {
+                savePrice: function (price) {
                     return simpleServiceResponse;
                 }
             };
             toDashboardRedirectServiceMock = {
-                showPopupAndRedirect: function(url) {}
+                showPopupAndRedirect: function (url) {
+                }
             };
             serverValidationServiceMock = {
                 removeErrors: function () {
@@ -131,7 +138,6 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
             };
             window = {location: {href: "location/sdsdfdfsdfsd/sdfsdfsd/sddfsdf/fdff-123"}};
             location = {};
-            utilsServiceMock = {};
             spyOn(productsServiceMock, "saveProduct").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
             spyOn(usersServiceMock, "updateUser").and.callThrough();
@@ -150,6 +156,7 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
             spyOn(scriptTagServiceMock, "trackPageView").and.callThrough();
             spyOn(scriptTagServiceMock, "loadAdWordsTags").and.callThrough();
             spyOn(scriptTagServiceMock, "loadPdltrackingScript").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
             spyOn(toDashboardRedirectServiceMock, "showPopupAndRedirect").and.callThrough();
             PublishAdCtrl = $controller("PublishAdCtrl", {
                 $scope: scope, $window: window, $location: location, Endpoints: endpointsMock,
@@ -225,23 +232,47 @@ define(["angular-mocks", "datejs", "eloue/controllers/publish_item/PublishAdCtrl
         });
 
         it("PublishAdCtrl:applyUserAddress", function () {
-            scope.applyUserAddress();
+            var result = {id: 1};
+            scope.applyUserAddress(result);
+            expect(scope.currentUser.default_address).toEqual(result);
         });
 
         it("PublishAdCtrl:trackPublishAdEvent", function () {
-            scope.trackPublishAdEvent();
+            scope.product = {
+                category: {
+                    id: 1
+                }
+            };
+            var product, productCategory;
+            scope.trackPublishAdEvent(product, productCategory);
+            expect(categoriesServiceMock.getAncestors).toHaveBeenCalled();
         });
 
         it("PublishAdCtrl:trackPublishSimpleAdEvent", function () {
-            scope.trackPublishSimpleAdEvent();
-        });
-
-        it("PublishAdCtrl:finishProductSaveAndRedirect", function () {
-            scope.finishProductSaveAndRedirect();
+            var ancestors = [], productCategory = {}, product = {id: 1};
+            scope.finishProductSaveAndRedirect = function () {
+            };
+            scope.trackPublishSimpleAdEvent(ancestors, productCategory, product);
+            expect(scriptTagServiceMock.trackEvent).toHaveBeenCalled();
         });
 
         it("PublishAdCtrl:applySuggestedCategories", function () {
-            scope.applySuggestedCategories();
+            var categories = [
+                [
+                    {
+                        id: 0
+                    },
+                    {
+                        id: 1
+                    },
+                    {
+                        id: 2
+                    }
+                ]
+            ];
+            scope.applySuggestedCategories(categories);
+            expect(scope.nodeCategories.length).toEqual(1);
+            expect(scope.leafCategories.length).toEqual(1);
         });
     });
 });

@@ -142,15 +142,42 @@ define(["angular-mocks", "eloue/controllers/items/ItemsShippingCtrl"], function 
         });
 
         it("ItemsShippingCtrl:applyProductDetails", function () {
-            scope.applyProductDetails();
+            scope.showPointList = true;
+            var product = {
+                address: {
+                    city: "Paris",
+                    street: "Champs"
+                }
+            };
+            scope.applyProductDetails(product);
+            expect(scope.addressQuery).toEqual(product.address.street + ", " + product.address.city);
         });
 
-        it("ItemsShippingCtrl:applyProductDetails", function () {
-            scope.applyProductDetails();
+        it("ItemsShippingCtrl:applyProductShippingPoints", function () {
+            var data = {
+                results: [
+                    {
+                        opening_dates: [
+                            {
+                                day_of_week: "",
+                                morning_opening_time: "",
+                                morning_closing_time: "",
+                                afternoon_opening_time: "",
+                                afternoon_closing_time: ""
+                            }
+                        ]
+                    }
+                ]
+            };
+            scope.applyProductShippingPoints(data);
+            expect(scope.productShippingPoint).toEqual(data.results[0]);
+            expect(scope.showPointDetails).toBeTruthy();
         });
 
         it("ItemsShippingCtrl:parseShippingPointResult", function () {
-            scope.parseShippingPointResult();
+            var result = {};
+            scope.parseShippingPointResult(result);
+            expect(scope.productShippingPoint).toEqual(result);
         });
     });
 });

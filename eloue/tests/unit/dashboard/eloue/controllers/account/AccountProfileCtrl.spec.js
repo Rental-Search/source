@@ -86,6 +86,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountProfileCtrl"], functi
             scope.markListItemAsSelected = function (prefix, id) {
             };
             scope.showNotification = function(object, action, bool){};
+            scope.initCustomScrollbars = function(){};
             spyOn(usersServiceMock, "sendForm").and.callThrough();
             spyOn(usersServiceMock, "updateUser").and.callThrough();
             spyOn(usersServiceMock, "getMe").and.callThrough();
@@ -130,11 +131,27 @@ define(["angular-mocks", "eloue/controllers/account/AccountProfileCtrl"], functi
         });
 
         it("AccountProfileCtrl:applyUserDetails", function () {
-            scope.applyUserDetails();
+            var currentUser = {
+                id: 1,
+                default_number: {
+                    number: ""
+                },
+                default_address: {
+                    id: 2
+                },
+                drivers_license_date: "2014-07-01"
+            };
+            scope.applyUserDetails(currentUser);
+            expect(scope.noAddress).toBeFalsy();
+            expect(addressesServiceMock.getAddressesByPatron).toHaveBeenCalled();
         });
 
         it("AccountProfileCtrl:processAddressSaveResponse", function () {
-            scope.processAddressSaveResponse();
+            var result = {
+                id: 1
+            };
+            scope.processAddressSaveResponse(result);
+            expect(scope.currentUser.default_address).toEqual(result);
         });
     });
 });

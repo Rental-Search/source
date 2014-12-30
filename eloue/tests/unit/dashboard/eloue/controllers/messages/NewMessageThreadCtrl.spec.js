@@ -42,6 +42,9 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             utilsServiceMock = {
                 getIdFromUrl: function (url) {
 
+                },
+                calculatePeriodBetweenDates: function(fromDate, toDate) {
+                    return {};
                 }
             };
             usersServiceMock = {
@@ -68,7 +71,11 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
                 }
             };
             scope.showNotification = function(object, action, bool){};
-            state = {};
+            state = {
+                transitionTo: function() {
+
+                }
+            };
             stateParams = {
                 id: 1
             };
@@ -78,6 +85,7 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
             spyOn(productRelatedMessagesServiceMock, "postMessage").and.callThrough();
             spyOn(productsServiceMock, "getProduct").and.callThrough();
             spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(utilsServiceMock, "calculatePeriodBetweenDates").and.callThrough();
 
             NewMessageThreadCtrl = $controller('NewMessageThreadCtrl', {
                 $scope: scope, $state: state,
@@ -100,7 +108,10 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
         });
 
         it("NewMessageThreadCtrl:redirectAfterMessagePost", function () {
-            scope.redirectAfterMessagePost();
+            var result = {
+                thread: {}
+            };
+            scope.redirectAfterMessagePost(result);
         });
     });
 });

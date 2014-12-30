@@ -333,7 +333,10 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
         });
 
         it("BookingCtrl:parseProductAvailabilityResponse", function () {
-            scope.parseProductAvailabilityResponse();
+            var result = {
+                total_price: "10.0"
+            };
+            scope.parseProductAvailabilityResponse(result);
         });
 
         it("BookingCtrl:updateThreadWithNewMessage", function () {
@@ -345,7 +348,10 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
         });
 
         it("BookingCtrl:applyDefaultAddress", function () {
-            scope.applyDefaultAddress();
+            var result = {
+                id: 1
+            };
+            scope.applyDefaultAddress(result);
         });
 
         it("BookingCtrl:saveCreditCard", function () {
@@ -353,11 +359,9 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
         });
 
         it("BookingCtrl:processBookingResponse", function () {
-            scope.processBookingResponse();
-        });
-
-        it("BookingCtrl:processBookingPaymentResponse", function () {
-            scope.processBookingPaymentResponse();
+            scope.creditCard = {};
+            var booking = {};
+            scope.processBookingResponse(booking);
         });
 
         it("BookingCtrl:applyProductCategoryAncestors", function () {
@@ -365,15 +369,30 @@ define(["angular-mocks", "datejs", "eloue/controllers/product_details/BookingCtr
         });
 
         it("BookingCtrl:applyPremiumRateNumberResponse", function () {
-            scope.applyPremiumRateNumberResponse();
+            var result = {
+                error: "0"
+            };
+            scope.applyPremiumRateNumberResponse(result);
         });
 
         it("BookingCtrl:applyUserCreditCard", function () {
-            scope.applyUserCreditCard();
+            var currentUser = {
+                creditcard: {
+                    expires: "0212"
+                }
+            };
+            scope.applyUserCreditCard(currentUser);
         });
 
         it("BookingCtrl:applyProductShippingPoint", function () {
-            scope.applyProductShippingPoint();
+            var data = {
+                results: [
+                    {
+                        id: 1
+                    }
+                ]
+            };
+            scope.applyProductShippingPoint(data);
         });
 
         it("BookingCtrl:applyArrivalShippingPoint", function () {

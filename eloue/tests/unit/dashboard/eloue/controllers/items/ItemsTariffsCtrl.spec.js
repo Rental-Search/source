@@ -70,6 +70,8 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
             scope.showNotification = function(object, action, bool){};
+            scope.markListItemAsSelected = function(){};
+            scope.initCustomScrollbars = function(){};
             stateParams = {
                 id: 1
             };
@@ -162,7 +164,18 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTariffsCtrl"], function (
         });
 
         it("ItemsTariffsCtrl:applyProductDetails", function () {
-            scope.applyProductDetails();
+            scope.prices = {
+                hour: {}
+            };
+            var product = {
+                prices: [{
+                    unit: 0,
+                    amount: 10,
+                    id: 1
+                }]
+            };
+            scope.applyProductDetails(product);
+            expect(scope.prices.hour.amount).toEqual(product.prices[0].amount);
         });
     });
 });

@@ -114,6 +114,8 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
             scope.showNotification = function(object, action, bool){};
+            scope.markListItemAsSelected = function(){};
+            scope.initCustomScrollbars = function(){};
             stateParams = {};
             spyOn(bookingsServiceMock, "getBookingDetails").and.callThrough();
             spyOn(bookingsServiceMock, "downloadContract").and.callThrough();
@@ -225,19 +227,63 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
         });
 
         it("BookingDetailCtrl:applyBookingDetails", function () {
-            scope.applyBookingDetails();
+            scope.currentUserUrl = "fsdfsd";
+            var bookingDetails = {
+                owner: {
+                    id: 1
+                },
+                borrower: {
+                    id: 2
+                }
+            };
+            scope.applyBookingDetails(bookingDetails);
+            expect(scope.bookingDetails).toEqual(bookingDetails);
         });
 
         it("BookingDetailCtrl:processAcceptBookingResponse", function () {
+            scope.bookingDetails = {
+                with_shipping: true,
+                product: {
+                    id: 1
+                }
+            };
             scope.processAcceptBookingResponse();
+            expect(productShippingPointsServiceMock.getByProduct).toHaveBeenCalled();
         });
 
         it("BookingDetailCtrl:processProductShippingPointsResponse", function () {
-            scope.processProductShippingPointsResponse();
+            scope.bookingDetails = {
+                borrower: {
+                    id: 0
+                },
+                owner: {
+                    id: 1
+                }
+            };
+            var productShippingPointData = {
+                results: [
+                    {
+                        id: 2
+                    }
+                ]
+            };
+            scope.processProductShippingPointsResponse(productShippingPointData);
+            expect(patronShippingPointsServiceMock.getByPatronAndBooking).toHaveBeenCalled();
         });
 
         it("BookingDetailCtrl:processPatronShippingPointsResponse", function () {
-            scope.processPatronShippingPointsResponse();
+            scope.bookingDetails = {
+                uuid: 1
+            };
+            var patronShippingPointData = {
+                results: [
+                    {
+                        id: 2
+                    }
+                ]
+            }, productShippingPoint = { id : 1};
+            scope.processPatronShippingPointsResponse(patronShippingPointData, productShippingPoint);
+            expect(shippingsServiceMock.saveShipping).toHaveBeenCalled();
         });
     });
 });

@@ -37,6 +37,8 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.markListItemAsSelected = function(){};
+            scope.initCustomScrollbars = function(){};
             stateParams = {
                 id: 1
             };
@@ -80,7 +82,17 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
         });
 
         it("ItemsTermsCtrl:applyProductDetails", function () {
-            scope.applyProductDetails();
+            var product = {
+                owner: {
+                    is_professional: true
+                },
+                category: {
+                    id: 2
+                }
+            };
+            scope.applyProductDetails(product);
+            expect(scope.isProfessional).toBeTruthy();
+            expect(categoriesServiceMock.getParentCategory).toHaveBeenCalled();
         });
     });
 });

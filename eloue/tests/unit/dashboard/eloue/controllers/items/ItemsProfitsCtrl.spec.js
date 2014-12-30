@@ -29,6 +29,8 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.markListItemAsSelected = function(){};
+            scope.initCustomScrollbars = function(){};
             stateParams = {
                 id: 1
             };
