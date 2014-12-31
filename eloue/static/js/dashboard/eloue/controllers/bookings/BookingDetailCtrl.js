@@ -94,6 +94,7 @@ define([
                     });
                 }
                 if ($scope.bookingDetails.shipping.enabled) {
+                    $scope.totalBookingPrice = Number($scope.bookingDetails.total_amount) + Number($scope.bookingDetails.shipping.price);
                     console.log($scope.bookingDetails.shipping);
                     $scope.searchShippingPointsInProgres = true;
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
