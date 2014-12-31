@@ -312,11 +312,12 @@ class Booking(models.Model):
     
     def get_total_amount(self):
         """Return total price including shipping price"""
-        if hasattr(self, 'shipping'):
-            # TODO store shipping price into PatronShippingPoint
-            return self.total_amount + D('10.0')
-        else:
-            return self.total_amount
+        total_amount = self.total_amount
+        if hasattr(self, 'arrival_point'):
+            # TODO get shipping price from `arrival_point`;
+            # see PatronShippingPoint in shipping/models.py
+            total_amount += D('10.0')
+        return total_amount
 
     # FSM conditions
     
