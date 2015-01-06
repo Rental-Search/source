@@ -872,3 +872,10 @@ FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())
 PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
+
+# GEOS from buildpack      
+try:       
+    GEOS_LIBRARY_PATH = os.path.join(env('GEOS_LIBRARY_PATH'), 'libgeos_c.so')     
+    GDAL_LIBRARY_PATH = os.path.join(env('GDAL_LIBRARY_PATH'), 'libgdal.so')       
+except:        
+    pass
