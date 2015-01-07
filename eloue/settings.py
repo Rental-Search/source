@@ -861,12 +861,6 @@ SLIMPAY_SITE_ID = env('SLIMPAY_SITE_ID', '')
 
 VIVA_SITE_ID = env('VIVA_SITE_ID', '45364001')
 
-# GEOS from buildpack
-try:
-    GEOS_LIBRARY_PATH = os.path.join(env('GEOS_LIBRARY_PATH'), 'libgeos_c.so')
-    GDAL_LIBRARY_PATH = os.path.join(env('GDAL_LIBRARY_PATH'), 'libgdal.so')
-except:
-    pass
 
 NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
     35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
