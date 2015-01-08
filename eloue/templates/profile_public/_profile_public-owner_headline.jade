@@ -1,6 +1,6 @@
 .container.text-center.indent-t-lg
   .round-img: img(style="{% if patron.profil.url %}background-image: url({{ patron.profil.url }}){% endif %}").bg-image
-  h3.indent-b-xs {{ patron.username }}{% if is_pro %}&nbsp;Pro{% endif %}
+  h3.indent-b-xs {% if is_pro %}{{ patron.company_name }}{% else %}{{ patron.username }}{% endif %}
   
   if not is_pro
     {% with patron.average_note as rate %}

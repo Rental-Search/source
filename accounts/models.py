@@ -543,10 +543,9 @@ class Address(models.Model):
     address1 = models.CharField(_(u'Adresse'), max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
     zipcode = models.CharField(max_length=9)
-    position = models.PointField(null=True, blank=True)
     city = models.CharField(_(u'Ville'), max_length=255)
     country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES)
-
+    position = models.PointField(null=True, blank=True)
     objects = models.GeoManager()
 
     COUNTRIES = COUNTRY_CHOICES
@@ -622,9 +621,9 @@ class ProAgency(models.Model):
     address1 = models.CharField(_(u'Adresse'), max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
     zipcode = models.CharField(max_length=9)
-    position = models.PointField(null=True, blank=True)
     city = models.CharField(_(u'Ville'), max_length=255)
-    country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES)
+    country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES, default='FR')
+    position = models.PointField(null=True, blank=True)
 
     
     def __unicode__(self):
