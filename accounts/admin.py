@@ -122,7 +122,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     )
     ordering = ['-subscription_started']
     list_filter = ('payment_type', 'propackage',)
-    search_fields = ('company_name', 'patron__username',)
+    search_fields = ('patron__username', 'patron__email',)
 
     def company_name(self, obj):
         return obj.patron.company_name
