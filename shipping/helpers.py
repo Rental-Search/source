@@ -1,10 +1,31 @@
 # coding=utf-8
 import datetime
 from decimal import Decimal
+
+from django.conf import settings
 from django.contrib.gis.geos.point import Point
+from django.core.exceptions import ImproperlyConfigured
+
 from eloue.geocoder import GoogleGeocoder
-from shipping.choises import SHIPPING_POINT_TYPE
 from shipping.navette import Navette, FileTransfer
+
+
+class EloueNavette(Navette):
+    try:
+        url = settings.NAVETTE_ENDPOINT
+    except AttributeError:
+        raise ImproperlyConfigured("NAVETTE_ENDPOINT not set.")
+
+    wsdl_proxy = settings.WSDL_PROXY
+
+
+class EloueFileTransfer(FileTransfer):
+    try:
+        url = settings.NAVETTE_FILE_TRANSFER_ENDPOINT
+    except AttributeError:
+        raise ImproperlyConfigured("NAVETTE_FILE_TRANSFER_ENDPOINT not set.")
+
+    wsdl_proxy = settings.WSDL_PROXY
 
 
 class FakeOpeningDate(object):
@@ -32,7 +53,7 @@ class FakeShippingPoint(object):
         self.Longitude = 22.22
         self.IsOpen = True
         self.OpeningDates = [
-            FakeOpeningDate()
+            (FakeOpeningDate(), )
         ]
 
 
@@ -92,6 +113,7 @@ def opening_date_to_dict(opening_date):
             result[dict_key] = getattr(opening_date, field_name)
     return result
 
+
 def get_position(address):
     """Identify geo position by address through Google service"""
     return GoogleGeocoder().geocode(address)[1]
@@ -103,7 +125,7 @@ def get_shipping_points(lat, lng, point_type):
         1: 'Departure',
         2: 'Arrival',
     }
-    shipping_points = Navette().get_pudo(Point((lat, lng)), point_type_map[point_type])
+    shipping_points = EloueNavette().get_pudo(Point((lat, lng)), point_type_map[point_type])
     #return [shipping_point_to_dict(FakeShippingPoint(identifier)) for identifier in xrange(6)]
     return [shipping_point_to_dict(shipping_point) for shipping_point in shipping_points]
 
@@ -117,12 +139,12 @@ def get_shipping_point(site_id, lat, lng, point_type):
 
 
 def get_shipping_price(departure_point_id, arrival_point_id):
-    price = Navette().get_price_from_partner(departure_point_id, arrival_point_id)
+    price = EloueNavette().get_price_from_partner(departure_point_id, arrival_point_id)
     return {'price': Decimal(price.Amount).quantize(Decimal('0.00')), 'token': price.Token}
 
 
 def create_shipping(token, order_params):
-    shipping_params = Navette().create_from_partner(token, order_params)
+    shipping_params = EloueNavette().create_from_partner(token, order_params)
     return {
         'order_number': shipping_params.OrderNumber,
         'shuttle_code': shipping_params.NavetteCode,
@@ -131,4 +153,4 @@ def create_shipping(token, order_params):
 
 
 def get_shipping_document(filename):
-    return FileTransfer().download_etiquette(filename)
+    return EloueFileTransfer().download_etiquette(filename)

@@ -99,11 +99,15 @@ class ShippingSerializer(serializers.ModelSerializer):
     def preprocess_name(self, name):
         return self.regexp.sub(' ', name).strip()
 
-    def _fill_order_detail(self, sender, receiver, send_point, receive_point):
+    def _fill_order_detail(self, sender, receiver, borrower, send_point, receive_point):
         sender_address = sender.default_address or first_or_empty(sender.addresses.all())
         sender_phone = sender.default_number or first_or_empty(sender.phones.all())
+
         receiver_address = receiver.default_address or first_or_empty(receiver.addresses.all())
         receiver_phone = receiver.default_number or first_or_empty(receiver.phones.all())
+
+        borrower_address = borrower.default_address or first_or_empty(borrower.addresses.all())
+        borrower_phone = borrower.default_number or first_or_empty(borrower.phones.all())
 
         return {
             'DeliveryContactFirstName': self.preprocess_name(sender.first_name),
@@ -130,18 +134,18 @@ class ShippingSerializer(serializers.ModelSerializer):
             'DropOffSiteCountryCode': receiver_address.country if receiver_address else '',
             'DropOffSiteName': receive_point.pudo_id,
             'DropOffSiteZipCode': receiver_address.zipcode if receiver_address else '',
-            'OrderContactFirstName': 'TEST',
-            'OrderContactLastName': 'Test',
-            'OrderContactMail': 'test@test.com',
-            'OrderOrderContactMobil': '0648484848',
+            'OrderContactFirstName': self.preprocess_name(borrower.first_name),
+            'OrderContactLastName': self.preprocess_name(borrower.last_name),
+            'OrderContactMail': borrower.email.replace('-', ''),
+            'OrderOrderContactMobil': borrower_phone.number if borrower_phone else '',
             'OrderContactCivility': 1,
-            'OrderSiteAdress1': 'test',
-            'OrderSiteAdress2': 'test',
-            'OrderSiteCity': 'test',
-            'OrderSiteCountry': 'france',
-            'OrderSiteZipCode': '75011',
+            'OrderSiteAdress1': borrower_address.address1 if borrower_address else '',
+            'OrderSiteAdress2': borrower_address.address2 if borrower_address else '',
+            'OrderSiteCity': borrower_address.city if borrower_address else '',
+            'OrderSiteCountry': getattr(COUNTRY_CHOICES,
+                         borrower_address.country) if borrower_address else '',
+            'OrderSiteZipCode': borrower_address.zipcode if borrower_address else '',
             'OrderDate': datetime.datetime.now(),
-            'OrderId': 'B400003a-abcd',
             'DeliverySiteId': send_point.site_id,
             'DropOffSiteId': receive_point.site_id,
         }
@@ -160,7 +164,9 @@ class ShippingSerializer(serializers.ModelSerializer):
 
             order_details = self._fill_order_detail(
                 instance.booking.owner, instance.booking.borrower,
-                instance.booking.product.departure_point, instance.booking.arrival_point)
+                instance.booking.borrower,
+                instance.booking.product.departure_point, 
+                instance.booking.arrival_point)
             shipping_params = helpers.create_shipping(token, order_details)
 
             instance.order_number = shipping_params['order_number']
@@ -169,7 +175,9 @@ class ShippingSerializer(serializers.ModelSerializer):
 
             order_details = self._fill_order_detail(
                 instance.booking.borrower, instance.booking.owner,
-                instance.booking.arrival_point, instance.booking.product.departure_point)
+                instance.booking.borrower,
+                instance.booking.arrival_point, 
+                instance.booking.product.departure_point)
             shipping_params = helpers.create_shipping(token, order_details)
 
             instance.order_number2 = shipping_params['order_number']
