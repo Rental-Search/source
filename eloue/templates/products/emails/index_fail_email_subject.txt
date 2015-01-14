@@ -1,1 +1,1 @@
-No daily price for product : {{ obj.id }}
+No daily price for product : {{ product.id }}

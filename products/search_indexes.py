@@ -1,5 +1,4 @@
 #-*- coding: utf-8 -*-
-from datetime import timedelta
 
 from django.core.mail import mail_admins
 from django.template.loader import render_to_string
@@ -11,8 +10,6 @@ from products.models import Alert, Product, CarProduct, RealEstateProduct
 from products.choices import UNIT
 
 __all__ = ['ProductIndex', 'AlertIndex']
-
-ONE_DAY_DELTA = timedelta(days=1)
 
 
 def cached_category(category_id, category):
@@ -97,7 +94,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
                 return price.day_amount
             else:
                 # there's no daily prices
-                context = {'obj': obj, }
+                context = {'product': obj, }
                 subject = render_to_string(
                         "products/emails/index_fail_email_subject.txt", context)
                 text_message = render_to_string(
