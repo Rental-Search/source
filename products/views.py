@@ -997,6 +997,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     ordering_fields = ('quantity', 'is_archived', 'category')
     public_actions = ('retrieve', 'search', 'is_available')
 
+    navette = helpers.EloueNavette()
+
     @link()
     def shipping_price(self, request, *args, **kwargs):
         params = serializers.ShippingPriceParamsSerializer(data=request.QUERY_PARAMS)
@@ -1012,7 +1014,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                     'detail': _(u'Departure point not specified')
                 })
             result = serializers.ShippingPriceSerializer(
-                data=helpers.get_shipping_price(departure_point.site_id, params['arrival_point_id']))
+                data=self.navette.get_shipping_price(departure_point.site_id, params['arrival_point_id']))
             if result.is_valid():
                 return Response(result.data)
 
@@ -1038,11 +1040,11 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                 lat, lng = helpers.get_position(params['address'])
                 if not all((lat, lng)):
                     return Response([])
-            shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
+            shipping_points = self.navette.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
                 if 'site_id' in shipping_point:
                     try:
-                        price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
+                        price = self.navette.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
                     except WebFault:
                         shipping_points.remove(shipping_point)
                     else:

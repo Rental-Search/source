@@ -16,7 +16,7 @@ from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api import serializers
 from shipping.models import ShippingPoint
-#from shipping import helpers
+#from shipping.helpers import EloueNavette
 from rent.utils import timesince
 
 
@@ -69,7 +69,7 @@ class NestedShippingPriceSerializer(serializers.NestedModelSerializerMixin, seri
         if self._is_shipping_enabled(obj):
             # TODO hardcoded instead getting réal price
             return Decimal('10.0')
-#            return helpers.get_shipping_price(
+#            return EloueNavette().get_shipping_price(
 #                obj.product.departure_point.site_id,
 #                obj.arrival_point.site_id).get('price')
         return Decimal('0')

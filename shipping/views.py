@@ -4,7 +4,8 @@ from django.http.response import Http404, HttpResponse
 from rest_framework.decorators import link
 from rest_framework.response import Response
 from eloue.api import filters, mixins, viewsets
-from . import helpers, models, serializers
+from . import models, serializers
+from .helpers import EloueNavette, EloueFileTransfer
 from eloue.api.decorators import user_required
 
 
@@ -19,6 +20,8 @@ class ShippingPointViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
     owner_field = ('patronshippingpoint__patron', 'productshippingpoint__product__owner')
 
+    navette = EloueNavette()
+
     def list(self, request, *args, **kwargs):
         params = serializers.ShippingPointListParamsSerializer(data=request.QUERY_PARAMS)
         if params.is_valid():
@@ -27,7 +30,7 @@ class ShippingPointViewSet(viewsets.ReadOnlyModelViewSet):
             lng = params['lng']
             if lat is None or lng is None:
                 lat, lng = helpers.get_position(params['address'])
-            shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
+            shipping_points = self.navette.get_shipping_points(lat, lng, params['search_type'])
             result = self.pudo_serializer_class(data=shipping_points, many=True)
             if result.is_valid():
                 return Response(result.data)
@@ -36,7 +39,7 @@ class ShippingPointViewSet(viewsets.ReadOnlyModelViewSet):
     @link()
     def details(self, request, *args, **kwargs):
         point = self.get_object()
-        shipping_point = helpers.get_shipping_point(
+        shipping_point = self.navette.get_shipping_point(
             point.site_id, point.position.x, point.position.y, point.type)
         if shipping_point:
             result = self.pudo_serializer_class(data=shipping_point)
@@ -86,7 +89,7 @@ class ShippingViewSet(viewsets.NonEditableModelViewSet):
         params = serializers.ShippingDocumentParamsSerializer(data=request.QUERY_PARAMS)
         if params.is_valid():
             params = params.data
-            file_content = helpers.get_shipping_document(
+            file_content = EloueFileTransfer().download_etiquette(
                 shipping.shuttle_document_url if not params['back'] else shipping.shuttle_document_url2)
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % shipping.shuttle_document_url

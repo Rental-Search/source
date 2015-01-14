@@ -10,6 +10,29 @@ from eloue.geocoder import GoogleGeocoder
 from shipping.navette import Navette, FileTransfer
 
 
+SHIPPING_POINT_TO_DICT_MAP = {
+    'SiteId': 'site_id',
+    'PudoId': 'pudo_id',
+    'Name': 'name',
+    'ZipCode': 'zipcode',
+    'CountryCode': 'country',
+    'CityName': 'city',
+    'AddressLine': 'address',
+    'DistanceFromSearch': 'distance',
+    'Latitude': 'lat',
+    'Longitude': 'lng',
+    'IsOpen': 'is_open',
+}
+
+OPENING_DATE_TO_DICT_MAP = {
+    'AfternoonClosingTime': 'afternoon_closing_time',
+    'AfternoonOpeningTime': 'afternoon_opening_time',
+    'MorningClosingTime': 'morning_closing_time',
+    'MorningOpeningTime': 'morning_opening_time',
+    'DayOfWeek': 'day_of_week',
+}
+
+
 class EloueNavette(Navette):
     try:
         url = settings.NAVETTE_ENDPOINT
@@ -17,6 +40,41 @@ class EloueNavette(Navette):
         raise ImproperlyConfigured("NAVETTE_ENDPOINT not set.")
 
     wsdl_proxy = settings.WSDL_PROXY
+
+    def create_shipping(self, token, order_params):
+        shipping_params = self.create_from_partner(token, order_params)
+        return {
+            'order_number': shipping_params.OrderNumber,
+            'shuttle_code': shipping_params.NavetteCode,
+            'shuttle_document_url': shipping_params.NavettePDFUrl
+        }
+
+    def get_shipping_price(self, departure_point_id, arrival_point_id):
+        price = self.get_price_from_partner(departure_point_id, arrival_point_id)
+        return {
+            'price': Decimal(price.Amount).quantize(Decimal('0.00')),
+            'token': price.Token
+        }
+
+    def get_shipping_points(self, lat, lng, point_type):
+        """Search nearest shipping points"""
+        point_type_map = {
+            1: 'Departure',
+            2: 'Arrival',
+        }
+        shipping_points = self.get_pudo(
+                Point((lat, lng)), point_type_map[point_type])
+        #return [shipping_point_to_dict(FakeShippingPoint(identifier)) for identifier in xrange(6)]
+        return [shipping_point_to_dict(shipping_point) for
+                                shipping_point in shipping_points]
+
+    def get_shipping_point(self, site_id, lat, lng, point_type):
+        """Return shipping point info"""
+        try:
+            return filter(lambda x: x['site_id'] == site_id,
+                        self.get_shipping_points(lat, lng, point_type))[0]
+        except IndexError:
+            return None
 
 
 class EloueFileTransfer(FileTransfer):
@@ -57,29 +115,6 @@ class FakeShippingPoint(object):
         ]
 
 
-SHIPPING_POINT_TO_DICT_MAP = {
-    'SiteId': 'site_id',
-    'PudoId': 'pudo_id',
-    'Name': 'name',
-    'ZipCode': 'zipcode',
-    'CountryCode': 'country',
-    'CityName': 'city',
-    'AddressLine': 'address',
-    'DistanceFromSearch': 'distance',
-    'Latitude': 'lat',
-    'Longitude': 'lng',
-    'IsOpen': 'is_open',
-}
-
-OPENING_DATE_TO_DICT_MAP = {
-    'AfternoonClosingTime': 'afternoon_closing_time',
-    'AfternoonOpeningTime': 'afternoon_opening_time',
-    'MorningClosingTime': 'morning_closing_time',
-    'MorningOpeningTime': 'morning_opening_time',
-    'DayOfWeek': 'day_of_week',
-}
-
-
 def build_cache_id(product, user, site_id):
     return '{}_{}_{}_shipping_token'.format(product.id, user.id, site_id)
 
@@ -117,39 +152,6 @@ def opening_date_to_dict(opening_date):
 def get_position(address):
     """Identify geo position by address through Google service"""
     return GoogleGeocoder().geocode(address)[1]
-
-
-def get_shipping_points(lat, lng, point_type):
-    """Search nearest shipping points"""
-    point_type_map = {
-        1: 'Departure',
-        2: 'Arrival',
-    }
-    shipping_points = EloueNavette().get_pudo(Point((lat, lng)), point_type_map[point_type])
-    #return [shipping_point_to_dict(FakeShippingPoint(identifier)) for identifier in xrange(6)]
-    return [shipping_point_to_dict(shipping_point) for shipping_point in shipping_points]
-
-
-def get_shipping_point(site_id, lat, lng, point_type):
-    """Return shipping point info"""
-    try:
-        return filter(lambda x: x['site_id'] == site_id, get_shipping_points(lat, lng, point_type))[0]
-    except IndexError:
-        return None
-
-
-def get_shipping_price(departure_point_id, arrival_point_id):
-    price = EloueNavette().get_price_from_partner(departure_point_id, arrival_point_id)
-    return {'price': Decimal(price.Amount).quantize(Decimal('0.00')), 'token': price.Token}
-
-
-def create_shipping(token, order_params):
-    shipping_params = EloueNavette().create_from_partner(token, order_params)
-    return {
-        'order_number': shipping_params.OrderNumber,
-        'shuttle_code': shipping_params.NavetteCode,
-        'shuttle_document_url': shipping_params.NavettePDFUrl
-    }
 
 
 def get_shipping_document(filename):

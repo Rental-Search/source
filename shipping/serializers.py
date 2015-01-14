@@ -1,13 +1,11 @@
 # coding=utf-8
 import datetime
-from decimal import Decimal
 import re
 
 from django.utils.translation import gettext as _
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from rest_framework.fields import TimeField
-from rest_framework.relations import HyperlinkedRelatedField
 
 from rest_framework.serializers import CharField, BooleanField, DecimalField, IntegerField
 from accounts.choices import COUNTRY_CHOICES
@@ -15,7 +13,7 @@ from accounts.choices import COUNTRY_CHOICES
 from eloue.api import serializers
 
 from . import helpers, models
-from eloue.api.exceptions import ServerException, ServerErrorEnum
+from shipping.helpers import EloueNavette
 from rent.contract import first_or_empty
 
 
@@ -50,7 +48,7 @@ class ShippingPointSerializer(serializers.GeoModelSerializer):
     def to_native(self, obj):
         result = super(ShippingPointSerializer, self).to_native(obj)
         if obj:  # for working of REST framework GUI
-            shipping_point = helpers.get_shipping_point(obj.site_id, obj.position.x, obj.position.y, obj.type)
+            shipping_point = EloueNavette().get_shipping_point(obj.site_id, obj.position.x, obj.position.y, obj.type)
             if shipping_point:
                 extra_info = PudoSerializer(data=shipping_point)
                 if extra_info.is_valid():
@@ -156,18 +154,20 @@ class ShippingSerializer(serializers.ModelSerializer):
             instance.departure_point = instance.booking.product.departure_point
             instance.arrival_point = instance.booking.arrival_point
 
+            navette = EloueNavette()
+
             token = cache.get(
                 helpers.build_cache_id(instance.booking.product, instance.booking.borrower, instance.arrival_point.site_id))
             if not token:
-                price = helpers.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
+                price = navette.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
                 token = price.pop('token')
 
             order_details = self._fill_order_detail(
                 instance.booking.owner, instance.booking.borrower,
                 instance.booking.borrower,
-                instance.booking.product.departure_point, 
+                instance.booking.product.departure_point,
                 instance.booking.arrival_point)
-            shipping_params = helpers.create_shipping(token, order_details)
+            shipping_params = navette.create_shipping(token, order_details)
 
             instance.order_number = shipping_params['order_number']
             instance.shuttle_code = shipping_params['shuttle_code']
@@ -176,9 +176,9 @@ class ShippingSerializer(serializers.ModelSerializer):
             order_details = self._fill_order_detail(
                 instance.booking.borrower, instance.booking.owner,
                 instance.booking.borrower,
-                instance.booking.arrival_point, 
+                instance.booking.arrival_point,
                 instance.booking.product.departure_point)
-            shipping_params = helpers.create_shipping(token, order_details)
+            shipping_params = navette.create_shipping(token, order_details)
 
             instance.order_number2 = shipping_params['order_number']
             instance.shuttle_code2 = shipping_params['shuttle_code']
