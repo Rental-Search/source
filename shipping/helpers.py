@@ -152,7 +152,3 @@ def opening_date_to_dict(opening_date):
 def get_position(address):
     """Identify geo position by address through Google service"""
     return GoogleGeocoder().geocode(address)[1]
-
-
-def get_shipping_document(filename):
-    return EloueFileTransfer().download_etiquette(filename)

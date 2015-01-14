@@ -4,8 +4,7 @@ from django.http.response import Http404, HttpResponse
 from rest_framework.decorators import link
 from rest_framework.response import Response
 from eloue.api import filters, mixins, viewsets
-from . import models, serializers
-from .helpers import EloueNavette, EloueFileTransfer
+from . import helpers, models, serializers
 from eloue.api.decorators import user_required
 
 
@@ -20,7 +19,7 @@ class ShippingPointViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend)
     owner_field = ('patronshippingpoint__patron', 'productshippingpoint__product__owner')
 
-    navette = EloueNavette()
+    navette = helpers.EloueNavette()
 
     def list(self, request, *args, **kwargs):
         params = serializers.ShippingPointListParamsSerializer(data=request.QUERY_PARAMS)
@@ -89,7 +88,7 @@ class ShippingViewSet(viewsets.NonEditableModelViewSet):
         params = serializers.ShippingDocumentParamsSerializer(data=request.QUERY_PARAMS)
         if params.is_valid():
             params = params.data
-            file_content = EloueFileTransfer().download_etiquette(
+            file_content = helpers.EloueFileTransfer().download_etiquette(
                 shipping.shuttle_document_url if not params['back'] else shipping.shuttle_document_url2)
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename="%s.pdf"' % shipping.shuttle_document_url

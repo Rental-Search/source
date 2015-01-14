@@ -13,7 +13,6 @@ from accounts.choices import COUNTRY_CHOICES
 from eloue.api import serializers
 
 from . import helpers, models
-from shipping.helpers import EloueNavette
 from rent.contract import first_or_empty
 
 
@@ -48,7 +47,8 @@ class ShippingPointSerializer(serializers.GeoModelSerializer):
     def to_native(self, obj):
         result = super(ShippingPointSerializer, self).to_native(obj)
         if obj:  # for working of REST framework GUI
-            shipping_point = EloueNavette().get_shipping_point(obj.site_id, obj.position.x, obj.position.y, obj.type)
+            shipping_point = helpers.EloueNavette().get_shipping_point(
+                        obj.site_id, obj.position.x, obj.position.y, obj.type)
             if shipping_point:
                 extra_info = PudoSerializer(data=shipping_point)
                 if extra_info.is_valid():
@@ -154,7 +154,7 @@ class ShippingSerializer(serializers.ModelSerializer):
             instance.departure_point = instance.booking.product.departure_point
             instance.arrival_point = instance.booking.arrival_point
 
-            navette = EloueNavette()
+            navette = helpers.EloueNavette()
 
             token = cache.get(
                 helpers.build_cache_id(instance.booking.product, instance.booking.borrower, instance.arrival_point.site_id))
