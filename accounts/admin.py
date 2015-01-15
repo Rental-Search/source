@@ -10,23 +10,29 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing
+from accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency
 from accounts.forms import PatronChangeForm, PatronCreationForm
 
 log = logbook.Logger('eloue')
 
 class AddressInline(admin.TabularInline):
     model = Address
-
+    extra = 0
 
 class PhoneNumberInline(admin.TabularInline):
     model = PhoneNumber
+    extra = 0
 
 class OpeningTimesInline(admin.StackedInline):
     model = OpeningTimes
+    extra = 0
 
 class BillingInline(admin.StackedInline):
     model = Billing
+
+class ProAgencyInline(admin.TabularInline):
+    model = ProAgency
+    extra = 0
 
 
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
@@ -56,7 +62,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional', 'is_subscribed', 'affiliate', 'new_messages_alerted')
     save_on_top = True
     ordering = ['-date_joined']
-    inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline]
+    inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, ProAgencyInline]
     actions = ['export_as_csv', 'send_activation_email']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
 
@@ -116,7 +122,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     )
     ordering = ['-subscription_started']
     list_filter = ('payment_type', 'propackage',)
-    search_fields = ('company_name', 'patron__username',)
+    search_fields = ('patron__username', 'patron__email',)
 
     def company_name(self, obj):
         return obj.patron.company_name
@@ -160,6 +166,20 @@ class ProPackageAdmin(admin.ModelAdmin):
     pass
 
 
+class ProAgencyAdmin(admin.ModelAdmin):
+    list_display = ('company_name', 'name', 'address1', 'address2', 'zipcode', 'city', 'country',)
+
+    search_fields = ('patron__company_name', 'name',)
+
+    raw_id_fields = ('patron',)
+
+    def company_name(self, obj):
+        if obj.patron.company_name:
+            return obj.patron.company_name
+        else:
+            return obj.patron.username
+
+
 try:
     admin.site.register(Address, AddressAdmin)
     admin.site.register(PhoneNumber, PhoneNumberAdmin)
@@ -167,5 +187,6 @@ try:
     admin.site.register(PatronAccepted)
     admin.site.register(ProPackage, ProPackageAdmin)
     admin.site.register(Subscription, SubscriptionAdmin)
+    admin.site.register(ProAgency, ProAgencyAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)

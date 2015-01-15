@@ -113,6 +113,6 @@ class Command(BaseCommand):
         ftp.set_pasv(getattr(settings, 'INSURANCE_FTP_PASSIVE_MODE', 0))
         if settings.INSURANCE_FTP_CWD:
             ftp.cwd(settings.INSURANCE_FTP_CWD)
-        ftp.storlines("STOR subscriptions-eloue-%s-%s.csv" % (period.month, period.day), latin1csv_file)
+        ftp.storlines("STOR subscriptions-eloue-%s-%s-%s.csv" % (period.year, period.month, period.day), latin1csv_file)
         ftp.quit()
         log.info('Finished daily insurance subscriptions batch')
