@@ -288,21 +288,24 @@ define(["angular", "toastr", "eloue/modules/booking/BookingModule",
             };
 
             $scope.sendBookingRequest = function () {
-                //if user has no default addrees, firstly save his address
-                if ($scope.noAddress) {
-                    $scope.submitInProgress = true;
-                    $scope.currentUser.default_address.country = "FR";
-                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
-                        $scope.currentUser.default_address = result;
-                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
-                        $scope.saveCardAndRequestBooking();
-                    }, function (error) {
-                        $scope.handleResponseErrors(error);
-                    });
+                if ($scope.isAuto()) {
+                    $("#auto-alert").modal();
                 } else {
-                    $scope.saveCardAndRequestBooking();
+                    //if user has no default addrees, firstly save his address
+                    if ($scope.noAddress) {
+                        $scope.submitInProgress = true;
+                        $scope.currentUser.default_address.country = "FR";
+                        AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
+                            $scope.currentUser.default_address = result;
+                            UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
+                            $scope.saveCardAndRequestBooking();
+                        }, function (error) {
+                            $scope.handleResponseErrors(error);
+                        });
+                    } else {
+                        $scope.saveCardAndRequestBooking();
+                    }
                 }
-
             };
 
             /**
