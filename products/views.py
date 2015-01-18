@@ -989,7 +989,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     """
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.filter(is_archived=False).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
-    filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet
