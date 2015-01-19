@@ -920,6 +920,7 @@ from rest_framework.response import Response
 import django_filters
 
 from products import serializers, models
+from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
@@ -989,7 +990,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     """
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.filter(is_archived=False).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
-    filter_backends = (filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet
