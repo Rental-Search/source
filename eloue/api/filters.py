@@ -14,7 +14,6 @@ from rest_framework import filters
 from mptt.fields import TreeNodeMultipleChoiceField
 
 import django_filters
-from products.forms import ProductFacetedSearchForm
 
 
 DjangoFilterBackend = filters.DjangoFilterBackend
@@ -132,17 +131,6 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
                 view._haystack_filter = True
 
         return queryset
-
-
-class ProductHaystackSearchFilter(HaystackSearchFilter):
-    def prepare_filters(self, request, view):
-        sqs = super(ProductHaystackSearchFilter, self).prepare_filters(
-                    request, view)
-
-        filter_form = ProductFacetedSearchForm(request.GET)
-        if sqs and filter_form.is_valid():
-            sqs = filter_form.filter_queryset(sqs)
-        return sqs
 
 
 MULTI_VALUE_FIELD_SPLIT_RE = re.compile(r'([-_\d\w]+)')
