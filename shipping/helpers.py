@@ -39,7 +39,10 @@ class EloueNavette(Navette):
     except AttributeError:
         raise ImproperlyConfigured("NAVETTE_ENDPOINT not set.")
 
-    wsdl_proxy = settings.WSDL_PROXY
+    try:
+        wsdl_proxy = settings.WSDL_PROXY
+    except AttributeError:
+        wsdl_proxy = None
 
     def create_shipping(self, token, order_params):
         shipping_params = self.create_from_partner(token, order_params)
@@ -83,7 +86,10 @@ class EloueFileTransfer(FileTransfer):
     except AttributeError:
         raise ImproperlyConfigured("NAVETTE_FILE_TRANSFER_ENDPOINT not set.")
 
-    wsdl_proxy = settings.WSDL_PROXY
+    try:
+        wsdl_proxy = settings.WSDL_PROXY
+    except AttributeError:
+        wsdl_proxy = None
 
 
 class FakeOpeningDate(object):
