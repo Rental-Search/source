@@ -47,7 +47,41 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             outdated: "Dépassée",
 
             //Validation errors
-            required_field: "Ce champ est obligatoire."
+            required_field: "Ce champ est obligatoire.",
+
+            //Dashboard form submit messages
+
+            // objects
+            address: "Adresse",
+            booking: "Réservation",
+            comment: "Commentaire",
+            item_info: "Annonce",
+            item_prices: "Tarifs",
+            message: "Message",
+            password: "Mot de passe",
+            profile: "Profil",
+            shipping: "Livraison",
+            shipping_point: "Point de livraison",
+            sinister: "Sinistre",
+            picture: "Photo",
+
+            // actions
+            get: "get",
+            save: "enregistré",
+            update: "mise à jour",
+            delete: "supprimé",
+            reset: "reset",
+            accept: "acceptée",
+            reject: "rejetée",
+            cancel: "annulée",
+            post: "enregistré",
+            redirect: "redirigé",
+            send: "envoyé",
+            upload: "téléchargé",
+
+            // submit statuses
+            success: "succeed",
+            fail: "failed"
         });
 
         $translateProvider.preferredLanguage("fr");

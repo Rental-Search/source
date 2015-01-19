@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
+define(["angular-mocks", "eloue/controllers/AuthCtrl"], function () {
 
     describe("Controller: AuthCtrl", function () {
 
@@ -6,26 +6,33 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
             scope,
             window,
             authServiceMock,
-            usersServiceMock;
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
-            authServiceMock = {clearUserData: function () {
-                console.log("Auth service mock called");
-            }};
+            authServiceMock = {
+                clearUserData: function () {
+                    console.log("Auth service mock called");
+                },
+                getUserToken: function () {
+                    return "U_token";
+                }
+            };
 
             usersServiceMock = {
                 getMe: function () {
                     console.log("Users service mock called");
-                    return {$promise: {then: function () {
-                        return {results: [
-                            {}
-                        ]}
-                    }}}
+                    return simpleServiceResponse;
                 },
                 getStatistics: function () {
                     console.log("Users service mock called");
+                    return simpleServiceResponse;
                 }
             };
 
@@ -36,11 +43,30 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
-            window = {location:{}};
+            window = {location: {
+                href: "url",
+                reload: function() {}
+            }};
 
-            spyOn(authServiceMock, "clearUserData").andCallThrough();
+            spyOn(authServiceMock, "clearUserData").and.callThrough();
+            spyOn(window.location, "reload").and.callThrough();
 
-            AuthCtrl = $controller('AuthCtrl', { $scope: scope, $window: window, AuthService: authServiceMock, UsersService: usersServiceMock});
+            AuthCtrl = $controller('AuthCtrl', {
+                $scope: scope,
+                $window: window,
+                AuthService: authServiceMock,
+                UsersService: usersServiceMock
+            });
         }));
+
+        it("AuthCtrl:logout from dashboard", function () {
+            var initialUrl = "http://e-loue.com/dashboard/";
+            window.location = {
+                href : initialUrl
+            };
+            scope.logout();
+            expect(authServiceMock.clearUserData).toHaveBeenCalled();
+            expect(window.location.href).toEqual("/");
+        });
     });
 });

@@ -1,11 +1,13 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../../common/eloue/services/UsersService",
+    "../../../../common/eloue/services/AddressesService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the account's addresses  page.
      */
-    angular.module("EloueDashboardApp").controller("AccountAddressesCtrl", [
+    EloueDashboardApp.controller("AccountAddressesCtrl", [
         "$scope",
         "UsersService",
         "AddressesService",
@@ -13,12 +15,12 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.markListItemAsSelected("account-part-", "account.addresses");
 
-            UsersService.getMe().$promise.then(function (currentUser) {
+            UsersService.getMe().then(function (currentUser) {
                 var currentUserId = currentUser.id;
 
                 AddressesService.getAddressesByPatron(currentUserId).then(function (results) {
                     $scope.addressList = results;
-                    $scope.defaultAddressId = !!currentUser.default_address ? currentUser.default_address.id : null;
+                    $scope.defaultAddressId = currentUser.default_address ? currentUser.default_address.id : null;
                 });
             });
         }

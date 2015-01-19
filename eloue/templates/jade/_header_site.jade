@@ -1,6 +1,6 @@
 -load staticfiles
 
-section.container.signs-links
+section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span
@@ -15,14 +15,14 @@ section.container.signs-links
     li.divide
     li: span
       | Appelez-nous au 
-      b 0826.800.200 
-      | (0,15&euro; / min)
+      b 01 85 08 99 77 
+      | (numéro gratuit)
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser", style="display: none;").without-spaces
     li: span
       | Appelez-nous au 
-      b 0826.800.200 
-      | (0,15&euro; / min)
+      b 01 85 08 99 77 
+      | (numéro gratuit)
     li.spacer
     li.guest-veiw
         {% verbatim %}
@@ -37,7 +37,7 @@ section.container.signs-links
             li: a(href="{% url 'dashboard:bookings' %}") Réservations
             li: a(href="{% url 'dashboard:items' %}") Annonces
             li: a(href="{% url 'dashboard:account' %}") Compte
-            li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()") Déconnexion
+            li: a(href="", ng-click="logout()") Déconnexion
             {% verbatim %}
         //-
          .dropdown

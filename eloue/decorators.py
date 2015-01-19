@@ -2,7 +2,7 @@
 import re
 
 from httplib2 import Http
-from functools import wraps, partial
+from functools import wraps
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -105,16 +105,16 @@ def mobify(view_func=None):
 
 
 def cached(
-    cache=None,
-    key_prefix=Site.objects.get_current().domain, key_func=cache_key,
+    cache=None, key_prefix=None, key_func=cache_key,
     **cache_kwargs
 ):
-    make_key = partial(key_func, key_prefix)
     cache = default_cache if cache is None else get_cache(cache)
     def decorator(func):
         @wraps(func)
         def wrapper(*func_args, **func_kwargs):
-            key = make_key(func.__name__, *func_args)
+            if key_prefix is None:
+                key_prefix = Site.objects.get_current().domain
+            key = key_func(key_prefix, func.__name__, *func_args)
             value = cache.get(key)
             if value is None:
                 value = func(*func_args, **func_kwargs)

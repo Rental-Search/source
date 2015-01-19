@@ -1,11 +1,15 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/CategoriesService",
+    "../../../../common/eloue/services/ProductsService",
+    "../../../../common/eloue/services/PricesService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the items tariffs tab.
      */
-    angular.module("EloueDashboardApp").controller("ItemsTariffsCtrl", [
+    EloueDashboardApp.controller("ItemsTariffsCtrl", [
         "$q",
         "$scope",
         "$stateParams",
@@ -17,9 +21,10 @@ define(["angular", "eloue/app"], function (angular) {
         "PricesService",
         function ($q, $scope, $stateParams, Endpoints, Currency, Unit, CategoriesService, ProductsService, PricesService) {
 
-            function onRequestFailed(){
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
-            }
+                $scope.showNotification(object, action, false);
+            };
 
             $scope.units = Unit;
             $scope.prices = {
@@ -32,7 +37,13 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.isAuto = false;
             $scope.isRealEstate = false;
 
-            ProductsService.getProductDetails($stateParams.id).then(function (product) {
+            ProductsService.getProductDetails($stateParams.id).then(
+                function (product) {
+                    $scope.applyProductDetails(product);
+                }
+            );
+
+            $scope.applyProductDetails = function (product) {
                 $scope.product = product;
                 $scope.markListItemAsSelected("item-tab-", "tariffs");
 
@@ -61,17 +72,17 @@ define(["angular", "eloue/app"], function (angular) {
                     }
                 });
 
-                CategoriesService.getParentCategory($scope.product.category).$promise.then(function (nodeCategory) {
+                CategoriesService.getParentCategory($scope.product.category).then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
                         $scope.updateFieldSet(nodeCategory);
                     } else {
-                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                        CategoriesService.getParentCategory(nodeCategory).then(function (rootCategory) {
                             $scope.updateFieldSet(rootCategory);
                         });
                     }
                     $scope.product.category = Endpoints.api_url + "categories/" + $scope.product.category.id + "/";
                 });
-            });
+            };
 
             $scope.updateFieldSet = function (rootCategory) {
                 $scope.isAuto = false;
@@ -85,50 +96,52 @@ define(["angular", "eloue/app"], function (angular) {
 
             $scope.updatePrices = function () {
                 $scope.submitInProgress = true;
-                var promises = [];
+                var promises = [], addressId, phoneId;
                 angular.forEach($scope.prices, function (value, key) {
                     var promise;
                     if (value.amount && value.amount > 0) {
                         value.currency = Currency.EUR.name;
                         value.product = Endpoints.api_url + "products/" + $scope.product.id + "/";
                         if (value.id) {
-                            promise=PricesService.updatePrice(value).$promise;
+                            promise = PricesService.updatePrice(value);
                         } else {
-                            promise=PricesService.savePrice(value).$promise;
+                            promise = PricesService.savePrice(value);
                         }
-                        promise.then(function(result){
-                            $scope.prices[key].amount=parseFloat(result.amount).toFixed(2);
+                        promise.then(function (result) {
+                            $scope.prices[key].amount = parseFloat(result.amount).toFixed(2);
                         });
                         promises.push(promise);
                     }
                 });
-                var addressId, phoneId;
-                if (!!$scope.product.address) {
+                if ($scope.product.address) {
                     addressId = $scope.product.address.id;
-                    if (!!addressId) {
+                    if (addressId) {
                         $scope.product.address = Endpoints.api_url + "addresses/" + addressId + "/";
                     }
                 }
-                if (!!$scope.product.phone) {
+                if ($scope.product.phone) {
                     phoneId = $scope.product.phone.id;
-                    if (!!phoneId) {
+                    if (phoneId) {
                         $scope.product.phone = Endpoints.api_url + "phones/" + phoneId + "/";
                     } else {
                         $scope.product.phone = null;
                     }
                 }
 
-                promises.push(ProductsService.updateProduct($scope.product).$promise);
-                $q.all(promises).then(function(results) {
+                promises.push(ProductsService.updateProduct($scope.product));
+                $q.all(promises).then(function (results) {
                     $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
+                    $scope.showNotification("item_prices", "save", true);
                     $scope.product.address = {
                         id: addressId
                     };
                     $scope.product.phone = {
                         id: phoneId
                     };
-                }, onRequestFailed);
-            }
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "item_prices", "save");
+                });
+            };
         }]);
 });

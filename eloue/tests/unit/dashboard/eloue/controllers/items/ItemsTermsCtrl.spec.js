@@ -6,7 +6,12 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
             scope,
             stateParams,
             categoriesServiceMock,
-            productsServiceMock;
+            productsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -14,17 +19,13 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
             categoriesServiceMock = {
                 getParentCategory: function (category) {
                     console.log("categoriesServiceMock:getParentCategory called with category = " + category);
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
             productsServiceMock = {
                 getProductDetails: function (id) {
                     console.log("productsServiceMock:getProductDetails called with id = " + id);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 
@@ -36,12 +37,14 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.markListItemAsSelected = function(){};
+            scope.initCustomScrollbars = function(){};
             stateParams = {
                 id: 1
             };
 
-            spyOn(productsServiceMock, "getProductDetails").andCallThrough();
-            spyOn(categoriesServiceMock, "getParentCategory").andCallThrough();
+            spyOn(productsServiceMock, "getProductDetails").and.callThrough();
+            spyOn(categoriesServiceMock, "getParentCategory").and.callThrough();
 
             ItemsTermsCtrl = $controller('ItemsTermsCtrl', { $scope: scope, $stateParams: stateParams, CategoriesService: categoriesServiceMock, ProductsService: productsServiceMock });
             expect(productsServiceMock.getProductDetails).toHaveBeenCalledWith(stateParams.id);
@@ -76,6 +79,20 @@ define(["angular-mocks", "eloue/controllers/items/ItemsTermsCtrl"], function () 
             scope.updateTermsBlocks(category);
             expect(scope.isAuto).toBe(false);
             expect(scope.isRealEstate).toBe(false);
+        });
+
+        it("ItemsTermsCtrl:applyProductDetails", function () {
+            var product = {
+                owner: {
+                    is_professional: true
+                },
+                category: {
+                    id: 2
+                }
+            };
+            scope.applyProductDetails(product);
+            expect(scope.isProfessional).toBeTruthy();
+            expect(categoriesServiceMock.getParentCategory).toHaveBeenCalled();
         });
     });
 });

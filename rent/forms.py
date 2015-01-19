@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from accounts.forms import CreditCardForm
+from products.helpers import calculate_available_quantity
 
 from rent.models import Booking, Sinister, OwnerComment, BorrowerComment
 from rent.utils import DATE_FORMAT, DATE_TIME_FORMAT
@@ -272,7 +273,7 @@ class Api20BookingForm(BookingForm):
         product = self.instance.product
 
         if started_at and ended_at:
-            self.max_available = Booking.calculate_available_quantity(product, started_at, ended_at)
+            self.max_available = calculate_available_quantity(product, started_at, ended_at)
 
             if started_at <= datetime.datetime.now() or ended_at <= datetime.datetime.now():
                 self.max_available = 0

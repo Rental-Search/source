@@ -1,18 +1,20 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../common/eloue/services/UsersService",
+    "../../../common/eloue/services/UtilsService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the messages page.
      */
-    angular.module("EloueDashboardApp").controller("MessagesCtrl", [
+    EloueDashboardApp.controller("MessagesCtrl", [
         "$scope",
         "UsersService",
         "UtilsService",
         function ($scope, UsersService, UtilsService) {
             $scope.messageThreadList = [];
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
@@ -20,7 +22,7 @@ define(["angular", "eloue/app"], function (angular) {
             });
 
             $scope.shouldMarkAsUnread = function (lastMessage) {
-                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) == $scope.currentUser.id)
+                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) === $scope.currentUser.id);
             };
         }
     ]);

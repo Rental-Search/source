@@ -30,18 +30,18 @@ h2 Vos informations personnelles
             span.flaticon.stroke.checkmark-1
         b.text-black Option livraison, recevez cet objet  dans un point relais pickup à proximiter de ches vous.
     a(href="", ng-show="loadingProductShippingPoint").btn.bg-gray-light-hover.text-white.loading2 &nbsp;&nbsp;&nbsp;
-.row(ng-show="isAuto()")
+.row(ng-show="isAuto")
   .col-sm-6(style="z-index: 1050")
-      input#date_of_birth(type="text", name="date_of_birth", data-date-format="yyyy-mm-dd" , placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto()").form-control
+      input#date_of_birth(type="text", name="date_of_birth", data-date-format="yyyy-mm-dd" , placeholder="Date de naissance *", ng-model="currentUser.date_of_birth", ng-required="isAuto").form-control
       span.text-danger(ng-show="bookingForm.date_of_birth.$error.required && bookingSubmitted", translate="required_field")
   .col-sm-6
-      input(type="text", name="place_of_birth", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", ng-required="isAuto()").form-control
+      input(type="text", name="place_of_birth", placeholder="Lieu de naissance *", ng-model="currentUser.place_of_birth", ng-required="isAuto").form-control
       span.text-danger(ng-show="bookingForm.place_of_birth.$error.required && bookingSubmitted", translate="required_field")
-.row(ng-show="isAuto()")
+.row(ng-show="isAuto")
   .col-sm-12
-      input(type="text", name="drivers_license_number", placeholder="Numéro de permis *", ng-model="currentUser.drivers_license_number", ng-required="isAuto()").form-control
+      input(type="text", name="drivers_license_number", placeholder="Numéro de permis *", ng-model="currentUser.drivers_license_number", ng-required="isAuto").form-control
       span.text-danger(ng-show="bookingForm.drivers_license_number.$error.required && bookingSubmitted", translate="required_field")
-.row(ng-show="isAuto()")
+.row(ng-show="isAuto")
   .col-sm-6(style="z-index: 1050")
       input#drivers_license_date(type="text", name="drivers_license_date", data-date-format="yyyy-mm-dd", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis").form-control
   //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis

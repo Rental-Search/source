@@ -1,33 +1,60 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/services/CommentsService"], function () {
 
     describe("Service: CommentsService", function () {
 
         var CommentsService,
+            q,
             commentsMock,
-            endpointsMock;
+            endpointsMock,
+            usersServiceMock,
+            utilsServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             commentsMock = {
                 get: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 },
                 save: function () {
+                    return simpleResourceResponse;
                 }
             };
             endpointsMock = {
             };
+
+            usersServiceMock = {
+                get: function (userId) {
+                    return simpleResourceResponse;
+                }
+            };
+            utilsServiceMock = {
+                getIdFromUrl: function (url) {
+
+                }
+            };
             module(function ($provide) {
                 $provide.value("Comments", commentsMock);
                 $provide.value("Endpoints", endpointsMock);
+                $provide.value("UsersService", usersServiceMock);
+                $provide.value("UtilsService", utilsServiceMock);
             });
         });
 
-        beforeEach(inject(function (_CommentsService_) {
+        beforeEach(inject(function (_CommentsService_, $q) {
             CommentsService = _CommentsService_;
-            spyOn(commentsMock, "get").andCallThrough();
-            spyOn(commentsMock, "save").andCallThrough();
+            q= $q;
+            spyOn(commentsMock, "get").and.callThrough();
+            spyOn(commentsMock, "save").and.callThrough();
+            spyOn(usersServiceMock, "get").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
         }));
 
         it("CommentsService should be not null", function () {
@@ -48,6 +75,12 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
                 comment: comment,
                 rate: rate
             });
+        });
+
+        it("CommentsService:parseComment", function () {
+            var author = "Author";
+            var result = CommentsService.parseComment({}, author);
+            expect(result).toEqual({author: author});
         });
     });
 });

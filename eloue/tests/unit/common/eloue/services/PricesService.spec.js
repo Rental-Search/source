@@ -1,21 +1,26 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/services/PricesService"], function () {
 
     describe("Service: PricesService", function () {
 
         var PricesService,
-            pricesMock;
+            pricesMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             pricesMock = {
-                getProductPricesPerDay: function () {
-                },
-                get: function () {
-                },
                 save: function () {
+                    return simpleResourceResponse;
                 },
                 update: function () {
+                    return simpleResourceResponse;
                 }
             };
 
@@ -26,10 +31,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_PricesService_) {
             PricesService = _PricesService_;
-            spyOn(pricesMock, "getProductPricesPerDay").andCallThrough();
-            spyOn(pricesMock, "get").andCallThrough();
-            spyOn(pricesMock, "save").andCallThrough();
-            spyOn(pricesMock, "update").andCallThrough();
+            spyOn(pricesMock, "save").and.callThrough();
+            spyOn(pricesMock, "update").and.callThrough();
         }));
 
         it("PricesService should be not null", function () {

@@ -4,19 +4,27 @@ define(["angular-mocks", "eloue/controllers/DashboardCtrl"], function() {
 
         var DashboardCtrl,
             scope,
-            usersServiceMock;
+            activityTypeMock,
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
+            activityTypeMock = {};
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+                    return simpleServiceResponse;
                 }
             };
 
             module(function($provide) {
+                $provide.value("ActivityType", activityTypeMock);
                 $provide.value("UsersService", usersServiceMock);
             })
         });
@@ -28,9 +36,9 @@ define(["angular-mocks", "eloue/controllers/DashboardCtrl"], function() {
                 }
             };
             scope.currentUser = { id: 1};
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
 
-            DashboardCtrl = $controller('DashboardCtrl', { $scope: scope, UsersService: usersServiceMock });
+            DashboardCtrl = $controller('DashboardCtrl', { $scope: scope, ActivityType: activityTypeMock, UsersService: usersServiceMock });
         }));
 
         it("DashboardCtrl should be not null", function () {

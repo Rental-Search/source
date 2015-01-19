@@ -1,5 +1,5 @@
 ({
-    mainConfigFile : "main.js",
+    mainConfigFile: "main.js",
     baseUrl: "./",
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
@@ -7,7 +7,6 @@
         "jQuery": "../../bower_components/jquery/dist/jquery",
         "angular": "../../bower_components/angular/angular",
         "angular-resource": "../../bower_components/angular-resource/angular-resource",
-        "angular-route": "../../bower_components/angular-route/angular-route",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router",
@@ -30,7 +29,6 @@
             deps: ["jQuery"],
             "exports": "angular"
         },
-        "angular-route": ["angular"],
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],

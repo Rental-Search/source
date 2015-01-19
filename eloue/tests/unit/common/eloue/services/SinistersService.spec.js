@@ -1,17 +1,24 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/services/SinistersService"], function () {
 
     describe("Service: SinistersService", function () {
 
         var SinistersService,
             sinistersMock,
-            endpointsMock;
+            endpointsMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             sinistersMock = {
                 get: function () {
-                    return {$promise: {}}
+                    return simpleResourceResponse;
                 }
             };
             endpointsMock = {
@@ -24,7 +31,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_SinistersService_) {
             SinistersService = _SinistersService_;
-            spyOn(sinistersMock, "get").andCallThrough();
+            spyOn(sinistersMock, "get").and.callThrough();
         }));
 
         it("SinistersService should be not null", function () {

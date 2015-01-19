@@ -1,8 +1,16 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
+define(["angular-mocks", "eloue/services/AuthService"], function() {
 
     describe("Service: AuthService", function () {
 
-        var AuthService, endpointsMock, authConstantsMock, redirectAfterLoginMock, registrationResourceMock;
+        var AuthService, q, rootScope, window, document, formServiceMock,
+            endpointsMock, authConstantsMock, redirectAfterLoginMock, registrationResourceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
@@ -11,8 +19,8 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
             authConstantsMock = {};
             redirectAfterLoginMock = {};
             registrationResourceMock = {
-                "register": {
-
+                register: function() {
+                    return simpleResourceResponse;
                 }
             };
 
@@ -24,17 +32,16 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
             });
         });
 
-        beforeEach(inject(function (_AuthService_) {
+        beforeEach(inject(function (_AuthService_, $q, $rootScope, $window, $document) {
             AuthService = _AuthService_;
+            q = $q; rootScope = $rootScope; window = $window; document = $document;
             AuthService.getCookie = function () {
                 return "111";
             };
-            AuthService.redirectToAttemptedUrl = function () {
-
-            };
-            spyOn(AuthService, "getCookie").andCallThrough();
-            spyOn(AuthService, "redirectToAttemptedUrl").andCallThrough();
-            spyOn(registrationResourceMock, "register").andCallThrough();
+            AuthService.redirectToAttemptedUrl = function () {};
+            spyOn(AuthService, "getCookie").and.callThrough();
+            spyOn(AuthService, "redirectToAttemptedUrl").and.callThrough();
+            spyOn(registrationResourceMock, "register").and.callThrough();
         }));
 
         it("AuthService should be not null", function() {
@@ -51,9 +58,50 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function() {
             expect(angular.isFunction(AuthService.getCookie)).toBe(true);
         });
 
-        it("AuthService should make a call to itself", function () {
+        it("AuthService:login", function () {
             var credentials = {};
             AuthService.login(credentials);
+        });
+
+        it("AuthService:loginFacebook", function () {
+            var url = "";
+            AuthService.loginFacebook(url);
+        });
+
+        it("AuthService:clearUserData", function () {
+            AuthService.clearUserData();
+        });
+
+        it("AuthService:redirectToAttemptedUrl", function () {
+            AuthService.redirectToAttemptedUrl();
+        });
+
+        it("AuthService:saveAttemptUrl", function () {
+            AuthService.saveAttemptUrl();
+        });
+
+        it("AuthService:sendActivationLink", function () {
+            AuthService.sendActivationLink();
+        });
+
+        it("AuthService:register", function () {
+            AuthService.register();
+            expect(registrationResourceMock.register).toHaveBeenCalled();
+        });
+        it("AuthService:isLoggedIn", function () {
+            AuthService.isLoggedIn();
+        });
+
+        it("AuthService:getCookie", function () {
+            AuthService.getCookie();
+        });
+
+        it("AuthService:getUserToken", function () {
+            AuthService.getUserToken();
+        });
+
+        it("AuthService:getCSRFToken", function () {
+            AuthService.getCSRFToken();
         });
     });
 });
