@@ -93,7 +93,9 @@ define([
                         }
                     });
                 }
-                if ($scope.bookingDetails.with_shipping) {
+                if ($scope.bookingDetails.shipping.enabled) {
+                    $scope.totalBookingPrice = Number($scope.bookingDetails.total_amount) + Number($scope.bookingDetails.shipping.price);
+                    console.log($scope.bookingDetails.shipping);
                     $scope.searchShippingPointsInProgres = true;
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
                         //Show shipping choice only if there are existing product shipping points
@@ -190,7 +192,7 @@ define([
             };
 
             $scope.processAcceptBookingResponse = function () {
-                if ($scope.bookingDetails.with_shipping) {
+                if ($scope.bookingDetails.shipping.enabled) {
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(
                         $scope.processProductShippingPointsResponse,
                         function (error) {
