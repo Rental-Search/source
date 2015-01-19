@@ -48,7 +48,7 @@ class ProductHaystackSearchFilter(HaystackSearchFilter):
         sqs = super(ProductHaystackSearchFilter, self).prepare_filters(
                     request, view)
 
-        filter_form = ProductFacetedSearchForm(request.GET)
+        filter_form = ProductFacetedSearchForm(request.DATA)
         if sqs and filter_form.is_valid():
             sqs = filter_form.filter_queryset(sqs)
         return sqs
