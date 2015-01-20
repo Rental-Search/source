@@ -81,12 +81,15 @@ def get_point_and_radius(coords, radius=None):
     return point, radius
 
 def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+    qs = search_index.exclude(thumbnail=None
+        ).filter(is_good=True)
+
     # try to find products in the same region
     region_point, region_radius = get_point_and_radius(
         location['region_coords'] or location['coordinates'],
         location['region_radius'] or location['radius']
         )
-    last_added = search_index.exclude(thumbnail=None).dwithin('location', region_point, Distance(km=region_radius)
+    last_added = qs.dwithin('location', region_point, Distance(km=region_radius)
         ).distance('location', region_point
         ).order_by(sort_by_date, SORT.NEAR)
 
@@ -99,14 +102,14 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
             # silently ignore exceptions like country name is missing or incorrect
             pass
         else:
-            last_added = search_index.exclude(thumbnail=None).dwithin('location', country_point, Distance(km=country_radius)
+            last_added = qs.dwithin('location', country_point, Distance(km=country_radius)
                 ).distance('location', country_point
                 ).order_by(sort_by_date, SORT.NEAR)
 
     # if there are no products found in the same country
     if not last_added.count():
         # do not filter on location, and return full list sorted by the provided date field only
-        last_added = search_index.exclude(thumbnail=None).order_by(sort_by_date)
+        last_added = qs.order_by(sort_by_date)
 
     return last_added[offset*limit:(offset+1)*limit]
 
@@ -920,6 +923,7 @@ from rest_framework.response import Response
 import django_filters
 
 from products import serializers, models
+from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
@@ -989,7 +993,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     """
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.filter(is_archived=False).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
-    filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet

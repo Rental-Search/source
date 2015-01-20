@@ -81,7 +81,9 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
 
             // submit statuses
             success: "succeed",
-            fail: "failed"
+            fail: "failed",
+
+            informationHasBeenUpdated: "Vous informations ont été mises à jour"
         });
 
         $translateProvider.preferredLanguage("fr");

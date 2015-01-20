@@ -5,6 +5,7 @@ import base64
 from datetime import date
 from decimal import Decimal
 import datetime
+import logging
 
 from django.db.models import get_model
 from django.contrib.auth import get_user_model
@@ -16,6 +17,9 @@ User = get_user_model()
 
 IMAGE_FILE = os.path.join(os.path.dirname(__file__), '..', 'fixtures', 'bentley.jpg')
 IMAGE_URL = 'http://www.topcarrating.com/jaguar/1966-jaguar-xj13.jpg'
+
+logging.getLogger('elasticsearch').setLevel(logging.ERROR)
+
 
 def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
@@ -801,6 +805,17 @@ class ProductTest(APITestCase):
         self.assertGreater(response.data['count'], 0)
         self.assertEqual(response.data['results'], filter(lambda x: x['deposit_amount'] == 700, response.data['results']))
         self.assertEqual([], filter(lambda x: x['deposit_amount'] != 700, response.data['results']))
+
+    # For test searching index we have to generate index for test data (maybe mock?)
+    def test_filter_prices(self):
+        response = self.client.get(_location('product-list'), {'price_from': 10, 'price_to': 20})
+        self.assertEquals(response.status_code, 200, response.data)
+        #self.assertGreater(response.data['count'], 0)
+
+    def test_filter_q(self):
+        response = self.client.get(_location('product-list'), {'q': 'Philips'})
+        self.assertEquals(response.status_code, 200, response.data)
+        #self.assertGreater(response.data['count'], 0)
 
 
 class StaffProductTest(APITestCase):

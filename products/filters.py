@@ -1,6 +1,11 @@
 # coding=utf-8
+
+import operator
 from django.db.models.query_utils import Q
 from rest_framework.filters import BaseFilterBackend
+
+from products.forms import ProductFacetedSearchForm
+from eloue.api.filters import HaystackSearchFilter
 
 
 class ProductAvailabilityFilter(BaseFilterBackend):
@@ -36,3 +41,14 @@ class ProductAvailabilityFilter(BaseFilterBackend):
             queryset = queryset.filter(reduce(operator.or_, or_queries))
 
         return queryset
+
+
+class ProductHaystackSearchFilter(HaystackSearchFilter):
+    def prepare_filters(self, request, view):
+        sqs = super(ProductHaystackSearchFilter, self).prepare_filters(
+                    request, view)
+
+        filter_form = ProductFacetedSearchForm(request.DATA)
+        if sqs and filter_form.is_valid():
+            sqs = filter_form.filter_queryset(sqs)
+        return sqs
