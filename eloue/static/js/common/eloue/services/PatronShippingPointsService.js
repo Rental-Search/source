@@ -20,9 +20,9 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], f
                 }).$promise;
             };
 
-            patronShippingPointsService.getById = function (PointId) {
-                console.log('PointId', PointId);
-                return PatronShippingPoints.get(PointId, {
+            patronShippingPointsService.getById = function (id) {
+                return PatronShippingPoints.get({
+                    id: id,
                     _cache: new Date().getTime()
                 }).$promise;
             };

@@ -20,6 +20,13 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], f
                 return ProductShippingPoints.get({_cache: new Date().getTime(), product: productId}).$promise;
             };
 
+            productShippingPointsService.getById = function (id) {
+                return ProductShippingPoints.get({
+                    id: id,
+                    _cache: new Date().getTime()
+                }).$promise;
+            };
+
             return productShippingPointsService;
         }
     ]);

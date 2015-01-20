@@ -95,23 +95,21 @@ define([
                 }
                 if ($scope.bookingDetails.shipping.enabled) {
                     $scope.totalBookingPrice = Number($scope.bookingDetails.total_amount) + Number($scope.bookingDetails.shipping.price);
-                    console.log($scope.bookingDetails.shipping);
                     $scope.searchShippingPointsInProgres = true;
-                    ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
+                    ProductShippingPointsService.getById($scope.bookingDetails.shipping.product_point).then(function (productShippingPointData) {
                         //Show shipping choice only if there are existing product shipping points
-                        if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
+                        if (!!productShippingPointData) {
                             if ($scope.isOwner) {
-                                $scope.departure_point = productShippingPointData.results[0];
+                                $scope.departure_point = productShippingPointData;
                             } else {
-                                $scope.arrival_point = productShippingPointData.results[0];
+                                $scope.arrival_point = productShippingPointData;
                             }
                             PatronShippingPointsService.getById($scope.bookingDetails.shipping.patron_point).then(function (patronShippingPointData) {
-                                console.log(patronShippingPointData);
-                                if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
+                                if (!!patronShippingPointData) {
                                     if ($scope.isOwner) {
-                                        $scope.arrival_point = patronShippingPointData.results[0];
+                                        $scope.arrival_point = patronShippingPointData;
                                     } else {
-                                        $scope.departure_point = patronShippingPointData.results[0];
+                                        $scope.departure_point = patronShippingPointData;
                                     }
                                     $scope.searchShippingPointsInProgres = false;
                                 }
