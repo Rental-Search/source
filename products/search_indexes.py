@@ -48,7 +48,10 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     pro_owner = indexes.BooleanField(default=False, indexed=False)
     comment_count = indexes.IntegerField(model_attr='comment_count', default=0, indexed=False)
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
-    
+
+    # summary field for checking product's description quality
+    is_good = indexes.BooleanField(default=False, indexed=False)
+
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
     
@@ -90,12 +93,16 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     def prepare_pro_owner(self, obj):
         return obj.owner.current_subscription is not None
 
+    def prepare_is_good(self, obj):
+        return True if len(obj.description.split()) > 1 else False
+
     def get_model(self):
         return Product
 
     def index_queryset(self, using=None):
         return self.get_model().on_site.active().select_related('category', 'address', 'owner')
-        
+
+
 class CarIndex(ProductIndex):
 
     brand = indexes.CharField(model_attr='brand')
