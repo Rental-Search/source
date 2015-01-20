@@ -1,13 +1,11 @@
 # coding=utf-8
 import datetime
-from decimal import Decimal
 import re
 
 from django.utils.translation import gettext as _
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from rest_framework.fields import TimeField
-from rest_framework.relations import HyperlinkedRelatedField
 
 from rest_framework.serializers import CharField, BooleanField, DecimalField, IntegerField
 from accounts.choices import COUNTRY_CHOICES
@@ -15,7 +13,6 @@ from accounts.choices import COUNTRY_CHOICES
 from eloue.api import serializers
 
 from . import helpers, models
-from eloue.api.exceptions import ServerException, ServerErrorEnum
 from rent.contract import first_or_empty
 
 
@@ -50,7 +47,8 @@ class ShippingPointSerializer(serializers.GeoModelSerializer):
     def to_native(self, obj):
         result = super(ShippingPointSerializer, self).to_native(obj)
         if obj:  # for working of REST framework GUI
-            shipping_point = helpers.get_shipping_point(obj.site_id, obj.position.x, obj.position.y, obj.type)
+            shipping_point = helpers.EloueNavette().get_shipping_point(
+                        obj.site_id, obj.position.x, obj.position.y, obj.type)
             if shipping_point:
                 extra_info = PudoSerializer(data=shipping_point)
                 if extra_info.is_valid():
@@ -99,11 +97,15 @@ class ShippingSerializer(serializers.ModelSerializer):
     def preprocess_name(self, name):
         return self.regexp.sub(' ', name).strip()
 
-    def _fill_order_detail(self, sender, receiver, send_point, receive_point):
+    def _fill_order_detail(self, sender, receiver, borrower, send_point, receive_point):
         sender_address = sender.default_address or first_or_empty(sender.addresses.all())
         sender_phone = sender.default_number or first_or_empty(sender.phones.all())
+
         receiver_address = receiver.default_address or first_or_empty(receiver.addresses.all())
         receiver_phone = receiver.default_number or first_or_empty(receiver.phones.all())
+
+        borrower_address = borrower.default_address or first_or_empty(borrower.addresses.all())
+        borrower_phone = borrower.default_number or first_or_empty(borrower.phones.all())
 
         return {
             'DeliveryContactFirstName': self.preprocess_name(sender.first_name),
@@ -130,18 +132,18 @@ class ShippingSerializer(serializers.ModelSerializer):
             'DropOffSiteCountryCode': receiver_address.country if receiver_address else '',
             'DropOffSiteName': receive_point.pudo_id,
             'DropOffSiteZipCode': receiver_address.zipcode if receiver_address else '',
-            'OrderContactFirstName': 'TEST',
-            'OrderContactLastName': 'Test',
-            'OrderContactMail': 'test@test.com',
-            'OrderOrderContactMobil': '0648484848',
+            'OrderContactFirstName': self.preprocess_name(borrower.first_name),
+            'OrderContactLastName': self.preprocess_name(borrower.last_name),
+            'OrderContactMail': borrower.email.replace('-', ''),
+            'OrderOrderContactMobil': borrower_phone.number if borrower_phone else '',
             'OrderContactCivility': 1,
-            'OrderSiteAdress1': 'test',
-            'OrderSiteAdress2': 'test',
-            'OrderSiteCity': 'test',
-            'OrderSiteCountry': 'france',
-            'OrderSiteZipCode': '75011',
+            'OrderSiteAdress1': borrower_address.address1 if borrower_address else '',
+            'OrderSiteAdress2': borrower_address.address2 if borrower_address else '',
+            'OrderSiteCity': borrower_address.city if borrower_address else '',
+            'OrderSiteCountry': getattr(COUNTRY_CHOICES,
+                         borrower_address.country) if borrower_address else '',
+            'OrderSiteZipCode': borrower_address.zipcode if borrower_address else '',
             'OrderDate': datetime.datetime.now(),
-            'OrderId': 'B400003a-abcd',
             'DeliverySiteId': send_point.site_id,
             'DropOffSiteId': receive_point.site_id,
         }
@@ -152,16 +154,20 @@ class ShippingSerializer(serializers.ModelSerializer):
             instance.departure_point = instance.booking.product.departure_point
             instance.arrival_point = instance.booking.arrival_point
 
+            navette = helpers.EloueNavette()
+
             token = cache.get(
                 helpers.build_cache_id(instance.booking.product, instance.booking.borrower, instance.arrival_point.site_id))
             if not token:
-                price = helpers.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
+                price = navette.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
                 token = price.pop('token')
 
             order_details = self._fill_order_detail(
                 instance.booking.owner, instance.booking.borrower,
-                instance.booking.product.departure_point, instance.booking.arrival_point)
-            shipping_params = helpers.create_shipping(token, order_details)
+                instance.booking.borrower,
+                instance.booking.product.departure_point,
+                instance.booking.arrival_point)
+            shipping_params = navette.create_shipping(token, order_details)
 
             instance.order_number = shipping_params['order_number']
             instance.shuttle_code = shipping_params['shuttle_code']
@@ -169,8 +175,10 @@ class ShippingSerializer(serializers.ModelSerializer):
 
             order_details = self._fill_order_detail(
                 instance.booking.borrower, instance.booking.owner,
-                instance.booking.arrival_point, instance.booking.product.departure_point)
-            shipping_params = helpers.create_shipping(token, order_details)
+                instance.booking.borrower,
+                instance.booking.arrival_point,
+                instance.booking.product.departure_point)
+            shipping_params = navette.create_shipping(token, order_details)
 
             instance.order_number2 = shipping_params['order_number']
             instance.shuttle_code2 = shipping_params['shuttle_code']
