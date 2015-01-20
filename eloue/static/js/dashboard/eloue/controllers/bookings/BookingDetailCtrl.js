@@ -105,7 +105,8 @@ define([
                             } else {
                                 $scope.arrival_point = productShippingPointData.results[0];
                             }
-                            PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(function (patronShippingPointData) {
+                            PatronShippingPointsService.getById($scope.bookingDetails.shipping.patron_point).then(function (patronShippingPointData) {
+                                console.log(patronShippingPointData);
                                 if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
                                     if ($scope.isOwner) {
                                         $scope.arrival_point = patronShippingPointData.results[0];
