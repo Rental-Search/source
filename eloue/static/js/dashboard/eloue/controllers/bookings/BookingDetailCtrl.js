@@ -93,7 +93,9 @@ define([
                         }
                     });
                 }
-                if ($scope.bookingDetails.with_shipping) {
+                if ($scope.bookingDetails.shipping.enabled) {
+                    $scope.totalBookingPrice = Number($scope.bookingDetails.total_amount) + Number($scope.bookingDetails.shipping.price);
+                    console.log($scope.bookingDetails.shipping);
                     $scope.searchShippingPointsInProgres = true;
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(function (productShippingPointData) {
                         //Show shipping choice only if there are existing product shipping points
@@ -175,12 +177,14 @@ define([
             $scope.handleResponseErrors = function (error, object, action) {
                 $scope.serverError = error.errors;
                 $scope.submitInProgress = false;
+                $scope.resetActionsProgress();
                 $scope.searchShippingPointsInProgres = false;
                 $scope.showNotification(object, action, false);
             };
 
             $scope.acceptBooking = function () {
                 $scope.submitInProgress = true;
+                $scope.acceptingInProgress = true;
                 BookingsService.acceptBooking($stateParams.uuid).then(
                     $scope.processAcceptBookingResponse,
                     function (error) {
@@ -190,7 +194,7 @@ define([
             };
 
             $scope.processAcceptBookingResponse = function () {
-                if ($scope.bookingDetails.with_shipping) {
+                if ($scope.bookingDetails.shipping.enabled) {
                     ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(
                         $scope.processProductShippingPointsResponse,
                         function (error) {
@@ -245,6 +249,7 @@ define([
 
             $scope.rejectBooking = function () {
                 $scope.submitInProgress = true;
+                $scope.rejectingInProgress = true;
                 BookingsService.rejectBooking($stateParams.uuid).then(function () {
                     $scope.showNotification("booking", "reject", true);
                     $window.location.reload();
@@ -259,6 +264,7 @@ define([
 
             $scope.cancelBooking = function () {
                 $scope.submitInProgress = true;
+                $scope.cancellingInProgress = true;
                 BookingsService.cancelBooking($stateParams.uuid).then(function () {
                     $scope.showNotification("booking", "cancel", true);
                     $window.location.reload();
@@ -299,6 +305,14 @@ define([
                         $scope.handleResponseErrors(error, "sinister", "post");
                     }
                 );
+            };
+
+            // Reset all actions progress such as rejecting, accepting or canceling reservation to disable
+            // spinner over the href.
+            $scope.resetActionsProgress = function () {
+                $scope.rejectingInProgress = false;
+                $scope.acceptingInProgress = false;
+                $scope.cancellingInProgress = false;
             };
         }
     ]);

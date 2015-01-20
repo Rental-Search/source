@@ -32,58 +32,56 @@ class NavetteTest(TestCase):
         from datetime import datetime
         try:
             from django.utils.timezone import get_default_timezone
-            tz=get_default_timezone()
+            tz = get_default_timezone()
         except:
             import pytz
             tz = pytz.timezone('Europe/Paris')
         return datetime.now(tz=tz)
 
     def test_create_from_partner(self):
-        order_details = self.client._create_order_details()
-        order_details.DeliveryContactFirstName = 'TEST'
-        order_details.DeliveryContactLastName = 'Test'
-        order_details.DeliveryContactMail = 'test@test.com'
-        order_details.DeliveryContactMobil = '0648484848'
-        order_details.DeliveryContactPhone = '0148484848'
-        order_details.DeliverySiteAdress1 = 'test'
-        order_details.DeliverySiteAdress2 = 'test'
-        #order_details.DeliverySiteAdress3 = ''
-        order_details.DeliverySiteCity = 'test'
-        order_details.DeliverySiteCountry = 'france'
-        order_details.DeliverySiteCountryCode = 'fr'
-        order_details.DeliverySiteName = 'test'
-        order_details.DeliverySiteZipCode = '75011'
-        order_details.DropOffContactFirstName = 'TEST'
-        order_details.DropOffContactLastName = 'Test'
-        order_details.DropOffContactMail = 'test@test.com'
-        order_details.DropOffContactMobil = '0648484848'
-        order_details.DropOffContactPhone = '0148484848'
-        order_details.DropOffSiteAdress1 = 'test'
-        order_details.DropOffSiteAdress2 = 'test'
-        #order_details.DropOffSiteAdress3 = ''
-        order_details.DropOffSiteCity = 'test'
-        order_details.DropOffSiteCountry = 'france'
-        order_details.DropOffSiteCountryCode = 'fr'
-        order_details.DropOffSiteName = 'test'
-        order_details.DropOffSiteZipCode = '75011'
-        order_details.OrderContactFirstName = 'TEST'
-        order_details.OrderContactLastName = 'Test'
-        order_details.OrderContactMail = 'test@test.com'
-        order_details.OrderOrderContactMobil = '0648484848'
-        order_details.OrderContactCivility = 1
-        order_details.OrderSiteAdress1 = 'test'
-        order_details.OrderSiteAdress2 = 'test'
-        #order_details.OrderSiteAdress3 = ''
-        order_details.OrderSiteCity = 'test'
-        order_details.OrderSiteCountry = 'france'
-        order_details.OrderSiteZipCode = '75011'
-        order_details.OrderDate = '2014-10-21T16:11:09+02:00'# self.now.strftime('%FT%H:%M:%S%z')
-        order_details.OrderId = 'B400003a-abcd'
-        #order_details.ParcelWeight = 1
-        order_details.DeliverySiteId = 25608
-        order_details.DropOffSiteId = 25894
+        order_details = {
+            'DeliveryContactFirstName': 'TEST',
+            'DeliveryContactLastName': 'Test',
+            'DeliveryContactMail': 'test@test.com',
+            'DeliveryContactMobil': '0648484848',
+            'DeliveryContactPhone': '0148484848',
+            'DeliverySiteAdress1': 'test',
+            'DeliverySiteAdress2': 'test',
+            'DeliverySiteCity': 'test',
+            'DeliverySiteCountry': 'france',
+            'DeliverySiteCountryCode': 'fr',
+            'DeliverySiteName': 'test',
+            'DeliverySiteZipCode': '75011',
+            'DropOffContactFirstName': 'TEST',
+            'DropOffContactLastName': 'Test',
+            'DropOffContactMail': 'test@test.com',
+            'DropOffContactMobil': '0648484848',
+            'DropOffContactPhone': '0148484848',
+            'DropOffSiteAdress1': 'test',
+            'DropOffSiteAdress2': 'test',
+            'DropOffSiteCity': 'test',
+            'DropOffSiteCountry': 'france',
+            'DropOffSiteCountryCode': 'fr',
+            'DropOffSiteName': 'test',
+            'DropOffSiteZipCode': '75011',
+            'OrderContactFirstName': 'TEST',
+            'OrderContactLastName': 'Test',
+            'OrderContactMail': 'test@test.com',
+            'OrderOrderContactMobil': '0648484848',
+            'OrderContactCivility': 1,
+            'OrderSiteAdress1': 'test',
+            'OrderSiteAdress2': 'test',
+            'OrderSiteCity': 'test',
+            'OrderSiteCountry': 'france',
+            'OrderSiteZipCode': '75011',
+            'OrderDate': '2014-10-21T16:11:09+02:00',  # self.now.strftime('%FT%H:%M:%S%z'),
+            'DeliverySiteId': 25608,
+            'DropOffSiteId': 25894,
+        }
 
-        res = self.client.get_price_from_partner(order_details.DeliverySiteId, order_details.DropOffSiteId)
+        res = self.client.get_price_from_partner(
+                order_details['DeliverySiteId'],
+                order_details['DropOffSiteId'])
         res = self.client.create_from_partner(res.Token, order_details=order_details)
         return res
 
@@ -100,51 +98,50 @@ class FileTransferTest(TestCase):
     def test_download_etiquette(self):
         client = Navette()
 
-        order_details = client._create_order_details()
-        order_details.DeliveryContactFirstName = 'TEST'
-        order_details.DeliveryContactLastName = 'Test'
-        order_details.DeliveryContactMail = 'test@test.com'
-        order_details.DeliveryContactMobil = '0648484848'
-        order_details.DeliveryContactPhone = '0148484848'
-        order_details.DeliverySiteAdress1 = 'test'
-        order_details.DeliverySiteAdress2 = 'test'
-        #order_details.DeliverySiteAdress3 = ''
-        order_details.DeliverySiteCity = 'test'
-        order_details.DeliverySiteCountry = 'france'
-        order_details.DeliverySiteCountryCode = 'fr'
-        order_details.DeliverySiteName = 'test'
-        order_details.DeliverySiteZipCode = '75011'
-        order_details.DropOffContactFirstName = 'TEST'
-        order_details.DropOffContactLastName = 'Test'
-        order_details.DropOffContactMail = 'test@test.com'
-        order_details.DropOffContactMobil = '0648484848'
-        order_details.DropOffContactPhone = '0148484848'
-        order_details.DropOffSiteAdress1 = 'test'
-        order_details.DropOffSiteAdress2 = 'test'
-        #order_details.DropOffSiteAdress3 = ''
-        order_details.DropOffSiteCity = 'test'
-        order_details.DropOffSiteCountry = 'france'
-        order_details.DropOffSiteCountryCode = 'fr'
-        order_details.DropOffSiteName = 'test'
-        order_details.DropOffSiteZipCode = '75011'
-        order_details.OrderContactFirstName = 'TEST'
-        order_details.OrderContactLastName = 'Test'
-        order_details.OrderContactMail = 'test@test.com'
-        order_details.OrderOrderContactMobil = '0648484848'
-        order_details.OrderContactCivility = 1
-        order_details.OrderSiteAdress1 = 'test'
-        order_details.OrderSiteAdress2 = 'test'
-        #order_details.OrderSiteAdress3 = ''
-        order_details.OrderSiteCity = 'test'
-        order_details.OrderSiteCountry = 'france'
-        order_details.OrderSiteZipCode = '75011'
-        order_details.OrderDate = '2014-10-21T16:11:09+02:00'# self.now.strftime('%FT%H:%M:%S%z')
-        order_details.OrderId = 'B400003a-abcd'
-        #order_details.ParcelWeight = 1
-        order_details.DeliverySiteId = 25608
-        order_details.DropOffSiteId = 25894
+        order_details = {
+            'DeliveryContactFirstName': 'TEST',
+            'DeliveryContactLastName': 'Test',
+            'DeliveryContactMail': 'test@test.com',
+            'DeliveryContactMobil': '0648484848',
+            'DeliveryContactPhone': '0148484848',
+            'DeliverySiteAdress1': 'test',
+            'DeliverySiteAdress2': 'test',
+            'DeliverySiteCity': 'test',
+            'DeliverySiteCountry': 'france',
+            'DeliverySiteCountryCode': 'fr',
+            'DeliverySiteName': 'test',
+            'DeliverySiteZipCode': '75011',
+            'DropOffContactFirstName': 'TEST',
+            'DropOffContactLastName': 'Test',
+            'DropOffContactMail': 'test@test.com',
+            'DropOffContactMobil': '0648484848',
+            'DropOffContactPhone': '0148484848',
+            'DropOffSiteAdress1': 'test',
+            'DropOffSiteAdress2': 'test',
+            'DropOffSiteCity': 'test',
+            'DropOffSiteCountry': 'france',
+            'DropOffSiteCountryCode': 'fr',
+            'DropOffSiteName': 'test',
+            'DropOffSiteZipCode': '75011',
+            'OrderContactFirstName': 'TEST',
+            'OrderContactLastName': 'Test',
+            'OrderContactMail': 'test@test.com',
+            'OrderOrderContactMobil': '0648484848',
+            'OrderContactCivility': 1,
+            'OrderSiteAdress1': 'test',
+            'OrderSiteAdress2': 'test',
+            'OrderSiteCity': 'test',
+            'OrderSiteCountry': 'france',
+            'OrderSiteZipCode': '75011',
+            'OrderDate': '2014-10-21T16:11:09+02:00',  # self.now.strftime('%FT%H:%M:%S%z'),
+            'OrderId': 'B400003a-abcd',
+            'DeliverySiteId': 25608,
+            'DropOffSiteId': 25894,
+        }
 
-        res = client.get_price_from_partner(order_details.DeliverySiteId, order_details.DropOffSiteId)
+        res = client.get_price_from_partner(
+                order_details['DeliverySiteId'],
+                order_details['DropOffSiteId'])
         res = client.create_from_partner(res.Token, order_details=order_details)
 
         res = self.client.download_etiquette(res.NavettePDFUrl)

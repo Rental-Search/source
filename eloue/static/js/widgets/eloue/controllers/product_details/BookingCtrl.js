@@ -405,7 +405,7 @@ define([
                     };
                 }
                 angular.forEach($scope.borrowerShippingPoints, function (value) {
-                    if ($scope.selectedPointId === value.site_id) {
+                    if ($scope.selectedPointId == value.site_id) {
                         selectedPoint = value;
                     }
                 });
