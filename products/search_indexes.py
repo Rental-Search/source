@@ -49,7 +49,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     comment_count = indexes.IntegerField(model_attr='comment_count', default=0, indexed=False)
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
     is_good = indexes.BooleanField(default=False, indexed=False)
-    
+
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
     
@@ -102,7 +102,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     def index_queryset(self, using=None):
         return self.get_model().on_site.active().select_related('category', 'address', 'owner')
-        
+
 
 class CarIndex(ProductIndex):
 
