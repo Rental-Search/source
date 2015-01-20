@@ -81,12 +81,15 @@ def get_point_and_radius(coords, radius=None):
     return point, radius
 
 def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+    qs = search_index.exclude(thumbnail=None
+        ).filter(is_good=True)
+
     # try to find products in the same region
     region_point, region_radius = get_point_and_radius(
         location['region_coords'] or location['coordinates'],
         location['region_radius'] or location['radius']
         )
-    last_added = search_index.exclude(thumbnail=None).dwithin('location', region_point, Distance(km=region_radius)
+    last_added = qs.dwithin('location', region_point, Distance(km=region_radius)
         ).distance('location', region_point
         ).order_by(sort_by_date, SORT.NEAR)
 
@@ -99,14 +102,14 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
             # silently ignore exceptions like country name is missing or incorrect
             pass
         else:
-            last_added = search_index.exclude(thumbnail=None).dwithin('location', country_point, Distance(km=country_radius)
+            last_added = qs.dwithin('location', country_point, Distance(km=country_radius)
                 ).distance('location', country_point
                 ).order_by(sort_by_date, SORT.NEAR)
 
     # if there are no products found in the same country
     if not last_added.count():
         # do not filter on location, and return full list sorted by the provided date field only
-        last_added = search_index.exclude(thumbnail=None).order_by(sort_by_date)
+        last_added = qs.order_by(sort_by_date)
 
     return last_added[offset*limit:(offset+1)*limit]
 
@@ -998,6 +1001,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     ordering_fields = ('quantity', 'is_archived', 'category')
     public_actions = ('retrieve', 'search', 'is_available')
 
+    navette = helpers.EloueNavette()
+
     @link()
     def shipping_price(self, request, *args, **kwargs):
         params = serializers.ShippingPriceParamsSerializer(data=request.QUERY_PARAMS)
@@ -1013,7 +1018,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                     'detail': _(u'Departure point not specified')
                 })
             result = serializers.ShippingPriceSerializer(
-                data=helpers.get_shipping_price(departure_point.site_id, params['arrival_point_id']))
+                data=self.navette.get_shipping_price(departure_point.site_id, params['arrival_point_id']))
             if result.is_valid():
                 return Response(result.data)
 
@@ -1039,11 +1044,11 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                 lat, lng = helpers.get_position(params['address'])
                 if not all((lat, lng)):
                     return Response([])
-            shipping_points = helpers.get_shipping_points(lat, lng, params['search_type'])
+            shipping_points = self.navette.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
                 if 'site_id' in shipping_point:
                     try:
-                        price = helpers.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
+                        price = self.navette.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
                     except WebFault:
                         shipping_points.remove(shipping_point)
                     else:

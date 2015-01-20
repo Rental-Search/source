@@ -6,21 +6,19 @@ from django.utils.functional import cached_property
 
 
 class WsdlClientBase(object):
+    wsdl_proxy = None
+
     @cached_property
     def client(self):
-        proxy_hosts = dict(http='ec2-54-77-217-241.eu-west-1.compute.amazonaws.com:8080')
         api = Client(self.url)
-        api.set_options(proxy=proxy_hosts)
+        if self.wsdl_proxy is not None:
+            api.set_options(proxy=self.wsdl_proxy)
         api.set_options(cache=DocumentCache())
         return api
 
 
 class Navette(WsdlClientBase):
-    from django.conf import settings
-    url = getattr(settings, 'NAVETTE_ENDPOINT', None)
-
-    if not url:
-        raise InvalidBackend("NAVETTE_ENDPOINT not set.")
+    url = 'http://test-web-navette.pickup.fr/v1/Navette.svc?wsdl'
 
     def get_pudo(self, point, pudo_type):
         res = self.client.service.GetPudo({
