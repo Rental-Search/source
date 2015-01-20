@@ -15,6 +15,7 @@ from mptt.fields import TreeNodeMultipleChoiceField
 
 import django_filters
 
+
 DjangoFilterBackend = filters.DjangoFilterBackend
 
 class OrderingFilter(filters.OrderingFilter):
@@ -109,13 +110,19 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
         query_string = request.QUERY_PARAMS.get(self.search_param, '')
         return query_string
 
-    def filter_queryset(self, request, queryset, view):
-        search_index = getattr(view, 'search_index', None)
+    def prepare_filters(self, request, view):
+        sqs = getattr(view, 'search_index', None)
         query_string = self.get_query_string(request)
 
+        if sqs and query_string:
+            sqs = sqs.auto_query(query_string)
+
+        return sqs
+
+    def filter_queryset(self, request, queryset, view):
         view._haystack_filter = False
-        if search_index is not None and query_string:
-            sqs = search_index.auto_query(query_string)
+        sqs = self.prepare_filters(request, view)
+        if sqs:
             pks = [obj.pk for obj in sqs]
             if pks:
                 queryset = queryset.filter(pk__in=pks)
@@ -124,6 +131,7 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
                 view._haystack_filter = True
 
         return queryset
+
 
 MULTI_VALUE_FIELD_SPLIT_RE = re.compile(r'([-_\d\w]+)')
 

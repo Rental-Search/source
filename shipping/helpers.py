@@ -16,6 +16,7 @@ SHIPPING_POINT_TO_DICT_MAP = {
     'Name': 'name',
     'ZipCode': 'zipcode',
     'CountryCode': 'country',
+    'CountryName': 'country_name',
     'CityName': 'city',
     'AddressLine': 'address',
     'DistanceFromSearch': 'distance',

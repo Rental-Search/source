@@ -48,7 +48,8 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     pro_owner = indexes.BooleanField(default=False, indexed=False)
     comment_count = indexes.IntegerField(model_attr='comment_count', default=0, indexed=False)
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
-    
+    is_good = indexes.BooleanField(default=False, indexed=False)
+
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
     
@@ -59,15 +60,15 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
             return cached_category(category.pk, category)
 
     def prepare_thumbnail(self, obj):
-        for picture in obj.pictures.all()[:1]:
+        for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
             return picture.thumbnail.url if picture.thumbnail else None
 
     def prepare_thumbnail_medium(self, obj):
-        for picture in obj.pictures.all()[:1]:
+        for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
             return picture.home.url if picture.home else None
 
     def prepare_profile(self, obj):
-        for picture in obj.pictures.all()[:1]:
+        for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
             return picture.profile.url if picture.profile else None
 
     def prepare_owner_avatar(self, obj):
@@ -90,12 +91,19 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     def prepare_pro_owner(self, obj):
         return obj.owner.current_subscription is not None
 
+    def prepare_is_good(self, obj):
+        # TODO: can we call prepare_thumbnail() only once per product?
+        if obj.address and len(obj.description.split()) > 1 and self.prepare_thumbnail(obj):
+            return True
+        return False
+
     def get_model(self):
         return Product
 
     def index_queryset(self, using=None):
         return self.get_model().on_site.active().select_related('category', 'address', 'owner')
-        
+
+
 class CarIndex(ProductIndex):
 
     brand = indexes.CharField(model_attr='brand')
