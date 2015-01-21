@@ -7,7 +7,8 @@ from rest_framework.fields import SerializerMethodField
 
 from rest_framework.serializers import (
         HyperlinkedRelatedField, RelatedField,
-        BooleanField, DecimalField, get_component)
+        BooleanField, DecimalField,
+        IntegerField, get_component)
 from rest_framework import fields
 from accounts.serializers import NestedUserSerializer
 from products.serializers import NestedProductSerializer
@@ -50,9 +51,11 @@ class NestedSinisterSerializer(serializers.NestedModelSerializerMixin, serialize
         fields = ('uuid', 'description')
 
 
-class NestedShippingPriceSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
+class NestedShippingSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
     enabled = BooleanField(source='uuid', default=False)
     price = DecimalField(source='uuid', max_digits=10, decimal_places=2)
+    product_point = IntegerField(source='uuid', required=False)
+    patron_point = IntegerField(source='uuid', required=True)
 
     def _is_shipping_enabled(self, obj):
         try:
@@ -74,9 +77,21 @@ class NestedShippingPriceSerializer(serializers.NestedModelSerializerMixin, seri
 #                obj.arrival_point.site_id).get('price')
         return Decimal('0')
 
+    def transform_product_point(self, obj, value):
+        try:
+            return obj.product.departure_point.id
+        except ShippingPoint.DoesNotExist:
+            pass
+
+    def transform_patron_point(self, obj, value):
+        try:
+            return obj.arrival_point.id
+        except ShippingPoint.DoesNotExist:
+            pass
+
     class Meta:
         model = models.Booking
-        fields = ('enabled', 'price')
+        fields = ('enabled', 'price', 'product_point', 'patron_point')
 
 
 class BookingProductField(NestedProductSerializer):
@@ -100,7 +115,7 @@ class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
     owner = NestedUserSerializer(read_only=True)
     borrower = NestedUserSerializer()
-    shipping = NestedShippingPriceSerializer(source='*', required=False)
+    shipping = NestedShippingSerializer(source='*', required=False)
     sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
     duration = SerializerMethodField('get_duration')
 
