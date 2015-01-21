@@ -35,8 +35,7 @@ block section-content
       h3 Annonces associées à cette adresse
     section.tabs-vertical-active
       ul.block-with-thumbnail
-        li.block-with-thumbnail(data-ng-repeat="product in productList track by product.id", ui-sref="items.info({id: product.id})")
-          a(href="").tab-vertical
+        li.tab-vertical.block-with-thumbnail(data-ng-repeat="product in productList track by product.id", ui-sref="items.info({id: product.id})")
             {% verbatim %}
             .col-thumbnail
               .thumbnail
