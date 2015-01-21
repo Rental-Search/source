@@ -37,7 +37,11 @@ define([
                             };
                         }
                         $scope.submitInProgress = false;
-                        $scope.showNotification("password", "reset", false);
+                        // Show generic error toastr only if there is no specific errors.
+                        if (0 === $scope.errors.current_password.length && 0 === $scope.errors.password.length &&
+                            0 === $scope.errors.confirm_password.length) {
+                            $scope.showNotification("password", "reset", false);
+                        }
                     });
                 }
             };
