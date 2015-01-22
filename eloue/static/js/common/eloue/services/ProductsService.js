@@ -28,6 +28,11 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                                 deposit_amount: value.deposit_amount
                             },
                             productPromises = {};
+                        if (value.prices && value.prices.length > 0) {
+                            productData.pricePerDay = value.prices[0].amount;
+                        } else {
+                            productData.pricePerDay = 0;
+                        }
                         productPromises.stats = Products.getStats({id: value.id, _cache: new Date().getTime()});
 
                         // When all data loaded

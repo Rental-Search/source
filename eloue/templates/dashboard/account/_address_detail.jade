@@ -44,7 +44,7 @@ block section-content
               h3.small
                 | Location {{product.summary}}
               p.normal.text-gray
-                big.text-primary {{product.deposit_amount}}€ / jour
+                big.text-primary {{product.pricePerDay}}€ / jour
                 br
                 {% endverbatim %}
                 span(ng-hide="product.stats.booking_comments_count == 0 && product.stats.bookings_count == 0")
