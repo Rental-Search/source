@@ -52,7 +52,7 @@ class ProductHaystackSearchFilter(HaystackSearchFilter):
             # parent class may return None as result if it did not apply any filtering
             sqs = super(ProductHaystackSearchFilter,
                         self).filter_search_queryset(request, sqs) or sqs
-            form = ProductFacetedSearchForm(request.DATA)
+            form = ProductFacetedSearchForm(request.QUERY_PARAMS)
             if form.is_valid():
                 sqs = form.filter_queryset(sqs)
                 return sqs

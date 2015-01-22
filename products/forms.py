@@ -203,7 +203,6 @@ class ProductFacetedSearchForm(FacetedSearchForm):
 #             sqs = sqs.filter(created_at_date__gte=self.cleaned_data['date_from'])
 #         if self.cleaned_data['date_to'] is not None:
 #             sqs = sqs.filter(created_at_date__lte=self.cleaned_data['date_to'])
-
         return sqs
 
 class AlertSearchForm(SearchForm):
