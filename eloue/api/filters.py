@@ -117,12 +117,13 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
         if sqs and query_string:
             sqs = sqs.auto_query(query_string)
 
-        return sqs
+        return sqs, query_string
 
     def filter_queryset(self, request, queryset, view):
         view._haystack_filter = False
-        sqs = self.prepare_filters(request, view)
-        if sqs:
+
+        (sqs, filtered) = self.prepare_filters(request, view)
+        if sqs is not None and filtered:
             pks = [obj.pk for obj in sqs]
             if pks:
                 queryset = queryset.filter(pk__in=pks)

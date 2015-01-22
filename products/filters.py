@@ -45,10 +45,11 @@ class ProductAvailabilityFilter(BaseFilterBackend):
 
 class ProductHaystackSearchFilter(HaystackSearchFilter):
     def prepare_filters(self, request, view):
-        sqs = super(ProductHaystackSearchFilter, self).prepare_filters(
+        (sqs, qs_filter) = super(ProductHaystackSearchFilter, self).prepare_filters(
                     request, view)
 
         filter_form = ProductFacetedSearchForm(request.DATA)
-        if sqs and filter_form.is_valid():
+        form_filter = filter_form.is_valid()
+        if sqs and form_filter:
             sqs = filter_form.filter_queryset(sqs)
-        return sqs
+        return sqs, qs_filter or form_filter
