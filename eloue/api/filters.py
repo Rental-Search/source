@@ -99,6 +99,10 @@ class OwnerFilter(filters.BaseFilterBackend):
         return queryset
 
 class HaystackSearchFilter(filters.BaseFilterBackend):
+    """
+    Uses Haystack to search by requested terms, and filters Django QuerySet
+    by found records, if any.
+    """
     # The URL query parameter used for the search.
     search_param = filters.SearchFilter.search_param
 
@@ -110,20 +114,30 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
         query_string = request.QUERY_PARAMS.get(self.search_param, '')
         return query_string
 
-    def prepare_filters(self, request, view):
+    def get_search_queryset(self, view):
+        """
+        Returns SearchQuerySet instance to be used for full-text search and
+        filtering.
+        """
         sqs = getattr(view, 'search_index', None)
-        query_string = self.get_query_string(request)
+        return sqs
 
-        if sqs and query_string:
-            sqs = sqs.auto_query(query_string)
-
-        return sqs, query_string
+    def filter_search_queryset(self, request, sqs):
+        """
+        Applies supported filters to the SearchQuerySet.
+        """
+        if sqs:
+            query_string = self.get_query_string(request)
+            if query_string:
+                sqs = sqs.auto_query(query_string)
+                return sqs
 
     def filter_queryset(self, request, queryset, view):
         view._haystack_filter = False
 
-        (sqs, filtered) = self.prepare_filters(request, view)
-        if sqs is not None and filtered:
+        sqs = self.get_search_queryset(view)
+        sqs = self.filter_search_queryset(request, sqs)
+        if sqs:
             pks = [obj.pk for obj in sqs]
             if pks:
                 queryset = queryset.filter(pk__in=pks)
