@@ -48,6 +48,7 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
 
             //Validation errors
             required_field: "Ce champ est obligatoire.",
+            zipcode_invalid: "Invalid zipcode",
 
             //Dashboard form submit messages
 

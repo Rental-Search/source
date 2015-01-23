@@ -67,8 +67,9 @@ block sections
                 input(type="text", name="street", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
                 span.text-danger(ng-show="profileInformation.street.$error.required && profileSubmitted", translate="required_field")
             .col-sm-3
-                input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="currentUser.default_address.zipcode").form-control
+                input(type="text", name="zipcode", placeholder="Code postal *", required, eloue-zipcode, ng-model="currentUser.default_address.zipcode").form-control
                 span.text-danger(ng-show="profileInformation.zipcode.$error.required && profileSubmitted", translate="required_field")
+                span.text-danger(ng-show="profileInformation.zipcode.$error.badFormat && profileSubmitted", translate="zipcode_invalid")
             .col-sm-4
                 input(type="text", name="city", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
                 span.text-danger(ng-show="profileInformation.city.$error.required && profileSubmitted", translate="required_field")
