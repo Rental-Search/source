@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import inspect
 from decimal import Decimal as D
 from datetime import date
 
@@ -36,7 +37,81 @@ else:
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
-class FacetedSearchForm(SearchForm):
+class FilteredSearchMixin(object):
+    def filter_search_queryset(self, sqs, search_params):
+        if sqs:
+            sqs_filters = filter(lambda x: x[0].startswith('sqs_filter_'),
+                                 inspect.getmembers(self, inspect.ismethod))
+            print "FILTERS:", sqs_filters, search_params
+            # FIXME 
+            for _, _filter in sqs_filters:
+                sqs = _filter(sqs, search_params)
+
+            exclude_keys = [k.replace('sqs_filter_', '') for
+                            k, v in sqs_filters]
+
+            # FIXME use hasattr
+            sqs = self.unspecified_sqs_filters(
+                    sqs, search_params, exclude_keys)
+
+        return sqs
+
+    def search(self):
+        sqs = self.searchqueryset
+        if self.is_valid():
+            sqs = self.filter_search_queryset(sqs, self.cleaned_data)
+
+        return sqs
+
+class FacetedSearchMixin(object):
+    def sqs_filter_q(self, sqs, search_params):
+        # TODO add suggestion
+        query_string = search_params.get('q', None)
+        print "FILTER Q", query_string
+        self.suggestions = suggestions = None
+        if query_string:
+            sqs = sqs.auto_query(query_string)
+            suggestions = sqs.spelling_suggestion()
+            if suggestions:
+                suggestions = re.sub('AND\s*', '', suggestions)
+                suggestions = re.sub('[\(\)]+', '', suggestions)
+                suggestions = re.sub('django_ct:[a-zA-Z\.]*', '', suggestions)
+                suggestions = suggestions.strip()
+            if suggestions == query:
+                suggestions = None
+
+            self.suggestions = suggestions
+        return sqs
+
+    def sqs_order(self, sqs, search_params):
+        sort = search_params.get('sort', SORT.RECENT)
+        return sqs.order_by(sort)
+
+    def search(self):
+        if self.is_valid():
+            sqs = self.searchqueryset
+            self.suggestions = None
+
+            prices = [price[0] for price in sqs.facet_counts(
+                        ).get('fields', {}).get('price', [])]
+            if prices:
+                self.filter_limits.update({
+                    'price_min': min(prices),
+                    'price_max': max(prices),
+                })
+
+            sqs = self.filter_search_queryset(
+                    self.searchqueryset, self.cleaned_data)
+
+            if self.load_all:
+                sqs = sqs.load_all()
+
+            return sqs, self.suggestions, None
+        else:
+            return self.searchqueryset, None, None
+
+
+class FilteredProductSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1', 'placeholder': _(u'Que voulez-vous louer ?')}))
     l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': _(u'Où voulez-vous louer?')}))
     r = forms.DecimalField(required=False, min_value=1, widget=forms.TextInput(attrs={'class': 'ins'}))
@@ -54,7 +129,8 @@ class FacetedSearchForm(SearchForm):
             geocoder = GoogleGeocoder()
             departement = geocoder.get_departement(location)
             if departement:
-                name, coordinates, radius = geocoder.geocode(departement['long_name'])
+                name, coordinates, radius = geocoder.geocode(
+                                            departement['long_name'])
             else:
                 name, coordinates, radius = geocoder.geocode(location)
 
@@ -68,84 +144,51 @@ class FacetedSearchForm(SearchForm):
             location = re.sub('^[0-9]* +(.*)', r'\1', location)
         return location
 
-    def search(self):
-        if self.is_valid():
-            sqs = self.searchqueryset
-            suggestions = None
-            
-            query = self.cleaned_data.get('q', None)
-            if query:
-                sqs = self.searchqueryset.auto_query(query).highlight()
-                suggestions = sqs.spelling_suggestion()
-                if suggestions:
-                    suggestions = re.sub('AND\s*', '', suggestions)
-                    suggestions = re.sub('[\(\)]+', '', suggestions)
-                    suggestions = re.sub('django_ct:[a-zA-Z\.]*', '', suggestions)
-                    suggestions = suggestions.strip()
-                if suggestions == query:
-                    suggestions = None
+    def sqs_filter_q(self, sqs, search_params):
+        query_string = search_params.get('q', None)
+        print "FILTER Q", query_string
+        if query_string:
+            sqs = sqs.auto_query(query_string)
+        return sqs
 
-            prices = [price[0] for price in sqs.facet_counts().get('fields', {}).get('price', [])]
-            if prices:
-                self.filter_limits.update({
-                    'price_min': min(prices),
-                    'price_max': max(prices),
-                })
-
-            sqs = self.filter_queryset(sqs)
-            
-            if self.load_all:
-                sqs = sqs.load_all()
-            
-            # we do not use top products at the moment
-            top_products = None
-#             if query:
-#                 top_products = sqs.filter(is_top=True)[:3]
-#             else:
-#                 top_products = None
-#
-#             if top_products:
-#                 sqs = sqs.exclude(id__in=[product.id for product in top_products])
-
-            for key, value in self.cleaned_data.iteritems():
-                if value and key not in ["q", "l", "r", "sort", "renter", "price_from", "price_to"]:
-                    sqs = sqs.narrow("%s_exact:%s" % (key, value))
-            
-            if self.cleaned_data['sort']:
-                sqs = sqs.order_by(self.cleaned_data['sort'])
-            else:
-                sqs = sqs.order_by(SORT.RECENT)
-            return sqs, suggestions, top_products
-        else:
-            return self.searchqueryset, None, None
-
-    def filter_queryset(self, sqs):
-        location = self.cleaned_data.get('l', None)
+    def sqs_filter_l(self, sqs, search_params):
+        location = search_params.get('l', None)
+        print "FILTER L", location
         if location:
             _location, coords, radius = GoogleGeocoder().geocode(location)
             self.max_range = radius or DEFAULT_RADIUS
             if all(coords):
                 point = Point(coords)
                 sqs = sqs.dwithin(
-                    'location', point, Distance(km=self.cleaned_data.get('r', self.max_range))
+                    'location', point, Distance(
+                        km=search_params.get('r', self.max_range))
                 )
-                if 'distance' in self.cleaned_data['sort']:
-                    sqs = sqs.distance('location', point)
+        return sqs
 
-        status = self.cleaned_data.get('renter')
+    # r is used with l only.  
+    def sqs_filter_r(self, sqs, search_params):
+        return sqs
+
+    def sqs_filter_renter(self, sqs, search_params):
+        status = search_params.get('renter')
+        print "FILTER STATUS", status
         if status == "particuliers":
             sqs = sqs.filter(pro_owner=False)
         elif status == "professionnels":
             sqs = sqs.filter(pro_owner=True)
-
         return sqs
 
-class ProductFacetedSearchForm(FacetedSearchForm):
+    def unspecified_sqs_filters(self, sqs, search_params, exclude_keys):
+        for key, value in search_params.iteritems():
+            if value and key not in exclude_keys:
+                sqs = sqs.narrow("%s_exact:%s" % (key, value))
+        return sqs                
+
+
+class FilteredProductPriceSearchForm(FilteredProductSearchForm):
     # Price slider step is 1, so we can't restrict price with minimum value to be 0.01
     price_from = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.00'), required=False)
     price_to = forms.DecimalField(decimal_places=2, max_digits=10, min_value=D('0.00'), required=False)
-#     date_from = forms.DateField(input_formats=DATE_FORMAT, required=False)
-#     date_to = forms.DateField(input_formats=DATE_FORMAT, required=False)
 
     def clean_price_from(self):
         price_from = self.cleaned_data.get('price_from', None)
@@ -169,41 +212,35 @@ class ProductFacetedSearchForm(FacetedSearchForm):
             return
         return price_to
 
-#     def clean_date_from(self):
-#         date_from = self.cleaned_data.get('date_from', None)
-#         if date_from is None:
-#             return
-#         date_to = self.cleaned_data.get('date_to', None)
-#         if (date_to is not None and date_from is not None and
-#             date_from > date_to
-#         ):
-#             return
-#         return min(date_from, date.today())
-#
-#     def clean_date_to(self):
-#         date_to = self.cleaned_data.get('date_to', None)
-#         if date_to is None:
-#             return
-#         date_from = self.cleaned_data.get('date_from', None)
-#         if (date_to is not None and date_from is not None and
-#             date_to < date_from
-#         ):
-#             return
-#         return min(date_to, date.today())
-
-    def filter_queryset(self, sqs):
-        sqs = super(ProductFacetedSearchForm, self).filter_queryset(sqs)
-
-        if self.cleaned_data['price_from'] is not None:
-            sqs = sqs.filter(price__gte=self.cleaned_data['price_from'])
-        if self.cleaned_data['price_to'] is not None:
-            sqs = sqs.filter(price__lte=self.cleaned_data['price_to'])
-
-#         if self.cleaned_data['date_from'] is not None:
-#             sqs = sqs.filter(created_at_date__gte=self.cleaned_data['date_from'])
-#         if self.cleaned_data['date_to'] is not None:
-#             sqs = sqs.filter(created_at_date__lte=self.cleaned_data['date_to'])
+    def sqs_filter_price_from(self, sqs, search_params):
+        price_from = search_params.get('price_from', None)
+        print "FILTER price_from", price_from
+        if price_from:
+            sqs = sqs.filter(price__gte=price_from)
         return sqs
+
+    def sqs_filter_price_to(self, sqs, search_params):
+        price_to = search_params.get('price_to', None)
+        print "FILTER price_to", price_to
+        if price_to:
+            sqs = sqs.filter(price__lte=price_to)
+        return sqs
+
+
+class FacetedSearchForm(FacetedSearchMixin,
+                        FilteredSearchMixin, FilteredProductSearchForm):
+    pass
+
+
+class ProductFacetedSearchForm(FacetedSearchMixin,
+                               FilteredSearchMixin, FilteredProductPriceSearchForm):
+    pass
+
+
+class APIProductFacetedSearchForm(FilteredSearchMixin,
+                                  FilteredProductPriceSearchForm):
+    pass
+
 
 class AlertSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'inb'}))
