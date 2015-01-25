@@ -42,8 +42,7 @@ class FilteredSearchMixin(object):
         if sqs:
             sqs_filters = filter(lambda x: x[0].startswith('sqs_filter_'),
                                  inspect.getmembers(self, inspect.ismethod))
-            print "FILTERS:", sqs_filters, search_params
-            # FIXME 
+
             for _, _filter in sqs_filters:
                 sqs = _filter(sqs, search_params)
 
@@ -63,61 +62,11 @@ class FilteredSearchMixin(object):
 
         return sqs
 
-class FacetedSearchMixin(object):
-    def sqs_filter_q(self, sqs, search_params):
-        # TODO add suggestion
-        query_string = search_params.get('q', None)
-        print "FILTER Q", query_string
-        self.suggestions = suggestions = None
-        if query_string:
-            sqs = sqs.auto_query(query_string)
-            suggestions = sqs.spelling_suggestion()
-            if suggestions:
-                suggestions = re.sub('AND\s*', '', suggestions)
-                suggestions = re.sub('[\(\)]+', '', suggestions)
-                suggestions = re.sub('django_ct:[a-zA-Z\.]*', '', suggestions)
-                suggestions = suggestions.strip()
-            if suggestions == query:
-                suggestions = None
-
-            self.suggestions = suggestions
-        return sqs
-
-    def sqs_order(self, sqs, search_params):
-        sort = search_params.get('sort', SORT.RECENT)
-        return sqs.order_by(sort)
-
-    def search(self):
-        if self.is_valid():
-            sqs = self.searchqueryset
-            self.suggestions = None
-
-            prices = [price[0] for price in sqs.facet_counts(
-                        ).get('fields', {}).get('price', [])]
-            if prices:
-                self.filter_limits.update({
-                    'price_min': min(prices),
-                    'price_max': max(prices),
-                })
-
-            sqs = self.filter_search_queryset(
-                    self.searchqueryset, self.cleaned_data)
-
-            if self.load_all:
-                sqs = sqs.load_all()
-
-            return sqs, self.suggestions, None
-        else:
-            return self.searchqueryset, None, None
-
 
 class FilteredProductSearchForm(SearchForm):
     q = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb search-box-q', 'tabindex': '1', 'placeholder': _(u'Que voulez-vous louer ?')}))
     l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': _(u'Où voulez-vous louer?')}))
     r = forms.DecimalField(required=False, min_value=1, widget=forms.TextInput(attrs={'class': 'ins'}))
-    sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
-    price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
-    categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
     renter = forms.CharField(required=False)
 
     filter_limits = {}
@@ -181,6 +130,7 @@ class FilteredProductSearchForm(SearchForm):
     def unspecified_sqs_filters(self, sqs, search_params, exclude_keys):
         for key, value in search_params.iteritems():
             if value and key not in exclude_keys:
+                print "%s_exact:%s" % (key, value)
                 sqs = sqs.narrow("%s_exact:%s" % (key, value))
         return sqs                
 
@@ -227,13 +177,59 @@ class FilteredProductPriceSearchForm(FilteredProductSearchForm):
         return sqs
 
 
-class FacetedSearchForm(FacetedSearchMixin,
-                        FilteredSearchMixin, FilteredProductSearchForm):
-    pass
+class FacetedSearchForm(FilteredSearchMixin, FilteredProductSearchForm):
+    sort = forms.ChoiceField(required=False, choices=SORT, widget=forms.HiddenInput())
+    price = FacetField(label=_(u"Prix"), pretty_name=_("par-prix"), required=False)
+    categories = FacetField(label=_(u"Catégorie"), pretty_name=_("par-categorie"), required=False, widget=forms.HiddenInput())
+
+    def sqs_filter_q(self, sqs, search_params):
+        query_string = search_params.get('q', None)
+        print "FILTER Q", query_string
+        self.suggestions = suggestions = None
+        if query_string:
+            sqs = sqs.auto_query(query_string)
+            suggestions = sqs.spelling_suggestion()
+            if suggestions:
+                suggestions = re.sub('AND\s*', '', suggestions)
+                suggestions = re.sub('[\(\)]+', '', suggestions)
+                suggestions = re.sub('django_ct:[a-zA-Z\.]*', '', suggestions)
+                suggestions = suggestions.strip()
+            if suggestions == query_string:
+                suggestions = None
+
+            self.suggestions = suggestions
+        return sqs
+
+    def sqs_filter_order(self, sqs, search_params):
+        sort = search_params.get('sort', SORT.RECENT)
+        return sqs.order_by(sort)
+
+    def search(self):
+        if self.is_valid():
+            sqs = self.searchqueryset
+            self.suggestions = None
+
+            prices = [price[0] for price in sqs.facet_counts(
+                        ).get('fields', {}).get('price', [])]
+            if prices:
+                self.filter_limits.update({
+                    'price_min': min(prices),
+                    'price_max': max(prices),
+                })
+
+            sqs = self.filter_search_queryset(
+                    self.searchqueryset, self.cleaned_data)
+
+            if self.load_all:
+                sqs = sqs.load_all()
+
+            # TODO add oreder
+            return sqs, self.suggestions, None
+        else:
+            return self.searchqueryset, None, None
 
 
-class ProductFacetedSearchForm(FacetedSearchMixin,
-                               FilteredSearchMixin, FilteredProductPriceSearchForm):
+class ProductFacetedSearchForm(FacetedSearchForm, FilteredProductPriceSearchForm):
     pass
 
 
