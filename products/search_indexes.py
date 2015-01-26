@@ -45,7 +45,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     is_top = indexes.BooleanField(default=False)#model_attr='is_top')
 
     # introduced for UI 3 and API 2.0
-    pro_owner = indexes.BooleanField(default=False, indexed=False)
+    pro_owner = indexes.BooleanField(default=False)
     comment_count = indexes.IntegerField(model_attr='comment_count', default=0, indexed=False)
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
     
