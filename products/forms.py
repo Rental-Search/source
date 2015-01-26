@@ -38,20 +38,14 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 
 
 class FilteredSearchMixin(object):
+    def get_filters(self):
+        return filter(lambda x: x[0].startswith('sqs_filter_'),
+                      inspect.getmembers(self, inspect.ismethod))
+
     def filter_search_queryset(self, sqs, search_params):
         if sqs:
-            sqs_filters = filter(lambda x: x[0].startswith('sqs_filter_'),
-                                 inspect.getmembers(self, inspect.ismethod))
-
-            for _, _filter in sqs_filters:
+            for _, _filter in self.get_filters():
                 sqs = _filter(sqs, search_params)
-
-            exclude_keys = [k.replace('sqs_filter_', '') for
-                            k, v in sqs_filters]
-
-            # FIXME use hasattr
-            sqs = self.unspecified_sqs_filters(
-                    sqs, search_params, exclude_keys)
 
         return sqs
 
@@ -59,8 +53,6 @@ class FilteredSearchMixin(object):
         sqs = self.searchqueryset
         if self.is_valid():
             sqs = self.filter_search_queryset(sqs, self.cleaned_data)
-
-        print "FilteredSearchMixin: ", sqs.query
         return sqs
 
 
@@ -96,14 +88,12 @@ class FilteredProductSearchForm(SearchForm):
 
     def sqs_filter_q(self, sqs, search_params):
         query_string = search_params.get('q', None)
-        print "FILTER Q", query_string
         if query_string:
             sqs = sqs.auto_query(query_string)
         return sqs
 
     def sqs_filter_l(self, sqs, search_params):
         location = search_params.get('l', None)
-        print "FILTER L", location
         if location:
             _location, coords, radius = GoogleGeocoder().geocode(location)
             self.max_range = radius or DEFAULT_RADIUS
@@ -121,20 +111,11 @@ class FilteredProductSearchForm(SearchForm):
 
     def sqs_filter_renter(self, sqs, search_params):
         status = search_params.get('renter')
-        print "FILTER STATUS", status
         if status == "particuliers":
             sqs = sqs.filter(pro_owner=False)
         elif status == "professionnels":
             sqs = sqs.filter(pro_owner=True)
         return sqs
-
-    def unspecified_sqs_filters(self, sqs, search_params, exclude_keys):
-        print "search_params", search_params
-        for key, value in search_params.iteritems():
-            if value and key not in exclude_keys:
-                print "%s_exact:%s" % (key, value)
-                #sqs = sqs.narrow("%s_exact:%s" % (key, value))
-        return sqs                
 
 
 class FilteredProductPriceSearchForm(FilteredProductSearchForm):
@@ -166,14 +147,12 @@ class FilteredProductPriceSearchForm(FilteredProductSearchForm):
 
     def sqs_filter_price_from(self, sqs, search_params):
         price_from = search_params.get('price_from', None)
-        print "FILTER price_from", price_from
         if price_from:
             sqs = sqs.filter(price__gte=price_from)
         return sqs
 
     def sqs_filter_price_to(self, sqs, search_params):
         price_to = search_params.get('price_to', None)
-        print "FILTER price_to", price_to
         if price_to:
             sqs = sqs.filter(price__lte=price_to)
         return sqs
@@ -186,7 +165,6 @@ class FacetedSearchForm(FilteredSearchMixin, FilteredProductSearchForm):
 
     def sqs_filter_q(self, sqs, search_params):
         query_string = search_params.get('q', None)
-        print "FILTER Q", query_string
         self.suggestions = suggestions = None
         if query_string:
             sqs = sqs.auto_query(query_string)
@@ -203,8 +181,21 @@ class FacetedSearchForm(FilteredSearchMixin, FilteredProductSearchForm):
         return sqs
 
     def sqs_filter_sort(self, sqs, search_params):
-        sort = search_params.get('sort', SORT.RECENT)
-        return sqs.order_by(sort)
+        sort = search_params.get('sort')
+        if sort:
+            sqs = sqs.order_by(sort)
+        else:
+            sqs = sqs.order_by(SORT.RECENT)
+        return sqs
+
+    def unspecified_sqs_filters(self, sqs, search_params):
+        exclude_keys = [k.replace('sqs_filter_', '') for
+                        k, v in self.get_filters()]
+
+        for key, value in search_params.iteritems():
+            if value and key not in exclude_keys:
+                sqs = sqs.narrow("%s_exact:%s" % (key, value))
+        return sqs 
 
     def search(self):
         if self.is_valid():
@@ -225,8 +216,9 @@ class FacetedSearchForm(FilteredSearchMixin, FilteredProductSearchForm):
             if self.load_all:
                 sqs = sqs.load_all()
 
-            print "SEARCH_FORM: ", sqs.query
-            # TODO add oreder
+            sqs = self.unspecified_sqs_filters(
+                    sqs, self.cleaned_data)
+
             return sqs, self.suggestions, None
         else:
             return self.searchqueryset, None, None
