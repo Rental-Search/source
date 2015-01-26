@@ -60,6 +60,7 @@ class FilteredSearchMixin(object):
         if self.is_valid():
             sqs = self.filter_search_queryset(sqs, self.cleaned_data)
 
+        print "FilteredSearchMixin: ", sqs.query
         return sqs
 
 
@@ -128,10 +129,11 @@ class FilteredProductSearchForm(SearchForm):
         return sqs
 
     def unspecified_sqs_filters(self, sqs, search_params, exclude_keys):
+        print "search_params", search_params
         for key, value in search_params.iteritems():
             if value and key not in exclude_keys:
                 print "%s_exact:%s" % (key, value)
-                sqs = sqs.narrow("%s_exact:%s" % (key, value))
+                #sqs = sqs.narrow("%s_exact:%s" % (key, value))
         return sqs                
 
 
@@ -200,7 +202,7 @@ class FacetedSearchForm(FilteredSearchMixin, FilteredProductSearchForm):
             self.suggestions = suggestions
         return sqs
 
-    def sqs_filter_order(self, sqs, search_params):
+    def sqs_filter_sort(self, sqs, search_params):
         sort = search_params.get('sort', SORT.RECENT)
         return sqs.order_by(sort)
 
@@ -223,6 +225,7 @@ class FacetedSearchForm(FilteredSearchMixin, FilteredProductSearchForm):
             if self.load_all:
                 sqs = sqs.load_all()
 
+            print "SEARCH_FORM: ", sqs.query
             # TODO add oreder
             return sqs, self.suggestions, None
         else:
