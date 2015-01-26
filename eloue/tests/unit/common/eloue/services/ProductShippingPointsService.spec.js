@@ -42,6 +42,12 @@ define(["angular-mocks", "eloue/services/ProductShippingPointsService"], functio
             expect(!!ProductShippingPointsService).toBe(true);
         });
 
+        it("ProductShippingPointsService:getById", function () {
+            var id = 1;
+            ProductShippingPointsService.getById(id);
+            expect(productShippingPointsMock.get).toHaveBeenCalledWith({id: id, _cache: jasmine.any(Number)});
+        });
+
         it("ProductShippingPointsService:getByProduct", function () {
             var productId = 1;
             ProductShippingPointsService.getByProduct(productId);

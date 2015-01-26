@@ -42,6 +42,12 @@ define(["angular-mocks", "eloue/services/PatronShippingPointsService"], function
             expect(!!PatronShippingPointsService).toBe(true);
         });
 
+        it("PatronShippingPointsService:getById", function () {
+            var id = 1;
+            PatronShippingPointsService.getById(id);
+            expect(patronShippingPointsMock.get).toHaveBeenCalledWith({id: id, _cache: jasmine.any(Number)});
+        });
+
         it("PatronShippingPointsService:getByPatronAndBooking", function () {
             var userId = 1, bookingId = 1;
             PatronShippingPointsService.getByPatronAndBooking(userId, bookingId);

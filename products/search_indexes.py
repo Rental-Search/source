@@ -48,7 +48,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     pro_owner = indexes.BooleanField(default=False, indexed=False)
     comment_count = indexes.IntegerField(model_attr='comment_count', default=0, indexed=False)
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
-    is_good = indexes.BooleanField(default=False, indexed=False)
+    is_good = indexes.BooleanField(default=False)
 
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))

@@ -82,7 +82,7 @@ def get_point_and_radius(coords, radius=None):
 
 def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
     # only objects that are 'good' to be shown
-    sqs = search_index.filter(is_good=True)
+    sqs = search_index.filter(is_good=1)
 
     # try to find products in the same region
     region_point, region_radius = get_point_and_radius(
