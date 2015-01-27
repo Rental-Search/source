@@ -22,7 +22,7 @@ define([
             });
 
             $scope.shouldMarkAsUnread = function (lastMessage) {
-                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) === $scope.currentUser.id);
+                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) == $scope.currentUser.id);
             };
         }
     ]);
