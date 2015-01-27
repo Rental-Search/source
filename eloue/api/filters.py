@@ -15,6 +15,7 @@ from mptt.fields import TreeNodeMultipleChoiceField
 
 import django_filters
 
+
 DjangoFilterBackend = filters.DjangoFilterBackend
 
 class OrderingFilter(filters.OrderingFilter):
@@ -98,6 +99,10 @@ class OwnerFilter(filters.BaseFilterBackend):
         return queryset
 
 class HaystackSearchFilter(filters.BaseFilterBackend):
+    """
+    Uses Haystack to search by requested terms, and filters Django QuerySet
+    by found records, if any.
+    """
     # The URL query parameter used for the search.
     search_param = filters.SearchFilter.search_param
 
@@ -109,21 +114,41 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
         query_string = request.QUERY_PARAMS.get(self.search_param, '')
         return query_string
 
-    def filter_queryset(self, request, queryset, view):
-        search_index = getattr(view, 'search_index', None)
-        query_string = self.get_query_string(request)
+    def get_search_queryset(self, view):
+        """
+        Returns SearchQuerySet instance to be used for full-text search and
+        filtering.
+        """
+        sqs = getattr(view, 'search_index', None)
+        return sqs
 
+    def filter_search_queryset(self, request, sqs):
+        """
+        Applies supported filters to the SearchQuerySet.
+        """
+        if sqs:
+            query_string = self.get_query_string(request)
+            if query_string:
+                sqs = sqs.auto_query(query_string)
+                return sqs
+
+    def filter_queryset(self, request, queryset, view):
         view._haystack_filter = False
-        if search_index is not None and query_string:
-            sqs = search_index.auto_query(query_string)
-            pks = [obj.pk for obj in sqs]
-            if pks:
+
+        sqs = self.get_search_queryset(view)
+        if sqs is not None:
+            filtered_sqs = self.filter_search_queryset(request, sqs)
+            # sqs was filtered
+            if filtered_sqs not in (None, sqs):
+                # FIXME should be better way to limit results
+                pks = [obj.pk for obj in filtered_sqs[:200]]
                 queryset = queryset.filter(pk__in=pks)
                 # mark the view has search results
                 # FIXME: should be a better (more safe) way to do this
                 view._haystack_filter = True
 
         return queryset
+
 
 MULTI_VALUE_FIELD_SPLIT_RE = re.compile(r'([-_\d\w]+)')
 
