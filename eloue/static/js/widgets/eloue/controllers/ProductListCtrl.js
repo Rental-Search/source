@@ -292,10 +292,27 @@ define([
                     google.maps.event.trigger(marker, "mouseout");
                 };
             };
+            
+            $scope.activateRenterSelect = function () {
+                var particularCheckbox = $("#particular"), proCheckbox = $("#professional");
+                particularCheckbox.change(
+                    function(){
+                        if (this.checked) {
+                            proCheckbox.prop("checked", false);
+                        }
+                    });
+                proCheckbox.change(
+                    function(){
+                        if (this.checked) {
+                            particularCheckbox.prop("checked", false);
+                        }
+                    });
+            };
 
             MapsService.loadGoogleMaps();
             $scope.activateLayoutSwitcher();
             $scope.activateCategoryAndSortSelector();
             $scope.activatePriceSlider();
+            $scope.activateRenterSelect();
         }]);
 });
