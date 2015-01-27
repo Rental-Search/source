@@ -17,7 +17,8 @@ define([
         "AddressesService",
         "ProductsService",
         "UsersService",
-        function ($scope, $state, $stateParams, Endpoints, AddressesService, ProductsService, UsersService) {
+        "UtilsService",
+        function ($scope, $state, $stateParams, Endpoints, AddressesService, ProductsService, UsersService, UtilsService) {
 
             $scope.address = {};
 
@@ -63,7 +64,7 @@ define([
 
             $scope.finaliseAddressUpdate = function () {
                 $scope.submitInProgress = false;
-                $scope.showNotification("address", "save", true);
+                $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
                 $state.transitionTo($state.current, $stateParams, {reload: true});
             };
 
@@ -72,7 +73,7 @@ define([
                 $scope.submitInProgress = true;
                 AddressesService.deleteAddress($scope.address.id).then(function () {
                     $scope.submitInProgress = false;
-                    $scope.showNotification("address", "delete", true);
+                    $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
                     $state.transitionTo("account.addresses", $stateParams, {reload: true});
                 }, function (error) {
                     $scope.handleResponseErrors(error, "address", "delete");
