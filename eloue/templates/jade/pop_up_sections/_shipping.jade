@@ -7,9 +7,8 @@ p(ng-show="noAddress").text-black Vous devez mettre une adresse dans le formulai
         span.text-danger(ng-show="bookingForm.street.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-show="noAddress")
     .col-sm-6
-        input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required, eloue-zipcode).form-control
+        input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
         span.text-danger(ng-show="bookingForm.zipcode.$error.required && bookingSubmitted", translate="required_field")
-        span.text-danger(ng-show="bookingForm.zipcode.$error.badFormat && bookingSubmitted", translate="zipcode_invalid")
     .col-sm-6
         input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
         span.text-danger(ng-show="bookingForm.city.$error.required && bookingSubmitted", translate="required_field")
