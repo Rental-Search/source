@@ -108,6 +108,7 @@ define([
                             promise = PricesService.savePrice(value);
                         }
                         promise.then(function (result) {
+                            $scope.prices[key].id = result.id;
                             $scope.prices[key].amount = parseFloat(result.amount).toFixed(2);
                         });
                         promises.push(promise);
