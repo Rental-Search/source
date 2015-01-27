@@ -113,6 +113,11 @@ define([
             $scope.applyProductDetails = function (product) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);
                 $scope.markListItemAsSelected("item-tab-", "info");
+                // Backend may send this fiels as string. It's wrong. The value
+                // must be a number value.
+                if (product && product.costs_per_km) {
+                    product.costs_per_km = parseFloat(product.costs_per_km);
+                }
                 $scope.product = product;
                 var initialCategoryId = product.category.id;
                 CategoriesService.getParentCategory(product.category).then(function (nodeCategory) {

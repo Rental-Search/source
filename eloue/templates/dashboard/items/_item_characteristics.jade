@@ -51,7 +51,7 @@
             tr(ng-show="isAuto")
                 td Prix par kilomètres supplémentaires
                 td
-                    input(type="number", ng-model="product.costs_per_km", placeholder="Prix").table-form
+                    input(type="number", ng-model="product.costs_per_km", step="0.5", placeholder="Prix").table-form
             tr(ng-show="isAuto")
                 td Climatisation
                 td
