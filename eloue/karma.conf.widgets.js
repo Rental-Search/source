@@ -21,9 +21,10 @@ module.exports = function (config) {
             {pattern: 'static/bower_components/angular/angular.js', included: false },
             {pattern: 'static/bower_components/angular-mocks/angular-mocks.js', included: false },
             {pattern: 'static/bower_components/angular-resource/angular-resource.js', included: false },
-            {pattern: 'static/bower_components/angular-route/angular-route.js', included: false },
             {pattern: 'static/bower_components/angular-cookies/angular-cookies.js', included: false },
             {pattern: 'static/bower_components/angular-sanitize/angular-sanitize.js', included: false },
+            {pattern: 'static/bower_components/angular-i18n/angular-locale_fr-fr.js', included: false },
+            {pattern: 'static/bower_components/angular-translate/angular-translate.min.js', included: false },
             {pattern: 'static/bower_components/moment/moment.js', included: false },
             {pattern: 'static/bower_components/angular-moment/angular-moment.js', included: false },
             {pattern: 'static/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', included: false },
@@ -71,11 +72,18 @@ module.exports = function (config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ['Chrome'],
-
-
+        browsers: ['PhantomJS'],
+        plugins: ['karma-jasmine', 'karma-requirejs', 'karma-coverage', 'karma-phantomjs-launcher'],
+        reporters: ['progress', 'coverage'],
+        preprocessors: {
+            'static/js/widgets/**/*.js': ['coverage']
+        },
+        coverageReporter: {
+            type : 'html',
+            dir : '../coverage/'
+        },
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
-        singleRun: false
+        singleRun: true
     });
 };

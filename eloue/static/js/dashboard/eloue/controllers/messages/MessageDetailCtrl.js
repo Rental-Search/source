@@ -1,37 +1,50 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/MessageThreadsService",
+    "../../../../common/eloue/services/BookingsService",
+    "../../../../common/eloue/services/ProductRelatedMessagesService",
+    "../../../../common/eloue/services/ProductsService",
+    "../../../../common/eloue/services/UtilsService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the message detail page.
      */
-    angular.module("EloueDashboardApp").controller("MessageDetailCtrl", [
+    EloueDashboardApp.controller("MessageDetailCtrl", [
         "$scope",
         "$stateParams",
         "$q",
         "$window",
         "Endpoints",
-        "MessageThreadsLoadService",
-        "BookingsLoadService",
-        "ProductRelatedMessagesLoadService",
-        "ProductsLoadService",
+        "MessageThreadsService",
+        "BookingsService",
+        "ProductRelatedMessagesService",
+        "ProductsService",
         "UtilsService",
-        function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsLoadService, BookingsLoadService, ProductRelatedMessagesLoadService, ProductsLoadService, UtilsService) {
+        function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsService, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService) {
 
-            function onRequestFailed(){
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
-            }
+                $scope.showNotification(object, action, false);
+            };
+
             var promises = {
                 currentUser: $scope.currentUserPromise,
-                messageThread: MessageThreadsLoadService.getMessageThread($stateParams.id)
+                messageThread: MessageThreadsService.getMessageThreadById($stateParams.id)
             };
 
             $q.all(promises).then(function (results) {
+                $scope.applyUserAndMessageThread(results);
+            });
+
+            $scope.applyUserAndMessageThread = function (results) {
                 $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
-                if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
+                $scope.currentuser = results.currentUser;
+                if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) === results.currentUser.id)) {
                     $scope.messageThread.last_message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
-                    ProductRelatedMessagesLoadService.updateMessage($scope.messageThread.last_message).$promise.then(function (result) {
+                    ProductRelatedMessagesService.updateMessage($scope.messageThread.last_message).then(function () {
                         $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
                         $scope.updateStatistics();
                     });
@@ -40,7 +53,7 @@ define(["angular", "eloue/app"], function (angular) {
                 if ($scope.messageThread.product) {
 
                     // Get booking product
-                    BookingsLoadService.getBookingByProduct($scope.messageThread.product.id).then(function (booking) {
+                    BookingsService.getBookingByProduct($scope.messageThread.product.id).then(function (booking) {
                         if (!booking) {
                             // Options for the select element
                             $scope.availableHours = [
@@ -80,16 +93,17 @@ define(["angular", "eloue/app"], function (angular) {
                             $scope.requestBooking = function () {
                                 $scope.submitInProgress = true;
 //                                //Get product details
-                                ProductsLoadService.getAbsoluteUrl($scope.messageThread.product.id).$promise.then(function (result) {
+                                ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
                                     $window.location.href = result.url + "#/booking";
-                                }, onRequestFailed);
+                                }, function (error) {
+                                    $scope.handleResponseErrors(error, "booking", "redirect");
+                                });
                             };
-
                             $scope.booking = booking;
                             $scope.updateNewBookingInfo();
                         } else {
                             $scope.booking = booking;
-                            $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) != -1;
+                            $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                             $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                         }
                     }, function (reason) {
@@ -97,58 +111,62 @@ define(["angular", "eloue/app"], function (angular) {
                     });
                 }
                 // Get users' roles
-                var usersRoles = MessageThreadsLoadService.getUsersRoles($scope.messageThread, results.currentUser.id);
+                var usersRoles = MessageThreadsService.getUsersRoles($scope.messageThread, results.currentUser.id);
 
                 // Post new message
                 $scope.postNewMessage = function () {
                     $scope.submitInProgress = true;
-                    ProductRelatedMessagesLoadService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
-                        $scope.message, null, $scope.messageThread.product.id).then(function () {
+                    ProductRelatedMessagesService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
+                        $scope.message, null, $scope.messageThread.product.id).then(
+                        function () {
                             // Clear message field
                             $scope.message = "";
 
                             // Reload data
-                            MessageThreadsLoadService.getMessageThread($stateParams.id).then(function (messageThread) {
+                            MessageThreadsService.getMessageThreadById($stateParams.id).then(function (messageThread) {
                                 $scope.messageThread.messages = messageThread.messages;
                                 $scope.submitInProgress = false;
-                            }, onRequestFailed);
-                        });
-                };
-
-                $scope.updateNewBookingInfo = function () {
-                    var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value;
-                    var toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value;
-
-                    var fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss");
-                    var toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
-
-                    ProductsLoadService.isAvailable($scope.messageThread.product.id,
-                        fromDateTimeStr, toDateTimeStr, 1).then(
-                        function (data) {
-                            var period = UtilsService.calculatePeriodBetweenDates(fromDateTime.toString(), toDateTime.toString());
-                            // Set data for displaying
-                            $scope.newBooking.period_days = period.period_days;
-                            $scope.newBooking.period_hours = period.period_hours;
-                            $scope.newBooking.total_amount = data.total_price;
-                            // TODO set deposit_amount field value
-                            // Set data for request
-                            $scope.newBooking.started_at = fromDateTime.toString("yyyy-MM-ddThh:mm:ss");
-                            $scope.newBooking.ended_at = toDateTime.toString("yyyy-MM-ddThh:mm:ss");
-
-                            $scope.newBooking.borrower = Endpoints.api_url + "users/" + results.currentUser.id + "/";
-
-                            $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
-                        },
-                        function (reason) {
-                            // TODO bad date handling
-                            console.log(reason);
+                                $scope.showNotification("message", "send", true);
+                            }, function (error) {
+                                $scope.handleResponseErrors(error, "message", "send");
+                            });
                         }
                     );
                 };
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
-            });
+            };
+
+            $scope.updateNewBookingInfo = function () {
+                var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value,
+                    toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value,
+                    fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
+                    toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
+
+                ProductsService.isAvailable($scope.messageThread.product.id,
+                    fromDateTimeStr, toDateTimeStr, 1).then(
+                    function (data) {
+                        $scope.parseProductAvailabilityResponse(data, fromDateTime, toDateTime);
+                    },
+                    function (error) {
+                        $scope.handleResponseErrors(error, "booking", "update");
+                    }
+                );
+            };
+
+            $scope.parseProductAvailabilityResponse = function (data, fromDateTime, toDateTime) {
+                var period = UtilsService.calculatePeriodBetweenDates(fromDateTime.toString(), toDateTime.toString());
+                // Set data for displaying
+                $scope.newBooking.period_days = period.period_days;
+                $scope.newBooking.period_hours = period.period_hours;
+                $scope.newBooking.total_amount = data.total_price;
+                // Set data for request
+                $scope.newBooking.started_at = fromDateTime.toString("yyyy-MM-ddThh:mm:ss");
+                $scope.newBooking.ended_at = toDateTime.toString("yyyy-MM-ddThh:mm:ss");
+                $scope.newBooking.borrower = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
+                $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
+            };
         }
     ]);
 });

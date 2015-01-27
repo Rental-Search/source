@@ -24,7 +24,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         "invalid_grant": "Bad credentials provided",
         "invalid_request": "Bad request",
         "invalid_scope": "Invalid scope",
-        "invalid_client": "Wrong client app"
+        "invalid_client": "Wrong client app",
+        "user_inactive": "Votre compte est inactif."
     });
 
     EloueCommon.constant("ActivityType", {
@@ -151,5 +152,5 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * URL to redirect user after logging in.
      */
-    EloueCommon.value("RedirectAfterLogin", { url: "/"});
+    EloueCommon.value("RedirectAfterLogin", {url: "/"});
 });

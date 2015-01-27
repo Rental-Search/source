@@ -1,36 +1,35 @@
 require.config(
     (function () {
         var STATIC_URL = "/static/";
-        var scripts = document.getElementsByTagName('script');
+        var scripts = document.getElementsByTagName("script");
         for (var i = 0, l = scripts.length; i < l; i++) {
-            if (scripts[i].getAttribute('data-static-path')) {
-                STATIC_URL = scripts[i].getAttribute('data-static-path');
+            if (scripts[i].getAttribute("data-static-path")) {
+                STATIC_URL = scripts[i].getAttribute("data-static-path");
                 break;
             }
         }
         return {
             baseUrl: STATIC_URL + "js/dashboard",
             paths: {
-                "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",
-                "underscore": "../../bower_components/lodash/dist/lodash.min",
-                "jQuery": "../../bower_components/jquery/dist/jquery.min",
-                "angular": "../../bower_components/angular/angular.min",
-                "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
-                "angular-route": "../../bower_components/angular-route/angular-route.min",
-                "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
-                "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
-                "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router.min",
-                "angular-translate": "../../bower_components/angular-translate/angular-translate.min",
+                "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
+                "underscore": "../../bower_components/lodash/dist/lodash",
+                "jQuery": "../../bower_components/jquery/dist/jquery",
+                "angular": "../../bower_components/angular/angular",
+                "angular-resource": "../../bower_components/angular-resource/angular-resource",
+                "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
+                "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
+                "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router",
+                "angular-translate": "../../bower_components/angular-translate/angular-translate",
                 "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
                 "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
                 "jquery-form": "../../bower_components/jquery-form/jquery.form",
-                "datejs": "../../bower_components/datejs/build/production/date.min",
-                "chosen": "../../bower_components/chosen/chosen.jquery.min",
+                "datejs": "../../bower_components/datejs/build/date",
+                "chosen": "../../bower_components/chosen/chosen.jquery",
                 "selectivizr": "../../bower_components/selectivizr/selectivizr",
                 "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
                 "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
                 "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
-                "toastr": "../../bower_components/toastr/toastr.min",
+                "toastr": "../../bower_components/toastr/toastr",
                 "formmapper": "../formmapper",
                 "filesaver": "../FileSaver.min"
             },
@@ -39,7 +38,6 @@ require.config(
                     deps: ["jQuery"],
                     "exports": "angular"
                 },
-                "angular-route": ["angular"],
                 "angular-cookies": ["angular"],
                 "angular-sanitize": ["angular"],
                 "angular-resource": ["angular"],
@@ -62,7 +60,7 @@ require.config(
                 "toastr": ["jQuery"],
                 "formmapper": ["jQuery"]
             }
-        }
+        };
     })()
 );
 
@@ -89,12 +87,4 @@ require([
         $(".signs-links").find("ul.without-spaces").show();
         angular.bootstrap(document, ["EloueDashboardApp"]);
     });
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.0&appId=197983240245844";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
 });

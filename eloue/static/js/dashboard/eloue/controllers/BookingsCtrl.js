@@ -1,11 +1,12 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../common/eloue/services/UsersService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the bookings page.
      */
-    angular.module("EloueDashboardApp").controller("BookingsCtrl", [
+    EloueDashboardApp.controller("BookingsCtrl", [
         "$scope",
         "$timeout",
         "UsersService",
@@ -28,7 +29,7 @@ define(["angular", "eloue/app"], function (angular) {
             };
 
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
@@ -57,28 +58,31 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.filter();
             };
 
-            $scope.filter = function() {
-                $scope.$broadcast("startLoading", {parameters: [$scope.currentUser.id, $scope.stateFilter, $scope.bookingFilter.borrower, $scope.bookingFilter.owner], shouldReloadList: true});
+            $scope.filter = function () {
+                $scope.$broadcast("startLoading", {
+                    parameters: [$scope.currentUser.id, $scope.stateFilter, $scope.bookingFilter.borrower, $scope.bookingFilter.owner],
+                    shouldReloadList: true
+                });
             };
 
             // Timeout is used because of chosen issue (when options are loaded asynchronously, they sometimes not visible in chosen widget)
             $timeout(function () {
                 $("#stateFilterSelect").chosen();
                 $(".chosen-drop").mCustomScrollbar({
-                    scrollInertia: '100',
+                    scrollInertia: "100",
                     autoHideScrollbar: true,
-                    theme: 'dark-thin',
-                    scrollbarPosition: 'outside',
-                    advanced:{
+                    theme: "dark-thin",
+                    scrollbarPosition: "outside",
+                    advanced: {
                         autoScrollOnFocus: false,
                         updateOnContentResize: true
                     }
                 });
             }, 500);
 
-            $scope.$on('$destroy', function iVeBeenDismissed() {
+            $scope.$on("$destroy", function iVeBeenDismissed() {
                 $scope.clearSelectedItem("booking-");
-            })
+            });
         }
     ]);
 });

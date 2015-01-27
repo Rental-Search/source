@@ -37,7 +37,9 @@ class ShippingPointTest(APITestCase):
 
 class PatronShippingPointTest(APITestCase):
 
-    fixtures = ['patron']
+    fixtures = [
+        'patron', 'booking_address', 'category', 'product', 'price', 'booking_api2', 
+    ]
 
     def setUp(self):
         self.model = get_model('shipping', 'PatronShippingPoint')
@@ -49,14 +51,18 @@ class PatronShippingPointTest(APITestCase):
             'lng': 2.3522219000000177,
             'site_id': 123456,
             'pudo_id': '123456',
-            'type': 1
+            'type': 1,
+            'booking': _location('booking-detail',
+                        pk='87ee8e9dec1d47c29ebb27e09bda8fc3'),
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response)
 
 
 class ProductShippingPointTest(APITestCase):
 
-    fixtures = ['patron']
+    fixtures = [
+        'patron', 'booking_address', 'category', 'product', 'price', 'booking_api2',
+    ]
 
     def setUp(self):
         self.model = get_model('shipping', 'PatronShippingPoint')
@@ -69,6 +75,8 @@ class ProductShippingPointTest(APITestCase):
             'lng': 2.3522219000000177,
             'site_id': 123456,
             'pudo_id': '123456',
-            'type': 1
+            'type': 1,
+            'booking': _location('booking-detail',
+                        pk='87ee8e9dec1d47c29ebb27e09bda8fc3'),
         })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response)

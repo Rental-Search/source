@@ -1,21 +1,17 @@
-"use strict";
 define([
     "angular",
     "angular-cookies",
     "angular-resource",
-    "angular-route",
     "angular-translate",
     "angular-i18n",
-    "eloue/modules/booking/BookingModule",
     "../../common/eloue/commonApp"
 ], function (angular) {
+    "use strict";
     // Create application module
-    return angular.module("EloueApp", [
+    return angular.module("EloueWidgetsApp", [
         "EloueCommon",
-        "EloueApp.BookingModule",
         "ngCookies",
         "ngResource",
-        "ngRoute",
         "pascalprecht.translate"
     ]);
 });

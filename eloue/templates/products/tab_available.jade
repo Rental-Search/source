@@ -1,6 +1,6 @@
 -load product
 
-.block-tab.ng-hide#tabs-availability
+.block-tab.ng-hide(data-ng-controller="CalendarCtrl")#tabs-availability
     form
       {% monthcalendar %}
       .row.indent-t-sm.indent-b-sm

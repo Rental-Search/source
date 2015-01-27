@@ -3,52 +3,153 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
     describe("Controller: BookingDetailCtrl", function () {
 
         var BookingDetailCtrl,
-            scope,
-            stateParams,
-            bookingsLoadServiceMock,
-            commentsLoadServiceMock;
+            scope, stateParams, window, endpointsMock, bookingsServiceMock, commentsServiceMock, phoneNumbersServiceMock,
+            sinistersServiceMock, usersServiceMock, shippingsServiceMock,
+            productShippingPointsServiceMock, patronShippingPointsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
-            bookingsLoadServiceMock = {
+            endpointsMock = {
+                api_url: "/api/2.0/"
+            };
+
+            bookingsServiceMock = {
                 getBookingDetails: function (bookingUUID) {
-                    console.log("bookingsLoadServiceMock:getBookingDetails called with bookingUUID = " + bookingUUID);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    console.log("bookingsServiceMock:getBookingDetails called with bookingUUID = " + bookingUUID);
+                    return simpleServiceResponse;
+                },
+                downloadContract: function (uuid) {
+                    return null;
+                },
+                acceptBooking: function (uuid) {
+                    return simpleServiceResponse;
+                },
+                rejectBooking: function (uuid) {
+                    return simpleServiceResponse;
+                },
+                cancelBooking: function (uuid) {
+                    return simpleServiceResponse;
+                },
+                postIncident: function (uuid, description) {
+                    return simpleServiceResponse;
                 }
             };
-            commentsLoadServiceMock = {
+            commentsServiceMock = {
                 getCommentList: function (bookingUUID) {
-                    console.log("commentsLoadServiceMock:getCommentList called with bookingUUID = " + bookingUUID);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    console.log("commentsServiceMock:getCommentList called with bookingUUID = " + bookingUUID);
+                    return simpleServiceResponse;
                 },
                 postComment: function (bookingUUID, comment, rate) {
-                    console.log("commentsLoadServiceMock:postComment called with bookingUUID = " + bookingUUID + ", comment = " + comment + ", rate = " + rate);
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    console.log("commentsServiceMock:postComment called with bookingUUID = " + bookingUUID + ", comment = " + comment + ", rate = " + rate);
+                    return simpleServiceResponse;
+                }
+            };
+
+            phoneNumbersServiceMock = {
+                getPremiumRateNumber: function (phoneId) {
+                    return simpleServiceResponse;
+                }
+            };
+
+            sinistersServiceMock = {
+                getSinisterList: function (uuid) {
+                    return simpleServiceResponse;
+                }
+            };
+
+            usersServiceMock = {
+                getMe: function (successCallback, errorCallback) {
+                    console.log("usersServiceMock:getMe");
+                    return simpleServiceResponse;
+                },
+
+                getStatistics: function (userId) {
+                    return simpleServiceResponse;
+                }
+            };
+
+            shippingsServiceMock = {
+                getByBooking: function (uuid) {
+                    return simpleServiceResponse;
+                },
+                downloadVoucher: function (shippingId, isOwner) {
+                    return null;
+                },
+                saveShipping: function (shipping) {
+                    return simpleServiceResponse;
+                }
+            };
+
+            productShippingPointsServiceMock = {
+                getByProduct: function () {
+                    return simpleServiceResponse;
+                }
+            };
+
+            patronShippingPointsServiceMock = {
+                getByPatronAndBooking: function (borrowerId, uuid) {
+                    return simpleServiceResponse;
                 }
             };
 
             module(function ($provide) {
-                $provide.value("BookingsLoadService", bookingsLoadServiceMock);
-                $provide.value("CommentsLoadService", commentsLoadServiceMock);
+                $provide.value("Endpoints", endpointsMock);
+                $provide.value("BookingsService", bookingsServiceMock);
+                $provide.value("CommentsService", commentsServiceMock);
+                $provide.value("PhoneNumbersService", phoneNumbersServiceMock);
+                $provide.value("SinistersService", sinistersServiceMock);
+                $provide.value("UsersService", usersServiceMock);
+                $provide.value("ShippingsService", shippingsServiceMock);
+                $provide.value("ProductShippingPointsService", productShippingPointsServiceMock);
+                $provide.value("PatronShippingPointsService", patronShippingPointsServiceMock);
             })
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.showNotification = function(object, action, bool){};
+            scope.markListItemAsSelected = function(){};
+            scope.initCustomScrollbars = function(){};
             stateParams = {};
-            spyOn(bookingsLoadServiceMock, "getBookingDetails").andCallThrough();
-            spyOn(commentsLoadServiceMock, "getCommentList").andCallThrough();
-            spyOn(commentsLoadServiceMock, "postComment").andCallThrough();
+            spyOn(bookingsServiceMock, "getBookingDetails").and.callThrough();
+            spyOn(bookingsServiceMock, "downloadContract").and.callThrough();
+            spyOn(bookingsServiceMock, "acceptBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "rejectBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "cancelBooking").and.callThrough();
+            spyOn(bookingsServiceMock, "postIncident").and.callThrough();
+            spyOn(commentsServiceMock, "getCommentList").and.callThrough();
+            spyOn(commentsServiceMock, "postComment").and.callThrough();
+            spyOn(phoneNumbersServiceMock, "getPremiumRateNumber").and.callThrough();
+            spyOn(sinistersServiceMock, "getSinisterList").and.callThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(usersServiceMock, "getStatistics").and.callThrough();
+            spyOn(shippingsServiceMock, "getByBooking").and.callThrough();
+            spyOn(shippingsServiceMock, "downloadVoucher").and.callThrough();
+            spyOn(shippingsServiceMock, "saveShipping").and.callThrough();
+            spyOn(productShippingPointsServiceMock, "getByProduct").and.callThrough();
+            spyOn(patronShippingPointsServiceMock, "getByPatronAndBooking").and.callThrough();
 
-            BookingDetailCtrl = $controller('BookingDetailCtrl', { $scope: scope, $stateParams: stateParams, BookingsLoadService: bookingsLoadServiceMock, CommentsLoadService: commentsLoadServiceMock });
-            expect(bookingsLoadServiceMock.getBookingDetails).toHaveBeenCalled();
+            BookingDetailCtrl = $controller('BookingDetailCtrl', {
+                $scope: scope,
+                $stateParams: stateParams,
+                $window: window,
+                Endpoints: endpointsMock,
+                BookingsService: bookingsServiceMock,
+                CommentsService: commentsServiceMock,
+                PhoneNumbersService: phoneNumbersServiceMock,
+                SinistersService: sinistersServiceMock,
+                UsersService: usersServiceMock,
+                ShippingsService: shippingsServiceMock,
+                ProductShippingPointsService: productShippingPointsServiceMock,
+                PatronShippingPointsService: patronShippingPointsServiceMock
+            });
+            expect(bookingsServiceMock.getBookingDetails).toHaveBeenCalled();
         }));
 
         it("BookingDetailCtrl should be not null", function () {
@@ -62,7 +163,127 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
                 rate: 1
             };
             scope.postComment();
-            expect(commentsLoadServiceMock.postComment).toHaveBeenCalledWith(stateParams.uuid, scope.comment.text, scope.comment.rate);
+            expect(commentsServiceMock.postComment).toHaveBeenCalledWith(stateParams.uuid, scope.comment.text, scope.comment.rate);
+        });
+
+        it("BookingDetailCtrl:starClicked", function () {
+            scope.starClicked();
+        });
+
+        it("BookingDetailCtrl:loadPhoneNumber", function () {
+            scope.loadPhoneNumber();
+        });
+
+        it("BookingDetailCtrl:loadUserInfo", function () {
+            var userObj = {
+                id: 1
+            };
+            scope.loadUserInfo(userObj);
+        });
+
+        it("BookingDetailCtrl:downloadContract", function () {
+            scope.downloadContract();
+        });
+
+        it("BookingDetailCtrl:downloadVoucher", function () {
+            scope.shipping = {
+                id: 1
+            };
+            scope.downloadVoucher();
+        });
+
+        it("BookingDetailCtrl:showRealPhoneNumber", function () {
+            scope.showRealPhoneNumber();
+        });
+
+        it("BookingDetailCtrl:handleResponseErrors", function () {
+            var error = {
+                errors: {}
+            };
+            scope.handleResponseErrors(error);
+        });
+
+        it("BookingDetailCtrl:acceptBooking", function () {
+            scope.acceptBooking();
+        });
+
+        it("BookingDetailCtrl:rejectBooking", function () {
+            scope.rejectBooking();
+        });
+
+        it("BookingDetailCtrl:cancelBooking", function () {
+            scope.cancelBooking();
+        });
+
+        it("BookingDetailCtrl:declareIncident", function () {
+            scope.declareIncident();
+        });
+
+        it("BookingDetailCtrl:postIncident", function () {
+            scope.incident = {
+                description: "description"
+            };
+            scope.postIncident();
+        });
+
+        it("BookingDetailCtrl:applyBookingDetails", function () {
+            scope.currentUserUrl = "fsdfsd";
+            var bookingDetails = {
+                owner: {
+                    id: 1
+                },
+                borrower: {
+                    id: 2
+                }
+            };
+            scope.applyBookingDetails(bookingDetails);
+            expect(scope.bookingDetails).toEqual(bookingDetails);
+        });
+
+        it("BookingDetailCtrl:processAcceptBookingResponse", function () {
+            scope.bookingDetails = {
+                with_shipping: true,
+                product: {
+                    id: 1
+                }
+            };
+            scope.processAcceptBookingResponse();
+            expect(productShippingPointsServiceMock.getByProduct).toHaveBeenCalled();
+        });
+
+        it("BookingDetailCtrl:processProductShippingPointsResponse", function () {
+            scope.bookingDetails = {
+                borrower: {
+                    id: 0
+                },
+                owner: {
+                    id: 1
+                }
+            };
+            var productShippingPointData = {
+                results: [
+                    {
+                        id: 2
+                    }
+                ]
+            };
+            scope.processProductShippingPointsResponse(productShippingPointData);
+            expect(patronShippingPointsServiceMock.getByPatronAndBooking).toHaveBeenCalled();
+        });
+
+        it("BookingDetailCtrl:processPatronShippingPointsResponse", function () {
+            scope.bookingDetails = {
+                uuid: 1
+            };
+            var patronShippingPointData = {
+                results: [
+                    {
+                        id: 2
+                    }
+                ]
+            }, productShippingPoint = { id : 1};
+            scope.processPatronShippingPointsResponse(patronShippingPointData, productShippingPoint);
+            expect(shippingsServiceMock.saveShipping).toHaveBeenCalled();
         });
     });
 });

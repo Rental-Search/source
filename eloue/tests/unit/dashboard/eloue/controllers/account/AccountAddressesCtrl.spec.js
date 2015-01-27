@@ -6,7 +6,11 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressesCtrl"], func
             scope,
             usersServiceMock,
             addressesServiceMock,
-            utilsServiceMock;
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -14,39 +18,31 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressesCtrl"], func
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return {$promise: {then: function () {
-                        return {result: {id: 1}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 
             addressesServiceMock = {
                 getAddressesByPatron: function (patronId) {
                     console.log("addressesServiceMock:getAddressesByPatron called with patronId = " + patronId);
-                    return {$promise: {then: function () {
-                        return {result: {id: 1}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 
-            utilsServiceMock = {getIdFromUrl: function (url) {
-                return 1;
-            }};
 
             module(function ($provide) {
                 $provide.value("UsersService", usersServiceMock);
                 $provide.value("AddressesService", addressesServiceMock);
-                $provide.value("UtilsService", utilsServiceMock);
             })
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
             scope.markListItemAsSelected = function(prefix, id) {};
-            spyOn(usersServiceMock, "getMe").andCallThrough();
-            spyOn(addressesServiceMock, "getAddressesByPatron").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(addressesServiceMock, "getAddressesByPatron").and.callThrough();
             $rootScope.$digest();
-            AccountAddressesCtrl = $controller('AccountAddressesCtrl', { $scope: scope, UsersService: usersServiceMock, AddressesService: addressesServiceMock, UtilsService: utilsServiceMock });
+            AccountAddressesCtrl = $controller('AccountAddressesCtrl', { $scope: scope, UsersService: usersServiceMock, AddressesService: addressesServiceMock });
             expect(usersServiceMock.getMe).toHaveBeenCalled();
         }));
 

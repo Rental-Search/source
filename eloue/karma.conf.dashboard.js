@@ -17,7 +17,6 @@ module.exports = function (config) {
             {pattern: 'static/bower_components/angular/angular.min.js', included: false },
             {pattern: 'static/bower_components/angular-mocks/angular-mocks.js', included: false },
             {pattern: 'static/bower_components/angular-resource/angular-resource.min.js', included: false },
-            {pattern: 'static/bower_components/angular-route/angular-route.min.js', included: false },
             {pattern: 'static/bower_components/angular-cookies/angular-cookies.min.js', included: false },
             {pattern: 'static/bower_components/angular-sanitize/angular-sanitize.min.js', included: false },
             {pattern: 'static/bower_components/angular-ui-router/release/angular-ui-router.min.js', included: false },
@@ -64,17 +63,18 @@ module.exports = function (config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ['Chrome'],
-//      plugins: ['karma-coverage'],
-//      reporters: ['progress', 'coverage'],
-//      preprocessors: {
-//          // source files, that you wanna generate coverage for
-//          // do not include tests or libraries
-//          // (these files will be instrumented by Istanbul)
-//          'static/js/**/*.js': ['coverage']
-//      },
+        browsers: ['PhantomJS'],
+        plugins: ['karma-jasmine', 'karma-requirejs', 'karma-coverage', 'karma-phantomjs-launcher'],
+        reporters: ['progress', 'coverage'],
+        preprocessors: {
+            'static/js/dashboard/**/*.js': ['coverage']
+        },
+        coverageReporter: {
+            type : 'html',
+            dir : '../coverage/'
+        },
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
-        singleRun: false
+        singleRun: true
     });
 };

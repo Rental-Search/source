@@ -1,11 +1,16 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/AddressesService",
+    "../../../../common/eloue/services/CategoriesService",
+    "../../../../common/eloue/services/PicturesService",
+    "../../../../common/eloue/services/ProductsService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the items photos and info page.
      */
-    angular.module("EloueDashboardApp").controller("ItemsInfoCtrl", [
+    EloueDashboardApp.controller("ItemsInfoCtrl", [
         "$q",
         "$scope",
         "$stateParams",
@@ -25,7 +30,7 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.leafCategories = {};
             $scope.rootCategory = {};
             $scope.nodeCategory = {};
-            $scope.loadingPicture=0;
+            $scope.loadingPicture = 0;
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
             $scope.categoriesBaseUrl = Endpoints.api_url + "categories/";
             $scope.isAuto = false;
@@ -94,12 +99,23 @@ define(["angular", "eloue/app"], function (angular) {
                 {id: 19, name: "19+"}
             ];
 
-            ProductsService.getProductDetails($stateParams.id).then(function (product) {
+            $scope.handleResponseErrors = function (error, object, action) {
+                $scope.submitInProgress = false;
+                $scope.showNotification(object, action, false);
+            };
+
+            ProductsService.getProductDetails($stateParams.id).then(
+                function (product) {
+                    $scope.applyProductDetails(product);
+                }
+            );
+
+            $scope.applyProductDetails = function (product) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);
                 $scope.markListItemAsSelected("item-tab-", "info");
                 $scope.product = product;
                 var initialCategoryId = product.category.id;
-                CategoriesService.getParentCategory(product.category).$promise.then(function (nodeCategory) {
+                CategoriesService.getParentCategory(product.category).then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
                         $scope.nodeCategory = initialCategoryId;
                         $scope.rootCategory = nodeCategory.id;
@@ -108,7 +124,7 @@ define(["angular", "eloue/app"], function (angular) {
                     } else {
                         $scope.nodeCategory = nodeCategory.id;
                         $scope.updateLeafCategories();
-                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                        CategoriesService.getParentCategory(nodeCategory).then(function (rootCategory) {
                             $scope.rootCategory = rootCategory.id;
                             $scope.updateNodeCategories();
                             $scope.updateFieldSet(rootCategory);
@@ -120,27 +136,27 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.product.phoneDetails = $scope.product.phone;
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
-
-
-            });
+            };
 
             CategoriesService.getRootCategories().then(function (categories) {
                 $scope.rootCategories = categories;
             });
 
             $scope.onPictureAdded = function () {
+                $scope.$apply(function () {
+                    $scope.loadingPicture += 1;
+                });
+                PicturesService.savePicture($("#add-picture"), function (data) {
                     $scope.$apply(function () {
-                        $scope.loadingPicture++;
-                    });
-                PicturesService.savePicture($scope.product.id, $("#add-picture"), function (data) {
-                    $scope.$apply(function () {
-                        $scope.loadingPicture--;
+                        $scope.loadingPicture -= 1;
                         $scope.product.pictures.push(data);
                     });
-                }, function(){
+                    $scope.showNotification("picture", "upload", true);
+                }, function () {
                     $scope.$apply(function () {
-                        $scope.loadingPicture--;
+                        $scope.loadingPicture -= 1;
                     });
+                    $scope.showNotification("picture", "upload", false);
                 });
             };
 
@@ -156,13 +172,14 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
                 }
                 var promises = [];
-                promises.push(AddressesService.update($scope.product.addressDetails).$promise);
-                promises.push(ProductsService.updateProduct($scope.product).$promise);
-                $q.all(promises).then(function (results) {
+                promises.push(AddressesService.update($scope.product.addressDetails));
+                promises.push(ProductsService.updateProduct($scope.product));
+                $q.all(promises).then(function () {
                     $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
-                },function(){
-                    $scope.submitInProgress = false;
+                    $scope.showNotification("item_info", "save", true);
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "item_info", "save");
                 });
             };
 
@@ -170,7 +187,7 @@ define(["angular", "eloue/app"], function (angular) {
                 CategoriesService.getChildCategories($scope.rootCategory).then(function (categories) {
                     $scope.nodeCategories = categories;
                 });
-                CategoriesService.getCategory($scope.rootCategory).$promise.then(function (rootCategory) {
+                CategoriesService.getCategory($scope.rootCategory).then(function (rootCategory) {
                     $scope.updateFieldSet(rootCategory);
                 });
             };
@@ -191,22 +208,24 @@ define(["angular", "eloue/app"], function (angular) {
                 }
             };
 
-            $scope.getTimes=function(n){
+            $scope.getTimes = function (n) {
                 return new Array(n);
             };
 
             $scope.showRemoveConfirm = function (pictureId) {
                 $scope.selectedPictureId = pictureId;
-                $('#confirm').modal();
+                $("#confirm").modal();
             };
 
             $scope.deletePicture = function () {
                 $scope.submitInProgress = true;
-                PicturesService.deletePicture($scope.selectedPictureId).$promise.then(function(data) {
+                PicturesService.deletePicture($scope.selectedPictureId).then(function () {
                     ProductsService.getProductDetails($stateParams.id).then(function (product) {
                         $scope.submitInProgress = false;
                         $scope.product.pictures = product.pictures;
                     });
+                }, function (error) {
+                    $scope.handleResponseErrors(error, "picture", "delete");
                 });
             };
         }

@@ -31,7 +31,7 @@ block append styles
   {% compressed_css "product_list_styles" %}
 
 block append content-body
-  .container-flex(data-ng-controller="AuthCtrl")
+  .container-flex(data-ng-controller="ProductListCtrl")
     header.header-site
       include ../jade/_header_site
      nav.bd-b
@@ -50,4 +50,3 @@ block append content-body
       //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
       section.footer-links: include ../jade/_footer_links
       section.rss: include ../jade/_rss
-    script(type="text/ng-template")#modalContainer
