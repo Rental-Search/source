@@ -839,7 +839,7 @@ else:
 NAVETTE_ENDPOINT = env('NAVETTE_ENDPOINT', 'http://test-web-navette.pickup.fr/v1/Navette.svc?wsdl')
 NAVETTE_FILE_TRANSFER_ENDPOINT = env('NAVETTE_FILE_TRANSFER_ENDPOINT', 'http://test-web-navette.pickup.fr/v1/FileTransfer.svc?wsdl')
 WSDL_PROXY = env('WSDL_PROXY',
-        {'http': 'ec2-54-77-217-241.eu-west-1.compute.amazonaws.com:8080',})
+        {'http': 'http://proxy:aa2d0de6b805-416d-91b9-3e586917597c@proxy-54-75-227-164.proximo.io',})
 
 
 PRODUCTHIGHLIGHT_PRICE = decimal.Decimal('7.5')
