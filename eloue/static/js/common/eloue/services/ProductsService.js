@@ -27,11 +27,19 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                                 summary: value.summary,
                                 deposit_amount: value.deposit_amount
                             },
-                            productPromises = {};
-                        if (value.prices && value.prices.length > 0) {
-                            productData.pricePerDay = value.prices[0].amount;
+                            productPromises = {},
+                            prices = value.prices;
+                        if (prices && prices.length > 0) {
+                            angular.forEach(prices, function (price, key) {
+                                if (price.unit == 1) {
+                                    productData.pricePerDay = price.amount;
+                                }
+                            });
                         } else {
                             productData.pricePerDay = 0;
+                        }
+                        if ($.isArray(value.pictures) && (value.pictures.length > 0)) {
+                            productData.picture = value.pictures[0].image.thumbnail;
                         }
                         productPromises.stats = Products.getStats({id: value.id, _cache: new Date().getTime()});
 
@@ -72,20 +80,23 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 Products.get(params).$promise.then(function (data) {
                     var promises = [];
                     angular.forEach(data.results, function (value) {
-                        var productDeferred = $q.defer(), subPromises = [];
-
-                        var product = {
-                            id: value.id,
-                            summary: value.summary,
-                            deposit_amount: value.deposit_amount
-                        };
+                        var productDeferred = $q.defer(), subPromises = [],
+                            product = {
+                                id: value.id,
+                                summary: value.summary,
+                                deposit_amount: value.deposit_amount
+                            }, prices = value.prices;
 
                         if ($.isArray(value.pictures) && (value.pictures.length > 0)) {
                             product.picture = value.pictures[0].image.thumbnail;
                         }
 
-                        if (value.prices && value.prices.length > 0) {
-                            product.pricePerDay = value.prices[0].amount;
+                        if (prices && prices.length > 0) {
+                            angular.forEach(prices, function (price, key) {
+                                if (price.unit == 1) {
+                                    product.pricePerDay = price.amount;
+                                }
+                            });
                         } else {
                             product.pricePerDay = 0;
                         }
