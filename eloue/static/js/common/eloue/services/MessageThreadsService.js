@@ -52,13 +52,15 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                         // For each message thread
                         angular.forEach(messageThreadListData.results, function (messageThreadData, key) {
-                            var messageThreadDeferred = $q.defer();
+                            if (messageThreadData.last_message && messageThreadData.messages && messageThreadData.messages.length > 0) {
+                                var messageThreadDeferred = $q.defer();
 
-                            var messageThread = messageThreadsService.parseMessageThreadListItem(messageThreadData,
-                                messageThreadData.last_message);
-                            messageThreadDeferred.resolve(messageThread);
+                                var messageThread = messageThreadsService.parseMessageThreadListItem(messageThreadData,
+                                    messageThreadData.last_message);
+                                messageThreadDeferred.resolve(messageThread);
 
-                            messageThreadListPromises.push(messageThreadDeferred.promise);
+                                messageThreadListPromises.push(messageThreadDeferred.promise);
+                            }
                         });
 
                         $q.all(messageThreadListPromises).then(function (messageThreadList) {
