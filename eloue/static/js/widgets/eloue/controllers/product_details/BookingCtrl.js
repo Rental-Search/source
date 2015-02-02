@@ -668,6 +668,15 @@ define([
                     $scope.shippingPrice = 0;
                     $scope.selectedPointId = "";
                 }
+                if ($scope.addShipping && $scope.borrowerShippingPoints.length !== 0) {
+                    var lastSelectedPoint;
+                    angular.forEach($scope.borrowerShippingPoints, function (value) {
+                        if (value.selected) {
+                            lastSelectedPoint = value;
+                        }
+                    });
+                    $scope.pointSelected(lastSelectedPoint.site_id);
+                }
             };
 
             $scope.applyArrivalShippingPoint = function (result) {
