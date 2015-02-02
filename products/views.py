@@ -1217,8 +1217,13 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         self._post_data = request.DATA
         return super(ProductViewSet, self).create(request, *args, **kwargs)
 
+    def update(self, request, pk=None):
+        self._post_data = request.DATA
+        return super(ProductViewSet, self).update(request, pk)
+
     def get_location_url(self):
         return reverse('product-detail', args=(self.object.pk,))
+
 
 class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
