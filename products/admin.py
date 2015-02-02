@@ -2,14 +2,17 @@
 import decimal
 import logbook
 
+from django.utils.translation import gettext_lazy as _
 from django.contrib import admin, messages
 from django.shortcuts import redirect
+from django.contrib.auth.models import Group
 
 from mptt.admin import MPTTModelAdmin
 from mptt.forms import TreeNodeChoiceField
 
 from django_messages.models import Message
 from django_messages.admin import MessageAdmin
+from django import forms
 
 from products.forms import ProductAdminForm
 from products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage
@@ -138,7 +141,32 @@ class AlertAdmin(admin.ModelAdmin):
     pass
 
 
+class EloueMessageAdminForm(forms.ModelForm):
+    """
+    Custom AdminForm to enable messages to groups and all users.
+    """
+    group = forms.ChoiceField(label=_('group'), required=False,
+        help_text=_('Creates the message optionally for all users or a group of users.'))
+
+    def __init__(self, *args, **kwargs):
+        super(EloueMessageAdminForm, self).__init__(*args, **kwargs)
+        self.fields['group'].choices = self._get_group_choices()
+        #self.fields['recipient'].required = True
+
+    def _get_group_choices(self):
+        return [('', u'---------'), ('all', _('All users'))] + \
+            [(group.pk, group.name) for group in Group.objects.all()]
+
+    class Meta:
+        model = Message
+        fields = ('sender', 'recipient', 'group', 'parent_msg', 'subject',
+                'body', 'sent_at', 'read_at', 'replied_at', 'sender_deleted_at',
+                'recipient_deleted_at')
+
+
 class EloueMessageAdmin(MessageAdmin):
+    form = EloueMessageAdminForm
+
     list_filter = ('sent_at', )
     search_fields = ('subject', 'body', 'recipient__username', 'sender__username',)
     readonly_fields = ('recipient', 'sender', 'parent_msg')

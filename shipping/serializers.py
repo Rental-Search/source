@@ -1,13 +1,11 @@
 # coding=utf-8
 import datetime
-from decimal import Decimal
 import re
 
 from django.utils.translation import gettext as _
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
 from rest_framework.fields import TimeField
-from rest_framework.relations import HyperlinkedRelatedField
 
 from rest_framework.serializers import CharField, BooleanField, DecimalField, IntegerField
 from accounts.choices import COUNTRY_CHOICES
@@ -15,7 +13,6 @@ from accounts.choices import COUNTRY_CHOICES
 from eloue.api import serializers
 
 from . import helpers, models
-from eloue.api.exceptions import ServerException, ServerErrorEnum
 from rent.contract import first_or_empty
 
 
@@ -50,7 +47,8 @@ class ShippingPointSerializer(serializers.GeoModelSerializer):
     def to_native(self, obj):
         result = super(ShippingPointSerializer, self).to_native(obj)
         if obj:  # for working of REST framework GUI
-            shipping_point = helpers.get_shipping_point(obj.site_id, obj.position.x, obj.position.y, obj.type)
+            shipping_point = helpers.EloueNavette().get_shipping_point(
+                        obj.site_id, obj.position.x, obj.position.y, obj.type)
             if shipping_point:
                 extra_info = PudoSerializer(data=shipping_point)
                 if extra_info.is_valid():
@@ -99,51 +97,55 @@ class ShippingSerializer(serializers.ModelSerializer):
     def preprocess_name(self, name):
         return self.regexp.sub(' ', name).strip()
 
-    def _fill_order_detail(self, sender, receiver, send_point, receive_point):
-        sender_address = sender.default_address or first_or_empty(sender.addresses.all())
-        sender_phone = sender.default_number or first_or_empty(sender.phones.all())
-        receiver_address = receiver.default_address or first_or_empty(receiver.addresses.all())
-        receiver_phone = receiver.default_number or first_or_empty(receiver.phones.all())
+    def _fill_order_detail(self, delivery, dropoff, order_contact,
+                                    delivery_site, dropoff_site):
+        delivery_phone = delivery.default_number or first_or_empty(delivery.phones.all())
+        dropoff_phone = dropoff.default_number or first_or_empty(dropoff.phones.all())
+
+        order_contact_address = order_contact.default_address or \
+                                first_or_empty(order_contact.addresses.all())
+        order_contact_phone = order_contact.default_number or \
+                                first_or_empty(order_contact.phones.all())
 
         return {
-            'DeliveryContactFirstName': self.preprocess_name(sender.first_name),
-            'DeliveryContactLastName': self.preprocess_name(sender.last_name),
-            'DeliveryContactMail': sender.email.replace('-', ''),
-            'DeliveryContactMobil': sender_phone.number if sender_phone else '',
-            'DeliveryContactPhone': sender_phone.number if sender_phone else '',
-            'DeliverySiteAdress1': sender_address.address1 if sender_address else '',
-            'DeliverySiteAdress2': sender_address.address2 if sender_address else '',
-            'DeliverySiteCity': sender_address.city if sender_address else '',
-            'DeliverySiteCountry': getattr(COUNTRY_CHOICES, sender_address.country) if sender_address else '',
-            'DeliverySiteCountryCode': sender_address.country if sender_address else '',
-            'DeliverySiteName': send_point.pudo_id,
-            'DeliverySiteZipCode': sender_address.zipcode if sender_address else '',
-            'DropOffContactFirstName': self.preprocess_name(receiver.first_name),
-            'DropOffContactLastName': self.preprocess_name(receiver.last_name),
-            'DropOffContactMail': receiver.email.replace('-', ''),
-            'DropOffContactMobil': receiver_phone.number if receiver_phone else '',
-            'DropOffContactPhone': receiver_phone.number if receiver_phone else '',
-            'DropOffSiteAdress1': receiver_address.address1 if receiver_address else '',
-            'DropOffSiteAdress2': receiver_address.address2 if receiver_address else '',
-            'DropOffSiteCity': receiver_address.city if receiver_address else '',
-            'DropOffSiteCountry': getattr(COUNTRY_CHOICES, receiver_address.country) if receiver_address else '',
-            'DropOffSiteCountryCode': receiver_address.country if receiver_address else '',
-            'DropOffSiteName': receive_point.pudo_id,
-            'DropOffSiteZipCode': receiver_address.zipcode if receiver_address else '',
-            'OrderContactFirstName': 'TEST',
-            'OrderContactLastName': 'Test',
-            'OrderContactMail': 'test@test.com',
-            'OrderOrderContactMobil': '0648484848',
+            'DeliveryContactFirstName': self.preprocess_name(delivery.first_name),
+            'DeliveryContactLastName': self.preprocess_name(delivery.last_name),
+            'DeliveryContactMail': delivery.email.replace('-', ''),
+            'DeliveryContactMobil': delivery_phone.number if delivery_phone else '',
+            'DeliveryContactPhone': delivery_phone.number if delivery_phone else '',
+            'DeliverySiteAdress1': delivery_site.get('address', ''),
+            'DeliverySiteAdress2': delivery_site.get('address2', ''),
+            'DeliverySiteCity': delivery_site.get('city', ''),
+            'DeliverySiteCountry': delivery_site.get('country_name', ''),
+            'DeliverySiteCountryCode': delivery_site.get('country', ''),
+            'DeliverySiteName': delivery_site.get('pudo_id', ''),
+            'DeliverySiteZipCode': delivery_site.get('zipcode', ''),
+            'DropOffContactFirstName': self.preprocess_name(dropoff.first_name),
+            'DropOffContactLastName': self.preprocess_name(dropoff.last_name),
+            'DropOffContactMail': dropoff.email.replace('-', ''),
+            'DropOffContactMobil': dropoff_phone.number if dropoff_phone else '',
+            'DropOffContactPhone': dropoff_phone.number if dropoff_phone else '',
+            'DropOffSiteAdress1': dropoff_site.get('address', ''),
+            'DropOffSiteAdress2': dropoff_site.get('address2', ''),
+            'DropOffSiteCity': dropoff_site.get('city', ''),
+            'DropOffSiteCountry': dropoff_site.get('country_name', ''),
+            'DropOffSiteCountryCode': dropoff_site.get('country', ''),
+            'DropOffSiteName': dropoff_site.get('pudo_id', ''),
+            'DropOffSiteZipCode': delivery_site.get('zipcode', ''),
+            'OrderContactFirstName': self.preprocess_name(order_contact.first_name),
+            'OrderContactLastName': self.preprocess_name(order_contact.last_name),
+            'OrderContactMail': order_contact.email.replace('-', ''),
+            'OrderOrderContactMobil': order_contact_phone.number if order_contact_phone else '',
             'OrderContactCivility': 1,
-            'OrderSiteAdress1': 'test',
-            'OrderSiteAdress2': 'test',
-            'OrderSiteCity': 'test',
-            'OrderSiteCountry': 'france',
-            'OrderSiteZipCode': '75011',
+            'OrderSiteAdress1': order_contact_address.address1 if order_contact_address else '',
+            'OrderSiteAdress2': order_contact_address.address2 if order_contact_address else '',
+            'OrderSiteCity': order_contact_address.city if order_contact_address else '',
+            'OrderSiteCountry': getattr(COUNTRY_CHOICES,
+                         order_contact_address.country) if order_contact_address else '',
+            'OrderSiteZipCode': order_contact_address.zipcode if order_contact_address else '',
             'OrderDate': datetime.datetime.now(),
-            'OrderId': 'B400003a-abcd',
-            'DeliverySiteId': send_point.site_id,
-            'DropOffSiteId': receive_point.site_id,
+            'DeliverySiteId': delivery_site.get('site_id', ''),
+            'DropOffSiteId': dropoff_site.get('site_id', ''),
         }
 
     def from_native(self, data, files):
@@ -152,16 +154,28 @@ class ShippingSerializer(serializers.ModelSerializer):
             instance.departure_point = instance.booking.product.departure_point
             instance.arrival_point = instance.booking.arrival_point
 
+            navette = helpers.EloueNavette()
+            product_point = instance.booking.product.departure_point
+            product_point = navette.get_shipping_point(
+                            product_point.site_id, product_point.position.x, 
+                            product_point.position.y, product_point.type)
+
+            patron_point = instance.booking.arrival_point
+            patron_point = navette.get_shipping_point(
+                            patron_point.site_id, patron_point.position.x, 
+                            patron_point.position.y, patron_point.type)
+
             token = cache.get(
                 helpers.build_cache_id(instance.booking.product, instance.booking.borrower, instance.arrival_point.site_id))
             if not token:
-                price = helpers.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
+                price = navette.get_shipping_price(instance.departure_point.site_id, instance.arrival_point.site_id)
                 token = price.pop('token')
 
             order_details = self._fill_order_detail(
                 instance.booking.owner, instance.booking.borrower,
-                instance.booking.product.departure_point, instance.booking.arrival_point)
-            shipping_params = helpers.create_shipping(token, order_details)
+                instance.booking.borrower,
+                product_point, patron_point)
+            shipping_params = navette.create_shipping(token, order_details)
 
             instance.order_number = shipping_params['order_number']
             instance.shuttle_code = shipping_params['shuttle_code']
@@ -169,8 +183,9 @@ class ShippingSerializer(serializers.ModelSerializer):
 
             order_details = self._fill_order_detail(
                 instance.booking.borrower, instance.booking.owner,
-                instance.booking.arrival_point, instance.booking.product.departure_point)
-            shipping_params = helpers.create_shipping(token, order_details)
+                instance.booking.borrower,
+                patron_point, product_point)
+            shipping_params = navette.create_shipping(token, order_details)
 
             instance.order_number2 = shipping_params['order_number']
             instance.shuttle_code2 = shipping_params['shuttle_code']

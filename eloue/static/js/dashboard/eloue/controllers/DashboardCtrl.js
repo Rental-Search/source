@@ -1,11 +1,13 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../common/eloue/values",
+    "../../../common/eloue/services/UsersService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the dashboard page.
      */
-    angular.module("EloueDashboardApp").controller("DashboardCtrl", [
+    EloueDashboardApp.controller("DashboardCtrl", [
         "$scope",
         "ActivityType",
         "UsersService",
@@ -17,22 +19,14 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.bookings = {};
 
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
-            }
-            if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
-                UsersService.getStatistics($scope.currentUser.id).$promise.then(function (stats) {
+                UsersService.getStatistics($scope.currentUser.id).then(function (stats) {
                     $scope.userStats = stats;
                 });
             });
-
-            $scope.filterByActivityType = function () {
-                console.log($scope.selectedActivityType);
-                //TODO: filter activity feed
-            }
         }]);
 });

@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+from decimal import Decimal
+
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
 
-from rest_framework.serializers import HyperlinkedRelatedField, RelatedField, get_component
+from rest_framework.serializers import (
+        HyperlinkedRelatedField, RelatedField,
+        BooleanField, DecimalField,
+        IntegerField, get_component)
 from rest_framework import fields
 from accounts.serializers import NestedUserSerializer
 from products.serializers import NestedProductSerializer
@@ -12,6 +17,7 @@ from rent import models
 from rent.choices import COMMENT_TYPE_CHOICES
 from eloue.api import serializers
 from shipping.models import ShippingPoint
+#from shipping.helpers import EloueNavette
 from rent.utils import timesince
 
 
@@ -44,6 +50,50 @@ class NestedSinisterSerializer(serializers.NestedModelSerializerMixin, serialize
     class Meta(SinisterSerializer.Meta):
         fields = ('uuid', 'description')
 
+
+class NestedShippingSerializer(serializers.NestedModelSerializerMixin, serializers.ModelSerializer):
+    enabled = BooleanField(source='uuid', default=False)
+    price = DecimalField(source='uuid', max_digits=10, decimal_places=2)
+    product_point = IntegerField(source='uuid', required=False)
+    patron_point = IntegerField(source='uuid', required=True)
+
+    def _is_shipping_enabled(self, obj):
+        try:
+            obj.product.departure_point
+            obj.arrival_point
+        except ShippingPoint.DoesNotExist:
+            return False
+        return True
+
+    def transform_enabled(self, obj, value):
+        return self._is_shipping_enabled(obj)
+
+    def transform_price(self, obj, value):
+        if self._is_shipping_enabled(obj):
+            # TODO hardcoded instead getting réal price
+            return Decimal('10.0')
+#            return EloueNavette().get_shipping_price(
+#                obj.product.departure_point.site_id,
+#                obj.arrival_point.site_id).get('price')
+        return Decimal('0')
+
+    def transform_product_point(self, obj, value):
+        try:
+            return obj.product.departure_point.id
+        except ShippingPoint.DoesNotExist:
+            pass
+
+    def transform_patron_point(self, obj, value):
+        try:
+            return obj.arrival_point.id
+        except ShippingPoint.DoesNotExist:
+            pass
+
+    class Meta:
+        model = models.Booking
+        fields = ('enabled', 'price', 'product_point', 'patron_point')
+
+
 class BookingProductField(NestedProductSerializer):
     default_error_messages = {
         'own_product': _(u"Vous ne pouvez pas louer vos propres objets"),
@@ -65,17 +115,9 @@ class BookingSerializer(serializers.ModelSerializer):
     product = BookingProductField()
     owner = NestedUserSerializer(read_only=True)
     borrower = NestedUserSerializer()
-    with_shipping = SerializerMethodField('is_shipping_included')
+    shipping = NestedShippingSerializer(source='*', required=False)
     sinisters = NestedSinisterSerializer(read_only=True, required=False, many=True)
     duration = SerializerMethodField('get_duration')
-
-    def is_shipping_included(self, obj):
-        try:
-            obj.product.departure_point
-            obj.arrival_point
-        except ShippingPoint.DoesNotExist:
-            return False
-        return True
 
     def get_duration(self, obj):
         return timesince(obj.started_at, obj.ended_at)
@@ -94,9 +136,10 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Booking
         fields = (
-            'uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 'insurance_amount', 'total_amount',
-            'currency', 'owner', 'borrower', 'product', 'contract_id', 'created_at', 'canceled_at', 'sinisters',
-            'with_shipping', 'duration',
+            'uuid', 'started_at', 'ended_at', 'state', 'deposit_amount', 
+            'insurance_amount', 'total_amount', 'shipping', 'currency', 
+            'owner', 'borrower', 'product', 'contract_id', 
+            'created_at', 'canceled_at', 'sinisters', 'duration',
         )
         read_only_fields = (
             'state', 'deposit_amount', 'insurance_amount', 'total_amount',

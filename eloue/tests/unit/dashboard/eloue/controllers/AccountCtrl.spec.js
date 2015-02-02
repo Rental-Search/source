@@ -4,7 +4,13 @@ define(["angular-mocks", "eloue/controllers/AccountCtrl"], function() {
 
         var AccountCtrl,
             scope,
-            usersServiceMock;
+            state,
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -12,9 +18,7 @@ define(["angular-mocks", "eloue/controllers/AccountCtrl"], function() {
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return {$promise: {then: function () {
-                        return {result: {}}
-                    }}}
+                    return simpleServiceResponse;
                 }
             };
 
@@ -23,12 +27,13 @@ define(["angular-mocks", "eloue/controllers/AccountCtrl"], function() {
             })
         });
 
-        beforeEach(inject(function ($rootScope, $controller) {
+        beforeEach(inject(function ($rootScope, $state, $controller) {
             scope = $rootScope.$new();
+            state = $state;
 
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
 
-            AccountCtrl = $controller('AccountCtrl', { $scope: scope, UsersService: usersServiceMock });
+            AccountCtrl = $controller('AccountCtrl', { $scope: scope, $state: state, UsersService: usersServiceMock });
             expect(usersServiceMock.getMe).toHaveBeenCalled();
         }));
 

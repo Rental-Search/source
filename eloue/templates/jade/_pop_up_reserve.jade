@@ -12,9 +12,9 @@
                         include ./pop_up_sections/_product_info.jade
                     section.terms
                         include ./pop_up_sections/_terms
-                        a(href="#/message").btn.bg-gray
+                        a(href="", ng-click="openModal('message')").btn.bg-gray
                             | Envoyez un message
-                        a(href="#/phone").btn.bg-gray
+                        a(href="", ng-click="openModal('phone')").btn.bg-gray
                             | Appelez
                 {% verbatim %}
                 form(id="bookingForm", name="bookingForm", role="form", ng-submit="bookingSubmitted=true; bookingForm.$valid && sendBookingRequest()", ng-class="{'submitted': bookingSubmitted}", ng-model="bookingDetails", novalidate, eloue-form-field-error-manager).input-group.change-part.table-cell.top
@@ -26,3 +26,13 @@
                             include ./pop_up_sections/_shipping
                     section.table.form-wrapper.bank-information
                         include ./pop_up_sections/_bank_information
+#auto-alert.modal.fade
+    .modal-dialog
+        .modal-content
+            .modal-header
+                | Alerte : Notre service location de voitures est en maintenance.
+            .modal-body
+                | La location de voitures entre particuliers fait peau neuve sur e-loue. Dans quelques jours le service sera à nouveau opérationnel.
+                .row
+                    button(type="button", data-dismiss="modal", style="width: 100px;margin-top: 20px;margin-left: 40%;").btn.bg-success
+                        | OK

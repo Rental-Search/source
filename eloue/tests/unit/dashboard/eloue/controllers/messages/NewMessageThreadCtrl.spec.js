@@ -1,22 +1,65 @@
-define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], function() {
+define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], function () {
 
     describe("Controller: NewMessageThreadCtrl", function () {
 
         var NewMessageThreadCtrl,
             scope,
-            usersServiceMock;
+            state,
+            stateParams,
+            endpointsMock,
+            bookingsServiceMock,
+            productRelatedMessagesServiceMock,
+            productsServiceMock,
+            utilsServiceMock,
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
+            endpointsMock = {
+                api_url: "/api/2.0/"
+            };
+            bookingsServiceMock = {
+                getBookingByProduct: function (productId) {
+                    return simpleServiceResponse;
+                }
+            };
+            productRelatedMessagesServiceMock = {
+                postMessage: function (threadId, senderId, recipientId, text, offerId, productId) {
+                    return simpleServiceResponse;
+                }
+            };
+            productsServiceMock = {
+                getProduct: function (productId, loadProductStats, loadOwnerStats) {
+                    return simpleServiceResponse;
+                }
+            };
+            utilsServiceMock = {
+                getIdFromUrl: function (url) {
+
+                },
+                calculatePeriodBetweenDates: function(fromDate, toDate) {
+                    return {};
+                }
+            };
             usersServiceMock = {
                 getMe: function (successCallback, errorCallback) {
                     console.log("usersServiceMock:getMe");
-                    return { id: 1190};
+                    return {id: 1190};
                 }
             };
 
-            module(function($provide) {
+            module(function ($provide) {
+                $provide.value("Endpoints", endpointsMock);
+                $provide.value("BookingsService", bookingsServiceMock);
+                $provide.value("ProductRelatedMessagesService", productRelatedMessagesServiceMock);
+                $provide.value("ProductsService", productsServiceMock);
+                $provide.value("UtilsService", utilsServiceMock);
                 $provide.value("UsersService", usersServiceMock);
             })
         });
@@ -27,14 +70,48 @@ define(["angular-mocks", "eloue/controllers/messages/NewMessageThreadCtrl"], fun
                 then: function () {
                 }
             };
+            scope.showNotification = function(object, action, bool){};
+            state = {
+                transitionTo: function() {
 
-            spyOn(usersServiceMock, "getMe").andCallThrough();
+                }
+            };
+            stateParams = {
+                id: 1
+            };
 
-            NewMessageThreadCtrl = $controller('NewMessageThreadCtrl', { $scope: scope, UsersService: usersServiceMock });
+            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(bookingsServiceMock, "getBookingByProduct").and.callThrough();
+            spyOn(productRelatedMessagesServiceMock, "postMessage").and.callThrough();
+            spyOn(productsServiceMock, "getProduct").and.callThrough();
+            spyOn(utilsServiceMock, "getIdFromUrl").and.callThrough();
+            spyOn(utilsServiceMock, "calculatePeriodBetweenDates").and.callThrough();
+
+            NewMessageThreadCtrl = $controller('NewMessageThreadCtrl', {
+                $scope: scope, $state: state,
+                $stateParams: stateParams, Endpoints: endpointsMock, BookingsService: bookingsServiceMock,
+                ProductRelatedMessagesService: productRelatedMessagesServiceMock,
+                ProductsService: productsServiceMock, UtilsService: utilsServiceMock,
+                UsersService: usersServiceMock
+            });
         }));
 
         it("NewMessageThreadCtrl should be not null", function () {
             expect(!!NewMessageThreadCtrl).toBe(true);
+        });
+
+        it("NewMessageThreadCtrl:postNewMessage", function () {
+            scope.currentUser = {id: 1};
+            scope.messageThread = {id: 1};
+            scope.booking = {owner: {}};
+            scope.postNewMessage();
+        });
+
+        it("NewMessageThreadCtrl:redirectAfterMessagePost", function () {
+            var result = {
+                thread: {}
+            };
+            scope.redirectAfterMessagePost(result);
         });
     });
 });

@@ -4,42 +4,42 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
 
         var BookingsCtrl,
             scope,
-            endpointsMock,
-            bookingsLoadServiceMock;
+            timeout,
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
         beforeEach(function () {
-            endpointsMock = {
-                api_url: "http://10.0.5.47:8200/api/2.0/"
-            };
-            bookingsLoadServiceMock = {
-                getBookingList: function (page, author) {
-                    console.log("bookingsLoadServiceMock:getBookingList called with page = " + page + ", author = " + author);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+            usersServiceMock = {
+                getMe: function () {
+                    console.log("usersServiceMock:getMe called");
+                    return simpleServiceResponse;
                 }
             };
 
             module(function ($provide) {
-                $provide.value("Endpoints", endpointsMock);
-                $provide.value("BookingsLoadService", bookingsLoadServiceMock);
+                $provide.value("UsersService", usersServiceMock);
             })
         });
 
-        beforeEach(inject(function ($rootScope, $controller) {
+        beforeEach(inject(function ($rootScope, $timeout, $controller) {
             scope = $rootScope.$new();
+            timeout = $timeout;
             scope.currentUserPromise = {
                 then: function () {
                 }
             };
             scope.markListItemAsSelected = function(prefix, id) {};
             scope.currentUser = { id: 1};
-            scope.currentUserUrl = endpointsMock.api_url + "users/" + scope.currentUser.id + "/";
-            spyOn(bookingsLoadServiceMock, "getBookingList").andCallThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(scope, "$broadcast").and.callThrough();
 
-            BookingsCtrl = $controller('BookingsCtrl', { $scope: scope, Endpoints: endpointsMock, BookingsLoadService: bookingsLoadServiceMock });
+            BookingsCtrl = $controller('BookingsCtrl', { $scope: scope, $timeout: timeout, UsersService: usersServiceMock });
         }));
 
         it("BookingsCtrl should be not null", function () {
@@ -67,6 +67,15 @@ define(["angular-mocks", "eloue/controllers/BookingsCtrl"], function () {
         it("BookingsCtrl:filterByState", function () {
             scope.filterByState();
             expect(scope.bookingFilter.state).toEqual(scope.stateFilter);
+        });
+
+        it("BookingsCtrl:filter", function () {
+            scope.filter();
+            expect(scope.$broadcast).toHaveBeenCalledWith("startLoading",
+                {
+                    parameters: [scope.currentUser.id, scope.stateFilter, scope.bookingFilter.borrower, scope.bookingFilter.owner],
+                    shouldReloadList: true
+                });
         });
     });
 });

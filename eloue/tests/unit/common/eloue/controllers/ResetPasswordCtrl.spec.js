@@ -1,4 +1,4 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
+define(["angular-mocks", "eloue/controllers/ResetPasswordCtrl"], function () {
 
     describe("Controller: ResetPasswordCtrl", function () {
 
@@ -6,17 +6,21 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
             scope,
             window,
             authServiceMock,
-            serviceErrorsMock;
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
-            authServiceMock = {};
-            serviceErrorsMock = {};
+            authServiceMock = {
+                sendResetPasswordRequest: function (form, successCallback, errorCallback) {}
+            };
 
             module(function ($provide) {
                 $provide.value("AuthService", authServiceMock);
-                $provide.value("ServiceErrors", serviceErrorsMock);
             })
         });
 
@@ -24,7 +28,7 @@ define(["angular-mocks", "eloue/commonApp", "eloue/controllers"], function () {
             scope = $rootScope.$new();
             window = {location:{}};
 
-            ResetPasswordCtrl = $controller('ResetPasswordCtrl', { $scope: scope, $window: window, AuthService: authServiceMock, ServiceErrors: serviceErrorsMock});
+            ResetPasswordCtrl = $controller("ResetPasswordCtrl", { $scope: scope, $window: window, AuthService: authServiceMock});
         }));
     });
 });

@@ -7,12 +7,16 @@ table.calendar.bd-wrap.indent-t-md.indent-b-md
             td Durée
             td
                 b {{duration}}
+        tr
+            td Prix
+            td
+                b.text-success {{bookingPrice | number}}&nbsp;€
         tr(ng-show="shippingPrice > 0")
             td Livraison
             td
-                b {{shippingPrice | number}}&nbsp;€
-        tr
-            td Prix
+                b.text-success {{shippingPrice | number: 2}}&nbsp;€
+        tr(ng-show="shippingPrice > 0")
+            td Total
             td
                 b.text-success {{bookingPrice + shippingPrice | number}}&nbsp;€
         tr

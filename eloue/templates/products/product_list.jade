@@ -31,7 +31,7 @@ block append styles
   {% compressed_css "product_list_styles" %}
 
 block append content-body
-  .container-flex(data-ng-controller="AuthCtrl")
+  .container-flex(data-ng-controller="ProductListCtrl")
     header.header-site
       include ../jade/_header_site
      nav.bd-b
@@ -39,15 +39,15 @@ block append content-body
     article.container.list-layout.indent-b-lg
       //- we shall calculate pagination for both the article head and the list below
       {% pagination %}
-      .row.article-head.indent-t-md
-        include ../jade/_product_list_article_head
-      .row
-        aside.col-xs-3
-          include ../jade/_product_list_aside
-        main.col-xs-9
-          include ../jade/_product_list_main
+      form#detail-search(action="{% facet_url breadcrumbs -'page' %}")
+        .row.article-head.indent-t-md
+          include ../jade/_product_list_article_head
+        .row
+          aside.col-xs-3
+            include ../jade/_product_list_aside
+          main.col-xs-9
+            include ../jade/_product_list_main
     footer
       //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
       section.footer-links: include ../jade/_footer_links
       section.rss: include ../jade/_rss
-    script(type="text/ng-template")#modalContainer

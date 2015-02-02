@@ -741,6 +741,12 @@ class PropertyValue(models.Model):
         """
         return smart_unicode(self.value)
 
+class UnavailabilityPeriod(models.Model):
+    """A period of time when the product is marked as uniavailable."""
+    product = models.ForeignKey('Product')
+    started_at = models.DateTimeField()
+    ended_at = models.DateTimeField()
+    quantity = models.PositiveIntegerField(default=1)
 
 class Price(models.Model):
     """A price"""

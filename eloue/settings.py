@@ -173,7 +173,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
     'eloue.middleware.SpacelessMiddleware',
     'django.middleware.common.CommonMiddleware',
-	'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -647,8 +647,7 @@ REST_FRAMEWORK = {
 #         'rest_framework_plist.parsers.PlistParser',
 #     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-#        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework.authentication.OAuth2Authentication',
+        'eloue.backends.EloueRestAuthBackend',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -838,6 +837,9 @@ else:
 
 ## NAVETTE PICKCUP CONFIGURATION
 NAVETTE_ENDPOINT = env('NAVETTE_ENDPOINT', 'http://test-web-navette.pickup.fr/v1/Navette.svc?wsdl')
+NAVETTE_FILE_TRANSFER_ENDPOINT = env('NAVETTE_FILE_TRANSFER_ENDPOINT', 'http://test-web-navette.pickup.fr/v1/FileTransfer.svc?wsdl')
+WSDL_PROXY = env('WSDL_PROXY',
+        {'http': 'http://proxy:aa2d0de6b805-416d-91b9-3e586917597c@proxy-54-75-227-164.proximo.io',})
 
 
 PRODUCTHIGHLIGHT_PRICE = decimal.Decimal('7.5')
@@ -861,12 +863,12 @@ SLIMPAY_SITE_ID = env('SLIMPAY_SITE_ID', '')
 
 VIVA_SITE_ID = env('VIVA_SITE_ID', '45364001')
 
-# GEOS from buildpack
-try:
-    GEOS_LIBRARY_PATH = os.path.join(env('GEOS_LIBRARY_PATH'), 'libgeos_c.so')
-    GDAL_LIBRARY_PATH = os.path.join(env('GDAL_LIBRARY_PATH'), 'libgdal.so')
-except:
-    pass
+
+NON_ACTIVE_LOGIN_COUNT = 1
+
+AUTHENTICATION_BACKENDS = (
+    'eloue.backends.EloueAuthBackend',
+)
 
 NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
     35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar

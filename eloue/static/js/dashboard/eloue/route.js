@@ -1,5 +1,3 @@
-"use strict";
-
 define(["eloue/app",
         "eloue/controllers/DashboardRootCtrl",
         "eloue/controllers/DashboardCtrl",
@@ -27,9 +25,26 @@ define(["eloue/app",
         "eloue/controllers/bookings/BookingDetailCtrl",
         "eloue/controllers/DashboardLoginCtrl",
         "eloue/directives/FileChooserDirective",
-        "../../common/eloue/interceptors"],
+        "../../common/eloue/controllers/AuthCtrl",
+        "../../common/eloue/controllers/LoginCtrl",
+        "../../common/eloue/controllers/RegisterCtrl",
+        "../../common/eloue/controllers/ResetPasswordCtrl",
+        "../../common/eloue/directives/Chosen",
+        "../../common/eloue/directives/DashboardRedirect",
+        "../../common/eloue/directives/Datepicker",
+        "../../common/eloue/directives/DatepickerMonth",
+        "../../common/eloue/directives/ExtendedDatepicker",
+        "../../common/eloue/directives/FormFieldErrorManager",
+        "../../common/eloue/directives/FormFieldMessage",
+        "../../common/eloue/directives/FormMessage",
+        "../../common/eloue/directives/LazyLoad",
+        "../../common/eloue/directives/LoginForm",
+        "../../common/eloue/directives/PasswordMatch",
+        "../../common/eloue/directives/RegistrationForm",
+        "../../common/eloue/directives/ResetPasswordForm",
+        "../../common/eloue/interceptors/ErrorHandlerInterceptor"],
     function (EloueApp) {
-
+        "use strict";
         /**
          * Routing configuration for app.
          */
@@ -232,34 +247,34 @@ define(["eloue/app",
             }
         ]);
 
-        EloueApp.run(["$rootScope", "$route", "$http", "$state", "AuthService", function ($rootScope, $route, $http, $state, AuthService) {
+        EloueApp.run(["$rootScope", "$http", "$state", "$window", "$document", "AuthService", function ($rootScope, $http, $state, $window, $document, AuthService) {
             $(".container-full-screen").show();
-            AuthService.saveAttemptUrl();
-            var navRoutes = ["dashboard", "messages", "bookings", "items", "account"];
-            var userToken = "";
-            var name = "user_token=";
-            var ca = document.cookie.split(";");
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1);
-                if (c.indexOf(name) != -1) {
+            AuthService.saveAttemptUrl($window.location.href);
+            var i, c, navRoutes = ["dashboard", "messages", "bookings", "items", "account"], userToken = "",
+                name = "user_token=", ca = $document[0].cookie.split(";");
+            for (i = 0; i < ca.length; i += 1) {
+                c = ca[i];
+                while (c.charAt(0) === " ") {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) !== -1) {
                     userToken = c.substring(name.length, c.length);
                 }
             }
             $http.defaults.useXDomain = true;
-            delete $http.defaults.headers.common['X-Requested-With'];
+            delete $http.defaults.headers.common["X-Requested-With"];
 
             if (userToken && userToken.length > 0) {
                 $http.defaults.headers.common.Authorization = "Bearer " + userToken;
             }
 
-            var csrftoken = AuthService.getCookie('csrftoken');
+            var csrftoken = AuthService.getCSRFToken();
             if (csrftoken && csrftoken.length > 0) {
                 $http.defaults.headers.common["X-CSRFToken"] = csrftoken;
             }
 
             // Route change event listener
-            $rootScope.$on('$stateChangeStart',
+            $rootScope.$on("$stateChangeStart",
                 function (event, toState, toParams, fromState, fromParams) {
                     $rootScope.routeChangeInProgress = true;
                     if (!toState.insecure && !AuthService.isLoggedIn()) {
@@ -267,8 +282,8 @@ define(["eloue/app",
                         event.preventDefault();
                     } else {
                         var stateName = toState.name;
-                        angular.forEach(navRoutes, function (route, key) {
-                            if (stateName.indexOf(route) == 0) {
+                        angular.forEach(navRoutes, function (route) {
+                            if (stateName.indexOf(route) === 0) {
                                 $("[ui-sref='" + route + "']").addClass("current");
                             } else {
                                 $("[ui-sref='" + route + "']").removeClass("current");
@@ -276,13 +291,13 @@ define(["eloue/app",
                         });
                     }
                 });
-            $rootScope.$on('$stateChangeSuccess',
-                function(event, toState, toParams, fromState, fromParams){
+            $rootScope.$on("$stateChangeSuccess",
+                function (event, toState, toParams, fromState, fromParams) {
                     $rootScope.routeChangeInProgress = false;
                 });
 
-            $rootScope.$on('$stateChangeError',
-                function(event, toState, toParams, fromState, fromParams, error){
+            $rootScope.$on("$stateChangeError",
+                function (event, toState, toParams, fromState, fromParams, error) {
                     $rootScope.routeChangeInProgress = false;
                 });
 

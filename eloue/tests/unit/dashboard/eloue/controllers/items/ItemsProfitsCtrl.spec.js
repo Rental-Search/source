@@ -5,7 +5,12 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
         var ItemsProfitsCtrl,
             scope,
             stateParams,
-            bookingsServiceMock;
+            bookingsServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -13,9 +18,7 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
             bookingsServiceMock = {
                 getBookingsByProduct: function (productId) {
                     console.log("bookingsServiceMock:getBookingsByProduct called with productId = " + productId);
-                    return {then: function () {
-                        return {response: {}}
-                    }}
+                    return simpleServiceResponse;
                 }
             };
 
@@ -26,11 +29,13 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
 
         beforeEach(inject(function ($rootScope, $controller) {
             scope = $rootScope.$new();
+            scope.markListItemAsSelected = function(){};
+            scope.initCustomScrollbars = function(){};
             stateParams = {
                 id: 1
             };
 
-            spyOn(bookingsServiceMock, "getBookingsByProduct").andCallThrough();
+            spyOn(bookingsServiceMock, "getBookingsByProduct").and.callThrough();
 
             ItemsProfitsCtrl = $controller('ItemsProfitsCtrl', { $scope: scope, $stateParams: stateParams, BookingsService: bookingsServiceMock });
             expect(bookingsServiceMock.getBookingsByProduct).toHaveBeenCalledWith(stateParams.id);
@@ -38,6 +43,10 @@ define(["angular-mocks", "eloue/controllers/items/ItemsProfitsCtrl"], function()
 
         it("ItemsProfitsCtrl should be not null", function () {
             expect(!!ItemsProfitsCtrl).toBe(true);
+        });
+
+        it("ItemsProfitsCtrl:applyBookings", function () {
+            scope.applyBookings();
         });
     });
 });

@@ -1,17 +1,28 @@
-define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
+define(["angular-mocks", "eloue/services/PicturesService"], function () {
 
     describe("Service: PicturesService", function () {
 
         var PicturesService,
             picturesMock,
             endpointsMock,
-            formServiceMock;
+            formServiceMock,
+            simpleResourceResponse = {
+                $promise: {
+                    then: function () {
+                        return {results: []};
+                    }
+                }
+            };
 
         beforeEach(module("EloueCommon"));
 
         beforeEach(function () {
             picturesMock = {
                 get: function () {
+                    return simpleResourceResponse;
+                },
+                delete: function(id) {
+                    return simpleResourceResponse;
                 }
             };
             endpointsMock = {
@@ -31,8 +42,9 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
 
         beforeEach(inject(function (_PicturesService_) {
             PicturesService = _PicturesService_;
-            spyOn(picturesMock, "get").andCallThrough();
-            spyOn(formServiceMock, "send").andCallThrough();
+            spyOn(picturesMock, "get").and.callThrough();
+            spyOn(picturesMock, "delete").and.callThrough();
+            spyOn(formServiceMock, "send").and.callThrough();
         }));
 
         it("PicturesService should be not null", function () {
@@ -40,9 +52,14 @@ define(["angular-mocks", "eloue/commonApp", "eloue/services"], function () {
         });
 
         it("PicturesService:savePicture", function () {
-            var productId = 1;
-            PicturesService.savePicture(productId, {}, undefined, undefined);
+            PicturesService.savePicture({}, undefined, undefined);
             expect(formServiceMock.send).toHaveBeenCalled();
+        });
+
+        it("PicturesService:deletePicture", function () {
+            var pictureId = 1;
+            PicturesService.deletePicture(pictureId);
+            expect(picturesMock.delete).toHaveBeenCalledWith({id: pictureId});
         });
     });
 });

@@ -1,11 +1,13 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../../common/eloue/services/CategoriesService",
+    "../../../../common/eloue/services/ProductsService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the items terms tab.
      */
-    angular.module("EloueDashboardApp").controller("ItemsTermsCtrl", [
+    EloueDashboardApp.controller("ItemsTermsCtrl", [
         "$scope",
         "$stateParams",
         "CategoriesService",
@@ -16,21 +18,27 @@ define(["angular", "eloue/app"], function (angular) {
             $scope.isAuto = false;
             $scope.isRealEstate = false;
 
-            ProductsService.getProductDetails($stateParams.id).then(function (product) {
+            ProductsService.getProductDetails($stateParams.id).then(
+                function (product) {
+                    $scope.applyProductDetails(product);
+                }
+            );
+
+            $scope.applyProductDetails = function (product) {
                 $scope.product = product;
                 $scope.markListItemAsSelected("item-tab-", "terms");
                 $scope.isProfessional = product.owner.is_professional;
                 $scope.initCustomScrollbars();
-                CategoriesService.getParentCategory($scope.product.category).$promise.then(function (nodeCategory) {
+                CategoriesService.getParentCategory($scope.product.category).then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
                         $scope.updateTermsBlocks(nodeCategory);
                     } else {
-                        CategoriesService.getParentCategory(nodeCategory).$promise.then(function (rootCategory) {
+                        CategoriesService.getParentCategory(nodeCategory).then(function (rootCategory) {
                             $scope.updateTermsBlocks(rootCategory);
                         });
                     }
                 });
-            });
+            };
 
             /**
              * Product terms are dependent on root category.
@@ -44,6 +52,6 @@ define(["angular", "eloue/app"], function (angular) {
                 } else if (rootCategory.name === "Location saisonnière") {
                     $scope.isRealEstate = true;
                 }
-            }
+            };
         }]);
 });

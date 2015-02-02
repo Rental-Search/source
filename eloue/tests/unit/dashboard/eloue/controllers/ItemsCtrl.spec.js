@@ -4,8 +4,14 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
 
         var ItemsCtrl,
             scope,
-            rootScope,
-            categoriesServiceMock;
+            timeout,
+            categoriesServiceMock,
+            usersServiceMock,
+            simpleServiceResponse = {
+                then: function () {
+                    return {result: {}};
+                }
+            };
 
         beforeEach(module('EloueDashboardApp'));
 
@@ -13,20 +19,26 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
             categoriesServiceMock = {
                 getRootCategories: function () {
                     console.log("categoriesServiceMock:getRootCategories called");
-                    return {then: function () {
-                        return {result: {}}
-                    }}
+                    return simpleServiceResponse;
+                }
+            };
+
+            usersServiceMock = {
+                getMe: function (successCallback, errorCallback) {
+                    console.log("usersServiceMock:getMe");
+                    return simpleServiceResponse;
                 }
             };
 
             module(function ($provide) {
                 $provide.value("CategoriesService", categoriesServiceMock);
+                $provide.value("UsersService", usersServiceMock);
             })
         });
 
-        beforeEach(inject(function ($rootScope, $controller) {
+        beforeEach(inject(function ($rootScope, $timeout, $controller) {
             scope = $rootScope.$new();
-            rootScope = $rootScope;
+            timeout = $timeout;
             scope.currentUserPromise = {
                 then: function () {
                     return {result: {}}
@@ -36,9 +48,11 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
                 id: 1190
             };
 
-            spyOn(categoriesServiceMock, "getRootCategories").andCallThrough();
+            spyOn(categoriesServiceMock, "getRootCategories").and.callThrough();
+            spyOn(usersServiceMock, "getMe").and.callThrough();
+            spyOn(scope, "$broadcast").and.callThrough();
 
-            ItemsCtrl = $controller('ItemsCtrl', { $scope: scope, $rootScope: rootScope, CategoriesService: categoriesServiceMock });
+            ItemsCtrl = $controller('ItemsCtrl', { $scope: scope, $timeout: timeout, CategoriesService: categoriesServiceMock, UsersService: usersServiceMock });
             expect(categoriesServiceMock.getRootCategories).toHaveBeenCalled();
         }));
 
@@ -49,6 +63,14 @@ define(["angular-mocks", "eloue/controllers/ItemsCtrl"], function () {
         it('ItemsCtrl:filterByCategory', function () {
             scope.selectedCategory = "Automobile";
             scope.filterByCategory();
+            expect(scope.$broadcast).toHaveBeenCalledWith("startLoading", {
+                parameters: [scope.currentUser.id, scope.selectedCategory],
+                shouldReloadList: true
+            });
+        });
+
+        it('ItemsCtrl:applyCategories', function () {
+            scope.applyCategories();
         });
     });
 });

@@ -1010,7 +1010,7 @@ msgstr ""
 
 #: accounts/serializers.py:159 accounts/tests/api2.py:215
 msgid "Your current password was entered incorrectly. Please enter it again."
-msgstr ""
+msgstr "Le mot de passe est incorrect. Veuillez réessayer."
 
 #: accounts/serializers.py:198
 #, python-format

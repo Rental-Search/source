@@ -35,3 +35,31 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', (
 ))
 
 DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')
+
+URL_REDIRECTS = (
+        (r'www\.go-sport-location\.com$', 'https://location.go-sport.com'),
+        (r'www\.go-sport-location\.fr$', 'https://location.go-sport.com'),
+        (r'www\.gosportlocation\.fr$', 'https://location.go-sport.com'),
+        (r'gosportlocation\.com$', 'https://location.go-sport.com'),
+        (r'www\.gosportlocation\.com$', 'https://location.go-sport.com'),
+        (r'go-sport-location\.fr$', 'https://location.go-sport.com'),
+        (r'gosportlocation\.fr$', 'https://location.go-sport.com'),
+        (r'go-sport-location\.com$', 'https://location.go-sport.com'),
+    )
+
+MIDDLEWARE_CLASSES = (
+    'eloue.middleware.UrlRedirectMiddleware',
+    'sslify.middleware.SSLifyMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    'eloue.middleware.SpacelessMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.http.ConditionalGetMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+)

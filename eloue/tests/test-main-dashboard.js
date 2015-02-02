@@ -8,16 +8,15 @@ for (var file in window.__karma__.files) {
 }
 
 requirejs.config({
-    // Karma serves files from '/base'
-    baseUrl: '/base/static/js/dashboard',
+    // Karma serves files from "/base"
+    baseUrl: "/base/static/js/dashboard",
 
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap.min",
         "underscore": "../../bower_components/lodash/dist/lodash.min",
-        "jQuery": "../../bower_components/jquery/dist/jquery.min",
+        "jquery": "../../bower_components/jquery/dist/jquery.min",
         "angular": "../../bower_components/angular/angular.min",
         "angular-resource": "../../bower_components/angular-resource/angular-resource.min",
-        "angular-route": "../../bower_components/angular-route/angular-route.min",
         "angular-cookies": "../../bower_components/angular-cookies/angular-cookies.min",
         "angular-mocks": "../../bower_components/angular-mocks/angular-mocks",
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize.min",
@@ -33,12 +32,12 @@ requirejs.config({
         "custom-scrollbar": "../../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar",
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize.min",
         "toastr": "../../bower_components/toastr/toastr.min",
-        "formmapper": "../formmapper"
+        "formmapper": "../formmapper",
+        "filesaver": "../FileSaver.min"
     },
 
     shim: {
         "angular": {"exports": "angular"},
-        "angular-route": ["angular"],
         "angular-cookies": ["angular"],
         "angular-sanitize": ["angular"],
         "angular-resource": ["angular"],
@@ -48,18 +47,18 @@ requirejs.config({
             deps: ["angular"],
             "exports": "angular.mock"
         },
-        "jQuery": {exports: "jQuery"},
-        "bootstrap": ["jQuery"],
-        "jquery-form": ["jQuery"],
-        "selectivizr": ["jQuery"],
-        "jquery-mousewheel": ["jQuery"],
-        "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
-        "jquery-autosize": ["jQuery"],
-        "bootstrap-datepicker": ["jQuery"],
-        "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
-        "chosen": ["jQuery"],
-        "toastr": ["jQuery"],
-        "formmapper": ["jQuery"]
+        "jquery": {exports: "jquery"},
+        "bootstrap": ["jquery"],
+        "jquery-form": ["jquery"],
+        "selectivizr": ["jquery"],
+        "jquery-mousewheel": ["jquery"],
+        "custom-scrollbar": ["jquery", "jquery-mousewheel"],
+        "jquery-autosize": ["jquery"],
+        "bootstrap-datepicker": ["jquery"],
+        "bootstrap-datepicker-fr": ["jquery", "bootstrap-datepicker"],
+        "chosen": ["jquery"],
+        "toastr": ["jquery"],
+        "formmapper": ["jquery"]
     },
 
     // ask Require.js to load these files (all our tests)

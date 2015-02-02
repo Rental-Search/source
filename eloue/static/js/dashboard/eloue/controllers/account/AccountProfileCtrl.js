@@ -1,11 +1,15 @@
-"use strict";
-
-define(["angular", "eloue/app"], function (angular) {
-
+define([
+    "eloue/app",
+    "../../../../common/eloue/values",
+    "../../../../common/eloue/services/UsersService",
+    "../../../../common/eloue/services/AddressesService",
+    "../../../../common/eloue/services/PhoneNumbersService"
+], function (EloueDashboardApp) {
+    "use strict";
     /**
      * Controller for the account's profile page.
      */
-    angular.module("EloueDashboardApp").controller("AccountProfileCtrl", [
+    EloueDashboardApp.controller("AccountProfileCtrl", [
         "$scope",
         "$timeout",
         "UsersService",
@@ -13,7 +17,9 @@ define(["angular", "eloue/app"], function (angular) {
         "PhoneNumbersService",
         "Endpoints",
         "CivilityChoices",
-        function ($scope, $timeout, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices) {
+        "UtilsService",
+        function ($scope, $timeout, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices,
+                  UtilsService) {
             $scope.civilityOptions = CivilityChoices;
             $scope.addressesBaseUrl = Endpoints.api_url + "addresses/";
             $scope.phonesBaseUrl = Endpoints.api_url + "phones/";
@@ -34,31 +40,35 @@ define(["angular", "eloue/app"], function (angular) {
                 {id: 11, value: "December"}
             ];
             $scope.yearOptions = [];
-            var currentYear = Date.today().getFullYear();
-            for (var i = 0; i < 99; i++) {
+            var currentYear = Date.today().getFullYear(), i;
+            for (i = 0; i < 99; i += 1) {
                 $scope.yearOptions.push(currentYear - i);
             }
-            $scope.licenceDay =  null;
+            $scope.licenceDay = null;
             $scope.licenceMonth = null;
             $scope.licenceYear = null;
 
             $scope.markListItemAsSelected("account-part-", "account.profile");
 
-            $scope.handleResponseErrors = function(error) {
+            $scope.handleResponseErrors = function (error, object, action) {
                 $scope.$apply(function () {
                     $scope.submitInProgress = false;
                 });
-
+                $scope.showNotification(object, action, false);
             };
 
             if (!$scope.currentUserPromise) {
-                $scope.currentUserPromise = UsersService.getMe().$promise;
+                $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
+                $scope.applyUserDetails(currentUser);
+            });
+
+            $scope.applyUserDetails = function (currentUser) {
                 // Save current user in the scope
                 $scope.currentUser = currentUser;
-                if (!!$scope.currentUser.default_number) {
-                    $scope.phoneNumber = !!$scope.currentUser.default_number.number.numero ? $scope.currentUser.default_number.number.numero : $scope.currentUser.default_number.number;
+                if ($scope.currentUser.default_number) {
+                    $scope.phoneNumber = $scope.currentUser.default_number.number.numero || $scope.currentUser.default_number.number;
                 }
                 if (!currentUser.default_address) {
                     $scope.noAddress = true;
@@ -66,21 +76,21 @@ define(["angular", "eloue/app"], function (angular) {
                 if (!$scope.noAddress) {
                     AddressesService.getAddressesByPatron(currentUser.id).then(function (results) {
                         $scope.addressList = results;
-                        $scope.defaultAddress = (!!currentUser.default_address) ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
+                        $scope.defaultAddress = currentUser.default_address ? $scope.addressesBaseUrl + currentUser.default_address.id + "/" : null;
                         // Timeout is used because of chosen issue (when options are loaded asynchronously, they sometimes not visible in chosen widget)
                         $timeout(function () {
                             $("#defaultAddressSelect").chosen();
                         }, 200);
                     });
                 }
-                if (!!$scope.currentUser.drivers_license_date) {
+                if ($scope.currentUser.drivers_license_date) {
                     var licenceDate = Date.parse($scope.currentUser.drivers_license_date);
-                    $scope.licenceDay =  licenceDate.getDate();
+                    $scope.licenceDay = licenceDate.getDate();
                     $scope.licenceMonth = licenceDate.getMonth();
                     $scope.licenceYear = licenceDate.getFullYear();
                 }
                 $scope.initCustomScrollbars();
-            });
+            };
 
             // Send form when a file changes
             $scope.onFileChanged = function () {
@@ -96,28 +106,33 @@ define(["angular", "eloue/app"], function (angular) {
                 $scope.submitInProgress = true;
                 if ($scope.noAddress) {
                     $scope.currentUser.default_address.country = "FR";
-                    AddressesService.saveAddress($scope.currentUser.default_address).$promise.then(function (result) {
-                        $scope.currentUser.default_address = result;
-                        $scope.defaultAddress = $scope.currentUser.default_address;
-                        $scope.noAddress = false;
-                        UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"}).$promise.then(function(user) {
-                            AddressesService.getAddressesByPatron($scope.currentUser.id).then(function (results) {
-                                $scope.addressList = results;
-                                $timeout(function () {
-                                    $("#defaultAddressSelect").chosen();
-                                }, 200);
-                            });
-                        });
-                        $scope.saveProfile();
-                    }, function (error) {
-                        $scope.handleResponseErrors(error);
-                    });
+                    AddressesService.saveAddress($scope.currentUser.default_address).then(
+                        $scope.processAddressSaveResponse,
+                        function (error) {
+                            $scope.handleResponseErrors(error, "profile", "save");
+                        }
+                    );
                 } else {
                     $scope.saveProfile();
                 }
             };
 
-            $scope.saveProfile = function() {
+            $scope.processAddressSaveResponse = function (result) {
+                $scope.currentUser.default_address = result;
+                $scope.defaultAddress = $scope.currentUser.default_address;
+                $scope.noAddress = false;
+                UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"}).then(function () {
+                    AddressesService.getAddressesByPatron($scope.currentUser.id).then(function (results) {
+                        $scope.addressList = results;
+                        $timeout(function () {
+                            $("#defaultAddressSelect").chosen();
+                        }, 200);
+                    });
+                });
+                $scope.saveProfile();
+            };
+
+            $scope.saveProfile = function () {
                 if (!!$scope.licenceDay && !!$scope.licenceMonth && !!$scope.licenceYear) {
                     var date = new Date();
                     date.setDate($scope.licenceDay);
@@ -126,21 +141,21 @@ define(["angular", "eloue/app"], function (angular) {
                     $scope.currentUser.drivers_license_date = date.toString("yyyy-MM-ddTHH:mm");
                     $("#drivers_license_date").val($scope.currentUser.drivers_license_date);
                 }
-                var initialNumber = !!$scope.currentUser.default_number ? (!!$scope.currentUser.default_number.number.numero ? $scope.currentUser.default_number.number.numero : $scope.currentUser.default_number.number) : null;
-                if ($scope.phoneNumber != initialNumber) {
+                var initialNumber = $scope.currentUser.default_number ? ($scope.currentUser.default_number.number.numero || $scope.currentUser.default_number.number) : null;
+                if ($scope.phoneNumber !== initialNumber) {
                     if (!initialNumber) {
                         $scope.saveNewPhone();
                     } else {
                         $scope.currentUser.default_number.number = $scope.phoneNumber;
-                        PhoneNumbersService.updatePhoneNumber($scope.currentUser.default_number).$promise.then(function (number) {
+                        PhoneNumbersService.updatePhoneNumber($scope.currentUser.default_number).then(function (number) {
                             $("#default_number").val($scope.phonesBaseUrl + number.id + "/");
                             $scope.sendUserForm();
                         }, function (error) {
-                            $scope.handleResponseErrors(error);
+                            $scope.handleResponseErrors(error, "profile", "save");
                         });
                     }
                 } else {
-                    if (!!$scope.currentUser.default_number) {
+                    if ($scope.currentUser.default_number) {
                         $("#default_number").val($scope.phonesBaseUrl + $scope.currentUser.default_number.id + "/");
                     }
                     $scope.sendUserForm();
@@ -152,23 +167,24 @@ define(["angular", "eloue/app"], function (angular) {
                     patron: $scope.usersBaseUrl + $scope.currentUser.id + "/",
                     number: $scope.phoneNumber
                 };
-                PhoneNumbersService.savePhoneNumber(newPhone).$promise.then(function (number) {
+                PhoneNumbersService.savePhoneNumber(newPhone).then(function (number) {
                     $("#default_number").val($scope.phonesBaseUrl + number.id + "/");
                     $scope.sendUserForm();
                 }, function (error) {
-                    $scope.handleResponseErrors(error);
-                })
+                    $scope.handleResponseErrors(error, "profile", "save");
+                });
             };
 
             $scope.sendUserForm = function () {
                 UsersService.sendForm($scope.currentUser.id, $("#profileInformation"), function (data) {
                     $scope.$apply(function () {
                         $scope.submitInProgress = false;
+                        $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
                     });
                 }, function (error) {
-                    $scope.handleResponseErrors(error.responseJSON);
+                    $scope.handleResponseErrors(error.responseJSON, "profile", "save");
                 });
-            }
+            };
         }
     ]);
 });
