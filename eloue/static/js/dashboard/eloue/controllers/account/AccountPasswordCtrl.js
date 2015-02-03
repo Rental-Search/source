@@ -11,7 +11,8 @@ define([
         "$state",
         "$stateParams",
         "UsersService",
-        function ($scope, $state, $stateParams, UsersService) {
+        "UtilsService",
+        function ($scope, $state, $stateParams, UsersService, UtilsService) {
             $scope.markListItemAsSelected("account-part-", "account.password");
 
             $scope.errors = {
@@ -25,7 +26,7 @@ define([
                 if ($scope.currentUser) {
                     UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form")).then(function () {
                         $scope.submitInProgress = false;
-                        $scope.showNotification("password", "reset", true);
+                        $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
                         $state.transitionTo($state.current, $stateParams, {reload: true});
                     }, function (error) {
                         if (!!error.responseJSON && !!error.responseJSON.errors) {
@@ -36,7 +37,11 @@ define([
                             };
                         }
                         $scope.submitInProgress = false;
-                        $scope.showNotification("password", "reset", false);
+                        // Show generic error toastr only if there is no specific errors.
+                        if (0 === $scope.errors.current_password.length && 0 === $scope.errors.password.length &&
+                            0 === $scope.errors.confirm_password.length) {
+                            $scope.showNotification("password", "reset", false);
+                        }
                     });
                 }
             };

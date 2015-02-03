@@ -17,7 +17,9 @@ define([
         "PhoneNumbersService",
         "Endpoints",
         "CivilityChoices",
-        function ($scope, $timeout, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices) {
+        "UtilsService",
+        function ($scope, $timeout, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices,
+                  UtilsService) {
             $scope.civilityOptions = CivilityChoices;
             $scope.addressesBaseUrl = Endpoints.api_url + "addresses/";
             $scope.phonesBaseUrl = Endpoints.api_url + "phones/";
@@ -177,7 +179,7 @@ define([
                 UsersService.sendForm($scope.currentUser.id, $("#profileInformation"), function (data) {
                     $scope.$apply(function () {
                         $scope.submitInProgress = false;
-                        $scope.showNotification("profile", "save", true);
+                        $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
                     });
                 }, function (error) {
                     $scope.handleResponseErrors(error.responseJSON, "profile", "save");

@@ -207,8 +207,8 @@ define([
                         $("#toHour").trigger("chosen:updated");
                     }, 0);
 
-                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour;
-                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour;
+                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
+                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
                 }
                 $scope.dateRangeError = null;
                 // check if product is available for selected dates
