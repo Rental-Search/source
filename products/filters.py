@@ -4,7 +4,7 @@ import operator
 from django.db.models.query_utils import Q
 from rest_framework.filters import BaseFilterBackend
 
-from products.forms import ProductFacetedSearchForm
+from products.forms import APIProductFacetedSearchForm
 from eloue.api.filters import HaystackSearchFilter
 
 
@@ -48,11 +48,6 @@ class ProductHaystackSearchFilter(HaystackSearchFilter):
     Uses additional set of filters when searching for products.
     """
     def filter_search_queryset(self, request, sqs):
-        if sqs:
-            # parent class may return None as result if it did not apply any filtering
-            sqs = super(ProductHaystackSearchFilter,
-                        self).filter_search_queryset(request, sqs) or sqs
-            form = ProductFacetedSearchForm(request.QUERY_PARAMS)
-            if form.is_valid():
-                sqs = form.filter_queryset(sqs)
-                return sqs
+        form = APIProductFacetedSearchForm(request.QUERY_PARAMS,
+                                           searchqueryset=sqs)
+        return form.search()

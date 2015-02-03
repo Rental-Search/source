@@ -86,7 +86,9 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             // No addresses added yet notification
             noAddressTitle: "Pas encore d'adresse renseignée",
             noAddressInfo: "Donner votre adresse rassure le lacataire ou le propriétaire et augmente vos chances de louer",
-            noAddressButton: "Mettre à jour vos infos"
+            noAddressButton: "Mettre à jour vos infos",
+            informationHasBeenUpdated: "Vous informations ont été mises à jour"
+
         });
 
         $translateProvider.preferredLanguage("fr");

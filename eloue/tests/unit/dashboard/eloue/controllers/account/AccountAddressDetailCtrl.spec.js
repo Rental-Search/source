@@ -10,6 +10,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
             addressesServiceMock,
             productsServiceMock,
             usersServiceMock,
+            utilsServiceMock,
             simpleServiceResponse = {
                 then: function () {
                     return {result: {}};
@@ -52,11 +53,18 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
                 }
             };
 
+            utilsServiceMock = {
+                translate: function(msg) {
+
+                }
+            };
+
             module(function ($provide) {
                 $provide.value("AddressesService", addressesServiceMock);
                 $provide.value("ProductsService", productsServiceMock);
                 $provide.value("UsersService", usersServiceMock);
-            })
+                $provide.value("UtilsService", utilsServiceMock);
+            });
         });
 
         beforeEach(inject(function ($rootScope, $controller) {
@@ -71,6 +79,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
             spyOn(addressesServiceMock, "deleteAddress").and.callThrough();
             spyOn(productsServiceMock, "getProductsByAddress").and.callThrough();
             spyOn(usersServiceMock, "updateUser").and.callThrough();
+            spyOn(utilsServiceMock, "translate").and.callThrough();
 
             AccountAddressDetailCtrl = $controller('AccountAddressDetailCtrl', { $scope: scope, $state: state, $stateParams: stateParams, Endpoints: endpointsMock, AddressesService: addressesServiceMock, ProductsService: productsServiceMock, UsersService: usersServiceMock });
         }));
@@ -86,6 +95,7 @@ define(["angular-mocks", "eloue/controllers/account/AccountAddressDetailCtrl"], 
 
         it("AccountAddressDetailCtrl:finaliseAddressUpdate", function () {
             scope.showNotification = function(notification){};
+            scope.showNotificationMessage = function(notification, succeed){};
             state.transitionTo = function(current, stateParams, opts) {};
             scope.finaliseAddressUpdate();
         });
