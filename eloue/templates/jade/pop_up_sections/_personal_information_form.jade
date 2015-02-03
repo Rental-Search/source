@@ -16,11 +16,12 @@ h2 Vos informations personnelles
   .col-sm-12
       input(type="text", name="street", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
       span.text-danger(ng-show="bookingForm.street.$error.required && bookingSubmitted", translate="required_field")
-.row(ng-show="!addShipping || (addShipping && !noAddress)")
+.row(ng-if="!addShipping || (addShipping && !noAddress)")
   .col-sm-6
-      input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
+      input(type="text", name="zipcode", placeholder="Code postal *", required, eloue-zipcode, ng-model="currentUser.default_address.zipcode").form-control
       span.text-danger(ng-show="bookingForm.zipcode.$error.required && bookingSubmitted", translate="required_field")
-  .col-sm-6
+      span.text-danger(ng-show="bookingForm.zipcode.$error.badFormat && bookingSubmitted", translate="zipcode_invalid")
+    .col-sm-6
       input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
       span.text-danger(ng-show="bookingForm.city.$error.required && bookingSubmitted", translate="required_field")
 .row: .col-xs-12

@@ -44,8 +44,12 @@
                     -var registration_form_fields = [["text", "Prénom", "first_name"], ["email", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
                     each type, placeholder, name in registration_form_fields
                         .form-group
-                            input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
-                            span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationForm.#{name}.$dirty") Required field
+                            if name == "zipcode"
+                                input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required, eloue-zipcode).form-control
+                                span.text-danger(ng-show="registrationForm.#{name}.$error.badFormat && registrationSubmitted", translate="zipcode_invalid")
+                            else
+                                input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
+                            span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationSubmitted", translate="required_field")
 
                     .checkbox
                         label(for="inform")
