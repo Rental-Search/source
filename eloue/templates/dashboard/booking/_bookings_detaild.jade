@@ -103,7 +103,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                         .col-xs-9.text-primary {{bookingDetails.total_amount}}€
                     li(ng-show="bookingDetails.shipping.enabled").clearfix
                         .col-xs-3 Livraison
-                        .col-xs-9.text-primary {{bookingDetails.shipping.price}}€
+                        .col-xs-9.text-primary {{bookingDetails.shipping.price | number: 2}}€
                     li(ng-show="bookingDetails.shipping.enabled").clearfix
                         .col-xs-3 Total
                         .col-xs-9.text-primary {{totalBookingPrice}}€

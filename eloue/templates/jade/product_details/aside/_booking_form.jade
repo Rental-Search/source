@@ -28,7 +28,7 @@ form.form-inline.section-body.text-center
         if not is_pro
             p Assurance incluse
     .part
-        a(href = "", data-dismiss="modal", ng-click="openModal('booking')").btn.bg-success.calendar-ok
+        a(href = "", data-dismiss="modal", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2
             | {% if is_pro %}Envoyez{% else %}Réservez{% endif %}
         p.mrg-v-1
