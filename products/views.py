@@ -1216,7 +1216,9 @@ class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     API endpoint that allows message threads to be viewed or edited.
     """
     model = models.MessageThread
-    queryset = models.MessageThread.objects.prefetch_related('messages').select_related('last_message')
+    queryset = models.MessageThread.objects.prefetch_related(
+                'messages').select_related(
+                'last_message').exclude(last_message_id__isnull=True)
     serializer_class = serializers.MessageThreadSerializer
     filter_backends = (filters.OwnerFilter, filters.DjangoFilterBackend, filters.RelatedOrderingFilter)
     owner_field = ('sender', 'recipient')
