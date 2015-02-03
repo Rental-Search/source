@@ -39,13 +39,14 @@ block append content-body
     article.container.list-layout.indent-b-lg
       //- we shall calculate pagination for both the article head and the list below
       {% pagination %}
-      .row.article-head.indent-t-md
-        include ../jade/_product_list_article_head
-      .row
-        aside.col-xs-3
-          include ../jade/_product_list_aside
-        main.col-xs-9
-          include ../jade/_product_list_main
+      form#detail-search(action="{% facet_url breadcrumbs -'page' %}")
+        .row.article-head.indent-t-md
+          include ../jade/_product_list_article_head
+        .row
+          aside.col-xs-3
+            include ../jade/_product_list_aside
+          main.col-xs-9
+            include ../jade/_product_list_main
     footer
       //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
       section.footer-links: include ../jade/_footer_links
