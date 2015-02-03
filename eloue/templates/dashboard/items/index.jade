@@ -28,8 +28,9 @@ block details
              span.text-danger(ng-show="itemInfoForm.street.$error.required && itemInfoSubmitted", translate="required_field")
         .row
             .col-sm-6
-                input(type="text", name="zipcode", placeholder="Code postal *", required, ng-model="product.addressDetails.zipcode").form-control
+                input(type="text", name="zipcode", placeholder="Code postal *", required, eloue-zipcode, ng-model="product.addressDetails.zipcode").form-control
                 span.text-danger(ng-show="itemInfoForm.zipcode.$error.required && itemInfoSubmitted", translate="required_field")
+                span.text-danger(ng-show="itemInfoForm.zipcode.$error.badFormat && itemInfoSubmitted", translate="zipcode_invalid")
             .col-sm-6
                 input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
                 span.text-danger(ng-show="itemInfoForm.city.$error.required && itemInfoSubmitted", translate="required_field")

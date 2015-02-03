@@ -103,7 +103,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                         .col-xs-9.text-primary {{bookingDetails.total_amount}}€
                     li(ng-show="bookingDetails.shipping.enabled").clearfix
                         .col-xs-3 Livraison
-                        .col-xs-9.text-primary {{bookingDetails.shipping.price}}€
+                        .col-xs-9.text-primary {{bookingDetails.shipping.price | number: 2}}€
                     li(ng-show="bookingDetails.shipping.enabled").clearfix
                         .col-xs-3 Total
                         .col-xs-9.text-primary {{totalBookingPrice}}€
@@ -117,10 +117,10 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 .text-danger(ng-show="!!serverError")
                     | {{serverError}}
                 .text-right
-                    a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : rejectingInProgress }").btn-inline.text-white.bg-gray-light-hover Refuser
-                    a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : acceptingInProgress }").btn-inline.text-white.bg-success-hover Accepter la Réservation
-                    a(href="", ng-click="showCancelConfirm()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')", ng-class="{ loading : cancellingInProgress }").btn-inline.text-white.bg-gray-light-hover Annuler
-                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident'))").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
+                    a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : rejectingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-gray-light-hover Refuser
+                    a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : acceptingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-success-hover Accepter la Réservation
+                    a(href="", ng-click="showCancelConfirm()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')", ng-class="{ loading : cancellingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-gray-light-hover Annuler
+                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident'))", ng-disabled="submitInProgress").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
         .block-with-thumbnail.notification.indent-md-b(ng-show="bookingDetails.shipping.enabled")
           .col-thumbnail
@@ -153,7 +153,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                                 {% endverbatim %}
                                 +average-rate-editable("comment.rate")
                             {% verbatim %}
-                            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.bg-success-hover.text-white Envoyer
+                            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}", ng-disabled="submitInProgress").btn-inline.bg-success-hover.text-white Envoyer
         .block-with-thumbnail.text-gray.notification(ng-show="showIncidentForm")
             .col-thumbnail
                 .thumbnail: i.icon-3x.flaticon.solid.pencil
@@ -162,7 +162,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     fieldset(data-ng-disabled="submitInProgress")
                         textarea.expand(name="incident.description", rows="4", placeholder="Décrire l'incident...", ng-model="incident.description", required)
                         p.text-right.indent-sm-t
-                            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn-inline.bg-success-hover.text-white Envoyer
+                            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}", ng-disabled="submitInProgress").btn-inline.bg-success-hover.text-white Envoyer
         .block-with-thumbnail.notification.indent-md-v(ng-show="showIncidentDescription")
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
