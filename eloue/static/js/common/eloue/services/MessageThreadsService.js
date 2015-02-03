@@ -30,8 +30,12 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                                 promises.push(ProductRelatedMessagesService.getMessage(messageId));
                             });
                         });
-                        $q.all(promises).then(function success(results) {
+                        var suppress = function(x) { return x.catch(function(){}); };
+                        var messages = $q.all(promises.map(suppress));
+                        messages.then(function success(results) {
                             deferred.resolve(results);
+                        }, function (reasons) {
+                            deferred.reject(reasons);
                         });
                     }
                 );
