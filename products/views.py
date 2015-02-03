@@ -12,6 +12,7 @@ from django.contrib.gis.measure import Distance
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.datastructures import SortedDict, MultiValueDict
@@ -80,7 +81,7 @@ def get_point_and_radius(coords, radius=None):
     radius = min(radius or float('inf'), MAX_DISTANCE)
     return point, radius
 
-def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+def _last_added(search_index, location, sort_by_date='-created_at_date'):
     # only objects that are 'good' to be shown
     sqs = search_index.filter(is_good=1)
 
@@ -111,7 +112,13 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
         # do not filter on location, and return full list sorted by the provided date field only
         last_added = sqs.order_by(sort_by_date)
 
+    return last_added
+
+
+def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+    last_added = _last_added(search_index, location, sort_by_date)
     return last_added[offset*limit:(offset+1)*limit]
+
 
 def last_joined(*args, **kwargs):
     return last_added(*args, sort_by_date='-date_joined_date', **kwargs)
@@ -1083,18 +1090,25 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def homepage(self, request, *args, **kwargs):
         # get product ids from the search index
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-        sqs = last_added(self.search_index, location)
-        pks = [obj.pk for obj in sqs]
+        sqs = _last_added(self.search_index, location)
+
+        paginator = Paginator(sqs, PAGINATE_PRODUCTS_BY)
+        page_number = request.QUERY_PARAMS.get('page')
+        try:
+            page = paginator.page(page_number)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            page = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999),
+            # deliver last page of results.
+            page = paginator.page(paginator.num_pages)
+
+        pks = [obj.pk for obj in page.object_list]
 
         # get records from the model
-        self.object_list = self.filter_queryset(self.get_queryset()).filter(id__in=pks)
-
-        # Switch between paginated or standard style responses
-        page = self.paginate_queryset(self.object_list)
-        if page is not None:
-            serializer = self.get_pagination_serializer(page)
-        else:
-            serializer = self.get_serializer(self.object_list, many=True)
+        page.object_list = self.get_queryset().filter(id__in=pks)
+        serializer = self.get_pagination_serializer(page)
 
         return Response(serializer.data)
 
