@@ -51,7 +51,7 @@ define([
             $scope.markListItemAsSelected("account-part-", "account.profile");
 
             $scope.handleResponseErrors = function (error, object, action) {
-                $scope.$apply(function () {
+                $timeout(function() {
                     $scope.submitInProgress = false;
                 });
                 $scope.showNotification(object, action, false);
