@@ -136,13 +136,16 @@ class HaystackSearchFilter(filters.BaseFilterBackend):
         view._haystack_filter = False
 
         sqs = self.get_search_queryset(view)
-        sqs = self.filter_search_queryset(request, sqs)
         if sqs is not None:
-            pks = [obj.pk for obj in sqs]
-            queryset = queryset.filter(pk__in=pks)
-            # mark the view has search results
-            # FIXME: should be a better (more safe) way to do this
-            view._haystack_filter = True
+            filtered_sqs = self.filter_search_queryset(request, sqs)
+            # sqs was filtered
+            if filtered_sqs not in (None, sqs):
+                # FIXME should be better way to limit results
+                pks = [obj.pk for obj in filtered_sqs[:200]]
+                queryset = queryset.filter(pk__in=pks)
+                # mark the view has search results
+                # FIXME: should be a better (more safe) way to do this
+                view._haystack_filter = True
 
         return queryset
 

@@ -134,12 +134,6 @@ define([
                     $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_prices", "save", true);
-                    $scope.product.address = {
-                        id: addressId
-                    };
-                    $scope.product.phone = {
-                        id: phoneId
-                    };
                 }, function (error) {
                     $scope.handleResponseErrors(error, "item_prices", "save");
                 });
