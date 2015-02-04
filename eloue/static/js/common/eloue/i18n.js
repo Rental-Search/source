@@ -48,6 +48,7 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
 
             //Validation errors
             required_field: "Ce champ est obligatoire.",
+            zipcode_invalid: "Code postal invalide",
 
             //Dashboard form submit messages
 
@@ -83,7 +84,12 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             success: "succeed",
             fail: "failed",
 
+            // No addresses added yet notification
+            noAddressTitle: "Pas encore d'adresse renseignée",
+            noAddressInfo: "Donner votre adresse rassure le lacataire ou le propriétaire et augmente vos chances de louer",
+            noAddressButton: "Mettre à jour vos infos",
             informationHasBeenUpdated: "Vous informations ont été mises à jour"
+
         });
 
         $translateProvider.preferredLanguage("fr");
