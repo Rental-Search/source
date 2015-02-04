@@ -139,6 +139,9 @@ define([
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.category.id + "/";
                 $scope.product.addressDetails = $scope.product.address;
                 $scope.product.phoneDetails = $scope.product.phone;
+                if ($scope.product.first_registration_date) {
+                    $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy/MM/dd");
+                }
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
             };
@@ -175,6 +178,9 @@ define([
                 }
                 if ($scope.isAuto || $scope.isRealEstate) {
                     $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
+                    if ($scope.product.first_registration_date) {
+                        $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
+                    }
                 }
                 var promises = [];
                 promises.push(AddressesService.update($scope.product.addressDetails));
