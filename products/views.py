@@ -1000,6 +1000,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     ordering = '-created_at'
     ordering_fields = ('quantity', 'is_archived', 'category')
     public_actions = ('retrieve', 'search', 'is_available', 'homepage')
+    paginate_by = PAGINATE_PRODUCTS_BY
 
     navette = helpers.EloueNavette()
 
