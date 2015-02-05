@@ -51,9 +51,9 @@ define([
             $scope.markListItemAsSelected("account-part-", "account.profile");
 
             $scope.handleResponseErrors = function (error, object, action) {
-                $timeout(function() {
+                $timeout(function () {
                     $scope.submitInProgress = false;
-                });
+                }, 0);
                 $scope.showNotification(object, action, false);
             };
 
@@ -142,7 +142,7 @@ define([
                     $("#drivers_license_date").val($scope.currentUser.drivers_license_date);
                 }
                 var initialNumber = $scope.currentUser.default_number ? ($scope.currentUser.default_number.number.numero || $scope.currentUser.default_number.number) : null;
-                if ($scope.phoneNumber !== initialNumber) {
+                if ($scope.phoneNumber != initialNumber) {
                     if (!initialNumber) {
                         $scope.saveNewPhone();
                     } else {
