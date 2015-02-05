@@ -12,7 +12,7 @@
                         include ./pop_up_sections/_product_info.jade
                     section.terms
                         include ./pop_up_sections/_terms
-                        a(href="", ng-click="openModal('booking')").btn.bg-success
+                        a(href="", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success
                             | Réservez
                         a(href="", ng-click="openModal('phone')").btn.bg-gray
                             | Appelez

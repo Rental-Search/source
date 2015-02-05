@@ -1148,7 +1148,7 @@ class LoginFacebookView(View):
             user_data = session.me
             try:
                 user = Patron.objects.get(email=user_data['email'])
-            except Patron.DoesNotExist:
+            except (Patron.DoesNotExist, KeyError):
                 user = None
             else:
                 session.user = user

@@ -80,7 +80,7 @@ def get_point_and_radius(coords, radius=None):
     radius = min(radius or float('inf'), MAX_DISTANCE)
     return point, radius
 
-def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+def get_last_added_sqs(search_index, location, sort_by_date='-created_at_date'):
     # only objects that are 'good' to be shown
     sqs = search_index.filter(is_good=1)
 
@@ -111,7 +111,13 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
         # do not filter on location, and return full list sorted by the provided date field only
         last_added = sqs.order_by(sort_by_date)
 
+    return last_added
+
+
+def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+    last_added = get_last_added_sqs(search_index, location, sort_by_date)
     return last_added[offset*limit:(offset+1)*limit]
+
 
 def last_joined(*args, **kwargs):
     return last_added(*args, sort_by_date='-date_joined_date', **kwargs)
@@ -1083,17 +1089,22 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def homepage(self, request, *args, **kwargs):
         # get product ids from the search index
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-        sqs = last_added(self.search_index, location)
-        pks = [obj.pk for obj in sqs]
+        self.object_list = get_last_added_sqs(self.search_index, location)
 
-        # get records from the model
-        self.object_list = self.filter_queryset(self.get_queryset()).filter(id__in=pks)
+        # we need to transform Haystack's SearchQuerySet to Django's QuerySet
+        # TODO: it may be better to provide a custom Serializer which would support both
+        def sqs_to_qs(sqs):
+            pks = [obj.pk for obj in sqs]
+            qs = self.get_queryset().filter(id__in=pks)
+            return qs
 
         # Switch between paginated or standard style responses
         page = self.paginate_queryset(self.object_list)
         if page is not None:
+            page.object_list = sqs_to_qs(page.object_list)
             serializer = self.get_pagination_serializer(page)
         else:
+            self.object_list = sqs_to_qs(self.object_list)
             serializer = self.get_serializer(self.object_list, many=True)
 
         return Response(serializer.data)
