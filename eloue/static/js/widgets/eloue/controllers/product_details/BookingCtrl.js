@@ -204,7 +204,7 @@ define([
                     // Fix for very strange eloueChosen directive behaviour. Sometimes directive doesn't get fired and
                     // UI doesn't change, but scope value was changed successfully.
                     $timeout(function () {
-                        $("#toHour").trigger("chosen:updated");
+                        $("[id=toHour]").trigger("chosen:updated");
                     }, 0);
 
                     fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;

@@ -14,8 +14,9 @@ block section-content
             .text-danger(eloue-form-field-message field-name="address1") {{value}}
         .row
           .col-sm-6
-            input#zipcode.form-control(type="text", name="zipcode", ng-model="address.zipcode", placeholder="Code postal *", required, autofocus)
+            input#zipcode.form-control(type="text", name="zipcode", ng-model="address.zipcode", placeholder="Code postal *", required, autofocus, eloue-zipcode)
             .text-danger(data-ng-show="addressDetailForm.zipcode.$error.required && !!addressSubmitted", translate="required_field")
+            .text-danger(data-ng-show="addressDetailForm.zipcode.$error.badFormat && !!addressSubmitted", translate="zipcode_invalid")
           .col-sm-6
             input#city.form-control(type="text", name="city", ng-model="address.city", placeholder="Ville *", required, autofocus)
             .text-danger(data-ng-show="addressDetailForm.city.$error.required && !!addressSubmitted", translate="required_field")
@@ -44,7 +45,7 @@ block section-content
               h3.small
                 | Location {{product.summary}}
               p.normal.text-gray
-                big.text-primary {{product.deposit_amount}}€ / jour
+                big.text-primary {{product.pricePerDay}}€ / jour
                 br
                 {% endverbatim %}
                 span(ng-hide="product.stats.booking_comments_count == 0 && product.stats.bookings_count == 0")

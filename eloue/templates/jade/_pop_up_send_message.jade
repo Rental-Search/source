@@ -1,4 +1,4 @@
-.modal.fade#messageModal(tabindex="-1", role="dialog", aria-hidden="true")
+.modal.modal__message.fade#messageModal(tabindex="-1", role="dialog", aria-hidden="true")
     .modal-dialog.large
         .modal-content
             .modal-header
@@ -6,17 +6,17 @@
                     span(aria-hidden="true")&times;
                     span.sr-only Close
                 h4.modal-title Message
-            .modal-body.table-cell
-                .static-part.table-cell
+            .modal-body
+                .static-part
                     section.product-info
                         include ./pop_up_sections/_product_info.jade
                     section.terms
                         include ./pop_up_sections/_terms
-                        a(href="", ng-click="openModal('booking')").btn.bg-success
+                        a(href="", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success
                             | Réservez
                         a(href="", ng-click="openModal('phone')").btn.bg-gray
                             | Appelez
-                .change-part.table-cell
+                .change-part
                     section.dialogs
                         include ./pop_up_sections/_dialogs
                     section.input-message
