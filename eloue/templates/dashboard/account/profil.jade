@@ -78,11 +78,12 @@ block sections
           .col-sm-12
             p.text-uppercase: b: small téléphone par défaut
             input#phone.form-control(type="text", name="phoneNumber", placeholder="Téléphone par défaut", ng-model="phoneNumber")
+            .text-danger(eloue-form-field-message field-name="number") {{value}}
             input#default_number(type="hidden", name="default_number", ng-model="currentUser.default_number")
         //- about myself
         .row
           .col-sm-12
-            p.text-uppercase: b: small quelques mots sur vous  
+            p.text-uppercase: b: small quelques mots sur vous
             textarea#about-myself.expand.form-control(name="about", tabindex="1", rows="6", placeholder="A propos de vous...", ng-model="currentUser.about")
         //- languages
          .row
