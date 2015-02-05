@@ -513,6 +513,9 @@ class AnonymousProductTest(APITestCase):
         self.assertIn('max_available', response.data)
         self.assertEqual(response.data['max_available'], 3)
 
+    def test_homepage_allowed(self):
+        response = self.client.get(_location('product-homepage'))
+        self.assertEquals(response.status_code, 200)
 
 class ProductTest(APITestCase):
     fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
@@ -817,6 +820,9 @@ class ProductTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         #self.assertGreater(response.data['count'], 0)
 
+    def test_homepage_allowed(self):
+        response = self.client.get(_location('product-homepage'))
+        self.assertEquals(response.status_code, 200)
 
 class StaffProductTest(APITestCase):
     fixtures = ['patron_staff', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
