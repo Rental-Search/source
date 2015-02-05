@@ -108,6 +108,7 @@ define([
                             promise = PricesService.savePrice(value);
                         }
                         promise.then(function (result) {
+                            $scope.prices[key].id = result.id;
                             $scope.prices[key].amount = parseFloat(result.amount).toFixed(2);
                         });
                         promises.push(promise);
@@ -133,12 +134,6 @@ define([
                     $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_prices", "save", true);
-                    $scope.product.address = {
-                        id: addressId
-                    };
-                    $scope.product.phone = {
-                        id: phoneId
-                    };
                 }, function (error) {
                     $scope.handleResponseErrors(error, "item_prices", "save");
                 });
