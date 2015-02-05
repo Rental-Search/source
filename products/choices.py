@@ -175,6 +175,6 @@ SORT = Enum([
 ])
 
 PRODUCT_TYPE = Enum([
-    (514, 'CAR', _(u"Location Automobile")),
-    (515, 'REALESTATE', _(u"Location saisonnière")),
+    (2700, 'CAR', _(u"Location Automobile")),
+    (2713, 'REALESTATE', _(u"Location saisonnière")),
 ])

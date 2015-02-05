@@ -12,6 +12,8 @@ from rest_framework.fields import (
 )
 from rest_framework.relations import HyperlinkedIdentityField
 from rest_framework.reverse import reverse
+from rest_framework import serializers
+
 from products import models
 from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import (
@@ -19,6 +21,7 @@ from eloue.api.serializers import (
     NestedModelSerializerMixin, SimpleSerializer, SimplePaginationSerializer
 )
 from products.helpers import calculate_available_quantity
+from products.choices import PRODUCT_TYPE
 
 from rent.utils import DATE_TIME_FORMAT
 from rent.models import Booking
@@ -93,6 +96,22 @@ class ProductSerializer(ModelSerializer):
     pictures = NestedPictureSerializer(read_only=True, many=True)
     owner = NestedUserSerializer()
     slug = CharField(read_only=True, source='slug')
+
+    def validate(self, attrs):
+        attrs = super(ProductSerializer, self).validate(attrs)
+
+        old_category = self.object._get_category()
+        new_category = attrs.get('category', None)
+
+        ext_categories = PRODUCT_TYPE.values()
+        # If categories are belong to different trees, we have to check
+        # possibility to change category
+        if old_category.tree_id != new_category.tree_id:
+            if old_category.get_root().id in ext_categories or \
+                    new_category.get_root().id in ext_categories:
+                raise serializers.ValidationError(_('Can\'t change product type'))
+
+        return attrs
 
     def full_clean(self, instance):
         instance = super(ProductSerializer, self).full_clean(instance)

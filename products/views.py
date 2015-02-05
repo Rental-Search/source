@@ -3,6 +3,7 @@ import re
 from urllib import urlencode
 import urllib
 import datetime
+from itertools import chain
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -65,6 +66,11 @@ PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 MAX_DISTANCE = 1541
+
+
+def category_cache_key(*args):
+    return u':'.join([str(item) for item in chain(args, PRODUCT_TYPE.values())])
+
 
 def get_point_and_radius(coords, radius=None):
     """get_point_and_radius(coords, radius=None):
@@ -1172,14 +1178,18 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def _category_from_native(self):
         return self.serializer_class().fields['category'].from_native
 
+    @method_decorator(cached(key_func=category_cache_key, timeout=15*60))
+    def _root_category_from_native(self, category):
+        category = self._category_from_native(category)
+        return category.get_root().id
+
     def get_serializer_class(self):
         data = getattr(self, '_post_data', None)
         if data is not None:
             delattr(self, '_post_data')
             category = data.get('category', None)
             if category is not None:
-                category = self._category_from_native(category)
-                category = getattr(category, category._mptt_meta.tree_id_attr)
+                category = self._root_category_from_native(category)
             if category == PRODUCT_TYPE.CAR or 'brand' in data:
                 # we have CarProduct here
                 return serializers.CarProductSerializer
@@ -1217,13 +1227,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         self._post_data = request.DATA
         return super(ProductViewSet, self).create(request, *args, **kwargs)
 
-    def update(self, request, pk=None):
-        self._post_data = request.DATA
-        return super(ProductViewSet, self).update(request, pk)
-
     def get_location_url(self):
         return reverse('product-detail', args=(self.object.pk,))
-
 
 class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
