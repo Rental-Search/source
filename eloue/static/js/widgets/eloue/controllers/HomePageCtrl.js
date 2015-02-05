@@ -8,7 +8,18 @@ define([
     EloueWidgetsApp.controller("HomePageCtrl", [
         "$scope",
         "$document",
-        function ($scope, $document) {
+        "$window",
+        "MapsService",
+        function ($scope, $document, $window, MapsService) {
+
+            /**
+             * Activate geolocation search.
+             */
+            $window.googleMapsLoaded = function () {
+                $("#geolocate").formmapper({
+                    details: "form"
+                });
+            };
 
             /**
              * Insert YouTube video into defined container, add play on modal open and stop on modal hide
@@ -46,5 +57,7 @@ define([
 
             //Load video player on home page loaded
             $scope.addVideoPlayer();
+
+            MapsService.loadGoogleMaps();
         }]);
 });
