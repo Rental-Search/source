@@ -3,8 +3,6 @@ from eloue.settings import *
 
 SITE_ID = 13
 
-SESSION_COOKIE_DOMAIN = 'go-sport.fr' # FIXME!
-
 CACHE_MIDDLEWARE_KEY_PREFIX = 'gosport'
 
 for key in PIPELINE_CSS:
