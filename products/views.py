@@ -39,8 +39,10 @@ from products.forms import (
     RealEstateEditForm, CarProductEditForm, ProductEditForm,
     ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
 )
-from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread, CarProduct, \
-    RealEstateProduct
+from products.models import (
+    Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread,
+    CarProduct, RealEstateProduct
+)
 from products.choices import UNIT, SORT, PRODUCT_TYPE
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
@@ -1005,7 +1007,9 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     filter_class = ProductFilterSet
     ordering = '-created_at'
     ordering_fields = ('quantity', 'is_archived', 'category')
-    public_actions = ('retrieve', 'search', 'is_available', 'homepage')
+    public_actions = ('retrieve', 'search', 'is_available',
+                      'homepage', 'unavailability_periods',
+                      'unavailability')
     paginate_by = PAGINATE_PRODUCTS_BY
 
     navette = helpers.EloueNavette()
@@ -1083,6 +1087,32 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             return Response(res, status=400)
 
         return Response(res)
+
+    @link()
+    @ignore_filters([filters.DjangoFilterBackend])
+    def unavailability(self, request, *args, **kwargs):
+        product = self.get_object()
+        serializer = serializers.ListUnavailabilityPeriodSerializer(
+                        data=request.QUERY_PARAMS,
+                        instance=product)
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        return Response(serializer.data)
+
+    @link()
+    @ignore_filters([filters.DjangoFilterBackend])
+    def unavailability_periods(self, request, *args, **kwargs):
+        product = self.get_object()
+        serializer = serializers.MixUnavailabilityPeriodSerializer(
+                instance=product,
+                data=[request.QUERY_PARAMS,],
+                many=True)
+
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        return Response(serializer.data)
 
     @list_link()
     @ignore_filters([filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter])
