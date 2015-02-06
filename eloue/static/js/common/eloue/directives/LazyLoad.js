@@ -6,8 +6,8 @@ define([
     /**
      * Lazy loading list components.
      */
-    EloueCommon.directive("eloueLazyLoad", ["$injector", "$window", "$document", "$timeout", "$rootScope", "LazyLoader",
-        function ($injector, $window, $document, $timeout, $rootScope, LazyLoader) {
+    EloueCommon.directive("eloueLazyLoad", ["$injector", "$window", "$document", "$timeout", "$rootScope", "$filter", "LazyLoader",
+        function ($injector, $window, $document, $timeout, $rootScope, $filter, LazyLoader) {
 
             var appendAnimations = function () {
                 var style = $document[0].createElement("style");
@@ -49,7 +49,8 @@ define([
                 link: function (scope, element, attrs, ngModel) {
                     var winEl = angular.element($window),
                         win = winEl[0],
-                        loadingWidget = angular.element($document[0].querySelector(".loading-widget")),
+                        loadingWidget,
+                        loadMoreButton,
                         lazyLoader = LazyLoader,
                         dataProvider = $injector.get(scope.lazyDataProvider),
                         lazyLoad;
@@ -57,11 +58,25 @@ define([
                     scope.page = 1;
                     scope.hasNextPage = true;
                     scope.isLoading = false;
+                    scope.loadMoreText = $filter('translate')('loadMore');
+
                     element.append(
-                        "<div class=\"col-md-12 loading\">" +
+                        "<div class=\"col-md-12 loading\" style=\"background-image: none\">" +
                         "<div class=\"loading-widget\"></div>" +
                         "</div>"
                     );
+
+                    element.append(
+                        "<div class=\"col-md-12 text-center load-more-button\">" +
+                        "<a class=\"text text-success text-underline-hover\">" + scope.loadMoreText + "</a>" +
+                        "</div>"
+                    );
+
+                    loadingWidget = angular.element($document[0].querySelector(".loading-widget"));
+                    loadMoreButton = angular.element($document[0].querySelector(".load-more-button"));
+                    loadMoreButton.on("click", function () {
+                        lazyLoad();
+                    });
 
                     element.mCustomScrollbar({
                         scrollInertia: "100",
@@ -113,6 +128,11 @@ define([
                                     scope.lazyData = data.list;
                                 }
                                 scope.isLoading = false;
+                                if (!scope.hasNextPage) {
+                                    loadMoreButton.hide();
+                                }
+                            }, function (error) {
+                                loadMoreButton.show();
                             });
                     };
 
@@ -131,10 +151,12 @@ define([
                     scope.$on("hideLoading", function () {
                         $rootScope.routeChangeInProgress = false;
                         loadingWidget.hide();
+                        loadMoreButton.show();
                     });
                     scope.$on("showLoading", function () {
                         $rootScope.routeChangeInProgress = true;
                         loadingWidget.show();
+                        loadMoreButton.hide();
                     });
                 }
             };

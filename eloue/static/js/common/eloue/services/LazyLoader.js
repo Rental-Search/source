@@ -24,6 +24,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 fetch.apply(null, args).then(function (res) {
                     deferred.resolve(res);
                     $rootScope.$broadcast("hideLoading");
+                }, function(error) {
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -36,6 +38,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                 this.getData().then(function (col) {
                     deferred.resolve(col);
+                }, function(error) {
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
