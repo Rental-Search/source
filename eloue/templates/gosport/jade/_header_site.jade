@@ -1,6 +1,6 @@
 -load staticfiles eloue_url
 
-section.container.signs-links
+section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span

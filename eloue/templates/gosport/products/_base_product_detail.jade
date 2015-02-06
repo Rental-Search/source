@@ -71,7 +71,7 @@ block append content-body
                   {% with owner_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}
-        aside.col-sm-4
+        aside(data-ng-controller="BookingCtrl").col-sm-4
           {% if is_pro %}
           section.owner-information
             include ../jade/product_details/aside/_owner_information
