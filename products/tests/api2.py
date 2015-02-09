@@ -537,7 +537,7 @@ class ProductTest(APITestCase):
         self.car_model = get_model('products', 'CarProduct')
         self.real_estate_model = get_model('products', 'RealEstateProduct')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-        self.borrower = get_model('accounts', 'Patron')
+        self.borrower_model = get_model('accounts', 'Patron')
 
     def test_is_product_available(self):
         start_date = datetime.datetime.today() + datetime.timedelta(days=1)
@@ -916,7 +916,7 @@ class ProductTest(APITestCase):
                 total_amount=10,
                 currency='EUR',
                 owner=product.owner,
-                borrower=self.borrower.objects.get(pk=2),
+                borrower=self.borrower_model.objects.get(pk=2),
                 contract_id=678,
                 pin='qqq',
                 created_at=start_date - datetime.timedelta(days=1),
@@ -942,8 +942,6 @@ class ProductTest(APITestCase):
         self.assertTrue(period['id'].endswith(
             _location('unavailabilityperiod-detail', pk=unavailable.pk)))
 
-
-
     def test_unavailability(self):
         start_date = datetime.datetime.today() + datetime.timedelta(days=1)
         end_date = datetime.datetime.today() + datetime.timedelta(days=2)
@@ -965,7 +963,7 @@ class ProductTest(APITestCase):
                 total_amount=10,
                 currency='EUR',
                 owner=product.owner,
-                borrower=self.borrower.objects.get(pk=2),
+                borrower=self.borrower_model.objects.get(pk=2),
                 contract_id=678,
                 pin='qqq',
                 created_at=start_date - datetime.timedelta(days=1),

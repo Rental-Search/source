@@ -310,11 +310,8 @@ class MixUnavailabilityPeriodSerializer(UnavailabilityPeriodSerializerMixin, Sim
     @property
     def errors(self):
         _errors = super(MixUnavailabilityPeriodSerializer, self).errors
-        if isinstance(_errors, (list, tuple)):
-            try:
-                self._errors = _errors[0]
-            except IndexError:
-                self._errors = None
+        if _errors and isinstance(_errors, (list, tuple)):
+            self._errors = _errors[0]
         return self._errors
 
     def restore_object(self, attrs, instance=None):

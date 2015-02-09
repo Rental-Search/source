@@ -1074,7 +1074,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return Response([])
 
     @link()
-    @ignore_filters([filters.DjangoFilterBackend])
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
     def is_available(self, request, *args, **kwargs):
         obj = self.get_object()
 
@@ -1089,11 +1089,12 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return Response(res)
 
     @link()
-    @ignore_filters([filters.DjangoFilterBackend])
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
     def unavailability(self, request, *args, **kwargs):
         product = self.get_object()
         serializer = serializers.ListUnavailabilityPeriodSerializer(
                         data=request.QUERY_PARAMS,
+                        context={'request': request},
                         instance=product)
         if not serializer.is_valid():
             raise ValidationException(serializer.errors)
@@ -1101,7 +1102,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return Response(serializer.data)
 
     @link()
-    @ignore_filters([filters.DjangoFilterBackend])
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
     def unavailability_periods(self, request, *args, **kwargs):
         product = self.get_object()
         serializer = serializers.MixUnavailabilityPeriodSerializer(
