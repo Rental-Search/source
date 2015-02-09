@@ -837,6 +837,28 @@ class ProductTest(APITestCase):
         response = self.client.get(_location('product-homepage'))
         self.assertEquals(response.status_code, 200)
 
+    def test_unavailability_periods_before_now(self):
+        start_date = datetime.datetime.today() - datetime.timedelta(days=2)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_unavailability_periods_wrong_date(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=2)
+        end_date = datetime.datetime.today() - datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+
     def test_empty_unavailability_periods(self):
         start_date = datetime.datetime.today() + datetime.timedelta(days=1)
         end_date = datetime.datetime.today() + datetime.timedelta(days=2)

@@ -232,7 +232,7 @@ class UnavailabilityPeriodSerializerMixin(object):
         started_at = attrs.get('started_at')
         ended_at = attrs.get('ended_at')
 
-        if max(started_at, ended_at) <= datetime.datetime.now():
+        if min(started_at, ended_at) <= datetime.datetime.now():
             # FIXME text error message
             raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
         if started_at >= ended_at:
@@ -306,6 +306,16 @@ class MixUnavailabilityPeriodSerializer(UnavailabilityPeriodSerializerMixin, Sim
     def data(self):
         self.object = self.context['object']
         return super(MixUnavailabilityPeriodSerializer, self).data
+
+    @property
+    def errors(self):
+        _errors = super(MixUnavailabilityPeriodSerializer, self).errors
+        if isinstance(_errors, (list, tuple)):
+            try:
+                self._errors = _errors[0]
+            except IndexError:
+                self._errors = None
+        return self._errors
 
     def restore_object(self, attrs, instance=None):
         bookings = Booking.objects.filter(state__in=BOOKED_STATE)
