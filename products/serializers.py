@@ -8,9 +8,9 @@ from django.utils.translation import ugettext as _
 from rest_framework.fields import (
         FloatField, DateTimeField,
         IntegerField, DecimalField,
-        CharField, SerializerMethodField
-    )
-
+        CharField, SerializerMethodField,
+)
+from rest_framework.relations import HyperlinkedIdentityField
 from products import models
 from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
@@ -285,16 +285,15 @@ class ListUnavailabilityPeriodSerializer(UnavailabilityPeriodSerializerMixin, Si
         return serializer.data
 
 
-class OptionalIntegerField(IntegerField):
+class OptionalHyperlinkedIdentityField(HyperlinkedIdentityField):
     def field_to_native(self, obj, field_name):
-        try:
-            return super(OptionalIntegerField, self).field_to_native(obj, field_name)
-        except AttributeError:
-            pass
+        if hasattr(obj, field_name):
+            return super(OptionalHyperlinkedIdentityField, self).field_to_native(obj, field_name)
 
 
 class MixUnavailabilityPeriodSerializer(UnavailabilityPeriodSerializerMixin, SimpleSerializer):
-    id = OptionalIntegerField(read_only=True, required=False)
+    id = OptionalHyperlinkedIdentityField(source='id',
+        view_name='unavailabilityperiod-detail')
     quantity = IntegerField(read_only=True)
     started_at = DateTimeField(input_formats=DATE_TIME_FORMAT)
     ended_at = DateTimeField(input_formats=DATE_TIME_FORMAT)

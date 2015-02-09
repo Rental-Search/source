@@ -854,7 +854,7 @@ class ProductTest(APITestCase):
         end_date = datetime.datetime.today() + datetime.timedelta(days=2)
 
         product = self.model.objects.get(pk=7)
-        product.unavailabilityperiod_set.create(
+        unavailable = product.unavailabilityperiod_set.create(
                 started_at=start_date,
                 ended_at=end_date,
                 quantity=1)
@@ -870,18 +870,20 @@ class ProductTest(APITestCase):
         self.assertEqual(period['started_at'], start_date)
         self.assertEqual(period['ended_at'], end_date)
         self.assertEqual(period['quantity'], 1)
+        self.assertTrue(period['id'].endswith(
+            _location('unavailabilityperiod-detail', pk=unavailable.pk)))
 
     def test_unavailability_and_booking_periods(self):
         start_date = datetime.datetime.today() + datetime.timedelta(days=1)
         end_date = datetime.datetime.today() + datetime.timedelta(days=2)
 
         product = self.model.objects.get(pk=7)
-        product.unavailabilityperiod_set.create(
+        unavailable = product.unavailabilityperiod_set.create(
                 started_at=start_date,
                 ended_at=end_date,
                 quantity=1)
 
-        product.bookings.create(
+        booking = product.bookings.create(
                 uuid= '87ee8e9dec1d47c29ebb27e09bda8fc8',
                 started_at=start_date,
                 ended_at=end_date + datetime.timedelta(days=2),
@@ -905,27 +907,32 @@ class ProductTest(APITestCase):
         })
         self.assertEquals(response.status_code, 200, response.data)
         self.assertEqual(len(response.data), 2)
-        period = response.data[0]
-        self.assertEqual(period['started_at'], start_date)
-        self.assertEqual(period['ended_at'],
-                end_date + datetime.timedelta(days=2))
-        self.assertEqual(period['quantity'], 1)
+        self.assertEqual(response.data[0], {
+            'id': None,
+            'started_at': start_date,
+            'ended_at': end_date + datetime.timedelta(days=2),
+            'quantity': 1,
+        })
         period = response.data[1]
         self.assertEqual(period['started_at'], start_date)
         self.assertEqual(period['ended_at'], end_date)
         self.assertEqual(period['quantity'], 1)
+        self.assertTrue(period['id'].endswith(
+            _location('unavailabilityperiod-detail', pk=unavailable.pk)))
+
+
 
     def test_unavailability(self):
         start_date = datetime.datetime.today() + datetime.timedelta(days=1)
         end_date = datetime.datetime.today() + datetime.timedelta(days=2)
 
         product = self.model.objects.get(pk=7)
-        product.unavailabilityperiod_set.create(
+        unavailable = product.unavailabilityperiod_set.create(
                 started_at=start_date,
                 ended_at=end_date,
                 quantity=1)
 
-        product.bookings.create(
+        booking = product.bookings.create(
                 uuid= '87ee8e9dec1d47c29ebb27e09bda8fc8',
                 started_at=start_date,
                 ended_at=end_date + datetime.timedelta(days=2),
@@ -950,10 +957,12 @@ class ProductTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         self.assertIn('unavailable_periods', response.data)
         self.assertEqual(len(response.data['unavailable_periods']), 1)
-        period = response.data['unavailable_periods'][0]
-        self.assertEqual(period['started_at'], start_date)
-        self.assertEqual(period['ended_at'], end_date)
-        self.assertEqual(period['quantity'], 1)
+        self.assertEqual(response.data['unavailable_periods'][0], {
+            'id': unavailable.pk,
+            'started_at': start_date,
+            'ended_at': end_date,
+            'quantity': 1,
+        })
 
         self.assertIn('booking_periods', response.data)
         self.assertEqual(len(response.data['booking_periods']), 1)

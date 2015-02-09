@@ -1106,6 +1106,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         product = self.get_object()
         serializer = serializers.MixUnavailabilityPeriodSerializer(
                 instance=product,
+                context={'request': request},
                 data=[request.QUERY_PARAMS,],
                 many=True)
 
