@@ -5,8 +5,10 @@ from decimal import Decimal
 from django.conf import settings
 from django.contrib.gis.geos.point import Point
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.translation import ugettext_lazy as _
 
 from eloue.geocoder import GoogleGeocoder
+from eloue.api.exceptions import ShippingException, ShippingErrorEnum
 from shipping.navette import Navette, FileTransfer
 
 
@@ -74,11 +76,16 @@ class EloueNavette(Navette):
 
     def get_shipping_point(self, site_id, lat, lng, point_type):
         """Return shipping point info"""
-        try:
-            return filter(lambda x: x['site_id'] == site_id,
-                        self.get_shipping_points(lat, lng, point_type))[0]
-        except IndexError:
-            return None
+        for point in self.get_shipping_points(lat, lng, point_type):
+            if point['site_id'] == site_id:
+                return point
+
+        raise ShippingException({
+            'code': ShippingErrorEnum.MISSING_PUDO[0],
+            'description': ShippingErrorEnum.MISSING_PUDO[1],
+            'detail': _(u"Can't find shipping point for lat: %s, lng: %s, type: %s, site_id: %s") % (
+                lat, lng, point_type, site_id)
+        })
 
 
 class EloueFileTransfer(FileTransfer):
