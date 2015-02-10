@@ -233,8 +233,8 @@ class UnavailabilityPeriodSerializerMixin(object):
         ended_at = attrs.get('ended_at')
 
         if min(started_at, ended_at) <= datetime.datetime.now():
-            # FIXME text error message
-            raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
+            raise ValidationError(
+                _(u"Vous ne pouvez pas renseigner une date d’indisponibilités antérieure à la date d’aujourd’hui"))
         if started_at >= ended_at:
             raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
 
