@@ -517,6 +517,18 @@ class AnonymousProductTest(APITestCase):
         response = self.client.get(_location('product-homepage'))
         self.assertEquals(response.status_code, 200)
 
+    def test_unavailability_periods_allowed(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 0)
+
 class ProductTest(APITestCase):
     fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
 
@@ -525,6 +537,7 @@ class ProductTest(APITestCase):
         self.car_model = get_model('products', 'CarProduct')
         self.real_estate_model = get_model('products', 'RealEstateProduct')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        self.borrower_model = get_model('accounts', 'Patron')
 
     def test_is_product_available(self):
         start_date = datetime.datetime.today() + datetime.timedelta(days=1)
@@ -823,6 +836,161 @@ class ProductTest(APITestCase):
     def test_homepage_allowed(self):
         response = self.client.get(_location('product-homepage'))
         self.assertEquals(response.status_code, 200)
+
+    def test_unavailability_periods_before_now(self):
+        start_date = datetime.datetime.today() - datetime.timedelta(days=2)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_unavailability_periods_wrong_date(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=2)
+        end_date = datetime.datetime.today() - datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_empty_unavailability_periods(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 0)
+
+    def test_unavailability_periods(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        product = self.model.objects.get(pk=7)
+        unavailable = product.unavailabilityperiod_set.create(
+                started_at=start_date,
+                ended_at=end_date,
+                quantity=1)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 1)
+        period = response.data[0]
+        self.assertEqual(period['started_at'], start_date)
+        self.assertEqual(period['ended_at'], end_date)
+        self.assertEqual(period['quantity'], 1)
+        self.assertTrue(period['id'].endswith(
+            _location('unavailabilityperiod-detail', pk=unavailable.pk)))
+
+    def test_unavailability_and_booking_periods(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        product = self.model.objects.get(pk=7)
+        unavailable = product.unavailabilityperiod_set.create(
+                started_at=start_date,
+                ended_at=end_date,
+                quantity=1)
+
+        booking = product.bookings.create(
+                uuid= '87ee8e9dec1d47c29ebb27e09bda8fc8',
+                started_at=start_date,
+                ended_at=end_date + datetime.timedelta(days=2),
+                quantity=1,
+                state='pending',
+                deposit_amount=100,
+                insurance_amount=10,
+                total_amount=10,
+                currency='EUR',
+                owner=product.owner,
+                borrower=self.borrower_model.objects.get(pk=2),
+                contract_id=678,
+                pin='qqq',
+                created_at=start_date - datetime.timedelta(days=1),
+                )
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0], {
+            'id': None,
+            'started_at': start_date,
+            'ended_at': end_date + datetime.timedelta(days=2),
+            'quantity': 1,
+        })
+        period = response.data[1]
+        self.assertEqual(period['started_at'], start_date)
+        self.assertEqual(period['ended_at'], end_date)
+        self.assertEqual(period['quantity'], 1)
+        self.assertTrue(period['id'].endswith(
+            _location('unavailabilityperiod-detail', pk=unavailable.pk)))
+
+    def test_unavailability(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        product = self.model.objects.get(pk=7)
+        unavailable = product.unavailabilityperiod_set.create(
+                started_at=start_date,
+                ended_at=end_date,
+                quantity=1)
+
+        booking = product.bookings.create(
+                uuid= '87ee8e9dec1d47c29ebb27e09bda8fc8',
+                started_at=start_date,
+                ended_at=end_date + datetime.timedelta(days=2),
+                quantity=1,
+                state='pending',
+                deposit_amount=100,
+                insurance_amount=10,
+                total_amount=10,
+                currency='EUR',
+                owner=product.owner,
+                borrower=self.borrower_model.objects.get(pk=2),
+                contract_id=678,
+                pin='qqq',
+                created_at=start_date - datetime.timedelta(days=1),
+                )
+
+        response = self.client.get(_location('product-unavailability', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('unavailable_periods', response.data)
+        self.assertEqual(len(response.data['unavailable_periods']), 1)
+        self.assertEqual(response.data['unavailable_periods'][0], {
+            'id': unavailable.pk,
+            'started_at': start_date,
+            'ended_at': end_date,
+            'quantity': 1,
+        })
+
+        self.assertIn('booking_periods', response.data)
+        self.assertEqual(len(response.data['booking_periods']), 1)
+        period = response.data['booking_periods'][0]
+        self.assertEqual(period['started_at'], start_date)
+        self.assertEqual(period['ended_at'],
+                end_date + datetime.timedelta(days=2))
+        self.assertEqual(period['quantity'], 1)
 
 class StaffProductTest(APITestCase):
     fixtures = ['patron_staff', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
