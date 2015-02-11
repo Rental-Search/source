@@ -49,7 +49,6 @@ define([
             });
 
             $scope.applyBookingDetails = function (bookingDetails) {
-                console.log(bookingDetails);
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                 $scope.showIncidentDescription = $scope.bookingDetails.state === "incident";
@@ -118,6 +117,9 @@ define([
                             });
                         }
                     }, function (error) {
+                        if (error.code == "60100") {
+                            $scope.shippingServiceError = "Désolé, il y a un problème avec le service de livraison. Pouvez-vous contacter le service client pour plus d'informations, s'il vous plaît?";
+                        }
                         $scope.handleResponseErrors(error, "shipping_point", "get");
                     });
                     ShippingsService.getByBooking($stateParams.uuid).then(function (shippingList) {

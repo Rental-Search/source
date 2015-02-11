@@ -42,6 +42,13 @@ define([
             ProductShippingPointsService.getByProduct($stateParams.id).then(
                 function (data) {
                     $scope.applyProductShippingPoints(data);
+                },
+                function (error) {
+                    //Depot not found. Need to start point selection from beginning
+                    if (error.code == "60100") {
+                        $scope.showMapPointList();
+                    }
+                    $scope.handleResponseErrors(error, "shipping_point", "get");
                 }
             );
 
