@@ -175,7 +175,7 @@ def get_position(address):
     return GoogleGeocoder().geocode(address)[1]
 
 
-def _preprocess_name(self, name):
+def _preprocess_name(name):
     return NAME_RE.sub(' ', name).strip()
 
 def _fill_order_detail(delivery, dropoff, order_contact, delivery_site, dropoff_site):
