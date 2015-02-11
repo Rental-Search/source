@@ -464,7 +464,7 @@ def thread_details(request, thread_id):
     borrower = user if peer == owner else peer
     
     message_list = thread.messages.order_by('sent_at')
-    
+
     if request.method == "POST":
         editForm = MessageEditForm(request.POST, prefix='0')
         if editForm.is_valid():
@@ -931,6 +931,7 @@ import django_filters
 from products import serializers, models
 from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
+from eloue.api.decorators import user_required
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
@@ -1223,7 +1224,16 @@ class MessageThreadFilterSet(filters.FilterSet):
         model = models.MessageThread
         fields = ('sender', 'recipient', 'product')
 
-class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
+
+class SetMessageOwnerMixin(mixins.SetOwnerMixin):
+    def pre_save(self, obj):
+        # set owner only for new messages threads
+        if obj.id:
+            return super(mixins.SetOwnerMixin, self).pre_save(obj)
+        return super(SetMessageOwnerMixin, self).pre_save(obj)
+
+
+class MessageThreadViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows message threads to be viewed or edited.
     """
@@ -1235,7 +1245,7 @@ class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_class = MessageThreadFilterSet
     ordering_fields = ('last_message__sent_at', 'last_message__read_at', 'last_message__replied_at')
 
-class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
+class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
     """
@@ -1246,7 +1256,23 @@ class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_fields = ('thread', 'sender', 'recipient', 'offer')
     ordering_fields = ('sent_at',)
 
+    _object = None
+
     def pre_save(self, obj):
         if not obj.subject and obj.thread:
             obj.subject = obj.thread.subject
         return super(ProductRelatedMessageViewSet, self).pre_save(obj)
+
+    def get_object(self, queryset=None):
+        if not self._object:
+            self._object = super(ProductRelatedMessageViewSet, self
+                    ).get_object(queryset=queryset)
+        return self._object
+
+    def retrieve(self, request, *args, **kwargs):
+        message = self.get_object(queryset=self.queryset)
+        if not message.read_at and message.recipient.id == request.user.id:
+            message.read_at = datetime.datetime.now()
+            message.save()
+
+        return super(ProductRelatedMessageViewSet, self).retrieve(request, *args, **kwargs)
