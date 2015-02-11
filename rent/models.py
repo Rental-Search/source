@@ -35,6 +35,7 @@ from rent.fields import UUIDField, IntegerAutoField
 from rent.manager import BookingManager, CurrentSiteBookingManager, CommentManager
 from payments.paypal_payment import AdaptivePapalPayments
 from payments.non_payment import NonPayments
+from shipping.models import ShippingPoint, Shipping
 
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, itertools_accumulate
@@ -345,8 +346,20 @@ class Booking(models.Model):
     
     @transition(field=state, source=BOOKING_STATE.AUTHORIZED, target=BOOKING_STATE.PENDING)
     def accept(self):
+        """Accept booking request for the owner"""
+        # create a Shipping record if needed
+        try:
+            self.product.departure_point
+            self.arrival_point
+        except ShippingPoint.DoesNotExist:
+            pass
+        else:
+            # TODO: remove hardcoded shipping price
+            self.shipping = Shipping.objects.create(booking=self, price=D('10.0'))
+        # charge payment
         self.payment.pay(self.pk, self.get_total_amount(), self.currency)
         self.payment.save()
+        # send e-mail notifications
         self.send_acceptation_email()
         self.send_borrower_receipt()
     

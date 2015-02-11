@@ -1053,14 +1053,13 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                     return Response([])
             shipping_points = self.navette.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
+                # FIXME: could there be a depot without site_id?
                 if 'site_id' in shipping_point:
                     try:
                         price = self.navette.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
                     except WebFault:
                         shipping_points.remove(shipping_point)
                     else:
-                        token = price.pop('token')
-                        cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
                         price['price'] *= 2
                         shipping_point.update(price)
                         # shipping_point.update({'price': 3.99})
