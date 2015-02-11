@@ -112,9 +112,10 @@ def cached(
     def decorator(func):
         @wraps(func)
         def wrapper(*func_args, **func_kwargs):
-            if key_prefix is None:
-                key_prefix = Site.objects.get_current().domain
-            key = key_func(key_prefix, func.__name__, *func_args)
+            prefix = key_prefix
+            if prefix is None:
+                prefix = Site.objects.get_current().domain
+            key = key_func(prefix, func.__name__, *func_args)
             value = cache.get(key)
             if value is None:
                 value = func(*func_args, **func_kwargs)
