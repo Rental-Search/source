@@ -14,6 +14,8 @@
             span.badge-pro pro
         .product-info
           .product-description
+            h6
+              |Location
             h6: a(href="{{ product.url }}") {{ product.summary }}
             p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
           .product-owner
@@ -22,4 +24,4 @@
     //- TODO: should use AJAX to fetch and insert next 8 items
     button(type="button", onclick="location.href='{% facet_url breadcrumbs 'sort' '' %}';").btn.bg-success.btn-explore.btn-lg
       i.flaticon.stroke.zoom-2.indent-r-xs
-      | Explorez toutes les annonces
+      | Explorez toutes les annonces de location
