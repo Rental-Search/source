@@ -931,7 +931,6 @@ import django_filters
 from products import serializers, models
 from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
-from eloue.api.decorators import user_required
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
