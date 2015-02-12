@@ -309,6 +309,21 @@ class MessageThreadTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
+    def test_not_empty_messagethread_list_paginated(self):
+        response = self.client.get(
+                _location('messagethread-list'), {'empty': False})
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 1,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
     def test_messagethread_create(self):
         response = self.client.post(_location('messagethread-list'), {
              'sender': _location('patron-detail', pk=1),
@@ -448,9 +463,71 @@ class MessageThreadMessageTest(APITestCase):
         response = self.client.get(_location('messagethread-detail', pk=thread_id))
         self.assertEquals(response.status_code, 200, response.data)
         self.assertEqual(response.data['last_message']['id'], message_id)
-
         if 'last_offer' in response.data:
             self.assertTrue(str(response.data['last_offer']).endswith(_location('productrelatedmessage-detail', pk=message_id)), response.data)
+
+    def test_message_read_at(self):
+        response = self.client.post(_location('messagethread-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=2),
+             'subject': 'Test message thread (offer)',
+             'product': _location('product-detail', pk=5),
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+
+        # check that 'sender' has been set in the back-end to refer to authenticated user
+        self.assertEqual(response.data['sender']['id'], 1)
+
+        thread_id = response.data['id']
+
+        response = self.client.post(_location('productrelatedmessage-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=2),
+             'thread': _location('messagethread-detail', pk=thread_id),
+             'subject': 'Test message (offer)',
+             'body': 'Please consider my offer.',
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+        message_id = response.data['id']
+
+        # check 'read_at' has been set
+        self.client.logout()
+        self.client.login(username='timothee.peignier@e-loue.com', password='timothee')
+
+        response = self.client.get(_location(
+            'productrelatedmessage-detail', pk=message_id))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertTrue(response.data['sender'].endswith(
+            _location('patron-detail', pk=1)), response.data)
+        self.assertTrue(response.data['recipient'].endswith(
+            _location('patron-detail', pk=2)), response.data)
+        self.assertIsNotNone(response.data['read_at'])
+
+        # create answer
+        response = self.client.post(_location('productrelatedmessage-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=1),
+             'thread': _location('messagethread-detail', pk=thread_id),
+             'subject': 'Test answer',
+             'body': 'Check reat at time',
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+        message_id = response.data['id']
+
+        self.client.logout()
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+        response = self.client.get(_location(
+            'productrelatedmessage-detail', pk=message_id))
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertTrue(response.data['sender'].endswith(
+            _location('patron-detail', pk=2)), response.data)
+        self.assertTrue(response.data['recipient'].endswith(
+            _location('patron-detail', pk=1)), response.data)
+        self.assertIsNotNone(response.data['read_at'])
 
 
 class AnonymousProductTest(APITestCase):

@@ -1219,6 +1219,7 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
 
 class MessageThreadFilterSet(filters.FilterSet):
     participant = filters.MultiFieldFilter(name=('sender', 'recipient'))
+    empty = django_filters.BooleanFilter(name='last_message__isnull')
 
     class Meta:
         model = models.MessageThread
