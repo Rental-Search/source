@@ -1262,7 +1262,7 @@ class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
             obj.subject = obj.thread.subject
         return super(ProductRelatedMessageViewSet, self).pre_save(obj)
 
-    @link()
+    @action(methods=['put'])
     @ignore_filters([filters.DjangoFilterBackend])
     def seen(self, request, *args, **kwargs):
         message = self.get_object()
