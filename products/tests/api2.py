@@ -376,11 +376,11 @@ class MessageTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
-    def test_message_edit(self):
-        response = self.client.patch(_location('productrelatedmessage-detail', 1), {
-            'read_at': '2014-10-14T00:00',
-        })
-        self.assertEquals(response.status_code, 200, response.data)
+#    def test_message_edit(self):
+#        response = self.client.patch(_location('productrelatedmessage-detail', 1), {
+#            'read_at': '2014-10-14T00:00',
+#        })
+#        self.assertEquals(response.status_code, 200, response.data)
 
     def test_message_create(self):
         response = self.client.post(_location('productrelatedmessage-list'), {
@@ -497,13 +497,8 @@ class MessageThreadMessageTest(APITestCase):
         self.client.login(username='timothee.peignier@e-loue.com', password='timothee')
 
         response = self.client.get(_location(
-            'productrelatedmessage-detail', pk=message_id))
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertTrue(response.data['sender'].endswith(
-            _location('patron-detail', pk=1)), response.data)
-        self.assertTrue(response.data['recipient'].endswith(
-            _location('patron-detail', pk=2)), response.data)
-        self.assertIsNotNone(response.data['read_at'])
+            'productrelatedmessage-seen', pk=message_id))
+        self.assertEquals(response.status_code, 204, response.data)
 
         # create answer
         response = self.client.post(_location('productrelatedmessage-list'), {
@@ -521,13 +516,8 @@ class MessageThreadMessageTest(APITestCase):
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
 
         response = self.client.get(_location(
-            'productrelatedmessage-detail', pk=message_id))
-        self.assertEquals(response.status_code, 200, response.data)
-        self.assertTrue(response.data['sender'].endswith(
-            _location('patron-detail', pk=2)), response.data)
-        self.assertTrue(response.data['recipient'].endswith(
-            _location('patron-detail', pk=1)), response.data)
-        self.assertIsNotNone(response.data['read_at'])
+            'productrelatedmessage-seen', pk=message_id))
+        self.assertEquals(response.status_code, 204, response.data)
 
 
 class AnonymousProductTest(APITestCase):

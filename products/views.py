@@ -926,6 +926,7 @@ class SuggestCategoryView(AjaxResponseMixin, View):
 
 from rest_framework.decorators import link
 from rest_framework.response import Response
+from rest_framework import status
 import django_filters
 
 from products import serializers, models
@@ -1256,23 +1257,16 @@ class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     filter_fields = ('thread', 'sender', 'recipient', 'offer')
     ordering_fields = ('sent_at',)
 
-    _object = None
-
     def pre_save(self, obj):
         if not obj.subject and obj.thread:
             obj.subject = obj.thread.subject
         return super(ProductRelatedMessageViewSet, self).pre_save(obj)
 
-    def get_object(self, queryset=None):
-        if not self._object:
-            self._object = super(ProductRelatedMessageViewSet, self
-                    ).get_object(queryset=queryset)
-        return self._object
-
-    def retrieve(self, request, *args, **kwargs):
-        message = self.get_object(queryset=self.queryset)
+    @link()
+    @ignore_filters([filters.DjangoFilterBackend])
+    def seen(self, request, *args, **kwargs):
+        message = self.get_object()
         if not message.read_at and message.recipient.id == request.user.id:
             message.read_at = datetime.datetime.now()
             message.save()
-
-        return super(ProductRelatedMessageViewSet, self).retrieve(request, *args, **kwargs)
+        return Response(status=status.HTTP_204_NO_CONTENT)
