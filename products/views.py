@@ -924,7 +924,7 @@ class SuggestCategoryView(AjaxResponseMixin, View):
 
 # REST API 2.0
 
-from rest_framework.decorators import link
+from rest_framework.decorators import link, action
 from rest_framework.response import Response
 from rest_framework import status
 import django_filters
