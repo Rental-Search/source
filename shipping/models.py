@@ -1,7 +1,13 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
 from django.contrib.gis.db import models
 from django.db.models.deletion import PROTECT
-from shipping.choises import SHIPPING_POINT_TYPE
+from django.db.models import signals
+from django.dispatch import receiver
+
+from .choises import SHIPPING_POINT_TYPE
+from .helpers import fill_order_details
 
 
 class ShippingPoint(models.Model):
@@ -31,3 +37,11 @@ class Shipping(models.Model):
     order_number2 = models.CharField(max_length=128, default='')
     shuttle_code2 = models.CharField(max_length=128, default='')
     shuttle_document_url2 = models.CharField(max_length=1024, default='')
+
+@receiver(
+    [signals.pre_save],
+    sender=Shipping,
+    dispatch_uid='shipping_fill_order_details_pre_save'
+)
+def on_fill_order_details_pre_save(sender, instance, **kwargs):
+    fill_order_details(instance, **kwargs)

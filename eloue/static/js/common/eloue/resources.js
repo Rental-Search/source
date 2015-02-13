@@ -42,7 +42,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
     EloueCommon.factory("ProductRelatedMessages", ["$resource", "Endpoints", function ($resource, Endpoints) {
         return $resource(Endpoints.api_url + "productrelatedmessages/:id/?", {},
             {
-                "update": {method: "PUT"}
+                "update": {method: "PUT"},
+                "seen": {method: "PUT", url: Endpoints.api_url + "productrelatedmessages/:id/seen/?"}
             });
     }]);
 

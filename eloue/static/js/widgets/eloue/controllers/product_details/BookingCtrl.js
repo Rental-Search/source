@@ -633,7 +633,14 @@ define([
                     $scope.loadingProductShippingPoint = true;
                     ProductShippingPointsService.getByProduct($scope.productId).then(
                         $scope.applyProductShippingPoint,
-                        $scope.handleResponseErrors
+                        function (error) {
+                            //Depot not found. Need to start point selection from beginning
+                            if (error.code == "60100") {
+                                $scope.loadingProductShippingPoint = false;
+                            } else {
+                                $scope.handleResponseErrors(error);
+                            }
+                        }
                     );
                 });
             };

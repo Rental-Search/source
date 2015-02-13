@@ -250,40 +250,5 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
             scope.processAcceptBookingResponse();
             expect(productShippingPointsServiceMock.getByProduct).toHaveBeenCalled();
         });
-
-        it("BookingDetailCtrl:processProductShippingPointsResponse", function () {
-            scope.bookingDetails = {
-                borrower: {
-                    id: 0
-                },
-                owner: {
-                    id: 1
-                }
-            };
-            var productShippingPointData = {
-                results: [
-                    {
-                        id: 2
-                    }
-                ]
-            };
-            scope.processProductShippingPointsResponse(productShippingPointData);
-            expect(patronShippingPointsServiceMock.getByPatronAndBooking).toHaveBeenCalled();
-        });
-
-        it("BookingDetailCtrl:processPatronShippingPointsResponse", function () {
-            scope.bookingDetails = {
-                uuid: 1
-            };
-            var patronShippingPointData = {
-                results: [
-                    {
-                        id: 2
-                    }
-                ]
-            }, productShippingPoint = { id : 1};
-            scope.processPatronShippingPointsResponse(patronShippingPointData, productShippingPoint);
-            expect(shippingsServiceMock.saveShipping).toHaveBeenCalled();
-        });
     });
 });

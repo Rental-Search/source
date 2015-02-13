@@ -39,8 +39,10 @@ from products.forms import (
     RealEstateEditForm, CarProductEditForm, ProductEditForm,
     ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
 )
-from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread, CarProduct, \
-    RealEstateProduct
+from products.models import (
+    Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread,
+    CarProduct, RealEstateProduct
+)
 from products.choices import UNIT, SORT, PRODUCT_TYPE
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
@@ -464,7 +466,7 @@ def thread_details(request, thread_id):
     borrower = user if peer == owner else peer
     
     message_list = thread.messages.order_by('sent_at')
-    
+
     if request.method == "POST":
         editForm = MessageEditForm(request.POST, prefix='0')
         if editForm.is_valid():
@@ -924,8 +926,9 @@ class SuggestCategoryView(AjaxResponseMixin, View):
 
 # REST API 2.0
 
-from rest_framework.decorators import link
+from rest_framework.decorators import link, action
 from rest_framework.response import Response
+from rest_framework import status
 import django_filters
 
 from products import serializers, models
@@ -1005,7 +1008,9 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     filter_class = ProductFilterSet
     ordering = '-created_at'
     ordering_fields = ('quantity', 'is_archived', 'category')
-    public_actions = ('retrieve', 'search', 'is_available', 'homepage')
+    public_actions = ('retrieve', 'search', 'is_available',
+                      'homepage', 'unavailability_periods',
+                      'unavailability')
     paginate_by = PAGINATE_PRODUCTS_BY
 
     navette = helpers.EloueNavette()
@@ -1053,14 +1058,13 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                     return Response([])
             shipping_points = self.navette.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
+                # FIXME: could there be a depot without site_id?
                 if 'site_id' in shipping_point:
                     try:
                         price = self.navette.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
                     except WebFault:
                         shipping_points.remove(shipping_point)
                     else:
-                        token = price.pop('token')
-                        cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
                         price['price'] *= 2
                         shipping_point.update(price)
                         # shipping_point.update({'price': 3.99})
@@ -1070,7 +1074,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return Response([])
 
     @link()
-    @ignore_filters([filters.DjangoFilterBackend])
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
     def is_available(self, request, *args, **kwargs):
         obj = self.get_object()
 
@@ -1083,6 +1087,34 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             return Response(res, status=400)
 
         return Response(res)
+
+    @link()
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
+    def unavailability(self, request, *args, **kwargs):
+        product = self.get_object()
+        serializer = serializers.ListUnavailabilityPeriodSerializer(
+                        data=request.QUERY_PARAMS,
+                        context={'request': request},
+                        instance=product)
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        return Response(serializer.data)
+
+    @link()
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
+    def unavailability_periods(self, request, *args, **kwargs):
+        product = self.get_object()
+        serializer = serializers.MixUnavailabilityPeriodSerializer(
+                instance=product,
+                context={'request': request},
+                data=[request.QUERY_PARAMS,],
+                many=True)
+
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        return Response(serializer.data)
 
     @list_link()
     @ignore_filters([filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter])
@@ -1218,12 +1250,22 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
 
 class MessageThreadFilterSet(filters.FilterSet):
     participant = filters.MultiFieldFilter(name=('sender', 'recipient'))
+    empty = django_filters.BooleanFilter(name='last_message__isnull')
 
     class Meta:
         model = models.MessageThread
         fields = ('sender', 'recipient', 'product')
 
-class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
+
+class SetMessageOwnerMixin(mixins.SetOwnerMixin):
+    def pre_save(self, obj):
+        # set owner only for new messages threads
+        if obj.id:
+            return super(mixins.SetOwnerMixin, self).pre_save(obj)
+        return super(SetMessageOwnerMixin, self).pre_save(obj)
+
+
+class MessageThreadViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows message threads to be viewed or edited.
     """
@@ -1235,7 +1277,7 @@ class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_class = MessageThreadFilterSet
     ordering_fields = ('last_message__sent_at', 'last_message__read_at', 'last_message__replied_at')
 
-class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
+class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
     """
@@ -1250,3 +1292,12 @@ class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
         if not obj.subject and obj.thread:
             obj.subject = obj.thread.subject
         return super(ProductRelatedMessageViewSet, self).pre_save(obj)
+
+    @action(methods=['put'])
+    @ignore_filters([filters.DjangoFilterBackend])
+    def seen(self, request, *args, **kwargs):
+        message = self.get_object()
+        if not message.read_at and message.recipient.id == request.user.id:
+            message.read_at = datetime.datetime.now()
+            message.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
