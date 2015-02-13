@@ -131,7 +131,7 @@ class ShippingSerializer(serializers.ModelSerializer):
             'DropOffSiteCountry': dropoff_site.get('country_name', ''),
             'DropOffSiteCountryCode': dropoff_site.get('country', ''),
             'DropOffSiteName': dropoff_site.get('pudo_id', ''),
-            'DropOffSiteZipCode': delivery_site.get('zipcode', ''),
+            'DropOffSiteZipCode': dropoff_site.get('zipcode', ''),
             'OrderContactFirstName': self.preprocess_name(order_contact.first_name),
             'OrderContactLastName': self.preprocess_name(order_contact.last_name),
             'OrderContactMail': order_contact.email.replace('-', ''),
