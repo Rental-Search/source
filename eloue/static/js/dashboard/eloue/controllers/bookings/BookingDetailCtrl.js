@@ -49,7 +49,6 @@ define([
             });
 
             $scope.applyBookingDetails = function (bookingDetails) {
-                console.log(bookingDetails);
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                 $scope.showIncidentDescription = $scope.bookingDetails.state === "incident";
@@ -118,6 +117,9 @@ define([
                             });
                         }
                     }, function (error) {
+                        if (error.code == "60100") {
+                            $scope.shippingServiceError = "Désolé, il y a un problème avec le service de livraison. Pouvez-vous contacter le service client pour plus d'informations, s'il vous plaît?";
+                        }
                         $scope.handleResponseErrors(error, "shipping_point", "get");
                     });
                     ShippingsService.getByBooking($stateParams.uuid).then(function (shippingList) {
@@ -193,57 +195,8 @@ define([
             };
 
             $scope.processAcceptBookingResponse = function () {
-                if ($scope.bookingDetails.shipping.enabled) {
-                    ProductShippingPointsService.getByProduct($scope.bookingDetails.product.id).then(
-                        $scope.processProductShippingPointsResponse,
-                        function (error) {
-                            $scope.handleResponseErrors(error, "booking", "accept");
-                        }
-                    );
-                } else {
-                    $scope.showNotification("booking", "accept", true);
-                    $window.location.reload();
-                }
-            };
-
-            $scope.processProductShippingPointsResponse = function (productShippingPointData) {
-                //Show shipping choice only if there are existing product shipping points
-                if (!!productShippingPointData.results && productShippingPointData.results.length > 0) {
-                    var productShippingPoint = productShippingPointData.results[0];
-                    PatronShippingPointsService.getByPatronAndBooking($scope.bookingDetails.borrower.id, $stateParams.uuid).then(
-                        function(patronShippingPointData) {
-                            $scope.processPatronShippingPointsResponse(patronShippingPointData, productShippingPoint);
-                        },
-                        function (error) {
-                            $scope.handleResponseErrors(error, "booking", "accept");
-                        }
-                    );
-                } else {
-                    $scope.showNotification("booking", "accept", true);
-                    $window.location.reload();
-                }
-            };
-
-            $scope.processPatronShippingPointsResponse = function (patronShippingPointData, productShippingPoint) {
-                if (!!patronShippingPointData.results && patronShippingPointData.results.length > 0) {
-                    var patronShippingPoint = patronShippingPointData.results[0], shipping;
-                    // TODO: Price is hardcoded for now, will be taken from some third-party pricing service
-                    shipping = {
-                        price: "10.0",
-                        booking: Endpoints.api_url + "bookings/" + $scope.bookingDetails.uuid + "/",
-                        departure_point: Endpoints.api_url + "productshippingpoints/" + productShippingPoint.id + "/",
-                        arrival_point: Endpoints.api_url + "patronshippingpoints/" + patronShippingPoint.id + "/"
-                    };
-                    ShippingsService.saveShipping(shipping).then(function () {
-                        $scope.showNotification("shipping", "save", true);
-                        $window.location.reload();
-                    }, function (error) {
-                        $scope.handleResponseErrors(error, "booking", "accept");
-                    });
-                } else {
-                    $scope.showNotification("booking", "accept", true);
-                    $window.location.reload();
-                }
+                $scope.showNotification("booking", "accept", true);
+                $window.location.reload();
             };
 
             $scope.rejectBooking = function () {

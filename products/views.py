@@ -39,8 +39,10 @@ from products.forms import (
     RealEstateEditForm, CarProductEditForm, ProductEditForm,
     ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
 )
-from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread, CarProduct, \
-    RealEstateProduct
+from products.models import (
+    Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread,
+    CarProduct, RealEstateProduct
+)
 from products.choices import UNIT, SORT, PRODUCT_TYPE
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
@@ -1006,7 +1008,9 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     filter_class = ProductFilterSet
     ordering = '-created_at'
     ordering_fields = ('quantity', 'is_archived', 'category')
-    public_actions = ('retrieve', 'search', 'is_available', 'homepage')
+    public_actions = ('retrieve', 'search', 'is_available',
+                      'homepage', 'unavailability_periods',
+                      'unavailability')
     paginate_by = PAGINATE_PRODUCTS_BY
 
     navette = helpers.EloueNavette()
@@ -1054,14 +1058,13 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                     return Response([])
             shipping_points = self.navette.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
+                # FIXME: could there be a depot without site_id?
                 if 'site_id' in shipping_point:
                     try:
                         price = self.navette.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
                     except WebFault:
                         shipping_points.remove(shipping_point)
                     else:
-                        token = price.pop('token')
-                        cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
                         price['price'] *= 2
                         shipping_point.update(price)
                         # shipping_point.update({'price': 3.99})
@@ -1071,7 +1074,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return Response([])
 
     @link()
-    @ignore_filters([filters.DjangoFilterBackend])
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
     def is_available(self, request, *args, **kwargs):
         obj = self.get_object()
 
@@ -1084,6 +1087,34 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             return Response(res, status=400)
 
         return Response(res)
+
+    @link()
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
+    def unavailability(self, request, *args, **kwargs):
+        product = self.get_object()
+        serializer = serializers.ListUnavailabilityPeriodSerializer(
+                        data=request.QUERY_PARAMS,
+                        context={'request': request},
+                        instance=product)
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        return Response(serializer.data)
+
+    @link()
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
+    def unavailability_periods(self, request, *args, **kwargs):
+        product = self.get_object()
+        serializer = serializers.MixUnavailabilityPeriodSerializer(
+                instance=product,
+                context={'request': request},
+                data=[request.QUERY_PARAMS,],
+                many=True)
+
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        return Response(serializer.data)
 
     @list_link()
     @ignore_filters([filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter])
