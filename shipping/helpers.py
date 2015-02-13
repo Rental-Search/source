@@ -211,7 +211,7 @@ def _fill_order_detail(delivery, dropoff, order_contact, delivery_site, dropoff_
         'DropOffSiteCountry': dropoff_site.get('country_name', ''),
         'DropOffSiteCountryCode': dropoff_site.get('country', ''),
         'DropOffSiteName': dropoff_site.get('pudo_id', ''),
-        'DropOffSiteZipCode': delivery_site.get('zipcode', ''),
+        'DropOffSiteZipCode': dropoff_site.get('zipcode', ''),
         'OrderContactFirstName': _preprocess_name(order_contact.first_name),
         'OrderContactLastName': _preprocess_name(order_contact.last_name),
         'OrderContactMail': order_contact.email.replace('-', ''),
