@@ -15,7 +15,7 @@ from django.core.files.base import ContentFile
 from django.utils.datastructures import SortedDict
 from requests.exceptions import MissingSchema, InvalidSchema, InvalidURL
 
-from rest_framework import serializers, status
+from rest_framework import serializers, status, pagination
 from rest_framework_gis.serializers import MapGeometryField
 from eloue.api import exceptions
 
@@ -257,6 +257,10 @@ class NestedModelSerializerMixin(object):
 
 
 class SimpleSerializer(RaiseOnValidateSerializerMixin, serializers.Serializer):
+    pass
+
+
+class SimplePaginationSerializer(pagination.PaginationSerializer):
     pass
 
 
