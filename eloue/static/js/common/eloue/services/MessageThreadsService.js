@@ -19,6 +19,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 var deferred = $q.defer();
                 MessageThreads.list({
                     product: productId,
+                    empty: "False",
                     participant: participantId,
                     _cache: new Date().getTime()
                 }).$promise.then(
@@ -48,6 +49,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 // Load message threads
                 MessageThreads.get({
                     page: page,
+                    empty: "False",
                     ordering: "-last_message__sent_at",
                     _cache: new Date().getTime()
                 }).$promise.then(

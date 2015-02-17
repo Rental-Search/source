@@ -39,8 +39,10 @@ from products.forms import (
     RealEstateEditForm, CarProductEditForm, ProductEditForm,
     ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
 )
-from products.models import Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread, CarProduct, \
-    RealEstateProduct
+from products.models import (
+    Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread,
+    CarProduct, RealEstateProduct
+)
 from products.choices import UNIT, SORT, PRODUCT_TYPE
 from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
 from products.utils import format_quote, escape_percent_sign
@@ -59,6 +61,7 @@ from shipping.models import ShippingPoint
 from shipping.serializers import ShippingPointListParamsSerializer, PudoSerializer
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
+PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_PERIODS_BY', 31)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 MAX_DISTANCE = 1541
@@ -80,7 +83,7 @@ def get_point_and_radius(coords, radius=None):
     radius = min(radius or float('inf'), MAX_DISTANCE)
     return point, radius
 
-def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+def get_last_added_sqs(search_index, location, sort_by_date='-created_at_date'):
     # only objects that are 'good' to be shown
     sqs = search_index.filter(is_good=1)
 
@@ -111,7 +114,13 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
         # do not filter on location, and return full list sorted by the provided date field only
         last_added = sqs.order_by(sort_by_date)
 
+    return last_added
+
+
+def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
+    last_added = get_last_added_sqs(search_index, location, sort_by_date)
     return last_added[offset*limit:(offset+1)*limit]
+
 
 def last_joined(*args, **kwargs):
     return last_added(*args, sort_by_date='-date_joined_date', **kwargs)
@@ -458,7 +467,7 @@ def thread_details(request, thread_id):
     borrower = user if peer == owner else peer
     
     message_list = thread.messages.order_by('sent_at')
-    
+
     if request.method == "POST":
         editForm = MessageEditForm(request.POST, prefix='0')
         if editForm.is_valid():
@@ -918,8 +927,9 @@ class SuggestCategoryView(AjaxResponseMixin, View):
 
 # REST API 2.0
 
-from rest_framework.decorators import link
+from rest_framework.decorators import link, action
 from rest_framework.response import Response
+from rest_framework import status
 import django_filters
 
 from products import serializers, models
@@ -999,9 +1009,20 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     filter_class = ProductFilterSet
     ordering = '-created_at'
     ordering_fields = ('quantity', 'is_archived', 'category')
-    public_actions = ('retrieve', 'search', 'is_available', 'homepage')
+    public_actions = ('retrieve', 'search', 'is_available',
+                      'homepage', 'unavailability_periods')
+    paginate_by = PAGINATE_PRODUCTS_BY
 
     navette = helpers.EloueNavette()
+
+    _object = None
+
+    # FIXME move to viewsets.ModelViewSet ??
+    def get_object(self, queryset=None):
+        if self._object is None:
+            self._object = super(ProductViewSet, self
+                    ).get_object(queryset=queryset)
+        return self._object
 
     @link()
     def shipping_price(self, request, *args, **kwargs):
@@ -1046,14 +1067,13 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
                     return Response([])
             shipping_points = self.navette.get_shipping_points(lat, lng, params['search_type'])
             for shipping_point in shipping_points:
+                # FIXME: could there be a depot without site_id?
                 if 'site_id' in shipping_point:
                     try:
                         price = self.navette.get_shipping_price(departure_point.site_id, shipping_point['site_id'])
                     except WebFault:
                         shipping_points.remove(shipping_point)
                     else:
-                        token = price.pop('token')
-                        cache.set(helpers.build_cache_id(product, request.user, shipping_point['site_id']), token, 3600)
                         price['price'] *= 2
                         shipping_point.update(price)
                         # shipping_point.update({'price': 3.99})
@@ -1063,7 +1083,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         return Response([])
 
     @link()
-    @ignore_filters([filters.DjangoFilterBackend])
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
     def is_available(self, request, *args, **kwargs):
         obj = self.get_object()
 
@@ -1077,22 +1097,64 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
 
         return Response(res)
 
+    @link()
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
+    def unavailability(self, request, *args, **kwargs):
+        product = self.get_object()
+        serializer = serializers.ListUnavailabilityPeriodSerializer(
+                        data=request.QUERY_PARAMS,
+                        context={'request': request},
+                        instance=product)
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        return Response(serializer.data)
+
+    @link()
+    @ignore_filters([product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend])
+    def unavailability_periods(self, request, *args, **kwargs):
+        product = self.get_object()
+        serializer = serializers.MixUnavailabilityPeriodSerializer(
+                context={'request': request, 'product': product},
+                data=[request.QUERY_PARAMS,],
+                many=True
+        )
+
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        self.object_list = serializer.context['object']
+        self.paginate_by = PAGINATE_UNAVAILABILITY_PERIODS_BY
+        page = self.paginate_queryset(self.object_list)
+        if page is not None:
+            serializer = serializers.MixUnavailabilityPeriodPaginatedSerializer(
+                    page,
+                    context={'request': request, 'product': product}
+            )
+
+        return Response(serializer.data)
+
     @list_link()
     @ignore_filters([filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter])
     def homepage(self, request, *args, **kwargs):
         # get product ids from the search index
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-        sqs = last_added(self.search_index, location)
-        pks = [obj.pk for obj in sqs]
+        self.object_list = get_last_added_sqs(self.search_index, location)
 
-        # get records from the model
-        self.object_list = self.filter_queryset(self.get_queryset()).filter(id__in=pks)
+        # we need to transform Haystack's SearchQuerySet to Django's QuerySet
+        # TODO: it may be better to provide a custom Serializer which would support both
+        def sqs_to_qs(sqs):
+            pks = [obj.pk for obj in sqs]
+            qs = self.get_queryset().filter(id__in=pks)
+            return qs
 
         # Switch between paginated or standard style responses
         page = self.paginate_queryset(self.object_list)
         if page is not None:
+            page.object_list = sqs_to_qs(page.object_list)
             serializer = self.get_pagination_serializer(page)
         else:
+            self.object_list = sqs_to_qs(self.object_list)
             serializer = self.get_serializer(self.object_list, many=True)
 
         return Response(serializer.data)
@@ -1206,12 +1268,22 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
 
 class MessageThreadFilterSet(filters.FilterSet):
     participant = filters.MultiFieldFilter(name=('sender', 'recipient'))
+    empty = django_filters.BooleanFilter(name='last_message__isnull')
 
     class Meta:
         model = models.MessageThread
         fields = ('sender', 'recipient', 'product')
 
-class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
+
+class SetMessageOwnerMixin(mixins.SetOwnerMixin):
+    def pre_save(self, obj):
+        # set owner only for new messages threads
+        if obj.id:
+            return super(mixins.SetOwnerMixin, self).pre_save(obj)
+        return super(SetMessageOwnerMixin, self).pre_save(obj)
+
+
+class MessageThreadViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows message threads to be viewed or edited.
     """
@@ -1223,7 +1295,7 @@ class MessageThreadViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
     filter_class = MessageThreadFilterSet
     ordering_fields = ('last_message__sent_at', 'last_message__read_at', 'last_message__replied_at')
 
-class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
+class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
     """
@@ -1238,3 +1310,12 @@ class ProductRelatedMessageViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):
         if not obj.subject and obj.thread:
             obj.subject = obj.thread.subject
         return super(ProductRelatedMessageViewSet, self).pre_save(obj)
+
+    @action(methods=['put'])
+    @ignore_filters([filters.DjangoFilterBackend])
+    def seen(self, request, *args, **kwargs):
+        message = self.get_object()
+        if not message.read_at and message.recipient.id == request.user.id:
+            message.read_at = datetime.datetime.now()
+            message.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -204,7 +204,7 @@ define([
                     // Fix for very strange eloueChosen directive behaviour. Sometimes directive doesn't get fired and
                     // UI doesn't change, but scope value was changed successfully.
                     $timeout(function () {
-                        $("#toHour").trigger("chosen:updated");
+                        $("[id=toHour]").trigger("chosen:updated");
                     }, 0);
 
                     fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
@@ -633,7 +633,14 @@ define([
                     $scope.loadingProductShippingPoint = true;
                     ProductShippingPointsService.getByProduct($scope.productId).then(
                         $scope.applyProductShippingPoint,
-                        $scope.handleResponseErrors
+                        function (error) {
+                            //Depot not found. Need to start point selection from beginning
+                            if (error.code == "60100") {
+                                $scope.loadingProductShippingPoint = false;
+                            } else {
+                                $scope.handleResponseErrors(error);
+                            }
+                        }
                     );
                 });
             };
@@ -667,6 +674,15 @@ define([
                 if (!$scope.addShipping) {
                     $scope.shippingPrice = 0;
                     $scope.selectedPointId = "";
+                }
+                if ($scope.addShipping && $scope.borrowerShippingPoints.length !== 0) {
+                    var lastSelectedPoint;
+                    angular.forEach($scope.borrowerShippingPoints, function (value) {
+                        if (value.selected) {
+                            lastSelectedPoint = value;
+                        }
+                    });
+                    $scope.pointSelected(lastSelectedPoint.site_id);
                 }
             };
 

@@ -16,7 +16,7 @@
                         include ./pop_up_sections/_terms
                         a(href="{% eloue_url 'dashboard:bookings' %}").btn.bg-success#create-booking
                             | Réservez
-                        a(href="#/message").btn.bg-gray
+                        a(href="", ng-click="openModal('message')").btn.bg-gray
                             | Envoyez un message
                 .change-part.table-cell.top
                     section.table.variant-call

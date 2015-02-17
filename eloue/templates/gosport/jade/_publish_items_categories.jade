@@ -5,7 +5,7 @@
   ul.nav.space-between
     {% for item in item_row %}
     li.spacer
-    li: span: a(href="#/publish?category={{ item.1 }}", data-dismiss="modal")
+    li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '{{ item.1 }}')")
       span.border-round
         i(class="eloue-{{ item.2 }}")
       span.title {{ item.0 }}

@@ -256,4 +256,9 @@ urlpatterns = patterns('',
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 )
 
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    )
+
 #handler404 = 'eloue.views.custom404'

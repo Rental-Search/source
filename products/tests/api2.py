@@ -309,6 +309,21 @@ class MessageThreadTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
+    def test_not_empty_messagethread_list_paginated(self):
+        response = self.client.get(
+                _location('messagethread-list'), {'empty': False})
+        self.assertEquals(response.status_code, 200, response.data)
+        # check pagination data format in the response
+        expected = {
+            'count': 1,
+            'previous': None,
+            'next': None,
+        }
+        self.assertDictContainsSubset(expected, response.data)
+        self.assertIn('results', response.data)
+        # check data
+        self.assertEquals(response.data['count'], len(response.data['results']))
+
     def test_messagethread_create(self):
         response = self.client.post(_location('messagethread-list'), {
              'sender': _location('patron-detail', pk=1),
@@ -361,11 +376,11 @@ class MessageTest(APITestCase):
         # check data
         self.assertEquals(response.data['count'], len(response.data['results']))
 
-    def test_message_edit(self):
-        response = self.client.patch(_location('productrelatedmessage-detail', 1), {
-            'read_at': '2014-10-14T00:00',
-        })
-        self.assertEquals(response.status_code, 200, response.data)
+#    def test_message_edit(self):
+#        response = self.client.patch(_location('productrelatedmessage-detail', 1), {
+#            'read_at': '2014-10-14T00:00',
+#        })
+#        self.assertEquals(response.status_code, 200, response.data)
 
     def test_message_create(self):
         response = self.client.post(_location('productrelatedmessage-list'), {
@@ -448,9 +463,61 @@ class MessageThreadMessageTest(APITestCase):
         response = self.client.get(_location('messagethread-detail', pk=thread_id))
         self.assertEquals(response.status_code, 200, response.data)
         self.assertEqual(response.data['last_message']['id'], message_id)
-
         if 'last_offer' in response.data:
             self.assertTrue(str(response.data['last_offer']).endswith(_location('productrelatedmessage-detail', pk=message_id)), response.data)
+
+    def test_message_read_at(self):
+        response = self.client.post(_location('messagethread-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=2),
+             'subject': 'Test message thread (offer)',
+             'product': _location('product-detail', pk=5),
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+
+        # check that 'sender' has been set in the back-end to refer to authenticated user
+        self.assertEqual(response.data['sender']['id'], 1)
+
+        thread_id = response.data['id']
+
+        response = self.client.post(_location('productrelatedmessage-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=2),
+             'thread': _location('messagethread-detail', pk=thread_id),
+             'subject': 'Test message (offer)',
+             'body': 'Please consider my offer.',
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+        message_id = response.data['id']
+
+        # check 'read_at' has been set
+        self.client.logout()
+        self.client.login(username='timothee.peignier@e-loue.com', password='timothee')
+
+        response = self.client.get(_location(
+            'productrelatedmessage-seen', pk=message_id))
+        self.assertEquals(response.status_code, 204, response.data)
+
+        # create answer
+        response = self.client.post(_location('productrelatedmessage-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=1),
+             'thread': _location('messagethread-detail', pk=thread_id),
+             'subject': 'Test answer',
+             'body': 'Check reat at time',
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+        message_id = response.data['id']
+
+        self.client.logout()
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+        response = self.client.get(_location(
+            'productrelatedmessage-seen', pk=message_id))
+        self.assertEquals(response.status_code, 204, response.data)
 
 
 class AnonymousProductTest(APITestCase):
@@ -513,6 +580,21 @@ class AnonymousProductTest(APITestCase):
         self.assertIn('max_available', response.data)
         self.assertEqual(response.data['max_available'], 3)
 
+    def test_homepage_allowed(self):
+        response = self.client.get(_location('product-homepage'))
+        self.assertEquals(response.status_code, 200)
+
+    def test_unavailability_periods_allowed(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data), 0)
 
 class ProductTest(APITestCase):
     fixtures = ['patron', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']
@@ -522,6 +604,7 @@ class ProductTest(APITestCase):
         self.car_model = get_model('products', 'CarProduct')
         self.real_estate_model = get_model('products', 'RealEstateProduct')
         self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+        self.borrower_model = get_model('accounts', 'Patron')
 
     def test_is_product_available(self):
         start_date = datetime.datetime.today() + datetime.timedelta(days=1)
@@ -817,6 +900,167 @@ class ProductTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         #self.assertGreater(response.data['count'], 0)
 
+    def test_homepage_allowed(self):
+        response = self.client.get(_location('product-homepage'))
+        self.assertEquals(response.status_code, 200)
+
+    def test_unavailability_periods_before_now(self):
+        start_date = datetime.datetime.today() - datetime.timedelta(days=2)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+
+    def test_unavailability_periods_wrong_date(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=2)
+        end_date = datetime.datetime.today() - datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 400, response.data)
+
+    def test_empty_unavailability_periods(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data['results']), 0)
+
+    def test_unavailability_periods(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        product = self.model.objects.get(pk=7)
+        unavailable = product.unavailabilityperiod_set.create(
+                started_at=start_date,
+                ended_at=end_date,
+                quantity=1)
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data['results']), 1)
+        period = response.data['results'][0]
+        self.assertEqual(period['started_at'], start_date)
+        self.assertEqual(period['ended_at'], end_date)
+        self.assertEqual(period['quantity'], 1)
+        self.assertEqual(period['id'], unavailable.pk)
+        self.assertTrue(period['product'].endswith(
+            _location('product-detail', pk=7)))
+
+    def test_unavailability_and_booking_periods(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        product = self.model.objects.get(pk=7)
+        unavailable = product.unavailabilityperiod_set.create(
+                started_at=start_date,
+                ended_at=end_date,
+                quantity=1)
+
+        booking = product.bookings.create(
+                uuid= '87ee8e9dec1d47c29ebb27e09bda8fc8',
+                started_at=start_date,
+                ended_at=end_date + datetime.timedelta(days=2),
+                quantity=1,
+                state='pending',
+                deposit_amount=100,
+                insurance_amount=10,
+                total_amount=10,
+                currency='EUR',
+                owner=product.owner,
+                borrower=self.borrower_model.objects.get(pk=2),
+                contract_id=678,
+                pin='qqq',
+                created_at=start_date - datetime.timedelta(days=1),
+                )
+
+        response = self.client.get(_location('product-unavailability-periods', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertEqual(len(response.data['results']), 2)
+
+        period = response.data['results'][0]
+        self.assertEqual(period['started_at'], start_date)
+        self.assertEqual(period['ended_at'], end_date + datetime.timedelta(days=2))
+        self.assertEqual(period['quantity'], 1)
+        self.assertIsNone(period['id'])
+
+        period = response.data['results'][1]
+        self.assertEqual(period['started_at'], start_date)
+        self.assertEqual(period['ended_at'], end_date)
+        self.assertEqual(period['quantity'], 1)
+        self.assertEqual(period['id'], unavailable.pk)
+        self.assertTrue(period['product'].endswith(
+            _location('product-detail', pk=7)))
+
+    def test_unavailability(self):
+        start_date = datetime.datetime.today() + datetime.timedelta(days=1)
+        end_date = datetime.datetime.today() + datetime.timedelta(days=2)
+
+        product = self.model.objects.get(pk=7)
+        unavailable = product.unavailabilityperiod_set.create(
+                started_at=start_date,
+                ended_at=end_date,
+                quantity=1)
+
+        booking = product.bookings.create(
+                uuid= '87ee8e9dec1d47c29ebb27e09bda8fc8',
+                started_at=start_date,
+                ended_at=end_date + datetime.timedelta(days=2),
+                quantity=1,
+                state='pending',
+                deposit_amount=100,
+                insurance_amount=10,
+                total_amount=10,
+                currency='EUR',
+                owner=product.owner,
+                borrower=self.borrower_model.objects.get(pk=2),
+                contract_id=678,
+                pin='qqq',
+                created_at=start_date - datetime.timedelta(days=1),
+                )
+
+        response = self.client.get(_location('product-unavailability', pk=7), {
+            'started_at': start_date.strftime('%d/%m/%Y %H:%M'),
+            'ended_at': end_date.strftime('%d/%m/%Y %H:%M'),
+            'quantity': 2
+        })
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('unavailable_periods', response.data)
+        self.assertEqual(len(response.data['unavailable_periods']), 1)
+        self.assertEqual(response.data['unavailable_periods'][0], {
+            'id': unavailable.pk,
+            'started_at': start_date,
+            'ended_at': end_date,
+            'quantity': 1,
+        })
+
+        self.assertIn('booking_periods', response.data)
+        self.assertEqual(len(response.data['booking_periods']), 1)
+        period = response.data['booking_periods'][0]
+        self.assertEqual(period['started_at'], start_date)
+        self.assertEqual(period['ended_at'],
+                end_date + datetime.timedelta(days=2))
+        self.assertEqual(period['quantity'], 1)
 
 class StaffProductTest(APITestCase):
     fixtures = ['patron_staff', 'address', 'phones', 'category', 'product', 'price', 'picture_api2']

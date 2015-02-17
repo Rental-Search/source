@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import patch_cache_control
@@ -196,7 +197,14 @@ class SetOwnerMixin(OwnerListMixin):
                 if not isinstance(owner_field, basestring):
                     owner_field = iter(owner_field).next()
                 owner_field_attname = obj._meta.get_field(owner_field).attname
-                if not (user.is_staff and getattr(obj, owner_field_attname)):
+                owner_id = getattr(obj, owner_field_attname)
+                if not (user.is_staff and owner_id):
+
+                    if settings.DEBUG and owner_id:
+                        assert owner_id == user.id, \
+                            'Changing owner from %s to %s' % (
+                            owner_id, user.id)
+
                     setattr(obj, owner_field, user)
                     if owner_field in getattr(obj, '_nested_forward_relations', {}):
                         obj._nested_forward_relations[owner_field] = user

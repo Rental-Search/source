@@ -71,6 +71,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
                 return ProductRelatedMessages.update({id: message.id}, message).$promise;
             };
 
+            productRelatedMessagesService.markAsRead = function (messageId) {
+                return ProductRelatedMessages.seen({id: messageId}, {id: messageId}).$promise;
+            };
+
             productRelatedMessagesService.parseMessage = function (messageData, senderData) {
                 var messageResults = angular.copy(messageData);
 

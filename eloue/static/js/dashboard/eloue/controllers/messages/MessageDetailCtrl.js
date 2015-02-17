@@ -42,12 +42,9 @@ define([
                 $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
                 $scope.currentuser = results.currentUser;
-                if ($scope.messageThread.last_message && !$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) === results.currentUser.id)) {
-                    $scope.messageThread.last_message.read_at = UtilsService.formatDate(Date.now(), "yyyy-MM-dd'T'HH:mm:ss");
-                    ProductRelatedMessagesService.updateMessage($scope.messageThread.last_message).then(function () {
-                        $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
-                        $scope.updateStatistics();
-                    });
+                if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
+                    $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
+                    ProductRelatedMessagesService.markAsRead($scope.messageThread.last_message.id);
                 }
 
                 if ($scope.messageThread.product) {

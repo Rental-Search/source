@@ -1,12 +1,28 @@
 # -*- coding: utf-8 -*-
+
+from itertools import chain
+
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext as _
-from rest_framework.fields import FloatField
-from rest_framework.fields import IntegerField, DecimalField, CharField
+from django.core.urlresolvers import NoReverseMatch
+from rest_framework.fields import (
+        FloatField, DateTimeField,
+        IntegerField, DecimalField,
+        CharField, SerializerMethodField,
+)
+from rest_framework.relations import HyperlinkedIdentityField
+from rest_framework.reverse import reverse
 from products import models
 from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
-from eloue.api.serializers import EncodedImageField, ObjectMethodBooleanField, ModelSerializer, \
-    NestedModelSerializerMixin, SimpleSerializer
+from eloue.api.serializers import (
+    EncodedImageField, ObjectMethodBooleanField, ModelSerializer,
+    NestedModelSerializerMixin, SimpleSerializer, SimplePaginationSerializer
+)
 from products.helpers import calculate_available_quantity
+
+from rent.utils import DATE_TIME_FORMAT
+from rent.models import Booking
+from rent.choices import BOOKING_STATE
 
 
 class CategorySerializer(ModelSerializer):
@@ -200,3 +216,139 @@ class UnavailabilityPeriodSerializer(ModelSerializer):
         fields = ('id', 'product', 'quantity', 'started_at', 'ended_at',)
         public_fields = ('id', 'product', 'quantity', 'started_at', 'ended_at',)
         immutable_fields = ('product',)
+
+
+class UnavailabilityPeriodSerializerMixin(object):
+    def _filter_periods(self, qs, attrs):
+        filter_kwargs = {
+            'product': self.product,
+            'ended_at__gt': attrs.get('started_at'),
+            'started_at__lt': attrs.get('ended_at')
+        }
+
+        return qs.filter(**filter_kwargs).only(
+            'pk', 'quantity', 'started_at', 'ended_at', 'product__id'
+        )
+
+    def validate(self, attrs):
+        attrs = super(UnavailabilityPeriodSerializerMixin, self).validate(attrs)
+
+        started_at = attrs.get('started_at')
+        ended_at = attrs.get('ended_at')
+
+        if started_at >= ended_at:
+            raise ValidationError(_(u"Une location ne peut pas terminer avant d'avoir commencer"))
+
+        return attrs
+
+
+class NestedUnavailabilityPeriodSerializer(UnavailabilityPeriodSerializer):
+    class Meta:
+        model = models.UnavailabilityPeriod
+        fields = ('id', 'quantity', 'started_at', 'ended_at',)
+        public_fields = ('id', 'quantity', 'started_at', 'ended_at',)
+
+
+class NestedBookingSerializer(ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = ('quantity', 'started_at', 'ended_at',)
+        public_fields = ('quantity', 'started_at', 'ended_at',)
+
+
+BOOKED_STATE = (
+    BOOKING_STATE.PENDING,
+    BOOKING_STATE.ONGOING,
+)
+
+
+class ListUnavailabilityPeriodSerializer(UnavailabilityPeriodSerializerMixin, SimpleSerializer):
+    started_at = DateTimeField(write_only=True, input_formats=DATE_TIME_FORMAT)
+    ended_at = DateTimeField(write_only=True, input_formats=DATE_TIME_FORMAT)
+    unavailable_periods = SerializerMethodField('get_unavailable_periods')
+    booking_periods = SerializerMethodField('get_booking_periods')
+
+    def __init__(self, *args, **kwargs):
+        self.product = kwargs.pop('instance')
+        super(ListUnavailabilityPeriodSerializer, self).__init__(*args, **kwargs)
+
+    def get_booking_periods(self, attrs):
+        qs = Booking.objects.filter(state__in=BOOKED_STATE)
+        serializer = NestedBookingSerializer(
+            instance=self._filter_periods(qs, attrs),
+            many=True)
+        return serializer.data
+
+    def get_unavailable_periods(self, attrs):
+        qs = models.UnavailabilityPeriod.objects.all()
+        serializer = NestedUnavailabilityPeriodSerializer(
+            instance=self._filter_periods(qs, attrs),
+            many=True)
+        return serializer.data
+
+
+class OptionalIntegerField(IntegerField):
+    def field_to_native(self, obj, field_name):
+        try:
+            return super(OptionalIntegerField, self).field_to_native(obj, field_name)
+        except AttributeError:
+            pass
+
+
+class HyperlinkedByIdField(HyperlinkedIdentityField):
+    def __init__(self, *args, **kwargs):
+        try:
+            self.source = kwargs.get('source')
+        except KeyError:
+            msg = _("HyperlinkedByIdField requires 'source' argument")
+            raise ValueError(msg)
+        return super(HyperlinkedByIdField, self).__init__(*args, **kwargs)
+
+    def get_url(self, obj, view_name, request, format):
+        source = getattr(obj, self.source, None)
+
+        try:
+            return reverse(view_name, [source, ], request=request, format=format)
+        except NoReverseMatch:
+            return super(HyperlinkedByIdField, self).get_url(obj, view_name, request, format)
+
+
+class MixUnavailabilityPeriodSerializer(UnavailabilityPeriodSerializerMixin, SimpleSerializer):
+    id = OptionalIntegerField(read_only=True, required=False)
+    product = HyperlinkedByIdField(source='product_id',
+        view_name='product-detail')
+    quantity = IntegerField(read_only=True)
+    started_at = DateTimeField(input_formats=DATE_TIME_FORMAT)
+    ended_at = DateTimeField(input_formats=DATE_TIME_FORMAT)
+
+    def __init__(self, *args, **kwargs):
+        self.product = kwargs['context']['product']
+        super(MixUnavailabilityPeriodSerializer, self).__init__(*args, **kwargs)
+
+    @property
+    def data(self):
+        self.object = self.context['object']
+        return super(MixUnavailabilityPeriodSerializer, self).data
+
+    @property
+    def errors(self):
+        _errors = super(MixUnavailabilityPeriodSerializer, self).errors
+        if _errors and isinstance(_errors, (list, tuple)):
+            self._errors = _errors[0]
+        return self._errors
+
+    def restore_object(self, attrs, instance=None):
+        bookings = Booking.objects.filter(state__in=BOOKED_STATE)
+        unavailability_periods = models.UnavailabilityPeriod.objects.all()
+
+        self.context['object'] = list(chain(*tuple([
+            tuple(self._filter_periods(qs, attrs))
+            for qs in (bookings, unavailability_periods)
+        ])))
+
+        return super(MixUnavailabilityPeriodSerializer, self).restore_object(attrs, instance=instance)
+
+
+class MixUnavailabilityPeriodPaginatedSerializer(SimplePaginationSerializer):
+    class Meta:
+        object_serializer_class = MixUnavailabilityPeriodSerializer

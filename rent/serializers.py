@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from decimal import Decimal
 
+from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from rest_framework.fields import SerializerMethodField
@@ -166,6 +167,7 @@ class BookingActionSerializer(serializers.ModelSerializer):
                 return attrs
         raise ValidationError(self.error_messages['invalid_action'] % dict(action=action, state=self.object.state))
 
+    @transaction.atomic
     def save_object(self, obj, force_insert=False, force_update=False, using=None, update_fields=None, **kwargs):
         obj._fsm_transition_method(**kwargs)
         super(BookingActionSerializer, self).save_object(obj, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)

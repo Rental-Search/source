@@ -72,7 +72,7 @@ class ProductShippingPointViewSet(viewsets.NonEditableModelViewSet):
     filter_fields = ('product', )
 
 
-class ShippingViewSet(viewsets.NonEditableModelViewSet):
+class ShippingViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows shippings to be viewed or edited.
     """

@@ -23,6 +23,7 @@ class ErrorGroupEnum(object):
     PERMISSION_ERROR = ('30', _(u'Permission error.'))
     URL_ERROR = ('40', _(u'URL error.'))
     SERVER_ERROR = ('50', _(u'Server error.'))
+    SHIPPING_ERROR = ('60', _(u'Shipping error.'))
 
 
 class ValidationErrorEnum(object):
@@ -57,6 +58,11 @@ class ServerErrorEnum(object):
     REQUEST_FAILED = ('101', _(u'A request to external server has failed.'))
     PICKUP_REQUEST_ERROR = ('102', _(u'A request to Pickup service has failed.'))
     OTHER_ERROR = ('199', _(u'Other error occurred.'))
+
+
+class ShippingErrorEnum(object):
+    """Enum for shipping errors."""
+    MISSING_PUDO = ('100', _(u'Depot not found.'))
 
 
 class ApiException(Exception):
@@ -155,6 +161,13 @@ class DocumentedServerException(ApiException):
 
     status_code = status.HTTP_400_BAD_REQUEST
     error_group = ErrorGroupEnum.SERVER_ERROR
+
+
+class ShippingException(ApiException):
+    """Raised on shipping service errors."""
+
+    status_code = status.HTTP_400_BAD_REQUEST
+    error_group = ErrorGroupEnum.SHIPPING_ERROR
 
 
 def api_exception_handler(exception):
