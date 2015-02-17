@@ -719,10 +719,10 @@ define([
             };
 
             $scope.applyMessageThread = function (result) {
-                angular.forEach(result, function (value) {
-                    $scope.threadId = UtilsService.getIdFromUrl(value.thread);
-                });
-                $scope.productRelatedMessages = result;
+                if (result && result[0] && result[0].results && result[0].results[0]) {
+                    $scope.threadId = UtilsService.getIdFromUrl(result[0].results[0].thread);
+                    $scope.productRelatedMessages = result[0].results;
+                }
             };
 
             $scope.applyDatePicker = function (fieldId) {

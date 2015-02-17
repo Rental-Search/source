@@ -19,6 +19,16 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
                 return ProductRelatedMessages.get({id: id, _cache: new Date().getTime()}).$promise;
             };
 
+            /**
+             * Get thread messages as list of messages for specified page.
+             * //TODO add pagination
+             * @param threadId messages thread id.
+             * @returns $promise representing specified page messages.
+             */
+            productRelatedMessagesService.getThreadMessages = function(threadId) {
+                return ProductRelatedMessages.get({thread: threadId, _cache: new Date().getTime(), ordering: '-sent_at'}).$promise;
+            };
+
             productRelatedMessagesService.getMessageListItem = function (messageId) {
                 var deferred = $q.defer();
 
