@@ -260,8 +260,7 @@ class SimpleSerializer(RaiseOnValidateSerializerMixin, serializers.Serializer):
     pass
 
 
-class SimplePaginationSerializer(pagination.PaginationSerializer):
-    pass
+SimplePaginationSerializer = pagination.PaginationSerializer
 
 
 class GeoModelSerializer(ModelSerializer):
