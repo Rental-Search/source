@@ -1019,7 +1019,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
 
     # FIXME move to viewsets.ModelViewSet ??
     def get_object(self, queryset=None):
-        if not self._object:
+        if self._object is None:
             self._object = super(ProductViewSet, self
                     ).get_object(queryset=queryset)
         return self._object
