@@ -26,10 +26,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     function (result) {
                         var promises = [];
                         angular.forEach(result.results, function (value) {
-                            angular.forEach(value.messages, function (messageLink) {
-                                var messageId = UtilsService.getIdFromUrl(messageLink);
-                                promises.push(ProductRelatedMessagesService.getMessage(messageId));
-                            });
+                            promises.push(ProductRelatedMessagesService.getThreadMessages(value.id));
                         });
                         var suppress = function(x) { return x.catch(function(){}); };
                         var messages = $q.all(promises.map(suppress));
@@ -93,12 +90,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                         // Load messages
                         var messagesPromises = [];
-                        angular.forEach(messageThreadData.messages, function (messageUrl, key) {
-                            // Get message id
-                            var messageId = UtilsService.getIdFromUrl(messageUrl);
-                            // Load message
-                            messagesPromises.push(ProductRelatedMessagesService.getMessageListItem(messageId));
-                        });
+                        messagesPromises.push(ProductRelatedMessagesService.getThreadMessages(messageThreadData.id));
+
                         // When all messages loaded
                         var suppress = function (x) {
                             return x.catch(function () {
@@ -113,7 +106,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                         }
 
                         $q.all(messageThreadPromises).then(function (results) {
-                            var messageThread = messageThreadsService.parseMessageThread(messageThreadData, results.messages, results.product);
+                            var messages = (results.messages && results.messages[0]) ? results.messages[0].results : undefined;
+                            var messageThread = messageThreadsService.parseMessageThread(messageThreadData, messages, results.product);
                             deferred.resolve(messageThread);
                         });
                     }
