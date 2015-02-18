@@ -14,19 +14,6 @@ from rest_framework.test import APITestCase, APITransactionTestCase
 
 from rent.choices import COMMENT_TYPE_CHOICES
 
-import logging
-logging.getLogger('suds.client').setLevel(logging.ERROR)
-logging.getLogger('suds.transport').setLevel(logging.ERROR)
-logging.getLogger('suds.xsd.sxbase').setLevel(logging.ERROR)
-logging.getLogger('suds.xsd.query').setLevel(logging.ERROR)
-logging.getLogger('suds.xsd.schema').setLevel(logging.ERROR)
-logging.getLogger('suds.xsd.sxbasic').setLevel(logging.ERROR)
-logging.getLogger('suds.wsdl').setLevel(logging.ERROR)
-logging.getLogger('suds.resolver').setLevel(logging.ERROR)
-logging.getLogger('suds.metrics').setLevel(logging.ERROR)
-logging.getLogger('suds.mx.core').setLevel(logging.ERROR)
-logging.getLogger('suds.mx.literal').setLevel(logging.ERROR)
-
 
 def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
