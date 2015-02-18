@@ -61,6 +61,7 @@ from shipping.models import ShippingPoint
 from shipping.serializers import ShippingPointListParamsSerializer, PudoSerializer
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
+PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_PERIODS_BY', 31)
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 MAX_DISTANCE = 1541
@@ -1009,11 +1010,19 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     ordering = '-created_at'
     ordering_fields = ('quantity', 'is_archived', 'category')
     public_actions = ('retrieve', 'search', 'is_available',
-                      'homepage', 'unavailability_periods',
-                      'unavailability')
+                      'homepage', 'unavailability_periods')
     paginate_by = PAGINATE_PRODUCTS_BY
 
     navette = helpers.EloueNavette()
+
+    _object = None
+
+    # FIXME move to viewsets.ModelViewSet ??
+    def get_object(self, queryset=None):
+        if self._object is None:
+            self._object = super(ProductViewSet, self
+                    ).get_object(queryset=queryset)
+        return self._object
 
     @link()
     def shipping_price(self, request, *args, **kwargs):
@@ -1106,13 +1115,22 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def unavailability_periods(self, request, *args, **kwargs):
         product = self.get_object()
         serializer = serializers.MixUnavailabilityPeriodSerializer(
-                instance=product,
-                context={'request': request},
+                context={'request': request, 'product': product},
                 data=[request.QUERY_PARAMS,],
-                many=True)
+                many=True
+        )
 
         if not serializer.is_valid():
             raise ValidationException(serializer.errors)
+
+        self.object_list = serializer.context['object']
+        self.paginate_by = PAGINATE_UNAVAILABILITY_PERIODS_BY
+        page = self.paginate_queryset(self.object_list)
+        if page is not None:
+            serializer = serializers.MixUnavailabilityPeriodPaginatedSerializer(
+                    page,
+                    context={'request': request, 'product': product}
+            )
 
         return Response(serializer.data)
 
