@@ -19,6 +19,7 @@ define([
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
                 $scope.$broadcast("startLoading", {parameters: [], shouldReloadList: true});
+                $scope.updateStatistics();
             });
 
             $scope.shouldMarkAsUnread = function (lastMessage) {
