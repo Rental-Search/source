@@ -16,18 +16,36 @@ define([
         "$stateParams",
         "$q",
         "$window",
+        "$timeout",
         "Endpoints",
         "MessageThreadsService",
         "BookingsService",
         "ProductRelatedMessagesService",
         "ProductsService",
         "UtilsService",
-        function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsService, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService) {
+        function ($scope, $stateParams, $q, $window, $timeout, Endpoints, MessageThreadsService, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService) {
+
+            $scope.items = [];
+
+            $scope.lazyLoadConfig = {
+                resultField: 'results',
+                // Inverse messages list.
+                inverse: true,
+                // Set custom target name to not cause affecting threads list.
+                loadingTarget: 'Messages'
+            };
 
             $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
                 $scope.showNotification(object, action, false);
             };
+
+            $scope.$watch('items', function(newValue, oldValue) {
+                // On first page loaded scroll list to the bottom.
+                if (oldValue.length == 0 && newValue.length != 0) {
+                    $scope.scrollMessagesListToBottom();
+                }
+            });
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
@@ -36,6 +54,8 @@ define([
 
             $q.all(promises).then(function (results) {
                 $scope.applyUserAndMessageThread(results);
+                // Load messages first page.
+                $scope.$broadcast("startLoading" + $scope.lazyLoadConfig.loadingTarget, {parameters: [$stateParams.id], shouldReloadList: true});
             });
 
             $scope.applyUserAndMessageThread = function (results) {
@@ -91,7 +111,7 @@ define([
 
                             $scope.requestBooking = function () {
                                 $scope.submitInProgress = true;
-//                                //Get product details
+                                //Get product details
                                 ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
                                     $window.location.href = result.url + "#/booking";
                                 }, function (error) {
@@ -117,18 +137,18 @@ define([
                     $scope.submitInProgress = true;
                     ProductRelatedMessagesService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(
-                        function () {
+                        function (data) {
                             // Clear message field
                             $scope.message = "";
 
-                            // Reload data
-                            MessageThreadsService.getMessageThreadById($stateParams.id).then(function (messageThread) {
-                                $scope.messageThread.messages = messageThread.messages;
-                                $scope.submitInProgress = false;
-                                $scope.showNotification("message", "send", true);
-                            }, function (error) {
-                                $scope.handleResponseErrors(error, "message", "send");
-                            });
+                            // Add new message.
+                            $scope.items.push(data);
+                            $scope.submitInProgress = false;
+                            $scope.showNotification("message", "send", true);
+
+
+                        }, function(error) {
+                            $scope.handleResponseErrors(error, "message", "send");
                         }
                     );
                 };
@@ -166,6 +186,17 @@ define([
                 $scope.newBooking.borrower = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
                 $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
             };
+
+            /**
+             * Scroll list to the bottom.
+             */
+            $scope.scrollMessagesListToBottom = function() {
+                $timeout(function () {
+                    $("#messages-list").mCustomScrollbar("scrollTo", "bottom", {
+                        scrollInertia: 0
+                    });
+                }, 50);
+            }
         }
     ]);
 });

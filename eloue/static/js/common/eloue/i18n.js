@@ -91,7 +91,8 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             noAddressButton: "Mettre à jour vos infos",
             informationHasBeenUpdated: "Vous informations ont été mises à jour",
 
-            loadMore: "Charger plus d'éléments"
+            loadMore: "Charger plus d'éléments",
+            getAllMessages: "Afficher les anciens messages"
         });
 
         $translateProvider.preferredLanguage("fr");

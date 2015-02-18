@@ -721,6 +721,7 @@ define([
             $scope.applyMessageThread = function (result) {
                 if (result && result[0] && result[0].results && result[0].results[0]) {
                     $scope.threadId = UtilsService.getIdFromUrl(result[0].results[0].thread);
+                    $scope.hasNextPage = result[0].next;
                     $scope.productRelatedMessages = result[0].results;
                 }
             };
