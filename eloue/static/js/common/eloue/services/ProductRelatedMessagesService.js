@@ -21,12 +21,12 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
 
             /**
              * Get thread messages as list of messages for specified page.
-             * //TODO add pagination
              * @param threadId messages thread id.
+             * @param page page to load.
              * @returns $promise representing specified page messages.
              */
-            productRelatedMessagesService.getThreadMessages = function(threadId) {
-                return ProductRelatedMessages.get({thread: threadId, _cache: new Date().getTime(), ordering: '-sent_at'}).$promise;
+            productRelatedMessagesService.getThreadMessages = function(threadId, page) {
+                return ProductRelatedMessages.get({thread: threadId, _cache: new Date().getTime(), ordering: '-sent_at', page: page}).$promise;
             };
 
             productRelatedMessagesService.getMessageListItem = function (messageId) {
