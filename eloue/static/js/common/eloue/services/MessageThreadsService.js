@@ -24,16 +24,18 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     _cache: new Date().getTime()
                 }).$promise.then(
                     function (result) {
-                        var promises = [];
-                        angular.forEach(result.results, function (value) {
-                            promises.push(ProductRelatedMessagesService.getThreadMessages(value.id));
-                        });
-                        var suppress = function(x) { return x.catch(function(){}); };
-                        var messages = $q.all(promises.map(suppress));
-                        messages.then(function success(results) {
+                        var promises = {
+                            // Add thread details to the final result.
+                            threads: result.$promise
+                        };
+
+                        // If thread exits, load messages for this thread.
+                        if (result.results.length > 0) {
+                            promises.messages = ProductRelatedMessagesService.getThreadMessages(result.results[0].id)
+                        }
+
+                        $q.all(promises).then(function success(results) {
                             deferred.resolve(results);
-                        }, function (reasons) {
-                            deferred.reject(reasons);
                         });
                     }
                 );
@@ -55,15 +57,13 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                         // For each message thread
                         angular.forEach(messageThreadListData.results, function (messageThreadData, key) {
-                            if (messageThreadData.last_message && messageThreadData.messages && messageThreadData.messages.length > 0) {
-                                var messageThreadDeferred = $q.defer();
+                            var messageThreadDeferred = $q.defer();
 
-                                var messageThread = messageThreadsService.parseMessageThreadListItem(messageThreadData,
-                                    messageThreadData.last_message);
-                                messageThreadDeferred.resolve(messageThread);
+                            var messageThread = messageThreadsService.parseMessageThreadListItem(messageThreadData,
+                                messageThreadData.last_message);
+                            messageThreadDeferred.resolve(messageThread);
 
-                                messageThreadListPromises.push(messageThreadDeferred.promise);
-                            }
+                            messageThreadListPromises.push(messageThreadDeferred.promise);
                         });
 
                         $q.all(messageThreadListPromises).then(function (messageThreadList) {

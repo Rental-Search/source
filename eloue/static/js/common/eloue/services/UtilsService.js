@@ -77,6 +77,25 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
             xhr.send();
         };
 
+        /**
+         * Set valid sender for messages.
+         * @param messages messages to modify.
+         * @param replacer in case of sender is not current user, sender filed will be replaced with this object.
+         * @param currentUser current user.
+         */
+        utilsService.updateMessagesSender = function(messages, replacer, currentUser) {
+            // Replace sender as url with real object for all messages.
+            angular.forEach(messages, function(value) {
+                var senderId = utilsService.getIdFromUrl(value.sender);
+
+                if (senderId == replacer.id) {
+                    value.sender = replacer;
+                } else {
+                    value.sender = currentUser;
+                }
+            });
+        };
+
         return utilsService;
     }]);
 });
