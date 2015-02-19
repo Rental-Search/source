@@ -934,7 +934,7 @@ from rest_framework import status
 import django_filters
 
 from products import serializers, models
-from products.serializers import category_cache_key
+from products.serializers import get_root_category
 from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
 from rent.forms import Api20BookingForm
@@ -1174,18 +1174,14 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def _category_from_native(self):
         return self.serializer_class().fields['category'].from_native
 
-    @method_decorator(cached(key_func=category_cache_key, timeout=15*60))
-    def _root_category_from_native(self, category):
-        category = self._category_from_native(category)
-        return category.get_root().id
-
     def get_serializer_class(self):
         data = getattr(self, '_post_data', None)
         if data is not None:
             delattr(self, '_post_data')
             category = data.get('category', None)
             if category is not None:
-                category = self._root_category_from_native(category)
+                category = get_root_category(
+                        self._category_from_native(category))
             if category == PRODUCT_TYPE.CAR or 'brand' in data:
                 # we have CarProduct here
                 return serializers.CarProductSerializer

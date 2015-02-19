@@ -30,9 +30,15 @@ from rent.choices import BOOKING_STATE
 
 
 def category_cache_key(*args):
-    return u':'.join([str(item) for item in chain(
-        map(lambda x: x.id if isinstance(x, models.Category) else x, args),
-        PRODUCT_TYPE.values())])
+    return u':'.join([
+        str(item.id if isinstance(item, models.Category) else item)
+            for item in chain(args, PRODUCT_TYPE.values())
+        ])
+
+
+@cached(key_func=category_cache_key, timeout=15*60)
+def get_root_category(category):
+    return category.get_root().id
 
 
 class CategorySerializer(ModelSerializer):
@@ -108,10 +114,6 @@ class ProductSerializer(ModelSerializer):
     def validate(self, attrs):
         attrs = super(ProductSerializer, self).validate(attrs)
 
-        @cached(key_func=category_cache_key, timeout=15*60)
-        def _get_root(category):
-            return category.get_root().id
-
         # update existing project
         if self.object is not None:
             old_category = self.object._get_category()
@@ -122,8 +124,8 @@ class ProductSerializer(ModelSerializer):
             # If categories are belong to different trees, we have to check
             # possibility to change category
             if old_category.tree_id != new_category.tree_id:
-                if _get_root(old_category) in ext_categories or \
-                        _get_root(new_category) in ext_categories:
+                if get_root_category(old_category) in ext_categories or \
+                        get_root_category(new_category) in ext_categories:
                     raise serializers.ValidationError(_('Can\'t change product type'))
 
         return attrs
