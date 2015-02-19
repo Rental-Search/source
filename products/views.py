@@ -3,7 +3,6 @@ import re
 from urllib import urlencode
 import urllib
 import datetime
-from itertools import chain
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -66,10 +65,6 @@ PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 MAX_DISTANCE = 1541
-
-
-def category_cache_key(*args):
-    return u':'.join([str(item) for item in chain(args, PRODUCT_TYPE.values())])
 
 
 def get_point_and_radius(coords, radius=None):
@@ -939,6 +934,7 @@ from rest_framework import status
 import django_filters
 
 from products import serializers, models
+from products.serializers import category_cache_key
 from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
 from rent.forms import Api20BookingForm

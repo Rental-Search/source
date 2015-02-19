@@ -20,12 +20,19 @@ from eloue.api.serializers import (
     EncodedImageField, ObjectMethodBooleanField, ModelSerializer,
     NestedModelSerializerMixin, SimpleSerializer, SimplePaginationSerializer
 )
+from eloue.decorators import cached
 from products.helpers import calculate_available_quantity
 from products.choices import PRODUCT_TYPE
 
 from rent.utils import DATE_TIME_FORMAT
 from rent.models import Booking
 from rent.choices import BOOKING_STATE
+
+
+def category_cache_key(*args):
+    return u':'.join([str(item) for item in chain(
+        map(lambda x: x.id if isinstance(x, models.Category) else x, args),
+        PRODUCT_TYPE.values())])
 
 
 class CategorySerializer(ModelSerializer):
@@ -97,19 +104,27 @@ class ProductSerializer(ModelSerializer):
     owner = NestedUserSerializer()
     slug = CharField(read_only=True, source='slug')
 
+
     def validate(self, attrs):
         attrs = super(ProductSerializer, self).validate(attrs)
 
-        old_category = self.object._get_category()
-        new_category = attrs.get('category', None)
+        @cached(key_func=category_cache_key, timeout=15*60)
+        def _get_root(category):
+            return category.get_root().id
 
-        ext_categories = PRODUCT_TYPE.values()
-        # If categories are belong to different trees, we have to check
-        # possibility to change category
-        if old_category.tree_id != new_category.tree_id:
-            if old_category.get_root().id in ext_categories or \
-                    new_category.get_root().id in ext_categories:
-                raise serializers.ValidationError(_('Can\'t change product type'))
+        # update existing project
+        if self.object is not None:
+            old_category = self.object._get_category()
+            new_category = attrs.get('category', None)
+
+            ext_categories = set(PRODUCT_TYPE.values())
+
+            # If categories are belong to different trees, we have to check
+            # possibility to change category
+            if old_category.tree_id != new_category.tree_id:
+                if _get_root(old_category) in ext_categories or \
+                        _get_root(new_category) in ext_categories:
+                    raise serializers.ValidationError(_('Can\'t change product type'))
 
         return attrs
 
