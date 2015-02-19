@@ -104,7 +104,10 @@ class ProductSerializer(ModelSerializer):
         return instance
 
     def to_native(self, obj):
-        obj.category = obj._get_category()
+        try:
+            obj.category = obj._get_category()
+        except AttributeError:
+            pass
         return super(ProductSerializer, self).to_native(obj)
 
     class Meta:
