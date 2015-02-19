@@ -126,7 +126,8 @@ class ProductSerializer(ModelSerializer):
             if old_category.tree_id != new_category.tree_id:
                 if get_root_category(old_category) in ext_categories or \
                         get_root_category(new_category) in ext_categories:
-                    raise serializers.ValidationError(_('Can\'t change product type'))
+                    raise serializers.ValidationError(
+                        _(u'Vous ne pouvez pas modifier la catégorie'))
 
         return attrs
 
