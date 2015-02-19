@@ -719,10 +719,13 @@ define([
             };
 
             $scope.applyMessageThread = function (result) {
-                if (result && result[0] && result[0].results && result[0].results[0]) {
-                    $scope.threadId = UtilsService.getIdFromUrl(result[0].results[0].thread);
-                    $scope.hasNextPage = result[0].next;
-                    $scope.productRelatedMessages = result[0].results;
+                if (result.threads.results.length > 0) {
+                    $scope.threadId = result.threads.results[0].id;
+                    $scope.hasNextPage = result.messages.next;
+                    var recipient = result.threads.results[0].recipient;
+                    var messages = result.messages.results;
+                    UtilsService.updateMessagesSender(messages, recipient, $scope.currentUser);
+                    $scope.productRelatedMessages = messages;
                 }
             };
 

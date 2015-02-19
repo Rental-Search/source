@@ -45,6 +45,9 @@ define([
                 if (oldValue.length == 0 && newValue.length != 0) {
                     $scope.scrollMessagesListToBottom();
                 }
+                if ($scope.messageThread) {
+                    UtilsService.updateMessagesSender($scope.items, $scope.messageThread.sender, $scope.currentUser);
+                }
             });
 
             var promises = {
