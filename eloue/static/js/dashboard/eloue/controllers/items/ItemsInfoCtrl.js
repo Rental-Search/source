@@ -124,14 +124,14 @@ define([
                     if (!nodeCategory.parent) {
                         $scope.nodeCategory = initialCategoryId;
                         $scope.rootCategory = nodeCategory.id;
-                        $scope.updateNodeCategories();
+                        $scope.updateNodeCategories(false);
                         $scope.updateFieldSet(nodeCategory);
                     } else {
                         $scope.nodeCategory = nodeCategory.id;
-                        $scope.updateLeafCategories();
+                        $scope.updateLeafCategories(false);
                         CategoriesService.getParentCategory(nodeCategory).then(function (rootCategory) {
                             $scope.rootCategory = rootCategory.id;
-                            $scope.updateNodeCategories();
+                            $scope.updateNodeCategories(false);
                             $scope.updateFieldSet(rootCategory);
                         });
                     }
@@ -190,11 +190,21 @@ define([
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_info", "save", true);
                 }, function (error) {
-                    $scope.handleResponseErrors(error, "item_info", "save");
+                    // Special error which not allow to change some categories.
+                    if (error.code == "10199") {
+                        $scope.submitInProgress = false;
+                        $scope.showNotificationMessage(error.description[0], false);
+                    }
+                    else {
+                        $scope.handleResponseErrors(error, "item_info", "save");
+                    }
                 });
             };
 
-            $scope.updateNodeCategories = function () {
+            $scope.updateNodeCategories = function (reset) {
+                if (reset) {
+                    $scope.nodeCategory = undefined;
+                }
                 CategoriesService.getChildCategories($scope.rootCategory).then(function (categories) {
                     $scope.nodeCategories = categories;
                 });
@@ -203,7 +213,10 @@ define([
                 });
             };
 
-            $scope.updateLeafCategories = function () {
+            $scope.updateLeafCategories = function (reset) {
+                if (reset) {
+                    $scope.product.category = undefined;
+                }
                 CategoriesService.getChildCategories($scope.nodeCategory).then(function (categories) {
                     $scope.leafCategories = categories;
                 });
