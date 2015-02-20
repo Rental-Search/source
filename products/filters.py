@@ -51,3 +51,34 @@ class ProductHaystackSearchFilter(HaystackSearchFilter):
         form = APIProductFacetedSearchForm(request.QUERY_PARAMS,
                                            searchqueryset=sqs)
         return form.search()
+
+
+    def filter_queryset(self, request, queryset, view):
+        view._haystack_filter = False
+
+        sqs = self.get_search_queryset(view)
+        if sqs is not None:
+            filtered_sqs = self.filter_search_queryset(request, sqs)
+            # sqs was filtered
+            if filtered_sqs not in (None, sqs):
+                # FIXME should be better way to limit results
+                pks = [obj.pk for obj in filtered_sqs[:200]]
+                # TODO Try to get model_name
+                idx = 'idx(array[%s], products_product.id)' % ', '.join(
+                        _id for _id in pks)
+
+                queryset = queryset.filter(pk__in=pks).extra(
+                        select={'idx': idx}, order_by = ['idx'])
+                # mark the view has search results
+                # FIXME: should be a better (more safe) way to do this
+                view._haystack_filter = True
+
+        self.remove_haystack_ordering(request, view)
+
+        return queryset
+
+    def remove_haystack_ordering(self, request, view):
+        ordering = request.QUERY_PARAMS.get('ordering')
+        if ordering in view.haystack_ordering_fields:
+            request._request.GET = request._request.GET.copy()
+            request.QUERY_PARAMS.pop('ordering')
