@@ -1008,7 +1008,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     search_index = product_search
     filter_class = ProductFilterSet
     ordering = '-created_at'
-    ordering_fields = ('quantity', 'is_archived', 'category')
+    ordering_fields = ('quantity', 'is_archived', 'category', 'created_at')
+    haystack_ordering_fields = ('price', 'average_rate', 'distance')
     public_actions = ('retrieve', 'search', 'is_available',
                       'homepage', 'unavailability_periods')
     paginate_by = PAGINATE_PRODUCTS_BY
