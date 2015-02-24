@@ -19,8 +19,10 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
+from django.db import connection
 from django.db.models import permalink, Q, Avg, Count
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, class_prepared
+from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
@@ -63,6 +65,21 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 DEFAULT_CURRENCY = get_format('CURRENCY', lang=settings.LANGUAGE_CODE) if not settings.CONVERT_XPF else "XPF"
 
 ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
+
+
+@receiver(class_prepared,
+    dispatch_uid='products_product_setup_postgres_intarray_class_prepared')
+def setup_postgres_intarray(sender, **kwargs):
+    """
+    Always create PostgreSQL intarray extension if it doesn't already exist
+    on the database before syncing the database.
+    Requires PostgreSQL 9.1 or newer.
+    """
+    if sender.__name__ == 'Product':
+        cursor = connection.cursor()
+        cursor.execute("CREATE EXTENSION IF NOT EXISTS intarray")
+        class_prepared.disconnect(dispatch_uid='products_product_setup_postgres_intarray_class_prepared')
+
 
 class Product(models.Model):
     """A product"""
