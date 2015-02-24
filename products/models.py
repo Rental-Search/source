@@ -72,7 +72,7 @@ ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
 def setup_postgres_intarray(sender, **kwargs):
     """
     Always create PostgreSQL intarray extension if it doesn't already exist
-    on the database before syncing the database.
+    on the database after model Product has been prepared.
     Requires PostgreSQL 9.1 or newer.
     """
     if sender.__name__ == 'Product':
