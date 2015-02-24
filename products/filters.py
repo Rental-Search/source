@@ -3,9 +3,10 @@
 import operator
 from django.db.models.query_utils import Q
 from rest_framework.filters import BaseFilterBackend
+from rest_framework.settings import api_settings
 
 from products.forms import APIProductFacetedSearchForm
-from eloue.api.filters import HaystackSearchFilter
+from eloue.api.filters import HaystackSearchFilter, OrderingFilter
 
 
 class ProductAvailabilityFilter(BaseFilterBackend):
@@ -43,7 +44,19 @@ class ProductAvailabilityFilter(BaseFilterBackend):
         return queryset
 
 
-class ProductHaystackSearchFilter(HaystackSearchFilter):
+class HaystackFilterMixin(object):
+    haystack_ordering_param = api_settings.ORDERING_PARAM
+
+    def is_haystack_ordering(self, request, view):
+        # TODO DRF Ordering is set by a comma delimited ?ordering=... query parameter.
+        ordering = request.QUERY_PARAMS.get(self.haystack_ordering_param, '')
+        ordering_field = ordering.lstrip('-')
+        valid_haystack_ordering = getattr(view, 'haystack_ordering_fields', [])
+
+        return ordering_field in valid_haystack_ordering
+
+
+class ProductHaystackSearchFilter(HaystackFilterMixin, HaystackSearchFilter):
     """
     Uses additional set of filters when searching for products.
     """
@@ -63,22 +76,29 @@ class ProductHaystackSearchFilter(HaystackSearchFilter):
             if filtered_sqs not in (None, sqs):
                 # FIXME should be better way to limit results
                 pks = [obj.pk for obj in filtered_sqs[:200]]
-                # TODO Try to get model_name
-                idx = 'idx(array[%s], products_product.id)' % ', '.join(
-                        _id for _id in pks)
+        
+                if self.is_haystack_ordering(request, view):
+                    db_table =  view.serializer_class.Meta.model._meta.db_table
+                    idx = 'idx(array[%s], %s.id)' % (', '.join(
+                            _id for _id in pks), db_table)
 
-                queryset = queryset.filter(pk__in=pks).extra(
-                        select={'idx': idx}, order_by = ['idx'])
+                    queryset = queryset.filter(pk__in=pks).extra(
+                            select={'idx': idx}, order_by = ['idx'])
+                else:
+                    queryset = queryset.filter(pk__in=pks)
+
                 # mark the view has search results
                 # FIXME: should be a better (more safe) way to do this
                 view._haystack_filter = True
 
-        self.remove_haystack_ordering(request, view)
-
         return queryset
 
-    def remove_haystack_ordering(self, request, view):
-        ordering = request.QUERY_PARAMS.get('ordering')
-        if ordering in view.haystack_ordering_fields:
-            request._request.GET = request._request.GET.copy()
-            request.QUERY_PARAMS.pop('ordering')
+
+class HaystackOrderingFilter(HaystackFilterMixin, OrderingFilter):
+    def filter_queryset(self, request, queryset, view):
+        # queryset is already ordered by sqs
+        if self.is_haystack_ordering(request, view):
+            return queryset
+
+        return super(HaystackOrderingFilter, self).filter_queryset(
+            request, queryset, view)

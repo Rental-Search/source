@@ -237,21 +237,24 @@ class ProductFacetedSearchForm(FacetedSearchForm, FilteredProductPriceSearchForm
 
 class APIProductFacetedSearchForm(FilteredSearchMixin,
                                   FilteredProductPriceSearchForm):
-    ordering = forms.ChoiceField(required=False, choices=SORT_SEARCH_RESULT, widget=forms.HiddenInput())
+    ordering = forms.ChoiceField(required=False, choices=SORT_SEARCH_RESULT,
+            widget=forms.HiddenInput())
+
 
     def sqs_filter_ordering(self, sqs, search_params):
         ordering = search_params.get('ordering')
-        location = search_params.get('l', None)
 
-        if ordering:
+        # This filter in valid only for search result!
+        if search_params.get('q') and ordering:
+            # TODO In DRF Ordering is set by a comma delimited ?ordering=... query parameter.
             # custom rules for ordering by distance
+            location = search_params.get('l', None)
             if ordering == SORT.NEAR and location:
                 point, _ = self._get_location(location)
                 if point:
                     sqs = sqs.distance('location', point)
             sqs = sqs.order_by(ordering)
-        else:
-            sqs = sqs.order_by(SORT_SEARCH_RESULT.RECENT)
+
         return sqs
 
 
