@@ -76,14 +76,14 @@ class ProductHaystackSearchFilter(HaystackFilterMixin, HaystackSearchFilter):
             if filtered_sqs not in (None, sqs):
                 # FIXME should be better way to limit results
                 pks = [obj.pk for obj in filtered_sqs[:200]]
-        
+
                 if self.is_haystack_ordering(request, view):
-                    db_table =  view.serializer_class.Meta.model._meta.db_table
+                    db_table = view.serializer_class.Meta.model._meta.db_table
                     idx = 'idx(array[%s], %s.id)' % (', '.join(
                             _id for _id in pks), db_table)
 
                     queryset = queryset.filter(pk__in=pks).extra(
-                            select={'idx': idx}, order_by = ['idx'])
+                            select={'idx': idx}, order_by=['idx'])
                 else:
                     queryset = queryset.filter(pk__in=pks)
 
