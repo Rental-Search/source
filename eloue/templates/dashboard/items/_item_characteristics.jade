@@ -5,114 +5,121 @@
             tr
                 td Quantité
                 td
-                    input(type="number", ng-model="product.quantity", placeholder="Quantité").table-form
-            tr(ng-show="isAuto")
-                td Marque
+                    input(type="number", ng-model="product.quantity", placeholder="Quantité", min=1).characteristic-form
+            tr(ng-if="isAuto")
+                td Marque *
                 td
-                    input(type="text", ng-model="product.brand", placeholder="Marque").table-form
-            tr(ng-show="isAuto")
-                td Modèle
+                    input(type="text", name="brand", ng-model="product.brand", placeholder="Marque", required).characteristic-form
+                    .text-danger(data-ng-show="itemInfoForm.brand.$error.required && !!itemInfoSubmitted", translate="required_field")
+            tr(ng-if="isAuto")
+                td Modèle *
                 td
-                    input(type="text", ng-model="product.model", placeholder="Modèle").table-form
+                    input(type="text", name="model", ng-model="product.model", placeholder="Modèle", required).characteristic-form
+                    .text-danger(data-ng-show="itemInfoForm.model.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-show="isAuto")
                 td Nombre de place
                 td
-                    select(ng-model="product.seat_number", eloue-chosen, data-ng-disabled="submitInProgress").table-form
+                    select(ng-model="product.seat_number", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in seatNumberOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Nombre de porte
                 td
-                    select(ng-model="product.door_number", eloue-chosen, data-ng-disabled="submitInProgress").table-form
+                    select(ng-model="product.door_number", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in doorNumberOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Énergie
                 td
-                    select(ng-model="product.fuel", eloue-chosen, data-ng-disabled="submitInProgress").table-form
+                    select(ng-model="product.fuel", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in fuelOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Boite de vitesse
                 td
-                    select(ng-model="product.transmission", eloue-chosen, data-ng-disabled="submitInProgress").table-form
+                    select(ng-model="product.transmission", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in transmissionOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Kilométrage
                 td
-                    select(ng-model="product.mileage", eloue-chosen, data-ng-disabled="submitInProgress").table-form
+                    select(ng-model="product.mileage", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in mileageOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Consommation
                 td
-                    select(ng-model="product.consumption", eloue-chosen, data-ng-disabled="submitInProgress").table-form
+                    select(ng-model="product.consumption", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in consumptionOptions", value="{{item.id}}")  {{item.name}}
-            tr(ng-show="isAuto")
-                td Kilomètres inclus/jour
+            tr(ng-if="isAuto")
+                td Kilomètres inclus/jour *
                 td
-                    input(type="number", ng-model="product.km_included", placeholder="Km inclus").table-form
+                    input(type="number", name="km_included", ng-model="product.km_included", placeholder="Km inclus", required).characteristic-form
+                    .text-danger(data-ng-show="itemInfoForm.km_included.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-show="isAuto")
                 td Prix par kilomètres supplémentaires
                 td
-                    input(type="number", ng-model="product.costs_per_km", placeholder="Prix").table-form
+                    input(type="number", ng-model="product.costs_per_km", step="0.5", placeholder="Prix").characteristic-form
             tr(ng-show="isAuto")
                 td Climatisation
                 td
-                    input(type="text", ng-model="product.air_conditioning", placeholder="Climatisation").table-form
+                    input(type="text", ng-model="product.air_conditioning", placeholder="Climatisation").characteristic-form
             tr(ng-show="isAuto")
                 td Direction assistée
                 td
-                    input(type="checkbox", ng-model="product.power_steering").table-form
+                    input(type="checkbox", ng-model="product.power_steering")
             tr(ng-show="isAuto")
                 td Régulateur de vitesse
                 td
-                    input(type="checkbox", ng-model="product.cruise_control").table-form
+                    input(type="checkbox", ng-model="product.cruise_control")
             tr(ng-show="isAuto")
                 td GPS
                 td
-                    input(type="checkbox", ng-model="product.gps").table-form
+                    input(type="checkbox", ng-model="product.gps")
             tr(ng-show="isAuto")
                 td Siège bébé
                 td
-                    input(type="checkbox", ng-model="product.baby_seat").table-form
+                    input(type="checkbox", ng-model="product.baby_seat")
             tr(ng-show="isAuto")
                 td Coffre de toit
                 td
-                    input(type="checkbox", ng-model="product.roof_box").table-form
+                    input(type="checkbox", ng-model="product.roof_box")
             tr(ng-show="isAuto")
                 td Porte-vélo
                 td
-                    input(type="checkbox", ng-model="product.bike_rack").table-form
+                    input(type="checkbox", ng-model="product.bike_rack")
             tr(ng-show="isAuto")
                 td Pneus neige
                 td
-                    input(type="checkbox", ng-model="product.snow_tires").table-form
+                    input(type="checkbox", ng-model="product.snow_tires")
             tr(ng-show="isAuto")
                 td Chaines
                 td
-                    input(type="checkbox", ng-model="product.snow_chains").table-form
+                    input(type="checkbox", ng-model="product.snow_chains")
             tr(ng-show="isAuto")
                 td Porte-skis
                 td
-                    input(type="checkbox", ng-model="product.ski_rack").table-form
+                    input(type="checkbox", ng-model="product.ski_rack")
             tr(ng-show="isAuto")
                 td Lecteur CD
                 td
-                    input(type="checkbox", ng-model="product.cd_player").table-form
+                    input(type="checkbox", ng-model="product.cd_player")
             tr(ng-show="isAuto")
                 td Entrée audio/iPod
                 td
-                    input(type="checkbox", ng-model="product.audio_input").table-form
-            tr(ng-show="isAuto")
-                td CV fiscaux
+                    input(type="checkbox", ng-model="product.audio_input")
+            tr(ng-if="isAuto")
+                td CV fiscaux *
                 td
-                    select(ng-model="product.tax_horsepower", eloue-chosen, data-ng-disabled="submitInProgress").table-form
+                    select(ng-model="product.tax_horsepower", name="tax_horsepower", eloue-chosen, data-ng-disabled="submitInProgress", required)
                         option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
-            tr(ng-show="isAuto")
-                td N° d'immatriculation
+                    .text-danger(data-ng-show="itemInfoForm.tax_horsepower.$error.required && !!itemInfoSubmitted", translate="required_field")
+            tr(ng-if="isAuto")
+                td N° d'immatriculation *
                 td
-                    input(type="checkbox", ng-model="product.licence_plate").table-form
-            tr(ng-show="isAuto")
-                td 1er mise en circulation
+                    input(type="text", name="licence_plate", placeholder="N° d'immatriculation", ng-model="product.licence_plate", ng-maxlength="10", required).characteristic-form
+                    .text-danger(data-ng-show="itemInfoForm.licence_plate.$error.required && !!itemInfoSubmitted", translate="required_field")
+                    .text-danger(data-ng-show="itemInfoForm.licence_plate.$error.maxlength && !!itemInfoSubmitted", translate="maxLength10")
+            tr(ng-if="isAuto")
+                td 1er mise en circulation *
                 td
-                    input(type="checkbox", ng-model="product.first_registration_date").table-form
+                    input(type="text", name="first_registration_date", placeholder="dd/mm/yyyy", ng-model="product.first_registration_date", eloue-extended-datepicker, required).date.characteristic-form
+                    .text-danger(data-ng-show="itemInfoForm.first_registration_date.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-show="isRealEstate")
                 td Capacité
                 td
