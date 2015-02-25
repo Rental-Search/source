@@ -1,0 +1,111 @@
+[
+    {
+        "fields": {
+            "username": "lin2",
+            "first_name": "Lin",
+            "last_name": "LIU",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2010-08-18 15:35:00",
+            "groups": [],
+            "user_permissions": [],
+            "password": "sha1$a93ad$e056bdb299c628a90200575982b88199b1fa3ffe",
+            "email": "lin.liu_rent@e-loue.com",
+            "date_joined": "2011-03-17 09:00:10",
+            "activation_key": null,
+            "is_professional": false,
+            "civility": 2,
+            "modified_at": "2011-08-17 09:00:10",
+            "groups": [],
+            "user_permissions": [],
+            "paypal_email": "eloue_1878761216@tryphon.org",
+            "slug": "lin2"
+        },
+        "model": "accounts.patron",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "kind": 4,
+            "number": "0645820078",
+            "patron": 1
+        },
+        "model": "accounts.phonenumber",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "holder_name": "osgfjsfd",
+            "masked_number": "4XXXXXXXXXXXX111",
+            "expires": "0616",
+            "keep": false,
+            "holder": 9,
+            "card_number": "SfdgsssDLLS"
+        },
+        "model": "accounts.creditcard",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "product": 6,
+            "ended_at": "2010-08-27 09:00:10",
+            "total_amount": "20",
+            "pin": 1234,
+            "insurance_amount": "1.294920",
+            "pay_key": "AP-1G646418FF723264N",
+            "created_at": "2010-08-15 09:00:10",
+            "deposit_amount": "10",
+            "state": "authorized",
+            "borrower": 1,
+            "owner": 9,
+            "started_at": "2010-08-17 09:00:10",
+            "contract_id": 110453,
+            "quantity": 1,
+            "content_type": [
+                "payments",
+                "nonpaymentinformation"
+            ],
+            "object_id": 1
+        },
+        "model": "rent.booking",
+        "pk": "87ee8e9dec1d47c29ebb27e09bda89aa"
+    },
+    {
+        "fields": {
+            "site_id": "48460",
+            "pudo_id": "R4431",
+            "position": "POINT (48.8627777778 2.385)",
+            "type": 1
+        },
+        "model": "shipping.shippingpoint",
+        "pk": "1"
+    },
+    {
+        "fields": {
+            "site_id": "18946",
+            "pudo_id": "P5232",
+            "position": "POINT (48.8466666667 2.37472222222)",
+            "type": 2
+        },
+        "model": "shipping.shippingpoint",
+        "pk": "2"
+    },
+    {
+        "fields": {
+            "shippingpoint_ptr": 2,
+            "patron": 1,
+            "booking": "87ee8e9dec1d47c29ebb27e09bda89aa"
+        },
+        "model": "shipping.patronshippingpoint",
+        "pk": "2"
+    },
+    {
+        "fields": {
+            "shippingpoint_ptr": 1,
+            "product": 6
+        },
+        "model": "shipping.productshippingpoint",
+        "pk": "1"
+    }
+]
