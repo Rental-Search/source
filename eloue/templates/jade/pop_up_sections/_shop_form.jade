@@ -4,26 +4,37 @@ h4
 
 {% if patron.pro_agencies.all %}
 p Nos boutiques sont situées au&nbsp;:
-for agency in patron.pro_agencies.all
-  .indent-t-sm.text-white.btn-lg.bg-primary: b
-    i.flaticon.stroke.up-2.icon-2x.pull-right.collapsed(data-toggle="collapse", data-target="#map-{{ forloop.counter }}")
-    | {{ agency.name }}
-    br
-    | {{ agency.address1 }}
-    br
-    | {{ agency.zipcode }} {{ agency.city|upper }}
-  .collapse.map-wrapper(id="map-{{ forloop.counter }}")
-    .map(locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}")
-        img(src="https://maps.googleapis.com/maps/api/staticmap?center={{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ agency.position.x|stringformat:'f' }},{{ agency.position.y|stringformat:'f' }}&zoom=18&size=910x546&language=fr", width="100%", height="100%")
+aside.col-xs-4
+  .map-container
+    .whirly
+    .map.pro-shop-map#map-canvas
+      // map goes here
+main.col-xs-8.pro-shop
+    ul.scrollbar-custom
+      for agency in patron.pro_agencies.all
+       li(id="marker-{{ forloop.counter }}", locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}", name="{{ agency.name }}")
+           span.badge-order {{ forloop.counter }}
+           .section-body
+             h6 {{ agency.name }}
+             p {{ agency.address1 }}
+             p {{ agency.zipcode }} {{ agency.city|upper }}
+             p {{ agency.phone_number }}
 {% else %}
 {% if patron.default_address %}
 p Notre boutique est située au&nbsp;:
-.indent-t-sm.text-white.btn-lg.bg-primary: b
-  | {{ patron.default_address.address1 }}
-  br
-  | {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
-.map-wrapper
-  .map(locationY="{{ patron.default_address.position.y|stringformat:'f' }}", locationX="{{ patron.default_address.position.x|stringformat:'f' }}")
-    img(src="https://maps.googleapis.com/maps/api/staticmap?center={{ patron.default_address.position.x|stringformat:'f' }},{{ patron.default_address.position.y|stringformat:'f' }}&markers=color:green%7Clabel:''%7C{{ patron.default_address.position.x|stringformat:'f' }},{{ patron.default_address.position.y|stringformat:'f' }}&zoom=18&size=910x546&language=fr", width="100%", height="100%")
+aside.col-xs-4
+    .map-container
+        .whirly
+        .map.pro-shop-map#map-canvas
+            // map goes here
+main.col-xs-8.pro-shop
+    ul.scrollbar-custom
+        li(id="marker-1", locationY="{{ patron.default_address.position.y|stringformat:'f' }}", locationX="{{ patron.default_address.position.x|stringformat:'f' }}", name="{{ patron.default_address.name }}")
+            span.badge-order 1
+            .section-body
+                h6 {{ patron.default_address.name }}
+                p {{ patron.default_address.address1 }}
+                p {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
+                p {{ patron.default_address.phone_number }}
 {% endif %}
 {% endif %}
