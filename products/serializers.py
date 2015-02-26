@@ -224,10 +224,13 @@ class MessageThreadSerializer(ModelSerializer):
     sender = NestedUserSerializer()
     recipient = NestedUserSerializer()
     last_message = NestedProductRelatedMessageSerializer(read_only=True)
+    seen = BooleanField(read_only=True)
 
     class Meta:
         model = models.MessageThread
-        fields = ('id', 'sender', 'recipient', 'product', 'last_message', 'subject', 'sender_archived', 'recipient_archived', 'messages')
+        fields = ('id', 'sender', 'recipient', 'product', 'last_message',
+                'subject', 'sender_archived', 'recipient_archived', 'messages',
+                'seen')
         read_only_fields = ('sender_archived', 'recipient_archived', 'messages')
         immutable_fields = ('sender', 'recipient', 'product')
 

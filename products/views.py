@@ -937,6 +937,7 @@ from products import serializers, models
 from products.serializers import get_root_category
 from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
+from eloue.api.decorators import list_action
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
@@ -1299,6 +1300,25 @@ class MessageThreadViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     filter_class = MessageThreadFilterSet
     ordering_fields = ('last_message__sent_at', 'last_message__read_at', 'last_message__replied_at')
 
+    def get_queryset(self):
+        qs = super(MessageThreadViewSet, self).get_queryset()
+
+        # FIXME seen doesn't make sense if the request.user is not 
+        # one of the thread participants
+        if self.request.user.is_authenticated():
+            qs = qs.extra(select={'seen': """
+                SELECT NOT EXISTS (
+                SELECT true FROM django_messages_message AS M
+                JOIN products_productrelatedmessage AS R
+                ON (M.id = R.message_ptr_id)
+                WHERE M.read_at IS NULL
+                AND M.recipient_id=%s
+                AND R.thread_id=products_messagethread.id)""" % self.request.user.id
+            })
+
+        return qs
+
+
 class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
@@ -1322,4 +1342,19 @@ class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
         if not message.read_at and message.recipient.id == request.user.id:
             message.read_at = datetime.datetime.now()
             message.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @list_action(methods=['put'], url_path='seen')
+    @ignore_filters([filters.DjangoFilterBackend])
+    def seen_many(self, request, *args, **kwargs):
+        messages_ids = request.DATA.get('messages', [])
+        if not isinstance(messages_ids, (list, tuple)):
+            messages_ids = [messages_ids, ]
+
+        self.get_queryset().filter(
+            recipient=request.user,
+            read_at__isnull=True,
+            id__in=messages_ids).update(
+            read_at=datetime.datetime.now())
+
         return Response(status=status.HTTP_204_NO_CONTENT)
