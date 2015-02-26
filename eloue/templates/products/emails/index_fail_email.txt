@@ -1,0 +1,1 @@
+No daily price for product {{ product.id }}: {{ product.get_absolute_url }}
