@@ -248,12 +248,14 @@ class APIProductFacetedSearchForm(FilteredSearchMixin,
         if search_params.get('q') and ordering:
             # TODO In DRF Ordering is set by a comma delimited ?ordering=... query parameter.
             # custom rules for ordering by distance
-            location = search_params.get('l', None)
-            if ordering == SORT.NEAR and location:
-                point, _ = self._get_location(location)
-                if point:
-                    sqs = sqs.distance('location', point)
-            sqs = sqs.order_by(ordering)
+            if ordering == SORT.NEAR:
+                location = search_params.get('l', None)
+                if location:
+                    point, _ = self._get_location(location)
+                    if point:
+                        sqs = sqs.distance('location', point).order_by(ordering)
+            else:
+                sqs = sqs.order_by(ordering)
 
         return sqs
 
