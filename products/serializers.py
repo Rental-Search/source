@@ -18,7 +18,8 @@ from products import models
 from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import (
     EncodedImageField, ObjectMethodBooleanField, ModelSerializer,
-    NestedModelSerializerMixin, SimpleSerializer, SimplePaginationSerializer
+    NestedModelSerializerMixin, SimpleSerializer, SimplePaginationSerializer,
+    NullBooleanField
 )
 from eloue.decorators import cached
 from products.helpers import calculate_available_quantity
@@ -224,7 +225,18 @@ class MessageThreadSerializer(ModelSerializer):
     sender = NestedUserSerializer()
     recipient = NestedUserSerializer()
     last_message = NestedProductRelatedMessageSerializer(read_only=True)
-    seen = BooleanField(read_only=True)
+    seen = NullBooleanField(source="id", read_only=True)
+
+    def transform_seen(self, obj, value):
+        request = self.context['request']
+
+        if request.user.is_authenticated():
+            qs = obj.messages.filter(
+                    read_at__isnull=True,
+                    recipient=request.user)
+            return not qs.exists()
+
+        return None
 
     class Meta:
         model = models.MessageThread

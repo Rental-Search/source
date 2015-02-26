@@ -1300,24 +1300,6 @@ class MessageThreadViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     filter_class = MessageThreadFilterSet
     ordering_fields = ('last_message__sent_at', 'last_message__read_at', 'last_message__replied_at')
 
-    def get_queryset(self):
-        qs = super(MessageThreadViewSet, self).get_queryset()
-
-        # FIXME seen doesn't make sense if the request.user is not 
-        # one of the thread participants
-        if self.request.user.is_authenticated():
-            qs = qs.extra(select={'seen': """
-                SELECT NOT EXISTS (
-                SELECT true FROM django_messages_message AS M
-                JOIN products_productrelatedmessage AS R
-                ON (M.id = R.message_ptr_id)
-                WHERE M.read_at IS NULL
-                AND M.recipient_id=%s
-                AND R.thread_id=products_messagethread.id)""" % self.request.user.id
-            })
-
-        return qs
-
 
 class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
