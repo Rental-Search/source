@@ -3,7 +3,7 @@ section.tabs-vertical-active.sm.scrollbar-custom(ng-show="messageThreadList && m
   ul(eloue-lazy-load, lazy-data="messageThreadList", lazy-data-provider="MessageThreadsService", lazy-load-method="getMessageThreadList")
     li.tab-vertical.block-with-thumbnail(ng-repeat="thread in messageThreadList track by thread.id", id="thread-{{thread.id}}", ui-sref="messages.detail({id: thread.id})")
       .col-thumbnail
-        .unread-marker(ng-show="shouldMarkAsUnread(thread.last_message)")
+        .unread-marker(ng-show="!thread.seen")
         .thumbnail.round: a(ui-sref="messages.detail({id: thread.id})).sm
           img(style="background-image: url({{thread.sender.avatar.thumbnail}});")
       .col-exposition

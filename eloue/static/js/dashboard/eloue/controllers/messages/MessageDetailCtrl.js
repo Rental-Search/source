@@ -35,18 +35,36 @@ define([
                 loadingTarget: 'Messages'
             };
 
+            $scope.isFirstLoad = true;
+
             $scope.handleResponseErrors = function (error, object, action) {
                 $scope.submitInProgress = false;
                 $scope.showNotification(object, action, false);
             };
 
-            $scope.$watch('items', function(newValue, oldValue) {
+            $scope.$watchCollection('items', function(newValue, oldValue) {
                 // On first page loaded scroll list to the bottom.
-                if (oldValue.length == 0 && newValue.length != 0) {
+                if (newValue.length != 0 && $scope.isFirstLoad) {
                     $scope.scrollMessagesListToBottom();
+                    $scope.isFirstLoad = false;
                 }
                 if ($scope.messageThread) {
                     UtilsService.updateMessagesSender($scope.items, $scope.messageThread.sender, $scope.currentUser);
+                }
+
+                var unreadMessages = UtilsService.getUnreadMessagesIds ($scope.items, $scope.currentUser);
+                if (unreadMessages.length != 0) {
+                    // If there are any unread messages.
+
+                    // Mark messages as seen.
+                    ProductRelatedMessagesService.markBunchAsRead(unreadMessages).then(function() {
+                        $scope.updateStatistics();
+                        MessageThreadsService.isThreadSeen($scope.messageThread.id).then(function(result) {
+                            if (result.seen) {
+                                $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
+                            }
+                        });
+                    });
                 }
             });
 
@@ -65,12 +83,6 @@ define([
                 $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
                 $scope.currentuser = results.currentUser;
-                if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
-                    $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
-                    ProductRelatedMessagesService.markAsRead($scope.messageThread.last_message.id).then(function() {
-                        $scope.updateStatistics();
-                    });
-                }
 
                 if ($scope.messageThread.product) {
 

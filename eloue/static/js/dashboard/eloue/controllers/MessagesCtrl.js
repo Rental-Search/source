@@ -11,7 +11,7 @@ define([
         "$scope",
         "UsersService",
         "UtilsService",
-        function ($scope, UsersService, UtilsService) {
+        function ($scope, UsersService) {
             $scope.messageThreadList = [];
             if (!$scope.currentUserPromise) {
                 $scope.currentUserPromise = UsersService.getMe();
@@ -21,10 +21,6 @@ define([
                 $scope.$broadcast("startLoading", {parameters: [], shouldReloadList: true});
                 $scope.updateStatistics();
             });
-
-            $scope.shouldMarkAsUnread = function (lastMessage) {
-                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) == $scope.currentUser.id);
-            };
         }
     ]);
 });

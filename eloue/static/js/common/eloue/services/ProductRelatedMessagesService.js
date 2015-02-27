@@ -85,6 +85,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
                 return ProductRelatedMessages.seen({id: messageId}, {id: messageId}).$promise;
             };
 
+            productRelatedMessagesService.markBunchAsRead = function(messages) {
+                return ProductRelatedMessages.seenBunch({messages: messages}).$promise;
+            };
+
             productRelatedMessagesService.parseMessage = function (messageData, senderData) {
                 var messageResults = angular.copy(messageData);
 

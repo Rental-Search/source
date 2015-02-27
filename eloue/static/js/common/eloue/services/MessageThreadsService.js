@@ -41,6 +41,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 );
                 return deferred.promise;
             };
+            
+            messageThreadsService.isThreadSeen = function(threadId) {
+                return MessageThreads.isThreadSeen({id: threadId}).$promise;
+            };
 
             messageThreadsService.getMessageThreadList = function (page) {
                 var deferred = $q.defer();
@@ -164,6 +168,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     angular.forEach(messageKeysToRemove, function (index, key) {
                         messageThreadResult.messages.splice(index, 1);
                     });
+                    messageThreadResult.messagesCount = messageThreadData.messages.length;
                 }
 
                 // Parse product
