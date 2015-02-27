@@ -361,6 +361,14 @@ class MessageThreadTest(APITestCase):
         self.assertIn('results', response.data)
         self.assertFalse(response.data['results'][0]['seen'])
 
+    def test_messagethread_check_seen_only(self):
+        response = self.client.get(_location('messagethread-seen', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+        expected = {
+            'seen': True
+        }
+        self.assertDictContainsSubset(expected, response.data)
+
 
 class MessageTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'messagethread', 'message']
