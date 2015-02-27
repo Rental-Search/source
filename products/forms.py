@@ -22,7 +22,7 @@ from accounts.widgets import CommentedCheckboxInput
 from products.fields import FacetField, FRLicensePlateField
 from products.models import Alert, PatronReview, ProductReview, Product, CarProduct, RealEstateProduct, Picture, Category, ProductRelatedMessage, ProductHighlight, ProductTopPosition, MessageThread
 from products.widgets import PriceTextInput, CommentedSelectInput, CommentedTextInput
-from products.choices import UNIT, SORT
+from products.choices import UNIT, SORT, SORT_SEARCH_RESULT
 
 from eloue.geocoder import GoogleGeocoder
 from eloue import legacy
@@ -63,6 +63,7 @@ class FilteredProductSearchForm(SearchForm):
     renter = forms.CharField(required=False)
 
     filter_limits = {}
+    _max_range = _point = None
 
     def clean_r(self):
         location = self.cleaned_data.get('l', None)
@@ -95,10 +96,8 @@ class FilteredProductSearchForm(SearchForm):
     def sqs_filter_l(self, sqs, search_params):
         location = search_params.get('l', None)
         if location:
-            _location, coords, radius = GoogleGeocoder().geocode(location)
-            self.max_range = radius or DEFAULT_RADIUS
-            if all(coords):
-                point = Point(coords)
+            point, self.max_range = self._get_location(location)
+            if point:
                 sqs = sqs.dwithin(
                     'location', point, Distance(
                         km=search_params.get('r', self.max_range))
@@ -116,6 +115,14 @@ class FilteredProductSearchForm(SearchForm):
         elif status == "professionnels":
             sqs = sqs.filter(pro_owner=1)
         return sqs
+
+    def _get_location(self, location):
+        if not all((self._point, self._max_range)):
+            _, coords, radius = GoogleGeocoder().geocode(location)
+            self._max_range = radius or DEFAULT_RADIUS
+            if all(coords):
+                self._point = Point(coords)
+        return (self._point, self._max_range)
 
 
 class FilteredProductPriceSearchForm(FilteredProductSearchForm):
@@ -230,7 +237,27 @@ class ProductFacetedSearchForm(FacetedSearchForm, FilteredProductPriceSearchForm
 
 class APIProductFacetedSearchForm(FilteredSearchMixin,
                                   FilteredProductPriceSearchForm):
-    pass
+    ordering = forms.ChoiceField(required=False, choices=SORT_SEARCH_RESULT,
+            widget=forms.HiddenInput())
+
+
+    def sqs_filter_ordering(self, sqs, search_params):
+        ordering = search_params.get('ordering')
+
+        # This filter in valid only for search result!
+        if search_params.get('q') and ordering:
+            # TODO In DRF Ordering is set by a comma delimited ?ordering=... query parameter.
+            # custom rules for ordering by distance
+            if ordering == SORT.NEAR:
+                location = search_params.get('l', None)
+                if location:
+                    point, _ = self._get_location(location)
+                    if point:
+                        sqs = sqs.distance('location', point).order_by(ordering)
+            else:
+                sqs = sqs.order_by(ordering)
+
+        return sqs
 
 
 class AlertSearchForm(SearchForm):

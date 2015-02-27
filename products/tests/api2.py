@@ -900,6 +900,11 @@ class ProductTest(APITestCase):
         self.assertEquals(response.status_code, 200, response.data)
         #self.assertGreater(response.data['count'], 0)
 
+    def test_filter_q_and_ordering(self):
+        response = self.client.get(_location('product-list'), {
+            'q': 'Philips', 'ordering': '-average_rate'})
+        self.assertEquals(response.status_code, 200, response.data)
+
     def test_homepage_allowed(self):
         response = self.client.get(_location('product-homepage'))
         self.assertEquals(response.status_code, 200)

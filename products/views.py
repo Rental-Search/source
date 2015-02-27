@@ -66,6 +66,7 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 MAX_DISTANCE = 1541
 
+
 def get_point_and_radius(coords, radius=None):
     """get_point_and_radius(coords, radius=None):
     A helper function which transforms provided coordinates into a gis.geos.Point object and validates radius.
@@ -933,6 +934,7 @@ from rest_framework import status
 import django_filters
 
 from products import serializers, models
+from products.serializers import get_root_category
 from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
 from rent.forms import Api20BookingForm
@@ -1003,12 +1005,14 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     """
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.filter(is_archived=False).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
-    filter_backends = (product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (product_filters.ProductHaystackSearchFilter,
+        filters.DjangoFilterBackend, product_filters.HaystackOrderingFilter)
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet
     ordering = '-created_at'
-    ordering_fields = ('quantity', 'is_archived', 'category')
+    ordering_fields = ('quantity', 'is_archived', 'category', 'created_at')
+    haystack_ordering_fields = ('price', 'average_rate', 'distance')
     public_actions = ('retrieve', 'search', 'is_available',
                       'homepage', 'unavailability_periods')
     paginate_by = PAGINATE_PRODUCTS_BY
@@ -1178,8 +1182,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             delattr(self, '_post_data')
             category = data.get('category', None)
             if category is not None:
-                category = self._category_from_native(category)
-                category = getattr(category, category._mptt_meta.tree_id_attr)
+                category = get_root_category(
+                        self._category_from_native(category))
             if category == PRODUCT_TYPE.CAR or 'brand' in data:
                 # we have CarProduct here
                 return serializers.CarProductSerializer

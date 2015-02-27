@@ -16,7 +16,11 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 fields: fieldErrors
             };
             if (description) {
-                formErrors[formTag].description = description.replace("[", "").replace("]", "").replace("{", "").replace("}", "");
+                if (angular.isArray(description)) {
+                    formErrors[formTag].description = description[0];
+                } else {
+                    formErrors[formTag].description = description.replace("[", "").replace("]", "").replace("{", "").replace("}", "");
+                }
             }
         };
         serverValidationService.removeErrors = function (formTag) {

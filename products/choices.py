@@ -174,6 +174,15 @@ SORT = Enum([
     ('-price', 'HIGH_PRICE', _(u"Les pris les plus haut")),
 ])
 
+SORT_SEARCH_RESULT = Enum([
+    ('distance', 'NEAR', _(u"Les plus proches")),
+    ('-created_at', 'RECENT', _(u"Les plus récentes")),
+    ('price', 'LOW_PRICE', _(u"Les pris les plus bas")),
+    ('-price', 'HIGH_PRICE', _(u"Les pris les plus haut")),
+    ('average_rate', 'WORSE_RATE', _(u"Les ...")),  # TODO Translate
+    ('-average_rate', 'BETTER_RATE', _(u"Les ...")),  # TODO Translate
+])
+
 PRODUCT_TYPE = Enum([
     (2700, 'CAR', _(u"Location Automobile")),
     (2713, 'REALESTATE', _(u"Location saisonnière")),
