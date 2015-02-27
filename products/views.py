@@ -1300,6 +1300,17 @@ class MessageThreadViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     filter_class = MessageThreadFilterSet
     ordering_fields = ('last_message__sent_at', 'last_message__read_at', 'last_message__replied_at')
 
+    @cached_property
+    def _seen_from_native(self):
+        return self.serializer_class().fields['seen'].from_native
+
+    @link()
+    @ignore_filters([filters.DjangoFilterBackend])
+    def seen(self, request, *args, **kwargs):
+        thread = self.get_object()
+        seen = self._seen_from_native(thread)
+        return Response({'seen': seen})
+
 
 class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
