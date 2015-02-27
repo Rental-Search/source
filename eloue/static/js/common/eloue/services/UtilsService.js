@@ -85,15 +85,34 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
          */
         utilsService.updateMessagesSender = function(messages, replacer, currentUser) {
             // Replace sender as url with real object for all messages.
-            angular.forEach(messages, function(value) {
-                var senderId = utilsService.getIdFromUrl(value.sender);
+            for (var i = 0; i < messages.length; i++) {
+                if (angular.isObject(messages[i].sender)) {
+                    continue;
+                }
+                var senderId = utilsService.getIdFromUrl(messages[i].sender);
 
                 if (senderId == replacer.id) {
-                    value.sender = replacer;
+                    messages[i].sender = replacer;
                 } else {
-                    value.sender = currentUser;
+                    messages[i].sender = currentUser;
                 }
-            });
+            }
+        };
+
+        /**
+         * Get unread messages ids.
+         * @param messages messages to check.
+         * @param currentUser current user to prevent selecting outcoming messages.
+         * @returns {Array} array of unread messages ids.
+         */
+        utilsService.getUnreadMessagesIds = function(messages, currentUser) {
+            var unreadMessagesIds = [];
+            for (var i = 0; i < messages.length; i++) {
+                if (messages[i].read_at == null && messages[i].sender.id != currentUser.id) {
+                    unreadMessagesIds.push(messages[i].id);
+                }
+            }
+            return unreadMessagesIds;
         };
 
         return utilsService;
