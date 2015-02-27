@@ -1,13 +1,12 @@
 # coding=utf-8
 from django.core.management.base import BaseCommand, CommandError
 from django.core.files import uploadedfile
-
+from django.utils.html import smart_urlquote
 from bs4 import BeautifulSoup
 import re, sys
 from urllib2 import urlopen, quote, HTTPError
 import threading
 from contextlib import closing
-from django.utils.encoding import smart_str
 
 category_mapping = { 
     'http://1robepour1soir.com/robes/': 'robe',
@@ -46,7 +45,7 @@ class Command(BaseCommand):
 
         while True:
             try:
-                product_url, category_slug = self.product_links.popitem()
+                product_url, category = self.product_links.popitem()
             except KeyError:
                 break
 
@@ -56,31 +55,29 @@ class Command(BaseCommand):
             except HTTPError:
                 print 'error loading page for object at url', self.base_url + product_url
 
-            # Get the image
-            if product_soup.find('div', class_="szg-thumbs"):
-                image_url =  product_soup.find('div', class_="szg-thumbs").find('img').get('data-medium')
-
-            # Get the title
-            infosProduits = product_soup.find('h2', class_='supertitre').text
-
-            # Get the price
+            #get the iomage
             try:
-                price_str = product_soup.find('div', class_='prix').find('p').text
-                price = _to_decimal(price_str)
+                image_url =  product_soup.find('div', class_="szg-thumbs").find('img').get('data-medium')
+                image_url = smart_urlquote(image_url)
             except:
                 pass
+            # Get the title
+            try:
+                infosProduits = product_soup.find('h2', class_='supertitre').text
+                print infosProduits
+            except:
+                infosProduits = ''
 
             # Get the description
-            description = product_soup.find('div', id='tab1').text
-            description = re.sub(r"\s{2,}","",description).strip()
+            try:
+                description = product_soup.find('div', id='tab1').text
+                description = re.sub(r"\s{2,}","",description).strip()
+            except:
+                description = 'NO DESCRIPTION'
+                pass
 
-            #Format the title
+            # Format the title
             summary = infosProduits
-
-            if price:
-                print '%s\n%s\n%s\n%s' % (product_url, price, description, summary)
-            else:
-                print '%s\n%s\n%s' % (product_url, description, summary)
             
             # Create the product
             from products.models import Category, Price
@@ -88,7 +85,7 @@ class Command(BaseCommand):
             product = Product.objects.create(
                 summary=summary, description=description, 
                 deposit_amount=0.0, address=self.address, owner=self.patron,
-                category=Category.objects.get(slug=category_mapping[category_slug]))
+                category=Category.objects.get(slug=category_mapping[category]))
             try:
                 with closing(urlopen(image_url)) as image:
                     product.pictures.add(Picture.objects.create(
@@ -98,12 +95,17 @@ class Command(BaseCommand):
                 )
             except HTTPError as e:
                 print '\nerror loading image for object at url:', self.base_url + product_url
+
             
             # Add the price to the product
-            if price:
-              product.prices.add(Price(amount=price, unit=UNIT.DAY))
-            # sys.stdout.write('.')
-            # sys.stdout.flush()
+            try:
+                price = product_soup.find('div', class_='prix').find('p').text
+                price = _to_decimal(price)
+                product.prices.add(Price(amount=price, unit=UNIT.DAY))
+                sys.stdout.flush()
+            except:
+                print 'NO PRICE'
+                pass
 
 
     def handle(self, *args, **options):
@@ -112,9 +114,10 @@ class Command(BaseCommand):
 
         # Get the user
         try:
-            self.patron = Patron.objects.get(username='LOXAM')
+            self.patron = Patron.objects.get(username='1robepour1soir')
+            # self.patron = Patron.objects.get(username='1robepour1soir')
         except Patron.DoesNotExist:
-            print "Can't find user 'deguizeland'"
+            print "Can't find user '1robepour1soir'"
             return
 
         # Get the default address of the user to add to the product
@@ -125,7 +128,9 @@ class Command(BaseCommand):
             self.soup = BeautifulSoup(main_page, 'html.parser')
 
         # Get families list of products
-        self.product_families = ['/robes/']
+        self.product_families = [
+            '/robes/',
+        ]
         
         # List the products
         for i in xrange(self.thread_num):
