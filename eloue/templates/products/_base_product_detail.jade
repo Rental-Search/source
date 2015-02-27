@@ -43,6 +43,8 @@ block append content-body
   #fb-root
   if is_pro
     {% with product.object.owner as patron %}
+    include ../jade/_pro_popin_message
+    include ../jade/_pro_popin_phone
     include ../jade/_pro_popin_website_link
     include ../jade/_pro_popin_shop
     {% endwith %}

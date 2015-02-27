@@ -1,5 +1,6 @@
 # coding=utf-8
 import xlrd
+import urllib2
 from django.core.management.base import BaseCommand
 
 def next_row(sheet, row):
@@ -21,28 +22,33 @@ class Command(BaseCommand):
 			print "Can't find the user"
 			return
 
-		with open(args[0]) as xlsx:
-			sheet = xlrd.open_workbook(file_contents=xlsx.read()).sheets()[0]
-			rows = iter(xrange(sheet.nrows))
-			header = tuple(next_row(sheet, next(rows))) #the header line
+		try:
+			xlsx = urllib2.urlopen(args[0])
+		except:
+			print "Impossible to download the file"
 
-			for row in iter(rows):
-				while True:
-					try:
-						pro_agency_row = dict(zip(header, next_row(sheet, row)))
-						pro_agency = ProAgency.objects.create(
-							patron=patron,
-							name=pro_agency_row["name"],
-							address1=pro_agency_row["address1"],
-							zipcode=str(int(float(pro_agency_row["zipcode"]))),
-							city=pro_agency_row["city"],
-							phone_number=pro_agency_row["phone"]
-						)
-						print pro_agency
-					except Exception,e:
-						print e
-						break
-					else:
-						break
+
+		sheet = xlrd.open_workbook(file_contents=xlsx.read()).sheets()[0]
+		rows = iter(xrange(sheet.nrows))
+		header = tuple(next_row(sheet, next(rows))) #the header line
+
+		for row in iter(rows):
+			while True:
+				try:
+					pro_agency_row = dict(zip(header, next_row(sheet, row)))
+					pro_agency = ProAgency.objects.create(
+						patron=patron,
+						name=pro_agency_row["name"],
+						address1=pro_agency_row["address1"],
+						zipcode=str(int(float(pro_agency_row["zipcode"]))),
+						city=pro_agency_row["city"],
+						phone_number=pro_agency_row["phone"]
+					)
+					print pro_agency
+				except Exception,e:
+					print e
+					break
+				else:
+					break
 
 			

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from datetime import datetime, timedelta
 from operator import itemgetter
 
@@ -12,6 +13,7 @@ from django.conf import settings
 from rest_framework.test import APITestCase, APITransactionTestCase
 
 from rent.choices import COMMENT_TYPE_CHOICES
+
 
 def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
@@ -54,7 +56,7 @@ class BookingTest(APITransactionTestCase):
     reset_sequences = True
     fixtures = [
         'patron', 'booking_address', 'category', 'product', 'price', 'booking_api2', 'comment',
-        'booking_creditcard', 'fake_payments'
+        'booking_creditcard', 'fake_payments', 'phone_api2', 'booking_shipping_api2',
     ]
 
     def setUp(self):
@@ -66,7 +68,7 @@ class BookingTest(APITransactionTestCase):
         self.assertEquals(response.status_code, 200, response.data)
         # check pagination data format in the response
         expected = {
-            'count': 14,
+            'count': 15,
             'previous': None,
         }
         self.assertDictContainsSubset(expected, response.data)
@@ -145,7 +147,7 @@ class BookingTest(APITransactionTestCase):
 
     def test_booking_cancel_not_mine(self):
         response = self.client.put(_location('booking-cancel', '349ce9ba628abfdfc9cb3a72608dab68'))
-        self.assertEqual(response.status_code, 404, response.data)
+        self.assertEqual(response.status_code, 403, response.data)
 
     def test_booking_pay_not_mine(self):
         response = self.client.put(_location('booking-pay', '349ce9ba628abfdfc9cb3a72608dab68'), {
@@ -154,7 +156,7 @@ class BookingTest(APITransactionTestCase):
             'card_number': '4987654321098769',
             'cvv': '123',
         })
-        self.assertEqual(response.status_code, 404, response.data)
+        self.assertEqual(response.status_code, 403, response.data)
 
     def test_booking_pay_new_card(self):
         response = self.client.put(_location('booking-pay', '87ee8e9dec1d47c29ebb27e09bdada43'), {
@@ -183,6 +185,17 @@ class BookingTest(APITransactionTestCase):
         response = self.client.put(_location('booking-accept', '87ee8e9dec1d47c29ebb27e09bda89df'))
         self.assertEqual(response.status_code, 200, response.data)
         self.assertEqual(response.data['detail'], _(u'Transition performed'))
+
+    def test_booking_with_shipping_accept(self):
+        self.client.login(username='lin.liu_rent@e-loue.com', password='lin')
+
+        response = self.client.put(_location('booking-accept', '87ee8e9dec1d47c29ebb27e09bda89aa'))
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertEqual(response.data['detail'], _(u'Transition performed'))
+
+        shipping_model = get_model('shipping', 'Shipping')
+        shipping = shipping_model.objects.filter(booking='87ee8e9dec1d47c29ebb27e09bda89aa')
+        self.assertTrue(shipping.exists())
 
     def test_booking_accept_borrower(self):
         response = self.client.put(_location('booking-accept', '87ee8e9dec1d47c29ebb27e09bda89df'))
