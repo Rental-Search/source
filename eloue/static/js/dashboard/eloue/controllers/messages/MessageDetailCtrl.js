@@ -44,7 +44,9 @@ define([
                 $scope.currentuser = results.currentUser;
                 if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
                     $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
-                    ProductRelatedMessagesService.markAsRead($scope.messageThread.last_message.id);
+                    ProductRelatedMessagesService.markAsRead($scope.messageThread.last_message.id).then(function() {
+                        $scope.updateStatistics();
+                    });
                 }
 
                 if ($scope.messageThread.product) {

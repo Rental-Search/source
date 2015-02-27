@@ -19,8 +19,10 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
 from django.contrib.sites.managers import CurrentSiteManager
 from django.contrib.sites.models import Site
+from django.db import connection
 from django.db.models import permalink, Q, Avg, Count
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, class_prepared
+from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
@@ -63,6 +65,21 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 DEFAULT_CURRENCY = get_format('CURRENCY', lang=settings.LANGUAGE_CODE) if not settings.CONVERT_XPF else "XPF"
 
 ALERT_RADIUS = getattr(settings, 'ALERT_RADIUS', 200)
+
+
+@receiver(class_prepared,
+    dispatch_uid='products_product_setup_postgres_intarray_class_prepared')
+def setup_postgres_intarray(sender, **kwargs):
+    """
+    Always create PostgreSQL intarray extension if it doesn't already exist
+    on the database after model Product has been prepared.
+    Requires PostgreSQL 9.1 or newer.
+    """
+    if sender.__name__ == 'Product':
+        cursor = connection.cursor()
+        cursor.execute("CREATE EXTENSION IF NOT EXISTS intarray")
+        class_prepared.disconnect(dispatch_uid='products_product_setup_postgres_intarray_class_prepared')
+
 
 class Product(models.Model):
     """A product"""
@@ -322,12 +339,20 @@ class Product(models.Model):
     def is_top(self):
         return bool(self.producttopposition_set.filter(ended_at__isnull=True).only('id')[:1])
 
+
     def calculate_price(self, started_at, ended_at):
+        # It doesn't play well with season
         prices = {price.unit: price.day_amount for price in self.prices.all()}
         if not prices:
             return None, None
 
-        amount, unit = D(0), prove_price_unit(prices, started_at, ended_at)
+        try:
+            amount, unit = D(0), prove_price_unit(prices, started_at, ended_at)
+        except Exception, e:
+            raise Exception(
+                    u'{0} Product: {1}, prices: {2}, started_at: {3}, ended_at: {4}'.
+                    format(str(e), self.id, prices, started_at, ended_at))
+
         package = UNIT.package[unit]
         delta = ended_at - started_at
 
