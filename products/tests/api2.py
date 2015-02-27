@@ -365,7 +365,7 @@ class MessageThreadTest(APITestCase):
         response = self.client.get(_location('messagethread-seen', pk=1))
         self.assertEquals(response.status_code, 200, response.data)
         expected = {
-            'seen': True
+            'seen': False
         }
         self.assertDictContainsSubset(expected, response.data)
 
