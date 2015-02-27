@@ -1,6 +1,6 @@
 -load i18n humanize
 
-div.col-md-9
+div
   h3
     if form.cleaned_data.q
       {% blocktrans with count=paginator.count|intcomma count counter=paginator.count %}
