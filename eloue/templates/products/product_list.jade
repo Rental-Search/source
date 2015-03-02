@@ -40,8 +40,10 @@ block append content-body
       //- we shall calculate pagination for both the article head and the list below
       {% pagination %}
       form#detail-search(action="{% facet_url breadcrumbs -'page' %}")
-        .row.article-head.indent-t-md.product-list-header
+        .row.indent-t-md.product-list-header
           include ../jade/_product_list_article_head
+        if breadcrumbs.categorie.object.header
+            .article-head.indent-t-md.category-description {{ breadcrumbs.categorie.object.header|safe }}
         .row
           aside.col-xs-3
             include ../jade/_product_list_aside

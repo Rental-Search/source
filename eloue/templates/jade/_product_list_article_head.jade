@@ -1,20 +1,16 @@
 -load i18n humanize
 
-div
-  h3
-    if form.cleaned_data.q
-      {% blocktrans with count=paginator.count|intcomma count counter=paginator.count %}
-      | 1 annonce correspondant à vos critères
-      {% plural %}
-      | {{ count }} annonces correspondant à vos critères
-      {% endblocktrans%}
-  if breadcrumbs.categorie.pretty_value
-    h3
-      |Location
-      {{ breadcrumbs.categorie.pretty_value|safe }}
-  if breadcrumbs.categorie.object.header
-    .category-description {{ breadcrumbs.categorie.object.footer|safe }}
-.layout-switcher.sort-menu
+h3.col-md-7
+  if form.cleaned_data.q
+    {% blocktrans with count=paginator.count|intcomma count counter=paginator.count %}
+    | 1 annonce correspondant à vos critères
+    {% plural %}
+    | {{ count }} annonces correspondant à vos critères
+    {% endblocktrans%}
+  else breadcrumbs.categorie.pretty_value
+    |Location
+    {{ breadcrumbs.categorie.pretty_value|safe }}
+.col-xs-5.layout-switcher
   i.flaticon.stroke.menu-list-4.list
   i.flaticon.stroke.window-1.grid
   .clear-selector: select#sort-selector.form-control(name="sort", form="detail-search")
