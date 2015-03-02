@@ -339,12 +339,20 @@ class Product(models.Model):
     def is_top(self):
         return bool(self.producttopposition_set.filter(ended_at__isnull=True).only('id')[:1])
 
+
     def calculate_price(self, started_at, ended_at):
+        # It doesn't play well with season
         prices = {price.unit: price.day_amount for price in self.prices.all()}
         if not prices:
             return None, None
 
-        amount, unit = D(0), prove_price_unit(prices, started_at, ended_at)
+        try:
+            amount, unit = D(0), prove_price_unit(prices, started_at, ended_at)
+        except Exception, e:
+            raise Exception(
+                    u'{0} Product: {1}, prices: {2}, started_at: {3}, ended_at: {4}'.
+                    format(str(e), self.id, prices, started_at, ended_at))
+
         package = UNIT.package[unit]
         delta = ended_at - started_at
 
