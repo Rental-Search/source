@@ -719,10 +719,14 @@ define([
             };
 
             $scope.applyMessageThread = function (result) {
-                angular.forEach(result, function (value) {
-                    $scope.threadId = UtilsService.getIdFromUrl(value.thread);
-                });
-                $scope.productRelatedMessages = result;
+                if (result.threads.results.length > 0) {
+                    $scope.threadId = result.threads.results[0].id;
+                    $scope.hasNextPage = result.messages.next;
+                    var recipient = result.threads.results[0].recipient;
+                    var messages = result.messages.results;
+                    UtilsService.updateMessagesSender(messages, recipient, $scope.currentUser);
+                    $scope.productRelatedMessages = messages;
+                }
             };
 
             $scope.applyDatePicker = function (fieldId) {

@@ -7,7 +7,9 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
         var config,
             data,
             fetch,
-            args;
+            args,
+            showLoadingEventName,
+            hideLoadingEventName;
         return {
 
             configure: function (options) {
@@ -15,15 +17,17 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 data = config.data;
                 fetch = config.fetchData;
                 args = config.args;
+                showLoadingEventName = config.showLoadingEventName;
+                hideLoadingEventName = config.hideLoadingEventName;
             },
 
             getData: function () {
                 var deferred = $q.defer();
-                $rootScope.$broadcast("showLoading");
+                $rootScope.$broadcast(showLoadingEventName);
 
                 fetch.apply(null, args).then(function (res) {
                     deferred.resolve(res);
-                    $rootScope.$broadcast("hideLoading");
+                    $rootScope.$broadcast(hideLoadingEventName);
                 }, function(error) {
                     deferred.reject(error);
                 });
@@ -34,7 +38,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             load: function () {
                 var deferred = $q.defer();
 
-                $rootScope.$broadcast("showLoading");
+                $rootScope.$broadcast(showLoadingEventName);
 
                 this.getData().then(function (col) {
                     deferred.resolve(col);

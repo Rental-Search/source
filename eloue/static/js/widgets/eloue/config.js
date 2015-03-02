@@ -21,6 +21,7 @@ define(["eloue/app",
         "../../common/eloue/directives/PasswordMatch",
         "../../common/eloue/directives/RegistrationForm",
         "../../common/eloue/directives/ResetPasswordForm",
+        "../../common/eloue/directives/ScrollBottom",
         "../../common/eloue/directives/ZipcodeValidator",
         "../../common/eloue/interceptors/ErrorHandlerInterceptor"],
     function (EloueApp) {

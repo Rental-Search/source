@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from operator import itemgetter
 import os.path
 import base64
 from datetime import date
@@ -356,6 +355,21 @@ class MessageThreadTest(APITestCase):
         # check that 'sender' has been overwritten in the back-end to refer to authenticated user
         self.assertEqual(response.data['sender']['id'], 1)
 
+    def test_messagethread_check_seen(self):
+        response = self.client.get(_location('messagethread-list'), pk=1)
+        self.assertEquals(response.status_code, 200, response.data)
+        self.assertIn('results', response.data)
+        self.assertFalse(response.data['results'][0]['seen'])
+
+    def test_messagethread_check_seen_only(self):
+        response = self.client.get(_location('messagethread-seen', pk=1))
+        self.assertEquals(response.status_code, 200, response.data)
+        expected = {
+            'seen': False
+        }
+        self.assertDictContainsSubset(expected, response.data)
+
+
 class MessageTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'messagethread', 'message']
 
@@ -416,6 +430,74 @@ class MessageTest(APITestCase):
         # check that 'sender' has been overwritten in the back-end to refer to authenticated user
         self.assertTrue(response.data['sender'].endswith(_location('patron-detail', pk=1)), response.data)
 
+    def test_message_read_at(self):
+        response = self.client.post(_location('messagethread-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=2),
+             'subject': 'Test message thread (offer)',
+             'product': _location('product-detail', pk=5),
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+
+        # check that 'sender' has been set in the back-end to refer to authenticated user
+        self.assertEqual(response.data['sender']['id'], 1)
+
+        thread_id = response.data['id']
+
+        response = self.client.post(_location('productrelatedmessage-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=2),
+             'thread': _location('messagethread-detail', pk=thread_id),
+             'subject': 'Test message (offer)',
+             'body': 'Please consider my offer.',
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+        message_id = response.data['id']
+
+        # check 'read_at' has been set
+        self.client.logout()
+        self.client.login(username='timothee.peignier@e-loue.com', password='timothee')
+
+        response = self.client.put(_location('productrelatedmessage-seen'), {
+            'id': message_id
+        })
+        self.assertEquals(response.status_code, 204, response.data)
+
+        # create answer
+        response = self.client.post(_location('productrelatedmessage-list'), {
+             #'sender': _location('patron-detail', pk=1),
+             'recipient': _location('patron-detail', pk=1),
+             'thread': _location('messagethread-detail', pk=thread_id),
+             'subject': 'Test answer',
+             'body': 'Check reat at time',
+        })
+        # check HTTP response code must be 201 CREATED
+        self.assertEquals(response.status_code, 201, response.data)
+        message_id = response.data['id']
+
+        self.client.logout()
+        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
+
+        response = self.client.put(_location('productrelatedmessage-seen'), {
+            'id': message_id
+        })
+        self.assertEquals(response.status_code, 204, response.data)
+
+
+    def test_bunch_messages_as_read(self):
+        response = self.client.put(_location('productrelatedmessage-seen'), {
+            'messages': [1, 2],
+        })
+        self.assertEquals(response.status_code, 204, response.data)
+        self.model = get_model('products', 'ProductRelatedMessage')
+        self.assertEquals(self.model.objects.filter(pk=2,
+            read_at__isnull=False).count(), 1)
+        self.assertEquals(self.model.objects.filter(pk=1,
+            read_at__isnull=True).count(), 1)
+
+
 class MessageThreadMessageTest(APITestCase):
     fixtures = ['patron', 'address', 'category', 'product', 'messagethread', 'message', 'booking']
 
@@ -465,59 +547,6 @@ class MessageThreadMessageTest(APITestCase):
         self.assertEqual(response.data['last_message']['id'], message_id)
         if 'last_offer' in response.data:
             self.assertTrue(str(response.data['last_offer']).endswith(_location('productrelatedmessage-detail', pk=message_id)), response.data)
-
-    def test_message_read_at(self):
-        response = self.client.post(_location('messagethread-list'), {
-             #'sender': _location('patron-detail', pk=1),
-             'recipient': _location('patron-detail', pk=2),
-             'subject': 'Test message thread (offer)',
-             'product': _location('product-detail', pk=5),
-        })
-        # check HTTP response code must be 201 CREATED
-        self.assertEquals(response.status_code, 201, response.data)
-
-        # check that 'sender' has been set in the back-end to refer to authenticated user
-        self.assertEqual(response.data['sender']['id'], 1)
-
-        thread_id = response.data['id']
-
-        response = self.client.post(_location('productrelatedmessage-list'), {
-             #'sender': _location('patron-detail', pk=1),
-             'recipient': _location('patron-detail', pk=2),
-             'thread': _location('messagethread-detail', pk=thread_id),
-             'subject': 'Test message (offer)',
-             'body': 'Please consider my offer.',
-        })
-        # check HTTP response code must be 201 CREATED
-        self.assertEquals(response.status_code, 201, response.data)
-        message_id = response.data['id']
-
-        # check 'read_at' has been set
-        self.client.logout()
-        self.client.login(username='timothee.peignier@e-loue.com', password='timothee')
-
-        response = self.client.get(_location(
-            'productrelatedmessage-seen', pk=message_id))
-        self.assertEquals(response.status_code, 204, response.data)
-
-        # create answer
-        response = self.client.post(_location('productrelatedmessage-list'), {
-             #'sender': _location('patron-detail', pk=1),
-             'recipient': _location('patron-detail', pk=1),
-             'thread': _location('messagethread-detail', pk=thread_id),
-             'subject': 'Test answer',
-             'body': 'Check reat at time',
-        })
-        # check HTTP response code must be 201 CREATED
-        self.assertEquals(response.status_code, 201, response.data)
-        message_id = response.data['id']
-
-        self.client.logout()
-        self.client.login(username='alexandre.woog@e-loue.com', password='alexandre')
-
-        response = self.client.get(_location(
-            'productrelatedmessage-seen', pk=message_id))
-        self.assertEquals(response.status_code, 204, response.data)
 
 
 class AnonymousProductTest(APITestCase):
@@ -899,6 +928,11 @@ class ProductTest(APITestCase):
         response = self.client.get(_location('product-list'), {'q': 'Philips'})
         self.assertEquals(response.status_code, 200, response.data)
         #self.assertGreater(response.data['count'], 0)
+
+    def test_filter_q_and_ordering(self):
+        response = self.client.get(_location('product-list'), {
+            'q': 'Philips', 'ordering': '-average_rate'})
+        self.assertEquals(response.status_code, 200, response.data)
 
     def test_homepage_allowed(self):
         response = self.client.get(_location('product-homepage'))

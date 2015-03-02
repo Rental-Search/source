@@ -19,6 +19,16 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
                 return ProductRelatedMessages.get({id: id, _cache: new Date().getTime()}).$promise;
             };
 
+            /**
+             * Get thread messages as list of messages for specified page.
+             * @param threadId messages thread id.
+             * @param page page to load.
+             * @returns $promise representing specified page messages.
+             */
+            productRelatedMessagesService.getThreadMessages = function(threadId, page) {
+                return ProductRelatedMessages.get({thread: threadId, _cache: new Date().getTime(), ordering: '-sent_at', page: page}).$promise;
+            };
+
             productRelatedMessagesService.getMessageListItem = function (messageId) {
                 var deferred = $q.defer();
 
@@ -73,6 +83,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources",
 
             productRelatedMessagesService.markAsRead = function (messageId) {
                 return ProductRelatedMessages.seen({id: messageId}, {id: messageId}).$promise;
+            };
+
+            productRelatedMessagesService.markBunchAsRead = function(messages) {
+                return ProductRelatedMessages.seenBunch({messages: messages}).$promise;
             };
 
             productRelatedMessagesService.parseMessage = function (messageData, senderData) {

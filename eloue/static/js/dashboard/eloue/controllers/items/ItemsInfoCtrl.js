@@ -113,20 +113,25 @@ define([
             $scope.applyProductDetails = function (product) {
                 $scope.markListItemAsSelected("item-", $stateParams.id);
                 $scope.markListItemAsSelected("item-tab-", "info");
+                // Backend may send this fiels as string. It's wrong. The value
+                // must be a number value.
+                if (product && product.costs_per_km) {
+                    product.costs_per_km = parseFloat(product.costs_per_km);
+                }
                 $scope.product = product;
                 var initialCategoryId = product.category.id;
                 CategoriesService.getParentCategory(product.category).then(function (nodeCategory) {
                     if (!nodeCategory.parent) {
                         $scope.nodeCategory = initialCategoryId;
                         $scope.rootCategory = nodeCategory.id;
-                        $scope.updateNodeCategories();
+                        $scope.updateNodeCategories(false);
                         $scope.updateFieldSet(nodeCategory);
                     } else {
                         $scope.nodeCategory = nodeCategory.id;
-                        $scope.updateLeafCategories();
+                        $scope.updateLeafCategories(false);
                         CategoriesService.getParentCategory(nodeCategory).then(function (rootCategory) {
                             $scope.rootCategory = rootCategory.id;
-                            $scope.updateNodeCategories();
+                            $scope.updateNodeCategories(false);
                             $scope.updateFieldSet(rootCategory);
                         });
                     }
@@ -134,6 +139,9 @@ define([
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.category.id + "/";
                 $scope.product.addressDetails = $scope.product.address;
                 $scope.product.phoneDetails = $scope.product.phone;
+                if ($scope.product.first_registration_date) {
+                    $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy/MM/dd");
+                }
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
             };
@@ -170,6 +178,9 @@ define([
                 }
                 if ($scope.isAuto || $scope.isRealEstate) {
                     $scope.product.category = $scope.categoriesBaseUrl + $scope.nodeCategory + "/";
+                    if ($scope.product.first_registration_date) {
+                        $scope.product.first_registration_date = Date.parse($scope.product.first_registration_date).toString("yyyy-MM-dd");
+                    }
                 }
                 var promises = [];
                 promises.push(AddressesService.update($scope.product.addressDetails));
@@ -179,11 +190,21 @@ define([
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_info", "save", true);
                 }, function (error) {
-                    $scope.handleResponseErrors(error, "item_info", "save");
+                    // Special error which not allow to change some categories.
+                    if (error.code == "10199") {
+                        $scope.submitInProgress = false;
+                        $scope.showNotificationMessage(error.description[0], false);
+                    }
+                    else {
+                        $scope.handleResponseErrors(error, "item_info", "save");
+                    }
                 });
             };
 
-            $scope.updateNodeCategories = function () {
+            $scope.updateNodeCategories = function (reset) {
+                if (reset) {
+                    $scope.nodeCategory = undefined;
+                }
                 CategoriesService.getChildCategories($scope.rootCategory).then(function (categories) {
                     $scope.nodeCategories = categories;
                 });
@@ -192,7 +213,10 @@ define([
                 });
             };
 
-            $scope.updateLeafCategories = function () {
+            $scope.updateLeafCategories = function (reset) {
+                if (reset) {
+                    $scope.product.category = undefined;
+                }
                 CategoriesService.getChildCategories($scope.nodeCategory).then(function (categories) {
                     $scope.leafCategories = categories;
                 });

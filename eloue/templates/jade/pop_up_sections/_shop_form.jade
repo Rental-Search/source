@@ -7,6 +7,8 @@ p Nos boutiques sont situées au&nbsp;:
 for agency in patron.pro_agencies.all
   .indent-t-sm.text-white.btn-lg.bg-primary: b
     i.flaticon.stroke.up-2.icon-2x.pull-right.collapsed(data-toggle="collapse", data-target="#map-{{ forloop.counter }}")
+    | {{ agency.name }}
+    br
     | {{ agency.address1 }}
     br
     | {{ agency.zipcode }} {{ agency.city|upper }}
