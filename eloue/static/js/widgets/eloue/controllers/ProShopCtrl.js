@@ -12,8 +12,9 @@ define([
         '$document',
         'MapsService',
         'UtilsService',
-        function ($scope, $window, $document, MapsService, UtilsService) {
-            var map, latLngsArr = [], addHovered = false;
+        'GoogleMapsMarkers',
+        function ($scope, $window, $document, MapsService, UtilsService, GoogleMapsMarkers) {
+            var map, latLngsArr = [], addHovered = false, mapMarker = GoogleMapsMarkers;
 
             // On modal shown.
             $('#pro-popin-shop').on('shown.bs.modal', function () {
@@ -29,50 +30,47 @@ define([
 
             $window.googleMapsLoaded = function () {
 
-                // Load marker with label helper.
-                $.getScript("/static/js/widgets/../markerwithlabel.js", function() {
-                    var mapCanvas = $document[0].getElementById('map-canvas'),
-                        mapOptions, agencies;
+                var mapCanvas = $document[0].getElementById('map-canvas'),
+                    mapOptions, agencies;
 
-                    if (!mapCanvas) {
-                        return;
-                    }
+                if (!mapCanvas) {
+                    return;
+                }
 
-                    // Init the map.
-                    mapOptions = {
-                        zoom: 5,
-                        disableDefaultUI: true,
-                        zoomControl: true,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
+                // Init the map.
+                mapOptions = {
+                    zoom: 5,
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
 
-                    map = new google.maps.Map(mapCanvas, mapOptions);
+                map = new google.maps.Map(mapCanvas, mapOptions);
 
-                    // Init custom scrollbar.
-                    UtilsService.initCustomScrollbars();
-                    $($window).trigger('resize');
+                // Init custom scrollbar.
+                UtilsService.initCustomScrollbars();
+                $($window).trigger('resize');
 
-                    // Create markers.
-                    agencies = [];
-                    $("li[id^='marker-']").each(function () {
-                        var item = $(this),
-                            agency = {
-                                title: item.attr('name'),
-                                lat: item.attr('locationX'),
-                                lng: item.attr('locationY'),
-                                zIndex: Number(item.attr('id').replace('marker-', ''))
-                            };
-                        agencies.push(agency);
-                    });
-
-                    $scope.setMarkers(map, agencies, 'li#marker-');
-
-                    // Need to called to prevent wrong map drawing inside modal.
-                    google.maps.event.trigger(map, 'resize');
-
-                    // Center map.
-                    MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16});
+                // Create markers.
+                agencies = [];
+                $("li[id^='marker-']").each(function () {
+                    var item = $(this),
+                        agency = {
+                            title: item.attr('name'),
+                            lat: item.attr('locationX'),
+                            lng: item.attr('locationY'),
+                            zIndex: Number(item.attr('id').replace('marker-', ''))
+                        };
+                    agencies.push(agency);
                 });
+
+                $scope.setMarkers(map, agencies, 'li#marker-');
+
+                // Need to called to prevent wrong map drawing inside modal.
+                google.maps.event.trigger(map, 'resize');
+
+                // Center map.
+                MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16});
             };
 
             $scope.setMarkers = function (map, locations, markerId) {
@@ -85,40 +83,36 @@ define([
                     }
                 }
 
+                var svgTemplate = mapMarker.template;
+
                 for (j = 0; j < locations.length; j += 1) {
                     agency = locations[j];
                     if (!agency.lat || !agency.lng) {
                         continue;
                     }
+
                     if (markerId === 'li#marker-') {
-                        var markerImagePath = j + 1 < 10 ? 'marker_smooth_aligned.png' : 'marker_large_smooth_aligned.png';
-                        var markerHoverImagePath = j + 1 < 10 ? 'marker_smooth_aligned_selected.png' : 'marker_large_smooth_aligned_selected.png';
-
-                        image = new google.maps.MarkerImage(staticUrl + 'images/' + markerImagePath);
-
-                        imageHover = new google.maps.MarkerImage(staticUrl + 'images/' + markerHoverImagePath);
+                        // Create svg marker according to label number (for values 10 and greater wide marker is used).
+                        image = $scope.createMarker(svgTemplate, mapMarker.unselected, mapMarker.unselectedLarge, j);
+                        imageHover = $scope.createMarker(svgTemplate, mapMarker.selected, mapMarker.selectedLarge, j);
                     }
                     myLatLng = new google.maps.LatLng(agency.lat, agency.lng);
 
                     // Store markers.
                     latLngsArr.push(myLatLng);
 
-                    marker = new MarkerWithLabel({
+                    marker = new google.maps.Marker({
                         position: myLatLng,
                         map: map,
                         draggable: false,
                         raiseOnDrag: false,
-                        labelContent: "" + (j + 1), // Set label.
-                        labelAnchor: new google.maps.Point(10, 23),
-                        labelClass: "marker", // The CSS class for the label.
-                        labelInBackground: false,
                         title: agency.title,
                         zIndex: agency.zIndex,
                         icon: image
                     });
                     marker.set('myZIndex', marker.getZIndex());
 
-                    // Add listeners.
+                    //Add listeners.
                     google.maps.event.addListener(marker, 'mouseover', $scope.mouseOverListenerGenerator(imageHover, marker, markerId));
                     google.maps.event.addListener(marker, 'click', $scope.mouseClickListenerGenerator(marker, markerId));
                     google.maps.event.addListener(marker, 'mouseout', $scope.mouseOutListenerGenerator(image, marker, markerId));
@@ -126,7 +120,12 @@ define([
                     $(markerId + marker.get('myZIndex')).mouseover($scope.triggerMouseOverGenerator(marker));
                     $(markerId + marker.get('myZIndex')).mouseout($scope.triggerMouseOutGenerator(marker));
                 }
+            };
 
+            $scope.createMarker = function(svgTemplate, marker, wideMarker, index) {
+                var markerSvg = index + 1 < 10 ? svgTemplate.replace('{{mapMarker}}', marker) : svgTemplate.replace('{{mapMarker}}', wideMarker);
+                markerSvg = markerSvg.replace("{{markerLabel}}", "" + (index + 1));
+                return {url: URL.createObjectURL(new Blob([markerSvg], {type: 'image/svg+xml'})), anchor: new google.maps.Point(13, 27)};
             };
 
             $scope.mouseOverListenerGenerator = function (imageHover, marker, markerId) {
@@ -158,6 +157,7 @@ define([
                     // Prevent list item highlighting on item hover.
                     addHovered = false;
 
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
                     google.maps.event.trigger(marker, 'mouseover');
                 };
             };
