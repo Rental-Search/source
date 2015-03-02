@@ -28,47 +28,51 @@ define([
 
 
             $window.googleMapsLoaded = function () {
-                var mapCanvas = $document[0].getElementById('map-canvas'),
-                    mapOptions, agencies;
 
-                if (!mapCanvas) {
-                    return;
-                }
+                // Load marker with label helper.
+                $.getScript("/static/js/widgets/../markerwithlabel.js", function() {
+                    var mapCanvas = $document[0].getElementById('map-canvas'),
+                        mapOptions, agencies;
 
-                // Init the map.
-                mapOptions = {
-                    zoom: 5,
-                    disableDefaultUI: true,
-                    zoomControl: true,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
+                    if (!mapCanvas) {
+                        return;
+                    }
 
-                map = new google.maps.Map(mapCanvas, mapOptions);
+                    // Init the map.
+                    mapOptions = {
+                        zoom: 5,
+                        disableDefaultUI: true,
+                        zoomControl: true,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
 
-                // Init custom scrollbar.
-                UtilsService.initCustomScrollbars();
-                $($window).trigger('resize');
+                    map = new google.maps.Map(mapCanvas, mapOptions);
 
-                // Create markers.
-                agencies = [];
-                $("li[id^='marker-']").each(function () {
-                    var item = $(this),
-                        agency = {
-                            title: item.attr('name'),
-                            lat: item.attr('locationX'),
-                            lng: item.attr('locationY'),
-                            zIndex: Number(item.attr('id').replace('marker-', ''))
-                        };
-                    agencies.push(agency);
+                    // Init custom scrollbar.
+                    UtilsService.initCustomScrollbars();
+                    $($window).trigger('resize');
+
+                    // Create markers.
+                    agencies = [];
+                    $("li[id^='marker-']").each(function () {
+                        var item = $(this),
+                            agency = {
+                                title: item.attr('name'),
+                                lat: item.attr('locationX'),
+                                lng: item.attr('locationY'),
+                                zIndex: Number(item.attr('id').replace('marker-', ''))
+                            };
+                        agencies.push(agency);
+                    });
+
+                    $scope.setMarkers(map, agencies, 'li#marker-');
+
+                    // Need to called to prevent wrong map drawing inside modal.
+                    google.maps.event.trigger(map, 'resize');
+
+                    // Center map.
+                    MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16});
                 });
-
-                $scope.setMarkers(map, agencies, 'li#marker-');
-
-                // Need to called to prevent wrong map drawing inside modal.
-                google.maps.event.trigger(map, 'resize');
-
-                // Center map.
-                MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16});
             };
 
             $scope.setMarkers = function (map, locations, markerId) {
@@ -87,24 +91,27 @@ define([
                         continue;
                     }
                     if (markerId === 'li#marker-') {
-                        image = new google.maps.MarkerImage(staticUrl + 'images/markers_smooth_aligned.png',
-                            new google.maps.Size(26, 28),
-                            new google.maps.Point(0, 28 * j),
-                            new google.maps.Point(14, 28));
+                        var markerImagePath = j + 1 < 10 ? 'marker_smooth_aligned.png' : 'marker_large_smooth_aligned.png';
+                        var markerHoverImagePath = j + 1 < 10 ? 'marker_smooth_aligned_selected.png' : 'marker_large_smooth_aligned_selected.png';
 
-                        imageHover = new google.maps.MarkerImage(staticUrl + 'images/markers_smooth_aligned.png',
-                            new google.maps.Size(26, 28),
-                            new google.maps.Point(29, 28 * j),
-                            new google.maps.Point(14, 28));
+                        image = new google.maps.MarkerImage(staticUrl + 'images/' + markerImagePath);
+
+                        imageHover = new google.maps.MarkerImage(staticUrl + 'images/' + markerHoverImagePath);
                     }
                     myLatLng = new google.maps.LatLng(agency.lat, agency.lng);
 
                     // Store markers.
                     latLngsArr.push(myLatLng);
 
-                    marker = new google.maps.Marker({
+                    marker = new MarkerWithLabel({
                         position: myLatLng,
                         map: map,
+                        draggable: false,
+                        raiseOnDrag: false,
+                        labelContent: "" + (j + 1), // Set label.
+                        labelAnchor: new google.maps.Point(10, 23),
+                        labelClass: "marker", // The CSS class for the label.
+                        labelInBackground: false,
                         title: agency.title,
                         zIndex: agency.zIndex,
                         icon: image
@@ -151,7 +158,6 @@ define([
                     // Prevent list item highlighting on item hover.
                     addHovered = false;
 
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
                     google.maps.event.trigger(marker, 'mouseover');
                 };
             };
