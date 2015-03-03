@@ -10,14 +10,13 @@ class Migration(DataMigration):
         from django.core.management import call_command
         call_command("loaddata", "autovoisin.json")
 
-        eloue_siteid = 1
+        eloue_site_id = 1
         autovoisin_site_id = 14
         site = orm['sites.Site'].objects.get(pk=autovoisin_site_id)
-        for user in orm.Patron.objects.filter(sites__id=eloue_siteid):
+        for user in orm.Patron.objects.filter(sites__id=eloue_site_id):
             user.sites.add(site)
 
     def backwards(self, orm):
-        "Write your backwards methods here."
         autovoisin_site_id = 14
         site = orm['sites.Site'].objects.get(pk=autovoisin_site_id)
         for user in orm.Patron.objects.filter(sites__id=autovoisin_site_id):
