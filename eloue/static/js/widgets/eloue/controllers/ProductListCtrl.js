@@ -57,6 +57,12 @@ define([
                         }
                     );
 
+                    // Submit form on location change.
+                    var autocomplete = new google.maps.places.Autocomplete($document[0].getElementById('where'));
+                    google.maps.event.addListener(autocomplete, "place_changed", function() {
+                        $scope.submitForm();
+                    });
+
                     rangeSlider = $("#range-slider");
                     if (rangeSlider) {
                         rangeInput = rangeEl;
@@ -91,6 +97,10 @@ define([
                                     setTimeout(function () {
                                         notUpdateByMap = false;
                                     }, 1000);
+                                },
+                                // On mouse up submit form.
+                                callback: function() {
+                                    $scope.submitForm();
                                 }
                             });
 
@@ -168,6 +178,10 @@ define([
                         }
                     });
                 }
+                // Submit form on category change.
+                categorySelection.change(function(){
+                    detailSearchForm.submit();
+                })
             };
 
             $scope.activatePriceSlider = function () {
@@ -202,6 +216,10 @@ define([
                                 // set new values to hidden inputs
                                 priceMinInput.attr("value", values[0]);
                                 priceMaxInput.attr("value", values[1]);
+                            },
+                            // On mouse up submit form.
+                            callback: function() {
+                                $scope.submitForm();
                             }
                         });
                     }
@@ -300,13 +318,19 @@ define([
                         if (this.checked) {
                             proCheckbox.prop("checked", false);
                         }
+                        $scope.submitForm();
                     });
                 proCheckbox.change(
                     function(){
                         if (this.checked) {
                             particularCheckbox.prop("checked", false);
                         }
+                        $scope.submitForm();
                     });
+            };
+            
+            $scope.submitForm = function() {
+                $("#detail-search").submit();
             };
 
             MapsService.loadGoogleMaps();
