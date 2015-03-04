@@ -34,14 +34,13 @@ block append content-body
 
     main
       {% cache 43200 'homepage_main_static' %}
-      section.download-mobile-apps.framing: include ./jade/_download_mobile_apps
-      section.watch-video: include ./jade/_watch_video
-      section.professional-renter-content.framing: include ./jade/_professional_renter_content
-      section.talk-about-us: include ./jade/_talk_about_us
+      section.watch-video.framing: include ./jade/_watch_video
+      section.professional-renter-content: include ./jade/_professional_renter_content
+      section.talk-about-us.framing: include ./jade/_talk_about_us
       {% endcache %}
 
     footer
       {% cache 43200 'homepage_footer_static' %}
-      section.footer-links.framing: include ./jade/_footer_links
-      section.rss.framing: include ./jade/_rss
+      section.footer-links: include ./jade/_footer_links
+      section.rss.framing.framing: include ./jade/_rss
       {% endcache %}
