@@ -1,0 +1,29 @@
+-load staticfiles
+
+.container
+    .row
+        .col-sm-6
+            .video(data-toggle="modal", data-target="#videoModal")
+                .smoke
+                img(src="{% static 'img/video-screen.jpg' %}")
+                span.btn-play
+        .col-sm-6
+            .description
+                h3
+                    | AutoVoisin c'est simple, efficace
+                    br
+                    | et sécurisé
+                p.lg-ln-height
+                    | Avec e-loue, mettez en location vos biens quand vous ne les utilisez pas&nbsp;: outils, appareils photo, voiture, tondeuse, vidéo-projecteur, poussette... Gagnez de l'argent en toute simplicté et sans aucun risque&nbsp;: nos locations sont assurées et sécurisées !
+                a(href="{% url 'howto' %}").link-success-color en savoir plus
+
+.modal.fade#videoModal(tabindex="-1", role="dialog", aria-hidden="true")
+    .modal-dialog.large
+        .modal-content
+            .modal-header
+                button(type="button", data-dismiss="modal").close
+                    span(aria-hidden="true")&times;
+                    span.sr-only Close
+                h4.modal-title Présentation de e-loue
+            .modal-body
+                #videoContainer
