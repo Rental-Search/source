@@ -1,6 +1,7 @@
 .rss
 	padding: $block-section-pad 0
 	color: lighten($brand-primary, 80%)
+	background: $header__bgc
 	$bor-rad: px(5)
 	p
 		font-weight: $fw-light
@@ -34,7 +35,7 @@
 		+border-bottom-radius($bor-rad !important)
 	.social-btns
 		white-space: nowrap
-		background-color: lighten($brand-primary, 20%)
+		background: $header__divider_section
 		display: inline-block
 		+border-top-radius($bor-rad)
 		+border-bottom-radius($bor-rad)
@@ -51,8 +52,7 @@
 			margin: $mrg
 			background-color: white
 			text-align: center
-			color: $brand-primary
-			color: lighten($brand-primary, 20%)
+			color: $header__bgc
 			&:hover
-				background-color: $brand-primary
+				background-color: $header__bgc
 				color: white
