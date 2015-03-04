@@ -1,7 +1,7 @@
 .header-site
   .framing,
   .divide:before
-    border-color: $header__divider-color
+    border-color: $header__divider_section
   .framing
     background-color: transparent !important
 
@@ -31,6 +31,19 @@
     border-radius: 1em
     font-size: .75em
 
+  .search-form-wrapper
+    position: relative
+
+  .search-form-icon
+    color: $header__text_input
+    font-size: 1.2em
+    position: absolute
+    top: 0
+    line-height: (3/1.2)
+    z-index: 50
+    right: auto
+    left: .5em
+
   .search-form
     font-size: px(14)
     font-weight: $fw-bold
@@ -39,31 +52,25 @@
       padding: 1.5em 2em
     .what-field
       color: $brand-success
-      border-right-width: 0
-      border-color: $gray-medium
-      +placeholder($gray-dark)
+      padding-left: 2.5em
+      border: 1px solid $header__divider_input
+      +placeholder($header__text_input)
     .where-field
-      width: 40%
-      .location-pin-3
-        color: $brand-secondary
-        font-size: 1.2em
-        position: absolute
-        top: 0
-        line-height: (3/1.2)
-        z-index: 50
-        right: auto
-        left: .5em
+      width: 25%
       input
         width: 100%
         padding-left: 2.5em
         border-radius: 0
         color: $gray-dark
-        border-color: $gray-medium $gray-lighter
+        border: 1px solid $header__divider_input
+        border-left: none
         font-weight: $fw-semibold
-        +placeholder($gray-dark)
+        +placeholder($header__text_input)
     .btn-search
-      border-left-width: 0
+      border-color: $header__divider_input
+      // border-left-width: 0
       z-index: 2
+      color: $header__text_input !important
       .zoom-2
         font-size: 1.2em
         line-height: 1.8
