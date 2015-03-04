@@ -14,7 +14,7 @@ define([
         'UtilsService',
         'GoogleMapsMarkers',
         function ($scope, $window, $document, MapsService, UtilsService, GoogleMapsMarkers) {
-            var map, latLngsArr = [], addHovered = false, mapMarker = GoogleMapsMarkers;
+            var map, latLngsArr = [], addHovered = false, mapMarker = GoogleMapsMarkers, markers;
 
             // On modal shown.
             $('#pro-popin-shop').on('shown.bs.modal', function () {
@@ -27,11 +27,10 @@ define([
                 }
             });
 
-
             $window.googleMapsLoaded = function () {
 
                 var mapCanvas = $document[0].getElementById('map-canvas'),
-                    mapOptions, agencies;
+                    mapOptions;
 
                 if (!mapCanvas) {
                     return;
@@ -51,17 +50,27 @@ define([
                 UtilsService.initCustomScrollbars();
                 $($window).trigger('resize');
 
+                $scope.addMarkers();
+            };
+
+            $scope.addMarkers = function() {
                 // Create markers.
-                agencies = [];
-                $("li[id^='marker-']").each(function () {
+                var agencies = [];
+                latLngsArr = [];
+                markers = [];
+                $("li[id^='marker-']").each(function (index) {
                     var item = $(this),
                         agency = {
                             title: item.attr('name'),
                             lat: item.attr('locationX'),
                             lng: item.attr('locationY'),
-                            zIndex: Number(item.attr('id').replace('marker-', ''))
+                            zIndex: Number(item.attr('id').replace('marker-', '')),
+                            markerIndex: index + 1
                         };
-                    agencies.push(agency);
+                    // Add markers only for visible list items.
+                    if (!item.hasClass("ng-hide")) {
+                        agencies.push(agency);
+                    }
                 });
 
                 $scope.setMarkers(map, agencies, 'li#marker-');
@@ -71,6 +80,15 @@ define([
 
                 // Center map.
                 MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16});
+            };
+
+            /**
+             * Delete markers from map.
+             */
+            $scope.deleteMarkers = function() {
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
             };
 
             $scope.setMarkers = function (map, locations, markerId) {
@@ -93,8 +111,8 @@ define([
 
                     if (markerId === 'li#marker-') {
                         // Create svg marker according to label number (for values 10 and greater wide marker is used).
-                        image = $scope.createMarker(svgTemplate, mapMarker.unselected, mapMarker.unselectedLarge, j);
-                        imageHover = $scope.createMarker(svgTemplate, mapMarker.selected, mapMarker.selectedLarge, j);
+                        image = $scope.createMarker(svgTemplate, mapMarker.unselected, mapMarker.unselectedLarge, agency.markerIndex);
+                        imageHover = $scope.createMarker(svgTemplate, mapMarker.selected, mapMarker.selectedLarge, agency.markerIndex);
                     }
                     myLatLng = new google.maps.LatLng(agency.lat, agency.lng);
 
@@ -112,6 +130,8 @@ define([
                     });
                     marker.set('myZIndex', marker.getZIndex());
 
+                    markers.push(marker);
+
                     //Add listeners.
                     google.maps.event.addListener(marker, 'mouseover', $scope.mouseOverListenerGenerator(imageHover, marker, markerId));
                     google.maps.event.addListener(marker, 'click', $scope.mouseClickListenerGenerator(marker, markerId));
@@ -123,8 +143,8 @@ define([
             };
 
             $scope.createMarker = function(svgTemplate, marker, wideMarker, index) {
-                var markerSvg = index + 1 < 10 ? svgTemplate.replace('{{mapMarker}}', marker) : svgTemplate.replace('{{mapMarker}}', wideMarker);
-                markerSvg = markerSvg.replace("{{markerLabel}}", "" + (index + 1));
+                var markerSvg = index < 10 ? svgTemplate.replace('{{mapMarker}}', marker) : svgTemplate.replace('{{mapMarker}}', wideMarker);
+                markerSvg = markerSvg.replace("{{markerLabel}}", "" + (index));
                 return {url: URL.createObjectURL(new Blob([markerSvg], {type: 'image/svg+xml'})), anchor: new google.maps.Point(13, 27)};
             };
 
@@ -177,6 +197,33 @@ define([
                     });
                 };
             };
+
+            // On key up in the search field, filter visible agencies according to city.
+            $("#cityInput").on("keyup", function() {
+                console.log($scope.search);
+                $("li[id^='marker-']").each(function () {
+                    var item = $(this);
+                    if (item.attr('city').trim().startsWith($scope.search.trim(), true)) {
+                        // Show item.
+                        item.removeClass("ng-hide");
+                    }
+                    else {
+                        // Hide item.
+                        item.addClass("ng-hide");
+                    }
+                });
+
+                // Redraw markers on the map.
+                $scope.deleteMarkers();
+                $scope.addMarkers();
+            });
+
+            if (typeof String.prototype.startsWith != 'function') {
+                String.prototype.startsWith = function(str, ignoreCase) {
+                    return (ignoreCase ? this.toUpperCase() : this)
+                            .indexOf(ignoreCase ? str.toUpperCase() : str) == 0;
+                };
+            }
 
             MapsService.loadGoogleMaps();
         }]);

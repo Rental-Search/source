@@ -94,6 +94,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
          * @param conf additional config. minZoom and maxZoom can be set.
          */
         mapsService.centerMap = function (map, latLngs, conf) {
+            // Do not center map if no coordinates provided.
+            if (latLngs.length == 0)
+                return;
+
             var latlngbounds = new google.maps.LatLngBounds();
 
             var config = {
