@@ -1,0 +1,14 @@
+-load facets
+
+.container
+  h3 Les villes les plus attractives
+  .row
+    ul.nav.nav-justified
+      -var cities_list = [[" PARIS", "MARSEILLE", "LYON"], ['TOULOUSE', 'BORDEAUX', 'MONTPELLIER'], ['LILLE', 'NICE', 'NANTES']]
+      each column in cities_list
+        li.divide
+        li: ul.nav
+          each city in column
+            li.item-city
+              .col-sm-8: a(href="{% facet_url breadcrumbs 'l' city 'r' 30 'sort' '-created_at' %}").link-success-color {{ city }}
+              .col-sm-4: span.actives-count 124 124
