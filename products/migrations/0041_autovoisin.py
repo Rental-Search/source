@@ -45,16 +45,6 @@ class Migration(DataMigration):
                 PC.category_id IN %s""",
                 [autovoisin_site_id, eloue_site_id, categories])
 
-        db.execute("""
-                INSERT INTO rent_booking_sites(booking_id, site_id)
-                SELECT BS.booking_id, %s FROM
-                rent_booking_sites AS BS JOIN
-                rent_booking AS B ON (BS.booking_id = B.uuid) JOIN
-                products_product2category AS PC ON (PC.product_id = B.product_id) WHERE
-                BS.site_id = PC.site_id AND BS.site_id = %s
-                AND PC.category_id IN %s""",
-                [autovoisin_site_id, eloue_site_id, categories])
-
         db.commit_transaction()
 
 
@@ -70,9 +60,6 @@ class Migration(DataMigration):
                 [autovoisin_site_id, ])
 
         db.execute("""DELETE FROM products_category_sites WHERE site_id = %s""",
-                [autovoisin_site_id, ])
-
-        db.execute("""DELETE FROM rent_booking_sites WHERE site_id = %s""",
                 [autovoisin_site_id, ])
 
         db.commit_transaction()
