@@ -1,0 +1,573 @@
+body
+  @media (max-width: $screen-xs-max)
+    font-size: 12px
+  @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max)
+    font-size: 13px
+  @media (min-width: $screen-md-min) and (max-width: $screen-md-max)
+    font-size: 14px
+  @media (min-width: $screen-lg-min)
+    font-size: 15px
+
+body
+  background-color: $gray-lite
+  overflow-x: hidden
+
+h1
+  text-transform: uppercase
+  font-size: px(39)
+  font-weight: $fw-light
+  color: rgb(82,82,82)
+  line-height: 1.5
+
+.rss,
+.header-site
+  background-color: black
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0))
+
+.s-eloue
+//  +sprite($s-eloue)
+  display: inline-block
+
+.part.comments .list-group
+  max-height: px(600) !important
+  overflow-y: auto
+
+.btn
+  font-weight: $fw-bold
+  outline: none !important
+  color: white !important
+
+.btn,
+.btn-inline
+  &.loading
+    background-image: url("../img/preloader.GIF")
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: auto 80%
+    color: transparent !important
+
+.bg-image
+  height: 100% !important
+  width: 100% !important
+  display: block
+  background-repeat: no-repeat
+  background-position: center center
+  background-size: cover
+
+.link-success
+  color: $brand-success
+  &:hover
+    color: $brand-success
+    text-decoration: underline
+
+.form-suffix
+  line-height: 3em
+
+select
+  &.disabled,
+  &[disabled],
+  fieldset:disabled &
+    + .chosen-container
+      @include opacity(1)
+      @include box-shadow(none)
+      border-color: $gray-medium !important
+      pointer-events: none
+      .chosen-choices,
+      .chosen-single
+        background-color: $gray-lighter
+
+a[download]
+  &[href $= ".eps"]
+    &::after
+      content: " [EPS]"
+
+  &[href $= ".psd"]
+    &::after
+      content: " [PSD]"
+
+  &[href $= ".png"]
+    &::after
+      content: " [PNG]"
+
+  &[href $= ".oi"]
+    &::after
+      content: " [OI]"
+
+  &[href $= ".svg"]
+    &::after
+      content: " [SVG]"
+
+  &[href $= ".pdf"]
+    &::after
+      content: " [PDF]"
+
+@each $name, $var in "pickup-logo" $s-pickup_logo, "pickup-logo-full" $s-pickup_logo_full, "pickup-logo-short-black" $s-pickup_logo_short_black, "calendar" $s-calendar, "euro" $s-euro
+  .sprite-#{$name}
+    +sprite($var)
+
+[class *= "sprite-"]
+  display: inline-block
+  vertical-align: middle
+
+.ovy-h
+  overflow-y: hidden
+
+.pad-l-xs
+  padding-left: $indent-xs
+
+i[data-toggle="collapse"]
+  cursor: pointer
+  &:before
+    content: "\e5a8" !important
+  &.collapsed:before
+    content: "\e5a9" !important
+
+h2
+  line-height: $line-height-base
+
+.e_loue-mark
+  $width: ($indent-md * 1.5)
+  position: absolute
+  width: $width
+  height: $width
+  border-radius: 50%
+  background-color: $brand-primary
+  left: 0
+  right: 0
+  top: $indent
+  margin: auto
+  &:before
+    content: " "
+    position: absolute
+    border-style: solid
+    border-color: $brand-primary transparent transparent
+    z-index: -1
+    border-width: ($width) ($width * 1/2)
+    top: 60%
+    left: 0
+    right: 0
+
+  &:after
+    content: "e"
+    color: white
+    font-size: 2.5em
+    line-height: 1.25
+    display: block
+    text-align: center
+
+.btn-inline
+  display: inline-block !important
+  width: auto !important
+  padding-left: .5em !important
+  padding-right: .5em !important
+
+textarea
+  &.form-control
+    resize: none
+    height: auto
+  &.expand
+    min-height: 10em
+
+legend
+  border: none
+  margin-bottom: 0
+
+a, a:hover, a:focus
+  color: inherit
+  outline: none
+
+.form-control
+  width: 100% !important
+
+.form-control:focus
+  +box-shadow( 0 0 6px $smoke-lite !important)
+  z-index: 10 !important
+  border-color: $gray-medium
+
+.table-cell
+  display: table-cell !important
+  width: 1%
+  vertical-align: middle
+  &.main-cell
+    width: 100% !important
+  &.top
+    vertical-align: top
+
+.table-row
+  display: table-row
+  height: 1%
+  vertical-align: middle
+  &.main-row
+    height: 100% !important
+  
+.table
+  display: table
+  margin: 0
+
+
+.zebra
+  display: table
+  border-collapse: collapse
+  width: 100%
+  .zebra-row
+    display: table-row
+    border: 1px solid $gray-medium
+    &:nth-of-type(2n - 1)
+      background-color: darken($gray-lite, 3%)
+    &:nth-of-type(2n)
+      background-color: $gray-lite
+
+  .zebra-row-wrapper
+    position: relative
+
+  .zebra-col
+    display: table-cell
+    vertical-align: middle
+    width: 1%
+    padding: $indent-xs ($indent-xs / 2)
+    &.main-cell
+      width: 100%
+  label
+    cursor: pointer
+    p
+      color: $gray-dark
+  input
+    position: absolute
+    z-index: -100
+    + .zebra-row-wrapper .radio-indicator
+      display: inline-block
+      background-color: white
+      margin: 0 $indent-xs
+      text-align: center
+      border: 1px solid $gray-medium
+      border-radius: 50%
+      padding: 0.4em
+      &:before
+        content: " "
+        display: block
+        width: 0.6em
+        height: 0.6em
+        border-radius: inherit
+
+    &:checked + .zebra-row-wrapper
+      background-color: darken($gray-lite, 10%)
+      .radio-indicator:before
+        background-color: $gray-light
+
+
+.without-spaces
+  margin: 0
+  padding: 0
+  display: table
+  white-space: nowrap
+  > li
+    display: table-cell
+    width: 0.1%
+    vertical-align: middle
+
+.spacer,
+.divide
+  min-width: 1%
+  width: 1% !important
+  padding: 0
+  position: relative
+  &:first-child
+    display: none
+
+.divide:before
+  content: " "
+  position: absolute
+  border-left: 1px solid $gray-lighter
+  width: 0
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  margin: auto
+
+
+
+.link-sprite
+  font-size: 0
+  color: transparent
+
+.bg-success
+  +make-bg($brand-success)
+
+.bg-secondary
+  +make-bg($brand-secondary)
+
+.bg-info
+  background-color: $brand-info !important
+
+.bg-danger
+  background-color: $brand-danger !important
+
+.bg-gray
+  background-color: $gray-strong !important
+
+.bg-gray-dark
+  background-color: $gray !important
+
+.text-white
+  color: white
+
+.bd-b
+  border-bottom: px(1) solid $gray-lighter
+
+.framing
+  border: px(1) solid $gray-lighter
+  background-color: white
+  border-width: px(1) 0
+
+.link-success-color
+  color: $brand-success
+  font-weight: 700
+  text-transform: uppercase
+  font-size: 13px
+  letter-spacing: .07em
+  &:hover
+    color: darken($brand-success, 10%)
+
+.normal-case
+  text-transform: none !important
+
+.center-text
+  text-align: center
+
+.breadcrumb
+  background-color: transparent
+  margin: 0
+  font-size: px(13)
+  font-weight: $fw-bold
+  margin: 0
+  padding: 0
+  color: $brand-secondary
+  > li
+    color: inherit
+    & + li:before
+      font-family: "Flaticons Stroke"
+      content: "\e5ab"
+      font-size: 1.2em
+      vertical-align: -10%
+      cursor: pointer
+    a
+      padding: .8em 0
+      display: inline-block
+      color: inherit
+      text-decoration: none
+    &.active,
+    &:hover
+      color: lighten($gray-strong,20%)
+    &:hover ~ li
+      color: $gray-strong
+      &:before
+        color: inherit
+
+.checkbox
+  input
+    margin-left: 0 !important
+    opacity: 0
+    cursor: pointer
+    &:checked + span
+      color: inherit
+  label
+    position: relative
+    border: 1px solid $gray-medium
+    color: $gray-light
+    margin-right: .5em
+    line-height: 1.4em
+    width: 1.5em
+    +border-left-radius(px(4))
+    +border-right-radius(px(4))
+    padding: 0
+    &:hover
+      background-color: $gray-lighter
+    span
+      color: transparent
+
+.fog
+  position: absolute
+  width: 100%
+  height: 100%
+  background-color: white
+  top: 0
+  left: 0
+  +opacity(.2)
+
+.smoke
+  position: absolute
+  width: 100%
+  height: 100%
+  top: 0
+  left: 0
+  background-color: black
+  +opacity(.5)
+
+.rate
+  font-size: px(18)
+  display: inline-block
+  color: $brand-gold
+  cursor: default
+  span
+    display: inline-block
+    padding-right: .25em
+    &.current-rate ~ span
+      color: $gray-lighter
+
+  &.setting span
+    cursor: pointer
+    color: $brand-gold !important
+    &:hover ~ span
+      color: $gray-lighter !important
+
+.text-secondary
+  color: $brand-secondary !important
+.text-success
+  color: $brand-success !important
+.text-blue
+  color: $brand-info
+.text-gray
+  color: $gray-medium !important
+.text-gray-strong
+  color: $gray-strong
+.text-black
+  color: $gray-dark !important
+
+.va-m
+  vertical-align: middle
+
+.badge.price
+  background-color: $brand-secondary
+  letter-spacing: .02em
+  font-weight: $fw-bold
+  $br: 1.5em
+  +border-bottom-radius($br)
+  +border-top-radius($br)
+  padding: .6em 1em
+
+.badge-pro
+  text-transform: uppercase
+  color: white
+  background-color: $gray-strong
+  font-size: px(13)
+  padding-left: .5em
+  padding-right: .5em
+  font-weight: $fw-bold
+
+
+.date-picker
+  .table-cell
+    padding: 0 .3em
+    position: relative
+  .form-control
+    color: $gray-dark
+    font-weight: $fw-semibold
+    background-color: transparent
+    border-width: 0
+    box-shadow: none
+    font-size: px(13, $section-fz)
+  i
+    position: absolute
+    top: .4em
+    right: 1.8em
+    font-size: 1.1em
+    color: $gray-medium
+  span
+    display: block
+    min-width: 2em
+    color: $gray-dark
+    font-weight: $fw-semibold
+  &.form-wrapper
+    margin-bottom: 1em
+    i
+      top: .6em
+      right: 1.2em
+    input
+      border-width: 1px
+      &:focus
+        box-shadow: none !important
+
+.chosen-container
+  display: block
+  width: auto !important
+  padding: 5px 0
+  .chosen-single
+    height: auto
+    background: $gray-lighter
+    background: linear-gradient(to bottom, white, $gray-lite 70%)
+    border-width: 0 !important
+    box-shadow: none
+  .chosen-drop
+    border-color: $gray-lighter
+    border-width: px(1)
+    background-color: white
+  .chosen-search
+    display: none
+  .chosen-results li.highlighted,
+  .chosen-results li.result-selected
+    background: $brand-primary
+
+.round-img
+  display: inline-block
+  line-height: 0
+  overflow: hidden
+  border-radius: 50%
+
+.list-group
+  li
+    background-color: $gray-lite
+    border: none
+    padding: .8em .5em
+    +clearfix()
+
+.reset_list
+  padding-left: 0
+  list-style-position: inside
+
+@each $indent, $size in ($indent, ""), ($indent-md, "-md"), ($indent-lg, "-lg"), ($indent-sm, "-sm"), ($indent-xs, "-xs") 
+  .indent#{$size}
+    margin: $indent !important
+  .indent-t#{$size}
+    margin-top: $indent !important
+  .indent-r#{$size}
+    margin-right: $indent !important
+  .indent-b#{$size}
+    margin-bottom: $indent !important
+  .indent-l#{$size}
+    margin-left: $indent !important
+  .indent-v#{$size}
+    margin-top: $indent !important
+    margin-bottom: $indent !important
+  .indent-h#{$size}
+    margin-left: $indent !important
+    margin-right: $indent !important
+  .pad#{$size}
+    padding: $indent !important
+  .pad-v#{$size}
+    padding-top: $indent !important
+    padding-bottom: $indent !important
+  .pad-h#{$size}
+    padding-right: $indent !important
+    padding-left: $indent !important
+
+ul.not-ordered,
+ul.dash-item
+  padding-left: 0
+  > li
+    margin: $indent-sm 0
+    padding-left: $indent-sm
+    position: relative
+    list-style-type: none
+    &:before
+      position: absolute
+      left: 0
+      line-height: 1
+      top: 0
+
+li:before
+  ul.not-ordered > &
+    content: "."
+  ul.dash-item > &
+    content: "-"
+
