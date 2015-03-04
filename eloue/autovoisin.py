@@ -7,6 +7,8 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'autovoisin'
 
 SECRET_KEY = 'j$(so*u7+=^@64&(skv1qc%avh04lib*)vih_wi7h(bcfx@753'
 
+SESSION_COOKIE_DOMAIN = env('SESSION_COOKIE_DOMAIN', 'autovoisin')
+
 #for key in PIPELINE_CSS:
 #    output_filename = PIPELINE_CSS[key]['output_filename'].replace('.css', '_gosport.css')
 #    PIPELINE_CSS[key]['output_filename'] = output_filename
@@ -15,24 +17,12 @@ SECRET_KEY = 'j$(so*u7+=^@64&(skv1qc%avh04lib*)vih_wi7h(bcfx@753'
 #    local_path('templates/gosport'),
 #    local_path('templates/'),
 #))
-#
 
-#NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
-#    2846, 2769, 2774, 2762, 2848, 2823, 2808,  # first line / nav bar
-#    2783, 2840, 2857, 2835,  # others / dropdown selection
-#])
-#
-#FILTER_CATEGORIES = env('FILTER_CATEGORIES', NAVBAR_CATEGORIES)
-#
-#PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', (
-#    (("Sports d'hiver", NAVBAR_CATEGORIES[0], "ski"),
-#    ("Sports de raquette", NAVBAR_CATEGORIES[1], "tennis"),
-#    ("Cycles", NAVBAR_CATEGORIES[2], "bike"),
-#    ("Sports d'extérieur", NAVBAR_CATEGORIES[3], "golf")),
-#    (("Sports d'équipe", NAVBAR_CATEGORIES[4], "football"),
-#    ("Fitness, Gym et Danse", NAVBAR_CATEGORIES[5], "pool2"),
-#    ("Loisirs", NAVBAR_CATEGORIES[6], "pool"),
-#    ("Autres", "", "dots"))
-#))
-#
+NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
+    2701, 2702, 2703, 2704, 2705, 2706, 2707, 2708,  # first line / nav bar
+    2709, 2710, 2711, 2712,  # others / dropdown selection
+])
+
+FILTER_CATEGORIES = env('FILTER_CATEGORIES', NAVBAR_CATEGORIES)
+
 DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')
