@@ -1,64 +1,61 @@
 # -*- coding: utf-8 -*-
-import re
+from __future__ import absolute_import
 from urllib import urlencode
-import urllib
 import datetime
 
+from suds import WebFault
+
 from django.conf import settings
-from django.contrib.sites.models import Site
-from django.contrib import messages
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import Distance
-from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.core.cache import cache
-from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse, Http404
-from django.shortcuts import get_object_or_404
-from django.utils.datastructures import SortedDict, MultiValueDict
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
+from django.utils.datastructures import MultiValueDict
 from django.utils.translation import ugettext as _
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from django.views.decorators.cache import never_cache, cache_page
+from django.utils.encoding import smart_str
+from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import ListView, DetailView, TemplateView, View
-from django.db.models import Q, Count
-from django.shortcuts import render_to_response, render, redirect
-from django.template import RequestContext
+from django.db.models import Q
 
-from haystack.query import SearchQuerySet
-from suds import WebFault
+from rest_framework.decorators import link, action
+from rest_framework.response import Response
+from rest_framework import status
 
-from accounts.forms import EmailAuthenticationForm
-from accounts.models import Patron
-from accounts.search import patron_search
-from eloue.api.decorators import ignore_filters, list_link
+import django_filters
+
+from eloue.views import AjaxResponseMixin
+from eloue.decorators import ajax_required
+from products.forms import SuggestCategoryViewForm
+
+from eloue.api import viewsets, filters, mixins, permissions
+from eloue.api.decorators import ignore_filters, list_link, list_action
 from eloue.api.exceptions import ValidationException, ServerException, ServerErrorEnum
-
-from products.forms import (
-    AlertSearchForm, AlertForm, FacetedSearchForm, ProductFacetedSearchForm, ProductForm,
-    RealEstateEditForm, CarProductEditForm, ProductEditForm,
-    ProductAddressEditForm, ProductPhoneEditForm, ProductPriceEditForm, MessageEditForm,
-)
-from products.models import (
-    Category, Product, Curiosity, ProductRelatedMessage, Alert, MessageThread,
-    CarProduct, RealEstateProduct
-)
-from products.choices import UNIT, SORT, PRODUCT_TYPE
-from products.wizard import ProductWizard, MessageWizard, AlertWizard, AlertAnswerWizard
-from products.utils import format_quote, escape_percent_sign
-from products.search import product_search, car_search, realestate_search, product_only_search
-
-from rent.forms import BookingOfferForm
-from rent.models import Booking, Comment
-from rent.choices import BOOKING_STATE
-
-from eloue.decorators import ownership_required, secure_required, mobify, cached
-from eloue.utils import cache_key
+from eloue.utils import currency
+from eloue.decorators import mobify
 from eloue.geocoder import GoogleGeocoder
-from eloue.views import LoginRequiredMixin, SearchQuerySetMixin, BreadcrumbsMixin
+from eloue.views import SearchQuerySetMixin, BreadcrumbsMixin
+
+from rent.models import Booking, Comment
+from rent.utils import timesince
+from rent.forms import Api20BookingForm
+
 from shipping import helpers
 from shipping.models import ShippingPoint
 from shipping.serializers import ShippingPointListParamsSerializer, PudoSerializer
+
+from .forms import ProductFacetedSearchForm
+from .models import (
+    Category, Product, CarProduct, RealEstateProduct
+)
+from .choices import UNIT, SORT, PRODUCT_TYPE
+from .utils import escape_percent_sign
+from .search import product_search
+from .serializers import get_root_category
+from . import serializers, models, filters as product_filters
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_PERIODS_BY', 31)
@@ -83,6 +80,7 @@ def get_point_and_radius(coords, radius=None):
     point = Point(*coords)
     radius = min(radius or float('inf'), MAX_DISTANCE)
     return point, radius
+
 
 def get_last_added_sqs(search_index, location, sort_by_date='-created_at_date'):
     # only objects that are 'good' to be shown
@@ -123,457 +121,94 @@ def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sor
     return last_added[offset*limit:(offset+1)*limit]
 
 
-def last_joined(*args, **kwargs):
-    return last_added(*args, sort_by_date='-date_joined_date', **kwargs)
-
-@mobify
-def homepage(request):
-    curiosities = Curiosity.on_site.all()
-    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    address = location.get('formatted_address') or (u'{city}, {country}'.format(**location) if location.get('city') else u'{country}'.format(**location))
-    form = FacetedSearchForm({'l': address}, auto_id='id_for_%s')
-    alerts = Alert.on_site.all()[:3]
-    categories_list = cache.get(cache_key('home_categories_list', Site.objects.get_current()))
-
-    if categories_list is None:
-        categories_list = {}
-        parent_categories = Category.on_site.filter(parent__isnull=True).exclude(slug='divers')
-        for cat in parent_categories:
-            categories_list[cat] = list(cat.get_leafnodes().annotate(num_products=Count('products')).order_by('-num_products')[:5])
-        cache.set(cache_key('home_categories_list', Site.objects.get_current()), categories_list, 10*60)
-
-    return render_to_response(
-        template_name='index.html', 
-        dictionary={
-            'product_list': last_added(product_only_search, location),
-            'car_list': last_added(car_search, location),
-            'realestate_list': last_added(realestate_search, location),
-            'form': form, 'curiosities': curiosities,
-            'alerts':alerts,
-            'last_joined': last_joined(patron_search, location, limit=11),
-            'categories_list': categories_list,
-        }, 
-        context_instance=RequestContext(request)
-    )
-
-def homepage_object_list(request, search_index, offset=0):
-    offset = int(offset) if offset else 0
-    location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-    return render_to_response(
-        template_name='products/partials/result_list.html',
-        dictionary={
-            'product_list': last_added(search_index, location, offset),
-            'truncation': 28
-        },
-        context_instance=RequestContext(request),
-        content_type='text/plain; charset=utf-8'
-    )
-
-
-@mobify
-@cache_page(300)
-def search(request):
-    form = FacetedSearchForm()
-    return render(request, 'products/search.html', {'form': form})
-
-
-@never_cache
-@secure_required
-def publish_new_ad(request, *args, **kwargs):
-    if request.user.is_authenticated():
-        if request.user.is_professional and not request.user.current_subscription:
-            messages.success(request, _(u"En tant que professionnel, vous devez souscrire à un abonnement avant de pouvoir déposer une annonce."))
-            return redirect(
-                'accounts.views.patron_subscription'
-            )
-    return render(request, 'products/publish_new_ad.html')
-
-
-@never_cache
-@secure_required
-def publish_new_ad2(request, *args, **kwargs):
-    if request.user.is_authenticated():
-        if request.user.is_professional and not request.user.current_subscription:
-            messages.success(request, _(u"En tant que professionnel, vous devez souscrire à un abonnement avant de pouvoir déposer une annonce."))
-            return redirect(
-                'accounts.views.patron_subscription'
-            )
-    return render(request, 'products/publish_new_ad2.html')
-
-    
-@never_cache
-@secure_required
-def shipping_service_offer(request, *args, **kwargs):
-    return render(request, 'products/shipping_service_offer.html')
-
-
-@never_cache
-@secure_required
-def product_create(request, *args, **kwargs):
-    wizard = ProductWizard([ProductForm, EmailAuthenticationForm])
-    return wizard(request, *args, **kwargs)
-
-@never_cache
-@secure_required
-def car_product_create(request, *args, **kwargs):
-    from products.forms import CarProductForm
-    wizard = ProductWizard([CarProductForm, EmailAuthenticationForm])
-    return wizard(request, *args, **kwargs)
-
-@never_cache
-@secure_required
-def real_estate_product_create(request, *args, **kwargs):
-    from products.forms import RealEstateForm
-    wizard = ProductWizard([RealEstateForm, EmailAuthenticationForm])
-    return wizard(request, *args, **kwargs)
-
-
-@login_required
-@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
-def product_edit(request, slug, product_id):
-    product = get_object_or_404(Product.on_site, pk=product_id)
-    try:
-        form = CarProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product.carproduct)
-    except Product.DoesNotExist:
+def get_booking_price_from_form(form):
+    product = form.instance.product
+    if form.is_valid():
+        duration = timesince(form.cleaned_data['started_at'], form.cleaned_data['ended_at'])
+        total_price = smart_str(currency(form.cleaned_data['total_amount']))
+        price_unit = form.cleaned_data['price_unit']
+        quantity = form.cleaned_data['quantity']
+        max_available = form.max_available
+        if quantity is None and max_available > 0:
+            quantity = 1
+        response_dict = {
+          'duration': duration,
+          'total_price': total_price,
+          'unit_name': UNIT[price_unit][1],
+          'unit_value': smart_str(currency(product.prices.filter(unit=price_unit)[0].amount)),
+          'max_available': max_available,
+          'quantity': max_available if quantity > max_available else quantity,
+        }
+        if quantity > max_available:
+            response_dict.setdefault('warnings', []).append(_(u'Quantité disponible à cette période: %s') % max_available)
+    else:
+        max_available = getattr(form, 'max_available', product.quantity)
         try:
-            form = RealEstateEditForm(data=request.POST or None, files=request.FILES or None, instance=product.realestateproduct)
-        except Product.DoesNotExist:
-            form = ProductEditForm(data=request.POST or None, files=request.FILES or None, instance=product)
-
-    if form.is_valid():
-        product = form.save()
-        messages.success(request, _(u"Les modifications ont bien été prises en compte"))
-        return redirect(
-            'owner_product_edit', 
-            slug=slug, product_id=product_id
-        )
-
-    return render_to_response(
-        'products/product_edit.html', dictionary={
-            'product': product, 
-            'form': form,
-        }, 
-        context_instance=RequestContext(request)
-    )
+            price_unit = product.prices.filter(unit=1)[0]
+            response_dict = {
+              'unit_name': UNIT[1][1],
+              'unit_value': smart_str(currency(price_unit.amount)),
+              'max_available': max_available,
+              'quantity': 1,
+            }
+        except:
+            response_dict = {}
+    return response_dict
 
 
-@login_required
-@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
-def product_address_edit(request, slug, product_id):
-    product = get_object_or_404(Product.on_site, pk=product_id)
-
-    if request.method == "POST":
-        form = ProductAddressEditForm(data=request.POST, instance=product)
-        if form.is_valid():
-            product = form.save()
-            messages.success(request, _(u"L'adresse a bien été modifiée"))
-            return redirect(
-                'owner_product_address_edit', 
-                slug=slug, product_id=product_id
-            )
-    else:
-        form = ProductAddressEditForm(instance=product)
-    
-    
-    return render_to_response(
-        'products/product_edit.html', dictionary={
-            'product': product, 
-            'form': form
-        }, 
-        context_instance=RequestContext(request)
-    )
-
-@login_required
-@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
-def product_phone_edit(request, slug, product_id):
-    product = get_object_or_404(Product.on_site, pk=product_id)
-
-    if request.method == "POST":
-        form = ProductPhoneEditForm(data=request.POST, instance=product)
-        if form.is_valid():
-            product = form.save()
-            messages.success(request, _(u"Le numéro de téléphone à bien été enregistré"))
-            return redirect(
-                'owner_product_phone_edit',
-                slug=slug, product_id=product_id
-            )
-    else:
-        form = ProductPhoneEditForm(instance=product)
-
-    return render_to_response(
-        'products/product_edit.html', dictionary={
-            'product': product,
-            'form': form
-        },
-        context_instance=RequestContext(request)
-    )
-
-@login_required
-@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
-def product_price_edit(request, slug, product_id):
-    product = get_object_or_404(Product.on_site, pk=product_id)
-    initial = {}
-
-    for price in product.prices.all():
-        initial['%s_price' % UNIT.reverted[price.unit].lower()] = price.amount
-
-    form = ProductPriceEditForm(data=request.POST or None, instance=product, initial=initial)
-
-    if form.is_valid():
-        product = form.save()
-        messages.success(request, _(u"Les prix ont bien été modifiés"))
-        return redirect(
-            'owner_product_price_edit', 
-            slug=slug, product_id=product_id
-        )
-    return render_to_response(
-        'products/product_edit.html', dictionary={
-            'product': product, 
-            'form': form
-        }, 
-        context_instance=RequestContext(request)
-    )
+# UI v3
 
 
-@login_required
-@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
-def product_highlight_edit(request, slug, product_id):
-    from products.forms import HighlightForm
-    from products.models import ProductHighlight
-    now = datetime.datetime.now()
-    product = get_object_or_404(Product.on_site, pk=product_id)
-    old_highlights = product.producthighlight_set.filter(ended_at__isnull=False).order_by('-ended_at')
-    new_highlight = product.producthighlight_set.filter(ended_at__isnull=True)
-    if new_highlight:
-        highlight, = new_highlight
-        if request.method == "POST":
-            form = HighlightForm(request.POST, instance=highlight)
-            if form.is_valid():
-                form.instance.ended_at = now
-                form.save()
-                return redirect('.')
-        else:
-            form = HighlightForm(instance=highlight)
-    else:
-        if request.method == "POST":
-            form = HighlightForm(request.POST, instance=ProductHighlight(product=product))
-            if form.is_valid():
-                form.save()
-                return redirect('.')
-        else:
-            form = HighlightForm(instance=ProductHighlight(product=product))
-    return render(
-        request, 'products/product_highlight_edit.html', 
-        {'product': product, 'old_highlights': old_highlights, 'form': form},
-    )
-
-@login_required
-@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
-def product_top_position_edit(request, slug, product_id):
-    from products.forms import TopPositionForm
-    from products.models import ProductTopPosition
-    now = datetime.datetime.now()
-    product = get_object_or_404(Product.on_site, pk=product_id)
-    old_toppositions = product.producttopposition_set.filter(ended_at__isnull=False).order_by('-ended_at')
-    new_topposition = product.producttopposition_set.filter(ended_at__isnull=True)
-    if new_topposition:
-        topposition, = new_topposition
-        if request.method == "POST":
-            form = TopPositionForm(request.POST, instance=topposition)
-            if form.is_valid():
-                form.instance.ended_at = now
-                form.save()
-                return redirect('.')
-        else:
-            form = TopPositionForm(instance=topposition)
-    else:
-        if request.method == "POST":
-            form = TopPositionForm(request.POST, instance=ProductTopPosition(product=product))
-            if form.is_valid():
-                form.save()
-                return redirect('.')
-        else:
-            form = TopPositionForm(instance=ProductTopPosition(product=product))
-    return render(
-        request, 'products/product_top_position_edit.html',
-        {'product': product, 'old_highlights': old_toppositions, 'form': form},
-    )
+class NavbarCategoryMixin(object):
+    def get_context_data(self, **kwargs):
+        category_list = list(Category.on_site.filter(pk__in=settings.NAVBAR_CATEGORIES))
+        index = settings.NAVBAR_CATEGORIES.index
+        category_list.sort(key=lambda obj: index(obj.pk))
+        context = {
+            'category_list': category_list,
+        }
+        context.update(super(NavbarCategoryMixin, self).get_context_data(**kwargs))
+        return context
 
 
-def thread_list(user, is_archived):
-    return sorted(
-        MessageThread.objects.filter(
-            Q(sender=user, sender_archived=is_archived)
-            |Q(recipient=user, recipient_archived=is_archived)
-        ).order_by('-last_message__sent_at'), 
-        key=lambda thread: not (thread.new_sender() if user==thread.sender else thread.new_recipient())
-    )
+class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
+    template_name = 'index.jade'
+
+    def get_context_data(self, **kwargs):
+        product_list = last_added(product_search, self.location, limit=8)
+        comment_list = Comment.objects.select_related(
+            'booking__product__address'
+        ).filter(
+            booking__product__sites__id=settings.SITE_ID
+        ).order_by('-created_at')
+
+        context = {
+            'product_list': product_list,
+            'comment_list': comment_list,
+            'products_on_site': Product.on_site.only('id'),
+        }
+        context.update(super(HomepageView, self).get_context_data(**kwargs))
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+        return super(HomepageView, self).get(request, *args, **kwargs)
 
 
-@login_required
-def inbox(request):
-    user = request.user
-    threads = thread_list(user, False)
-    return render_to_response(
-      'products/inbox.html', 
-      {'thread_list': threads}, 
-      context_instance=RequestContext(request)
-    )
-
-@login_required
-def archived(request):
-    user = request.user
-    threads = thread_list(user, True)
-    return render_to_response(
-      'products/archives.html', 
-      {'thread_list': threads}, 
-      context_instance=RequestContext(request)
-    )
-
-@login_required
-def archive_thread(request, thread_id):
-    thread = get_object_or_404(MessageThread, pk=thread_id)
-    if thread.sender != request.user and thread.recipient != request.user:
-        return HttpResponseForbidden()
-    if request.user == thread.sender:
-        thread.sender_archived = True
-    else:
-        thread.recipient_archived = True
-    thread.save()
-    return HttpResponseRedirect(reverse('inbox'))
-
-@login_required
-def unarchive_thread(request, thread_id):
-    thread = get_object_or_404(MessageThread, pk=thread_id)
-    if thread.sender != request.user and thread.recipient != request.user:
-        return HttpResponseForbidden()
-    if request.user == thread.sender:
-        thread.sender_archived = False
-    else:
-        thread.recipient_archived = False
-    thread.save()
-    return HttpResponseRedirect(reverse('archived'))
-
-@login_required
-def thread_details(request, thread_id):
-
-    thread = get_object_or_404(MessageThread, id=thread_id)
-    if request.user != thread.sender and request.user != thread.recipient:
-        return HttpResponseRedirect(reverse('inbox'))
-
-    user = request.user
-    peer = thread.sender if user == thread.recipient else thread.recipient
-    product = thread.product
-    owner = product.owner if product else None
-    borrower = user if peer == owner else peer
-    
-    message_list = thread.messages.order_by('sent_at')
-
-    if request.method == "POST":
-        editForm = MessageEditForm(request.POST, prefix='0')
-        if editForm.is_valid():
-            if editForm.cleaned_data.get('jointOffer'): # FIXME: this is not used
-                booking = Booking(
-                  product=product, 
-                  owner=owner, 
-                  borrower=borrower, 
-                  state=BOOKING_STATE.UNACCEPTED, # FIXME: direct manipulation of state could lead to FSM exception
-                  ip=request.META.get('REMOTE_ADDR', None) if user==borrower else None) # we can fill out IP if the user is the borrower, else only when peer accepts the offer
-                offerForm = BookingOfferForm(request.POST, instance=booking, prefix='1')
-                if offerForm.is_valid():
-                    messages_with_offer = message_list.filter(~Q(offer=None) & ~Q(offer__state=BOOKING_STATE.REJECTED)).select_related('offer').only('offer')
-                    for message in messages_with_offer:
-                        message.offer.reject()
-                        message.offer.save()
-                    editForm.save(product, user, peer, parent_msg=thread.last_message, offer=offerForm.save())
-                    messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent with booking offer."))
-                    return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
-            else:
-                editForm.save(product=product, sender=user, recipient=peer, parent_msg=thread.last_message)
-                messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
-                return HttpResponseRedirect(reverse('thread_details', kwargs={'thread_id': thread_id}))
-    elif request.method == "GET":
-        editForm = MessageEditForm(prefix='0')
-        offerForm = BookingOfferForm(prefix='1')
-        for message in message_list.filter(recipient=user, read_at=None):
-            message.read_at = datetime.datetime.now()
-            message.save()
-    return render_to_response('products/message_view.html', {'thread': thread, 'message_list': message_list, 'editForm': editForm, 'offerForm': offerForm, 'Booking': Booking}, context_instance=RequestContext(request))
-
-@login_required
-def reply_product_related_message(request, message_id, form_class=MessageEditForm,
-    template_name='django_messages/compose.html', success_url=None, recipient_filter=None,
-    quote=format_quote):
-    parent = get_object_or_404(ProductRelatedMessage, id=message_id)
-    product = parent.product
-    
-    if parent.sender != request.user and parent.recipient != request.user:
-        return HttpResponseForbidden()
-    if request.method == "POST":
-        sender = request.user
-        form = form_class(request.POST)
-        if form.is_valid():
-            form.save(product=product, sender=request.user, recipient=parent.sender, parent_msg=parent)
-            messages.add_message(request, messages.SUCCESS, _(u"Message successfully sent."))
-            if success_url is None:
-                success_url = reverse('messages_inbox')
-            return HttpResponseRedirect(success_url)
-    else:
-        form = form_class({
-            'body': quote(parent.sender, parent.body),
-            'subject': _(u"Re: %(subject)s") % {'subject': parent.subject},
-            'recipient': parent.sender
-            })
-    return render_to_response(template_name, {
-        'form': form,
-    }, context_instance=RequestContext(request))
-
-
-@never_cache
-@secure_required
-def message_create(request, product_id, recipient_id):
-    message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
-    return message_wizard(request, product_id, recipient_id)
-
-@never_cache
-@secure_required
-def patron_message_create(request, recipient_username):
-    message_wizard = MessageWizard([MessageEditForm, EmailAuthenticationForm])
-    recipient = Patron.objects.get(slug=recipient_username)
-    return message_wizard(request, None, recipient.pk)
-
-@login_required
-@ownership_required(model=Product, object_key='product_id', ownership=['owner'])
-def product_delete(request, slug, product_id):
-    product = get_object_or_404(Product.on_site, pk=product_id).subtype
-
-    if request.method == "POST":
-        if product.bookings.all() or product.messages.all():
-            product.is_archived = True
-            product.save()
-        else:
-            product.delete()
-        messages.success(request, _(u"Votre objet à bien été supprimée"))
-        return redirect('owner_product')
-    else:
-        return render(request, 'products/product_delete.html', {'product': product})
-
-
-class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
-    template_name = "products/product_result.html"
-    paginate_by = PAGINATE_PRODUCTS_BY
+class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
+    template_name = 'products/product_list.jade'
     context_object_name = 'product_list'
+    paginate_by = PAGINATE_PRODUCTS_BY
+    form_class = ProductFacetedSearchForm
 
     @method_decorator(mobify)
-    @method_decorator(cache_page(900))
     @method_decorator(vary_on_cookie)
-    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet().filter(is_archived=False), suggestions=None, page=None, **kwargs):
+    def dispatch(self, request, urlbits=None, sqs=None, **kwargs):
         self.breadcrumbs = self.get_breadcrumbs(request)
-        urlbits = urlbits or ''
-        urlbits = filter(None, urlbits.split('/')[::-1])
+        urlbits = filter(None, urlbits.split('/')[::-1]) if urlbits else []
         while urlbits:
             bit = urlbits.pop()
-            if bit.startswith(_('par-')):
+            if bit.startswith(_('par-')): # FIXME: seems like it is not used anymore, needs checking
                 try:
                     value = urlbits.pop()
                 except IndexError:
@@ -614,191 +249,19 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                     'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
                     'url': item.get_absolute_url(), 'facet': True
                 }
-        
-        self.site_url="%s://%s" % ("https" if USE_HTTPS else "http", Site.objects.get_current().domain)
-        self.form = self.form_class(
-            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
-            searchqueryset=sqs
-        )
-        sqs, self.suggestions, self.top_products = self.form.search()
-        # we use canonical_parameters to generate the canonical url in the header
-        canonical_parameters = SortedDict(((key, unicode(value['value']).encode('utf-8')) for (key, value) in self.breadcrumbs.iteritems() if value['value']))
-        canonical_parameters.pop('categorie', None)
-        canonical_parameters.pop('r', None)
-        canonical_parameters.pop('sort', None)
-        canonical_parameters = urllib.urlencode(canonical_parameters)
-        if canonical_parameters:
-            canonical_parameters = '?' + canonical_parameters
-        self.canonical_parameters = canonical_parameters
-        self.kwargs.update({'page': page}) # Django 1.5+ ignore *args and **kwargs in View.dispatch()
-        return super(ProductList, self).dispatch(request, sqs=sqs, **kwargs)
+        return super(ProductListView, self).dispatch(request, sqs=sqs, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(ProductList, self).get_context_data(**kwargs)
-        context.update({
-            'facets': self.sqs.facet_counts(),
-            'form': self.form,
-            'breadcrumbs': self.breadcrumbs,
-            'suggestions': self.suggestions,
-            'site_url': self.site_url,
-            'canonical_parameters': self.canonical_parameters,
-            'top_products': self.top_products,
-        })
-        filter_limits = self.form.filter_limits
-        if filter_limits:
-            context.update(filter_limits)
-        return context
-
-@never_cache
-@secure_required
-def alert_create(request, *args, **kwargs):
-    wizard = AlertWizard([AlertForm, EmailAuthenticationForm])
-    return wizard(request, *args, **kwargs)
-
-class AlertList(ListView):
-    template_name = "products/alert_list.html"
-    context_object_name = 'alert'
-
-    @method_decorator(cache_page(900))
-    @method_decorator(vary_on_cookie)
-    def dispatch(self, *args, **kwargs):
-        return super(AlertList, self).dispatch(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(AlertList, self).get_context_data(**kwargs)
-        context['form'] = FacetedSearchForm()
-        context['search_alert_form'] = self.search_alert_form
-        return context
-
-    def get_queryset(self):
-        self.search_alert_form = AlertSearchForm(self.request.GET, searchqueryset=self.kwargs['sqs'])
-        return self.search_alert_form
-
-# @cache_page(900)
-# @vary_on_cookie
-# def alert_list(request, sqs=SearchQuerySet(), page=None):
-#     form = FacetedSearchForm()
-#     search_alert_form = AlertSearchForm(request.GET, searchqueryset=sqs)
-#     return object_list(request, search_alert_form.search(), page=page, paginate_by=PAGINATE_PRODUCTS_BY, ,
-#          extra_context={'form': form, 'search_alert_form':search_alert_form})
-
-
-@never_cache
-@secure_required
-def alert_inform(request, *args, **kwargs):
-    wizard = AlertAnswerWizard([ProductForm, EmailAuthenticationForm])
-    return wizard(request, *args, **kwargs)
-
-
-class AlertInformSuccess(LoginRequiredMixin, DetailView):
-    template_name = 'products/alert_unform_success.html'
-    model = Alert
-    context_object_name = 'alert'
-    pk_url_kwarg = 'alert_id'
-
-
-@login_required
-def alert_delete(request, alert_id):
-    alert = get_object_or_404(Alert, pk=alert_id)
-    if request.method == "POST":
-        alert.delete()
-        messages.success(request, _(u"Votre alerte à bien été supprimée"))
-        return redirect('alert_edit')
-    else:
-        return render(request, 'products/alert_delete.html', {'alert': alert})
-
-def suggestion(request): 
-    word = request.GET['q']
-    cache_value = cache.get(word)
-    if cache_value:
-        return HttpResponse(cache_value)
-    results_categories = SearchQuerySet().filter(categories__startswith=word).models(Product)
-    resp_list = []
-    for result in results_categories:
-        if len(result.categories)>1:
-            for category in result.categories:
-                if category.startswith(word):
-                    if "-" in category:
-                        resp_list.append(category.split("-")[0].lower())
-                    else:
-                        resp_list.append(category.lower())      
-        else:
-            category = result.categories[0]
-            if category.startswith(word):
-                if "-" in category:
-                    resp_list.append(category.split("-")[0].lower())
-                else:
-                    resp_list.append(category.lower())
-    results_description = SearchQuerySet().autocomplete(description=word)
-    results_summary = SearchQuerySet().autocomplete(summary=word)
-    for result in results_summary:
-        for m in re.finditer(r"^%s(\w+)"%word, result.summary, re.I):
-            resp_list.append(m.group(0).lower())
-    for result in results_description:
-        for m in re.finditer(r"^%s(\w+)"%word, result.description, re.I):
-            resp_list.append(m.group(0).lower())
-    resp_list = list(set(resp_list))
-    resp_list = resp_list[-10:]
-    resp = ""
-    for el in resp_list:
-        resp += "\n%s"%el
-    cache.set(word, resp, 0)
-    return HttpResponse(resp)
-
-
-# UI v3
-
-from eloue.views import AjaxResponseMixin
-from eloue.decorators import ajax_required
-from products.forms import SuggestCategoryViewForm
-
-class NavbarCategoryMixin(object):
-    def get_context_data(self, **kwargs):
-        category_list = list(Category.on_site.filter(pk__in=settings.NAVBAR_CATEGORIES))
-        index = settings.NAVBAR_CATEGORIES.index
-        category_list.sort(key=lambda obj: index(obj.pk))
-        context = {
-            'category_list': category_list,
-        }
-        context.update(super(NavbarCategoryMixin, self).get_context_data(**kwargs))
-        return context
-
-class PublishCategoryMixin(object):
-    def get_context_data(self, **kwargs):
-        context = dict()
-        if settings.PUBLISH_CATEGORIES:
-            context['publish_category_list'] = settings.PUBLISH_CATEGORIES
-        context.update(super(PublishCategoryMixin, self).get_context_data(**kwargs))
-        return context
-
-
-class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
-    template_name = 'index.jade'
-
-    def get_context_data(self, **kwargs):
-        product_list = last_added(product_search, self.location, limit=8)
-        comment_list = Comment.objects.select_related(
-            'booking__product__address'
-        ).filter(
-            booking__product__sites__id=settings.SITE_ID
-        ).order_by('-created_at')
-
-        context = {
-            'product_list': product_list,
-            'comment_list': comment_list,
-            'products_on_site': Product.on_site.only('id'),
-        }
-        context.update(super(HomepageView, self).get_context_data(**kwargs))
-        return context
-
+    @method_decorator(cache_page(900)) # TBD: 15 minutes of caching for search results - is it OK?
     def get(self, request, *args, **kwargs):
-        self.location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
-        return super(HomepageView, self).get(request, *args, **kwargs)
-
-
-class ProductListView(ProductList):
-    template_name = 'products/product_list.jade'
-    form_class = ProductFacetedSearchForm
+        form = self.form_class(
+            dict((facet['name'], facet['value']) for facet in self.breadcrumbs.values()),
+            searchqueryset=self.sqs
+        )
+        if not form.is_valid():
+            raise Http404
+        self.sqs, suggestions, top_products = form.search()
+        self.form = form
+        return super(ProductListView, self).get(request, *args, **kwargs)
 
     def get_breadcrumbs(self, request):
         breadcrumbs = super(ProductListView, self).get_breadcrumbs(request)
@@ -819,11 +282,17 @@ class ProductListView(ProductList):
             ).exclude(slug='divers')
 
         context = {
-            'category_list': category_list
+            'category_list': category_list,
+            'facets': self.sqs.facet_counts(),
+            'form': self.form,
         }
+        filter_limits = self.form.filter_limits
+        if filter_limits:
+            context.update(filter_limits)
         context.update(super(ProductListView, self).get_context_data(**kwargs))
 
         return context
+
 
 class ProductDetailView(SearchQuerySetMixin, DetailView):
     model = Product
@@ -834,7 +303,7 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         self.object = self.get_object()
         # check if slug has changed
         product = self.object.object
-        if product.slug != self.kwargs['slug']:
+        if product.slug != kwargs['slug']:
             return redirect(product, permanent=True)
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
@@ -861,23 +330,6 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         product_comment_list = comment_qs.filter(booking__product=product)
         owner_comment_list = comment_qs.filter(booking__owner=product.owner)
 
-        # FIXME: remove after mass rebuild of all images is done on hosting
-        # from itertools import chain
-        # from eloue.legacy import generate_patron_images, generate_picture_images
-        # patron_set = set()
-        # for picture in product.pictures.all():
-            # generate_picture_images(picture)
-        # for elem in product_list:
-            # if elem.object:
-                # patron_set.add(elem.object.owner)
-                # for picture in elem.object.pictures.all()[:1]:
-                    # generate_picture_images(picture, ['thumbnail', 'display'])
-        # for comment in chain(product_comment_list, owner_comment_list):
-            # patron_set.add(comment.booking.owner)
-            # patron_set.add(comment.booking.borrower)
-        # for patron in patron_set:
-            # generate_patron_images(patron, ['product_page'])
-
         context = {
             'properties': product.properties.select_related('property'),
             'product_list': product_list,
@@ -891,8 +343,17 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
         context.update(super(ProductDetailView, self).get_context_data(**kwargs))
         return context
 
-class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, PublishCategoryMixin, TemplateView):
+
+class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'publich_item/index.jade'
+
+    def get_context_data(self, **kwargs):
+        context = super(PublishItemView, self).get_context_data(**kwargs)
+        publish_categories = getattr(settings, 'PUBLISH_CATEGORIES', tuple())
+        if publish_categories:
+            context['publish_category_list'] = publish_categories,
+        return context
+
 
 class SuggestCategoryView(AjaxResponseMixin, View):
 
@@ -928,18 +389,6 @@ class SuggestCategoryView(AjaxResponseMixin, View):
 
 # REST API 2.0
 
-from rest_framework.decorators import link, action
-from rest_framework.response import Response
-from rest_framework import status
-import django_filters
-
-from products import serializers, models
-from products.serializers import get_root_category
-from products import filters as product_filters
-from eloue.api import viewsets, filters, mixins, permissions
-from eloue.api.decorators import list_action
-from rent.forms import Api20BookingForm
-from rent.views import get_booking_price_from_form
 
 class CategoryFilterSet(filters.FilterSet):
     parent__isnull = django_filters.Filter(name='parent', lookup_type='isnull')
@@ -950,6 +399,7 @@ class CategoryFilterSet(filters.FilterSet):
     class Meta:
         model = models.Category
         fields = ('parent', 'need_insurance')
+
 
 class CategoryViewSet(viewsets.NonDeletableModelViewSet):
     """
@@ -982,6 +432,7 @@ class CategoryViewSet(viewsets.NonDeletableModelViewSet):
         serializer = self.get_serializer(obj.get_descendants(), many=True)
         return Response(serializer.data)
 
+
 class ProductFilterSet(filters.FilterSet):
     category__isdescendant = filters.MPTTModelFilter(name='categories', lookup_type='descendants', queryset=Category.objects.all())
     category = django_filters.ModelChoiceFilter(name='categories', queryset=Category.objects.all())
@@ -989,6 +440,7 @@ class ProductFilterSet(filters.FilterSet):
     class Meta:
         model = models.Product
         fields = ('deposit_amount', 'currency', 'address', 'is_archived', 'owner', 'created_at', 'quantity')
+
 
 class ProductOrderingFilter(filters.OrderingFilter):
 
@@ -999,6 +451,7 @@ class ProductOrderingFilter(filters.OrderingFilter):
                 if 'category' in param:
                     ordering[i] = param.replace('category', 'categories__id')
         return ordering
+
 
 class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, viewsets.ModelViewSet):
     """
@@ -1225,6 +678,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def get_location_url(self):
         return reverse('product-detail', args=(self.object.pk,))
 
+
 class PriceViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product prices to be viewed or edited.
@@ -1237,6 +691,7 @@ class PriceViewSet(viewsets.NonDeletableModelViewSet):
     ordering_fields = ('name', 'amount')
     public_actions = ('retrieve',)
 
+
 class UnavailabilityPeriodViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows product unavailability periods to be viewed or edited.
@@ -1247,6 +702,7 @@ class UnavailabilityPeriodViewSet(viewsets.ModelViewSet):
     owner_field = 'product__owner'
     filter_fields = ('product', )
     public_actions = ('list', 'retrieve')
+
 
 class PictureViewSet(viewsets.ModelViewSet):
     """
@@ -1260,6 +716,7 @@ class PictureViewSet(viewsets.ModelViewSet):
     ordering_fields = ('created_at',)
     public_actions = ('retrieve',)
 
+
 class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     """
     API endpoint that allows product curiosities to be viewed or edited.
@@ -1270,6 +727,7 @@ class CuriosityViewSet(viewsets.NonDeletableModelViewSet):
     filter_fields = ('product',) # TODO: 'city', 'price')
     # TODO: ordering_fields = ('price',)
     public_actions = ('retrieve', 'list', )
+
 
 class MessageThreadFilterSet(filters.FilterSet):
     participant = filters.MultiFieldFilter(name=('sender', 'recipient'))

@@ -1,11 +1,16 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
 import base64
+
 from django.http.response import Http404, HttpResponse
+
 from rest_framework.decorators import link
 from rest_framework.response import Response
+
 from eloue.api import filters, mixins, viewsets
-from . import helpers, models, serializers
 from eloue.api.decorators import user_required
+
+from . import helpers, models, serializers
 
 
 class ShippingPointViewSet(viewsets.ReadOnlyModelViewSet):

@@ -1,5 +1,6 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from django.utils.translation import gettext as _
+
 from eloue.utils import Enum
 
 

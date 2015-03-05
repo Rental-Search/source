@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import logbook
-
 from django.conf import settings
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
@@ -11,15 +9,11 @@ from django.contrib.sitemaps.views import index, sitemap
 from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSitemap
 
 from eloue.api.urls import router
+
 from products.views import HomepageView
 from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView
 
-log = logbook.Logger('eloue')
-
-try:
-    admin.autodiscover()
-except admin.sites.AlreadyRegistered, e:
-    log.warn('Site is already registered : %s' % e)
+admin.autodiscover()
 
 sitemaps = {
     'category': CategorySitemap,
@@ -201,10 +195,10 @@ reset_urlpatterns = patterns('',
     ),
 )
 
-from products.urls import ui3_urlpatterns as products_urlpatterns
-from accounts.urls import ui3_urlpatterns as accounts_urlpatterns
+from products.urls import urlpatterns as products_urlpatterns
+from accounts.urls import urlpatterns as accounts_urlpatterns
 
-ui3_urlpatterns = patterns('',
+urlpatterns = patterns('',
     url(r'^$', HomepageView.as_view(), name='home'),
     url(r'^redirect/', LoginAndRedirectView.as_view(), name='redirect'),
     url(r'^login_facebook/', LoginFacebookView.as_view(), name='login_facebook'),
@@ -232,15 +226,6 @@ ui3_urlpatterns = patterns('',
     url(r'^activate/(?P<activation_key>\w+)/$', ActivationView.as_view(), name='auth_activate'),
     url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
     url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
-)
-
-urlpatterns = patterns('',
-
-    # url(r'^faq/', include('faq.urls')),
-
-    #url(r'^loueur/', include('accounts.urls')),
-    #url(r'^location/', include('products.urls')),
-
     url(r'^edit/', include(admin.site.urls)),
     url(r'edit/', include('accounts.admin_urls')),
     url(r'^edit/stats/', include('reporting.admin_urls')),
@@ -248,9 +233,6 @@ urlpatterns = patterns('',
 
     # API 2.0
     url(r'^', include(api2_urlpatterns)),
-
-    # UI v3
-    url(r'^', include(ui3_urlpatterns)), # namespace='ui3'
 
     # social: support for sign-in by Google and/or Facebook
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),

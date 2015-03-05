@@ -1,7 +1,9 @@
 #-*- coding: utf-8 -*-
+from __future__ import absolute_import
+
 from haystack import indexes
 
-from accounts.models import Patron
+from .models import Patron
 
 __all__ = ['PatronIndex']
 
@@ -20,8 +22,8 @@ class PatronIndex(indexes.Indexable, indexes.SearchIndex):
         return tuple(obj.sites.values_list('id', flat=True))
 
     def prepare_avatar(self, obj):
-        if obj.avatar and obj.thumbnail:
-            return obj.thumbnail.url
+        # FIXME: should we really check for obj.avatar here?
+        return obj.thumbnail.url if obj.avatar and obj.thumbnail else None
 
     def get_model(self):
         return Patron
