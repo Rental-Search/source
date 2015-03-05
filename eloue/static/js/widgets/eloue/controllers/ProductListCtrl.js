@@ -13,6 +13,8 @@ define([
         "MapsService",
         function ($scope, $window, $document, MapsService) {
 
+            $scope.submitInProgress = false;
+
             /**
              * Callback function for Google maps script loaded event.
              */
@@ -106,6 +108,9 @@ define([
 
                             google.maps.event.addListener(map, "zoom_changed", function () {
                                 notUpdateBySlider = true;
+                                if ($scope.submitInProgress) {
+                                    return;
+                                }
                                 if (!notUpdateByMap) {
                                     var zoomLevel = map.getZoom(),
                                         calcRange = MapsService.range(zoomLevel);
@@ -332,6 +337,18 @@ define([
             $scope.submitForm = function() {
                 $("#detail-search").submit();
             };
+
+            $scope.disableForm = function() {
+                $("input, select").attr("disabled", true);
+                $(".jslider-pointer").attr("style", "display: none !important");
+                $("#submitButton").addClass("loading");
+            };
+
+            $("#detail-search").on("submit", function() {
+                $scope.submitInProgress = true;
+                $scope.disableForm();
+                return true;
+            });
 
             MapsService.loadGoogleMaps();
             $scope.activateLayoutSwitcher();
