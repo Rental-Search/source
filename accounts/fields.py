@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 import datetime
-import itertools
-import string
 import calendar
 
 from django import forms
@@ -61,7 +59,6 @@ class CreditCardField(forms.CharField):
         except ValueError as e:
             raise forms.ValidationError(u'Votre numero doit etre composé uniquement de chiffres')
         return card_number
-    
 
 
 MONTH_CHOICES = (
@@ -120,69 +117,6 @@ class ExpirationField(forms.MultiValueField):
         return ''.join(data_list)
 
 
-mapping = dict(zip(string.ascii_uppercase, 2*'123456789' + '23456789'))
-
-
-def rib_check(rib):
-    rib = rib.replace(' ', '')
-    rib = ''.join((mapping.get(ch, ch) for ch in rib))
-    return (89*int(rib[:5]) + 15*int(rib[5:10]) + 3*int(rib[10:21]) + int(rib[21:23]))%97 == 0
-
-
-class RIBWidget(forms.MultiWidget):
-    def __init__(self, attrs=None):
-        widgets = [
-            forms.TextInput(attrs={'maxlength': 5 }),
-            forms.TextInput(attrs={'maxlength': 5 }),
-            forms.TextInput(attrs={'maxlength': 11 }), 
-            forms.TextInput(attrs={'maxlength': 2 }),
-        ]
-        super(RIBWidget, self).__init__(widgets)
-
-    def decompress(self, value):
-        value = value.replace(' ', '')
-        if value:
-            return (value[:5], value[5:10], value[10:21], value[21:23])
-        return (None, None, None, None)
-
-
-class HiddenRIBWidget(RIBWidget):
-    def __init__(self, attrs=None):
-        widgets = [
-            forms.HiddenInput,
-            forms.HiddenInput,
-            forms.HiddenInput, 
-            forms.HiddenInput,
-        ]
-        super(HiddenRIBWidget, self).__init__(widgets)
-
-
-class RIBField(forms.MultiValueField):
-    widget = RIBWidget
-    hidden_widget = HiddenRIBWidget
-    default_error_messages = {
-        'invalid_rib': _(u'Your RIB failed the checksum validation. Please verify.')
-    }
-
-    def __init__(self, *args, **kwargs):
-        fields = (
-            forms.CharField(min_length=5, max_length=5),
-            forms.CharField(min_length=5, max_length=5),
-            forms.CharField(min_length=11, max_length=11),
-            forms.CharField(min_length=2, max_length=2),
-        )
-        super(RIBField, self).__init__(fields, *args, **kwargs)
-
-    def clean(self, value):
-        value = super(RIBField, self).clean(value).upper()
-        if not rib_check(value):
-            raise forms.ValidationError(self.error_messages['invalid_rib'])
-        return value
-
-    def compress(self, data_list):
-        return ''.join(data_list)
-
-
 class DateSelectWidget(forms.MultiWidget):
     def decompress(self, value):
         if value:
@@ -190,6 +124,7 @@ class DateSelectWidget(forms.MultiWidget):
         return (None, None, None)
     def __call__(self):
         return self
+
 
 class DateSelectField(forms.MultiValueField):
     DAYS = [('', 'Jour')] + [(x, x) for x in xrange(1, 32)]

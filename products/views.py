@@ -41,7 +41,7 @@ from eloue.views import SearchQuerySetMixin, BreadcrumbsMixin
 
 from rent.models import Booking, Comment
 from rent.utils import timesince
-from rent.forms import Api20BookingForm
+from rent.forms import BookingForm
 
 from shipping import helpers
 from shipping.models import ShippingPoint
@@ -545,7 +545,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     def is_available(self, request, *args, **kwargs):
         obj = self.get_object()
 
-        form = Api20BookingForm(data=request.GET, instance=Booking(product=obj))
+        form = BookingForm(data=request.GET, instance=Booking(product=obj))
         res = get_booking_price_from_form(form)
 
         # add errors if the form is invalid
