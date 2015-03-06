@@ -1,12 +1,12 @@
 {% load i18n %}
-h2.text-uppercase.text-center
+h1.text-uppercase.text-center
     | Assurance objet
 
   .row.indent-t-lg
     .col-sm-10.col-sm-offset-1
       h3.b 
         | SYNTHÈSE 
-      ul
+      ul.dash-item
         li
           | En effectuant votre location sur E-loue, l’objet loué est automatiquement assuré pour tous les dommages matériels 
           | accidentels causés au bien pendant la durée de location, sans coût supplémentaire. 
@@ -19,7 +19,7 @@ h2.text-uppercase.text-center
         | CONDITIONS PORTANT SUR LE BIEN LOUÉ
       | Pour être couvert par l’assurance E-loue / Assur’One, le bien loué doit :
       br
-      ul
+      ul.dash-item
         li être au nom d’un particulier
         li être immatriculé en France métropolitaine
       b
@@ -29,7 +29,7 @@ h2.text-uppercase.text-center
       br
       br
       | L’assurance ne couvre pas les catégories d’objets suivantes :
-      ul
+      ul.dash-item
         li 
           | véhicules terrestres à moteur relevant d’une assurance obligatoire (auto, moto, scooter, camping-car, voiturette, 
           | tondeuse autoportée…)
@@ -43,14 +43,14 @@ h2.text-uppercase.text-center
         | CONDITIONS PORTANT SUR LE PROPRIETAIRE DU BIEN LOUÉ
 
       Pour être couvert par l’assurance E-loue / Assur’One, le propriétaire du bien loué doit :
-      ul
+      ul.dash-item
         li être un particulier
         li résider en France métropolitaine
 
       h3.b
         | GARANTIES ACCORDÉES PAR L’ASSURANCE
       | Pendant la durée de la location, l’assurance E-loue / Assur’One inclut les garanties suivantes : 
-      ul
+      ul.dash-item
         li dommages matériels accidentels causés au bien
         li destruction
         li détérioration totale ou partielle extérieurement visible 
@@ -61,7 +61,7 @@ h2.text-uppercase.text-center
       br
       br
       | Le montant de l’indemnisation : 
-      ul
+      ul.dash-item
         li correspondra au montant de la caution (demandée par le propriétaire, lors de son dépôt d’annonce)
         li sera minoré d’une franchise de 15%
         li ne pourra pas dépasser 750€
@@ -70,19 +70,26 @@ h2.text-uppercase.text-center
         | QUE FAIRE POUR DÉCLARER UN INCIDENT ?
       
       | En cas de casse ou de panne, le locataire doit :
-      ul
+      ul.dash-item
         li prévenir le propriétaire de l’objet loué,  en lui expliquant le problème qu’il rencontre 
-        li déclarer le sinistre auprès d’E-loue sur le site, par mail (contact@e-loue.com) ou par téléphone (01.85.08.99.77) 
+        li 
+          | déclarer le sinistre auprès d’E-loue sur le site, par 
+          a(href="mailto:contact@e-loue.com").link-success mail
+          | ou par téléphone (01.85.08.99.77) 
+
         li restituer l’objet loué au propriétaire
         li compléter et signer l'état des lieux de sortie en précisant les dommages constatés
         li déclarer le sinistre auprès de l’assureur par téléphone (Assur’One – 01.76.29.75.22)
 
       br
       | En cas de casse ou de panne, le propriétaire doit :
-      ul
+      ul.dash-item
         li récupérer le bien loué 
         li signer l’état des lieux de sortie en précisant les dommages constatés
-        li déclarer le sinistre auprès d’E-loue sur le site, par mail (contact@e-loue.com) ou par téléphone (01.85.08.99.77) 
+        li
+          | déclarer le sinistre auprès d’E-loue sur le site, par mail (
+          a(href="mailto:contact@e-loue.com").link-success mail contact@e-loue.com
+          |) ou par téléphone (01.85.08.99.77) 
         li déclarer le sinistre auprès de l’assureur par téléphone (Assur’One – 01.76.29.75.22)
         li 
           | faire établir un devis de réparation ou (si le bien n’est pas réparable) une attestation d’irréparabilité à 
@@ -92,7 +99,7 @@ h2.text-uppercase.text-center
         | QUE FAIRE POUR ÊTRE INDEMNISÉ ?
 
       | Une fois l’incident déclaré auprès d’E-loue et de l’assurance, le propriétaire pourra alors être indemnisé : 
-      ul
+      ul.dash-item
         li
           | E-loue utilisera la caution en ligne laissée par le locataire (au moment de la réservation) pour prélever le montant 
           | correspondant à la franchise (plafonné au montant de la caution ou à 750€)
@@ -102,14 +109,14 @@ h2.text-uppercase.text-center
       | courrier à l’assureur (Gestion Assurance Assur’One Group – BP 30200 – 95210 Saint Gratien), dans un délai de 5 jours
       | ouvrés 
       | suivant le constat du dommage, avec les documents suivants :
-      ul
+      ul.dash-item
         li déclaration sur l’honneur décrivant très précisément la date, le lieu et les circonstances du dommage
         li copie du contrat de location liant le propriétaire et le locataire
         li copie du certificat de garantie
 
       br
       | Après analyse de cette déclaration, l’assureur pourra réclamer au propriétaire d’autres documents :
-      ul
+      ul.dash-item
         li une photocopie du bien avant réparation
         li si le bien est réparable : le devis de réparation du bien (à demander au propriétaire) 
         li 
@@ -133,19 +140,19 @@ h2.text-uppercase.text-center
       | ligne par le locataire. 
 
       | L’ensemble des garanties d’assurance est régi par une Notice d’information (téléchargeable à cette 
-      a(href="http://eloue.s3.amazonaws.com/media/assurances/Assurone.pdf" style="color:blue").link-success addresse 
+      a(href="http://eloue.s3.amazonaws.com/media/assurances/Assurone.pdf" style="color:orange").link-success adresse 
       | et un Certificat de garantie (reçu avec votre contrat de location). 
       | Il est demandé aux utilisateurs d’en prendre connaissance et de s’assurer de les avoir bien comprises.
       br
       br
 
-h2.text-uppercase.text-center
+h1.text-uppercase.text-center
     | Assurance logement
   .row.indent-t-lg
     .col-sm-10.col-sm-offset-1
       h3.b
         | SYNTHÈSE
-      ul
+      ul.dash-item
         li En effectuant votre location sur e-loue, le logement loué est automatiquement assuré, sans coût supplémentaire.
         li L’assurance est incluse dans le montant réglé en ligne par le locataire.
         li Pour déclarer un sinistre, la procédure est simple et rapide.
@@ -153,7 +160,7 @@ h2.text-uppercase.text-center
       h3.b
       | CONDITIONS PORTANT SUR LE LOGEMENT LOUÉ 
       Pour être couvert par l’assurance E-loue / Europ Assistance, le logement loué doit : 
-      ul
+      ul.dash-item
         li être au nom d’un particulier
         li
           | être loué par le propriétaire ou copropriétaire du logement, ou par le locataire expressément autorisé, via son 
@@ -170,7 +177,7 @@ h2.text-uppercase.text-center
       h3.b
         | CONDITIONS PORTANT SUR LE LOCATAIRE
       Pour être couvert par l’assurance E-loue / Europ Assistance, le locataire doit :
-      ul
+      ul.dash-item
         li être un particulier 
         li louer le logement pour une durée qui n’excède pas 90 jours
         li payer la location sur le site avec une carte bancaire à son nom
@@ -183,7 +190,7 @@ h2.text-uppercase.text-center
       h3.b
         | GARANTIES ACCORDÉES PAR L’ASSURANCE
       Pendant la durée de la location, l’assurance E-loue / Europ Assistance inclut les types de garanties et montants de garantie suivants :
-      ul 
+      ul.dash-item
         li Responsabilité civile / Dommages corporels : illimité (franchise de 500 €)
         li Annulation du séjour : acompte + solde (dans la limite de 15 000 €)
           br
@@ -215,18 +222,24 @@ h2.text-uppercase.text-center
       h4
         | > En cas de casse : 
       | Le locataire doit :
-      ul
+      ul.dash-item
         li prévenir immédiatement le propriétaire du logement loué,  en lui expliquant le problème qu’il rencontre 
-        li déclarer le sinistre auprès d’E-loue sur le site, par mail (contact@e-loue.com) ou par téléphone (01.85.08.99.77) 
+        li
+          | déclarer le sinistre auprès d’E-loue sur le site, par mail (
+          a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
+          |) ou par téléphone (01.85.08.99.77) 
         li compléter et signer l'état des lieux de sortie en précisant les dommages constatés
         li
-          | déclarer le sinistre auprès de l’assureur, dans les 5 jours, par courrier (AADAR PLUS C/O Cabinet ALBINET - 5, cité de 
+          | déclarer le sinistre auprès de l’assureur, dans les 5 jours, par courrier (ADAR PLUS C/O Cabinet ALBINET - 5, cité de 
           | Trévise 75009 Paris), en joignant les documents nécessaires (voir ci-dessous)
       br
       | Le propriétaire du bien loué doit : 
-      ul
+      ul.dash-item
         li signer l’état des lieux de sortie en précisant les dommages constatés
-        li déclarer le sinistre auprès d’E-loue sur le site, par mail (contact@e-loue.com) ou par téléphone (01.85.08.99.77) 
+        li 
+          | déclarer le sinistre auprès d’E-loue sur le site, par mail (
+          a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
+          |) ou par téléphone (01.85.08.99.77) 
         li 
           |faire établir un devis de réparation ou une facture de rachat du bien détérioré (si le bien n’est pas réparable), et le 
           |transmettre au locataire dans les 48h
@@ -246,15 +259,15 @@ h2.text-uppercase.text-center
       h3.b
         | QUE FAIRE POUR ÊTRE INDEMNISÉ ?
       | Une fois l’incident déclaré auprès d’E-loue et de l’assurance, le propriétaire pourra alors être indemnisé : 
-      ul
+      ul.dash-item
         li
           | E-loue utilisera la caution en ligne laissée par le locataire (au moment de la réservation) pour prélever le montant 
           | correspondant à la franchise (plafonné au montant de la caution ou à 990€)
         li cette somme sera versée au propriétaire par E-loue
 
-      | Le locataire devra ensuite envoyer un courrier à l’assureur (AADAR PLUS C/O Cabinet ALBINET - 5 Cité de Trévise - 75009 
+      | Le locataire devra ensuite envoyer un courrier à l’assureur (ADAR PLUS C/O Cabinet ALBINET - 5 Cité de Trévise - 75009 
       | Paris), dans un délai de 5 jours ouvrés suivant le constat de du dommage, avec les documents suivants :
-      ul
+      ul.dash-item
         li
           | informations générales : nom de l’agence de location : « E-loue », numéro de référence de location, dates de début et 
           | de fin de séjour
@@ -285,22 +298,23 @@ h2.text-uppercase.text-center
         | > En cas d’annulation du séjour 
       | QUE FAIRE ?
       br
-      | Le locataire doit impérativement procéder à l'annulation de son séjour via le site E-loue par mail (contact@e-loue.com) ou 
-      | par téléphone (01.85.08.99.77). (voir politique annulation).
-
+      | Le locataire doit impérativement procéder à l'annulation de son séjour via le site E-loue par mail (
+      a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
+      |) ou par téléphone (01.85.08.99.77). (voir politique annulation).
+      br
       | En fonction de la politique annulation définie par le propriétaire et validée par le locataire, les services E-loue 
       | procéderont au paiement du solde de la transaction.
       | Le locataire doit ensuite procéder à une déclaration de sinistre directement auprès des services assurance dans un délai 
       | maximum de 5 jours ouvrés.
       br
-      | LES DOCUMENTS A ENVOYER (AADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
+      | LES DOCUMENTS A ENVOYER (ADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
       | Informations générales : nom de l'agence de location : "E-loue", numéro de référence location, dates de début et de fin de 
       | séjour
       br
       | En cas de maladie ou d'accident : - Certificat médical et/ou bulletin d'hospitalisation sous pli fermé précisant l'origine, 
       | la nature, la gravité et les conséquences prévisibles de la maladie ou de l'accident - Copie de l'arrêt de travail - 
       | Photocopies des ordonnances comportant les vignettes des médicaments prescrits, analyses et examens pratiqués.
-
+      br
       | En cas de licenciement économique : 
       ul
         li Copie de la lettre de licenciement 
@@ -311,7 +325,6 @@ h2.text-uppercase.text-center
         li Certificat médical ou bulletin d'hospitalisation 
         li Copie de la feuille d'examen prénatal 
         li Copie de l'arrêt de travail
-
       | En cas de décès :
       ul
         li Certificat de décès 
@@ -328,14 +341,17 @@ h2.text-uppercase.text-center
       | dépôt de garantie, remise des clés,…).
       br
       | Le locataire doit ensuite prendre directement contacter avec le service assistance (numéro +33 (0)1 41 85 80 02 et fax +33 
-      | (0)1 41 85 85 71) afin : - D'obtenir l'accord préalable avant de prendre toute initiative ou d'engager des dépenses - Se 
-      | conformer aux solutions que préconise l'assureur - Fournir tous les éléments relatifs au contrat - Fournir tous les 
-      | justificatifs originaux des dépenses dont le remboursement est demandé.
+      | (0)1 41 85 85 71) afin : 
+      ul.dash-item
+        li D'obtenir l'accord préalable avant de prendre toute initiative ou d'engager des dépenses 
+        li Se conformer aux solutions que préconise l'assureur - Fournir tous les éléments relatifs au contrat 
+        li Fournir tous les justificatifs originaux des dépenses dont le remboursement est demandé.
       br
       | A l'issue du rapatriement, le locataire doit procéder à la déclaration de sinistre directement auprès de l'assureur afin 
       | de demander le remboursement des prestations non utilisées du fait de l'interruption de séjour.
       br
-      | LES DOCUMENTS A ENVOYER A L’ASSUREUR (AADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
+      | LES DOCUMENTS A ENVOYER A L’ASSUREUR (ADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
+      br
       | Informations générales : nom de l'agence de location : "E-loue", numéro de référence location, dates de début et de fin de 
       | séjour.
       | Les documents demandés sont identiques à ceux demandés dans le cas de l'annulation de séjour. En tout état de cause, la 
@@ -346,13 +362,15 @@ h2.text-uppercase.text-center
         | > En cas de non-conformité du bien
       | QUE FAIRE ?
       br
-      | Le locataire doit impérativement aviser directement le propriétaire, les services E-loue, par mail (contact@e-loue.com) et 
-      | par téléphone (01.85.08.99.77) et l'assureur verbalement et par écrit, par lettre recommandée avec accusé de réception, 
-      | dans les 72 heures de son arrivée et de son refus de prendre possession des locaux loués et des raisons qui le motivent.
+      | Le locataire doit impérativement aviser directement le propriétaire, les services E-loue, par mail (
+      a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
+      |) et par téléphone (01.85.08.99.77) et l'assureur verbalement et par écrit, par lettre recommandée avec accusé de 
+      | réception, dans les 72 heures de son arrivée et de son refus de prendre possession des locaux loués et des raisons qui le 
+      | motivent.
       | Par la suite, le locataire doit envoyer directement à l'assureur une déclaration de sinistre avec les documents suivants.
-
-      | LES DOCUMENTS A ENVOYER A L’ASSUREUR (AADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévisse 75009 Paris)
-      ul 
+      br
+      | LES DOCUMENTS A ENVOYER A L’ASSUREUR (ADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévisse 75009 Paris)
+      ul.dash-item
         li
           | Informations générales : nom de l'agence de location : "E-loue", numéro de référence location, dates de début et de 
           | fin de séjour.
@@ -361,24 +379,26 @@ h2.text-uppercase.text-center
           | dates de la location.
         li La copie de l'annonce parue sur le site E-loue et des photographies
         li 
-          |Le compte-rendu d'état des lieux, photographies, témoignages et tout autre document permettant à l'assureur de supposer 
-          | qu'il s'agit bien d'une non-conformité substantielle.
+          | Le compte-rendu d'état des lieux, photographies, témoignages et tout autre document permettant à l'assureur de 
+          | supposer qu'il s'agit bien d'une non-conformité substantielle.
         li Les coordonnées courriel ou postale du propriétaire
       h4
         | > En cas de fraude
       | QUE FAIRE ?
       br
-      | Le locataire doit impérativement aviser directement le propriétaire, les services E-loue (par mail à contact@e-loue.com ou 
-      | par téléphone au 01.85.08.99.77) et l'assureur verbalement et par écrit dans les 72 heures de la découverte de la fraude 
-      | ou de toute suspicion de fraude et prendre toutes mesures nécessaires pour interrompre les effets de l'infraction et 
-      | limiter l'importance du sinistre.
+      | Le locataire doit impérativement aviser directement le propriétaire, les services E-loue (par mail à 
+      a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com 
+      | ou par téléphone au 01.85.08.99.77) et l'assureur verbalement et par écrit dans les 72 heures de la découverte de la 
+      | fraude ou de toute suspicion de fraude et prendre toutes mesures nécessaires pour interrompre les effets de l'infraction 
+      | et limiter l'importance du sinistre.
       br
       | Le locataire doit impérativement déposer plainte au pénal auprès des autorités compétentes. A défaut de dépôt de plainte, 
       | il doit exécuter sans délai les formalités administratives et/ou judiciaires qui s'imposent auprès de celles-ci.
       br
       | Par la suite, le locataire doit envoyer directement à l'assureur une déclaration de sinistre avec les documents suivants.
       br
-      | LES DOCUMENTS A ENVOYER A L’ASSUREUR (AADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
+      br  
+      | LES DOCUMENTS A ENVOYER A L’ASSUREUR (ADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
       li
         | Le récépissé de plainte ou de tout autre acte analogue dans les meilleurs délais, et au plus tard dans les huit jours de 
         | son dépôt.
@@ -388,8 +408,13 @@ h2.text-uppercase.text-center
       br
       h4
         | COORDONNEES DE L’ASSUREUR
-      | AADAR PLUS C/O Cabinet ALBINET 5, cité de Trévisse 
-      | 75009 Paris mail : claim@cabinetalbinet.fr Fax : 01 48 01 84 83
+      | ADAR PLUS C/O Cabinet ALBINET 5, cité de Trévisse 
+      | 75009 Paris 
+      br
+      | mail : 
+      a(href="mailto:claim@cabinetalbinet.fr ").link-success claim@cabinetalbinet.fr 
+      br
+      | Fax : 01 48 01 84 83
 
       h4
         | ASSISTANCE RAPATRIEMENT
@@ -399,6 +424,6 @@ h2.text-uppercase.text-center
       h4
         | NOTICE D'INFORMATION
       | L’ensemble des garanties d’assurance sont régies par une Notice d’information (téléchargeable à cette 
-      a(href="http://eloue.s3.amazonaws.com/media/assurances/europ_assistance.pdf" style="color:blue").link-success addresse
-      | )et un Certificat de garantie (reçu avec votre contrat de location). 
+      a(href="http://eloue.s3.amazonaws.com/media/assurances/europ_assistance.pdf" style="color:orange").link-success adresse
+      |) et un Certificat de garantie (reçu avec votre contrat de location). 
       | Il est demandé aux utilisateurs d’en prendre connaissance et de s’assurer de les avoir bien comprises. 
