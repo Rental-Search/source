@@ -339,9 +339,12 @@ define([
             };
 
             $scope.disableForm = function() {
-                $("input, select").attr("disabled", true);
-                $(".jslider-pointer").attr("style", "display: none !important");
-                $("#submitButton").addClass("loading");
+                setTimeout(function() {
+                    $("input, select").attr("disabled", true);
+                    $(".jslider-pointer").attr("style", "display: none !important");
+                    $("#submitButton").addClass("loading");
+                }, 50);
+
             };
 
             $("#detail-search").on("submit", function() {
