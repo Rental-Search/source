@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+from datetime import datetime
 
 from django.core.mail import mail_admins
 from django.template.loader import render_to_string
@@ -8,6 +9,8 @@ from haystack import indexes
 
 from products.models import Alert, Product, CarProduct, RealEstateProduct
 from products.choices import UNIT
+from helpers import get_unavailable_periods
+
 
 __all__ = ['ProductIndex', 'AlertIndex']
 
@@ -16,6 +19,12 @@ def cached_category(category_id, category):
     return tuple(category.get_ancestors(ascending=False, include_self=True).values_list('slug', flat=True))
 _category = {}
 cached_category = memoize(cached_category, _category, 1)
+
+
+# TODO need cache
+def cached_unavailables(product):
+    started_at = datetime.now()
+    return get_unavailable_periods(product, started_at)
 
 
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
@@ -52,6 +61,10 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
     is_good = indexes.BooleanField(default=False)
 
+    # 
+    starts_unavailable = indexes.MultiValueField(faceted=True, null=True)
+    ends_unavailable = indexes.MultiValueField(faceted=True, null=True)
+
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
     
@@ -60,6 +73,22 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if category:
             # it is safe to cache get_ancestors for categories and cache them by category PK
             return cached_category(category.pk, category)
+    
+    def prepare_ends_unavailable(self, obj):
+        ends = cached_unavailables(obj)
+        try:
+            if len(ends['ends']):
+                return ends['ends']
+        except:
+            print ends 
+
+    def prepare_starts_unavailable(self, obj):
+        starts = cached_unavailables(obj)
+        try:
+            if len(starts['starts']):
+                return starts['starts']
+        except:
+            print starts 
 
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
