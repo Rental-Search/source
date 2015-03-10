@@ -2,46 +2,55 @@ block details
   .section-content(ng-show="showWellcome")
     h2 La livraison avec la
       span.sprite-pickup-logo-full.indent-sm-l
-    h2.small La navette pickup disponible partout en France
-        p
-            | Vous pouvez proposer  grâce à notre partenaire La Navette Pickup une 
-            | option de livraison à votre objet.
-            br
-            | L’objet sera transporté via une pochette de relais pickup à relais pickup 
-            | à travers toute la France. Il faut donc que votre objet rentre dans une 
-            | pochette de ce type :
 
-        .indent-md-v: img(src="#{STATIC_URL}img/pickup_instruction.jpg", alt="", width="100%")
-        ul
-          li.row.indent-md-v
-            .col-xs-1.text-center: span.sprite-pickup-logo-short-black
-            .col-xs-11: p
-              | 4200 points relais partenaires partout en France : vous 
-              | choisissez le relais le plus proche de chez vous.
-          li.row.indent-md-v
-            .col-xs-1.text-center: span.sprite-calendar
-            .col-xs-11: p
-              | La livraison sera en général de 24 ou 48h (non garanti).
-          li.row.indent-md-v
-            .col-xs-1.text-center: span.sprite-euro
-            .col-xs-11: p
-              | Les coûts de livraison sont à la charge du locataire.
+    p Envoyez vos objets loués grâce à notre partenaire la navette pickup, l’envoi de colis entre particuliers !
 
-        h2.small.indent-lg-t Comment se passeront les locations sur e-loue avec la Navette pickup&nbsp;?
-        ol.ordered-list-big
-          li.row.indent-md-v
-            .col-xs-1.text-center: span.counter
-            .col-xs-11: p
-              | Si j’accepte une demande de réservation avec l’option 
-              | livraison, je me rends dans un point relais La Navette Pickup 
-              | pour envoyer l’objet.
-          li.row.indent-md-v
-            .col-xs-1.text-center: span.counter
-            .col-xs-11: p
-              | En fin de location vous êtes prévenu par email de la livraison 
-              | de votre navette dans votre relais d’arrivée.
+    p 
+      b Quels avantages ?
+    p Plus besoin de vous déplacer : rendez-vous dans le relais pickup le plus proche, parmi les  4 200 relais partout en France, et envoyez votre objet en 24h/48h
+    p Faites des économies : le coût de livraison de 10 € pour l’aller-retour d’un objet est à la charge de votre locataire
+    p Plus besoin de fabriquer un colis : un simple emballage suffit pour protéger l’objet envoyé (sac plastique, papier bulle, boite, …) grâce à une pochette souple et matelassée, mesurant 50 x 50 x 5 cm, qui sert de navette ! Ces pochettes sont misent à disposition dans les relais pickup.
 
-        .text-center: a(href="", ng-click="showMapPointList()").btn.btn-inline.bg-success-hover.text-white J’accepte les  livraisons
+
+    .indent-md-v: img(src="#{STATIC_URL}img/pickup_instruction.jpg", alt="", width="100%")
+    ul
+      li.row.indent-md-v
+        .col-xs-1.text-center: span.sprite-pickup-logo-short-black
+        .col-xs-11: p
+          | 4200 points relais partenaires partout en France : vous 
+          | choisissez le relais le plus proche de chez vous.
+      li.row.indent-md-v
+        .col-xs-1.text-center: span.sprite-calendar
+        .col-xs-11: p
+          | La livraison sera en général de 24 ou 48h (non garanti).
+      li.row.indent-md-v
+        .col-xs-1.text-center: span.sprite-euro
+        .col-xs-11: p
+          | Les coûts de livraison sont à la charge du locataire. 
+
+
+    h2.small.indent-lg-t Comment ça marche ? 
+    ol.ordered-list-big
+      li.row.indent-md-v
+        .col-xs-1.text-center: span.counter
+        .col-xs-11 
+          p Sur le site eloue.fr :
+          p Si votre objet loué entre dans la pochette, choisissez cette option et offrez la possibilité à votre locataire de recevoir et de vous renvoyer l’objet loué en relais
+          p Si votre locataire sélectionne l’option, imprimez votre étiquette de transport et préparez votre envoi
+      li.row.indent-md-v
+        .col-xs-1.text-center: span.counter
+        .col-xs-11
+          p L’envoi de votre objet en relais :
+          p Rendez-vous dans votre relais, glissez votre objet emballé dans la pochette, placez l’étiquette sous la fenêtre plastifiée et fermez-là avec un scellé
+          p Vous et votre locataire seront prévenus par email de la livraison de l’objet
+
+      li.row.indent-md-v
+        .col-xs-1.text-center: span.counter
+        .col-xs-11
+          p Le retour de votre objet en relais :
+          p Une fois que la location est terminée, votre locataire imprime son étiquette de retour et renvoie l’objet depuis son relais vers votre relais de départ
+
+    .text-center: a(href="", ng-click="showMapPointList()").btn.btn-inline.bg-success-hover.text-white J’accepte les  livraisons
 
   .section-content(ng-show="showPointList")
     h2 La livraison avec la
