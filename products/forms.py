@@ -61,6 +61,8 @@ class FilteredProductSearchForm(SearchForm):
     l = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'x9 inb', 'tabindex': '2', 'placeholder': _(u'Où voulez-vous louer?')}))
     r = forms.DecimalField(required=False, min_value=1, widget=forms.TextInput(attrs={'class': 'ins'}))
     renter = forms.CharField(required=False)
+    date_from = forms.DateTimeField(required=False)
+    date_to = forms.DateTimeField(required=False)
 
     filter_limits = {}
     _max_range = _point = None
@@ -114,6 +116,17 @@ class FilteredProductSearchForm(SearchForm):
             sqs = sqs.filter(pro_owner=False)
         elif status == "professionnels":
             sqs = sqs.filter(pro_owner=True)
+        return sqs
+
+    def sqs_filter_date_from(self, sqs, search_params):
+        date_from = search_params.get('date_from', None)
+        date_to = search_params.get('date_from', None)
+        if all((date_from, date_to)):
+            sqs = sqs.date_facet('starts_unavailable', date_from, date_to, gap_by='day')
+            sqs = sqs.date_facet('ends_unavailable', date_from, date_to, gap_by='day')
+        return sqs
+
+    def sqs_filter_data_to(self, sqs, search_params):
         return sqs
 
     def _get_location(self, location):

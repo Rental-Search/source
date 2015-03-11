@@ -14,8 +14,6 @@ BOOKED_STATE = (
 
 
 # TODO There is an obsolete version in rent.Booking.calculate_available_quantity
-
-
 def __get_unavailable_periods(product, started_at, ended_at=None):
     bookings = Booking.objects.filter(
         product=product, state__in=BOOKED_STATE,
@@ -44,13 +42,13 @@ def __get_unavailable_periods(product, started_at, ended_at=None):
 
 def get_unavailable_periods(product, started_at, ended_at=None, quantity=1):
     """Returns unavailable periods between dates started_at and ended_at."""
-    available_quantity = max_available = product.quantity
+    available_quantity = product.quantity
     if quantity > available_quantity:
-        return 0, ({'start': started_at, 'stop': ended_at},)
+        return ([], [])
 
     grouped_dates = __get_unavailable_periods(
             product, started_at, ended_at=ended_at)
-    periods, start = {'starts': [], 'ends': []}, None
+    starts, ends, new_period = [], [], None
 
     """
     In [47]: product.quantity
@@ -76,20 +74,18 @@ def get_unavailable_periods(product, started_at, ended_at=None, quantity=1):
     for key, val in grouped_dates:
         # calculate available items of product for current date
         available_quantity -= sum(map(lambda x: operator.mul(*operator.itemgetter(1, 2)(x)), val))
-        #max_available = min(max_available, available_quantity)
 
         if available_quantity < quantity:
             # start new unavailable period
-            if not start: start = key
+            if not new_period: new_period = key
         else:
-            if start:
+            if new_period:
                 # stop current unavailable period
-                periods['starts'].append(start)
-                periods['ends'].append(key)
-                start = None
+                starts.append(new_period)
+                ends.append(key)
+                new_period = None
 
-    #return max_available, periods
-    return periods
+    return (starts, ends)
 
 
 def calculate_available_quantity(product, started_at, ended_at):

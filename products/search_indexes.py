@@ -9,7 +9,7 @@ from haystack import indexes
 
 from products.models import Alert, Product, CarProduct, RealEstateProduct
 from products.choices import UNIT
-from helpers import get_unavailable_periods
+from products.helpers import get_unavailable_periods
 
 
 __all__ = ['ProductIndex', 'AlertIndex']
@@ -19,12 +19,6 @@ def cached_category(category_id, category):
     return tuple(category.get_ancestors(ascending=False, include_self=True).values_list('slug', flat=True))
 _category = {}
 cached_category = memoize(cached_category, _category, 1)
-
-
-# TODO need cache
-def cached_unavailables(product):
-    started_at = datetime.now()
-    return get_unavailable_periods(product, started_at)
 
 
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
@@ -75,20 +69,14 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
             return cached_category(category.pk, category)
     
     def prepare_ends_unavailable(self, obj):
-        ends = cached_unavailables(obj)
-        try:
-            if len(ends['ends']):
-                return ends['ends']
-        except:
-            print ends 
+        started_at = datetime.now()
+        starts, ends = get_unavailable_periods(obj, started_at)
+        if len(ends): return ends
 
     def prepare_starts_unavailable(self, obj):
-        starts = cached_unavailables(obj)
-        try:
-            if len(starts['starts']):
-                return starts['starts']
-        except:
-            print starts 
+        started_at = datetime.now()
+        starts, ends = get_unavailable_periods(obj, started_at)
+        if len(starts): return starts
 
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
