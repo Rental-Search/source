@@ -120,13 +120,13 @@ class FilteredProductSearchForm(SearchForm):
 
     def sqs_filter_date_from(self, sqs, search_params):
         date_from = search_params.get('date_from', None)
-        date_to = search_params.get('date_from', None)
+        date_to = search_params.get('date_to', None)
         if all((date_from, date_to)):
-            sqs = sqs.date_facet('starts_unavailable', date_from, date_to, gap_by='day')
-            sqs = sqs.date_facet('ends_unavailable', date_from, date_to, gap_by='day')
+            range_query = 'NOT starts_unavailable_exact:[{0} TO {1}] AND NOT ends_unavailable_exact:[{0} TO {1}]'
+            sqs = sqs.raw_search(range_query.format(date_from.strftime('%F'), date_to.strftime('%F')))
         return sqs
 
-    def sqs_filter_data_to(self, sqs, search_params):
+    def sqs_filter_date_to(self, sqs, search_params):
         return sqs
 
     def _get_location(self, location):
