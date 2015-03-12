@@ -83,7 +83,7 @@ section(ng-controller="AuthCtrl").container.signs-links
 .framing
   section(data-ng-controller="HeaderCtrl").container.search-form
     .table-cell
-      a(href="{% url 'home' %}"): img(src="{% static 'img/logo.png' %}", alt="e-loue logo")
+      a(href="{% url 'home' %}"): img(src="{% static 'img/logo_autovoisin.png' %}", alt="e-loue logo").site-logo
     .table-cell.main-cell
       form(action="{% url 'product_list' %}")
         .search-form-wrapper.input-group
