@@ -8,7 +8,7 @@ html(lang="fr")
       include jade/variables
 
     block head
-      title GO Sport Location
+      title AutoVoisin Location
       meta(charset="UTF-8")
       meta(name="viewport", content="width=device-width, initial-scale=1.0")
       link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
@@ -21,8 +21,8 @@ html(lang="fr")
       {% compressed_js "public_js" %}
     script
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-58724631-1']);
-      _gaq.push(['_setDomainName', 'location.go-sport.com']);
+      //_gaq.push(['_setAccount', 'UA-58724631-1']);
+      _gaq.push(['_setDomainName', 'autovoisin.com']);
       _gaq.push(['_trackPageview']);
       {% spaceless %}
       {% if request.user.is_authenticated %}
