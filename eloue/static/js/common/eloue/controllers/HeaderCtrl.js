@@ -7,7 +7,8 @@ define([
      */
     EloueWidgetsApp.controller('HeaderCtrl', [
         '$scope',
-        function ($scope) {
+        'UtilsService',
+        function ($scope, UtilsService) {
             var fromDateSelector = $("input[name='date_from']"),
                 toDateSelector = $("input[name='date_to']");
 
@@ -15,6 +16,7 @@ define([
                 if (!fromDateSelector || !toDateSelector) {
                     return;
                 }
+
                 fromDateSelector.datepicker({
                     language: 'fr',
                     autoclose: true,
@@ -25,6 +27,11 @@ define([
                     autoclose: true,
                     startDate: Date.today().add(2).days().toString('dd/MM/yyyy')
                 });
+
+                var params = UtilsService.getQueryParams();
+
+                $scope.fromDate = params.date_from;
+                $scope.toDate = params.date_to;
             };
 
             $scope.validateDates = function() {
