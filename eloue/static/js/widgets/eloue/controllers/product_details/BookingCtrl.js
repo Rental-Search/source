@@ -99,7 +99,9 @@ define([
                 $scope.isAuto = ($scope.rootCategory === "automobile");
                 $scope.isRealEstate = ($scope.rootCategory === "location-saisonniere");
                 var subparts = href.split("-");
-                return subparts[subparts.length - 1];
+                var productId = subparts[subparts.length - 1];
+                var productIdSubparts = productId.split("/");
+                return productIdSubparts[0];
             };
             $scope.productId = $scope.getProductIdFromUrl();
 
@@ -130,22 +132,24 @@ define([
                 {"label": "23h", "value": "23:00:00"}
             ];
 
+            var queryParams = UtilsService.getQueryParams();
+
             /**
              * Initial booking dates are 1 nad 2 days after todat, 8a.m.
              */
             $scope.bookingDetails = {
-                "fromDate": Date.today().add(1).days().toString("dd/MM/yyyy"),
+                "fromDate": queryParams.date_from ? queryParams.date_from : Date.today().add(1).days().toString("dd/MM/yyyy"),
                 "fromHour": $scope.hours[8],
-                "toDate": Date.today().add(2).days().toString("dd/MM/yyyy"),
+                "toDate": queryParams.date_to ? queryParams.date_to : Date.today().add(2).days().toString("dd/MM/yyyy"),
                 "toHour": $scope.hours[9]
             };
             var fromDateSelector = $("input[name='fromDate']"), toDateSelector = $("input[name='toDate']");
-            fromDateSelector.val(Date.today().add(1).days().toString("dd/MM/yyyy")).datepicker({
+            fromDateSelector.val($scope.bookingDetails.fromDate).datepicker({
                 language: "fr",
                 autoclose: true,
                 startDate: Date.today().add(1).days().toString("dd/MM/yyyy")
             });
-            toDateSelector.val(Date.today().add(2).days().toString("dd/MM/yyyy")).datepicker({
+            toDateSelector.val($scope.bookingDetails.toDate).datepicker({
                 language: "fr",
                 autoclose: true,
                 startDate: Date.today().add(2).days().toString("dd/MM/yyyy")
