@@ -30,7 +30,7 @@ class Migration(DataMigration):
 
         db.execute("""
                 INSERT INTO products_product_sites(product_id, site_id)
-                SELECT PS.product_id, %s FROM
+                SELECT DISTINCT PS.product_id, %s FROM
                 products_product_sites AS PS JOIN products_product2category AS PC ON
                 (PC.product_id=PS.product_id) WHERE PC.site_id = PS.site_id AND
                 PS.site_id = %s AND
