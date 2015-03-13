@@ -2,7 +2,7 @@
 from django.conf.urls import patterns, url, include
 
 #from eloue.api.resources import api_v1
-from eloue.api import views
+#from eloue.api import views
 from eloue.api import routers
 
 urlpatterns = patterns('',
