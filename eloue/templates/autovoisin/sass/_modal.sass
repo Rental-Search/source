@@ -165,13 +165,16 @@
   input[type="email"],
   input[type="number"],
   input[type="password"]
-    &:invalid,
     &:empty
-      border-color: $brand-danger
+      border-color: $gray-medium
     &:valid
       border-color: $gray-medium
     &[disabled]
       border-color: $gray-medium !important
+  .submitted input.input-invalid
+    border-color: $input-invalid-color
+  .submitted input.ng-invalid
+    border-color: $input-invalid-color
 
   .chosen-container
     font-size: 14px
