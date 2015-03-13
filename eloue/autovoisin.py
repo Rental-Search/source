@@ -8,8 +8,6 @@ CACHE_MIDDLEWARE_KEY_PREFIX = VERTICAL_SITE_NAME
 
 SECRET_KEY = 'j$(so*u7+=^@64&(skv1qc%avh04lib*)vih_wi7h(bcfx@753'
 
-SESSION_COOKIE_DOMAIN = env('SESSION_COOKIE_DOMAIN', VERTICAL_SITE_NAME)
-
 for key in PIPELINE_CSS:
     output_filename = PIPELINE_CSS[key]['output_filename'].replace(
             '.css', '_%s.css' % VERTICAL_SITE_NAME)
