@@ -55,8 +55,8 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
     is_good = indexes.BooleanField(default=False)
 
-    starts_unavailable = indexes.MultiValueField(null=True)
-    ends_unavailable = indexes.MultiValueField(null=True)
+    starts_unavailable = indexes.MultiValueField(faceted=True, null=True)
+    ends_unavailable = indexes.MultiValueField(faceted=True, null=True)
 
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
