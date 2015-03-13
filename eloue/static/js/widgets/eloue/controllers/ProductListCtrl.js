@@ -72,55 +72,48 @@ define([
                         if (!rangeMax) {
                             $("#range-label").hide();
                         } else {
+                            var updatedBySlider = false;
                             rangeVal = rangeInput.attr("value");
                             if (rangeVal) {
                                 rangeSlider.attr("value", "1;" + rangeVal);
                             } else {
                                 rangeSlider.attr("value", "1;" + rangeMax);
                             }
-                            notUpdateBySlider = false;
-                            notUpdateByMap = false;
                             rangeSlider.slider({
                                 from: 1,
                                 to: Number(rangeMax),
                                 limits: false,
                                 dimension: "&nbsp;km",
-                                onstatechange: function (value) {
-                                    notUpdateByMap = true;
-                                    if (!notUpdateBySlider) {
-                                        var rangeValue = value.split(";")[1];
-                                        // enable the input so its value could be now posted with a form data
-                                        rangeInput.prop("disabled", false);
-                                        // set new values to the hidden input
-                                        rangeInput.attr("value", rangeValue);
-                                        // change map's zoom level
-                                        map.setZoom(MapsService.zoom(rangeValue));
-                                    }
-                                    setTimeout(function () {
-                                        notUpdateByMap = false;
-                                    }, 1000);
-                                },
                                 // On mouse up submit form.
-                                callback: function() {
+                                callback: function(value) {
+                                    updatedBySlider = true;
+                                    var rangeValue = value.split(";")[1];
+                                    // enable the input so its value could be now posted with a form data
+                                    rangeInput.prop("disabled", false);
+                                    // set new values to the hidden input
+                                    rangeInput.attr("value", rangeValue);
+                                    // change map's zoom level
+                                    map.setZoom(MapsService.zoom(rangeValue));
+
                                     $scope.submitForm();
                                 }
                             });
 
                             google.maps.event.addListener(map, "zoom_changed", function () {
-                                notUpdateBySlider = true;
                                 if ($scope.submitInProgress) {
                                     return;
                                 }
-                                if (!notUpdateByMap) {
+                                if (!updatedBySlider) {
                                     var zoomLevel = map.getZoom(),
                                         calcRange = MapsService.range(zoomLevel);
                                     if (calcRange && calcRange <= rangeMax) {
                                         rangeSlider.slider("value", 1, calcRange);
                                     }
+                                    rangeInput.prop("disabled", false);
+                                    rangeInput.attr("value", calcRange);
                                 }
-                                setTimeout(function () {
-                                    notUpdateBySlider = false;
-                                }, 1000);
+                                updatedBySlider = false;
+                                $scope.submitForm();
                             });
                         }
                     }
