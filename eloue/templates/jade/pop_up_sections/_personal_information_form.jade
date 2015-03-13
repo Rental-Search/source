@@ -24,7 +24,11 @@ h2 Vos informations personnelles
     .col-sm-6
       input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
       span.text-danger(ng-show="bookingForm.city.$error.required && bookingSubmitted", translate="required_field")
+//- section
+//-   include _pickup_info
 .row: .col-xs-12
+    .span
+      include _pickup_info
     .checkbox(ng-show="shippingAllowed")
         label
             input(type="checkbox", ng-model="addShipping", ng-change="loadShippingPoints()")#particular
