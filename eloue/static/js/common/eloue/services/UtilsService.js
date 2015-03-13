@@ -115,6 +115,40 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
             return unreadMessagesIds;
         };
 
+        // The method to initiate custom scrollbars
+        utilsService.initCustomScrollbars = function() {
+
+                // custom scrollbar
+                $(".chosen-drop").mCustomScrollbar({
+                    scrollInertia: "100",
+                    autoHideScrollbar: true,
+                    theme: "dark-thin",
+                    scrollbarPosition: "outside",
+                    advanced: {
+                        autoScrollOnFocus: false,
+                        updateOnContentResize: true
+                    }
+                });
+                $(".scrollbar-custom").mCustomScrollbar({
+                    scrollInertia: "100",
+                    autoHideScrollbar: true,
+                    theme: "dark-thin",
+                    advanced: {
+                        updateOnContentResize: true,
+                        autoScrollOnFocus: false
+                    }
+                });
+                $(".textarea-wrapper").mCustomScrollbar({
+                    scrollInertia: "100",
+                    autoHideScrollbar: true,
+                    theme: "dark-thin",
+                    mouseWheel: {
+                        updateOnContentResize: true,
+                        disableOver: false
+                    }
+                });
+            };
+
         return utilsService;
     }]);
 });
