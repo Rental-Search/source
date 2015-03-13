@@ -775,6 +775,16 @@ class PublishCategoryMixin(object):
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
+    @staticmethod
+    def get_product_counts_per_city():
+        d = {}
+        for city, count in product_search.facet('city').facet_counts()['fields']['city']:
+            city = city.upper()
+            d[city] = d.get(city, 0) + count
+        l = d.items()
+        l.sort(key=lambda t: t[1], reverse=True)
+        return l[:9]
+
     def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
         comment_list = Comment.objects.select_related(
@@ -786,7 +796,8 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         context = {
             'product_list': product_list,
             'comment_list': comment_list,
-            'products_on_site': Product.on_site.only('id'),
+            'products_on_site': product_search,
+            'cities_list': self.get_product_counts_per_city,
         }
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
