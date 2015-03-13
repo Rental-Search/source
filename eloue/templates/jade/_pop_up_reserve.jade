@@ -22,9 +22,9 @@
                   fieldset(data-ng-disabled="submitInProgress || shippingPointsRequestInProgress || loadingProductShippingPoint")
                     section.table.form-wrapper.personal-information
                         include ./pop_up_sections/_personal_information_form
-                        include ./pop_up_sections/_pickup_info
                     section.table.form-wrapper.shipping(ng-show="addShipping")
-                            include ./pop_up_sections/_shipping
+                        include ./pop_up_sections/_pickup_info
+                        include ./pop_up_sections/_shipping
                     section.table.form-wrapper.bank-information
                         include ./pop_up_sections/_bank_information
 #auto-alert.modal.fade
