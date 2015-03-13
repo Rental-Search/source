@@ -30,7 +30,7 @@
                                 input(type="text", name="model", placeholder="Modèle *", ng-required="isAuto", ng-model="product.model", ng-show="isAuto").form-control
                                 span.text-danger(ng-show="publishAdForm.model.$error.required && !!publishAdSubmitted", translate="required_field")
                         .row
-                            .col-sm-4
+                            .col-sm-4.ng-hide
                                 select(ng-model="rootCategory", required,  name="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-placeholder="Catégorie Niv.1 *", data-ng-disabled="submitInProgress", style="z-index: 1051").form-control
                                     option(ng-repeat="category in rootCategories", value="{{category.id}}", ng-selected="category.id == rootCategory") {{category.name}}
                                 span.text-danger(ng-show="publishAdForm.rootCategory.$error.required && !!publishAdSubmitted", translate="required_field")
