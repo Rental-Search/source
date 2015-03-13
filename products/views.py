@@ -797,7 +797,7 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
             'product_list': product_list,
             'comment_list': comment_list,
             'products_on_site': product_search,
-            'cities_list': self.get_product_counts_per_city,
+            #'cities_list': self.get_product_counts_per_city,
         }
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
