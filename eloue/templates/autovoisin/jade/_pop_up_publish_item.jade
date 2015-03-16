@@ -74,7 +74,7 @@
                              .col-sm-1(ng-show="isAuto"): b.form-suffix &euro;
                         .row(ng-if="isAuto")
                             .col-sm-4(style="z-index: 1050")
-                                input#first_registration_date(type="text", name="first_registration_date", ng-model="product.first_registration_date", placeholder="1er mise en circulation *", ng-required="isAuto", eloue-extended-datepicker).form-control.date
+                                input#first_registration_date(type="text", name="first_registration_date", ng-model="product.first_registration_date", placeholder="1er mise en circulation *", ng-required="isAuto", eloue-year-datepicker).form-control.date
                                 span.text-danger(ng-show="publishAdForm.first_registration_date.$error.required && !!publishAdSubmitted", translate="required_field")
                             .col-sm-4
                                 input(type="text", name="licence_plate", ng-model="product.licence_plate", placeholder="N° d'immatriculation *", ng-required="isAuto").form-control

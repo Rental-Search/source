@@ -82,6 +82,14 @@ define([
                         $scope.noAddress = true;
                     }
                     $scope.loadCreditCards();
+
+                    if (currentUser.date_of_birth) {
+                        $("#date_of_birth").datepicker("setDate", new Date(currentUser.date_of_birth));
+                    }
+
+                    if (currentUser.drivers_license_date) {
+                        $("#drivers_license_date").datepicker("setDate", new Date(currentUser.date_of_birth));
+                    }
                 });
             }
 
@@ -737,6 +745,7 @@ define([
                 $("#" + fieldId).datepicker({
                     language: "fr",
                     autoclose: true,
+                    startView: 2,
                     todayHighlight: true,
                     dateFormat: "yyyy-MM-dd"
                 });
