@@ -10,10 +10,11 @@ define([
         '$scope',
         '$window',
         '$document',
+        '$rootScope',
         'MapsService',
         'UtilsService',
         'GoogleMapsMarkers',
-        function ($scope, $window, $document, MapsService, UtilsService, GoogleMapsMarkers) {
+        function ($scope, $window, $document, $rootScope, MapsService, UtilsService, GoogleMapsMarkers) {
             var map, latLngsArr = [], addHovered = false, mapMarker = GoogleMapsMarkers, markers;
 
             // On modal shown.
@@ -28,7 +29,10 @@ define([
             });
 
             $window.googleMapsLoaded = function () {
+                $scope.googleMapsLoaded();
+            };
 
+            $scope.googleMapsLoaded = function() {
                 var mapCanvas = $document[0].getElementById('map-canvas'),
                     mapOptions;
 
@@ -224,6 +228,10 @@ define([
                             .indexOf(ignoreCase ? str.toUpperCase() : str) == 0;
                 };
             }
+
+            $rootScope.$on('productMapLoaded', function() {
+                $scope.googleMapsLoaded();
+            });
 
             MapsService.loadGoogleMaps();
         }]);
