@@ -96,6 +96,6 @@ section(ng-controller="AuthCtrl").container.signs-links
             i.search-form-icon.flaticon.stroke.calendar-3
             input(type="text", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}", placeholder="Au", title="{% if form.cleaned_data.date_to %}Où ça ?{% endif %}", data-ng-model="toDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
           .table-cell.input-group-btn
-            button(type="submit", default).btn.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
+            button(type="submit", default).btn.btn-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
     .table-cell
       button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise Déposez une annonce
