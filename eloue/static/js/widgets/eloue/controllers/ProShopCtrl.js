@@ -206,7 +206,7 @@ define([
             $("#cityInput").on("keyup", function() {
                 $("li[id^='marker-']").each(function () {
                     var item = $(this);
-                    if (item.attr('city').trim().startsWith($scope.search.trim(), true)) {
+                    if (item.attr('city').trim().toUpperCase().indexOf($scope.search.trim().toUpperCase()) == 0) {
                         // Show item.
                         item.removeClass("ng-hide");
                     }
@@ -220,13 +220,6 @@ define([
                 $scope.deleteMarkers();
                 $scope.addMarkers();
             });
-
-            if (typeof String.prototype.startsWith != 'function') {
-                String.prototype.startsWith = function(str, ignoreCase) {
-                    return (ignoreCase ? this.toUpperCase() : this)
-                            .indexOf(ignoreCase ? str.toUpperCase() : str) == 0;
-                };
-            }
 
             $rootScope.$on('productMapLoaded', function() {
                 $scope.googleMapsLoaded();
