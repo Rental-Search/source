@@ -204,7 +204,6 @@ define([
 
             // On key up in the search field, filter visible agencies according to city.
             $("#cityInput").on("keyup", function() {
-                console.log($scope.search);
                 $("li[id^='marker-']").each(function () {
                     var item = $(this);
                     if (item.attr('city').trim().startsWith($scope.search.trim(), true)) {
