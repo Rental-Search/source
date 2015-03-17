@@ -20,7 +20,7 @@ TEMPLATE_DIRS = env('TEMPLATE_DIRS', (
 
 NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
     2701, 2702, 2703, 2704, 2705, 2706, 2707, 2710,  # first line / nav bar
-    2708, 2709, 2711, 2712,  # others / dropdown selection
+    2708, 2711, 2712,  # others / dropdown selection  #2709 - minibus
 ])
 
 FILTER_CATEGORIES = env('FILTER_CATEGORIES', NAVBAR_CATEGORIES)
