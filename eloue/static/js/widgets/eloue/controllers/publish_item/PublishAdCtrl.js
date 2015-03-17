@@ -384,6 +384,11 @@ define([
                 }
             };
 
+            $scope.initRootCategory = function(rootCategoryId) {
+                $scope.rootCategory = rootCategoryId;
+                $scope.updateNodeCategories();
+            };
+
             MapsService.loadGoogleMaps();
         }]);
 });
