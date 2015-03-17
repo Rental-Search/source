@@ -41,6 +41,7 @@
       border: .8em solid transparent
       top: .6em
   &.from-declarer
+    position: relative
     .time,
     .thumbnail-frame
       float: left
@@ -49,8 +50,12 @@
       &:before
         left: -1.5em
         border-right-color: $bgc-declarer
-  &.from-customer
     .thumbnail-content
+      width: 100%
+  &.from-customer
+    position: relative
+    .thumbnail-content
+      width: 100%
       padding-left: 0
       padding-right: $section-pad
     .time,

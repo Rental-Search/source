@@ -77,8 +77,46 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
             xhr.send();
         };
 
+        /**
+         * Set valid sender for messages.
+         * @param messages messages to modify.
+         * @param replacer in case of sender is not current user, sender filed will be replaced with this object.
+         * @param currentUser current user.
+         */
+        utilsService.updateMessagesSender = function(messages, replacer, currentUser) {
+            // Replace sender as url with real object for all messages.
+            for (var i = 0; i < messages.length; i++) {
+                if (angular.isObject(messages[i].sender)) {
+                    continue;
+                }
+                var senderId = utilsService.getIdFromUrl(messages[i].sender);
+
+                if (senderId == replacer.id) {
+                    messages[i].sender = replacer;
+                } else {
+                    messages[i].sender = currentUser;
+                }
+            }
+        };
+
+        /**
+         * Get unread messages ids.
+         * @param messages messages to check.
+         * @param currentUser current user to prevent selecting outcoming messages.
+         * @returns {Array} array of unread messages ids.
+         */
+        utilsService.getUnreadMessagesIds = function(messages, currentUser) {
+            var unreadMessagesIds = [];
+            for (var i = 0; i < messages.length; i++) {
+                if (messages[i].read_at == null && (messages[i].sender.id != currentUser.id || messages[i].sender.id == utilsService.getIdFromUrl(messages[i].recipient))) {
+                    unreadMessagesIds.push(messages[i].id);
+                }
+            }
+            return unreadMessagesIds;
+        };
+
         // The method to initiate custom scrollbars
-        utilsService.initCustomScrollbars = function() {
+        utilsService.initCustomScrollbars = function(scrollbarSelector) {
 
                 // custom scrollbar
                 $(".chosen-drop").mCustomScrollbar({
@@ -91,7 +129,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
                         updateOnContentResize: true
                     }
                 });
-                $(".scrollbar-custom").mCustomScrollbar({
+                $(scrollbarSelector ? scrollbarSelector : ".scrollbar-custom").mCustomScrollbar({
                     scrollInertia: "100",
                     autoHideScrollbar: true,
                     theme: "dark-thin",

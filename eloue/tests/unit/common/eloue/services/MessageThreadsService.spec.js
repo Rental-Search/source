@@ -78,13 +78,13 @@ define(["angular-mocks", "eloue/services/MessageThreadsService"], function () {
         it("MessageThreadsService:getMessageThreadByProductAndParticipant", function () {
             var productId = 1, participantId = 2;
             MessageThreadsService.getMessageThreadByProductAndParticipant(productId, participantId);
-            expect(messageThreadsMock.list).toHaveBeenCalledWith({product: productId, participant: participantId, _cache: jasmine.any(Number)});
+            expect(messageThreadsMock.list).toHaveBeenCalledWith({product: productId, participant: participantId, _cache: jasmine.any(Number), empty: "False"});
         });
 
         it("MessageThreadsService:getMessageThreadList", function () {
             var page = 1;
             MessageThreadsService.getMessageThreadList(page);
-            expect(messageThreadsMock.get).toHaveBeenCalledWith({page: page, ordering: "-last_message__sent_at", _cache: jasmine.any(Number)});
+            expect(messageThreadsMock.get).toHaveBeenCalledWith({page: page, ordering: "-last_message__sent_at", _cache: jasmine.any(Number), empty: "False"});
         });
 
         it("MessageThreadsService:getMessageThreadById", function () {

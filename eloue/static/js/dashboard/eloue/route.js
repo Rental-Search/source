@@ -42,6 +42,7 @@ define(["eloue/app",
         "../../common/eloue/directives/PasswordMatch",
         "../../common/eloue/directives/RegistrationForm",
         "../../common/eloue/directives/ResetPasswordForm",
+        "../../common/eloue/directives/ScrollBottom",
         "../../common/eloue/directives/ZipcodeValidator",
         "../../common/eloue/interceptors/ErrorHandlerInterceptor"],
     function (EloueApp) {
@@ -75,7 +76,7 @@ define(["eloue/app",
                         controller: "MessagesCtrl"
                     })
                     .state("messages.new", {
-                        url: "/new_message/:productId",
+                        url: "/new_message/:bookingId",
                         templateUrl: "partials/dashboard/messages/message_detail.html",
                         controller: "NewMessageThreadCtrl"
                     })

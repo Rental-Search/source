@@ -32,20 +32,22 @@ class Api20Router(DefaultRouter):
             if route.mapping == {'{httpmethod}': '{methodname}'}:
                 # Dynamic routes (@link or @action decorator)
                 for httpmethods, methodname in dynamic_routes:
+                    method_kwargs = getattr(viewset, methodname).kwargs
+                    url_path = method_kwargs.pop("url_path", None) or methodname
                     initkwargs = route.initkwargs.copy()
-                    initkwargs.update(getattr(viewset, methodname).kwargs)
+                    initkwargs.update(method_kwargs)
                     if getattr(getattr(viewset, methodname), 'for_list', False):
                         ret.insert(0, Route(
-                            url=replace_methodname(route.url, methodname).replace('{lookup}/', ''),
+                            url=replace_methodname(route.url, url_path).replace('{lookup}/', ''),
                             mapping=dict((httpmethod, methodname) for httpmethod in httpmethods),
-                            name=replace_methodname(route.name, methodname),
+                            name=replace_methodname(route.name, url_path),
                             initkwargs=initkwargs,
                         ))
                     else:
                         ret.append(Route(
-                            url=replace_methodname(route.url, methodname),
+                            url=replace_methodname(route.url, url_path),
                             mapping=dict((httpmethod, methodname) for httpmethod in httpmethods),
-                            name=replace_methodname(route.name, methodname),
+                            name=replace_methodname(route.name, url_path),
                             initkwargs=initkwargs,
                         ))
             else:

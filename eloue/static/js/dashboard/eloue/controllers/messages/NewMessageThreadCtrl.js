@@ -14,6 +14,7 @@ define([
      */
     EloueDashboardApp.controller("NewMessageThreadCtrl", [
         "$scope",
+        "$rootScope",
         "$state",
         "$stateParams",
         "Endpoints",
@@ -22,29 +23,29 @@ define([
         "ProductsService",
         "UtilsService",
         "UsersService",
-        function ($scope, $state, $stateParams, Endpoints, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService, UsersService) {
+        function ($scope, $rootScope, $state, $stateParams, Endpoints, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService, UsersService) {
 
             if (!$scope.currentUserPromise) {
                 $scope.currentUserPromise = UsersService.getMe();
             }
+
+            // Broadcast value to display message thread.
+            $rootScope.$broadcast("newMessage", {showMessages: true});
+
             $scope.currentUserPromise.then(function (currentUser) {
 
                 $scope.currentUser = currentUser;
                 $scope.currentUserUrl = Endpoints.api_url + "users/" + currentUser.id + "/";
 
-                if ($stateParams.productId) {
+                if ($stateParams.bookingId) {
                     $scope.messageThread = {
                         id: null
                     };
 
-                    //Get product details
-                    ProductsService.getProduct($stateParams.productId, true, true).then(function (product) {
-                        $scope.messageThread.product = product;
-                    });
-
-                    // Get booking product
-                    BookingsService.getBookingByProduct($stateParams.productId).then(function (booking) {
+                    // Get booking
+                    BookingsService.getBooking($stateParams.bookingId).then(function(booking) {
                         $scope.booking = booking;
+                        $scope.messageThread.product = booking.product;
                         $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                         $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
                     });
@@ -55,13 +56,15 @@ define([
 
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
+                $("#messages-list").find(".load-more-button").hide();
             });
 
             // Post new message
             $scope.postNewMessage = function () {
                 $scope.submitInProgress = true;
-                ProductRelatedMessagesService.postMessage($scope.messageThread.id, $scope.currentUser.id, $scope.booking.owner.id,
-                    $scope.message, null, $stateParams.productId).then(
+                var recipientId = $scope.booking.owner.id == $scope.currentUser.id ? $scope.booking.borrower.id : $scope.booking.owner.id;
+                ProductRelatedMessagesService.postMessage($scope.messageThread.id, $scope.currentUser.id, recipientId,
+                    $scope.message, null, $scope.booking.product.id).then(
                     $scope.redirectAfterMessagePost,
                     function () {
                         $scope.submitInProgress = false;

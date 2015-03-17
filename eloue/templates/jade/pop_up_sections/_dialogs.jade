@@ -1,14 +1,16 @@
 .dialog-scroll-container
-    .dialog-container
+    .dialog-container(scroll-bottom="productRelatedMessages")
         {% verbatim %}
+        div.text.text-success.text-underline-hover(ng-show="threadId && hasNextPage")
+          a(href="/dashboard/#/messages/{{threadId}}", translate="getAllMessages")
         .message(ng-repeat="message in productRelatedMessages | orderBy:'sent_at'", class="{{(product.owner.id == message.sender.id ? 'from-declarer' : 'from-customer')}}")
-            div(ng-show="product.owner.id == message.sender.id").thumbnail-img
+            div(ng-if="product.owner.id == message.sender.id").thumbnail-img
                 a(href="{{message.sender.url}}"): img(style="background-image: url({{ message.sender.avatar.thumbnail }})").bg-image
             .thumbnail-content
                 .thumbnail-frame
                     h4 {{message.sender.username}}
                     p(ng-bind="message.body")
                 p(ng-bind="message.sent_at | date : 'Le dd.MM.yyyy à HH:mm'").time
-            div(ng-show="product.owner.id != message.sender.id").thumbnail-img
+            div(ng-if="product.owner.id != message.sender.id").thumbnail-img
                 a(href="{{message.sender.url}}"): img(style="background-image: url({{ message.sender.avatar.thumbnail }})").bg-image
         {% endverbatim %}

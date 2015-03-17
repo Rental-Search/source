@@ -11,7 +11,34 @@ block append styles
 block append scripts
   script(type="text/javascript", src="https://www.googleadservices.com/pagead/conversion_async.js", charset="utf-8")
 
+block append head
+  {% with product.pictures.all|first as picture %}
+  {% with product.object.get_absolute_url as absolute_url %}
+  meta(property="og:title", content="A louser sur e-loue : {{product.summary}}")
+  meta(property="og:type", content="product")
+  meta(property="og:url", content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}{{ absolute_url }}")
+  {% with product.object.address as address %}
+  meta(property="og:locality", content="{{address.city}}")
+  meta(property="og:postal-code", content="{{address.zipcode}}")
+  meta(property="og:country-name", content="{{address.get_country_display}}")
+  {% endwith %}
+  {% if picture %}
+  meta(property="og:image", content="{{picture.display.url}}")
+  {% endif %}
+  meta(property="og:site_name", content="e-loue")
+  meta(property="fb:app_id", content="197983240245844")
+  meta(property="og:description", content="{{product.description}}")
+  {% if picture %}
+  meta(itemprop="image", content="{{picture.display.url}}")
+  {% endif %}
+  meta(itemprop="name", content="{{product.summary}}")
+  link(rel="canonical", href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}{{ absolute_url }}")
+  {% endwith %}
+  {% endwith %}
+
+
 block append content-body
+
   -var is_pro = product.pro_owner
   #fb-root
   if is_pro

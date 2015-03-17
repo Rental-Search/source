@@ -79,6 +79,13 @@ define(["angular-mocks", "eloue/services/ProductRelatedMessagesService"], functi
             expect(productRelatedMessagesMock.get).toHaveBeenCalledWith({id: messageId, _cache: jasmine.any(Number)});
         });
 
+        it("ProductRelatedMessagesService:getThreadMessages", function() {
+            var threadId = 1, page = 1;
+            ProductRelatedMessagesService.getThreadMessages(threadId, page);
+            expect(productRelatedMessagesMock.get).toHaveBeenCalled();
+            expect(productRelatedMessagesMock.get).toHaveBeenCalledWith({thread: threadId, _cache: jasmine.any(Number), ordering: '-sent_at', page: page});
+        });
+
         it("ProductRelatedMessagesService:getMessage", function () {
             var messageId = 1;
             ProductRelatedMessagesService.getMessage(messageId);

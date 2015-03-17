@@ -16,18 +16,59 @@ define([
         "$stateParams",
         "$q",
         "$window",
+        "$timeout",
         "Endpoints",
         "MessageThreadsService",
         "BookingsService",
         "ProductRelatedMessagesService",
         "ProductsService",
         "UtilsService",
-        function ($scope, $stateParams, $q, $window, Endpoints, MessageThreadsService, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService) {
+        function ($scope, $stateParams, $q, $window, $timeout, Endpoints, MessageThreadsService, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService) {
+
+            $scope.items = [];
+
+            $scope.lazyLoadConfig = {
+                resultField: 'results',
+                // Inverse messages list.
+                inverse: true,
+                // Set custom target name to not cause affecting threads list.
+                loadingTarget: 'Messages'
+            };
+
+            $scope.isFirstLoad = true;
 
             $scope.handleResponseErrors = function (error, object, action) {
-                $scope.submitInProgress = false;
+                $scope.messageSubmitInProgress = false;
+                $scope.bookingSubmitInProgress = false;
                 $scope.showNotification(object, action, false);
             };
+
+            $scope.$watchCollection('items', function(newValue, oldValue) {
+                // On first page loaded scroll list to the bottom.
+                if (newValue.length != 0 && $scope.isFirstLoad) {
+                    $scope.scrollMessagesListToBottom();
+                    $scope.isFirstLoad = false;
+                }
+                if ($scope.messageThread) {
+                    var replacer = $scope.messageThread.sender.id == $scope.currentUser.id ? $scope.messageThread.recipient : $scope.messageThread.sender;
+                    UtilsService.updateMessagesSender($scope.items, replacer, $scope.currentUser);
+                }
+
+                var unreadMessages = UtilsService.getUnreadMessagesIds ($scope.items, $scope.currentUser);
+                if (unreadMessages.length != 0) {
+                    // If there are any unread messages.
+
+                    // Mark messages as seen.
+                    ProductRelatedMessagesService.markBunchAsRead(unreadMessages).then(function() {
+                        $scope.updateStatistics();
+                        MessageThreadsService.isThreadSeen($scope.messageThread.id).then(function(result) {
+                            if (result.seen) {
+                                $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
+                            }
+                        });
+                    });
+                }
+            });
 
             var promises = {
                 currentUser: $scope.currentUserPromise,
@@ -36,16 +77,14 @@ define([
 
             $q.all(promises).then(function (results) {
                 $scope.applyUserAndMessageThread(results);
+                // Load messages first page.
+                $scope.$broadcast("startLoading" + $scope.lazyLoadConfig.loadingTarget, {parameters: [$stateParams.id], shouldReloadList: true});
             });
 
             $scope.applyUserAndMessageThread = function (results) {
                 $scope.markListItemAsSelected("thread-", $stateParams.id);
                 $scope.messageThread = results.messageThread;
                 $scope.currentuser = results.currentUser;
-                if (!$scope.messageThread.last_message.read_at && (UtilsService.getIdFromUrl($scope.messageThread.last_message.recipient) == results.currentUser.id)) {
-                    $("#thread-" + $scope.messageThread.id).find(".unread-marker").hide();
-                    ProductRelatedMessagesService.markAsRead($scope.messageThread.last_message.id);
-                }
 
                 if ($scope.messageThread.product) {
 
@@ -88,8 +127,8 @@ define([
                             };
 
                             $scope.requestBooking = function () {
-                                $scope.submitInProgress = true;
-//                                //Get product details
+                                $scope.bookingSubmitInProgress = true;
+                                //Get product details
                                 ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
                                     $window.location.href = result.url + "#/booking";
                                 }, function (error) {
@@ -112,27 +151,27 @@ define([
 
                 // Post new message
                 $scope.postNewMessage = function () {
-                    $scope.submitInProgress = true;
+                    $scope.messageSubmitInProgress = true;
                     ProductRelatedMessagesService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(
-                        function () {
+                        function (data) {
                             // Clear message field
                             $scope.message = "";
 
-                            // Reload data
-                            MessageThreadsService.getMessageThreadById($stateParams.id).then(function (messageThread) {
-                                $scope.messageThread.messages = messageThread.messages;
-                                $scope.submitInProgress = false;
-                                $scope.showNotification("message", "send", true);
-                            }, function (error) {
-                                $scope.handleResponseErrors(error, "message", "send");
-                            });
+                            // Add new message.
+                            $scope.items.push(data);
+                            $scope.messageSubmitInProgress = false;
+                            $scope.showNotification("message", "send", true);
+
+
+                        }, function(error) {
+                            $scope.handleResponseErrors(error, "message", "send");
                         }
                     );
                 };
 
                 // Initiate custom scrollbars
-                $scope.initCustomScrollbars();
+                UtilsService.initCustomScrollbars("#messages-list");
             };
 
             $scope.updateNewBookingInfo = function () {
@@ -164,6 +203,17 @@ define([
                 $scope.newBooking.borrower = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
                 $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
             };
+
+            /**
+             * Scroll list to the bottom.
+             */
+            $scope.scrollMessagesListToBottom = function() {
+                $timeout(function () {
+                    $("#messages-list").mCustomScrollbar("scrollTo", "bottom", {
+                        scrollInertia: 0
+                    });
+                }, 50);
+            }
         }
     ]);
 });
