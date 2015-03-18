@@ -86,7 +86,7 @@ def get_point_and_radius(coords, radius=None):
 
 def get_last_added_sqs(search_index, location, sort_by_date='-created_at_date'):
     # only objects that are 'good' to be shown
-    sqs = search_index.filter(is_good=1)
+    sqs = search_index.filter(is_good=True)
 
     # try to find products in the same region
     region_point, region_radius = get_point_and_radius(
@@ -567,7 +567,7 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
     @method_decorator(mobify)
     @method_decorator(cache_page(900))
     @method_decorator(vary_on_cookie)
-    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet().filter(is_archived=False), suggestions=None, page=None, **kwargs):
+    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet(), suggestions=None, page=None, **kwargs):
         self.breadcrumbs = self.get_breadcrumbs(request)
         urlbits = urlbits or ''
         urlbits = filter(None, urlbits.split('/')[::-1])

@@ -111,9 +111,9 @@ class FilteredProductSearchForm(SearchForm):
     def sqs_filter_renter(self, sqs, search_params):
         status = search_params.get('renter')
         if status == "particuliers":
-            sqs = sqs.filter(pro_owner=0)
+            sqs = sqs.filter(pro_owner=False)
         elif status == "professionnels":
-            sqs = sqs.filter(pro_owner=1)
+            sqs = sqs.filter(pro_owner=True)
         return sqs
 
     def _get_location(self, location):
