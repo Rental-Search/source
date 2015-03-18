@@ -32,6 +32,16 @@ define([
 
                 $scope.fromDate = params.date_from;
                 $scope.toDate = params.date_to;
+
+                $("#from_icon")
+            };
+
+            $scope.showFromCalendar = function() {
+                fromDateSelector.datepicker('show');
+            };
+
+            $scope.showToCalendar = function() {
+                toDateSelector.datepicker('show');
             };
 
             $scope.validateDates = function() {

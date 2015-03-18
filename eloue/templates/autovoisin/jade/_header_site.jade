@@ -90,10 +90,10 @@ section(ng-controller="AuthCtrl").container.signs-links
           input#geolocate(type="text", name="l", value="{{ form.cleaned_data.l }}", autocomplete="off", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
           i.search-form-icon.flaticon.stroke.location-pin-3
           .table-cell.input-group.where-field
-            i.search-form-icon.flaticon.stroke.calendar-3
+            i(ng-click="showFromCalendar()").search-form-icon.flaticon.stroke.calendar-3
             input(type="text", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}", placeholder="Du", title="{% if form.cleaned_data.date_from %}Où ça ?{% endif %}", data-ng-model="fromDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
           .table-cell.input-group.where-field
-            i.search-form-icon.flaticon.stroke.calendar-3
+            i(ng-click="showToCalendar()").search-form-icon.flaticon.stroke.calendar-3
             input(type="text", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}", placeholder="Au", title="{% if form.cleaned_data.date_to %}Où ça ?{% endif %}", data-ng-model="toDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
           .table-cell.input-group-btn
             button(type="submit", default).btn.btn-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
