@@ -32,8 +32,6 @@ define([
 
                 $scope.fromDate = params.date_from;
                 $scope.toDate = params.date_to;
-
-                $("#from_icon")
             };
 
             $scope.showFromCalendar = function() {
