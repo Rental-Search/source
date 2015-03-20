@@ -4,8 +4,7 @@
       | Assurance objet
   
   section.indent-v-md
-    h2.b
-      | SYNTHÈSE
+    h2 SYNTHÈSE
 
     ul
       li.indent-v-sm
@@ -163,8 +162,7 @@
 
   h1.text-uppercase.text-center
     | Assurance logement
-  h3.b
-    | SYNTHÈSE
+  h2 SYNTHÈSE
   ul.dash-item
     li.indent-v-sm En effectuant votre location sur e-loue, le logement loué est automatiquement assuré, sans coût supplémentaire.
     li.indent-v-sm L’assurance est incluse dans le montant réglé en ligne par le locataire.
@@ -202,38 +200,66 @@
 
   h3.b
     | GARANTIES ACCORDÉES PAR L’ASSURANCE
+
   p Pendant la durée de la location, l’assurance E-loue / Europ Assistance inclut les types de garanties et montants de garantie suivants :
-  ul.dash-item
-    li.indent-v-sm Responsabilité civile / Dommages corporels : illimité (franchise de 500 €)
-    li.indent-v-sm Annulation du séjour : acompte + solde (dans la limite de 15 000 €)
-      p
-        em
-          | Uniquement si l’annulation fait suite à une maladie, un accident, un décès, des dommages matériels au domicile ou 
-          | locaux professionnels, un licenciement économique de l’assuré ou de son conjoint, annulation de l’accompagnant du 
-          | bénéficiaire
 
-    li.indent-v-sm Interruption de séjour : Loyer non couru (dans la limite de 15 000 €)
-
-    li.indent-v-sm Interruption de séjour : Remboursement des frais de transports terrestres non utilisés (frais réels)
-      em Uniquement si l’interruption fait suite à un rapatriement médical ou à un retour anticipé
-    li.indent-v-sm 
-      | Responsabilité civile villégiature / Dommages corporels et matériels suite à incendie, explosion, dégâts des eaux : 
-      | 1 525 000 € (franchise de 75 €)
-
-    li.indent-v-sm 
-      | Responsabilité civile villégiature / Dommages aux biens mobiliers et immobiliers appartenant au propriétaire du bien 
-      | loué : 2 500 € (franchise de 75 €)
-    li.indent-v-sm Location frauduleuse : Frais hôteliers à hauteur de 75€ / personne, dans la limite d’une nuit.
-
-    li.indent-v-sm 
-      | Refus d'occupation par le locataire suite à une non-conformité du bien loué : Frais hôteliers à hauteur de 75€ / 
-      | personne, dans la limite d’une nuit.
+  table.table
+      thead
+        tr
+          th Type de garantie
+          th Montant de la garantie
+          th Franchise
+      tbody
+        tr
+          th Responsabilité civile / Dommages corporels
+          th Illimité
+          th 500 €
+        tr
+          th 
+            | Annulation du séjour
+            br
+            em 
+              | Uniquement si l’annulation fait suite à une maladie, un accident, un décès,
+              br
+              | des dommages matériels au domicile ou locaux professionnels, un licenciement
+              br
+              | économique de l’assuré ou de son conjoint, annulation de l’accompagnant du bénéficiaire
+          th Acompte + solde dans la limite de 15 000€
+          th néant
+        tr
+          th Interruption de séjour
+          th Loyer non couru (dans la limite de 15 000€)
+          th néant
+        tr
+          th
+            | Interruption de séjour
+            br 
+            em Uniquement si l’interruption fait suite à un rapatriement médical ou à un retour anticipé
+          th Remboursement des frais de transports terrestres non utilisés (frais réels)
+          th néant
+        tr
+          th
+            | Responsabilité civile villégiature / Dommages corporels et matériels
+            br
+            | suite à incendie, explosion, dégâts des eaux
+          th 1 525 000 €
+          th 75 €
+        tr
+          th Responsabilité civile villégiature / Dommages aux biens mobiliers et immobiliers appartenant au propriétaire du bien loué
+          th 2 500 €
+          th 75 €
+        tr
+          th Location frauduleuse
+          th Frais hôteliers à hauteur de 75€ / personne, dans la limite d’une nuit
+          th néant
+        tr
+          th Refus d'occupation par le locataire suite à une non-conformité du bien loué
+          th Frais hôteliers à hauteur de 75€ / personne, dans la limite d’une nuit
+          th néant
 
   h3.b
     | QUE FAIRE POUR DÉCLARER UN INCIDENT ?
-  h4
-    | > En cas de casse :
-
+  h4.b > EN CAS DE CASSE :
   p Le locataire doit :
   ul.dash-item
     li.indent-v-sm prévenir immédiatement le propriétaire du logement loué,  en lui expliquant le problème qu’il rencontre 
@@ -259,14 +285,12 @@
     li.indent-v-sm
       |dans le cas d’un dégât des eaux, un incendie, une explosion : faire établir un constat amiable et le transmettre au |locataire dans les 48h
   
-  h4
-    | > En cas de vol :
+  h4.b > EN CAS DE VOL :
   p
     | En cas de cambriolage constaté par le locataire durant la période de location, le locataire doit prévenir immédiatement le 
     | propriétaire qui se chargera de prendre contact avec son assureur. 
   
-  h4
-    | > En cas de panne :
+  h4.b > EN CAS DE PANNE :
   p
     | En cas de panne constatée par le locataire durant la période de location (chauffage, eaux, équipements), le locataire doit 
     | contacter immédiatement le propriétaire qui s'engage à mettre tout en œuvre pour assurer les réparations.
@@ -312,9 +336,7 @@
 
   h3.b
     | GARANTIES SUPPLEMENTAIRES POUR LA LOCATION SAISONNIERE
-  h4
-    | > En cas d’annulation du séjour
-  p.b QUE FAIRE ?
+  h4.b QUE FAIRE EN CAS D’ANNULATION DU SÉJOUR ?
   p
     | Le locataire doit impérativement procéder à l'annulation de son séjour via le site E-loue par mail (
     a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
@@ -354,10 +376,7 @@
     li.indent-v-sm Tout justificatif
 
 
-  h4
-    | > En cas d’interruption de séjour
-  p
-    b QUE FAIRE ?
+  h4.b QUE FAIRE EN CAS D’INTERRUPTION DE SÉJOUR ?
   p
     | Le locataire doit impérativement prévenir le propriétaire afin de convenir des modalités de fin de séjour (état des lieux, 
     | dépôt de garantie, remise des clés,…).
@@ -380,10 +399,8 @@
     | en fonction de la raison de l'interruption.
 
 
-  h4
-    | > En cas de non-conformité du bien
+  h4.b > QUE FAIRE EN CAS DE NON-CONFORMITÉ DU BIEN ?
   p
-    b QUE FAIRE ?
     | Le locataire doit impérativement aviser directement le propriétaire, les services E-loue, par mail (
     a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
     |) et par téléphone (01.85.08.99.77) et l'assureur verbalement et par écrit, par lettre recommandée avec accusé de 
@@ -409,10 +426,7 @@
     li.indent-v-sm Les coordonnées courriel ou postale du propriétaire
 
 
-  h4
-    | > En cas de fraude
-  p 
-    b QUE FAIRE ?
+  h4.b QUE FAIRE EN CAS DE FRAUDE ?
 
   p 
     | Le locataire doit impérativement aviser directement le propriétaire, les services E-loue (par mail à 
@@ -438,14 +452,14 @@
 
   h4
     | COORDONNEES DE L’ASSUREUR
-    p
-      | ADAR PLUS C/O Cabinet ALBINET 5, cité de Trévisse 
-      | 75009 Paris 
-    p  
-      | mail : 
-      a(href="mailto:claim@cabinetalbinet.fr ").link-success claim@cabinetalbinet.fr 
-    p
-      | Fax : 01 48 01 84 83
+  p
+    | ADAR PLUS C/O Cabinet ALBINET 5, cité de Trévisse 
+    | 75009 Paris 
+  p  
+    | mail : 
+    a(href="mailto:claim@cabinetalbinet.fr ").link-success claim@cabinetalbinet.fr 
+  p
+    | Fax : 01 48 01 84 83
 
 
   h4
@@ -465,9 +479,7 @@
   br
 
   h1.text-uppercase.text-center Assurance véhicule
-  
-  h2 1 - Rappel
-  h3 SYNTHÈSE
+  h2 SYNTHÈSE
   ul.dash-item
       li
           | En effectuant votre location sur e-loue, le véhicule loué est automatiquement assuré «tous risques»,
