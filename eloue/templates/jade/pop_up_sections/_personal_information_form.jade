@@ -24,16 +24,14 @@ h2 Vos informations personnelles
     .col-sm-6
       input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
       span.text-danger(ng-show="bookingForm.city.$error.required && bookingSubmitted", translate="required_field")
-//- section
-//-   include _pickup_info
 .row: .col-xs-12
-    .span
+    .shipping-option(ng-show="shippingAllowed")
       include _pickup_info
-    .checkbox(ng-show="shippingAllowed")
-        label
-            input(type="checkbox", ng-model="addShipping", ng-change="loadShippingPoints()")#particular
-            span.flaticon.stroke.checkmark-1
-        b.text-black Option livraison, recevez cet objet  dans un point relais pickup à proximiter de ches vous.
+      .checkbox
+          label
+              input(type="checkbox", ng-model="addShipping", ng-change="loadShippingPoints()")#particular
+              span.flaticon.stroke.checkmark-1
+          b.text-black Je souhaite recevoir cet objet  dans un point relais pickup à proximiter de chez moi.
     a(href="", ng-show="loadingProductShippingPoint").btn.bg-gray-light-hover.text-white.loading2 &nbsp;&nbsp;&nbsp;
 .row(ng-show="isAuto")
   .col-sm-6(style="z-index: 1050")
@@ -51,4 +49,5 @@ h2 Vos informations personnelles
       input#drivers_license_date(type="text", name="drivers_license_date", data-date-format="yyyy-mm-dd", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis").form-control
   //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
   //  input(type="file", ng-model="bookingDetails.photo")#photo.form-control
-p.info Vous devrez présenter votre pièce d'identité, au propriétaire, avant le début de la location. Si les coordonnées que vous saisissez ici ne sont pas les mêmes que celles de votre pièce d'identité,  le propriétaire pourra refuser la transaction. Les champs marqués d'une étoile (*) sont obligatoires.
+p.info(ng-hide="shippingAllowed") Vous devrez présenter votre pièce d'identité, au propriétaire, avant le début de la location. Si les coordonnées que vous saisissez ici ne sont pas les mêmes que celles de votre pièce d'identité,  le propriétaire pourra refuser la transaction. Les champs marqués d'une étoile (*) sont obligatoires.
+p.info(ng-show="shippingAllowed") Les champs marqués d'une étoile (*) sont obligatoires.
