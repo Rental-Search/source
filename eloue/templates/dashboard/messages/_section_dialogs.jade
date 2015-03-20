@@ -1,14 +1,14 @@
 {% verbatim %}
-section.tabs-vertical-active.sm.scrollbar-custom(ng-show="messageThreadList && messageThreadList.length > 0")
+section.tabs-vertical-active.sm.scrollbar-custom(ng-show="(messageThreadList && messageThreadList.length > 0) || showMessages")
   ul(eloue-lazy-load, lazy-data="messageThreadList", lazy-data-provider="MessageThreadsService", lazy-load-method="getMessageThreadList")
     li.tab-vertical.block-with-thumbnail(ng-repeat="thread in messageThreadList track by thread.id", id="thread-{{thread.id}}", ui-sref="messages.detail({id: thread.id})")
       .col-thumbnail
         .unread-marker(ng-show="!thread.seen")
         .thumbnail.round: a(ui-sref="messages.detail({id: thread.id})).sm
-          img(style="background-image: url({{thread.sender.avatar.thumbnail}});")
+          img(style="background-image: url({{currentUser.id == thread.sender.id ? thread.recipient.avatar.thumbnail : thread.sender.avatar.thumbnail}});")
       .col-exposition
           a(ui-sref="messages.detail({id: thread.id})").pull-left
-            h3.small {{thread.sender.username}}
+            h3.small {{currentUser.id == thread.sender.id ? thread.recipient.username : thread.sender.username}}
           span.time-badge.pull-right {{thread.last_message.sent_at}}
           h5.text-overflow.small.text-gray-stronger.clear-both {{thread.subject}}
           p.text-overflow.text-gray.small {{thread.last_message.body}}

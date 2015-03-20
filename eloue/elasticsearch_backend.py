@@ -27,6 +27,16 @@ DATETIME_REGEX = re.compile(
     r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})T'
     r'(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})(\.\d+)?$')
 
+TRUE = 'true'
+FALSE = 'false'
+
+
+class Boolean(Raw):
+    input_type_name = 'boolean'
+
+    def prepare(self, query_obj):
+        return TRUE if self.query_string else FALSE
+
 
 class ElasticsearchSearchBackend(BaseSearchBackend):
     # Word reserved by Elasticsearch for special use.
@@ -791,6 +801,10 @@ class ElasticsearchSearchQuery(BaseSearchQuery):
             if isinstance(value, six.string_types):
                 # It's not an ``InputType``. Assume ``Clean``.
                 value = Clean(value)
+            elif isinstance(value, bool):
+                value = Boolean(value)
+            elif value is None:
+                value = Raw(value)
             else:
                 value = PythonData(value)
 

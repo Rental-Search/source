@@ -1,0 +1,60 @@
+.process-list
+  $padding: $indent * 1.5
+  $height: ($line-height-base*2 + $padding)
+  $border-width: px(1)
+  $border-color: $gray-medium
+  $background-color: $gray-lite
+
+  padding-left: 0
+  margin-bottom: 0
+  list-style-type: none
+  display: table
+  text-align: center
+
+  .arrow,
+  .arrow-container + .arrow-container
+    &:before,
+    &:after
+      content: ""
+      border-style: solid
+      border-width: ($height / 2 + ($border-width / 2)) $padding
+      position: absolute
+      left: 0
+      top: -$border-width
+      z-index: 2
+    &:before
+      border-color: transparent transparent transparent $border-color
+
+  .arrow-container
+    display: table-cell
+    vertical-align: top
+    width: 1%
+    padding-right: $padding
+    position: relative
+    &:first-child .arrow
+      border-left-width: $border-width
+      padding-left: ($padding / 2)
+    &:before,
+    &:after
+      left: 0
+    &:before
+      margin-left: $border-width
+    &:after
+      border-color: transparent transparent transparent $gray-lite
+
+
+  .arrow
+    position: relative
+    padding: ($padding / 2) ($padding / 2) ($padding / 2) ($padding * 1.5)
+    height: $height
+    background-color: $background-color
+    border-color: $border-color
+    border-style: solid
+    border-width: $border-width 0
+    &:before,
+    &:after
+      left: 100%
+    &:after
+      border-color: transparent transparent transparent $background-color
+      margin-left: -$border-width
+

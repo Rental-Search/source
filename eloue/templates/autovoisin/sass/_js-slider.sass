@@ -1,0 +1,48 @@
+.jslider
+  $pointer-square: 14px
+
+  $color-primary:   $brand-secondary
+  $color-secondary: $gray-lighter
+
+  $text-size:   px(10)
+  $text-color:  $gray-strong
+  $line-height: $line-height-base
+
+  height: $pointer-square
+  border-radius: ($pointer-square / 4)
+  padding-bottom: ($pointer-square * ($line-height + 1))
+  .jslider-bg
+    top: ($pointer-square / 4)
+    i
+      height: ($pointer-square / 2) !important
+      background: $color-secondary
+    .v,
+    .l
+      border-radius: ($pointer-square / 4) 0 0 ($pointer-square / 4)
+    .r
+      border-radius: 0 ($pointer-square / 4) ($pointer-square / 4) 0
+    .v
+      background-color: $color-primary
+
+  .jslider-pointer
+    background: $color-primary
+    border-radius: 50%
+    width: $pointer-square
+    height: $pointer-square
+    top: 0
+    transition: background-color .2s
+    &:hover
+      background-color: darken($color-primary, 5%)
+
+  .jslider-value
+    font-size: $text-size
+    font-family: $font-family-base
+    color: $text-color
+    top: ($pointer-square * $line-height)
+
+  [solo] + &
+    .jslider-value,
+    .jslider-pointer
+      display: none
+      &-to
+        display: block

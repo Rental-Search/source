@@ -108,7 +108,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
         utilsService.getUnreadMessagesIds = function(messages, currentUser) {
             var unreadMessagesIds = [];
             for (var i = 0; i < messages.length; i++) {
-                if (messages[i].read_at == null && messages[i].sender.id != currentUser.id) {
+                if (messages[i].read_at == null && (messages[i].sender.id != currentUser.id || messages[i].sender.id == utilsService.getIdFromUrl(messages[i].recipient))) {
                     unreadMessagesIds.push(messages[i].id);
                 }
             }
@@ -116,7 +116,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
         };
 
         // The method to initiate custom scrollbars
-        utilsService.initCustomScrollbars = function() {
+        utilsService.initCustomScrollbars = function(scrollbarSelector) {
 
                 // custom scrollbar
                 $(".chosen-drop").mCustomScrollbar({
@@ -129,7 +129,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
                         updateOnContentResize: true
                     }
                 });
-                $(".scrollbar-custom").mCustomScrollbar({
+                $(scrollbarSelector ? scrollbarSelector : ".scrollbar-custom").mCustomScrollbar({
                     scrollInertia: "100",
                     autoHideScrollbar: true,
                     theme: "dark-thin",
@@ -148,6 +148,26 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
                     }
                 });
             };
+
+        utilsService.getQueryParams = function () {
+            var query_string = [];
+            var query = decodeURIComponent(window.location.search.substring(1));
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                // If first entry with this name
+                if (typeof query_string[pair[0]] === "undefined") {
+                    query_string[pair[0]] = pair[1];
+                    // If second entry with this name
+                } else if (typeof query_string[pair[0]] === "string") {
+                    query_string[pair[0]] = [query_string[pair[0]], pair[1]];
+                    // If third or later entry with this name
+                } else {
+                    query_string[pair[0]].push(pair[1]);
+                }
+            }
+            return query_string;
+        };
 
         return utilsService;
     }]);
