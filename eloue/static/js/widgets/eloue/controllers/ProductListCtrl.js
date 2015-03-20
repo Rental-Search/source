@@ -230,7 +230,7 @@ define([
                 var markerHeight = 28;
 
                 var markerHeightAttr = mapCanvas.attr('marker-height');
-                if (markerHeight) {
+                if (markerHeightAttr) {
                     markerHeight = parseInt(markerHeightAttr);
                 }
 

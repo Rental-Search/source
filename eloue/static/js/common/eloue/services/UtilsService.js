@@ -108,7 +108,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
         utilsService.getUnreadMessagesIds = function(messages, currentUser) {
             var unreadMessagesIds = [];
             for (var i = 0; i < messages.length; i++) {
-                if (messages[i].read_at == null && messages[i].sender.id != currentUser.id) {
+                if (messages[i].read_at == null && (messages[i].sender.id != currentUser.id || messages[i].sender.id == utilsService.getIdFromUrl(messages[i].recipient))) {
                     unreadMessagesIds.push(messages[i].id);
                 }
             }
@@ -116,7 +116,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
         };
 
         // The method to initiate custom scrollbars
-        utilsService.initCustomScrollbars = function() {
+        utilsService.initCustomScrollbars = function(scrollbarSelector) {
 
                 // custom scrollbar
                 $(".chosen-drop").mCustomScrollbar({
@@ -129,7 +129,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
                         updateOnContentResize: true
                     }
                 });
-                $(".scrollbar-custom").mCustomScrollbar({
+                $(scrollbarSelector ? scrollbarSelector : ".scrollbar-custom").mCustomScrollbar({
                     scrollInertia: "100",
                     autoHideScrollbar: true,
                     theme: "dark-thin",

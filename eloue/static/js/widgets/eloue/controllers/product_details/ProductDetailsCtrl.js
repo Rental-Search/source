@@ -5,10 +5,13 @@ define([
     "use strict";
 
     EloueWidgetsApp.controller("ProductDetailsCtrl", [
-        "$scope", "$window", "$document", "MapsService",
-        function ($scope, $window, $document, MapsService) {
+        "$scope", "$window", "$document", "$rootScope", "MapsService",
+        function ($scope, $window, $document, $rootScope, MapsService) {
 
             $window.googleMapsLoaded = function () {
+
+                $rootScope.$broadcast("productMapLoaded");
+
                 $("#geolocate").formmapper({
                     details: "form"
                 });

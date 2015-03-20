@@ -78,7 +78,7 @@ define(["eloue/app",
                         controller: "MessagesCtrl"
                     })
                     .state("messages.new", {
-                        url: "/new_message/:productId",
+                        url: "/new_message/:bookingId",
                         templateUrl: "partials/dashboard/messages/message_detail.html",
                         controller: "NewMessageThreadCtrl"
                     })

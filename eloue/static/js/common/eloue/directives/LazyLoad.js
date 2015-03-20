@@ -197,7 +197,9 @@ define([
                     scope.$on(hideLoadingEventName, function () {
                         $rootScope.routeChangeInProgress = false;
                         loadingWidget.hide();
-                        loadMoreButton.show();
+                        if (scope.hasNextPage) {
+                            loadMoreButton.show();
+                        }
                     });
                     scope.$on(showLoadingEventName, function () {
                         $rootScope.routeChangeInProgress = true;
