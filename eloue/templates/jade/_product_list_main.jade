@@ -18,7 +18,13 @@ ol.product-layout
             a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2
         .info
           h6
-            a(href="{{ product.url }}") {{ product.summary }}
+            if request.GET.date_from2
+                if request.GET.date_to2
+                    a(href="{{ product.url }}?date_from={{request.GET.date_from|urlencode:''}}&date_to={{request.GET.date_to|urlencode:''}}") {{ product.summary }}
+                else
+                    a(href="{{ product.url }}") {{ product.summary }}
+            else
+                a(href="{{ product.url }}") {{ product.summary }}
             if product.pro_owner
               span.badge-pro pro
           p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}

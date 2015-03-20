@@ -217,18 +217,37 @@ define([
                         break;
                     }
                 }
+
+                var markersUrl = staticUrl + "images/markers_smooth_aligned.png";
+
+                var mapCanvas= $("#map-canvas");
+
+                var markerFilename = mapCanvas.attr('markers-filename');
+                if (markerFilename) {
+                    markersUrl = staticUrl + "images/" + markerFilename;
+                }
+
+                var markerHeight = 28;
+
+                var markerHeightAttr = mapCanvas.attr('marker-height');
+                if (markerHeightAttr) {
+                    markerHeight = parseInt(markerHeightAttr);
+                }
+
+
+
                 for (j = 0; j < locations.length; j += 1) {
                     product = locations[j];
                     if (markerId === "li#marker-") {
-                        image = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
-                            new google.maps.Size(26, 28),
-                            new google.maps.Point(0, 28 * j),
-                            new google.maps.Point(14, 28));
+                        image = new google.maps.MarkerImage(markersUrl,
+                            new google.maps.Size(26, markerHeight),
+                            new google.maps.Point(0, markerHeight * j),
+                            new google.maps.Point(14, markerHeight));
 
-                        imageHover = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
-                            new google.maps.Size(26, 28),
-                            new google.maps.Point(29, 28 * j),
-                            new google.maps.Point(14, 28));
+                        imageHover = new google.maps.MarkerImage(markersUrl,
+                            new google.maps.Size(26, markerHeight),
+                            new google.maps.Point(29, markerHeight * j),
+                            new google.maps.Point(14, markerHeight));
                     }
                     myLatLng = new google.maps.LatLng(product.lat, product.lng);
                     marker = new google.maps.Marker({

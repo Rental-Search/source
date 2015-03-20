@@ -32,7 +32,8 @@ define([
         "ToDashboardRedirectService",
         "ServerValidationService",
         "ScriptTagService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService, ScriptTagService) {
+        "MapsService",
+        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService, ScriptTagService, MapsService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -85,6 +86,15 @@ define([
                 first_registration_date: "",
                 licence_plate: "",
                 tax_horsepower: ""
+            };
+
+            /**
+             * Activate geolocation search.
+             */
+            $window.googleMapsLoaded = function () {
+                $("#geolocate").formmapper({
+                    details: "form"
+                });
             };
 
             /**
@@ -373,5 +383,12 @@ define([
                     $scope.leafCategories = leafCategoryList;
                 }
             };
+
+            $scope.initRootCategory = function(rootCategoryId) {
+                $scope.rootCategory = rootCategoryId;
+                $scope.updateNodeCategories();
+            };
+
+            MapsService.loadGoogleMaps();
         }]);
 });
