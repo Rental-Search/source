@@ -1,4 +1,4 @@
-section.pull-nothing(ng-hide="messageThreadList && messageThreadList.length > 0")
+section.pull-nothing(ng-hide="(messageThreadList && messageThreadList.length > 0) || showMessages")
   .notification-empty
     .notification-container
       {% verbatim %}

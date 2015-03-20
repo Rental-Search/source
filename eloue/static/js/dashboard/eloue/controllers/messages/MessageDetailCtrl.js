@@ -38,7 +38,8 @@ define([
             $scope.isFirstLoad = true;
 
             $scope.handleResponseErrors = function (error, object, action) {
-                $scope.submitInProgress = false;
+                $scope.messageSubmitInProgress = false;
+                $scope.bookingSubmitInProgress = false;
                 $scope.showNotification(object, action, false);
             };
 
@@ -49,7 +50,8 @@ define([
                     $scope.isFirstLoad = false;
                 }
                 if ($scope.messageThread) {
-                    UtilsService.updateMessagesSender($scope.items, $scope.messageThread.sender, $scope.currentUser);
+                    var replacer = $scope.messageThread.sender.id == $scope.currentUser.id ? $scope.messageThread.recipient : $scope.messageThread.sender;
+                    UtilsService.updateMessagesSender($scope.items, replacer, $scope.currentUser);
                 }
 
                 var unreadMessages = UtilsService.getUnreadMessagesIds ($scope.items, $scope.currentUser);
@@ -125,7 +127,7 @@ define([
                             };
 
                             $scope.requestBooking = function () {
-                                $scope.submitInProgress = true;
+                                $scope.bookingSubmitInProgress = true;
                                 //Get product details
                                 ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
                                     $window.location.href = result.url + "#/booking";
@@ -149,7 +151,7 @@ define([
 
                 // Post new message
                 $scope.postNewMessage = function () {
-                    $scope.submitInProgress = true;
+                    $scope.messageSubmitInProgress = true;
                     ProductRelatedMessagesService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(
                         function (data) {
@@ -158,7 +160,7 @@ define([
 
                             // Add new message.
                             $scope.items.push(data);
-                            $scope.submitInProgress = false;
+                            $scope.messageSubmitInProgress = false;
                             $scope.showNotification("message", "send", true);
 
 
@@ -169,7 +171,7 @@ define([
                 };
 
                 // Initiate custom scrollbars
-                $scope.initCustomScrollbars();
+                UtilsService.initCustomScrollbars("#messages-list");
             };
 
             $scope.updateNewBookingInfo = function () {

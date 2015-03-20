@@ -10,10 +10,11 @@ define([
         '$scope',
         '$window',
         '$document',
+        '$rootScope',
         'MapsService',
         'UtilsService',
         'GoogleMapsMarkers',
-        function ($scope, $window, $document, MapsService, UtilsService, GoogleMapsMarkers) {
+        function ($scope, $window, $document, $rootScope, MapsService, UtilsService, GoogleMapsMarkers) {
             var map, latLngsArr = [], addHovered = false, mapMarker = GoogleMapsMarkers, markers;
 
             // On modal shown.
@@ -28,7 +29,10 @@ define([
             });
 
             $window.googleMapsLoaded = function () {
+                $scope.googleMapsLoaded();
+            };
 
+            $scope.googleMapsLoaded = function() {
                 var mapCanvas = $document[0].getElementById('map-canvas'),
                     mapOptions;
 
@@ -200,10 +204,9 @@ define([
 
             // On key up in the search field, filter visible agencies according to city.
             $("#cityInput").on("keyup", function() {
-                console.log($scope.search);
                 $("li[id^='marker-']").each(function () {
                     var item = $(this);
-                    if (item.attr('city').trim().startsWith($scope.search.trim(), true)) {
+                    if (item.attr('city').trim().toUpperCase().indexOf($scope.search.trim().toUpperCase()) == 0) {
                         // Show item.
                         item.removeClass("ng-hide");
                     }
@@ -218,12 +221,9 @@ define([
                 $scope.addMarkers();
             });
 
-            if (typeof String.prototype.startsWith != 'function') {
-                String.prototype.startsWith = function(str, ignoreCase) {
-                    return (ignoreCase ? this.toUpperCase() : this)
-                            .indexOf(ignoreCase ? str.toUpperCase() : str) == 0;
-                };
-            }
+            $rootScope.$on('productMapLoaded', function() {
+                $scope.googleMapsLoaded();
+            });
 
             MapsService.loadGoogleMaps();
         }]);
