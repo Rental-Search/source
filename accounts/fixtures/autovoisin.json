@@ -1,0 +1,10 @@
+[
+    {
+        "fields": {
+            "domain": "autovoisin.com",
+            "name": "autovoisin"
+        },
+        "model": "sites.site",
+        "pk": 14
+    }
+]

@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+from datetime import datetime
 
 from django.core.mail import mail_admins
 from django.template.loader import render_to_string
@@ -8,6 +9,8 @@ from haystack import indexes
 
 from products.models import Alert, Product, CarProduct, RealEstateProduct
 from products.choices import UNIT
+from products.helpers import get_unavailable_periods
+
 
 __all__ = ['ProductIndex', 'AlertIndex']
 
@@ -52,6 +55,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
     is_good = indexes.BooleanField(default=False)
 
+    starts_unavailable = indexes.MultiValueField(faceted=True, null=True)
+    ends_unavailable = indexes.MultiValueField(faceted=True, null=True)
+
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
     
@@ -60,6 +66,16 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if category:
             # it is safe to cache get_ancestors for categories and cache them by category PK
             return cached_category(category.pk, category)
+    
+    def prepare_ends_unavailable(self, obj):
+        started_at = datetime.now()
+        starts, ends = get_unavailable_periods(obj, started_at)
+        if len(ends): return tuple(ends)
+
+    def prepare_starts_unavailable(self, obj):
+        started_at = datetime.now()
+        starts, ends = get_unavailable_periods(obj, started_at)
+        if len(starts): return tuple(starts)
 
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
