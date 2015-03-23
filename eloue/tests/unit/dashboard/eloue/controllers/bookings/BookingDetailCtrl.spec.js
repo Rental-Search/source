@@ -134,6 +134,8 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
             spyOn(shippingsServiceMock, "saveShipping").and.callThrough();
             spyOn(productShippingPointsServiceMock, "getByProduct").and.callThrough();
             spyOn(patronShippingPointsServiceMock, "getByPatronAndBooking").and.callThrough();
+            spyOn(scope, 'showNotification').and.callThrough();
+            window = {location: {reload: jasmine.createSpy()}};
 
             BookingDetailCtrl = $controller('BookingDetailCtrl', {
                 $scope: scope,
@@ -234,21 +236,26 @@ define(["angular-mocks", "eloue/controllers/bookings/BookingDetailCtrl"], functi
                 },
                 borrower: {
                     id: 2
+                },
+                shipping: {
+                    enabled: false
                 }
             };
             scope.applyBookingDetails(bookingDetails);
             expect(scope.bookingDetails).toEqual(bookingDetails);
         });
 
-        it("BookingDetailCtrl:processAcceptBookingResponse", function () {
+        it("BookingDetailCtrl:processAcceptBookingResponseWithShipping", function () {
             scope.bookingDetails = {
-                with_shipping: true,
                 product: {
                     id: 1
+                },
+                shipping: {
+                    enabled: true
                 }
             };
             scope.processAcceptBookingResponse();
-            expect(productShippingPointsServiceMock.getByProduct).toHaveBeenCalled();
+            expect(scope.showNotification).toHaveBeenCalled();
         });
     });
 });

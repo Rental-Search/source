@@ -11,19 +11,25 @@ define([
         "$scope",
         "UsersService",
         "UtilsService",
-        function ($scope, UsersService, UtilsService) {
+        function ($scope, UsersService) {
             $scope.messageThreadList = [];
+
+            $scope.showMessages = false;
+
             if (!$scope.currentUserPromise) {
                 $scope.currentUserPromise = UsersService.getMe();
             }
             $scope.currentUserPromise.then(function (currentUser) {
                 $scope.currentUser = currentUser;
                 $scope.$broadcast("startLoading", {parameters: [], shouldReloadList: true});
+                $scope.updateStatistics();
             });
 
-            $scope.shouldMarkAsUnread = function (lastMessage) {
-                return !lastMessage.read_at && (UtilsService.getIdFromUrl(lastMessage.recipient) == $scope.currentUser.id);
-            };
+            // Special case when user tries to send message from reservations while he has no
+            // message threads yet. It will display message threads block and field to send message.
+            $scope.$on("newMessage", function(event, args) {
+                $scope.showMessages = args.showMessages;
+            });
         }
     ]);
 });

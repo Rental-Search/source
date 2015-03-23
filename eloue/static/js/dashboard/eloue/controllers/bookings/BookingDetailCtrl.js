@@ -196,7 +196,7 @@ define([
 
             $scope.processAcceptBookingResponse = function () {
                 $scope.showNotification("booking", "accept", true);
-                $window.location.reload();
+                $scope.reloadPage();
             };
 
             $scope.rejectBooking = function () {
@@ -204,7 +204,7 @@ define([
                 $scope.rejectingInProgress = true;
                 BookingsService.rejectBooking($stateParams.uuid).then(function () {
                     $scope.showNotification("booking", "reject", true);
-                    $window.location.reload();
+                    $scope.reloadPage();
                 }, function (error) {
                     $scope.handleResponseErrors(error, "booking", "reject");
                 });
@@ -219,7 +219,7 @@ define([
                 $scope.cancellingInProgress = true;
                 BookingsService.cancelBooking($stateParams.uuid).then(function () {
                     $scope.showNotification("booking", "cancel", true);
-                    $window.location.reload();
+                    $scope.reloadPage();
                 }, function (error) {
                     $scope.handleResponseErrors(error, "booking", "cancel");
                 });
@@ -251,7 +251,7 @@ define([
                     function () {
                         $scope.showNotification("sinister", "post", true);
                         $scope.showIncidentForm = false;
-                        $window.location.reload();
+                        $scope.reloadPage();
                     },
                     function (error) {
                         $scope.handleResponseErrors(error, "sinister", "post");
@@ -266,6 +266,13 @@ define([
                 $scope.acceptingInProgress = false;
                 $scope.cancellingInProgress = false;
             };
+
+            /**
+             * Reload page.
+             */
+            $scope.reloadPage = function() {
+                $window.location.reload();
+            }
         }
     ]);
 });

@@ -117,7 +117,7 @@ LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
-DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13])
+DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -625,7 +625,8 @@ HAYSTACK_CONNECTIONS = {
         }
     },
 }
-HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
+#HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
+HAYSTACK_SIGNAL_PROCESSOR = 'eloue.search.HaystackSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 
 # Queue configuration
@@ -872,7 +873,7 @@ AUTHENTICATION_BACKENDS = (
 
 NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
     35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
-    323, 432, 297, 379, 2713, 512, 3,  # others / dropdown selection
+    172, 323, 432, 297, 379, 2713, 512, 3, 687  # others / dropdown selection
 ])
 
 FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())

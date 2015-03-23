@@ -1,20 +1,25 @@
 #-*- coding: utf-8 -*-
-from datetime import datetime, timedelta
+from datetime import datetime
 
+from django.core.mail import mail_admins
+from django.template.loader import render_to_string
 from django.utils.functional import memoize
 
 from haystack import indexes
 
 from products.models import Alert, Product, CarProduct, RealEstateProduct
+from products.choices import UNIT
+from products.helpers import get_unavailable_periods
+
 
 __all__ = ['ProductIndex', 'AlertIndex']
 
-ONE_DAY_DELTA = timedelta(days=1)
 
 def cached_category(category_id, category):
     return tuple(category.get_ancestors(ascending=False, include_self=True).values_list('slug', flat=True))
 _category = {}
 cached_category = memoize(cached_category, _category, 1)
+
 
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
@@ -50,6 +55,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     average_rate = indexes.IntegerField(model_attr='average_rate', default=0, indexed=False)
     is_good = indexes.BooleanField(default=False)
 
+    starts_unavailable = indexes.MultiValueField(faceted=True, null=True)
+    ends_unavailable = indexes.MultiValueField(faceted=True, null=True)
+
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
     
@@ -58,6 +66,16 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if category:
             # it is safe to cache get_ancestors for categories and cache them by category PK
             return cached_category(category.pk, category)
+    
+    def prepare_ends_unavailable(self, obj):
+        started_at = datetime.now()
+        starts, ends = get_unavailable_periods(obj, started_at)
+        if len(ends): return tuple(ends)
+
+    def prepare_starts_unavailable(self, obj):
+        started_at = datetime.now()
+        starts, ends = get_unavailable_periods(obj, started_at)
+        if len(starts): return tuple(starts)
 
     def prepare_thumbnail(self, obj):
         for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
@@ -80,9 +98,29 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return obj.product_page.url if obj.product_page else None
 
     def prepare_price(self, obj):
-        # It doesn't play well with season
-        now = datetime.now()
-        return obj.calculate_price(now, now + ONE_DAY_DELTA)[1]
+        prices = obj.prices.order_by('unit') # explicitly sort by 'unit'
+
+        for price in prices:
+            if price.unit >= UNIT.DAY:
+                # either we have found the daily price, or there's no one
+                break
+
+        if prices:
+            if price and price.unit == UNIT.DAY:
+                return price.day_amount
+            else:
+                # there's no daily prices
+                context = {'product': obj, }
+                subject = render_to_string(
+                        "products/emails/index_fail_email_subject.txt", context)
+                text_message = render_to_string(
+                        "products/emails/index_fail_email.txt", context)
+                html_message = render_to_string(
+                        "products/emails/index_fail_email.html", context)
+
+                mail_admins(subject, text_message, html_message=html_message)
+
+        return None
 
     def prepare_special(self, obj):
         special = hasattr(obj, 'carproduct') or hasattr(obj, 'realestateproduct')

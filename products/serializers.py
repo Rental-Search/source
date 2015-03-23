@@ -12,17 +12,34 @@ from rest_framework.fields import (
 )
 from rest_framework.relations import HyperlinkedIdentityField
 from rest_framework.reverse import reverse
+from rest_framework import serializers
+
 from products import models
 from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
 from eloue.api.serializers import (
     EncodedImageField, ObjectMethodBooleanField, ModelSerializer,
-    NestedModelSerializerMixin, SimpleSerializer, SimplePaginationSerializer
+    NestedModelSerializerMixin, SimpleSerializer, SimplePaginationSerializer,
+    NullBooleanField
 )
+from eloue.decorators import cached
 from products.helpers import calculate_available_quantity
+from products.choices import PRODUCT_TYPE
 
 from rent.utils import DATE_TIME_FORMAT
 from rent.models import Booking
 from rent.choices import BOOKING_STATE
+
+
+def category_cache_key(*args):
+    return u':'.join([
+        str(item.id if isinstance(item, models.Category) else item)
+            for item in chain(args, PRODUCT_TYPE.values())
+        ])
+
+
+@cached(key_func=category_cache_key, timeout=15*60)
+def get_root_category(category):
+    return category.get_root().id
 
 
 class CategorySerializer(ModelSerializer):
@@ -94,6 +111,27 @@ class ProductSerializer(ModelSerializer):
     owner = NestedUserSerializer()
     slug = CharField(read_only=True, source='slug')
 
+
+    def validate(self, attrs):
+        attrs = super(ProductSerializer, self).validate(attrs)
+
+        # update existing project
+        if self.object is not None:
+            old_category = self.object._get_category()
+            new_category = attrs.get('category', None)
+
+            ext_categories = set(PRODUCT_TYPE.values())
+
+            # If categories are belong to different trees, we have to check
+            # possibility to change category
+            if old_category.tree_id != new_category.tree_id:
+                if get_root_category(old_category) in ext_categories or \
+                        get_root_category(new_category) in ext_categories:
+                    raise serializers.ValidationError(
+                        _(u'Vous ne pouvez pas modifier la catégorie'))
+
+        return attrs
+
     def full_clean(self, instance):
         instance = super(ProductSerializer, self).full_clean(instance)
         if instance and instance.deposit_amount < 0:
@@ -104,7 +142,10 @@ class ProductSerializer(ModelSerializer):
         return instance
 
     def to_native(self, obj):
-        obj.category = obj._get_category()
+        try:
+            obj.category = obj._get_category()
+        except AttributeError:
+            pass
         return super(ProductSerializer, self).to_native(obj)
 
     class Meta:
@@ -184,10 +225,24 @@ class MessageThreadSerializer(ModelSerializer):
     sender = NestedUserSerializer()
     recipient = NestedUserSerializer()
     last_message = NestedProductRelatedMessageSerializer(read_only=True)
+    seen = NullBooleanField(source="id", read_only=True)
+
+    def transform_seen(self, obj, value):
+        request = self.context['request']
+
+        if request.user.is_authenticated():
+            qs = obj.messages.filter(
+                    read_at__isnull=True,
+                    recipient=request.user)
+            return not qs.exists()
+
+        return None
 
     class Meta:
         model = models.MessageThread
-        fields = ('id', 'sender', 'recipient', 'product', 'last_message', 'subject', 'sender_archived', 'recipient_archived', 'messages')
+        fields = ('id', 'sender', 'recipient', 'product', 'last_message',
+                'subject', 'sender_archived', 'recipient_archived', 'messages',
+                'seen')
         read_only_fields = ('sender_archived', 'recipient_archived', 'messages')
         immutable_fields = ('sender', 'recipient', 'product')
 

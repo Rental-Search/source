@@ -24,23 +24,26 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     _cache: new Date().getTime()
                 }).$promise.then(
                     function (result) {
-                        var promises = [];
-                        angular.forEach(result.results, function (value) {
-                            angular.forEach(value.messages, function (messageLink) {
-                                var messageId = UtilsService.getIdFromUrl(messageLink);
-                                promises.push(ProductRelatedMessagesService.getMessage(messageId));
-                            });
-                        });
-                        var suppress = function(x) { return x.catch(function(){}); };
-                        var messages = $q.all(promises.map(suppress));
-                        messages.then(function success(results) {
+                        var promises = {
+                            // Add thread details to the final result.
+                            threads: result.$promise
+                        };
+
+                        // If thread exits, load messages for this thread.
+                        if (result.results.length > 0) {
+                            promises.messages = ProductRelatedMessagesService.getThreadMessages(result.results[0].id)
+                        }
+
+                        $q.all(promises).then(function success(results) {
                             deferred.resolve(results);
-                        }, function (reasons) {
-                            deferred.reject(reasons);
                         });
                     }
                 );
                 return deferred.promise;
+            };
+            
+            messageThreadsService.isThreadSeen = function(threadId) {
+                return MessageThreads.isThreadSeen({id: threadId}).$promise;
             };
 
             messageThreadsService.getMessageThreadList = function (page) {
@@ -58,15 +61,13 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                         // For each message thread
                         angular.forEach(messageThreadListData.results, function (messageThreadData, key) {
-                            if (messageThreadData.last_message && messageThreadData.messages && messageThreadData.messages.length > 0) {
-                                var messageThreadDeferred = $q.defer();
+                            var messageThreadDeferred = $q.defer();
 
-                                var messageThread = messageThreadsService.parseMessageThreadListItem(messageThreadData,
-                                    messageThreadData.last_message);
-                                messageThreadDeferred.resolve(messageThread);
+                            var messageThread = messageThreadsService.parseMessageThreadListItem(messageThreadData,
+                                messageThreadData.last_message);
+                            messageThreadDeferred.resolve(messageThread);
 
-                                messageThreadListPromises.push(messageThreadDeferred.promise);
-                            }
+                            messageThreadListPromises.push(messageThreadDeferred.promise);
                         });
 
                         $q.all(messageThreadListPromises).then(function (messageThreadList) {
@@ -93,12 +94,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
                         // Load messages
                         var messagesPromises = [];
-                        angular.forEach(messageThreadData.messages, function (messageUrl, key) {
-                            // Get message id
-                            var messageId = UtilsService.getIdFromUrl(messageUrl);
-                            // Load message
-                            messagesPromises.push(ProductRelatedMessagesService.getMessageListItem(messageId));
-                        });
+                        messagesPromises.push(ProductRelatedMessagesService.getThreadMessages(messageThreadData.id));
+
                         // When all messages loaded
                         var suppress = function (x) {
                             return x.catch(function () {
@@ -113,7 +110,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                         }
 
                         $q.all(messageThreadPromises).then(function (results) {
-                            var messageThread = messageThreadsService.parseMessageThread(messageThreadData, results.messages, results.product);
+                            var messages = (results.messages && results.messages[0]) ? results.messages[0].results : undefined;
+                            var messageThread = messageThreadsService.parseMessageThread(messageThreadData, messages, results.product);
                             deferred.resolve(messageThread);
                         });
                     }
@@ -170,6 +168,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     angular.forEach(messageKeysToRemove, function (index, key) {
                         messageThreadResult.messages.splice(index, 1);
                     });
+                    messageThreadResult.messagesCount = messageThreadData.messages.length;
                 }
 
                 // Parse product

@@ -3,24 +3,24 @@
     .modal-dialog
         .modal-content(style="padding: 30px")
             .modal-body
-                h3 Ajoutez une nouvelle disponibilité
+                h3 Ajoutez une nouvelle indisponibilité
                 .alert.alert-danger(ng-show="!!unavailabilityPeriodValidationError")
                     span.text-danger {{unavailabilityPeriodValidationError}}
                 form(name="addPeriodForm", ng-submit="periodSubmitted = true").table-form
                     fieldset(data-ng-disabled="submitInProgress")
                         .row
                             .col-sm-12
-                                input(type="number", name="quantity", ng-model="newUnavailabilityPeriod.quantity", required).form-control
+                                input(type="number", name="quantity", ng-model="newUnavailabilityPeriod.quantity", placeholder="Quantité", required).form-control
                                 span.text-danger(ng-show="addPeriodForm.quantity.$error.required && periodSubmitted", translate="required_field")
                                 span.text-danger(eloue-form-field-message, field-name="quantity") {{value}}
                         .row
                             .col-sm-12(style="z-index: 1050")
-                                input(type="text", name="started_at", ng-model="newUnavailabilityPeriod.started_at", eloue-extended-datepicker, required).form-control
+                                input(type="text", name="started_at", ng-model="newUnavailabilityPeriod.started_at", placeholder="Du", eloue-extended-datepicker, required).form-control
                                 span.text-danger(ng-show="addPeriodForm.started_at.$error.required && periodSubmitted", translate="required_field")
                                 span.text-danger(eloue-form-field-message, field-name="started_at") {{value}}
                         .row
                             .col-sm-12(style="z-index: 1050")
-                                input(type="text", name="ended_at", ng-model="newUnavailabilityPeriod.ended_at", eloue-extended-datepicker, required).form-control
+                                input(type="text", name="ended_at", ng-model="newUnavailabilityPeriod.ended_at", placeholder="Au", eloue-extended-datepicker, required).form-control
                                 span.text-danger(ng-show="addPeriodForm.ended_at.$error.required && periodSubmitted", translate="required_field")
                                 span.text-danger(eloue-form-field-message, field-name="ended_at") {{value}}
                         .row

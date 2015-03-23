@@ -26,6 +26,7 @@ define(["eloue/app",
         "eloue/controllers/DashboardLoginCtrl",
         "eloue/directives/FileChooserDirective",
         "../../common/eloue/controllers/AuthCtrl",
+        "../../common/eloue/controllers/HeaderCtrl",
         "../../common/eloue/controllers/LoginCtrl",
         "../../common/eloue/controllers/RegisterCtrl",
         "../../common/eloue/controllers/ResetPasswordCtrl",
@@ -33,6 +34,7 @@ define(["eloue/app",
         "../../common/eloue/directives/DashboardRedirect",
         "../../common/eloue/directives/Datepicker",
         "../../common/eloue/directives/DatepickerMonth",
+        "../../common/eloue/directives/YearDatepicker",
         "../../common/eloue/directives/ExtendedDatepicker",
         "../../common/eloue/directives/FormFieldErrorManager",
         "../../common/eloue/directives/FormFieldMessage",
@@ -42,6 +44,7 @@ define(["eloue/app",
         "../../common/eloue/directives/PasswordMatch",
         "../../common/eloue/directives/RegistrationForm",
         "../../common/eloue/directives/ResetPasswordForm",
+        "../../common/eloue/directives/ScrollBottom",
         "../../common/eloue/directives/ZipcodeValidator",
         "../../common/eloue/interceptors/ErrorHandlerInterceptor"],
     function (EloueApp) {
@@ -75,7 +78,7 @@ define(["eloue/app",
                         controller: "MessagesCtrl"
                     })
                     .state("messages.new", {
-                        url: "/new_message/:productId",
+                        url: "/new_message/:bookingId",
                         templateUrl: "partials/dashboard/messages/message_detail.html",
                         controller: "NewMessageThreadCtrl"
                     })

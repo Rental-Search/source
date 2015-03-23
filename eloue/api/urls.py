@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url, include
 
-from eloue.api.resources import api_v1
-from eloue.api import views
+#from eloue.api.resources import api_v1
+#from eloue.api import views
 from eloue.api import routers
 
 urlpatterns = patterns('',
-    url(r'^1.0/update_product_prices/$', views.update_product_prices, name='update_product_prices'),
-    url(r'^', include(api_v1.urls)),
+#    url(r'^1.0/update_product_prices/$', views.update_product_prices, name='update_product_prices'),
+#    url(r'^', include(api_v1.urls)),
 )
 
 from accounts import views as accounts_api

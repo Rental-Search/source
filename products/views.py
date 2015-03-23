@@ -66,6 +66,7 @@ DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
 USE_HTTPS = getattr(settings, 'USE_HTTPS', True)
 MAX_DISTANCE = 1541
 
+
 def get_point_and_radius(coords, radius=None):
     """get_point_and_radius(coords, radius=None):
     A helper function which transforms provided coordinates into a gis.geos.Point object and validates radius.
@@ -85,7 +86,7 @@ def get_point_and_radius(coords, radius=None):
 
 def get_last_added_sqs(search_index, location, sort_by_date='-created_at_date'):
     # only objects that are 'good' to be shown
-    sqs = search_index.filter(is_good=1)
+    sqs = search_index.filter(is_good=True)
 
     # try to find products in the same region
     region_point, region_radius = get_point_and_radius(
@@ -566,7 +567,7 @@ class ProductList(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
     @method_decorator(mobify)
     @method_decorator(cache_page(900))
     @method_decorator(vary_on_cookie)
-    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet().filter(is_archived=False), suggestions=None, page=None, **kwargs):
+    def dispatch(self, request, urlbits=None, sqs=SearchQuerySet(), suggestions=None, page=None, **kwargs):
         self.breadcrumbs = self.get_breadcrumbs(request)
         urlbits = urlbits or ''
         urlbits = filter(None, urlbits.split('/')[::-1])
@@ -774,6 +775,16 @@ class PublishCategoryMixin(object):
 class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
     template_name = 'index.jade'
 
+    @staticmethod
+    def get_product_counts_per_city():
+        d = {}
+        for city, count in product_search.facet('city').facet_counts()['fields']['city']:
+            city = city.upper()
+            d[city] = d.get(city, 0) + count
+        l = d.items()
+        l.sort(key=lambda t: t[1], reverse=True)
+        return l[:9]
+
     def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
         comment_list = Comment.objects.select_related(
@@ -785,7 +796,8 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         context = {
             'product_list': product_list,
             'comment_list': comment_list,
-            'products_on_site': Product.on_site.only('id'),
+            'products_on_site': product_search,
+            #'cities_list': self.get_product_counts_per_city,
         }
         context.update(super(HomepageView, self).get_context_data(**kwargs))
         return context
@@ -802,8 +814,8 @@ class ProductListView(ProductList):
     def get_breadcrumbs(self, request):
         breadcrumbs = super(ProductListView, self).get_breadcrumbs(request)
         form = self.form
-        #breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date_from', 'facet': False}
-        #breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date_to', 'facet': False}
+        breadcrumbs['date_from'] = {'name': 'date_from', 'value': form.cleaned_data.get('date_from', None), 'label': 'date_from', 'facet': False}
+        breadcrumbs['date_to'] = {'name': 'date_to', 'value': form.cleaned_data.get('date_to', None), 'label': 'date_to', 'facet': False}
         breadcrumbs['price_from'] = {'name': 'price_from', 'value': form.cleaned_data.get('price_from', None), 'label': 'price_from', 'facet': False}
         breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'price_to', 'facet': False}
         breadcrumbs['categorie'] = {'name': 'categorie', 'value': None, 'label': 'categorie', 'facet': True}
@@ -933,8 +945,10 @@ from rest_framework import status
 import django_filters
 
 from products import serializers, models
+from products.serializers import get_root_category
 from products import filters as product_filters
 from eloue.api import viewsets, filters, mixins, permissions
+from eloue.api.decorators import list_action
 from rent.forms import Api20BookingForm
 from rent.views import get_booking_price_from_form
 
@@ -1003,12 +1017,14 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
     """
     serializer_class = serializers.ProductSerializer
     queryset = models.Product.on_site.filter(is_archived=False).select_related('carproduct', 'realestateproduct', 'address', 'phone', 'category', 'owner')
-    filter_backends = (product_filters.ProductHaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (product_filters.ProductHaystackSearchFilter,
+        filters.DjangoFilterBackend, product_filters.HaystackOrderingFilter)
     owner_field = 'owner'
     search_index = product_search
     filter_class = ProductFilterSet
     ordering = '-created_at'
-    ordering_fields = ('quantity', 'is_archived', 'category')
+    ordering_fields = ('quantity', 'is_archived', 'category', 'created_at')
+    haystack_ordering_fields = ('price', 'average_rate', 'distance')
     public_actions = ('retrieve', 'search', 'is_available',
                       'homepage', 'unavailability_periods')
     paginate_by = PAGINATE_PRODUCTS_BY
@@ -1178,8 +1194,8 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
             delattr(self, '_post_data')
             category = data.get('category', None)
             if category is not None:
-                category = self._category_from_native(category)
-                category = getattr(category, category._mptt_meta.tree_id_attr)
+                category = get_root_category(
+                        self._category_from_native(category))
             if category == PRODUCT_TYPE.CAR or 'brand' in data:
                 # we have CarProduct here
                 return serializers.CarProductSerializer
@@ -1295,6 +1311,15 @@ class MessageThreadViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     filter_class = MessageThreadFilterSet
     ordering_fields = ('last_message__sent_at', 'last_message__read_at', 'last_message__replied_at')
 
+    @link()
+    @ignore_filters([filters.DjangoFilterBackend])
+    def seen(self, request, *args, **kwargs):
+        thread = self.get_object()
+        serializer = self.get_serializer()
+        seen = serializer.transform_seen(thread, thread.id)
+        return Response({'seen': seen})
+
+
 class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows product related messages to be viewed or edited.
@@ -1318,4 +1343,19 @@ class ProductRelatedMessageViewSet(SetMessageOwnerMixin, viewsets.ModelViewSet):
         if not message.read_at and message.recipient.id == request.user.id:
             message.read_at = datetime.datetime.now()
             message.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @list_action(methods=['put'], url_path='seen')
+    @ignore_filters([filters.DjangoFilterBackend])
+    def seen_many(self, request, *args, **kwargs):
+        messages_ids = request.DATA.get('messages', [])
+        if not isinstance(messages_ids, (list, tuple)):
+            messages_ids = [messages_ids, ]
+
+        self.get_queryset().filter(
+            recipient=request.user,
+            read_at__isnull=True,
+            id__in=messages_ids).update(
+            read_at=datetime.datetime.now())
+
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -1,39 +1,44 @@
 block details
     .section-content
-      fieldset(data-ng-disabled="submitInProgress")
-        h2 Catégories
-        .row
-            {% verbatim %}
-            .col-md-4
-                .form-control
-                    select(ng-model="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.1")
-                        option(ng-repeat="category in rootCategories", ng-selected="category.id == rootCategory", value="{{category.id}}") {{category.name}}
-            .col-md-4
-                .form-control
-                    select(ng-model="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", ng-required="isAuto || isRealEstate", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.2")
-                        option(ng-repeat="category in nodeCategories", ng-selected="category.id == nodeCategory", value="{{category.id}}") {{category.name}}
-            .col-md-4
-                .form-control
-                    select(ng-model="product.category", ng-required="!isAuto && !isRealEstate", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate", data-placeholder="Catégorie Niv.3")
-                        option(ng-repeat="category in leafCategories", ng-selected="(categoriesBaseUrl + category.id + '/') == product.category", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
-            {% endverbatim %}
-        h2 Titre
-        .row
-            .col-xs-12
-                input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary")
-        h2 Adresse
-        .row
-            .col-sm-12
-             input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
-             span.text-danger(ng-show="itemInfoForm.street.$error.required && itemInfoSubmitted", translate="required_field")
-        .row
-            .col-sm-6
-                input(type="text", name="zipcode", placeholder="Code postal *", required, eloue-zipcode, ng-model="product.addressDetails.zipcode").form-control
-                span.text-danger(ng-show="itemInfoForm.zipcode.$error.required && itemInfoSubmitted", translate="required_field")
-                span.text-danger(ng-show="itemInfoForm.zipcode.$error.badFormat && itemInfoSubmitted", translate="zipcode_invalid")
-            .col-sm-6
-                input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
-                span.text-danger(ng-show="itemInfoForm.city.$error.required && itemInfoSubmitted", translate="required_field")
+      fieldset(data-ng-disabled="submitInProgress", novalidate)
+        form(name="generalItemInfoForm")
+            h2 Catégories
+            .row
+                {% verbatim %}
+                .col-md-4
+                    .form-control
+                        select(name="rootCategory", ng-model="rootCategory", ng-change="updateNodeCategories(true)", eloue-chosen, opts="rootCategories", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.1")
+                            option(ng-repeat="category in rootCategories", ng-selected="category.id == rootCategory", value="{{category.id}}") {{category.name}}
+                        span.text-danger(ng-show="generalItemInfoForm.rootCategory.$error.required && itemInfoSubmitted", translate="required_field")
+                .col-md-4
+                    .form-control
+                        select(name="nodeCategory", ng-model="nodeCategory", ng-change="updateLeafCategories(true)", eloue-chosen, opts="nodeCategories", ng-required="isAuto || isRealEstate || nodeCategories.length>0", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.2")
+                            option(ng-repeat="category in nodeCategories", ng-selected="category.id == nodeCategory", value="{{category.id}}") {{category.name}}
+                        span.text-danger(ng-show="generalItemInfoForm.nodeCategory.$error.required && itemInfoSubmitted", translate="required_field")
+                .col-md-4
+                    .form-control
+                        select(name="category", ng-model="product.category", ng-required="!isAuto && !isRealEstate", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate", data-placeholder="Catégorie Niv.3")
+                            option(ng-repeat="category in leafCategories", ng-selected="(categoriesBaseUrl + category.id + '/') == product.category", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
+                        span.text-danger(ng-show="generalItemInfoForm.category.$error.required && itemInfoSubmitted", translate="required_field")
+                {% endverbatim %}
+            h2 Titre
+            .row
+                .col-xs-12
+                    input#title.form-control(type="text", name="title", placeholder="Titre", ng-model="product.summary", required)
+                    span.text-danger(ng-show="generalItemInfoForm.title.$error.required && itemInfoSubmitted", translate="required_field")
+            h2 Adresse
+            .row
+                .col-sm-12
+                 input(type="text", name="street", placeholder="Rue *", required, ng-model="product.addressDetails.street").form-control
+                 span.text-danger(ng-show="generalItemInfoForm.street.$error.required && itemInfoSubmitted", translate="required_field")
+            .row
+                .col-sm-6
+                    input(type="text", name="zipcode", placeholder="Code postal *", required, eloue-zipcode, ng-model="product.addressDetails.zipcode").form-control
+                    span.text-danger(ng-show="generalItemInfoForm.zipcode.$error.required && itemInfoSubmitted", translate="required_field")
+                    span.text-danger(ng-show="generalItemInfoForm.zipcode.$error.badFormat && itemInfoSubmitted", translate="zipcode_invalid")
+                .col-sm-6
+                    input(type="text", name="city", placeholder="Ville *", required, ng-model="product.addressDetails.city").form-control
+                    span.text-danger(ng-show="generalItemInfoForm.city.$error.required && itemInfoSubmitted", translate="required_field")
         h2 Photos
         .row
             form#add-picture
@@ -55,7 +60,7 @@ block details
                            .thumbnail: span.lg-p
                              img(style="background-image: url('/static/img/preloader2.gif');")
                 {% endverbatim %}
-        form(name="itemInfoForm", ng-submit="itemInfoSubmitted=true;itemInfoForm.$valid && updateProduct()", novalidate, ng-class="{'submitted':itemInfoSubmitted}")
+        form(name="itemInfoForm", ng-submit="itemInfoSubmitted=true;itemInfoForm.$valid && generalItemInfoForm.$valid && updateProduct()", novalidate, ng-class="{'submitted':itemInfoSubmitted}")
           fieldset(data-ng-disabled="submitInProgress")
             h2(ng-show="isAuto || isRealEstate") Caractéristiques
             include ./_item_characteristics
