@@ -38,7 +38,8 @@ define([
             $scope.isFirstLoad = true;
 
             $scope.handleResponseErrors = function (error, object, action) {
-                $scope.submitInProgress = false;
+                $scope.messageSubmitInProgress = false;
+                $scope.bookingSubmitInProgress = false;
                 $scope.showNotification(object, action, false);
             };
 
@@ -49,7 +50,8 @@ define([
                     $scope.isFirstLoad = false;
                 }
                 if ($scope.messageThread) {
-                    UtilsService.updateMessagesSender($scope.items, $scope.messageThread.sender, $scope.currentUser);
+                    var replacer = $scope.messageThread.sender.id == $scope.currentUser.id ? $scope.messageThread.recipient : $scope.messageThread.sender;
+                    UtilsService.updateMessagesSender($scope.items, replacer, $scope.currentUser);
                 }
 
                 var unreadMessages = UtilsService.getUnreadMessagesIds ($scope.items, $scope.currentUser);
@@ -89,56 +91,63 @@ define([
                     // Get booking product
                     BookingsService.getBookingByProduct($scope.messageThread.product.id).then(function (booking) {
                         if (!booking) {
-                            // Options for the select element
-                            $scope.availableHours = [
-                                {"label": "00.00", "value": "00:00:00"},
-                                {"label": "01.00", "value": "01:00:00"},
-                                {"label": "02.00", "value": "02:00:00"},
-                                {"label": "03.00", "value": "03:00:00"},
-                                {"label": "04.00", "value": "04:00:00"},
-                                {"label": "05.00", "value": "05:00:00"},
-                                {"label": "06.00", "value": "06:00:00"},
-                                {"label": "07.00", "value": "07:00:00"},
-                                {"label": "08.00", "value": "08:00:00"},
-                                {"label": "09.00", "value": "09:00:00"},
-                                {"label": "10.00", "value": "10:00:00"},
-                                {"label": "11.00", "value": "11:00:00"},
-                                {"label": "12.00", "value": "12:00:00"},
-                                {"label": "13.00", "value": "13:00:00"},
-                                {"label": "14.00", "value": "14:00:00"},
-                                {"label": "15.00", "value": "15:00:00"},
-                                {"label": "16.00", "value": "16:00:00"},
-                                {"label": "17.00", "value": "17:00:00"},
-                                {"label": "18.00", "value": "18:00:00"},
-                                {"label": "19.00", "value": "19:00:00"},
-                                {"label": "20.00", "value": "20:00:00"},
-                                {"label": "21.00", "value": "21:00:00"},
-                                {"label": "22.00", "value": "22:00:00"},
-                                {"label": "23.00", "value": "23:00:00"}
-                            ];
 
-                            $scope.newBooking = {
-                                start_date: Date.today().add(1).days().toString("dd/MM/yyyy"),
-                                end_date: Date.today().add(2).days().toString("dd/MM/yyyy"),
-                                start_time: $scope.availableHours[0],
-                                end_time: $scope.availableHours[0]
-                            };
+                            if ($scope.messageThread.product.owner.id != $scope.currentUser.id) {
 
-                            $scope.requestBooking = function () {
-                                $scope.submitInProgress = true;
-                                //Get product details
-                                ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
-                                    $window.location.href = result.url + "#/booking";
-                                }, function (error) {
-                                    $scope.handleResponseErrors(error, "booking", "redirect");
-                                });
-                            };
-                            $scope.booking = booking;
-                            $scope.updateNewBookingInfo();
+                                $scope.getProductUrl();
+
+                                // Options for the select element
+                                $scope.availableHours = [
+                                    {"label": "00.00", "value": "00:00:00"},
+                                    {"label": "01.00", "value": "01:00:00"},
+                                    {"label": "02.00", "value": "02:00:00"},
+                                    {"label": "03.00", "value": "03:00:00"},
+                                    {"label": "04.00", "value": "04:00:00"},
+                                    {"label": "05.00", "value": "05:00:00"},
+                                    {"label": "06.00", "value": "06:00:00"},
+                                    {"label": "07.00", "value": "07:00:00"},
+                                    {"label": "08.00", "value": "08:00:00"},
+                                    {"label": "09.00", "value": "09:00:00"},
+                                    {"label": "10.00", "value": "10:00:00"},
+                                    {"label": "11.00", "value": "11:00:00"},
+                                    {"label": "12.00", "value": "12:00:00"},
+                                    {"label": "13.00", "value": "13:00:00"},
+                                    {"label": "14.00", "value": "14:00:00"},
+                                    {"label": "15.00", "value": "15:00:00"},
+                                    {"label": "16.00", "value": "16:00:00"},
+                                    {"label": "17.00", "value": "17:00:00"},
+                                    {"label": "18.00", "value": "18:00:00"},
+                                    {"label": "19.00", "value": "19:00:00"},
+                                    {"label": "20.00", "value": "20:00:00"},
+                                    {"label": "21.00", "value": "21:00:00"},
+                                    {"label": "22.00", "value": "22:00:00"},
+                                    {"label": "23.00", "value": "23:00:00"}
+                                ];
+
+                                $scope.newBooking = {
+                                    start_date: Date.today().add(1).days().toString("dd/MM/yyyy"),
+                                    end_date: Date.today().add(2).days().toString("dd/MM/yyyy"),
+                                    start_time: $scope.availableHours[0],
+                                    end_time: $scope.availableHours[0]
+                                };
+
+                                $scope.requestBooking = function () {
+                                    $scope.bookingSubmitInProgress = true;
+                                    //Get product details
+                                    ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
+                                        $window.location.href = result.url + "#/booking";
+                                    }, function (error) {
+                                        $scope.handleResponseErrors(error, "booking", "redirect");
+                                    });
+                                };
+                                $scope.booking = booking;
+                                $scope.updateNewBookingInfo();
+                            }
                         } else {
                             $scope.booking = booking;
                             $scope.allowDownloadContract = $.inArray($scope.booking.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
                             $scope.contractLink = Endpoints.api_url + "bookings/" + $scope.booking.uuid + "/contract/";
+                            $scope.getProductUrl();
                         }
                     }, function (reason) {
                         console.log(reason);
@@ -149,7 +158,7 @@ define([
 
                 // Post new message
                 $scope.postNewMessage = function () {
-                    $scope.submitInProgress = true;
+                    $scope.messageSubmitInProgress = true;
                     ProductRelatedMessagesService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(
                         function (data) {
@@ -158,7 +167,7 @@ define([
 
                             // Add new message.
                             $scope.items.push(data);
-                            $scope.submitInProgress = false;
+                            $scope.messageSubmitInProgress = false;
                             $scope.showNotification("message", "send", true);
 
 
@@ -169,7 +178,13 @@ define([
                 };
 
                 // Initiate custom scrollbars
-                $scope.initCustomScrollbars();
+                UtilsService.initCustomScrollbars("#messages-list");
+            };
+
+            $scope.getProductUrl = function() {
+                ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function(result) {
+                    $scope.productUrl = result.url;
+                });
             };
 
             $scope.updateNewBookingInfo = function () {
@@ -211,6 +226,16 @@ define([
                         scrollInertia: 0
                     });
                 }, 50);
+            };
+
+            $scope.getProductPicture = function(product) {
+                var result = undefined;
+
+                if (product && product.pictures && product.pictures[0]) {
+                    return product.pictures[0].image.thumbnail;
+                }
+
+                return result;
             }
         }
     ]);

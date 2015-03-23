@@ -7,6 +7,19 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
         var mapsService = {};
 
         mapsService.loadGoogleMaps = function () {
+
+            var mapsLoaded = false;
+            angular.forEach($document[0].body.childNodes, function(value) {
+                if (value && value.src) {
+                    if (value.src == 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded') {
+                        mapsLoaded = true;
+                    }
+                }
+            });
+            if (mapsLoaded) {
+                return;
+            }
+
             var script = $document[0].createElement("script");
             script.type = "text/javascript";
             script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
@@ -85,6 +98,48 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 return 4;
             }
             return 3;
+        };
+
+        /**
+         * Center map according to provided coordinates to make them fit the map.
+         * @param map initialized map.
+         * @param latLngs arr of coordinates.
+         * @param conf additional config. minZoom and maxZoom can be set.
+         */
+        mapsService.centerMap = function (map, latLngs, conf) {
+            // Do not center map if no coordinates provided.
+            if (latLngs.length == 0) {
+                if (!conf.center) {
+                    return;
+                }
+                else {
+                    map.setCenter(conf.center);
+                    return;
+                }
+            }
+
+            var latlngbounds = new google.maps.LatLngBounds();
+
+            var config = {
+                minZoom: conf && conf.minZoom ? conf.minZoom : undefined,
+                maxZoom: conf && conf.maxZoom ? conf.maxZoom : undefined
+            };
+
+            // Extend all coordinates.
+            for (var i = 0; i < latLngs.length; i++) {
+                latlngbounds.extend(latLngs[i]);
+            }
+
+            // Fit map bounds.
+            map.fitBounds(latlngbounds);
+
+            // Check min zoom and max zoom if any.
+            if (config.minZoom && map.getZoom() < config.minZoom)  {
+                map.setZoom(config.minZoom);
+            }
+            if (config.maxZoom && map.getZoom() > config.maxZoom) {
+                map.setZoom(config.maxZoom);
+            }
         };
 
         return mapsService;
