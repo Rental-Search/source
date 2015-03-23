@@ -1096,21 +1096,28 @@ class ProductTopPosition(models.Model):
         return (settings.PRODUCTTOPPOSITION_PRICE * dt_sec / days_sec).quantize(D('0.01'))
 
 
-
-post_save.connect(post_save_answer, sender=Answer)
-post_save.connect(post_save_product, sender=Product)
-post_save.connect(post_save_product, sender=CarProduct)
-post_save.connect(post_save_product, sender=RealEstateProduct)
+post_save.connect(post_save_answer, sender=Answer,
+        dispatch_uid='products_answer_post_save_answer')
+post_save.connect(post_save_product, sender=Product,
+        dispatch_uid='products_product_post_save_product')
+post_save.connect(post_save_product, sender=CarProduct,
+        dispatch_uid='products_carproduct_post_save_product')
+post_save.connect(post_save_product, sender=RealEstateProduct,
+        dispatch_uid='products_realestateproduct_post_save_product')
 post_save.connect(post_save_curiosity, sender=Curiosity)
 
 post_save.connect(post_save_sites, sender=Alert)
 post_save.connect(post_save_sites, sender=Curiosity)
 # post_save.connect(post_save_sites, sender=Category)
 
-post_save.connect(post_save_to_update_product, sender=Price)
-post_save.connect(post_save_to_update_product, sender=Picture)
-post_save.connect(post_save_to_update_product, sender=ProductHighlight)
-post_save.connect(post_save_to_update_product, sender=ProductTopPosition)
+post_save.connect(post_save_to_update_product, sender=Price,
+        dispatch_uid='products_price_post_save_to_update_product')
+post_save.connect(post_save_to_update_product, sender=Picture,
+        dispatch_uid='products_picture_post_save_to_update_product')
+post_save.connect(post_save_to_update_product, sender=ProductHighlight,
+        dispatch_uid='products_producthighlight_post_save_to_update_product')
+post_save.connect(post_save_to_update_product, sender=ProductTopPosition,
+        dispatch_uid='products_producttopposition_post_save_to_update_product')
 
 # register a signal handler to update message thread and parent of the newly created message
 post_save.connect(post_save_message, sender=ProductRelatedMessage)
