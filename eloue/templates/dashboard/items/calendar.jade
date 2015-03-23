@@ -49,22 +49,22 @@ block details
                 td(ng-show="showBookings && period.reason=='booked'").text-success-light Réservé
                 td(ng-show="showUnavailable && period.reason=='unavailable'").text-danger-light Indisponible
                 td
-                  a(href="", ng-click="showUpdatePeriodForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") Edit &nbsp;
-                  a(href="", ng-click="showConfirmForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") Delete
+                  a(href="", ng-click="showUpdatePeriodForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") Modifier &nbsp;
+                  a(href="", ng-click="showConfirmForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") Supprimer
       .row
         .col-xs-8.col-xs-offset-2
-          button(type="button", ng-click="showAddPeriodForm()").btn.bg-success-hover.text-white Ajoutez une nouvelle disponibilité
+          button(type="button", ng-click="showAddPeriodForm()").btn.bg-success-hover.text-white Ajouter une nouvelle disponibilité
     {% endverbatim %}
 #confirm-delete-period.modal.fade
     .modal-dialog
         .modal-content(style="padding: 30px")
             .modal-body
-                h3 Delete selected period ?
+                h3 Supprimer l'indisponibilité ?
                 .row
                     .col-xs-6
-                        button(type="button", data-dismiss="modal", ng-click="deleteUnavailabilityPeriod(selectedPeriod)").btn
+                        button(type="button", data-dismiss="modal", ng-click="deleteUnavailabilityPeriod(selectedPeriod)").btn.bg-success
                             | Oui
                     .col-xs-6
-                        button(type="button", data-dismiss="modal").btn.bg-success
+                        button(type="button", data-dismiss="modal").btn
                             | Non
 include add_period

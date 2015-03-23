@@ -3,16 +3,11 @@
     .modal-dialog
         .modal-content(style="padding: 30px")
             .modal-body
-                h3 Ajoutez une nouvelle disponibilité
+                h3 Ajouter une nouvelle disponibilité
                 .alert.alert-danger(ng-show="!!unavailabilityPeriodValidationError")
                     span.text-danger {{unavailabilityPeriodValidationError}}
                 form(name="addPeriodForm", ng-submit="periodSubmitted = true").table-form
                     fieldset(data-ng-disabled="submitInProgress")
-                        .row
-                            .col-sm-12
-                                input(type="number", name="quantity", ng-model="newUnavailabilityPeriod.quantity", placeholder="Quantité", required).form-control
-                                span.text-danger(ng-show="addPeriodForm.quantity.$error.required && periodSubmitted", translate="required_field")
-                                span.text-danger(eloue-form-field-message, field-name="quantity") {{value}}
                         .row
                             .col-sm-12(style="z-index: 1050")
                                 input(type="text", name="started_at", ng-model="newUnavailabilityPeriod.started_at", placeholder="Du", eloue-extended-datepicker, required).form-control
