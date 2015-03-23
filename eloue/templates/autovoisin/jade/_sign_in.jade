@@ -29,7 +29,7 @@
                     button(type="button", data-dismiss="alert", class="close")
                     | {{loginError}}
                 {% endverbatim %}
-                form(name="registrationForm", ng-submit="registrationSubmitted=true; registrationForm.$valid && regiser()", novalidate, eloue-form-field-error-manager, ng-class="{'submitted':registrationSubmitted}")
+                form(name="registrationForm", ng-submit="registrationSubmitted=true; registrationForm.$valid && register()", novalidate, eloue-form-field-error-manager, ng-class="{'submitted':registrationSubmitted}")
                     fieldset(data-ng-disabled="!!submitting")
                         //-
                          h3 Inscription 30 secondes
