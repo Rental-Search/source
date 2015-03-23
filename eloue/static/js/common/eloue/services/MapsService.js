@@ -108,8 +108,15 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
          */
         mapsService.centerMap = function (map, latLngs, conf) {
             // Do not center map if no coordinates provided.
-            if (latLngs.length == 0)
-                return;
+            if (latLngs.length == 0) {
+                if (!conf.center) {
+                    return;
+                }
+                else {
+                    map.setCenter(conf.center);
+                    return;
+                }
+            }
 
             var latlngbounds = new google.maps.LatLngBounds();
 
