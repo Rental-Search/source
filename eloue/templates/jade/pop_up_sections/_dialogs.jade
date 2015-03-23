@@ -9,7 +9,7 @@
             .thumbnail-content
                 .thumbnail-frame
                     h4 {{message.sender.username}}
-                    p(ng-bind="message.body")
+                    p(style="white-space: pre-line;", ng-bind="message.body")
                 p(ng-bind="message.sent_at | date : 'Le dd.MM.yyyy à HH:mm'").time
             div(ng-if="product.owner.id != message.sender.id").thumbnail-img
                 a(href="{{message.sender.url}}"): img(style="background-image: url({{ message.sender.avatar.thumbnail }})").bg-image

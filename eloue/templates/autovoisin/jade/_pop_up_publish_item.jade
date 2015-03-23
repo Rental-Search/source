@@ -1,0 +1,95 @@
+.modal.fade#publishModal(tabindex="-1", role="dialog", aria-hidden="true")
+    .modal-dialog.large
+        .modal-content
+            .modal-header
+                button(type="button", data-dismiss="modal").close
+                    span(aria-hidden="true")&times;
+                    span.sr-only Close
+                h4.modal-title Dépot d'annonce
+            .modal-body
+                section.content.clearfix
+                    h3 Publiez votre annonce en 1 minute
+                    p.text-light
+                        | AutoVoisin vous permet de gagner de l'argent en louant vos biens,
+                        br
+                        | en toute sécurité, quand vous ne les utilisez pas
+                    {% verbatim %}
+                    .alert.alert-danger(eloue-form-message)
+                       button(type="button", data-dismiss="alert", class="close")
+                       | {{!!description?description:message}}
+                    form(name="publishAdForm", ng-submit="publishAdSubmitted=true; publishAdForm.$valid && isCategorySelectorsValid() && publishAd()", ng-class="{'submitted':!!publishAdSubmitted}", role="form", novalidate, eloue-form-field-error-manager).input-group.form-wrapper.col-sm-10.col-sm-offset-1
+                      fieldset(data-ng-disabled="submitInProgress")
+                        .row
+                            .col-sm-12
+                                input(type="text", name="summary", placeholder="Titre", ng-required="!isAuto", ng-model="product.summary", ng-show="!isAuto").form-control
+                                span.text-danger(ng-show="publishAdForm.summary.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-6
+                                input(type="text", name="brand", placeholder="Marque *", ng-required="isAuto", ng-model="product.brand", ng-show="isAuto").form-control
+                                span.text-danger(ng-show="publishAdForm.brand.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-6
+                                input(type="text", name="model", placeholder="Modèle *", ng-required="isAuto", ng-model="product.model", ng-show="isAuto").form-control
+                                span.text-danger(ng-show="publishAdForm.model.$error.required && !!publishAdSubmitted", translate="required_field")
+                        .row
+                            .col-sm-4.ng-hide
+                                select(ng-model="rootCategory", required,  name="rootCategory", ng-change="updateNodeCategories()", eloue-chosen, opts="rootCategories", data-placeholder="Catégorie Niv.1 *", data-ng-disabled="submitInProgress", style="z-index: 1051", ng-init="initRootCategory(2700)").form-control
+                                    option(ng-repeat="category in rootCategories", value="{{category.id}}", ng-selected="category.id == rootCategory") {{category.name}}
+                                span.text-danger(ng-show="publishAdForm.rootCategory.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-4
+                                select(ng-model="nodeCategory", ng-required="nodeCategories.length>0", name="nodeCategory", ng-change="updateLeafCategories()", eloue-chosen, opts="nodeCategories", data-placeholder="Catégorie Niv.2 *", data-ng-disabled="submitInProgress").form-control
+                                    option(ng-repeat="category in nodeCategories", value="{{category.id}}", ng-selected="category.id == nodeCategory") {{category.name}}
+                                span.text-danger(ng-show="publishAdForm.nodeCategory.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-4
+                                select(ng-model="product.category", ng-required="leafCategories.length>0", name="category", opts="leafCategories", eloue-chosen, data-placeholder="Catégorie Niv.3 *", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate").form-control
+                                    option(ng-repeat="category in leafCategories", value="{{categoriesBaseUrl}}{{category.id}}/", ng-selected="category.id == product.category") {{category.name}}
+                                span.text-danger(ng-show="publishAdForm.category.$error.required && !!publishAdSubmitted", translate="required_field")
+                        .row(ng-show="noAddress")
+                            .col-sm-5
+                                input(type="text", name="street", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
+                                span.text-danger(ng-show="publishAdForm.street.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-3
+                                input(type="text", name="zipcode", placeholder="Code postal *", required, eloue-zipcode, ng-model="currentUser.default_address.zipcode").form-control
+                                span.text-danger(ng-show="publishAdForm.zipcode.$error.required && !!publishAdSubmitted", translate="required_field")
+                                span.text-danger(ng-show="publishAdForm.zipcode.$error.badFormat && !!publishAdSubmitted", translate="zipcode_invalid")
+                            .col-sm-4
+                                input(type="text", name="city", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
+                                span.text-danger(ng-show="publishAdForm.city.$error.required && !!publishAdSubmitted", translate="required_field")
+                        .row
+                            .col-sm-3
+                                input(type="text", eloue-placeholder-fix, name="amount", placeholder="{{isRealEstate ? 'Prix à la nuit *' : 'Prix à la journée *'}}", required, ng-model="price.amount").form-control
+                                span.text-danger(ng-show="publishAdForm.amount.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-1: b.form-suffix &euro;
+                            .col-sm-3(ng-if="!isAuto")
+                                input(type="text", eloue-placeholder-fix, name="deposit_amount", placeholder="Caution demandée *", ng-required="!isAuto", ng-model="product.deposit_amount").form-control
+                                span.text-danger(ng-show="publishAdForm.deposit_amount.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-1(ng-show="!isAuto"): b.form-suffix &euro;
+                            .col-sm-3(ng-show="isAuto")
+                                input(type="text", eloue-placeholder-fix, name="km_included", placeholder="Kilomètres inclus *", ng-required="isAuto", ng-model="product.km_included").form-control
+                                span.text-danger(ng-show="publishAdForm.km_included.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-1(ng-show="isAuto"): b.form-suffix Km
+                            .col-sm-4(ng-show="!isAuto")
+                                button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
+                            .col-sm-3(ng-show="isAuto")
+                                input(type="text", eloue-placeholder-fix, name="costs_per_km", placeholder="Prix km supp *", ng-required="isAuto", ng-model="product.costs_per_km").form-control
+                                span.text-danger(ng-show="publishAdForm.costs_per_km.$error.required && !!publishAdSubmitted", translate="required_field")
+                             .col-sm-1(ng-show="isAuto"): b.form-suffix &euro;
+                        .row(ng-if="isAuto")
+                            .col-sm-4(style="z-index: 1050")
+                                input#first_registration_date(type="text", name="first_registration_date", ng-model="product.first_registration_date", placeholder="1er mise en circulation *", ng-required="isAuto", eloue-year-datepicker).form-control.date
+                                span.text-danger(ng-show="publishAdForm.first_registration_date.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-4
+                                input(type="text", name="licence_plate", ng-model="product.licence_plate", placeholder="N° d'immatriculation *", ng-required="isAuto").form-control
+                                span.text-danger(ng-show="publishAdForm.licence_plate.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-3
+                                input(type="text", eloue-placeholder-fix, name="deposit_amount", placeholder="Caution demandée *", ng-required="isAuto", ng-model="product.deposit_amount").form-control
+                                span.text-danger(ng-show="publishAdForm.deposit_amount.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-1: b.form-suffix &euro;
+                        .row(ng-show="isAuto")
+                            .col-sm-3
+                                select(ng-model="product.tax_horsepower", name="tax_horsepower", data-placeholder="CV fiscaux *", eloue-chosen, data-ng-disabled="submitInProgress", ng-required="isAuto").form-control
+                                    option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
+                                span.text-danger(ng-show="publishAdForm.tax_horsepower.$error.required && !!publishAdSubmitted", translate="required_field")
+                            .col-sm-1: b.form-suffix CV
+                            .col-sm-4
+                            .col-sm-4
+                                button(type="submit", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.btn-advertise Publiez votre annonce
+                        {% endverbatim %}

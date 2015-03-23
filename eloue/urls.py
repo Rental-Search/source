@@ -232,6 +232,7 @@ ui3_urlpatterns = patterns('',
     url(r'^activate/(?P<activation_key>\w+)/$', ActivationView.as_view(), name='auth_activate'),
     url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
     url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
+    url(r'^navette/', TemplateView.as_view(template_name='shipping/index.jade'), name='shuttle'),
 )
 
 urlpatterns = patterns('',

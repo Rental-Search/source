@@ -3,7 +3,7 @@ section.tabs-vertical-active.lg(ng-show="(bookingList && bookingList.length > 0)
     .row
       .col-xs-8.tabs-horisontal-active
         ul.list-without-spaces.fixed
-          -var  booking_detail_horisontal_tabs = [["filterByBoth()", "Tous"], ["filterByOwner()", "Propriétaires"], ["filterByBorrower()", "Emprunteurs"]]
+          -var  booking_detail_horisontal_tabs = [["filterByBoth()", "Tous"], ["filterByOwner()", "Propriétaires"], ["filterByBorrower()", "Locataires"]]
           each filter_func, filter_name in booking_detail_horisontal_tabs
             li.divider
             li.tab-horisontal(ng-click="{{ filter_func }}", id="filter-{{ filter_name }}"): h3.small {{ filter_name }}

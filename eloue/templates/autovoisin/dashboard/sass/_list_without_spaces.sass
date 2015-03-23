@@ -1,0 +1,43 @@
+.list-without-spaces,
+.without-spaces
+  margin: 0
+  padding: 0
+  display: table
+  white-space: nowrap
+  > li
+    display: table-cell
+    width: 0.1%
+    vertical-align: middle
+  &.compress > li
+    width: auto
+    a
+      padding: 0 1em
+
+  &.fixed
+    .divide:before,
+    .divider:before
+      bottom: 0
+      height: ($line-height-base * 1em)
+
+.spacer,
+.divider,
+.divide
+  min-width: 1%
+  width: 1% !important
+  padding: 0
+  position: relative
+  &:first-child
+    display: none
+
+.divide,
+.divider
+  &:before
+    content: " "
+    position: absolute
+    border-left: 1px solid $gray-lighter
+    width: 0
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    margin: auto
