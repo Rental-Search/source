@@ -3,12 +3,12 @@ section.tabs-vertical-static.pull-nothing
     ul#messages-list.scrollbar-custom.messages-container(eloue-lazy-load, lazy-data="items", lazy-data-provider="ProductRelatedMessagesService", lazy-load-method="getThreadMessages", lazy-load-config="lazyLoadConfig")
         li.tab-vertical.block-with-thumbnail.display-table(ng-repeat="message in items | orderBy:'id'")
             .col-thumbnail
-                .thumbnail.round: a(href="#").sm
+                .thumbnail.round: a(href="/loueur/{{message.sender.slug}}").sm
                     img(style="background-image: url({{message.sender.avatar.thumbnail}});")
             .col-exposition
-                h3: a(href="#").text-underline-hover {{message.sender.username}}
+                h3: a(href="/loueur/{{message.sender.slug}}").text-underline-hover {{message.sender.username}}
                 p.small.text-gray-light {{message.sent_at | date : "dd.MM.yyyy HH'h'mm"}}
-                p.normal.text-gray.text-justify {{message.body}}
+                p.normal.text-gray.text-justify(style="white-space: pre-line;") {{message.body}}
 
     form(ng-submit="postNewMessage()").send-dialog-message.clearfix
       fieldset(data-ng-disabled="messageSubmitInProgress")

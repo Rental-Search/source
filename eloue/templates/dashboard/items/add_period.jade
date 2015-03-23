@@ -3,7 +3,7 @@
     .modal-dialog
         .modal-content(style="padding: 30px")
             .modal-body
-                h3 Ajoutez une nouvelle disponibilité
+                h3 Ajoutez une nouvelle indisponibilité
                 .alert.alert-danger(ng-show="!!unavailabilityPeriodValidationError")
                     span.text-danger {{unavailabilityPeriodValidationError}}
                 form(name="addPeriodForm", ng-submit="periodSubmitted = true").table-form

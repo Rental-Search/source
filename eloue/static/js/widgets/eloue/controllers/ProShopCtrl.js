@@ -24,7 +24,7 @@ define([
                     google.maps.event.trigger(map, 'resize');
 
                     // Center map.
-                    MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16});
+                    MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16, center: {lat: 46.71109, lng: 1.7191036 }});
                 }
             });
 
@@ -83,7 +83,7 @@ define([
                 google.maps.event.trigger(map, 'resize');
 
                 // Center map.
-                MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16});
+                MapsService.centerMap(map, latLngsArr, {minZoom: 5, maxZoom: 16, center: {lat: 46.71109, lng: 1.7191036 }});
             };
 
             /**
