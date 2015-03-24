@@ -33,12 +33,7 @@ def __update_product_category(sender, instance, created, **kwargs):
 
 def __reset_product_cache(sender, instance, created, **kwargs):
     cache.delete(cache_key('product:patron:row', instance.id))
-
-    cache.delete(cache_key('product:meta', instance.pk))
     cache.delete(cache_key('product:breadcrumb', instance.pk))
-    cache.delete(cache_key('product:details:before_csrf', instance.pk, Site.objects.get_current().pk))
-    cache.delete(cache_key('product:details:after_csrf', instance.pk, Site.objects.get_current().pk))
-    cache.delete(cache_key('product:details:after_dates', instance.pk))
 
 
 def post_save_product(sender, instance, created, **kwargs):

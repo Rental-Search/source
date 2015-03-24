@@ -1110,6 +1110,7 @@ post_save.connect(post_save_sites, sender=Alert)
 post_save.connect(post_save_sites, sender=Curiosity)
 # post_save.connect(post_save_sites, sender=Category)
 
+# TODO Remove these?
 post_save.connect(post_save_to_update_product, sender=Price,
         dispatch_uid='products_price_post_save_to_update_product')
 post_save.connect(post_save_to_update_product, sender=Picture,
