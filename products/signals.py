@@ -3,11 +3,9 @@ from django.conf import settings
 from django.core.cache import cache
 from django.contrib.sites.models import Site
 from django.db.models import get_model
-from django.db.models.query_utils import Q
 from django.db import transaction
 
 from eloue.utils import cache_key, create_alternative_email
-from django.db.models import signals
 from django.core import exceptions
 
 
@@ -23,7 +21,6 @@ GOSPORT_SITE_ID = 13
 def __update_product_category(sender, instance, created, **kwargs):
     Product2Category = get_model('products', 'Product2Category')
 
-    print "category upd", kwargs
     Product2Category.objects.filter(product=instance).delete()
     for site_id in settings.DEFAULT_SITES:
         category = instance.category.get_conformity(site_id)
