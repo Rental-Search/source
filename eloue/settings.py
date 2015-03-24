@@ -235,7 +235,6 @@ INSTALLED_APPS = (
     'provider', 'provider.oauth2', # django-oauth2-provider
     'rest_framework',
     # 'faq',
-    'globaltags',  # custom cache template tag
     'accounts',
     'products',
     'rent',

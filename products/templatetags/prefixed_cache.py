@@ -1,26 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
-import hashlib
-from django.utils.encoding import force_bytes
-from django.utils.http import urlquote
-
 from django.template import Library, Node, TemplateSyntaxError, VariableDoesNotExist
 from django.core.cache import cache
-from django.contrib.sites.models import Site
+#from django.contrib.sites.models import Site
+from eloue.utils import cache_key as make_template_fragment_key
 
 register = Library()
-
-TEMPLATE_FRAGMENT_KEY_TEMPLATE = '%s:template.cache.%s.%s'
-
-
-def make_template_fragment_key(fragment_name, prefix=None, vary_on=None):
-    if vary_on is None:
-        vary_on = ()
-    key = ':'.join([urlquote(var) for var in vary_on])
-    args = hashlib.md5(force_bytes(key))
-    if prefix is None:
-        prefix = Site.objects.get_current().domain
-    return TEMPLATE_FRAGMENT_KEY_TEMPLATE % (prefix, fragment_name, args.hexdigest())
 
 
 class CacheNode(Node):
@@ -40,7 +25,7 @@ class CacheNode(Node):
         except (ValueError, TypeError):
             raise TemplateSyntaxError('"cache" tag got a non-integer timeout value: %r' % expire_time)
         vary_on = [var.resolve(context) for var in self.vary_on]
-        cache_key = make_template_fragment_key(self.fragment_name, vary_on=vary_on)
+        cache_key = make_template_fragment_key(self.fragment_name, vary_on)
         value = cache.get(cache_key)
         if value is None:
             value = self.nodelist.render(context)

@@ -13,6 +13,7 @@ from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
+from django.utils.encoding import force_bytes
 from django.utils import translation, six
 from django.forms.util import ErrorList
 
@@ -56,9 +57,16 @@ def form_errors_append(form, field_name, message):
 def simple_cache_key(*args):
     return u':'.join(args)
 
+
+TEMPLATE_FRAGMENT_KEY_TEMPLATE = '%s:template.cache.%s.%s'
+
+
 def cache_key(fragment_name, *args):
-    hasher = hashlib.md5(u':'.join([urlquote(arg) for arg in args]))
-    return 'template.cache.%s.%s' % (fragment_name, hasher.hexdigest())
+    key = ':'.join([urlquote(arg) for arg in args])
+    args = hashlib.md5(force_bytes(key))
+    prefix = Site.objects.get_current().domain
+    return TEMPLATE_FRAGMENT_KEY_TEMPLATE % (prefix, fragment_name, args.hexdigest())
+
 
 def create_alternative_email(prefix, context, from_email, recipient_list):
     context.update({
