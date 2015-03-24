@@ -2,7 +2,6 @@ from __future__ import absolute_import, unicode_literals
 
 from django.template import Library, Node, TemplateSyntaxError, VariableDoesNotExist
 from django.core.cache import cache
-#from django.contrib.sites.models import Site
 from eloue.utils import cache_key as make_template_fragment_key
 
 register = Library()
