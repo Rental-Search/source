@@ -22,7 +22,7 @@ define([
             $scope.bookings = [];
             $scope.productUnavailablePeriods = [];
             $scope.weeks = {};
-            $scope.newUnavailabilityPeriod = {};
+            $scope.newUnavailabilityPeriod = {quantity: 1};
             $scope.unavailabilityPeriodValidationError = "";
 
             var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];

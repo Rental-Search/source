@@ -33,6 +33,7 @@ from rent.choices import BOOKING_STATE, COMMENT_TYPE_CHOICES
 from rent.decorators import incr_sequence
 from rent.fields import UUIDField, IntegerAutoField
 from rent.manager import BookingManager, CurrentSiteBookingManager, CommentManager
+from rent.signals import post_save_booking
 from payments.paypal_payment import AdaptivePapalPayments
 from payments.non_payment import NonPayments
 from shipping.models import ShippingPoint, Shipping
@@ -565,9 +566,9 @@ class Sinister(models.Model):
         if not self.pk:
             self.created_at = datetime.datetime.now() # TODO: should be replaced with auto_now_add=True in the model's field
         super(Sinister, self).save(*args, **kwargs)
-    
 
-post_save.connect(post_save_sites, sender=Booking)
+
+post_save.connect(post_save_booking, sender=Booking)
 post_save.connect(post_save_sites, sender=ProBooking)
 post_save.connect(post_save_to_update_product, sender=Comment)
 post_save.connect(post_save_to_update_product, sender=BorrowerComment)
