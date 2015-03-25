@@ -113,7 +113,6 @@ define([
                                     rangeInput.attr("value", calcRange);
                                 }
                                 updatedBySlider = false;
-                                $scope.submitForm();
                             });
                         }
                     }
