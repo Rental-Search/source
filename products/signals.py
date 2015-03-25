@@ -3,10 +3,9 @@ from django.conf import settings
 from django.core.cache import cache
 from django.contrib.sites.models import Site
 from django.db.models import get_model
-from django.db.models.query_utils import Q
+from django.db import transaction
 
 from eloue.utils import cache_key, create_alternative_email
-from django.db.models import signals
 from django.core import exceptions
 
 
@@ -18,15 +17,8 @@ ELOUE_SITE_ID = 1
 GOSPORT_SITE_ID = 13
 
 
-def post_save_product(sender, instance, created, **kwargs):
-    cache.delete(cache_key('product:patron:row', instance.id))
-    
-    cache.delete(cache_key('product:meta', instance.pk))
-    cache.delete(cache_key('product:breadcrumb', instance.pk))
-    cache.delete(cache_key('product:details:before_csrf', instance.pk, Site.objects.get_current().pk))
-    cache.delete(cache_key('product:details:after_csrf', instance.pk, Site.objects.get_current().pk))
-    cache.delete(cache_key('product:details:after_dates', instance.pk))
-
+@transaction.atomic
+def __update_product_category(sender, instance, created, **kwargs):
     Product2Category = get_model('products', 'Product2Category')
 
     Product2Category.objects.filter(product=instance).delete()
@@ -39,22 +31,39 @@ def post_save_product(sender, instance, created, **kwargs):
             instance.sites.remove(site_id)
 
 
+def __reset_product_cache(sender, instance, created, **kwargs):
+    cache.delete(cache_key('product:patron:row', instance.id))
+    cache.delete(cache_key('product:breadcrumb', instance.pk))
+
+
+def post_save_product(sender, instance, created, **kwargs):
+    __reset_product_cache(
+        sender=sender, instance=instance,
+        created=created, **kwargs
+    )
+    __update_product_category(
+        sender=sender, instance=instance,
+        created=created, **kwargs
+    )
+
+
 def post_save_to_update_product(sender, instance, created, **kwargs):
     try:
         product = instance.product
         if product is not None:
             # Fixed issues with picture.json fixture when running tests:
             # it doesn't make sense to emit signal for None product
-            signals.post_save.send(
+            __reset_product_cache(
                 sender=product.__class__, instance=product,
                 raw=False, created=False
             )
     except exceptions.ObjectDoesNotExist:
         pass
 
+
 def post_save_to_batch_update_product(sender, instance, created, **kwargs):
     for product in instance.products.all():
-        signals.post_save.send(
+        __reset_product_cache(
             sender=product.__class__, instance=product,
             raw=False, created=False
         )

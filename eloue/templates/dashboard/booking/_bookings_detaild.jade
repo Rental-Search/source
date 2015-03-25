@@ -39,7 +39,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 b {{phoneNumber}}
                 | ou
             a(ui-sref="messages.detail({id: bookingDetails.lastThreadId})", ng-show="!!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover Envoyez un message
-            a(ui-sref="messages.new({productId: bookingDetails.product.id})", ng-show="!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover Envoyez un message
+            a(ui-sref="messages.new({bookingId: bookingDetails.uuid})", ng-show="!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover Envoyez un message
 
         .block-with-thumbnail.notification.indent-md-t.col-bg-line
             .col-thumbnail

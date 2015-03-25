@@ -1,0 +1,101 @@
+-load staticfiles eloue_url
+
+section(ng-controller="AuthCtrl").container.signs-links
+  //- version of header for anonymous user
+  ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
+    li: span
+      | Bonjour, 
+      a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b inscrivez-vous 
+      | ou 
+      a(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b connectez-vous
+    li.divide
+    li: span
+        | Vous êtes un loueur professionnel, découvrez les 
+        a(href="{% url 'subscription' %}"): b offres AutoVoisin Pro
+    li.divide
+    li: span
+      | Appelez-nous au 
+      b 01 85 09 07 44 
+      | (numéro gratuit)
+  //- version of header for authorized user
+  ul.ng-hide(role="tablist", ng-show="!!currentUser", style="display: none;").without-spaces
+    li: span
+      | Appelez-nous au 
+      b 01 85 09 07 44 
+      | (numéro gratuit)
+    li.spacer
+    li.guest-veiw
+        {% verbatim %}
+        .dropdown
+          span.dropdown-img: a(href="#"): img(data-ng-src="{{currentUser.avatar.profil}}").bg-image
+          span(data-toggle="dropdown").dropdown-toggle.text-success {{currentUser.username}}
+            span.caret
+          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+            {% endverbatim %}
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:dashboard' %}").signs-links-black Tableau de bord
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:messages' %}").signs-links-black Messages
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:bookings' %}").signs-links-black Réservations
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:items' %}").signs-links-black Annonces
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:account' %}").signs-links-black Compte
+            li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()").signs-links-black Déconnexion
+            {% verbatim %}
+        //-
+         .dropdown
+          span(data-toggle="dropdown").dropdown-toggle.text-success
+            i.flaticon.stroke.mail
+            span.badge-count {{userStats.unread_message_threads_count}}
+          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+          //-
+            each item in header_popover
+              li
+                .middle-round: span
+                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="").bg-image
+                .content
+                  h4: a(href="#") #{item.first_name}
+                  h5: a(href="#") #{item.topic}
+                  p #{item.text}
+        //-
+         .dropdown
+          span(data-toggle="dropdown").dropdown-toggle.text-success
+            i.flaticon.stroke.calendar-5
+            span.badge-count {{userStats.booking_requests_count}}
+          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+          //-
+            each item in header_popover
+              li
+                .middle-round: span
+                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
+                .content
+                  h4: a(href="#") #{item.first_name}
+                  h5: a(href="#") #{item.topic}
+                  p #{item.text}
+        .dropdown
+          span(data-toggle="dropdown").dropdown-toggle.text-success Aide
+            span.caret
+          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+            {% endverbatim %}
+            li: a(href="{% url 'howto' %}") Comment ça marche ?
+            //-
+             li: a Simulez vos revenus
+             li: a Conseils pour les propriétaires
+             li: a Conseils pour les locataires
+
+.framing
+  section(data-ng-controller="HeaderCtrl").container.search-form
+    .table-cell
+      a(href="{% url 'home' %}"): img(src="{% static 'img/logo_autovoisin.png' %}", alt="e-loue logo").site-logo
+    .table-cell.main-cell
+      form(action="{% url 'product_list' %}")
+        .search-form-wrapper.input-group
+          input#geolocate(type="text", name="l", value="{{ form.cleaned_data.l }}", autocomplete="off", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
+          i.search-form-icon.flaticon.stroke.location-pin-3
+          .table-cell.input-group.where-field
+            i(ng-click="showFromCalendar()").search-form-icon.flaticon.stroke.calendar-3
+            input(type="text", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}", placeholder="Du", title="{% if form.cleaned_data.date_from %}Où ça ?{% endif %}", data-ng-model="fromDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
+          .table-cell.input-group.where-field
+            i(ng-click="showToCalendar()").search-form-icon.flaticon.stroke.calendar-3
+            input(type="text", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}", placeholder="Au", title="{% if form.cleaned_data.date_to %}Où ça ?{% endif %}", data-ng-model="toDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
+          .table-cell.input-group-btn
+            button(type="submit", default).btn.btn-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
+    .table-cell
+      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise Déposez une annonce

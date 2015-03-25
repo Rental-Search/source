@@ -1,5 +1,5 @@
 extends ./base
--load compressed cache
+-load compressed prefixed_cache
 
 block append styles
   {% compressed_css "bootstrap" %}
@@ -27,6 +27,7 @@ block append content-body
         include ./jade/_comments
       {% cache 43200 'homepage_city_list_static' %}
       section.location-list
+        -var cities_list = [["PARIS", "MARSEILLE", "LYON"], ['TOULOUSE', 'BORDEAUX', 'MONTPELLIER'], ['LILLE', 'NICE', 'NANTES']]
         include ./jade/_location_list
       {% endcache %}
 

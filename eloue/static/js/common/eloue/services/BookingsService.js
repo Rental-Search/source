@@ -19,7 +19,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 var deferred = $q.defer(), bookingList = [];
                 Bookings.get({product: productId, _cache: new Date().getTime()}).$promise.then(function (data) {
 
-                    angular.forEach(data.results, function (value) {
+                    for (var i = 0; i < data.results.length; i++) {
+                        var value = data.results[i];
                         var booking = {
                             state: value.state,
                             total_amount: value.total_amount,
@@ -41,9 +42,9 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                             booking.picture = value.product.pictures[0].image.thumbnail;
                         }
                         bookingList.push(booking);
-                    });
+                    }
+                    deferred.resolve(bookingList);
                 });
-                deferred.resolve(bookingList);
 
                 return deferred.promise;
             };
@@ -119,8 +120,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 // Load booking
                 this.getBooking(bookingUUID).then(function (booking) {
                     MessageThreadsService.getMessageThreadByProductAndParticipant(booking.product.id, booking.borrower.id).then(function (threads) {
-                        if (threads && threads.length > 0) {
-                            booking.lastThreadId = UtilsService.getIdFromUrl(threads[threads.length - 1].thread);
+                        if (threads.threads && threads.threads.results.length > 0) {
+                            booking.lastThreadId = threads.threads.results[threads.threads.results.length - 1].id;
                         }
                         deferred.resolve(booking);
                     });

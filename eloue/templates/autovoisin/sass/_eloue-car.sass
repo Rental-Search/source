@@ -1,0 +1,36 @@
+@font-face
+  font-family: $eloue-font-car-family
+  src: url('#{$eloue-font-car-path}/e-loue-cars.eot')
+  src: url('#{$eloue-font-car-path}/e-loue-cars.eot?#iefix') format("embedded-opentype"), url('#{$eloue-font-car-path}/e-loue-cars.woff') format('woff'), url('#{$eloue-font-car-path}/e-loue-cars.ttf') format('truetype'), url('#{$eloue-font-car-path}/e-loue-cars.svg#flaticons-social') format('svg')
+  font-weight: normal
+  font-style: normal
+
+[class^="car-"], [class*=" car-"]
+  font-family: $eloue-font-car-family
+  speak: none
+  font-style: normal
+  font-weight: normal
+  font-variant: normal
+  text-transform: none
+  line-height: 1
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+$eloue-car-1:  "\e800"
+$eloue-car-2:  "\e801"
+$eloue-car-3:  "\e802"
+$eloue-car-4:  "\e803"
+$eloue-car-5:  "\e804"
+$eloue-car-6:  "\e805"
+$eloue-car-7:  "\e806"
+$eloue-car-8:  "\e807"
+$eloue-car-9:  "\e808"
+$eloue-car-10: "\e809"
+$eloue-car-11: "\e80a"
+$eloue-car-12: "\e80b"
+
+@each $name, $var in "1" $eloue-car-1, "2" $eloue-car-2, "3" $eloue-car-3, "4" $eloue-car-4, "5" $eloue-car-5, "6" $eloue-car-6, "7" $eloue-car-7, "8" $eloue-car-8, "9" $eloue-car-9, "10" $eloue-car-10, "11" $eloue-car-11, "12" $eloue-car-12
+  .car-#{$name}:before
+    content: $var
+
+
