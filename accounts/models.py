@@ -877,8 +877,11 @@ class BillingHistory(models.Model):
 
     class Meta:
         ordering = ['date']
-    
+
+
 signals.post_save.connect(post_save_sites, sender=Patron)
 signals.pre_delete.connect(pre_delete_creditcard, sender=CreditCard)
-signals.post_save.connect(post_save_to_batch_update_product, sender=Address)
-signals.post_save.connect(post_save_to_batch_update_product, sender=Patron)
+signals.post_save.connect(post_save_to_batch_update_product, sender=Address,
+    dispatch_uid='accounts_address_post_save_to_batch_update_product')
+signals.post_save.connect(post_save_to_batch_update_product, sender=Patron,
+    dispatch_uid='accounts_patron_post_save_to_batch_update_product')
