@@ -1,5 +1,10 @@
 -load staticfiles eloue_url
 
+section.framing(ng-controller="CookiesCtrl")
+    div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") En poursuivant votre navigation, vous acceptez l’utilization des cookies pour disposer de services et d’offers adaptés à vos centres d’intérêts. Pour en savoir plus,&nbsp;
+        a(href="/conditions-generales/#Cookies") cliquez ici
+        span.cross(ng-click="acceptCookies(true)") &#10006;
+
 section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
@@ -37,7 +42,7 @@ section(ng-controller="AuthCtrl").container.signs-links
             li: a(eloue-dashboard-redirect="{% url 'dashboard:bookings' %}").signs-links-black Réservations
             li: a(eloue-dashboard-redirect="{% url 'dashboard:items' %}").signs-links-black Annonces
             li: a(eloue-dashboard-redirect="{% url 'dashboard:account' %}").signs-links-black Compte
-            li(ng-controller="AuthCtrl"): a(href="", ng-click="logout()").signs-links-black Déconnexion
+            li: a(href="", ng-click="logout()").signs-links-black Déconnexion
             {% verbatim %}
         //-
          .dropdown
