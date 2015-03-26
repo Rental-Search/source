@@ -60,7 +60,8 @@ def cache_key(fragment_name, *args):
     hasher = hashlib.md5(u':'.join([urlquote(arg) for arg in args]))
     return 'template.cache.%s.%s' % (fragment_name, hasher.hexdigest())
 
-def create_alternative_email(prefix, context, from_email, recipient_list):
+def create_alternative_email(
+        prefix, context, from_email, recipient_list, headers=None):
     context.update({
         'site': Site.objects.get_current(),
         'protocol': "https" if USE_HTTPS else "http"
@@ -68,7 +69,11 @@ def create_alternative_email(prefix, context, from_email, recipient_list):
     subject = render_to_string("%s_email_subject.txt" % prefix, context)
     text_content = render_to_string("%s_email.txt" % prefix, context)
     html_content = render_to_string("%s_email.html" % prefix, context)
-    message = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
+    message = EmailMultiAlternatives(
+        subject, text_content,
+        from_email, recipient_list,
+        headers=headers
+    )
     message.attach_alternative(html_content, "text/html")
     return message
 

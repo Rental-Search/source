@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block title_email %}{% trans "Validation de votre inscription pro" %}{% endblock %}
+{% block title_email %}{% trans "Vous avez reçu un nouveau message" %}{% endblock %}
 
 {% block content_email %}
 <tr>
@@ -12,17 +12,16 @@
                 <tr>
                     <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
                         <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
-                        	{% blocktrans with patron.username as username and domain as domain and protocol as protocol %}
+                        	{% blocktrans with patron.username as username %}
+                           <h1 style="color: #6EB924;display: block;font-family: Arial;font-size: 22px;font-weight: normal;line-height: 100%;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left; font-style: italic;">{{ email }}</h1>
                                 Bonjour {{ username }},<br><br>
 
                             {% endblocktrans %}
 
-                            {{ email }}
-
                             {{ message }}
 
                             <p style="margin-top: 0px; text-align: center;">
-                            	<a href="{{ protocol }}://{{ domain }}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                            	<a href="{{ protocol }}://{{ site.domain }}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
                                 	{% trans "Activer votre compte" %}
                             	</a>
                             </p>

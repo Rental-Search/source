@@ -1,15 +1,14 @@
 {% load i18n %}
 
-{% blocktrans with patron.username as username and domain as domain and protocol as protocol %}
+{% blocktrans with patron.username as username %}
+Envoyé par {{ email }} :
 
 Bonjour {{ username }},
-
 {% endblocktrans %}
 
-{{ email }}
 {{ message }}
 
-{{ protocol }}://{{ domain }}.
+{{ protocol }}://{{ site.domain }}.
 
 {% trans "Cordialement" %},
 
