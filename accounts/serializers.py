@@ -290,14 +290,16 @@ class ContactProSerializer(serializers.SimpleSerializer):
             subject = strip_tags(attrs.pop(source))
             attrs[source] = normalize_newlines(subject.replace('\n', ' '))
         except (KeyError, IndexError):
-            raise ValidationError(_("Attribute missed or invalid: 'subject'"))
+            raise ValidationError(
+                    _("Attribute missed or invalid: %s" % 'subject'))
         return attrs
 
     def validate_message(self, attrs, source):
         try:
             attrs[source] = strip_tags(attrs.pop(source))
         except (KeyError, IndexError):
-            raise ValidationError(_("Attribute missed or invalid: 'message'"))
+            raise ValidationError(
+                    _("Attribute missed or invalid: %s" % 'message'))
         return attrs
 
     def validate(self, attrs):
@@ -307,7 +309,6 @@ class ContactProSerializer(serializers.SimpleSerializer):
         return attrs
 
     def save_object(self, obj, **kwargs):
-        print obj, self.recipient.email
         context = {
             'email': obj.get('email'),
             'subject': obj.get('subject'),
