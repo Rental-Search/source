@@ -7,8 +7,9 @@ define([
      */
     EloueWidgetsApp.controller('CookiesCtrl', [
         '$scope',
+        '$rootScope',
         'ipCookie',
-        function ($scope, ipCookie) {
+        function ($scope, $rootScope, ipCookie) {
 
             /**
              * Update cookie value to 'true'.
@@ -20,6 +21,11 @@ define([
                     $scope.showCookiesRibbon = false;
                 }
             };
+
+            $rootScope.$on('loggedIn', function() {
+                // When user logged in, remove the ribbon.
+                $scope.acceptCookies(true);
+            });
 
             $scope.showCookiesRibbon = ipCookie('cookiesAccepted') == false || ipCookie('cookiesAccepted') == undefined;
         }]);
