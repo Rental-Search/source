@@ -9,12 +9,11 @@ define([
      */
     EloueCommon.controller("AuthCtrl", [
         "$scope",
-        "$rootScope",
         "$window",
         "$document",
         "AuthService",
         "UsersService",
-        function ($scope, $rootScope, $window, $document, AuthService, UsersService) {
+        function ($scope, $window, $document, AuthService, UsersService) {
             var currentUserToken = AuthService.getUserToken();
             if (currentUserToken) {
                 // Get current user
@@ -22,7 +21,6 @@ define([
                 $scope.currentUserPromise.then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
-                    $rootScope.$broadcast("loggedIn");
                     UsersService.getStatistics($scope.currentUser.id).then(function (stats) {
                         $scope.userStats = stats;
                     });
