@@ -5,11 +5,15 @@ import uuid
 from django.template.defaultfilters import slugify
 
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import strip_tags
+from django.utils.text import normalize_newlines
 from django.core.exceptions import ValidationError
+from django.conf import settings
 from rest_framework.fields import IntegerField
 
 from rest_framework.serializers import (
-    PrimaryKeyRelatedField, CharField, EmailField, BooleanField, FloatField
+    PrimaryKeyRelatedField, CharField, EmailField,
+    BooleanField, FloatField
 )
 
 from accounts.forms import CreditCardForm
@@ -18,6 +22,7 @@ from accounts.models import Patron
 from eloue.api import serializers
 from eloue.api.serializers import NestedModelSerializerMixin
 from eloue.api.serializers import GeoModelSerializer
+from eloue.utils import create_alternative_email
 
 
 class AddressSerializer(GeoModelSerializer):
@@ -269,3 +274,50 @@ class BillingSubscriptionSerializer(serializers.ModelSerializer):
         model = models.BillingSubscription
         fields = ('subscription', 'billing', 'price')
         immutable_fields = ('subscription', 'billing')
+
+
+class ContactProSerializer(serializers.SimpleSerializer):
+    email = EmailField(required=True)
+    subject = CharField(max_length=78, required=True)
+    message = CharField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        self.recipient = kwargs['context']['recipient']
+        super(ContactProSerializer, self).__init__(*args, **kwargs)
+
+    def validate_subject(self, attrs, source):
+        try:
+            subject = strip_tags(attrs.pop(source))
+            attrs[source] = normalize_newlines(subject.replace('\n', ' '))
+        except (KeyError, IndexError):
+            raise ValidationError(_("Attribute missed or invalid: 'subject'"))
+        return attrs
+
+    def validate_message(self, attrs, source):
+        try:
+            attrs[source] = strip_tags(attrs.pop(source))
+        except (KeyError, IndexError):
+            raise ValidationError(_("Attribute missed or invalid: 'message'"))
+        return attrs
+
+    def validate(self, attrs):
+        attrs = super(ContactProSerializer, self).validate(attrs)
+        if self.recipient.current_subscription is None:
+            raise ValidationError(_("Sending messages is allowed only to pro-accounts."))
+        return attrs
+
+    def save_object(self, obj, **kwargs):
+        print obj, self.recipient.email
+        context = {
+            'email': obj.get('email'),
+            'subject': obj.get('subject'),
+            'message': obj.get('message'),
+            'patron': self.recipient,
+        }
+        message = create_alternative_email(
+            'accounts/emails/contact_pro',
+            context,
+            settings.DEFAULT_FROM_EMAIL,
+            [self.recipient.email]
+        )
+        message.send()
