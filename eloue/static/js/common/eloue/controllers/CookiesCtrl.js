@@ -7,9 +7,9 @@ define([
      */
     EloueWidgetsApp.controller('CookiesCtrl', [
         '$scope',
-        '$location',
+        '$rootScope',
         'ipCookie',
-        function ($scope, $location, ipCookie) {
+        function ($scope, $rootScope, ipCookie) {
 
             /**
              * Update cookie value to 'true'.
@@ -22,12 +22,11 @@ define([
                 }
             };
 
-            $scope.showCookiesRibbon = ipCookie('cookiesAccepted') == false || ipCookie('cookiesAccepted') == undefined;
+            $rootScope.$on('loggedIn', function() {
+                // When user logged in, remove the ribbon.
+                $scope.acceptCookies(true);
+            });
 
-            // If user is on the "Terms" page, let's say, that user read cookies term, and there is no need to
-            // display ribbon anymore. Update cookie, but keep the ribbon while he is on this page.
-            if ($location.$$absUrl.indexOf('/conditions-generales/') != -1) {
-                $scope.acceptCookies(false);
-            }
+            $scope.showCookiesRibbon = ipCookie('cookiesAccepted') == false || ipCookie('cookiesAccepted') == undefined;
         }]);
 });
