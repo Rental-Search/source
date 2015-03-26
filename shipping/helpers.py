@@ -180,7 +180,7 @@ def _get_order_date(date):
     delta = date - datetime.datetime.now()
 
     if delta.days > 3:
-        return date - datetime.deltatime(3)
+        return date - datetime.timedelta(3)
     else:
         return datetime.datetime.now()
 
