@@ -142,6 +142,12 @@ define([
                                 };
                                 $scope.booking = booking;
                                 $scope.updateNewBookingInfo();
+
+                                $timeout(function() {
+                                    // Initiate custom scrollbars
+                                    $scope.initCustomScrollbars();
+                                }, 0);
+
                             }
                         } else {
                             $scope.booking = booking;
