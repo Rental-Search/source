@@ -8,7 +8,8 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
             {
                 "getMe": {method: "GET", params: {id: "me"}},
                 "update": {method: "PATCH"},
-                "getStats": {method: "GET", url: Endpoints.api_url + "users/:id/stats/?"}
+                "getStats": {method: "GET", url: Endpoints.api_url + "users/:id/stats/?"},
+                "send_message": {method: "PUT", url: Endpoints.api_url + "users/:id/send_message/?"}
             });
     }]);
 
