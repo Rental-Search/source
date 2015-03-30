@@ -2,6 +2,7 @@
 define([
     "angular",
     "angular-cookies",
+    "angular-cookie",
     "angular-resource",
     "angular-translate",
     "datejs",

@@ -1,5 +1,6 @@
 define([
     "angular",
+    "angular-cookie",
     "angular-cookies",
     "angular-resource",
     "angular-translate",
@@ -11,6 +12,7 @@ define([
     return angular.module("EloueWidgetsApp", [
         "EloueCommon",
         "ngCookies",
+        "ipCookie",
         "ngResource",
         "pascalprecht.translate"
     ]);

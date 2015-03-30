@@ -37,7 +37,8 @@
         "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
         "toastr": "../../bower_components/toastr/toastr",
         "formmapper": "../formmapper",
-        "filesaver": "../FileSaver.min"
+        "filesaver": "../FileSaver.min",
+        "angular-cookie": "../../bower_components/angular-cookie/angular-cookie"
     },
     shim: {
         "angular": {
@@ -75,7 +76,8 @@
         "formmapper": ["jquery"],
         "jquery-mousewheel": ["jquery"],
         "custom-scrollbar": ["jquery", "jquery-mousewheel"],
-        "toastr": ["jquery"]
+        "toastr": ["jquery"],
+        "angular-cookie": ["angular"]
     },
     removeCombined: true,
     findNestedDependencies: true,

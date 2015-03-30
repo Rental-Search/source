@@ -22,7 +22,7 @@ define([
             $scope.bookings = [];
             $scope.productUnavailablePeriods = [];
             $scope.weeks = {};
-            $scope.newUnavailabilityPeriod = {};
+            $scope.newUnavailabilityPeriod = {quantity: 1};
             $scope.unavailabilityPeriodValidationError = "";
 
             var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
@@ -217,14 +217,14 @@ define([
 
                     angular.forEach($scope.bookings, function (value) {
                         if (currentDay.between(value.startDay, value.endDay)) {
-                            $scope.unavailabilityPeriodValidationError = "Can't create an unavailability period if the product is already booked";
+                            $scope.unavailabilityPeriodValidationError = "La période d'indisponibilité n'a pas pu être créée car le produit est loué pendant cette période";
                         }
                     });
 
                     angular.forEach($scope.unavailablePeriods, function (value) {
                         if (currentDay.between(value.startDay, value.endDay)) {
                             if (!$scope.newUnavailabilityPeriod.id || $scope.newUnavailabilityPeriod.id !== value.id) {
-                                $scope.unavailabilityPeriodValidationError = "Can't create an unavailability period if the start or end date is between an other unavailability period.";
+                                $scope.unavailabilityPeriodValidationError = "La période d'indisponibilité n'a pas pu être créée car il existe déjà une période d'indisponibilité entre ces dates";
                             }
                         }
                     });
