@@ -3,7 +3,7 @@
     .modal-dialog
         .modal-content(style="padding: 30px")
             .modal-body
-                h3 Ajouter une nouvelle disponibilité
+                h3 Ajouter une nouvelle indisponibilité
                 .alert.alert-danger(ng-show="!!unavailabilityPeriodValidationError")
                     span.text-danger {{unavailabilityPeriodValidationError}}
                 form(name="addPeriodForm", ng-submit="periodSubmitted = true").table-form
@@ -20,9 +20,9 @@
                                 span.text-danger(eloue-form-field-message, field-name="ended_at") {{value}}
                         .row
                             .col-xs-6
-                                button(type="button", ng-click="saveUnavailabilityPeriod()", ng-disabled="submitInProgress || !addPeriodForm.$valid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success
-                                    | Enregistrer
-                            .col-xs-6
                                 button(type="button", data-dismiss="modal").btn
                                     | Annuler
+                            .col-xs-6
+                                button(type="button", ng-click="saveUnavailabilityPeriod()", ng-disabled="submitInProgress || !addPeriodForm.$valid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success
+                                    | Enregistrer
 {% endverbatim %}
