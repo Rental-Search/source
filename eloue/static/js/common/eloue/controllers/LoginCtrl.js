@@ -44,6 +44,7 @@ define([
                             function (data) {
                                 $scope.authorize();
                                 $scope.submitting = false;
+                                $rootScope.$broadcast("loggedIn");
                             },
                             function (jqXHR) {
                                 $scope.onLoginError(jqXHR);
@@ -77,6 +78,7 @@ define([
                 document.cookie = "user_token=" + encodeURIComponent(data.access_token) + ";expires=" +
                 expire.toGMTString() + ";path=/";
                 $scope.authorize();
+                $rootScope.$broadcast("loggedIn");
             };
 
             $scope.onLoginError = function (jqXHR) {

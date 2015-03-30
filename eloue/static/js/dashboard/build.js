@@ -22,7 +22,8 @@
         "jquery-autosize": "../../bower_components/jquery-autosize/jquery.autosize",
         "toastr": "../../bower_components/toastr/toastr",
         "formmapper": "../formmapper",
-        "filesaver": "../FileSaver.min"
+        "filesaver": "../FileSaver.min",
+        "angular-cookie": "../../bower_components/angular-cookie/angular-cookie"
     },
     shim: {
         "angular": {
@@ -49,7 +50,8 @@
         "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
         "chosen": ["jQuery"],
         "toastr": ["jQuery"],
-        "formmapper": ["jQuery"]
+        "formmapper": ["jQuery"],
+        "angular-cookie": ["angular"]
     },
     removeCombined: true,
     findNestedDependencies: true,

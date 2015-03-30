@@ -1,174 +1,645 @@
 {% load i18n %}
-#flatpages.container
-    .one-content
-        h1.text-uppercase.text-center Assurance véhicule
-        h2 1 - Rappel
-        h3 SYNTHÈSE
-        ul.dash-item
-            li
-                | En effectuant votre location sur e-loue, le véhicule loué est automatiquement assuré «tous risques»,
-                | pendant toute la durée de la location, sans coût supplémentaire.
-            li L’assurance est incluse dans le montant réglé en ligne par le locataire.
-            li
-                |Les véhicules assurés doivent être destinés uniquement 
-                span
-                    b à un usage privé des locataires
-            li En cas de sinistre durant la location, le bonus du propriétaire n’est pas impacté.
-            li Pour déclarer un sinistre, la procédure est simple et rapide.
+.container
+  h1.text-uppercase.text-center
+      | Assurance objet
+  
+  section.indent-v-md
+    h2 SYNTHÈSE
 
-        h3 CONDITIONS PORTANT SUR LE VÉHICULE LOUÉ
-        p Pour être couvert par l’assurance e-loue / Allianz, le certificat d’immatriculation du véhicule loué doit : 
-        ul
-            li porter la mention VP sur la carte grise (dans la case J1) ou la mention VU à condition que le véhicule ne soit pas destiné à un usage professionnel
-            li être au nom d’un particulier
-            li être immatriculé en France métropolitaine
-        p
-            | L’assurance couvre uniquement les transactions effectuées et finalisées sur le site, aux dates enregistrées.
-            | En cas de modification de date ou d’allongement de durée,
-            | il est indispensable de refaire une demande de réservation sur le site afin d’être couvert par l’assurance.
+    ul
+      li.indent-v-sm
+        | En effectuant votre location sur E-loue, l’objet loué est automatiquement assuré pour tous les dommages matériels 
+        | accidentels causés au bien pendant la durée de location, sans coût supplémentaire. 
+      li.indent-v-sm 
+        | L’assurance ne couvre pas le vol par le locataire.
+      li.indent-v-sm 
+        | L’assurance est incluse dans le montant réglé en ligne par le locataire.
+      li.indent-v-sm 
+        | Le montant de remboursement maximum est de 750 € (incluant une franchise de 15%).
+      li.indent-v-sm 
+        | Pour déclarer un sinistre, la procédure est simple et rapide.
 
-        p L’assurance ne couvre pas les véhicules suivants : 
-        ul.dash-item
-            li les véhicules destinés au transport public de marchandises ou de voyageurs  y compris messagerie ou distribution de marchandise, usage de transport public de personnes et autres usages non privés : Auto-école, taxis
-            li les véhicules de plus de 9 places destinés au transport de personnes
-            li les véhicules à 2 ou 3 roues
-            li les véhicules de sport et de luxe d’une valeur supérieure à 50 000 euros
-            li les véhicules dont la puissance fiscale dépasse les 16 CV
-            li les véhicules ne bénéficiant pas d'un contrat d'assurance annuel 
-            li les véhicules faisant eux-mêmes l’objet d’une location
-            li les véhicules utilitaires dont le poids total en charges est supérieur à 2,3 Tonnes
+  section.indent-v-md    
+    h3.b
+      | CONDITIONS PORTANT SUR LE BIEN LOUÉ
 
-        h3 CONDITIONS PORTANT SUR LE LOCATAIRE
+    p Pour être couvert par l’assurance E-loue / Assur’One, le bien loué doit :
 
-        p Pour être couvert par l’assurance e-loue / Allianz, le conducteur doit : 
-        ul.dash-item
-            li être âgé d’au moins
-                ul
-                    li 21 ans pour les véhicules d’une valeur inférieure à 18 000€
-                    li 28 ans les véhicules d’une valeur comprise entre 18 000€ et 50 000€
-            li être titulaire d’un permis de conduire français en cours de validité depuis :
-                ul
-                    li plus de 2 ans pour les véhicules d’une valeur inférieure à 18 000€
-                    li plus de 5 ans pour les véhicules d’une valeur comprise entre 18 000 et 50 000€
-            li s'engager à circuler en France métropolitaine ou/et dans les pays limitrophes (Angleterre compris)
-            li s’engager à ne pas faire d'usage professionnel du véhicule
-            li louer le véhicule pour une durée qui n’excède pas 90 jours 
-            li louer un même véhicule pour une durée qui n’excède pas trois mois sur une période de douze mois
-            li payer la location sur le site avec une carte bancaire à son nom
-            li présenter tous les documents au propriétaire, au début de la location (contrat + carte bancaire + permis de conduire, tous les 3 au même nom)
+    ul.dash-item
+      li.indent-v-sm être au nom d’un particulier
+      li.indent-v-sm être immatriculé en France métropolitaine
+    p
+      b
+        | L’assurance couvre uniquement les transactions effectuées et finalisées sur le site, aux dates enregistrées. En cas de
+        | modification de date ou d’allongement de durée, il est indispensable de refaire une demande de réservation sur le site
+        | afin d’être couvert par l’assurance.
+    
+    p L’assurance ne couvre pas les catégories d’objets suivantes :
 
-        p Le propriétaire peut également exiger une facture portant le même nom que sur les trois documents précités
-        p 
-            span
-                b Attention : 
-            | Il est possible d'avoir plusieurs conducteurs. 
-            | Dans ce cas, chaque conducteur devra être mentionné sur le contrat de location
-            | et répondre aux conditions d'âge et de permis de conduire.
-        
+    ul.dash-item
+      li.indent-v-sm
+        | véhicules terrestres à moteur relevant d’une assurance obligatoire (auto, moto, scooter, camping-car, voiturette, 
+        | tondeuse autoportée…)
+      li.indent-v-sm biens immobiliers et locations saisonnières
+      li.indent-v-sm matériels de levage, manutention, construction et terrassement
+      li.indent-v-sm armes
+      li.indent-v-sm téléphones portables
 
-        h3 CONDITIONS PORTANT SUR LE PROPRIETAIRE DU VÉHICULE LOUÉ
-        h4 Pour être couvert par l’assurance e-loue / Allianz, le propriétaire du véhicule loué doit : 
-        ul
-            li résider en France métropolitaine
-            li être le titulaire de la carte grise du véhicule
-            li posséder un contrat d’assurance annuel pour le véhicule
+  section.indent-v-md
+    h3.b
+      | CONDITIONS PORTANT SUR LE PROPRIETAIRE DU BIEN LOUÉ
 
-        
-        h3 GARANTIES ACCORDÉES PAR L’ASSURANCE
-        h4 Pendant la durée de la location, l’assurance e-loue / Allianz inclut les garanties suivantes :
-        table.table
-            thead
-                tr
-                  th       
-                  th Limite contractuelle d’indemnité
-                  th Franchise    
-            tbody
-                tr
-                  td Responsabilité civile      
-                  td illimité      
-                  td non
-                tr
-                  td Défense civile et insolvabilité      
-                  td illimité 
-                  td non
-                tr
-                  td Dommages conducteur : cas d’atteinte à l’intégrité physique ou psychique et décès*       
-                  td 250 000€
-                  td non
-                tr
-                  td Dommages tous accidents
-                  td 50 000€
-                  td
-                    p 800€ pour les véhicules particuliers
-                    p 3 000€ pour les véhicules utilitaires
-                tr
-                  td Vol ou tentative de vol
-                  td 50 000€
-                  td 
-                    p 800€ pour les véhicules particuliers
-                    p 3 000€ en cas de détournement
-                    p 3 000€ pour les véhicules utilitaires
-                tr
-                  td Incendie, tempête ou force de la nature
-                  td 50 000€
-                  td 800€
-                tr
-                  td Bris de glaces
-                  td
-                  td 150€
-                tr
-                    td Catastrophes naturelles
-                    td 50 000€
-                    td Franchise légale fixée par la règlementation en vigueur au jour du sinistre
-        p
-            em *Si AIPP inférieur ou égal à 10%, aucune indemnité versée au titre du préjudice subi.
-        br
-        p Autres garanties : 
-        ul.dash-item 
-            li Défense pénale et recours pour des litiges supérieurs à 230 €
-            li Dépannage, remorquage à concurrence de 300€
-        p L’assurance exclut les garanties suivantes : 
-        ul
-            li
-                | dégâts occasionnés aux parties hautes du véhicule loué résultant du non-respect
-                br 
-                | de la limite de gabarit et/ou d'une mauvaise appréciation d'un passage
-            li protection juridique
-            li indemnisation
-            li aménagements
-            li accessoires
-            li bagages
-            li marchandise
-            li immobilisation
-            li pertes financières
-            li crevaison
+    p Pour être couvert par l’assurance E-loue / Assur’One, le propriétaire du bien loué doit :
 
-        h3 QUE FAIRE POUR DÉCLARER UN INCIDENT ?
-        p En cas d’incident, veuillez contacter le service client au 01 85 08 99 80 ou par mail à 
-            a(href='mailto:contact@e-loue.com') contact@e-loue.com.
+    ul.dash-item
+      li être un particulier
+      li résider en France métropolitaine
 
-        h3 QUE FAIRE POUR ÊTRE INDEMNISÉ ?
-        p
-            | Pour connaitre la procédure d’indemnisation, veuillez contacter le service client
-            | au 01 85 08 99 80 ou par mail à 
-            a(href='mailto:contact@e-loue.com') contact@e-loue.com.
+  section.indent-v-md
+    h3.b
+      | GARANTIES ACCORDÉES PAR L’ASSURANCE
 
-        h3 CONTRAT D’ASSURANCE 
-        p
-            | Un contrat d’assurance est associé pour chaque transaction effectuée sur le site www.e-loue.com. 
-            | Le contrat d’assurance est établi entre le locataire et notre partenaire Allianz.
+    p Pendant la durée de la location, l’assurance E-loue / Assur’One inclut les garanties suivantes :
+
+    ul.dash-item
+      li.indent-v-sm dommages matériels accidentels causés au bien
+      li.indent-v-sm destruction
+      li.indent-v-sm détérioration totale ou partielle extérieurement visible 
+    
+    p
+      | Ces dommages doivent provenir d’un événement extérieur et soudain et doivent rendre le bien garanti impropre à toute 
+      | utilisation.
+
+    p 
+      b L’assurance ne couvre pas le vol par le locataire.
+
+    p Le montant de l’indemnisation :
+     
+    ul.dash-item
+      li.indent-v-sm correspondra au montant de la caution (demandée par le propriétaire, lors de son dépôt d’annonce)
+      li.indent-v-sm sera minoré d’une franchise de 15%
+      li.indent-v-sm ne pourra pas dépasser 750€
+
+  section.indent-v-md
+    h3.b
+      | QUE FAIRE POUR DÉCLARER UN INCIDENT ?
+  
+    p En cas de casse ou de panne, le locataire doit :
+    ul.dash-item
+      li.indent-v-sm prévenir le propriétaire de l’objet loué,  en lui expliquant le problème qu’il rencontre 
+      li.indent-v-sm 
+        | déclarer le sinistre auprès d’E-loue sur le site, par 
+        a(href="mailto:contact@e-loue.com").link-success mail
+        | ou par téléphone (01.85.08.99.77) 
+
+      li.indent-v-sm restituer l’objet loué au propriétaire
+      li.indent-v-sm compléter et signer l'état des lieux de sortie en précisant les dommages constatés
+      li.indent-v-sm déclarer le sinistre auprès de l’assureur par téléphone (Assur’One – 01.76.29.75.22)
+
+    p En cas de casse ou de panne, le propriétaire doit :
+    ul.dash-item
+      li.indent-v-sm récupérer le bien loué 
+      li.indent-v-sm signer l’état des lieux de sortie en précisant les dommages constatés
+      li.indent-v-sm
+        | déclarer le sinistre auprès d’E-loue sur le site, par mail (
+        a(href="mailto:contact@e-loue.com").link-success mail contact@e-loue.com
+        |) ou par téléphone (01.85.08.99.77) 
+      li.indent-v-sm déclarer le sinistre auprès de l’assureur par téléphone (Assur’One – 01.76.29.75.22)
+      li.indent-v-sm
+        | faire établir un devis de réparation ou (si le bien n’est pas réparable) une attestation d’irréparabilité à 
+        | transmettre au locataire dans les 48 heures à compter du dommage.
+
+  h3.b
+    | QUE FAIRE POUR ÊTRE INDEMNISÉ ?
+
+  p Une fois l’incident déclaré auprès d’E-loue et de l’assurance, le propriétaire pourra alors être indemnisé : 
+  ul.dash-item
+    li.indent-v-sm
+      | E-loue utilisera la caution en ligne laissée par le locataire (au moment de la réservation) pour prélever le montant 
+      | correspondant à la franchise (plafonné au montant de la caution ou à 750€)
+    li.indent-v-sm cette somme sera versée au propriétaire par e-loue
+  p
+    | Pour pouvoir obtenir le remboursement selon les modalités du contrat d’assurance, le locataire devra ensuite envoyer un  
+    | courrier à l’assureur (Gestion Assurance Assur’One Group – BP 30200 – 95210 Saint Gratien), dans un délai de 5 jours
+    | ouvrés 
+    | suivant le constat du dommage, avec les documents suivants :
+    ul.dash-item
+      li.indent-v-sm déclaration sur l’honneur décrivant très précisément la date, le lieu et les circonstances du dommage
+      li.indent-v-sm copie du contrat de location liant le propriétaire et le locataire
+      li.indent-v-sm copie du certificat de garantie
+
+  p Après analyse de cette déclaration, l’assureur pourra réclamer au propriétaire d’autres documents :
+  ul.dash-item
+    li.indent-v-sm une photocopie du bien avant réparation
+    li.indent-v-sm si le bien est réparable : le devis de réparation du bien (à demander au propriétaire) 
+    li.indent-v-sm 
+      | si le bien n’est pas réparable : une attestation d’irréparabilité établie par un SAV compétent et la facture d’achat 
+      | initiale du bien (ou toute autre preuve de sa valeur)
+  p L’assureur se réserve le droit de demander au propriétaire l’envoi du bien endommagé s’il est irréparable.
+
+  p Sous réserve de l’éligibilité du dossier, la prise en charge consistera à indemniser le locataire : 
+  ul.dash-item
+    li.indent-v-sm 
+      | en cas de non-restitution du bien : du montant de la caution prélevée par le propriétaire du fait de la non-restitution 
+      | du bien garanti, après déduction de la franchise
+    li.indent-v-sm
+      | en cas de réparation du bien : du montant de la facture de réparation dans la limite de la caution et après déduction de | la franchise
+
+  h3.b 
+    | CONTRAT D’ASSURANCE 
+  p
+    | Un contrat d’assurance est associé pour chaque transaction effectuée sur le site www.e-loue.com.  Le contrat d’assurance 
+    | est établi entre le locataire et notre partenaire Assur’One. Le montant de l’assurance est inclus dans le montant réglé en 
+    | ligne par le locataire. 
+
+  p
+    | L’ensemble des garanties d’assurance est régi par une Notice d’information (téléchargeable à cette 
+    a(href="http://eloue.s3.amazonaws.com/media/assurances/Assurone.pdf" style="color:orange").link-success adresse 
+    | et un Certificat de garantie (reçu avec votre contrat de location). 
+    | Il est demandé aux utilisateurs d’en prendre connaissance et de s’assurer de les avoir bien comprises.
+  br
+  br
+
+  h1.text-uppercase.text-center
+    | Assurance logement
+  h2 SYNTHÈSE
+  ul.dash-item
+    li.indent-v-sm En effectuant votre location sur e-loue, le logement loué est automatiquement assuré, sans coût supplémentaire.
+    li.indent-v-sm L’assurance est incluse dans le montant réglé en ligne par le locataire.
+    li.indent-v-sm Pour déclarer un sinistre, la procédure est simple et rapide.
+
+  h3.b
+    | CONDITIONS PORTANT SUR LE LOGEMENT LOUÉ 
+  p Pour être couvert par l’assurance E-loue / Europ Assistance, le logement loué doit : 
+  ul.dash-item
+    li.indent-v-sm être au nom d’un particulier
+    li.indent-v-sm
+      | être loué par le propriétaire ou copropriétaire du logement, ou par le locataire expressément autorisé, via son 
+      | bail,à pratiquer de la sous-location
+    li.indent-v-sm
+      | se situer dans un pays qui n’est pas en guerre civile, qui n’est pas en situation d'instabilité politique notoire, qui | ne subit pas de représailles, de restrictions à  la libre circulation des personnes et des biens, d’actes de
+      | terrorisme, ou de catastrophes naturelles ou désintégration du noyau atomique
+
+  b 
+    | L’assurance couvre uniquement les transactions effectuées et finalisées sur le site, aux dates enregistrées. En cas de 
+    | modification de date ou d’allongement de durée, il est indispensable de refaire une demande de réservation sur le site 
+    | afin d’être couvert par l’assurance.
+
+  h3.b
+    | CONDITIONS PORTANT SUR LE LOCATAIRE
+  p Pour être couvert par l’assurance E-loue / Europ Assistance, le locataire doit :
+  ul.dash-item
+    li.indent-v-sm être un particulier 
+    li.indent-v-sm louer le logement pour une durée qui n’excède pas 90 jours
+    li.indent-v-sm payer la location sur le site avec une carte bancaire à son nom
+    li.indent-v-sm présenter tous les documents au propriétaire, au début de la location (contrat + carte bancaire, tous les 2 au même nom)
+
+  h3.b
+    | CONDITIONS PORTANT SUR LE PROPRIETAIRE DU LOGEMENT LOUÉ
+  p Pour être couvert par l’assurance e-loue / Europe Assistance, le propriétaire du logement loué doit être un particulier.
+
+  h3.b
+    | GARANTIES ACCORDÉES PAR L’ASSURANCE
+
+  p Pendant la durée de la location, l’assurance E-loue / Europ Assistance inclut les types de garanties et montants de garantie suivants :
+
+  table.table
+      thead
+        tr
+          th Type de garantie
+          th Montant de la garantie
+          th Franchise
+      tbody
+        tr
+          th Responsabilité civile / Dommages corporels
+          th Illimité
+          th 500 €
+        tr
+          th 
+            | Annulation du séjour
+            br
+            em 
+              | Uniquement si l’annulation fait suite à une maladie, un accident, un décès,
+              br
+              | des dommages matériels au domicile ou locaux professionnels, un licenciement
+              br
+              | économique de l’assuré ou de son conjoint, annulation de l’accompagnant du bénéficiaire
+          th Acompte + solde dans la limite de 15 000€
+          th néant
+        tr
+          th Interruption de séjour
+          th Loyer non couru (dans la limite de 15 000€)
+          th néant
+        tr
+          th
+            | Interruption de séjour
+            br 
+            em Uniquement si l’interruption fait suite à un rapatriement médical ou à un retour anticipé
+          th Remboursement des frais de transports terrestres non utilisés (frais réels)
+          th néant
+        tr
+          th
+            | Responsabilité civile villégiature / Dommages corporels et matériels
+            br
+            | suite à incendie, explosion, dégâts des eaux
+          th 1 525 000 €
+          th 75 €
+        tr
+          th Responsabilité civile villégiature / Dommages aux biens mobiliers et immobiliers appartenant au propriétaire du bien loué
+          th 2 500 €
+          th 75 €
+        tr
+          th Location frauduleuse
+          th Frais hôteliers à hauteur de 75€ / personne, dans la limite d’une nuit
+          th néant
+        tr
+          th Refus d'occupation par le locataire suite à une non-conformité du bien loué
+          th Frais hôteliers à hauteur de 75€ / personne, dans la limite d’une nuit
+          th néant
+
+  h3.b
+    | QUE FAIRE POUR DÉCLARER UN INCIDENT ?
+  h4.b > EN CAS DE CASSE :
+  p Le locataire doit :
+  ul.dash-item
+    li.indent-v-sm prévenir immédiatement le propriétaire du logement loué,  en lui expliquant le problème qu’il rencontre 
+    li.indent-v-sm
+      | déclarer le sinistre auprès d’E-loue sur le site, par mail (
+      a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
+      |) ou par téléphone (01.85.08.99.77) 
+    li.indent-v-sm compléter et signer l'état des lieux de sortie en précisant les dommages constatés
+    li.indent-v-sm
+      | déclarer le sinistre auprès de l’assureur, dans les 5 jours, par courrier (ADAR PLUS C/O Cabinet ALBINET - 5, cité de 
+      | Trévise 75009 Paris), en joignant les documents nécessaires (voir ci-dessous)
+
+  p Le propriétaire du bien loué doit : 
+  ul.dash-item
+    li.indent-v-sm signer l’état des lieux de sortie en précisant les dommages constatés
+    li.indent-v-sm
+      | déclarer le sinistre auprès d’E-loue sur le site, par mail (
+      a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
+      |) ou par téléphone (01.85.08.99.77) 
+    li.indent-v-sm
+      |faire établir un devis de réparation ou une facture de rachat du bien détérioré (si le bien n’est pas réparable), et le 
+      |transmettre au locataire dans les 48h
+    li.indent-v-sm
+      |dans le cas d’un dégât des eaux, un incendie, une explosion : faire établir un constat amiable et le transmettre au |locataire dans les 48h
+  
+  h4.b > EN CAS DE VOL :
+  p
+    | En cas de cambriolage constaté par le locataire durant la période de location, le locataire doit prévenir immédiatement le 
+    | propriétaire qui se chargera de prendre contact avec son assureur. 
+  
+  h4.b > EN CAS DE PANNE :
+  p
+    | En cas de panne constatée par le locataire durant la période de location (chauffage, eaux, équipements), le locataire doit 
+    | contacter immédiatement le propriétaire qui s'engage à mettre tout en œuvre pour assurer les réparations.
+
+  h3.b
+    | QUE FAIRE POUR ÊTRE INDEMNISÉ ?
+
+  p Une fois l’incident déclaré auprès d’E-loue et de l’assurance, le propriétaire pourra alors être indemnisé : 
+  ul.dash-item
+    li.indent-v-sm
+      | E-loue utilisera la caution en ligne laissée par le locataire (au moment de la réservation) pour prélever le montant 
+      | correspondant à la franchise (plafonné au montant de la caution ou à 990€)
+    li.indent-v-sm cette somme sera versée au propriétaire par E-loue
+
+  p
+    | Le locataire devra ensuite envoyer un courrier à l’assureur (ADAR PLUS C/O Cabinet ALBINET - 5 Cité de Trévise - 75009 
+    | Paris), dans un délai de 5 jours ouvrés suivant le constat de du dommage, avec les documents suivants :
+  ul.dash-item
+    li.indent-v-sm
+      | informations générales : nom de l’agence de location : « E-loue », numéro de référence de location, dates de début et 
+      | de fin de séjour
+    li.indent-v-sm
+      | la déclaration sur l’honneur décrivant très précisément la date, le lieu et les circonstances du dommage en précisant 
+      | s’il y a eu l’intervention des pompiers et des blessés dans le cas de dégât des eaux, incendie et explosion
+    li.indent-v-sm la copie du contrat de location liant le propriétaire et le locataire
+    li.indent-v-sm l’état des lieux d’entrée et de sortie
+    li.indent-v-sm
+      | dans le cas d’un bien détérioré : le devis de réparation du bien (à demander au propriétaire) ou (si le bien n’est pas 
+      | réparable) une attestation d’irréparabilité établie par un SAV compétent et une facture de rachat du bien détérioré.
+    li.indent-v-sm
+      | dans le cas de dégât des eaux, un incendie ou une explosion : le constat amiable dûment, ainsi qu’un devis de 
+      | réparation, s’il a été établi 
+
+  p
+    | Une fois ces documents préparés et avant l’envoi aux assureurs, nous vous recommandons de contacter les services E-loue 
+    | afin de vérifier que ce dossier est complet. 
+
+  h3.b
+    | CONTRAT D’ASSURANCE 
+  p
+    | Un contrat d’assurance est associé pour chaque transaction effectuée sur le site www.e-loue.com.  Le contrat d’assurance 
+    | est établi entre le locataire et notre partenaire Europ Assistance.
+
+  h3.b
+    | GARANTIES SUPPLEMENTAIRES POUR LA LOCATION SAISONNIERE
+  h4.b QUE FAIRE EN CAS D’ANNULATION DU SÉJOUR ?
+  p
+    | Le locataire doit impérativement procéder à l'annulation de son séjour via le site E-loue par mail (
+    a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
+    |) ou par téléphone (01.85.08.99.77). (voir politique annulation).
+    | En fonction de la politique annulation définie par le propriétaire et validée par le locataire, les services E-loue 
+    | procéderont au paiement du solde de la transaction.
+    | Le locataire doit ensuite procéder à une déclaration de sinistre directement auprès des services assurance dans un délai 
+    | maximum de 5 jours ouvrés.
+  p
+    | LES DOCUMENTS A ENVOYER (ADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
+    | Informations générales : nom de l'agence de location : "E-loue", numéro de référence location, dates de début et de fin de 
+    | séjour
+  p
+    | En cas de maladie ou d'accident : - Certificat médical et/ou bulletin d'hospitalisation sous pli fermé précisant l'origine, 
+    | la nature, la gravité et les conséquences prévisibles de la maladie ou de l'accident - Copie de l'arrêt de travail - 
+    | Photocopies des ordonnances comportant les vignettes des médicaments prescrits, analyses et examens pratiqués.
+
+  p En cas de licenciement économique : 
+  ul
+    li.indent-v-sm Copie de la lettre de licenciement 
+    li.indent-v-sm Copie du contrat de travail
+
+  p En cas de grossesse ou complication de grossesse : 
+  ul
+    li.indent-v-sm Certificat attestant de la date de début de grossesse 
+    li.indent-v-sm Certificat médical ou bulletin d'hospitalisation 
+    li.indent-v-sm Copie de la feuille d'examen prénatal 
+    li.indent-v-sm Copie de l'arrêt de travail
+
+  p En cas de décès :
+  ul
+    li.indent-v-sm Certificat de décès 
+    li.indent-v-sm Fiche d'état civil
+
+  p Tous les autres cas : 
+  ul
+    li.indent-v-sm Tout justificatif
 
 
+  h4.b QUE FAIRE EN CAS D’INTERRUPTION DE SÉJOUR ?
+  p
+    | Le locataire doit impérativement prévenir le propriétaire afin de convenir des modalités de fin de séjour (état des lieux, 
+    | dépôt de garantie, remise des clés,…).
+    | Le locataire doit ensuite prendre directement contacter avec le service assistance (numéro +33 (0)1 41 85 80 02 et fax +33 
+    | (0)1 41 85 85 71) afin : 
+  ul.dash-item
+    li.indent-v-sm D'obtenir l'accord préalable avant de prendre toute initiative ou d'engager des dépenses 
+    li.indent-v-sm Se conformer aux solutions que préconise l'assureur - Fournir tous les éléments relatifs au contrat 
+    li.indent-v-sm Fournir tous les justificatifs originaux des dépenses dont le remboursement est demandé.
+  p
+    | A l'issue du rapatriement, le locataire doit procéder à la déclaration de sinistre directement auprès de l'assureur afin 
+    | de demander le remboursement des prestations non utilisées du fait de l'interruption de séjour.
+
+  p
+    | LES DOCUMENTS A ENVOYER A L’ASSUREUR (ADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
+    | Informations générales : nom de l'agence de location : "E-loue", numéro de référence location, dates de début et de fin de 
+    | séjour.
+    | Les documents demandés sont identiques à ceux demandés dans le cas de l'annulation de séjour. En tout état de cause, la 
+    | prise de contact préalable avec l'assureur étant nécessaire, il sera à ce moment-là préciser toutes les pièces souhaitées 
+    | en fonction de la raison de l'interruption.
 
 
+  h4.b > QUE FAIRE EN CAS DE NON-CONFORMITÉ DU BIEN ?
+  p
+    | Le locataire doit impérativement aviser directement le propriétaire, les services E-loue, par mail (
+    a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com
+    |) et par téléphone (01.85.08.99.77) et l'assureur verbalement et par écrit, par lettre recommandée avec accusé de 
+    | réception, dans les 72 heures de son arrivée et de son refus de prendre possession des locaux loués et des raisons qui le 
+    | motivent.
+
+  p
+    | Par la suite, le locataire doit envoyer directement à l'assureur une déclaration de sinistre avec les documents suivants.
+
+  p
+    | LES DOCUMENTS A ENVOYER A L’ASSUREUR (ADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévisse 75009 Paris)
+  ul.dash-item
+    li.indent-v-sm
+      | Informations générales : nom de l'agence de location : "E-loue", numéro de référence location, dates de début et de 
+      | fin de séjour.
+    li.indent-v-sm
+      | L'original de la facture initiale acquittée, délivrée lors de la réservation de la location et faisant ressortir les 
+      | dates de la location.
+    li.indent-v-sm La copie de l'annonce parue sur le site E-loue et des photographies
+    li.indent-v-sm
+      | Le compte-rendu d'état des lieux, photographies, témoignages et tout autre document permettant à l'assureur de 
+      | supposer qu'il s'agit bien d'une non-conformité substantielle.
+    li.indent-v-sm Les coordonnées courriel ou postale du propriétaire
 
 
+  h4.b QUE FAIRE EN CAS DE FRAUDE ?
+
+  p 
+    | Le locataire doit impérativement aviser directement le propriétaire, les services E-loue (par mail à 
+    a(href="mailto:contact@e-loue.com").link-success contact@e-loue.com 
+    | ou par téléphone au 01.85.08.99.77) et l'assureur verbalement et par écrit dans les 72 heures de la découverte de la 
+    | fraude ou de toute suspicion de fraude et prendre toutes mesures nécessaires pour interrompre les effets de l'infraction 
+    | et limiter l'importance du sinistre.
+  p
+    | Le locataire doit impérativement déposer plainte au pénal auprès des autorités compétentes. A défaut de dépôt de plainte, 
+    | il doit exécuter sans délai les formalités administratives et/ou judiciaires qui s'imposent auprès de celles-ci.
+
+  p Par la suite, le locataire doit envoyer directement à l'assureur une déclaration de sinistre avec les documents suivants.
+  
+  p LES DOCUMENTS A ENVOYER A L’ASSUREUR (ADAR PLUS C/O Cabinet ALBINET- 5, cité de Trévise 75009 Paris)
+  ul.dash-item
+    li.indent-v-sm
+      | Le récépissé de plainte ou de tout autre acte analogue dans les meilleurs délais, et au plus tard dans les huit jours de 
+      | son dépôt.
+    li.indent-v-sm La copie de l'accord de location signé par le propriétaire.
+    li.indent-v-sm Tout document prouvant les règlements effectués pour la réservation et leurs encaissements.
+    li.indent-v-sm Les coordonnées courriel ou postale du propriétaire
 
 
+  h4
+    | COORDONNEES DE L’ASSUREUR
+  p
+    | ADAR PLUS C/O Cabinet ALBINET 5, cité de Trévisse 
+    | 75009 Paris 
+  p  
+    | mail : 
+    a(href="mailto:claim@cabinetalbinet.fr ").link-success claim@cabinetalbinet.fr 
+  p
+    | Fax : 01 48 01 84 83
 
 
+  h4
+    | ASSISTANCE RAPATRIEMENT
+  p
+    | Afin de compléter son offre de services, E-loue propose en complément du service assurance, un service d’assistance 
+    | rapatriement dans le cadre de la location saisonnière. Le numéro du service d’assistance est le + 33 (0)1 41 85 80 02.
 
+  h4
+    | NOTICE D'INFORMATION
+  p
+    | L’ensemble des garanties d’assurance sont régies par une Notice d’information (téléchargeable à cette 
+    a(href="http://eloue.s3.amazonaws.com/media/assurances/europ_assistance.pdf" style="color:orange").link-success adresse
+    |) et un Certificat de garantie (reçu avec votre contrat de location). 
+    | Il est demandé aux utilisateurs d’en prendre connaissance et de s’assurer de les avoir bien comprises. 
+  br
+  br
 
+  h1.text-uppercase.text-center Assurance véhicule
+  h2 SYNTHÈSE
+  ul.dash-item
+      li
+          | En effectuant votre location sur e-loue, le véhicule loué est automatiquement assuré «tous risques»,
+          | pendant toute la durée de la location, sans coût supplémentaire.
+      li L’assurance est incluse dans le montant réglé en ligne par le locataire.
+      li
+          |Les véhicules assurés doivent être destinés uniquement 
+          span
+              b à un usage privé des locataires
+      li En cas de sinistre durant la location, le bonus du propriétaire n’est pas impacté.
+      li Pour déclarer un sinistre, la procédure est simple et rapide.
 
+  h3 CONDITIONS PORTANT SUR LE VÉHICULE LOUÉ
+  p Pour être couvert par l’assurance e-loue / Allianz, le certificat d’immatriculation du véhicule loué doit : 
+  ul
+      li porter la mention VP sur la carte grise (dans la case J1) ou la mention VU à condition que le véhicule ne soit pas destiné à un usage professionnel
+      li être au nom d’un particulier
+      li être immatriculé en France métropolitaine
+  p
+      | L’assurance couvre uniquement les transactions effectuées et finalisées sur le site, aux dates enregistrées.
+      | En cas de modification de date ou d’allongement de durée,
+      | il est indispensable de refaire une demande de réservation sur le site afin d’être couvert par l’assurance.
 
+  p L’assurance ne couvre pas les véhicules suivants : 
+  ul.dash-item
+      li les véhicules destinés au transport public de marchandises ou de voyageurs  y compris messagerie ou distribution de marchandise, usage de transport public de personnes et autres usages non privés : Auto-école, taxis
+      li les véhicules de plus de 9 places destinés au transport de personnes
+      li les véhicules à 2 ou 3 roues
+      li les véhicules de sport et de luxe d’une valeur supérieure à 50 000 euros
+      li les véhicules dont la puissance fiscale dépasse les 16 CV
+      li les véhicules ne bénéficiant pas d'un contrat d'assurance annuel 
+      li les véhicules faisant eux-mêmes l’objet d’une location
+      li les véhicules utilitaires dont le poids total en charges est supérieur à 2,3 Tonnes
 
+  h3 CONDITIONS PORTANT SUR LE LOCATAIRE
+
+  p Pour être couvert par l’assurance e-loue / Allianz, le conducteur doit : 
+  ul.dash-item
+      li être âgé d’au moins
+          ul
+              li 21 ans pour les véhicules d’une valeur inférieure à 18 000€
+              li 28 ans les véhicules d’une valeur comprise entre 18 000€ et 50 000€
+      li être titulaire d’un permis de conduire français en cours de validité depuis :
+          ul
+              li plus de 2 ans pour les véhicules d’une valeur inférieure à 18 000€
+              li plus de 5 ans pour les véhicules d’une valeur comprise entre 18 000 et 50 000€
+      li s'engager à circuler en France métropolitaine ou/et dans les pays limitrophes (Angleterre compris)
+      li s’engager à ne pas faire d'usage professionnel du véhicule
+      li louer le véhicule pour une durée qui n’excède pas 90 jours 
+      li louer un même véhicule pour une durée qui n’excède pas trois mois sur une période de douze mois
+      li payer la location sur le site avec une carte bancaire à son nom
+      li présenter tous les documents au propriétaire, au début de la location (contrat + carte bancaire + permis de conduire, tous les 3 au même nom)
+
+  p Le propriétaire peut également exiger une facture portant le même nom que sur les trois documents précités
+  p 
+      span
+          b Attention : 
+      | Il est possible d'avoir plusieurs conducteurs. 
+      | Dans ce cas, chaque conducteur devra être mentionné sur le contrat de location
+      | et répondre aux conditions d'âge et de permis de conduire.
+  
+
+  h3 CONDITIONS PORTANT SUR LE PROPRIETAIRE DU VÉHICULE LOUÉ
+  h4 Pour être couvert par l’assurance e-loue / Allianz, le propriétaire du véhicule loué doit : 
+  ul
+      li résider en France métropolitaine
+      li être le titulaire de la carte grise du véhicule
+      li posséder un contrat d’assurance annuel pour le véhicule
+
+  
+  h3 GARANTIES ACCORDÉES PAR L’ASSURANCE
+  h4 Pendant la durée de la location, l’assurance e-loue / Allianz inclut les garanties suivantes :
+  table.table
+      thead
+          tr
+            th       
+            th Limite contractuelle d’indemnité
+            th Franchise    
+      tbody
+          tr
+            td Responsabilité civile      
+            td illimité      
+            td non
+          tr
+            td Défense civile et insolvabilité      
+            td illimité 
+            td non
+          tr
+            td Dommages conducteur : cas d’atteinte à l’intégrité physique ou psychique et décès*       
+            td 250 000€
+            td non
+          tr
+            td Dommages tous accidents
+            td 50 000€
+            td
+              p 800€ pour les véhicules particuliers
+              p 3 000€ pour les véhicules utilitaires
+          tr
+            td Vol ou tentative de vol
+            td 50 000€
+            td 
+              p 800€ pour les véhicules particuliers
+              p 3 000€ en cas de détournement
+              p 3 000€ pour les véhicules utilitaires
+          tr
+            td Incendie, tempête ou force de la nature
+            td 50 000€
+            td 800€
+          tr
+            td Bris de glaces
+            td
+            td 150€
+          tr
+              td Catastrophes naturelles
+              td 50 000€
+              td Franchise légale fixée par la règlementation en vigueur au jour du sinistre
+  p
+      em *Si AIPP inférieur ou égal à 10%, aucune indemnité versée au titre du préjudice subi.
+  br
+  p Autres garanties : 
+  ul.dash-item 
+      li Défense pénale et recours pour des litiges supérieurs à 230 €
+      li Dépannage, remorquage à concurrence de 300€
+  p L’assurance exclut les garanties suivantes : 
+  ul
+      li
+          | dégâts occasionnés aux parties hautes du véhicule loué résultant du non-respect
+          br 
+          | de la limite de gabarit et/ou d'une mauvaise appréciation d'un passage
+      li protection juridique
+      li indemnisation
+      li aménagements
+      li accessoires
+      li bagages
+      li marchandise
+      li immobilisation
+      li pertes financières
+      li crevaison
+
+  h3 QUE FAIRE POUR DÉCLARER UN INCIDENT ?
+  p En cas d’incident, veuillez contacter le service client au 01 85 08 99 77 ou par mail à 
+      a(href='mailto:contact@e-loue.com') contact@e-loue.com.
+
+  h3 QUE FAIRE POUR ÊTRE INDEMNISÉ ?
+  p
+      | Pour connaitre la procédure d’indemnisation, veuillez contacter le service client
+      | au 01 85 08 99 77 ou par mail à 
+      a(href='mailto:contact@e-loue.com') contact@e-loue.com.
+
+  h3 CONTRAT D’ASSURANCE 
+  p
+      | Un contrat d’assurance est associé pour chaque transaction effectuée sur le site www.e-loue.com. 
+      | Le contrat d’assurance est établi entre le locataire et notre partenaire Allianz.
+  br
+  h3 CABINET D'ASSURANCE
+  div(style="padding-top: 50px; font-height: 28px;")
+      p(style="text-align: center") 
+          | Cabinet d’assurances Richard BEHAGUE<br>
+          |Spécialiste des risques d’Entreprises<br>
+          | 92210 SAINT-CLOUD<br>
+          |+(33)155390960<br>
+          | <a href="mailto:richard.behague@agents.allianz.fr" style="color:#428bca">richard.behague@agents.allianz.fr</a> - <a href="http://www.allianz.fr/behague" style="color:#428bca">www.allianz.fr/behague</a><br>
+          | ORIAS 09052400 - Siret 498819473 – RCS Nanterre<br>
