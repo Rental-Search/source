@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+from collections import OrderedDict
 from django.template import Library
 from django.utils.itercompat import is_iterable
 
@@ -32,3 +34,32 @@ def ancestors(value, ascending=False, include_self=False, attr=None):
         return []
     qs = value.get_ancestors(ascending=bool(ascending), include_self=bool(include_self in ('True', 'true', 1)))
     return qs if attr is None else [getattr(obj, attr) for obj in qs]
+
+
+class FakeCategory(object):
+    slug = None
+    name = None
+    _url = None
+
+    def get_absolute_url(self):
+        return self._url
+
+
+@register.assignment_tag
+def arrange_categories(categories_map, root_id):
+    ids = categories_map.get(root_id, [])
+    category_dict = dict(((x.id, x) for x in Category.on_site.filter(
+        id__in=[i for i in ids if isinstance(i, int)])))
+
+    categories = []
+    for item in ids:
+        if isinstance(item, (list, tuple)):
+            cat = FakeCategory()
+            cat.name, cat._url = tuple(item)
+            categories.append(cat)
+        else:
+            try:
+                categories.append(category_dict[item])
+            except KeyError:
+                pass
+    return categories

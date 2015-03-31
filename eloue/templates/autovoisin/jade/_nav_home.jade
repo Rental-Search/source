@@ -3,7 +3,7 @@
 ul.without-spaces
   each category in category_list|slice:":8"
     li.spacer
-    li.center-text: a(href="{% url 'category_homepage' category.slug %}", title="{% trans 'location'%} {{ category.name }}")
+    li.center-text: a(href="{{ category.get_absolute_url }}", title="{% trans 'location'%} {{ category.name }}")
      |Location
      br
      {{ category.name|capfirst }}

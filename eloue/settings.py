@@ -824,8 +824,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
-    35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
-    172, 323, 432, 297, 379, 2713, 512, 3, 687  # others / dropdown selection
+    35, 390, 253, 418, 3, 379, 126, 172,  # first line / nav bar
+    432, 323, 297, 512, 2700, 335, 495, 2713  # others / dropdown selection
 ])
 
 FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())

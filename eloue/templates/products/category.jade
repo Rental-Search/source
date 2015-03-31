@@ -1,0 +1,40 @@
+extends ../base
+-load compressed cache i18n
+
+{% block title %}#{category}{% endblock %}
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "homepage_styles" %}
+
+block append content-body
+  .container-flex(data-ng-controller="HomePageCtrl")
+     header.header-site
+        include ../jade/_header_site
+     nav.nav-home.container
+        include ../jade/_nav_home
+
+    article
+      section.banner
+        include ../jade/_homepage_carousel_banner
+        //include ../jade/_category_menu
+
+      section.product-list
+        include ./subcategory_list
+
+      section.insurances.framing
+        include ../jade/_insurances
+
+      section.location-list
+        -var cities_list = [["Location PARIS", "Location MARSEILLE", "Location LYON"], ['Location TOULOUSE', 'Location BORDEAUX', 'Location MONTPELLIER'], ['Location LILLE', 'Location NICE', 'Location NANTES']]
+        include ../jade/_location_list
+
+      section.text-info.framing
+        include _text_info
+
+
+    footer
+      {% cache 43200 'homepage_footer_static' %}
+      section.footer-links.framing: include ../jade/_footer_links
+      section.rss.framing: include ../jade/_rss
+      {% endcache %}
