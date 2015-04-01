@@ -31,7 +31,6 @@ define([
 
             // Initial comment data
             $scope.comment = {rate: 0};
-            $scope.showIncidentForm = false;
             $scope.showIncidentDescription = false;
             $scope.userInfo = {};
 
@@ -226,7 +225,7 @@ define([
             };
 
             $scope.declareIncident = function () {
-                $scope.showIncidentForm = true;
+                $("#report-incendent").modal();
             };
 
             // Method to post new comment
@@ -249,8 +248,8 @@ define([
                 $scope.submitInProgress = true;
                 BookingsService.postIncident($stateParams.uuid, $scope.incident.description).then(
                     function () {
+                        $("#report-incendent").modal("hide");
                         $scope.showNotification("sinister", "post", true);
-                        $scope.showIncidentForm = false;
                         $scope.reloadPage();
                     },
                     function (error) {
