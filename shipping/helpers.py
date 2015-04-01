@@ -174,11 +174,21 @@ def get_position(address):
     """Identify geo position by address through Google service"""
     return GoogleGeocoder().geocode(address)[1]
 
+def _get_order_date(date):
+    """Return order date, 3 days max before the start date"""
+
+    delta = date - datetime.datetime.now()
+
+    if delta.days > 3:
+        return date - datetime.timedelta(3)
+    else:
+        return datetime.datetime.now()
+
 
 def _preprocess_name(name):
     return NAME_RE.sub(' ', name).strip()
 
-def _fill_order_detail(delivery, dropoff, order_contact, delivery_site, dropoff_site):
+def _fill_order_detail(delivery, dropoff, order_contact, delivery_site, dropoff_site, order_date):
     delivery_phone = delivery.default_number or first_or_empty(delivery.phones.all())
     dropoff_phone = dropoff.default_number or first_or_empty(dropoff.phones.all())
 
@@ -198,7 +208,7 @@ def _fill_order_detail(delivery, dropoff, order_contact, delivery_site, dropoff_
         'DeliverySiteCity': delivery_site.get('city', ''),
         'DeliverySiteCountry': delivery_site.get('country_name', ''),
         'DeliverySiteCountryCode': delivery_site.get('country', ''),
-        'DeliverySiteName': delivery_site.get('pudo_id', ''),
+        'DeliverySiteName': delivery_site.get('name', ''),
         'DeliverySiteZipCode': delivery_site.get('zipcode', ''),
         'DropOffContactFirstName': _preprocess_name(dropoff.first_name),
         'DropOffContactLastName': _preprocess_name(dropoff.last_name),
@@ -210,7 +220,7 @@ def _fill_order_detail(delivery, dropoff, order_contact, delivery_site, dropoff_
         'DropOffSiteCity': dropoff_site.get('city', ''),
         'DropOffSiteCountry': dropoff_site.get('country_name', ''),
         'DropOffSiteCountryCode': dropoff_site.get('country', ''),
-        'DropOffSiteName': dropoff_site.get('pudo_id', ''),
+        'DropOffSiteName': dropoff_site.get('name', ''),
         'DropOffSiteZipCode': dropoff_site.get('zipcode', ''),
         'OrderContactFirstName': _preprocess_name(order_contact.first_name),
         'OrderContactLastName': _preprocess_name(order_contact.last_name),
@@ -223,7 +233,7 @@ def _fill_order_detail(delivery, dropoff, order_contact, delivery_site, dropoff_
         'OrderSiteCountry': getattr(COUNTRY_CHOICES,
                      order_contact_address.country) if order_contact_address else '',
         'OrderSiteZipCode': order_contact_address.zipcode if order_contact_address else '',
-        'OrderDate': datetime.datetime.now(),
+        'OrderDate': order_date,
         'DeliverySiteId': delivery_site.get('site_id', ''),
         'DropOffSiteId': dropoff_site.get('site_id', ''),
     }
@@ -255,7 +265,8 @@ def fill_order_details(instance, **kwargs):
     order_details = _fill_order_detail(
         owner, borrower,
         borrower,
-        product_point, patron_point
+        product_point, patron_point,
+        _get_order_date(booking.started_at) 
     )
     shipping_params = navette.create_shipping(token, order_details)
 
@@ -271,7 +282,8 @@ def fill_order_details(instance, **kwargs):
     order_details = _fill_order_detail(
         borrower, owner,
         borrower,
-        patron_point, product_point
+        patron_point, product_point,
+        booking.ended_at
     )
     shipping_params = navette.create_shipping(token, order_details)
 

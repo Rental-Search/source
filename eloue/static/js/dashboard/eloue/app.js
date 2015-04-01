@@ -1,4 +1,5 @@
 define(["angular",
+        "angular-cookie",
         "angular-cookies",
         "angular-resource",
         "angular-ui-router",
@@ -16,6 +17,6 @@ define(["angular",
     function (angular) {
         "use strict";
         // Create dashboard application
-        return angular.module("EloueDashboardApp", ["EloueCommon", "ngCookies", "ngResource", "ui.router",
+        return angular.module("EloueDashboardApp", ["EloueCommon", "ngCookies", "ipCookie", "ngResource", "ui.router",
             "pascalprecht.translate"]);
     });

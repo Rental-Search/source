@@ -1,5 +1,5 @@
 extends ./base
--load compressed cache i18n
+-load compressed prefixed_cache i18n
 
 {% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
 
@@ -29,6 +29,7 @@ block append content-body
         include ./jade/_comments
       {% cache 43200 'homepage_city_list_static' %}
       section.location-list
+        -var cities_list = [["Location PARIS", "Location MARSEILLE", "Location LYON"], ['Location TOULOUSE', 'Location BORDEAUX', 'Location MONTPELLIER'], ['Location LILLE', 'Location NICE', 'Location NANTES']]
         include ./jade/_location_list
       {% endcache %}
 

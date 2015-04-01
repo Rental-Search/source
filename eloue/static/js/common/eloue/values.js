@@ -153,4 +153,22 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
      * URL to redirect user after logging in.
      */
     EloueCommon.value("RedirectAfterLogin", {url: "/"});
+
+    /**
+     * Svg cannot parse <image xlink:href> as URL. Base64 data is acceptable.
+     * All marker images are converted to Base64.
+     */
+    EloueCommon.value("GoogleMapsMarkers", {
+        smallMarkerPath: "M 12.80 0.00 L 15.35 0.00 C 18.27 0.95 21.17 2.57 22.66 5.37 C 25.06 9.50 24.18 15.32 20.35 18.30 C 17.69 20.50 15.95 23.51 13.98 26.29 C 11.98 22.61 8.98 19.79 5.61 17.41 C -0.22 11.38 4.44 0.25 12.80 0.00 Z",
+
+        largeMarkerPath: "M 9.92 0.00 L 18.37 0.00 C 22.82 1.16 26.59 4.84 27.00 9.55 L 27.00 11.73 C 26.42 16.38 22.69 19.83 18.33 21.04 C 16.95 23.04 15.66 25.11 14.14 27.00 L 13.77 27.00 C 12.39 25.08 11.08 23.10 9.74 21.14 C 4.78 20.43 0.38 16.54 0.00 11.38 L 0.00 9.34 C 0.61 4.38 4.90 0.27 9.92 0.00 Z",
+
+        template: [
+            '<?xml version="1.0"?>',
+            '<svg height="27" width="27" version="1.1" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg">',
+            '<path fill="{{markerColor}}" stroke="none" stroke-width="0" d="{{markerPath}}" />',
+            '<text text-anchor="middle" font-family="Open Sans" font-weight="600" y="14" x="13" font-size="10" fill="#FFFFFF">{{markerLabel}}</text>',
+            '</svg>'
+        ].join('\n')
+    })
 });

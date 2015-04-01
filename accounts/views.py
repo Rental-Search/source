@@ -25,8 +25,10 @@ from eloue.views import AjaxResponseMixin, BreadcrumbsMixin
 from eloue.http import JsonResponse
 from eloue.decorators import ajax_required
 from eloue.api import viewsets, filters, mixins, permissions
-from eloue.api.decorators import list_action
-from eloue.api.exceptions import ServerErrorEnum, DocumentedServerException
+from eloue.api.decorators import list_action, ignore_filters
+from eloue.api.exceptions import (
+    ServerErrorEnum, DocumentedServerException, ValidationException
+)
 
 from products.search import product_search
 from rent.models import Comment
@@ -227,13 +229,13 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     """
     queryset = models.Patron.objects.select_related('default_address', 'default_number')
     serializer_class = serializers.UserSerializer
-    permission_classes = (permissions.UserPermissions,)
+    #permission_classes = (permissions.UserPermissions,)
     filter_backends = (filters.HaystackSearchFilter, filters.DjangoFilterBackend, filters.OrderingFilter)
     owner_field = 'id'
     search_index = search.patron_search
     filter_fields = ('is_professional', 'is_active')
     ordering_fields = ('username', 'first_name', 'last_name')
-    public_actions = ('retrieve', 'search', 'create', 'forgot_password', 'activation_mail')
+    public_actions = ('retrieve', 'search', 'create', 'forgot_password', 'activation_mail', 'send_message')
 
     def initial(self, request, *args, **kwargs):
         pk_field = getattr(self, 'pk_url_kwarg', 'pk')
@@ -276,6 +278,24 @@ class UserViewSet(mixins.OwnerListPublicSearchMixin, viewsets.ModelViewSet):
     @link()
     def stats(self, request, *args, **kwargs):
         return Response(self.get_object().stats)
+
+    @action(methods=['put', 'get'])
+    @ignore_filters([filters.DjangoFilterBackend])
+    def send_message(self, request, *args, **kwargs):
+        serializer = serializers.ContactProSerializer(
+            data=request.DATA,
+            context={
+                'request': request,
+                'recipient': self.get_object()
+            },
+        )
+
+        if not serializer.is_valid():
+            raise ValidationException(serializer.errors)
+
+        serializer.save()
+        success_msg = _("Your message has been sent sucessfully.")
+        return Response({'detail': success_msg})
 
 
 class AddressViewSet(mixins.SetOwnerMixin, viewsets.ModelViewSet):

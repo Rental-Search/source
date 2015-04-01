@@ -13,6 +13,7 @@ from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
+from django.utils.encoding import force_bytes
 from django.utils import translation, six
 from django.forms.util import ErrorList
 
@@ -56,11 +57,19 @@ def form_errors_append(form, field_name, message):
 def simple_cache_key(*args):
     return u':'.join(args)
 
-def cache_key(fragment_name, *args):
-    hasher = hashlib.md5(u':'.join([urlquote(arg) for arg in args]))
-    return 'template.cache.%s.%s' % (fragment_name, hasher.hexdigest())
 
-def create_alternative_email(prefix, context, from_email, recipient_list):
+TEMPLATE_FRAGMENT_KEY_TEMPLATE = '%s:template.cache.%s.%s'
+
+
+def cache_key(fragment_name, *args):
+    key = ':'.join([urlquote(arg) for arg in args])
+    args = hashlib.md5(force_bytes(key))
+    prefix = Site.objects.get_current().domain
+    return TEMPLATE_FRAGMENT_KEY_TEMPLATE % (prefix, fragment_name, args.hexdigest())
+
+
+def create_alternative_email(
+        prefix, context, from_email, recipient_list, headers=None):
     context.update({
         'site': Site.objects.get_current(),
         'protocol': "https" if USE_HTTPS else "http"
@@ -68,7 +77,11 @@ def create_alternative_email(prefix, context, from_email, recipient_list):
     subject = render_to_string("%s_email_subject.txt" % prefix, context)
     text_content = render_to_string("%s_email.txt" % prefix, context)
     html_content = render_to_string("%s_email.html" % prefix, context)
-    message = EmailMultiAlternatives(subject, text_content, from_email, recipient_list)
+    message = EmailMultiAlternatives(
+        subject, text_content,
+        from_email, recipient_list,
+        headers=headers
+    )
     message.attach_alternative(html_content, "text/html")
     return message
 

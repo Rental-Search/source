@@ -13,6 +13,8 @@ define([
         "MapsService",
         function ($scope, $window, $document, MapsService) {
 
+            $scope.submitInProgress = false;
+
             /**
              * Callback function for Google maps script loaded event.
              */
@@ -57,6 +59,12 @@ define([
                         }
                     );
 
+                    // Submit form on location change.
+                    var autocomplete = new google.maps.places.Autocomplete($document[0].getElementById('where'));
+                    google.maps.event.addListener(autocomplete, "place_changed", function() {
+                        $scope.submitForm();
+                    });
+
                     rangeSlider = $("#range-slider");
                     if (rangeSlider) {
                         rangeInput = rangeEl;
@@ -64,48 +72,47 @@ define([
                         if (!rangeMax) {
                             $("#range-label").hide();
                         } else {
+                            var updatedBySlider = false;
                             rangeVal = rangeInput.attr("value");
                             if (rangeVal) {
                                 rangeSlider.attr("value", "1;" + rangeVal);
                             } else {
                                 rangeSlider.attr("value", "1;" + rangeMax);
                             }
-                            notUpdateBySlider = false;
-                            notUpdateByMap = false;
                             rangeSlider.slider({
                                 from: 1,
                                 to: Number(rangeMax),
                                 limits: false,
                                 dimension: "&nbsp;km",
-                                onstatechange: function (value) {
-                                    notUpdateByMap = true;
-                                    if (!notUpdateBySlider) {
-                                        var rangeValue = value.split(";")[1];
-                                        // enable the input so its value could be now posted with a form data
-                                        rangeInput.prop("disabled", false);
-                                        // set new values to the hidden input
-                                        rangeInput.attr("value", rangeValue);
-                                        // change map's zoom level
-                                        map.setZoom(MapsService.zoom(rangeValue));
-                                    }
-                                    setTimeout(function () {
-                                        notUpdateByMap = false;
-                                    }, 1000);
+                                // On mouse up submit form.
+                                callback: function(value) {
+                                    updatedBySlider = true;
+                                    var rangeValue = value.split(";")[1];
+                                    // enable the input so its value could be now posted with a form data
+                                    rangeInput.prop("disabled", false);
+                                    // set new values to the hidden input
+                                    rangeInput.attr("value", rangeValue);
+                                    // change map's zoom level
+                                    map.setZoom(MapsService.zoom(rangeValue));
+
+                                    $scope.submitForm();
                                 }
                             });
 
                             google.maps.event.addListener(map, "zoom_changed", function () {
-                                notUpdateBySlider = true;
-                                if (!notUpdateByMap) {
+                                if ($scope.submitInProgress) {
+                                    return;
+                                }
+                                if (!updatedBySlider) {
                                     var zoomLevel = map.getZoom(),
                                         calcRange = MapsService.range(zoomLevel);
                                     if (calcRange && calcRange <= rangeMax) {
                                         rangeSlider.slider("value", 1, calcRange);
                                     }
+                                    rangeInput.prop("disabled", false);
+                                    rangeInput.attr("value", calcRange);
                                 }
-                                setTimeout(function () {
-                                    notUpdateBySlider = false;
-                                }, 1000);
+                                updatedBySlider = false;
                             });
                         }
                     }
@@ -168,6 +175,10 @@ define([
                         }
                     });
                 }
+                // Submit form on category change.
+                categorySelection.change(function(){
+                    detailSearchForm.submit();
+                })
             };
 
             $scope.activatePriceSlider = function () {
@@ -202,6 +213,10 @@ define([
                                 // set new values to hidden inputs
                                 priceMinInput.attr("value", values[0]);
                                 priceMaxInput.attr("value", values[1]);
+                            },
+                            // On mouse up submit form.
+                            callback: function() {
+                                $scope.submitForm();
                             }
                         });
                     }
@@ -217,18 +232,37 @@ define([
                         break;
                     }
                 }
+
+                var markersUrl = staticUrl + "images/markers_smooth_aligned.png";
+
+                var mapCanvas= $("#map-canvas");
+
+                var markerFilename = mapCanvas.attr('markers-filename');
+                if (markerFilename) {
+                    markersUrl = staticUrl + "images/" + markerFilename;
+                }
+
+                var markerHeight = 28;
+
+                var markerHeightAttr = mapCanvas.attr('marker-height');
+                if (markerHeightAttr) {
+                    markerHeight = parseInt(markerHeightAttr);
+                }
+
+
+
                 for (j = 0; j < locations.length; j += 1) {
                     product = locations[j];
                     if (markerId === "li#marker-") {
-                        image = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
-                            new google.maps.Size(26, 28),
-                            new google.maps.Point(0, 28 * j),
-                            new google.maps.Point(14, 28));
+                        image = new google.maps.MarkerImage(markersUrl,
+                            new google.maps.Size(26, markerHeight),
+                            new google.maps.Point(0, markerHeight * j),
+                            new google.maps.Point(14, markerHeight));
 
-                        imageHover = new google.maps.MarkerImage(staticUrl + "images/markers_smooth_aligned.png",
-                            new google.maps.Size(26, 28),
-                            new google.maps.Point(29, 28 * j),
-                            new google.maps.Point(14, 28));
+                        imageHover = new google.maps.MarkerImage(markersUrl,
+                            new google.maps.Size(26, markerHeight),
+                            new google.maps.Point(29, markerHeight * j),
+                            new google.maps.Point(14, markerHeight));
                     }
                     myLatLng = new google.maps.LatLng(product.lat, product.lng);
                     marker = new google.maps.Marker({
@@ -300,14 +334,35 @@ define([
                         if (this.checked) {
                             proCheckbox.prop("checked", false);
                         }
+                        $scope.submitForm();
                     });
                 proCheckbox.change(
                     function(){
                         if (this.checked) {
                             particularCheckbox.prop("checked", false);
                         }
+                        $scope.submitForm();
                     });
             };
+            
+            $scope.submitForm = function() {
+                $("#detail-search").submit();
+            };
+
+            $scope.disableForm = function() {
+                setTimeout(function() {
+                    $("input, select").attr("disabled", true);
+                    $(".jslider-pointer").attr("style", "display: none !important");
+                    $("#submitButton").addClass("loading");
+                }, 50);
+
+            };
+
+            $("#detail-search").on("submit", function() {
+                $scope.submitInProgress = true;
+                $scope.disableForm();
+                return true;
+            });
 
             MapsService.loadGoogleMaps();
             $scope.activateLayoutSwitcher();

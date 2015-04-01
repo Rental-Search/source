@@ -46,7 +46,8 @@ require.config(
                 "jquery-mousewheel": "../../bower_components/jquery-mousewheel/jquery.mousewheel",
                 "toastr": "../../bower_components/toastr/toastr",
                 "formmapper": "../formmapper",
-                "filesaver": "../FileSaver.min"
+                "filesaver": "../FileSaver.min",
+                "angular-cookie": "../../bower_components/angular-cookie/angular-cookie"
             },
             shim: {
                 "angular": {
@@ -84,7 +85,8 @@ require.config(
                 "formmapper": ["jquery"],
                 "jquery-mousewheel": ["jquery"],
                 "custom-scrollbar": ["jquery", "jquery-mousewheel"],
-                "toastr": ["jquery"]
+                "toastr": ["jquery"],
+                "angular-cookie": ["angular"]
             }
         };
     })()
@@ -124,7 +126,8 @@ require([
     "bootstrap-datepicker-fr",
     "../common/eloue/commonApp",
     "../common/eloue/i18n",
-    "eloue/config"
+    "eloue/config",
+    "angular-cookie"
 ], function ($, _, angular) {
     "use strict";
     $(function () {

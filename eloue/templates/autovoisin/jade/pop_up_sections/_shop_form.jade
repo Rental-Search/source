@@ -1,0 +1,43 @@
+h4
+  b N’hésitez pas à venir dans notre boutique,
+  | nous nous ferons un plaisir de répondre à toutes vos questions…
+
+{% if patron.pro_agencies.all %}
+p Nos boutiques sont situées au&nbsp;:
+aside.col-xs-4
+  .map-container
+    .whirly
+    .map.pro-shop-map#map-canvas
+      // map goes here
+main.col-xs-8.pro-shop
+    table-cell.input-group.where-field.pro-shop-where
+      i.flaticon.stroke.location-pin-3
+      input(id="cityInput", type="text", name="search", ng-model="search", placeholder="Ville de l'agence", title="Ville de l'agence").form-control
+    ul.scrollbar-custom
+      for agency in patron.pro_agencies.all
+          li(id="marker-{{ forloop.counter }}", locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}", name="{{ agency.name }}", city="{{agency.city}}", color="#3798f3", selectedColor="#e85d5f")
+           span.badge-order {{ forloop.counter }}
+           .section-body
+             h6 {{ agency.name }}
+             p {{ agency.address1 }}
+             p {{ agency.zipcode }} {{ agency.city|upper }}
+             p {{ agency.phone_number }}
+{% else %}
+{% if patron.default_address %}
+p Notre boutique est située au&nbsp;:
+aside.col-xs-4
+    .map-container
+        .whirly
+        .map.pro-shop-map#map-canvas
+            // map goes here
+main.col-xs-8.pro-shop
+    ul.scrollbar-custom
+        li(id="marker-1", locationY="{{ patron.default_address.position.y|stringformat:'f' }}", locationX="{{ patron.default_address.position.x|stringformat:'f' }}", name="{{ patron.default_address.name }}", color="#3798f3", selectedColor="#e85d5f")
+            span.badge-order 1
+            .section-body
+                h6 {{ patron.default_address.name }}
+                p {{ patron.default_address.address1 }}
+                p {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
+                p {{ patron.default_address.phone_number }}
+{% endif %}
+{% endif %}

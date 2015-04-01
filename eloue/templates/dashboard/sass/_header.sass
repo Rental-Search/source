@@ -30,7 +30,9 @@ header
     @extend .bg-success-hover
 
   .framing
-    border-top: $bd-lighter
+    border: px(1) solid $gray-lighter
+    background-color: white
+    border-width: px(1) 0
   .search-form
     padding-top: $indent-sm
     padding-bottom: $indent-sm
@@ -225,3 +227,19 @@ header
         width: $thumbnail-smx
         height: $thumbnail-smx
         +default-user
+.header-site
+  .cookies-alert
+    background: #FFFFFF
+    color: #777777
+    font-weight: $fw-semibold
+    font-size: px(12)
+    padding-top: 1em
+    padding-bottom: 1em
+    text-align: center
+    a
+      color: $brand-primary
+    .cross
+      float: right
+      padding-right: 1em
+      padding-left: 1em
+      cursor: pointer

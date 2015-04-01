@@ -46,7 +46,7 @@ define([
 
             $scope.filterByBorrower = function () {
                 $scope.filtered = true;
-                $scope.markListItemAsSelected("filter-", "Emprunteurs");
+                $scope.markListItemAsSelected("filter-", "Locataires");
                 $scope.bookingFilter.owner = undefined;
                 $scope.bookingFilter.borrower = $scope.currentUser.id;
                 $scope.filter();
