@@ -214,6 +214,10 @@ define([
                 $("#confirm").modal();
             };
 
+            $scope.showComment = function() {
+                $("#comment-and-rank").modal();
+            };
+
             $scope.cancelBooking = function () {
                 $scope.submitInProgress = true;
                 $scope.cancellingInProgress = true;
@@ -234,6 +238,7 @@ define([
                 $scope.submitInProgress = true;
                 CommentsService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).then(
                     function () {
+                        $("#comment-and-rank").modal("hide");
                         $scope.showNotification("comment", "post", true);
                         $scope.showCommentForm = false;
                         $scope.submitInProgress = false;
