@@ -94,6 +94,8 @@ define([
                 });
                 $scope.bookings = bookings;
                 $scope.updateUnavailabilityPeriods();
+                // Initiate custom scrollbars
+                $scope.initCustomScrollbars();
             });
 
             $scope.updateUnavailabilityPeriods = function () {

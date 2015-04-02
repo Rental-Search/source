@@ -47,6 +47,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                 return Users.update({id: "me"}, user).$promise;
             };
 
+            usersService.sendProMessage = function(recipientId, message) {
+                return Users.send_message({id: recipientId}, message).$promise;
+            };
+
             return usersService;
         }]);
 });

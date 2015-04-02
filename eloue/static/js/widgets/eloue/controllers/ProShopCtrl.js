@@ -68,6 +68,8 @@ define([
                             title: item.attr('name'),
                             lat: item.attr('locationX'),
                             lng: item.attr('locationY'),
+                            markerColor: item.attr('color'),
+                            selectedMarkerColor: item.attr('selectedColor'),
                             zIndex: Number(item.attr('id').replace('marker-', '')),
                             markerIndex: index + 1
                         };
@@ -113,10 +115,13 @@ define([
                         continue;
                     }
 
+                    var markerColor = agency.markerColor ? agency.markerColor : '#24bd77';
+                    var selectedMarkerColor = agency.selectedMarkerColor ? agency.selectedMarkerColor : '#f27e36';
+
                     if (markerId === 'li#marker-') {
                         // Create svg marker according to label number (for values 10 and greater wide marker is used).
-                        image = $scope.createMarker(svgTemplate, mapMarker.unselected, mapMarker.unselectedLarge, agency.markerIndex);
-                        imageHover = $scope.createMarker(svgTemplate, mapMarker.selected, mapMarker.selectedLarge, agency.markerIndex);
+                        image = $scope.createMarker(svgTemplate, markerColor, agency.markerIndex);
+                        imageHover = $scope.createMarker(svgTemplate, selectedMarkerColor, agency.markerIndex);
                     }
                     myLatLng = new google.maps.LatLng(agency.lat, agency.lng);
 
@@ -146,9 +151,10 @@ define([
                 }
             };
 
-            $scope.createMarker = function(svgTemplate, marker, wideMarker, index) {
-                var markerSvg = index < 10 ? svgTemplate.replace('{{mapMarker}}', marker) : svgTemplate.replace('{{mapMarker}}', wideMarker);
-                markerSvg = markerSvg.replace("{{markerLabel}}", "" + (index));
+            $scope.createMarker = function(svgTemplate, markerColor, index) {
+                var markerSvg = index < 10 ? svgTemplate.replace('{{markerPath}}', GoogleMapsMarkers.smallMarkerPath) : svgTemplate.replace('{{markerPath}}', GoogleMapsMarkers.largeMarkerPath);
+                markerSvg = markerSvg.replace('{{markerLabel}}', "" + (index));
+                markerSvg = markerSvg.replace('{{markerColor}}', markerColor);
                 return {url: URL.createObjectURL(new Blob([markerSvg], {type: 'image/svg+xml'})), anchor: new google.maps.Point(13, 27)};
             };
 
