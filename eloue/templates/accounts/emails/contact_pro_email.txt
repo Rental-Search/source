@@ -1,0 +1,15 @@
+{% load i18n %}
+
+{% blocktrans with patron.username as username %}
+Envoyé par {{ email }} :
+
+Bonjour {{ username }},
+{% endblocktrans %}
+
+{{ message }}
+
+{{ protocol }}://{{ site.domain }}.
+
+{% trans "Cordialement" %},
+
+{% trans "L'équipe" %} {{ site.name }}.

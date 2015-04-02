@@ -9,5 +9,5 @@
         li: ul.nav
           each city in column
             li.item-city
-              .col-sm-8: a(href="{% facet_url breadcrumbs 'l' city 'r' 30 'sort' '-created_at' %}").link-success-color.normal-case {{ city }}
+              .col-sm-12: a(href="{% facet_url breadcrumbs 'l' city 'r' 30 'sort' '-created_at' %}").link-success-color.normal-case {{ city }}
               //-.col-sm-4: span.actives-count count
