@@ -1,6 +1,7 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.db.models import get_model
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 

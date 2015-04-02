@@ -240,7 +240,6 @@ INSTALLED_APPS = (
     'rent',
     'shipping',
     'payments',
-    'contest',
     'eloue.api',
     'south', # South must be the last in the list of applications that contains models
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
@@ -431,53 +430,6 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
-    # 'master': {
-    #     'source_filenames': (
-    #         'less/styles.less',
-    #         'css/chosen.css'
-    #     ),
-    #     'output_filename': 'css/master.css',
-    #     'extra_context': {
-    #         'media': 'screen',
-    #     },
-    # },
-    # 'mobile': {
-    #     'source_filenames': (
-    #         'css/mobile.css',
-    #     ),
-    #     'output_filename': 'css/mobile.css',
-    #     'extra_context': {
-    #         'media': 'screen',
-    #     },
-    # },
-    # 'ie': {
-    #     'source_filenames': (
-    #         'css/ie/ie.css',
-    #     ),
-    #     'output_filename': 'css/ie.css',
-    #     'extra_context': {
-    #         'media': 'screen',
-    #     }
-    # },
-    # 'proapp': {
-    #     'source_filenames': (
-    #         'proapp/less/app.less',
-    #     ),
-    #     'output_filename': 'css/proapp.css',
-    #     'extra_context': {
-    #         'media': 'screen',
-    #     },
-    # },
-    # 'contest': {
-    #     'source_filenames': (
-    #         'less/contest.less',
-    #         'css/chosen.css'
-    #     ),
-    #     'output_filename': 'css/contest.css',
-    #     'extra_context': {
-    #         'media': 'screen',
-    #     },
-    # },
 }
 
 PIPELINE_JS = {
