@@ -24,6 +24,7 @@ class ErrorGroupEnum(object):
     URL_ERROR = ('40', _(u'URL error.'))
     SERVER_ERROR = ('50', _(u'Server error.'))
     SHIPPING_ERROR = ('60', _(u'Shipping error.'))
+    PAYMENT_ERROR = ('70', _(u'Payment error.'))
 
 
 class ValidationErrorEnum(object):
@@ -63,6 +64,11 @@ class ServerErrorEnum(object):
 class ShippingErrorEnum(object):
     """Enum for shipping errors."""
     MISSING_PUDO = ('100', _(u'Depot not found.'))
+
+
+class PaymentErrorEnum(object):
+    """Enum for paying errors."""
+    FAILED_PAYMENT = ('100', _(u'Failed to process payment.'))
 
 
 class ApiException(Exception):
@@ -168,6 +174,13 @@ class ShippingException(ApiException):
 
     status_code = status.HTTP_400_BAD_REQUEST
     error_group = ErrorGroupEnum.SHIPPING_ERROR
+
+
+class PaymentException(ApiException):
+    """Raised on payment service errors."""
+
+    status_code = status.HTTP_400_BAD_REQUEST
+    error_group = ErrorGroupEnum.PAYMENT_ERROR
 
 
 def api_exception_handler(exception):
