@@ -420,7 +420,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
             obj.payment = payment
         try:
             return self._perform_transition(request, instance=obj, action='preapproval', cvv=credit_card.cvv)
-        except abstract_payment.PaymentException, e:
+        except abstract_payment.PaymentException as e:
             raise exceptions.PaymentException({
                 'code': exceptions.PaymentErrorEnum.FAILED_PAYMENT[0],
                 'description': exceptions.PaymentErrorEnum.FAILED_PAYMENT[1],
