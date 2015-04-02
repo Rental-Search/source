@@ -681,14 +681,15 @@ class CreditCardForm(forms.ModelForm):
         )
 
     def clean(self):
-        try:
-            pm = PayboxManager()
-            self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data.get('card_number', ''))
-            pm.authorize(self.cleaned_data['card_number'], 
-                self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
-            )
-        except PayboxException as err:
-            raise forms.ValidationError(_(u'La validation de votre carte a échoué: ({0}) {1}').format(*err.args))
+        if self.cleaned_data.get('card_number'):
+            try:
+                pm = PayboxManager()
+                self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
+                pm.authorize(self.cleaned_data['card_number'],
+                    self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
+                )
+            except PayboxException as err:
+                raise forms.ValidationError(_(u'La validation de votre carte a échoué: ({0}) {1}').format(*err.args))
         return self.cleaned_data
 
     def save(self, *args, **kwargs):
