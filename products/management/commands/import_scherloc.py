@@ -78,58 +78,54 @@ class Command(BaseCommand):
                 print 'error loading page for object at url', self.base_url + product_url
 
 
-            # family = product_url.split('/')[3]
-            # # Get the image
-            # try:
-            #     image_url = product_soup.find('a', href=re.compile('.+\.jpg')).get('href')
-            #     image_url = product_url.rsplit('/', 1)[0] + '/' + image_url
-            #     print image_url
-            # except:
-            #     pass
+            family = product_url.split('/')[3]
+            # Get the image
+            try:
+                image_url = product_soup.find('a', href=re.compile('.+\.jpg')).get('href')
+                image_url = product_url.rsplit('/', 1)[0] + '/' + image_url
+            except:
+                print 'NO IMG'
+                pass
 
             # Get the title
-            # infosProduits = product_soup.find('td', style="text-align:justify").text
+            infosProduits = product_soup.find('td', style="text-align:justify").text
             # print infosProduits
 
             # Get the price
-            price_soup = product_soup.find('td', id="ppriceNFLABt")
-            print price_soup
+            # price_soup = product_soup.find('span', attrs={'class': 'wg-price'})
+            # print price_soup
             # print price
 
 
             # Get the description
-            description = ''#product_soup.find('td', style='text-align:justify').text
-            # if product_soup.find('div', id='tabbertab1'):
-            #     description_1 = product_soup.find('div', id='tabbertab1').text
-            #     description += '\n %s' % description_1
-            # if product_soup.find('div', id='tabbertab2'):    
-            #     description_2 = product_soup.find('div', id='tabbertab2').text
-            #     description += u'\n Caractéristiques :\n %s' % description_2
-
-    #         # print description
+            description = ''
 
 
             # Format the title
-            # summary = infosProduits
+            summary = product_soup.find('h2').text
 
             deposit_amount = 0.0
 
-            # # Create the product
-            # from products.models import Category, Price
-            # from products.choices import UNIT
-            # product = Product.objects.create(
-            #     summary=summary, description=description, 
-            #     deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-            #     category=Category.objects.get(slug=category_mapping[category]))
-            # try:
-            #     with closing(urlopen(image_url)) as image:
-            #         product.pictures.add(Picture.objects.create(
-            #             image=uploadedfile.SimpleUploadedFile(
-            #                 name='img', content=image.read())
-            #         )
-            #     )
-            # except HTTPError as e:
-            #     print '\nerror loading image for object at url:', self.base_url + product_url
+            # Create the product
+            try:
+                from products.models import Category, Price
+                from products.choices import UNIT
+                product = Product.objects.create(
+                    summary=summary, description=description, 
+                    deposit_amount=deposit_amount, address=self.address, owner=self.patron,
+                    category=Category.objects.get(slug=category_mapping[category]))
+                try:
+                    with closing(urlopen(image_url)) as image:
+                        product.pictures.add(Picture.objects.create(
+                            image=uploadedfile.SimpleUploadedFile(
+                                name='img', content=image.read())
+                        )
+                    )
+                except HTTPError as e:
+                    print '\nerror loading image for object at url:', self.base_url + product_url
+            except:
+                print 'CANNOT CREATE PRODUCT : %s' % summary
+                pass
             
     #         # # Add the price to the product
     #         # product.prices.add(Price(amount=price, unit=UNIT.DAY))
