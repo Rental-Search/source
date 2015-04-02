@@ -27,7 +27,8 @@ define([
         "ShippingsService",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
-        function ($scope, $stateParams, $window, Endpoints, BookingsService, CommentsService, PhoneNumbersService, SinistersService, UsersService, ShippingsService, ProductShippingPointsService, PatronShippingPointsService) {
+        "ProductsService",
+        function ($scope, $stateParams, $window, Endpoints, BookingsService, CommentsService, PhoneNumbersService, SinistersService, UsersService, ShippingsService, ProductShippingPointsService, PatronShippingPointsService, ProductsService) {
 
             // Initial comment data
             $scope.comment = {rate: 0};
@@ -129,6 +130,10 @@ define([
                         }
                     });
                 }
+
+                ProductsService.getAbsoluteUrl($scope.bookingDetails.product.id).then(function (result) {
+                    $scope.productUrl = result.url;
+                });
             };
 
             $scope.loadPhoneNumber = function (phoneObj) {
