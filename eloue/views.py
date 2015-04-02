@@ -13,14 +13,16 @@ from haystack.constants import DJANGO_ID
 from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
 
+
 class LoginRequiredMixin(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
 
+
 class SearchQuerySetMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        self.sqs = kwargs.pop('sqs', SearchQuerySet())
+        self.sqs = kwargs.pop('sqs', None) or SearchQuerySet()
         self.load_all = kwargs.pop('load_all', False)
         return super(SearchQuerySetMixin, self).dispatch(request, *args, **kwargs)
 
@@ -69,21 +71,27 @@ class SearchQuerySetMixin(object):
 
         return obj
 
+
 class AjaxResponseMixin(object):
     response_class = JsonResponse
 
     def render_to_response(self, context, **kwargs):
         return self.response_class(context, **kwargs)
 
+
 class BreadcrumbsMixin(object):
     form_class = FacetedSearchForm
 
-    def get_breadcrumbs(self, request):
+    def get_form(self, request):
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         query_data = request.GET.copy()
         if 'l' not in query_data or not query_data['l']:
             query_data['l'] = location['country']
         form = self.form_class(query_data)
+        return form
+
+    def get_breadcrumbs(self, request):
+        form = self.get_form(request)
         if not form.is_valid():
             raise Http404
         self.form = form

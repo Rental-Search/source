@@ -6,17 +6,17 @@ block details
             .row
                 {% verbatim %}
                 .col-md-4
-                    .form-control
+                    .form-control.without-search
                         select(name="rootCategory", ng-model="rootCategory", ng-change="updateNodeCategories(true)", eloue-chosen, opts="rootCategories", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.1")
                             option(ng-repeat="category in rootCategories", ng-selected="category.id == rootCategory", value="{{category.id}}") {{category.name}}
                         span.text-danger(ng-show="generalItemInfoForm.rootCategory.$error.required && itemInfoSubmitted", translate="required_field")
                 .col-md-4
-                    .form-control
+                    .form-control.without-search
                         select(name="nodeCategory", ng-model="nodeCategory", ng-change="updateLeafCategories(true)", eloue-chosen, opts="nodeCategories", ng-required="isAuto || isRealEstate || nodeCategories.length>0", data-ng-disabled="submitInProgress", data-placeholder="Catégorie Niv.2")
                             option(ng-repeat="category in nodeCategories", ng-selected="category.id == nodeCategory", value="{{category.id}}") {{category.name}}
                         span.text-danger(ng-show="generalItemInfoForm.nodeCategory.$error.required && itemInfoSubmitted", translate="required_field")
                 .col-md-4
-                    .form-control
+                    .form-control.without-search
                         select(name="category", ng-model="product.category", ng-required="!isAuto && !isRealEstate", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate", data-placeholder="Catégorie Niv.3")
                             option(ng-repeat="category in leafCategories", ng-selected="(categoriesBaseUrl + category.id + '/') == product.category", value="{{categoriesBaseUrl}}{{category.id}}/") {{category.name}}
                         span.text-danger(ng-show="generalItemInfoForm.category.$error.required && itemInfoSubmitted", translate="required_field")

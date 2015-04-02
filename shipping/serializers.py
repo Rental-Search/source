@@ -3,9 +3,10 @@ from __future__ import absolute_import
 
 from django.utils.translation import gettext as _
 from django.contrib.gis.geos import Point
-from rest_framework.fields import TimeField
 
-from rest_framework.serializers import CharField, BooleanField, DecimalField, IntegerField
+from rest_framework.fields import (
+    CharField, BooleanField, DecimalField, IntegerField, TimeField
+)
 
 from eloue.api import serializers
 
