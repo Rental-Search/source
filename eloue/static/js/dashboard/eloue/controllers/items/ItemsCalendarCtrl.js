@@ -10,13 +10,13 @@ define([
      */
     EloueDashboardApp.controller("ItemsCalendarCtrl", [
         "$scope",
+        "$timeout",
         "$stateParams",
         "Endpoints",
         "BookingsService",
         "UnavailabilityPeriodsService",
-        function ($scope, $stateParams, Endpoints, BookingsService, UnavailabilityPeriodsService) {
+        function ($scope, $timeout, $stateParams, Endpoints, BookingsService, UnavailabilityPeriodsService) {
 
-            $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
             $scope.showUnavailable = true;
             $scope.showBookings = true;
             $scope.bookings = [];
@@ -85,6 +85,11 @@ define([
                     value: Date.today().add(12).months().getMonth() + " " + Date.today().add(12).months().getFullYear()
                 }
             ];
+
+            $timeout(function() {
+                // Set default value.
+                $scope.selectedMonthAndYear = Date.today().getMonth() + " " + Date.today().getFullYear();
+            }, 0);
 
             BookingsService.getBookingsByProduct($stateParams.id).then(function (bookings) {
                 $scope.markListItemAsSelected("item-tab-", "calendar");
