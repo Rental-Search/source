@@ -84,12 +84,6 @@ class EncodedImageField(serializers.ImageField):
                 k: self.to_native(getattr(obj, k))
                 for k in self._generated_image_names
             }
-
-            # FIXME: remove after mass rebuild of all images is done on hosting
-            from eloue.legacy import generate_spec
-            for imagespec in value.values():
-                generate_spec(imagespec)
-
         return value
 
     def to_native(self, value):

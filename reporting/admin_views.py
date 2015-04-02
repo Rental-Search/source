@@ -5,18 +5,15 @@ import qsstats
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.admin.views.decorators import staff_member_required
-
 from django.db.models import Avg, Sum, Q, Count
+from django.shortcuts import get_object_or_404
+
+from django_messages.models import Message
 
 from accounts.models import Patron
 from products.models import Product, CarProduct, RealEstateProduct, Category
 from rent.models import Booking, OwnerComment, BorrowerComment
 from rent.choices import BOOKING_STATE
-
-from django_messages.models import Message
-
-from django.shortcuts import get_object_or_404
-
 
 
 def stats(request):

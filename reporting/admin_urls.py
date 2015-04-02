@@ -1,5 +1,13 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
 from django.conf.urls import patterns, url
-from reporting.admin_views import stats, stats_by_patron, stats_by_product, stats_by_category, stats_by_city, stats_by_patron_detail, stats_by_product_detail, stats_by_category_detail, stats_by_city_detail
+
+from .admin_views import (
+    stats, stats_by_patron, stats_by_product, stats_by_category, stats_by_city,
+    stats_by_patron_detail, stats_by_product_detail, stats_by_category_detail,
+    stats_by_city_detail
+)
 
 
 urlpatterns = patterns('',
