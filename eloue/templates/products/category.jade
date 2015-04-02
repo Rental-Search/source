@@ -25,7 +25,6 @@ block content-homepage
 
       {% cache 43200 'homepage_city_list_static' %}
       section.location-list
-        -var cities_list = [["Location PARIS", "Location MARSEILLE", "Location LYON"], ['Location TOULOUSE', 'Location BORDEAUX', 'Location MONTPELLIER'], ['Location LILLE', 'Location NICE', 'Location NANTES']]
         include ../jade/_location_list
       {% endcache %}
 
