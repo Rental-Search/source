@@ -6,8 +6,8 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
         .block-with-thumbnail
             .col-thumbnail
                 .thumbnail
-                    a(ui-sref="items.info({id: bookingDetails.product.id})", ng-if="currentUser.id == bookingDetails.borrower.id").lg-p
-                    a(href="{{productUrl}}", ng-if="currentUser.id != bookingDetails.borrower.id").lg-p
+                    a(ui-sref="items.info({id: bookingDetails.product.id})", ng-if="currentUser.id == bookingDetails.owner.id").lg-p
+                    a(href="{{productUrl}}", ng-if="currentUser.id != bookingDetails.owner.id").lg-p
                         img(style="background-image: url({{bookingDetails.product.picture}});", width="200")
             .col-exposition
                 .indent-sm-h
