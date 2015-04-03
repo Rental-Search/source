@@ -44,6 +44,7 @@ class Command(BaseCommand):
     base_url = 'http://www.passionloisir.com/album'
 
     total = 0
+    price_found = 0
 
     def _subpage_crawler(self):
         from products.models import Product, Picture, Price
@@ -74,65 +75,59 @@ class Command(BaseCommand):
                         try:
                             product.find('dd')
                             description = product.find('dd').text
+                            # print description
                         except:
                             description = ''
                         
-
+                        # long way to go to get the price...
                         try:
-                            price = re.search('([0-9,]+(\.[0-9]+)?\W', description)
-                            # price = price.group(1)
-                            print price
+                            price = re.search(u'[0-9]+(\.[0-9]+)?\s?\u20AC', description)
+                            price = price.group(0)
+                            price = _to_decimal(price)
+                            self.price_found += 1
                         except:
-                            # try:
-                            #     price = re.search('([0-9,]+(\.[0-9]+)?\W)', infosProduits)
-                            #     print price.group(1)
-                            # except:
-                            #     print 'NO PRICE'
-                            #     pass
-                            print 'NO PRICE'
+                            try:
+                                price = re.search(u'[0-9]+(\.[0-9]+)?\s?\u20AC', infosProduits)
+                                price = price.group(0)
+                                price = _to_decimal(price)
+                                self.price_found += 1
+                            except:
+                                pass
                             pass
-                        # print '%s\n%s\n%s\n%s\n\n' % (infosProduits, self.base_url+family, description, yop.group(1))
-
-                        # try:
-                        #     price = _to_decimal(price.group(0))
-                        #     # print price
-                        # except:
-                        #     print 'NO PRICE'
-                        #     pass
                         
-                        # summary = infosProduits
-                        # deposit_amount = 0.0
+                        summary = infosProduits
+                        deposit_amount = 0.0
 
-                        # # Create the product
-                        # from products.models import Category, Price
-                        # from products.choices import UNIT
-                        # try:
-                        #     product = Product.objects.create(
-                        #         summary=summary, description=description, 
-                        #         deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-                        #         category=Category.objects.get(slug=category_mapping[family]))
+                        # Create the product
+                        from products.models import Category, Price
+                        from products.choices import UNIT
+                        try:
+                            product = Product.objects.create(
+                                summary=summary, description=description, 
+                                deposit_amount=deposit_amount, address=self.address, owner=self.patron,
+                                category=Category.objects.get(slug=category_mapping[family]))
 
-                        #     try:
-                        #         with closing(urlopen(image_url)) as image:
-                        #             product.pictures.add(Picture.objects.create(
-                        #                 image=uploadedfile.SimpleUploadedFile(
-                        #                     name='img', content=image.read())
-                        #             )
-                        #         )
-                        #     except HTTPError as e:
-                        #         print '\nerror loading image for object at url:', self.base_url + product_url
+                            try:
+                                with closing(urlopen(image_url)) as image:
+                                    product.pictures.add(Picture.objects.create(
+                                        image=uploadedfile.SimpleUploadedFile(
+                                            name='img', content=image.read())
+                                    )
+                                )
+                            except HTTPError as e:
+                                print '\nerror loading image for object at url:', self.base_url + product_url
 
-                        #     # Add the price to the product
-                        #     try:
-                        #         price = _to_decimal(description)
-                        #         product.prices.add(Price(amount=price, unit=UNIT.DAY))
-                        #         sys.stdout.flush()
-                        #     except:
-                        #         print 'PRICE ERROR'
-                        #         pass
-                        # except:
-                        #     print 'CANNOT CREATE THE PRODUCT'
-                        #     pass
+                            # Add the price to the product
+                            try:
+                                price = _to_decimal(description)
+                                product.prices.add(Price(amount=price, unit=UNIT.DAY))
+                                sys.stdout.flush()
+                            except:
+                                print 'PRICE ERROR'
+                                pass
+                        except:
+                            print 'CANNOT CREATE THE PRODUCT'
+                            pass
 
     def handle(self, *args, **options):
         if len(args) > 1:
@@ -197,3 +192,4 @@ class Command(BaseCommand):
             if thread is not threading.currentThread():
                 thread.join()
         print '\n\nTOTAL NB OF PRODUCTS = %s' % self.total    
+        print '\n NB OF PRICES = %s' % self.price_found

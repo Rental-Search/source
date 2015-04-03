@@ -10,27 +10,27 @@ from contextlib import closing
 
 category_mapping = { 
     '/effetdisco1/': 'jeu-de-lumiere',
-    # '/effetdiscoleds/': 'jeu-de-lumiere',
-    # '/effetsdivers/':'jeu-de-lumiere',
-    # '/projecteur/':'projecteur',
-    # '/laserstroboscope/':'jeu-de-lumiere',
-    # '/bouleafacettes/':'jeu-de-lumiere',
-    # '/machine/':'machine-neige',
-    # '/structurespieds/':'equipement-dj',
-    # '/controleslumiere/':'jeu-de-lumiere',
-    # '/amplification/':'amplificateur',
-    # '/enceintes/':'enceinte-dj',
-    # '/tabledemixage/':'equipement-dj',
-    # '/platinedj/':'equipement-dj',
-    # '/micro/':'micro-filaire',
-    # '/casques/':'casques-dj',
-    # '/peripherique/':'equipement-dj',
-    # '/videoprojecteur/':'projecteur',
-    # '/ecranblancprojection/':'projecteur',
-    # '/sonoconference/': 'enceinte-dj',
-    # '/effetsspeciaux/':'jeu-de-lumiere',
-    # '/packsono1/':'enceinte-dj',
-    # '/packdjmix/':'equipement-dj',
+    '/effetdiscoleds/': 'jeu-de-lumiere',
+    '/effetsdivers/':'jeu-de-lumiere',
+    '/projecteur/':'projecteur',
+    '/laserstroboscope/':'jeu-de-lumiere',
+    '/bouleafacettes/':'jeu-de-lumiere',
+    '/machine/':'machine-neige',
+    '/structurespieds/':'equipement-dj',
+    '/controleslumiere/':'jeu-de-lumiere',
+    '/amplification/':'amplificateur',
+    '/enceintes/':'enceinte-dj',
+    '/tabledemixage/':'equipement-dj',
+    '/platinedj/':'equipement-dj',
+    '/micro/':'micro-filaire',
+    '/casques/':'casques-dj',
+    '/peripherique/':'equipement-dj',
+    '/videoprojecteur/':'projecteur',
+    '/ecranblancprojection/':'projecteur',
+    '/sonoconference/': 'enceinte-dj',
+    '/effetsspeciaux/':'jeu-de-lumiere',
+    '/packsono1/':'enceinte-dj',
+    '/packdjmix/':'equipement-dj',
     }
 
 
@@ -102,7 +102,11 @@ class Command(BaseCommand):
 
 
             # Format the title
-            summary = product_soup.find('h2').text
+            try:
+                summary = product_soup.find('h2').text
+            except:
+                summary = ''
+                pass
 
             deposit_amount = 0.0
 
@@ -141,7 +145,7 @@ class Command(BaseCommand):
             thread_num = int(args[0])
             print type(thread_num)
         except:
-            thread_num = 2
+            thread_num = 4
 
         from accounts.models import Patron, Address
         self.product_links = {}
@@ -163,27 +167,27 @@ class Command(BaseCommand):
         # Get families list of products
         self.product_families = [
         '/effetdisco1/',
-        # '/effetdiscoleds/',
-        # '/effetsdivers/',
-        # '/projecteur/',
-        # '/laserstroboscope/',
-        # '/bouleafacettes/',
-        # '/machine/',
-        # '/structurespieds/',
-        # '/controleslumiere/',
-        # '/amplification/',
-        # '/enceintes/',
-        # '/tabledemixage/',
-        # '/platinedj/',
-        # '/micro/',
-        # '/casques/',
-        # '/peripherique/',
-        # '/videoprojecteur/',
-        # '/ecranblancprojection/',
-        # '/sonoconference/',
-        # '/effetsspeciaux/',
-        # '/packsono1/',
-        # '/packdjmix/',
+        '/effetdiscoleds/',
+        '/effetsdivers/',
+        '/projecteur/',
+        '/laserstroboscope/',
+        '/bouleafacettes/',
+        '/machine/',
+        '/structurespieds/',
+        '/controleslumiere/',
+        '/amplification/',
+        '/enceintes/',
+        '/tabledemixage/',
+        '/platinedj/',
+        '/micro/',
+        '/casques/',
+        '/peripherique/',
+        '/videoprojecteur/',
+        '/ecranblancprojection/',
+        '/sonoconference/',
+        '/effetsspeciaux/',
+        '/packsono1/',
+        '/packdjmix/',
         ]
         # self.product_families = self.soup.findAll('a', href=re.compile('famille'))
         
