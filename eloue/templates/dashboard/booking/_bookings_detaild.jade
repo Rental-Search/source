@@ -122,7 +122,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : rejectingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-gray-light-hover Refuser
                     a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : acceptingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-success-hover Accepter la Réservation
                     a(href="", ng-click="showCancelConfirm()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')", ng-class="{ loading : cancellingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-gray-light-hover Annuler
-                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing' || (isOwner && (bookingDetails.state=='incident'))", ng-disabled="submitInProgress").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
+                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing'", ng-disabled="submitInProgress").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
 
         .block-with-thumbnail.notification.indent-md-b(ng-show="bookingDetails.shipping.enabled")
           .col-thumbnail
@@ -157,15 +157,15 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                                 +average-rate-editable("comment.rate")
                             {% verbatim %}
                             button(type="submit", class="{{submitInProgress ? 'loading' : ''}}", ng-disabled="submitInProgress").btn-inline.bg-success-hover.text-white Envoyer
-        .block-with-thumbnail.text-gray.notification(ng-show="showIncidentForm")
-            .col-thumbnail
-                .thumbnail: i.icon-3x.flaticon.solid.pencil
-            .col-exposition
-                form(name="incidentForm", ng-submit="postIncident()")
-                    fieldset(data-ng-disabled="submitInProgress")
-                        textarea.expand(name="incident.description", rows="4", placeholder="Décrire l'incident...", ng-model="incident.description", required)
-                        p.text-right.indent-sm-t
-                            button(type="submit", class="{{submitInProgress ? 'loading' : ''}}", ng-disabled="submitInProgress").btn-inline.bg-success-hover.text-white Envoyer
+        //.block-with-thumbnail.text-gray.notification(ng-show="showIncidentForm")
+        //    .col-thumbnail
+        //        .thumbnail: i.icon-3x.flaticon.solid.pencil
+        //    .col-exposition
+        //        form(name="incidentForm", ng-submit="postIncident()")
+        //            fieldset(data-ng-disabled="submitInProgress")
+        //                textarea.expand(name="incident.description", rows="4", placeholder="Décrire l'incident...", ng-model="incident.description", required)
+        //                p.text-right.indent-sm-t
+        //                    button(type="submit", class="{{submitInProgress ? 'loading' : ''}}", ng-disabled="submitInProgress").btn-inline.bg-success-hover.text-white Envoyer
         .block-with-thumbnail.notification.indent-md-v(ng-show="showIncidentDescription")
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
@@ -186,6 +186,8 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     .col-xs-6
                       button(type="button", data-dismiss="modal").btn.bg-success
                         | Non
+include _report_incendent
+
 //-
   section.text-gray-strong.bg-lite
     ul.section-content.booking-activity-feed
