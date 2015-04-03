@@ -84,11 +84,13 @@ class Command(BaseCommand):
                 image_url = product_soup.find('a', href=re.compile('.+\.jpg')).get('href')
                 image_url = product_url.rsplit('/', 1)[0] + '/' + image_url
             except:
-                print 'NO IMG'
                 pass
 
             # Get the title
-            infosProduits = product_soup.find('td', style="text-align:justify").text
+            try:
+                infosProduits = product_soup.find('h2').text
+            except:
+                infosProduits = ''
             # print infosProduits
 
             # Get the price
@@ -98,17 +100,19 @@ class Command(BaseCommand):
 
 
             # Get the description
-            description = ''
+            try:
+                description = product_soup.find('td', style='text-align:justify').text
+            except:
+                print 'no description'
+                pass
 
 
             # Format the title
-            try:
-                summary = product_soup.find('h2').text
-            except:
-                summary = ''
-                pass
+            summary = infosProduits
 
             deposit_amount = 0.0
+
+            # print 'summary : %s\n description : %s\n' % (summary, description)
 
             # Create the product
             try:
