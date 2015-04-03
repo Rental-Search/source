@@ -18,32 +18,32 @@
                     .text-danger(data-ng-show="itemInfoForm.model.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-show="isAuto")
                 td Nombre de place
-                td
+                td.without-search
                     select(ng-model="product.seat_number", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in seatNumberOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Nombre de porte
-                td
+                td.without-search
                     select(ng-model="product.door_number", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in doorNumberOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Énergie
-                td
+                td.without-search
                     select(ng-model="product.fuel", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in fuelOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Boite de vitesse
-                td
+                td.without-search
                     select(ng-model="product.transmission", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in transmissionOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Kilométrage
-                td
+                td.without-search
                     select(ng-model="product.mileage", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in mileageOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isAuto")
                 td Consommation
-                td
+                td.without-search
                     select(ng-model="product.consumption", eloue-chosen, data-ng-disabled="submitInProgress")
                         option(ng-repeat="item in consumptionOptions", value="{{item.id}}")  {{item.name}}
             tr(ng-if="isAuto")
@@ -105,7 +105,7 @@
                     input(type="checkbox", ng-model="product.audio_input")
             tr(ng-if="isAuto")
                 td CV fiscaux *
-                td
+                td.without-search
                     select(ng-model="product.tax_horsepower", name="tax_horsepower", eloue-chosen, data-ng-disabled="submitInProgress", required)
                         option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
                     .text-danger(data-ng-show="itemInfoForm.tax_horsepower.$error.required && !!itemInfoSubmitted", translate="required_field")
@@ -122,12 +122,12 @@
                     .text-danger(data-ng-show="itemInfoForm.first_registration_date.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-show="isRealEstate")
                 td Capacité
-                td
+                td.without-search
                     select(ng-model="product.capacity", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isRealEstate")
                 td Type de logement
-                td
+                td.without-search
                     select(ng-model="product.private_life", eloue-chosen, data-ng-disabled="submitInProgress").table-form
                         option(ng-repeat="item in privateLifeOptions", value="{{item.id}}") {{item.name}}
             tr(ng-show="isRealEstate")
