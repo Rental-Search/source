@@ -6,6 +6,7 @@ from decimal import Decimal as D
 
 from backports.ssl_match_hostname import match_hostname
 from django.conf import settings
+from django.utils.translation import ugettext as _
 
 import abstract_payment
 
@@ -33,7 +34,7 @@ TYPES = {
 class PayboxException(abstract_payment.PaymentException):
 
     def __unicode__(self):
-        return u"PayboxError with code {0} and message \"{1}\"".format(*self.args)
+        return _(u"PayboxError with code {0} and message \"{1}\"").format(*self.args)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
