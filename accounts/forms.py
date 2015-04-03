@@ -661,7 +661,6 @@ class CreditCardForm(forms.ModelForm):
     expires = ExpirationField(label=_(u'Date d\'expiration'))
     holder_name = forms.CharField(label=_(u'Titulaire de la carte'))
 
-
     def __init__(self, *args, **kwargs):
         super(CreditCardForm, self).__init__(*args, **kwargs)
         # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
@@ -681,13 +680,19 @@ class CreditCardForm(forms.ModelForm):
         )
 
     def clean(self):
-        if self.cleaned_data.get('card_number'):
+        cleaned_data = super(CreditCardForm, self).clean()
+        try:
+            card_number = cleaned_data['card_number']
+            expires = cleaned_data['expires']
+            cvv = self.cleaned_data['cvv']
+        except KeyError:
+            pass
+        else:
+            # attempt to verify the credit card information through the payment API
             try:
                 pm = PayboxManager()
-                self.cleaned_data['masked_number'] = mask_card_number(self.cleaned_data['card_number'])
-                pm.authorize(self.cleaned_data['card_number'],
-                    self.cleaned_data['expires'], self.cleaned_data['cvv'], 1, 'verification'
-                )
+                self.cleaned_data['masked_number'] = mask_card_number(card_number)
+                pm.authorize(card_number, expires, cvv, 1, 'verification')
             except PayboxException as err:
                 raise forms.ValidationError(_(u'La validation de votre carte a échoué: ({0}) {1}').format(*err.args))
         return self.cleaned_data

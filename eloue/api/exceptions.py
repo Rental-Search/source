@@ -13,7 +13,10 @@ from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
+
 from suds import WebFault
+
+from payments.abstract_payment import PaymentException as abstract_payment__PaymentException
 
 
 class ErrorGroupEnum(object):
@@ -214,6 +217,10 @@ def api_exception_handler(exception):
         error = PermissionErrorEnum.PERMISSION_DENIED
         exception = PermissionException(
             {'code': error[0], 'description': error[1]})
+    elif isinstance(exception, abstract_payment__PaymentException):
+        error = PaymentErrorEnum.FAILED_PAYMENT
+        exception = PaymentException(
+            {'code': error[0], 'description': error[1], 'detail': smart_unicode(exception)})
     # ... and also python-requests exceptions
     elif isinstance(exception, RequestException) and exception.response:
         error = ServerErrorEnum.REQUEST_FAILED

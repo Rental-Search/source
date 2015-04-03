@@ -357,7 +357,6 @@ import django_filters
 from rent import serializers, models
 from eloue.api import viewsets, filters, mixins, exceptions
 from accounts.serializers import CreditCardSerializer, BookingPayCreditCardSerializer
-from payments import abstract_payment
 
 
 class BookingFilterSet(filters.FilterSet):
@@ -418,14 +417,7 @@ class BookingViewSet(mixins.SetOwnerMixin, viewsets.ImmutableModelViewSet):
         if not settings.TEST_MODE:
             payment = PayboxDirectPlusPaymentInformation.objects.create(creditcard=credit_card)
             obj.payment = payment
-        try:
-            return self._perform_transition(request, instance=obj, action='preapproval', cvv=credit_card.cvv)
-        except abstract_payment.PaymentException as e:
-            raise exceptions.PaymentException({
-                'code': exceptions.PaymentErrorEnum.FAILED_PAYMENT[0],
-                'description': exceptions.PaymentErrorEnum.FAILED_PAYMENT[1],
-                'detail': str(e)
-            })
+        return self._perform_transition(request, instance=obj, action='preapproval', cvv=credit_card.cvv)
 
     @action(methods=['put'])
     @user_required(attname='owner')
