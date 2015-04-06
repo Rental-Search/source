@@ -81,6 +81,7 @@ define([
                 // Load comments
                 CommentsService.getCommentList($stateParams.uuid).then(function (commentList) {
                     $scope.commentList = commentList;
+                    $scope.comment = commentList[0];
                     $scope.showCommentForm = $scope.commentList.length === 0 && $scope.bookingDetails.state === "ended";
                 });
 
