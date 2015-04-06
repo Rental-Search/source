@@ -684,7 +684,7 @@ class CreditCardForm(forms.ModelForm):
         try:
             card_number = cleaned_data['card_number']
             expires = cleaned_data['expires']
-            cvv = self.cleaned_data['cvv']
+            cvv = cleaned_data['cvv']
         except KeyError:
             pass
         else:
