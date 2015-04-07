@@ -46,7 +46,8 @@ define([
         "PatronShippingPointsService",
         "ToDashboardRedirectService",
         "ScriptTagService",
-        function ($scope, $window, $location, $timeout, Endpoints, CivilityChoices, ProductsService, MessageThreadsService, ProductRelatedMessagesService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService, ScriptTagService) {
+        "AvailableHours",
+        function ($scope, $window, $location, $timeout, Endpoints, CivilityChoices, ProductsService, MessageThreadsService, ProductRelatedMessagesService, UsersService, AuthService, AddressesService, CreditCardsService, BookingsService, PhoneNumbersService, CategoriesService, UtilsService, ShippingPointsService, ProductShippingPointsService, PatronShippingPointsService, ToDashboardRedirectService, ScriptTagService, AvailableHours) {
 
             $scope.creditCard = {
                 id: null,
@@ -113,32 +114,15 @@ define([
             };
             $scope.productId = $scope.getProductIdFromUrl();
 
-            $scope.hours = [
-                {"label": "00h", "value": "00:00:00"},
-                {"label": "01h", "value": "01:00:00"},
-                {"label": "02h", "value": "02:00:00"},
-                {"label": "03h", "value": "03:00:00"},
-                {"label": "04h", "value": "04:00:00"},
-                {"label": "05h", "value": "05:00:00"},
-                {"label": "06h", "value": "06:00:00"},
-                {"label": "07h", "value": "07:00:00"},
-                {"label": "08h", "value": "08:00:00"},
-                {"label": "09h", "value": "09:00:00"},
-                {"label": "10h", "value": "10:00:00"},
-                {"label": "11h", "value": "11:00:00"},
-                {"label": "12h", "value": "12:00:00"},
-                {"label": "13h", "value": "13:00:00"},
-                {"label": "14h", "value": "14:00:00"},
-                {"label": "15h", "value": "15:00:00"},
-                {"label": "16h", "value": "16:00:00"},
-                {"label": "17h", "value": "17:00:00"},
-                {"label": "18h", "value": "18:00:00"},
-                {"label": "19h", "value": "19:00:00"},
-                {"label": "20h", "value": "20:00:00"},
-                {"label": "21h", "value": "21:00:00"},
-                {"label": "22h", "value": "22:00:00"},
-                {"label": "23h", "value": "23:00:00"}
-            ];
+            $scope.hours = AvailableHours;
+
+            $scope.findHour = function(hourValue) {
+                for (var i = 0; i < $scope.hours.length; i++) {
+                    if ($scope.hours[i].value === hourValue) {
+                        return $scope.hours[i];
+                    }
+                }
+            };
 
             var queryParams = UtilsService.getQueryParams();
 
@@ -147,9 +131,9 @@ define([
              */
             $scope.bookingDetails = {
                 "fromDate": queryParams.date_from ? queryParams.date_from : Date.today().add(1).days().toString("dd/MM/yyyy"),
-                "fromHour": $scope.hours[8],
+                "fromHour": queryParams.hour_from ? $scope.findHour(queryParams.hour_from) : $scope.hours[8],
                 "toDate": queryParams.date_to ? queryParams.date_to : Date.today().add(2).days().toString("dd/MM/yyyy"),
-                "toHour": $scope.hours[9]
+                "toHour": queryParams.hour_to ? $scope.findHour(queryParams.hour_to) :  $scope.hours[9]
             };
             var fromDateSelector = $("input[name='fromDate']"), toDateSelector = $("input[name='toDate']");
             fromDateSelector.val($scope.bookingDetails.fromDate).datepicker({
@@ -231,14 +215,6 @@ define([
                         $scope.handleResponseErrors(error);
                     }
                 );
-            };
-
-            $scope.findHour = function(hourValue) {
-                for (var i = 0; i < $scope.hours.length; i++) {
-                    if ($scope.hours[i].value === hourValue) {
-                        return $scope.hours[i];
-                    }
-                }
             };
 
             /**
@@ -752,5 +728,9 @@ define([
             };
             $scope.applyDatePicker("date_of_birth");
             $scope.applyDatePicker("drivers_license_date");
+
+            if (queryParams.show_booking == 'true') {
+                $scope.openModal('booking');
+            }
         }]);
 });
