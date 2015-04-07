@@ -75,13 +75,17 @@ define([
                     }
                 });
 
+                $scope.comment = {rate: 0};
+
                 $scope.markListItemAsSelected("booking-", $stateParams.uuid);
                 // Initiate custom scrollbars
                 $scope.initCustomScrollbars();
                 // Load comments
                 CommentsService.getCommentList($stateParams.uuid).then(function (commentList) {
                     $scope.commentList = commentList;
-                    $scope.comment = commentList[0];
+                    if (commentList.length > 0) {
+                        $scope.comment = commentList[0];
+                    }
                     $scope.showCommentForm = $scope.commentList.length === 0 && $scope.bookingDetails.state === "ended";
                 });
 
@@ -237,11 +241,13 @@ define([
             $scope.postComment = function () {
                 $scope.submitInProgress = true;
                 CommentsService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).then(
-                    function () {
+                    function (result) {
                         $("#comment-and-rank").modal("hide");
                         $scope.showNotification("comment", "post", true);
                         $scope.showCommentForm = false;
                         $scope.submitInProgress = false;
+                        $scope.commentList = [result];
+                        $scope.comment = result;
                     },
                     function (error) {
                         $scope.handleResponseErrors(error, "comment", "post");
