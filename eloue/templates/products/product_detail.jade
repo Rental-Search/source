@@ -12,9 +12,8 @@
         a(href="#carousel-product", role="button", data-slide="next").right.carousel-control
           i.flaticon.solid.right-2
       .items-thumbnail-inner
-        {% for picture in pictures %}
-        div: a.items-thumbnail(href="#"): img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}")
-        {% endfor %}
+        each picture, index in product_object.pictures.all
+            div: a.items-thumbnail(href="#carousel-product", data-slide-to="{{ index }}"): img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}")
       {% else %}
       .carousel
         .carousel-inner

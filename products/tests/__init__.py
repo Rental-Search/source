@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from products.tests.api import *
-from products.tests.models import *
-from products.tests.price import *
-from products.tests.views import *
-from products.tests.wizard import *
-from products.tests.fields import *
-from products.tests.api2 import *
+from __future__ import absolute_import
+#from .api import *
+#from .models import *
+#from .price import *
+#from .views import *
+#from .fields import *
+from .api2 import *

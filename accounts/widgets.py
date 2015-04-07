@@ -1,23 +1,60 @@
 # -*- coding: utf-8 -*-
-from django.forms.widgets import RadioFieldRenderer, RadioInput, CheckboxInput
-from django.utils.encoding import force_unicode
-from django.utils.safestring import mark_safe
+from datetime import date
+
+from django import forms
+from django.utils.translation import ugettext as _
+
+MONTH_CHOICES = (
+    ('', _(u'Mois')),
+    ('01', '01'),
+    ('02', '02'),
+    ('03', '03'),
+    ('04', '04'),
+    ('05', '05'),
+    ('06', '06'),
+    ('07', '07'),
+    ('08', '08'),
+    ('09', '09'),
+    ('10', '10'),
+    ('11', '11'),
+    ('12', '12')
+)
+
+YEAR_CHOICES = [('', _(u'Année'))] + [(lambda x: (str(x)[2:], x))(date.today().year+y) for y in xrange(11)] 
 
 
-class ParagraphRadioFieldRenderer(RadioFieldRenderer):
-    def __iter__(self):
-        for i, choice in enumerate(self.choices):
-            yield RadioInput(self.name, self.value, self.attrs.copy(), choice, i)
+class ExpirationWidget(forms.MultiWidget):
+    def __init__(self):
+        widgets = (
+            forms.Select(choices=MONTH_CHOICES),
+            forms.Select(choices=YEAR_CHOICES),
+            )
+        super(ExpirationWidget, self).__init__(widgets)
     
-    def __getitem__(self, idx):
-        choice = self.choices[idx]  # Let the IndexError propogate
-        return RadioInput(self.name, self.value, self.attrs.copy(), choice, idx)
-    
-    def render(self):
-        return mark_safe(u'\n'.join([u'%s' % force_unicode(w) for w in self]))
+    def decompress(self, value):
+        if value is None:
+            return (None, None)
+        return (value[:2], value[2:])
+
+class HiddenExpirationWidget(ExpirationWidget):
+    def __init__(self):
+        widgets = (
+            forms.Select(choices=MONTH_CHOICES),
+            forms.Select(choices=YEAR_CHOICES),
+            )
+        super(ExpirationWidget, self).__init__(widgets)
 
 
-class CommentedCheckboxInput(CheckboxInput):
+class DateSelectWidget(forms.MultiWidget):
+    def decompress(self, value):
+        if value:
+            return (value.day, value.month, value.year)
+        return (None, None, None)
+    def __call__(self):
+        return self
+
+
+class CommentedCheckboxInput(forms.CheckboxInput):
 
     def __init__(self, info_text, attrs=None, check_test=bool):
         super(CommentedCheckboxInput, self).__init__(attrs, check_test)
@@ -27,4 +64,3 @@ class CommentedCheckboxInput(CheckboxInput):
     def render(self, name, value, attrs=None):
         from django.utils.safestring import mark_safe
         return mark_safe('<label class="checkbox">' + super(CommentedCheckboxInput, self).render(name, value, attrs) + '\t' + self.info_text + '</label>')
-    

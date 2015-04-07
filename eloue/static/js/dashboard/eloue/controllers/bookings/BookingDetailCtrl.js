@@ -27,11 +27,11 @@ define([
         "ShippingsService",
         "ProductShippingPointsService",
         "PatronShippingPointsService",
-        function ($scope, $stateParams, $window, Endpoints, BookingsService, CommentsService, PhoneNumbersService, SinistersService, UsersService, ShippingsService, ProductShippingPointsService, PatronShippingPointsService) {
+        "ProductsService",
+        function ($scope, $stateParams, $window, Endpoints, BookingsService, CommentsService, PhoneNumbersService, SinistersService, UsersService, ShippingsService, ProductShippingPointsService, PatronShippingPointsService, ProductsService) {
 
             // Initial comment data
             $scope.comment = {rate: 0};
-            $scope.showIncidentForm = false;
             $scope.showIncidentDescription = false;
             $scope.userInfo = {};
 
@@ -129,6 +129,10 @@ define([
                         }
                     });
                 }
+
+                ProductsService.getAbsoluteUrl($scope.bookingDetails.product.id).then(function (result) {
+                    $scope.productUrl = result.url;
+                });
             };
 
             $scope.loadPhoneNumber = function (phoneObj) {
@@ -214,6 +218,10 @@ define([
                 $("#confirm").modal();
             };
 
+            $scope.showComment = function() {
+                $("#comment-and-rank").modal();
+            };
+
             $scope.cancelBooking = function () {
                 $scope.submitInProgress = true;
                 $scope.cancellingInProgress = true;
@@ -226,7 +234,7 @@ define([
             };
 
             $scope.declareIncident = function () {
-                $scope.showIncidentForm = true;
+                $("#report-incendent").modal();
             };
 
             // Method to post new comment
@@ -234,6 +242,7 @@ define([
                 $scope.submitInProgress = true;
                 CommentsService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).then(
                     function () {
+                        $("#comment-and-rank").modal("hide");
                         $scope.showNotification("comment", "post", true);
                         $scope.showCommentForm = false;
                         $scope.submitInProgress = false;
@@ -249,8 +258,8 @@ define([
                 $scope.submitInProgress = true;
                 BookingsService.postIncident($stateParams.uuid, $scope.incident.description).then(
                     function () {
+                        $("#report-incendent").modal("hide");
                         $scope.showNotification("sinister", "post", true);
-                        $scope.showIncidentForm = false;
                         $scope.reloadPage();
                     },
                     function (error) {
