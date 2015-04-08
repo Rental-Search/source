@@ -9,9 +9,9 @@ block append styles
 
 block content-homepage
     article
-      {% cache 43200 'homepage_banner_static' %}
+      {% cache 43200 'homepage_banner_static' category.slug %}
       section.banner
-        include ../jade/_homepage_carousel_banner
+        .item(style="{% if category.profile %}background-image: url({{ category.profile.url }}){% endif %}")
         //include ../jade/_category_menu
       {% endcache %}
 

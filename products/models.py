@@ -644,6 +644,10 @@ class Picture(models.Model):
         super(Picture, self).delete(*args, **kwargs)
     
 
+def category_upload_to(instance, filename):
+    return 'pictures/categories/%s.jpg' % uuid.uuid4().hex
+
+
 class Category(MPTTModel):
     """A category"""
     parent = models.ForeignKey('self', related_name='childrens', blank=True, null=True)
@@ -657,6 +661,25 @@ class Category(MPTTModel):
     description = models.TextField(blank=True)
     header = models.TextField(blank=True)
     footer = models.TextField(blank=True)
+    image = models.ImageField(null=True, blank=True, upload_to=category_upload_to)
+
+    profile = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=1920, height=400),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
+
+    thumbnail = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=226, height=159),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
 
     on_site = CurrentSiteManager()
     objects = models.Manager()
