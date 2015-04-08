@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from collections import OrderedDict
 from django.template import Library
 from django.utils.itercompat import is_iterable
 
