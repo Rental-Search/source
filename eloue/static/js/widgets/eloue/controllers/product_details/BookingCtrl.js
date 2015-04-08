@@ -375,7 +375,11 @@ define([
 
             $scope.saveCreditCard = function () {
                 CreditCardsService.saveCard($scope.creditCard).then(
-                    $scope.requestBooking(),
+                    function(result) {
+                        $scope.creditCard.id = result.id;
+                        $scope.creditCard.masked_number = result.masked_number;
+                        $scope.requestBooking();
+                    },
                     $scope.handleResponseErrors
                 );
             };
