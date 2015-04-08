@@ -194,6 +194,22 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         return super(HomepageView, self).get(request, *args, **kwargs)
 
 
+class CategoryDetailView(NavbarCategoryMixin, BreadcrumbsMixin, DetailView):
+    model = Category
+    # hardcoded for e-loue
+    queryset = Category.on_site.filter(pk__in=settings.NAVBAR_CATEGORIES[:8])
+    template_name = 'products/category.jade'
+
+    def get_context_data(self, **kwargs):
+        category_slugs = [x.slug for x in self.object.get_descendants(include_self=True)]
+        context = {
+            'products_on_category': product_search.filter(categories__in=category_slugs),
+        }
+        context.update(super(CategoryDetailView, self).get_context_data(**kwargs))
+
+        return context
+
+
 class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
     template_name = 'products/product_list.jade'
     context_object_name = 'product_list'

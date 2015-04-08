@@ -28,7 +28,8 @@ block content-homepage
         include ../jade/_location_list
       {% endcache %}
 
-      {% cache 43200 'category_homepage_info_static' %}
+      {% cache 43200 'category_homepage_info_static' category.slug %}
       section.text-info.framing
-        include _text_info
+        .container
+          .text-info__paragraph {{ category.footer|safe }}
       {% endcache %}
