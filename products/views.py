@@ -356,7 +356,7 @@ class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
         context = super(PublishItemView, self).get_context_data(**kwargs)
         publish_categories = getattr(settings, 'PUBLISH_CATEGORIES', tuple())
         if publish_categories:
-            context['publish_category_list'] = publish_categories,
+            context['publish_category_list'] = publish_categories
         return context
 
 
