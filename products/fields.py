@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 import datetime
+import re
 
 from django.db import models
 from django.core import exceptions
 from django import forms
+
+old_plate_re = re.compile(r'^(\d{1,4})\W*([a-zA-Z]{1,3})\W*(\d{2}|2A|2B)$')
+new_plate_re = re.compile(r'^([a-zA-Z]{2})\W*(\d{3})\W*([a-zA-Z]{2})$')
+
 
 class SimpleDate(int):
     def __new__(cls, value):

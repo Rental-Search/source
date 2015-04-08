@@ -36,7 +36,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             if ((!formErrors[formTag] || (!formErrors[formTag].message && !formErrors[formTag].description))) {
                 return undefined;
             }
-            return {message: formErrors[formTag].message, description: formErrors[formTag].description};
+            return {message: formErrors[formTag].message, description: formErrors[formTag].description, errors: formErrors[formTag].fields};
         };
         serverValidationService.getFieldError = function (fieldName, formTag) {
             if (!formTag) {

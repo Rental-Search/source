@@ -65,7 +65,7 @@ def convert_to_realestateproduct(modeladmin, request, queryset):
     return redirect('admin:products_realestateproduct_change', realestateproduct.pk)
 convert_to_realestateproduct.short_description = "Convert selected products to RealEstateProduct"
 
-class ProductAdmin(CurrentSiteAdmin):
+class ProductCurrentSiteAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
@@ -76,7 +76,21 @@ class ProductAdmin(CurrentSiteAdmin):
     ordering = ['-created_at']
     list_per_page = 20
     form = ProductAdminForm
-    actions = [convert_to_carproduct, convert_to_realestateproduct]  
+
+
+class ProductAdmin(ProductCurrentSiteAdmin):
+    date_hierarchy = 'created_at'
+    search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email']
+    inlines = [PictureInline, PropertyValueInline, PriceInline]
+    raw_id_fields = ("owner", "address", "phone")
+    list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
+    list_filter = ('shipping', 'is_archived', 'is_allowed', 'category')
+    list_editable = ('category',)
+    ordering = ['-created_at']
+    list_per_page = 20
+    form = ProductAdminForm
+    actions = [convert_to_carproduct, convert_to_realestateproduct]
+
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'category':
             kwargs['form_class'] = TreeNodeChoiceField
@@ -89,9 +103,8 @@ class ProductAdmin(CurrentSiteAdmin):
         qs = super(ProductAdmin, self).queryset(request)
         return qs.filter(carproduct=None, realestateproduct=None)
 
-class RealEstateProductAdmin(CurrentSiteAdmin):
-    list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at', 'modified_at')
-    inlines = [PictureInline, PropertyValueInline, PriceInline]
+
+class RealEstateProductAdmin(ProductCurrentSiteAdmin):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'category':
@@ -101,9 +114,7 @@ class RealEstateProductAdmin(CurrentSiteAdmin):
             kwargs['queryset'] = Category.tree.get(name=u'Location saisonnière').get_descendants()
         return super(RealEstateProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
-class CarProductAdmin(CurrentSiteAdmin):
-    list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'is_allowed', 'created_at', 'modified_at')
-    inlines = [PictureInline, PropertyValueInline, PriceInline]
+class CarProductAdmin(ProductCurrentSiteAdmin):
     
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'category':

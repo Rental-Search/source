@@ -204,6 +204,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
     @method_decorator(vary_on_cookie)
     def dispatch(self, request, urlbits=None, sqs=None, **kwargs):
         self.breadcrumbs = self.get_breadcrumbs(request)
+        page = None
         urlbits = filter(None, urlbits.split('/')[::-1]) if urlbits else []
         while urlbits:
             bit = urlbits.pop()
@@ -248,6 +249,11 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                     'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
                     'url': item.get_absolute_url(), 'facet': True
                 }
+        # Django 1.5+ ignore *args and **kwargs in View.dispatch(),
+        # and collects "page" only from URLconf and from request.GET
+        # which is not our case. Force update self.kwargs here.
+        if page:
+            self.kwargs.update({'page': page})
         return super(ProductListView, self).dispatch(request, sqs=sqs, **kwargs)
 
     @method_decorator(cache_page(900)) # TBD: 15 minutes of caching for search results - is it OK?

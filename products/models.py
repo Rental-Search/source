@@ -126,7 +126,7 @@ class Product(models.Model):
         qs = self.product2category_set.all().select_related('category')
         if settings.DEBUG:
             category_count = qs.count()
-            assert category_count == 1, 'product_id: %d; category_count: %d; site_id: %d' % (self.id, category_count, Site.objects.get_current().id)
+            # assert category_count == 1, 'product_id: %d; category_count: %d; site_id: %d' % (self.id, category_count, Site.objects.get_current().id)
         return qs[0].category
 
     @permalink

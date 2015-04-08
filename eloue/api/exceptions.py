@@ -13,7 +13,10 @@ from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
+
 from suds import WebFault
+
+from payments.abstract_payment import PaymentException as abstract_payment__PaymentException
 
 
 class ErrorGroupEnum(object):
@@ -24,6 +27,7 @@ class ErrorGroupEnum(object):
     URL_ERROR = ('40', _(u'URL error.'))
     SERVER_ERROR = ('50', _(u'Server error.'))
     SHIPPING_ERROR = ('60', _(u'Shipping error.'))
+    PAYMENT_ERROR = ('70', _(u'Payment error.'))
 
 
 class ValidationErrorEnum(object):
@@ -63,6 +67,11 @@ class ServerErrorEnum(object):
 class ShippingErrorEnum(object):
     """Enum for shipping errors."""
     MISSING_PUDO = ('100', _(u'Depot not found.'))
+
+
+class PaymentErrorEnum(object):
+    """Enum for paying errors."""
+    FAILED_PAYMENT = ('100', _(u'Failed to process payment.'))
 
 
 class ApiException(Exception):
@@ -170,6 +179,13 @@ class ShippingException(ApiException):
     error_group = ErrorGroupEnum.SHIPPING_ERROR
 
 
+class PaymentException(ApiException):
+    """Raised on payment service errors."""
+
+    status_code = status.HTTP_400_BAD_REQUEST
+    error_group = ErrorGroupEnum.PAYMENT_ERROR
+
+
 def api_exception_handler(exception):
     """Handler for exceptions being raised during work of REST API"""
 
@@ -201,6 +217,10 @@ def api_exception_handler(exception):
         error = PermissionErrorEnum.PERMISSION_DENIED
         exception = PermissionException(
             {'code': error[0], 'description': error[1]})
+    elif isinstance(exception, abstract_payment__PaymentException):
+        error = PaymentErrorEnum.FAILED_PAYMENT
+        exception = PaymentException(
+            {'code': error[0], 'description': error[1], 'detail': smart_unicode(exception)})
     # ... and also python-requests exceptions
     elif isinstance(exception, RequestException) and exception.response:
         error = ServerErrorEnum.REQUEST_FAILED
