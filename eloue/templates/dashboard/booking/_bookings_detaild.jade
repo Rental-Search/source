@@ -151,6 +151,16 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 h3
                     b Description de l'incident
                 p(ng-bind="sinister.description")
+        .block-with-thumbnail.notification.indent-md-v(ng-show="commentList")
+            .col-thumbnail
+                .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
+            .col-exposition.text-action
+                h3.comment-title
+                    b Note et commentaires
+                {% endverbatim %}
+                +average-rate("comment.rate")
+                {% verbatim %}
+                p.comment-body(ng-bind="comment.comment")
                 {% endverbatim %}
 #confirm.modal.fade
     .modal-dialog
