@@ -1,5 +1,5 @@
 extends ../index
--load compressed prefixed_cache i18n
+-load compressed prefixed_cache i18n staticfiles
 
 {% block title %}#{category}{% endblock %}
 
@@ -11,7 +11,8 @@ block content-homepage
     article
       {% cache 43200 'homepage_banner_static' category.slug %}
       section.banner
-        .item(style="{% if category.profile %}background-image: url({{ category.profile.url }}){% endif %}")
+        -var banners = ['img/banner-1.jpg', 'img/banner-2.jpg', 'img/banner-3.jpg']
+        .item(style="{% if category.profile %}background-image: url({{ category.profile.url }}){% else %}background-image: url({% static banners|random %}){% endif %}")
         //include ../jade/_category_menu
       {% endcache %}
 
