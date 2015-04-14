@@ -11,7 +11,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 from eloue.api.urls import router
 
 from products.views import HomepageView
-from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView
+from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView
 
 admin.autodiscover()
 
@@ -231,6 +231,7 @@ urlpatterns = patterns('',
     url(r'edit/', include('accounts.admin_urls')),
     url(r'^edit/stats/', include('reporting.admin_urls')),
     url(r'^slimpay/', include('payments.slimpay_urls')),
+    url(r'^inscription/(?P<campagn_name>\w+)/$', SignUpLandingView.as_view(), name='signup'),
 
     # API 2.0
     url(r'^', include(api2_urlpatterns)),

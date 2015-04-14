@@ -1,0 +1,25 @@
+extends ../base
+-load compressed staticfiles
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "security_styles" %}
+
+block append content-body
+  .container-flex.main
+    header.header-site
+      include ../jade/_header_site
+    container-flex
+      {% if campagn_name == 'perceuse' %}
+      img(src="#{STATIC_URL}images/landing1.png", style="width:100%;")
+      {% elif campagn_name == 'resto' %}
+      img(src="#{STATIC_URL}images/landing2.png", style="width:100%;")
+      {% else %}
+      img(src="#{STATIC_URL}images/landing1.png", style="width:100%;")
+      {% endif %}
+    article(ng-controller="RegisterCtrl")
+      include _sign_in_content.jade
+
+    footer
+      section.footer-links: include ../jade/_footer_links
+      section.rss: include ../jade/_rss
