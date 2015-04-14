@@ -239,6 +239,79 @@ class PatronCreationForm(UserCreationForm):
         model = Patron
 
 
+def mask_card_number(card_number):
+    return re.sub(
+        '(.)(.*)(...)', 
+        lambda matchobject: (
+            matchobject.group(1)+'X'*len(matchobject.group(2))+matchobject.group(3)
+        ), 
+        card_number
+    )
+
+
+class CreditCardForm(forms.ModelForm):
+    cvv = forms.CharField(max_length=4, label=_(u'Cryptogramme de sécurité'), help_text=_(u'Les 3 derniers chiffres au dos de la carte.'))
+    expires = ExpirationField(label=_(u'Date d\'expiration'))
+    holder_name = forms.CharField(label=_(u'Titulaire de la carte'))
+
+    def __init__(self, *args, **kwargs):
+        super(CreditCardForm, self).__init__(*args, **kwargs)
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added, to avoid save automatically the card_number. Required by rent.forms.BookingCreditCardForm
+        self.fields['card_number'] = CreditCardField(
+            label=_(u'Numéro de carte de crédit'), widget=forms.TextInput(
+                attrs={'placeholder': self.instance.masked_number or ''}
+            )
+        )
+
+    class Meta:
+        # see note: https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#using-a-subset-of-fields-on-the-form
+        # we excluded, then added, to avoid save automatically the card_number
+        model = CreditCard
+        exclude = (
+            'card_number', 'masked_number', 'keep', 'subscriber_reference'
+        )
+
+    def clean(self):
+        cleaned_data = super(CreditCardForm, self).clean()
+        try:
+            card_number = cleaned_data['card_number']
+            expires = cleaned_data['expires']
+            cvv = cleaned_data['cvv']
+        except KeyError:
+            pass
+        else:
+            # attempt to verify the credit card information through the payment API
+            try:
+                pm = PayboxManager()
+                self.cleaned_data['masked_number'] = mask_card_number(card_number)
+                pm.authorize(card_number, expires, cvv, 1, 'verification')
+            except PayboxException as err:
+                raise forms.ValidationError(_(u'La validation de votre carte a échoué: ({0}) {1}').format(*err.args))
+        return self.cleaned_data
+
+    def save(self, *args, **kwargs):
+        commit = kwargs.pop('commit', True)
+        pm = PayboxManager()
+        if self.instance.pk:
+            self.cleaned_data['card_number'] = pm.modify(
+                self.instance.subscriber_reference,
+                self.cleaned_data['card_number'],
+                self.cleaned_data['expires'], self.cleaned_data['cvv'])
+        else:
+            self.cleaned_data['card_number'] = pm.subscribe(
+                self.instance.subscriber_reference,
+                self.cleaned_data['card_number'],
+                self.cleaned_data['expires'], self.cleaned_data['cvv']
+            )
+        instance = super(CreditCardForm, self).save(*args, commit=False, **kwargs)
+        instance.card_number = self.cleaned_data['card_number']
+        instance.masked_number = self.cleaned_data['masked_number']
+        if commit:
+            instance.save()
+        return instance
+
+
 def make_missing_data_form(instance, required_fields=[]):
     fields = SortedDict({
         'is_professional': forms.BooleanField(label=_(u"Professionnel"), required=False, initial=False, widget=CommentedCheckboxInput(info_text='Je suis professionnel')),

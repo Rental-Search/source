@@ -41,7 +41,7 @@ h2 Vos informations bancaires
 p.info Vous devrez présenter une carte de paiement à votre nom, au propriétaire, avant le début de la location. Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire pourra refuser la location.
 {% verbatim %}
 span.text-danger(eloue-form-field-message, field-name="product") {{value}}
-span.text-danger(eloue-form-message) {{!!description?description:message}}
+span.text-danger.payment-error(eloue-general-form-message)
 .col-sm-8.col-sm-offset-2: button(type="submit", ng-disabled="shippingPointsRequestInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.indent-t Réservez
 {% endverbatim %}
 

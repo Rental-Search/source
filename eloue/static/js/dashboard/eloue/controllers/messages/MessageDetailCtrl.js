@@ -23,7 +23,8 @@ define([
         "ProductRelatedMessagesService",
         "ProductsService",
         "UtilsService",
-        function ($scope, $stateParams, $q, $window, $timeout, Endpoints, MessageThreadsService, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService) {
+        "AvailableHours",
+        function ($scope, $stateParams, $q, $window, $timeout, Endpoints, MessageThreadsService, BookingsService, ProductRelatedMessagesService, ProductsService, UtilsService, AvailableHours) {
 
             $scope.items = [];
 
@@ -97,50 +98,32 @@ define([
                                 $scope.getProductUrl();
 
                                 // Options for the select element
-                                $scope.availableHours = [
-                                    {"label": "00.00", "value": "00:00:00"},
-                                    {"label": "01.00", "value": "01:00:00"},
-                                    {"label": "02.00", "value": "02:00:00"},
-                                    {"label": "03.00", "value": "03:00:00"},
-                                    {"label": "04.00", "value": "04:00:00"},
-                                    {"label": "05.00", "value": "05:00:00"},
-                                    {"label": "06.00", "value": "06:00:00"},
-                                    {"label": "07.00", "value": "07:00:00"},
-                                    {"label": "08.00", "value": "08:00:00"},
-                                    {"label": "09.00", "value": "09:00:00"},
-                                    {"label": "10.00", "value": "10:00:00"},
-                                    {"label": "11.00", "value": "11:00:00"},
-                                    {"label": "12.00", "value": "12:00:00"},
-                                    {"label": "13.00", "value": "13:00:00"},
-                                    {"label": "14.00", "value": "14:00:00"},
-                                    {"label": "15.00", "value": "15:00:00"},
-                                    {"label": "16.00", "value": "16:00:00"},
-                                    {"label": "17.00", "value": "17:00:00"},
-                                    {"label": "18.00", "value": "18:00:00"},
-                                    {"label": "19.00", "value": "19:00:00"},
-                                    {"label": "20.00", "value": "20:00:00"},
-                                    {"label": "21.00", "value": "21:00:00"},
-                                    {"label": "22.00", "value": "22:00:00"},
-                                    {"label": "23.00", "value": "23:00:00"}
-                                ];
+                                $scope.availableHours = AvailableHours;
 
                                 $scope.newBooking = {
                                     start_date: Date.today().add(1).days().toString("dd/MM/yyyy"),
                                     end_date: Date.today().add(2).days().toString("dd/MM/yyyy"),
-                                    start_time: $scope.availableHours[0],
-                                    end_time: $scope.availableHours[0]
+                                    start_time: $scope.availableHours[8],
+                                    end_time: $scope.availableHours[9]
                                 };
 
                                 $scope.requestBooking = function () {
                                     $scope.bookingSubmitInProgress = true;
                                     //Get product details
                                     ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
-                                        $window.location.href = result.url + "#/booking";
+                                        var redirectUrl = result.url;
+                                        redirectUrl += '?date_from=' + $scope.newBooking.start_date;
+                                        redirectUrl += '&date_to=' + $scope.newBooking.end_date;
+                                        redirectUrl += '&hour_from=' + $scope.newBooking.start_time.value;
+                                        redirectUrl += '&hour_to=' + $scope.newBooking.end_time.value;
+                                        redirectUrl += '&show_booking=true';
+                                        $window.location.href = redirectUrl;
                                     }, function (error) {
                                         $scope.handleResponseErrors(error, "booking", "redirect");
                                     });
                                 };
                                 $scope.booking = booking;
+                                $scope.available = true;
                                 $scope.updateNewBookingInfo();
 
                                 $timeout(function() {
@@ -187,6 +170,14 @@ define([
                 UtilsService.initCustomScrollbars("#messages-list");
             };
 
+            $scope.findHour = function(hourValue) {
+                for (var i = 0; i < $scope.availableHours.length; i++) {
+                    if ($scope.availableHours[i].value === hourValue) {
+                        return $scope.availableHours[i];
+                    }
+                }
+            };
+
             $scope.getProductUrl = function() {
                 ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function(result) {
                     $scope.productUrl = result.url;
@@ -199,28 +190,57 @@ define([
                     fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
                     toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
 
+                if (fromDateTime > toDateTime) {
+                    //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
+                    $scope.dateRangeError = "La date de début ne peut pas être après la date de fin";
+                    if (fromDateTime.getHours() < 23) {
+                        $scope.newBooking.end_date = fromDateTime.toString("dd/MM/yyyy");
+                        $scope.newBooking.end_time = $scope.findHour(fromDateTime.add(1).hours().toString("HH:mm:ss"));
+                    } else {
+                        $scope.newBooking.end_date = fromDateTime.add(1).days().toString("dd/MM/yyyy");
+                        $scope.newBooking.end_time = $scope.findHour(fromDateTime.add(1).hours().toString("HH:mm:ss"));
+                    }
+
+                    // Fix for very strange eloueChosen directive behaviour. Sometimes directive doesn't get fired and
+                    // UI doesn't change, but scope value was changed successfully.
+                    $timeout(function () {
+                        $("[id=fromHour]").trigger("chosen:updated");
+                        $("[id=toHour]").trigger("chosen:updated");
+                    }, 0);
+
+                    fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value;
+                    toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value;
+                }
+
+                $timeout(function() {
+                    var fromDateSelector = $("input[name='fromDate']");
+                    var toDateSelector = $("input[name='toDate']");
+                    fromDateSelector.datepicker('setDate', $scope.newBooking.start_date);
+                    toDateSelector.datepicker('setDate', $scope.newBooking.end_date);
+                }, 0);
+
+
                 ProductsService.isAvailable($scope.messageThread.product.id,
                     fromDateTimeStr, toDateTimeStr, 1).then(
                     function (data) {
                         $scope.parseProductAvailabilityResponse(data, fromDateTime, toDateTime);
                     },
                     function (error) {
+                        $scope.available = false;
                         $scope.handleResponseErrors(error, "booking", "update");
                     }
                 );
             };
 
             $scope.parseProductAvailabilityResponse = function (data, fromDateTime, toDateTime) {
-                var period = UtilsService.calculatePeriodBetweenDates(fromDateTime.toString(), toDateTime.toString());
-                // Set data for displaying
-                $scope.newBooking.period_days = period.period_days;
-                $scope.newBooking.period_hours = period.period_hours;
-                $scope.newBooking.total_amount = data.total_price;
-                // Set data for request
-                $scope.newBooking.started_at = fromDateTime.toString("yyyy-MM-ddThh:mm:ss");
-                $scope.newBooking.ended_at = toDateTime.toString("yyyy-MM-ddThh:mm:ss");
-                $scope.newBooking.borrower = Endpoints.api_url + "users/" + $scope.currentUser.id + "/";
-                $scope.newBooking.product = Endpoints.api_url + "products/" + $scope.messageThread.product.id + "/";
+
+                var price = data.total_price;
+                price = price.replace("€", "").replace("\u20ac", "").replace("Eu", "").replace(",", ".").replace(" ", "");
+                price = Number(price);
+                $scope.duration = data.duration;
+                $scope.pricePerDay = data.unit_value;
+                $scope.bookingPrice = price;
+                $scope.available = data.max_available > 0;
             };
 
             /**
