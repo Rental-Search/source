@@ -350,13 +350,14 @@ class ProductDetailView(SearchQuerySetMixin, DetailView):
 
 
 class PublishItemView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
-    template_name = 'publich_item/index.jade'
+    template_name = 'landing_pages/publish.jade'
+    # template_name = 'publich_item/index.jade'
 
     def get_context_data(self, **kwargs):
         context = super(PublishItemView, self).get_context_data(**kwargs)
-        publish_categories = getattr(settings, 'PUBLISH_CATEGORIES', tuple())
-        if publish_categories:
-            context['publish_category_list'] = publish_categories
+        # publish_categories = getattr(settings, 'PUBLISH_CATEGORIES', tuple())
+        # if publish_categories:
+        #     context['publish_category_list'] = publish_categories
         return context
 
 
