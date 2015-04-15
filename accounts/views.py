@@ -438,3 +438,10 @@ class BillingSubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
     owner_field = 'billing__patron'
     filter_fields = ('subscription', 'billing', 'price')
     ordering_fields = ('price',)
+
+
+class SignUpLandingView(TemplateView):
+    template_name = 'landing_pages/sign_in.jade'
+    def get_context_data(self, **kwargs):
+        context = super(SignUpLandingView, self).get_context_data(**kwargs)
+        return context
