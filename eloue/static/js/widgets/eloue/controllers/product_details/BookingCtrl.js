@@ -129,22 +129,25 @@ define([
             /**
              * Initial booking dates are 1 nad 2 days after todat, 8a.m.
              */
+            var currentDate = new Date();
+            var currentHours = (currentDate.getHours() + 1) % 24;
             $scope.bookingDetails = {
-                "fromDate": queryParams.date_from ? queryParams.date_from : Date.today().add(1).days().toString("dd/MM/yyyy"),
-                "fromHour": queryParams.hour_from ? $scope.findHour(queryParams.hour_from) : $scope.hours[8],
-                "toDate": queryParams.date_to ? queryParams.date_to : Date.today().add(2).days().toString("dd/MM/yyyy"),
-                "toHour": queryParams.hour_to ? $scope.findHour(queryParams.hour_to) :  $scope.hours[9]
+                "fromDate": queryParams.date_from ? queryParams.date_from : Date.today().add(0).days().toString("dd/MM/yyyy"),
+                "fromHour": queryParams.hour_from ? $scope.findHour(queryParams.hour_from) : $scope.hours[currentHours],
+                "toDate": queryParams.date_to ? queryParams.date_to : Date.today().add(1).days().toString("dd/MM/yyyy"),
+                "toHour": queryParams.hour_to ? $scope.findHour(queryParams.hour_to) :  $scope.hours[currentHours]
             };
+
             var fromDateSelector = $("input[name='fromDate']"), toDateSelector = $("input[name='toDate']");
             fromDateSelector.val($scope.bookingDetails.fromDate).datepicker({
                 language: "fr",
                 autoclose: true,
-                startDate: Date.today().add(1).days().toString("dd/MM/yyyy")
+                startDate: Date.today().add(0).days().toString("dd/MM/yyyy")
             });
             toDateSelector.val($scope.bookingDetails.toDate).datepicker({
                 language: "fr",
                 autoclose: true,
-                startDate: Date.today().add(2).days().toString("dd/MM/yyyy")
+                startDate: Date.today().add(1).days().toString("dd/MM/yyyy")
             });
             $scope.duration = "0 jour";
             $scope.bookingPrice = 0;
@@ -186,6 +189,8 @@ define([
                 toDateSelector.datepicker("setStartDate", fromDateTime);
                 toDateSelector.datepicker("update");
                 $scope.dateRangeError = "";
+                
+
                 if (fromDateTime > toDateTime) {
                     //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
                     $scope.dateRangeError = "La date de début ne peut pas être après la date de fin";
@@ -206,8 +211,42 @@ define([
                     fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
                     toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
                 }
+
+                if (fromDateTime.valueOf() === toDateTime.valueOf()) {
+                    $scope.bookingDetails.toDate = fromDateTime.toString("dd/MM/yyyy");
+                    $scope.bookingDetails.toHour = $scope.findHour(toDateTime.add(1).hours().toString("HH:mm:ss"));
+
+                    // Fix for very strange eloueChosen directive behaviour. Sometimes directive doesn't get fired and
+                    // UI doesn't change, but scope value was changed successfully.
+                    $timeout(function () {
+                        $("[id=toHour]").trigger("chosen:updated");
+                    }, 0);
+
+                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
+                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
+                }
+
+
+                var now = new Date();
+                if (fromDateTime.valueOf() < now.valueOf()) {
+
+                    var currentHours = (now.getHours() + 1) % 24;
+                    $scope.bookingDetails.fromDate = fromDateTime.toString("dd/MM/yyyy");
+                    $scope.bookingDetails.fromHour = $scope.hours[currentHours];
+
+                    // Fix for very strange eloueChosen directive behaviour. Sometimes directive doesn't get fired and
+                    // UI doesn't change, but scope value was changed successfully.
+                    $timeout(function () {
+                        $("[id=fromHour]").trigger("chosen:updated");
+                    }, 0);
+
+                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
+                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
+                }
+
                 $scope.dateRangeError = null;
                 // check if product is available for selected dates
+
                 ProductsService.isAvailable($scope.productId, fromDateTimeStr, toDateTimeStr, "1").then(
                     $scope.parseProductAvailabilityResponse,
                     function (error) {

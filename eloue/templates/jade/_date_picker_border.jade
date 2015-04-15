@@ -6,7 +6,7 @@
             input(type="text", placeholder="", name="fromDate", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
     .table-cell
-        select(ng-show="!bookingDetails.fromHour", name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.label for h in hours track by h.value", ng-change="updatePrice()", eloue-chosen, data-ng-disabled="submitInProgress").form-control.ng-cloak
+        select#fromHour(ng-show="!bookingDetails.fromHour", name="fromHour", ng-model="bookingDetails.fromHour", ng-options="h.label for h in hours track by h.value", ng-change="updatePrice()", eloue-chosen, data-ng-disabled="submitInProgress").form-control.ng-cloak
         //this only for show selector befor angular ready to process directive.
         div(ng-if="!bookingDetails.fromHour").chosen-container.chosen-container-single.chosen-container-active
             a.chosen-single
