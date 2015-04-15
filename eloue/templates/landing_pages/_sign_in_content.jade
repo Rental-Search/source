@@ -22,37 +22,37 @@
         button(type="button", data-dismiss="alert", class="close")
         | {{loginError}}
     {% endverbatim %}
-    form(name="registrationForm", ng-submit="registrationSubmitted=true; registrationForm.$valid && register()", novalidate, eloue-form-field-error-manager, ng-class="{'submitted':registrationSubmitted}").classic-form
+    form(name="registrationForm", ng-submit="registrationSubmitted=true; registrationForm.$valid && register()", novalidate, eloue-form-field-error-manager, ng-class="{'submitted':registrationSubmitted}", style="width: 400px; margin: auto;").classic-form
         fieldset(data-ng-disabled="!!submitting")
             //-
              h3 Inscription 30 secondes
-            .container(style='margin-left:420px;')
-                .form-group.row(style='width:300px;')
-                    .col-xs-5.clear-selector()
-                        {% verbatim %}
-                        select(ng-model="account.civility", data-placeholder="Civilité", eloue-chosen).form-control
-                            option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
-                        {% endverbatim %}
-                    .col-xs-5(style='width:170px;')
-                        input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
-                        span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted", translate="required_field")
-                -var registration_form_fields = [["text", "Prénom", "first_name"], ["text", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
-                each type, placeholder, name in registration_form_fields
-                    .form-group(style='width:300px;')
-                        if name == "zipcode"
-                            input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required, eloue-zipcode).form-control
-                            span.text-danger(ng-show="registrationForm.#{name}.$error.badFormat && registrationSubmitted", translate="zipcode_invalid")
-                        else
-                            input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
-                        span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationSubmitted", translate="required_field")
+            .form-group: .row
+                .col-xs-5.clear-selector
+                    {% verbatim %}
+                    select(ng-model="account.civility", data-placeholder="Civilité", eloue-chosen).form-control
+                        option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
+                    {% endverbatim %}
+                .col-xs-7
+                    input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
+                    span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted", translate="required_field")
+            -var registration_form_fields = [["text", "Prénom", "first_name"], ["text", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
+            each type, placeholder, name in registration_form_fields
+                .form-group
+                    if name == "zipcode"
+                        input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required, eloue-zipcode).form-control
+                        span.text-danger(ng-show="registrationForm.#{name}.$error.badFormat && registrationSubmitted", translate="zipcode_invalid")
+                    else
+                        input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
+                    span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationSubmitted", translate="required_field")
 
             .checkbox
                 label(for="inform")
                     input(type="checkbox", checked)#inform
                     span.flaticon.stroke.checkmark
-            p(style='font-size: 13px;') Tenez moi informé de l'actualité et des bonnes affaires e-loue
-            .form-group(style='padding-top:10px;'): button(type="submit", ng-class="{'loading': !!submitting}", style='width:300px; height:35px;').btn.bg-success Valider
-            p(style='font-size: 13px;') En créant un compte e-loue, vous acceptez les &nbsp;
+                | Tenez moi informé de l'actualité et des bonnes affaires e-loue
+            .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success Inscription via Email
+            p
+                | En créant un compte e-loue, vous acceptez les &nbsp;
                 a(href="{% url 'terms' %}") Conditions Générales
                 br
                 | et la &nbsp;
