@@ -103,3 +103,35 @@ form[name='itemTariffsForm']
   display: block
   margin: auto
 
+
+.available
+  padding-top: 1em
+  color: $brand-success
+  &:before
+    font-family: "Flaticons Solid"
+    content: "\e1ce"
+    display: inline-block
+    font-size: 1.3em
+    vertical-align: middle
+    margin-right: .5em
+  &.unavailable
+    color: $brand-danger
+    &:before
+      content: "\e1cf"
+
+.part
+  border-top: px(1) solid $gray-lighter
+  padding: px(20)
+  &:first-child
+    border-top: none
+
+.datepicker-center
+  margin: 0 0 1em 0
+
+
+.comment-title
+  display: inline
+  padding-right: 1em
+
+.comment-body
+  word-break: break-all
