@@ -16,9 +16,13 @@
       {% if product_object.km_included %}
       .indent-b-md
       table.calendar.text-center
-        tbody: tr
-          td Kilomêtres inclus par jour
-          td {{ product_object.km_included }} Km
+        tbody
+          tr
+            td Kilomètres inclus par jour
+            td {{ product_object.km_included }} Km
+          tr
+            td Coût du kilomètre supplémentaire
+            td {{ product_object.costs_per_km|price:"&euro;" }}
       {% endif %}
       {% else %}
       table.calendar.text-center
