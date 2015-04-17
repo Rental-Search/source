@@ -259,7 +259,9 @@ class ContractGeneratorCar(ContractGenerator):
         canvas.drawString(205, 612, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(205, 601, format(booking.ended_at, _(u"d F Y à H\hi.")))
 
-        canvas.drawString(198, 591, u"{km_included}".format(km_included=booking.product.carproduct.km_included or 0))
+        delta = booking.ended_at - booking.started_at
+        total_km_included = round(delta.days + delta.seconds/60/60/24., 2)*booking.product.carproduct.km_included
+        canvas.drawString(198, 591, u"{km_included}".format(km_included=total_km_included or 0))
         canvas.drawString(203, 580, u"{costs_per_km}".format(costs_per_km=booking.product.carproduct.costs_per_km or 0))
         canvas.drawString(154, 569, str(booking.total_amount))
 
