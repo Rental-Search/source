@@ -113,16 +113,17 @@ class PhoneNumberAdmin(admin.ModelAdmin):
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('company_name', 'propackage', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment',)
+    list_display = ('company_name', 'propackage', 'slimpay_code', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment',)
     raw_id_fields = ("patron",)
     readonly_fields = ('subscription_started', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email', 'slimpay_code', 'slimpay_link')
     fieldsets = (
         (_('Abonnement'), {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'payment_type', 'annual_payment_date', 'free', 'number_of_free_month', 'comment',)}),
         (_('Patron informations'), {'fields': ('patron', 'company_name', 'contact', 'address', 'phone', 'online_date', 'products_count', 'email', 'slimpay_code', 'slimpay_link',)}),
     )
+    date_hierarchy = 'subscription_started'
     ordering = ['-subscription_started']
     list_filter = ('payment_type', 'propackage',)
-    search_fields = ('patron__username', 'patron__email',)
+    search_fields = ('patron__username', 'patron__email', 'patron__company_name')
 
     def company_name(self, obj):
         return obj.patron.company_name
@@ -151,7 +152,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     def slimpay_code(self, obj):
         try:
             slimpay = obj.patron.slimpaymandateinformation_set.latest('pk')
-            return slimpay[0].RUM
+            return slimpay.RUM
         except:
             return None
 
