@@ -1,10 +1,32 @@
+-load i18n
 .container
   ul.nav.nav-justified
-    -var footer_links = [["Le concept e-loue", [["Comment ça marche ?", "/comment-ca-marche/"], ["L’offre e-loue Pro", "/offre-professionnel/"], ["La livraison", "/navette/"]]], ["Pourquoi choisir e-loue ?", [["E-­loue et la sécurité", "/securite/"], ["Contrats de location", "/contrat-de-location/"], ["Assurance tranquillité", "/assurance-tranquillite/"]]], ["L’entreprise e-loue", [["Qui sommes-nous ?", "/qui-sommes-nous/"], ["Nos partenaires", "/nos-partenaires/"], ["Conditions générales", "/conditions-generales/"], ["Dépôt de garantie", "/depot-de-garantie/"]]], ["En savoir plus", [["Contactez-nous", "/contactez-nous/"], ["Mentions légales", "/mentions-legales/"], ["Blog e-loue", "http://blog.e-loue.com/"]]]]
-    each header, group in footer_links
-      li.divide
-      li.ul-wrapper: .centering
-        h4.text-nowrap {{ header }}
-        ul.nav
-          each title, link in group
-            li.link-wrapper: a(href="{{ link }}") {{ title }}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "Le concept e-loue" %}
+      ul.nav
+        li.link-wrapper: a(href="/comment-ca-marche/") {% trans "Comment ça marche ?" %}
+        li.link-wrapper: a(href="/offre-professionnel/") {% trans "L’offre e-loue Pro" %}
+        li.link-wrapper: a(href="/navette/") {% trans "La livraison" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "Pourquoi choisir e-loue ?" %}
+      ul.nav
+        li.link-wrapper: a(href="/securite/") {% trans "E-­loue et la sécurité" %}
+        li.link-wrapper: a(href="/contrat-de-location/") {% trans "Contrats de location" %}
+        li.link-wrapper: a(href="/assurance-tranquillite/") {% trans "Assurance tranquillité" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "L’entreprise e-loue" %}
+      ul.nav
+        li.link-wrapper: a(href="/qui-sommes-nous/") {% trans "Qui sommes-nous ?" %}
+        li.link-wrapper: a(href="/nos-partenaires/") {% trans "Nos partenaires" %}
+        li.link-wrapper: a(href="/conditions-generales/") {% trans "Conditions générales" %}
+        li.link-wrapper: a(href="/depot-de-garantie/") {% trans "Dépôt de garantie" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "En savoir plus" %}
+      ul.nav
+        li.link-wrapper: a(href="/contactez-nous/") {% trans "Contactez-nous" %}
+        li.link-wrapper: a(href="/mentions-legales/") {% trans "Mentions légales" %}
+        li.link-wrapper: a(href="http://blog.e-loue.com/") {% trans "Blog e-loue" %}
