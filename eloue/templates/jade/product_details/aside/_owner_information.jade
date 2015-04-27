@@ -1,9 +1,13 @@
+-load i18n
+
 .section-header
+    {% trans "Contactez-nous" as contacteznous %}
+    {% trans "Contactez-moi" as contactezmoi %}
     {% if is_pro %}
     span.badge-pro.pull-right pro
-    h4 Contactez-nous
+    h4 {{contacteznous}}
     {% else %}
-    h4 Contactez-moi
+    h4 {{contactmoi}}
     {% endif %}
 .section-body
     .part
@@ -20,7 +24,7 @@
                 include ../../_rate
                 {% endwith %}
                 p
-                    | Membre depuis le
+                    {% trans "Membre depuis le" %}
                     br
                     span {{ product_object.owner.date_joined|date:"d F Y" }}
                 {% endif %}
@@ -28,25 +32,25 @@
         {% if is_pro %}
         a(href="#/message", data-toggle="modal", data-target="#pro-popin-message").btn.bg-success
             i.flaticon.stroke.mail-2
-            | Envoyez un message
+            {% trans "Envoyez un message" %}
         a(href="#/phone", data-toggle="modal", data-target="#pro-popin-phone").btn.bg-success
             i.flaticon.stroke.phone-3
-            | Appelez
+            {% trans "Appelez" %}
         a(href="#/shop", data-toggle="modal", data-target="#pro-popin-shop").btn.bg-success
             i.flaticon.stroke.shop-1
-            | Venez en magasin
+            {% trans "Venez en magasin" %}
         a(href="#/website", data-toggle="modal", data-target="#pro-popin-website-link").btn.bg-success
             i.flaticon.stroke.imac-1
-            | Visitez notre site web
+            {% trans "Visitez notre site web" %}
         {% else %}
         {% verbatim %}
         a.ng-hide(href="", data-dismiss="modal", ng-click="openModal('message')", ng-show="currentUser.id != product.owner.id").btn.bg-success.send-message
             {% endverbatim %}
             i.flaticon.stroke.mail-2
-            | Envoyez un message
+            {% trans "Envoyez un message" %}
         a(href="", data-dismiss="modal", ng-click="openModal('phone')").btn.bg-success.call
             i.flaticon.stroke.phone-3
-            | Appelez
+            {% trans "Appelez" %}
         ul.nav.stats
             {% with product_object.owner.stats as stats %}
             include ../../_patron_stats
