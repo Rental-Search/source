@@ -1,12 +1,35 @@
+-load i18n
 .container
   ul.nav.nav-justified.text-nowrap
-
-    -var insurances = [["lock", "success", "Louez en toute sécurité", "Paiement en ligne sécurisé.<br>Dépôt de garantie en ligne."], ["file", "black", "Louez en toute simplicité", "Contrat de location pré-rempli.<br>Service client dédié 7j/7"], ["details", "gray-strong", "Louez en toute confiance", "Identité des membres vérifiée.<br>Notes et commentaires."], ["umbrella", "primary", "Louez en toute sérénité", "Assurance incluse et automatique.<br>Aucun échange d’argent."]]
-    each icon, style, title, text in insurances
-      li.divide
+    li.divide
       li
-        .insurances-img(class="text-{{ style }}")
-          i(class="eloue-{{ icon }}")
-        h5 {{ title }}
+        .insurances-img(class="text-success")
+          i(class="eloue-lock")
+        h5 {% trans "Louez en toute sécurité" %}
         p
-          != text|safe
+          {% trans "Paiement en ligne sécurisé.<br>Dépôt de garantie en ligne." as payment %}
+          != payment|safe
+    li.divide
+      li
+        .insurances-img(class="text-black")
+          i(class="eloue-file")
+        h5 {% trans "Louez en toute simplicité" %}
+        p
+          {% trans "Contrat de location pré-rempli.<br>Service client dédié 7j/7" as simple }
+          != simple|safe
+    li.divide
+      li
+        .insurances-img(class="text-gray-strong")
+          i(class="eloue-details")
+        h5 {% trans "Louez en toute confiance" %}
+        p
+          {% trans "Identité des membres vérifiée.<br>Notes et commentaires." as confidence %}
+          != confidence|safe
+    li.divide
+      li
+        .insurances-img(class="text-primary")
+          i(class="eloue-umbrella")
+        h5 {% trans "Louez en toute sérénité" %}
+        p
+          {% trans "Assurance incluse et automatique.<br>Aucun échange d’argent." as serenity %}
+          != serenity|safe
