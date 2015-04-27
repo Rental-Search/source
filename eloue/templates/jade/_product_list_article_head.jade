@@ -8,7 +8,7 @@ h3.col-md-7
     | {{ count }} annonces correspondant à vos critères
     {% endblocktrans%}
   else breadcrumbs.categorie.pretty_value
-    |Location
+    {% trans "Location" %}
     {{ breadcrumbs.categorie.pretty_value|safe }}
 .col-xs-5.layout-switcher
   i.flaticon.stroke.menu-list-4.list

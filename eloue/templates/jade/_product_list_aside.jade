@@ -1,14 +1,15 @@
 -load category facets
+-load i18n
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
-  label.caption(for="what") quoi
+  label.caption(for="what") {% trans "quoi" %}
   input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
 
-  p.caption catégories
+  p.caption {% trans "catégories" %}
   .clear-selector
     select#category-selection.form-control(name="categories", form="")
-      option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}") Toutes les catégories
+      option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}") {% trans "Toutes les catégories" %}
       if form.cleaned_data.q
         {% for value, count in facets.fields.categories %}
         if count and value
@@ -38,8 +39,8 @@
           else
             option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
 
-  label.caption(for="where") où
-  input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
+  label.caption(for="where") {% trans "où" %}
+  input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
 
   .map-container
     .whirly
@@ -47,7 +48,7 @@
       //- map here
 
   //- .slider
-  label.caption(for="range-slider") rayon
+  label.caption(for="range-slider") {% trans "rayon" %}
   input#range(type="hidden", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}", disabled)
   input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
 
@@ -70,7 +71,7 @@
   input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
   input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
 
-  p.caption loueurs
+  p.caption {% trans "loueurs" %}
   .checkbox
     label(for="particular")
       {% if form.cleaned_data.renter == 'particuliers' %}
@@ -79,7 +80,7 @@
       input(type="checkbox", name="renter", value="particuliers")#particular
       {% endif %}
       span.flaticon.stroke.checkmark-1
-    | Particuliers
+    {% trans " Particuliers" %}
   .checkbox
     label(for="professional")
       {% if form.cleaned_data.renter == 'professionnels' %}
@@ -88,10 +89,10 @@
       input(type="checkbox", name="renter", value="professionnels")#professional
       {% endif %}
       span.flaticon.stroke.checkmark-1
-    | Professionnels
+    {% trans " Professionnels" %}
 
   .indent-t-md
-    input(id="submitButton", type="submit", style="width: 100%", value="Filtrer").btn.btn-lg.btn-advertise.bg-success
+    input(id="submitButton", type="submit", style="width: 100%", value="{% trans 'Filtrer' %}").btn.btn-lg.btn-advertise.bg-success
 
 //-
   p.caption champ 1
