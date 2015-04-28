@@ -1,8 +1,10 @@
+-load i18n
 section(ng-controller="SendProMessageCtrl", ng-init="setUserId({{ patron.id }})")
     div(ng-show="isSent")
       h4(style="position: relative;").text-success.indent-l-md
         i.flaticon.solid.checkmark-2.icon-li
-        | Demande de devis envoyé
+        | {% trans "Demande de devis envoyé" %}
+      {% blocktrans %}
       p
         | Votre demande de devis vient d’être envoyée.
       p
@@ -17,11 +19,13 @@ section(ng-controller="SendProMessageCtrl", ng-init="setUserId({{ patron.id }})"
         | votre disposi;on si vous avez des questions.
       p
         | L’équipe e-loue
+      {% endblocktrans %}
     div(ng-show="!isSent")
       h4
+        {% blocktrans %}
         b N’hésitez pas à nous écrire
         | via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions...
-
+        {% endblocktrans %}
       {% verbatim %}
       form(name="proMessageForm", novalidate).form-wrapper
         input(name="email", type="email", data-ng-model="message.email", placeholder="Votre adresse e‐mail *", required).form-control.indent-t-md

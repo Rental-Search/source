@@ -74,19 +74,21 @@
   p.caption {% trans "loueurs" %}
   .checkbox
     label(for="particular")
+      {% trans "particuliers" as particular %}
       {% if form.cleaned_data.renter == 'particuliers' %}
-      input(type="checkbox", name="renter", value="particuliers", checked)#particular
+      input(type="checkbox", name="renter", value="{{ particular }}", checked)#particular
       {% else %}
-      input(type="checkbox", name="renter", value="particuliers")#particular
+      input(type="checkbox", name="renter", value="{{ particular }}")#particular
       {% endif %}
       span.flaticon.stroke.checkmark-1
     {% trans " Particuliers" %}
   .checkbox
     label(for="professional")
+      {% trans "professionnels" as professional %}
       {% if form.cleaned_data.renter == 'professionnels' %}
-      input(type="checkbox", name="renter", value="professionnels", checked)#professional
+      input(type="checkbox", name="renter", value="{{ professional }}", checked)#professional
       {% else %}
-      input(type="checkbox", name="renter", value="professionnels")#professional
+      input(type="checkbox", name="renter", value="{{ professional }}")#professional
       {% endif %}
       span.flaticon.stroke.checkmark-1
     {% trans " Professionnels" %}

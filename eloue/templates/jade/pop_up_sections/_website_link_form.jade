@@ -1,5 +1,7 @@
--load patron
+-load patron i18n
 h4
+  {% blocktrans %}
   b N’hésitez pas à venir sur notre site internet.
   | vous devriez y trouver les réponses à toutes vos questions.
+  {% endblocktrans %}
 a(href="{{ patron.url }}").btn.btn-lg.bg-primary.btn-inline: b {{ patron.url|hostname }}

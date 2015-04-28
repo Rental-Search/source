@@ -1,7 +1,9 @@
--load patron
+-load patron i18n
 
 h4
+  {% blocktrans %}
   b N’hésitez pas à nous appeler, 
   | nous nous ferons un plaisir de répondre à toutes vos questions…
-p.indent-b-sm Nous sommes joignables au&nbsp;:
+  {% endblocktrans %}
+p.indent-b-sm {% trans "Nous sommes joignables au&nbsp;" %}:
 b.btn-lg.bg-primary.text-white {{ patron.default_number.number }}

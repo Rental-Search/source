@@ -1,9 +1,11 @@
+-load i18n
 h4
+  {% blocktrans %}
   b N’hésitez pas à venir dans notre boutique,
   | nous nous ferons un plaisir de répondre à toutes vos questions…
-
+  {% endblocktrans %}
 {% if patron.pro_agencies.all %}
-p Nos boutiques sont situées au&nbsp;:
+p {% trans "Nos boutiques sont situées au&nbsp;" %}:
 aside.col-xs-4
   .map-container
     .whirly
@@ -12,7 +14,8 @@ aside.col-xs-4
 main.col-xs-8.pro-shop
     table-cell.input-group.where-field.pro-shop-where
       i.flaticon.stroke.location-pin-3
-      input(id="cityInput", type="text", name="search", ng-model="search", placeholder="Ville de l'agence", title="Ville de l'agence").form-control
+      {% trans "Ville de l'agence" as town %}
+      input(id="cityInput", type="text", name="search", ng-model="search", placeholder="{{ town }}", title="{{ town }}").form-control
     ul.scrollbar-custom
       for agency in patron.pro_agencies.all
           li(id="marker-{{ forloop.counter }}", locationY="{{ agency.position.y|stringformat:'f' }}", locationX="{{ agency.position.x|stringformat:'f' }}", name="{{ agency.name }}", city="{{agency.city}}")
@@ -24,7 +27,7 @@ main.col-xs-8.pro-shop
              p {{ agency.phone_number }}
 {% else %}
 {% if patron.default_address %}
-p Notre boutique est située au&nbsp;:
+p {% trans "Notre boutique est située au&nbsp;" %}:
 aside.col-xs-4
     .map-container
         .whirly
