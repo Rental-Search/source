@@ -1,3 +1,5 @@
+-load i18n
+
 .modal.fade#pro-popin-message(tabindex="-1", role="dialog", aria-hidden="true")
 	//- -var is_send = true
 	.modal-dialog.large
@@ -8,9 +10,9 @@
 					span.sr-only Close
 				h4.modal-title 
 				if is_send
-					| Demande de devis
+					{% trans "Demande de devis" %}
 				else
-					| {{ patron.company_name }} - Envoyez un message
+					| {{ patron.company_name }} - {% trans "Envoyez un message" %}
 			.modal-body.table-cell.text-justify
 				//-.static-part.table-cell
 				//-	section.product-info

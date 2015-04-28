@@ -1,26 +1,34 @@
+-load i18n
+
 section(ng-controller="SendProMessageCtrl", ng-init="setUserId({{ patron.id }})")
     div(ng-show="isSent")
       h4(style="position: relative;").text-success.indent-l-md
         i.flaticon.solid.checkmark-2.icon-li
-        | Demande de devis envoyé
+        {% trans "Demande de devis envoyé" %}
       p
-        | Votre demande de devis vient d’être envoyée.
+        {% trans "Votre demande de devis vient d’être envoyée." %}
       p
+        {% blocktrans %}
         | Nos équipes font le nécessaire pour que le loueur vous
         | réponde dans les 24 heures, afin de confirmer votre
         | location.
+        {% endblocktrans %}
       p
+        {% blocktrans %}
         | Vous n’avez rien à payer sur e-loue, le paiement se fera
         | directement chez le loueur.
+        {% endblocktrans %}
       p
+        {% blocktrans %}
         | Nous vous remercions pour votre confiance et  restons à
         | votre disposi;on si vous avez des questions.
+        {% endblocktrans %}
       p
-        | L’équipe e-loue
+        {% trans "L’équipe e-loue" %}
     div(ng-show="!isSent")
       h4
-        b N’hésitez pas à nous écrire
-        | via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions...
+        b {% trans "N’hésitez pas à nous écrire" %}
+        {% trans "via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions..." %}
 
       {% verbatim %}
       form(name="proMessageForm", novalidate).form-wrapper
@@ -33,4 +41,3 @@ section(ng-controller="SendProMessageCtrl", ng-init="setUserId({{ patron.id }})"
         span.text-danger(ng-show="proMessageForm.message.$error.required && formSubmitted", translate="required_field")
         input(type="submit", ng-disabled="submitInProgress", ng-click="formSubmitted=true; proMessageForm.$valid && sendMessage()", value="Envoyer", class="{{submitInProgress ? 'loading' : ''}}").btn.btn-lg.bg-success.indent-t-md
       {% endverbatim %}
-
