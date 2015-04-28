@@ -1,3 +1,5 @@
+-load i18n
+
 .modal.fade#publishModal(tabindex="-1", role="dialog", aria-hidden="true")
     .modal-dialog.large
         .modal-content
@@ -5,14 +7,17 @@
                 button(type="button", data-dismiss="modal").close
                     span(aria-hidden="true")&times;
                     span.sr-only Close
-                h4.modal-title Dépot d'annonce
+                h4.modal-title {% trans "Dépot d'annonce" %}
             .modal-body
                 section.content.clearfix
-                    h3 Publiez votre annonce en 1 minute
+                    h3 {% trans "Publiez votre annonce en 1 minute" %}
                     p.text-light
+                        {% blocktrans %}
                         | e-loue vous permet de gagner de l'argent en louant vos biens,
                         br
                         | en toute sécurité, quand vous ne les utilisez pas
+                        {% endblocktrans %}
+                        
                     {% verbatim %}
                     .alert.alert-danger(eloue-form-message)
                        button(type="button", data-dismiss="alert", class="close")
