@@ -1,3 +1,5 @@
+-load i18n
+
 .modal.fade#bookingModal(tabindex="-1", role="dialog", aria-hidden="true")
     .modal-dialog.large
         .modal-content
@@ -5,7 +7,7 @@
                 button(type="button", data-dismiss="modal").close
                     span(aria-hidden="true")&times;
                     span.sr-only Close
-                h4.modal-title Réservation
+                h4.modal-title {% trans "Réservation" %}
             .modal-body.table-cell
                 .static-part.table-cell
                     section.product-info
@@ -13,9 +15,9 @@
                     section.terms
                         include ./pop_up_sections/_terms
                         a(href="", ng-click="openModal('message')").btn.bg-gray
-                            | Envoyez un message
+                            {% trans "Envoyez un message" %}
                         a(href="", ng-click="openModal('phone')").btn.bg-gray
-                            | Appelez
+                            {% trans "Appelez" %}
                 {% verbatim %}
                 form(id="bookingForm", name="bookingForm", role="form", ng-submit="bookingSubmitted=true; bookingForm.$valid && sendBookingRequest()", ng-class="{'submitted': bookingSubmitted}", ng-model="bookingDetails", novalidate, eloue-form-field-error-manager).input-group.change-part.table-cell.top
                   {% endverbatim %}
@@ -30,9 +32,9 @@
     .modal-dialog
         .modal-content
             .modal-header
-                | Alerte : Notre service location de voitures est en maintenance.
+                {% trans "Alerte : Notre service location de voitures est en maintenance." %}
             .modal-body
-                | La location de voitures entre particuliers fait peau neuve sur e-loue. Dans quelques jours le service sera à nouveau opérationnel.
+                {% trans "La location de voitures entre particuliers fait peau neuve sur e-loue. Dans quelques jours le service sera à nouveau opérationnel." %}
                 .row
                     button(type="button", data-dismiss="modal", style="width: 100px;margin-top: 20px;margin-left: 40%;").btn.bg-success
                         | OK

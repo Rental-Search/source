@@ -1,7 +1,9 @@
+-load i18n
+
 -load product
 
 .section-header
-	h4 {% if is_pro %}Toutes nos annonces{% else %}Annonces similaires{% endif %}
+	h4 {% if is_pro %} {% trans "Toutes nos annonces" %}{% else %}{% trans "Annonces similaires" %}{% endif %}
 .section-body
 	.part
 		ul.nav

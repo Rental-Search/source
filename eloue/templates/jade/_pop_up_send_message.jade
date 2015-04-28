@@ -1,3 +1,5 @@
+-load i18n
+
 .modal.modal__message.fade#messageModal(tabindex="-1", role="dialog", aria-hidden="true")
     .modal-dialog.large
         .modal-content
@@ -5,7 +7,7 @@
                 button(type="button", data-dismiss="modal").close
                     span(aria-hidden="true")&times;
                     span.sr-only Close
-                h4.modal-title Message
+                h4.modal-title {% trans "Message" %}
             .modal-body
                 .static-part
                     section.product-info
@@ -13,9 +15,9 @@
                     section.terms
                         include ./pop_up_sections/_terms
                         a(href="", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success
-                            | Réservez
+                            {% trans "Réservez" %}
                         a(href="", ng-click="openModal('phone')").btn.bg-gray
-                            | Appelez
+                            {% trans "Appelez" %}
                 .change-part
                     section.dialogs
                         include ./pop_up_sections/_dialogs
