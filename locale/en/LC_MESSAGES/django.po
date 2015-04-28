@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-28 09:19+0200\n"
+"POT-Creation-Date: 2015-04-28 10:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1217,6 +1217,10 @@ msgstr ""
 msgid "Louez en toute simplicité"
 msgstr ""
 
+#: eloue/templates/jade/_insurances.jade:18
+msgid "Contrat de location pré-rempli.<br>Service client dédié 7j/7"
+msgstr ""
+
 #: eloue/templates/jade/_insurances.jade:24
 msgid "Louez en toute confiance"
 msgstr ""
@@ -1275,6 +1279,31 @@ msgstr ""
 msgid "chambres"
 msgstr ""
 
+#: eloue/templates/jade/_pro_popin_message.jade:12
+msgid "Demande de devis"
+msgstr ""
+
+#: eloue/templates/jade/_pro_popin_message.jade:14
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:35
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:50
+msgid "Envoyez un message"
+msgstr ""
+
+#: eloue/templates/jade/_pro_popin_phone.jade:10
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:38
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:53
+msgid "Appelez"
+msgstr ""
+
+#: eloue/templates/jade/_pro_popin_shop.jade:10
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:41
+msgid "Venez en magasin"
+msgstr ""
+
+#: eloue/templates/jade/_pro_popin_website_link.jade:9
+msgid "Visitez notre site"
+msgstr ""
+
 #: eloue/templates/jade/_product_list.jade:4
 msgid "annonces de location dans toute la France"
 msgstr "rental items throughout France"
@@ -1320,15 +1349,23 @@ msgstr ""
 msgid "loueurs"
 msgstr ""
 
-#: eloue/templates/jade/_product_list_aside.jade:83
+#: eloue/templates/jade/_product_list_aside.jade:77
+msgid "particuliers"
+msgstr ""
+
+#: eloue/templates/jade/_product_list_aside.jade:84
 msgid " Particuliers"
 msgstr ""
 
-#: eloue/templates/jade/_product_list_aside.jade:92
+#: eloue/templates/jade/_product_list_aside.jade:87
+msgid "professionnels"
+msgstr ""
+
+#: eloue/templates/jade/_product_list_aside.jade:94
 msgid " Professionnels"
 msgstr ""
 
-#: eloue/templates/jade/_product_list_aside.jade:95
+#: eloue/templates/jade/_product_list_aside.jade:97
 msgid "Filtrer"
 msgstr ""
 
@@ -1397,26 +1434,85 @@ msgstr ""
 msgid "Présentation de e-loue"
 msgstr ""
 
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:6
+msgid "Demande de devis envoyé"
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:7
+msgid ""
+"\n"
+"      p\n"
+"        | Votre demande de devis vient d’être envoyée.\n"
+"      p\n"
+"        | Nos équipes font le nécessaire pour que le loueur vous\n"
+"        | réponde dans les 24 heures, afin de confirmer votre\n"
+"        | location.\n"
+"      p\n"
+"        | Vous n’avez rien à payer sur e-loue, le paiement se fera\n"
+"        | directement chez le loueur.\n"
+"      p\n"
+"        | Nous vous remercions pour votre confiance et  restons à\n"
+"        | votre disposi;on si vous avez des questions.\n"
+"      p\n"
+"        | L’équipe e-loue\n"
+"      "
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:25
+msgid ""
+"\n"
+"        b N’hésitez pas à nous écrire\n"
+"        | via le formulaire ci‐dessous, nous nous ferons un plaisir de "
+"répondre à toutes vos questions...\n"
+"        "
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_phone_form.jade:4
+msgid ""
+"\n"
+"  b N’hésitez pas à nous appeler, \n"
+"  | nous nous ferons un plaisir de répondre à toutes vos questions…\n"
+"  "
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_phone_form.jade:8
+msgid "Nous sommes joignables au&nbsp;"
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_shop_form.jade:3
+msgid ""
+"\n"
+"  b N’hésitez pas à venir dans notre boutique,\n"
+"  | nous nous ferons un plaisir de répondre à toutes vos questions…\n"
+"  "
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_shop_form.jade:8
+msgid "Nos boutiques sont situées au&nbsp;"
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_shop_form.jade:17
+msgid "Ville de l'agence"
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_shop_form.jade:30
+msgid "Notre boutique est située au&nbsp;"
+msgstr ""
+
+#: eloue/templates/jade/pop_up_sections/_website_link_form.jade:3
+msgid ""
+"\n"
+"  b N’hésitez pas à venir sur notre site internet.\n"
+"  | vous devriez y trouver les réponses à toutes vos questions.\n"
+"  "
+msgstr ""
+
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:5
 msgid "Contactez-moi"
 msgstr ""
 
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:27
 msgid "Membre depuis le"
-msgstr ""
-
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:35
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:50
-msgid "Envoyez un message"
-msgstr ""
-
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:38
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:53
-msgid "Appelez"
-msgstr ""
-
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:41
-msgid "Venez en magasin"
 msgstr ""
 
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:44
