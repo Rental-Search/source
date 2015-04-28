@@ -15,9 +15,9 @@
                     section.terms
                         include ./pop_up_sections/_terms
                         a#create-booking(href="", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success
-                            | Réservez
+                            {% trans "Réservez" %}
                         a(href="", ng-click="openModal('message')").btn.bg-gray
-                            | Envoyez un message
+                            {% trans "Envoyez un message" %}
                 .change-part.table-cell.top
                     section.table.variant-call
                         include ./pop_up_sections/_variants_call
