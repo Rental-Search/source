@@ -45,11 +45,11 @@ section(ng-controller="AuthCtrl").container.signs-links
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
             {% endverbatim %}
             li: a(href="{% url 'dashboard:dashboard' %}") {% trans "Tableau de bord" %}
-            li: a(href="{% url 'dashboard:messages' %}") {% trans "Messages" %}
-            li: a(href="{% url 'dashboard:bookings' %}") {% trans "Réservations" %}
-            li: a(href="{% url 'dashboard:items' %}") {% trans "Annonces" %}
-            li: a(href="{% url 'dashboard:account' %}") {% trans "Compte" %}
-            li: a(href="", ng-click="logout()") {% trans "Déconnexion" %}
+            li: a(href="{% url 'dashboard:messages' %}") Messages
+            li: a(href="{% url 'dashboard:bookings' %}") Réservations
+            li: a(href="{% url 'dashboard:items' %}") Annonces
+            li: a(href="{% url 'dashboard:account' %}") Compte
+            li: a(href="", ng-click="logout()") Déconnexion
             {% verbatim %}
         //-
          .dropdown
@@ -82,7 +82,7 @@ section(ng-controller="AuthCtrl").container.signs-links
                   h5: a(href="#") #{item.topic}
                   p #{item.text}
         .dropdown
-          span(data-toggle="dropdown").dropdown-toggle.text-success {% trans "Aide" %}
+          span(data-toggle="dropdown").dropdown-toggle.text-success Aide
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
             {% endverbatim %}
