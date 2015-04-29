@@ -112,6 +112,24 @@ class PhoneNumberAdmin(admin.ModelAdmin):
     )
 
 
+class SlimpayFilter(admin.SimpleListFilter):
+    title = _('Signature')
+
+    parameter_name = 'slimpay_code'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('true', _('Avec signature')),
+            ('false', _('Sans signature'))
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'true':
+            return queryset.filter(patron__slimpaymandateinformation__transactionStatus='success').exclude(patron__slimpaymandateinformation__transactionStatus='failure').distinct()
+        if self.value() == 'false':
+            return queryset.filter(patron__slimpaymandateinformation__transactionStatus='failure').exclude(patron__slimpaymandateinformation__transactionStatus='success').distinct()
+
+
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('company_name', 'propackage', 'slimpay_code', 'subscription_started', 'subscription_ended', 'payment_type','online_date', 'comment',)
     raw_id_fields = ("patron",)
@@ -122,7 +140,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     )
     date_hierarchy = 'subscription_started'
     ordering = ['-subscription_started']
-    list_filter = ('payment_type', 'propackage',)
+    list_filter = ('payment_type', 'propackage', SlimpayFilter)
     search_fields = ('patron__username', 'patron__email', 'patron__company_name')
 
     def company_name(self, obj):
