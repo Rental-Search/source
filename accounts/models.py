@@ -401,6 +401,17 @@ class Patron(AbstractUser):
     is_expired.short_description = ugettext(u"Expiré")
 
 
+class ProManager(PatronManager):
+    def get_queryset(self):
+        return super(ProManager, self).get_queryset().filter(is_professional=True)
+
+class Pro(Patron):
+    objects = ProManager()
+
+    class Meta:
+        proxy = True
+
+
 from datetime import time
 HOURS = [(time(h, 0), "%02d:00" % (h,)) for h in xrange(24)]
 

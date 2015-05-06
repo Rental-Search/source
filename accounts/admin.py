@@ -10,7 +10,7 @@ from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from eloue.admin import CurrentSiteAdmin
-from accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency
+from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency
 from accounts.forms import PatronChangeForm, PatronCreationForm
 
 log = logbook.Logger('eloue')
@@ -33,6 +33,14 @@ class BillingInline(admin.StackedInline):
 class ProAgencyInline(admin.TabularInline):
     model = ProAgency
     extra = 0
+
+class SubscriptionInline(admin.StackedInline):
+    model = Subscription
+    extra = 0
+    readonly_fields = ('subscription_started', )
+    fieldsets = (
+        (None, {'fields': ('propackage', 'subscription_started', 'subscription_ended', 'free', 'number_of_free_month', 'payment_type', 'annual_payment_date', 'comment')}),
+    )
 
 
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
@@ -199,6 +207,24 @@ class ProAgencyAdmin(admin.ModelAdmin):
             return obj.patron.username
 
 
+class ProAdmin(PatronAdmin):
+    list_display = ('company_name', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
+    list_filter = ()
+    inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, SubscriptionInline]
+
+    def queryset(self, request):
+        return Pro.objects.exclude(subscriptions=None)
+
+    def last_subscription(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].propackage
+
+    def last_subscription_started_date(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_started
+
+    def last_subscription_ended_date(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_ended
+
+
 try:
     admin.site.register(Address, AddressAdmin)
     admin.site.register(PhoneNumber, PhoneNumberAdmin)
@@ -207,5 +233,6 @@ try:
     admin.site.register(ProPackage, ProPackageAdmin)
     admin.site.register(Subscription, SubscriptionAdmin)
     admin.site.register(ProAgency, ProAgencyAdmin)
+    admin.site.register(Pro, ProAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)
