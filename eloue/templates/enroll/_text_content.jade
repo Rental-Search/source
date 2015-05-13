@@ -1,0 +1,76 @@
+-load i18n
+
+style
+  h4 {
+    color:#555;
+  }
+  
+  h3 {
+    color:#444;
+  }
+  
+  a[href^="mailto:"] {
+    color:#f27e36;
+  }
+  
+  a{
+    color:#24bd77;
+  }
+  
+  #intro {
+      background-image: url('/static/img/banner-1.jpg');
+      background-repeat: no-repeat;
+      background-size: 100%;
+      //- -webkit-filter: blur(1px);
+      //- -moz-filter: blur(1px);
+      //- -o-filter: blur(1px);
+      //- -ms-filter: blur(1px);
+      //- filter: blur(1px);
+      
+      border: 5px solid red;
+      color: #DDD;
+      width: 100%;
+      height: 200px;
+      opacity: 0.8;
+  }
+  
+  
+
+div#intro
+  p e-loue est une startup en pleine croissance, si vous voulez en savoir plus : 
+    a(href="/qui-sommes-nous/") qui-sommes-nous
+
+.container(style="color:#777; text-align: justify;")
+  div(style="margin: 0 5%;")  
+    h4 service commercial
+    include sales_department
+    
+    h4 relation client
+    include customer_department
+    
+    h4 développement technique
+    include technical_department
+    
+    
+    h3 Offres
+    p
+      a(href='https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20Charg%C3%A9%20Service%20Client.pdf?_subject_uid=114656958&w=AACAlA8ih_6emrGDOtkZt-Fc8dNr7hV15oofn4yX5xfKwA', target="_blank") Chargé service client - Pôle relations clients
+    p
+      a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20Chef%20de%20projet%20fonctionnel.pdf?_subject_uid=114656958&w=AADzwapka9ZUq7rHeLAA_8fj4YFD7aqYNTf_ob4tTao5_Q", target="_blank") Chef de projet - Méthodologie Scrum
+      
+    p
+      a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20D%C3%A9veloppeur%20Backend.pdf?_subject_uid=114656958&w=AACJQ7V5H7kjAQOb0wJf3viDmSP5rXegHq5kNXOoqRl9Ow", target="_blank") Développeur Backend Python - Framework Django
+      
+    p
+      a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20D%C3%A9veloppeur%20Frontend.pdf?_subject_uid=114656958&w=AADdT0OsN9y4g8UtIx60ZP1PnoV73cetXUV_rLqsIotHhQ",target="_blank") Développeur Frontend Javascript - AJAX
+    
+    
+    h3 Candidature spontanée
+    p Vous pouvez aussi, bien entendu, nous envoyer une candidature spontanée par mail à 
+      a(href="mailto:contact@e-loue.com") contact@e-loue.com
+    
+    h3 {% trans "Vous n'avez pas trouvé le job idéal ?" %}
+    p
+      | N'hésite pas à visiter le site de notre partenaire Meteojob.com, 
+      | avec plus de 200000 d'annonce partout en France : 
+      a(href="https://www.meteojob.com", target="_blank") https://www.meteojob.com
