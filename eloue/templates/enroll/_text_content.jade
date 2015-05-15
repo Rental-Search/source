@@ -33,39 +33,63 @@ style
   }
 
   a[href^="mailto:"] {
-    color:#f27e36;
+    color:#24bd77;
+  }
+
+  #content a {
+    color: #f27e36;
   }
   
   
   
   #intro {
-      background-image: url('/static/img/banner-4.png');
+      background-image: linear-gradient(
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.6)
+      ), url('/static/img/banner-4.png');
+      background-size: cover;
+      background-attachment: fixed;
+
       background-repeat: no-repeat;
-      background-size: 100%;
-      //- -webkit-filter: blur(1px);
-      //- -moz-filter: blur(1px);
-      //- -o-filter: blur(1px);
-      //- -ms-filter: blur(1px);
-      //- filter: blur(1px);
+      //- background-size: 100%;
       
       //- border: 5px solid red;
+      position: relative;
       color: #DDD;
       width: 100%;
-      height: 200px;
+      height: 250px;
       opacity: 0.8;
       margin-bottom: 50px;
   }
 
   #intro-text {
-    margin: 0 50px;
+    margin-left: 200px;
+    margin-right: 200px;
+    margin: 0 200px;
+    padding: 40px 0;
+    text-align: center;
+    vertical-align: middle;
   }
   
   
-
 div#intro
   div#intro-text
-    p e-loue est une startup en pleine croissance, si vous voulez en savoir plus : 
-      a(href="/qui-sommes-nous/") qui-sommes-nous
+    p 
+      | En plus des aquisitions récentes des sites 
+      a(href="https://www.sejourning.com/", target="_blank") Sejourning.com
+      | et 
+      a(href="https://www.contactngo.com/", target="_blank") ContactNGo.com
+      | , le groupe e-loue voit régulièrement naître des projets de création interne, comme 
+      a(href="https://www.autovoisin.com/", target="_blank") Autovoisin
+      | et 
+      a(href="https://location.go-sport.com/", target="_blank") GoSportLocation
+      | .
+    p
+      | C'est dans cette optique d'innovation permanente, cœur même de l'esprit startup, 
+      | que nous recherchons de nouveaux profils.
+    p Postulez dès à présent et rejoignez l'équipe e-loue
+    //- p si vous voulez en savoir plus : 
+    //-   a(href="/qui-sommes-nous/") qui-sommes-nous
 
 .container(style="color:#777; text-align: justify;")
   div(style="margin: 0 5%;")
@@ -107,7 +131,7 @@ div#intro
     h3 {% trans "Vous n'avez pas trouvé le job idéal ?" %}
     p
       | N'hésite pas à visiter le site de notre partenaire Meteojob.com, 
-      | avec plus de 200000 d'annonce partout en France : 
+      | avec plus de 50 000 offres d'emploi : 
       a(href="https://www.meteojob.com", target="_blank") https://www.meteojob.com
 
 
