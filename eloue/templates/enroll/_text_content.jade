@@ -11,7 +11,8 @@ style
 
 
   #content {
-    height: 150px;
+    height: 200px;
+    margin-bottom: 50px;
   }
 
   .orange .active a{
@@ -20,6 +21,11 @@ style
   .orange a {
     color: #555;
     background-color: #DDD;
+  }
+
+  .tab-content {
+    padding-top: 20px;
+    margin: 0 50px 0 20px;
   }
 
   .orange a:hover {
@@ -33,7 +39,7 @@ style
   
   
   #intro {
-      background-image: url('/static/img/banner-1.jpg');
+      background-image: url('/static/img/banner-4.png');
       background-repeat: no-repeat;
       background-size: 100%;
       //- -webkit-filter: blur(1px);
@@ -49,24 +55,29 @@ style
       opacity: 0.8;
       margin-bottom: 50px;
   }
+
+  #intro-text {
+    margin: 0 50px;
+  }
   
   
 
 div#intro
-  p e-loue est une startup en pleine croissance, si vous voulez en savoir plus : 
-    a(href="/qui-sommes-nous/") qui-sommes-nous
+  div#intro-text
+    p e-loue est une startup en pleine croissance, si vous voulez en savoir plus : 
+      a(href="/qui-sommes-nous/") qui-sommes-nous
 
 .container(style="color:#777; text-align: justify;")
   div(style="margin: 0 5%;")
     div(id="content")
       ul(id="tabs", class="nav nav-tabs orange", data-tabs="tabs")
         li.active
-          a(href="#sales-department", data-toggle="tab") service commercial
+          a(href="#technical-department", data-toggle="tab") développement
         li
           a(href="#customer-department", data-toggle="tab") relation client
         li
-          a(href="#technical-department", data-toggle="tab") développement technique
-
+          a(href="#sales-department", data-toggle="tab") service commercial
+        
       div(id="my-tab-content", class="tab-content")
         div(class="tab-pane active", id="sales-department")
           include sales_department
@@ -76,17 +87,17 @@ div#intro
           include technical_department
 
     
-    h3 Offres
-    p
-      a(href='https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20Charg%C3%A9%20Service%20Client.pdf?_subject_uid=114656958&w=AACAlA8ih_6emrGDOtkZt-Fc8dNr7hV15oofn4yX5xfKwA', target="_blank") Chargé service client - Pôle relations clients
-    p
-      a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20Chef%20de%20projet%20fonctionnel.pdf?_subject_uid=114656958&w=AADzwapka9ZUq7rHeLAA_8fj4YFD7aqYNTf_ob4tTao5_Q", target="_blank") Chef de projet - Méthodologie Scrum
+    //- h3 Offres
+    //- p
+    //-   a(href='https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20Charg%C3%A9%20Service%20Client.pdf?_subject_uid=114656958&w=AACAlA8ih_6emrGDOtkZt-Fc8dNr7hV15oofn4yX5xfKwA', target="_blank") Chargé service client - Pôle relations clients
+    //- p
+    //-   a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20Chef%20de%20projet%20fonctionnel.pdf?_subject_uid=114656958&w=AADzwapka9ZUq7rHeLAA_8fj4YFD7aqYNTf_ob4tTao5_Q", target="_blank") Chef de projet - Méthodologie Scrum
       
-    p
-      a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20D%C3%A9veloppeur%20Backend.pdf?_subject_uid=114656958&w=AACJQ7V5H7kjAQOb0wJf3viDmSP5rXegHq5kNXOoqRl9Ow", target="_blank") Développeur Backend Python - Framework Django
+    //- p
+    //-   a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20D%C3%A9veloppeur%20Backend.pdf?_subject_uid=114656958&w=AACJQ7V5H7kjAQOb0wJf3viDmSP5rXegHq5kNXOoqRl9Ow", target="_blank") Développeur Backend Python - Framework Django
       
-    p
-      a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20D%C3%A9veloppeur%20Frontend.pdf?_subject_uid=114656958&w=AADdT0OsN9y4g8UtIx60ZP1PnoV73cetXUV_rLqsIotHhQ",target="_blank") Développeur Frontend Javascript - AJAX
+    //- p
+    //-   a(href="https://dl-web.dropbox.com/get/pdf_eloue/Offre%20de%20stage%20e-loue%20-%20D%C3%A9veloppeur%20Frontend.pdf?_subject_uid=114656958&w=AADdT0OsN9y4g8UtIx60ZP1PnoV73cetXUV_rLqsIotHhQ",target="_blank") Développeur Frontend Javascript - AJAX
     
     
     h3 Candidature spontanée
