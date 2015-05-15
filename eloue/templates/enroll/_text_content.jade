@@ -8,14 +8,29 @@ style
   h3 {
     color:#444;
   }
-  
+
+
+  #content {
+    height: 150px;
+  }
+
+  .orange .active a{
+    background-color: #f27e36;
+  }
+  .orange a {
+    color: #555;
+    background-color: #DDD;
+  }
+
+  .orange a:hover {
+    color: #f27e36;
+  }
+
   a[href^="mailto:"] {
     color:#f27e36;
   }
   
-  a{
-    color:#24bd77;
-  }
+  
   
   #intro {
       background-image: url('/static/img/banner-1.jpg');
@@ -27,11 +42,12 @@ style
       //- -ms-filter: blur(1px);
       //- filter: blur(1px);
       
-      border: 5px solid red;
+      //- border: 5px solid red;
       color: #DDD;
       width: 100%;
       height: 200px;
       opacity: 0.8;
+      margin-bottom: 50px;
   }
   
   
@@ -41,16 +57,24 @@ div#intro
     a(href="/qui-sommes-nous/") qui-sommes-nous
 
 .container(style="color:#777; text-align: justify;")
-  div(style="margin: 0 5%;")  
-    h4 service commercial
-    include sales_department
-    
-    h4 relation client
-    include customer_department
-    
-    h4 développement technique
-    include technical_department
-    
+  div(style="margin: 0 5%;")
+    div(id="content")
+      ul(id="tabs", class="nav nav-tabs orange", data-tabs="tabs")
+        li.active
+          a(href="#sales-department", data-toggle="tab") service commercial
+        li
+          a(href="#customer-department", data-toggle="tab") relation client
+        li
+          a(href="#technical-department", data-toggle="tab") développement technique
+
+      div(id="my-tab-content", class="tab-content")
+        div(class="tab-pane active", id="sales-department")
+          include sales_department
+        div(class="tab-pane", id="customer-department")
+          include customer_department
+        div(class="tab-pane", id="technical-department")
+          include technical_department
+
     
     h3 Offres
     p
@@ -74,3 +98,18 @@ div#intro
       | N'hésite pas à visiter le site de notre partenaire Meteojob.com, 
       | avec plus de 200000 d'annonce partout en France : 
       a(href="https://www.meteojob.com", target="_blank") https://www.meteojob.com
+
+
+
+
+
+    script(type="text/javascript")
+      jQuery(document).ready(function ($) {
+          $('#tabs').tab()
+            .bind(function (e) {
+              $(this).next().hide().fadeIn();
+            });
+        });
+ 
+ 
+  script(type="text/javascript", src="../bootstrap/js/bootstrap.js")
