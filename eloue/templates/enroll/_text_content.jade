@@ -9,8 +9,9 @@ style
   }
   #content {
     height: 300px;
-    //- margin-bottom: 50px;
     background-color: white;
+    border-bottom: 1px solid #EEE;
+    border-top: 1px solid #EEE;
   }
   .orange .active a{
     background-color: #f27e36;
@@ -61,10 +62,11 @@ style
   }
 
   #quote-border {
-    margin: 2% 35%;
-    width: 30%;
-    border: 1px solid;
+    margin: 2% 40%;
+    width: 20%;
+    border: 1px solid #DDD;
   }
+
   
 div#intro
     p(style="margin-left: 200px; margin-right: 200px; margin: 0 200px; padding: 90px 0; text-align: center; vertical-align: middle; color: #EEE; font-size: 45px") Nous Recrutons
@@ -79,7 +81,7 @@ div#intro
     div#quote-border
   div(style="margin: 0 5%;")
     h3 Nos Offres
-    ul(id="tabs", class="nav nav-tabs orange", data-tabs="tabs")
+    ul(id="tabs", style="border-bottom: none;", class="nav nav-tabs orange", data-tabs="tabs")
       li.active
         a(href="#technical-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;développement&nbsp;&nbsp;&nbsp;
       li
