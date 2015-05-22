@@ -6,6 +6,7 @@ style
   } 
   h3 {
     color:#444;
+    margin-top: 40px;
   }
   #content {
     height: 300px;
@@ -40,10 +41,11 @@ style
   }
 
   #intro {
-      background-image: linear-gradient(
-      rgba(0, 0, 0, 0.3),
-      rgba(0, 0, 0, 0.1)
-      ), url('/static/img/banner-4.png');
+      //- background-image: linear-gradient(
+      //- rgba(0, 0, 0, 0.3),
+      //- rgba(0, 0, 0, 0.1)
+      //- ), url('/static/img/banner-4.png');
+      background-image: url('/static/img/banner-4.png');
       background-size: cover;
       background-attachment: fixed;
       background-repeat: no-repeat;
@@ -58,11 +60,11 @@ style
   #intro-text {
     text-align: center;
     color: #999;
-    padding-bottom: 40px;
+    //- padding-bottom: 40px;
   }
 
   #quote-border {
-    margin: 2% 40%;
+    margin: 3.5% 40%;
     width: 20%;
     border: 1px solid #DDD;
   }
@@ -100,7 +102,7 @@ div(id="content")
         include technical_department
 
 .container
-  div(style="margin: 1% 5% 3%;")
+  div(style="margin: 5% 5% 5%;")
     h3 Candidature spontanée
     p Vous pouvez aussi, bien entendu, nous envoyer une candidature spontanée par mail à 
       a(href="mailto:contact@e-loue.com") contact@e-loue.com
