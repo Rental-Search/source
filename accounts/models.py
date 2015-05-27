@@ -482,7 +482,7 @@ class FacebookSession(models.Model):
             return me_dict
         # we have to stock it in a local variable, and return the value from that
         # local variable, otherwise this stuff is broken with the dummy cache engine
-        me_dict = self.graph_api.get_object("me", fields='picture,email,first_name,last_name,gender,username,location')
+        me_dict = self.graph_api.get_object("me", fields='picture,email,first_name,last_name,gender,location')
         cache.set('facebook:me_%s' % self.uid, me_dict, 0)
         return me_dict
     
