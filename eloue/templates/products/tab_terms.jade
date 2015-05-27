@@ -4,9 +4,13 @@
     {% else %}
     {% if product_type == 'product' %}
     h3.indent-t-sm Assurance de l'objet
+    {% if product.category.need_insurance %}
     ul.not-ordered
       li Assurance incluse dans le prix du montant de la réservation. 
       li Casse accidentelle (vol exclu) pour un montant maximum de 750€ avec une franchise de 15%.
+    {% else %}
+    p Il n'y a pas d'assurance pour ce produit.
+    {% endif %}
 
     h3.indent-t-sm Conditions de location
     ul.not-ordered
