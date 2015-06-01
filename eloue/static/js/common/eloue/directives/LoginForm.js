@@ -8,7 +8,11 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
             restrict: "E",
             templateUrl: Path.templatePrefix + "partials/homepage/login-form.html",
             scope: {},
-            controller: "LoginCtrl"
+            controller: "LoginCtrl",
+            link: function (scope, element, attrs, ngModel) {
+                var link = document.getElementById('login-link');
+                analytics.trackLink(link, "Sign In Modal");
+            }
         };
     }]);
 });
