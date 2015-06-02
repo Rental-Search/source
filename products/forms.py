@@ -87,7 +87,7 @@ class FilteredProductSearchForm(SearchForm):
             point, self.max_range = self._get_location(location)
             if point:
                 sqs = sqs.dwithin(
-                    'location', point, Distance(
+                    'locations', point, Distance(
                         km=search_params.get('r', self.max_range))
                 )
         return sqs
