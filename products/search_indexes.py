@@ -14,10 +14,25 @@ from .helpers import get_unavailable_periods
 __all__ = ['ProductIndex']
 
 
+
+class LocationMultiValueField(indexes.SearchField):
+    """Handle multilocation"""
+    field_type = 'location'
+
+    def prepare(self, obj):
+        return super(LocationMultiValueField, self).prepare(obj)
+
+    def convert(self, value):
+        if value:
+            return list(value)
+        else:
+            return None
+
+
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
     location = indexes.LocationField(model_attr='address__position', null=True)
-
+    locations = LocationMultiValueField()
     categories = indexes.MultiValueField(faceted=True, null=True)
     created_at = indexes.DateTimeField(model_attr='created_at')
     created_at_date = indexes.DateField(model_attr='created_at__date')
@@ -50,6 +65,26 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     starts_unavailable = indexes.MultiValueField(faceted=True, null=True)
     ends_unavailable = indexes.MultiValueField(faceted=True, null=True)
+
+    agencies = indexes.BooleanField(default=False)
+
+    
+    def prepare_locations(self, obj):
+        agencies = obj.owner.pro_agencies.all()
+        if agencies.count() > 0:
+            positions = tuple([agency.position.x, agency.position.y] for agency in agencies if agency.position)
+            return positions
+        elif obj.address.position:
+            return tuple([obj.address.position.x, obj.address.position.y])
+        else:
+            return None
+            
+
+    def prepare_agencies(self, obj):
+        if obj.owner.pro_agencies.all().count() > 0 :
+            return True
+        else:
+            return False
 
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
