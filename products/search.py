@@ -11,6 +11,6 @@ __all__ = ['product_search']
 
 
 product_search = SearchQuerySet().models(Product) \
-    .filter(is_archived=False).filter(is_allowed=True) \
+    .filter(is_archived=False) \
     .facet('sites').facet('categories').facet('owner').facet('price') \
     .narrow('sites:%s' % settings.SITE_ID)

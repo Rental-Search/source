@@ -142,7 +142,7 @@ class Product(models.Model):
     def more_like_this(self):
         from products.search import product_search
         sqs = product_search.dwithin(
-            'location', self.address.position,
+            'locations', self.address.position,
             Distance(km=DEFAULT_RADIUS)
         ) #.distance('location', self.address.position)
         return sqs.more_like_this(self)[:3]

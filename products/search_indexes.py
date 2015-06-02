@@ -53,6 +53,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
     is_archived = indexes.BooleanField(model_attr='is_archived')
+    is_allowed = indexes.BooleanField(model_attr='is_allowed')
 
     is_highlighted = indexes.BooleanField(default=False)#model_attr='is_highlighted')
     is_top = indexes.BooleanField(default=False)#model_attr='is_top')
@@ -165,4 +166,4 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return Product
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.active().select_related('category', 'address', 'owner')
+        return self.get_model().on_site.select_related('category', 'address', 'owner')
