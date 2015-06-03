@@ -120,8 +120,10 @@ block append content-body
           section.owner-information
             include ../jade/product_details/aside/_owner_information
           {% endif %}
+          {% if product_list %}
           section.similar-listing
             include ../jade/product_details/aside/_similar_listing
+          {% endif %}
           //-section.connected-with-owner
           //-  include ../jade/product_details/aside/_connected_with_owner
           include ../jade/_pop_up_reserve.jade
