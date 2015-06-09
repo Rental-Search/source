@@ -26,7 +26,7 @@
     ul.subcategory__list.row
       each subcategory in categories|slice:"8:"
         li.subcategory__item.col-xs-3
-          a(href="{{ subcategory.get_absolute_url }}").subcategory__link {{ subcategory.name }}
+          a(href="{{ subcategory.get_absolute_url }}").subcategory__link Location<br>{{ subcategory.name }}
   {% endcache %}
 
   .row.text-center.indent-v-lg
