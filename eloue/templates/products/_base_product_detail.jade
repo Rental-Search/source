@@ -14,7 +14,7 @@ block append scripts
 block append head
   {% with product.pictures.all|first as picture %}
   {% with product.object.get_absolute_url as absolute_url %}
-  meta(property="og:title", content="A louser sur e-loue : {{product.summary}}")
+  meta(property="og:title", content="A louer sur e-loue : {{product.summary}}")
   meta(property="og:type", content="product")
   meta(property="og:url", content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}{{ absolute_url }}")
   {% with product.object.address as address %}
@@ -120,8 +120,10 @@ block append content-body
           section.owner-information
             include ../jade/product_details/aside/_owner_information
           {% endif %}
+          {% if product_list %}
           section.similar-listing
             include ../jade/product_details/aside/_similar_listing
+          {% endif %}
           //-section.connected-with-owner
           //-  include ../jade/product_details/aside/_connected_with_owner
           include ../jade/_pop_up_reserve.jade

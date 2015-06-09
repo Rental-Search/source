@@ -1,12 +1,16 @@
 .block-tab.ng-hide#tabs-insurance
     {% if is_pro %}
-    p.text-gray-strong Il n'y a pas d'assurance pour les professionnels
+    p.text-gray-strong Le professionnel se charge de l’assurance.
     {% else %}
     {% if product_type == 'product' %}
     h3.indent-t-sm Assurance de l'objet
+    {% if product.need_insurance %}
     ul.not-ordered
       li Assurance incluse dans le prix du montant de la réservation. 
       li Casse accidentelle (vol exclu) pour un montant maximum de 750€ avec une franchise de 15%.
+    {% else %}
+    p Il n'y a pas d'assurance pour cette annonce.
+    {% endif %}
 
     h3.indent-t-sm Conditions de location
     ul.not-ordered

@@ -107,7 +107,7 @@
                 td CV fiscaux *
                 td.without-search
                     select(ng-model="product.tax_horsepower", name="tax_horsepower", eloue-chosen, data-ng-disabled="submitInProgress", required)
-                        option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in capacityOptions", value={{item.id}}) {{item.name}}
                     .text-danger(data-ng-show="itemInfoForm.tax_horsepower.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-if="isAuto")
                 td N° d'immatriculation *
