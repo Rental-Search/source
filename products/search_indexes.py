@@ -69,6 +69,8 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     agencies = indexes.BooleanField(default=False)
 
+    need_insurance = indexes.BooleanField(default=True)
+
     
     def prepare_locations(self, obj):
         agencies = obj.owner.pro_agencies.all()
@@ -79,6 +81,10 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
             return tuple([obj.address.position.x, obj.address.position.y])
         else:
             return None
+
+
+    def prepare_need_insurance(self, obj):
+        return obj.category.need_insurance
             
 
     def prepare_agencies(self, obj):
