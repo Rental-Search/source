@@ -93,7 +93,7 @@ class Product(models.Model):
     shipping = models.BooleanField(_(u'Livraison possible'), default=False)
 
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
-    is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
+    is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True, help_text=_(u"Not index the product in the search engine"))
     # FIXME: 'category' attribute is obsoleted by 'categories' and must be removed
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
     categories = models.ManyToManyField('Category', related_name='product_categories', through='Product2Category')
@@ -142,7 +142,7 @@ class Product(models.Model):
     def more_like_this(self):
         from products.search import product_search
         sqs = product_search.dwithin(
-            'location', self.address.position,
+            'locations', self.address.position,
             Distance(km=DEFAULT_RADIUS)
         ) #.distance('location', self.address.position)
         return sqs.more_like_this(self)[:3]
