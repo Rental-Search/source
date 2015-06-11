@@ -19,3 +19,10 @@ block append content-body
         include ../jade/_footer_links
       section.row-fluid.rss
         include ../jade/_rss
+
+if is_actived
+  block append tail
+    {{ block.super }}
+    script
+      analytics.track("Activation Account Success", {'userId': {{ is_actived.pk}} });
+      
