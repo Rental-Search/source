@@ -1,5 +1,6 @@
 style
-    #anchors a{color: #24bd77;}
+    #anchors a, #summary{color: #24bd77;}
+
 
 .container(style="color:#777; width:85%;")
   h2.text-uppercase.text-center Conditions générales Particuliers
@@ -8,12 +9,13 @@ style
   br
   br
   .row#anchors
-    .col-md-3.col-centered
-        p: a(href="#objet") Objet
+    .col-md-2.col-centered
+        p: a(href="#objet") Objet des CGU
         p: a(href="#definitions") Définitions
         p: a(href="#fonctionnement") Fonctionnement du site et inscription
         p: a(href="#processus") Processus de Location
-    .col-md-3.col-centered
+    div(style="width: 10px; background-color: #ddd;")
+    .col-md-2.col-centered
         p: a(href="#tarifs") Tarifs
         p: a(href="#obligations-membres") Obligations des membres
         p: a(href="#obligations-proprietaires") Obligations des Propriétaires
@@ -32,6 +34,18 @@ style
         p: a(href="#liens") Liens hypertextes
         p: a(href="#propriete-intelectuelle") Propriété intellectuelle
 
+  //- section.footer-links.framing
+  //-     .container
+  //-     ul.nav.nav-justified
+  //-       -var footer_links = [["Le concept e-loue", [["Comment ça marche ?", "/comment-ca-marche/"], ["L’offre e-loue Pro", "/offre-professionnel/"], ["La livraison", "/navette/"]]], ["Pourquoi choisir e-loue ?", [["E-­loue et la sécurité", "/securite/"], ["Contrats de location", "/contrat-de-location/"], ["Assurance tranquillité", "/assurance-tranquillite/"]]], ["L’entreprise e-loue", [["Qui sommes-nous ?", "/qui-sommes-nous/"], ["Nos partenaires", "/nos-partenaires/"], ["Conditions générales particuliers", "/conditions-generales-particuliers/"], ["Nous recrutons", "/nous-recrutons/"]]], ["En savoir plus", [["Contactez-nous", "/contactez-nous/"], ["Mentions légales", "/mentions-legales/"], ["Blog e-loue", "http://blog.e-loue.com/"]]]]
+  //-       each header, group in footer_links
+  //-         li.divide
+  //-         li.ul-wrapper: .centering
+  //-           h4.text-nowrap {{ header }}
+  //-           ul.nav
+  //-             each title, link in group
+  //-               li.link-wrapper: a(href="{{ link }}") {{ title }}
+
 
   br
   h3: a Préambule
@@ -42,7 +56,7 @@ style
     | Ainsi tout membre inscrit sur E-loue a accepté ces conditions générales d’utilisation.
 
   br
-  h3: a#objet 1. Objet 
+  h3: a#objet 1. Objet des CGU
   p Le service d'annonces en ligne www.e-loue.com est géré par la société E-loue et permet la mise en relation de propriétaires annonceurs (ci-après les Propriétaires) et de locataires de biens (ci- après les Locataires). Les Propriétaires et les Locataires sont ci-après désignés conjointement les Membres.
   p Les présentes conditions générales d'utilisation de la Plateforme E-loue ont pour objet de définir des conditions par lesquelles les Membres sont autorisés à utiliser la Plateforme E-loue aux fins d'opérer leur mise en relation.
   p La Plateforme E-loue permet la conclusion de contrats de location d’Objets entre Propriétaires et Locataires, mais n’en demeure aucunement responsable ni partie. Les Propriétaires peuvent être des particuliers ou des professionnels. Les Locataires ne peuvent louer qu’à des fins personnelles et non dans l’exercice de leur profession.
@@ -51,7 +65,8 @@ style
   p En conséquence, E-loue n'exerce aucun contrôle sur la qualité, la sûreté ou la licéité des objets répertoriés, la véracité ou l'exactitude du contenu ou des annonces des utilisateurs, la capacité des vendeurs à vendre lesdits objets ni la capacité des acheteurs à payer lesdits objets. 
   p Les Membres sont seuls décisionnaires de la concrétisation de la location des Objets et seuls responsables du contrat de location.
   p L'acceptation des présentes Conditions Générales d'utilisation de la Plateforme E-loue par les Membres vaut mandat donné à E-loue pour mettre en relation Propriétaires et Locataires et opérer les transactions effectuées sur le site de E-loue selon les modalités ci-après.
-
+  br
+  p: a#summary(href="#") Revenir au sommaire
 
   br
   h3: a#definitions 2. Définitions
@@ -107,12 +122,19 @@ style
         | toute personne physique qui accède au site sans être nécessairement inscrite dessus.
 
     br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
     h3: a#fonctionnement 3. Fonctionnement du site et inscription
     p Tout Utilisateur de la Plateforme E-loue peut effectuer une recherche d’Objet sans être inscrit sur le site. Pour cela, il lui suffit de taper le nom de l’objet de sa recherche dans la barre de recherche prévue à cet effet. Il pourra également préciser sa localisation. 
     p Pour bénéficier des services de mise en relation proposés par E-loue, l’Utilisateur doit s’inscrire sur la Plateforme E-loue. L’inscription est gratuite.
     p Le Membre pourra demander la suppression de son compte à tout moment aux services E-loue, par e-mail à contact@e-loue.com en indiquant son nom d’utilisateur ou son adresse mail associée à son compte. Les règles relatives à l’annulation d’une location seront applicables si une location est prévue au moment de la désinscription.
     p Les éventuels Locataires peuvent, s’ils le souhaitent avant toute demande de réservation, contacter par téléphone les Propriétaires Particuliers via la fiche produit de l’objet concerné (en cliquant sur « Appelez ») qui donnera accès à un numéro payant (1,35€/ appel + 0,35€/ minute) protégeant la confidentialité des coordonnées personnelles du Propriétaire Particulier. Ils peuvent également envoyer un message avant toute demande de réservation (en cliquant sur « Envoyez un message »).
 
+    br
+    a#summary(href="#") Revenir au sommaire
+
+    br
     br
     h3: a#processus 4. Processus de Location
     
@@ -186,6 +208,8 @@ style
         | Les Locataires et/ou Propriétaires auront ainsi la possibilité de mettre en ligne leurs commentaires sur les Membres avec lesquels ils ont effectué leurs transactions. Cette évaluation positive pourra être, pour certains Propriétaires une condition à la location de leurs biens. L’évaluation s’appliquera également au Propriétaire afin, pour les Locataires,
         | d’évaluer le Propriétaire pendant ou à l’issue de la transaction dite « location ». L’Objet ou le bien loué pourra également être évalué à l’issue de la transaction par le Locataire.
 
+    br
+    a#summary(href="#") Revenir au sommaire
 
     br
     h3 4.2 En cas de location avec un Propriétaire Professionnel
@@ -206,7 +230,9 @@ style
     p Il sera de la responsabilité du Propriétaire et du Locataire d’ajouter la mention « prolongation de location » sur le Contrat de location. Cette mention les dispensera de refaire un état des lieux d’entrée de location.
     p L’état des lieux d’entrée de location à prendre en compte sera celui fait lors de la location initiale. 
 
-
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
     br
     h3#tarifs 5. Tarifs
     p L’utilisation de la plateforme E-loue est gratuite, s’agissant des frais d’inscription et des frais d’insertion d’une annonce.
@@ -221,6 +247,9 @@ style
     p E-loue peut modifier à tout moment sa politique relative aux frais de mise en ligne et aux commissions ainsi que les tarifs de ses services. Ces modifications prendront effet dès leur mise en ligne et s’ap pliqueront à toutes les transactions postérieures à cette mise en ligne. Veuillez donc consulter régulièrement ces Conditions Générales et notamment avant toute transaction sur le site.
 
     br
+    a#summary(href="#") Revenir au sommaire
+
+    br
     h3#obligations-membres 6. Obligations des membres
     p Les services d’E-loue sont réservés aux personnes juridiquement capables ou autorisées de souscrire des contrats de location à l’exclusion notamment des mineurs.
     p E-loue se réserve le droit de supprimer le compte d’un Membre quelque soit le motif, notamment s’il ne respecte pas les conditions générales, s’il est engagé dans des actes frauduleux en rapport avec le site ou met en location ou souhaite louer des objets illicites.
@@ -228,6 +257,9 @@ style
     p Le Membre engage sa responsabilité sur les informations annoncées.
     p Il ne doit annoncer aucune information mensongère ou exagérée.
 
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
     br
     h3#obligations-proprietaires 7. Obligations des Propriétaires
 
@@ -303,7 +335,6 @@ style
     p Le Locataire s’engage à mettre à jour les informations le concernant.
     p Le Locataire s'engage à posséder une boîte aux lettres normalisée conforme aux recommandations des services postaux (dimension de la boîte aux lettres, indication des coordonnées des résidents, etc...), dans le cas où la transaction est acheminée par voie postale.
 
-
     br
     b 8.1.2. Consommables
     p Les consommables ne sont pas inclus dans le tarif de location.
@@ -349,9 +380,6 @@ style
     b 8.2.2. Carburant
     p Le Locataire rend le véhicule avec le même niveau de carburant que le niveau avec lequel le Propriétaire lui a donné.
 
-
-
-
     b 8.2.3. Frais annexes
     p Le Locataire s’engage à payer les frais annexes suivants :
     ul 
@@ -360,11 +388,6 @@ style
             li 20€ (vingt euros) pour l’intérieur du véhicule
             li 20€ (vingt euros) pour l’extérieur du véhicule
     p Plus généralement, le Locataire supportera l’intégralité des prestations, services rendus et dépenses acquittées pour son compte par le Propriétaire par nécessité.
-
-
-
-
-
 
     b 8.2.4. Utilisation du véhicule
     p Le Locataire devra utiliser le véhicule en bon père de famille, ne pas confier le véhicule loué à des personnes non prévues dans le contrat, garder le véhicule en cas de panne ou d’accident sous sa responsabilité jusqu’à ce que le dépanneur ou Propriétaire arrive.
@@ -387,8 +410,6 @@ style
     b 8.2.5. Panne
     p En cas de panne non liée à une utilisation du véhicule contraire aux termes de ce contrat, le Locataire peut interrompre le contrat de location et être remboursé du temps de location non utilisé.
 
-
-
     b 8.2.6. Contravention 
     p Le Locataire qui commet une infraction entraînant une contravention doit en supporter le coût. 
     p Le Locataire qui reçoit une contravention ou pense avoir commis une infraction constatée par un contrôle automatique doit en avertir le Propriétaire lors de la restitution du véhicule.
@@ -398,8 +419,6 @@ style
         | En cas de stationnement sur l’espace public le Locataire doit trouver une place autorisée, et le cas
         | échéant payer le stationnement jusqu’à la fin de la période de location.
     p Le contrat de location et la responsabilité du Locataire ne prennent fin qu'à réception du véhicule, des clés et des papiers par le Propriétaire ou une personne mandatée par lui.
-
-
 
     h4 8.3. Pour la location des logements
     b 8.3.1. Consommables
@@ -422,7 +441,10 @@ style
     p A l’issue du contrat, le Locataire est tenu de restituer le bien et ses clés au Propriétaire, au lieu où la location a débuté.
     p Le contrat de location et la responsabilité du Locataire ne prennent fin qu'à réception des clés et de l’état des lieux.
 
-
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
     h3#assurance 9. Assurance
     b Pour le détail de la Politique d’assurance, merci de vous référer aux conditions spécifiques Assurance tranquillité.
     Trois contrats d’assurance de biens ont été souscrits par la société E-loue :
@@ -432,8 +454,10 @@ style
         li Europe Assistance pour les appartements. La prime est déjà incluse dans le montant de la location.
 
 
-
-
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
     h3#engagements 10. Engagements de E-LOUE
     p E-loue s'engage à tout mettre en œuvre pour maintenir le site dans un état opérationnel. Il s'agit toutefois d'une obligation de moyen et en aucun cas d’une obligation de résultat.
     p E-loue s'engage à transmettre au Propriétaire par e-mail tous les messages postés par les personnes intéressées par son annonce et par téléphone les appels reçus concernant sa fiche produit ainsi que de tenir à sa disposition toutes les informations relatives à son annonce à la condition que l’adresse e-mail et le numéro de téléphone renseignés soient valides
@@ -448,6 +472,9 @@ style
         li de dysfonctionnements, bugs, erreurs ou inexactitudes quelconques présents sur nos services ;
         li de tout dommage subi par vos matériels informatiques résultant de votre utilisation de la Plateforme E-loue ;
 
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
     br
     h3#responsabilites 11. Responsabilité
     br
@@ -483,7 +510,10 @@ style
     p E-loue n’accepte aucune responsabilité liée à une éventuelle dangerosité ou défectuosité des objets mis en location sur le site, pouvant porter atteinte à la santé ou à l’intégrité physique et n’apporte aucune garantie à ce sujet. N’en déduisez donc pas que tous les Objets mis en location sont sans danger pour les personnes ou leurs biens. Les Membres et Utilisateurs sont seuls responsables du contrôle et de la vérification que les objets offerts en location et loués sont bien autorisés à la location en vertu des législations applicables. Certains produits sont interdits à la location, c’est pourquoi vous ne les trouverez pas dans l’arborescence catégories/sous-catégorie objets. Aussi vous êtes tenus responsables si vous ajoutez un Objet interdit à la location. Veuillez nous signaler si une annonce concernant un Objet supposé interdit à la location est en ligne sur le site, afin qu’E-loue la supprime. E-loue se réserve le droit de supprimer toute annonce dont le contenu ou la forme serait illicite ou non-conforme aux présentes conditions générales de service.
     br
     p Vous êtes tenus responsables en cas de location d’un produit interdit. E-loue ne fait aucune déclaration ou garantie, expresse ou tacite, concernant le site, les offres de location, leur présentation ou leur contenu, y compris la garantie de qualité marchande, d’aptitude à un emploi particulier, la non-violation du droit d’auteur, de marques commerciales ou d’autres droits de propriété intellectuelle, la liberté de tous les services, les travaux ou autres matériels de contenu, contre les virus, les vers, les chevaux de Troie ou tout autre code aux traits hostiles, perturbateurs ou destructeurs. Sans préjudice des stipulations prévues au paragraphe précédent, E-loue ne peut être tenu pour responsable d’aucune perte ou altération de données, d’aucune perte de profit, de chiffre d’affaires, de temps, d’opportunité ou de tout autre dommage indirect, que ladite perte ou ledit dommage résulte d’une négligence ou de toute autre cause. Si le membre ou l’utilisateur est consommateur, les droits qui lui sont accordés par la loi ne sont pas remis en cause par la présente clause.
+    br
+    a#summary(href="#") Revenir au sommaire
 
+    br
     br
     h3#dispositions 12. Dispositions générales
     br
@@ -520,6 +550,9 @@ style
         li Sauf indication expresse contraire, les présentes Conditions d'utilisation sont régies par le droit français.
     p L’utilisation des applications externes utilisées par E-loue entraine l’acceptation implicite des conditions générales de ces applications.
 
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
     br
     h3#cookies 13. Cookies
     p 
@@ -561,6 +594,9 @@ style
 
 
     br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
     h3#gestion 14. Gestion des données personnelles
     p Pour la gestion de leur relation clientèle avec E-loue, les Membres autorisent ce dernier à utiliser les données personnelles qu’ils ont transmises. Ce traitement a fait l’objet d’une déclaration à la CNIL sous le numéro 1403691.
     p 
@@ -568,17 +604,27 @@ style
         | Les données nominatives relatives aux Membres sont collectées, enregistrées et stockées en conformité avec les dispositions de la Loi relative à l'informatique, aux fichiers et aux libertés du 6 janvier 1978. Les Membres disposent du droit d'accès et de rectification prévu par la loi auprès de E-loue responsable de la Plateforme. Pour tout renseignement, adressez-vous directement à E-loue à contact@e-loue.com.
     p Le pseudo et le mot de passe choisis par un Membre sont strictement confidentiels, et il s’engage à ne pas les communiquer. Les Membres sont seuls responsables en cas d'utilisation à leur insu par une autre personne utilisant leurs identifiants. Toute action faite à partir du compte de l’Utilisateur est présumée être faite par lui. 
     p Les échanges de messages entre les utilisateurs sont confidentiels. E-loue ne peut les consulter qu’en cas de besoin.
+    br
+    a#summary(href="#") Revenir au sommaire
 
+    br
     br
     h3#taxes 15. Taxes et imposition
     p Contrairement à E-loue qui n’est pas partie aux locations de biens, les Utilisateurs, Membres,Locataires et Propriétaires sont seuls redevables de tous les impôts, taxes et commissions résultant de l'utilisation de nos services et de notre site, notamment concernant l’argent des locations effectuées via le site. E-loue se dégage donc de toute responsabilité pour les taxes sur les transactions effectuées sur ou via son site. Il est de la responsabilité des Membres d’être à jour de leurs déclarations fiscales. 
     p Ils sont invités à se rapprocher de leur centre des impôts.
 
     br
+    a#summary(href="#") Revenir au sommaire
+
+    br
+    br
     h3#liens 16. Liens hypertextes
     p Le Site peut contenir des liens hypertextes et/ou des hyperliens renvoyant vers des Sites édités et hébergés depuis des serveurs tiers, et tout particulièrement concernant les bannières publicitaires, dont la régie n’est aucunement assurée par E-loue et sur lesquels aucun contrôle ne peut être exercé.
     p E-loue décline toute responsabilité concernant les conséquences juridiques liées à l’accès à ces Sites depuis le Site.
+    br
+    a#summary(href="#") Revenir au sommaire
 
+    br
     br
     h3#propriete-intelectuelle 17. Propriété intellectuelle
     p E-loue est propriétaire des droits de propriété intellectuelle ou détient les droits d’usage sur tous les éléments accessibles sur le Site, notamment les textes, images, graphismes, logo, icônes, sons, logiciels. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du Site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de E-loue. Toute exploitation non autorisée du site ou de l’un quelconque des éléments qu’il contient sera considérée comme constitutive d’une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de Propriété Intellectuelle.
