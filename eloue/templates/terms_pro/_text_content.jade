@@ -1,0 +1,284 @@
+style
+    #anchors a, #summary{color: #24bd77;}
+
+.container(style="color:#777; width:85%;")
+    h2.text-uppercase.text-center Conditions générales Professionnels
+    p.text-right: em Version 15 avril 2015
+
+    br
+    section.footer-links.framing
+      .container
+      ul.nav.nav-justified
+        -var footer_links = [[["1. Objet des CGU", "#objet"], ["2. Définitions", "#definitions"], ["3. Inscription", "#inscription"], ["4. Tarifs et modalités de paiement", "#tarifs"], ["5.  Résiliation du contrat", "#resiliation"]], [["6. Résolution du contrat", "#resolution"], ["7. Processus de Location", "#processus"], ["8. Obligations des Loueurs Professionnels", "#obligations"], ["9. Assurance","#assurance"], ["10. Engagements de E-LOUE", "#engagements"]], [["11. Résponsabilités", "#responsabilites"], ["12. Dispositions générales", "#dispositions"], ["13. Cookies", "#cookies"], ["14. Liens hypertextes", "#liens"]]]
+        each group in footer_links
+          //- li.divide
+          li.ul-wrapper
+          li.ul-wrapper: .centering
+            //- h4.text-nowrap &nbsp;
+            ul.nav
+              each title, link in group
+                li.link-wrapper: a(href="{{ link }}") {{ title }}
+        li.ul-wrapper
+
+    br
+    h3 Préambule
+    p Les conditions générales du Contrat Loueur Professionnel précisent les conditions dans lesquelles les Loueurs Professionnels peuvent souscrire aux services proposés par E-loue.
+    p Les présentes conditions générales sont soumises à acceptation par les loueurs d’E-loue lors de leur inscription. Ainsi tout Loueur Professionnel inscrit sur E-loue a accepté ces conditions générales d’utilisation.
+
+
+    br
+    br
+    h3#objet 1. Objet
+    p Le service d'annonces en ligne www.e-loue.com est géré par la société E-loue et permet aux professionnels de la location d’avoir une boutique en ligne sur la Plateforme.
+    p L'acceptation des présentes Conditions Générales d'utilisation pour les contrats professionnels de la Plateforme E-loue par les Membres vaut mandat donné à E-loue pour afficher aux Membres du site E-loue les produits et coordonnées des Loueurs Professionnels.
+    p Les services d’E-loue sont réservés aux personnes juridiquement capables ou autorisées de souscrire des contrats de location à l’exclusion notamment des mineurs.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#definitions 2. Définitions
+    p Chacun des termes mentionnés ci-dessous aura la signification suivante dans les présentes Conditions Générales du Service E-Loue:
+    ul.dash-item
+        li 
+            em Eventuel Locataire : 
+            | Membre cherchant à louer un Objet sur E-loue, avant de concrétiser la location.
+        ul 
+            li 
+                em Locataire :
+                | Membre ayant fait une demande de réservation qui a été acceptée par le Propriétaire.
+            li 
+                em Loueur Professionnel ou Propriétaire Professionnel : 
+                | Membre de la Plateforme E-loue, agissant à titre de professionnel, mettant en ligne une offre de location d’un objet sur la Plateforme E-loue 
+
+        li 
+            em Membre : 
+            | au singulier ou au pluriel,  un Propriétaire ou un Locataire susceptible de faire usage de la Plateforme E-loue après acceptation des présentes Conditions Générales. Tout Membre s'engage à fournir des informations exactes quant à son identité, adresse et autres données nécessaires à l'accès à la Plateforme E-loue et à mettre à jour toute modification concernant ces informations.
+
+        li 
+            em Objet : 
+            | Objets susceptibles de faire l'objet d'une mise en relation pour une location par la Plateforme E-loue.
+
+        li 
+            em Plateforme E-loue : 
+            | Structure fonctionnelle et organisationnelle mise en place par E-loue permettant la mise en relation entre  locataires d’objets et Loueurs Professionnels (site, application et plus 
+            | généralement tout support permettant d’accéder aux services d’E-loue).- Prix de la Transaction : Prix total de la location de l’objet payable par le Locataire. Eventuellement, si une transaction se fait à distance, des frais de port peuvent être demandés. 
+            | Ils devront être inclus dans le Prix indiqué par jour.
+        li 
+            em Utilisateur : 
+            | toute personne physique qui accède au site sans être nécessairement inscrite dessus.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#inscription 3. Processus d’inscription
+    p L’inscription au service E-loue pour un Loueur Professionnel s’effectue à distance, par l’intermédiaire d’un chargé de clientèle de la société E-LOUE.
+    p Le chargé de clientèle demandera toutes les coordonnées nécessaires à l’inscription ainsi que le numéro de téléphone portable et le RIB.
+    p Un code SMS sera envoyé sur le mobile du Loueur Professionnel pour acceptation de ce présent contrat. Le Loueur Professionnel communiquera le code au chargé de clientèle pour validation.
+    p Ensuite un chef de projet de E-loue contactera le Loueur Professionnel afin de mettre en place sa boutique sur la plateforme E-Loue.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#tarifs 4. Tarifs et modalités de paiement
+    p Pour les transactions avec un Loueur Professionnel de la plateforme, E-loue ne perçoit aucune commission sur les locations. Le Loueur pPofessionnel est uniquement facturé d'un abonnement mensuel dépendant de la durée de son engagement et des frais de mise en service. Pour connaitre ce montant, il convient de demander un devis en ligne. Le contrat est ensuite conclu pour une durée de 6 ou 12 mois. 
+    p: b Cet engagement sera reconduit automatiquement.
+    p 
+        | Le paiement des abonnements se fait uniquement par prélèvement bancaire mensuel via un 
+        b RIB.
+
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#resiliation 5. Résiliation du contrat
+
+    p Les contrats sont conclus pour des durées de 6 mois ou 12 mois (hors cas particuliers fixés avec le service commercial) et sont reconduits tacitement à l’issue de la durée d’engagement.
+    p Pour les contrats dont la durée d’engagement dépasse 6 mois, le Loueur Professionnel dispose d’une faculté de résiliation anticipée à l’issue d’une période de  6 mois en s’acquittant de 50% des sommes dues jusqu’au terme du contrat initialement prévu.
+    p Au-delà de la période d’engagement, le contrat est reconduit tacitement entre les parties. Le Loueur Professionnel peut résilier son abonnement à tout moment en respectant un délai de préavis d’un mois.
+    p Dans tous les cas, le Loueur Professionnel devra informer E-loue de toute résiliation, qu’elle soit anticipée ou non, par lettre recommandée avec accusé de réception ou par courrier électronique recommandé (service proposé par La Poste). Le délai de préavis commence à courir à compter de la réception de cette notification de résiliation par E-loue.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#resolution 6. Résolution du contrat
+    p En cas de manquement du Loueur Professionnel à ses obligations, E-loue peut mettre fin au contrat. Cette résolution se fera de plein droit, sans sommation ni formalité. 
+    p E-Loue pourra notamment mettre fin au contrat en cas de manquement du Loueur Professionnel à son obligation de payer le contrat. 
+
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#processus 7. Processus de Location
+    p La réservation ne s’effectue pas en ligne pour les Loueurs Professionnels. 
+    p Un Membre souhaitant louer un bien à un Loueur Professionnel pourra le contacter via la plateforme E-loue.
+    p Le Propriétaire Professionnel recevra alors les coordonnées de l’éventuel Locataire et décidera de donner suite ou non à la location.
+    p Sur chaque boutique ou fiche produit d’un Loueur professionnel, sont affichés :
+    ul
+        li L’adresse physique du magasin
+        li L’adresse du site web
+        li Le numéro de téléphone 
+        li Un formulaire de contact
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#obligations 8. Obligations des Loueurs Professionnels
+
+    p Les services d’E-loue sont réservés aux professionnels juridiquement capables ou autorisées de souscrire des contrats.
+    p Le Propriétaire agissant à titre professionnel doit s'identifier auprès de E-loue en cette qualité lors de l’inscription. E-loue se réserve le droit de ne pas contracter avec un Propriétaire Professionnel.
+    br
+    p Le Membre doit s’assurer, préalablement à la mise en ligne, qu’il détient tous les droits nécessaires pour faire apparaître les images, textes et autres éléments susceptibles d’être couverts par un droit de propriété intellectuelle. Le Membre s’engage ainsi à recueillir l’autorisation ou le consentement de l’intéressé pour tout élément ou donnée saisie ou apparaissant sur la Plateforme de son fait, qu’il s’agisse par exemple des données personnelles ou de photographies ou éléments textuels.
+    br
+    p L'Utilisateur engage sa responsabilité sur les informations annoncées. Il donne les informations sur les caractéristiques essentielles de l’Objet loué. 
+    p Il ne doit annoncer aucune information mensongère ou exagérée.
+    p Le Loueur Professionnel s'engage à produire une annonce dont le contenu n'est pas de nature à porter préjudice à autrui ni à enfreindre les lois et règlements en vigueur. Si tel était le cas, il en serait tenu pour seul responsable en tant qu’éditeur des contenus mis en ligne. E-loue ne pourra pas en être tenu pour responsable.
+    p Il accepte de recevoir par e-mail les messages et par téléphone les appels de toute personne intéressée par son annonce.
+    p Il s'engage à répondre à toute personne intéressée par son annonce.
+    p Il s'engage à demander la suppression de son annonce dès lors qu’elle ne sera plus disponible à la location.
+    p Le Propriétaire est seul responsable de la bonne exécution de l'obligation d'informer les Locataires des caractéristiques essentielles du bien. Il est seul responsable de la description des biens qu'il propose à la location. Il garantit E-loue de toute réclamation relative au contenu et à la forme de ladite description. Le Propriétaire s'engage à effectuer toutes validations et à apporter toutes précisions nécessaires de sorte que le descriptif et les éléments de l'offre soient fidèles et n'induisent pas le Locataire en erreur. En cas d'erreur du descriptif, des éléments de l'offre, le Propriétaire assumera seuls les surcoûts éventuels et aucune réclamation de sa part ne sera recevable à ce titre tant auprès du Locataire que de E-loue.
+    p Le Propriétaire s’engage à mettre à jour les informations le concernant.
+    br
+    p Les Loueurs Professionnels n’ont aucun engagement de location et de disponibilité. Lorsqu’un Membre les sollicite pour louer un Objet de la boutique, ils ont la possibilité d’accepter ou de refuser sans aucune justification.
+
+
+    p E-loue rappelle au Propriétaire agissant à titre professionnel son obligation de respecter les lois et règlements relatifs à l'exercice d'une activité commerciale de location à distance à titre professionnel. Il devra notamment s'assurer de ses obligations déclaratives de nature sociale ou fiscale.
+    p Le Propriétaire s'engage à établir au profit du Locataire une attestation nominative de la location opérée et une facture conforme aux exigences légales désignant l’Objet loué et le Prix de la Transaction. Cette attestation devra notamment mentionner l'existence et les modalités d'exercice du droit de rétractation auprès de E-loue pour le Locataire.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#assurance 9. Assurance
+    p E-Loue ne propose aucune assurance pour les locations des Loueurs Professionnels. Les Loueurs Professionnels doivent avoir leur propre assurance. Il est de leur responsabilité de vérifier que leur contrat d’assurance couvre la location de biens. 
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#engagements 10. Engagements de E-LOUE
+    p E-loue s'engage à tout mettre en œuvre pour maintenir le site dans un état opérationnel. Il s'agit toutefois d'une obligation de moyen et en aucun cas d’une obligation de résultat.
+    p E-loue s'engage à transmettre à l'annonceur par e-mail tous les messages postés par les personnes intéressées par son annonce et par téléphone les appels reçus concernant sa boutique ou une fiche produit ainsi que de tenir à sa disposition toutes les informations relatives à son annonce.
+    p Du fait des caractéristiques et des limites de l´Internet, que le client déclare connaître, E-loue ne peut en aucune manière être tenu responsable des vitesses d´accès, des ralentissements et des difficultés d´accès au site.
+    p E-loue se réserve le droit d´interrompre temporairement l´accessibilité à ses services pour des raisons de maintenance et/ou d´amélioration. Cependant, E-loue s´engage à tout mettre en œuvre pour minimiser ce type d´interruption.
+    p E-loue n'offre aucune garantie de continuité de service. A ce titre, la responsabilité des administrateurs du site E-loue ne pourra être recherchée en cas de dommages. 
+    p E-loue ne saurait être tenu responsable à titre contractuel, délictuel (même en cas de négligence) ou autre, de toute perte commerciale que les Membres pourraient subir (pertes de données, de bénéfices, de chiffre d'affaires, d'activité, d'opportunités, de valeur de la clientèle, de réputation ou interruption d'activité) ou de toute perte n'étant pas raisonnablement prévisible et découlant, directement ou indirectement :
+    ul.dash-item
+        li de l’utilisation de nos services par les Membres,  ou de leur incapacité à les utiliser ;
+        li des éventuels retards ou perturbations de nos services ;
+        li de virus ou de tout autre logiciel malveillant obtenu en accédant, ou en lien avec nos services;
+        li de dysfonctionnements, bugs, erreurs ou inexactitudes quelconques présents sur nos services ;
+        li de tout dommage subi par vos matériels informatiques résultant de votre utilisation de la plateforme E-loue ;
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#responsabilites 11. Responsabilité de E-loue
+    p E-loue n'est en aucun cas une société de location mais une plateforme sur internet d’annonces de locations. 
+    p E-loue ne peut pas confirmer l’identité de chaque Membre. Il invite donc ses Membres à faire preuve de prudence lors des transactions. Pour se prémunir de tout éventuel problème, E-loue invite les Propriétaires Professionnels à demander au Locataire des pièces d’identité officielles.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#dispositions 12. Dispositions générales
+    br
+    h4 12.1 Modification des Conditions Générales d’Utilisation
+    p E-loue a la faculté de modifier les présentes Conditions Générales en fonction de l'évolution de son offre et du marché. 
+    p Toute modification prendra effet immédiatement pour les offres en ligne.
+    p Ces modifications ne s'appliqueront pas pour les transactions en cours au moment de leur entrée en vigueur. 
+    p 
+        b Les Membres sont donc invités à vérifier ces conditions générales régulièrement, 
+        | notamment avant toute transaction.
+
+    br
+    h4 12.2 Non-renonciation
+    p Le fait, pour E-loue, de ne pas faire application, de ne pas exiger l’application ou de ne pas se prévaloir de l’une quelconque des dispositions des présentes conditions générales ne saurait être interprété comme une renonciation à invoquer ultérieurement cette disposition ou toute autre.
+
+    br
+    h4 12.3 Responsabilité et Force majeure
+    p En cas de force majeure, les obligations de la partie empêchée seront suspendues, notamment en cas :
+    ul
+        li d'acte ou omission du gouvernement ou d'autorités supérieures compétentes
+        li de blocage ou défaillance des réseaux de télécommunications
+        li d'insurrections, guerre civile, guerre, opérations militaires, état d'urgence national ou local, feu, foudre, explosion, grève, inondation, tempête, fait d'un tiers.
+
+    br
+    h4 12.4 Dispositions diverses
+    p L'invalidité d'une ou plusieurs clauses des Dispositions Générales d'utilisation de la Plateforme E-loue n'entraînera pas la nullité de celles-ci.
+    p Les titres des différents articles figurant dans les présentes Conditions d'utilisation sont purement indicatifs et ne déterminent pas nécessairement avec précision le contenu des articles auxquels ils se réfèrent. Notre absence de réaction à la suite d'une violation des présentes Conditions d'utilisation par vous ou un tiers n'altérera aucunement notre droit à réagir en cas de violation ultérieure ou similaire
+
+    br
+    h4 12.5 Résolution des litiges
+    p Le présent contrat est soumis à la Loi Française. Tout litige avec un Loueur Professionnel et né à l'occasion de son interprétation et/ou de son exécution est de la compétence des tribunaux compétents du ressort de la Cour d’appel de Paris.En cas de litige entre tout Membre et E-loue, nous vous encourageons vivement à nous contacter en premier lieu pour rechercher une solution. 
+    p Sauf indication expresse contraire, les présentes Conditions d'utilisation sont régies par le droit français.
+    p L’utilisation des applications externes utilisées par E-loue entraine l’acceptation implicite des conditions générales de ces applications.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+
+    h3#cookies 13. Cookies
+    p La navigation sur la Plateforme E-loue est susceptible de provoquer l’installation de cookie(s) sur l’ordinateur de l’Utilisateur. Un cookie est un fichier de petite taille, qui ne permet pas l’identification de l’Utilisateur, mais qui enregistre des informations relatives à la navigation d’un ordinateur sur un site. Les données ainsi obtenues visent à faciliter la navigation ultérieure sur le site, et ont également vocation à permettre diverses mesures de fréquentation. 
+    p L’Utilisateur peut configurer son ordinateur de la manière suivante, pour refuser l’installation des cookies :
+    b 1/ Avec le navigateur Internet Explorer
+    ul
+        li Dans Internet Explorer, cliquez sur le bouton « Outils », puis sur « Options Internet ».
+        li Sous l’onglet Général, sous « Historique de navigation », cliquez sur « Paramètres ».
+        li Cliquez sur le bouton « Afficher les fichiers ».
+        li Cliquez sur l’en-tête de colonne « Nom » pour trier tous les fichiers dans l’ordre alphabétique, puis parcourez la liste jusqu’à ce que vous voyiez des fichiers commençant par le préfixe « Cookie ». (tous les cookies possèdent ce préfixe et contiennent habituellement le nom du site Web qui a créé le cookie).
+        li Sélectionnez le ou les cookies concernés et supprimez-les.
+        li Fermez la fenêtre qui contient la liste des fichiers, puis cliquez deux fois sur OK pour retourner dans Internet Explorer.
+
+    b 2/ Avec le navigateur Firefox
+    ul
+        li Allez dans l’onglet « Outils » du navigateur puis sélectionnez le menu « Options ».
+        li Dans la fenêtre qui s’affiche, choisissez « Vie privée » et cliquez sur « Affichez les cookies ».
+        li Repérez les fichiers concernés, sélectionnez-les et supprimez-les.
+
+
+    b 3/ Avec le navigateur Safari
+    ul
+        li Dans votre navigateur, choisissez le menu « Édition > Préférences ».
+        li Cliquez sur « Sécurité ».
+        li Cliquez sur « Afficher les cookies ».
+        li Sélectionnez les cookies concernés et cliquez sur « Effacer » ou sur « Tout effacer ».
+        li Après avoir supprimé les cookies, cliquez sur « Terminé ».
+
+    b 4/ Avec le navigateur Google Chrome
+    ul
+        li Cliquez sur l’icône du menu « Outils ».• Sélectionnez « Options ».
+        li Cliquez sur l'onglet « Options avancées » et accédez à la section « Confidentialité ».
+        li Cliquez sur le bouton « Afficher les cookies ».
+        li Repérez les fichiers concernés, sélectionnez-les et supprimez-les.
+        li Cliquez sur « Fermer » pour revenir à votre navigateur.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#liens 14. Liens hypertextes
+    p Le Site peut contenir des liens hypertextes et/ou des hyperliens renvoyant vers des Sites édités et hébergés depuis des serveurs tiers, et tout particulièrement concernant les bannières publicitaires, dont la régie n’est aucunement assurée par E-loue et sur lesquels aucun contrôle ne peut être exercé.
+    p E-loue décline toute responsabilité concernant les conséquences juridiques liées à l’accès à ces Sites depuis le Site.
+
+    br
+    a#summary(href="#") Revenir au sommaire
+    br
+    br
+    h3#propriete-intelectuelle 15. Propriété intellectuelle
+    p E-loue est propriétaire des droits de propriété intellectuelle ou détient les droits d’usage sur tous les éléments accessibles sur le Site, notamment les textes, images, graphismes, logo, icônes, sons, logiciels. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du Site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de E-loue. Toute exploitation non autorisée du site ou de l’un quelconque des éléments qu’il contient sera considérée comme constitutive d’une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de Propriété Intellectuelle.
+    p Le Membre concède à E-loue à titre non exclusif, gratuit, pour toutes les langues, pour le monde entier et pour la durée légale des droits (y compris les éventuelles prolongations qui pourraient intervenir), l'ensemble des droits de propriété intellectuelle afférant aux éléments utilisés pour la composition de leurs annonces (notamment textes, images, photographies, logos, illustrations, marques, modèles, titres, données), y compris toute base de données et tout contenu pouvant être qualifié d'œuvre dérivée intégralement ou par extrait, au fur et à mesure de leur insertion sur les Sites.
+    p Ces droits comprennent le droit de reproduire, représenter, diffuser, adapter, modifier, traduire, sous-licencier et communiquer au public tout ou partie du contenu par tous procédés, sur tous formats et tous supports (numérique, imprimé…) connus ou inconnus à ce jour. Les droits énumérés ci-dessus sont accordés pour tous les sites du groupe E-loue ainsi que pour les sites tiers autorisés par E-loue.
+    p E-loue peut faire bénéficier à des tiers tout ou partie des droits accordés dans le cadre de la présente licence.
+    p Le Membre garantit E-loue que le contenu des annonces est conforme à la législation applicable, qu’il est titulaire des droits de propriété intellectuelle sur le contenu, qu'il ne porte pas atteinte aux droits des tiers, et qu'il ne fait l'objet d'aucune action en contrefaçon ou autre. Le Membre garantit E-loue contre toutes les conséquences financières des éventuelles actions, réclamations, revendications, ou oppositions de la part de toute personne invoquant un droit de propriété intellectuelle sur le contenu, un acte de concurrence déloyale et/ou parasitaire, et/ou une infraction à la loi sur la presse.
+
+    br
+    a#summary(href="#") Revenir au sommaire

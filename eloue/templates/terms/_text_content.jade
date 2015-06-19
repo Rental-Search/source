@@ -1,5 +1,13 @@
 style
     #anchors a, #summary{color: #24bd77;}
+    .col-md-3 a{
+      //- text-align: center;
+      margin-left: 25px;
+    }
+
+    .col-md-3{
+      height:170px;
+    }
 
 
 .container(style="color:#777; width:85%;")
@@ -7,44 +15,43 @@ style
   p.text-right: em Version du 22 Avril 2015
   
   br
-  br
-  .row#anchors
-    .col-md-2.col-centered
-        p: a(href="#objet") Objet des CGU
-        p: a(href="#definitions") Définitions
-        p: a(href="#fonctionnement") Fonctionnement du site et inscription
-        p: a(href="#processus") Processus de Location
-    div(style="width: 10px; background-color: #ddd;")
-    .col-md-2.col-centered
-        p: a(href="#tarifs") Tarifs
-        p: a(href="#obligations-membres") Obligations des membres
-        p: a(href="#obligations-proprietaires") Obligations des Propriétaires
-        p: a(href="#obligations-locataires") Obligations des Locataires
-    
-    .col-md-3.col-centered
-        p: a(href="#assurance") Assurance
-        p: a(href="#engagements") Engagements de E-LOUE
-        p: a(href="#responsabilites") Résponsabilités
-        p: a(href="#dispositions") Dispositions générales
+  //- .row#anchors
+  //-   .col-md-3.col-centered(style="border-right:1px solid #ddd;")
+  //-       p: a(href="#objet") 1. Objet des CGU
+  //-       p: a(href="#definitions") 2. Définitions
+  //-       p: a(href="#fonctionnement") 3. Inscription
+  //-       p: a(href="#processus") 4. Processus de Location
+  //-       p: a(href="#tarifs") 5. Tarifs
+  //-   .col-md-3.col-centered(style="border-right:1px solid #ddd;")
+  //-       p: a(href="#obligations-membres") 6. Obligations des Membres
+  //-       p: a(href="#obligations-proprietaires") 7. Obligations des Propriétaires
+  //-       p: a(href="#obligations-locataires") 8. Obligations des Locataires
+  //-       p: a(href="#assurance") 9. Assurance
+  //-   .col-md-3.col-centered(style="border-right:1px solid #ddd;")
+  //-       p: a(href="#engagements") 10. Engagements de E-LOUE
+  //-       p: a(href="#responsabilites") 11. Résponsabilités
+  //-       p: a(href="#dispositions") 12. Dispositions générales
+  //-       p: a(href="#cookies") 13. Cookies
 
-    .col-md-3.col-centered
-        p: a(href="#cookies") Cookies
-        p: a(href="#gestion") Gestion des données personnelles
-        p: a(href="#taxes") Taxes et imposition
-        p: a(href="#liens") Liens hypertextes
-        p: a(href="#propriete-intelectuelle") Propriété intellectuelle
+  //-   .col-md-3.col-centered
+  //-       p: a(href="#gestion") 14. Données personnelles
+  //-       p: a(href="#taxes") 15. Taxes et imposition
+  //-       p: a(href="#liens") 16. Liens hypertextes
+  //-       p: a(href="#propriete-intelectuelle") 17. Propriété intellectuelle
 
-  //- section.footer-links.framing
-  //-     .container
-  //-     ul.nav.nav-justified
-  //-       -var footer_links = [["Le concept e-loue", [["Comment ça marche ?", "/comment-ca-marche/"], ["L’offre e-loue Pro", "/offre-professionnel/"], ["La livraison", "/navette/"]]], ["Pourquoi choisir e-loue ?", [["E-­loue et la sécurité", "/securite/"], ["Contrats de location", "/contrat-de-location/"], ["Assurance tranquillité", "/assurance-tranquillite/"]]], ["L’entreprise e-loue", [["Qui sommes-nous ?", "/qui-sommes-nous/"], ["Nos partenaires", "/nos-partenaires/"], ["Conditions générales particuliers", "/conditions-generales-particuliers/"], ["Nous recrutons", "/nous-recrutons/"]]], ["En savoir plus", [["Contactez-nous", "/contactez-nous/"], ["Mentions légales", "/mentions-legales/"], ["Blog e-loue", "http://blog.e-loue.com/"]]]]
-  //-       each header, group in footer_links
-  //-         li.divide
-  //-         li.ul-wrapper: .centering
-  //-           h4.text-nowrap {{ header }}
-  //-           ul.nav
-  //-             each title, link in group
-  //-               li.link-wrapper: a(href="{{ link }}") {{ title }}
+  section.footer-links.framing
+      .container
+      ul.nav.nav-justified
+        -var footer_links = [[["1. Objet des CGU", "objet"], ["2. Définitions", "#definitions"], ["3. Inscription", "#fonctionnement"], ["4. Processus de location", "#processus"], ["5. Tarifs", "#tarifs"], ["6. Obligations des Membres", "#obligations-membres"]], [["7. Obligations des Propriétaires", "#obligations-proprietaires"], ["8. Obligations des Locataires", "#obligations-locataires"], ["9. Assurance","#assurance"], ["10. Engagements de E-LOUE", "#engagements"], ["11. Résponsabilités", "#responsabilites"], ["12. Dispositions générales", "#dispositions"]], [["13. Cookies", "#cookies"], ["14. Données personnelles", "#gestion"], ["15. Taxes et imposition", "#taxes"], ["16. Liens hypertextes", "#liens"], ["17. Propriété intellectuelle", "#propriete-intelectuelle"]]]
+        each group in footer_links
+          //- li.divide
+          li.ul-wrapper
+          li.ul-wrapper: .centering
+            //- h4.text-nowrap &nbsp;
+            ul.nav
+              each title, link in group
+                li.link-wrapper: a(href="{{ link }}") {{ title }}
+        li.ul-wrapper
 
 
   br
@@ -637,3 +644,5 @@ style
     p E-loue peut faire bénéficier à des tiers tout ou partie des droits accordés dans le cadre de la présente licence.
     p Le Membre garantit E-loue que le contenu des annonces est conforme à la législation applicable, qu’il est titulaire des droits de propriété intellectuelle sur le contenu, qu'il ne porte pas atteinte aux droits des tiers, et qu'il ne fait l'objet d'aucune action en contrefaçon ou autre. Le Membre garantit E-loue contre toutes les conséquences financières des éventuelles actions, réclamations, revendications, ou oppositions de la part de toute personne invoquant un droit de propriété intellectuelle sur le contenu, un acte de concurrence déloyale et/ou parasitaire, et/ou une infraction à la loi sur la presse.
 
+    br
+    a#summary(href="#") Revenir au sommaire
