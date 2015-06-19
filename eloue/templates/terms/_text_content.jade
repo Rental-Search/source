@@ -15,47 +15,22 @@ style
   p.text-right: em Version du 22 Avril 2015
   
   br
-  //- .row#anchors
-  //-   .col-md-3.col-centered(style="border-right:1px solid #ddd;")
-  //-       p: a(href="#objet") 1. Objet des CGU
-  //-       p: a(href="#definitions") 2. Définitions
-  //-       p: a(href="#fonctionnement") 3. Inscription
-  //-       p: a(href="#processus") 4. Processus de Location
-  //-       p: a(href="#tarifs") 5. Tarifs
-  //-   .col-md-3.col-centered(style="border-right:1px solid #ddd;")
-  //-       p: a(href="#obligations-membres") 6. Obligations des Membres
-  //-       p: a(href="#obligations-proprietaires") 7. Obligations des Propriétaires
-  //-       p: a(href="#obligations-locataires") 8. Obligations des Locataires
-  //-       p: a(href="#assurance") 9. Assurance
-  //-   .col-md-3.col-centered(style="border-right:1px solid #ddd;")
-  //-       p: a(href="#engagements") 10. Engagements de E-LOUE
-  //-       p: a(href="#responsabilites") 11. Résponsabilités
-  //-       p: a(href="#dispositions") 12. Dispositions générales
-  //-       p: a(href="#cookies") 13. Cookies
-
-  //-   .col-md-3.col-centered
-  //-       p: a(href="#gestion") 14. Données personnelles
-  //-       p: a(href="#taxes") 15. Taxes et imposition
-  //-       p: a(href="#liens") 16. Liens hypertextes
-  //-       p: a(href="#propriete-intelectuelle") 17. Propriété intellectuelle
-
   section.footer-links.framing
       .container
       ul.nav.nav-justified
         -var footer_links = [[["1. Objet des CGU", "objet"], ["2. Définitions", "#definitions"], ["3. Inscription", "#fonctionnement"], ["4. Processus de location", "#processus"], ["5. Tarifs", "#tarifs"], ["6. Obligations des Membres", "#obligations-membres"]], [["7. Obligations des Propriétaires", "#obligations-proprietaires"], ["8. Obligations des Locataires", "#obligations-locataires"], ["9. Assurance","#assurance"], ["10. Engagements de E-LOUE", "#engagements"], ["11. Résponsabilités", "#responsabilites"], ["12. Dispositions générales", "#dispositions"]], [["13. Cookies", "#cookies"], ["14. Données personnelles", "#gestion"], ["15. Taxes et imposition", "#taxes"], ["16. Liens hypertextes", "#liens"], ["17. Propriété intellectuelle", "#propriete-intelectuelle"]]]
+        li.divide
         each group in footer_links
-          //- li.divide
-          li.ul-wrapper
+          li.divide
           li.ul-wrapper: .centering
-            //- h4.text-nowrap &nbsp;
             ul.nav
               each title, link in group
-                li.link-wrapper: a(href="{{ link }}") {{ title }}
+                li.link-wrapper: p: a(href="{{ link }}") {{ title }}
         li.ul-wrapper
 
 
   br
-  h3: a Préambule
+  h3 Préambule
   p
     | Les conditions générales d’utilisation de la plateforme E-loue précisent les conditions dans lesquelles les membres d’E-loue ont accès aux services proposés par E-loue.
   p

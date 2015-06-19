@@ -9,15 +9,14 @@ style
     section.footer-links.framing
       .container
       ul.nav.nav-justified
-        -var footer_links = [[["1. Objet des CGU", "#objet"], ["2. Définitions", "#definitions"], ["3. Inscription", "#inscription"], ["4. Tarifs et modalités de paiement", "#tarifs"], ["5.  Résiliation du contrat", "#resiliation"]], [["6. Résolution du contrat", "#resolution"], ["7. Processus de Location", "#processus"], ["8. Obligations des Loueurs Professionnels", "#obligations"], ["9. Assurance","#assurance"], ["10. Engagements de E-LOUE", "#engagements"]], [["11. Résponsabilités", "#responsabilites"], ["12. Dispositions générales", "#dispositions"], ["13. Cookies", "#cookies"], ["14. Liens hypertextes", "#liens"]]]
+        -var footer_links = [[["1. Objet des CGU", "#objet"], ["2. Définitions", "#definitions"], ["3. Inscription", "#inscription"], ["4. Tarifs", "#tarifs"], ["5.  Résiliation du contrat", "#resiliation"]], [["6. Résolution du contrat", "#resolution"], ["7. Processus de Location", "#processus"], ["8. Obligations des Loueurs Pro", "#obligations"], ["9. Assurance","#assurance"], ["10. Engagements de E-LOUE", "#engagements"]], [["11. Résponsabilités", "#responsabilites"], ["12. Dispositions générales", "#dispositions"], ["13. Cookies", "#cookies"], ["14. Liens hypertextes", "#liens"]]]
+        li.divide
         each group in footer_links
-          //- li.divide
-          li.ul-wrapper
+          li.divide
           li.ul-wrapper: .centering
-            //- h4.text-nowrap &nbsp;
             ul.nav
               each title, link in group
-                li.link-wrapper: a(href="{{ link }}") {{ title }}
+                li.link-wrapper: p: a(href="{{ link }}") {{ title }}
         li.ul-wrapper
 
     br
