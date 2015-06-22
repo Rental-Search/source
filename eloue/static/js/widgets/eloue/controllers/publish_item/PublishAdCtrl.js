@@ -178,6 +178,9 @@ define([
                     $(".modal").modal("hide");
                     modalContainer = $("#" + name + "Modal");
                     modalContainer.modal("show");
+
+                    //Segment Publish Item Modal
+                    analytics.track('Publish Item Modal');
                 }
             };
 
@@ -319,6 +322,15 @@ define([
                         }
                     );
                 }
+
+
+                // Segment track published item
+                analytics.track('Published Item', {
+                    'product id': product.id,
+                    'summary': product.summary,
+                    'category name': product.category.name,
+                    'category slug': product.category.slug
+                });
             };
 
             $scope.trackPublishSimpleAdEvent = function (ancestors, productCategory, product) {
@@ -343,6 +355,7 @@ define([
                 toastr.success("Annonce publiée", "");
                 $(".modal").modal("hide");
                 //$window.location.href = "/dashboard/#/items/" + product.id + "/info";
+
                 $scope.submitInProgress = false;
                 ToDashboardRedirectService.showPopupAndRedirect("/dashboard/#/items/" + product.id + "/info");
             };
