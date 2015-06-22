@@ -1,4 +1,22 @@
-.container.text-gray-strong
+style
+  .nav-justified li.active a{
+    color: #f27e36;
+  }
+
+  .tab-pane p a{
+    text-decoration: none;
+    color: #f27e36;
+  }
+
+  #text{
+    color: #666;
+  }
+
+  ul#agrees li a{
+    color: #f27e36;
+  }
+
+.container#text
   h2.text-uppercase.text-center
     | Chez e-loue nous pensons qu’être PRUDENT, c’est bien
     | Mais qu’être TRES PRUDENT, c’est encore mieux&nbsp;!
@@ -14,3 +32,47 @@
     p
       | Lors de la rencontre propriétaire-locataire, il ne vous restera plus qu’à vérifier que les informations 
       | précisées sur le contrat sont exactes. Alors, vous êtes prêts à louer avec e-loue&nbsp;?
+    br
+    br
+
+  ul#agrees
+    li 
+      p 
+        | Contrat de location saisonnière : [ 
+        a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320601/contrat_location_saisonniere.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434963038&Signature=RGighddB4auEqsrNuwOZN9kv7gA%3D#_=_", target="_blank") specimen
+        | ]
+    li
+      p
+        | Contrat objet : [ 
+        a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320603/contrat_objet.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434964159&Signature=EPUUq6ECXAMPC60TFMJ9QIYue4Y%3D#_=_", target="_blank") specimen
+        | ]
+    li
+      p
+        | Contrat sans assurance : [ 
+        a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320605/contrat_sans_assurance.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434964246&Signature=iYIUk1X9mSSDlcHGOBmChx8%2FTk4%3D#_=_", target="_blank") specimen
+        | ]
+    li
+      p
+        | Contrat voiture : [ 
+        a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320607/contrat_voiture.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434964320&Signature=AwkQJ3b6zPSt%2FTkTK6UprSAf06A%3D#_=_", target="_blank") specimen
+        | ]
+
+//- .container(style="height: 100px;")
+//-   ul.nav-tabs.nav-justified(data-tabs="tabs")
+//-     li.active
+//-       a(href="#seasonnal", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat de location saisonnière&nbsp;&nbsp;&nbsp;
+//-     li
+//-       a(href="#object", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat objet&nbsp;&nbsp;&nbsp;
+//-     li
+//-       a(href="#no-insurance", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat sans assurance&nbsp;&nbsp;&nbsp;
+//-     li
+//-       a(href="#car", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat voiture&nbsp;&nbsp;&nbsp;
+
+  
+//-   .container(style="width:90%;"): .tab-content
+//-     .tab-pane.active#seasonnal
+//-       p: a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320601/contrat_location_saisonniere.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434963038&Signature=RGighddB4auEqsrNuwOZN9kv7gA%3D#_=_", target="_blank") specimen
+//-     .tab-pane#object
+//-       p haha
+//-     .tab-pane#no-insurance
+//-     .tab-pane#car
