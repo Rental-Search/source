@@ -154,6 +154,7 @@ define([
              * @param support of the sign up type (facebook or form)
              */
             $scope.segmentTrackEvent = function (support) {
+                analytics.alias($rootScope.currentUser.id);
                 analytics.identify($rootScope.currentUser.id, {
                     'lastLogin' : new Date(),
                 });
