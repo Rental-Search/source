@@ -134,6 +134,7 @@ define([
                     $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_prices", "save", true);
+                    analytics.track('Item Prices Updated', {'product id': $scope.product.id});
                 }, function (error) {
                     $scope.handleResponseErrors(error, "item_prices", "save");
                 });

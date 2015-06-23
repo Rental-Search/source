@@ -158,8 +158,14 @@ define([
                     $scope.$apply(function () {
                         $scope.loadingPicture -= 1;
                         $scope.product.pictures.push(data);
+
                     });
                     $scope.showNotification("picture", "upload", true);
+                    analytics.track('Item Photo Added', {
+                        'product id': $scope.product.id,
+                        'picture id': data.id,
+                        'picture url': data.image.display
+                    });
                 }, function () {
                     $scope.$apply(function () {
                         $scope.loadingPicture -= 1;
@@ -189,6 +195,7 @@ define([
                     $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_info", "save", true);
+                    analytics.track('Item Info Updated', {'product id': $scope.product.id});
                 }, function (error) {
                     // Special error which not allow to change some categories.
                     if (error.code == "10199") {
@@ -248,6 +255,7 @@ define([
                         $scope.submitInProgress = false;
                         $scope.product.pictures = product.pictures;
                     });
+                    analytics.track('Item Photo Deleted', {'product id': $scope.product.id})
                 }, function (error) {
                     $scope.handleResponseErrors(error, "picture", "delete");
                 });
