@@ -1,24 +1,29 @@
 style
     #anchors a, #summary{color: #24bd77;}
 
-.container(style="color:#777; width:85%;")
+    .footer-links a:hover{
+        text-decoration: none;
+    }
+
+.container(style="color:#777;")
     h2.text-uppercase.text-center Conditions générales Professionnels
     p.text-right: em Version 15 avril 2015
-
     br
-    section.footer-links.framing
-      .container
+
+
+section.footer-links.framing
+  .container
       ul.nav.nav-justified
-        -var footer_links = [[["1. Objet des CGU", "#objet"], ["2. Définitions", "#definitions"], ["3. Inscription", "#inscription"], ["4. Tarifs", "#tarifs"], ["5.  Résiliation du contrat", "#resiliation"]], [["6. Résolution du contrat", "#resolution"], ["7. Processus de Location", "#processus"], ["8. Obligations des Loueurs Pro", "#obligations"], ["9. Assurance","#assurance"], ["10. Engagements de E-LOUE", "#engagements"]], [["11. Résponsabilités", "#responsabilites"], ["12. Dispositions générales", "#dispositions"], ["13. Cookies", "#cookies"], ["14. Liens hypertextes", "#liens"]]]
-        li.divide
+        -var footer_links = [[["1. Objet des CGU", "#objet"], ["2. Définitions", "#definitions"], ["3. Inscription", "#inscription"], ["4. Tarifs", "#tarifs"]], [["5.  Résiliation du contrat", "#resiliation"], ["6. Résolution du contrat", "#resolution"], ["7. Processus de Location", "#processus"], ["8. Obligations des Loueurs Pro", "#obligations"]], [["9. Assurance","#assurance"], ["10. Engagements de E-LOUE", "#engagements"], ["11. Résponsabilités", "#responsabilites"]], [["12. Dispositions générales", "#dispositions"], ["13. Cookies", "#cookies"], ["14. Liens hypertextes", "#liens"]]]
         each group in footer_links
           li.divide
           li.ul-wrapper: .centering
             ul.nav
               each title, link in group
                 li.link-wrapper: p: a(href="{{ link }}") {{ title }}
-        li.divide
 
+
+.container(style="color:#777; text-align: justify;")
     br
     h3 Préambule
     p Les conditions générales du Contrat Loueur Professionnel précisent les conditions dans lesquelles les Loueurs Professionnels peuvent souscrire aux services proposés par E-loue.
