@@ -1,20 +1,16 @@
 style
-  .nav-tabs.nav-justified li a{
+  .nav-justified li a{
     border-bottom: 0px solid #ddd;
   }
 
-  .nav-justified li a:hover{
+  .nav-justified li a:hover, .nav-justified li.active a, .nav-justified li.active a:hover{
     text-decoration: none;
-    color: #f27e36;
-  }
-
-  .nav-justified li.active a{
-    text-decoration: none;
+    color: #24bd77;
   }
 
   .tab-pane p a{
     text-decoration: none;
-    color: #f27e36;
+    color: #24bd77;
   }
 
 
@@ -24,6 +20,7 @@ style
 
   #text{
     color: #666;
+    text-align: justify;
   }
 
 .container#text
@@ -49,20 +46,20 @@ style
   .container(style="height: 180px;")
     ul.nav.nav-tabs.nav-justified(data-tabs="tabs")
       li.active
-        a(href="#seasonnal", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat de location saisonnière&nbsp;&nbsp;&nbsp;
-      li
         a(href="#object", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat objet&nbsp;&nbsp;&nbsp;
       li
-        a(href="#no-insurance", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat sans assurance&nbsp;&nbsp;&nbsp;
-      li
         a(href="#car", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat voiture&nbsp;&nbsp;&nbsp;
+      li
+        a(href="#seasonnal", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat de location saisonnière&nbsp;&nbsp;&nbsp;
+      li
+        a(href="#no-insurance", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat sans assurance&nbsp;&nbsp;&nbsp;
 
     .container(style="width:90%;"): .tab-content
-      .tab-pane.active#seasonnal
+      .tab-pane#seasonnal
         p Notre assurance couvre la location de logements. 
         p Voici le contrat de location type que nous proposons pour la location de logements. Lorsque vous effectuez une location, ce contrat vous est envoyé pré-rempli avec les informations que vous avez renseignées.
         p: a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320601/contrat_location_saisonniere.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434963038&Signature=RGighddB4auEqsrNuwOZN9kv7gA%3D#_=_", target="_blank") En voici un specimen
-      .tab-pane#object
+      .tab-pane.active#object
         p Notre assurance couvre la location des objets. Voici le contrat de location standard que nous proposons pour ce type de location. Lorsque vous effectuez une location, ce contrat vous est envoyé pré-rempli avec les informations que vous avez renseignées.
         p Cependant, notre assurance ne couvre pas certains objets (matériels de levage, manutention, construction et terrassement, armes, téléphones portables, etc). Se référer à la page Assurance tranquillité pour plus d’informations.
         p: a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320601/contrat_location_saisonniere.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434963038&Signature=RGighddB4auEqsrNuwOZN9kv7gA%3D#_=_", target="_blank") En voici un specimen
@@ -82,5 +79,5 @@ style
     br
     p 
       | Se référer à la 
-      a(href="assurance-tranquillite/", target="_blank", style="color: #24bd77") page Assurance tranquillité 
+      a(href="assurance-tranquillite/", target="_blank", style="color: #4976AB") page Assurance tranquillité 
       | pour plus d’informations.
