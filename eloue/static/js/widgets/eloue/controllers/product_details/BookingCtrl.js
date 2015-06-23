@@ -467,6 +467,21 @@ define([
                 ScriptTagService.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
                 ScriptTagService.trackEvent("Réservation", "Demande de réservation", $scope.getEventLabel());
                 ScriptTagService.trackPageView();
+                analytics.track('Booking Requested', {
+                    'booking id': booking.uuid,
+                    'borrower id': booking.borrower.id,
+                    'owner id': booking.owner.id,
+                    'category': booking.product.category.name,
+                    'category slug': booking.product.category.slug,
+                    'product id': booking.product.id,
+                    'product summary': booking.product.summary,
+                    'product pictures': booking.product.pictures.length,
+                    'duration': booking.duration,
+                    'start date': booking.started_at,
+                    'end date': booking.ended_at,
+                    'state': booking.state,
+                    'total amount': booking.total_amount 
+                });
                 toastr.options.positionClass = "toast-top-full-width";
                 toastr.success("Réservation enregistré");
                 $(".modal").modal("hide");

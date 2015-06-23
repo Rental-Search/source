@@ -204,18 +204,28 @@ define([
             };
 
             $scope.processAcceptBookingResponse = function () {
-                $scope.showNotification("booking", "accept", true);
-                $scope.reloadPage();
+                BookingsService.getBookingDetails($stateParams.uuid).then(function (booking) {
+                    $scope.showNotification("booking", "accept", true);
+                    $scope.segmentBookingTrackEvent('Booking Accepted', booking);
+                    $scope.reloadPage();
+                });
             };
 
             $scope.rejectBooking = function () {
                 $scope.submitInProgress = true;
                 $scope.rejectingInProgress = true;
-                BookingsService.rejectBooking($stateParams.uuid).then(function () {
-                    $scope.showNotification("booking", "reject", true);
-                    $scope.reloadPage();
-                }, function (error) {
+                BookingsService.rejectBooking($stateParams.uuid).then(
+                    $scope.processRejectBookingResponse,
+                    function (error) {
                     $scope.handleResponseErrors(error, "booking", "reject");
+                });
+            };
+
+            $scope.processRejectBookingResponse = function () {
+                BookingsService.getBookingDetails($stateParams.uuid).then(function (booking) {
+                    $scope.showNotification("booking", "reject", true);
+                    $scope.segmentBookingTrackEvent('Booking Rejected', booking);
+                    $scope.reloadPage();
                 });
             };
 
@@ -230,11 +240,18 @@ define([
             $scope.cancelBooking = function () {
                 $scope.submitInProgress = true;
                 $scope.cancellingInProgress = true;
-                BookingsService.cancelBooking($stateParams.uuid).then(function () {
-                    $scope.showNotification("booking", "cancel", true);
-                    $scope.reloadPage();
-                }, function (error) {
+                BookingsService.cancelBooking($stateParams.uuid).then(
+                    $scope.processCancelBookingResponse,
+                    function (error) {
                     $scope.handleResponseErrors(error, "booking", "cancel");
+                });
+            };
+
+            $scope.processCancelBookingResponse = function () {
+                BookingsService.getBookingDetails($stateParams.uuid).then(function (booking) {
+                    $scope.showNotification("booking", "cancel", true);
+                    $scope.segmentBookingTrackEvent('Booking Canceled', booking);
+                    $scope.reloadPage();
                 });
             };
 
@@ -247,12 +264,7 @@ define([
                 $scope.submitInProgress = true;
                 CommentsService.postComment($stateParams.uuid, $scope.comment.text, $scope.comment.rate).then(
                     function (result) {
-                        $("#comment-and-rank").modal("hide");
-                        $scope.showNotification("comment", "post", true);
-                        $scope.showCommentForm = false;
-                        $scope.submitInProgress = false;
-                        $scope.commentList = [result];
-                        $scope.comment = result;
+                        $scope.processCommentBookingResponse(result);
                     },
                     function (error) {
                         $scope.handleResponseErrors(error, "comment", "post");
@@ -260,19 +272,36 @@ define([
                 );
             };
 
+            $scope.processCommentBookingResponse = function (result) {
+                BookingsService.getBookingDetails($stateParams.uuid).then(function (booking) {
+                    $("#comment-and-rank").modal("hide");
+                    $scope.showNotification("comment", "post", true);
+                    $scope.showCommentForm = false;
+                    $scope.submitInProgress = false;
+                    $scope.commentList = [result];
+                    $scope.comment = result;
+                    $scope.segmentBookingTrackEvent('Booking Commented', booking);
+                });
+            };
+
             // Method to post new incident
             $scope.postIncident = function () {
                 $scope.submitInProgress = true;
                 BookingsService.postIncident($stateParams.uuid, $scope.incident.description).then(
-                    function () {
-                        $("#report-incendent").modal("hide");
-                        $scope.showNotification("sinister", "post", true);
-                        $scope.reloadPage();
-                    },
+                    $scope.processIncidentBookingResponse,
                     function (error) {
                         $scope.handleResponseErrors(error, "sinister", "post");
                     }
                 );
+            };
+
+            $scope.processIncidentBookingResponse = function () {
+                BookingsService.getBookingDetails($stateParams.uuid).then(function (booking) {
+                    $("#report-incendent").modal("hide");
+                    $scope.showNotification("sinister", "post", true);
+                    $scope.segmentBookingTrackEvent('Booking Incident Posted', booking);
+                    $scope.reloadPage();
+                });
             };
 
             // Reset all actions progress such as rejecting, accepting or canceling reservation to disable
@@ -289,6 +318,29 @@ define([
             $scope.reloadPage = function() {
                 $window.location.reload();
             }
+
+            /**
+             * Push track event to segment.
+             *
+             * @param support of the sign up type (facebook or form)
+             */
+            $scope.segmentBookingTrackEvent = function (event, booking) {
+                analytics.track(event, {
+                    'booking id': booking.uuid,
+                    'borrower id': booking.borrower.id,
+                    'owner id': booking.owner.id,
+                    'category': booking.product.category.name,
+                    'category slug': booking.product.category.slug,
+                    'product id': booking.product.id,
+                    'product summary': booking.product.summary,
+                    'product pictures': booking.product.pictures.length,
+                    'duration': booking.duration,
+                    'start date': booking.started_at,
+                    'end date': booking.ended_at,
+                    'state': booking.state,
+                    'total amount': booking.total_amount 
+                });
+            };
         }
     ]);
 });
