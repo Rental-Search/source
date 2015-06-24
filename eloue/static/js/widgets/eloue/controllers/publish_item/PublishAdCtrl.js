@@ -322,15 +322,28 @@ define([
                         }
                     );
                 }
-
-
                 // Segment track published item
-                analytics.track('Published Item', {
-                    'product id': product.id,
-                    'summary': product.summary,
-                    'category name': product.category.name,
-                    'category slug': product.category.slug
-                });
+                ProductsService.getProductDetails(product.id).then(
+                    function (result) {
+                        // Get the price by day                        
+                        var price_by_day;
+                        
+                        angular.forEach(result.prices, function (value, key) {
+                            if (value.unit == 1) {
+                                price_by_day = value.amount;
+                            }
+                        });
+
+                        analytics.track('Published Item', {
+                            'product id': result.id,
+                            'summary': result.summary,
+                            'category name': result.category.name,
+                            'category slug': result.category.slug,
+                            'city': result.address.city,
+                            'price by day': price_by_day
+                        });
+                    }
+                );
             };
 
             $scope.trackPublishSimpleAdEvent = function (ancestors, productCategory, product) {
