@@ -294,6 +294,13 @@ define([
                 ScriptTagService.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
                 ScriptTagService.trackEvent("Réservation", "Message", $scope.getEventLabel());
                 ScriptTagService.trackPageView();
+                analytics.track('Message Sended', {
+                    'product category': $scope.product.category.name,
+                    'product category slug': $scope.product.category.slug,
+                    'product id': $scope.product.id,
+                    'product summary': $scope.product.summary,
+                    'product pictures': $scope.product.pictures.length,
+                });
                 // Clear message field
                 $scope.newMessage = {};
                 $scope.productRelatedMessages.push(result);
@@ -545,11 +552,32 @@ define([
                     name = "login";
                 } else {
                     if ((name === "message") && $scope.productRelatedMessages.length === 0) {
+                        analytics.track('Message Modal',{
+                            'product category': $scope.product.category.name,
+                            'product category slug': $scope.product.category.slug,
+                            'product id': $scope.product.id,
+                            'product summary': $scope.product.summary,
+                            'product pictures': $scope.product.pictures.length,
+                        });
                         $scope.loadMessageThread();
                     } else if (name === "booking") {
+                        analytics.track('Booking Modal',{
+                            'product category': $scope.product.category.name,
+                            'product category slug': $scope.product.category.slug,
+                            'product id': $scope.product.id,
+                            'product summary': $scope.product.summary,
+                            'product pictures': $scope.product.pictures.length,
+                        });
                         $scope.loadCreditCards();
                         $scope.loadProductShippingPoint();
                     } else if (name === "phone") {
+                        analytics.track('Phone Modal',{
+                            'product category': $scope.product.category.name,
+                            'product category slug': $scope.product.category.slug,
+                            'product id': $scope.product.id,
+                            'product summary': $scope.product.summary,
+                            'product pictures': $scope.product.pictures.length,
+                        });
                         $scope.loadPhoneDetails();
                     }
                 }
@@ -784,6 +812,7 @@ define([
                     dateFormat: "yyyy-MM-dd"
                 });
             };
+
             $scope.applyDatePicker("date_of_birth");
             $scope.applyDatePicker("drivers_license_date");
 

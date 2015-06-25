@@ -98,6 +98,7 @@ define([
                     $scope.$apply(function () {
                         $scope.currentUser.avatar = data.avatar;
                     });
+                    analytics.track('User Picture Updated');
                 });
             };
 
@@ -177,6 +178,15 @@ define([
 
             $scope.sendUserForm = function () {
                 UsersService.sendForm($scope.currentUser.id, $("#profileInformation"), function (data) {
+                    analytics.identify(data.id, {
+                        'email': data.email,
+                        'firstName': data.first_name,
+                        'lastName': data.last_name,
+                        'name': data.first_name + " " + data.last_name,
+                        'username': data.username,
+                        'newsletter': data.is_subscribed,
+                    });
+                    analytics.track('User Profile Updated');
                     $scope.$apply(function () {
                         $scope.submitInProgress = false;
                         $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);

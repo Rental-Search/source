@@ -322,7 +322,8 @@ define([
             /**
              * Push track event to segment.
              *
-             * @param support of the sign up type (facebook or form)
+             * @param event : name of the event
+             * @param booking : booking information
              */
             $scope.segmentBookingTrackEvent = function (event, booking) {
                 analytics.track(event, {
