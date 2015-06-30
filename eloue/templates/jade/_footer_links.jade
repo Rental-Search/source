@@ -1,10 +1,15 @@
 .container
   ul.nav.nav-justified
-    -var footer_links = [["Le concept e-loue", [["Comment ça marche ?", "/comment-ca-marche/"], ["E-­loue et la sécurité", "/securite/"], ["L’offre e-loue Pro", "/offre-professionnel/"], ["La livraison", "/navette/"]]], ["Pourquoi choisir e-loue ?", [["Contrats de location", "/contrat-de-location/"], ["Assurance tranquillité", "/assurance-tranquillite/"], ["Conditions générales particuliers", "/conditions-generales-particuliers/"], ["Conditions générales proffessionnels", "/conditions-generales-professionnels/"]]], ["L’entreprise e-loue", [["Qui sommes-nous ?", "/qui-sommes-nous/"], ["Nos partenaires", "/nos-partenaires/"], ["Nous recrutons", "/nous-recrutons/"]]], ["En savoir plus", [["Contactez-nous", "/contactez-nous/"], ["Mentions légales", "/mentions-legales/"], ["Blog e-loue", "http://blog.e-loue.com/"]]]]
+    -var footer_links = [["Le concept e-loue", [["Comment ça marche ?", "/comment-ca-marche/"], ["E-­loue et la sécurité", "/securite/"], ["L’offre e-loue Pro", "/offre-professionnel/"], ["La livraison", "/navette/"]]], ["Pourquoi choisir e-loue ?", [["Contrats de location", "/contrat-de-location/"], ["Assurance tranquillité", "/assurance-tranquillite/"], ["Conditions générales particuliers", "/conditions-generales-particuliers/"], ["Conditions générales proffessionnels", "/conditions-generales-professionnels/"]]], ["L’entreprise e-loue", [["Qui sommes-nous ?", "/qui-sommes-nous/"], ["Nos partenaires", "/nos-partenaires/"], ["Nous recrutons", "/nous-recrutons/"]]], ["En savoir plus", [["FAQ", "https://eloue1.zendesk.com/hc/fr"], ["Contactez-nous", "/contactez-nous/"], ["Mentions légales", "/mentions-legales/"], ["Blog e-loue", "http://blog.e-loue.com/"]]]]
     each header, group in footer_links
       li.divide
       li.ul-wrapper: .centering
         h4.text-nowrap {{ header }}
         ul.nav
           each title, link in group
-            li.link-wrapper: a(href="{{ link }}") {{ title }}
+            li.link-wrapper
+                {% if title == "FAQ" %}
+                a(href="{{ link }}", target="_blank") {{ title }}
+                {% else %}
+                a(href="{{ link }}") {{ title }}
+                {% endif %}
