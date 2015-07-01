@@ -105,7 +105,6 @@ class Booking(models.Model):
                 self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commission
             else:
                 self.insurance_amount = D(0)
-            from django.contrib.sites.models import Site
             self.source = Site.objects.get_current()
         super(Booking, self).save(*args, **kwargs)
 
