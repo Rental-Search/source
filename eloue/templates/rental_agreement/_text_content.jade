@@ -23,6 +23,14 @@ style
     text-align: justify;
   }
 
+  #tabs li a img{
+    height: 35px;
+  }
+
+  #tabs li a{
+    height: 100px;
+  }
+
 .container#text
   .container
     h2.text-uppercase.text-center
@@ -43,16 +51,24 @@ style
       br
       br
 
-  .container(style="height: 180px;")
-    ul.nav.nav-tabs.nav-justified(data-tabs="tabs")
+  .container(style="height: 250px;")
+    ul.nav.nav-tabs.nav-justified(data-tabs="tabs")#tabs
       li.active
-        a(href="#object", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat objet&nbsp;&nbsp;&nbsp;
+        a(href="#object", data-toggle="tab")
+          h4 &nbsp;&nbsp;&nbsp;Contrat objet&nbsp;&nbsp;&nbsp;
+          img(src="#{STATIC_URL}images/objet.png")
       li
-        a(href="#car", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat voiture&nbsp;&nbsp;&nbsp;
+        a(href="#car", data-toggle="tab") 
+          h4 &nbsp;&nbsp;&nbsp;Contrat voiture&nbsp;&nbsp;&nbsp;
+          img(src="#{STATIC_URL}images/voiture.png")
       li
-        a(href="#seasonnal", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat de location saisonnière&nbsp;&nbsp;&nbsp;
+        a(href="#seasonnal", data-toggle="tab")
+          h4 &nbsp;&nbsp;&nbsp;Contrat de location saisonnière&nbsp;&nbsp;&nbsp;
+          img(src="#{STATIC_URL}images/logement.png")
       li
-        a(href="#no-insurance", data-toggle="tab") &nbsp;&nbsp;&nbsp;Contrat sans assurance&nbsp;&nbsp;&nbsp;
+        a(href="#no-insurance", data-toggle="tab") 
+          h4 &nbsp;&nbsp;&nbsp;Contrat sans assurance&nbsp;&nbsp;&nbsp;
+          img(src="#{STATIC_URL}images/sans_assurance.png")
 
     .container(style="width:90%;"): .tab-content
       .tab-pane#seasonnal
