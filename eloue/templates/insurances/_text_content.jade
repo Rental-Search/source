@@ -2,6 +2,11 @@
 
 
 style
+  #choice{
+    border-bottom: none;
+    width: inherit;
+  }
+
   #choice li a{
     height: 100px;
   }
@@ -35,7 +40,7 @@ style
 
 
 .container
-  ul.nav.nav-justified#choice(style="border-bottom: none;", data-tabs="tabs")
+  ul.nav.nav-justified#choice(data-tabs="tabs")
       li.active
         a(href="#objet", data-toggle="tab") &nbsp;&nbsp;&nbsp;Assurance objet&nbsp;&nbsp;&nbsp;
           br
@@ -51,7 +56,7 @@ style
 
   //- div(style="height: 10px; border-top: 2px solid #ddd;")
 
-  .container.tab-content(style='margin: 2% 2% 1%; text-align: justify;')
+  .container.tab-content(style='margin: 1% 2% 2% 0; text-align: justify;')
       .tab-pane.active#objet
         h2 SYNTHÈSE 
         ul
