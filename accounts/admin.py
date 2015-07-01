@@ -8,6 +8,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.http import HttpResponse
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.sites.models import Site
 
 from eloue.admin import CurrentSiteAdmin
 from accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency
@@ -66,6 +67,13 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, ProAgencyInline]
     actions = ['export_as_csv', 'send_activation_email', 'index_user_products', 'unindex_user_products']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
+
+    def queryset(self, request):
+        current_site = Site.objects.get_current()
+        if current_site.pk == 1:
+            return super(PatronAdmin, self).queryset(request)
+        else:
+            return super(PatronAdmin, self).queryset(request).filter(source=current_site)
 
     def save_model(self, request, obj, form, change):
         obj.save()
