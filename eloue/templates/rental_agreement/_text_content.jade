@@ -1,14 +1,15 @@
 style
   #tabs li a{
-    border-top: 5px solid #ddd;
+    border-top: 5px solid transparent;
     height: 110px;
+    background-color: #eee;
   }
 
   #tabs li a:hover, #tabs li.active a, #tabs li.active a:hover{
     text-decoration: none;
-    //- color: #24bd77;
+    color: #24bd77;
     border-top: 5px solid #24bd77;
-
+    background-color: white;
   }
 
   .tab-pane p a{
@@ -18,7 +19,7 @@ style
 
 
   .tab-pane{
-    margin: 40px 0;
+    margin: 40px 0 0;
   }
 
   #text{
@@ -37,6 +38,9 @@ style
   #content{
     background-color: white;
     height: 250px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
   }
 
 .container#text
