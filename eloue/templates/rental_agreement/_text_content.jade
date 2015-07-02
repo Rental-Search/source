@@ -1,3 +1,5 @@
+-load staticfiles
+
 style
   #tabs li a{
     border-top: 5px solid transparent;
@@ -31,8 +33,20 @@ style
     height: 35px;
   }
 
-  #object{
-    border-left: none;
+  #objet:hover img, #tabs li.active #objet img{
+    content:url("{% static 'images/objet-vert.png' %}");
+  }
+
+  #voiture:hover img, #tabs li.active #voiture img{
+    content:url("{% static 'images/voiture-vert.png' %}");
+  }
+
+  #logement:hover img, #tabs li.active #logement img{
+    content:url("{% static 'images/logement-vert.png' %}");
+  }
+
+  #sans_assurance:hover img, #tabs li.active #sans_assurance img{
+    content:url("{% static 'images/sans_assurance-vert.png' %}");
   }
 
   #content{
@@ -66,19 +80,19 @@ style
   .container
     ul.nav.nav-tabs.nav-justified(data-tabs="tabs")#tabs
       li.active
-        a(href="#object", data-toggle="tab")
+        a(href="#object", data-toggle="tab")#objet
           h4 &nbsp;&nbsp;&nbsp;Contrat objet&nbsp;&nbsp;&nbsp;
           img(src="#{STATIC_URL}images/objet.png")
       li
-        a(href="#car", data-toggle="tab") 
+        a(href="#car", data-toggle="tab")#voiture
           h4 &nbsp;&nbsp;&nbsp;Contrat voiture&nbsp;&nbsp;&nbsp;
           img(src="#{STATIC_URL}images/voiture.png")
       li
-        a(href="#seasonnal", data-toggle="tab")
+        a(href="#seasonnal", data-toggle="tab")#logement
           h4 &nbsp;&nbsp;&nbsp;Location saisonnière&nbsp;&nbsp;&nbsp;
           img(src="#{STATIC_URL}images/logement.png")
       li
-        a(href="#no-insurance", data-toggle="tab") 
+        a(href="#no-insurance", data-toggle="tab")#sans_assurance
           h4 &nbsp;&nbsp;&nbsp;Contrat sans assurance&nbsp;&nbsp;&nbsp;
           img(src="#{STATIC_URL}images/sans_assurance.png")
 
