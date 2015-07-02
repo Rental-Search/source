@@ -54,6 +54,8 @@ def stats(request):
 		{'title': 'real_estate_product', 'qss': (RealEstateProduct.objects.all(), 'created_at'), 'pos': 23},
 		{'title': 'average_total_amount_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list), 'created_at', Avg('total_amount')), 'pos': 24},
 		{'title': 'owner_comment', 'qss': (OwnerComment.objects.all(), 'created_at'), 'pos': 25},
+		{'title': 'sum_total_amount_car_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__carproduct=None)), 'created_at', Sum('total_amount')), 'pos': 26},
+		{'title': 'sum_total_amount_real_estate_booking', 'qss': (Booking.objects.filter(state__in=booking_transaction_list).filter(~Q(product__realestateproduct=None)), 'created_at', Sum('total_amount')), 'pos': 27},
 	]
 
 	new_stat = []
