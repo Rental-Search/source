@@ -108,6 +108,8 @@ class Product(models.Model):
 
     pro_agencies = models.ManyToManyField(ProAgency, related_name='products', blank=True, null=True)
 
+    source = models.ForeignKey(Site, null=True, blank=True)
+
 
     class Meta:
         verbose_name = _('product')
@@ -120,6 +122,7 @@ class Product(models.Model):
         self.description = strip_tags(self.description)
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
+            self.source = Site.objects.get_current()
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
