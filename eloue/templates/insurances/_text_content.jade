@@ -1,5 +1,5 @@
 {% load i18n %}
-
+-load staticfiles
 
 style
   #content{
@@ -10,18 +10,22 @@ style
     padding-bottom: 6%;
   }
 
+  #tabs li{
+    width: 25%;
+  }
+
 
   #tabs li a{
     padding-top: 4%;
-    border-top: 6px solid transparent;
+    border-top: 5px solid transparent;
     height: 110px;
     background-color: #eee;
-    font-size: 22px;
+    //- font-size: 22px;
   }
 
   #tabs li a:hover, #tabs li.active a, #tabs li.active a:hover{
     text-decoration: none;
-    border-top: 6px solid #4976AB;
+    border-top: 5px solid #4976AB;
     background-color: white;
   }
 
@@ -36,23 +40,39 @@ style
 
   #tabs li a img{
     height: 35px;
+    margin-left: 40%;
+  }
+
+  #tabs li a:hover, #tabs li.active a, #tabs li.active a:hover{
+    color: #4976AB;
+  }
+
+  #objet:hover img, #tabs li.active #objet img{
+    content:url("{% static 'images/objet-bleu.png' %}");
+  }
+
+  #voiture:hover img, #tabs li.active #voiture img{
+    content:url("{% static 'images/voiture-bleu.png' %}");
+  }
+
+  #logement:hover img, #tabs li.active #logement img{
+    content:url("{% static 'images/logement-bleu.png' %}");
   }
 
 .container(style="color: #666; text-align: justify;")
-  ul.nav.nav-tabs.nav-justified(data-tabs="tabs")#tabs
+  ul.nav.nav-tabs(data-tabs="tabs")#tabs
     li.active
-      a(href="#objet", data-toggle="tab") &nbsp;&nbsp;&nbsp;Assurance objet&nbsp;&nbsp;&nbsp;
-        br
+      a(href="#objet", data-toggle="tab")#objet
+        h4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assurance objet&nbsp;&nbsp;&nbsp;
         img(src="#{STATIC_URL}images/objet.png")
     li
-      a(href="#logement", data-toggle="tab") &nbsp;&nbsp;&nbsp;Assurance logement&nbsp;&nbsp;&nbsp;
-        br
+      a(href="#logement", data-toggle="tab")#logement
+        h4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assurance logement&nbsp;&nbsp;&nbsp;
         img(src="#{STATIC_URL}images/logement.png")
     li
-      a(href="#vehicle", data-toggle="tab") &nbsp;&nbsp;&nbsp;Assurance véhicule&nbsp;&nbsp;&nbsp;
-        br
+      a(href="#vehicle", data-toggle="tab")#voiture
+        h4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assurance véhicule&nbsp;&nbsp;&nbsp;
         img(src="#{STATIC_URL}images/voiture.png")
-
   //- div(style="height: 10px; border-top: 2px solid #ddd;")
   
   #content
