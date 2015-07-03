@@ -23,7 +23,7 @@ section(ng-controller="SendProMessageCtrl", ng-init="setUserId({{ patron.id }})"
         | via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions...
 
       {% verbatim %}
-      form(name="proMessageForm", novalidate).form-wrapper
+      form(name="proMessageForm", novalidate)#proMessageForm.form-wrapper
         input(name="email", type="email", data-ng-model="message.email", placeholder="Votre adresse e‐mail *", required).form-control.indent-t-md
         span.text-danger(ng-show="proMessageForm.email.$error.required && formSubmitted", translate="required_field")
         span.text-danger(ng-show="proMessageForm.email.$error.email && formSubmitted", translate="email_invalid")

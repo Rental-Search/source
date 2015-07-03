@@ -90,7 +90,7 @@ section(ng-controller="AuthCtrl").container.signs-links
     .table-cell
       a(href="{% url 'home' %}"): img(src="{% static 'img/logo.png' %}", alt="e-loue logo")
     .table-cell.main-cell
-      form(action="{% url 'product_list' %}").input-group
+      form(action="{% url 'product_list' %}")#searh-form.input-group
         input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="Que voulez-vous louer ?", title="{% if form.cleaned_data.q %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
         .table-cell.input-group.where-field
           i.flaticon.stroke.location-pin-3

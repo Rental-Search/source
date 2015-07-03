@@ -243,8 +243,10 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
+
+    from django.conf.urls.static import static
     urlpatterns += patterns('',
         url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    )
+    ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 #handler404 = 'eloue.views.custom404'

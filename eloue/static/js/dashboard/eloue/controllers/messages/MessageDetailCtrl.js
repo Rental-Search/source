@@ -151,6 +151,9 @@ define([
                     ProductRelatedMessagesService.postMessage($stateParams.id, usersRoles.senderId, usersRoles.recipientId,
                         $scope.message, null, $scope.messageThread.product.id).then(
                         function (data) {
+                            analytics.track("Message Replied", {
+                                recipient: data.recipient
+                            });
                             // Clear message field
                             $scope.message = "";
 
