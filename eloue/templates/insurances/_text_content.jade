@@ -62,22 +62,22 @@ style
 .container(style="color: #666; text-align: justify;")
   ul.nav.nav-tabs(data-tabs="tabs")#tabs
     li.active
-      a(href="#objet", data-toggle="tab")#objet
+      a(href="#object", data-toggle="tab")#objet
         h4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assurance objet&nbsp;&nbsp;&nbsp;
         img(src="#{STATIC_URL}images/objet.png")
     li
-      a(href="#logement", data-toggle="tab")#logement
+      a(href="#seasonnal", data-toggle="tab")#logement
         h4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assurance logement&nbsp;&nbsp;&nbsp;
         img(src="#{STATIC_URL}images/logement.png")
     li
-      a(href="#vehicle", data-toggle="tab")#voiture
+      a(href="#car", data-toggle="tab")#voiture
         h4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assurance véhicule&nbsp;&nbsp;&nbsp;
         img(src="#{STATIC_URL}images/voiture.png")
   //- div(style="height: 10px; border-top: 2px solid #ddd;")
   
   #content
     .container(style="width:90%;"): .tab-content
-      .tab-pane.active#objet
+      .tab-pane.active#object
         h2 SYNTHÈSE 
         ul
           li.indent-v-sm En effectuant votre location sur E-loue, l’objet loué est automatiquement assuré pour tous les dommages matériels accidentels causés au bien pendant la durée de location, sans coût supplémentaire. 
@@ -188,7 +188,7 @@ style
 
 
 
-      div.tab-pane#logement
+      div.tab-pane#seasonnal
         h2 SYNTHÈSE
         ul
           li.indent-v-sm En effectuant votre location sur e-loue, le logement loué est automatiquement assuré, sans coût supplémentaire.
@@ -523,7 +523,7 @@ style
 
 
 
-      .tab-pane#vehicle
+      .tab-pane#car
         h2 SYNTHÈSE
         ul
             li.indent-v-sm
