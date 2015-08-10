@@ -25,8 +25,11 @@ form.form-inline.section-body.text-center
             | Prix {% endverbatim %}{% if is_pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
             big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
         {% endverbatim %}
-        if not is_pro
-            p Assurance incluse
+            
+        {% if not is_pro and product.need_insurance %}
+        p Assurance incluse
+        {% endif %}
+
     .part
         a(href = "", data-dismiss="modal", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2
