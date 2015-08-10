@@ -8,6 +8,9 @@ import operator
 from decimal import Decimal as D
 from itertools import chain, groupby
 
+from parse_rest.connection import register
+from parse_rest.installation import Push
+
 from django_fsm import FSMField, transition
 from django_fsm.signals import post_transition
 
@@ -191,6 +194,8 @@ class Booking(models.Model):
         message.send()
         message = create_alternative_email('rent/emails/borrower_ask', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
+        self.send_notification(message="Demande de réservation", receiver=self.owner)
+
     
     def send_acceptation_email(self):
         context = {'booking': self}
@@ -206,6 +211,7 @@ class Booking(models.Model):
         if contract_content:
             message.attach('contrat.pdf', contract_content, 'application/pdf')
         message.send()
+        self.send_notification(message="Réservation acceptée", receiver=self.borrower)
     
     def send_borrower_receipt(self):
         context = {'booking': self}
@@ -221,6 +227,7 @@ class Booking(models.Model):
         context = {'booking': self}
         message = create_alternative_email('rent/emails/borrower_rejection', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
+        self.send_notification(message="Réservation refusée", receiver=self.borrower)
     
     def send_cancelation_email(self, source=None):
         context = {'booking': self}
@@ -234,11 +241,13 @@ class Booking(models.Model):
             message.send()
             message = create_alternative_email('rent/emails/borrower_cancelation_to_borrower', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
             message.send()
+        self.send_notification(message="Réservation annulée", receiver=source)
     
     def send_incident_email(self, source, description):
         context = {'user': source.username, 'booking_id': self.pk, 'problem': description}
         message = create_alternative_email('rent/emails/incident', context, settings.DEFAULT_FROM_EMAIL, [source.email])
         message.send()
+        self.send_notification(message="Incident déclaré", receiver=source)
     
     def send_ended_email(self):
         context = {'booking': self}
@@ -247,13 +256,18 @@ class Booking(models.Model):
         message = create_alternative_email('rent/emails/borrower_ended', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
     
-    
     def send_closed_email(self):
         context = {'booking': self}
         message = create_alternative_email('rent/emails/owner_closed', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
         message.send()
         message = create_alternative_email('rent/emails/borrower_closed', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
+
+    def send_notification(self, message, receiver):
+        if receiver.device_token:
+            register(settings.PARSE_APPLICATION_ID, settings.PARSE_REST_API_KEY)
+            Push.alert({"alert": message, "booking_id": "%s" % self.uuid}, where={"deviceToken": receiver.device_token})
+
     
     @property
     def commission(self):
