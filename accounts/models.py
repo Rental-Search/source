@@ -105,6 +105,8 @@ class Patron(AbstractUser):
 
     url = models.URLField(_(u"Site internet"), blank=True)
 
+    source = models.ForeignKey(Site, null=True, blank=True)
+
     thumbnail = ImageSpecField(
         source='avatar',
         processors=[
@@ -144,6 +146,8 @@ class Patron(AbstractUser):
                 self.slug = slugify(self.company_name)
             else:
                 self.slug = slugify(self.username)
+        if not self.source:
+            self.source = Site.objects.get_current()
         super(Patron, self).save(*args, **kwargs)
 
     def __eq__(self, other):
