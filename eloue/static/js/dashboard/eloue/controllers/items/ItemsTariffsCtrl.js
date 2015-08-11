@@ -134,6 +134,22 @@ define([
                     $("#item-title-price-" + $scope.product.id).text($scope.prices.day.amount + "€ / jour");
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_prices", "save", true);
+                    
+                    // Get the price by day                        
+                    var price_by_day;
+                    
+                    angular.forEach($scope.product.prices, function (value, key) {
+                        if (value.unit == 1) {
+                            price_by_day = value.amount;
+                        }
+                    });
+
+                    analytics.track('Item Prices Updated', {
+                        'product id': $scope.product.id,
+                        'summary': $scope.product.summary,
+                        'price by day': price_by_day
+                    });
+                    
                 }, function (error) {
                     $scope.handleResponseErrors(error, "item_prices", "save");
                 });

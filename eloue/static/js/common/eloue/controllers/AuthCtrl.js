@@ -29,6 +29,7 @@ define([
 
             $scope.logout = function () {
                 AuthService.clearUserData();
+                analytics.track('Logged Out');
                 if ($window.location.href.indexOf("dashboard") !== -1) {
                     $window.location.href = "/";
                 } else {

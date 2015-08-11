@@ -34,8 +34,9 @@ form.form-inline.section-body.text-center
         {% verbatim %}
             big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
         {% endverbatim %}
-        if not is_pro
-            p {% trans "Assurance incluse" %}
+        {% if not is_pro and product.need_insurance %}
+        p {% trans "Assurance incluse" %}
+        {% endif %}
     .part
         a(href = "", data-dismiss="modal", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2

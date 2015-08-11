@@ -92,6 +92,8 @@ class Booking(models.Model):
     content_type = models.ForeignKey(ContentType, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     payment = generic.GenericForeignKey('content_type', 'object_id')
+
+    source = models.ForeignKey(Site, null=True, blank=True)
     
     @incr_sequence('contract_id', 'rent_booking_contract_id_seq')
     def save(self, *args, **kwargs):
@@ -103,6 +105,7 @@ class Booking(models.Model):
                 self.insurance_amount = self.insurance_fee + self.insurance_taxes + self.insurance_commission
             else:
                 self.insurance_amount = D(0)
+            self.source = Site.objects.get_current()
         super(Booking, self).save(*args, **kwargs)
 
     def set_state(self, state):

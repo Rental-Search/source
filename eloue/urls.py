@@ -223,6 +223,7 @@ urlpatterns = patterns('',
     url(r'^mentions-legales/', TemplateView.as_view(template_name='imprint/index.jade'), name='notices'),
     url(r'^politique_annulation/', TemplateView.as_view(template_name='cancel_terms/index.jade'), name='notices'),
     url(r'^assurance-tranquillite/', TemplateView.as_view(template_name='insurances/index.jade'), name='notices'),
+    url(r'^nous-recrutons/', TemplateView.as_view(template_name='enroll/index.jade'), name='enroll'),
     url(r'^activate/(?P<activation_key>\w+)/$', ActivationView.as_view(), name='auth_activate'),
     url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
     url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
@@ -241,8 +242,10 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
+
+    from django.conf.urls.static import static
     urlpatterns += patterns('',
         url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    )
+    ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 #handler404 = 'eloue.views.custom404'

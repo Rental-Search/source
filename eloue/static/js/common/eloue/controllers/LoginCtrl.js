@@ -42,7 +42,7 @@ define([
                         AuthService.loginFacebook(
                             $("#eloue_url_redirect_facebook").val() + "?access_token=" + response.authResponse.accessToken + "&user_id=" + response.authResponse.userID + "&expires_in=" + response.authResponse.expiresIn,
                             function (data) {
-                                $scope.authorize();
+                                $scope.authorize('facebook');
                                 $scope.submitting = false;
                                 $rootScope.$broadcast("loggedIn");
                             },
@@ -77,7 +77,7 @@ define([
                 expire.setTime(new Date().getTime() + 3600000 * 24 * 30);
                 document.cookie = "user_token=" + encodeURIComponent(data.access_token) + ";expires=" +
                 expire.toGMTString() + ";path=/";
-                $scope.authorize();
+                $scope.authorize('form');
                 $rootScope.$broadcast("loggedIn");
             };
 
@@ -127,8 +127,9 @@ define([
 
             /**
              * Authorize user by "user_token" cookie.
+             * @param support of the signin type
              */
-            $scope.authorize = function () {
+            $scope.authorize = function (support) {
                 var userToken = AuthService.getUserToken();
                 if (userToken) {
                     $http.defaults.headers.common.authorization = "Bearer " + userToken;
@@ -137,6 +138,7 @@ define([
                     UsersService.getMe(function (currentUser) {
                         // Save current user in the root scope
                         $rootScope.currentUser = currentUser;
+                        $scope.segmentTrackEvent(support);
                         if (RedirectAfterLogin.url !== "/") {
                             AuthService.redirectToAttemptedUrl();
                         } else {
@@ -144,6 +146,18 @@ define([
                         }
                     });
                 }
+            };
+
+            /**
+             * Push track event to segment.
+             *
+             * @param support of the sign up type (facebook or form)
+             */
+            $scope.segmentTrackEvent = function (support) {
+                analytics.identify($rootScope.currentUser.id, {
+                    'lastLogin' : new Date(),
+                });
+                analytics.track('Logged In', {'support': support});
             };
         }]);
 });

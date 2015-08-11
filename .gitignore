@@ -43,3 +43,5 @@ scim.log
 .env
 staticfiles/
 venv/
+eloue/static/js/dashboard.js
+eloue/static/js/widgets.js

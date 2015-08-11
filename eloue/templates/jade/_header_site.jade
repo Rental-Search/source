@@ -10,9 +10,9 @@ section(ng-controller="AuthCtrl").container.signs-links
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span
       | {% trans "Bonjour" %}, 
-      a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b {% trans "inscrivez-vous" %}
+      a#registration-link(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b {% trans "inscrivez-vous" %}
       | {% trans "ou" %} 
-      a(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b {% trans "connectez-vous" %}
+      a#login-link(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b {% trans "connectez-vous" %}
     li.divide
     li: span
         {% url 'subscription' as subscription_url %}
@@ -99,7 +99,7 @@ section(ng-controller="AuthCtrl").container.signs-links
     .table-cell.main-cell
       {% trans "Que voulez-vous louer ?" as what %}
       {% trans "Où ça ?" as where %}
-      form(action="{% url 'product_list' %}").input-group
+      form(action="{% url 'product_list' %}")#searh-form.input-group
         input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", title="{% if form.cleaned_data.q %}{{ what }}{% endif %}").table-cell.main-cell.form-control.what-field
         .table-cell.input-group.where-field
           i.flaticon.stroke.location-pin-3
