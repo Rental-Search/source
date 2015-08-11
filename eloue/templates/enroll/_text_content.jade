@@ -85,6 +85,8 @@ div#intro(style="background-image: url('#{STATIC_URL}img/banner-4.png')")
         a(href="#customer-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Relation Client&nbsp;&nbsp;&nbsp;
       li
         a(href="#sales-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Service Commercial&nbsp;&nbsp;&nbsp;
+      li
+        a(href="#marketing-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Marketing et Communication&nbsp;&nbsp;&nbsp;
 
 div(id="content")
   .container
@@ -95,12 +97,14 @@ div(id="content")
         include customer_department
       div(class="tab-pane active", id="technical-department")
         include technical_department
+      div(class="tab-pane", id="marketing-department")
+        include marketing_department
 
 .container
   div(style="margin: 5% 5% 5%;")
     h3 {% trans "Vous n'avez pas trouvé le job idéal ?" %}
     p Vous pouvez aussi, bien entendu, nous envoyer une candidature spontanée par mail à 
-      a(href="mailto:contact@e-loue.com") contact@e-loue.com
+      a(href="mailto:recrutement@e-loue.com") recrutement@e-loue.com
 
     h3 {% trans "Notre partenaire" %}
     p
