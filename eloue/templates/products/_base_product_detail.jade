@@ -115,8 +115,10 @@ block append content-body
           //-section.add-to-wishlist
           //-  include ../jade/product_details/aside/_add_to_wishlist
           {% if is_pro %}
+          {% if patron.slug != "loxam" %}
           section.booking-form
             include  ../jade/product_details/aside/_booking_form.jade
+          {% endif %} 
           {% else %}
           section.owner-information
             include ../jade/product_details/aside/_owner_information
