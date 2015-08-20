@@ -268,7 +268,7 @@ class Booking(models.Model):
     def send_notification(self, message, state, receiver):
         if receiver.device_token:
             register(settings.PARSE_APPLICATION_ID, settings.PARSE_REST_API_KEY)
-            Push.alert({"alert": message, "booking_id": "%s" % self.uuid, 'type': state, 'user_id': receiver.pk, 'is_borrower': "true" if receiver == self.borrower else "false"}, where={"deviceToken": receiver.device_token})
+            Push.alert({"alert": message, "booking_id": "%s" % self.uuid, 'type': state, 'user_id': receiver.pk, 'is_borrower': True if receiver == self.borrower else False}, where={"deviceToken": receiver.device_token})
 
     
     @property
