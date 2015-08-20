@@ -194,7 +194,7 @@ class Booking(models.Model):
         message.send()
         message = create_alternative_email('rent/emails/borrower_ask', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
-        self.send_notification(message="Demande de réservation", receiver=self.owner)
+        self.send_notification(message="Demande de réservation", receiver=self.owner, state="BOOKING_ASK")
 
     
     def send_acceptation_email(self):
@@ -211,7 +211,7 @@ class Booking(models.Model):
         if contract_content:
             message.attach('contrat.pdf', contract_content, 'application/pdf')
         message.send()
-        self.send_notification(message="Réservation acceptée", receiver=self.borrower)
+        self.send_notification(message="Réservation acceptée", receiver=self.borrower, state="BOOKING_ACCEPT")
     
     def send_borrower_receipt(self):
         context = {'booking': self}
@@ -227,7 +227,7 @@ class Booking(models.Model):
         context = {'booking': self}
         message = create_alternative_email('rent/emails/borrower_rejection', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
-        self.send_notification(message="Réservation refusée", receiver=self.borrower)
+        self.send_notification(message="Réservation refusée", receiver=self.borrower, state="BOOKING_REJECT")
     
     def send_cancelation_email(self, source=None):
         context = {'booking': self}
@@ -236,18 +236,20 @@ class Booking(models.Model):
             message.send()
             message = create_alternative_email('rent/emails/owner_cancelation_to_borrower', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
             message.send()
+            self.send_notification(message="Réservation annulée", receiver=self.borrower, state="BOOKING_CANCEL")
         else:
             message = create_alternative_email('rent/emails/borrower_cancelation_to_owner', context, settings.DEFAULT_FROM_EMAIL, [self.owner.email])
             message.send()
             message = create_alternative_email('rent/emails/borrower_cancelation_to_borrower', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
             message.send()
-        self.send_notification(message="Réservation annulée", receiver=source)
+            self.send_notification(message="Réservation annulée", receiver=self.owner, state="BOOKING_CANCEL")
+        
     
     def send_incident_email(self, source, description):
-        context = {'user': source.username, 'booking_id': self.pk, 'problem': description}
-        message = create_alternative_email('rent/emails/incident', context, settings.DEFAULT_FROM_EMAIL, [source.email])
-        message.send()
-        self.send_notification(message="Incident déclaré", receiver=source)
+        #context = {'user': source.username, 'booking_id': self.pk, 'problem': description}
+        #message = create_alternative_email('rent/emails/incident', context, settings.DEFAULT_FROM_EMAIL, [source.email])
+        #message.send()
+        self.send_notification(message="Incident déclaré", receiver=self.owner if source == self.borrower else self.borrower, state="BOOKING_INCIDENT")
     
     def send_ended_email(self):
         context = {'booking': self}
@@ -263,10 +265,10 @@ class Booking(models.Model):
         message = create_alternative_email('rent/emails/borrower_closed', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
 
-    def send_notification(self, message, receiver):
+    def send_notification(self, message, state, receiver):
         if receiver.device_token:
             register(settings.PARSE_APPLICATION_ID, settings.PARSE_REST_API_KEY)
-            Push.alert({"alert": message, "booking_id": "%s" % self.uuid}, where={"deviceToken": receiver.device_token})
+            Push.alert({"alert": message, "booking_id": "%s" % self.uuid, 'type': state, 'user_id': receiver.pk, 'is_borrower': "true" if receiver == self.borrower else "false"}, where={"deviceToken": receiver.device_token})
 
     
     @property
