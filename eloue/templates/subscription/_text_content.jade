@@ -3,19 +3,20 @@ style
       background-size: cover;
       background-attachment: fixed;
       background-repeat: no-repeat;
+      background-size: 1500px 400px;
       position: relative;
       color: #FFF;
-      width: 100%;
-      height: 250px;
       opacity: 0.9;
-      margin-bottom: 10px;
+      height: 260px;
+  }
+  h2{
+  opacity: 0.75;
   }
 
   #intro-text {
-    text-align: center;
-    color: #999;
-  }
+      text-align: center;
+    }
 
-#intro(style="background-image: url('#{STATIC_URL}img/banner-4.png')")
-    p(style="margin-left: 200px; margin-right: 200px; margin: 0 200px; padding-top: 65px; text-align: center; vertical-align: middle; color: #EEE; font-size: 45px") L'offre pro e-loue
-    p(style="margin-left: 200px; margin-right: 200px; margin: 0 200px; padding: 0 0; text-align: center; vertical-align: middle; color: #EEE; font-size: 45px"): a(href="#form").btn.btn-lg.bg-success Vous êtes interessés ?
+#intro(style="background-image: url('#{STATIC_URL}img/pro-banner.png')")
+    h2(style="margin-left: 200px; margin-right: 200px; margin: 0 200px; padding-top: 65px; text-align: center; vertical-align: middle; font-size: 45px; color:#000000") L'offre e-loue Pro
+    p(style="margin-left: 200px; margin-right: 200px; margin: 0 200px; padding: 0 0; text-align: center; vertical-align: middle; color: #EEE; font-size: 45px"): a(href="#form").btn.btn-lg.bg-primary Vous êtes interessés ?
