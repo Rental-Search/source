@@ -120,7 +120,11 @@ def new_message_email(sender, instance, created, **kwargs):
             'django_messages/new_message', context, settings.DEFAULT_FROM_EMAIL, [instance.recipient.email])
         message.send()
         #Parse notification
+        print instance.recipient.email
+        print instance.recipient.device_token
         if instance.recipient.device_token:
+            print "NOTIFICATION"
             register(settings.PARSE_APPLICATION_ID, settings.PARSE_REST_API_KEY)
-            Push.alert({"alert": "Vous avez reçu un nouveau message", "message_id": instance.pk}, where={"deviceToken": instance.recipient.device_token})
+            unread_count = instance.recipient.received_messages.filter(read_at=None).count()
+            Push.alert({"alert": "Vous avez reçu un nouveau message", "type": "MSG_NEW", "user_id": instance.recipient.pk, "count": unread_count}, where={"deviceToken": instance.recipient.device_token})
 
