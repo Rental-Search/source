@@ -104,7 +104,7 @@ class ContractGenerator(object):
 
 class ContractGeneratorNormal(ContractGenerator):
     templates = {
-        'fr-fr': local_path("contract/fr_template_normal.pdf")
+        'fr-fr': local_path("contract/new_contrat_objet_fr.pdf")
     }
     
     def draw(self, canvas, booking):
@@ -118,9 +118,10 @@ class ContractGeneratorNormal(ContractGenerator):
         ))
 
         canvas.drawString(128, 732, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
-        canvas.drawString(81, 712, u"{address}".format(
+        canvas.drawString(81, 702, u"{address}".format(
             address=booking.owner.default_address or first_or_empty(booking.owner.addresses.all()))
         )
+        #canvas.drawString(36è, 722, u"{email}".format(email=first_or_empty(booking.borrower.email.all())))
 
         if booking.borrower.is_professional:
             canvas.drawString(369, 717, booking.borrower.company_name)
@@ -131,14 +132,14 @@ class ContractGeneratorNormal(ContractGenerator):
             )
         )
         canvas.drawString(363, 732, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
-        canvas.drawString(315, 712, u"{address1}".format(
+        canvas.drawString(315, 702, u"{address1}".format(
             address1=booking.borrower.default_address or first_or_empty(booking.borrower.addresses.all()))
         )
 
-        canvas.drawString(378, 427, "{masked_number}".format(
+        canvas.drawString(380, 407, "{masked_number}".format(
             masked_number=booking.payment.creditcard.masked_number
         ))
-        canvas.drawString(354, 408, "{expires1}/{expires2}".format(
+        canvas.drawString(355, 389, "{expires1}/{expires2}".format(
             expires1=booking.payment.creditcard.expires[:2],
             expires2=booking.payment.creditcard.expires[2:],
         ))
@@ -146,65 +147,12 @@ class ContractGeneratorNormal(ContractGenerator):
 
         canvas.drawString(127, 621, u"{summary}".format(summary=booking.product.summary))
 
-        canvas.drawString(81, 579, format(booking.started_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(81, 558, format(booking.ended_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(389, 610, str(booking.total_amount))
+        canvas.drawString(81, 596, format(booking.started_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(81, 574, format(booking.ended_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(389, 621, str(booking.total_amount))
+        canvas.drawString(153, 553, str(booking.total_amount))
         
-        canvas.drawString(157, 510,  str(booking.product.deposit_amount))
-
-        canvas.showPage()
-        canvas.setFont("Helvetica", 8)
-
-        #locataire
-        canvas.drawString(130, 721,  u"{first_name} {last_name}".format(
-                first_name=booking.borrower.first_name.upper(), 
-                last_name=booking.borrower.last_name.upper()
-            )
-        )
-
-        borrower_address = booking.borrower.default_address or first_or_empty(booking.borrower.addresses.all())
-
-        canvas.drawString(100, 706,  u"{address1}".format(
-            address1=borrower_address.address1 if borrower_address else '')
-        )
-
-        canvas.drawString(113, 690, u"{zipcode} {city}".format(
-                zipcode=borrower_address.zipcode if borrower_address else '',
-                city=borrower_address.city if borrower_address else '',
-            )
-        )
-
-        canvas.drawString(153, 674, u"{deposit_amount} euros".format(
-            deposit_amount=booking.product.deposit_amount)
-        )
-
-        canvas.drawString(131, 658, smart_str(booking.product.summary))
-
-        canvas.drawString(65, 628, smart_str(booking.product.summary))
-
-
-        #propriétaire
-        canvas.drawString(353, 721, u"{first_name} {last_name}".format(
-                first_name=booking.owner.first_name.upper(), 
-                last_name=booking.owner.last_name.upper()
-            )
-
-        )
-
-        owner_address = booking.owner.default_address or first_or_empty(booking.owner.addresses.all())
-
-        canvas.drawString(323, 706,  u"{address1}".format(
-            address1=owner_address.address1 if owner_address else ''))
-
-        canvas.drawString(336, 690, u"{zipcode} {city}".format(
-                zipcode=owner_address.zipcode if owner_address else '',
-                city=owner_address.city if owner_address else '',
-            )
-        )
-
-        canvas.drawString(338, 626, format(booking.started_at, _(u"d F Y à H\hi.")))
-
-        canvas.drawString(336, 611, format(booking.ended_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(157, 491,  str(booking.product.deposit_amount))
 
         return canvas
 
@@ -212,7 +160,7 @@ class ContractGeneratorNormal(ContractGenerator):
 
 class ContractGeneratorCar(ContractGenerator):
     templates = {
-        'fr-fr': local_path("contract/fr_template_car.pdf"),
+        'fr-fr': local_path("contract/new_contrats_voiture_fr.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
     }
     def draw(self, canvas, booking):
@@ -275,14 +223,12 @@ class ContractGeneratorCar(ContractGenerator):
             expires2=booking.payment.creditcard.expires[2:],
         ))
 
-        
-
         return canvas
         
 
 class ContractGeneratorRealEstate(ContractGenerator):
     templates = {
-        'fr-fr': local_path("contract/fr_template_realestate.pdf"),
+        'fr-fr': local_path("contract/new_contrat_location_saisonniere_fr.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
     }
     def draw(self, canvas, booking):
@@ -295,37 +241,37 @@ class ContractGeneratorRealEstate(ContractGenerator):
             last_name=booking.owner.last_name.upper()
         ))
         canvas.drawString(128, 732, u"{phone}".format(phone=first_or_empty(booking.owner.phones.all())))
-        
-        canvas.drawString(81, 712, u"{address}".format(
+        canvas.drawString(81, 701, u"{address}".format(
             address=booking.owner.default_address or first_or_empty(booking.owner.addresses.all()))
         )
 
         if booking.borrower.is_professional:
-            canvas.drawString(355, 721, booking.borrower.company_name)
+            canvas.drawString(369, 717, booking.borrower.company_name)
 
         canvas.drawString(383, 743, u"{first_name} {last_name}".format(
                 first_name=booking.borrower.first_name, 
                 last_name=booking.borrower.last_name.upper()
             )
         )
-        canvas.drawString(363, 732, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
-        canvas.drawString(315, 712, u"{address1}".format(
+        canvas.drawString(361, 732, u"{phone}".format(phone=first_or_empty(booking.borrower.phones.all())))
+        canvas.drawString(315, 701, u"{address1}".format(
             address1=booking.borrower.default_address or first_or_empty(booking.borrower.addresses.all()))
         )
 
-        canvas.drawString(378, 427, "{masked_number}".format(
+        canvas.drawString(379, 401, "{masked_number}".format(
             masked_number=booking.payment.creditcard.masked_number
         ))
-        canvas.drawString(354, 408, "{expires1}/{expires2}".format(
+        canvas.drawString(359, 382, "{expires1}/{expires2}".format(
             expires1=booking.payment.creditcard.expires[:2],
             expires2=booking.payment.creditcard.expires[2:],
         ))
         
-        canvas.drawString(127, 628, u"{summary}".format(summary=smart_str(booking.product.summary)))
+        canvas.drawString(81, 619, u"{summary}".format(summary=smart_str(booking.product.summary)))
 
-        canvas.drawString(81, 585, format(booking.started_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(81, 564, format(booking.ended_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(389, 615, str(booking.total_amount))
+        canvas.drawString(81, 601, format(booking.started_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(81, 580, format(booking.ended_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(150, 558, str(booking.total_amount))
+        canvas.drawString(384, 617, str(booking.total_amount))
         
-        canvas.drawString(157, 510,  str(booking.product.deposit_amount))
+        canvas.drawString(157, 491,  str(booking.product.deposit_amount))
         return canvas
