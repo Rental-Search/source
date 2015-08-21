@@ -24,16 +24,10 @@ form.form-inline.section-body.text-center
             | Durée de la location&nbsp;:&nbsp;
             b.period-days.ng-cloak {{duration}}
         p.price
-            | Prix 
-        {% endverbatim %}
-        
-        {% if is_pro %} {% trans "indicatif" %}
-        {% else %} {% trans "de la location" %}
-        {% endif %}&nbsp;:
-        
-        {% verbatim %}
+            | Prix {% endverbatim %}{% if is_pro %}{% trans "indicatif" %}{% else %}{% trans "de la location" %}{% endif %}&nbsp;:{% verbatim %}
             big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
         {% endverbatim %}
+
         {% if not is_pro and product.need_insurance %}
         p {% trans "Assurance incluse" %}
         {% endif %}
