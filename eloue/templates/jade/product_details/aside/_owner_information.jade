@@ -1,13 +1,13 @@
 -load i18n
 
 .section-header
-    {% trans "Contactez-nous" as contacteznous %}
-    {% trans "Contactez-moi" as contactezmoi %}
+    {% trans "Contactez-nous" as contactez_nous %}
+    {% trans "Contactez-moi" as contactez_moi %}
     {% if is_pro %}
     span.badge-pro.pull-right pro
-    h4 {{contacteznous}}
+    h4 {{contactez_nous}}
     {% else %}
-    h4 {{contactmoi}}
+    h4 {{contact_moi}}
     {% endif %}
 .section-body
     .part

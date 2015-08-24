@@ -23,9 +23,10 @@ form.form-inline.section-body.text-center
         p
             | Durée de la location&nbsp;:&nbsp;
             b.period-days.ng-cloak {{duration}}
+        {% endverbatim %}
         p.price
-            | Prix {% endverbatim %}{% if is_pro %}{% trans "indicatif" %}{% else %}{% trans "de la location" %}{% endif %}&nbsp;:{% verbatim %}
-            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
+            | {% trans "Prix" %} {% if is_pro %}{% trans "indicatif" %}{% else %}{% trans "de la location" %}{% endif %}&nbsp;:{% verbatim %}
+            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{ bookingPriceCurrency }}
         {% endverbatim %}
 
         {% if not is_pro and product.need_insurance %}
@@ -33,8 +34,8 @@ form.form-inline.section-body.text-center
         {% endif %}
     .part
         a(href = "", data-dismiss="modal", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success.calendar-ok
-            i.flaticon.stroke.calendar-2
-            | {% if is_pro %}Envoyez{% else %}{% trans "Réservez" %}{% endif %}
+            i.flaticon.stroke.calendar-2glio
+            | {% if is_pro %}{% trans "Envoyez" %}{% else %}{% trans "Réservez" %}{% endif %}
         p.mrg-v-1
             if is_pro
                 {% blocktrans %}

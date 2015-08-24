@@ -14,9 +14,7 @@ h3.col-md-7
   i.flaticon.stroke.menu-list-4.list
   i.flaticon.stroke.window-1.grid
   .clear-selector: select#sort-selector.form-control(name="sort", form="detail-search")
-    -var options = [["-created_at", "Les plus récents"], ["distance", "Les plus proches"], ["price", "Les prix les plus bas"], ["-price", "Les prix les plus haut"]]
-    for sort, title in options
-      if form.sort.data == sort
-        option(value="{{ sort }}", selected) {{ title }}
-      else
-        option(value="{{ sort }}") {{ title }}
+    <option value="-created_at" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les plus récents" %}
+    <option value="distance" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les plus proches" %}
+    <option value="price" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les prix les plus bas" %}
+    <option value="-price" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les prix les plus haut" %}

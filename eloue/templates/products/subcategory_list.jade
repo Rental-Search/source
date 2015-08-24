@@ -1,10 +1,7 @@
--load humanize facets product prefixed_cache
--load category
--load i18n
-
+-load humanize facets product prefixed_cache category i18n
 .container
   {% cache 43200 'products_on_category_homepage' category.id  %}
-  h3.text-center.indent-v-lg 1{{ products_on_category.count|intcomma }} annonces de location {{ category }} dans toute la France
+  h3.text-center.indent-v-lg 1{{ products_on_category.count|intcomma }} {% trans "annonces de location" %} {{ category }} {% trans "dans toute la France" %}
   {% endcache %}
 
   {% cache 43200 'category_homepage' category.slug  %}

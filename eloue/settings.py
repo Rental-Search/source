@@ -105,12 +105,13 @@ TIME_ZONE = 'Europe/Paris'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-fr')
+LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-FR')
 
 ugettext = lambda s: s
 LANGUAGES = (
-    ('fr-fr', ugettext('Français')),
-    ('en-gb', ugettext('English')),
+    ('fr-FR', ugettext('Français')),
+    ('en-GB', ugettext('English')),
+    ('da-DK', ugettext('Danish'))
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )

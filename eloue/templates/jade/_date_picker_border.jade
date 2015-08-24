@@ -1,7 +1,8 @@
+-load i18n
 .date-picker.form-wrapper
     .table-cell.main-cell
         .table-cell
-            span Du
+            span {% trans "Du" %}
         .table-cell.main-cell
             input(type="text", placeholder="", name="fromDate", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
@@ -20,7 +21,7 @@
 .date-picker.form-wrapper
     .table-cell.main-cell
         .table-cell
-            span Au
+            span {% trans "Au" %}
         .table-cell.main-cell
             input(type="text", placeholder="", name="toDate", ng-model="bookingDetails.toDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3

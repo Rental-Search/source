@@ -1,8 +1,7 @@
 -load paginator i18n product
--load i18n
 
 {% if paginator.count %}
-h3.indent-b-xs Les {{ paginator.count }} annonces de {{ patron.username }}{% if is_pro %}&nbsp;Pro{% endif %}
+h3.indent-b-xs {% trans "Les" %} {{ paginator.count }} {% trans "annonces de" %} {{ patron.username }}{% if is_pro %}&nbsp;{% trans "Pro" %}{% endif %}
 
 ol.product-layout
   each product in product_list
@@ -10,7 +9,7 @@ ol.product-layout
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
-          span.badge.price {{ product.price|price:"&euro; /jour" }}
+          span.badge.price {{ product.price|currency }} /{% trans "jour" %}
           //-span.badge-order {{ forloop.counter }}
         .info
           h6
