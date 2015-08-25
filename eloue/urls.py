@@ -12,6 +12,7 @@ from eloue.api.urls import router
 
 from products.views import HomepageView, PublishItemView
 from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView
+from eloue.contact_views import ContactView 
 
 admin.autodiscover()
 
