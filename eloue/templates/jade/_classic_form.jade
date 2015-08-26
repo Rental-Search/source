@@ -17,7 +17,7 @@
               option(value="madame", selected) Mme
               option(value="mademoiselle") Mlle
               option(value="monsieur") Mr
-            .col-xs-7:
+            .col-xs-7
               input(type="text", placeholder="Nom", name="lastName", ng-model="account.lastName", required).form-control
               span.errorMsg(ng-show="registrationForm.lastName.$error.required && registrationForm.lastName.$dirty", translate="required_field")
           -var registration_form_fields = [["text", "Prénom", "firstName"], ["email", "Adresse email", "email"], ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "postalCode"]]
