@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 class ContactView(FormView):
     template_name = 'index.jade'
     form_class = ContactForm
-    success_url = '//'
+    success_url = 'loca'
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.

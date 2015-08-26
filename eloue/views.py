@@ -13,6 +13,9 @@ from haystack.constants import DJANGO_ID
 from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
 
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from .forms import ContactForm
 
 class LoginRequiredMixin(View):
     @method_decorator(login_required)
@@ -115,3 +118,21 @@ class BreadcrumbsMixin(object):
         }
         context.update(super(BreadcrumbsMixin, self).get_context_data(**kwargs))
         return context
+
+
+class ContactView(View):
+    form_class = ContactForm
+    template_name = 'contact_us/index.jade'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            # <process form cleaned data>
+            return HttpResponseRedirect('')
+
+        return render(request, self.template_name, {'form': form})
+    
