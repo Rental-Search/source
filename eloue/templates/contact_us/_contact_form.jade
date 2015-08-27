@@ -4,29 +4,28 @@
     {% csrf_token %}
     .row.indent-v-sm
       .col-xs-4.text-right: label Votre e‐mail*&nbsp;:
-      .col-xs-8.col-sm-6.col-md-4: <input(type="email", value="{{ email }}", class="form-control", required)>
+      .col-xs-8.col-sm-6.col-md-4: input(type="email", name="{{ form.sender.html_name }}", value="{{ form.sender.value }}" , required).form-control
 
     .row.indent-v-sm
       .col-xs-4.text-right: label Catégorie*&nbsp;:
-      .col-xs-8.col-sm-6.col-md-4: select(data-placeholder="Sélectionner une catégorie",  required).form-control
-        option(value="")
+      .col-xs-8.col-sm-6.col-md-4: select(data-placeholder="Sélectionner une catégorie", name="{{ form.category.html_name }}", value="{{ form.category.value }}",  required).form-control
         {% for item in select_items %}
+        {% if form.category.value == item.value %}
+        option(value="{{item.value}}" selected) {{item.text}}
+        {% else %}
         option(value="{{item.value}}") {{item.text}}
+        {% endif %} 
         {% endfor %}
-
-    .row.indent-v-sm
-      .col-xs-4.text-right: label Objet&nbsp;:
-      .col-xs-8.col-sm-6: input(type="text", name="objet").form-control
 
     .row.indent-t-sm
       .col-xs-4.text-right: label Message*&nbsp;:
-      .col-xs-8.col-sm-6: textarea(name="message" rows="5", required).expand.form-control
+      .col-xs-8.col-sm-6: textarea(name="{{ form.message.html_name }}", value="{{ form.message.value }}", rows="5", required).expand.form-control
 
     .row.indent-v-xs
       .col-xs-4.col-sm-3.col-xs-offset-4
         .checkbox
           label
-            input(type="checkbox")#particular
+            input(type="checkbox", name="{{ form.cc_myself.html_name }}", value="{{ form.cc_myself.value }}")#particular
             span.flaticon.stroke.checkmark-1
           | être en copie du mail
       .col-xs-4.col-sm-3.text-right

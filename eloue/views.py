@@ -16,6 +16,7 @@ from eloue.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .forms import ContactForm
+from django.core.mail import send_mail, BadHeaderError
 
 class LoginRequiredMixin(View):
     @method_decorator(login_required)
@@ -130,9 +131,46 @@ class ContactView(View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        
         if form.is_valid():
-            # <process form cleaned data>
-            return HttpResponseRedirect('')
+            subject = form.cleaned_data['category']
+            message = form.cleaned_data['message']
+            sender = form.cleaned_data['sender']
+            cc_myself = form.cleaned_data['cc_myself']
+            
+            print "form is valid"
 
-        return render(request, self.template_name, {'form': form})
-    
+            new_form = self.form_class()
+            recipients = ['hugo.woog@e-loue.com']
+            if cc_myself:
+                recipients.append(sender)
+
+            if subject and message and sender:
+                try:
+                    send_mail(subject, message, sender, recipients)
+                except BadHeaderError:
+                    print "BadHeaderError"
+                    return render(request, self.template_name, {'form': form})
+                return render(request, self.template_name, {'form': new_form})
+            else:
+                return render(request, self.template_name, {'form': form})
+        
+        else:
+            print "form is not valid"
+            return render(request, self.template_name, {'form': form})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

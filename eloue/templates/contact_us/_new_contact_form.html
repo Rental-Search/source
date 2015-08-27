@@ -1,7 +1,100 @@
-<html>
-<body>
+<div class="container indent-v-lg">
+	<form action="/contactez-nous/" method="POST" class="form-wrapper ng-pristine ng-valid">
+		<input type="hidden" name="csrfmiddlewaretoken" value="cpgjobvtP4WZdk8FaXsn3IleZaCGQBkc">
+		<div class="row indent-v-sm">
+			<div class="col-xs-4 text-right">
+			<label>Votre e‐mail*&nbsp;:</label>
+			</div>
+			<div class="col-xs-8 col-sm-6 col-md-4">
+			<input type="email" required="" class="form-control" name="email">
+			</div>
+		</div>
+		<div class="row indent-v-sm">
+			<div class="col-xs-4 text-right">
+				<label>Sujet*&nbsp;:</label>
+			</div>
 
-	{{form}}
+			<div class="col-xs-8 col-sm-6 col-md-4" name="objet">
+				<select data-placeholder="Sélectionner une catégorie" required="" class="form-control" eloue-chosen="">
+					<option value=""></option>
+					<option value="request_information">Demande d'information</option>
+					<option value="technical_problem">Problème technique</option>
+					<option value="register_login">Inscription / Connexion</option>
+					<option value="dashboard_client_area">Tableau de bord / Espace client</option>
+					<option value="research">Recherche</option>
+					<option value="booking_rentals">Réservations / Locations</option>
+					<option value="payment_deposit">Paiement / Caution</option>
+					<option value="insurance">Assurance</option>
+					<option value="suggestions">Suggestions</option>
+					<option value="congratulations">Félicitations</option>
+					<option value="press_relations">Relation presse</option>
+					<option value="partnership_proposal">Proposition de partenariat</option>
+					<option value="other">Autre</option>
+				</select>
+			</div>
+		</div> 
 
-</body>
-</html>
+			<!--<div class="row indent-v-sm">
+				<div class="col-xs-4 text-right">
+				<label>Objet&nbsp;:</label>
+				</div>
+				<div class="col-xs-8 col-sm-6">
+					<input type="text" name="objet" class="form-control" name="subject">
+				</div>
+			</div>-->
+
+			<div class="row indent-t-sm"><div class="col-xs-4 text-right">
+			<label>Message*&nbsp;:</label>
+			</div>
+			<div class="col-xs-8 col-sm-6">
+			<textarea name="message" rows="5" required="" class="expand form-control" name="message"></textarea>
+			</div>
+		</div>
+
+		<div class="row indent-v-xs">
+			<div class="col-xs-4 col-sm-3 col-xs-offset-4">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="particular" name="cc_myself">
+						<span class="flaticon stroke checkmark-1"></span>
+					</label> être en copie du mail
+        		</div>
+        	</div>
+
+        	<div class="col-xs-4 col-sm-3 text-right">
+        		<p><em>*&nbsp;champs obligatoires</em></p>
+        	</div>
+        </div>
+
+        <div class="row indent-v-md">
+        	<div class="col-xs-8 col-sm-4 col-xs-offset-4">
+        		<input type="submit" value="Envoyer le message" style="width: 100%;" class="btn btn-lg bg-success">
+        	</div>
+        </div>
+
+        <div class="row"><hr class="col-xs-6 col-sm-4 col-xs-offset-3 col-sm-offset-4">
+        </div>
+    </form>
+    	<p class="text-center"> Vous pouvez également nous joindre, du lundi au vendredi de 9h à 18h,<br> par chat ou par téléphone (01 85 08 99 77)
+  		</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
