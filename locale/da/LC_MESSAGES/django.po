@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-26 19:21+0200\n"
+"POT-Creation-Date: 2015-08-27 10:20+0200\n"
 "PO-Revision-Date: 2015-05-17 18:52+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <victoria1307@hotmail.com>\n"
@@ -1527,8 +1527,21 @@ msgstr "Abonnement"
 msgid "Du"
 msgstr ""
 
+#: eloue/templates/jade/_date_picker_border.jade:18
+msgid "Il manque la date de début"
+msgstr "Kreditkort"
+
+#: eloue/templates/jade/_date_picker_border.jade:19
+#: eloue/templates/jade/_date_picker_border.jade:38
+msgid "Le format de la date n'est pas valide"
+msgstr ""
+
 #: eloue/templates/jade/_date_picker_border.jade:23
 msgid "Au"
+msgstr ""
+
+#: eloue/templates/jade/_date_picker_border.jade:37
+msgid "Il manque la date de fin"
 msgstr ""
 
 #: eloue/templates/jade/_download_mobile_apps.jade:5
@@ -1812,7 +1825,7 @@ msgstr "Ring"
 
 #: eloue/templates/jade/_pop_up_call.jade:14
 #: eloue/templates/jade/_pop_up_send_message.jade:14
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:33
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
 msgid "Réservez"
 msgstr "Reservationer"
 
@@ -1915,6 +1928,7 @@ msgstr "Lejeannoncer i hele landet"
 
 #: eloue/templates/jade/_product_list.jade:7
 #: eloue/templates/jade/_product_list_main.jade:2
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
 #: eloue/templates/jade/product_details/aside/_similar_listing.jade:15
 #: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
 #: products/choices.py:22 rent/utils.py:78 rent/tests/pricing_compat.py:126
@@ -2040,10 +2054,10 @@ msgstr ""
 "\n"
 "      <p> e-loue er det første web-sted 100%% tilegnet til erhvervsudlejere. "
 "Vores medlemmer søger alle former for lejemål over hele landet. De største "
-"udlejere udviser os tillid, så hvorfor gør du ikke? "
-"alors pourquoi pas vous ? \n"
-"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">da vil du vide "
-"mere</a>"
+"udlejere udviser os tillid, så hvorfor gør du ikke? alors pourquoi pas "
+"vous ? \n"
+"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">da "
+"vil du vide mere</a>"
 
 #: eloue/templates/jade/_reset_password.jade:8
 msgid "Réinitialisation du mot de passe"
@@ -2152,10 +2166,10 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"        <p class=\"lg-ln-height\"> Via e-loue kan du udleje alt det, du ikke længere bruger i "
-"hverdagen: værktøj, kamera, bil, plæneklipper, video-projecteur, kalpvogn... "
-"Tjen penge i al simpelhed og uden risisko: vores tjeneste forsikrer 100%% "
-"sikkerhed!\n"
+"        <p class=\"lg-ln-height\"> Via e-loue kan du udleje alt det, du ikke "
+"længere bruger i hverdagen: værktøj, kamera, bil, plæneklipper, video-"
+"projecteur, kalpvogn... Tjen penge i al simpelhed og uden risisko: vores "
+"tjeneste forsikrer 100%% sikkerhed!\n"
 "        </p><a href=\"%(howto_url)s\" class=\"link-success-color\">da savoir "
 "plus</a>"
 
@@ -2225,9 +2239,11 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"    <p> Din efterspørgelse om et overslag er afsendt.Vores team gør alt for at\n"
+"    <p> Din efterspørgelse om et overslag er afsendt.Vores team gør alt for "
+"at\n"
 "    </p>\n"
-"    <p> udlejer kontakter dem inden 24 timer.Du skal intet betale over e-loue\n"
+"    <p> udlejer kontakter dem inden 24 timer.Du skal intet betale over e-"
+"loue\n"
 "    </p>\n"
 "    <p> Vous n’avez rien à payer sur e-loue, le paiement se fera\n"
 " directement chez le loueur.\n"
@@ -2245,8 +2261,8 @@ msgid ""
 "ferons un plaisir de répondre à toutes vos questions...\n"
 msgstr ""
 "\n"
-"<b>Tøv ikke med at skrive til os</b> via formularen nedenfor. Vi svarer med stor fornøjelse på alle "
-"henvendelser...\n"
+"<b>Tøv ikke med at skrive til os</b> via formularen nedenfor. Vi svarer med "
+"stor fornøjelse på alle henvendelser...\n"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:29
 msgid "L’équipe e-loue"
@@ -2261,8 +2277,8 @@ msgid ""
 "via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à "
 "toutes vos questions..."
 msgstr ""
-"Tøv ikke med at skrive til os via formularen nedenfor. Vi svarer med stor fornøjelse på alle"
-"henvendelser..."
+"Tøv ikke med at skrive til os via formularen nedenfor. Vi svarer med stor "
+"fornøjelse på allehenvendelser..."
 
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:12
 msgid "Prénom *"
@@ -2327,7 +2343,8 @@ msgid ""
 "répondre à toutes vos questions…\n"
 msgstr ""
 "\n"
-"<b>øv ikke med at ringe til os. </b> Vi svarer med stor fornøjelse på alle henvendelser...\n"
+"<b>øv ikke med at ringe til os. </b> Vi svarer med stor fornøjelse på alle "
+"henvendelser...\n"
 
 #: eloue/templates/jade/pop_up_sections/_phone_form.jade:7
 msgid "Nous sommes joignables au&nbsp;"
@@ -2369,7 +2386,8 @@ msgid ""
 "plaisir de répondre à toutes vos questions…\n"
 msgstr ""
 "\n"
-"<b>Tøv ikke med at kom forbi i butikken.</b> Vi svarer med stor fornøjelse på alle henvendelser...\n"
+"<b>Tøv ikke med at kom forbi i butikken.</b> Vi svarer med stor fornøjelse "
+"på alle henvendelser...\n"
 
 #: eloue/templates/jade/pop_up_sections/_shop_form.jade:8
 msgid "Nos boutiques sont situées au&nbsp;"
@@ -2413,36 +2431,52 @@ msgid ""
 "les réponses à toutes vos questions.\n"
 msgstr ""
 "\n"
-"<b>Tøv ikke med at besøge vores hjemmeside.</b> er vil du finde samtlige svar "
-"på dine spørgsmål.\n"
+"<b>Tøv ikke med at besøge vores hjemmeside.</b> er vil du finde samtlige "
+"svar på dine spørgsmål.\n"
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:3
 msgid "Demandez un devis"
 msgstr "Forespørgsel på overslag"
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:7
+msgid "à partir de"
+msgstr ""
+
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:11
+msgid "Cet article est disponible à ces dates"
+msgstr "Antal tilgængelig i denne periode"
+
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:12
+msgid "Cet article n'est pas disponible à ces dates"
+msgstr ""
+
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:16
+msgid "Durée de la location"
+msgstr "Standard placering"
+
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 #: eloue/templates/products/tab_tarifs.jade:11
 #: eloue/templates/products/tab_tarifs.jade:41 products/forms.py:169
 msgid "Prix"
 msgstr "Pris"
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 msgid "indicatif"
 msgstr ""
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 msgid "de la location"
 msgstr "Standard placering"
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:30
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:22
 msgid "Assurance incluse"
 msgstr "Forsikret tilfredstillelse"
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:33
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
 msgid "Envoyez"
 msgstr ""
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:34
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:26
 msgid ""
 "\n"
 " Vous allez envoyer<br> une demande de location. <br> &ndash;<br> Le loueur "
@@ -3066,8 +3100,9 @@ msgstr ""
 "                            \n"
 "                            og sikkert,<br>\n"
 "                            \n"
-"                            e-loue er simpelt og effektivt %(site_name)s<br>\n"
-"   						 "
+"                            e-loue er simpelt og effektivt "
+"%(site_name)s<br>\n"
+"   \t\t\t\t\t\t "
 
 #: eloue/templates/rent/emails/borrower_cancelation_to_owner_email.txt:2
 #, python-format

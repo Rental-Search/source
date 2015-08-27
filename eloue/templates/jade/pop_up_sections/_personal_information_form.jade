@@ -1,13 +1,11 @@
 -load i18n
 
-h2 Vos informations personnelles
+h2 {% trans "Vos informations personnelles" %}
 .row
   .col-sm-2
-      {% verbatim %}
       select(ng-model="currentUser.civility", name="", data-placeholder="Civilité", eloue-chosen, data-ng-disabled="submitInProgress").form-control
-          option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
-      span.text-danger(eloue-form-field-message, field-name="civility") {{value}}
-      {% endverbatim %}
+          {% verbatim %}option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}{% endverbatim %}
+      span.text-danger(eloue-form-field-message, field-name="civility") {% verbatim %}{{value}}{% endverbatim %}
   .col-sm-5
       input(type="text", name="first_name", placeholder="{% trans 'Prénom *' %}", ng-model="currentUser.first_name", required).form-control
       span.text-danger(ng-show="bookingForm.first_name.$error.required && bookingSubmitted", translate="required_field")

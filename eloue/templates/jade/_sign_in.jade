@@ -43,10 +43,9 @@
                         {% trans "Code postal" as zipcode %}
                         .form-group: .row
                             .col-xs-5.clear-selector
-                                {% verbatim %}
+                                
                                 select(ng-model="account.civility", data-placeholder="Civilité", eloue-chosen).form-control
-                                    option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
-                                {% endverbatim %}
+                                    {% verbatim %}option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}{% endverbatim %}
                             .col-xs-7
                                 input(type="text", placeholder="{{ last_name }} *", name="last_name", ng-model="account.last_name", required).form-control
                                 span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted", translate="required_field")
@@ -76,7 +75,7 @@
                                 input(type="checkbox", checked)#inform
                                 span.flaticon.stroke.checkmark
                             | {% trans "Tenez moi informé de l'actualité et des bonnes affaires e-loue" %}
-                        .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success Inscription via Email
+                        .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success {% trans "Inscription via Email" %}
                         p
                             {% url 'terms' as terms_url %}
                             {% blocktrans %} 
@@ -89,4 +88,4 @@
                             {% endblocktrans%}
                 span.or
                 h4 {% trans "Vous êtes déjà membre e-loue ?" %}
-                a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion Connexion
+                a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion {% trans "Connexion" %}
