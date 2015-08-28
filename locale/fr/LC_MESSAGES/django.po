@@ -1528,7 +1528,7 @@ msgstr ""
 #: eloue/templates/products/product_result.html:80
 #: eloue/templates/products/product_result.html:82
 msgid "location"
-msgstr ""
+msgstr "location"
 
 #: eloue/templates/index.html:109
 #: eloue/templates/dcns/products/product_detail.html:4
@@ -1541,7 +1541,7 @@ msgstr ""
 #: eloue/templates/shiseido/products/product_detail.html:4
 #: eloue/templates/shiseido/products/product_detail.html:38
 msgid "Location"
-msgstr ""
+msgstr "Location"
 
 #: eloue/templates/index.html:122
 msgid "Découvrez e-loue"
