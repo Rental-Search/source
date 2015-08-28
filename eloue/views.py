@@ -12,6 +12,9 @@ from haystack.constants import DJANGO_ID
 
 from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
+from .forms import ContactFormPro
+from django.shortcuts import render
+from django.core.mail import send_mail, BadHeaderError
 
 
 class LoginRequiredMixin(View):
@@ -115,3 +118,47 @@ class BreadcrumbsMixin(object):
         }
         context.update(super(BreadcrumbsMixin, self).get_context_data(**kwargs))
         return context
+
+
+class ContactProView(View):
+    form_class = ContactFormPro
+    template_name = 'subscription/index.jade'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            sender = form.cleaned_data['sender']
+            phone_number = form.cleaned_data['phone_number']
+            activity_field = form.cleaned_data['activity_field']
+            
+
+            new_form = self.form_class()
+            recipients = ['hugo.eloue@e-loue.com']
+
+            print "form is valid"
+
+            if activity_field and name and sender and phone_number:
+                try:
+                    message = "%s %s" % (name, phone_number)
+                    send_mail(activity_field, message, sender, recipients)
+                except BadHeaderError:
+                    return render(request, self.template_name, {'form': form})
+                print "email is sent"
+                return render(request, self.template_name, {'form': new_form})
+            else:
+                return render(request, self.template_name, {'form': form})
+        
+        else:
+            print "form is not valid"
+            return render(request, self.template_name, {'form': form})
+
+
+
+
+
