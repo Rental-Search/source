@@ -110,7 +110,6 @@ LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-fr')
 ugettext = lambda s: s
 LANGUAGES = (
     ('fr-fr', ugettext('Français')),
-    ('en-gb', ugettext('English')),
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
@@ -824,8 +823,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [
-    35, 390, 253, 335, 418, 2700, 495, 126,  # first line / nav bar
-    172, 323, 432, 297, 379, 2713, 512, 3, 687  # others / dropdown selection
+    35, 390, 253, 418, 3, 379, 126, 172,  # first line / nav bar
+    432, 323, 297, 512, 2700, 335, 495, 2713  # others / dropdown selection
 ])
 
 FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())
@@ -833,3 +832,8 @@ FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())
 PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
+
+
+#Parse credential
+PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')
+PARSE_REST_API_KEY = env('PARSE_REST_API_KEY', 'VQdNVFgacql3M7T1uTnk8jO7mjqM3Q5yCiaqyXyv')

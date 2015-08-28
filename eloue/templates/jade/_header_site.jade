@@ -1,33 +1,40 @@
--load staticfiles
+-load staticfiles i18n
 
 section.framing(ng-controller="CookiesCtrl")
-    div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") En poursuivant votre navigation, vous acceptez l’utilisation des cookies pour disposer de services et d’offres adaptées à vos centres d’intérêts. Pour en savoir plus,&nbsp;
-        a(href="/conditions-generales/#Cookies") cliquez ici
+    div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") {% trans "En poursuivant votre navigation, vous acceptez l’utilisation des cookies pour disposer de services et d’offres adaptées à vos centres d’intérêts. Pour en savoir plus,&nbsp;" %}
+        a(href="/conditions-generales/#Cookies") {% trans "cliquez ici" %}
         span.cross(ng-click="acceptCookies(true)") &#10006;
 
 section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span
-      | Bonjour, 
-      a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b inscrivez-vous 
-      | ou 
-      a(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b connectez-vous
+      | {% trans "Bonjour" %}, 
+      a#registration-link(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b {% trans "inscrivez-vous" %}
+      | {% trans "ou" %} 
+      a#login-link(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b {% trans "connectez-vous" %}
     li.divide
     li: span
+        {% url 'subscription' as subscription_url %}
+        {% blocktrans %}
         | Vous êtes un loueur professionnel, découvrez les 
-        a(href="{% url 'subscription' %}"): b offres e-loue Pro
+        a(href="{{ subscription_url }}"): b offres e-loue Pro
+        {% endblocktrans %}
     li.divide
     li: span
+      {% blocktrans %}
       | Appelez-nous au 
       b 01 85 08 99 77 
       | (numéro gratuit)
+      {% endblocktrans %}
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser", style="display: none;").without-spaces
     li: span
+      {% blocktrans %}
       | Appelez-nous au 
       b 01 85 08 99 77 
       | (numéro gratuit)
+      {% endblocktrans %}
     li.spacer
     li.guest-veiw
         {% verbatim %}
@@ -37,7 +44,7 @@ section(ng-controller="AuthCtrl").container.signs-links
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
             {% endverbatim %}
-            li: a(href="{% url 'dashboard:dashboard' %}") Tableau de bord
+            li: a(href="{% url 'dashboard:dashboard' %}") {% trans "Tableau de bord" %}
             li: a(href="{% url 'dashboard:messages' %}") Messages
             li: a(href="{% url 'dashboard:bookings' %}") Réservations
             li: a(href="{% url 'dashboard:items' %}") Annonces
@@ -79,7 +86,7 @@ section(ng-controller="AuthCtrl").container.signs-links
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
             {% endverbatim %}
-            li: a(href="{% url 'howto' %}") Comment ça marche ?
+            li: a(href="{% url 'howto' %}") {% trans "Comment ça marche ?" %}
             //-
              li: a Simulez vos revenus
              li: a Conseils pour les propriétaires
@@ -90,12 +97,14 @@ section(ng-controller="AuthCtrl").container.signs-links
     .table-cell
       a(href="{% url 'home' %}"): img(src="{% static 'img/logo.png' %}", alt="e-loue logo")
     .table-cell.main-cell
-      form(action="{% url 'product_list' %}").input-group
-        input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="Que voulez-vous louer ?", title="{% if form.cleaned_data.q %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
+      {% trans "Que voulez-vous louer ?" as what %}
+      {% trans "Où ça ?" as where %}
+      form(action="{% url 'product_list' %}")#searh-form.input-group
+        input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", title="{% if form.cleaned_data.q %}{{ what }}{% endif %}").table-cell.main-cell.form-control.what-field
         .table-cell.input-group.where-field
           i.flaticon.stroke.location-pin-3
-          input(type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control#geolocate
+          input(type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="{{ where }}" %}", title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
         .table-cell.input-group-btn
           button(type="submit", default).btn.bg-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
     .table-cell
-      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise Déposez une annonce
+      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}

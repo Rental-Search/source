@@ -1,4 +1,5 @@
 -load paginator i18n product
+-load i18n
 
 {% if paginator.count %}
 h3.indent-b-xs Les {{ paginator.count }} annonces de {{ patron.username }}{% if is_pro %}&nbsp;Pro{% endif %}
@@ -16,7 +17,9 @@ ol.product-layout
             a(href="{{ product.url }}") {{ product.summary }}
             if is_pro
               span.badge-pro pro
+          {% if not product.agencies %}
           p: {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
+          {% endif %}
           if product.comment_count
             {% with product.average_rate as rate %}
             include ../jade/_rate

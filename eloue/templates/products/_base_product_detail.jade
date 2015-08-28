@@ -11,6 +11,7 @@ block append styles
 block append scripts
   script(type="text/javascript", src="https://www.googleadservices.com/pagead/conversion_async.js", charset="utf-8")
 
+
 block append head
   {% with product.pictures.all|first as picture %}
   {% with product.object.get_absolute_url as absolute_url %}
@@ -93,13 +94,13 @@ block append content-body
                 include ../jade/product_details/main/_description
               if product_comments and not is_pro
                 .part.comments.comments-ad
-                  h3 Commentaires liés à cette annonce
+                  h3 {% trans "Commentaires liés à cette annonce" %}
                   {% with product_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}
               if owner_comments and not is_pro
                 .part.comments.comments-owner
-                  h3 Commentaire liés au propriétaire
+                  h3 {% trans "Commentaire liés au propriétaire" %}
                   {% with owner_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}
@@ -114,14 +115,18 @@ block append content-body
           //-section.add-to-wishlist
           //-  include ../jade/product_details/aside/_add_to_wishlist
           {% if is_pro %}
+          {% if patron.slug != "loxam" %}
           section.booking-form
             include  ../jade/product_details/aside/_booking_form.jade
+          {% endif %} 
           {% else %}
           section.owner-information
             include ../jade/product_details/aside/_owner_information
           {% endif %}
+          {% if product_list %}
           section.similar-listing
             include ../jade/product_details/aside/_similar_listing
+          {% endif %}
           //-section.connected-with-owner
           //-  include ../jade/product_details/aside/_connected_with_owner
           include ../jade/_pop_up_reserve.jade
@@ -131,3 +136,22 @@ block append content-body
       section.row-fluid.insurances.framing: include ../jade/_insurances
       section.row-fluid.footer-links: include ../jade/_footer_links
       section.row-fluid.rss: include ../jade/_rss
+
+block append tail
+  script
+    var pro_popin_message_link = document.getElementById('pro-popin-message');
+    analytics.trackLink(pro_popin_message_link, "Pro Cost Request Modal");
+    var pro_popin_message_link = document.getElementById('pro-popin-phone');
+    analytics.trackLink(pro_popin_message_link, "Pro Phone Modal");
+    var pro_popin_message_link = document.getElementById('pro-popin-shop');
+    analytics.trackLink(pro_popin_message_link, "Pro Shop Modal");
+    var pro_popin_message_link = document.getElementById('pro-popin-website-link');
+    analytics.trackLink(pro_popin_message_link, "Pro Website Link Modal");
+
+    var pro_message_form = document.getElementById('proMessageForm');
+    if (pro_message_form != 'undefined') {
+      analytics.trackForm(pro_message_form, 'Pro Cost Request Sended');
+    }
+
+    var websiteProLink = document.getElementById('websiteProLink');
+    analytics.trackLink(websiteProLink, "Pro Website Link Redirected");

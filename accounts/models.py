@@ -96,6 +96,8 @@ class Patron(AbstractUser):
 
     godfather_email = models.EmailField(null=True, blank=True)
 
+    device_token = models.CharField(null=True, blank=True, max_length=255)
+
     # PatronManager must be declared first in order to become the '_default_manager' for this model
     objects = PatronManager()
     on_site = CurrentSiteManager()
@@ -104,6 +106,8 @@ class Patron(AbstractUser):
     iban = IBANField(blank=True)
 
     url = models.URLField(_(u"Site internet"), blank=True)
+
+    source = models.ForeignKey(Site, null=True, blank=True)
 
     thumbnail = ImageSpecField(
         source='avatar',
@@ -144,6 +148,8 @@ class Patron(AbstractUser):
                 self.slug = slugify(self.company_name)
             else:
                 self.slug = slugify(self.username)
+        if not self.source:
+            self.source = Site.objects.get_current()
         super(Patron, self).save(*args, **kwargs)
 
     def __eq__(self, other):
@@ -493,7 +499,7 @@ class FacebookSession(models.Model):
             return me_dict
         # we have to stock it in a local variable, and return the value from that
         # local variable, otherwise this stuff is broken with the dummy cache engine
-        me_dict = self.graph_api.get_object("me", fields='picture,email,first_name,last_name,gender,username,location')
+        me_dict = self.graph_api.get_object("me", fields='picture,email,first_name,last_name,gender,location')
         cache.set('facebook:me_%s' % self.uid, me_dict, 0)
         return me_dict
     

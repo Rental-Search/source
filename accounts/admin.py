@@ -8,10 +8,12 @@ from django.contrib.auth.admin import UserAdmin
 from django.http import HttpResponse
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.sites.models import Site
 
 from eloue.admin import CurrentSiteAdmin
 from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency
 from accounts.forms import PatronChangeForm, PatronCreationForm
+from products.models import Product
 
 log = logbook.Logger('eloue')
 
@@ -71,8 +73,15 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     save_on_top = True
     ordering = ['-date_joined']
     inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, ProAgencyInline]
-    actions = ['export_as_csv', 'send_activation_email']
+    actions = ['export_as_csv', 'send_activation_email', 'index_user_products', 'unindex_user_products']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
+
+    def queryset(self, request):
+        current_site = Site.objects.get_current()
+        if current_site.pk == 1:
+            return super(PatronAdmin, self).queryset(request)
+        else:
+            return super(PatronAdmin, self).queryset(request).filter(source=current_site)
 
     def save_model(self, request, obj, form, change):
         obj.save()
@@ -98,6 +107,22 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
             except smtplib.SMTPException:
                 pass
     send_activation_email.short_description = _(u"Envoyer à nouveau l'email d'activation")
+
+    def index_user_products(self, request, queryset):
+        for user in queryset:
+            products = Product.objects.filter(owner=user)
+            for p in products:
+                p.is_allowed = True
+                p.save()
+    index_user_products.short_description = _(u"Indexer les produits")
+
+    def unindex_user_products(self, request, queryset):
+       for user in queryset:
+            products = Product.objects.filter(owner=user)
+            for p in products:
+                p.is_allowed = False
+                p.save()
+    unindex_user_products.short_description = _(u"Désindexer les produits")
     
 
 class AddressAdmin(admin.ModelAdmin):

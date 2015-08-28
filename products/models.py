@@ -93,7 +93,7 @@ class Product(models.Model):
     shipping = models.BooleanField(_(u'Livraison possible'), default=False)
 
     is_archived = models.BooleanField(_(u'archivé'), default=False, db_index=True)
-    is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True)
+    is_allowed = models.BooleanField(_(u'autorisé'), default=True, db_index=True, help_text=_(u"Not index the product in the search engine"))
     # FIXME: 'category' attribute is obsoleted by 'categories' and must be removed
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
     categories = models.ManyToManyField('Category', related_name='product_categories', through='Product2Category')
@@ -108,6 +108,8 @@ class Product(models.Model):
 
     pro_agencies = models.ManyToManyField(ProAgency, related_name='products', blank=True, null=True)
 
+    source = models.ForeignKey(Site, null=True, blank=True)
+
 
     class Meta:
         verbose_name = _('product')
@@ -120,6 +122,7 @@ class Product(models.Model):
         self.description = strip_tags(self.description)
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
+            self.source = Site.objects.get_current()
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
@@ -142,7 +145,7 @@ class Product(models.Model):
     def more_like_this(self):
         from products.search import product_search
         sqs = product_search.dwithin(
-            'location', self.address.position,
+            'locations', self.address.position,
             Distance(km=DEFAULT_RADIUS)
         ) #.distance('location', self.address.position)
         return sqs.more_like_this(self)[:3]
@@ -644,6 +647,10 @@ class Picture(models.Model):
         super(Picture, self).delete(*args, **kwargs)
     
 
+def category_upload_to(instance, filename):
+    return 'pictures/categories/%s.jpg' % uuid.uuid4().hex
+
+
 class Category(MPTTModel):
     """A category"""
     parent = models.ForeignKey('self', related_name='childrens', blank=True, null=True)
@@ -657,6 +664,25 @@ class Category(MPTTModel):
     description = models.TextField(blank=True)
     header = models.TextField(blank=True)
     footer = models.TextField(blank=True)
+    image = models.ImageField(null=True, blank=True, upload_to=category_upload_to)
+
+    profile = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=1920, height=400),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
+
+    thumbnail = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=226, height=159),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
 
     on_site = CurrentSiteManager()
     objects = models.Manager()

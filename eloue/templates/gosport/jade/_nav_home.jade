@@ -16,4 +16,4 @@ ul.without-spaces
     ul(role="menu", aria-labelledby="dLabel").dropdown-menu
       each category in category_list|slice:"7:"
         li.content: a(href="{{ category.get_absolute_url }}", title="{% trans 'location'%} {{ category.name }}")
-            | Location {{ category.name|capfirst }}
+            |{% if category.slug == 'location-saisonniere' %}{{ category.name|capfirst }}{% else %}Location {{ category.name|capfirst }}{% endif %}

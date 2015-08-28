@@ -158,8 +158,16 @@ define([
                     $scope.$apply(function () {
                         $scope.loadingPicture -= 1;
                         $scope.product.pictures.push(data);
+
                     });
                     $scope.showNotification("picture", "upload", true);
+                    analytics.track('Item Photo Added', {
+                        'product id': $scope.product.id,
+                        'summary': $scope.product.summary,
+                        'city': $scope.product.addressDetails.city,
+                        'picture id': data.id,
+                        'picture url': data.image.display
+                    });
                 }, function () {
                     $scope.$apply(function () {
                         $scope.loadingPicture -= 1;
@@ -189,6 +197,23 @@ define([
                     $("#item-title-link-" + $scope.product.id).text($scope.product.summary);
                     $scope.submitInProgress = false;
                     $scope.showNotification("item_info", "save", true);
+
+                    // Get the price by day                        
+                    var price_by_day;
+                    
+                    angular.forEach($scope.product.prices, function (value, key) {
+                        if (value.unit == 1) {
+                            price_by_day = value.amount;
+                        }
+                    });
+
+                    analytics.track('Item Info Updated', {
+                        'product id': $scope.product.id,
+                        'summary': $scope.product.summary,
+                        'city': $scope.product.addressDetails.city,
+                        'price by day': price_by_day
+                    });
+
                 }, function (error) {
                     // Special error which not allow to change some categories.
                     if (error.code == "10199") {
@@ -247,6 +272,11 @@ define([
                     ProductsService.getProductDetails($stateParams.id).then(function (product) {
                         $scope.submitInProgress = false;
                         $scope.product.pictures = product.pictures;
+                    });
+                    analytics.track('Item Photo Deleted', {
+                        'product id': $scope.product.id,
+                        'summary': $scope.product.summary,
+                        'city': $scope.product.addressDetails.city
                     });
                 }, function (error) {
                     $scope.handleResponseErrors(error, "picture", "delete");

@@ -677,7 +677,7 @@ class BookingResource(OAuthResource):
                 booking.preapproval(
                     cancel_url="%s://%s%s" % (protocol, domain, reverse("booking_failure", args=[booking.pk.hex])),
                     return_url="%s://%s%s" % (protocol, domain, reverse("booking_success", args=[booking.pk.hex])),
-                    ip_address=request.META['REMOTE_ADDR']
+                    ip_address=request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
                 )
             except IntegrityError:
                 raise ImmediateHttpResponse(response=HttpBadRequest())

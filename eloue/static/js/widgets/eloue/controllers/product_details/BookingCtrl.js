@@ -294,6 +294,13 @@ define([
                 ScriptTagService.loadAdWordsTags("SfnGCMvgrgMQjaaF6gM");
                 ScriptTagService.trackEvent("Réservation", "Message", $scope.getEventLabel());
                 ScriptTagService.trackPageView();
+                analytics.track('Message Sended', {
+                    'product category': $scope.product.category.name,
+                    'product category slug': $scope.product.category.slug,
+                    'product id': $scope.product.id,
+                    'product summary': $scope.product.summary,
+                    'product pictures': $scope.product.pictures.length,
+                });
                 // Clear message field
                 $scope.newMessage = {};
                 $scope.productRelatedMessages.push(result);
@@ -467,6 +474,21 @@ define([
                 ScriptTagService.loadAdWordsTags("-XHsCMvspQMQjaaF6gM");
                 ScriptTagService.trackEvent("Réservation", "Demande de réservation", $scope.getEventLabel());
                 ScriptTagService.trackPageView();
+                analytics.track('Booking Requested', {
+                    'booking id': booking.uuid,
+                    'borrower id': booking.borrower.id,
+                    'owner id': booking.owner.id,
+                    'category': booking.product.category.name,
+                    'category slug': booking.product.category.slug,
+                    'product id': booking.product.id,
+                    'product summary': booking.product.summary,
+                    'product pictures': booking.product.pictures.length,
+                    'duration': booking.duration,
+                    'start date': booking.started_at,
+                    'end date': booking.ended_at,
+                    'state': booking.state,
+                    'total amount': booking.total_amount 
+                });
                 toastr.options.positionClass = "toast-top-full-width";
                 toastr.success("Réservation enregistré");
                 $(".modal").modal("hide");
@@ -530,11 +552,32 @@ define([
                     name = "login";
                 } else {
                     if ((name === "message") && $scope.productRelatedMessages.length === 0) {
+                        analytics.track('Message Modal',{
+                            'product category': $scope.product.category.name,
+                            'product category slug': $scope.product.category.slug,
+                            'product id': $scope.product.id,
+                            'product summary': $scope.product.summary,
+                            'product pictures': $scope.product.pictures.length,
+                        });
                         $scope.loadMessageThread();
                     } else if (name === "booking") {
+                        analytics.track('Booking Modal',{
+                            'product category': $scope.product.category.name,
+                            'product category slug': $scope.product.category.slug,
+                            'product id': $scope.product.id,
+                            'product summary': $scope.product.summary,
+                            'product pictures': $scope.product.pictures.length,
+                        });
                         $scope.loadCreditCards();
                         $scope.loadProductShippingPoint();
                     } else if (name === "phone") {
+                        analytics.track('Phone Modal',{
+                            'product category': $scope.product.category.name,
+                            'product category slug': $scope.product.category.slug,
+                            'product id': $scope.product.id,
+                            'product summary': $scope.product.summary,
+                            'product pictures': $scope.product.pictures.length,
+                        });
                         $scope.loadPhoneDetails();
                     }
                 }
@@ -769,6 +812,7 @@ define([
                     dateFormat: "yyyy-MM-dd"
                 });
             };
+
             $scope.applyDatePicker("date_of_birth");
             $scope.applyDatePicker("drivers_license_date");
 

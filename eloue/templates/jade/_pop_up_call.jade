@@ -1,3 +1,5 @@
+-load i18n
+
 .modal.fade#phoneModal(tabindex="-1", role="dialog", aria-hidden="true")
     .modal-dialog.large
         .modal-content
@@ -5,7 +7,7 @@
                 button(type="button", data-dismiss="modal").close
                     span(aria-hidden="true")&times;
                     span.sr-only Close
-                h4.modal-title Appel
+                h4.modal-title {% trans "Appel" %}
             .modal-body.table-cell
                 .static-part.table-cell
                     section.product-info
@@ -13,9 +15,9 @@
                     section.terms
                         include ./pop_up_sections/_terms
                         a#create-booking(href="", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success
-                            | Réservez
+                            {% trans "Réservez" %}
                         a(href="", ng-click="openModal('message')").btn.bg-gray
-                            | Envoyez un message
+                            {% trans "Envoyez un message" %}
                 .change-part.table-cell.top
                     section.table.variant-call
                         include ./pop_up_sections/_variants_call

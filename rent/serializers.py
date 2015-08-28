@@ -131,7 +131,7 @@ class BookingSerializer(serializers.ModelSerializer):
             max_available = self.opts.model.calculate_available_quantity(product, obj.started_at, obj.ended_at)
             obj.quantity = quantity = min(obj.quantity or 1, max_available)
             obj.total_amount = unit[1] * quantity
-            obj.ip = self.context['request'].META.get('REMOTE_ADDR', None)
+            obj.ip = self.context['request'].META.get('HTTP_X_FORWARDED_FOR', self.context['request'].META.get('REMOTE_ADDR'))
         return obj
 
     class Meta:
