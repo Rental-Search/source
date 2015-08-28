@@ -110,7 +110,6 @@ LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-fr')
 ugettext = lambda s: s
 LANGUAGES = (
     ('fr-fr', ugettext('Français')),
-    ('en-gb', ugettext('English')),
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
