@@ -110,7 +110,6 @@ LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-fr')
 ugettext = lambda s: s
 LANGUAGES = (
     ('fr-fr', ugettext('Français')),
-    ('en-gb', ugettext('English')),
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
@@ -833,3 +832,8 @@ FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())
 PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
+
+
+#Parse credential
+PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')
+PARSE_REST_API_KEY = env('PARSE_REST_API_KEY', 'VQdNVFgacql3M7T1uTnk8jO7mjqM3Q5yCiaqyXyv')

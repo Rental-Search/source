@@ -96,6 +96,8 @@ class Patron(AbstractUser):
 
     godfather_email = models.EmailField(null=True, blank=True)
 
+    device_token = models.CharField(null=True, blank=True, max_length=255)
+
     # PatronManager must be declared first in order to become the '_default_manager' for this model
     objects = PatronManager()
     on_site = CurrentSiteManager()

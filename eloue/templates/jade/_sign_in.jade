@@ -1,3 +1,4 @@
+-load i18n
 .modal.fade#registrationModal(tabindex="-1", role="dialog", aria-hidden="true")
     .modal-dialog
         .modal-content
@@ -5,22 +6,22 @@
                 button(type="button", data-dismiss="modal").close
                     span(aria-hidden="true")&times;
                     span.sr-only Close
-                h4.modal-title Inscription
+                h4.modal-title {% trans "Inscription" %}
             .modal-body
-                h3 Inscrivez-vous en 2 secondes
+                h3 {% trans "Inscrivez-vous en 2 secondes" %}
                 .form-group: a(ng-click="loginFacebook()").btn.bg-info
                     i.flaticon.social.facebook
-                    | Inscription via Facebook
+                    | {% trans "Inscription via Facebook" %}
                 //-
                  .form-group: a(href="#").btn.bg-danger
                    i.flaticon.social.google-plus
                    | Inscription via Google
                 p.info
-                    | Nous ne publierons jamais rien sur votre mur sans votre accord
+                    | {% trans "Nous ne publierons jamais rien sur votre mur sans votre accord" %}
                 span.or
-                h3 Inscrivez-vous en 30 secondes
+                h3 {% trans "Inscrivez-vous en 30 secondes" %}
                 form(action="")
-                    .form-group: a( href = "", ng-click="openRegistrationForm()").btn.bg-success Inscription via Email
+                    .form-group: a( href = "", ng-click="openRegistrationForm()").btn.bg-success {% trans "Inscription via Email" %}
                 {% verbatim %}
                 .alert.alert-danger(eloue-form-message)
                     button(type="button", data-dismiss="alert", class="close")
@@ -33,6 +34,13 @@
                     fieldset(data-ng-disabled="!!submitting")
                         //-
                          h3 Inscription 30 secondes
+                        {% trans "Nom" as last_name %}
+                        {% trans "Prénom" as first_name %}
+                        {% trans "Addresse email" as email %}
+                        {% trans "Pseudo" as username %}
+                        {% trans "Mot de passe" as password %}
+                        {% trans "Confirmation de mot de passe" as confirm_password %}
+                        {% trans "Code postal" as zipcode %}
                         .form-group: .row
                             .col-xs-5.clear-selector
                                 {% verbatim %}
@@ -40,31 +48,45 @@
                                     option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
                                 {% endverbatim %}
                             .col-xs-7
-                                input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
+                                input(type="text", placeholder="{{ last_name }} *", name="last_name", ng-model="account.last_name", required).form-control
                                 span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted", translate="required_field")
-                        -var registration_form_fields = [["text", "Prénom", "first_name"], ["text", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
-                        each type, placeholder, name in registration_form_fields
-                            .form-group
-                                if name == "zipcode"
-                                    input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required, eloue-zipcode).form-control
-                                    span.text-danger(ng-show="registrationForm.#{name}.$error.badFormat && registrationSubmitted", translate="zipcode_invalid")
-                                else
-                                    input(type="#{type}", placeholder="#{placeholder} *", name="#{name}", ng-model="account.#{name}", required).form-control
-                                span.text-danger(ng-show="registrationForm.#{name}.$error.required && registrationSubmitted", translate="required_field")
+                        .form-group
+                            input(type="text", placeholder="{{ first_name }}*", name="first_name", ng-model="account.first_name", required).form-control
+                            span.text-danger(ng-show="registrationForm.first_name.$error.required && registrationSubmitted", translate="required_field")
+                        .form-group
+                            input(type="text", placeholder="{{ email }} *", name="email", ng-model="account.email", required).form-control
+                            span.text-danger(ng-show="registrationForm.email.$error.required && registrationSubmitted", translate="required_field")
+                        .form-group
+                            input(type="text", placeholder="{{ username }} *", name="username", ng-model="account.username", required).form-control
+                            span.text-danger(ng-show="registrationForm.username.$error.required && registrationSubmitted", translate="required_field")
+                        .form-group
+                            input(type="password", placeholder="{{ password }} *", name="password", ng-model="account.password", required).form-control
+                            span.text-danger(ng-show="registrationForm.password.$error.required && registrationSubmitted", translate="required_field")
+                        .form-group
+                            input(type="password", placeholder="{{ confirm_password }} *", name="confirmPassword", ng-model="account.confirmPassword", required).form-control
+                            span.text-danger(ng-show="registrationForm.confirmPassword.$error.required && registrationSubmitted", translate="required_field")
+                        .form-group
+                            input(type="text", placeholder="{{ zipcode }} *", name="zipcode", ng-model="account.zipcode", required, eloue-zipcode).form-control
+                            span.text-danger(ng-show="registrationForm.zipcode.$error.badFormat && registrationSubmitted", translate="zipcode_invalid")
+                            span.text-danger(ng-show="registrationForm.zipcode.$error.required && registrationSubmitted", translate="required_field")
+
 
                         .checkbox
                             label(for="inform")
                                 input(type="checkbox", checked)#inform
                                 span.flaticon.stroke.checkmark
-                            | Tenez moi informé de l'actualité et des bonnes affaires e-loue
+                            | {% trans "Tenez moi informé de l'actualité et des bonnes affaires e-loue" %}
                         .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success Inscription via Email
                         p
+                            {% url 'terms' as terms_url %}
+                            {% blocktrans %} 
                             | En créant un compte e-loue, vous acceptez les &nbsp;
-                            a(href="{% url 'terms' %}") Conditions Générales
+                            a(href="tems_url") Conditions Générales
                             br
                             | et la &nbsp;
                             a(href="/respect-vie-privee/") Politique de Confidentialité
                             | de notre site
+                            {% endblocktrans%}
                 span.or
-                h4 Vous êtes déjà membre e-loue ?
+                h4 {% trans "Vous êtes déjà membre e-loue ?" %}
                 a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion Connexion

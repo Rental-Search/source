@@ -1,5 +1,6 @@
 -load humanize facets product prefixed_cache
 -load category
+-load i18n
 
 .container
   {% cache 43200 'products_on_category_homepage' category.id  %}
@@ -17,7 +18,7 @@
         .product-info
           .product-description
             h6
-                |Location
+                |{% trans "Location" %}
             h6: a(href="{{ subcategory.get_absolute_url }}")
               b {{ subcategory.name }}
           .product-owner
@@ -26,10 +27,10 @@
     ul.subcategory__list.row
       each subcategory in categories|slice:"8:"
         li.subcategory__item.col-xs-3
-          a(href="{{ subcategory.get_absolute_url }}").subcategory__link Location<br>{{ subcategory.name }}
+          a(href="{{ subcategory.get_absolute_url }}").subcategory__link {% trans "Location" %}<br>{{ subcategory.name }}
   {% endcache %}
 
   .row.text-center.indent-v-lg
     button(type="button", onclick="location.href='{{ category.get_absolute_url }}';").btn.bg-success.btn-explore.btn-lg
       i.flaticon.stroke.zoom-2.indent-r-xs
-      | Explorez toutes les annonces de location
+      | {% trans "Explorez toutes les annonces de location" %}
