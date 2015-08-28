@@ -1,10 +1,11 @@
 .container.indent-v-lg
   -var select_items = [{'text': "Demande d'information", 'value': "request_information"},{'text': "Problème technique", 'value': "technical_problem"}, {'text': "Inscription / Connexion", 'value': "register_login"}, {'text': "Tableau de bord / Espace client", 'value': "dashboard_client_area"}, {'text': "Recherche", 'value': "research"}, {'text': "Réservations / Locations", 'value': "booking_rentals"}, {'text': "Paiement / Caution", 'value': "payment_deposit"}, {'text': "Assurance", 'value': "insurance"}, {'text': "Suggestions", 'value': "suggestions"}, {'text': "Félicitations", 'value': "congratulations"}, {'text': "Relation presse", 'value': "press_relations"}, {'text': "Proposition de partenariat", 'value': "partnership_proposal"}, {'text': "Autre", 'value': "other"}]
-  form(action="/contactez-nous/" method="POST").form-wrapper
+  form(action="/contactez-nous/" method="POST", name="sendContactForm", ng-submit="publishAdSubmitted=true; publishAdForm.$valid && isCategorySelectorsValid() && publishAd()", ng-class="{'submitted':!!publishAdSubmitted}", role="form", novalidate, eloue-form-field-error-manager).form-wrapper
     {% csrf_token %}
     .row.indent-v-sm
       .col-xs-4.text-right: label Votre e‐mail*&nbsp;:
       .col-xs-8.col-sm-6.col-md-4: input(type="email", name="{{ form.sender.html_name }}", value="{{ form.sender.value }}" , required).form-control
+      span.text-danger(ng-show="sendContactForm.sender.$error.required && !!publishAdSubmitted", translate="required_field")
 
     .row.indent-v-sm
       .col-xs-4.text-right: label Catégorie*&nbsp;:
@@ -20,6 +21,7 @@
     .row.indent-t-sm
       .col-xs-4.text-right: label Message*&nbsp;:
       .col-xs-8.col-sm-6: textarea(name="{{ form.message.html_name }}", value="{{ form.message.value }}", rows="5", required).expand.form-control
+      <!--span.text-danger(ng-show="publishAdForm.summary.$error.required && !!publishAdSubmitted", translate="required_field")-->
 
     .row.indent-v-xs
       .col-xs-4.col-sm-3.col-xs-offset-4
