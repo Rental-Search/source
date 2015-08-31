@@ -141,7 +141,6 @@ class ContactProView(View):
             new_form = self.form_class()
             recipients = ['hugo.eloue@e-loue.com']
 
-            print "form is valid"
 
             if activity_field and name and sender and phone_number:
                 try:
@@ -149,13 +148,11 @@ class ContactProView(View):
                     send_mail(activity_field, message, sender, recipients)
                 except BadHeaderError:
                     return render(request, self.template_name, {'form': form})
-                print "email is sent"
                 return render(request, self.template_name, {'form': new_form})
             else:
                 return render(request, self.template_name, {'form': form})
         
         else:
-            print "form is not valid"
             return render(request, self.template_name, {'form': form})
 
 
