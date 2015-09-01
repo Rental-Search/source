@@ -11,6 +11,11 @@ style
   -var select_items = [{'text': "Demande d'information", 'value': "request_information"},{'text': "Problème technique", 'value': "technical_problem"}, {'text': "Inscription / Connexion", 'value': "register_login"}, {'text': "Tableau de bord / Espace client", 'value': "dashboard_client_area"}, {'text': "Recherche", 'value': "research"}, {'text': "Réservations / Locations", 'value': "booking_rentals"}, {'text': "Paiement / Caution", 'value': "payment_deposit"}, {'text': "Assurance", 'value': "insurance"}, {'text': "Suggestions", 'value': "suggestions"}, {'text': "Félicitations", 'value': "congratulations"}, {'text': "Relation presse", 'value': "press_relations"}, {'text': "Proposition de partenariat", 'value': "partnership_proposal"}, {'text': "Autre", 'value': "other"}]
   form(action="/offre-professionnel/" method="POST").form-wrapper
     {% csrf_token %}
+    {% if messages %}
+    {% for message in messages %}
+    p.indent-v-xs {{ message }}
+    {% endfor %}
+    {% endif %}
     .row.indent-v-xs
       .col-xs-4.text-right: label Nom, Prenom*&nbsp;:
       .col-xs-8.col-sm-6.col-md-4
@@ -60,3 +65,5 @@ style
     | Vous pouvez également nous joindre, du lundi au vendredi de 9h à 18h,
     br
     | par chat ou par téléphone au 01 85 08 99 77
+
+

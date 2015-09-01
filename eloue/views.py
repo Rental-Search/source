@@ -12,9 +12,12 @@ from haystack.constants import DJANGO_ID
 
 from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
+
 from .forms import ContactFormPro
 from django.shortcuts import render
 from django.core.mail import send_mail, BadHeaderError
+from django.contrib import messages
+
 
 
 class LoginRequiredMixin(View):
@@ -148,12 +151,16 @@ class ContactProView(View):
                     send_mail(activity_field, message, sender, recipients)
                 except BadHeaderError:
                     return render(request, self.template_name, {'form': form})
+                messages.add_message(request, messages.INFO, 'Hello world.')
                 return render(request, self.template_name, {'form': new_form})
             else:
                 return render(request, self.template_name, {'form': form})
         
         else:
             return render(request, self.template_name, {'form': form})
+
+
+            
 
 
 
