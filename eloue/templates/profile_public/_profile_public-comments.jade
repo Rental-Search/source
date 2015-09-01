@@ -1,6 +1,10 @@
+-load i18n
+
 {% with borrowercomments|length as comments_count %}
 {% if comments_count %}
+{% blocktrans %}
 h3.indent-b-xs Les {{ comments_count }} commentaires de {{ patron.username }}
+{% endblocktrans %}
 
 ul.list-group
   each comment in borrowercomments
@@ -13,14 +17,14 @@ ul.list-group
       .thumbnail-content
         p
           a(href="{{ product.get_absolute_url }}").text-success: b {{ product.summary }} 
-          small loué par 
+          small {% trans "loué par" %}
           a(href="{{ comment.author.get_absolute_url }}").text-success: b {{ comment.author.username }}
         .indent-t-xs.indent-b-xs //- this is a change against HTML dev's branch, should be checked that it looks like expected
           {% with comment.note as rate %}
           include ../jade/_rate
           {% endwith %}
         p {{ comment.comment|truncatechars:145 }}
-        small Le {{ comment.created_at|date:"d F Y" }}
+        small {% trans "Le" %} {{ comment.created_at|date:"d F Y" }}
     {% endwith %}
 {% endif %}
 {% endwith %}

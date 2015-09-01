@@ -8,9 +8,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.http import HttpResponse
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.sites.models import Site
 
 from eloue.admin import CurrentSiteAdmin
-from accounts.models import Patron, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency
+from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency, ProReport, Ticket
 from accounts.forms import PatronChangeForm, PatronCreationForm
 from products.models import Product
 
@@ -35,19 +36,36 @@ class ProAgencyInline(admin.TabularInline):
     model = ProAgency
     extra = 0
 
+class SubscriptionInline(admin.StackedInline):
+    model = Subscription
+    extra = 0
+    fieldsets = (
+        (None, {'fields': ('seller', 'propackage', 'signed_at', 'subscription_started', 'subscription_ended','amount', 'fee', 'free', 'number_of_free_month', 'payment_type', 'comment')}),
+    )
+
+class ProReportInline(admin.TabularInline):
+    readonly_fields = ('agent',)
+    model = ProReport
+    extra = 0
+    fk_name = 'pro'
+
+class ProTicketInline(admin.TabularInline):
+    readonly_fields = ('agent',)
+    model = Ticket
+    extra = 0
+    fk_name = 'pro'
 
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
     fieldsets = (
-        (None, {'fields': ('username', 'slug', 'password', 'sites')}),
-        (_('Personal info'), {'fields': ('civility', 'first_name', 'last_name', 'email', 'affiliate', 'avatar', 'about')}),
+        (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
+        (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
-        (_('Permissions'), {'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')}),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined',)}),
-
-        (_('Paypal'), {'classes': ('collapse',), 'fields': ('paypal_email',)}),
-        (_('Groups'), {'classes': ('collapse',), 'fields': ('groups',)}),
+        (_('Permissions'), {
+            'classes': ('collapse',),
+            'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')
+        }),
     )
 
     add_fieldsets = (
@@ -59,13 +77,19 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
 
     list_display = ('username', 'first_name', 'last_name', 'email', 'company_name',
         'is_staff', 'is_active', 'is_expired', 'is_professional', 'is_subscribed', 'date_joined', 'modified_at', 'new_messages_alerted')
-    date_hierarchy = 'date_joined'
     list_filter = ('is_active', 'is_staff', 'is_superuser', 'is_professional', 'is_subscribed', 'affiliate', 'new_messages_alerted')
     save_on_top = True
     ordering = ['-date_joined']
     inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, ProAgencyInline]
     actions = ['export_as_csv', 'send_activation_email', 'index_user_products', 'unindex_user_products']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
+
+    def queryset(self, request):
+        current_site = Site.objects.get_current()
+        if current_site.pk == 1:
+            return super(PatronAdmin, self).queryset(request)
+        else:
+            return super(PatronAdmin, self).queryset(request).filter(source=current_site)
 
     def save_model(self, request, obj, form, change):
         obj.save()
@@ -123,10 +147,16 @@ class AddressAdmin(admin.ModelAdmin):
 class PhoneNumberAdmin(admin.ModelAdmin):
     list_display = ('patron', 'number')
     search_fields = ('patron__username', 'number')
-    readonly_fields = ('patron', )
     fieldsets = (
         (None, {'fields': ('patron', 'number', 'kind')}),
     )
+    raw_id_fields = ("patron",)
+
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return self.readonly_fields + ('patron', )
+        return self.readonly_fields
 
 
 class SlimpayFilter(admin.SimpleListFilter):
@@ -216,6 +246,89 @@ class ProAgencyAdmin(admin.ModelAdmin):
             return obj.patron.username
 
 
+class ProAdmin(PatronAdmin):
+    list_display = ('company_name', 'closed_ticket', 'last_report_date', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
+    list_filter = ()
+    inlines = [SubscriptionInline, ProReportInline, ProTicketInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
+    readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
+    fieldsets = (
+        (_('Company info'), {'fields': ('company_name', 'civility', 'first_name', 'last_name', 'username', 'is_professional', 'password')}),
+        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url')}),
+        (_('Boutique'), {'fields': ('store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
+        (_('Permissions'), {
+            'classes': ('collapse',),
+            'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')
+        }),
+    )
+    date_hierarchy = None
+    search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name', 'pk',)
+
+    def queryset(self, request):
+        return Pro.objects.exclude(subscriptions=None)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ProAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['default_number'].queryset = form.base_fields['default_number'].queryset.filter(patron=obj)
+        form.base_fields['default_address'].queryset = form.base_fields['default_address'].queryset.filter(patron=obj)
+        return form
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            try:
+                instance.agent = request.user
+                instance.save()
+            except:
+                pass
+        formset.save_m2m()
+
+    def store_link(self, obj):
+        store_link = '<a href="%s" target="_blank">Voir la boutique</a>' % obj.get_absolute_url()
+        return store_link   
+    store_link.allow_tags = True
+    store_link.short_description = _(u"lien boutique")
+
+    def products_count(self, obj):
+        return obj.products.all().count()
+    products_count.short_description = _(u"noubre d'annonce")
+
+    def edit_product_link(self, obj):
+        edit_product_link = '<a href="/edit/products/product/?q=%s" target="_blank">Editer les annonces</a>' % obj.pk
+        return edit_product_link
+    edit_product_link.allow_tags = True
+    edit_product_link.short_description = _(u"annonces")
+
+    def last_subscription(self, obj):
+        last_subscription = obj.subscription_set.all().order_by('-subscription_started')[0]
+        if last_subscription.fee:
+            return "%s : %s : %s" % (last_subscription.propackage.name, last_subscription.amount, last_subscription.fee)
+        else:
+            return "%s : %s" % (last_subscription.propackage.name, last_subscription.amount)
+    last_subscription.short_description = _(u"Souscription")
+
+    def last_subscription_started_date(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_started
+    last_subscription_started_date.short_description = _(u"mise en lignes")
+
+    def last_subscription_ended_date(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_ended
+    last_subscription_ended_date.short_description = _(u"fin de souscription")
+
+    def last_report_date(self, obj):
+        last_report = obj.reports.latest('created_at')
+        return last_report.created_at
+    last_report_date.short_description = _(u"dernier rapport")
+
+    def closed_ticket(self, obj):
+        tickets = obj.tickets.filter(is_closed=False)
+        if not tickets:
+            return True
+        else:
+            return False
+    closed_ticket.short_description = _(u"tickets résolus")
+    closed_ticket.boolean = True
+
+
 try:
     admin.site.register(Address, AddressAdmin)
     admin.site.register(PhoneNumber, PhoneNumberAdmin)
@@ -224,5 +337,6 @@ try:
     admin.site.register(ProPackage, ProPackageAdmin)
     admin.site.register(Subscription, SubscriptionAdmin)
     admin.site.register(ProAgency, ProAgencyAdmin)
+    admin.site.register(Pro, ProAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)

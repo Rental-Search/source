@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib import admin, messages
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group
+from django.contrib.sites.models import Site
 
 from mptt.admin import MPTTModelAdmin
 from mptt.forms import TreeNodeChoiceField
@@ -80,7 +81,7 @@ class ProductCurrentSiteAdmin(CurrentSiteAdmin):
 
 class ProductAdmin(ProductCurrentSiteAdmin):
     date_hierarchy = 'created_at'
-    search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email']
+    search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email', 'owner__pk']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address", "phone")
     list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
@@ -91,6 +92,15 @@ class ProductAdmin(ProductCurrentSiteAdmin):
     form = ProductAdminForm
     actions = [convert_to_carproduct, convert_to_realestateproduct]
 
+    def queryset(self, request):
+        qs = super(ProductAdmin, self).queryset(request).filter(carproduct=None, realestateproduct=None)
+        current_site = Site.objects.get_current()
+        
+        if current_site.pk == 1:
+            return qs
+        else:
+            return qs.filter(source=current_site)
+
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'category':
             kwargs['form_class'] = TreeNodeChoiceField
@@ -98,10 +108,6 @@ class ProductAdmin(ProductCurrentSiteAdmin):
             kwargs['level_indicator'] = u"--"
             kwargs['queryset'] = Category.tree.all()
         return super(ProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
-    
-    def queryset(self, request):
-        qs = super(ProductAdmin, self).queryset(request)
-        return qs.filter(carproduct=None, realestateproduct=None)
 
 
 class RealEstateProductAdmin(ProductCurrentSiteAdmin):

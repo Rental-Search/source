@@ -4,11 +4,13 @@ import logbook
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.sites.models import Site
 
 from rent.models import Booking, OwnerComment, BorrowerComment, Sinister, BookingLog
 from rent.choices import BOOKING_STATE
 
 from eloue.admin import CurrentSiteAdmin
+
 
 log = logbook.Logger('eloue')
 
@@ -30,7 +32,14 @@ class BookingAdmin(CurrentSiteAdmin):
         'started_at', 'ended_at', 'created_at', 'total_amount', 'state')
     ordering = ['-created_at']
     actions = ['send_recovery_email']
-    search_fields = ['product__summary', 'owner__username', 'owner__email', 'borrower__email', 'borrower__username']
+    search_fields = ['product__summary', 'owner__username', 'owner__email', 'borrower__email', 'borrower__username', 'ip']
+
+    def queryset(self, request):
+        current_site = Site.objects.get_current()
+        if current_site.pk == 1:
+            return super(BookingAdmin, self).queryset(request)
+        else:
+            return super(BookingAdmin, self).queryset(request).filter(source=current_site)
     
     def send_recovery_email(self, request, queryset):
         for booking in queryset:
