@@ -62,7 +62,7 @@ class Language(models.Model):
 class Patron(AbstractUser):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
-    company_name = models.CharField(null=True, blank=True, max_length=255)
+    company_name = models.CharField(_(u"Nom de l'entreprise"), null=True, blank=True, max_length=255)
     subscriptions = models.ManyToManyField('ProPackage', through='Subscription')
 
     activation_key = models.CharField(null=True, blank=True, max_length=40)
@@ -82,10 +82,10 @@ class Patron(AbstractUser):
 
     customers = models.ManyToManyField('self', symmetrical=False)
 
-    about = models.TextField(blank=True, null=True)
-    work = models.CharField(max_length=75, blank=True, null=True)
-    school = models.CharField(max_length=75, blank=True, null=True)
-    hobby = models.CharField(max_length=75, blank=True, null=True)
+    about = models.TextField(_(u"à propos"),blank=True, null=True)
+    work = models.CharField(_(u"travail"), max_length=75, blank=True, null=True)
+    school = models.CharField(_(u"ecole"), max_length=75, blank=True, null=True)
+    hobby = models.CharField(_(u"hobbies"), max_length=75, blank=True, null=True)
     languages = models.ManyToManyField(Language, blank=True, null=True)
 
     drivers_license_date = models.DateTimeField(_(u"Date d'obtention"), blank=True, null=True)
