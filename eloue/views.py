@@ -139,7 +139,7 @@ class ContactProView(View):
             
 
             new_form = self.form_class()
-            recipients = ['hugo.eloue@e-loue.com']
+            recipients = ['benjamin.laroche@e-loue.com']
 
 
             if activity_field and name and sender and phone_number:
