@@ -687,15 +687,19 @@ class ProPackage(models.Model):
         ordering = ('-maximum_items', )
     
 class Subscription(models.Model):
-    patron = models.ForeignKey(Patron)
+    patron = models.ForeignKey(Patron, related_name='subscription_set')
+    seller = models.ManyToManyField(Patron, related_name='contracts', limit_choices_to={'is_staff': True}, blank=True)
     propackage = models.ForeignKey(ProPackage)
-    subscription_started = models.DateTimeField(auto_now_add=True)
-    subscription_ended = models.DateTimeField(null=True, blank=True)
-    free = models.BooleanField(default=False)
+    subscription_started = models.DateTimeField(_(u"Mise en ligne"), null=True, blank=True)
+    subscription_ended = models.DateTimeField(_(u"Fin de souscription"), null=True, blank=True)
+    signed_at = models.DateTimeField(_(u"Date de signature"), null=True, blank=True)
+    free = models.BooleanField(_(u"Gratuit"), default=False)
     number_of_free_month = models.PositiveSmallIntegerField(_(u"Nombre de mois gratuit"), null=True, blank=True)
     payment_type = models.PositiveSmallIntegerField(_(u"Type de paiement"), null=True, blank=True, choices=SUBSCRIPTION_PAYMENT_TYPE_CHOICES)
     annual_payment_date = models.DateTimeField(_(u"Date de paiement annuel"), null=True, blank=True)
     comment = models.TextField(_(u"Commentaire"), blank=True, null=True)
+    amount = models.DecimalField(_(u"Total"), max_digits=8, decimal_places=2, null=True, blank=True)
+    fee = models.DecimalField(_(u"Frais de dossier"), max_digits=8, decimal_places=2, null=True, blank=True)
 
     def price(self, _from=datetime.datetime.min, to=datetime.datetime.max, discount=False):
         if self.free:
@@ -714,18 +718,29 @@ class BillingSubscription(models.Model):
     billing = models.ForeignKey('Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
-
 class BillingProductHighlight(models.Model):
     producthighlight = models.ForeignKey('products.ProductHighlight')
     billing = models.ForeignKey('Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
-
 
 class BillingProductTopPosition(models.Model):
     producttopposition = models.ForeignKey('products.ProductTopPosition')
     billing = models.ForeignKey('Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
+class ProReport(models.Model):
+    pro = models.ForeignKey(Patron, related_name='reports')
+    agent = models.ForeignKey(Patron, related_name='pro_reports', limit_choices_to={'is_staff': True})
+    comment = models.TextField(null=True, blank=True)
+    stat = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Ticket(models.Model):
+    pro = models.ForeignKey(Patron, related_name='tickets')
+    agent = models.ForeignKey(Patron, related_name='pro_tickets', limit_choices_to={'is_staff': True})
+    is_closed = models.BooleanField(_(u"clôturé"), default=False)
+    comment = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Notification(models.Model):
     patron = models.ForeignKey(Patron)

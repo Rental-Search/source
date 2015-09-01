@@ -242,6 +242,7 @@ INSTALLED_APPS = (
     'eloue.api',
     'south', # South must be the last in the list of applications that contains models
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
+    'core',
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
