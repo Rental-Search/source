@@ -1,5 +1,8 @@
 extends ../base
--load compressed staticfiles
+-load compressed staticfiles i18n
+
+block append title
+  {% trans "Conditions Générales Particuliers" %}
 
 block append styles
   {% compressed_css "bootstrap" %}
