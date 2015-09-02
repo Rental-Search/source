@@ -17,6 +17,7 @@ from .forms import ContactFormPro
 from django.shortcuts import render
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 
 
@@ -157,7 +158,8 @@ class ContactProView(View):
                 return render(request, self.template_name, {'form': form})
         
         else:
-            return render(request, self.template_name, {'form': form})
+            return HttpResponseRedirect('/offre-professionnel/#form')
+            #return render(request, self.template_name, {'form': form})
 
 
             
