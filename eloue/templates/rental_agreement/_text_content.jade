@@ -101,20 +101,20 @@ style
         .tab-pane#seasonnal
           p Notre assurance couvre la location de logements. 
           p Voici le contrat de location type que nous proposons pour la location de logements. Lorsque vous effectuez une location, ce contrat vous est envoyé pré-rempli avec les informations que vous avez renseignées.
-          p: a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320601/contrat_location_saisonniere.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434963038&Signature=RGighddB4auEqsrNuwOZN9kv7gA%3D#_=_", target="_blank") Télécharger un exemplaire
+          p: a(href="{% static 'contracts/real_estate.pdf' %}", target="_blank") Télécharger un exemplaire
         .tab-pane.active#object
           p Notre assurance couvre la location des objets. Voici le contrat de location standard que nous proposons pour ce type de location. Lorsque vous effectuez une location, ce contrat vous est envoyé pré-rempli avec les informations que vous avez renseignées.
           p Cependant, notre assurance ne couvre pas certains objets (matériels de levage, manutention, construction et terrassement, armes, téléphones portables, etc). Se référer à la page Assurance tranquillité pour plus d’informations.
-          p: a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320601/contrat_location_saisonniere.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434963038&Signature=RGighddB4auEqsrNuwOZN9kv7gA%3D#_=_", target="_blank") Télécharger un exemplaire
+          p: a(href="{% static 'contracts/normal.pdf' %}", target="_blank") Télécharger un exemplaire
         .tab-pane#no-insurance
           p Certains objets et véhicules ne sont pas couverts par notre assurance (véhicules à 2 et 3 roues, armes, téléphones portables, etc). 
           p C’est pourquoi nous proposons un contrat de location type pour les objets et véhicules ne bénéficiant pas d’une assurance sur notre site. Lorsque vous effectuez une location, ce contrat vous est envoyé pré-rempli avec les informations que vous avez renseignées. 
-          p: a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320605/contrat_sans_assurance.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434964246&Signature=iYIUk1X9mSSDlcHGOBmChx8%2FTk4%3D#_=_", target="_blank") Télécharger un exemplaire
+          p: a(href="{% static 'contracts/noinsurance.pdf' %}", target="_blank") Télécharger un exemplaire
         .tab-pane#car
           p Notre assurance couvre la location de véhicules. Voici le contrat de location standard que nous proposons pour ce type de location. 
           p Lorsque vous effectuez une location, ce contrat vous est envoyé pré-rempli avec les informations que vous avez renseignées. 
           p Cependant, notre assurance ne couvre pas certains véhicules (les véhicules à 2 et 3 roues, les véhicules d’une valeur supérieure à 50 000 euros, les véhicules ne bénéficiant pas d'un contrat d'assurance annuel, les véhicules utilitaires dont le poids total en charge est supérieur à 2,3 Tonnes, etc). Se référer à la page Assurance tranquillité pour plus d’informations.
-          p: a(href="https://s3.amazonaws.com/prod_object_assets/assets/38447953320603/contrat_objet.pdf?AWSAccessKeyId=AKIAI7NUHQYARXR2GGCQ&Expires=1434964159&Signature=EPUUq6ECXAMPC60TFMJ9QIYue4Y%3D#_=_", target="_blank") Télécharger un exemplaire
+          p: a(href="{% static 'contracts/car.pdf' %}", target="_blank") Télécharger un exemplaire
 
   .container
     br
