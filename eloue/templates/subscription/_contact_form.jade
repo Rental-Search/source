@@ -6,14 +6,21 @@ style
   label{
   margin-bottom: 0px;
   margin-top: 5px;}
-  
+
+
 .container.indent-v-lg
-  -var select_items = [{'text': "Demande d'information", 'value': "request_information"},{'text': "Problème technique", 'value': "technical_problem"}, {'text': "Inscription / Connexion", 'value': "register_login"}, {'text': "Tableau de bord / Espace client", 'value': "dashboard_client_area"}, {'text': "Recherche", 'value': "research"}, {'text': "Réservations / Locations", 'value': "booking_rentals"}, {'text': "Paiement / Caution", 'value': "payment_deposit"}, {'text': "Assurance", 'value': "insurance"}, {'text': "Suggestions", 'value': "suggestions"}, {'text': "Félicitations", 'value': "congratulations"}, {'text': "Relation presse", 'value': "press_relations"}, {'text': "Proposition de partenariat", 'value': "partnership_proposal"}, {'text': "Autre", 'value': "other"}]
+  script
+    var select_items = [{'text': "Demande d'information", 'value': "request_information"},{'text': "Problème technique", 'value': "technical_problem"}, {'text': "Inscription / Connexion", 'value': "register_login"}, {'text': "Tableau de bord / Espace client", 'value': "dashboard_client_area"}, {'text': "Recherche", 'value': "research"}, {'text': "Réservations / Locations", 'value': "booking_rentals"}, {'text': "Paiement / Caution", 'value': "payment_deposit"}, {'text': "Assurance", 'value': "insurance"}, {'text': "Suggestions", 'value': "suggestions"}, {'text': "Félicitations", 'value': "congratulations"}, {'text': "Relation presse", 'value': "press_relations"}, {'text': "Proposition de partenariat", 'value': "partnership_proposal"}, {'text': "Autre", 'value': "other"}]
+    
+    function myFunction() {
+    setTimeout(function(){ hide(message); }, 3000);
+    }
+
   form(action="/offre-professionnel/" method="POST").form-wrapper
     {% csrf_token %}
     {% if messages %}
     {% for message in messages %}
-    p.indent-v-xs {{ message }}
+    p.indent-v-xs {{ message|safe }}
     {% endfor %}
     {% endif %}
     .row.indent-v-xs
@@ -22,7 +29,7 @@ style
         input(name="{{ form.name.html_name }}", value="{{ form.name.value }}" , required).form-control
         {% if form.name.errors %}
         {% for error in form.name.errors %}
-        p.alert-danger{{ error|escape }}
+        {{ error|escape }}
         {% endfor %}
         {% endif %}
     .row.indent-v-xs

@@ -151,20 +151,16 @@ class ContactProView(View):
                     message = "%s %s" % (name, phone_number)
                     send_mail(activity_field, message, sender, recipients)
                 except BadHeaderError:
+                    messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Adresse mail invalide</div></div></div>', extra_tags='safe')
                     return render(request, self.template_name, {'form': form})
-                messages.add_message(request, messages.INFO, 'Hello world.')
+               
+                messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-success"><div class="toast-message">Votre message a bien été envoyé</div></div></div>', extra_tags='safe')
                 return render(request, self.template_name, {'form': new_form})
             else:
+                messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Adresse mail invalide</div></div></div>', extra_tags='safe')
                 return render(request, self.template_name, {'form': form})
         
         else:
-            return HttpResponseRedirect('/offre-professionnel/#form')
-            #return render(request, self.template_name, {'form': form})
-
-
-            
-
-
-
-
+            messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Adresse mail invalide</div></div></div>', extra_tags='safe')
+            return render(request, self.template_name, {'form': form})
 
