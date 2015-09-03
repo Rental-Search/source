@@ -17,6 +17,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .forms import ContactForm
 from django.core.mail import send_mail, BadHeaderError
+from django.contrib import messages
+
 
 class LoginRequiredMixin(View):
     @method_decorator(login_required)
@@ -138,10 +140,9 @@ class ContactView(View):
             sender = form.cleaned_data['sender']
             cc_myself = form.cleaned_data['cc_myself']
             
-            print "form is valid"
 
             new_form = self.form_class()
-            recipients = ['hugo.woog@e-loue.com']
+            recipients = ['contact@e-loue.com']
             if cc_myself:
                 recipients.append(sender)
 
@@ -149,15 +150,18 @@ class ContactView(View):
                 try:
                     send_mail(subject, message, sender, recipients)
                 except BadHeaderError:
-                    print "BadHeaderError"
+                    messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Erreur dans le formulaire</div></div></div>', extra_tags='safe')
                     return render(request, self.template_name, {'form': form})
+                messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-success"><div class="toast-message">Votre message a bien été envoyé</div></div></div>', extra_tags='safe')
                 return render(request, self.template_name, {'form': new_form})
             else:
+                messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Erreur dans le formulaire</div></div></div>', extra_tags='safe')
                 return render(request, self.template_name, {'form': form})
         
         else:
-            print "form is not valid"
+            messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Form not valiv</div></div></div>', extra_tags='safe')
             return render(request, self.template_name, {'form': form})
+
 
 
 
