@@ -1,23 +1,26 @@
 style
   .text-red{
-  color: #a94442;
-  }
+  color: #a94442;}
+
 .container.indent-v-lg
+  //- <div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-success"><div class="toast-message">{{ message|safe }}</div></div></div>
   script
-    var select_items = [{'text': "Demande d'information", 'value': "request_information"},{'text': "Problème technique", 'value': "technical_problem"}, {'text': "Inscription / Connexion", 'value': "register_login"}, {'text': "Tableau de bord / Espace client", 'value': "dashboard_client_area"}, {'text': "Recherche", 'value': "research"}, {'text': "Réservations / Locations", 'value': "booking_rentals"}, {'text': "Paiement / Caution", 'value': "payment_deposit"}, {'text': "Assurance", 'value': "insurance"}, {'text': "Suggestions", 'value': "suggestions"}, {'text': "Félicitations", 'value': "congratulations"}, {'text': "Relation presse", 'value': "press_relations"}, {'text': "Proposition de partenariat", 'value': "partnership_proposal"}, {'text': "Autre", 'value': "other"}]
-  
+
     setTimeout(function() {
     $('#toast-container').fadeOut('slow');
     }, 3000);
+  
 
-
-  form(action="/contactez-nous/" method="POST").form-wrapper
+  -var select_items = [{'text': "Demande d'information", 'value': "request_information"},{'text': "Problème technique", 'value': "technical_problem"}, {'text': "Inscription / Connexion", 'value': "register_login"}, {'text': "Tableau de bord / Espace client", 'value': "dashboard_client_area"}, {'text': "Recherche", 'value': "research"}, {'text': "Réservations / Locations", 'value': "booking_rentals"}, {'text': "Paiement / Caution", 'value': "payment_deposit"}, {'text': "Assurance", 'value': "insurance"}, {'text': "Suggestions", 'value': "suggestions"}, {'text': "Félicitations", 'value': "congratulations"}, {'text': "Relation presse", 'value': "press_relations"}, {'text': "Proposition de partenariat", 'value': "partnership_proposal"}, {'text': "Autre", 'value': "other"}]
+  form(action="/contactez-nous/" method="POST", novalidate="")#contact-form.form-wrapper
     {% csrf_token %}
+
     {% if messages %}
     {% for message in messages %}
-    {{ message|safe }}
+    <div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">{{ message|safe }}</div></div></div>
     {% endfor %}
     {% endif %}
+
     .row.indent-v-xs
       .col-xs-4.text-right: label Votre e‐mail*&nbsp;:
       .col-xs-8.col-sm-6.col-md-4
@@ -27,17 +30,18 @@ style
         p.text-red{{ error|escape }}
         {% endfor %}
         {% endif %}
+        //-print {{form.sender}}
     .row.indent-v-xs
       .col-xs-4.text-right: label Catégorie*&nbsp;:
       .col-xs-8.col-sm-6.col-md-4
-        select(data-placeholder="Sélectionner une catégorie", name="{{ form.category.html_name }}", value="{{ form.category.value }}",  required).form-control
-        {% for item in select_items %}
-        {% if form.category.value == item.value %}
-        option(value="{{item.value}}" selected) {{item.text}}
-        {% else %}
-        option(value="{{item.value}}") {{item.text}}
-        {% endif %} 
-        {% endfor %}
+        select(data-placeholder="Sélectionner une catégorie", name="{{ form.category.html_name }}", value="{{ form.category.value }}").form-control
+          {% for item in select_items %}
+          {% if form.category.value == item.value %}
+          option(value="{{item.value}}" selected) {{item.text}}
+          {% else %}
+          option(value="{{item.value}}") {{item.text}}
+          {% endif %} 
+          {% endfor %}
 
         {% if form.category.errors %}
         {% for error in form.category.errors %}

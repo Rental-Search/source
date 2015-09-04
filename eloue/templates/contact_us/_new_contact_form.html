@@ -1,12 +1,35 @@
+<style>
+  .text-red{
+  color: #a94442;}
+</style>
+
+ <script>
+    setTimeout(function() {
+    $('#toast-container').fadeOut('slow');
+    }, 3000);
+</script>
+
 <div class="container indent-v-lg">
-	<form action="/contactez-nous/" method="POST" class="form-wrapper ng-pristine ng-valid">
-		<input type="hidden" name="csrfmiddlewaretoken" value="cpgjobvtP4WZdk8FaXsn3IleZaCGQBkc">
+	<form action="/contactez-nous/" method="POST" class="form-wrapper ng-pristine ng-valid" , novalidate="">
+	{% csrf_token %}
+
+	{% if messages %}
+    {% for message in messages %}
+   	<div id="toast-container" class="toast-top-full-width" aria-live="polite"><div class="toast toast-"><div class="toast-message">{{ message|safe }}</div></div></div>
+    {% endfor %}
+    {% endif %}
+<!-- {% if message.tags %} class="{{ message.tags }}"{% endif %} -->
 		<div class="row indent-v-sm">
 			<div class="col-xs-4 text-right">
 			<label>Votre e‐mail*&nbsp;:</label>
 			</div>
 			<div class="col-xs-8 col-sm-6 col-md-4">
-			<input type="email" required="" class="form-control" name="email">
+			<input type="email" required class="form-control" name="{{ form.sender.html_name }}" value="{{ form.sender.value }}">
+			{% if form.sender.errors %}
+	        {% for error in form.sender.errors %}
+	        <p class="text-red">{{ error|escape }}</p>
+	        {% endfor %}
+	        {% endif %}
 			</div>
 		</div>
 		<div class="row indent-v-sm">
@@ -14,40 +37,41 @@
 				<label>Sujet*&nbsp;:</label>
 			</div>
 
-			<div class="col-xs-8 col-sm-6 col-md-4" name="objet">
-				<select data-placeholder="Sélectionner une catégorie" required="" class="form-control" eloue-chosen="">
-					<option value=""></option>
-					<option value="request_information">Demande d'information</option>
-					<option value="technical_problem">Problème technique</option>
-					<option value="register_login">Inscription / Connexion</option>
-					<option value="dashboard_client_area">Tableau de bord / Espace client</option>
-					<option value="research">Recherche</option>
-					<option value="booking_rentals">Réservations / Locations</option>
-					<option value="payment_deposit">Paiement / Caution</option>
-					<option value="insurance">Assurance</option>
-					<option value="suggestions">Suggestions</option>
-					<option value="congratulations">Félicitations</option>
-					<option value="press_relations">Relation presse</option>
-					<option value="partnership_proposal">Proposition de partenariat</option>
-					<option value="other">Autre</option>
-				</select>
+			 <div class="col-xs-8 col-sm-6 col-md-4" name="objet">
+        	<select data-placeholder="Sélectionner une catégorie" name="category" value="None" class="form-control" eloue-chosen="">
+        		<option value="request_information">Demande d'information</option>
+        		<option value="technical_problem">Problème technique</option>
+        		<option value="register_login">Inscription / Connexion</option>
+        		<option value="dashboard_client_area">Tableau de bord / Espace client</option>
+        		<option value="research">Recherche</option>
+        		<option value="booking_rentals">Réservations / Locations</option>
+        		<option value="payment_deposit">Paiement / Caution</option>
+        		<option value="insurance">Assurance</option>
+        		<option value="suggestions">Suggestions</option>
+        		<option value="congratulations">Félicitations</option>
+        		<option value="press_relations">Relation presse</option>
+        		<option value="partnership_proposal">Proposition de partenariat</option>
+        		<option value="other">Autre</option></select>
+
+
+			{% if form.category.errors %}
+	        {% for error in form.category.errors %}
+	        <p class="text-red">{{ error|escape }}</p>
+	        {% endfor %}
+	        {% endif %}
 			</div>
 		</div> 
-
-			<!--<div class="row indent-v-sm">
-				<div class="col-xs-4 text-right">
-				<label>Objet&nbsp;:</label>
-				</div>
-				<div class="col-xs-8 col-sm-6">
-					<input type="text" name="objet" class="form-control" name="subject">
-				</div>
-			</div>-->
 
 			<div class="row indent-t-sm"><div class="col-xs-4 text-right">
 			<label>Message*&nbsp;:</label>
 			</div>
 			<div class="col-xs-8 col-sm-6">
-			<textarea name="message" rows="5" required="" class="expand form-control" name="message"></textarea>
+			<textarea name="{{ form.message.html_name }}" value="{{ form.message.value }}" rows="5" required class="expand form-control"></textarea>
+			{% if form.message.errors %}
+	        {% for error in form.message.errors %}
+	        <p class="text-red">{{ error|escape }}</p>
+	        {% endfor %}
+	        {% endif %}
 			</div>
 		</div>
 
@@ -55,7 +79,7 @@
 			<div class="col-xs-4 col-sm-3 col-xs-offset-4">
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" id="particular" name="cc_myself">
+						<input type="checkbox" id="particular" name="{{ form.cc_myself.html_name }}" value="{{ form.cc_myself.value }}">
 						<span class="flaticon stroke checkmark-1"></span>
 					</label> être en copie du mail
         		</div>
