@@ -5,3 +5,4 @@ class ContactForm(forms.Form):
 	sender = forms.EmailField(label='Your name', max_length=100, initial="")
 	category = forms.CharField(widget=forms.Select)
 	cc_myself = forms.BooleanField(required=False)
+

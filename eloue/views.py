@@ -162,4 +162,3 @@ class ContactView(View):
             messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
             return render(request, self.template_name, {'form': form, 'tag' : "error"})
 
-            # message = "%s ; %s ; %s ; %s" % (name, activity_field, sender, phone_number)
