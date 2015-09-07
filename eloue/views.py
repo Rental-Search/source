@@ -149,22 +149,20 @@ class ContactProView(View):
             recipients = ['benjamin.laroche@e-loue.com']
 
 
-            if activity_field and name and sender and phone_number:
+            if activity_field and name and sender:
                 try:
                     message = "%s ; %s ; %s ; %s" % (name, activity_field, sender, phone_number)
                     send_mail("Formulaire de contact Pro", message, sender, recipients)
                 except BadHeaderError:
-                    messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Erreur dans le formulaire</div></div></div>', extra_tags='safe')
-                    return render(request, self.template_name, {'form': form})
-               
-                messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-success"><div class="toast-message">Votre message a bien été envoyé</div></div></div>', extra_tags='safe')
-                return render(request, self.template_name, {'form': new_form})
+                    messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+                    return render(request, self.template_name, {'form': form, 'tag' : "error"})
+                messages.add_message(request, messages.INFO, _('Le message a ete envoye avec succes'), extra_tags='safe')
+                return render(request, self.template_name, {'form': new_form, 'tag' : "success"})
             else:
-                messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Erreur dans le formulaire</div></div></div>', extra_tags='safe')
-                return render(request, self.template_name, {'form': form})
+                messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+                return render(request, self.template_name, {'form': form, 'tag' : "error"})
         
         else:
-            messages.add_message(request, messages.INFO, '<div id="toast-container" class="toast-top-full-width" aria-live="polite" role="alert"><div class="toast toast-error"><div class="toast-message">Erreur dans le formulaire</div></div></div>', extra_tags='safe')
-            return render(request, self.template_name, {'form': form})
-
+            messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+            return render(request, self.template_name, {'form': form, 'tag' : "error"})
 
