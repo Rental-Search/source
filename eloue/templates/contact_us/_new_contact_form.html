@@ -15,10 +15,9 @@
 
 	{% if messages %}
     {% for message in messages %}
-   	<div id="toast-container" class="toast-top-full-width" aria-live="polite"><div class="toast toast-"><div class="toast-message">{{ message|safe }}</div></div></div>
+   	<div id="toast-container" class="toast-top-full-width" aria-live="polite"><div class="toast toast-{{ tag }}"><div class="toast-message">{{ message|safe }}</div></div></div>
     {% endfor %}
     {% endif %}
-<!-- {% if message.tags %} class="{{ message.tags }}"{% endif %} -->
 		<div class="row indent-v-sm">
 			<div class="col-xs-4 text-right">
 			<label>Votre e‐mail*&nbsp;:</label>
@@ -30,29 +29,28 @@
 	        <p class="text-red">{{ error|escape }}</p>
 	        {% endfor %}
 	        {% endif %}
+	    
 			</div>
 		</div>
 		<div class="row indent-v-sm">
 			<div class="col-xs-4 text-right">
 				<label>Sujet*&nbsp;:</label>
 			</div>
-
 			 <div class="col-xs-8 col-sm-6 col-md-4" name="objet">
-        	<select data-placeholder="Sélectionner une catégorie" name="category" value="None" class="form-control" eloue-chosen="">
-        		<option value="request_information">Demande d'information</option>
-        		<option value="technical_problem">Problème technique</option>
-        		<option value="register_login">Inscription / Connexion</option>
-        		<option value="dashboard_client_area">Tableau de bord / Espace client</option>
-        		<option value="research">Recherche</option>
-        		<option value="booking_rentals">Réservations / Locations</option>
-        		<option value="payment_deposit">Paiement / Caution</option>
-        		<option value="insurance">Assurance</option>
-        		<option value="suggestions">Suggestions</option>
-        		<option value="congratulations">Félicitations</option>
-        		<option value="press_relations">Relation presse</option>
-        		<option value="partnership_proposal">Proposition de partenariat</option>
-        		<option value="other">Autre</option></select>
-
+        	<select data-placeholder="Sélectionner une catégorie" name="{{ form.category.html_name }}" value="{{ form.category.value }}" class="form-control" eloue-chosen="">
+        		<option value="Demande d'information" selected="selected" >Demande d'information</option>
+        		<option value="Problème technique">Problème technique</option>
+        		<option value="Inscription / Connexion">Inscription / Connexion</option>
+        		<option value="Tableau de bord / Espace client">Tableau de bord / Espace client</option>
+        		<option value="Recherche">Recherche</option>
+        		<option value="Réservations / Locations">Réservations / Locations</option>
+        		<option value="Paiement / Caution">Paiement / Caution</option>
+        		<option value="Assurance">Assurance</option>
+        		<option value="Suggestions">Suggestions</option>
+        		<option value="Félicitations">Félicitations</option>
+        		<option value="Relation presse">Relation presse</option>
+        		<option value="Proposition de partenariat">Proposition de partenariat</option>
+        		<option value="Autre">Autre</option></select>
 
 			{% if form.category.errors %}
 	        {% for error in form.category.errors %}
@@ -66,7 +64,7 @@
 			<label>Message*&nbsp;:</label>
 			</div>
 			<div class="col-xs-8 col-sm-6">
-			<textarea name="{{ form.message.html_name }}" value="{{ form.message.value }}" rows="5" required class="expand form-control"></textarea>
+			<textarea name="{{ form.message.html_name }}" rows="5" required class="expand form-control">{{ form.message.value }}</textarea>
 			{% if form.message.errors %}
 	        {% for error in form.message.errors %}
 	        <p class="text-red">{{ error|escape }}</p>

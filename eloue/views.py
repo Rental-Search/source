@@ -140,7 +140,6 @@ class ContactView(View):
             sender = form.cleaned_data['sender']
             cc_myself = form.cleaned_data['cc_myself']
             
-
             new_form = self.form_class()
             recipients = ['contact@e-loue.com']
             if cc_myself:
@@ -148,26 +147,19 @@ class ContactView(View):
 
             if subject and message and sender:
                 try:
-                    send_mail(subject, message, sender, recipients)
+                    sujet = "Formulaire de contact : %s" % (subject)
+                    send_mail(sujet, message, sender, recipients)
                 except BadHeaderError:
-                    tag = "error"
-                    messages.add_message(request, messages.ERROR, _('Erreur dans le formulaire3'), extra_tags='safe')
-                    return render(request, self.template_name, {'form': form})
-                tag = "success"
-                messages.add_message(request, messages.SUCCESS, _('Le message a ete envoye avec succes'), extra_tags='safe')
-                return render(request, self.template_name, {'form': new_form})
+                    messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+                    return render(request, self.template_name, {'form': form, 'tag' : "error"})
+                messages.add_message(request, messages.INFO, _('Le message a ete envoye avec succes'), extra_tags='safe')
+                return render(request, self.template_name, {'form': new_form, 'tag' : "success"})
             else:
-                tag = "error"
-                messages.add_message(request, messages.ERROR, _('Erreur dans le formulaire1'), extra_tags='safe')
-                return render(request, self.template_name, {'form': form})
+                messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+                return render(request, self.template_name, {'form': form, 'tag' : "error"})
         
         else:
-            tag = "error"
-            messages.add_message(request, messages.ERROR, _('Erreur dans le formulaire2'), extra_tags='safe')
-            return render(request, self.template_name, {'form': form})
+            messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+            return render(request, self.template_name, {'form': form, 'tag' : "error"})
 
-
-
-
-
-
+            # message = "%s ; %s ; %s ; %s" % (name, activity_field, sender, phone_number)
