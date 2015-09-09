@@ -253,7 +253,7 @@ class Patron(AbstractUser):
 
     @property
     def current_subscription(self):
-        subscriptions = self.subscription_set.filter(subscription_ended__gte=datetime.datetime.now()-datetime.timedelta(days=365)).order_by('-subscription_started')[:1]
+        subscriptions = self.subscription_set.filter(Q(subscription_ended__gte=datetime.datetime.now()-datetime.timedelta(days=365))| Q(subscription_ended__isnull=True)).order_by('-subscription_started')[:1]
         if subscriptions:
             return subscriptions[0]
         return None
