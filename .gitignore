@@ -45,5 +45,3 @@ staticfiles/
 venv/
 eloue/static/js/dashboard.js
 eloue/static/js/widgets.js
-
-eloue/urls.py
