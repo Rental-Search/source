@@ -1,3 +1,5 @@
+-load i18n
+
 .modal.fade#pro-popin-website-link(tabindex="-1", role="dialog", aria-hidden="true")
 	.modal-dialog.large
 		.modal-content
@@ -5,7 +7,7 @@
 				button(type="button", data-dismiss="modal").close
 					span(aria-hidden="true")&times;
 					span.sr-only Close
-				h4.modal-title {{ patron.company_name }} - Visitez notre site
+				h4.modal-title {{ patron.company_name }} - {% trans "Visitez notre site" %}
 			.modal-body.table-cell.text-justify
 				//-.static-part.table-cell
 				//-	section.product-info

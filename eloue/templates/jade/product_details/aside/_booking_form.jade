@@ -1,5 +1,7 @@
+-load i18n
+
 .section-header
-    h4 {% if is_pro %}Demandez un devis{% else %}Réservez en ligne{% endif %}
+    h4 {% if is_pro %} {% trans "Demandez un devis" %} {% else %} {% trans "Réservez en ligne" %} {% endif %}
 form.form-inline.section-body.text-center
     {% verbatim %}
     .part
@@ -22,20 +24,20 @@ form.form-inline.section-body.text-center
             | Durée de la location&nbsp;:&nbsp;
             b.period-days.ng-cloak {{duration}}
         p.price
-            | Prix {% endverbatim %}{% if is_pro %}indicatif{% else %}de la location{% endif %}&nbsp;:{% verbatim %}
+            | Prix {% endverbatim %}{% if is_pro %}{% trans "indicatif" %}{% else %}{% trans "de la location" %}{% endif %}&nbsp;:{% verbatim %}
             big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
         {% endverbatim %}
-            
-        {% if not is_pro and product.need_insurance %}
-        p Assurance incluse
-        {% endif %}
 
+        {% if not is_pro and product.need_insurance %}
+        p {% trans "Assurance incluse" %}
+        {% endif %}
     .part
         a(href = "", data-dismiss="modal", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2
-            | {% if is_pro %}Envoyez{% else %}Réservez{% endif %}
+            | {% if is_pro %}Envoyez{% else %}{% trans "Réservez" %}{% endif %}
         p.mrg-v-1
             if is_pro
+                {% blocktrans %}
                 | Vous allez envoyer
                 br
                 | une demande de location. 
@@ -53,5 +55,6 @@ form.form-inline.section-body.text-center
                 | Le paiement se fera directement 
                 br
                 | chez le loueur.
+                {% endblocktrans %}
         //-
             small Cette somme vous sera débitée lorsque le propriétaire validera la location

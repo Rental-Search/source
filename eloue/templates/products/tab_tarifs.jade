@@ -1,34 +1,35 @@
 -load product
+-load i18n
 
 .block-tab.ng-hide#tabs-tarifs
-  h3.indent-t-md.indent-b-xs {% if product_type == 'carproduct' %}Tarif{% else %}Grille tarifaire{% endif %}
+  h3.indent-t-md.indent-b-xs {% if product_type == 'carproduct' %}{% trans "Tarif" %}{% else %}{% trans "Grille tarifaire" %}{% endif %}
   .row
     .col-xs-6
       {% if product_type == 'carproduct' %}
       table.calendar.text-center
         thead: tr
-          td Durée
-          td Prix
+          td {% trans "Durée" %}
+          td {% trans "Prix" %}
         tbody
           tr
-            td 1 jours*
+            td {% trans "1 jours*" %}
             td {{ product.price|price:"&euro;" }}
       {% if product_object.km_included %}
       .indent-b-md
       table.calendar.text-center
         tbody
           tr
-            td Kilomètres inclus par jour
+            td {% trans "Kilomètres inclus par jour" %}
             td {{ product_object.km_included }} Km
           tr
-            td Coût du kilomètre supplémentaire
+            td {% trans "Coût du kilomètre supplémentaire" %}
             td {{ product_object.costs_per_km|price:"&euro;" }}
       {% endif %}
       {% else %}
       table.calendar.text-center
         thead: tr
-          td Durée
-          td Prix
+          td {% trans "Durée" %}
+          td {% trans "Prix" %}
         tbody: each price in product_object.prices.all
           tr
             td {{ price.get_prefixed_unit_display }}{% if price.unit == 1 %}*{% endif %}
@@ -37,9 +38,9 @@
       .indent-b-md
       table.calendar.text-center
         tbody: tr
-          td Caution
+          td {% trans "Caution" %}
           td {{ product_object.deposit_amount }} &euro;
     .col-sm-6
-      p.indent-sm-b Certains propriétaires proposent des prix degressifs pour les locations de plusieurs jours. Si vous effectuez une demande de location pour plusieurs jours, e-loue vous propose automatiquement le prix le plus avantageux.
-      p.indent-sm-b Lorsque vous effectuez une réservation sur e-loue, seul le prix de la location est débité de votre carte bancaire.
-      p.indent-sm-b Si le propriétaire demande une caution, e-loue procédera à une empreinte bancaire au moment du paiement. Cette empreinte ne sera pas débitée, sauf  si vous constatez un sinistre à la fin de la location.
+      p.indent-sm-b {% trans "Certains propriétaires proposent des prix degressifs pour les locations de plusieurs jours. Si vous effectuez une demande de location pour plusieurs jours, e-loue vous propose automatiquement le prix le plus avantageux." %}
+      p.indent-sm-b {% trans "Lorsque vous effectuez une réservation sur e-loue, seul le prix de la location est débité de votre carte bancaire." %}
+      p.indent-sm-b {% trans "Si le propriétaire demande une caution, e-loue procédera à une empreinte bancaire au moment du paiement. Cette empreinte ne sera pas débitée, sauf  si vous constatez un sinistre à la fin de la location." %}

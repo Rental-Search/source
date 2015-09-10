@@ -23,7 +23,7 @@ from django.contrib.gis.db import models
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.cache import cache
-from django.db.models import permalink, Q, signals, Count, Sum, Avg
+from django.db.models import permalink, Q, signals, Count, Sum, Avg, F
 from django.utils.encoding import smart_unicode
 from django.utils.formats import get_format
 from django.utils.timesince import timesince
@@ -62,7 +62,7 @@ class Language(models.Model):
 class Patron(AbstractUser):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
-    company_name = models.CharField(null=True, blank=True, max_length=255)
+    company_name = models.CharField(_(u"Nom de l'entreprise"), null=True, blank=True, max_length=255)
     subscriptions = models.ManyToManyField('ProPackage', through='Subscription')
 
     activation_key = models.CharField(null=True, blank=True, max_length=40)
@@ -82,10 +82,10 @@ class Patron(AbstractUser):
 
     customers = models.ManyToManyField('self', symmetrical=False)
 
-    about = models.TextField(blank=True, null=True)
-    work = models.CharField(max_length=75, blank=True, null=True)
-    school = models.CharField(max_length=75, blank=True, null=True)
-    hobby = models.CharField(max_length=75, blank=True, null=True)
+    about = models.TextField(_(u"à propos"),blank=True, null=True)
+    work = models.CharField(_(u"travail"), max_length=75, blank=True, null=True)
+    school = models.CharField(_(u"ecole"), max_length=75, blank=True, null=True)
+    hobby = models.CharField(_(u"hobbies"), max_length=75, blank=True, null=True)
     languages = models.ManyToManyField(Language, blank=True, null=True)
 
     drivers_license_date = models.DateTimeField(_(u"Date d'obtention"), blank=True, null=True)
@@ -95,6 +95,8 @@ class Patron(AbstractUser):
     place_of_birth = models.CharField(_(u"Lieu de naissance"), blank=True, max_length=255)
 
     godfather_email = models.EmailField(null=True, blank=True)
+
+    device_token = models.CharField(null=True, blank=True, max_length=255)
 
     # PatronManager must be declared first in order to become the '_default_manager' for this model
     objects = PatronManager()
@@ -251,7 +253,7 @@ class Patron(AbstractUser):
 
     @property
     def current_subscription(self):
-        subscriptions = self.subscription_set.filter(subscription_ended__isnull=True).order_by('-subscription_started')[:1]
+        subscriptions = self.subscription_set.filter(Q(subscription_ended__gte=datetime.datetime.now()-datetime.timedelta(days=365))| Q(subscription_ended__isnull=True)).order_by('-subscription_started')[:1]
         if subscriptions:
             return subscriptions[0]
         return None
@@ -403,6 +405,17 @@ class Patron(AbstractUser):
         return (self.date_joined + expiration_date <= datetime.datetime.now())
     is_expired.boolean = True
     is_expired.short_description = ugettext(u"Expiré")
+
+
+class ProManager(PatronManager):
+    def get_queryset(self):
+        return super(ProManager, self).get_queryset().filter(is_professional=True)
+
+class Pro(Patron):
+    objects = ProManager()
+
+    class Meta:
+        proxy = True
 
 
 from datetime import time
@@ -674,15 +687,19 @@ class ProPackage(models.Model):
         ordering = ('-maximum_items', )
     
 class Subscription(models.Model):
-    patron = models.ForeignKey(Patron)
+    patron = models.ForeignKey(Patron, related_name='subscription_set')
+    seller = models.ManyToManyField(Patron, related_name='contracts', limit_choices_to={'is_staff': True}, blank=True)
     propackage = models.ForeignKey(ProPackage)
-    subscription_started = models.DateTimeField(auto_now_add=True)
-    subscription_ended = models.DateTimeField(null=True, blank=True)
-    free = models.BooleanField(default=False)
+    subscription_started = models.DateTimeField(_(u"Mise en ligne"), null=True, blank=True)
+    subscription_ended = models.DateTimeField(_(u"Fin de souscription"), null=True, blank=True)
+    signed_at = models.DateTimeField(_(u"Date de signature"), null=True, blank=True)
+    free = models.BooleanField(_(u"Gratuit"), default=False)
     number_of_free_month = models.PositiveSmallIntegerField(_(u"Nombre de mois gratuit"), null=True, blank=True)
     payment_type = models.PositiveSmallIntegerField(_(u"Type de paiement"), null=True, blank=True, choices=SUBSCRIPTION_PAYMENT_TYPE_CHOICES)
     annual_payment_date = models.DateTimeField(_(u"Date de paiement annuel"), null=True, blank=True)
     comment = models.TextField(_(u"Commentaire"), blank=True, null=True)
+    amount = models.DecimalField(_(u"Total"), max_digits=8, decimal_places=2, null=True, blank=True)
+    fee = models.DecimalField(_(u"Frais de dossier"), max_digits=8, decimal_places=2, null=True, blank=True)
 
     def price(self, _from=datetime.datetime.min, to=datetime.datetime.max, discount=False):
         if self.free:
@@ -701,18 +718,29 @@ class BillingSubscription(models.Model):
     billing = models.ForeignKey('Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
-
 class BillingProductHighlight(models.Model):
     producthighlight = models.ForeignKey('products.ProductHighlight')
     billing = models.ForeignKey('Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
-
 
 class BillingProductTopPosition(models.Model):
     producttopposition = models.ForeignKey('products.ProductTopPosition')
     billing = models.ForeignKey('Billing')
     price = models.DecimalField(max_digits=8, decimal_places=2)
 
+class ProReport(models.Model):
+    pro = models.ForeignKey(Patron, related_name='reports')
+    agent = models.ForeignKey(Patron, related_name='pro_reports', limit_choices_to={'is_staff': True})
+    comment = models.TextField(null=True, blank=True)
+    stat = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Ticket(models.Model):
+    pro = models.ForeignKey(Patron, related_name='tickets')
+    agent = models.ForeignKey(Patron, related_name='pro_tickets', limit_choices_to={'is_staff': True})
+    is_closed = models.BooleanField(_(u"clôturé"), default=False)
+    comment = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Notification(models.Model):
     patron = models.ForeignKey(Patron)
