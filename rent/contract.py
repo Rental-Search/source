@@ -128,11 +128,6 @@ class ContractGeneratorNormal(ContractGenerator):
         canvas.drawString(81, 702, u"{address}".format(
             address=booking.owner.default_address or first_or_empty(booking.owner.addresses.all()))
         )
-        canvas.drawString(81, 674, "{date_of_birth}, {place_of_birth}".format(
-                date_of_birth=booking.owner.date_of_birth.strftime("%d/%m/%Y"),
-                place_of_birth=booking.owner.place_of_birth
-            )
-        )
 
         
         if booking.borrower.is_professional:
