@@ -109,9 +109,9 @@ LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-FR')
 
 ugettext = lambda s: s
 LANGUAGES = (
-    ('fr-FR', ugettext('Français')),
-    ('en-GB', ugettext('English')),
-    ('da-DK', ugettext('Danish'))
+    ('fr', ugettext('Francais')),
+    ('en', ugettext('English')),
+    ('da', ugettext('Danish'))
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
@@ -173,8 +173,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'eloue.middleware.SpacelessMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

@@ -239,6 +239,8 @@ urlpatterns = patterns('',
 
     # social: support for sign-in by Google and/or Facebook
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
+
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 )
 
 if settings.DEBUG:
