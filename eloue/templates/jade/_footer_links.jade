@@ -6,7 +6,8 @@
       h4.text-nowrap {% trans "Le concept e-loue" %}
       ul.nav
         li.link-wrapper: a(href="/comment-ca-marche/") {% trans "Comment ça marche ?" %}
-        li.link-wrapper: a(href="/offre-professionnel/") {% trans "L’offre e-loue Pro" %}
+        li.link-wrapper: a(href="/securite/") {% trans "e-loue et la sécurité" %}
+        li.link-wrapper: a(href="/offre-professionnel/") {% trans "L'offre e-loue Pro" %}
         li.link-wrapper: a(href="/navette/") {% trans "La livraison" %}
         li.link-wrapper
           <form action="{% url 'set_language' %}" method="post">
@@ -26,22 +27,22 @@
     li.ul-wrapper: .centering
       h4.text-nowrap {% trans "Pourquoi choisir e-loue ?" %}
       ul.nav
-        li.link-wrapper: a(href="/securite/") {% trans "E-­loue et la sécurité" %}
         li.link-wrapper: a(href="/contrat-de-location/") {% trans "Contrats de location" %}
-        li.link-wrapper: a(href="/assurance-tranquillite/") {% trans "Assurance tranquillité" %}
-        li.link-wrapper: a(href="/depot-de-garantie/") {% trans "Dépôt de garantie" %}
+        li.link-wrapper: a(href="/assurance-tranquillite/") {% trans "Assurance tranquilité" %}
+        li.link-wrapper: a(href="/conditions-generales-particuliers/") {% trans "Conditions générales particuliers" %}
+        li.link-wrapper: a(href="/conditions-generales-professionnels/") {% trans "Conditions générales professionnels" %}
     li.divide
     li.ul-wrapper: .centering
       h4.text-nowrap {% trans "L’entreprise e-loue" %}
       ul.nav
         li.link-wrapper: a(href="/qui-sommes-nous/") {% trans "Qui sommes-nous ?" %}
         li.link-wrapper: a(href="/nos-partenaires/") {% trans "Nos partenaires" %}
-        li.link-wrapper: a(href="/conditions-generales/") {% trans "Conditions générales" %}
         li.link-wrapper: a(href="/nous-recrutons/") {% trans "Nous recrutons" %}
     li.divide
     li.ul-wrapper: .centering
       h4.text-nowrap {% trans "En savoir plus" %}
       ul.nav
+        li.link-wrapper: a(href="https://eloue1.zendesk.com/hc/fr") {% trans "FAQ" %}
         li.link-wrapper: a(href="/contactez-nous/") {% trans "Contactez-nous" %}
         li.link-wrapper: a(href="/mentions-legales/") {% trans "Mentions légales" %}
         li.link-wrapper: a(href="http://blog.e-loue.com/") {% trans "Blog e-loue" %}
