@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-17 14:38+0200\n"
+"POT-Creation-Date: 2015-09-17 15:19+0200\n"
 "PO-Revision-Date: 2015-09-16 18:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
@@ -18,69 +18,101 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.4\n"
 
-#: accounts/admin.py:45 accounts/admin.py:56
+#: accounts/admin.py:62 accounts/admin.py:73
 msgid "Personal info"
 msgstr "Personlige informationer "
 
-#: accounts/admin.py:46 accounts/admin.py:57
+#: accounts/admin.py:63
+msgid "Profile"
+msgstr "Beskæftigelse"
+
+#: accounts/admin.py:64 accounts/admin.py:74 accounts/admin.py:255
 msgid "Company info"
 msgstr "Virksomheds info"
 
-#: accounts/admin.py:47 accounts/admin.py:58
+#: accounts/admin.py:65 accounts/admin.py:75 accounts/admin.py:258
 msgid "Permissions"
 msgstr "Tilladelser"
 
-#: accounts/admin.py:48
-msgid "Important dates"
-msgstr "Vigtige datoer"
-
-#: accounts/admin.py:50
-msgid "Paypal"
-msgstr "PayPal"
-
-#: accounts/admin.py:51
-msgid "Groups"
-msgstr "Grupper"
-
-#: accounts/admin.py:91
+#: accounts/admin.py:107
 msgid "Exporter en csv"
 msgstr "Importer en cvs-fil"
 
-#: accounts/admin.py:101
+#: accounts/admin.py:117
 msgid "Envoyer à nouveau l'email d'activation"
 msgstr "Gensend aktiveringsemail"
 
-#: accounts/admin.py:109
+#: accounts/admin.py:125
 msgid "Indexer les produits"
 msgstr ""
 
-#: accounts/admin.py:117
+#: accounts/admin.py:133
 msgid "Désindexer les produits"
 msgstr ""
 
-#: accounts/admin.py:127
+#: accounts/admin.py:143
 msgid "Geolocation"
 msgstr "Stedsbestemmelse"
 
-#: accounts/admin.py:141
+#: accounts/admin.py:163
 msgid "Signature"
 msgstr ""
 
-#: accounts/admin.py:147
+#: accounts/admin.py:169
 msgid "Avec signature"
 msgstr ""
 
-#: accounts/admin.py:148
+#: accounts/admin.py:170
 msgid "Sans signature"
 msgstr ""
 
-#: accounts/admin.py:163
+#: accounts/admin.py:185
 msgid "Abonnement"
 msgstr "Abonnement"
 
-#: accounts/admin.py:164
+#: accounts/admin.py:186
 msgid "Patron informations"
 msgstr "Arbejdsgiver"
+
+#: accounts/admin.py:256
+msgid "Contact"
+msgstr "Kontakt mig"
+
+#: accounts/admin.py:257
+msgid "Boutique"
+msgstr "Automatisk"
+
+#: accounts/admin.py:289
+msgid "lien boutique"
+msgstr "Elektrisk"
+
+#: accounts/admin.py:293
+msgid "noubre d'annonce"
+msgstr "Indsæt en annonce"
+
+#: accounts/admin.py:299
+msgid "annonces"
+msgstr "Annoncer"
+
+#: accounts/admin.py:307
+msgid "Souscription"
+msgstr "leje"
+
+#: accounts/admin.py:311
+msgid "mise en lignes"
+msgstr ""
+
+#: accounts/admin.py:315
+msgid "fin de souscription"
+msgstr "Aktivering af din konto"
+
+#: accounts/admin.py:320
+msgid "dernier rapport"
+msgstr ""
+
+#: accounts/admin.py:328
+msgid "tickets résolus"
+msgstr ""
 
 #: accounts/admin_views.py:66
 msgid "Cett email est déjà pris."
@@ -579,14 +611,14 @@ msgstr "Vej"
 msgid "Code postal"
 msgstr "Postnummer"
 
-#: accounts/forms.py:332 accounts/models.py:552 accounts/models.py:630
+#: accounts/forms.py:332 accounts/models.py:563 accounts/models.py:641
 #: eloue/templates/jade/_pop_up_publish_item.jade:59
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:26
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:14
 msgid "Ville"
 msgstr "By"
 
-#: accounts/forms.py:333 accounts/models.py:553 accounts/models.py:631
+#: accounts/forms.py:333 accounts/models.py:564 accounts/models.py:642
 msgid "Pays"
 msgstr "Land"
 
@@ -629,7 +661,7 @@ msgstr ""
 "Der tilbydes 3 mdrs kommision, hvis du er proponent for nye medlemmer. "
 "Tilbuddet gælder fra ...."
 
-#: accounts/forms.py:356 accounts/models.py:549 accounts/models.py:627
+#: accounts/forms.py:356 accounts/models.py:560 accounts/models.py:638
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:18
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:6
 msgid "Adresse"
@@ -672,6 +704,10 @@ msgstr "Kørekort"
 msgid "Civilité"
 msgstr "Civilstand"
 
+#: accounts/models.py:65
+msgid "Nom de l'entreprise"
+msgstr "Angiv firmanavn"
+
 #: accounts/models.py:69
 msgid "newsletter"
 msgstr "nyhedsbrev"
@@ -699,6 +735,22 @@ msgstr "Angiv om bruger er professionel"
 #: accounts/models.py:72
 msgid "date de modification"
 msgstr "dato for modifikation"
+
+#: accounts/models.py:85
+msgid "à propos"
+msgstr ""
+
+#: accounts/models.py:86
+msgid "travail"
+msgstr "Arbejde"
+
+#: accounts/models.py:87
+msgid "ecole"
+msgstr ""
+
+#: accounts/models.py:88
+msgid "hobbies"
+msgstr ""
 
 #: accounts/models.py:91
 msgid "Date d'obtention"
@@ -730,53 +782,81 @@ msgstr "e-loue"
 msgid "Expiré"
 msgstr "Udløbet"
 
-#: accounts/models.py:416 accounts/models.py:419 accounts/models.py:422
-#: accounts/models.py:425 accounts/models.py:428 accounts/models.py:431
-#: accounts/models.py:434 accounts/models.py:437 accounts/models.py:440
-#: accounts/models.py:443 accounts/models.py:446 accounts/models.py:449
-#: accounts/models.py:452 accounts/models.py:455
+#: accounts/models.py:427 accounts/models.py:430 accounts/models.py:433
+#: accounts/models.py:436 accounts/models.py:439 accounts/models.py:442
+#: accounts/models.py:445 accounts/models.py:448 accounts/models.py:451
+#: accounts/models.py:454 accounts/models.py:457 accounts/models.py:460
+#: accounts/models.py:463 accounts/models.py:466
 msgid "De"
 msgstr "Fra"
 
-#: accounts/models.py:417 accounts/models.py:420 accounts/models.py:423
-#: accounts/models.py:426 accounts/models.py:429 accounts/models.py:432
-#: accounts/models.py:435 accounts/models.py:438 accounts/models.py:441
-#: accounts/models.py:444 accounts/models.py:447 accounts/models.py:450
-#: accounts/models.py:453 accounts/models.py:456
+#: accounts/models.py:428 accounts/models.py:431 accounts/models.py:434
+#: accounts/models.py:437 accounts/models.py:440 accounts/models.py:443
+#: accounts/models.py:446 accounts/models.py:449 accounts/models.py:452
+#: accounts/models.py:455 accounts/models.py:458 accounts/models.py:461
+#: accounts/models.py:464 accounts/models.py:467
 msgid "à"
 msgstr "til"
 
-#: accounts/models.py:465
+#: accounts/models.py:476
 msgid "Conserver mes coordonnées bancaire"
 msgstr "Gem mine bankoplysninger"
 
-#: accounts/models.py:560
+#: accounts/models.py:571
 msgid "addresses"
 msgstr "adresser"
 
-#: accounts/models.py:582
+#: accounts/models.py:593
 msgid "Coordonnées géographiques incorrectes"
 msgstr "Dine geografiske oplysninger er ikke korrekte"
 
-#: accounts/models.py:606
+#: accounts/models.py:617
 msgid "Géolocalisé"
 msgstr "Stedsbetegnet"
 
-#: accounts/models.py:684
+#: accounts/models.py:693
+msgid "Mise en ligne"
+msgstr ""
+
+#: accounts/models.py:694
+msgid "Fin de souscription"
+msgstr "Proponent email"
+
+#: accounts/models.py:695
+msgid "Date de signature"
+msgstr "Fødselsdag"
+
+#: accounts/models.py:696
+msgid "Gratuit"
+msgstr ""
+
+#: accounts/models.py:697
 msgid "Nombre de mois gratuit"
 msgstr "Antal måneder med garanti"
 
-#: accounts/models.py:685
+#: accounts/models.py:698
 msgid "Type de paiement"
 msgstr "Betalingsmåde"
 
-#: accounts/models.py:686
+#: accounts/models.py:699
 msgid "Date de paiement annuel"
 msgstr "Dato for årlig betaling"
 
-#: accounts/models.py:687 rent/models.py:485
+#: accounts/models.py:700 rent/models.py:485
 msgid "Commentaire"
 msgstr "Kommentar "
+
+#: accounts/models.py:701 eloue/templates/jade/pop_up_sections/_terms.jade:20
+msgid "Total"
+msgstr ""
+
+#: accounts/models.py:702
+msgid "Frais de dossier"
+msgstr ""
+
+#: accounts/models.py:741
+msgid "clôturé"
+msgstr "Afsluttet"
 
 #: accounts/serializers.py:68
 msgid "Attribute missed or invalid: 'expires'"
@@ -888,7 +968,6 @@ msgid "New Message: %(subject)s"
 msgstr "Ny besked: %(subject)s"
 
 #: eloue/settings.py:112
-#, fuzzy
 msgid "Francais"
 msgstr "Fransk"
 
@@ -1410,7 +1489,7 @@ msgstr ""
 #: eloue/templates/autovoisin/our_partners/_breadcrumbs.jade:4
 #: eloue/templates/autovoisin/rental_agreement/_breadcrumbs.jade:4
 #: eloue/templates/autovoisin/security/_breadcrumbs.jade:4
-#: eloue/templates/autovoisin/subscription/_breadcrumbs.jade:4
+#: eloue/templates/autovoisin/subscription/_breadcrumbs.jade:5
 #: eloue/templates/autovoisin/terms/_breadcrumbs.jade:4
 #: eloue/templates/autovoisin/who_are_we/_breadcrumbs.jade:4
 #: eloue/templates/cancel_terms/_breadcrumbs.jade:4
@@ -1433,6 +1512,7 @@ msgstr ""
 #: eloue/templates/security/_breadcrumbs.jade:4
 #: eloue/templates/subscription/_breadcrumbs.jade:4
 #: eloue/templates/terms/_breadcrumbs.jade:4
+#: eloue/templates/terms_pro/_breadcrumbs.jade:4
 #: eloue/templates/who_are_we/_breadcrumbs.jade:4
 msgid "Accueil"
 msgstr "Startside"
@@ -1441,6 +1521,30 @@ msgstr "Startside"
 #: eloue/templates/autovoisin/admin/base_site.html:7
 msgid "AutoVoisin"
 msgstr ""
+
+#: eloue/templates/autovoisin/contact_us/_contact_form.jade:1
+#: eloue/templates/contact_us/index.jade:1
+msgid "Contactez nous"
+msgstr "Kontakt os"
+
+#: eloue/templates/autovoisin/how_it_works/index.jade:1
+#: eloue/templates/autovoisin/jade/_header_site.jade:41
+#: eloue/templates/gosport/how_it_works/index.jade:1
+#: eloue/templates/jade/_footer_links.jade:9
+#: eloue/templates/jade/_header_site.jade:49
+msgid "Comment ça marche ?"
+msgstr "Hvordan fungerer det?"
+
+#: eloue/templates/autovoisin/imprint/_text_content.jade:1
+#: eloue/templates/gosport/imprint/index.jade:1
+msgid "Mentions Légales"
+msgstr "Omtale"
+
+#: eloue/templates/autovoisin/insurances/index.jade:1
+#: eloue/templates/insurances/index.jade:1
+#: eloue/templates/jade/_footer_links.jade:42
+msgid "Assurance tranquilité"
+msgstr "Forsikret tilfredstillelse"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:25
 #: eloue/templates/django_messages/compose.html:9
@@ -1483,12 +1587,6 @@ msgstr "Log af"
 msgid "Aide"
 msgstr ""
 
-#: eloue/templates/autovoisin/jade/_header_site.jade:41
-#: eloue/templates/jade/_footer_links.jade:9
-#: eloue/templates/jade/_header_site.jade:49
-msgid "Comment ça marche ?"
-msgstr "Hvordan fungerer det?"
-
 #: eloue/templates/autovoisin/jade/_header_site.jade:55
 #: eloue/templates/autovoisin/jade/_header_site.jade:57
 #: eloue/templates/autovoisin/jade/_header_site.jade:60
@@ -1527,7 +1625,6 @@ msgstr "Aktivering af din konto"
 
 #: eloue/templates/autovoisin/jade/_log_in.jade:19
 #: eloue/templates/jade/_reset_password.jade:20
-#, fuzzy
 msgid "E-mail"
 msgstr "Email"
 
@@ -1557,6 +1654,36 @@ msgstr ""
 #: eloue/templates/jade/_nav_home.jade:17
 msgid "location"
 msgstr "leje"
+
+#: eloue/templates/autovoisin/our_partners/index.jade:1
+#: eloue/templates/jade/_footer_links.jade:58
+msgid "Nos partenaires"
+msgstr "Vores partnere"
+
+#: eloue/templates/autovoisin/rental_agreement/_text_content.jade:1
+#: eloue/templates/jade/_footer_links.jade:40
+msgid "Contrats de location"
+msgstr "Lejekontrakter"
+
+#: eloue/templates/autovoisin/security/_list_securisty.jade:1
+#: eloue/templates/gosport/security/_list_securisty.jade:1
+#: eloue/templates/security/index.jade:1
+msgid "Sécurité"
+msgstr "Sikkerheds kryptogram"
+
+#: eloue/templates/autovoisin/subscription/_breadcrumbs.jade:1
+msgid "Offre professionnel"
+msgstr "professionel"
+
+#: eloue/templates/autovoisin/terms/_text_content.jade:1
+#: eloue/templates/terms/index.jade:1
+msgid "Conditions Générales Particuliers"
+msgstr "Generelle betingelser"
+
+#: eloue/templates/autovoisin/who_are_we/_static_content.jade:1
+#: eloue/templates/who_are_we/index.jade:1
+msgid "Qui sommes nous ?"
+msgstr "Hvem er vi?"
 
 #: eloue/templates/contest/contest_auth_login.html:4
 msgid "Jeu concours - Identification"
@@ -1618,7 +1745,6 @@ msgstr ""
 #: eloue/templates/django_messages/inbox.html:3
 #: eloue/templates/django_messages/outbox.html:3
 #: eloue/templates/django_messages/trash.html:3
-#, fuzzy
 msgid "Votre tableau de bord"
 msgstr "Dashboard"
 
@@ -1635,7 +1761,6 @@ msgstr ""
 #: eloue/templates/django_messages/outbox.html:11
 #: eloue/templates/django_messages/trash.html:11
 #: eloue/templates/django_messages/view.html:11
-#, fuzzy
 msgid "Locataire"
 msgstr "Leje"
 
@@ -1644,7 +1769,6 @@ msgstr "Leje"
 #: eloue/templates/django_messages/outbox.html:12
 #: eloue/templates/django_messages/trash.html:12
 #: eloue/templates/django_messages/view.html:12
-#, fuzzy
 msgid "Mon compte"
 msgstr "Min konto"
 
@@ -1663,7 +1787,6 @@ msgstr ""
 #: eloue/templates/django_messages/outbox.html:18
 #: eloue/templates/django_messages/trash.html:18
 #: eloue/templates/django_messages/view.html:18
-#, fuzzy
 msgid "Messages reçus"
 msgstr "Beskeder"
 
@@ -1673,7 +1796,6 @@ msgstr "Beskeder"
 #: eloue/templates/django_messages/outbox.html:24
 #: eloue/templates/django_messages/trash.html:19
 #: eloue/templates/django_messages/view.html:19
-#, fuzzy
 msgid "Messages envoyés"
 msgstr "Beskeder"
 
@@ -1682,17 +1804,14 @@ msgstr "Beskeder"
 #: eloue/templates/django_messages/outbox.html:20
 #: eloue/templates/django_messages/trash.html:20
 #: eloue/templates/django_messages/view.html:20
-#, fuzzy
 msgid "Messages supprimés"
 msgstr "slettet"
 
 #: eloue/templates/django_messages/compose.html:24
-#, fuzzy
 msgid "Nouveau Message"
 msgstr "Beskeder"
 
 #: eloue/templates/django_messages/compose.html:71
-#, fuzzy
 msgid "* = champ obligatoire"
 msgstr "Dette felt er obligatorisk"
 
@@ -1717,7 +1836,6 @@ msgstr ""
 #: eloue/templates/django_messages/inbox.html:32
 #: eloue/templates/django_messages/outbox.html:30
 #: eloue/templates/django_messages/trash.html:30
-#, fuzzy
 msgid "Action"
 msgstr "leje"
 
@@ -1744,18 +1862,15 @@ msgstr ""
 #: eloue/templates/django_messages/inbox.html:54
 #: eloue/templates/django_messages/outbox.html:51
 #: eloue/templates/django_messages/trash.html:52
-#, fuzzy
 msgid "No messages."
 msgstr "Beskeder"
 
 #: eloue/templates/django_messages/message_create.html:3
-#, fuzzy
 msgid "Composer un message"
 msgstr "Send en besked"
 
 #: eloue/templates/django_messages/message_create.html:15
 #: eloue/templates/django_messages/message_create.html:18
-#, fuzzy
 msgid "Nouveau message"
 msgstr "Send en besked"
 
@@ -1765,7 +1880,6 @@ msgstr ""
 
 #: eloue/templates/django_messages/message_missing.html:10
 #: eloue/templates/django_messages/message_register.html:10
-#, fuzzy
 msgid "Rédiger un message"
 msgstr "Send en besked"
 
@@ -1810,7 +1924,6 @@ msgid ""
 msgstr ""
 
 #: eloue/templates/django_messages/new_message_email.html:43
-#, fuzzy
 msgid "Répondre au message"
 msgstr "Send en besked"
 
@@ -1828,7 +1941,6 @@ msgid "Voici le lien pour répondre :"
 msgstr ""
 
 #: eloue/templates/django_messages/trash.html:24
-#, fuzzy
 msgid "Deleted Messages"
 msgstr "Beskeder"
 
@@ -1853,6 +1965,11 @@ msgstr ""
 msgid "Notre partenaire"
 msgstr "Vores partnere"
 
+#: eloue/templates/enroll/index.jade:1
+#: eloue/templates/jade/_footer_links.jade:60
+msgid "Nous recrutons"
+msgstr ""
+
 #: eloue/templates/gosport/admin/base_site.html:4
 #: eloue/templates/gosport/admin/base_site.html:7
 msgid "GO Sport Location"
@@ -1862,6 +1979,29 @@ msgstr "Stedsbestemmelse"
 #: eloue/templates/jade/_nav_home.jade:15
 msgid "Autres"
 msgstr "Andet"
+
+#: eloue/templates/gosport/rental_agreement/index.jade:1
+#: eloue/templates/rental_agreement/index.jade:1
+msgid "Contrats de Location"
+msgstr "Lejekontrakter"
+
+#: eloue/templates/gosport/subscription/index.jade:1
+#: eloue/templates/subscription/index.jade:1
+msgid "Offre Professionnel"
+msgstr "Erhvervsfolk"
+
+#: eloue/templates/gosport/terms/index.jade:1
+msgid "Condtitions Générales Particuliers"
+msgstr "Generelle betingelser"
+
+#: eloue/templates/how_it_works/index.jade:1
+msgid "Comment ça marche"
+msgstr "Hvordan fungerer det?"
+
+#: eloue/templates/imprint/index.jade:1
+#: eloue/templates/jade/_footer_links.jade:74
+msgid "Mentions légales"
+msgstr "Omtale"
 
 #: eloue/templates/insurances/_text_content.html:34
 #: eloue/templates/insurances/_text_content.html:307
@@ -1916,67 +2056,51 @@ msgid "Le concept e-loue"
 msgstr "E-loue's koncept"
 
 #: eloue/templates/jade/_footer_links.jade:11
-msgid "L’offre e-loue Pro"
-msgstr "E-loue Pro tilbud"
+msgid "e-loue et la sécurité"
+msgstr "E-loue og sikkerhed"
 
 #: eloue/templates/jade/_footer_links.jade:13
+msgid "L'offre e-loue Pro"
+msgstr "E-loue Pro tilbud"
+
+#: eloue/templates/jade/_footer_links.jade:15
 msgid "La livraison"
 msgstr "Fragt"
 
-#: eloue/templates/jade/_footer_links.jade:36
+#: eloue/templates/jade/_footer_links.jade:38
 msgid "Pourquoi choisir e-loue ?"
 msgstr "Hvorfor vælge e-loue?"
 
-#: eloue/templates/jade/_footer_links.jade:38
-msgid "E-­loue et la sécurité"
-msgstr "E-loue og sikkerhed"
+#: eloue/templates/jade/_footer_links.jade:44
+msgid "Conditions générales particuliers"
+msgstr "Generelle betingelser"
 
-#: eloue/templates/jade/_footer_links.jade:40
-msgid "Contrats de location"
-msgstr "Lejekontrakter"
+#: eloue/templates/jade/_footer_links.jade:46
+msgid "Conditions générales professionnels"
+msgstr "Generelle betingelser"
 
-#: eloue/templates/jade/_footer_links.jade:42
-msgid "Assurance tranquillité"
-msgstr "Forsikret tilfredstillelse"
-
-#: eloue/templates/jade/_footer_links.jade:44 products/models.py:87
-msgid "Dépôt de garantie"
-msgstr "Depositum"
-
-#: eloue/templates/jade/_footer_links.jade:52
+#: eloue/templates/jade/_footer_links.jade:54
 msgid "L’entreprise e-loue"
 msgstr "Virksomheden e-loue"
 
-#: eloue/templates/jade/_footer_links.jade:54
+#: eloue/templates/jade/_footer_links.jade:56
 msgid "Qui sommes-nous ?"
 msgstr "Hvem er vi?"
-
-#: eloue/templates/jade/_footer_links.jade:56
-msgid "Nos partenaires"
-msgstr "Vores partnere"
-
-#: eloue/templates/jade/_footer_links.jade:58
-msgid "Conditions générales"
-msgstr "Generelle betingelser"
-
-#: eloue/templates/jade/_footer_links.jade:60
-msgid "Nous recrutons"
-msgstr ""
 
 #: eloue/templates/jade/_footer_links.jade:68
 msgid "En savoir plus"
 msgstr "Få mere at vide"
 
 #: eloue/templates/jade/_footer_links.jade:70
+msgid "FAQ"
+msgstr ""
+
+#: eloue/templates/jade/_footer_links.jade:72
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:2
 msgid "Contactez-nous"
 msgstr "Kontakt os"
 
-#: eloue/templates/jade/_footer_links.jade:72
-msgid "Mentions légales"
-msgstr "Omtale"
-
-#: eloue/templates/jade/_footer_links.jade:74
+#: eloue/templates/jade/_footer_links.jade:76
 msgid "Blog e-loue"
 msgstr "E-loue blog"
 
@@ -2078,12 +2202,10 @@ msgid ""
 msgstr ""
 
 #: eloue/templates/jade/_log_in.jade:29
-#, fuzzy
 msgid "email"
 msgstr "Email"
 
 #: eloue/templates/jade/_log_in.jade:32
-#, fuzzy
 msgid "mot de passe"
 msgstr "Adgangskode"
 
@@ -2171,27 +2293,22 @@ msgid "Titre"
 msgstr "Titel"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:28
-#, fuzzy
 msgid "Marque"
 msgstr "mærke"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:31
-#, fuzzy
 msgid "Modèle"
 msgstr "model"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:36
-#, fuzzy
 msgid "Catégorie Niv.1"
 msgstr "Kategori"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:41
-#, fuzzy
 msgid "Catégorie Niv.2"
 msgstr "Kategori"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:46
-#, fuzzy
 msgid "Catégorie Niv.3"
 msgstr "Kategori"
 
@@ -2213,12 +2330,10 @@ msgstr ""
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:70
 #: eloue/templates/jade/_pop_up_publish_item.jade:98
-#, fuzzy
 msgid "Caution demandée"
 msgstr "Indbetalt kaution"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:75
-#, fuzzy
 msgid "Kilomètres inclus"
 msgstr "Inkluderede kilometre pr dag"
 
@@ -2228,7 +2343,6 @@ msgstr ""
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:80
 #: eloue/templates/jade/_pop_up_publish_item.jade:113
-#, fuzzy
 msgid "Publiez votre annonce"
 msgstr "Skriv din annonce på 1 minut"
 
@@ -2260,8 +2374,9 @@ msgstr "Reservationer"
 #: eloue/templates/jade/_pop_up_reserve.jade:15
 #: eloue/templates/jade/_pop_up_send_message.jade:15
 #: eloue/templates/jade/_pro_popin_phone.jade:8
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:34
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:39
-#: eloue/templates/profile_public/_profile_public-contact_member.jade:9
+#: eloue/templates/profile_public/_profile_public-contact_member.jade:8
 msgid "Appelez"
 msgstr "Ring"
 
@@ -2491,13 +2606,11 @@ msgid ""
 msgstr ""
 
 #: eloue/templates/jade/_reset_password_confirm.jade:15
-#, fuzzy
 msgid "Nouveau mot de passe"
 msgstr "Adgangskode"
 
 #: eloue/templates/jade/_reset_password_confirm.jade:18
 #: eloue/templates/jade/_sign_in.jade:65
-#, fuzzy
 msgid "Confirmation du mot de passe"
 msgstr "Lejekontrakter"
 
@@ -2511,7 +2624,6 @@ msgid ""
 msgstr ""
 
 #: eloue/templates/jade/_reset_password_confirm.jade:29
-#, fuzzy
 msgid "Accéder à mon compte"
 msgstr "Aktivering af din konto"
 
@@ -2613,7 +2725,6 @@ msgid "Vos informations bancaires"
 msgstr "Arbejdsgiver"
 
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:5
-#, fuzzy
 msgid "Numéro de carte"
 msgstr "Kortnummer"
 
@@ -2622,7 +2733,6 @@ msgid "MM/AA"
 msgstr ""
 
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:17
-#, fuzzy
 msgid "Code de sécurité"
 msgstr "Sikkerheds kryptogram"
 
@@ -2723,17 +2833,14 @@ msgstr ""
 "fornøjelse på allehenvendelser..."
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:38
-#, fuzzy
 msgid "Votre adresse e‐mail"
 msgstr "Adresse"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:39
-#, fuzzy
 msgid "Objet de votre message"
 msgstr "automatgear"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:39
-#, fuzzy
 msgid "Votre message"
 msgstr "Send en besked"
 
@@ -2742,7 +2849,6 @@ msgid "Envoyer"
 msgstr ""
 
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:2
-#, fuzzy
 msgid "Vos informations personnelles"
 msgstr "Arbejdsgiver"
 
@@ -2878,10 +2984,6 @@ msgstr "Pris"
 msgid "€"
 msgstr "€"
 
-#: eloue/templates/jade/pop_up_sections/_terms.jade:20
-msgid "Total"
-msgstr ""
-
 #: eloue/templates/jade/pop_up_sections/_terms.jade:25
 #: eloue/templates/products/tab_tarifs.jade:56
 msgid "Caution"
@@ -2899,7 +3001,6 @@ msgid ""
 msgstr ""
 
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:8
-#, fuzzy
 msgid "Appelez le propriétaire"
 msgstr "Kommentarer i forbindelse med ejer"
 
@@ -3074,7 +3175,6 @@ msgid "Nom *"
 msgstr ""
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:46
-#, fuzzy
 msgid "Comfirmation de mot de passe"
 msgstr "Lejekontrakter"
 
@@ -3116,6 +3216,10 @@ msgstr ""
 #: eloue/templates/landing_pages/publish.jade:32
 msgid "Vous aussi faites comme Thomas ..."
 msgstr ""
+
+#: eloue/templates/our_partners/index.jade:1
+msgid "Nos Partenaires"
+msgstr "Vores partnere"
 
 #: eloue/templates/proapp/app.html:4
 msgid "Vos statistiques"
@@ -4494,6 +4598,14 @@ msgid ""
 "</table>\n"
 msgstr ""
 
+#: eloue/templates/shipping/index.jade:1
+msgid "la Livraison"
+msgstr "Fragt"
+
+#: eloue/templates/terms_pro/index.jade:1
+msgid "Conditions Générales Professionnel"
+msgstr "Generelle betingelser"
+
 #: payments/paybox_payment.py:37
 #, python-brace-format
 msgid "PayboxError with code {0} and message \"{1}\""
@@ -4794,6 +4906,10 @@ msgstr "Kategori"
 #: products/forms.py:170
 msgid "par-categorie"
 msgstr "udfra kategori"
+
+#: products/models.py:87
+msgid "Dépôt de garantie"
+msgstr "Depositum"
 
 #: products/models.py:92
 msgid "Quantité"
@@ -5244,10 +5360,9 @@ msgstr "Ejer kommentar"
 msgid "BorrowerComment"
 msgstr "Lejer kommentar"
 
-#: rent/contract.py:96 rent/contract.py:97 rent/contract.py:148
-#: rent/contract.py:149 rent/contract.py:204 rent/contract.py:206
-#: rent/contract.py:259 rent/contract.py:260 rent/contract.py:324
-#: rent/contract.py:325
+#: rent/contract.py:102 rent/contract.py:103 rent/contract.py:161
+#: rent/contract.py:162 rent/contract.py:224 rent/contract.py:225
+#: rent/contract.py:297 rent/contract.py:298
 msgid "d F Y à H\\hi."
 msgstr "d F Y à H\\hi."
 
@@ -5470,6 +5585,15 @@ msgstr ""
 #: shipping/serializers.py:114
 msgid "Latitude\\longitude or address are required"
 msgstr "Latitude\\longitude eller adresse er påkrævet"
+
+#~ msgid "Important dates"
+#~ msgstr "Vigtige datoer"
+
+#~ msgid "Paypal"
+#~ msgstr "PayPal"
+
+#~ msgid "Groups"
+#~ msgstr "Grupper"
 
 #~ msgid "Adresse *"
 #~ msgstr "Adresse *"
