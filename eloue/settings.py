@@ -157,6 +157,7 @@ if not DEBUG:
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
     'django.core.context_processors.request',
@@ -171,6 +172,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 MIDDLEWARE_CLASSES = (
     'sslify.middleware.SSLifyMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'eloue.middleware.SpacelessMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -181,7 +183,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.http.ConditionalGetMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 PASSWORD_HASHERS =(
