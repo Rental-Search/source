@@ -45,9 +45,7 @@
             i.flaticon.stroke.imac-1
             {% trans "Visitez notre site web" %}
         {% else %}
-        {% verbatim %}
         a.ng-hide(href="", data-dismiss="modal", ng-click="openModal('message')", ng-show="currentUser.id != product.owner.id").btn.bg-success.send-message
-            {% endverbatim %}
             i.flaticon.stroke.mail-2
             {% trans "Envoyez un message" %}
         a(href="", data-dismiss="modal", ng-click="openModal('phone')").btn.bg-success.call

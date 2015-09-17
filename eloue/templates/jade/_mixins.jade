@@ -1,7 +1,9 @@
+-load i18n
 mixin average-rate(account_var)
     .rate(ng-init="stars=[1, 2, 3, 4, 5]")
+        {% verbatim %}
         i.flaticon.solid.star-2(ng-repeat="star in stars", class="{{!#{account_var} ? 'disabled' : (star === #{account_var} ? 'current_rate' : '')}}")
-
+        {% endverbatim %}
 mixin rate-counter(account_var)
     span.rate-count(ng-show="!!#{account_var}", ng-bind="#{account_var}")
 
@@ -20,5 +22,5 @@ mixin verify-type(icon, text, color)
         .col-thumbnail
             .thumbnail
                 i.icon-fw.icon-3x.indent-sm-r(class="#{icon} text-#{color}")
-        .col-exposition #{text} verifié
+        .col-exposition #{text} {% trans "verifié" %}
             i.icon-lg.flaticon.solid.checkmark-2.indent-xs-l.text-success

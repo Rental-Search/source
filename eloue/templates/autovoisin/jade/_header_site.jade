@@ -30,20 +30,17 @@ section(ng-controller="AuthCtrl").container.signs-links
       | (numéro gratuit)
     li.spacer
     li.guest-veiw
-        {% verbatim %}
         .dropdown
-          span.dropdown-img: a(href="#"): img(data-ng-src="{{currentUser.avatar.profil}}").bg-image
-          span(data-toggle="dropdown").dropdown-toggle.text-success {{currentUser.username}}
+          span.dropdown-img: a(href="#"): img(data-ng-src="{% verbatim %}{{currentUser.avatar.profil}}{% endverbatim %}").bg-image
+          span(data-toggle="dropdown").dropdown-toggle.text-success {% verbatim %}{{currentUser.username}}{% endverbatim %}
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-            {% endverbatim %}
-            li: a(eloue-dashboard-redirect="{% url 'dashboard:dashboard' %}").signs-links-black Tableau de bord
-            li: a(eloue-dashboard-redirect="{% url 'dashboard:messages' %}").signs-links-black Messages
-            li: a(eloue-dashboard-redirect="{% url 'dashboard:bookings' %}").signs-links-black Réservations
-            li: a(eloue-dashboard-redirect="{% url 'dashboard:items' %}").signs-links-black Annonces
-            li: a(eloue-dashboard-redirect="{% url 'dashboard:account' %}").signs-links-black Compte
-            li: a(href="", ng-click="logout()").signs-links-black Déconnexion
-            {% verbatim %}
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:dashboard' %}").signs-links-black {% trans "Tableau de bord" %}
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:messages' %}").signs-links-black {% trans "Messages" %}
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:bookings' %}").signs-links-black {% trans "Réservations" %}
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:items' %}").signs-links-black {% trans "Annonces" %}
+            li: a(eloue-dashboard-redirect="{% url 'dashboard:account' %}").signs-links-black {% trans "Compte" %}
+            li: a(href="", ng-click="logout()").signs-links-black {% trans "Déconnexion" %}
         //-
          .dropdown
           span(data-toggle="dropdown").dropdown-toggle.text-success
@@ -75,11 +72,10 @@ section(ng-controller="AuthCtrl").container.signs-links
                   h5: a(href="#") #{item.topic}
                   p #{item.text}
         .dropdown
-          span(data-toggle="dropdown").dropdown-toggle.text-success Aide
+          span(data-toggle="dropdown").dropdown-toggle.text-success {% trans "Aide" %}
             span.caret
           ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-            {% endverbatim %}
-            li: a(href="{% url 'howto' %}") Comment ça marche ?
+            li: a(href="{% url 'howto' %}") {% trans "Comment ça marche ?" %}
             //-
              li: a Simulez vos revenus
              li: a Conseils pour les propriétaires
@@ -92,15 +88,15 @@ section(ng-controller="AuthCtrl").container.signs-links
     .table-cell.main-cell
       form(action="{% url 'product_list' %}")
         .search-form-wrapper.input-group
-          input#geolocate(type="text", name="l", value="{{ form.cleaned_data.l }}", autocomplete="off", placeholder="Où ça ?", title="{% if form.cleaned_data.l %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field
+          input#geolocate(type="text", name="l", value="{{ form.cleaned_data.l }}", autocomplete="off", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}{% trans 'Que voulez-vous louer ?' %}{% endif %}").table-cell.main-cell.form-control.what-field
           i.search-form-icon.flaticon.stroke.location-pin-3
           .table-cell.input-group.where-field
             i(ng-click="showFromCalendar()").search-form-icon.flaticon.stroke.calendar-3
-            input(type="text", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}", placeholder="Du", title="{% if form.cleaned_data.date_from %}Où ça ?{% endif %}", data-ng-model="fromDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
+            input(type="text", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}", placeholder="{% trans 'Du' %}" , title="{% if form.cleaned_data.date_from %}{% trans 'Où ça ?' %}{% endif %}", data-ng-model="fromDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
           .table-cell.input-group.where-field
             i(ng-click="showToCalendar()").search-form-icon.flaticon.stroke.calendar-3
-            input(type="text", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}", placeholder="Au", title="{% if form.cleaned_data.date_to %}Où ça ?{% endif %}", data-ng-model="toDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
+            input(type="text", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}", placeholder="{% trans 'Au' %}", title="{% if form.cleaned_data.date_to %}{% trans 'Où ça ?' %}{% endif %}", data-ng-model="toDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
           .table-cell.input-group-btn
             button(type="submit", default).btn.btn-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
     .table-cell
-      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise Déposez une annonce
+      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}

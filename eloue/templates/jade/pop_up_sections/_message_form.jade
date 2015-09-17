@@ -1,6 +1,6 @@
 -load i18n
 
-section(ng-controller="SendProMessageCtrl", ng-init="setUserId({{ patron.id }})")
+section(ng-controller="SendProMessageCtrl", ng-init="setUserId({% verbatim %}{{ patron.id }}{% endverbatim %})")
     div(ng-show="isSent")
       h4(style="position: relative;").text-success.indent-l-md
         i.flaticon.solid.checkmark-2.icon-li
@@ -33,14 +33,12 @@ section(ng-controller="SendProMessageCtrl", ng-init="setUserId({{ patron.id }})"
         b {% trans "N’hésitez pas à nous écrire" %}
         {% trans "via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions..." %}
 
-      {% verbatim %}
       form(name="proMessageForm", novalidate)#proMessageForm.form-wrapper
-        input(name="email", type="email", data-ng-model="message.email", placeholder="Votre adresse e‐mail *", required).form-control.indent-t-md
+        input(name="email", type="email", data-ng-model="message.email", placeholder="{% trans 'Votre adresse e‐mail' %} *", required).form-control.indent-t-md
         span.text-danger(ng-show="proMessageForm.email.$error.required && formSubmitted", translate="required_field")
         span.text-danger(ng-show="proMessageForm.email.$error.email && formSubmitted", translate="email_invalid")
-        input(name="subject", type="text", data-ng-model="message.subject", placeholder="Objet de votre message *", required).form-control.indent-t-md
+        input(name="subject", type="text", data-ng-model="message.subject", placeholder="{% trans 'Objet de votre message' %} *", required).form-control.indent-t-md
         span.text-danger(ng-show="proMessageForm.subject.$error.required && formSubmitted", translate="required_field")
-        textarea(name="message", data-ng-model="message.message", placeholder="Votre message *", rows="5", required).expand.form-control.indent-t-md
+        textarea(name="message", data-ng-model="message.message", placeholder="{% trans 'Votre message' %} *", rows="5", required).expand.form-control.indent-t-md
         span.text-danger(ng-show="proMessageForm.message.$error.required && formSubmitted", translate="required_field")
-        input(type="submit", ng-disabled="submitInProgress", ng-click="formSubmitted=true; proMessageForm.$valid && sendMessage()", value="Envoyer", class="{{submitInProgress ? 'loading' : ''}}").btn.btn-lg.bg-success.indent-t-md
-      {% endverbatim %}
+        input(type="submit", ng-disabled="submitInProgress", ng-click="formSubmitted=true; proMessageForm.$valid && sendMessage()", value="{% trans 'Envoyer' %}", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").btn.btn-lg.bg-success.indent-t-md
