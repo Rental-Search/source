@@ -11,8 +11,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 from eloue.api.urls import router
 
 from products.views import HomepageView, PublishItemView
-from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView
-from eloue.views import ContactProView
+from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView, ContactProView
 
 admin.autodiscover()
 

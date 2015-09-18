@@ -13,16 +13,6 @@ from haystack.constants import DJANGO_ID
 from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
 
-from .forms import ContactFormPro
-from django.shortcuts import render
-from django.core.mail import send_mail, BadHeaderError
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-
-
 
 class LoginRequiredMixin(View):
     @method_decorator(login_required)
@@ -125,44 +115,3 @@ class BreadcrumbsMixin(object):
         }
         context.update(super(BreadcrumbsMixin, self).get_context_data(**kwargs))
         return context
-
-
-class ContactProView(View):
-    form_class = ContactFormPro
-    template_name = 'subscription/index.jade'
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            sender = form.cleaned_data['sender']
-            phone_number = form.cleaned_data['phone_number']
-            activity_field = form.cleaned_data['activity_field']
-            
-
-            new_form = self.form_class()
-            recipients = ['benjamin.laroche@e-loue.com']
-
-
-            if activity_field and name and sender:
-                try:
-                    message = "%s ; %s ; %s ; %s" % (name, activity_field, sender, phone_number)
-                    send_mail("Formulaire de contact Pro", message, sender, recipients)
-                except BadHeaderError:
-                    messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
-                    return render(request, self.template_name, {'form': form, 'tag' : "error"})
-                messages.add_message(request, messages.INFO, _('Le message a ete envoye avec succes'), extra_tags='safe')
-                return render(request, self.template_name, {'form': new_form, 'tag' : "success"})
-            else:
-                messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
-                return render(request, self.template_name, {'form': form, 'tag' : "error"})
-        
-        else:
-            messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
-            return render(request, self.template_name, {'form': form, 'tag' : "error"})
-

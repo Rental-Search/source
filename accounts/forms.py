@@ -530,3 +530,9 @@ def make_missing_data_form(instance, required_fields=[]):
     form_class.clean_addresses = types.MethodType(clean_addresses, None, form_class)
     form_class.clean_company_name = types.MethodType(clean_company_name, None, form_class)
     return fields != {}, form_class
+
+class ContactFormPro(forms.Form):
+    name = forms.CharField(max_length=100, initial="")
+    sender = forms.EmailField(max_length=50, initial="")
+    phone_number = forms.CharField(max_length= 12, required=False, initial="")
+    activity_field = forms.CharField(max_length=100, initial="")
