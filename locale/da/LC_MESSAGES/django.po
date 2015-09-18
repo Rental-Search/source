@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-17 15:19+0200\n"
+"POT-Creation-Date: 2015-09-18 09:28+0200\n"
 "PO-Revision-Date: 2015-09-16 18:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
@@ -1143,7 +1143,7 @@ msgstr ""
 msgid "Page"
 msgstr "Side"
 
-#: eloue/templates/index.jade:1 eloue/templates/autovoisin/index.jade:1
+#: eloue/templates/index.jade:2 eloue/templates/autovoisin/index.jade:2
 msgid "Location entre particuliers ou professionnels de tout type d'objet"
 msgstr "Leje mellem privatperson og erhverv ved alle former for genstande"
 
@@ -1505,7 +1505,7 @@ msgstr ""
 #: eloue/templates/how_it_works/_breadcrumb.jade:4
 #: eloue/templates/imprint/_breadcrumbs.jade:4
 #: eloue/templates/insurances/_breadcrumbs.jade:4
-#: eloue/templates/jade/_breadcrumbs.jade:6
+#: eloue/templates/jade/_breadcrumbs.jade:7
 #: eloue/templates/our_partners/_breadcrumbs.jade:4
 #: eloue/templates/press/_breadcrumbs.jade:4
 #: eloue/templates/rental_agreement/_breadcrumbs.jade:4
@@ -1647,8 +1647,8 @@ msgstr ""
 #: eloue/templates/autovoisin/jade/_nav_home.jade:10
 #: eloue/templates/gosport/jade/_nav_home.jade:4
 #: eloue/templates/gosport/jade/_nav_home.jade:10
-#: eloue/templates/jade/_breadcrumbs.jade:22
-#: eloue/templates/jade/_breadcrumbs.jade:24
+#: eloue/templates/jade/_breadcrumbs.jade:23
+#: eloue/templates/jade/_breadcrumbs.jade:25
 #: eloue/templates/jade/_nav_home.jade:6
 #: eloue/templates/jade/_nav_home.jade:10
 #: eloue/templates/jade/_nav_home.jade:17
@@ -2224,8 +2224,8 @@ msgstr ""
 #: eloue/templates/jade/_product_list_article_head.jade:7
 #: eloue/templates/products/product_list.jade:5
 #: eloue/templates/products/product_list.jade:12
-#: eloue/templates/products/subcategory_list.jade:15
-#: eloue/templates/products/subcategory_list.jade:27
+#: eloue/templates/products/subcategory_list.jade:16
+#: eloue/templates/products/subcategory_list.jade:28
 msgid "Location"
 msgstr "Leje"
 
@@ -2447,7 +2447,7 @@ msgid "jour"
 msgstr "dag"
 
 #: eloue/templates/jade/_product_list.jade:24
-#: eloue/templates/products/subcategory_list.jade:33
+#: eloue/templates/products/subcategory_list.jade:34
 msgid "Explorez toutes les annonces de location"
 msgstr "Opdag samtlige lejeannoncer"
 
@@ -3245,11 +3245,11 @@ msgstr "Kommentarer i forbindelse med denne annonce"
 msgid "Commentaire liés au propriétaire"
 msgstr "Kommentarer i forbindelse med ejer"
 
-#: eloue/templates/products/subcategory_list.jade:4
+#: eloue/templates/products/subcategory_list.jade:5
 msgid "annonces de location"
 msgstr "Lejekontrakter"
 
-#: eloue/templates/products/subcategory_list.jade:4
+#: eloue/templates/products/subcategory_list.jade:5
 msgid "dans toute la France"
 msgstr "Lejeannoncer i hele landet"
 
