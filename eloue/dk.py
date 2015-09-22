@@ -1,10 +1,20 @@
 import os
 
 from eloue.settings import *
-#local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
-#SITE_ID = 5
+TIME_ZONE = 'Europe/Copenhagen'
 
-TIME_ZONE = 'Europe/London'
+LANGUAGE_CODE = 'da'
 
-LANGUAGE_CODE = 'da-DK'
+
+DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
+    'city': u'Copenhague',
+    'coordinates': (55.6760968, 12.5683371),
+    'country': u'Danemark',
+    'fallback': None,
+    'radius': 22,
+    'formatted_address': u'Copenhague, Danemark',
+    'region': u'Hovedstaden',
+    'region_coords': (55.6751812, 12.54932610000003),
+    'region_radius': 100,
+})
