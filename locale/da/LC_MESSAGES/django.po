@@ -2235,11 +2235,11 @@ msgstr "Lejemål"
 
 #: eloue/templates/jade/_patron_stats.jade:4
 msgid "annonces publiées"
-msgstr ""
+msgstr "uploadede annoncer"
 
 #: eloue/templates/jade/_patron_stats.jade:7
 msgid "locations effectués"
-msgstr ""
+msgstr "Gennemførte udlejninger"
 
 #: eloue/templates/jade/_patron_stats.jade:10
 msgid "évaluations"
@@ -2247,11 +2247,11 @@ msgstr "Reservationer"
 
 #: eloue/templates/jade/_patron_stats.jade:13
 msgid "de taux de réponse"
-msgstr ""
+msgstr "Svarrate"
 
 #: eloue/templates/jade/_patron_stats.jade:16
 msgid "de temps de réponse en moyenne"
-msgstr ""
+msgstr "Svartid"
 
 #: eloue/templates/jade/_pop_up_call.jade:8
 msgid "Appel"
@@ -2262,7 +2262,7 @@ msgstr "Ring"
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:45
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:25
 msgid "Réservez"
-msgstr "Reservationer"
+msgstr "Reservér"
 
 #: eloue/templates/jade/_pop_up_call.jade:15
 #: eloue/templates/jade/_pop_up_reserve.jade:14
@@ -3029,7 +3029,7 @@ msgstr ""
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:37
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:3
 msgid "Réservez en ligne"
-msgstr ""
+msgstr "Online reservering"
 
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:38
 msgid ""
@@ -3108,11 +3108,11 @@ msgstr "Alle kategorier"
 
 #: eloue/templates/jade/product_details/aside/_similar_listing.jade:3
 msgid "Annonces similaires"
-msgstr ""
+msgstr "Tilsvarende annoncer"
 
 #: eloue/templates/jade/product_details/main/_description.jade:2
 msgid "Description"
-msgstr ""
+msgstr "Produktbeskrivelse"
 
 #: eloue/templates/jade/product_details/main/_description.jade:11
 msgid "Notation"
