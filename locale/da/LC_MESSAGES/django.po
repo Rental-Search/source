@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 09:28+0200\n"
+"POT-Creation-Date: 2015-09-24 10:18+0200\n"
 "PO-Revision-Date: 2015-09-16 18:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
@@ -1600,11 +1600,6 @@ msgstr "Hvor ligger det?"
 msgid "Que voulez-vous louer ?"
 msgstr "Hvad ønsker du at leje?"
 
-#: eloue/templates/autovoisin/jade/_header_site.jade:60
-#: eloue/templates/jade/_date_picker_border.jade:23
-msgid "Au"
-msgstr ""
-
 #: eloue/templates/autovoisin/jade/_header_site.jade:70
 #: eloue/templates/jade/_header_site.jade:75
 msgid "Déposez une annonce"
@@ -1977,6 +1972,7 @@ msgstr "Stedsbestemmelse"
 
 #: eloue/templates/gosport/jade/_nav_home.jade:8
 #: eloue/templates/jade/_nav_home.jade:15
+#: eloue/templates/jade/_publish_items_categories.jade:36
 msgid "Autres"
 msgstr "Andet"
 
@@ -2035,6 +2031,10 @@ msgstr "Kreditkort"
 #: eloue/templates/jade/_date_picker_border.jade:19
 #: eloue/templates/jade/_date_picker_border.jade:38
 msgid "Le format de la date n'est pas valide"
+msgstr ""
+
+#: eloue/templates/jade/_date_picker_border.jade:23
+msgid "Au"
 msgstr ""
 
 #: eloue/templates/jade/_date_picker_border.jade:37
@@ -2569,6 +2569,38 @@ msgstr ""
 "vous ? \n"
 "      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">da "
 "vil du vide mere</a>"
+
+#: eloue/templates/jade/_publish_items_categories.jade:3
+msgid "Choisissez une catégorie pour votre annonce"
+msgstr "Vælg en kategori til din annonce"
+
+#: eloue/templates/jade/_publish_items_categories.jade:6
+msgid "Bricolage"
+msgstr "Boligbyggeri"
+
+#: eloue/templates/jade/_publish_items_categories.jade:10
+msgid "Jardinage"
+msgstr "Havearbejde"
+
+#: eloue/templates/jade/_publish_items_categories.jade:14
+msgid "High-tech"
+msgstr "High-tech"
+
+#: eloue/templates/jade/_publish_items_categories.jade:18
+msgid "Réception"
+msgstr "Reservationer"
+
+#: eloue/templates/jade/_publish_items_categories.jade:24
+msgid "Véhicule"
+msgstr "køretøj"
+
+#: eloue/templates/jade/_publish_items_categories.jade:28
+msgid "Mode et accessoires"
+msgstr "Mode og accessoires"
+
+#: eloue/templates/jade/_publish_items_categories.jade:32
+msgid "Santé et bien-etre"
+msgstr "Sundhed og Wellness"
 
 #: eloue/templates/jade/_reset_password.jade:8
 msgid "Réinitialisation du mot de passe"

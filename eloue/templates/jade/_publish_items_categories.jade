@@ -1,12 +1,46 @@
+-load i18n
 .container
-  h3.text-center Choisissez une catégorie pour votre annonce
+  h3.text-center {% trans "Choisissez une catégorie pour votre annonce" %}
 
-  -var publish_items_categories = [[{"title": "Bricolage", "id": 35, "classname": "drill"}, {"title": "Jardinage", "id": 390, "classname": "mower"}, {"title": "High-tech", "id": 253, "classname": "camera"}, {"title": "Réception", "id": 418, "classname": "glass"}], [{"title": "Véhicule", "id": 2700, "classname": "car"}, {"title": "Mode et accessoires", "id": 126, "classname": "dress"}, {"title": "Santé et bien-etre", "id": 323, "classname": "basket"}, {"title": "Autres", "id": "", "classname": "dots"}]]
-  each group in publish_items_categories
-    ul.nav.space-between
-      each item in group
-        li.spacer
-        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '{{ item.id }}')")
+  ul.nav.space-between
+    li.spacer
+        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '35')")
           span.border-round
-            i(class="eloue-{{ item.classname }}")
-          span.title {{ item.title }}
+            i(class="eloue-drill")
+          span.title {% trans "Bricolage" %}
+    li.spacer
+        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '390')")
+          span.border-round
+            i(class="eloue-mower")
+          span.title {% trans "Jardinage" %}
+    li.spacer
+        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '253')")
+          span.border-round
+            i(class="eloue-camera")
+          span.title {% trans "High-tech" %}
+    li.spacer
+        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '418')")
+          span.border-round
+            i(class="eloue-glass")
+          span.title {% trans "Réception" %}
+  ul.nav.space-between
+    li.spacer
+        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '2700')")
+          span.border-round
+            i(class="eloue-car")
+          span.title {% trans "Véhicule" %}
+    li.spacer
+        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '126')")
+          span.border-round
+            i(class="eloue-dress")
+          span.title {% trans "Mode et accessoires" %}
+    li.spacer
+        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '323')")
+          span.border-round
+            i(class="eloue-basket")
+          span.title {% trans "Santé et bien-etre" %}
+    li.spacer
+        li: span: a(href="", data-dismiss="modal", ng-click="openModal('publish', '')")
+          span.border-round
+            i(class="eloue-dots")
+          span.title {% trans "Autres" %}
