@@ -1,4 +1,4 @@
--load staticfiles eloue_url
+-load staticfiles eloue_url i18n
 
 section.framing(ng-controller="CookiesCtrl")
     div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") En poursuivant votre navigation, vous acceptez l’utilisation des cookies pour disposer de services et d’offres adaptées à vos centres d’intérêts. Pour en savoir plus,&nbsp;
@@ -88,14 +88,14 @@ section(ng-controller="AuthCtrl").container.signs-links
     .table-cell.main-cell
       form(action="{% url 'product_list' %}")
         .search-form-wrapper.input-group
-          input#geolocate(type="text", name="l", value="{{ form.cleaned_data.l }}", autocomplete="off", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}{% trans 'Que voulez-vous louer ?' %}{% endif %}").table-cell.main-cell.form-control.what-field
+          input#geolocate(type="text", name="l", value="{% verbatim %}{{ form.cleaned_data.l }}{% endverbatim %}", autocomplete="off", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}{% trans 'Que voulez-vous louer ?' %}{% endif %}").table-cell.main-cell.form-control.what-field
           i.search-form-icon.flaticon.stroke.location-pin-3
           .table-cell.input-group.where-field
             i(ng-click="showFromCalendar()").search-form-icon.flaticon.stroke.calendar-3
-            input(type="text", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}", placeholder="{% trans 'Du' %}" , title="{% if form.cleaned_data.date_from %}{% trans 'Où ça ?' %}{% endif %}", data-ng-model="fromDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
+            input(type="text", name="date_from", value="{% verbatim %}{{ form.cleaned_data.date_from|date:'d/m/Y' }}{% endverbatim %}", placeholder="Du" , title="{% if form.cleaned_data.date_from %}{% trans 'Où ça ?' %}{% endif %}", data-ng-model="fromDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
           .table-cell.input-group.where-field
             i(ng-click="showToCalendar()").search-form-icon.flaticon.stroke.calendar-3
-            input(type="text", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}", placeholder="{% trans 'Au' %}", title="{% if form.cleaned_data.date_to %}{% trans 'Où ça ?' %}{% endif %}", data-ng-model="toDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
+            input(type="text", name="date_to", value="{% verbatim %}{{ form.cleaned_data.date_to|date:'d/m/Y' }}{% endverbatim %}", placeholder="Au", title="{% if form.cleaned_data.date_to %}{% trans 'Où ça ?' %}{% endif %}", data-ng-model="toDate", data-ng-change="validateDates()", eloue-datepicker, autocomplete="off").form-control
           .table-cell.input-group-btn
             button(type="submit", default).btn.btn-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
     .table-cell
