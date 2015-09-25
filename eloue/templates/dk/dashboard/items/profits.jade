@@ -1,0 +1,36 @@
+block details
+  .section-content
+    {% verbatim %}
+    h2.pull-right.clear-both Total des revenus générés : {{totalProfit}}€
+    h3.pull-right.clear-both.indent-sm-b Nombre de réservation : {{numberOfBookings}} en
+      span(ng-show="durationYears > 0")
+       | {{durationYears}} ans et
+      span(ng-show="durationMonths > 0")
+       | {{durationMonths}} mois et
+      | {{durationDays}} jours
+    .row: .col-xs-12
+      table.calendar.text-center
+        thead: tr
+          td Réservation
+         //-
+          td Date de virement
+          td Compte crédité
+          td Montant
+        tbody
+            tr(ng-repeat="booking in bookings")
+              td.text-left
+                a(ui-sref="bookings.detail({uuid: booking.uuid})").text-success.text-underline-hover Du {{booking.start_date.day}} &nbsp;
+                  span(translate="{{booking.start_date.month}}")
+                  | {{booking.start_date.year}}
+                  | au {{booking.end_date.day}} &nbsp;
+                  span(translate="{{booking.end_date.month}}")
+                  | {{booking.end_date.year}}
+                br
+                | Montant : {{booking.total_amount}}€/J
+                br
+                | Locataire : {{booking.borrower.username}}
+             //-
+              td
+              td
+              td
+     {% endverbatim %}

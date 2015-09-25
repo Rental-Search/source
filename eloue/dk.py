@@ -6,6 +6,19 @@ TIME_ZONE = 'Europe/Copenhagen'
 
 LANGUAGE_CODE = 'da'
 
+VERTICAL_SITE_NAME = 'dk'
+
+
+for key in PIPELINE_CSS:
+    output_filename = PIPELINE_CSS[key]['output_filename'].replace(
+            '.css', '_%s.css' % VERTICAL_SITE_NAME)
+    PIPELINE_CSS[key]['output_filename'] = output_filename
+
+TEMPLATE_DIRS = env('TEMPLATE_DIRS', (
+    local_path('templates/%s' % VERTICAL_SITE_NAME),
+    local_path('templates/'),
+))
+
 
 DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
     'city': u'Copenhague',

@@ -1,0 +1,7 @@
+section.pull-nothing
+  .notification-empty
+    .notification-container
+      {% verbatim %}
+      i(class="{{routeChangeInProgress ? 'loading' : ''}}").icon-5x.indent-sm-b.flaticon.solid.menu-list-4
+      {% endverbatim %}
+      h2(ng-show="!routeChangeInProgress") Aucune annonce sélectionnée

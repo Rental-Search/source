@@ -1,0 +1,71 @@
+include ../jade/_global_variables
+
+block details
+  .section-content
+    {% verbatim %}
+    form(action="itmes")
+      .row
+        .col-xs-7
+          h2 Sélectionner le mois
+        .col-xs-5
+          .form-control.without-search.select-gradient
+            select(ng-model="selectedMonthAndYear", ng-change="updateCalendar()", eloue-chosen, opts="monthOptions")
+                option(ng-repeat="month in monthOptions", value="{{month.value}}") {{month.name}}
+      .row
+        .col-xs-12.indent-sm-b
+          table.calendar.text-center
+            {% endverbatim %}
+            thead
+              tr: each day in days_of_week
+                td {{ day }}
+            {% verbatim %}
+            tbody
+                  tr(ng-repeat="week in weeks")
+                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : '' || day.isUnavailable && showUnavailable ? 'outages' : ''}}") {{day.dayOfMonth}}
+      .row(style="text-align: center;")
+          div(style="display: inline-block; width: 70%;")
+            .col-xs-6
+              label.check-btn.form-control.text-danger-light
+                input(type="checkbox", ng-model="showUnavailable", ng-change="onShowUnavailable()")
+                span: i.flaticon.stroke.checkmark
+                | Indisponiblités
+            .col-xs-6
+              label.check-btn.form-control.text-success-light
+                input(type="checkbox", ng-model="showBookings", ng-change="onShowBookings()")
+                span: i.flaticon.stroke.checkmark
+                | Réservations
+      .row.indent-xs-b
+        .col-xs-12.indent-sm-b
+          table.calendar.bg-light.text-center
+            thead
+              tr
+                td Date de début
+                td Date de fin
+                td Motifs
+                td Action
+            tbody
+              tr(ng-repeat="period in productUnavailablePeriods track by period.uuid", ng-show="(showBookings && period.reason=='booked') || (showUnavailable && period.reason=='unavailable')")
+                td {{period.startDay | date:'dd/MM/yyyy'}}
+                td {{period.endDay | date:'dd/MM/yyyy'}}
+                td(ng-show="showBookings && period.reason=='booked'").text-success-light Réservé
+                td(ng-show="showUnavailable && period.reason=='unavailable'").text-danger-light Indisponible
+                td
+                  //a(href="", ng-click="showUpdatePeriodForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") Modifier &nbsp;
+                  a(href="", ng-click="showConfirmForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") Supprimer
+      .row
+        .col-xs-12
+          button(type="button", ng-click="showAddPeriodForm()").btn.bg-success-hover.text-white.center Ajouter une nouvelle indisponibilité
+    {% endverbatim %}
+#confirm-delete-period.modal.fade
+    .modal-dialog
+        .modal-content(style="padding: 30px")
+            .modal-body
+                h3 Supprimer l'indisponibilité ?
+                .row
+                    .col-xs-6
+                        button(type="button", data-dismiss="modal").btn
+                            | Non
+                    .col-xs-6
+                        button(type="button", data-dismiss="modal", ng-click="deleteUnavailabilityPeriod(selectedPeriod)").btn.bg-success
+                            | Oui
+include add_period

@@ -1,0 +1,10 @@
+section.pull-nothing(ng-hide="(bookingList && bookingList.length > 0) || filtered")
+  .notification-empty
+    .notification-container
+      {% verbatim %}
+      i(class="{{routeChangeInProgress ? 'loading' : ''}}").icon-5x.indent-sm-b.flaticon.stroke.calendar-5
+      {% endverbatim %}
+      h2(ng-show="!routeChangeInProgress") Pas encore de réservation
+      p(ng-show="!routeChangeInProgress").indent-md-v.text-black
+        | A tout moment vous pouvez faire une demande de réservation auprès d'un propriétaire si son objet vous intéresse
+      a(ng-show="!routeChangeInProgress", href="#").btn-inline.bg-success-hover.text-white Commencez à rechercher un objet
