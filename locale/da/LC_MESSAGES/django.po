@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-24 10:18+0200\n"
-"PO-Revision-Date: 2015-09-24 17:44+0200\n"
+"PO-Revision-Date: 2015-09-25 14:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
 "Language: da_DK\n"
@@ -1148,7 +1148,7 @@ msgstr "Leje mellem privatperson og erhverv ved alle former for genstande"
 
 #: eloue/templates/accounts/password_reset_confirm.jade:8
 msgid "Mise à jour du mot de passe effectuée"
-msgstr "Opdater adgangskode"
+msgstr "Adgangskoden er nu opdateret"
 
 #: eloue/templates/accounts/password_reset_confirm.jade:9
 msgid "Lien de mot de passe oublié invalide"
@@ -1439,6 +1439,26 @@ msgid ""
 "\n"
 "                            "
 msgstr ""
+"\n"
+"                                Hej!,<br><br>\n"
+"\n"
+"                                Vi bekræfter inNous vous confirmons la "
+"souscription à l'abonnement.\n"
+"                                <br>\n"
+"\n"
+"                                Nous vous invitons à prendre connaissance "
+"des conditions générales : <a href=\"https://www.e-loue.com/conditions-"
+"generales/\">Conditions générales e-loue</a><br>\n"
+"\n"
+"                                Nous allons vous recontacter pour la mise en "
+"place de votre e-boutique sur le site.<br>\n"
+"\n"
+"                                Merci pour votre confiance et bienvenue chez "
+"e-loue !<br>\n"
+"\n"
+"                                Bonnes e-locations,<br>\n"
+"\n"
+"                            "
 
 #: eloue/templates/accounts/emails/professional_subscribed_email.txt:6
 msgid ""
@@ -1459,6 +1479,21 @@ msgid ""
 "\tBonnes e-locations,\n"
 "\n"
 msgstr ""
+"\n"
+"\tHej!\n"
+"\n"
+"\tVi bekræfter oprettelsen af dit abonnement.\n"
+"\n"
+"\tVi beder dig om nøje at læse de Generelle betingelser: <a href=\"https://"
+"www.e-loue.com/conditions-generales/\">Conditions générales e-loue</a>\n"
+"\n"
+"\tVi vil kontakte dig på ny, så vi kan oprette din online butik på "
+"hjemmesiden.\n"
+"\n"
+"\tVi takker for din tillid og byder dig hjertelig velkommen hos e-loue!\n"
+"\n"
+"\tRigtig god udlejning\n"
+"\n"
 
 #: eloue/templates/accounts/emails/professional_subscribed_email_subject.txt:1
 msgid "Confirmation inscription compte professionnel e-loue"
@@ -1729,9 +1764,9 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"For at beskytte dine personlige oplysninger, skjule vi dit navn, "
+"For at beskytte dine personlige oplysninger, skjuler vi dit navn, "
 "telefonnummer og kontaktoplysninger i tilfælde af, at lejen ikke er blevet "
-"bekræftet. "
+"bekræftet."
 
 #: eloue/templates/contest/contest_product_create.html:4
 msgid "en location"
@@ -2032,7 +2067,7 @@ msgstr "Abonnement"
 
 #: eloue/templates/jade/_date_picker_border.jade:4
 msgid "Du"
-msgstr ""
+msgstr "Fra"
 
 #: eloue/templates/jade/_date_picker_border.jade:18
 msgid "Il manque la date de début"
@@ -2041,15 +2076,15 @@ msgstr "Kreditkort"
 #: eloue/templates/jade/_date_picker_border.jade:19
 #: eloue/templates/jade/_date_picker_border.jade:38
 msgid "Le format de la date n'est pas valide"
-msgstr ""
+msgstr "Datoen er ikke korrekt indskrevet"
 
 #: eloue/templates/jade/_date_picker_border.jade:23
 msgid "Au"
-msgstr ""
+msgstr "Til"
 
 #: eloue/templates/jade/_date_picker_border.jade:37
 msgid "Il manque la date de fin"
-msgstr ""
+msgstr "Der mangler slutdatoen"
 
 #: eloue/templates/jade/_download_mobile_apps.jade:5
 msgid "Les bonnes affaires e-loue, c'est (aussi) dans la poche"
@@ -2120,7 +2155,7 @@ msgid ""
 "pour disposer de services et d’offres adaptées à vos centres d’intérêts. "
 "Pour en savoir plus,&nbsp;"
 msgstr ""
-"Vi bruger cookies på hjemmesiden til at forbedre bruger-oplevelsen. Vil du "
+"Vi bruger cookies på hjemmesiden til at forbedre brugeroplevelsen. Vil du "
 "vide mere,&nbsp;"
 
 #: eloue/templates/jade/_header_site.jade:3
@@ -2152,7 +2187,7 @@ msgid ""
 "\"%(subscription_url)s\"><b>offres e-loue Pro</b></a>"
 msgstr ""
 "\n"
-" Du er erhvervsudlejer find <a href=\"%(subscription_url)s\"><b>e-loue Pro "
+" Er du erhvervsudlejer, se her <a href=\"%(subscription_url)s\"><b>e-loues PRO "
 "tilbud</b></a>"
 
 #: eloue/templates/jade/_header_site.jade:17
@@ -2178,7 +2213,7 @@ msgstr "Leje uden problemer"
 
 #: eloue/templates/jade/_insurances.jade:19
 msgid "Contrat de location pré-rempli.<br>Service client dédié 7j/7"
-msgstr "Forudfyldt lejekontrakt.<br>Kundeservice 7d/7"
+msgstr "Lejekontrakten er udfyldt på forhånd.<br>Kundeservice 24/7"
 
 #: eloue/templates/jade/_insurances.jade:28
 msgid "Louez en toute confiance"
@@ -2194,7 +2229,7 @@ msgstr "Leje med klarhed"
 
 #: eloue/templates/jade/_insurances.jade:39
 msgid "Assurance incluse et automatique.<br>Aucun échange d’argent."
-msgstr "Automatisk og inkluderet forsikring.<br>Ingen udveksling af penge."
+msgstr "Ingen betaling med kontanter."
 
 #: eloue/templates/jade/_location_list.jade:3
 msgid "Les villes les plus attractives"
@@ -2250,11 +2285,11 @@ msgstr "Lejemål"
 
 #: eloue/templates/jade/_patron_stats.jade:4
 msgid "annonces publiées"
-msgstr "uploadede annoncer"
+msgstr "publicerede annoncer"
 
 #: eloue/templates/jade/_patron_stats.jade:7
 msgid "locations effectués"
-msgstr "Gennemførte udlejninger"
+msgstr "gennemførte udlejninger"
 
 #: eloue/templates/jade/_patron_stats.jade:10
 msgid "évaluations"
@@ -2363,7 +2398,7 @@ msgstr "Skriv din annonce på 1 minut"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:83
 msgid "Prix km supp"
-msgstr ""
+msgstr "Pris per ekstra kilometer"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:90 products/models.py:448
 msgid "1er mise en circulation"
@@ -2464,7 +2499,7 @@ msgstr "dag"
 #: eloue/templates/jade/_product_list.jade:24
 #: eloue/templates/products/subcategory_list.jade:34
 msgid "Explorez toutes les annonces de location"
-msgstr "Opdag samtlige lejeannoncer"
+msgstr "Se samtlige lejeannoncer"
 
 #: eloue/templates/jade/_product_list_article_head.jade:2
 #, python-format
@@ -2581,8 +2616,7 @@ msgstr ""
 "      <p> e-loue er det første web-sted 100%% tilegnet til erhvervsudlejere. "
 "Vores medlemmer søger alle former for lejemål over hele landet. Landets "
 "største udlejere udviser os tillid, så hvorfor ikke også dig? \n"
-"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">da "
-"vil du vide mere</a>"
+"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">For yderligere oplysninger</a>"
 
 #: eloue/templates/jade/_publish_items_categories.jade:3
 msgid "Choisissez une catégorie pour votre annonce"
@@ -2757,10 +2791,9 @@ msgstr ""
 "\n"
 "        <p class=\"lg-ln-height\"> Via e-loue kan du udleje alt det, du ikke "
 "længere bruger i hverdagen: værktøj, kamera, bil, plæneklipper, video-"
-"projecteur, kalpvogn... Tjen penge i al simpelhed og uden risisko: vores "
+"projektor, klapvogn... Tjen penge i al simpelhed og uden risiko: vores "
 "tjeneste forsikrer 100%% sikkerhed!\n"
-"        </p><a href=\"%(howto_url)s\" class=\"link-success-color\">da savoir "
-"plus</a>"
+"        </p><a href=\"%(howto_url)s\" class=\"link-success-color\">For yderligere oplysninger</a>"
 
 #: eloue/templates/jade/_watch_video.jade:31
 msgid "Présentation de e-loue"
@@ -2768,7 +2801,7 @@ msgstr "Præsentation"
 
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:2
 msgid "Vos informations bancaires"
-msgstr "Arbejdsgiver"
+msgstr "Dine bankoplysninger"
 
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:5
 msgid "Numéro de carte"
@@ -2801,7 +2834,7 @@ msgid ""
 "avant le début de la location. Si vous payez avec une carte bleue qui n'est "
 "pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire "
 "pourra refuser la location."
-msgstr ""
+msgstr "Du skal fremvise et bankkort i dit eget navn til ejeren, inden du kan begynde lejen. Hvis du betaler med et bankkort, som ikke er i dit eget navn, har ejeren mulighed for at afvise lejemålet."
 
 #: eloue/templates/jade/pop_up_sections/_input_message.jade:3
 msgid "Rédigez votre message ici..."
@@ -2837,19 +2870,19 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"    <p> Din efterspørgelse om et overslag er afsendt.Vores team gør alt for "
+"    <p> Din efterspørgsel om et overslag er afsendt. Vores team gør alt for "
 "at\n"
 "    </p>\n"
-"    <p> udlejer kontakter dem inden 24 timer.Du skal intet betale over e-"
+"    <p> udlejer kontakter dem inden 24 timer. Du skal intet betale over e-"
 "loue\n"
+" Betalingen foregår direkte hos udlejer. \n"
 "    </p>\n"
-"    <p> Vous n’avez rien à payer sur e-loue, le paiement se fera\n"
-" directement chez le loueur.\n"
-"    </p>\n"
-"    <p> betalingen foregår ved direkte kontakt med lejer.Vi takker dig for\n"
-" illiden,\n"
+"    <p> betalingen foregår ved direkte kontakt med lejer. Vi takker dig for "
+"tilliden og\n"
+"\n"
 "    </p>\n"
 "    <p> Team e-loue\n"
+" \n"
 "    </p>\n"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:26
@@ -2896,7 +2929,7 @@ msgstr ""
 
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:2
 msgid "Vos informations personnelles"
-msgstr "Arbejdsgiver"
+msgstr "Dine personlige oplysninger"
 
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:10
 msgid "Prénom *"
@@ -2926,6 +2959,11 @@ msgid ""
 "refuser la transaction. Les champs marqués d'une étoile (*) sont "
 "obligatoires."
 msgstr ""
+"Du skal fremvise dit ID-kort til ejeren, inden du kan påbegynde lejen af "
+"Genstanden. Hvis dine personlige oplysninger, som du har på din profil hos "
+"os, ikke stemmer overens med dit Id-kort, kan ejeren afvise transaktionen. "
+"Rubrikker markeret med stjerne (*), er felter, som er obligatoriske at "
+"udfylde. "
 
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:63
 msgid "Les champs marqués d'une étoile (*) sont obligatoires."
@@ -3028,12 +3066,12 @@ msgstr "Pris"
 #: eloue/templates/jade/pop_up_sections/_terms.jade:21
 #: eloue/templates/jade/pop_up_sections/_terms.jade:26 products/choices.py:60
 msgid "€"
-msgstr "€"
+msgstr "kr."
 
 #: eloue/templates/jade/pop_up_sections/_terms.jade:25
 #: eloue/templates/products/tab_tarifs.jade:56
 msgid "Caution"
-msgstr "Kaution"
+msgstr "Depositum"
 
 #: eloue/templates/jade/pop_up_sections/_terms.jade:30
 msgid ""
@@ -3045,6 +3083,13 @@ msgid ""
 "loue prendra simplement une empreinte de votre carte bancaire en cas de "
 "problème pendant la location).</p>"
 msgstr ""
+"\n"
+"\n"
+"<p>Når du klikker på knappen \"Réserver\", sender du en forespørgsel om leje "
+"til ejeren. Din konto vil blive debiteret, så snart ejeren accepterer din "
+"forespørgsel. Depositummet vil derimod ikke blive debiteret på din konto (e-"
+"loue har udelukkende et aftryk af dit bankkort i tilfælde af, at der opstår "
+"problemer under lejeperioden).</p>"
 
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:8
 msgid "Appelez le propriétaire"
@@ -3060,10 +3105,15 @@ msgid ""
 "oui, tout le monde a le droit de se reposer.\n"
 "          </p>\n"
 msgstr ""
+"\n"
+"\n"
+"          <p> Efter kl. 21 beder vi dig om at stille dine spørgsmål via <a "
+"href=\"\" ng-click=\"openModal('message')\" class=\"text-success"
+"\">messagerie.</a>.\n"
 
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:26
 msgid "Posez lui toutes vos questions"
-msgstr ""
+msgstr "Stil ejeren alle dine spørgsmål her"
 
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:27
 msgid ""
@@ -3071,6 +3121,10 @@ msgid ""
 "les modalités de locations ? Sur le  lieu et l’horaire du RDV ? N’ayez pas "
 "peur, les membres e-loue  sont très  serviables, et vous répondront..."
 msgstr ""
+"Har du behov for yderligere detaljer vedrørende Genstanden, som er til leje? "
+"Spørgsmål vedrørende lejeproceduren, tid og sted for mødet med udlejer m.m.? "
+"Så er du meget velkommen til at kontakte vores kundeservice. De hjælper dig "
+"med glæde!"
 
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:37
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:3
@@ -3083,6 +3137,10 @@ msgid ""
 "surprise : le paiement  est sécurisé, la caution est automatiquement "
 "débloquée dès que vous restituez le produit."
 msgstr ""
+"Når du reserverer på e-loue, er du sikret ikke at få nogle dårlige "
+"overraskelser: Betalingen er sikker og depositummet, som er reserveret på "
+"din konto, vil automatisk blive deblokeret, når du afleverer den lejede "
+"Genstand tilbage. "
 
 #: eloue/templates/jade/pop_up_sections/_website_link_form.jade:2
 msgid ""
@@ -3104,7 +3162,7 @@ msgstr "Op til "
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:11
 msgid "Cet article est disponible à ces dates"
-msgstr "Antal tilgængelig i denne periode"
+msgstr "Genstanden er tilgængelig på følgende datoer "
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:12
 msgid "Cet article n'est pas disponible à ces dates"
@@ -3112,7 +3170,7 @@ msgstr ""
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:16
 msgid "Durée de la location"
-msgstr "Standard placering"
+msgstr "Lejeperiodens varighed"
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 msgid "indicatif"
@@ -3120,11 +3178,11 @@ msgstr "indikerende"
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 msgid "de la location"
-msgstr "Standard placering"
+msgstr "for leje"
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:22
 msgid "Assurance incluse"
-msgstr "Forsikret tilfredstillelse"
+msgstr "Inklusiv forsikring"
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:26
 msgid ""
@@ -3359,8 +3417,8 @@ msgid ""
 "bancaire au moment du paiement. Cette empreinte ne sera pas débitée, sauf  "
 "si vous constatez un sinistre à la fin de la location."
 msgstr ""
-"Hvis ejer forlanger kaution, reserverer e-loue beløbet på dit kreditkort, i "
-"det øjeblik du betaler. Selve kautionen bliver kun hævet, hvis vi ved "
+"Hvis ejer forlanger depositum, reserverer e-loue beløbet på dit kreditkort, "
+"i det øjeblik du betaler. Selve depositummet bliver kun hævet, hvis vi ved "
 "slutningen af lejemålet registrerer et uheld."
 
 #: eloue/templates/products/partials/message_list.html:44
@@ -3799,6 +3857,13 @@ msgid ""
 "effectuer la location. La location suivante est donc annulée :<br>\n"
 "                           \t"
 msgstr ""
+"\n"
+"\n"
+"                            Hej %(owner_name)s<br><br>\n"
+"\n"
+"                            Desværre har lejeren besluttet sig for ikke at "
+"gennemføre lejemålet. Følgende udlejningen er derfor annulleret:<br>\n"
+"                           \t"
 
 #: eloue/templates/rent/emails/borrower_cancelation_to_owner_email.html:24
 #, python-format
@@ -3834,6 +3899,18 @@ msgid ""
 "\n"
 "L'équipe %(site_name)s\n"
 msgstr ""
+"\n"
+"Hej! %(username)s,\n"
+"\n"
+"Desværre har lejeren besluttet sig for ikke at gennemføre lejen. Følgende "
+"udlejning er derfor annulleret:\n"
+"\n"
+"Type: %(category)s\n"
+"Genstand: %(summary)s\n"
+"Lejeperiodens begyndelse: %(starting_at)s\n"
+"Lejeperiodens varighed: %(duration)s\n"
+"\n"
+"Dit Team %(site_name)s\n"
 
 #: eloue/templates/rent/emails/borrower_closed_email.html:4
 #: eloue/templates/rent/emails/owner_closed_email.html:5
@@ -5073,7 +5150,7 @@ msgstr "Lejers maksimum antal kilometer"
 
 #: products/models.py:429
 msgid "Prix par kilomètres supplémentaires"
-msgstr "Pris pr ektra kilometer"
+msgstr "Pris per ekstra kilometer"
 
 #: products/models.py:429
 msgid ""

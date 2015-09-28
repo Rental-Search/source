@@ -33,10 +33,6 @@ block append content-body
           include ./jade/_product_list
         section.float-comments.framing
           include ./jade/_comments
-        {% cache 43200 'homepage_city_list_static' LANGUAGE_CODE %}
-        section.location-list
-          include ./jade/_location_list
-        {% endcache %}
 
       main
         {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}

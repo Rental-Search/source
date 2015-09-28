@@ -14,4 +14,8 @@
 							a(href="{{ product.url }}") {{ product.summary }}
 						p
 							small {{ product.city|title }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+						{% if product.price %}
 						span.badge.price {{ product.price|currency }} /{% trans "jour" %}
+						{% else %}
+						span.badge.price {% trans "Sur devis" %}
+						{% endif %}

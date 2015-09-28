@@ -42,16 +42,11 @@ block append content-body
       form#detail-search(action="{% facet_url breadcrumbs -'page' %}")
         .row.indent-t-md.product-list-header
           include ../jade/_product_list_article_head
-        if breadcrumbs.categorie.object.header
-            .article-head.indent-t-md.category-description {{ breadcrumbs.categorie.object.header|safe }}
         .row
           aside.col-xs-3
             include ../jade/_product_list_aside
           main.col-xs-9
             include ../jade/_product_list_main
-        if breadcrumbs.categorie.object.footer
-          .category-description {{ breadcrumbs.categorie.object.footer|safe }}
-
     footer
       //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
       section.footer-links: include ../jade/_footer_links
