@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 10:18+0200\n"
+"POT-Creation-Date: 2015-09-29 15:40+0200\n"
 "PO-Revision-Date: 2015-09-25 14:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
@@ -528,7 +528,8 @@ msgstr "Bekræftelse af ny adgangskode"
 msgid "User record is empty."
 msgstr "Brugerposten er tom."
 
-#: accounts/forms.py:181 accounts/serializers.py:183 accounts/tests/api2.py:217
+#: accounts/forms.py:181 accounts/serializers.py:183
+#: accounts/tests/api2.py:217
 msgid "The two password fields didn't match."
 msgstr "Brugernavnet og adgangskoder passer ikke sammen"
 
@@ -978,6 +979,82 @@ msgstr "Engelsk"
 msgid "Danish"
 msgstr ""
 
+#: eloue/urls.py:206 eloue/templates/django_messages/new_message_email.html:17
+#: eloue/templates/rent/emails/comment_email.html:18
+msgid "loueur"
+msgstr "lejere"
+
+#: eloue/urls.py:208 eloue/templates/autovoisin/jade/_nav_home.jade:4
+#: eloue/templates/autovoisin/jade/_nav_home.jade:10
+#: eloue/templates/gosport/jade/_nav_home.jade:4
+#: eloue/templates/gosport/jade/_nav_home.jade:10
+#: eloue/templates/jade/_breadcrumbs.jade:23
+#: eloue/templates/jade/_breadcrumbs.jade:25
+#: eloue/templates/jade/_nav_home.jade:6
+#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:17 products/templatetags/facets.py:72
+msgid "location"
+msgstr "leje"
+
+#: eloue/urls.py:209
+#, fuzzy
+msgid "comment-ca-marche"
+msgstr "Hvordan fungerer det?"
+
+#: eloue/urls.py:210
+#, fuzzy
+msgid "offre-professionnel"
+msgstr "professionel"
+
+#: eloue/urls.py:216
+#, fuzzy
+msgid "nos-partenaires"
+msgstr "Vores partnere"
+
+#: eloue/urls.py:217
+#, fuzzy
+msgid "contactez-nous"
+msgstr "Kontakt os"
+
+#: eloue/urls.py:219
+#, fuzzy
+msgid "qui-sommes-nous"
+msgstr "Hvem er vi?"
+
+#: eloue/urls.py:220
+msgid "securite"
+msgstr ""
+
+#: eloue/urls.py:221
+#, fuzzy
+msgid "conditions-generales-particuliers"
+msgstr "Generelle betingelser (privat)"
+
+#: eloue/urls.py:222
+#, fuzzy
+msgid "conditions-generales-professionnels"
+msgstr "Generelle betingelser (PRO/Erhverv)"
+
+#: eloue/urls.py:223
+#, fuzzy
+msgid "contrat-de-location"
+msgstr "Lejekontrakter"
+
+#: eloue/urls.py:225
+#, fuzzy
+msgid "mentions-legales"
+msgstr "Omtale"
+
+#: eloue/urls.py:227
+#, fuzzy
+msgid "assurance-tranquillite"
+msgstr "Garanteret tilfredshed"
+
+#: eloue/urls.py:228
+#, fuzzy
+msgid "nous-recrutons"
+msgstr "Rekruttering"
+
 #: eloue/views.py:63
 #, python-format
 msgid "No %(verbose_name)s found matching the query"
@@ -1143,6 +1220,7 @@ msgid "Page"
 msgstr "Side"
 
 #: eloue/templates/index.jade:2 eloue/templates/autovoisin/index.jade:2
+#: eloue/templates/dk/index.jade:2
 msgid "Location entre particuliers ou professionnels de tout type d'objet"
 msgstr "Leje mellem privatperson og erhverv ved alle former for genstande"
 
@@ -1584,7 +1662,7 @@ msgstr "Omtale"
 
 #: eloue/templates/autovoisin/insurances/index.jade:1
 #: eloue/templates/insurances/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:42
+#: eloue/templates/jade/_footer_links.jade:27
 msgid "Assurance tranquilité"
 msgstr "Garanteret tilfredshed"
 
@@ -1680,24 +1758,13 @@ msgstr ""
 msgid "Inscription"
 msgstr "Indskrivning"
 
-#: eloue/templates/autovoisin/jade/_nav_home.jade:4
-#: eloue/templates/autovoisin/jade/_nav_home.jade:10
-#: eloue/templates/gosport/jade/_nav_home.jade:4
-#: eloue/templates/gosport/jade/_nav_home.jade:10
-#: eloue/templates/jade/_breadcrumbs.jade:23
-#: eloue/templates/jade/_breadcrumbs.jade:25
-#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
-#: eloue/templates/jade/_nav_home.jade:17
-msgid "location"
-msgstr "leje"
-
 #: eloue/templates/autovoisin/our_partners/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:58
+#: eloue/templates/jade/_footer_links.jade:43
 msgid "Nos partenaires"
 msgstr "Vores partnere"
 
 #: eloue/templates/autovoisin/rental_agreement/_text_content.jade:1
-#: eloue/templates/jade/_footer_links.jade:40
+#: eloue/templates/jade/_footer_links.jade:25
 msgid "Contrats de location"
 msgstr "Lejekontrakter"
 
@@ -1857,7 +1924,7 @@ msgstr "Dette felt er obligatorisk"
 
 #: eloue/templates/django_messages/inbox.html:32
 #: eloue/templates/django_messages/outbox.html:30
-#: eloue/templates/django_messages/trash.html:30 products/models.py:978
+#: eloue/templates/django_messages/trash.html:30 products/models.py:974
 msgid "Subject"
 msgstr "Emne"
 
@@ -1946,11 +2013,6 @@ msgstr ""
 msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
 msgstr ""
 
-#: eloue/templates/django_messages/new_message_email.html:17
-#: eloue/templates/rent/emails/comment_email.html:18
-msgid "loueur"
-msgstr "lejere"
-
 #: eloue/templates/django_messages/new_message_email.html:30
 #, python-format
 msgid ""
@@ -1997,6 +2059,43 @@ msgstr "Beskeder"
 msgid "Reply"
 msgstr ""
 
+#: eloue/templates/dk/jade/_product_list.jade:3
+#: eloue/templates/jade/_product_list.jade:3
+msgid "annonces de location dans toute la France"
+msgstr "Lejeannoncer i hele landet"
+
+#: eloue/templates/dk/jade/_product_list.jade:7
+#: eloue/templates/jade/_product_list.jade:7
+#: eloue/templates/jade/_product_list_main.jade:2
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
+#: eloue/templates/jade/product_details/aside/_similar_listing.jade:16
+#: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
+#: products/choices.py:22 rent/utils.py:78 rent/tests/pricing_compat.py:126
+msgid "jour"
+msgid_plural "jours"
+msgstr[0] "dag"
+msgstr[1] "dage"
+
+#: eloue/templates/dk/jade/_product_list.jade:11
+#: eloue/templates/jade/_nav_home.jade:6
+#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:17
+#: eloue/templates/jade/_porduct_details_title.jade:2
+#: eloue/templates/jade/_product_list.jade:11
+#: eloue/templates/jade/_product_list_article_head.jade:7
+#: eloue/templates/products/product_list.jade:5
+#: eloue/templates/products/product_list.jade:12
+#: eloue/templates/products/subcategory_list.jade:16
+#: eloue/templates/products/subcategory_list.jade:28
+msgid "Location"
+msgstr "Leje"
+
+#: eloue/templates/dk/jade/_product_list.jade:24
+#: eloue/templates/jade/_product_list.jade:24
+#: eloue/templates/products/subcategory_list.jade:34
+msgid "Explorez toutes les annonces de location"
+msgstr "Se samtlige lejeannoncer"
+
 #: eloue/templates/enroll/_text_content.jade:107
 msgid "Vous n'avez pas trouvé le job idéal ?"
 msgstr ""
@@ -2006,7 +2105,7 @@ msgid "Notre partenaire"
 msgstr "Vores partnere"
 
 #: eloue/templates/enroll/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:60
+#: eloue/templates/jade/_footer_links.jade:45
 msgid "Nous recrutons"
 msgstr "Rekruttering"
 
@@ -2040,7 +2139,7 @@ msgid "Comment ça marche"
 msgstr "Hvordan fungerer det?"
 
 #: eloue/templates/imprint/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:74
+#: eloue/templates/jade/_footer_links.jade:59
 msgid "Mentions légales"
 msgstr "Omtale"
 
@@ -2112,40 +2211,40 @@ msgstr "E-loue Pro tilbud"
 msgid "La livraison"
 msgstr "Fragt"
 
-#: eloue/templates/jade/_footer_links.jade:38
+#: eloue/templates/jade/_footer_links.jade:23
 msgid "Pourquoi choisir e-loue ?"
 msgstr "Hvorfor vælge e-loue?"
 
-#: eloue/templates/jade/_footer_links.jade:44
+#: eloue/templates/jade/_footer_links.jade:29
 msgid "Conditions générales particuliers"
 msgstr "Generelle betingelser (privat)"
 
-#: eloue/templates/jade/_footer_links.jade:46
+#: eloue/templates/jade/_footer_links.jade:31
 msgid "Conditions générales professionnels"
 msgstr "Generelle betingelser (PRO/Erhverv)"
 
-#: eloue/templates/jade/_footer_links.jade:54
+#: eloue/templates/jade/_footer_links.jade:39
 msgid "L’entreprise e-loue"
 msgstr "Virksomheden e-loue"
 
-#: eloue/templates/jade/_footer_links.jade:56
+#: eloue/templates/jade/_footer_links.jade:41
 msgid "Qui sommes-nous ?"
 msgstr "Hvem er vi?"
 
-#: eloue/templates/jade/_footer_links.jade:68
+#: eloue/templates/jade/_footer_links.jade:53
 msgid "En savoir plus"
 msgstr "For yderligere information"
 
-#: eloue/templates/jade/_footer_links.jade:70
+#: eloue/templates/jade/_footer_links.jade:55
 msgid "FAQ"
 msgstr ""
 
-#: eloue/templates/jade/_footer_links.jade:72
+#: eloue/templates/jade/_footer_links.jade:57
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:2
 msgid "Contactez-nous"
 msgstr "Kontakt os"
 
-#: eloue/templates/jade/_footer_links.jade:76
+#: eloue/templates/jade/_footer_links.jade:61
 msgid "Blog e-loue"
 msgstr "E-loue blog"
 
@@ -2187,8 +2286,8 @@ msgid ""
 "\"%(subscription_url)s\"><b>offres e-loue Pro</b></a>"
 msgstr ""
 "\n"
-" Er du erhvervsudlejer, se her <a href=\"%(subscription_url)s\"><b>e-loues PRO "
-"tilbud</b></a>"
+" Er du erhvervsudlejer, se her <a href=\"%(subscription_url)s\"><b>e-loues "
+"PRO tilbud</b></a>"
 
 #: eloue/templates/jade/_header_site.jade:17
 #: eloue/templates/jade/_header_site.jade:24
@@ -2267,17 +2366,6 @@ msgstr "Er du ikke medlem af e-loue endnu?"
 #: eloue/templates/jade/_mixins.jade:11
 msgid "verifié"
 msgstr ""
-
-#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
-#: eloue/templates/jade/_porduct_details_title.jade:2
-#: eloue/templates/jade/_product_list.jade:11
-#: eloue/templates/jade/_product_list_article_head.jade:7
-#: eloue/templates/products/product_list.jade:5
-#: eloue/templates/products/product_list.jade:12
-#: eloue/templates/products/subcategory_list.jade:16
-#: eloue/templates/products/subcategory_list.jade:28
-msgid "Location"
-msgstr "Leje"
 
 #: eloue/templates/jade/_nav_home.jade:15
 msgid "Locations"
@@ -2400,7 +2488,7 @@ msgstr "Skriv din annonce på 1 minut"
 msgid "Prix km supp"
 msgstr "Pris per ekstra kilometer"
 
-#: eloue/templates/jade/_pop_up_publish_item.jade:90 products/models.py:448
+#: eloue/templates/jade/_pop_up_publish_item.jade:90 products/models.py:446
 msgid "1er mise en circulation"
 msgstr "Dato for første kørte kilometer"
 
@@ -2413,7 +2501,7 @@ msgid ""
 "\"isAuto\" class=\"form-control\">"
 msgstr ""
 
-#: eloue/templates/jade/_pop_up_publish_item.jade:105 products/models.py:446
+#: eloue/templates/jade/_pop_up_publish_item.jade:105 products/models.py:444
 msgid "CV fiscaux"
 msgstr "hestekræfter"
 
@@ -2483,24 +2571,6 @@ msgstr "Kom ind i butikken"
 msgid "Visitez notre site"
 msgstr "Besøg vores hjemmeside"
 
-#: eloue/templates/jade/_product_list.jade:3
-msgid "annonces de location dans toute la France"
-msgstr "Lejeannoncer i hele landet"
-
-#: eloue/templates/jade/_product_list.jade:7
-#: eloue/templates/jade/_product_list_main.jade:2
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
-#: eloue/templates/jade/product_details/aside/_similar_listing.jade:15
-#: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
-#: products/choices.py:22 rent/utils.py:78 rent/tests/pricing_compat.py:126
-msgid "jour"
-msgstr "dag"
-
-#: eloue/templates/jade/_product_list.jade:24
-#: eloue/templates/products/subcategory_list.jade:34
-msgid "Explorez toutes les annonces de location"
-msgstr "Se samtlige lejeannoncer"
-
 #: eloue/templates/jade/_product_list_article_head.jade:2
 #, python-format
 msgid ""
@@ -2521,7 +2591,7 @@ msgid "Les plus récents"
 msgstr "De nyeste"
 
 #: eloue/templates/jade/_product_list_article_head.jade:14
-#: products/choices.py:171 products/choices.py:178
+#: products/choices.py:172 products/choices.py:179
 msgid "Les plus proches"
 msgstr "De mest nærliggende"
 
@@ -2565,15 +2635,11 @@ msgstr "privatpersoner"
 msgid " Particuliers"
 msgstr "Privatpersoner"
 
-#: eloue/templates/jade/_product_list_aside.jade:50
-msgid "professionnels"
-msgstr "erhversfolk"
-
-#: eloue/templates/jade/_product_list_aside.jade:57
+#: eloue/templates/jade/_product_list_aside.jade:56
 msgid " Professionnels"
 msgstr "Erhvervsfolk"
 
-#: eloue/templates/jade/_product_list_aside.jade:61
+#: eloue/templates/jade/_product_list_aside.jade:60
 msgid "Filtrer"
 msgstr "Filtrér"
 
@@ -2616,7 +2682,8 @@ msgstr ""
 "      <p> e-loue er det første web-sted 100%% tilegnet til erhvervsudlejere. "
 "Vores medlemmer søger alle former for lejemål over hele landet. Landets "
 "største udlejere udviser os tillid, så hvorfor ikke også dig? \n"
-"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">For yderligere oplysninger</a>"
+"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">For "
+"yderligere oplysninger</a>"
 
 #: eloue/templates/jade/_publish_items_categories.jade:3
 msgid "Choisissez une catégorie pour votre annonce"
@@ -2793,7 +2860,8 @@ msgstr ""
 "længere bruger i hverdagen: værktøj, kamera, bil, plæneklipper, video-"
 "projektor, klapvogn... Tjen penge i al simpelhed og uden risiko: vores "
 "tjeneste forsikrer 100%% sikkerhed!\n"
-"        </p><a href=\"%(howto_url)s\" class=\"link-success-color\">For yderligere oplysninger</a>"
+"        </p><a href=\"%(howto_url)s\" class=\"link-success-color\">For "
+"yderligere oplysninger</a>"
 
 #: eloue/templates/jade/_watch_video.jade:31
 msgid "Présentation de e-loue"
@@ -2834,7 +2902,10 @@ msgid ""
 "avant le début de la location. Si vous payez avec une carte bleue qui n'est "
 "pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire "
 "pourra refuser la location."
-msgstr "Du skal fremvise et bankkort i dit eget navn til ejeren, inden du kan begynde lejen. Hvis du betaler med et bankkort, som ikke er i dit eget navn, har ejeren mulighed for at afvise lejemålet."
+msgstr ""
+"Du skal fremvise et bankkort i dit eget navn til ejeren, inden du kan "
+"begynde lejen. Hvis du betaler med et bankkort, som ikke er i dit eget navn, "
+"har ejeren mulighed for at afvise lejemålet."
 
 #: eloue/templates/jade/pop_up_sections/_input_message.jade:3
 msgid "Rédigez votre message ici..."
@@ -3214,6 +3285,11 @@ msgstr "Alle kategorier"
 msgid "Annonces similaires"
 msgstr "Tilsvarende annoncer"
 
+#: eloue/templates/jade/product_details/aside/_similar_listing.jade:17
+#: eloue/templates/products/partials/result_list.html:22
+msgid "Sur devis"
+msgstr "efter tilbud"
+
 #: eloue/templates/jade/product_details/main/_description.jade:2
 msgid "Description"
 msgstr "Produktbeskrivelse"
@@ -3223,42 +3299,42 @@ msgid "Notation"
 msgstr "Betegnelse"
 
 #: eloue/templates/jade/product_details/main/_description.jade:20
-#: products/models.py:416
+#: products/models.py:414
 msgid "marque"
 msgstr "mærke"
 
 #: eloue/templates/jade/product_details/main/_description.jade:25
-#: products/models.py:417
+#: products/models.py:415
 msgid "modèle"
 msgstr "model"
 
 #: eloue/templates/jade/product_details/main/_description.jade:30
-#: products/models.py:420
+#: products/models.py:418
 msgid "nombre de place"
 msgstr "antal pladser"
 
 #: eloue/templates/jade/product_details/main/_description.jade:35
-#: products/models.py:421
+#: products/models.py:419
 msgid "nombre de porte"
 msgstr "antal døre"
 
 #: eloue/templates/jade/product_details/main/_description.jade:40
-#: products/models.py:422
+#: products/models.py:420
 msgid "énergie"
 msgstr "styrke"
 
 #: eloue/templates/jade/product_details/main/_description.jade:45
-#: products/models.py:423
+#: products/models.py:421
 msgid "boite de vitesse"
 msgstr "automatgear"
 
 #: eloue/templates/jade/product_details/main/_description.jade:50
-#: products/models.py:424
+#: products/models.py:422
 msgid "kilométrage"
 msgstr "kilometermål"
 
 #: eloue/templates/jade/product_details/main/_description.jade:55
-#: products/models.py:425
+#: products/models.py:423
 msgid "consommation"
 msgstr "forbrug"
 
@@ -3449,10 +3525,6 @@ msgstr ""
 msgid "Pas encore d'historique pour cette annonce"
 msgstr ""
 
-#: eloue/templates/products/partials/result_list.html:22
-msgid "Sur devis"
-msgstr "efter tilbud"
-
 #: eloue/templates/products/partials/top_ads.html:2
 msgid "Top annonces"
 msgstr "Annoncer"
@@ -3626,7 +3698,7 @@ msgid ""
 "\n"
 "                            Bonjour %(borrower_name)s<br><br>\n"
 "\n"
-"                            Nous avons bien pris en compte votre demande de "
+"                            Nous avons bien pris en coe votre demande de "
 "réservation et venons d’informer le propriétaire de votre proposition.<br>\n"
 "\n"
 "                            Voici donc les différents éléments qui lui ont "
@@ -4807,7 +4879,7 @@ msgstr "Fragt"
 msgid "Conditions Générales Professionnel"
 msgstr "Generelle betingelser (PRO/Erhverv)"
 
-#: payments/paybox_payment.py:37
+#: payments/paybox_payment.py:43
 #, python-brace-format
 msgid "PayboxError with code {0} and message \"{1}\""
 msgstr "Paybox fejl med kode {0} og meddelelse \"{1}\""
@@ -4826,7 +4898,9 @@ msgstr "Alle brugere"
 
 #: products/choices.py:17 rent/utils.py:79 rent/tests/pricing_compat.py:121
 msgid "heure"
-msgstr "time"
+msgid_plural "heures"
+msgstr[0] "time"
+msgstr[1] "timer"
 
 #: products/choices.py:18 rent/tests/pricing_compat.py:122
 msgid "1 heure"
@@ -4847,7 +4921,9 @@ msgstr "1 weekend"
 #: products/choices.py:32 rent/utils.py:77 rent/tests/pricing_compat.py:136
 #: rent/tests/pricing_compat.py:206 rent/tests/pricing_compat.py:214
 msgid "semaine"
-msgstr "uge"
+msgid_plural "semaines"
+msgstr[0] "uge"
+msgstr[1] "uger"
 
 #: products/choices.py:33 rent/tests/pricing_compat.py:137
 #: rent/tests/pricing_compat.py:207 rent/tests/pricing_compat.py:215
@@ -4864,7 +4940,9 @@ msgstr "2 uger"
 
 #: products/choices.py:42 rent/utils.py:76 rent/tests/pricing_compat.py:146
 msgid "mois"
-msgstr "måned"
+msgid_plural "mois"
+msgstr[0] "måned"
+msgstr[1] "måned"
 
 #: products/choices.py:43 rent/tests/pricing_compat.py:147
 msgid "1 mois"
@@ -4887,208 +4965,212 @@ msgid "15 jours"
 msgstr "15 dage"
 
 #: products/choices.py:61
+msgid "kr."
+msgstr ""
+
+#: products/choices.py:62
 msgid "$"
 msgstr "$"
 
-#: products/choices.py:62
+#: products/choices.py:63
 msgid "£"
 msgstr "£"
 
-#: products/choices.py:63
+#: products/choices.py:64
 msgid "¥"
 msgstr "¥"
 
-#: products/choices.py:64
+#: products/choices.py:65
 msgid "F"
 msgstr "F"
 
-#: products/choices.py:68
+#: products/choices.py:69
 msgid "brouillon"
 msgstr "kladde"
 
-#: products/choices.py:69
+#: products/choices.py:70
 msgid "privé"
 msgstr "privat"
 
-#: products/choices.py:70
+#: products/choices.py:71
 msgid "public"
 msgstr "offentligt"
 
-#: products/choices.py:71
+#: products/choices.py:72
 msgid "supprimé"
 msgstr "slettet"
 
-#: products/choices.py:75
+#: products/choices.py:76
 msgid "Le locataire me paye directement et mon objet n'est pas assuré"
 msgstr "Lejer betaler mig direkte, og min genstand er ikke forsikret"
 
-#: products/choices.py:76
+#: products/choices.py:77
 msgid "Le locataire paye en ligne et mon objet est assuré"
 msgstr "Lejer betaler via nettet, og min genstand er forsikret"
 
-#: products/choices.py:77
+#: products/choices.py:78
 msgid ""
 "Le locataire paye en ligne par son carte bancaire et mon objet est assuré"
 msgstr "Lejer betaler med kreditkort via nettet, og min genstand er forsikret"
 
-#: products/choices.py:81 products/choices.py:93 products/choices.py:101
-#: products/choices.py:142
+#: products/choices.py:82 products/choices.py:94 products/choices.py:102
+#: products/choices.py:143
 msgid "2"
 msgstr "2"
 
-#: products/choices.py:82 products/choices.py:94 products/choices.py:102
-#: products/choices.py:143
+#: products/choices.py:83 products/choices.py:95 products/choices.py:103
+#: products/choices.py:144
 msgid "3"
 msgstr "3"
 
-#: products/choices.py:83 products/choices.py:95 products/choices.py:103
-#: products/choices.py:144
+#: products/choices.py:84 products/choices.py:96 products/choices.py:104
+#: products/choices.py:145
 msgid "4"
 msgstr "4"
 
-#: products/choices.py:84 products/choices.py:96 products/choices.py:104
-#: products/choices.py:145
+#: products/choices.py:85 products/choices.py:97 products/choices.py:105
+#: products/choices.py:146
 msgid "5"
 msgstr "5"
 
-#: products/choices.py:85 products/choices.py:97 products/choices.py:105
-#: products/choices.py:146
+#: products/choices.py:86 products/choices.py:98 products/choices.py:106
+#: products/choices.py:147
 msgid "6"
 msgstr "6"
 
-#: products/choices.py:86 products/choices.py:106 products/choices.py:147
+#: products/choices.py:87 products/choices.py:107 products/choices.py:148
 msgid "7"
 msgstr "7"
 
-#: products/choices.py:87 products/choices.py:107 products/choices.py:148
+#: products/choices.py:88 products/choices.py:108 products/choices.py:149
 msgid "8"
 msgstr "8"
 
-#: products/choices.py:88 products/choices.py:108 products/choices.py:149
+#: products/choices.py:89 products/choices.py:109 products/choices.py:150
 msgid "9"
 msgstr "9"
 
-#: products/choices.py:89 products/choices.py:109 products/choices.py:150
+#: products/choices.py:90 products/choices.py:110 products/choices.py:151
 msgid "10"
 msgstr "10"
 
-#: products/choices.py:110 products/choices.py:151
+#: products/choices.py:111 products/choices.py:152
 msgid "11"
 msgstr "11"
 
-#: products/choices.py:111 products/choices.py:152
+#: products/choices.py:112 products/choices.py:153
 msgid "12"
 msgstr "12"
 
-#: products/choices.py:112 products/choices.py:153
+#: products/choices.py:113 products/choices.py:154
 msgid "13"
 msgstr "13"
 
-#: products/choices.py:113 products/choices.py:154
+#: products/choices.py:114 products/choices.py:155
 msgid "14"
 msgstr "14"
 
-#: products/choices.py:114 products/choices.py:155
+#: products/choices.py:115 products/choices.py:156
 msgid "15"
 msgstr "15"
 
-#: products/choices.py:115 products/choices.py:156
+#: products/choices.py:116 products/choices.py:157
 msgid "16"
 msgstr "16"
 
-#: products/choices.py:116 products/choices.py:157
+#: products/choices.py:117 products/choices.py:158
 msgid "17"
 msgstr "17"
 
-#: products/choices.py:117 products/choices.py:158
+#: products/choices.py:118 products/choices.py:159
 msgid "18"
 msgstr "18"
 
-#: products/choices.py:118
+#: products/choices.py:119
 msgid "19"
 msgstr "19"
 
-#: products/choices.py:122
+#: products/choices.py:123
 msgid "Essence"
 msgstr "Benzin"
 
-#: products/choices.py:123
+#: products/choices.py:124
 msgid "Diesel"
 msgstr "Diesel"
 
-#: products/choices.py:124
+#: products/choices.py:125
 msgid "GPL"
 msgstr "GPL"
 
-#: products/choices.py:125
+#: products/choices.py:126
 msgid "Electrique"
 msgstr "Elektrisk"
 
-#: products/choices.py:126
+#: products/choices.py:127
 msgid "Hybride"
 msgstr "Hybrid"
 
-#: products/choices.py:130
+#: products/choices.py:131
 msgid "Manuel"
 msgstr "Manuel"
 
-#: products/choices.py:131
+#: products/choices.py:132
 msgid "Automatique"
 msgstr "Automatisk"
 
-#: products/choices.py:135
+#: products/choices.py:136
 msgid "- de 10000 km"
 msgstr "-fra 10000 km"
 
-#: products/choices.py:136
+#: products/choices.py:137
 msgid "Entre 10001 et 50000 km"
 msgstr "Mellem 10001 og 50000 km"
 
-#: products/choices.py:137
+#: products/choices.py:138
 msgid "Plus de 50000 km"
 msgstr "Mere end 50000 km"
 
-#: products/choices.py:141
+#: products/choices.py:142
 msgid "1"
 msgstr "1"
 
-#: products/choices.py:159
+#: products/choices.py:160
 msgid "19+"
 msgstr "19"
 
-#: products/choices.py:165
+#: products/choices.py:166
 msgid "Appartement/Maison"
 msgstr "Lejlighed/hus"
 
-#: products/choices.py:166
+#: products/choices.py:167
 msgid "Chambre partagé"
 msgstr "Fællesværelse"
 
-#: products/choices.py:167
+#: products/choices.py:168
 msgid "Chambre privée"
 msgstr "Enkeltværelse"
 
-#: products/choices.py:172 products/choices.py:179
+#: products/choices.py:173 products/choices.py:180
 msgid "Les plus récentes"
 msgstr "De nyeste"
 
-#: products/choices.py:173 products/choices.py:180
+#: products/choices.py:174 products/choices.py:181
 msgid "Les pris les plus bas"
 msgstr "De billigste priser"
 
-#: products/choices.py:174 products/choices.py:181
+#: products/choices.py:175 products/choices.py:182
 msgid "Les pris les plus haut"
 msgstr "De dyreste priser"
 
-#: products/choices.py:182 products/choices.py:183
+#: products/choices.py:183 products/choices.py:184
 msgid "Les ..."
 msgstr "De..."
 
-#: products/choices.py:187
+#: products/choices.py:188
 msgid "Location Automobile"
 msgstr "Billeje"
 
-#: products/choices.py:188
+#: products/choices.py:189
 msgid "Location saisonnière"
 msgstr "Sæsonlejemål"
 
@@ -5140,19 +5222,19 @@ msgstr "Betalingstype"
 msgid "product"
 msgstr "produkt"
 
-#: products/models.py:428
+#: products/models.py:426
 msgid "kilomètres inclus/jour"
 msgstr "Inkluderede kilometre pr dag"
 
-#: products/models.py:428
+#: products/models.py:426
 msgid "Nombre de kilomètres maximum que le locataire peut effectuer par jour."
 msgstr "Lejers maksimum antal kilometer"
 
-#: products/models.py:429
+#: products/models.py:427
 msgid "Prix par kilomètres supplémentaires"
 msgstr "Pris per ekstra kilometer"
 
-#: products/models.py:429
+#: products/models.py:427
 msgid ""
 "Prix du kilomètre supplémentaire. Si le locataire dépasse le nombre de "
 "kilomètre inclus par jour."
@@ -5160,204 +5242,204 @@ msgstr ""
 "Pris pr ekstra kilometer, hvis lejer overskrider inkluderede kilometer pr "
 "dag."
 
-#: products/models.py:432
+#: products/models.py:430
 msgid "climatisation"
 msgstr "air condition"
 
-#: products/models.py:433
+#: products/models.py:431
 msgid "direction assistée"
 msgstr "servostyring"
 
-#: products/models.py:434
+#: products/models.py:432
 msgid "régulateur de vitesse"
 msgstr "Hastighedsregulation"
 
-#: products/models.py:435
+#: products/models.py:433
 msgid "GPS"
 msgstr "GPS"
 
-#: products/models.py:436
+#: products/models.py:434
 msgid "siège bébé"
 msgstr "barnestol"
 
-#: products/models.py:437
+#: products/models.py:435
 msgid "coffre de toit"
 msgstr "tagbagage"
 
-#: products/models.py:438
+#: products/models.py:436
 msgid "porte-vélo"
 msgstr "cykelanhænger"
 
-#: products/models.py:439
+#: products/models.py:437
 msgid "pneus neige"
 msgstr "vinterdæk"
 
-#: products/models.py:440
+#: products/models.py:438
 msgid "chaines"
 msgstr "snekæder"
 
-#: products/models.py:441
+#: products/models.py:439
 msgid "porte-skis"
 msgstr "skiboks"
 
-#: products/models.py:442
+#: products/models.py:440
 msgid "lecteur CD"
 msgstr "CD afspiller"
 
-#: products/models.py:443
+#: products/models.py:441
 msgid "entrée audio/iPod"
 msgstr "indgang til iPod "
 
-#: products/models.py:447
+#: products/models.py:445
 msgid "N° d'immatriculation"
 msgstr "Indregistringsnummer"
 
-#: products/models.py:521
+#: products/models.py:519
 msgid "capacité"
 msgstr "kapacitet"
 
-#: products/models.py:521
+#: products/models.py:519
 msgid "Nombre de personne que peux accueillir votre locgement"
 msgstr "Antal tilladte personer i boligen"
 
-#: products/models.py:522
+#: products/models.py:520
 msgid "Type de logement"
 msgstr "Boligtype"
 
-#: products/models.py:524
+#: products/models.py:522
 msgid "nombre de chambre"
 msgstr "antal værelser"
 
-#: products/models.py:525
+#: products/models.py:523
 msgid "Règles d'utilisation"
 msgstr "Husregler"
 
-#: products/models.py:528
+#: products/models.py:526
 msgid "air conditionné"
 msgstr "air condition"
 
-#: products/models.py:529
+#: products/models.py:527
 msgid "petit déjeuner"
 msgstr "morgenmad"
 
-#: products/models.py:530
+#: products/models.py:528
 msgid "balcon/terasse"
 msgstr "Balcon/terrasse"
 
-#: products/models.py:531
+#: products/models.py:529
 msgid "chambre avec serrure"
 msgstr "aflåst værelse"
 
-#: products/models.py:532
+#: products/models.py:530
 msgid "serviettes"
 msgstr "håndklæder"
 
-#: products/models.py:533
+#: products/models.py:531
 msgid "ascenseur dans l'immeuble"
 msgstr "elevator i bygningen"
 
-#: products/models.py:534
+#: products/models.py:532
 msgid "adapté aux familles/enfants"
 msgstr "familie/børne venlig"
 
-#: products/models.py:535
+#: products/models.py:533
 msgid "salle de sport"
 msgstr "træningsrum"
 
-#: products/models.py:536
+#: products/models.py:534
 msgid "accessible aux personnes handicapées"
 msgstr "handicapvenlig"
 
-#: products/models.py:537
+#: products/models.py:535
 msgid "chauffage"
 msgstr "varme"
 
-#: products/models.py:538
+#: products/models.py:536
 msgid "jacuzzi"
 msgstr "jacuzzi"
 
-#: products/models.py:539
+#: products/models.py:537
 msgid "cheminée intérieure"
 msgstr "pejs"
 
-#: products/models.py:540
+#: products/models.py:538
 msgid "accès internet"
 msgstr "internet adgang"
 
-#: products/models.py:541
+#: products/models.py:539
 msgid "cuisine"
 msgstr "køkken [ slug ]"
 
-#: products/models.py:542
+#: products/models.py:540
 msgid "parking"
 msgstr "parkering"
 
-#: products/models.py:543
+#: products/models.py:541
 msgid "fumeurs acceptées"
 msgstr "rygning tilladt"
 
-#: products/models.py:544
+#: products/models.py:542
 msgid "idéal pour des évènements"
 msgstr "ideal til afholdelse af sammenkomster"
 
-#: products/models.py:545
+#: products/models.py:543
 msgid "TV"
 msgstr "Tv"
 
-#: products/models.py:546
+#: products/models.py:544
 msgid "machine à laver"
 msgstr "vaskemaskine"
 
-#: products/models.py:547
+#: products/models.py:545
 msgid "sèche linge"
 msgstr "tørretumbler"
 
-#: products/models.py:548
+#: products/models.py:546
 msgid "ordinateur avec Internet"
 msgstr "computer med internet adgang"
 
-#: products/models.py:695
+#: products/models.py:693
 msgid "category"
 msgstr "kategori"
 
-#: products/models.py:696
+#: products/models.py:694
 msgid "categories"
 msgstr "kategorier"
 
-#: products/models.py:710
+#: products/models.py:708
 #, python-format
 msgid "Category with name %s (%s) already exists. Site_id is %d."
 msgstr "Kategori med navnet %s (%s) findes allerede. Site_id er %d."
 
-#: products/models.py:768
+#: products/models.py:766
 msgid "properties"
 msgstr "egenskaber"
 
-#: products/models.py:825
+#: products/models.py:823
 msgid "Le prix ne peut pas être négatif"
 msgstr "Prisen må ikke være negativ"
 
-#: products/models.py:879
+#: products/models.py:875
 msgid "Score can't be higher than 1"
 msgstr "Scoren kan ikke være højere end 1"
 
-#: products/models.py:881
+#: products/models.py:877
 msgid "Score can't be a negative value"
 msgstr "Scoren kan ikke være af negativ værdi"
 
-#: products/models.py:890
+#: products/models.py:886
 msgid "Vous ne pouvez pas commenter vos propres locations"
 msgstr "Du kan ikke kommentere din egne lejemål"
 
-#: products/models.py:892
+#: products/models.py:888
 msgid "Vous ne pouvez pas commenter un produit que vous n'avez pas loué"
 msgstr "Du kan ikke kommentere en genstand, du ikke har lejet"
 
-#: products/models.py:902
+#: products/models.py:898
 msgid "Vous ne pouvez pas commenter votre profil"
 msgstr "Du kan ikke kommentere din egen profil"
 
-#: products/models.py:904
+#: products/models.py:900
 msgid ""
 "Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
 "effectué de réservations"
@@ -5365,7 +5447,7 @@ msgstr ""
 "Du kan ikke kommentere en lejerprofil, ved hvilken du aldrig har foretaget "
 "reservationer"
 
-#: products/models.py:979 products/models.py:980
+#: products/models.py:975 products/models.py:976
 msgid "Archived"
 msgstr "Arkiveret"
 
@@ -5388,6 +5470,10 @@ msgstr "Et lejemål kan ikke afsluttes, før det er trådt i kraft"
 #: products/serializers.py:358
 msgid "HyperlinkedByIdField requires 'source' argument"
 msgstr "HyperlinkedByIdField kræver 'kilde' argument"
+
+#: products/urls.py:14 products/views.py:232
+msgid "categorie"
+msgstr "kategori"
 
 #: products/urls.py:15
 msgid "deposer"
@@ -5424,10 +5510,6 @@ msgstr "Antal tilgængelig i denne periode: %s"
 #: products/views.py:227
 msgid "par-"
 msgstr "via-"
-
-#: products/views.py:232
-msgid "categorie"
-msgstr "kategori"
 
 #: products/views.py:243 products/views.py:246 products/views.py:254
 msgid "page"
@@ -5613,19 +5695,19 @@ msgstr ""
 msgid "année"
 msgid_plural "années"
 msgstr[0] "år"
-msgstr[1] ""
+msgstr[1] "år"
 
 #: rent/utils.py:80 rent/utils.py:100
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minut"
-msgstr[1] ""
+msgstr[1] "minuts"
 
 #: rent/utils.py:81
 msgid "seconde"
 msgid_plural "secondes"
 msgstr[0] "sekund"
-msgstr[1] ""
+msgstr[1] "sekunds"
 
 #: rent/utils.py:135
 msgid "milliard"
@@ -5786,6 +5868,9 @@ msgstr ""
 #: shipping/serializers.py:114
 msgid "Latitude\\longitude or address are required"
 msgstr "Latitude\\longitude eller adresse er påkrævet"
+
+#~ msgid "professionnels"
+#~ msgstr "erhversfolk"
 
 #~ msgid "Important dates"
 #~ msgstr "Vigtige datoer"

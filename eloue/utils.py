@@ -139,6 +139,24 @@ def convert_to_xpf(value):
     amount = value / D(settings.XPF_EXCHANGE_RATE)
     return amount.quantize(D("0.00"), rounding=ROUND_UP)
 
+def convert(value, base_currency, currency):
+    rates = {
+        'EUR:DKK': D("7.46"),
+        'DKK:EUR': D("0.13"),
+        'EUR:XPF': D("119.24"),
+        'XPF:EUR': D("0.0084")
+    }
+
+    rate = "%s:%s" % (currency, base_currency)
+    
+    try:
+        rate_value = rates[rate]
+        amount = D(value*rate_value)
+        return amount.quantize(D("0.00"), rounding=ROUND_UP)
+    except:
+        return value
+        
+
 
 class Enum(object):
     """

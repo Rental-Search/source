@@ -45,7 +45,7 @@ from rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGe
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites
 from eloue import signals as eloue_signals
-from eloue.utils import currency, create_alternative_email, itertools_accumulate, convert_from_xpf, convert_to_xpf
+from eloue.utils import currency, create_alternative_email, itertools_accumulate, convert
 
 
 import copy
@@ -172,10 +172,8 @@ class Product(models.Model):
         if self.daily_price:
             if self.daily_price.currency == DEFAULT_CURRENCY:
                 return self.deposit_amount
-            if self.daily_price.currency == 'XPF':
-                return convert_from_xpf(self.deposit_amount.amount)
             else:
-                return convert_to_xpf(self.deposit_amount)
+                return convert(self.deposit_amount, DEFAULT_CURRENCY, self.daily_price.currency)
         else:
             return self.deposit_amount 
 
@@ -738,9 +736,9 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
         if ancestors_slug:
-            return u"/location/%(ancestors_slug)s/%(slug)s/" % {'ancestors_slug': ancestors_slug, 'slug': self.slug }
+            return u"/%(location)s/%(ancestors_slug)s/%(slug)s/" % {'location': _('location'), 'ancestors_slug': ancestors_slug, 'slug': self.slug }
         else:
-            return u"/location/%(slug)s/" % {'slug': self.slug}
+            return u"/%(location)s/%(slug)s/" % {'location': _('location'), 'slug': self.slug}
 
 class Product2Category(models.Model):
     product = models.ForeignKey('Product')
@@ -841,10 +839,8 @@ class Price(models.Model):
         # XXX: ugly and not very well tested hack
         if self.currency == DEFAULT_CURRENCY:
             return self.amount
-        if self.currency == 'XPF':
-            return convert_from_xpf(self.amount)
         else:
-            return convert_to_xpf(self.amount)
+            return convert(self.amount, DEFAULT_CURRENCY, self.currency)
 
     def get_prefixed_unit_display(self):
         return UNIT.prefixed[self.unit]
