@@ -126,5 +126,5 @@ def new_message_email(sender, instance, created, **kwargs):
             print "NOTIFICATION"
             register(settings.PARSE_APPLICATION_ID, settings.PARSE_REST_API_KEY)
             unread_count = instance.recipient.received_messages.filter(read_at=None).count()
-            Push.alert({"alert": "Vous avez reçu un nouveau message", "type": "MSG_NEW", "user_id": instance.recipient.pk, "count": unread_count}, where={"deviceToken": instance.recipient.device_token})
+            Push.alert({"alert": "Vous avez reçu un nouveau message", "type": "MSG_NEW", "user_id": instance.recipient.pk, "count": unread_count, "badge": unread_count, "sound": "default"}, where={"deviceToken": instance.recipient.device_token})
 
