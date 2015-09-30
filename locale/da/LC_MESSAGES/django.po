@@ -997,61 +997,50 @@ msgid "location"
 msgstr "leje"
 
 #: eloue/urls.py:209
-#, fuzzy
 msgid "comment-ca-marche"
-msgstr "Hvordan fungerer det?"
+msgstr "Hvordan-fungerer-det?"
 
 #: eloue/urls.py:210
-#, fuzzy
 msgid "offre-professionnel"
 msgstr "professionel"
 
 #: eloue/urls.py:216
-#, fuzzy
 msgid "nos-partenaires"
-msgstr "Vores partnere"
+msgstr "Vores-partnere"
 
 #: eloue/urls.py:217
-#, fuzzy
 msgid "contactez-nous"
-msgstr "Kontakt os"
+msgstr "Kontakt-os"
 
 #: eloue/urls.py:219
-#, fuzzy
 msgid "qui-sommes-nous"
-msgstr "Hvem er vi?"
+msgstr "Hvem-er-vi?"
 
 #: eloue/urls.py:220
 msgid "securite"
 msgstr ""
 
 #: eloue/urls.py:221
-#, fuzzy
 msgid "conditions-generales-particuliers"
-msgstr "Generelle betingelser (privat)"
+msgstr "Generelle-betingelser-privat"
 
 #: eloue/urls.py:222
-#, fuzzy
 msgid "conditions-generales-professionnels"
-msgstr "Generelle betingelser (PRO/Erhverv)"
+msgstr "Generelle-betingelser-PRO-Erhverv"
 
 #: eloue/urls.py:223
-#, fuzzy
 msgid "contrat-de-location"
 msgstr "Lejekontrakter"
 
 #: eloue/urls.py:225
-#, fuzzy
 msgid "mentions-legales"
 msgstr "Omtale"
 
 #: eloue/urls.py:227
-#, fuzzy
 msgid "assurance-tranquillite"
-msgstr "Garanteret tilfredshed"
+msgstr "Garanteret-tilfredshed"
 
 #: eloue/urls.py:228
-#, fuzzy
 msgid "nous-recrutons"
 msgstr "Rekruttering"
 

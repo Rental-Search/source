@@ -16,7 +16,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 
 		try:
-			xlsx = urllib2.urlopen("http://eloue.s3.amazonaws.com/categories.xls")
+			xlsx = urllib2.urlopen(args[0])
 		except:
 			print "Impossible to download the file"
 
@@ -29,8 +29,23 @@ class Command(BaseCommand):
 				try:
 					category_row = dict(zip(header, next_row(sheet, row)))
 					category = Category.objects.get(pk=int(float(category_row['id'])))
-					category.name_da = category_row['name_da']
-					category.save()
+					if not category.name_da == category_row['name_da']:
+						category.name_da = category_row['name_da']
+						slug_da = slugify(category.name_da)
+						category.slug_da=slug_da
+
+						#Detect if the slug is unique or not...
+						if Category.objects.filter(slug_da=slug_da).exists():
+							try:
+								number = int(slug_da.split("-")[-1])
+								category.slug_da = "%s-%s" % (slug_da, number+1)
+							except:
+								category.slug_da = "%s-1" % (slug_da)
+						else:
+							category.slug_da=slug_da
+
+						category.save()
+
 				except Exception,e:
 					print e
 					break
