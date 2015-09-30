@@ -32,7 +32,6 @@ class Command(BaseCommand):
 					if not category.name_da == category_row['name_da']:
 						category.name_da = category_row['name_da']
 						slug_da = slugify(category.name_da)
-						category.slug_da=slug_da
 
 						#Detect if the slug is unique or not...
 						if Category.objects.filter(slug_da=slug_da).exists():
