@@ -250,7 +250,7 @@ class ContactView(View):
             if subject and message and sender:
                 try:
                     sujet = "Formulaire de contact : %s" % (subject)
-                    send_mail(sujet, message, sender, recipients)
+                    send_mail(sujet, "Email de contact : %s\n\nMessage :\n%s" %(sender, message), "contact@e-loue.com", recipients)
                 except BadHeaderError:
                     messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
                     return render(request, self.template_name, {'form': form, 'tag' : "error"})
