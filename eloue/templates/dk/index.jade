@@ -31,9 +31,6 @@ block append content-body
         {% endcache %}
         section.product-list
           include ./jade/_product_list
-        section.float-comments.framing
-          include ./jade/_comments
-
       main
         {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
         section.watch-video: include ./jade/_watch_video
