@@ -1,6 +1,6 @@
 -load i18n
 
-h3 Location {{ product.summary }} - {{ product.city|title }}
+h3 {% trans "Location" %} {{ product.summary }} - {{ product.city|title }}
 {% if product_type != 'product' %}
 ul.breadcrumb
   {% if product_type == 'carproduct' %}

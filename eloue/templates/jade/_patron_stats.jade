@@ -1,23 +1,24 @@
+-load i18n
+
 {% if stats %}
 li
   span
     big.text-success {{ stats.products_count }}&nbsp;
-  span annonces publiées
+  span {% trans "annonces publiées" %}
 li
   span
     big.text-success {{ stats.bookings_count }}&nbsp;
-  span locations effectués
+  span {% trans "locations effectués" %}
 li
   span
     big.text-success {{ stats.ratings_count }}&nbsp;
-  span évaluations
+  span {% trans "évaluations" %}
 li
   span
     big.text-success {{ stats.response_rate|floatformat:"0" }}%&nbsp;
-  span de taux de réponse
+  span {% trans "de taux de réponse" %}
 li
   span
     big.text-success {{ stats.response_time }}&nbsp;
-  span de temps de réponse en moyenne
+  span {% trans "de temps de réponse en moyenne" %}
 {% endif %}
-

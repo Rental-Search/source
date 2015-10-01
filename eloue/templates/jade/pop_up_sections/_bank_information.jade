@@ -1,7 +1,9 @@
-h2 Vos informations bancaires
+-load i18n
+
+h2 {% trans "Vos informations bancaires" %}
 .row
     .col-sm-8.card
-        input(type="text", name="card_number", placeholder="Numéro de carte *", ng-model="creditCard.card_number", ng-required="newCreditCard", ng-show="newCreditCard").form-control
+        input(type="text", name="card_number", placeholder="{% trans 'Numéro de carte *' %}", ng-model="creditCard.card_number", ng-required="newCreditCard", ng-show="newCreditCard").form-control
         span.text-danger(ng-show="bookingForm.card_number.$error.required && bookingSubmitted", translate="required_field")
         span.text-danger(eloue-form-field-message, field-name="card_number")
             {% verbatim %}
@@ -10,21 +12,21 @@ h2 Vos informations bancaires
         input(type="text", name="masked_number", disabled, ng-model="creditCard.masked_number", ng-show="!newCreditCard").form-control
         i.flaticon.stroke.credit-card
     .col-sm-4(style="z-index: 1050")
-        input(type="text", name="expires", placeholder="MM/AA *", ng-model="creditCard.expires", ng-required="newCreditCard", eloue-datepicker-month, ng-disabled="!newCreditCard").form-control
+        input(type="text", name="expires", placeholder="{% trans 'MM/AA *' %}", ng-model="creditCard.expires", ng-required="newCreditCard", eloue-datepicker-month, ng-disabled="!newCreditCard").form-control
         i.flaticon.stroke.calendar-4
         span.text-danger(ng-show="bookingForm.expires.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-if="newCreditCard")
     .col-sm-5
-        input(type="text", name="cvv", placeholder="Code de sécurité *", ng-model="creditCard.cvv", ng-required="newCreditCard").form-control
+        input(type="text", name="cvv", placeholder="{% trans 'Code de sécurité *' %}'", ng-model="creditCard.cvv", ng-required="newCreditCard").form-control
         i.flaticon.stroke.lock-3
         span.text-danger(ng-show="bookingForm.cvv.$error.required && bookingSubmitted", translate="required_field")
     .col-sm-7
-        input(type="text", name="holder_name", placeholder="Nom et prénom du titulaire *", ng-model="creditCard.holder_name", ng-required="newCreditCard").form-control
+        input(type="text", name="holder_name", placeholder="{% trans 'Nom et prénom du titulaire *' %}'", ng-model="creditCard.holder_name", ng-required="newCreditCard").form-control
         i.flaticon.stroke.user-4
         span.text-danger(ng-show="bookingForm.holder_name.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-if="!newCreditCard")
     .col-sm-12
-        input(type="text", name="holder_name", placeholder="Nom et prénom du titulaire *", disabled, ng-model="creditCard.holder_name").form-control
+        input(type="text", name="holder_name", placeholder="{% trans 'Nom et prénom du titulaire *' %}", disabled, ng-model="creditCard.holder_name").form-control
         i.flaticon.stroke.user-4
         span.text-danger(ng-show="bookingForm.holder_name.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-show="newCreditCard")
@@ -33,15 +35,14 @@ h2 Vos informations bancaires
             label(for="show-save-card")
                 input(type="checkbox", name="showSaveCard", ng-model="showSaveCard")#show-save-card
                 span.flaticon.stroke.checkmark
-            | Conserver mes coordonnées bancaires
+            {% trans "Conserver mes coordonnées bancaires" %}
 .row(ng-show="!newCreditCard")
     .col-sm-5
     .col-sm-7
-        a(href="#", ng-click="clearCreditCard()").text-success.pull-right Modifier mes coordonnées bancaires
-p.info Vous devrez présenter une carte de paiement à votre nom, au propriétaire, avant le début de la location. Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire pourra refuser la location.
+        a(href="#", ng-click="clearCreditCard()").text-success.pull-right {% trans "Modifier mes coordonnées bancaires" %}
+p.info {% trans "Vous devrez présenter une carte de paiement à votre nom, au propriétaire, avant le début de la location. Si vous payez avec une carte bleue qui n'est pas à votre nom (ou une carte virtuelle, e-carte bleue), le propriétaire pourra refuser la location." %}
 {% verbatim %}
 span.text-danger(eloue-form-field-message, field-name="product") {{value}}
 span.text-danger.payment-error(eloue-general-form-message)
 .col-sm-8.col-sm-offset-2: button(type="submit", ng-disabled="shippingPointsRequestInProgress", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success.indent-t Réservez
 {% endverbatim %}
-

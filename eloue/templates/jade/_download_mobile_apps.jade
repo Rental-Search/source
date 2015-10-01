@@ -1,9 +1,9 @@
--load staticfiles
+-load staticfiles i18n
 
 .container
 	.row
 		.col-sm-9
-			h3 Les bonnes affaires e-loue, c'est (aussi) dans la poche
-			p Retrouvez toutes les fonctionnalités que vous aimez sur iPhone, iPad et Android.
+			h3 {% trans "Les bonnes affaires e-loue, c'est (aussi) dans la poche" %}
+			p {% trans "Retrouvez toutes les fonctionnalités que vous aimez sur iPhone, iPad et Android." %}
 			a(href = "https://play.google.com/store/apps/details?id=com.eloue.appandroid", target = "_blank"): img(src="{% static 'img/btn-google-play.png' %}")
 			a(href = "https://itunes.apple.com/fr/app/e-loue/id427538545?mt=8", target = "_blank"): img(src="{% static 'img/btn-app-store.png' %}")

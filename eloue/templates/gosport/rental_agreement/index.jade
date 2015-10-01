@@ -1,6 +1,10 @@
 extends ../base
 -load compressed
+-load compressed staticfiles i18n
 
+block append title
+  {% trans "Contrats de Location" %}
+  
 block append styles
     {% compressed_css "bootstrap" %}
     {% compressed_css "security_styles" %}

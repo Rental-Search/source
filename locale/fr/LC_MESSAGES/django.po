@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-06 10:49+0100\n"
+"POT-Creation-Date: 2015-08-28 15:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,49 +18,73 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: accounts/admin.py:37 accounts/admin.py:48
+#: accounts/admin.py:45 accounts/admin.py:56
 msgid "Personal info"
 msgstr ""
 
-#: accounts/admin.py:38 accounts/admin.py:49
+#: accounts/admin.py:46 accounts/admin.py:57
 msgid "Company info"
 msgstr ""
 
-#: accounts/admin.py:39 accounts/admin.py:50
+#: accounts/admin.py:47 accounts/admin.py:58
 msgid "Permissions"
 msgstr ""
 
-#: accounts/admin.py:40
+#: accounts/admin.py:48
 msgid "Important dates"
 msgstr ""
 
-#: accounts/admin.py:42
+#: accounts/admin.py:50
 msgid "Paypal"
 msgstr ""
 
-#: accounts/admin.py:43
+#: accounts/admin.py:51
 msgid "Groups"
 msgstr ""
 
-#: accounts/admin.py:76
+#: accounts/admin.py:91
 msgid "Exporter en csv"
 msgstr ""
 
-#: accounts/admin.py:86
+#: accounts/admin.py:101
 msgid "Envoyer à nouveau l'email d'activation"
 msgstr ""
 
-#: accounts/admin.py:96
+#: accounts/admin.py:109
+msgid "Indexer les produits"
+msgstr ""
+
+#: accounts/admin.py:117
+msgid "Désindexer les produits"
+msgstr ""
+
+#: accounts/admin.py:127
 msgid "Geolocation"
 msgstr ""
 
-#: accounts/admin.py:105
+#: accounts/admin.py:141
+msgid "Signature"
+msgstr ""
+
+#: accounts/admin.py:147
+msgid "Avec signature"
+msgstr ""
+
+#: accounts/admin.py:148
+msgid "Sans signature"
+msgstr ""
+
+#: accounts/admin.py:163
 #: eloue/templates/accounts/patron_edit_subscription.html:36
 msgid "Abonnement"
 msgstr ""
 
-#: accounts/admin.py:106
+#: accounts/admin.py:164
 msgid "Patron informations"
+msgstr ""
+
+#: accounts/admin_views.py:66
+msgid "Cett email est déjà pris."
 msgstr ""
 
 #: accounts/auth.py:28
@@ -110,23 +134,27 @@ msgstr ""
 msgid "date joined"
 msgstr ""
 
-#: accounts/auth.py:51
-msgid "user"
+#: accounts/auth.py:44
+msgid "login count"
 msgstr ""
 
 #: accounts/auth.py:52
+msgid "user"
+msgstr ""
+
+#: accounts/auth.py:53
 msgid "users"
 msgstr ""
 
-#: accounts/auth.py:148
+#: accounts/auth.py:149
 msgid "algorithm"
 msgstr ""
 
-#: accounts/auth.py:149
+#: accounts/auth.py:150
 msgid "salt"
 msgstr ""
 
-#: accounts/auth.py:150
+#: accounts/auth.py:151
 msgid "hash"
 msgstr ""
 
@@ -342,8 +370,7 @@ msgstr ""
 msgid "Domicile"
 msgstr ""
 
-#: accounts/choices.py:67 accounts/forms.py:322
-#: eloue/templates/accounts/partials/more_info.html:12
+#: accounts/choices.py:67 eloue/templates/accounts/partials/more_info.html:12
 msgid "Travail"
 msgstr ""
 
@@ -367,531 +394,255 @@ msgstr ""
 msgid "Chèque"
 msgstr ""
 
-#: accounts/choices.py:79
-msgid "Location set manually"
+#: accounts/choices.py:76
+msgid "IBAN"
 msgstr ""
 
 #: accounts/choices.py:80
-msgid "Location set by browser geocoding"
+msgid "Location set manually"
 msgstr ""
 
 #: accounts/choices.py:81
-msgid "Location set by user address"
+msgid "Location set by browser geocoding"
 msgstr ""
 
 #: accounts/choices.py:82
+msgid "Location set by user address"
+msgstr ""
+
+#: accounts/choices.py:83
 msgid "Default location"
 msgstr ""
 
-#: accounts/choices.py:86
+#: accounts/choices.py:87
 msgid "Je n'ai pas encore de compte"
 msgstr ""
 
-#: accounts/choices.py:87
+#: accounts/choices.py:88
 msgid "J'ai déjà un compte et mon mot de passe est :"
 msgstr ""
 
-#: accounts/choices.py:91
+#: accounts/choices.py:92
 msgid "Je n'ai pas encore de compte PayPal"
 msgstr ""
 
-#: accounts/choices.py:92
+#: accounts/choices.py:93
 msgid "J'ai déjà un compte PayPal et mon email est :"
 msgstr ""
 
-#: accounts/fields.py:38 accounts/forms.py:876 accounts/tests/views.py:449
+#: accounts/fields.py:42 accounts/forms.py:476 accounts/tests/views.py:449
 msgid "Vous devez spécifiez un numéro de téléphone"
 msgstr ""
 
-#: accounts/fields.py:68
-msgid "Mois"
+#: accounts/forms.py:43 accounts/forms.py:253 accounts/forms.py:340
+#: accounts/serializers.py:58
+msgid "Cryptogramme de sécurité"
 msgstr ""
 
-#: accounts/fields.py:83
-msgid "Année"
+#: accounts/forms.py:43 accounts/forms.py:253 accounts/forms.py:340
+#: accounts/serializers.py:59
+msgid "Les 3 derniers chiffres au dos de la carte."
 msgstr ""
 
-#: accounts/fields.py:164
-msgid "Your RIB failed the checksum validation. Please verify."
+#: accounts/forms.py:44 accounts/forms.py:254 accounts/forms.py:341
+#: eloue/templates/rent/booking_confirm.html:164
+msgid "Date d'expiration"
 msgstr ""
 
-#: accounts/forms.py:61 accounts/forms.py:157
-msgid ""
-"Les serveurs de Facebook sont inaccessibles. Veuillez reessayer dans "
-"quelques secondes."
+#: accounts/forms.py:45 accounts/forms.py:255 accounts/forms.py:342
+msgid "Titulaire de la carte"
 msgstr ""
 
-#: accounts/forms.py:66 accounts/forms.py:145 accounts/tests/wizard.py:364
-msgid "Wrong facebook uid."
+#: accounts/forms.py:53 accounts/forms.py:262 accounts/forms.py:343
+#: eloue/templates/rent/booking_confirm.html:156
+msgid "Numéro de carte de crédit"
 msgstr ""
 
-#: accounts/forms.py:84
-msgid "Un compte e-loue est déjà associé à votre Facebook"
+#: accounts/forms.py:74 accounts/forms.py:290
+#, python-brace-format
+msgid "La validation de votre carte a échoué: ({0}) {1}"
 msgstr ""
 
-#: accounts/forms.py:95 accounts/forms.py:96 accounts/forms.py:248
-#: accounts/forms.py:303 accounts/forms.py:496 accounts/forms.py:936
-msgid "Email"
-msgstr ""
-
-#: accounts/forms.py:98 accounts/forms.py:493
-msgid "Password"
-msgstr ""
-
-#: accounts/forms.py:98 accounts/forms.py:724
-#: eloue/templates/accounts/patron_edit.html:59
-msgid "Mot de passe"
-msgstr ""
-
-#: accounts/forms.py:120 accounts/tests/wizard.py:93
-msgid ""
-"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue."
-"com, vous ne pouvez pas vous enregistrer avec une adresse email jetable."
-msgstr ""
-
-#: accounts/forms.py:123 accounts/tests/wizard.py:102
-msgid "Un compte existe déjà pour cet email"
-msgstr ""
-
-#: accounts/forms.py:191
-msgid "Activate cookies"
-msgstr ""
-
-#: accounts/forms.py:221
-msgid "Empty email"
-msgstr ""
-
-#: accounts/forms.py:226 accounts/tests/wizard.py:73
-#: accounts/tests/wizard.py:83
-msgid "Veuillez saisir une adresse email et un mot de passe valide."
-msgstr ""
-
-#: accounts/forms.py:228 accounts/tests/wizard.py:63
-msgid "Ce compte est inactif parce qu'il n'a pas été activé."
-msgstr ""
-
-#: accounts/forms.py:242
+#: accounts/forms.py:101
 msgid ""
 "That email address doesn't have an associated user account. Are you sure "
 "you've registered?"
-msgstr "L'adresse e-mail indiquée n'est pas associée à un utilisateur connu. Etes-vous sûr de vous être inscrit ?"
+msgstr ""
 
-#: accounts/forms.py:244
+#: accounts/forms.py:103
 msgid ""
 "The user account associated with this email address cannot reset the "
 "password."
 msgstr ""
 
-#: accounts/forms.py:300 accounts/forms.py:717
-#: eloue/templates/products/product_detail.html:526
-#: eloue/templates/products/product_detail.html:573
-msgid "Professionnel"
+#: accounts/forms.py:107 accounts/forms.py:203
+msgid "Email"
 msgstr ""
 
-#: accounts/forms.py:301 accounts/forms.py:718
-msgid "Nom de la société"
-msgstr ""
-
-#: accounts/forms.py:305 accounts/forms.py:719
-msgid "Pseudo"
-msgstr ""
-
-#: accounts/forms.py:306 accounts/forms.py:720
-msgid "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
-msgstr ""
-
-#: accounts/forms.py:307 accounts/forms.py:721
-msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
-msgstr ""
-
-#: accounts/forms.py:310 accounts/forms.py:497 accounts/forms.py:726
-msgid "Prénom"
-msgstr ""
-
-#: accounts/forms.py:311 accounts/forms.py:498 accounts/forms.py:727
-msgid "Nom"
-msgstr ""
-
-#: accounts/forms.py:312 accounts/forms.py:734
-msgid "Photo de profil"
-msgstr ""
-
-#: accounts/forms.py:315
-msgid "Newsletter"
-msgstr ""
-
-#: accounts/forms.py:316 eloue/templates/accounts/patron_edit_highlight.html:9
-#: eloue/templates/accounts/patron_edit_notification.html:4
-#: eloue/templates/accounts/patron_edit_notification.html:9
-#: eloue/templates/accounts/patron_edit_top_position.html:9
-msgid "Notifications"
-msgstr ""
-
-#: accounts/forms.py:318 accounts/forms.py:739 accounts/models.py:95
-msgid "Lieu de naissance"
-msgstr ""
-
-#: accounts/forms.py:319 accounts/models.py:91
-msgid "Date d'obtention"
-msgstr ""
-
-#: accounts/forms.py:321
-msgid "A propos de vous"
-msgstr ""
-
-#: accounts/forms.py:322
-msgid "Exemple : Directrice Resources Humaines, ma socitée"
-msgstr ""
-
-#: accounts/forms.py:323 eloue/templates/accounts/partials/more_info.html:16
-msgid "Etudes"
-msgstr ""
-
-#: accounts/forms.py:323
-msgid "Exemple : Université Panthéon Sorbonne (Paris I)"
-msgstr ""
-
-#: accounts/forms.py:324
-msgid "Hobbies"
-msgstr ""
-
-#: accounts/forms.py:325
-msgid "Langues parlées"
-msgstr ""
-
-#: accounts/forms.py:325
-msgid "Choisissez vos langues"
-msgstr ""
-
-#: accounts/forms.py:337 accounts/forms.py:354 accounts/forms.py:404
-msgid "Informations nécessaires"
-msgstr ""
-
-#: accounts/forms.py:341
-msgid "Informations de profil"
-msgstr ""
-
-#: accounts/forms.py:345 accounts/forms.py:412
-msgid "Informations sur le permis"
-msgstr ""
-
-#: accounts/forms.py:357
-msgid "Adresse par defaut"
-msgstr ""
-
-#: accounts/forms.py:360
-msgid "Téléphone par defaut"
-msgstr ""
-
-#: accounts/forms.py:367 accounts/forms.py:868
-msgid "Vous devez entrer le nom de votre société"
-msgstr ""
-
-#: accounts/forms.py:373 accounts/tests/views.py:169
-#: accounts/tests/views.py:330
-msgid "This field is required."
-msgstr ""
-
-#: accounts/forms.py:376 accounts/tests/views.py:183
-msgid ""
-"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue."
-"com dans le métro, vous ne pouvez pas vous enregistrer avec une adresse "
-"email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."
-msgstr ""
-
-#: accounts/forms.py:379 accounts/tests/views.py:155
-msgid "Un compte avec cet email existe déjà"
-msgstr ""
-
-#: accounts/forms.py:392
-msgid "Logo de l'entreprise"
-msgstr ""
-
-#: accounts/forms.py:393
-msgid "A propos de l'entreprise"
-msgstr ""
-
-#: accounts/forms.py:393
-msgid ""
-"Décrivez votre entreprise afin d’expliquer aux membres de e-loue votre "
-"activité."
-msgstr ""
-
-#: accounts/forms.py:408
-msgid "Informations sur l'entreprise"
-msgstr ""
-
-#: accounts/forms.py:421
-msgid "Adresse de l'entreprise"
-msgstr ""
-
-#: accounts/forms.py:423
-msgid "Téléphone de l'entreprise"
-msgstr ""
-
-#: accounts/forms.py:443
+#: accounts/forms.py:164
 msgid "New password"
 msgstr ""
 
-#: accounts/forms.py:444
+#: accounts/forms.py:165
 msgid "New password confirmation"
 msgstr ""
 
-#: accounts/forms.py:452
+#: accounts/forms.py:173
 msgid "User record is empty."
 msgstr ""
 
-#: accounts/forms.py:460 accounts/serializers.py:164
-#: accounts/tests/api2.py:216
+#: accounts/forms.py:181 accounts/serializers.py:183
+#: accounts/tests/api2.py:217
 msgid "The two password fields didn't match."
 msgstr ""
 
-#: accounts/forms.py:474
-msgid "Ancien mot de passe"
+#: accounts/forms.py:200
+msgid "Password"
 msgstr ""
 
-#: accounts/forms.py:482
-msgid "Your old password was entered incorrectly. Please enter it again."
-msgstr ""
-
-#: accounts/forms.py:494
+#: accounts/forms.py:201
 msgid "Password confirmation"
 msgstr ""
 
-#: accounts/forms.py:495
+#: accounts/forms.py:202
 msgid "Enter the same password as above, for verification."
 msgstr ""
 
-#: accounts/forms.py:508
+#: accounts/forms.py:204 accounts/forms.py:326
+msgid "Prénom"
+msgstr ""
+
+#: accounts/forms.py:205 accounts/forms.py:327
+msgid "Nom"
+msgstr ""
+
+#: accounts/forms.py:215
 msgid "Vous devez entrer le nom de l'entreprise"
 msgstr ""
 
-#: accounts/forms.py:520
+#: accounts/forms.py:227
 msgid "Ce champ est obligatoire."
 msgstr ""
 
-#: accounts/forms.py:536
-msgid "E-mail"
+#: accounts/forms.py:317
+msgid "Professionnel"
 msgstr ""
 
-#: accounts/forms.py:545
-msgid "Vous devez entrer votre email Paypal"
+#: accounts/forms.py:318
+msgid "Nom de la société"
 msgstr ""
 
-#: accounts/forms.py:556 accounts/forms.py:735 accounts/forms.py:764
-#: eloue/templates/accounts/patron_edit.html:58
-#: eloue/templates/dcns/accounts/partials/missing.html:97
-#: eloue/templates/products/product_edit.html:27
-#: eloue/templates/rent/booking_confirm.html:91 products/forms.py:668
-#: products/forms.py:673
-msgid "Téléphone"
+#: accounts/forms.py:319
+msgid "Pseudo"
 msgstr ""
 
-#: accounts/forms.py:560
-msgid "Vous ne pouvez pas supprimer votre numéro par default."
+#: accounts/forms.py:320
+msgid "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
 msgstr ""
 
-#: accounts/forms.py:575 accounts/forms.py:577
-msgid "Order"
+#: accounts/forms.py:321
+msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr ""
 
-#: accounts/forms.py:579 eloue/templates/django_messages/inbox.html:47
-#: eloue/templates/django_messages/view.html:34
-msgid "Delete"
+#: accounts/forms.py:324 eloue/templates/accounts/patron_edit.html:59
+msgid "Mot de passe"
 msgstr ""
 
-#: accounts/forms.py:587
-msgid "Vous ne pouvez pas supprimer tous vos numéros."
-msgstr ""
-
-#: accounts/forms.py:595 accounts/forms.py:756 accounts/models.py:543
-#: accounts/models.py:622
-#: eloue/templates/dcns/accounts/partials/missing.html:133
-#: eloue/templates/products/product_edit.html:26
-#: eloue/templates/rent/booking_confirm.html:97 products/forms.py:636
-msgid "Adresse"
-msgstr ""
-
-#: accounts/forms.py:595 accounts/forms.py:610 accounts/forms.py:728
-#: products/forms.py:627
-msgid "Rue"
-msgstr ""
-
-#: accounts/forms.py:596
-msgid "Code Postal"
-msgstr ""
-
-#: accounts/forms.py:596 accounts/forms.py:613 accounts/forms.py:729
-#: products/forms.py:628
-msgid "Code postal"
-msgstr ""
-
-#: accounts/forms.py:597 accounts/forms.py:616 accounts/forms.py:732
-#: accounts/models.py:547 accounts/models.py:626 products/forms.py:629
-msgid "Ville"
-msgstr ""
-
-#: accounts/forms.py:601
-msgid ""
-"Vous ne pouvez pas supprimer une adresse associé à un produit. Veuillez le "
-"changer sur le page produit."
-msgstr ""
-
-#: accounts/forms.py:603
-msgid "Vous ne pouvez pas supprimer votre adresse par default."
-msgstr ""
-
-#: accounts/forms.py:660 accounts/forms.py:740 accounts/serializers.py:54
-#: accounts/serializers.py:179
-msgid "Cryptogramme de sécurité"
-msgstr ""
-
-#: accounts/forms.py:660 accounts/forms.py:740 accounts/serializers.py:55
-#: accounts/serializers.py:180
-msgid "Les 3 derniers chiffres au dos de la carte."
-msgstr ""
-
-#: accounts/forms.py:661 accounts/forms.py:741
-#: eloue/templates/rent/booking_confirm.html:164
-msgid "Date d'expiration"
-msgstr ""
-
-#: accounts/forms.py:662 accounts/forms.py:742
-msgid "Titulaire de la carte"
-msgstr ""
-
-#: accounts/forms.py:670 accounts/forms.py:743
-#: eloue/templates/rent/booking_confirm.html:156
-msgid "Numéro de carte de crédit"
-msgstr ""
-
-#: accounts/forms.py:691
-#, python-brace-format
-msgid "La validation de votre carte a échoué: ({0}) {1}"
-msgstr ""
-
-#: accounts/forms.py:725
+#: accounts/forms.py:325
 msgid "Mot de passe à nouveau"
 msgstr ""
 
-#: accounts/forms.py:733 accounts/models.py:548 accounts/models.py:627
+#: accounts/forms.py:328
+msgid "Rue"
+msgstr ""
+
+#: accounts/forms.py:329
+msgid "Code postal"
+msgstr ""
+
+#: accounts/forms.py:332 accounts/models.py:552 accounts/models.py:630
+msgid "Ville"
+msgstr ""
+
+#: accounts/forms.py:333 accounts/models.py:553 accounts/models.py:631
 msgid "Pays"
 msgstr ""
 
-#: accounts/forms.py:736
+#: accounts/forms.py:334
+msgid "Photo de profil"
+msgstr ""
+
+#: accounts/forms.py:335 accounts/forms.py:364
+#: eloue/templates/accounts/patron_edit.html:58
+#: eloue/templates/dcns/accounts/partials/missing.html:97
+#: eloue/templates/products/product_edit.html:27
+#: eloue/templates/rent/booking_confirm.html:91
+msgid "Téléphone"
+msgstr ""
+
+#: accounts/forms.py:336
 msgid "Numéro de permis"
 msgstr ""
 
-#: accounts/forms.py:737
+#: accounts/forms.py:337
 msgid "Date de délivraisance"
 msgstr ""
 
-#: accounts/forms.py:738 accounts/models.py:94
+#: accounts/forms.py:338 accounts/models.py:94
 msgid "Date de naissance"
 msgstr ""
 
-#: accounts/forms.py:744
+#: accounts/forms.py:339 accounts/models.py:95
+msgid "Lieu de naissance"
+msgstr ""
+
+#: accounts/forms.py:344
 msgid "Email de votre parrain"
 msgstr ""
 
-#: accounts/forms.py:744
+#: accounts/forms.py:344
 msgid ""
 "Commissions offertes pendant 3 mois si vous êtes parrainé par membre e-loue. "
 "Offre valable entre le 18 avril et le 30 avril 2013."
 msgstr ""
 
-#: accounts/forms.py:757
+#: accounts/forms.py:356 accounts/models.py:549 accounts/models.py:627
+#: eloue/templates/dcns/accounts/partials/missing.html:133
+#: eloue/templates/products/product_edit.html:26
+#: eloue/templates/rent/booking_confirm.html:97
+msgid "Adresse"
+msgstr ""
+
+#: accounts/forms.py:357
 msgid "Selectionnez une adresse enregistrée précédemment"
 msgstr ""
 
-#: accounts/forms.py:765
+#: accounts/forms.py:365
 msgid "Selectionnez un numéro de téléphone enregistré précédemment"
 msgstr ""
 
-#: accounts/forms.py:848 accounts/forms.py:850 accounts/tests/wizard.py:147
-#: accounts/tests/wizard.py:329
+#: accounts/forms.py:448 accounts/forms.py:450
 msgid "Ce nom d'utilisateur est déjà pris."
 msgstr ""
 
-#: accounts/forms.py:861 products/forms.py:648
+#: accounts/forms.py:461
 msgid "Vous devez spécifiez une adresse"
 msgstr ""
 
-#: accounts/forms.py:891
+#: accounts/forms.py:468
+msgid "Vous devez entrer le nom de votre société"
+msgstr ""
+
+#: accounts/forms.py:491
 msgid "La validation de votre carte a échoué."
 msgstr ""
 
-#: accounts/forms.py:898 accounts/tests/wizard.py:163
+#: accounts/forms.py:498
 msgid "Vos mots de passe ne correspondent pas"
 msgstr ""
 
-#: accounts/forms.py:913 eloue/templates/rent/booking_confirm.html:112
+#: accounts/forms.py:513 eloue/templates/rent/booking_confirm.html:112
 msgid "Permis de conduire"
-msgstr ""
-
-#: accounts/forms.py:939 products/forms.py:252
-msgid "Sujet"
-msgstr ""
-
-#: accounts/forms.py:940 eloue/templates/django_messages/view.html:3
-#: eloue/templates/products/product_detail.html:663
-msgid "Message"
-msgstr ""
-
-#: accounts/forms.py:941
-msgid "Etre en copie"
-msgstr ""
-
-#: accounts/forms.py:963
-msgid "L'heure d'ouverture doit etre inferieure a celui de fermeture"
-msgstr ""
-
-#: accounts/forms.py:971
-msgid "Le debut de la tranche horaire doit précéder la fin"
-msgstr ""
-
-#: accounts/forms.py:981
-msgid "Vous devez saisir le debut et la fin de la tranche d'horaire"
-msgstr ""
-
-#: accounts/forms.py:989
-msgid "Vous ne pouvez pas definir de tranche horaire si vous n'etes pas ouvert"
-msgstr ""
-
-#: accounts/forms.py:996
-msgid "Vous devez saisir l'ouverture et le fermeture"
-msgstr ""
-
-#: accounts/forms.py:1008
-msgid "Lundi"
-msgstr ""
-
-#: accounts/forms.py:1012
-msgid "Mardi"
-msgstr ""
-
-#: accounts/forms.py:1016
-msgid "Mercredi"
-msgstr ""
-
-#: accounts/forms.py:1020
-msgid "Jeudi"
-msgstr ""
-
-#: accounts/forms.py:1024
-msgid "Vendredi"
-msgstr ""
-
-#: accounts/forms.py:1028
-msgid "Samedi"
-msgstr ""
-
-#: accounts/forms.py:1032
-msgid "Dimanche"
-msgstr ""
-
-#: accounts/forms.py:1047
-msgid "Vous pouvez choisir 20 contacts maximum"
 msgstr ""
 
 #: accounts/models.py:64
@@ -926,23 +677,27 @@ msgstr ""
 msgid "date de modification"
 msgstr ""
 
+#: accounts/models.py:91
+msgid "Date d'obtention"
+msgstr ""
+
 #: accounts/models.py:92
 msgid "Numéro du permis"
 msgstr ""
 
-#: accounts/models.py:106
+#: accounts/models.py:108
 msgid "Site internet"
 msgstr ""
 
-#: accounts/models.py:164 accounts/models.py:169
+#: accounts/models.py:170 accounts/models.py:175
 msgid "Un utilisateur utilisant cet email existe déjà"
 msgstr ""
 
-#: accounts/models.py:166 accounts/models.py:171
+#: accounts/models.py:172 accounts/models.py:177
 msgid "Un utilisateur utilisant ce nom d'utilisateur existe déjà"
 msgstr ""
 
-#: accounts/models.py:221 eloue/templates/base.html:7
+#: accounts/models.py:227 eloue/templates/base.html:7
 #: eloue/templates/admin/base_site.html:4
 #: eloue/templates/admin/base_site.html:7 eloue/templates/argusnc/base.html:7
 #: eloue/templates/dcns/base.html:7 eloue/templates/gites/base.html:7
@@ -952,299 +707,279 @@ msgstr ""
 msgid "e-loue"
 msgstr ""
 
-#: accounts/models.py:401
+#: accounts/models.py:407
 msgid "Expiré"
 msgstr ""
 
-#: accounts/models.py:410 accounts/models.py:413 accounts/models.py:416
-#: accounts/models.py:419 accounts/models.py:422 accounts/models.py:425
-#: accounts/models.py:428 accounts/models.py:431 accounts/models.py:434
-#: accounts/models.py:437 accounts/models.py:440 accounts/models.py:443
-#: accounts/models.py:446 accounts/models.py:449
+#: accounts/models.py:416 accounts/models.py:419 accounts/models.py:422
+#: accounts/models.py:425 accounts/models.py:428 accounts/models.py:431
+#: accounts/models.py:434 accounts/models.py:437 accounts/models.py:440
+#: accounts/models.py:443 accounts/models.py:446 accounts/models.py:449
+#: accounts/models.py:452 accounts/models.py:455
 msgid "De"
 msgstr ""
 
-#: accounts/models.py:411 accounts/models.py:414 accounts/models.py:417
-#: accounts/models.py:420 accounts/models.py:423 accounts/models.py:426
-#: accounts/models.py:429 accounts/models.py:432 accounts/models.py:435
-#: accounts/models.py:438 accounts/models.py:441 accounts/models.py:444
-#: accounts/models.py:447 accounts/models.py:450
+#: accounts/models.py:417 accounts/models.py:420 accounts/models.py:423
+#: accounts/models.py:426 accounts/models.py:429 accounts/models.py:432
+#: accounts/models.py:435 accounts/models.py:438 accounts/models.py:441
+#: accounts/models.py:444 accounts/models.py:447 accounts/models.py:450
+#: accounts/models.py:453 accounts/models.py:456
 msgid "à"
 msgstr ""
 
-#: accounts/models.py:459 eloue/templates/rent/booking_credit_card.html:24
+#: accounts/models.py:465 eloue/templates/rent/booking_credit_card.html:24
 msgid "Conserver mes coordonnées bancaire"
 msgstr ""
 
-#: accounts/models.py:555
+#: accounts/models.py:560
 msgid "addresses"
 msgstr ""
 
-#: accounts/models.py:577
+#: accounts/models.py:582
 msgid "Coordonnées géographiques incorrectes"
 msgstr ""
 
-#: accounts/models.py:601
+#: accounts/models.py:606
 msgid "Géolocalisé"
 msgstr ""
 
-#: accounts/models.py:679
+#: accounts/models.py:684
 msgid "Nombre de mois gratuit"
 msgstr ""
 
-#: accounts/models.py:680
+#: accounts/models.py:685
 msgid "Type de paiement"
 msgstr ""
 
-#: accounts/models.py:681
+#: accounts/models.py:686
 msgid "Date de paiement annuel"
 msgstr ""
 
-#: accounts/models.py:682 rent/models.py:438
+#: accounts/models.py:687 rent/models.py:485
 msgid "Commentaire"
 msgstr ""
 
-#: accounts/serializers.py:64 accounts/serializers.py:189
+#: accounts/serializers.py:68
 msgid "Attribute missed or invalid: 'expires'"
 msgstr ""
 
-#: accounts/serializers.py:159 accounts/tests/api2.py:215
+#: accounts/serializers.py:118
+msgid "Account for company with this name already exists."
+msgstr ""
+
+#: accounts/serializers.py:121
+msgid "This username is already used."
+msgstr ""
+
+#: accounts/serializers.py:178 accounts/tests/api2.py:216
 msgid "Your current password was entered incorrectly. Please enter it again."
-msgstr "Le mot de passe est incorrect. Veuillez réessayer."
+msgstr ""
 
-#: accounts/serializers.py:198
+#: accounts/serializers.py:253 accounts/serializers.py:261
 #, python-format
-msgid "Form errors: %s"
+msgid "Attribute missed or invalid: %s"
 msgstr ""
 
-#: accounts/views.py:386
-msgid "Vos informations ont bien été modifiées"
+#: accounts/serializers.py:267
+msgid "Sending messages is allowed only to pro-accounts."
 msgstr ""
 
-#: accounts/views.py:459
-msgid ""
-"Pour un abonnement vous devez enregistrer une carte bancaire. Merci de "
-"renseigner la carte utilisée pour le paiement."
-msgstr ""
-
-#: accounts/views.py:482 accounts/views.py:1151 accounts/tests/api2.py:199
-msgid "Votre mot de passe à bien été modifié"
-msgstr ""
-
-#: accounts/views.py:492
-msgid "Vos numéros de téléphones ont bien été modifiés"
-msgstr ""
-
-#: accounts/views.py:531 accounts/views.py:534
-msgid "Vous n'avez pas de carte enregistrée"
-msgstr ""
-
-#: accounts/views.py:540
-msgid ""
-"Vous avez un abonnement en cours, veuillez nous contacter à contact@e-loue."
-"com pour supprimer votre carte."
-msgstr ""
-
-#: accounts/views.py:549
-msgid "On a bien supprimé les détails de votre carte bancaire."
-msgstr ""
-
-#: accounts/views.py:560
-msgid "Votre RIB a bien été ajouté"
-msgstr ""
-
-#: accounts/views.py:567 rent/views.py:251 rent/views.py:280
-msgid "Votre demande est dépassée"
-msgstr ""
-
-#: accounts/views.py:571 rent/views.py:266
-msgid "La demande de location a été acceptée"
-msgstr ""
-
-#: accounts/views.py:676
-msgid "Vos adresses ont bien été modifiées"
-msgstr ""
-
-#: accounts/views.py:798
-msgid "Votre message a bien été envoyé"
-msgstr ""
-
-#: accounts/views.py:801
-msgid "Erreur lors de l'envoi du message"
-msgstr ""
-
-#: accounts/views.py:1026 accounts/views.py:1159
+#: accounts/views.py:61 accounts/views.py:264
 #: eloue/templates/accounts/password_reset_done.html:9
 #: eloue/templates/dcns/accounts/password_reset_done.html:12
 msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
-msgstr "Les instructions pour réinitialiser votre mot de passe ont été envoyées à l'adresse indiquée. Vous devriez les recevoir rapidement."
+msgstr ""
 
-#: accounts/views.py:1055
+#: accounts/views.py:91
 #: eloue/templates/accounts/password_reset_complete.html:10
 #: eloue/templates/dcns/accounts/password_reset_complete.html:12
 msgid "Your password has been set.  You may go ahead and log in now."
 msgstr ""
 
-#: accounts/views.py:1184
+#: accounts/views.py:256 accounts/tests/api2.py:200
+msgid "Votre mot de passe à bien été modifié"
+msgstr ""
+
+#: accounts/views.py:273
+msgid "User with this email not registered"
+msgstr ""
+
+#: accounts/views.py:275
+msgid ""
+"We've e-mailed you instructions for activating your account to the e-mail "
+"address you submitted. You should be receiving it shortly."
+msgstr ""
+
+#: accounts/views.py:297
+msgid "Your message has been sent sucessfully."
+msgstr ""
+
+#: accounts/views.py:318
 msgid "The address is default address of current user"
 msgstr ""
 
-#: accounts/views.py:1190
+#: accounts/views.py:324
 msgid "The address is used in products"
 msgstr ""
 
-#: accounts/views.py:1223
+#: accounts/views.py:356
 msgid "The phone is default number of current user"
 msgstr ""
 
-#: accounts/views.py:1229
+#: accounts/views.py:362
 msgid "The phone is used in products"
 msgstr ""
 
-#: accounts/wizard.py:23
-msgid "S'incrire ou se connecter"
+#: accounts/widgets.py:8
+msgid "Mois"
 msgstr ""
 
-#: accounts/wizard.py:96
-msgid "Bienvenue !"
+#: accounts/widgets.py:23
+msgid "Année"
 msgstr ""
 
-#: accounts/wizard.py:99
+#: accounts/tests/views.py:155
+msgid "Un compte avec cet email existe déjà"
+msgstr ""
+
+#: accounts/tests/views.py:169 accounts/tests/views.py:330
+msgid "This field is required."
+msgstr ""
+
+#: accounts/tests/views.py:183
 msgid ""
-"Bienvenue ! Nous vous avons envoyé un lien de validation par email. Cette "
-"validation est impérative pour terminer votre enregistrement."
+"Pour garantir un service de qualité et la sécurité des utilisateurs d'e-loue."
+"com dans le métro, vous ne pouvez pas vous enregistrer avec une adresse "
+"email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."
 msgstr ""
 
-#: accounts/wizard.py:142
-msgid "Vous avez changer d'abonnement avec succès"
-msgstr ""
-
-#: accounts/wizard.py:144
-msgid "Votre inscription à l'abonnement est validé"
-msgstr ""
-
-#: accounts/wizard.py:146
-msgid ""
-"Votre nombre d'annonces dépasse le nombre d'annonce maximum de cet "
-"abonnement. Merci de choisir un abonnement plus important"
-msgstr ""
-
-#: accounts/tests/wizard.py:346
-msgid "Invalid OAuth access token."
-msgstr ""
-
-#: eloue/decorators.py:153
+#: eloue/decorators.py:154
 msgid "AJAX request is required."
 msgstr ""
 
-#: eloue/legacy.py:64
+#: eloue/legacy.py:59
 #, python-format
 msgid "New Message: %(subject)s"
-msgstr ""
-
-#: eloue/legacy.py:268
-msgid ""
-"We apologize, but your form has expired. Please continue filling out the "
-"form from this page."
 msgstr ""
 
 #: eloue/settings.py:112
 msgid "Français"
 msgstr ""
 
-#: eloue/settings.py:113
-msgid "English"
-msgstr ""
-
-#: eloue/views.py:61
+#: eloue/views.py:63
 #, python-format
 msgid "No %(verbose_name)s found matching the query"
 msgstr ""
 
-#: eloue/api/exceptions.py:20
-msgid "Model validation error."
-msgstr ""
-
-#: eloue/api/exceptions.py:21
-msgid "Authentication error."
-msgstr ""
-
-#: eloue/api/exceptions.py:22
-msgid "Permission error."
-msgstr ""
-
-#: eloue/api/exceptions.py:23
-msgid "URL error."
+#: eloue/views.py:68
+#, python-format
+msgid "Product with pk %(pk)s and slug \"%(slug)s\" does not exist"
 msgstr ""
 
 #: eloue/api/exceptions.py:24
+msgid "Model validation error."
+msgstr ""
+
+#: eloue/api/exceptions.py:25
+msgid "Authentication error."
+msgstr ""
+
+#: eloue/api/exceptions.py:26
+msgid "Permission error."
+msgstr ""
+
+#: eloue/api/exceptions.py:27
+msgid "URL error."
+msgstr ""
+
+#: eloue/api/exceptions.py:28
 msgid "Server error."
 msgstr ""
 
 #: eloue/api/exceptions.py:29
-msgid "One or more fields are invalid."
+msgid "Shipping error."
 msgstr ""
 
 #: eloue/api/exceptions.py:30
-msgid "Unknown error occurred."
+msgid "Payment error."
 msgstr ""
 
-#: eloue/api/exceptions.py:31 eloue/api/exceptions.py:57
-msgid "Other error occurred."
+#: eloue/api/exceptions.py:35
+msgid "One or more fields are invalid."
 msgstr ""
 
 #: eloue/api/exceptions.py:36
-msgid "Incorrect authentication credentials."
+msgid "Unknown error occurred."
 msgstr ""
 
-#: eloue/api/exceptions.py:37
-msgid "Authentication credentials were not provided."
+#: eloue/api/exceptions.py:37 eloue/api/exceptions.py:64
+msgid "Other error occurred."
 msgstr ""
 
 #: eloue/api/exceptions.py:42
-msgid "You do not have permission to perform this action."
+msgid "Incorrect authentication credentials."
 msgstr ""
 
 #: eloue/api/exceptions.py:43
-msgid "You must be owner to perform this action."
+msgid "Authentication credentials were not provided."
 msgstr ""
 
-#: eloue/api/exceptions.py:44
-msgid "You must be borrower to perform this action."
+#: eloue/api/exceptions.py:48
+msgid "You do not have permission to perform this action."
 msgstr ""
 
 #: eloue/api/exceptions.py:49
+msgid "You must be owner to perform this action."
+msgstr ""
+
+#: eloue/api/exceptions.py:50
+msgid "You must be borrower to perform this action."
+msgstr ""
+
+#: eloue/api/exceptions.py:55
 #, python-format
 msgid "Method \"%s\" not allowed."
 msgstr ""
 
-#: eloue/api/exceptions.py:50
+#: eloue/api/exceptions.py:56
 msgid "Not found."
 msgstr ""
 
-#: eloue/api/exceptions.py:55
+#: eloue/api/exceptions.py:61
 msgid "The Object is referenced by other objects and can't be deleted."
-msgstr "Vous ne pouvez ni supprimer une information par défaut, ni une information liée à une réservation"
+msgstr ""
 
-#: eloue/api/exceptions.py:56
+#: eloue/api/exceptions.py:62
 msgid "A request to external server has failed."
 msgstr ""
 
-#: eloue/api/filters.py:132
+#: eloue/api/exceptions.py:63
+msgid "A request to Pickup service has failed."
+msgstr ""
+
+#: eloue/api/exceptions.py:69
+msgid "Depot not found."
+msgstr ""
+
+#: eloue/api/exceptions.py:74
+msgid "Failed to process payment."
+msgstr ""
+
+#: eloue/api/filters.py:157
 msgid "Enter valid primary keys separated by commas."
 msgstr ""
 
-#: eloue/api/filters.py:133
+#: eloue/api/filters.py:158
 msgid "This value must be a list, a string or None."
 msgstr ""
 
-#: eloue/api/serializers.py:160
+#: eloue/api/serializers.py:158
 msgid "Start date is later than end date"
 msgstr ""
 
-#: eloue/api/serializers.py:162
+#: eloue/api/serializers.py:160
 msgid "Start value is large than end value"
 msgstr ""
 
@@ -1400,7 +1135,6 @@ msgstr ""
 #: eloue/templates/products/publish_new_ad2.html:11
 #: eloue/templates/products/publish_new_ad2.html:14
 #: eloue/templates/uk/base.html:73 eloue/templates/uk/base.html.py:87
-#: products/wizard.py:28
 msgid "Déposer une annonce"
 msgstr ""
 
@@ -1438,7 +1172,6 @@ msgstr ""
 #: eloue/templates/products/alert_list.html:38
 #: eloue/templates/products/phone_view.html:104
 #: eloue/templates/products/product_create.html:9
-#: eloue/templates/products/product_detail.html:303
 #: eloue/templates/products/product_result.html:67
 #: eloue/templates/products/publish_new_ad.html:10
 #: eloue/templates/products/publish_new_ad2.html:10
@@ -1563,7 +1296,15 @@ msgstr ""
 msgid "Respect de la vie privée"
 msgstr ""
 
-#: eloue/templates/base.html:111 eloue/templates/20minutes/base.html:51
+#: eloue/templates/base.html:108
+msgid "/mentions-legales/"
+msgstr ""
+
+#: eloue/templates/base.html:108
+msgid "Mentions legales"
+msgstr ""
+
+#: eloue/templates/base.html:112 eloue/templates/20minutes/base.html:51
 #: eloue/templates/argusnc/base.html:83 eloue/templates/dcns/500.html:102
 #: eloue/templates/dcns/base.html:93 eloue/templates/gites/base.html:83
 #: eloue/templates/nc/_base.html:105 eloue/templates/nc/base.html:101
@@ -1571,7 +1312,7 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: eloue/templates/base.html:113 eloue/templates/20minutes/base.html:53
+#: eloue/templates/base.html:114 eloue/templates/20minutes/base.html:53
 #: eloue/templates/argusnc/base.html:91 eloue/templates/dcns/500.html:104
 #: eloue/templates/dcns/base.html:95 eloue/templates/gites/base.html:91
 #: eloue/templates/nc/_base.html:107 eloue/templates/nc/base.html:103
@@ -1579,7 +1320,7 @@ msgstr ""
 msgid "Aide"
 msgstr ""
 
-#: eloue/templates/base.html:114 eloue/templates/20minutes/base.html:54
+#: eloue/templates/base.html:115 eloue/templates/20minutes/base.html:54
 #: eloue/templates/accounts/contact.html:10
 #: eloue/templates/accounts/contact.html:13
 #: eloue/templates/argusnc/base.html:85 eloue/templates/dcns/500.html:105
@@ -1589,35 +1330,35 @@ msgstr ""
 msgid "Contactez-nous"
 msgstr ""
 
-#: eloue/templates/base.html:115 eloue/templates/20minutes/base.html:55
+#: eloue/templates/base.html:116 eloue/templates/20minutes/base.html:55
 #: eloue/templates/nc/_base.html:109 eloue/templates/nc/base.html:105
 #: eloue/templates/products/search.html:135
 #: eloue/templates/shiseido/index.html:137 eloue/templates/uk/base.html:108
 msgid "/espace-presse/"
 msgstr ""
 
-#: eloue/templates/base.html:115 eloue/templates/20minutes/base.html:55
+#: eloue/templates/base.html:116 eloue/templates/20minutes/base.html:55
 #: eloue/templates/flatpages/press.html:10 eloue/templates/nc/_base.html:109
 #: eloue/templates/nc/base.html:105 eloue/templates/products/search.html:135
 #: eloue/templates/shiseido/index.html:137 eloue/templates/uk/base.html:108
 msgid "Espace presse"
 msgstr ""
 
-#: eloue/templates/base.html:116 eloue/templates/20minutes/base.html:56
+#: eloue/templates/base.html:117 eloue/templates/20minutes/base.html:56
 #: eloue/templates/dcns/500.html:106 eloue/templates/dcns/base.html:97
 #: eloue/templates/nc/_base.html:110 eloue/templates/nc/base.html:106
 #: eloue/templates/uk/base.html:109
 msgid "/qui-sommes-nous/"
 msgstr ""
 
-#: eloue/templates/base.html:116 eloue/templates/20minutes/base.html:56
+#: eloue/templates/base.html:117 eloue/templates/20minutes/base.html:56
 #: eloue/templates/dcns/500.html:106 eloue/templates/dcns/base.html:97
 #: eloue/templates/nc/_base.html:110 eloue/templates/nc/base.html:106
 #: eloue/templates/uk/base.html:109
 msgid "Qui sommes nous ?"
 msgstr ""
 
-#: eloue/templates/base.html:120 eloue/templates/index.html:143
+#: eloue/templates/base.html:121 eloue/templates/index.html:143
 #: eloue/templates/20minutes/base.html:60 eloue/templates/argusnc/base.html:89
 #: eloue/templates/gites/base.html:89 eloue/templates/nc/_base.html:114
 #: eloue/templates/nc/base.html:110 eloue/templates/nc/index.html:100
@@ -1625,19 +1366,19 @@ msgstr ""
 msgid "Communauté"
 msgstr ""
 
-#: eloue/templates/base.html:122 eloue/templates/20minutes/base.html:62
+#: eloue/templates/base.html:123 eloue/templates/20minutes/base.html:62
 #: eloue/templates/nc/_base.html:116 eloue/templates/nc/base.html:112
 #: eloue/templates/uk/base.html:115
 msgid "Blog"
 msgstr ""
 
-#: eloue/templates/base.html:123 eloue/templates/20minutes/base.html:63
+#: eloue/templates/base.html:124 eloue/templates/20minutes/base.html:63
 #: eloue/templates/nc/_base.html:117 eloue/templates/nc/base.html:113
 #: eloue/templates/uk/base.html:116
 msgid "Twitter"
 msgstr ""
 
-#: eloue/templates/base.html:124 eloue/templates/20minutes/base.html:64
+#: eloue/templates/base.html:125 eloue/templates/20minutes/base.html:64
 #: eloue/templates/accounts/facebook_invite.html:95
 #: eloue/templates/accounts/facebook_invite.html:103
 #: eloue/templates/nc/_base.html:118 eloue/templates/nc/base.html:114
@@ -1645,12 +1386,12 @@ msgstr ""
 msgid "Facebook"
 msgstr ""
 
-#: eloue/templates/base.html:126 eloue/templates/nc/base.html:115
+#: eloue/templates/base.html:127 eloue/templates/nc/base.html:115
 #: eloue/templates/uk/base.html:118
 msgid "Nos partenaires"
 msgstr ""
 
-#: eloue/templates/base.html:139 eloue/templates/20minutes/base.html:77
+#: eloue/templates/base.html:140 eloue/templates/20minutes/base.html:77
 #: eloue/templates/nc/_base.html:130 eloue/templates/nc/base.html:128
 #: eloue/templates/uk/base.html:131
 msgid "sur"
@@ -1726,7 +1467,12 @@ msgstr ""
 #: eloue/templates/flatpages/assurancies.html:320
 #: eloue/templates/flatpages/assurancies.html:464
 #: eloue/templates/flatpages/assurancies.html:646
-#: eloue/templates/gites/index.html:39 eloue/templates/nc/index.html:38
+#: eloue/templates/gites/index.html:39
+#: eloue/templates/insurances/_text_content.html:34
+#: eloue/templates/insurances/_text_content.html:307
+#: eloue/templates/insurances/_text_content.html:449
+#: eloue/templates/insurances/_text_content.html:629
+#: eloue/templates/nc/index.html:38
 msgid "Objets"
 msgstr ""
 
@@ -1735,7 +1481,12 @@ msgstr ""
 #: eloue/templates/flatpages/assurancies.html:321
 #: eloue/templates/flatpages/assurancies.html:465
 #: eloue/templates/flatpages/assurancies.html:647
-#: eloue/templates/gites/index.html:38 eloue/templates/nc/index.html:39
+#: eloue/templates/gites/index.html:38
+#: eloue/templates/insurances/_text_content.html:89
+#: eloue/templates/insurances/_text_content.html:346
+#: eloue/templates/insurances/_text_content.html:509
+#: eloue/templates/insurances/_text_content.html:654
+#: eloue/templates/nc/index.html:39
 msgid "Voitures"
 msgstr ""
 
@@ -1744,7 +1495,12 @@ msgstr ""
 #: eloue/templates/flatpages/assurancies.html:322
 #: eloue/templates/flatpages/assurancies.html:466
 #: eloue/templates/flatpages/assurancies.html:648
-#: eloue/templates/gites/index.html:40 eloue/templates/nc/index.html:40
+#: eloue/templates/gites/index.html:40
+#: eloue/templates/insurances/_text_content.html:195
+#: eloue/templates/insurances/_text_content.html:405
+#: eloue/templates/insurances/_text_content.html:573
+#: eloue/templates/insurances/_text_content.html:678
+#: eloue/templates/nc/index.html:40
 msgid "Logements"
 msgstr ""
 
@@ -1772,23 +1528,20 @@ msgstr ""
 #: eloue/templates/products/product_result.html:80
 #: eloue/templates/products/product_result.html:82
 msgid "location"
-msgstr ""
+msgstr "location"
 
 #: eloue/templates/index.html:109
 #: eloue/templates/dcns/products/product_detail.html:4
 #: eloue/templates/dcns/products/product_detail.html:38
 #: eloue/templates/dcns/products/product_list.html:5
 #: eloue/templates/products/phone_view.html:108
-#: eloue/templates/products/product_detail.html:9
-#: eloue/templates/products/product_detail.html:307
-#: eloue/templates/products/product_detail.html:315
 #: eloue/templates/products/product_list_category.html:8
 #: eloue/templates/products/product_result.html:8
 #: eloue/templates/products/product_result.html:94
 #: eloue/templates/shiseido/products/product_detail.html:4
 #: eloue/templates/shiseido/products/product_detail.html:38
 msgid "Location"
-msgstr ""
+msgstr "Location"
 
 #: eloue/templates/index.html:122
 msgid "Découvrez e-loue"
@@ -2109,13 +1862,7 @@ msgstr ""
 #: eloue/templates/accounts/patron_detail.html:19
 #: eloue/templates/accounts/patron_edit.html:88
 #: eloue/templates/accounts/patron_edit.html:90
-#: eloue/templates/django_messages/new_message.html:17
-#: eloue/templates/products/product_detail.html:533
-#: eloue/templates/products/product_detail.html:535
-#: eloue/templates/products/product_detail.html:580
-#: eloue/templates/products/product_detail.html:582
-#: eloue/templates/products/product_detail.html:644
-#: eloue/templates/products/product_detail.html:646
+#: eloue/templates/django_messages/new_message_email.html:17
 #: eloue/templates/rent/emails/comment_email.html:18
 #: eloue/templates/shiseido/base.html:42
 msgid "loueur"
@@ -2155,7 +1902,6 @@ msgstr ""
 
 #: eloue/templates/accounts/company_detail.html:98
 #: eloue/templates/products/phone_view.html:142
-#: eloue/templates/products/product_detail.html:706
 #: eloue/templates/products/partials/result_list.html:22
 msgid "Sur devis"
 msgstr ""
@@ -2321,7 +2067,6 @@ msgstr ""
 #: eloue/templates/accounts/owner_product.html:23
 #: eloue/templates/accounts/owner_product.html:29
 #: eloue/templates/products/phone_view.html:130
-#: eloue/templates/products/product_detail.html:692
 #: eloue/templates/rent/emails/borrower_ask_email.html:4
 #: eloue/templates/rent/emails/borrower_ask_pro_email.html:4
 #: eloue/templates/rent/emails/owner_ask_email.html:5
@@ -2448,7 +2193,6 @@ msgid "Date"
 msgstr ""
 
 #: eloue/templates/accounts/patron_billing.html:44
-#: eloue/templates/products/product_detail.html:414
 msgid "Période"
 msgstr ""
 
@@ -2565,6 +2309,13 @@ msgstr ""
 #: eloue/templates/accounts/partials/billing_table.html:49
 #: eloue/templates/products/product_edit.html:30
 msgid "Mise en avant"
+msgstr ""
+
+#: eloue/templates/accounts/patron_edit_highlight.html:9
+#: eloue/templates/accounts/patron_edit_notification.html:4
+#: eloue/templates/accounts/patron_edit_notification.html:9
+#: eloue/templates/accounts/patron_edit_top_position.html:9
+msgid "Notifications"
 msgstr ""
 
 #: eloue/templates/accounts/patron_edit_highlight.html:10
@@ -2850,7 +2601,6 @@ msgstr ""
 #: eloue/templates/dcns/rent/booking_detail.html:88
 #: eloue/templates/dcns/rent/booking_incident.html:61
 #: eloue/templates/shiseido/products/product_edit.html:21
-#: products/forms.py:335
 msgid "Ajouter un objet"
 msgstr ""
 
@@ -2940,7 +2690,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: eloue/templates/accounts/admin/patron_create_subscription.html:59
+#: eloue/templates/accounts/admin/patron_create_subscription.html:60
 msgid "Créer le compte"
 msgstr ""
 
@@ -2961,6 +2711,7 @@ msgid ""
 msgstr ""
 
 #: eloue/templates/accounts/emails/activation_email.html:24
+#: eloue/templates/accounts/emails/contact_pro_email.html:25
 #: eloue/templates/accounts/emails/professional_activation_email.html:24
 msgid "Activer votre compte"
 msgstr ""
@@ -2973,9 +2724,11 @@ msgstr ""
 
 #: eloue/templates/accounts/emails/activation_email.html:29
 #: eloue/templates/accounts/emails/activation_email.txt:13
+#: eloue/templates/accounts/emails/contact_pro_email.html:28
+#: eloue/templates/accounts/emails/contact_pro_email.txt:15
 #: eloue/templates/accounts/emails/professional_activation_email.html:27
 #: eloue/templates/accounts/emails/professional_activation_email.txt:17
-#: eloue/templates/accounts/emails/professional_subscribed_email.html:32
+#: eloue/templates/accounts/emails/professional_subscribed_email.html:30
 #: eloue/templates/accounts/emails/professional_subscribed_email.txt:20
 #: eloue/templates/accounts/emails/professional_subscription_changed_email.html:22
 #: eloue/templates/accounts/emails/professional_subscription_changed_email.txt:13
@@ -2992,6 +2745,38 @@ msgid ""
 "\"%(protocol)s://%(domain)s\">%(domain)s</a>.\n"
 "\tAfin d’activer votre compte et de rejoindre notre communauté de loueurs, "
 "vous devez cliquer sur le bouton ci-dessous.\n"
+msgstr ""
+
+#: eloue/templates/accounts/emails/contact_pro_email.html:5
+#: eloue/templates/django_messages/new_message_email.html:5
+msgid "Vous avez reçu un nouveau message"
+msgstr ""
+
+#: eloue/templates/accounts/emails/contact_pro_email.html:15
+#, python-format
+msgid ""
+"\n"
+"                           <h1 style=\"color: #6EB924;display: block;font-"
+"family: Arial;font-size: 22px;font-weight: normal;line-height: 100%%;margin-"
+"top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left; "
+"font-style: italic;\">%(email)s</h1>\n"
+"                                Bonjour %(username)s,<br><br>\n"
+"\n"
+"                            "
+msgstr ""
+
+#: eloue/templates/accounts/emails/contact_pro_email.txt:3
+#, python-format
+msgid ""
+"\n"
+"Envoyé par %(email)s :\n"
+"\n"
+"Bonjour %(username)s,\n"
+msgstr ""
+
+#: eloue/templates/accounts/emails/contact_pro_email.txt:13
+#: eloue/templates/accounts/emails/professional_activation_email.txt:15
+msgid "Cordialement"
 msgstr ""
 
 #: eloue/templates/accounts/emails/gmail_invitation_email.html:5
@@ -3117,21 +2902,14 @@ msgid ""
 "\n"
 msgstr ""
 
-#: eloue/templates/accounts/emails/professional_activation_email.txt:15
-msgid "Cordialement"
-msgstr ""
-
 #: eloue/templates/accounts/emails/professional_subscribed_email.html:15
-#, python-format
 msgid ""
 "\n"
 "                                Bonjour,<br><br>\n"
 "\n"
 "                                Nous vous confirmons la souscription à "
-"l'abonnement suivant :<br><br>\n"
-"                                %(propackage)s\n"
+"l'abonnement.\n"
 "                                <br>\n"
-"                                Le premier mois est à 4,50€.<br>\n"
 "\n"
 "                                Nous vous invitons à prendre connaissance "
 "des conditions générales : <a href=\"https://www.e-loue.com/conditions-"
@@ -3149,13 +2927,11 @@ msgid ""
 msgstr ""
 
 #: eloue/templates/accounts/emails/professional_subscribed_email.txt:6
-#, python-format
 msgid ""
 "\n"
 "\tBonjour,\n"
 "\n"
-"\tNous vous confirmons la souscription à l'abonnement suivant : "
-"%(propackage)s\n"
+"\tNous vous confirmons la souscription à l'abonnement.\n"
 "\n"
 "\tNous vous invitons à prendre connaissance des conditions générales : <a "
 "href=\"https://www.e-loue.com/conditions-generales/\">Conditions générales e-"
@@ -3238,7 +3014,6 @@ msgstr ""
 #: eloue/templates/accounts/partials/booking_list_owner.html:45
 #: eloue/templates/dcns/products/product_detail.html:76
 #: eloue/templates/products/phone_view.html:149
-#: eloue/templates/products/product_detail.html:714
 #: eloue/templates/rent/booking_detail.html:46
 #: eloue/templates/rent/booking_incident.html:31
 #: eloue/templates/rent/booking_success.html:50
@@ -3250,7 +3025,6 @@ msgstr ""
 #: eloue/templates/accounts/partials/booking_list_owner.html:48
 #: eloue/templates/dcns/products/product_detail.html:80
 #: eloue/templates/products/phone_view.html:153
-#: eloue/templates/products/product_detail.html:718
 #: eloue/templates/rent/booking_detail.html:49
 #: eloue/templates/rent/booking_incident.html:35
 #: eloue/templates/rent/booking_success.html:53
@@ -3310,17 +3084,19 @@ msgid ""
 "            "
 msgstr ""
 
+#: eloue/templates/accounts/partials/more_info.html:16
+msgid "Etudes"
+msgstr ""
+
 #: eloue/templates/accounts/partials/more_info.html:20
 msgid "Langues Parlées"
 msgstr ""
 
 #: eloue/templates/accounts/partials/response_stats.html:6
-#: eloue/templates/products/product_detail.html:675
 msgid "Taux de réponse"
 msgstr ""
 
 #: eloue/templates/accounts/partials/response_stats.html:12
-#: eloue/templates/products/product_detail.html:681
 msgid "Temps de réponse moyen"
 msgstr ""
 
@@ -3868,6 +3644,11 @@ msgstr ""
 msgid "Réservation et paiement <br>en ligne"
 msgstr ""
 
+#: eloue/templates/autovoisin/admin/base_site.html:4
+#: eloue/templates/autovoisin/admin/base_site.html:7
+msgid "AutoVoisin"
+msgstr ""
+
 #: eloue/templates/contest/contest_auth_login.html:4
 msgid "Jeu concours - Identification"
 msgstr ""
@@ -3943,7 +3724,6 @@ msgstr ""
 #: eloue/templates/products/search.html:16
 #: eloue/templates/shiseido/index.html:17
 #: eloue/templates/shiseido/products/product_detail.html:15
-#: products/urls.py:21
 msgid "voiture"
 msgstr ""
 
@@ -4042,7 +3822,6 @@ msgstr ""
 #: eloue/templates/products/search.html:21
 #: eloue/templates/shiseido/index.html:22
 #: eloue/templates/shiseido/products/product_detail.html:20
-#: products/forms.py:211
 msgid "Où ?"
 msgstr ""
 
@@ -4140,7 +3919,6 @@ msgstr ""
 #: eloue/templates/dcns/accounts/contact.html:63
 #: eloue/templates/dcns/rent/booking_incident.html:180
 #: eloue/templates/products/phone_view.html:179
-#: eloue/templates/products/product_detail.html:745
 msgid "Envoyer"
 msgstr ""
 
@@ -4291,7 +4069,7 @@ msgstr ""
 #: eloue/templates/mobile/index.html:20
 #: eloue/templates/mobile/products/search.html:20
 #: eloue/templates/products/alert_list.html:17
-#: eloue/templates/shiseido/index.html:15 products/forms.py:40
+#: eloue/templates/shiseido/index.html:15 products/forms.py:46
 msgid "Que voulez-vous louer ?"
 msgstr ""
 
@@ -4944,8 +4722,7 @@ msgstr ""
 
 #: eloue/templates/dcns/products/alert_list.html:90
 #: eloue/templates/dcns/products/product_list.html:197
-#: eloue/templates/products/alert_list.html:101 products/forms.py:444
-#: products/forms.py:593
+#: eloue/templates/products/alert_list.html:101
 msgid "Km"
 msgstr ""
 
@@ -5099,7 +4876,6 @@ msgstr ""
 
 #: eloue/templates/dcns/products/product_detail.html:70
 #: eloue/templates/products/phone_view.html:140
-#: eloue/templates/products/product_detail.html:704
 #: eloue/templates/shiseido/products/product_detail.html:70
 #, python-format
 msgid " / par %(unit)s"
@@ -5131,20 +4907,18 @@ msgstr ""
 #: eloue/templates/dcns/products/product_detail.html:113
 #: eloue/templates/mobile/products/product_detail.html:53
 #: eloue/templates/products/phone_view.html:158
-#: eloue/templates/products/product_detail.html:723
 #: eloue/templates/rent/booking_confirm.html:75
 #: eloue/templates/rent/booking_detail.html:54
 #: eloue/templates/rent/booking_success.html:58
 #: eloue/templates/shiseido/products/product_detail.html:113
-#: products/forms.py:320 products/forms.py:497 products/models.py:74
+#: products/models.py:92
 msgid "Quantité"
 msgstr ""
 
 #: eloue/templates/dcns/products/product_detail.html:117
 #: eloue/templates/mobile/products/product_detail.html:57
 #: eloue/templates/shiseido/products/product_detail.html:117
-#: products/forms.py:45 products/forms.py:331 products/forms.py:500
-#: products/forms.py:508 products/models.py:79 products/views.py:594
+#: products/forms.py:170 products/models.py:98 products/views.py:265
 msgid "Catégorie"
 msgstr ""
 
@@ -5233,6 +5007,7 @@ msgstr ""
 #: eloue/templates/dcns/products/product_list.html:106
 #: eloue/templates/products/product_result.html:123
 #: eloue/templates/products/product_result.html:125 products/choices.py:171
+#: products/choices.py:178
 msgid "Les plus proches"
 msgstr ""
 
@@ -5255,7 +5030,6 @@ msgstr ""
 
 #: eloue/templates/dcns/products/product_list.html:148
 #: eloue/templates/products/phone_view.html:181
-#: eloue/templates/products/product_detail.html:747
 #: eloue/templates/products/product_list_category.html:36
 msgid "Réserver"
 msgstr ""
@@ -5299,7 +5073,7 @@ msgstr ""
 #: eloue/templates/rent/booking_failure.html:10
 #: eloue/templates/rent/booking_missing.html:10
 #: eloue/templates/rent/booking_register.html:14
-#: eloue/templates/rent/booking_success.html:10 rent/wizard.py:41
+#: eloue/templates/rent/booking_success.html:10
 msgid "Réservation"
 msgstr ""
 
@@ -5615,7 +5389,7 @@ msgstr ""
 
 #: eloue/templates/django_messages/inbox.html:32
 #: eloue/templates/django_messages/outbox.html:30
-#: eloue/templates/django_messages/trash.html:30 products/models.py:861
+#: eloue/templates/django_messages/trash.html:30 products/models.py:978
 msgid "Subject"
 msgstr ""
 
@@ -5653,6 +5427,11 @@ msgstr ""
 msgid "Lire"
 msgstr ""
 
+#: eloue/templates/django_messages/inbox.html:47
+#: eloue/templates/django_messages/view.html:34
+msgid "Delete"
+msgstr ""
+
 #: eloue/templates/django_messages/inbox.html:54
 #: eloue/templates/django_messages/outbox.html:51
 #: eloue/templates/django_messages/trash.html:52
@@ -5673,11 +5452,7 @@ msgstr ""
 msgid "Rédiger un message"
 msgstr ""
 
-#: eloue/templates/django_messages/new_message.html:5
-msgid "Vous avez reçu un nouveau message"
-msgstr ""
-
-#: eloue/templates/django_messages/new_message.html:30
+#: eloue/templates/django_messages/new_message_email.html:30
 #, python-format
 msgid ""
 "\n"
@@ -5689,11 +5464,11 @@ msgid ""
 "                        "
 msgstr ""
 
-#: eloue/templates/django_messages/new_message.html:42
+#: eloue/templates/django_messages/new_message_email.html:43
 msgid "Répondre au message"
 msgstr ""
 
-#: eloue/templates/django_messages/new_message.txt:3
+#: eloue/templates/django_messages/new_message_email.txt:3
 #, python-format
 msgid ""
 "\n"
@@ -5702,7 +5477,7 @@ msgid ""
 "Bonjour %(recipient)s,\n"
 msgstr ""
 
-#: eloue/templates/django_messages/new_message.txt:12
+#: eloue/templates/django_messages/new_message_email.txt:12
 msgid "Voici le lien pour répondre :"
 msgstr ""
 
@@ -5712,6 +5487,10 @@ msgstr ""
 
 #: eloue/templates/django_messages/trash.html:45
 msgid "undelete"
+msgstr ""
+
+#: eloue/templates/django_messages/view.html:3
+msgid "Message"
 msgstr ""
 
 #: eloue/templates/django_messages/view.html:32
@@ -5744,6 +5523,11 @@ msgstr ""
 
 #: eloue/templates/flatpages/press.html:43
 msgid "Derniers communiqués de Presse"
+msgstr ""
+
+#: eloue/templates/gosport/admin/base_site.html:4
+#: eloue/templates/gosport/admin/base_site.html:7
+msgid "GO Sport Location"
 msgstr ""
 
 #: eloue/templates/mobile/index.html:5 eloue/templates/products/search.html:4
@@ -5949,9 +5733,6 @@ msgid "Appeler le propriétaire"
 msgstr ""
 
 #: eloue/templates/products/phone_view.html:110
-#: eloue/templates/products/product_detail.html:654
-#: eloue/templates/products/product_detail.html:657
-#: eloue/templates/products/product_detail.html:660
 msgid "Appeler"
 msgstr ""
 
@@ -5960,12 +5741,10 @@ msgid "Besoin d'informations avant de faire la location ?"
 msgstr ""
 
 #: eloue/templates/products/phone_view.html:132
-#: eloue/templates/products/product_detail.html:694
 msgid "Réservez en ligne"
 msgstr ""
 
 #: eloue/templates/products/phone_view.html:171
-#: eloue/templates/products/product_detail.html:737
 #, python-format
 msgid ""
 "\n"
@@ -5977,14 +5756,12 @@ msgid ""
 msgstr ""
 
 #: eloue/templates/products/phone_view.html:186
-#: eloue/templates/products/product_detail.html:752
 msgid ""
 "Il s'agit d'une demande de réservation.<br>Le loueur va vous contacter "
 "rapidement. Le prix total est indicatif."
 msgstr ""
 
 #: eloue/templates/products/phone_view.html:188
-#: eloue/templates/products/product_detail.html:754
 msgid ""
 "Il s'agit simplement d'une pré-réservation. Vous ne serez débité que si le "
 "propriétaire accepte la demande de location sous 24h."
@@ -5998,174 +5775,16 @@ msgstr ""
 msgid "Etes-vous sûr de vouloir l'annonce ?"
 msgstr ""
 
-#: eloue/templates/products/product_detail.html:328
-msgid "places"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:332
-msgid "portes"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:344
-msgid "L/100km"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:350
-msgid "Plaque paire"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:352
-msgid "Plaque impaire"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:362
-msgid "personnes"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:370
-msgid "chambres"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:378
-#, python-format
-msgid ""
-"\n"
-"                    (%(count)s avis)\n"
-"                    "
-msgid_plural ""
-"\n"
-"                    (%(count)s avis)\n"
-"                "
-msgstr[0] ""
-msgstr[1] ""
-
-#: eloue/templates/products/product_detail.html:389 products/forms.py:318
-#: products/forms.py:495
-msgid "Photo"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:392
-msgid "Disponibilités et tarifs"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:396
-msgid "Conditions et assurance"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:415
-#: eloue/templates/products/product_edit.html:24 products/forms.py:44
-msgid "Prix"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:427
-msgid "Prix uniquement sur devis"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:432
-#: eloue/templates/rent/booking_confirm.html:134 products/forms.py:319
-#: products/forms.py:388 products/forms.py:452 products/forms.py:496
-#: products/models.py:69
-msgid "Dépôt de garantie"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:433
-msgid "Uniquement débité en cas de dommage constaté et avec votre accord."
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:451
-msgid "Date disponible"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:455
-msgid "Date non disponible"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:468 products/forms.py:426
-#: products/forms.py:585
-msgid "Options & accessoires"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:477 products/forms.py:321
-#: products/forms.py:387 products/forms.py:451 products/forms.py:749
-msgid "Description"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:482
-msgid "Règle d'utilisation"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:489
-#, python-format
-msgid ""
-"\n"
-"                        <h2>%(count)s commentaires</h2>\n"
-"                        "
-msgid_plural ""
-"\n"
-"                        <h2>%(count)s commentaire</h2>\n"
-"                    "
-msgstr[0] ""
-msgstr[1] ""
-
-#: eloue/templates/products/product_detail.html:495
-msgid "Pas de commentaire"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:501
-msgid "Soyez-le premier à réserver et à commenter !"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:528
-#: eloue/templates/products/product_detail.html:575
-msgid " Voir toutes ses annonces "
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:551
-msgid "Retrait en magasin"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:615
-msgid "Contacter par téléphone"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:621
-msgid "Vister le site internet"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:627
-msgid "Aller à la boutique"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:640
-msgid "Posez-moi vos questions"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:668
-msgid "Evaluations"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:762
-msgid "Objets similaires"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:772
-msgid "Désolé l'annnonce n\\'est plus disponible"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:772
-msgid "Effectuez une nouvelle recherche"
-msgstr ""
-
-#: eloue/templates/products/product_detail.html:772
-msgid "ou sélectionnez un objet similaire"
-msgstr ""
-
 #: eloue/templates/products/product_edit.html:19
 msgid "Retour à mes annonces"
 msgstr ""
 
 #: eloue/templates/products/product_edit.html:22
 msgid "Description et photos"
+msgstr ""
+
+#: eloue/templates/products/product_edit.html:24 products/forms.py:169
+msgid "Prix"
 msgstr ""
 
 #: eloue/templates/products/product_edit.html:48
@@ -6621,6 +6240,10 @@ msgstr ""
 
 #: eloue/templates/rent/booking_confirm.html:122
 msgid "Conditions"
+msgstr ""
+
+#: eloue/templates/rent/booking_confirm.html:134 products/models.py:87
+msgid "Dépôt de garantie"
 msgstr ""
 
 #: eloue/templates/rent/booking_confirm.html:147
@@ -8032,6 +7655,23 @@ msgstr ""
 msgid "Suivez-nous<br>sur Twitter"
 msgstr ""
 
+#: payments/paybox_payment.py:37
+#, python-brace-format
+msgid "PayboxError with code {0} and message \"{1}\""
+msgstr ""
+
+#: products/admin.py:165
+msgid "group"
+msgstr ""
+
+#: products/admin.py:166
+msgid "Creates the message optionally for all users or a group of users."
+msgstr ""
+
+#: products/admin.py:174
+msgid "All users"
+msgstr ""
+
 #: products/choices.py:17 rent/utils.py:79 rent/tests/pricing_compat.py:121
 #, fuzzy
 msgid "heure"
@@ -8300,587 +7940,361 @@ msgstr ""
 msgid "Chambre privée"
 msgstr ""
 
-#: products/choices.py:172
+#: products/choices.py:172 products/choices.py:179
 msgid "Les plus récentes"
 msgstr ""
 
-#: products/choices.py:173
+#: products/choices.py:173 products/choices.py:180
 msgid "Les pris les plus bas"
 msgstr ""
 
-#: products/choices.py:174
+#: products/choices.py:174 products/choices.py:181
 msgid "Les pris les plus haut"
 msgstr ""
 
-#: products/choices.py:178
+#: products/choices.py:182 products/choices.py:183
+msgid "Les ..."
+msgstr ""
+
+#: products/choices.py:187
 msgid "Location Automobile"
 msgstr ""
 
-#: products/choices.py:179
+#: products/choices.py:188
 msgid "Location saisonnière"
 msgstr ""
 
-#: products/fields.py:135
-msgid "Enter a valid vehicle license plate number"
-msgstr ""
-
-#: products/forms.py:41
+#: products/forms.py:47
 msgid "Où voulez-vous louer?"
 msgstr ""
 
-#: products/forms.py:44
+#: products/forms.py:169
 msgid "par-prix"
 msgstr ""
 
-#: products/forms.py:45
+#: products/forms.py:170
 msgid "par-categorie"
 msgstr ""
 
-#: products/forms.py:212
-msgid "Restreindre les résultats à un rayon de :"
-msgstr ""
-
-#: products/forms.py:253
-msgid "Contenu"
-msgstr ""
-
-#: products/forms.py:295 products/forms.py:367 products/forms.py:464
-msgid "Choisissez une catégorie"
-msgstr ""
-
-#: products/forms.py:316
-msgid "Titre de l'annnonce"
-msgstr ""
-
-#: products/forms.py:319
-msgid ""
-"Nous conseillons de mettre la valeur actuelle de votre bien. Ce montant vous "
-"sera versé si votre objet est cassé ou irréparable."
-msgstr ""
-
-#: products/forms.py:320 products/forms.py:497
-msgid "Le locataire peut réserver plusieurs exemplaires si vous les possédez"
-msgstr ""
-
-#: products/forms.py:321
-msgid ""
-"Décrivez plus précisement votre objet, son état, comment et quand vous "
-"l'utilisez."
-msgstr ""
-
-#: products/forms.py:322 products/forms.py:498 products/models.py:75
-msgid "Livraison possible"
-msgstr ""
-
-#: products/forms.py:324 products/forms.py:702
-msgid "L'heure"
-msgstr ""
-
-#: products/forms.py:325
-msgid "Tarif journée"
-msgstr ""
-
-#: products/forms.py:325
-#, python-format
-msgid ""
-"20% de frais de commission (comprenant notamment l'assurance, le paiement en "
-"ligne,etc.) seront prélevés sur ce prix à chaque location."
-msgstr ""
-
-#: products/forms.py:326 products/forms.py:704
-msgid "Le week-end"
-msgstr ""
-
-#: products/forms.py:327 products/forms.py:705
-msgid "La semaine"
-msgstr ""
-
-#: products/forms.py:328 products/forms.py:706
-msgid "Les 15 jours"
-msgstr ""
-
-#: products/forms.py:329 products/forms.py:707
-msgid "Le mois"
-msgstr ""
-
-#: products/forms.py:336
-msgid "Donnez envie aux e-loueurs potentiels de louer votre objet."
-msgstr ""
-
-#: products/forms.py:342 products/forms.py:526
-msgid "Vous devez au moins louer un object"
-msgstr ""
-
-#: products/forms.py:355
-msgid "Vous devez ajouter une photo."
-msgstr ""
-
-#: products/forms.py:370 products/forms.py:467 products/forms.py:514
-#: products/forms.py:609
-msgid "Informations"
-msgstr ""
-
-#: products/forms.py:373 products/forms.py:511
-msgid "Livraison de l'objet"
-msgstr ""
-
-#: products/forms.py:375 products/forms.py:430 products/forms.py:482
-#: products/forms.py:731
-msgid "Prix de la location"
-msgstr ""
-
-#: products/forms.py:378 products/forms.py:434 products/forms.py:485
-#: products/forms.py:734
-msgid "Grille des tarifs"
-msgstr ""
-
-#: products/forms.py:387
-msgid ""
-"Décrivez plus précissément votre véhicule, son état, ses particularités."
-msgstr ""
-
-#: products/forms.py:388
-msgid ""
-"Nous conseillons un dépôt de garantie de 2000€, qui correspond au montant de "
-"la franchise de l'assurance voiture. en cas de vol."
-msgstr ""
-
-#: products/forms.py:389 products/forms.py:549 products/models.py:399
-msgid "N° d'immatriculation"
-msgstr ""
-
-#: products/forms.py:390 products/forms.py:550 products/models.py:400
-msgid "1er mise en circulation"
-msgstr ""
-
-#: products/forms.py:395
-msgid "Ajouter une voiture"
-msgstr ""
-
-#: products/forms.py:396
-msgid ""
-"Votre voiture peut être très utile. Donnez envie aux e-loueurs potentiels de "
-"louer votre véhicule."
-msgstr ""
-
-#: products/forms.py:407 products/forms.py:566
-msgid "Type de véhicule"
-msgstr ""
-
-#: products/forms.py:410 products/forms.py:569
-msgid "Description du véhicule"
-msgstr ""
-
-#: products/forms.py:414 products/forms.py:573
-msgid "Caractéristique du véhicule"
-msgstr ""
-
-#: products/forms.py:418 products/forms.py:577
-msgid "Informations pour l'assurance"
-msgstr ""
-
-#: products/forms.py:419 products/forms.py:578
-msgid ""
-"Ces informations servent à assurer le véhicule pendant la location <a href="
-"\"#\">(En savoir plus)</a>."
-msgstr ""
-
-#: products/forms.py:435
-msgid ""
-"La grille tarifaire permet d'appliquer un tarif dégressif en fonction de la "
-"période. Ces prix ne sont pas obligatoires pour publier l'annonce, il est "
-"possible de les ajouter plus tard."
-msgstr ""
-
-#: products/forms.py:440 products/forms.py:589
-msgid "place(s)"
-msgstr ""
-
-#: products/forms.py:441 products/forms.py:590
-msgid "porte(s)"
-msgstr ""
-
-#: products/forms.py:442 products/forms.py:591
-msgid "litre/100km"
-msgstr ""
-
-#: products/forms.py:443 products/forms.py:592
-msgid "CV"
-msgstr ""
-
-#: products/forms.py:445 products/forms.py:594
-msgid "€/Km"
-msgstr ""
-
-#: products/forms.py:451
-msgid ""
-"Décrivez les spécifités de votre logement et insistez sur ce qui le rend "
-"exceptionnel."
-msgstr ""
-
-#: products/forms.py:452
-msgid ""
-"Nous conseillons un dépôt de garantie de 75€. Ceci correspond au montant de "
-"la franchise de l'assurance."
-msgstr ""
-
-#: products/forms.py:453
-msgid "Prix par nuit"
-msgstr ""
-
-#: products/forms.py:453
-msgid "Prix de location à la journée"
-msgstr ""
-
-#: products/forms.py:457
-msgid "Ajouter un logement"
-msgstr ""
-
-#: products/forms.py:458
-msgid ""
-"Votre logement est unique. Donnez envie aux e-loueurs potentiels de venir y "
-"séjourner."
-msgstr ""
-
-#: products/forms.py:470 products/forms.py:612
-msgid "Description du lieu"
-msgstr ""
-
-#: products/forms.py:479 products/forms.py:621
-msgid "Service inclus"
-msgstr ""
-
-#: products/forms.py:489
-msgid "persone(s)"
-msgstr ""
-
-#: products/forms.py:490
-msgid "chambre(s)"
-msgstr ""
-
-#: products/forms.py:496
-msgid "Montant utilisé en cas de dédomagement"
-msgstr ""
-
-#: products/forms.py:606
-msgid "Choisissez un catégorie"
-msgstr ""
-
-#: products/forms.py:682
-msgid "Vous devez spécifiez un numéro"
-msgstr ""
-
-#: products/forms.py:703
-msgid "La journée"
-msgstr ""
-
-#: products/models.py:68
+#: products/models.py:86
 msgid "Titre"
 msgstr ""
 
-#: products/models.py:77
+#: products/models.py:93
+msgid "Livraison possible"
+msgstr ""
+
+#: products/models.py:95
 msgid "archivé"
 msgstr ""
 
-#: products/models.py:78
+#: products/models.py:96
 msgid "autorisé"
 msgstr ""
 
-#: products/models.py:83
+#: products/models.py:96
+msgid "Not index the product in the search engine"
+msgstr ""
+
+#: products/models.py:103
 msgid "Type de payments"
 msgstr ""
 
-#: products/models.py:93
+#: products/models.py:115
 msgid "product"
 msgstr ""
 
-#: products/models.py:368
+#: products/models.py:416
 msgid "marque"
 msgstr ""
 
-#: products/models.py:369
+#: products/models.py:417
 msgid "modèle"
 msgstr ""
 
-#: products/models.py:372
+#: products/models.py:420
 msgid "nombre de place"
 msgstr ""
 
-#: products/models.py:373
+#: products/models.py:421
 msgid "nombre de porte"
 msgstr ""
 
-#: products/models.py:374
+#: products/models.py:422
 msgid "énergie"
 msgstr ""
 
-#: products/models.py:375
+#: products/models.py:423
 msgid "boite de vitesse"
 msgstr ""
 
-#: products/models.py:376
+#: products/models.py:424
 msgid "kilométrage"
 msgstr ""
 
-#: products/models.py:377
+#: products/models.py:425
 msgid "consommation"
 msgstr ""
 
-#: products/models.py:380
+#: products/models.py:428
 msgid "kilomètres inclus/jour"
 msgstr ""
 
-#: products/models.py:380
+#: products/models.py:428
 msgid "Nombre de kilomètres maximum que le locataire peut effectuer par jour."
 msgstr ""
 
-#: products/models.py:381
+#: products/models.py:429
 msgid "Prix par kilomètres supplémentaires"
 msgstr ""
 
-#: products/models.py:381
+#: products/models.py:429
 msgid ""
 "Prix du kilomètre supplémentaire. Si le locataire dépasse le nombre de "
 "kilomètre inclus par jour."
 msgstr ""
 
-#: products/models.py:384
+#: products/models.py:432
 msgid "climatisation"
 msgstr ""
 
-#: products/models.py:385
+#: products/models.py:433
 msgid "direction assistée"
 msgstr ""
 
-#: products/models.py:386
+#: products/models.py:434
 msgid "régulateur de vitesse"
 msgstr ""
 
-#: products/models.py:387
+#: products/models.py:435
 msgid "GPS"
 msgstr ""
 
-#: products/models.py:388
+#: products/models.py:436
 msgid "siège bébé"
 msgstr ""
 
-#: products/models.py:389
+#: products/models.py:437
 msgid "coffre de toit"
 msgstr ""
 
-#: products/models.py:390
+#: products/models.py:438
 msgid "porte-vélo"
 msgstr ""
 
-#: products/models.py:391
+#: products/models.py:439
 msgid "pneus neige"
 msgstr ""
 
-#: products/models.py:392
+#: products/models.py:440
 msgid "chaines"
 msgstr ""
 
-#: products/models.py:393
+#: products/models.py:441
 msgid "porte-skis"
 msgstr ""
 
-#: products/models.py:394
+#: products/models.py:442
 msgid "lecteur CD"
 msgstr ""
 
-#: products/models.py:395
+#: products/models.py:443
 msgid "entrée audio/iPod"
 msgstr ""
 
-#: products/models.py:398
+#: products/models.py:446
 msgid "CV fiscaux"
 msgstr ""
 
-#: products/models.py:473
+#: products/models.py:447
+msgid "N° d'immatriculation"
+msgstr ""
+
+#: products/models.py:448
+msgid "1er mise en circulation"
+msgstr ""
+
+#: products/models.py:521
 msgid "capacité"
 msgstr ""
 
-#: products/models.py:473
+#: products/models.py:521
 msgid "Nombre de personne que peux accueillir votre locgement"
 msgstr ""
 
-#: products/models.py:474
+#: products/models.py:522
 msgid "Type de logement"
 msgstr ""
 
-#: products/models.py:476
+#: products/models.py:524
 msgid "nombre de chambre"
 msgstr ""
 
-#: products/models.py:477
+#: products/models.py:525
 msgid "Règles d'utilisation"
 msgstr ""
 
-#: products/models.py:480
+#: products/models.py:528
 msgid "air conditionné"
 msgstr ""
 
-#: products/models.py:481
+#: products/models.py:529
 msgid "petit déjeuner"
 msgstr ""
 
-#: products/models.py:482
+#: products/models.py:530
 msgid "balcon/terasse"
 msgstr ""
 
-#: products/models.py:483
+#: products/models.py:531
 msgid "chambre avec serrure"
 msgstr ""
 
-#: products/models.py:484
+#: products/models.py:532
 msgid "serviettes"
 msgstr ""
 
-#: products/models.py:485
+#: products/models.py:533
 msgid "ascenseur dans l'immeuble"
 msgstr ""
 
-#: products/models.py:486
+#: products/models.py:534
 msgid "adapté aux familles/enfants"
 msgstr ""
 
-#: products/models.py:487
+#: products/models.py:535
 msgid "salle de sport"
 msgstr ""
 
-#: products/models.py:488
+#: products/models.py:536
 msgid "accessible aux personnes handicapées"
 msgstr ""
 
-#: products/models.py:489
+#: products/models.py:537
 msgid "chauffage"
 msgstr ""
 
-#: products/models.py:490
+#: products/models.py:538
 msgid "jacuzzi"
 msgstr ""
 
-#: products/models.py:491
+#: products/models.py:539
 msgid "cheminée intérieure"
 msgstr ""
 
-#: products/models.py:492
+#: products/models.py:540
 msgid "accès internet"
 msgstr ""
 
-#: products/models.py:493
+#: products/models.py:541
 msgid "cuisine"
 msgstr ""
 
-#: products/models.py:494
+#: products/models.py:542
 msgid "parking"
 msgstr ""
 
-#: products/models.py:495
+#: products/models.py:543
 msgid "fumeurs acceptées"
 msgstr ""
 
-#: products/models.py:496
+#: products/models.py:544
 msgid "idéal pour des évènements"
 msgstr ""
 
-#: products/models.py:497
+#: products/models.py:545
 msgid "TV"
 msgstr ""
 
-#: products/models.py:498
+#: products/models.py:546
 msgid "machine à laver"
 msgstr ""
 
-#: products/models.py:499
+#: products/models.py:547
 msgid "sèche linge"
 msgstr ""
 
-#: products/models.py:500
+#: products/models.py:548
 msgid "ordinateur avec Internet"
 msgstr ""
 
-#: products/models.py:624
+#: products/models.py:695
 msgid "category"
 msgstr ""
 
-#: products/models.py:625
+#: products/models.py:696
 msgid "categories"
 msgstr ""
 
-#: products/models.py:657
+#: products/models.py:710
+#, python-format
+msgid "Category with name %s (%s) already exists. Site_id is %d."
+msgstr ""
+
+#: products/models.py:768
 msgid "properties"
 msgstr ""
 
-#: products/models.py:708
+#: products/models.py:825
 msgid "Le prix ne peut pas être négatif"
 msgstr ""
 
-#: products/models.py:762
+#: products/models.py:879
 msgid "Score can't be higher than 1"
 msgstr ""
 
-#: products/models.py:764
+#: products/models.py:881
 msgid "Score can't be a negative value"
 msgstr ""
 
-#: products/models.py:773
+#: products/models.py:890
 msgid "Vous ne pouvez pas commenter vos propres locations"
 msgstr ""
 
-#: products/models.py:775
+#: products/models.py:892
 msgid "Vous ne pouvez pas commenter un produit que vous n'avez pas loué"
 msgstr ""
 
-#: products/models.py:785
+#: products/models.py:902
 msgid "Vous ne pouvez pas commenter votre profil"
 msgstr ""
 
-#: products/models.py:787
+#: products/models.py:904
 msgid ""
 "Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
 "effectué de réservations"
 msgstr ""
 
-#: products/models.py:862 products/models.py:863
+#: products/models.py:979 products/models.py:980
 msgid "Archived"
 msgstr ""
 
-#: products/urls.py:17
-msgid "service_de_livraison"
+#: products/serializers.py:131
+msgid "Vous ne pouvez pas modifier la catégorie"
 msgstr ""
 
-#: products/urls.py:18 products/urls.py:20 products/urls.py:21
-#: products/urls.py:22 products/urls.py:46 products/urls.py:47
-msgid "ajouter"
+#: products/serializers.py:139
+msgid "Value can't be negative"
 msgstr ""
 
-#: products/urls.py:19
+#: products/serializers.py:264
+msgid "You can't make unavailable such quantity."
+msgstr ""
+
+#: products/serializers.py:295 rent/forms.py:55
+msgid "Une location ne peut pas terminer avant d'avoir commencer"
+msgstr ""
+
+#: products/serializers.py:358
+msgid "HyperlinkedByIdField requires 'source' argument"
+msgstr ""
+
+#: products/urls.py:15
 msgid "deposer"
 msgstr ""
 
-#: products/urls.py:20
-msgid "objet"
-msgstr ""
-
-#: products/urls.py:22
-msgid "logement"
-msgstr ""
-
-#: products/urls.py:24 products/urls.py:26
-msgid "alertes"
-msgstr ""
-
-#: products/urls.py:25
-msgid "alertes/ajouter"
-msgstr ""
-
-#: products/urls.py:27
-msgid "alertes/supprimer"
-msgstr ""
-
-#: products/urls.py:29
-msgid "nouveau-message"
+#: products/urls.py:16 products/urls.py:17
+msgid "ajouter"
 msgstr ""
 
 #: products/utils.py:22
@@ -8895,79 +8309,25 @@ msgid ""
 "%(body)s"
 msgstr ""
 
-#: products/views.py:165 products/views.py:177 products/wizard.py:47
-msgid ""
-"En tant que professionnel, vous devez souscrire à un abonnement avant de "
-"pouvoir déposer une annonce."
-msgstr ""
-
-#: products/views.py:225
-msgid "Les modifications ont bien été prises en compte"
-msgstr ""
-
-#: products/views.py:249
-msgid "L'adresse a bien été modifiée"
-msgstr ""
-
-#: products/views.py:275
-msgid "Le numéro de téléphone à bien été enregistré"
-msgstr ""
-
-#: products/views.py:304
-msgid "Les prix ont bien été modifiés"
-msgstr ""
-
-#: products/views.py:469
-msgid "Message successfully sent with booking offer."
-msgstr ""
-
-#: products/views.py:473 products/views.py:497
-msgid "Message successfully sent."
-msgstr ""
-
-#: products/views.py:504
+#: products/views.py:142
 #, python-format
-msgid "Re: %(subject)s"
+msgid "Quantité disponible à cette période: %s"
 msgstr ""
 
-#: products/views.py:536
-msgid "Votre objet à bien été supprimée"
-msgstr ""
-
-#: products/views.py:556
+#: products/views.py:227
 msgid "par-"
 msgstr ""
 
-#: products/views.py:561
+#: products/views.py:232
 msgid "categorie"
 msgstr ""
 
-#: products/views.py:572 products/views.py:575 products/views.py:583
+#: products/views.py:243 products/views.py:246 products/views.py:254
 msgid "page"
 msgstr ""
 
-#: products/views.py:685
-msgid "Votre alerte à bien été supprimée"
-msgstr ""
-
-#: products/wizard.py:77
-msgid "Votre objet a bien été ajouté"
-msgstr ""
-
-#: products/wizard.py:111
-msgid "Envoyer un message"
-msgstr ""
-
-#: products/wizard.py:126
-msgid "Vous ne pouvez pas vous envoyer des messages."
-msgstr ""
-
-#: products/wizard.py:134
-msgid "Votre message a bien été envoyé au propriétaire"
-msgstr ""
-
-#: products/wizard.py:158
-msgid "Votre alerte a bien été créée"
+#: products/views.py:522 products/views.py:539
+msgid "Departure point not specified"
 msgstr ""
 
 #: products/templatetags/facets.py:28 products/templatetags/facets.py:72
@@ -8979,43 +8339,43 @@ msgstr ""
 msgid "sur devis"
 msgstr ""
 
-#: rent/admin.py:24
+#: rent/admin.py:26
 msgid "Borrower & Owner"
 msgstr ""
 
-#: rent/admin.py:25
+#: rent/admin.py:27
 msgid "Payment"
 msgstr ""
 
-#: rent/admin.py:39
+#: rent/admin.py:48
 msgid "Envoyer un email de relance"
 msgstr ""
 
-#: rent/admin.py:43
+#: rent/admin.py:52
 msgid "Product"
 msgstr ""
 
-#: rent/admin.py:50
+#: rent/admin.py:59
 msgid "Borrower"
 msgstr ""
 
-#: rent/admin.py:55
+#: rent/admin.py:64
 msgid "Borrower email"
 msgstr ""
 
-#: rent/admin.py:61
+#: rent/admin.py:70
 msgid "Borrower phone"
 msgstr ""
 
-#: rent/admin.py:68
+#: rent/admin.py:77
 msgid "Owner"
 msgstr ""
 
-#: rent/admin.py:73
+#: rent/admin.py:82
 msgid "Owner email"
 msgstr ""
 
-#: rent/admin.py:79
+#: rent/admin.py:88
 msgid "Owner phone"
 msgstr ""
 
@@ -9089,79 +8449,46 @@ msgstr ""
 
 #: rent/contract.py:96 rent/contract.py:97 rent/contract.py:148
 #: rent/contract.py:149 rent/contract.py:204 rent/contract.py:206
-#: rent/contract.py:259 rent/contract.py:260 rent/contract.py:322
-#: rent/contract.py:323
+#: rent/contract.py:259 rent/contract.py:260 rent/contract.py:324
+#: rent/contract.py:325
 msgid "d F Y à H\\hi."
 msgstr ""
 
-#: rent/forms.py:60 rent/forms.py:80
-msgid "Enter a valid date."
-msgstr ""
-
-#: rent/forms.py:61 rent/forms.py:82
-msgid "Enter a valid time."
-msgstr ""
-
-#: rent/forms.py:101 rent/forms.py:115
-msgid "Cette transaction ne semble pas lier à une transaction interne"
-msgstr ""
-
-#: rent/forms.py:149 rent/forms.py:237
-msgid "Vous ne pouvez pas louer à ces dates"
-msgstr ""
-
-#: rent/forms.py:151 rent/forms.py:280
-msgid "Une location ne peut pas terminer avant d'avoir commencer"
-msgstr ""
-
-#: rent/forms.py:153 rent/forms.py:282
+#: rent/forms.py:57
 #, python-format
 msgid "La durée d'une location est limitée à %s jours."
 msgstr ""
 
-#: rent/forms.py:158 rent/forms.py:287
+#: rent/forms.py:62
 msgid "Prix sur devis"
 msgstr ""
 
-#: rent/forms.py:186
-msgid "You have to bind an existing instance to this form"
-msgstr ""
-
-#: rent/forms.py:193
-msgid "You have to fill out all the fields"
-msgstr ""
-
-#: rent/forms.py:234 rent/views.py:108
-#, python-format
-msgid "Quantité disponible à cette période: %s"
-msgstr ""
-
-#: rent/models.py:439
+#: rent/models.py:486
 msgid "Note"
 msgstr ""
 
-#: rent/models.py:444
+#: rent/models.py:491
 msgid "Type"
 msgstr ""
 
-#: rent/serializers.py:25
+#: rent/serializers.py:33
 msgid "The booking is made on another product"
 msgstr ""
 
-#: rent/serializers.py:30
+#: rent/serializers.py:38
 msgid "You are not owner or borrower of this booking"
 msgstr ""
 
-#: rent/serializers.py:48 rent/wizard.py:85
+#: rent/serializers.py:100
 msgid "Vous ne pouvez pas louer vos propres objets"
 msgstr ""
 
-#: rent/serializers.py:102
+#: rent/serializers.py:156
 #, python-format
 msgid "Action %(action)s is not available for this state: %(state)s"
 msgstr ""
 
-#: rent/serializers.py:126
+#: rent/serializers.py:181
 msgid ""
 "Author of the comment must be either owner or borrower of the related "
 "booking record"
@@ -9321,40 +8648,25 @@ msgstr ""
 msgid "quatre-vingt-dix"
 msgstr ""
 
-#: rent/views.py:258
-msgid "Avant l'acceptation de la demande, veuillez saisir votre RIB."
-msgstr ""
-
-#: rent/views.py:269
-msgid "La demande de location n'a pu être acceptée"
-msgstr ""
-
-#: rent/views.py:285
-msgid "Cette réservation a bien été refusée"
-msgstr ""
-
-#: rent/views.py:297
-msgid "Cette réservation a bien été marqué comme lu"
-msgstr ""
-
-#: rent/views.py:308
-msgid "Cette réservation a bien été annulée"
-msgstr ""
-
-#: rent/views.py:319
-msgid ""
-"Cette réservation a bien été cloturée. Si vous voulez vous pouvez ajouter un "
-"commentaire et une note sur le déroulement de la location."
-msgstr ""
-
-#: rent/views.py:339
-msgid ""
-"Nous avons bien pris en compte la déclaration de l'incident. Nous vous "
-"contacterons rapidement."
-msgstr ""
-
-#: rent/views.py:475 rent/tests/api2.py:172 rent/tests/api2.py:190
-#: rent/tests/api2.py:206 rent/tests/api2.py:218 rent/tests/api2.py:239
-#: rent/tests/api2.py:246
+#: rent/views.py:135 rent/tests/api2.py:169 rent/tests/api2.py:187
+#: rent/tests/api2.py:194 rent/tests/api2.py:214 rent/tests/api2.py:226
+#: rent/tests/api2.py:247 rent/tests/api2.py:255
 msgid "Transition performed"
+msgstr ""
+
+#: shipping/choises.py:8
+msgid "Pudo de type départ"
+msgstr ""
+
+#: shipping/choises.py:9
+msgid "Pudo de type arrivée"
+msgstr ""
+
+#: shipping/helpers.py:97
+#, python-format
+msgid "Can't find shipping point for lat: %s, lng: %s, type: %s, site_id: %s"
+msgstr ""
+
+#: shipping/serializers.py:114
+msgid "Latitude\\longitude or address are required"
 msgstr ""
