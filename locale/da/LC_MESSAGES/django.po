@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-29 15:40+0200\n"
+"POT-Creation-Date: 2015-10-01 11:37+0200\n"
 "PO-Revision-Date: 2015-09-25 14:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
@@ -992,7 +992,8 @@ msgstr "lejere"
 #: eloue/templates/jade/_breadcrumbs.jade:25
 #: eloue/templates/jade/_nav_home.jade:6
 #: eloue/templates/jade/_nav_home.jade:10
-#: eloue/templates/jade/_nav_home.jade:17 products/templatetags/facets.py:72
+#: eloue/templates/jade/_nav_home.jade:17 products/models.py:739
+#: products/models.py:741 products/templatetags/facets.py:72
 msgid "location"
 msgstr "leje"
 
@@ -1000,7 +1001,7 @@ msgstr "leje"
 msgid "comment-ca-marche"
 msgstr "Hvordan-fungerer-det?"
 
-#: eloue/urls.py:210
+#: eloue/urls.py:210 eloue/templates/dk/jade/_footer_links.jade:9
 msgid "offre-professionnel"
 msgstr "professionel"
 
@@ -1024,7 +1025,7 @@ msgstr ""
 msgid "conditions-generales-particuliers"
 msgstr "Generelle-betingelser-privat"
 
-#: eloue/urls.py:222
+#: eloue/urls.py:222 eloue/templates/dk/jade/_footer_links.jade:19
 msgid "conditions-generales-professionnels"
 msgstr "Generelle-betingelser-PRO-Erhverv"
 
@@ -1032,7 +1033,7 @@ msgstr "Generelle-betingelser-PRO-Erhverv"
 msgid "contrat-de-location"
 msgstr "Lejekontrakter"
 
-#: eloue/urls.py:225
+#: eloue/urls.py:225 eloue/templates/dk/jade/_footer_links.jade:29
 msgid "mentions-legales"
 msgstr "Omtale"
 
@@ -1604,6 +1605,8 @@ msgstr ""
 #: eloue/templates/cancel_terms/_breadcrumbs.jade:4
 #: eloue/templates/contact_us/_breadcrumbs.jade:4
 #: eloue/templates/deposit_amount/_breadcrumbs.jade:4
+#: eloue/templates/dk/subscription/_breadcrumbs.jade:4
+#: eloue/templates/dk/terms_pro/_breadcrumbs.jade:4
 #: eloue/templates/gosport/how_it_works/_breadcrumb.jade:4
 #: eloue/templates/gosport/imprint/_breadcrumbs.jade:4
 #: eloue/templates/gosport/our_partners/_breadcrumbs.jade:4
@@ -1638,6 +1641,7 @@ msgstr "Kontakt os"
 
 #: eloue/templates/autovoisin/how_it_works/index.jade:1
 #: eloue/templates/autovoisin/jade/_header_site.jade:41
+#: eloue/templates/dk/jade/_header_site.jade:49
 #: eloue/templates/gosport/how_it_works/index.jade:1
 #: eloue/templates/jade/_footer_links.jade:9
 #: eloue/templates/jade/_header_site.jade:49
@@ -1661,37 +1665,44 @@ msgstr "Garanteret tilfredshed"
 #: eloue/templates/django_messages/outbox.html:9
 #: eloue/templates/django_messages/trash.html:9
 #: eloue/templates/django_messages/view.html:9
+#: eloue/templates/dk/jade/_header_site.jade:33
 #: eloue/templates/jade/_header_site.jade:33
 msgid "Tableau de bord"
 msgstr "Dashboard"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:27
+#: eloue/templates/dk/jade/_header_site.jade:35
 #: eloue/templates/jade/_header_site.jade:35
 msgid "Messages"
 msgstr "Beskeder"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:29
+#: eloue/templates/dk/jade/_header_site.jade:37
 #: eloue/templates/jade/_header_site.jade:37
 #: eloue/templates/products/tab_available.jade:55
 msgid "Réservations"
 msgstr "Reservér"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:31
+#: eloue/templates/dk/jade/_header_site.jade:39
 #: eloue/templates/jade/_header_site.jade:39
 msgid "Annonces"
 msgstr "Annoncer"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:33
+#: eloue/templates/dk/jade/_header_site.jade:41
 #: eloue/templates/jade/_header_site.jade:41
 msgid "Compte"
 msgstr "Min konto"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:35
+#: eloue/templates/dk/jade/_header_site.jade:43
 #: eloue/templates/jade/_header_site.jade:43
 msgid "Déconnexion"
 msgstr "Log af"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:39
+#: eloue/templates/dk/jade/_header_site.jade:47
 #: eloue/templates/jade/_header_site.jade:47
 msgid "Aide"
 msgstr "Hjælp"
@@ -1699,17 +1710,20 @@ msgstr "Hjælp"
 #: eloue/templates/autovoisin/jade/_header_site.jade:55
 #: eloue/templates/autovoisin/jade/_header_site.jade:57
 #: eloue/templates/autovoisin/jade/_header_site.jade:60
+#: eloue/templates/dk/jade/_header_site.jade:61
 #: eloue/templates/jade/_header_site.jade:61
 #: eloue/templates/jade/_product_list_aside.jade:24
 msgid "Où ça ?"
 msgstr "Hvor ligger det?"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:55
+#: eloue/templates/dk/jade/_header_site.jade:60
 #: eloue/templates/jade/_header_site.jade:60 products/forms.py:46
 msgid "Que voulez-vous louer ?"
 msgstr "Hvad ønsker du at leje?"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:70
+#: eloue/templates/dk/jade/_header_site.jade:75
 #: eloue/templates/jade/_header_site.jade:75
 msgid "Déposez une annonce"
 msgstr "Indsæt en annonce"
@@ -2048,6 +2062,96 @@ msgstr "Beskeder"
 msgid "Reply"
 msgstr ""
 
+#: eloue/templates/dk/jade/_footer_links.jade:7
+#: eloue/templates/jade/_footer_links.jade:7
+msgid "Le concept e-loue"
+msgstr "E-loue's koncept"
+
+#: eloue/templates/dk/jade/_footer_links.jade:9
+#: eloue/templates/jade/_footer_links.jade:13
+msgid "L'offre e-loue Pro"
+msgstr "E-loue Pro tilbud"
+
+#: eloue/templates/dk/jade/_footer_links.jade:17
+#: eloue/templates/jade/_footer_links.jade:23
+msgid "Pourquoi choisir e-loue ?"
+msgstr "Hvorfor vælge e-loue?"
+
+#: eloue/templates/dk/jade/_footer_links.jade:19
+#: eloue/templates/jade/_footer_links.jade:31
+msgid "Conditions générales professionnels"
+msgstr "Generelle betingelser (PRO/Erhverv)"
+
+#: eloue/templates/dk/jade/_footer_links.jade:27
+#: eloue/templates/jade/_footer_links.jade:53
+msgid "En savoir plus"
+msgstr "For yderligere information"
+
+#: eloue/templates/dk/jade/_footer_links.jade:29
+#: eloue/templates/imprint/index.jade:1
+#: eloue/templates/jade/_footer_links.jade:59
+msgid "Mentions légales"
+msgstr "Omtale"
+
+#: eloue/templates/dk/jade/_header_site.jade:3
+#: eloue/templates/jade/_header_site.jade:3
+msgid ""
+"En poursuivant votre navigation, vous acceptez l’utilisation des cookies "
+"pour disposer de services et d’offres adaptées à vos centres d’intérêts. "
+"Pour en savoir plus,&nbsp;"
+msgstr ""
+"Vi bruger cookies på hjemmesiden til at forbedre brugeroplevelsen. Vil du "
+"vide mere,&nbsp;"
+
+#: eloue/templates/dk/jade/_header_site.jade:3
+#: eloue/templates/jade/_header_site.jade:3
+msgid "cliquez ici"
+msgstr "Klik her"
+
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+msgid "Bonjour"
+msgstr "Hej"
+
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+msgid "inscrivez-vous"
+msgstr "Tilmeld dig"
+
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+#: eloue/templates/landing_pages/_sign_in_content.jade:9
+msgid "ou"
+msgstr "eller"
+
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+msgid "connectez-vous"
+msgstr "log dig på"
+
+#: eloue/templates/dk/jade/_header_site.jade:12
+#: eloue/templates/jade/_header_site.jade:12
+#, python-format
+msgid ""
+"\n"
+" Vous êtes un loueur professionnel, découvrez les <a href="
+"\"%(subscription_url)s\"><b>offres e-loue Pro</b></a>"
+msgstr ""
+"\n"
+" Er du erhvervsudlejer, se her <a href=\"%(subscription_url)s\"><b>e-loues "
+"PRO tilbud</b></a>"
+
+#: eloue/templates/dk/jade/_header_site.jade:17
+#: eloue/templates/dk/jade/_header_site.jade:24
+#: eloue/templates/jade/_header_site.jade:17
+#: eloue/templates/jade/_header_site.jade:24
+msgid ""
+"\n"
+" Appelez-nous au <b>01 85 08 99 77 </b> (numéro gratuit)\n"
+msgstr ""
+"\n"
+" Kontakt os på <b>01 85 08 99 77 </b> (gratis opkald)\n"
+
 #: eloue/templates/dk/jade/_product_list.jade:3
 #: eloue/templates/jade/_product_list.jade:3
 msgid "annonces de location dans toute la France"
@@ -2056,14 +2160,12 @@ msgstr "Lejeannoncer i hele landet"
 #: eloue/templates/dk/jade/_product_list.jade:7
 #: eloue/templates/jade/_product_list.jade:7
 #: eloue/templates/jade/_product_list_main.jade:2
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
 #: eloue/templates/jade/product_details/aside/_similar_listing.jade:16
 #: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
-#: products/choices.py:22 rent/utils.py:78 rent/tests/pricing_compat.py:126
+#: products/choices.py:22 rent/utils.py:79 rent/tests/pricing_compat.py:126
+#, fuzzy
 msgid "jour"
-msgid_plural "jours"
-msgstr[0] "dag"
-msgstr[1] "dage"
+msgstr "dag"
 
 #: eloue/templates/dk/jade/_product_list.jade:11
 #: eloue/templates/jade/_nav_home.jade:6
@@ -2084,6 +2186,50 @@ msgstr "Leje"
 #: eloue/templates/products/subcategory_list.jade:34
 msgid "Explorez toutes les annonces de location"
 msgstr "Se samtlige lejeannoncer"
+
+#: eloue/templates/dk/products/_base_product_detail.jade:53
+#: eloue/templates/products/_base_product_detail.jade:53
+msgid "Photos et Localisation"
+msgstr "Lejekontrakter"
+
+#: eloue/templates/dk/products/_base_product_detail.jade:56
+#: eloue/templates/products/_base_product_detail.jade:56
+msgid "Tarifs"
+msgstr "Priser"
+
+#: eloue/templates/dk/products/_base_product_detail.jade:59
+#: eloue/templates/products/_base_product_detail.jade:59
+msgid "Conditions d'assurance"
+msgstr "Forsikringsmæssige betingelser"
+
+#: eloue/templates/dk/products/_base_product_detail.jade:63
+#: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
+#: eloue/templates/jade/pop_up_sections/_shipping.jade:2
+#: eloue/templates/jade/pop_up_sections/_terms.jade:15
+#: eloue/templates/products/_base_product_detail.jade:63
+msgid "Livraison"
+msgstr "Fragt"
+
+#: eloue/templates/dk/products/_base_product_detail.jade:74
+#: eloue/templates/products/_base_product_detail.jade:74
+msgid "Commentaires liés à cette annonce"
+msgstr "Kommentarer i forbindelse med denne annonce"
+
+#: eloue/templates/dk/products/_base_product_detail.jade:79
+#: eloue/templates/products/_base_product_detail.jade:79
+msgid "Commentaire liés au propriétaire"
+msgstr "Kommentarer i forbindelse med ejer"
+
+#: eloue/templates/dk/subscription/index.jade:1
+#: eloue/templates/gosport/subscription/index.jade:1
+#: eloue/templates/subscription/index.jade:1
+msgid "Offre Professionnel"
+msgstr "Erhvervsfolk"
+
+#: eloue/templates/dk/terms_pro/index.jade:1
+#: eloue/templates/terms_pro/index.jade:1
+msgid "Conditions Générales Professionnel"
+msgstr "Generelle betingelser (PRO/Erhverv)"
 
 #: eloue/templates/enroll/_text_content.jade:107
 msgid "Vous n'avez pas trouvé le job idéal ?"
@@ -2114,11 +2260,6 @@ msgstr "Andet"
 msgid "Contrats de Location"
 msgstr "Lejekontrakter"
 
-#: eloue/templates/gosport/subscription/index.jade:1
-#: eloue/templates/subscription/index.jade:1
-msgid "Offre Professionnel"
-msgstr "Erhvervsfolk"
-
 #: eloue/templates/gosport/terms/index.jade:1
 msgid "Condtitions Générales Particuliers"
 msgstr "Generelle betingelser (privat)"
@@ -2126,11 +2267,6 @@ msgstr "Generelle betingelser (privat)"
 #: eloue/templates/how_it_works/index.jade:1
 msgid "Comment ça marche"
 msgstr "Hvordan fungerer det?"
-
-#: eloue/templates/imprint/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:59
-msgid "Mentions légales"
-msgstr "Omtale"
 
 #: eloue/templates/insurances/_text_content.html:34
 #: eloue/templates/insurances/_text_content.html:307
@@ -2184,33 +2320,17 @@ msgid ""
 "Android."
 msgstr "Find alle de egenskaber du sætter pris på via iPhone, iPad og Android."
 
-#: eloue/templates/jade/_footer_links.jade:7
-msgid "Le concept e-loue"
-msgstr "E-loue's koncept"
-
 #: eloue/templates/jade/_footer_links.jade:11
 msgid "e-loue et la sécurité"
 msgstr "E-loue og sikkerhed"
-
-#: eloue/templates/jade/_footer_links.jade:13
-msgid "L'offre e-loue Pro"
-msgstr "E-loue Pro tilbud"
 
 #: eloue/templates/jade/_footer_links.jade:15
 msgid "La livraison"
 msgstr "Fragt"
 
-#: eloue/templates/jade/_footer_links.jade:23
-msgid "Pourquoi choisir e-loue ?"
-msgstr "Hvorfor vælge e-loue?"
-
 #: eloue/templates/jade/_footer_links.jade:29
 msgid "Conditions générales particuliers"
 msgstr "Generelle betingelser (privat)"
-
-#: eloue/templates/jade/_footer_links.jade:31
-msgid "Conditions générales professionnels"
-msgstr "Generelle betingelser (PRO/Erhverv)"
 
 #: eloue/templates/jade/_footer_links.jade:39
 msgid "L’entreprise e-loue"
@@ -2219,10 +2339,6 @@ msgstr "Virksomheden e-loue"
 #: eloue/templates/jade/_footer_links.jade:41
 msgid "Qui sommes-nous ?"
 msgstr "Hvem er vi?"
-
-#: eloue/templates/jade/_footer_links.jade:53
-msgid "En savoir plus"
-msgstr "For yderligere information"
 
 #: eloue/templates/jade/_footer_links.jade:55
 msgid "FAQ"
@@ -2236,56 +2352,6 @@ msgstr "Kontakt os"
 #: eloue/templates/jade/_footer_links.jade:61
 msgid "Blog e-loue"
 msgstr "E-loue blog"
-
-#: eloue/templates/jade/_header_site.jade:3
-msgid ""
-"En poursuivant votre navigation, vous acceptez l’utilisation des cookies "
-"pour disposer de services et d’offres adaptées à vos centres d’intérêts. "
-"Pour en savoir plus,&nbsp;"
-msgstr ""
-"Vi bruger cookies på hjemmesiden til at forbedre brugeroplevelsen. Vil du "
-"vide mere,&nbsp;"
-
-#: eloue/templates/jade/_header_site.jade:3
-msgid "cliquez ici"
-msgstr "Klik her"
-
-#: eloue/templates/jade/_header_site.jade:8
-msgid "Bonjour"
-msgstr "Hej"
-
-#: eloue/templates/jade/_header_site.jade:8
-msgid "inscrivez-vous"
-msgstr "Tilmeld dig"
-
-#: eloue/templates/jade/_header_site.jade:8
-#: eloue/templates/landing_pages/_sign_in_content.jade:9
-msgid "ou"
-msgstr "eller"
-
-#: eloue/templates/jade/_header_site.jade:8
-msgid "connectez-vous"
-msgstr "log dig på"
-
-#: eloue/templates/jade/_header_site.jade:12
-#, python-format
-msgid ""
-"\n"
-" Vous êtes un loueur professionnel, découvrez les <a href="
-"\"%(subscription_url)s\"><b>offres e-loue Pro</b></a>"
-msgstr ""
-"\n"
-" Er du erhvervsudlejer, se her <a href=\"%(subscription_url)s\"><b>e-loues "
-"PRO tilbud</b></a>"
-
-#: eloue/templates/jade/_header_site.jade:17
-#: eloue/templates/jade/_header_site.jade:24
-msgid ""
-"\n"
-" Appelez-nous au <b>01 85 08 99 77 </b> (numéro gratuit)\n"
-msgstr ""
-"\n"
-" Kontakt os på <b>01 85 08 99 77 </b> (gratis opkald)\n"
 
 #: eloue/templates/jade/_insurances.jade:8
 msgid "Louez en toute sécurité"
@@ -2903,7 +2969,7 @@ msgstr ""
 #: eloue/templates/jade/pop_up_sections/_input_message.jade:6
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:25
 msgid "Envoyez"
-msgstr ""
+msgstr "Send"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:4
 msgid "Demande de devis envoyé"
@@ -3046,13 +3112,6 @@ msgstr "Du kan træffe os på;"
 #: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
 msgid "Nouveau !"
 msgstr ""
-
-#: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
-#: eloue/templates/jade/pop_up_sections/_shipping.jade:2
-#: eloue/templates/jade/pop_up_sections/_terms.jade:15
-#: eloue/templates/products/_base_product_detail.jade:63
-msgid "Livraison"
-msgstr "Fragt"
 
 #: eloue/templates/jade/pop_up_sections/_pickup_info.jade:6
 msgid "Option livraison 10 € :"
@@ -3219,6 +3278,10 @@ msgstr "Forespørgsel på overslag"
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:7
 msgid "à partir de"
 msgstr "Op til "
+
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
+msgid "/jour"
+msgstr "/dag"
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:11
 msgid "Cet article est disponible à ces dates"
@@ -3393,26 +3456,6 @@ msgstr "Vores partnere"
 #: eloue/templates/proapp/app.html:4
 msgid "Vos statistiques"
 msgstr ""
-
-#: eloue/templates/products/_base_product_detail.jade:53
-msgid "Photos et Localisation"
-msgstr "Lejekontrakter"
-
-#: eloue/templates/products/_base_product_detail.jade:56
-msgid "Tarifs"
-msgstr "Priser"
-
-#: eloue/templates/products/_base_product_detail.jade:59
-msgid "Conditions d'assurance"
-msgstr "Forsikringsmæssige betingelser"
-
-#: eloue/templates/products/_base_product_detail.jade:74
-msgid "Commentaires liés à cette annonce"
-msgstr "Kommentarer i forbindelse med denne annonce"
-
-#: eloue/templates/products/_base_product_detail.jade:79
-msgid "Commentaire liés au propriétaire"
-msgstr "Kommentarer i forbindelse med ejer"
 
 #: eloue/templates/products/subcategory_list.jade:5
 msgid "annonces de location"
@@ -3681,19 +3724,26 @@ msgid "Demande de réservation"
 msgstr "Forespørgsel på overslag"
 
 #: eloue/templates/rent/emails/borrower_ask_email.html:14
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "\n"
 "\n"
 "                            Bonjour %(borrower_name)s<br><br>\n"
 "\n"
-"                            Nous avons bien pris en coe votre demande de "
+"                            Nous avons bien pris en compte votre demande de "
 "réservation et venons d’informer le propriétaire de votre proposition.<br>\n"
 "\n"
 "                            Voici donc les différents éléments qui lui ont "
 "été transmis :<br>\n"
 "                           \t"
 msgstr ""
+"\n"
+"\n"
+"                            Hej %(owner_name)s<br><br>\n"
+"\n"
+"                            Desværre har lejeren besluttet sig for ikke at "
+"gennemføre lejemålet. Følgende udlejningen er derfor annulleret:<br>\n"
+"                           \t"
 
 #: eloue/templates/rent/emails/borrower_ask_email.html:26
 #, python-format
@@ -4864,10 +4914,6 @@ msgstr ""
 msgid "la Livraison"
 msgstr "Fragt"
 
-#: eloue/templates/terms_pro/index.jade:1
-msgid "Conditions Générales Professionnel"
-msgstr "Generelle betingelser (PRO/Erhverv)"
-
 #: payments/paybox_payment.py:43
 #, python-brace-format
 msgid "PayboxError with code {0} and message \"{1}\""
@@ -4885,11 +4931,10 @@ msgstr "Opretter meddelelse for alle brugere eller en gruppe af brugere."
 msgid "All users"
 msgstr "Alle brugere"
 
-#: products/choices.py:17 rent/utils.py:79 rent/tests/pricing_compat.py:121
+#: products/choices.py:17 rent/utils.py:80 rent/tests/pricing_compat.py:121
+#, fuzzy
 msgid "heure"
-msgid_plural "heures"
-msgstr[0] "time"
-msgstr[1] "timer"
+msgstr "time"
 
 #: products/choices.py:18 rent/tests/pricing_compat.py:122
 msgid "1 heure"
@@ -4907,12 +4952,11 @@ msgstr "weekend"
 msgid "1 week-end"
 msgstr "1 weekend"
 
-#: products/choices.py:32 rent/utils.py:77 rent/tests/pricing_compat.py:136
+#: products/choices.py:32 rent/utils.py:78 rent/tests/pricing_compat.py:136
 #: rent/tests/pricing_compat.py:206 rent/tests/pricing_compat.py:214
+#, fuzzy
 msgid "semaine"
-msgid_plural "semaines"
-msgstr[0] "uge"
-msgstr[1] "uger"
+msgstr "uge"
 
 #: products/choices.py:33 rent/tests/pricing_compat.py:137
 #: rent/tests/pricing_compat.py:207 rent/tests/pricing_compat.py:215
@@ -4927,11 +4971,10 @@ msgstr "to uger"
 msgid "2 semaines"
 msgstr "2 uger"
 
-#: products/choices.py:42 rent/utils.py:76 rent/tests/pricing_compat.py:146
+#: products/choices.py:42 rent/utils.py:77 rent/tests/pricing_compat.py:146
+#, fuzzy
 msgid "mois"
-msgid_plural "mois"
-msgstr[0] "måned"
-msgstr[1] "måned"
+msgstr "måned"
 
 #: products/choices.py:43 rent/tests/pricing_compat.py:147
 msgid "1 mois"
@@ -5680,157 +5723,157 @@ msgstr ""
 "Forfatter af kommentaren skal være enten ejer eller lejer af postens "
 "relaterede booking"
 
-#: rent/utils.py:75
+#: rent/utils.py:76
 msgid "année"
 msgid_plural "années"
 msgstr[0] "år"
 msgstr[1] "år"
 
-#: rent/utils.py:80 rent/utils.py:100
+#: rent/utils.py:81 rent/utils.py:101
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minut"
 msgstr[1] "minuts"
 
-#: rent/utils.py:81
+#: rent/utils.py:82
 msgid "seconde"
 msgid_plural "secondes"
 msgstr[0] "sekund"
 msgstr[1] "sekunds"
 
-#: rent/utils.py:135
+#: rent/utils.py:136
 msgid "milliard"
 msgstr "milliard"
 
-#: rent/utils.py:141
+#: rent/utils.py:142
 msgid "million"
 msgstr "million"
 
-#: rent/utils.py:150 rent/utils.py:165
+#: rent/utils.py:151 rent/utils.py:166
 msgid "cent"
 msgstr "hundrede"
 
-#: rent/utils.py:160
+#: rent/utils.py:161
 msgid "mille"
 msgstr "tusinde"
 
-#: rent/utils.py:176
+#: rent/utils.py:177
 msgid "zéro"
 msgstr "nul"
 
-#: rent/utils.py:186
+#: rent/utils.py:187
 msgid "et"
 msgstr "og"
 
-#: rent/utils.py:194
+#: rent/utils.py:195
 msgid "moins"
 msgstr "mindre"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "un"
 msgstr "en"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "deux"
 msgstr "to"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "trois"
 msgstr "tre"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "quatre"
 msgstr "fire"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "cinq"
 msgstr "fem"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "six"
 msgstr "seks"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "sept"
 msgstr "syv"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "huit"
 msgstr "otte"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "neuf"
 msgstr "ni"
 
-#: rent/utils.py:197 rent/utils.py:201
+#: rent/utils.py:198 rent/utils.py:202
 msgid "dix"
 msgstr "ti"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "onze"
 msgstr "elleve"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "douze"
 msgstr "tolv"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "treize"
 msgstr "tretten"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "quatorze"
 msgstr "fjorten"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "quinze"
 msgstr "femten"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "seize"
 msgstr "seksten"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "dix-sept"
 msgstr "sytten"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "dix-huit"
 msgstr "atten"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "dix-neuf"
 msgstr "nitten"
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "vingt"
 msgstr "tyve"
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "trente"
 msgstr "tredive"
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "quarante"
 msgstr "fyrre"
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "cinquante"
 msgstr "halvtreds"
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "soixante"
 msgstr "tres"
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "soixante-dix"
 msgstr "halvfjerds"
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "quatre-vingt"
 msgstr "firs"
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "quatre-vingt-dix"
 msgstr "halvfems"
 

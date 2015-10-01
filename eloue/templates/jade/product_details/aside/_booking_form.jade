@@ -6,7 +6,7 @@ form.form-inline.section-body.text-center
     .part
         p
             small {% trans "à partir de" %}
-            big.ng-cloak.text-primary &nbsp;{% verbatim %}{{pricePerDay}}{% endverbatim %}&nbsp;/{% trans "jour" %}
+            big.ng-cloak.text-primary &nbsp;{% verbatim %}{{pricePerDay}}{% endverbatim %}&nbsp;{% trans "/jour" %}
         include ../../_date_picker_border
         span(ng-show="dateRangeError").ng-cloak.text-danger {% verbatim %}{{dateRangeError}}{% endverbatim %}
         {% if not is_pro %}
