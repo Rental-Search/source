@@ -1,225 +1,224 @@
-{% verbatim %}
+-load i18n
 .row(ng-show="isAuto || isRealEstate")
     table.calendar
         tbody
             tr
-                td Quantité
+                td {% trans "Quantité" %}
                 td
-                    input(type="number", ng-model="product.quantity", placeholder="Quantité", min=1).characteristic-form
+                    input(type="number", ng-model="product.quantity", placeholder="{% trans 'Quantité' %}", min=1).characteristic-form
             tr(ng-if="isAuto")
-                td Marque *
+                td {% trans "Marque" %} *
                 td
-                    input(type="text", name="brand", ng-model="product.brand", placeholder="Marque", required).characteristic-form
+                    input(type="text", name="brand", ng-model="product.brand", placeholder="{% trans 'Marque' %}", required).characteristic-form
                     .text-danger(data-ng-show="itemInfoForm.brand.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-if="isAuto")
-                td Modèle *
+                td {% trans "Modèle" %} *
                 td
-                    input(type="text", name="model", ng-model="product.model", placeholder="Modèle", required).characteristic-form
+                    input(type="text", name="model", ng-model="product.model", placeholder="{% trans 'Modèle' %}", required).characteristic-form
                     .text-danger(data-ng-show="itemInfoForm.model.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-show="isAuto")
-                td Nombre de place
+                td {% trans "Nombre de place" %}
                 td.without-search
                     select(ng-model="product.seat_number", eloue-chosen, data-ng-disabled="submitInProgress")
-                        option(ng-repeat="item in seatNumberOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in seatNumberOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
             tr(ng-show="isAuto")
-                td Nombre de porte
+                td {% trans "Nombre de porte" %}
                 td.without-search
                     select(ng-model="product.door_number", eloue-chosen, data-ng-disabled="submitInProgress")
-                        option(ng-repeat="item in doorNumberOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in doorNumberOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
             tr(ng-show="isAuto")
-                td Énergie
+                td {% trans "Énergie" %}
                 td.without-search
                     select(ng-model="product.fuel", eloue-chosen, data-ng-disabled="submitInProgress")
-                        option(ng-repeat="item in fuelOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in fuelOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
             tr(ng-show="isAuto")
-                td Boite de vitesse
+                td {% trans "Boite de vitesse" %}
                 td.without-search
                     select(ng-model="product.transmission", eloue-chosen, data-ng-disabled="submitInProgress")
-                        option(ng-repeat="item in transmissionOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in transmissionOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
             tr(ng-show="isAuto")
-                td Kilométrage
+                td {% trans "Kilométrage" %}
                 td.without-search
                     select(ng-model="product.mileage", eloue-chosen, data-ng-disabled="submitInProgress")
-                        option(ng-repeat="item in mileageOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in mileageOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
             tr(ng-show="isAuto")
-                td Consommation
+                td {% trans "Consommation" %}
                 td.without-search
                     select(ng-model="product.consumption", eloue-chosen, data-ng-disabled="submitInProgress")
-                        option(ng-repeat="item in consumptionOptions", value="{{item.id}}")  {{item.name}}
+                        option(ng-repeat="item in consumptionOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}")  {% verbatim %}{{item.name}}{% endverbatim %}
             tr(ng-if="isAuto")
-                td Kilomètres inclus/jour *
+                td {% trans "Kilomètres inclus/jour" %} *
                 td
                     input(type="number", name="km_included", ng-model="product.km_included", placeholder="Km inclus", required).characteristic-form
                     .text-danger(data-ng-show="itemInfoForm.km_included.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-show="isAuto")
-                td Prix par kilomètres supplémentaires
+                td {% trans "Prix par kilomètres supplémentaires" %}
                 td
-                    input(type="number", ng-model="product.costs_per_km", step="0.5", placeholder="Prix").characteristic-form
+                    input(type="number", ng-model="product.costs_per_km", step="0.5", placeholder="{% trans 'Prix' %}").characteristic-form
             tr(ng-show="isAuto")
-                td Climatisation
+                td {% trans "Climatisation" %}
                 td
-                    input(type="text", ng-model="product.air_conditioning", placeholder="Climatisation").characteristic-form
+                    input(type="text", ng-model="product.air_conditioning", placeholder="{% trans 'Climatisation' %}").characteristic-form
             tr(ng-show="isAuto")
-                td Direction assistée
+                td {% trans "Direction assistée" %}
                 td
                     input(type="checkbox", ng-model="product.power_steering")
             tr(ng-show="isAuto")
-                td Régulateur de vitesse
+                td {% trans "Régulateur de vitesse" %}
                 td
                     input(type="checkbox", ng-model="product.cruise_control")
             tr(ng-show="isAuto")
-                td GPS
+                td {% trans "GPS" %}
                 td
                     input(type="checkbox", ng-model="product.gps")
             tr(ng-show="isAuto")
-                td Siège bébé
+                td {% trans "Siège bébé" %}
                 td
                     input(type="checkbox", ng-model="product.baby_seat")
             tr(ng-show="isAuto")
-                td Coffre de toit
+                td {% trans "Coffre de toit" %}
                 td
                     input(type="checkbox", ng-model="product.roof_box")
             tr(ng-show="isAuto")
-                td Porte-vélo
+                td {% trans "Porte-vélo" %}
                 td
                     input(type="checkbox", ng-model="product.bike_rack")
             tr(ng-show="isAuto")
-                td Pneus neige
+                td {% trans "Pneus neige" %}
                 td
                     input(type="checkbox", ng-model="product.snow_tires")
             tr(ng-show="isAuto")
-                td Chaines
+                td {% trans "Chaines" %}
                 td
                     input(type="checkbox", ng-model="product.snow_chains")
             tr(ng-show="isAuto")
-                td Porte-skis
+                td {% trans "Porte-skis" %}
                 td
                     input(type="checkbox", ng-model="product.ski_rack")
             tr(ng-show="isAuto")
-                td Lecteur CD
+                td {% trans "Lecteur CD" %}
                 td
                     input(type="checkbox", ng-model="product.cd_player")
             tr(ng-show="isAuto")
-                td Entrée audio/iPod
+                td {% trans "Entrée audio/iPod" %}
                 td
                     input(type="checkbox", ng-model="product.audio_input")
             tr(ng-if="isAuto")
-                td CV fiscaux *
+                td {% trans "CV fiscaux" %} *
                 td.without-search
                     select(ng-model="product.tax_horsepower", name="tax_horsepower", eloue-chosen, data-ng-disabled="submitInProgress", required)
-                        option(ng-repeat="item in capacityOptions", value={{item.id}}) {{item.name}}
+                        option(ng-repeat="item in capacityOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
                     .text-danger(data-ng-show="itemInfoForm.tax_horsepower.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-if="isAuto")
-                td N° d'immatriculation *
+                td {% trans "N° d'immatriculation" %} *
                 td
                     input(type="text", name="licence_plate", placeholder="N° d'immatriculation", ng-model="product.licence_plate", ng-maxlength="10", required).characteristic-form
                     .text-danger(data-ng-show="itemInfoForm.licence_plate.$error.required && !!itemInfoSubmitted", translate="required_field")
                     .text-danger(data-ng-show="itemInfoForm.licence_plate.$error.maxlength && !!itemInfoSubmitted", translate="maxLength10")
             tr(ng-if="isAuto")
-                td 1er mise en circulation *
+                td {% trans "1er mise en circulation" %} *
                 td
                     input(type="text", name="first_registration_date", placeholder="dd/mm/yyyy", ng-model="product.first_registration_date", eloue-extended-datepicker, required).date.characteristic-form
                     .text-danger(data-ng-show="itemInfoForm.first_registration_date.$error.required && !!itemInfoSubmitted", translate="required_field")
             tr(ng-show="isRealEstate")
-                td Capacité
+                td {% trans "Capacité" %}
                 td.without-search
                     select(ng-model="product.capacity", eloue-chosen, data-ng-disabled="submitInProgress").table-form
-                        option(ng-repeat="item in capacityOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in capacityOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
             tr(ng-show="isRealEstate")
-                td Type de logement
+                td {% trans "Type de logement" %}
                 td.without-search
                     select(ng-model="product.private_life", eloue-chosen, data-ng-disabled="submitInProgress").table-form
-                        option(ng-repeat="item in privateLifeOptions", value="{{item.id}}") {{item.name}}
+                        option(ng-repeat="item in privateLifeOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
             tr(ng-show="isRealEstate")
-                td Nombre de chambre
+                td {% trans "Nombre de chambre" %}
                 td
                     input(type="checkbox", ng-model="product.chamber_number").table-form
             tr(ng-show="isRealEstate")
-                td Règles d'utilisation
+                td {% trans "Règles d'utilisation" %}
                 td
                     input(type="text", ng-model="product.rules", placeholder="Règles d'utilisation").table-form
             tr(ng-show="isRealEstate")
-                td Air conditionné
+                td {% trans "Air conditionné" %}
                 td
                     input(type="checkbox", ng-model="product.air_conditioning").table-form
             tr(ng-show="isRealEstate")
-                td Petit déjeuner
+                td {% trans "Petit déjeuner" %}
                 td
                     input(type="checkbox", ng-model="product.breakfast").table-form
             tr(ng-show="isRealEstate")
-                td Balcon/terasse
+                td {% trans "Balcon/terasse" %}
                 td
                     input(type="checkbox", ng-model="product.balcony").table-form
             tr(ng-show="isRealEstate")
-                td Chambre avec serrure
+                td {% trans "Chambre avec serrure" %}
                 td
                     input(type="checkbox", ng-model="product.lockable_chamber").table-form
             tr(ng-show="isRealEstate")
-                td Serviettes
+                td {% trans "Serviettes" %}
                 td
                     input(type="checkbox", ng-model="product.towel").table-form
             tr(ng-show="isRealEstate")
-                td Ascenseur dans l\'immeuble
+                td {% trans "Ascenseur dans l\'immeuble" %}
                 td
                     input(type="checkbox", ng-model="product.lift").table-form
             tr(ng-show="isRealEstate")
-                td Adapté aux familles/enfants
+                td {% trans "Adapté aux familles/enfants" %}
                 td
                     input(type="checkbox", ng-model="product.family_friendly").table-form
             tr(ng-show="isRealEstate")
-                td Salle de sport
+                td {% trans "Salle de sport" %}
                 td
                     input(type="checkbox", ng-model="product.gym").table-form
             tr(ng-show="isRealEstate")
-                td Accessible aux personnes handicapées
+                td {% trans "Accessible aux personnes handicapées" %}
                 td
                     input(type="checkbox", ng-model="product.accessible").table-form
             tr(ng-show="isRealEstate")
-                td Chauffage
+                td {% trans "Chauffage" %}
                 td
                     input(type="checkbox", ng-model="product.heating").table-form
             tr(ng-show="isRealEstate")
-                td Jacuzzi
+                td {% trans "Jacuzzi" %}
                 td
                     input(type="checkbox", ng-model="product.jacuzzi").table-form
             tr(ng-show="isRealEstate")
-                td Cheminée intérieure
+                td {% trans "Cheminée intérieure" %}
                 td
                     input(type="checkbox", ng-model="product.chimney").table-form
             tr(ng-show="isRealEstate")
-                td Accès internet
+                td {% trans "Accès internet" %}
                 td
                     input(type="checkbox", ng-model="product.internet_access").table-form
             tr(ng-show="isRealEstate")
-                td Cuisine
+                td {% trans "Cuisine" %}
                 td
                     input(type="checkbox", ng-model="product.kitchen").table-form
             tr(ng-show="isRealEstate")
-                td Parking
+                td {% trans "Parking" %}
                 td
                     input(type="checkbox", ng-model="product.parking").table-form
             tr(ng-show="isRealEstate")
-                td Fumeurs acceptées
+                td {% trans "Fumeurs acceptées" %}
                 td
                     input(type="checkbox", ng-model="product.smoking_accepted").table-form
             tr(ng-show="isRealEstate")
-                td Idéal pour des évènements
+                td {% trans "Idéal pour des évènements" %}
                 td
                     input(type="checkbox", ng-model="product.ideal_for_events").table-form
             tr(ng-show="isRealEstate")
-                td TV
+                td {% trans "TV" %}
                 td
                     input(type="checkbox", ng-model="product.tv").table-form
             tr(ng-show="isRealEstate")
-                td Machine à laver
+                td {% trans "Machine à laver" %}
                 td
                     input(type="checkbox", ng-model="product.washing_machine").table-form
             tr(ng-show="isRealEstate")
-                td Sèche linge
+                td {% trans "Sèche linge" %}
                 td
                     input(type="checkbox", ng-model="product.tumble_dryer").table-form
             tr(ng-show="isRealEstate")
-                td Ordinateur avec Internet
+                td {% trans "Ordinateur avec Internet" %}
                 td
                     input(type="checkbox", ng-model="product.computer_with_internet").table-form
-{% endverbatim %}

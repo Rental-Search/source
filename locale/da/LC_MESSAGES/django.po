@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-01 11:37+0200\n"
+"POT-Creation-Date: 2015-10-01 18:59+0200\n"
 "PO-Revision-Date: 2015-09-25 14:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
@@ -427,7 +427,10 @@ msgstr "Kreditkort"
 msgid "Chèque"
 msgstr "Check"
 
-#: accounts/choices.py:76
+#: accounts/choices.py:76 eloue/templates/dashboard/account/profil.jade:141
+#: eloue/templates/dashboard/account/profil.jade:144
+#: eloue/templates/dk/dashboard/account/profil.jade:141
+#: eloue/templates/dk/dashboard/account/profil.jade:144
 msgid "IBAN"
 msgstr "IBAN"
 
@@ -511,6 +514,8 @@ msgstr ""
 "kodeordet"
 
 #: accounts/forms.py:107 accounts/forms.py:203
+#: eloue/templates/dashboard/account/profil.jade:44
+#: eloue/templates/dk/dashboard/account/profil.jade:44
 #: eloue/templates/jade/_log_in.jade:25 eloue/templates/jade/_sign_in.jade:56
 #: eloue/templates/landing_pages/_sign_in_content.jade:37
 msgid "Email"
@@ -546,12 +551,16 @@ msgid "Enter the same password as above, for verification."
 msgstr "For verifikation, indtast samme kodeord som ovenfor."
 
 #: accounts/forms.py:204 accounts/forms.py:326
+#: eloue/templates/dashboard/account/profil.jade:56
+#: eloue/templates/dk/dashboard/account/profil.jade:56
 #: eloue/templates/jade/_sign_in.jade:33 eloue/templates/jade/_sign_in.jade:53
 #: eloue/templates/landing_pages/_sign_in_content.jade:34
 msgid "Prénom"
 msgstr "Fornavn"
 
 #: accounts/forms.py:205 accounts/forms.py:327
+#: eloue/templates/dashboard/account/profil.jade:59
+#: eloue/templates/dk/dashboard/account/profil.jade:59
 #: eloue/templates/jade/_sign_in.jade:32 eloue/templates/jade/_sign_in.jade:48
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:13
 msgid "Nom"
@@ -573,8 +582,9 @@ msgstr "Beskæftigelse"
 msgid "Nom de la société"
 msgstr "Selskab"
 
-#: accounts/forms.py:319 eloue/templates/jade/_sign_in.jade:35
-#: eloue/templates/jade/_sign_in.jade:59
+#: accounts/forms.py:319 eloue/templates/dashboard/account/profil.jade:41
+#: eloue/templates/dk/dashboard/account/profil.jade:41
+#: eloue/templates/jade/_sign_in.jade:35 eloue/templates/jade/_sign_in.jade:59
 #: eloue/templates/landing_pages/_sign_in_content.jade:40
 msgid "Pseudo"
 msgstr "Pseudo"
@@ -589,6 +599,8 @@ msgstr ""
 "Denne værdi må udelukkende indeholde bogstaver, tal og @/. / + / / _ tegn."
 
 #: accounts/forms.py:324 eloue/templates/autovoisin/jade/_log_in.jade:22
+#: eloue/templates/dashboard/account/_base_account.jade:3
+#: eloue/templates/dk/dashboard/account/_base_account.jade:3
 #: eloue/templates/jade/_log_in.jade:26 eloue/templates/jade/_sign_in.jade:36
 #: eloue/templates/jade/_sign_in.jade:62
 #: eloue/templates/landing_pages/_sign_in_content.jade:43
@@ -599,11 +611,25 @@ msgstr "Adgangskode"
 msgid "Mot de passe à nouveau"
 msgstr "Gentag adgangskode"
 
-#: accounts/forms.py:328 eloue/templates/jade/_pop_up_publish_item.jade:53
+#: accounts/forms.py:328
+#: eloue/templates/dashboard/account/_address_detail.jade:8
+#: eloue/templates/dashboard/account/profil.jade:77
+#: eloue/templates/dashboard/items/index.jade:38
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:8
+#: eloue/templates/dk/dashboard/account/profil.jade:77
+#: eloue/templates/dk/dashboard/items/index.jade:38
+#: eloue/templates/jade/_pop_up_publish_item.jade:53
 msgid "Rue"
 msgstr "Vej"
 
-#: accounts/forms.py:329 eloue/templates/jade/_pop_up_publish_item.jade:56
+#: accounts/forms.py:329
+#: eloue/templates/dashboard/account/_address_detail.jade:15
+#: eloue/templates/dashboard/account/profil.jade:80
+#: eloue/templates/dashboard/items/index.jade:43
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:15
+#: eloue/templates/dk/dashboard/account/profil.jade:80
+#: eloue/templates/dk/dashboard/items/index.jade:43
+#: eloue/templates/jade/_pop_up_publish_item.jade:56
 #: eloue/templates/jade/_sign_in.jade:38 eloue/templates/jade/_sign_in.jade:68
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:23
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:11
@@ -612,6 +638,12 @@ msgid "Code postal"
 msgstr "Postnummer"
 
 #: accounts/forms.py:332 accounts/models.py:563 accounts/models.py:641
+#: eloue/templates/dashboard/account/_address_detail.jade:20
+#: eloue/templates/dashboard/account/profil.jade:83
+#: eloue/templates/dashboard/items/index.jade:46
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:20
+#: eloue/templates/dk/dashboard/account/profil.jade:83
+#: eloue/templates/dk/dashboard/items/index.jade:46
 #: eloue/templates/jade/_pop_up_publish_item.jade:59
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:26
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:14
@@ -630,7 +662,8 @@ msgstr "Profilbillede"
 msgid "Téléphone"
 msgstr "Telefon"
 
-#: accounts/forms.py:336
+#: accounts/forms.py:336 eloue/templates/dashboard/account/profil.jade:138
+#: eloue/templates/dk/dashboard/account/profil.jade:138
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:50
 msgid "Numéro de permis"
 msgstr "Kørekortnummer"
@@ -662,6 +695,8 @@ msgstr ""
 "Tilbuddet gælder fra ...."
 
 #: accounts/forms.py:356 accounts/models.py:560 accounts/models.py:638
+#: eloue/templates/dashboard/items/index.jade:35
+#: eloue/templates/dk/dashboard/items/index.jade:35
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:18
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:6
 msgid "Adresse"
@@ -699,7 +734,9 @@ msgstr "Adgangskoderne passer ikke"
 msgid "Permis de conduire"
 msgstr "Kørekort"
 
-#: accounts/models.py:64 eloue/templates/jade/_sign_in.jade:43
+#: accounts/models.py:64 eloue/templates/dashboard/account/profil.jade:50
+#: eloue/templates/dk/dashboard/account/profil.jade:50
+#: eloue/templates/jade/_sign_in.jade:43
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:5
 msgid "Civilité"
 msgstr "Civilstand"
@@ -774,7 +811,7 @@ msgstr "En bruger er allerede registreret med dette navn"
 
 #: accounts/models.py:227 eloue/templates/base.jade:5
 #: eloue/templates/admin/base_site.html:4
-#: eloue/templates/admin/base_site.html:7
+#: eloue/templates/admin/base_site.html:7 eloue/templates/dk/base.jade:5
 msgid "e-loue"
 msgstr "e-loue"
 
@@ -846,7 +883,10 @@ msgstr "Dato for årlig betaling"
 msgid "Commentaire"
 msgstr "Kommentar "
 
-#: accounts/models.py:701 eloue/templates/jade/pop_up_sections/_terms.jade:20
+#: accounts/models.py:701
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:89
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:89
+#: eloue/templates/jade/pop_up_sections/_terms.jade:20
 msgid "Total"
 msgstr ""
 
@@ -932,11 +972,13 @@ msgstr "Dette telefonnummer er brugers standard nummer"
 msgid "The phone is used in products"
 msgstr ""
 
-#: accounts/widgets.py:8
+#: accounts/widgets.py:8 eloue/templates/dashboard/account/profil.jade:125
+#: eloue/templates/dk/dashboard/account/profil.jade:125
 msgid "Mois"
 msgstr "Måneder"
 
-#: accounts/widgets.py:23
+#: accounts/widgets.py:23 eloue/templates/dashboard/account/profil.jade:130
+#: eloue/templates/dk/dashboard/account/profil.jade:130
 msgid "Année"
 msgstr "År"
 
@@ -979,7 +1021,12 @@ msgstr "Engelsk"
 msgid "Danish"
 msgstr ""
 
-#: eloue/urls.py:206 eloue/templates/django_messages/new_message_email.html:17
+#: eloue/urls.py:206
+#: eloue/templates/dashboard/messages/_aside_product_detail.jade:18
+#: eloue/templates/dashboard/messages/_aside_product_detail.jade:21
+#: eloue/templates/django_messages/new_message_email.html:17
+#: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:18
+#: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:21
 #: eloue/templates/rent/emails/comment_email.html:18
 msgid "loueur"
 msgstr "lejere"
@@ -1205,7 +1252,7 @@ msgid ""
 "          "
 msgstr ""
 
-#: eloue/templates/base.jade:5
+#: eloue/templates/base.jade:5 eloue/templates/dk/base.jade:5
 msgid "Page"
 msgstr "Side"
 
@@ -1671,12 +1718,18 @@ msgid "Tableau de bord"
 msgstr "Dashboard"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:27
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:25
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:25
 #: eloue/templates/dk/jade/_header_site.jade:35
 #: eloue/templates/jade/_header_site.jade:35
 msgid "Messages"
 msgstr "Beskeder"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:29
+#: eloue/templates/dashboard/items/calendar.jade:41
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:27
+#: eloue/templates/dk/dashboard/items/calendar.jade:41
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:27
 #: eloue/templates/dk/jade/_header_site.jade:37
 #: eloue/templates/jade/_header_site.jade:37
 #: eloue/templates/products/tab_available.jade:55
@@ -1684,12 +1737,16 @@ msgid "Réservations"
 msgstr "Reservér"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:31
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:29
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:29
 #: eloue/templates/dk/jade/_header_site.jade:39
 #: eloue/templates/jade/_header_site.jade:39
 msgid "Annonces"
 msgstr "Annoncer"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:33
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:31
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:31
 #: eloue/templates/dk/jade/_header_site.jade:41
 #: eloue/templates/jade/_header_site.jade:41
 msgid "Compte"
@@ -1822,6 +1879,8 @@ msgid "Sans engagement et sans frais de résiliation."
 msgstr ""
 
 #: eloue/templates/contest/contest_auth_missing.html:32
+#: eloue/templates/dashboard/items/index.jade:80
+#: eloue/templates/dk/dashboard/items/index.jade:80
 msgid "Informations complémentaires"
 msgstr ""
 
@@ -1851,6 +1910,1331 @@ msgstr "Tilpas prisen i forhold til varigheden af lejeperioden"
 msgid "Continuer"
 msgstr ""
 
+#: eloue/templates/dashboard/account/_address_detail.jade:27
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:27
+msgid "Addresse par défaut"
+msgstr ""
+
+#: eloue/templates/dashboard/account/_address_detail.jade:33
+#: eloue/templates/dashboard/items/calendar.jade:64
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:33
+#: eloue/templates/dk/dashboard/items/calendar.jade:64
+msgid "Supprimer"
+msgstr "slettet"
+
+#: eloue/templates/dashboard/account/_address_detail.jade:34
+#: eloue/templates/dashboard/account/password.jade:15
+#: eloue/templates/dashboard/booking/_comment_and_rank.jade:16
+#: eloue/templates/dashboard/booking/_report_incendent.jade:19
+#: eloue/templates/dashboard/items/add_period.jade:27
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:34
+#: eloue/templates/dk/dashboard/account/password.jade:15
+#: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:16
+#: eloue/templates/dk/dashboard/booking/_report_incendent.jade:19
+#: eloue/templates/dk/dashboard/items/add_period.jade:27
+#: eloue/templates/jade/pop_up_sections/_shipping.jade:20
+msgid "Enregistrer"
+msgstr ""
+
+#: eloue/templates/dashboard/account/_address_detail.jade:41
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:41
+msgid "Annonces associées à cette adresse"
+msgstr ""
+
+#: eloue/templates/dashboard/account/_address_detail.jade:51
+#: eloue/templates/dashboard/booking/_bookings_list.jade:38
+#: eloue/templates/dashboard/items/_items_list.jade:22
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:51
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:38
+#: eloue/templates/dk/dashboard/items/_items_list.jade:22
+#: eloue/templates/dk/jade/_product_list.jade:11
+#: eloue/templates/jade/_nav_home.jade:6
+#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:17
+#: eloue/templates/jade/_porduct_details_title.jade:2
+#: eloue/templates/jade/_product_list.jade:11
+#: eloue/templates/jade/_product_list_article_head.jade:7
+#: eloue/templates/products/product_list.jade:5
+#: eloue/templates/products/product_list.jade:12
+#: eloue/templates/products/subcategory_list.jade:16
+#: eloue/templates/products/subcategory_list.jade:28
+msgid "Location"
+msgstr "Leje"
+
+#: eloue/templates/dashboard/account/_address_detail.jade:54
+#: eloue/templates/dashboard/items/_items_list.jade:25
+#: eloue/templates/dashboard/items/profits.jade:3
+#: eloue/templates/dashboard/items/tarifs.jade:20
+#: eloue/templates/dashboard/items/tarifs.jade:26
+#: eloue/templates/dashboard/items/tarifs.jade:32
+#: eloue/templates/dashboard/items/tarifs.jade:38
+#: eloue/templates/dashboard/items/tarifs.jade:44
+#: eloue/templates/dashboard/items/tarifs.jade:59
+#: eloue/templates/dashboard/items/tarifs.jade:92
+#: eloue/templates/dashboard/items/tarifs.jade:98
+#: eloue/templates/dashboard/items/tarifs.jade:104
+#: eloue/templates/dashboard/items/tarifs.jade:110
+#: eloue/templates/dashboard/messages/_details_reservation.jade:24
+#: eloue/templates/dashboard/messages/_form_reservation.jade:33
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:54
+#: eloue/templates/dk/dashboard/items/_items_list.jade:25
+#: eloue/templates/dk/dashboard/items/profits.jade:3
+#: eloue/templates/dk/dashboard/items/tarifs.jade:20
+#: eloue/templates/dk/dashboard/items/tarifs.jade:26
+#: eloue/templates/dk/dashboard/items/tarifs.jade:32
+#: eloue/templates/dk/dashboard/items/tarifs.jade:38
+#: eloue/templates/dk/dashboard/items/tarifs.jade:44
+#: eloue/templates/dk/dashboard/items/tarifs.jade:59
+#: eloue/templates/dk/dashboard/items/tarifs.jade:92
+#: eloue/templates/dk/dashboard/items/tarifs.jade:98
+#: eloue/templates/dk/dashboard/items/tarifs.jade:104
+#: eloue/templates/dk/dashboard/items/tarifs.jade:110
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:24
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:33
+#: eloue/templates/jade/pop_up_sections/_terms.jade:11
+#: eloue/templates/jade/pop_up_sections/_terms.jade:16
+#: eloue/templates/jade/pop_up_sections/_terms.jade:21
+#: eloue/templates/jade/pop_up_sections/_terms.jade:26 products/choices.py:60
+msgid "€"
+msgstr "kr."
+
+#: eloue/templates/dashboard/account/_address_detail.jade:54
+#: eloue/templates/dashboard/items/_items_list.jade:25
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:54
+#: eloue/templates/dk/dashboard/items/_items_list.jade:25
+#: eloue/templates/dk/jade/_product_list.jade:7
+#: eloue/templates/jade/_product_list.jade:7
+#: eloue/templates/jade/_product_list_main.jade:2
+#: eloue/templates/jade/product_details/aside/_similar_listing.jade:16
+#: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
+#: products/choices.py:22 rent/utils.py:79 rent/tests/pricing_compat.py:126
+msgid "jour"
+msgstr "dag"
+
+#: eloue/templates/dashboard/account/_base_account.jade:3
+#: eloue/templates/dk/dashboard/account/_base_account.jade:3
+msgid "Profil"
+msgstr "Beskæftigelse"
+
+#: eloue/templates/dashboard/account/_base_account.jade:3
+#: eloue/templates/dk/dashboard/account/_base_account.jade:3
+msgid "Adresses"
+msgstr "Adresse"
+
+#: eloue/templates/dashboard/account/_notification_not_selected_address.jade:5
+#: eloue/templates/dk/dashboard/account/_notification_not_selected_address.jade:5
+msgid "Aucune adresse sélectionnée"
+msgstr ""
+
+#: eloue/templates/dashboard/account/password.jade:4
+#: eloue/templates/dk/dashboard/account/password.jade:4
+msgid "Ancien mot de passe"
+msgstr "Adgangskode"
+
+#: eloue/templates/dashboard/account/password.jade:4
+#: eloue/templates/dk/dashboard/account/password.jade:4
+#: eloue/templates/jade/_reset_password_confirm.jade:15
+msgid "Nouveau mot de passe"
+msgstr "Adgangskode"
+
+#: eloue/templates/dashboard/account/password.jade:6
+#: eloue/templates/dk/dashboard/account/password.jade:6
+msgid "Modification de votre mot de passe"
+msgstr "Lejekontrakter"
+
+#: eloue/templates/dashboard/account/password.jade:14
+#: eloue/templates/dashboard/booking/_comment_and_rank.jade:12
+#: eloue/templates/dashboard/booking/_report_incendent.jade:15
+#: eloue/templates/dashboard/items/add_period.jade:23
+#: eloue/templates/dk/dashboard/account/password.jade:14
+#: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:12
+#: eloue/templates/dk/dashboard/booking/_report_incendent.jade:15
+#: eloue/templates/dk/dashboard/items/add_period.jade:23
+msgid "Annuler"
+msgstr "Annulleret"
+
+#: eloue/templates/dashboard/account/profil.jade:5
+#: eloue/templates/dk/dashboard/account/profil.jade:5
+msgid "Informations personnelles"
+msgstr "Dine personlige oplysninger"
+
+#: eloue/templates/dashboard/account/profil.jade:13
+#: eloue/templates/dk/dashboard/account/profil.jade:13
+msgid "Modifiez mon image"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:26
+#: eloue/templates/dk/dashboard/account/profil.jade:26
+msgid "Je suis un professionnel ?"
+msgstr "professionel"
+
+#: eloue/templates/dashboard/account/profil.jade:29
+#: eloue/templates/dashboard/account/profil.jade:106
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:171
+#: eloue/templates/dashboard/items/calendar.jade:89
+#: eloue/templates/dashboard/items/index.jade:99
+#: eloue/templates/dk/dashboard/account/profil.jade:29
+#: eloue/templates/dk/dashboard/account/profil.jade:106
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:171
+#: eloue/templates/dk/dashboard/items/calendar.jade:89
+#: eloue/templates/dk/dashboard/items/index.jade:99
+msgid "Oui"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:34
+#: eloue/templates/dashboard/account/profil.jade:111
+#: eloue/templates/dashboard/items/index.jade:103
+#: eloue/templates/dk/dashboard/account/profil.jade:34
+#: eloue/templates/dk/dashboard/account/profil.jade:111
+#: eloue/templates/dk/dashboard/items/index.jade:103
+msgid "Non"
+msgstr "Efternavn"
+
+#: eloue/templates/dashboard/account/profil.jade:64
+#: eloue/templates/dk/dashboard/account/profil.jade:64
+msgid "adresse par défaut"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:66
+#: eloue/templates/dk/dashboard/account/profil.jade:66
+msgid "Adresse par défaut"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:71
+#: eloue/templates/dk/dashboard/account/profil.jade:71
+msgid "Modifier une adresse"
+msgstr "Opgiv en adresse"
+
+#: eloue/templates/dashboard/account/profil.jade:88
+#: eloue/templates/dk/dashboard/account/profil.jade:88
+msgid "téléphone par défaut"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:90
+#: eloue/templates/dk/dashboard/account/profil.jade:90
+msgid "Téléphone par défaut"
+msgstr "Telefon"
+
+#: eloue/templates/dashboard/account/profil.jade:97
+#: eloue/templates/dk/dashboard/account/profil.jade:97
+msgid "quelques mots sur vous"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:98
+#: eloue/templates/dk/dashboard/account/profil.jade:98
+msgid "A propos de vous..."
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:103
+#: eloue/templates/dk/dashboard/account/profil.jade:103
+msgid "J’accepte de recevoir la newsletter e-loue"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:117
+#: eloue/templates/dk/dashboard/account/profil.jade:117
+msgid "Informations sur le permis"
+msgstr "Oplysninger om dit abonnement"
+
+#: eloue/templates/dashboard/account/profil.jade:120
+#: eloue/templates/dk/dashboard/account/profil.jade:120
+msgid "Jour"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:149
+#: eloue/templates/dk/dashboard/account/profil.jade:149
+msgid "Enregistrez les informations"
+msgstr "Arbejdsgiver"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
+msgid "Joignable au"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+#: eloue/templates/landing_pages/_sign_in_content.jade:9
+msgid "ou"
+msgstr "eller"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/jade/_pop_up_call.jade:15
+#: eloue/templates/jade/_pop_up_reserve.jade:14
+#: eloue/templates/jade/_pro_popin_message.jade:9
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:34
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:38
+#: eloue/templates/profile_public/_profile_public-contact_member.jade:7
+msgid "Envoyez un message"
+msgstr "Send forespørgsel"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:44
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:44
+msgid "Demande de réservation par"
+msgstr "Forespørgsel på overslag"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:46
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:46
+msgid "Incident declare par "
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:48
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:48
+msgid "Réservation annulée"
+msgstr "Antal reservationer"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:50
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:50
+msgid "Réservation acceptée par"
+msgstr "Antal reservationer"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:52
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:52
+msgid "Réservation rejetée par"
+msgstr "Antal reservationer"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:54
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:54
+msgid "Réservation terminée"
+msgstr "Antal reservationer"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:56
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:56
+msgid "Réservation dépassée"
+msgstr "Reservér"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:58
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:58
+msgid "Réservation en cours"
+msgstr "Reservér"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:62
+#: eloue/templates/dashboard/messages/_details_reservation.jade:4
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:62
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:4
+msgid "Statut"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:67
+#: eloue/templates/dashboard/messages/_details_reservation.jade:9
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:67
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:9
+msgid "Début"
+msgstr "Kreditkort"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:72
+#: eloue/templates/dashboard/messages/_details_reservation.jade:14
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:72
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:14
+msgid "Fin"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:77
+#: eloue/templates/dashboard/messages/_details_reservation.jade:19
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:77
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:19
+msgid "Période"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:81
+#: eloue/templates/dashboard/items/_item_characteristics.jade:83
+#: eloue/templates/dashboard/items/tarifs.jade:13
+#: eloue/templates/dashboard/items/tarifs.jade:52
+#: eloue/templates/dashboard/items/tarifs.jade:85
+#: eloue/templates/dashboard/messages/_details_reservation.jade:23
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:81
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:83
+#: eloue/templates/dk/dashboard/items/tarifs.jade:13
+#: eloue/templates/dk/dashboard/items/tarifs.jade:52
+#: eloue/templates/dk/dashboard/items/tarifs.jade:85
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:23
+#: eloue/templates/jade/pop_up_sections/_terms.jade:10
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
+#: eloue/templates/products/tab_tarifs.jade:11
+#: eloue/templates/products/tab_tarifs.jade:41 products/forms.py:169
+msgid "Prix"
+msgstr "Pris"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:85
+#: eloue/templates/dashboard/items/tabs.jade:32
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:85
+#: eloue/templates/dk/dashboard/items/tabs.jade:32
+#: eloue/templates/dk/products/_base_product_detail.jade:63
+#: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
+#: eloue/templates/jade/pop_up_sections/_shipping.jade:2
+#: eloue/templates/jade/pop_up_sections/_terms.jade:15
+#: eloue/templates/products/_base_product_detail.jade:63
+msgid "Livraison"
+msgstr "Fragt"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:93
+#: eloue/templates/dashboard/items/tarifs.jade:120
+#: eloue/templates/dashboard/messages/_details_reservation.jade:27
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:93
+#: eloue/templates/dk/dashboard/items/tarifs.jade:120
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:27
+#: eloue/templates/jade/pop_up_sections/_terms.jade:25
+#: eloue/templates/products/tab_tarifs.jade:56
+msgid "Caution"
+msgstr "Depositum"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:97
+#: eloue/templates/dashboard/messages/_details_reservation.jade:31
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:97
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:31
+msgid "Contrat"
+msgstr "Kontakt mig"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:98
+#: eloue/templates/dashboard/messages/_details_reservation.jade:32
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:98
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:32
+msgid "Télécharger le contrat"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:117
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:117
+msgid "Relais de départ"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:124
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:124
+msgid "Relais de d’arrivée"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:132
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:132
+msgid "Télécharger l'étiquette"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:144
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:144
+msgid "Description de l'incident"
+msgstr "Produktbeskrivelse"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:157
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:157
+msgid "Note et commentaires"
+msgstr "Vores partnere"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:168
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:168
+msgid "Etes-vous sûr de vouloir annuler la réservation ?"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:9
+#: eloue/templates/dashboard/booking/_bookings_list.jade:24
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:9
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:24
+msgid "Tous"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:13
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:13
+msgid "Propriétaires"
+msgstr "Ring til ejeren"
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:17
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:17
+msgid "Locataires"
+msgstr "Leje"
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:41
+#: eloue/templates/dashboard/items/profits.jade:17
+#: eloue/templates/dashboard/messages/_form_reservation.jade:6
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:41
+#: eloue/templates/dk/dashboard/items/profits.jade:17
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:6
+#: eloue/templates/jade/_date_picker_border.jade:4
+msgid "Du"
+msgstr "Fra"
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:42
+#: eloue/templates/dashboard/items/profits.jade:18
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:42
+#: eloue/templates/dk/dashboard/items/profits.jade:18
+msgid "au"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_comment_and_rank.jade:6
+#: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:6
+msgid "Noter et commenter votre réservation"
+msgstr "Proponent email"
+
+#: eloue/templates/dashboard/booking/_comment_and_rank.jade:9
+#: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:9
+msgid "Comment s’est passé votre réservation ?"
+msgstr "Proponent email"
+
+#: eloue/templates/dashboard/booking/_notification_empty_booking.jade:5
+#: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:5
+msgid "Pas encore de réservation"
+msgstr "Forespørgsel på overslag"
+
+#: eloue/templates/dashboard/booking/_notification_empty_booking.jade:6
+#: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:6
+msgid ""
+"A tout moment vous pouvez faire une demande de réservation auprès d'un "
+"propriétaire si son objet vous intéresse"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_notification_empty_booking.jade:7
+#: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:7
+msgid "Commencez à rechercher un objet"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_notification_not_selected_booking.jade:5
+#: eloue/templates/dk/dashboard/booking/_notification_not_selected_booking.jade:5
+msgid "Aucune réservation sélectionnée"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_report_incendent.jade:6
+#: eloue/templates/dk/dashboard/booking/_report_incendent.jade:6
+msgid "Déclarer un incident"
+msgstr ""
+
+#: eloue/templates/dashboard/dashboard/index.jade:12
+#: eloue/templates/dk/dashboard/dashboard/index.jade:12
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:25
+#: eloue/templates/profile_public/_profile_public-owner_information.jade:14
+msgid "Membre depuis le"
+msgstr "Medlem siden"
+
+#: eloue/templates/dashboard/dashboard/index.jade:12
+#: eloue/templates/dk/dashboard/dashboard/index.jade:12
+msgid "Mettre à jour mes infos"
+msgstr ""
+
+#: eloue/templates/dashboard/dashboard/index.jade:18
+#: eloue/templates/dk/dashboard/dashboard/index.jade:18
+msgid "Statistiques"
+msgstr "Martinique"
+
+#: eloue/templates/dashboard/dashboard/index.jade:21
+#: eloue/templates/dk/dashboard/dashboard/index.jade:21
+#: eloue/templates/jade/_patron_stats.jade:4
+msgid "annonces publiées"
+msgstr "publicerede annoncer"
+
+#: eloue/templates/dashboard/dashboard/index.jade:24
+#: eloue/templates/dk/dashboard/dashboard/index.jade:24
+msgid "locations effectuées"
+msgstr "gennemførte udlejninger"
+
+#: eloue/templates/dashboard/dashboard/index.jade:27
+#: eloue/templates/dk/dashboard/dashboard/index.jade:27
+#: eloue/templates/jade/_patron_stats.jade:10
+msgid "évaluations"
+msgstr "Vurderinger"
+
+#: eloue/templates/dashboard/dashboard/index.jade:30
+#: eloue/templates/dk/dashboard/dashboard/index.jade:30
+#: eloue/templates/jade/_patron_stats.jade:13
+msgid "de taux de réponse"
+msgstr "Svarrate"
+
+#: eloue/templates/dashboard/dashboard/index.jade:33
+#: eloue/templates/dk/dashboard/dashboard/index.jade:33
+#: eloue/templates/jade/_patron_stats.jade:16
+msgid "de temps de réponse en moyenne"
+msgstr "Svartid"
+
+#: eloue/templates/dashboard/dashboard/index.jade:53
+#: eloue/templates/dk/dashboard/dashboard/index.jade:53
+msgid "Votre activité sur e-loue"
+msgstr "e-loue"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:6
+#: eloue/templates/dashboard/items/_item_characteristics.jade:8
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:6
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:8
+#: products/models.py:92
+msgid "Quantité"
+msgstr "Antal"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:12
+#: eloue/templates/dashboard/items/_item_characteristics.jade:14
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:12
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:14
+#: eloue/templates/jade/_pop_up_publish_item.jade:28
+msgid "Marque"
+msgstr "mærke"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:19
+#: eloue/templates/dashboard/items/_item_characteristics.jade:21
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:19
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:21
+#: eloue/templates/jade/_pop_up_publish_item.jade:31
+msgid "Modèle"
+msgstr "model"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:26
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:26
+msgid "Nombre de place"
+msgstr "antal pladser"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:34
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:34
+msgid "Nombre de porte"
+msgstr "antal døre"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:42
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:42
+msgid "Énergie"
+msgstr "styrke"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:50
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:50
+msgid "Boite de vitesse"
+msgstr "automatgear"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:58
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:58
+msgid "Kilométrage"
+msgstr "kilometermål"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:66
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:66
+msgid "Consommation"
+msgstr "forbrug"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:74
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:74
+msgid "Kilomètres inclus/jour"
+msgstr "Inkluderede kilometre pr dag"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:81
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:81
+#: products/models.py:427
+msgid "Prix par kilomètres supplémentaires"
+msgstr "Pris per ekstra kilometer"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:87
+#: eloue/templates/dashboard/items/_item_characteristics.jade:89
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:87
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:89
+msgid "Climatisation"
+msgstr "air condition"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:93
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:93
+msgid "Direction assistée"
+msgstr "servostyring"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:99
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:99
+msgid "Régulateur de vitesse"
+msgstr "Hastighedsregulation"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:105
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:105
+#: products/models.py:433
+msgid "GPS"
+msgstr "GPS"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:111
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:111
+msgid "Siège bébé"
+msgstr "barnestol"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:117
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:117
+msgid "Coffre de toit"
+msgstr "tagbagage"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:123
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:123
+msgid "Porte-vélo"
+msgstr "cykelanhænger"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:129
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:129
+msgid "Pneus neige"
+msgstr "vinterdæk"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:135
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:135
+msgid "Chaines"
+msgstr "snekæder"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:141
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:141
+msgid "Porte-skis"
+msgstr "skiboks"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:147
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:147
+msgid "Lecteur CD"
+msgstr "CD afspiller"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:153
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:153
+msgid "Entrée audio/iPod"
+msgstr "indgang til iPod "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:159
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:159
+#: eloue/templates/jade/_pop_up_publish_item.jade:105 products/models.py:444
+msgid "CV fiscaux"
+msgstr "hestekræfter"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:168
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:168
+#: products/models.py:445
+msgid "N° d'immatriculation"
+msgstr "Indregistringsnummer"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:176
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:176
+#: eloue/templates/jade/_pop_up_publish_item.jade:90 products/models.py:446
+msgid "1er mise en circulation"
+msgstr "Dato for første kørte kilometer"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:183
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:183
+msgid "Capacité"
+msgstr "kapacitet"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:191
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:191
+#: products/models.py:520
+msgid "Type de logement"
+msgstr "Boligtype"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:199
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:199
+msgid "Nombre de chambre"
+msgstr "antal værelser"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:205
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:205
+#: products/models.py:523
+msgid "Règles d'utilisation"
+msgstr "Husregler"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:211
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:211
+msgid "Air conditionné"
+msgstr "air condition"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:217
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:217
+msgid "Petit déjeuner"
+msgstr "morgenmad"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:223
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:223
+msgid "Balcon/terasse"
+msgstr "Balcon/terrasse"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:229
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:229
+msgid "Chambre avec serrure"
+msgstr "aflåst værelse"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:235
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:235
+msgid "Serviettes"
+msgstr "håndklæder"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:241
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:241
+msgid "Ascenseur dans l\\'immeuble"
+msgstr "elevator i bygningen"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:247
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:247
+msgid "Adapté aux familles/enfants"
+msgstr "familie/børne venlig"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:253
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:253
+msgid "Salle de sport"
+msgstr "træningsrum"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:259
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:259
+msgid "Accessible aux personnes handicapées"
+msgstr "handicapvenlig"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:265
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:265
+msgid "Chauffage"
+msgstr "varme"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:271
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:271
+msgid "Jacuzzi"
+msgstr "jacuzzi"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:277
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:277
+msgid "Cheminée intérieure"
+msgstr "pejs"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:283
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:283
+msgid "Accès internet"
+msgstr "internet adgang"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:289
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:289
+msgid "Cuisine"
+msgstr "køkken [ slug ]"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:295
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:295
+msgid "Parking"
+msgstr "parkering"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:301
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:301
+msgid "Fumeurs acceptées"
+msgstr "rygning tilladt"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:307
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:307
+msgid "Idéal pour des évènements"
+msgstr "ideal til afholdelse af sammenkomster"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:313
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:313
+#: products/models.py:543
+msgid "TV"
+msgstr "Tv"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:319
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:319
+msgid "Machine à laver"
+msgstr "vaskemaskine"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:325
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:325
+msgid "Sèche linge"
+msgstr "tørretumbler"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:331
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:331
+msgid "Ordinateur avec Internet"
+msgstr "computer med internet adgang"
+
+#: eloue/templates/dashboard/items/_items_list.jade:8
+#: eloue/templates/dashboard/items/index.jade:5
+#: eloue/templates/dk/dashboard/items/_items_list.jade:8
+#: eloue/templates/dk/dashboard/items/index.jade:5
+msgid "Catégories"
+msgstr "Kategori"
+
+#: eloue/templates/dashboard/items/_notification_empty_items.jade:5
+#: eloue/templates/dk/dashboard/items/_notification_empty_items.jade:5
+msgid "Pas encore d'annonce déposée"
+msgstr "Indsæt en annonce"
+
+#: eloue/templates/dashboard/items/_notification_empty_items.jade:6
+#: eloue/templates/dk/dashboard/items/_notification_empty_items.jade:6
+msgid ""
+"Vos objets peuvent vous rapporter de l'argent : karcher, appareil photo, "
+"caméra ..."
+msgstr ""
+
+#: eloue/templates/dashboard/items/_notification_empty_items.jade:7
+#: eloue/templates/dk/dashboard/items/_notification_empty_items.jade:7
+msgid "Déposez votre première annonce"
+msgstr "Indsæt en annonce"
+
+#: eloue/templates/dashboard/items/_notification_not_selected_item.jade:5
+#: eloue/templates/dk/dashboard/items/_notification_not_selected_item.jade:5
+msgid "Aucune annonce sélectionnée"
+msgstr ""
+
+#: eloue/templates/dashboard/items/add_period.jade:6
+#: eloue/templates/dashboard/items/calendar.jade:73
+#: eloue/templates/dk/dashboard/items/add_period.jade:6
+#: eloue/templates/dk/dashboard/items/calendar.jade:73
+msgid "Ajouter une nouvelle indisponibilité"
+msgstr ""
+
+#: eloue/templates/dashboard/items/calendar.jade:6
+#: eloue/templates/dk/dashboard/items/calendar.jade:6
+#: eloue/templates/products/tab_available.jade:7
+msgid "Sélectionner le mois"
+msgstr ""
+
+#: eloue/templates/dashboard/items/calendar.jade:36
+#: eloue/templates/dk/dashboard/items/calendar.jade:36
+#: eloue/templates/products/tab_available.jade:48
+msgid "Indisponiblités"
+msgstr ""
+
+#: eloue/templates/dashboard/items/calendar.jade:51
+#: eloue/templates/dk/dashboard/items/calendar.jade:51
+#: eloue/templates/products/partials/product_option_edit_history.html:6
+msgid "Date de début"
+msgstr "Kreditkort"
+
+#: eloue/templates/dashboard/items/calendar.jade:52
+#: eloue/templates/dk/dashboard/items/calendar.jade:52
+#: eloue/templates/products/partials/product_option_edit_history.html:7
+msgid "Date de fin"
+msgstr "Fødselsdag"
+
+#: eloue/templates/dashboard/items/calendar.jade:53
+#: eloue/templates/dk/dashboard/items/calendar.jade:53
+msgid "Motifs"
+msgstr ""
+
+#: eloue/templates/dashboard/items/calendar.jade:54
+#: eloue/templates/django_messages/inbox.html:32
+#: eloue/templates/django_messages/outbox.html:30
+#: eloue/templates/django_messages/trash.html:30
+#: eloue/templates/dk/dashboard/items/calendar.jade:54
+msgid "Action"
+msgstr "leje"
+
+#: eloue/templates/dashboard/items/calendar.jade:61
+#: eloue/templates/dk/dashboard/items/calendar.jade:61
+msgid "Réservé"
+msgstr "Reservér"
+
+#: eloue/templates/dashboard/items/calendar.jade:62
+#: eloue/templates/dk/dashboard/items/calendar.jade:62
+msgid "Indisponible"
+msgstr ""
+
+#: eloue/templates/dashboard/items/calendar.jade:82
+#: eloue/templates/dk/dashboard/items/calendar.jade:82
+msgid "Supprimer l'indisponibilité ?"
+msgstr ""
+
+#: eloue/templates/dashboard/items/index.jade:9
+#: eloue/templates/dk/dashboard/items/index.jade:9
+#: eloue/templates/jade/_pop_up_publish_item.jade:36
+msgid "Catégorie Niv.1"
+msgstr "Kategori"
+
+#: eloue/templates/dashboard/items/index.jade:16
+#: eloue/templates/dk/dashboard/items/index.jade:16
+#: eloue/templates/jade/_pop_up_publish_item.jade:41
+msgid "Catégorie Niv.2"
+msgstr "Kategori"
+
+#: eloue/templates/dashboard/items/index.jade:23
+#: eloue/templates/dk/dashboard/items/index.jade:23
+#: eloue/templates/jade/_pop_up_publish_item.jade:46
+msgid "Catégorie Niv.3"
+msgstr "Kategori"
+
+#: eloue/templates/dashboard/items/index.jade:29
+#: eloue/templates/dashboard/items/index.jade:32
+#: eloue/templates/dk/dashboard/items/index.jade:29
+#: eloue/templates/dk/dashboard/items/index.jade:32
+#: eloue/templates/jade/_pop_up_publish_item.jade:25 products/models.py:86
+msgid "Titre"
+msgstr "Titel"
+
+#: eloue/templates/dashboard/items/index.jade:50
+#: eloue/templates/dk/dashboard/items/index.jade:50
+msgid "Photos"
+msgstr ""
+
+#: eloue/templates/dashboard/items/index.jade:79
+#: eloue/templates/dk/dashboard/items/index.jade:79
+msgid "Caractéristiques"
+msgstr ""
+
+#: eloue/templates/dashboard/items/index.jade:86
+#: eloue/templates/dashboard/items/tarifs.jade:131
+#: eloue/templates/dk/dashboard/items/index.jade:86
+#: eloue/templates/dk/dashboard/items/tarifs.jade:131
+msgid "Enregistrez les modifications"
+msgstr "dato for modifikation"
+
+#: eloue/templates/dashboard/items/index.jade:96
+#: eloue/templates/dk/dashboard/items/index.jade:96
+msgid "Etes-vous sûr de vouloir supprimer l'image?"
+msgstr ""
+
+#: eloue/templates/dashboard/items/profits.jade:3
+#: eloue/templates/dk/dashboard/items/profits.jade:3
+msgid "Total des revenus générés"
+msgstr ""
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4
+msgid "Nombre de réservation"
+msgstr "Forespørgsel på overslag"
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4
+msgid "en"
+msgstr "hundrede"
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4
+msgid "ans"
+msgstr "snekæder"
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4 rent/utils.py:187
+msgid "et"
+msgstr "og"
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4 products/choices.py:42
+#: rent/utils.py:77 rent/tests/pricing_compat.py:146
+msgid "mois"
+msgstr "måned"
+
+#: eloue/templates/dashboard/items/profits.jade:5
+#: eloue/templates/dk/dashboard/items/profits.jade:5
+msgid "jours"
+msgstr "dage"
+
+#: eloue/templates/dashboard/items/profits.jade:12
+#: eloue/templates/dk/dashboard/items/profits.jade:12
+#: eloue/templates/jade/_pop_up_reserve.jade:8
+msgid "Réservation"
+msgstr "Antal reservationer"
+
+#: eloue/templates/dashboard/items/profits.jade:18
+#: eloue/templates/dk/dashboard/items/profits.jade:18
+msgid "Montant"
+msgstr "Kontakt mig"
+
+#: eloue/templates/dashboard/items/profits.jade:18
+#: eloue/templates/dk/dashboard/items/profits.jade:18
+msgid "J"
+msgstr ""
+
+#: eloue/templates/dashboard/items/profits.jade:18
+#: eloue/templates/django_messages/compose.html:11
+#: eloue/templates/django_messages/inbox.html:13
+#: eloue/templates/django_messages/outbox.html:11
+#: eloue/templates/django_messages/trash.html:11
+#: eloue/templates/django_messages/view.html:11
+#: eloue/templates/dk/dashboard/items/profits.jade:18
+msgid "Locataire"
+msgstr "Leje"
+
+#: eloue/templates/dashboard/items/tabs.jade:7
+#: eloue/templates/dk/dashboard/items/tabs.jade:7
+msgid "Photos et infos"
+msgstr "Lejekontrakter"
+
+#: eloue/templates/dashboard/items/tabs.jade:12
+#: eloue/templates/dk/dashboard/items/tabs.jade:12
+#: eloue/templates/dk/products/_base_product_detail.jade:56
+#: eloue/templates/products/_base_product_detail.jade:56
+msgid "Tarifs"
+msgstr "Priser"
+
+#: eloue/templates/dashboard/items/tabs.jade:17
+#: eloue/templates/dk/dashboard/items/tabs.jade:17
+msgid "Calendrier"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tabs.jade:22
+#: eloue/templates/dk/dashboard/items/tabs.jade:22
+msgid "Conditions"
+msgstr "Lejemål"
+
+#: eloue/templates/dashboard/items/tabs.jade:27
+#: eloue/templates/dk/dashboard/items/tabs.jade:27
+msgid "Revenus"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:5
+#: eloue/templates/dk/dashboard/items/tarifs.jade:5
+#: eloue/templates/products/tab_tarifs.jade:3
+msgid "Grille tarifaire"
+msgstr "Prisliste"
+
+#: eloue/templates/dashboard/items/tarifs.jade:12
+#: eloue/templates/dashboard/items/tarifs.jade:51
+#: eloue/templates/dashboard/items/tarifs.jade:84
+#: eloue/templates/dk/dashboard/items/tarifs.jade:12
+#: eloue/templates/dk/dashboard/items/tarifs.jade:51
+#: eloue/templates/dk/dashboard/items/tarifs.jade:84
+#: eloue/templates/jade/pop_up_sections/_terms.jade:5
+#: eloue/templates/products/tab_tarifs.jade:10
+#: eloue/templates/products/tab_tarifs.jade:40
+msgid "Durée"
+msgstr "Varighed"
+
+#: eloue/templates/dashboard/items/tarifs.jade:18
+#: eloue/templates/dk/dashboard/items/tarifs.jade:18 products/choices.py:18
+#: rent/tests/pricing_compat.py:122
+msgid "1 heure"
+msgstr "1 time"
+
+#: eloue/templates/dashboard/items/tarifs.jade:20
+#: eloue/templates/dashboard/items/tarifs.jade:26
+#: eloue/templates/dashboard/items/tarifs.jade:32
+#: eloue/templates/dashboard/items/tarifs.jade:38
+#: eloue/templates/dashboard/items/tarifs.jade:44
+#: eloue/templates/dashboard/items/tarifs.jade:59
+#: eloue/templates/dashboard/items/tarifs.jade:92
+#: eloue/templates/dashboard/items/tarifs.jade:98
+#: eloue/templates/dashboard/items/tarifs.jade:104
+#: eloue/templates/dashboard/items/tarifs.jade:110
+#: eloue/templates/dk/dashboard/items/tarifs.jade:20
+#: eloue/templates/dk/dashboard/items/tarifs.jade:26
+#: eloue/templates/dk/dashboard/items/tarifs.jade:32
+#: eloue/templates/dk/dashboard/items/tarifs.jade:38
+#: eloue/templates/dk/dashboard/items/tarifs.jade:44
+#: eloue/templates/dk/dashboard/items/tarifs.jade:59
+#: eloue/templates/dk/dashboard/items/tarifs.jade:92
+#: eloue/templates/dk/dashboard/items/tarifs.jade:98
+#: eloue/templates/dk/dashboard/items/tarifs.jade:104
+#: eloue/templates/dk/dashboard/items/tarifs.jade:110
+msgid "Prix..."
+msgstr "Pris"
+
+#: eloue/templates/dashboard/items/tarifs.jade:24
+#: eloue/templates/dashboard/items/tarifs.jade:57
+#: eloue/templates/dk/dashboard/items/tarifs.jade:24
+#: eloue/templates/dk/dashboard/items/tarifs.jade:57 products/choices.py:23
+#: rent/tests/pricing_compat.py:127
+msgid "1 jour"
+msgstr "1 dag"
+
+#: eloue/templates/dashboard/items/tarifs.jade:30
+#: eloue/templates/dk/dashboard/items/tarifs.jade:30 products/choices.py:48
+#: rent/tests/pricing_compat.py:152
+msgid "3 jours"
+msgstr "3 dage"
+
+#: eloue/templates/dashboard/items/tarifs.jade:36
+#: eloue/templates/dk/dashboard/items/tarifs.jade:36
+msgid "7 jours"
+msgstr "7 dage"
+
+#: eloue/templates/dashboard/items/tarifs.jade:42
+#: eloue/templates/dk/dashboard/items/tarifs.jade:42 products/choices.py:53
+#: rent/tests/pricing_compat.py:157
+msgid "15 jours"
+msgstr "15 dage"
+
+#: eloue/templates/dashboard/items/tarifs.jade:72
+#: eloue/templates/dk/dashboard/items/tarifs.jade:72
+#: eloue/templates/products/tab_tarifs.jade:26
+msgid "Kilomètres inclus par jour"
+msgstr "Inkluderede kilometre pr dag"
+
+#: eloue/templates/dashboard/items/tarifs.jade:74
+#: eloue/templates/dk/dashboard/items/tarifs.jade:74
+#: eloue/templates/jade/_pop_up_publish_item.jade:77
+msgid "Km"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:90
+#: eloue/templates/dk/dashboard/items/tarifs.jade:90
+msgid "1 nuit"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:96
+#: eloue/templates/dk/dashboard/items/tarifs.jade:96
+msgid "3 nuits"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:102
+#: eloue/templates/dk/dashboard/items/tarifs.jade:102
+msgid "7 nuits"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:108
+#: eloue/templates/dk/dashboard/items/tarifs.jade:108
+msgid "15 nuits"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:122
+#: eloue/templates/dk/dashboard/items/tarifs.jade:122
+#: eloue/templates/jade/_pop_up_publish_item.jade:70
+#: eloue/templates/jade/_pop_up_publish_item.jade:98
+msgid "Caution demandée"
+msgstr "Depositum"
+
+#: eloue/templates/dashboard/items/tarifs.jade:129
+#: eloue/templates/dk/dashboard/items/tarifs.jade:129
+msgid "Tarif obligatoire"
+msgstr "Dette felt er obligatorisk"
+
+#: eloue/templates/dashboard/items/terms/car_terms.jade:1
+#: eloue/templates/dk/dashboard/items/terms/car_terms.jade:1
+msgid ""
+"\n"
+"\n"
+"<h2 class=\"indent-lg-t\">Asssurance du véhicule</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Assurance accident et vol inclus dans le prix du montant de la "
+"réservation. La franchise de cette assurance est de 2000&euro;.</li>\n"
+"</ul>\n"
+"<h2 class=\"indent-lg-t\">Condition de location</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Le conducteur doit avoir au moins 21 ans.</li>\n"
+"  <li>Le conducteur doit être titulaire d'un permis de conduire obtenu "
+"depuis plus de 2 ans valable en France.</li>\n"
+"  <li>Le conducteur doit payer la location sur le site avec une carte "
+"bancaire à son nom qu'il présentera au propriétaire au début de la location, "
+"ainsi que son permis de conduire.</li>\n"
+"  <li>Il est possible d'avoir plusieurs conducteurs. Dans ce cas, chaque "
+"conducteur devra être mentionné sur le contrat de location et répondre aux "
+"conditions d'age et de permis de conduire.</li>\n"
+"  <li>Le véhicule ne doit circuler qu'en France métropolitaine.</li>\n"
+"  <li>L'usage est exclusivement privé.</li>\n"
+"  <li>Le transport de passagers à titre onéreux est exclus.</li>\n"
+"</ul>"
+msgstr ""
+
+#: eloue/templates/dashboard/items/terms/professional_terms.jade:2
+#: eloue/templates/dk/dashboard/items/terms/professional_terms.jade:2
+msgid "Le professionnel se charge de l’assurance."
+msgstr ""
+
+#: eloue/templates/dashboard/items/terms/real_estate_terms.jade:1
+#: eloue/templates/dk/dashboard/items/terms/real_estate_terms.jade:1
+msgid ""
+"\n"
+"\n"
+"<h2 class=\"indent-lg-t\">Assurance du logement</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Annulation de séjour</li>\n"
+"  <li>Intéruption de séjour</li>\n"
+"  <li>Responsabilité civile villégiature</li>\n"
+"  <li class=\"last\">Non-conformité du bien loué</li>\n"
+"</ul>\n"
+"<h2 class=\"indent-lg-t\">Conditions de location</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Le locataire doit être un particulier.</li>\n"
+"  <li>La durée de la location ne peut pas excéder 90 jours.</li>\n"
+"</ul>"
+msgstr ""
+
+#: eloue/templates/dashboard/items/terms/simple_terms.jade:1
+#: eloue/templates/dk/dashboard/items/terms/simple_terms.jade:1
+#, python-format
+msgid ""
+"\n"
+"\n"
+"<h2 class=\"indent-lg-t\">Assurance de l'objet</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Casse accidentelle (vol exclu) pour un montant maximum de 750&euro;.</"
+"li>\n"
+"  <li>Pour les réparations n'excédant pas 750&euro; : franchise de 15%% du "
+"montant des réparations.</li>\n"
+"  <li class=\"last\">Pour les réparations supérieures à 750&euro; : "
+"franchise de 112,5&euro; plus le montant des réparations excédant 750&euro;."
+"</li>\n"
+"</ul>\n"
+"<h2 class=\"indent-lg-t\">Condition de location</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Le locataire doit être un particulier.</li>\n"
+"  <li>Le locataire doit payer sur le site avec une carte bancaire à son nom "
+"qu'il présentera au propriétaire au début de la location.</li>\n"
+"  <li>La location doit se faire en France métropolitaine.</li>\n"
+"  <li>La durée de la location ne peut pas excéder 90 jours.</li>\n"
+"</ul>"
+msgstr ""
+
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:23
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:23
+msgid "Tableau de board"
+msgstr "Dashboard"
+
+#: eloue/templates/dashboard/messages/_aside_product_detail.jade:4
+#: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:4
+msgid "Réservation associée à"
+msgstr "Reservér"
+
+#: eloue/templates/dashboard/messages/_details_reservation.jade:20
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:20
+msgid "jours et"
+msgstr ""
+
+#: eloue/templates/dashboard/messages/_details_reservation.jade:20
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:20
+msgid "heures"
+msgstr "time"
+
+#: eloue/templates/dashboard/messages/_details_reservation.jade:36
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:36
+msgid "Détails de la réservation"
+msgstr ""
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:17
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:17
+#: eloue/templates/jade/_date_picker_border.jade:23
+msgid "Au"
+msgstr "Til"
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:26
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:26
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:11
+msgid "Cet article est disponible à ces dates"
+msgstr "Genstanden er tilgængelig på følgende datoer "
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:27
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:27
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:12
+msgid "Cet article n'est pas disponible à ces dates"
+msgstr ""
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:30
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:30
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:16
+msgid "Durée de la location"
+msgstr "Lejeperiodens varighed"
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:32
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:32
+msgid "Prix de la location"
+msgstr "for leje"
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:35
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:35
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:22
+msgid "Assurance incluse"
+msgstr "Inklusiv forsikring"
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:37
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:37
+#: eloue/templates/jade/_pop_up_call.jade:14
+#: eloue/templates/jade/_pop_up_send_message.jade:14
+#: eloue/templates/jade/pop_up_sections/_bank_information.jade:45
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
+msgid "Réservez"
+msgstr "Reservér"
+
+#: eloue/templates/dashboard/messages/_notification_empty_messages.jade:5
+#: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:5
+msgid "Pas encore de conversation"
+msgstr "Bekræftelse af adgangskode"
+
+#: eloue/templates/dashboard/messages/_notification_empty_messages.jade:6
+#: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:6
+msgid ""
+"Avant de faire une demande réservation, il est possible d'envoyer un message "
+"au propriétaire"
+msgstr ""
+
+#: eloue/templates/dashboard/messages/_notification_empty_messages.jade:7
+#: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:7
+msgid "Commencer à rechercher une annonce"
+msgstr "Kommentarer i forbindelse med denne annonce"
+
+#: eloue/templates/dashboard/messages/_notification_not_selected_dialog.jade:5
+#: eloue/templates/dk/dashboard/messages/_notification_not_selected_dialog.jade:5
+msgid "Aucune conversation sélectionnée"
+msgstr ""
+
+#: eloue/templates/dashboard/messages/_section_communication.jade:21
+#: eloue/templates/dk/dashboard/messages/_section_communication.jade:21
+#: eloue/templates/jade/pop_up_sections/_input_message.jade:6
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
+msgid "Envoyez"
+msgstr "Send"
+
 #: eloue/templates/django_messages/compose.html:3
 #: eloue/templates/django_messages/inbox.html:3
 #: eloue/templates/django_messages/outbox.html:3
@@ -1865,14 +3249,6 @@ msgstr "Dashboard"
 #: eloue/templates/django_messages/view.html:10
 msgid "Propriétaire"
 msgstr ""
-
-#: eloue/templates/django_messages/compose.html:11
-#: eloue/templates/django_messages/inbox.html:13
-#: eloue/templates/django_messages/outbox.html:11
-#: eloue/templates/django_messages/trash.html:11
-#: eloue/templates/django_messages/view.html:11
-msgid "Locataire"
-msgstr "Leje"
 
 #: eloue/templates/django_messages/compose.html:12
 #: eloue/templates/django_messages/inbox.html:14
@@ -1942,12 +3318,6 @@ msgstr ""
 #: eloue/templates/django_messages/trash.html:30
 msgid "Reçu le"
 msgstr ""
-
-#: eloue/templates/django_messages/inbox.html:32
-#: eloue/templates/django_messages/outbox.html:30
-#: eloue/templates/django_messages/trash.html:30
-msgid "Action"
-msgstr "leje"
 
 #: eloue/templates/django_messages/inbox.html:44
 #: eloue/templates/django_messages/outbox.html:42
@@ -2120,12 +3490,6 @@ msgstr "Tilmeld dig"
 
 #: eloue/templates/dk/jade/_header_site.jade:8
 #: eloue/templates/jade/_header_site.jade:8
-#: eloue/templates/landing_pages/_sign_in_content.jade:9
-msgid "ou"
-msgstr "eller"
-
-#: eloue/templates/dk/jade/_header_site.jade:8
-#: eloue/templates/jade/_header_site.jade:8
 msgid "connectez-vous"
 msgstr "log dig på"
 
@@ -2157,30 +3521,6 @@ msgstr ""
 msgid "annonces de location dans toute la France"
 msgstr "Lejeannoncer i hele landet"
 
-#: eloue/templates/dk/jade/_product_list.jade:7
-#: eloue/templates/jade/_product_list.jade:7
-#: eloue/templates/jade/_product_list_main.jade:2
-#: eloue/templates/jade/product_details/aside/_similar_listing.jade:16
-#: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
-#: products/choices.py:22 rent/utils.py:79 rent/tests/pricing_compat.py:126
-#, fuzzy
-msgid "jour"
-msgstr "dag"
-
-#: eloue/templates/dk/jade/_product_list.jade:11
-#: eloue/templates/jade/_nav_home.jade:6
-#: eloue/templates/jade/_nav_home.jade:10
-#: eloue/templates/jade/_nav_home.jade:17
-#: eloue/templates/jade/_porduct_details_title.jade:2
-#: eloue/templates/jade/_product_list.jade:11
-#: eloue/templates/jade/_product_list_article_head.jade:7
-#: eloue/templates/products/product_list.jade:5
-#: eloue/templates/products/product_list.jade:12
-#: eloue/templates/products/subcategory_list.jade:16
-#: eloue/templates/products/subcategory_list.jade:28
-msgid "Location"
-msgstr "Leje"
-
 #: eloue/templates/dk/jade/_product_list.jade:24
 #: eloue/templates/jade/_product_list.jade:24
 #: eloue/templates/products/subcategory_list.jade:34
@@ -2192,23 +3532,10 @@ msgstr "Se samtlige lejeannoncer"
 msgid "Photos et Localisation"
 msgstr "Lejekontrakter"
 
-#: eloue/templates/dk/products/_base_product_detail.jade:56
-#: eloue/templates/products/_base_product_detail.jade:56
-msgid "Tarifs"
-msgstr "Priser"
-
 #: eloue/templates/dk/products/_base_product_detail.jade:59
 #: eloue/templates/products/_base_product_detail.jade:59
 msgid "Conditions d'assurance"
 msgstr "Forsikringsmæssige betingelser"
-
-#: eloue/templates/dk/products/_base_product_detail.jade:63
-#: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
-#: eloue/templates/jade/pop_up_sections/_shipping.jade:2
-#: eloue/templates/jade/pop_up_sections/_terms.jade:15
-#: eloue/templates/products/_base_product_detail.jade:63
-msgid "Livraison"
-msgstr "Fragt"
 
 #: eloue/templates/dk/products/_base_product_detail.jade:74
 #: eloue/templates/products/_base_product_detail.jade:74
@@ -2289,10 +3616,6 @@ msgstr ""
 msgid "Logements"
 msgstr "Abonnement"
 
-#: eloue/templates/jade/_date_picker_border.jade:4
-msgid "Du"
-msgstr "Fra"
-
 #: eloue/templates/jade/_date_picker_border.jade:18
 msgid "Il manque la date de début"
 msgstr "Kreditkort"
@@ -2301,10 +3624,6 @@ msgstr "Kreditkort"
 #: eloue/templates/jade/_date_picker_border.jade:38
 msgid "Le format de la date n'est pas valide"
 msgstr "Datoen er ikke korrekt indskrevet"
-
-#: eloue/templates/jade/_date_picker_border.jade:23
-msgid "Au"
-msgstr "Til"
 
 #: eloue/templates/jade/_date_picker_border.jade:37
 msgid "Il manque la date de fin"
@@ -2426,45 +3745,13 @@ msgstr ""
 msgid "Locations"
 msgstr "Lejemål"
 
-#: eloue/templates/jade/_patron_stats.jade:4
-msgid "annonces publiées"
-msgstr "publicerede annoncer"
-
 #: eloue/templates/jade/_patron_stats.jade:7
 msgid "locations effectués"
 msgstr "gennemførte udlejninger"
 
-#: eloue/templates/jade/_patron_stats.jade:10
-msgid "évaluations"
-msgstr "Vurderinger"
-
-#: eloue/templates/jade/_patron_stats.jade:13
-msgid "de taux de réponse"
-msgstr "Svarrate"
-
-#: eloue/templates/jade/_patron_stats.jade:16
-msgid "de temps de réponse en moyenne"
-msgstr "Svartid"
-
 #: eloue/templates/jade/_pop_up_call.jade:8
 msgid "Appel"
 msgstr "Ring op"
-
-#: eloue/templates/jade/_pop_up_call.jade:14
-#: eloue/templates/jade/_pop_up_send_message.jade:14
-#: eloue/templates/jade/pop_up_sections/_bank_information.jade:45
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
-msgid "Réservez"
-msgstr "Reservér"
-
-#: eloue/templates/jade/_pop_up_call.jade:15
-#: eloue/templates/jade/_pop_up_reserve.jade:14
-#: eloue/templates/jade/_pro_popin_message.jade:9
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:34
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:38
-#: eloue/templates/profile_public/_profile_public-contact_member.jade:7
-msgid "Envoyez un message"
-msgstr "Send forespørgsel"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:8
 msgid "Dépot d'annonce"
@@ -2480,30 +3767,6 @@ msgid ""
 " e-loue vous permet de gagner de l'argent en louant vos biens,<br> en toute "
 "sécurité, quand vous ne les utilisez pas\n"
 msgstr ""
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:25 products/models.py:86
-msgid "Titre"
-msgstr "Titel"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:28
-msgid "Marque"
-msgstr "mærke"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:31
-msgid "Modèle"
-msgstr "model"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:36
-msgid "Catégorie Niv.1"
-msgstr "Kategori"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:41
-msgid "Catégorie Niv.2"
-msgstr "Kategori"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:46
-msgid "Catégorie Niv.3"
-msgstr "Kategori"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:64
 msgid "Prix à la nuit"
@@ -2521,18 +3784,9 @@ msgstr "Pris per dag"
 msgid "&euro;"
 msgstr "kr."
 
-#: eloue/templates/jade/_pop_up_publish_item.jade:70
-#: eloue/templates/jade/_pop_up_publish_item.jade:98
-msgid "Caution demandée"
-msgstr "Depositum"
-
 #: eloue/templates/jade/_pop_up_publish_item.jade:75
 msgid "Kilomètres inclus"
 msgstr "Inkluderede kilometre pr dag"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:77
-msgid "Km"
-msgstr ""
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:80
 #: eloue/templates/jade/_pop_up_publish_item.jade:113
@@ -2543,10 +3797,6 @@ msgstr "Skriv din annonce på 1 minut"
 msgid "Prix km supp"
 msgstr "Pris per ekstra kilometer"
 
-#: eloue/templates/jade/_pop_up_publish_item.jade:90 products/models.py:446
-msgid "1er mise en circulation"
-msgstr "Dato for første kørte kilometer"
-
 #: eloue/templates/jade/_pop_up_publish_item.jade:92
 msgid ""
 "\n"
@@ -2555,14 +3805,6 @@ msgid ""
 "\"product.licence_plate\" placeholder=\"N° d'immatriculation\" ng-required="
 "\"isAuto\" class=\"form-control\">"
 msgstr ""
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:105 products/models.py:444
-msgid "CV fiscaux"
-msgstr "hestekræfter"
-
-#: eloue/templates/jade/_pop_up_reserve.jade:8
-msgid "Réservation"
-msgstr "Antal reservationer"
 
 #: eloue/templates/jade/_pop_up_reserve.jade:15
 #: eloue/templates/jade/_pop_up_send_message.jade:15
@@ -2807,10 +4049,6 @@ msgid ""
 "correctement saisi."
 msgstr ""
 
-#: eloue/templates/jade/_reset_password_confirm.jade:15
-msgid "Nouveau mot de passe"
-msgstr "Adgangskode"
-
 #: eloue/templates/jade/_reset_password_confirm.jade:18
 #: eloue/templates/jade/_sign_in.jade:65
 msgid "Confirmation du mot de passe"
@@ -2965,11 +4203,6 @@ msgstr ""
 #: eloue/templates/jade/pop_up_sections/_input_message.jade:3
 msgid "Rédigez votre message ici..."
 msgstr ""
-
-#: eloue/templates/jade/pop_up_sections/_input_message.jade:6
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
-msgid "Envoyez"
-msgstr "Send"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:4
 msgid "Demande de devis envoyé"
@@ -3137,10 +4370,6 @@ msgstr ""
 msgid "Vous devez mettre une adresse dans le formulaire ci-dessus"
 msgstr ""
 
-#: eloue/templates/jade/pop_up_sections/_shipping.jade:20
-msgid "Enregistrer"
-msgstr ""
-
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:24
 msgid "Sélectionner un point relais ci-dessous"
 msgstr ""
@@ -3166,31 +4395,6 @@ msgstr "By med filial"
 #: eloue/templates/jade/pop_up_sections/_shop_form.jade:35
 msgid "Notre boutique est située au&nbsp;"
 msgstr "Vores butik ligger placeret;"
-
-#: eloue/templates/jade/pop_up_sections/_terms.jade:5
-#: eloue/templates/products/tab_tarifs.jade:10
-#: eloue/templates/products/tab_tarifs.jade:40
-msgid "Durée"
-msgstr "Varighed"
-
-#: eloue/templates/jade/pop_up_sections/_terms.jade:10
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
-#: eloue/templates/products/tab_tarifs.jade:11
-#: eloue/templates/products/tab_tarifs.jade:41 products/forms.py:169
-msgid "Prix"
-msgstr "Pris"
-
-#: eloue/templates/jade/pop_up_sections/_terms.jade:11
-#: eloue/templates/jade/pop_up_sections/_terms.jade:16
-#: eloue/templates/jade/pop_up_sections/_terms.jade:21
-#: eloue/templates/jade/pop_up_sections/_terms.jade:26 products/choices.py:60
-msgid "€"
-msgstr "kr."
-
-#: eloue/templates/jade/pop_up_sections/_terms.jade:25
-#: eloue/templates/products/tab_tarifs.jade:56
-msgid "Caution"
-msgstr "Depositum"
 
 #: eloue/templates/jade/pop_up_sections/_terms.jade:30
 msgid ""
@@ -3283,18 +4487,6 @@ msgstr "Op til "
 msgid "/jour"
 msgstr "/dag"
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:11
-msgid "Cet article est disponible à ces dates"
-msgstr "Genstanden er tilgængelig på følgende datoer "
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:12
-msgid "Cet article n'est pas disponible à ces dates"
-msgstr ""
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:16
-msgid "Durée de la location"
-msgstr "Lejeperiodens varighed"
-
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 msgid "indicatif"
 msgstr "indikerende"
@@ -3303,10 +4495,6 @@ msgstr "indikerende"
 msgid "de la location"
 msgstr "for leje"
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:22
-msgid "Assurance incluse"
-msgstr "Inklusiv forsikring"
-
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:26
 msgid ""
 "\n"
@@ -3314,15 +4502,14 @@ msgid ""
 "vous recontactera <br> très rapidement <br> pour vous confirmer la location."
 "<br> &ndash;<br> Le paiement se fera directement <br> chez le loueur.\n"
 msgstr ""
+"\n"
+" Du sender nu<br> en forespørgsel om leje. <br> &ndash;<br> Lejeren "
+"kontakter dig <br> snarligst <br> for at bekræfte lejen.<br> &ndash;<br> "
+"Betalingen foretages <br> hos ejeren.\n"
 
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:3
 msgid "Contactez-moi"
 msgstr "Kontakt mig"
-
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:25
-#: eloue/templates/profile_public/_profile_public-owner_information.jade:14
-msgid "Membre depuis le"
-msgstr "Medlem siden"
 
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:36
 #: eloue/templates/profile_public/_profile_public-contact_member.jade:11
@@ -3465,10 +4652,6 @@ msgstr "Lejekontrakter"
 msgid "dans toute la France"
 msgstr "Lejeannoncer i hele landet"
 
-#: eloue/templates/products/tab_available.jade:7
-msgid "Sélectionner le mois"
-msgstr ""
-
 #: eloue/templates/products/tab_available.jade:36
 msgid ""
 "\n"
@@ -3480,25 +4663,13 @@ msgid ""
 "necessitatibus quis illum enim.</p>"
 msgstr ""
 
-#: eloue/templates/products/tab_available.jade:48
-msgid "Indisponiblités"
-msgstr ""
-
 #: eloue/templates/products/tab_tarifs.jade:3
 msgid "Tarif"
 msgstr "Priser"
 
-#: eloue/templates/products/tab_tarifs.jade:3
-msgid "Grille tarifaire"
-msgstr "Prisliste"
-
 #: eloue/templates/products/tab_tarifs.jade:16
 msgid "1 jours*"
 msgstr "1 dag*"
-
-#: eloue/templates/products/tab_tarifs.jade:26
-msgid "Kilomètres inclus par jour"
-msgstr "Inkluderede kilometre pr dag"
 
 #: eloue/templates/products/tab_tarifs.jade:30
 msgid "Coût du kilomètre supplémentaire"
@@ -3540,14 +4711,6 @@ msgstr "aktiv"
 #: eloue/templates/products/partials/product_option_edit_form.html:31
 msgid "Activer"
 msgstr "aktiv"
-
-#: eloue/templates/products/partials/product_option_edit_history.html:6
-msgid "Date de début"
-msgstr "Kreditkort"
-
-#: eloue/templates/products/partials/product_option_edit_history.html:7
-msgid "Date de fin"
-msgstr "Fødselsdag"
 
 #: eloue/templates/products/partials/product_option_edit_history.html:8
 msgid "Coût"
@@ -3724,7 +4887,7 @@ msgid "Demande de réservation"
 msgstr "Forespørgsel på overslag"
 
 #: eloue/templates/rent/emails/borrower_ask_email.html:14
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 "\n"
@@ -3739,7 +4902,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"                            Hej %(owner_name)s<br><br>\n"
+"                            Hej %(borrower_name)s<br><br>\n"
 "\n"
 "                            Desværre har lejeren besluttet sig for ikke at "
 "gennemføre lejemålet. Følgende udlejningen er derfor annulleret:<br>\n"
@@ -4932,17 +6095,8 @@ msgid "All users"
 msgstr "Alle brugere"
 
 #: products/choices.py:17 rent/utils.py:80 rent/tests/pricing_compat.py:121
-#, fuzzy
 msgid "heure"
 msgstr "time"
-
-#: products/choices.py:18 rent/tests/pricing_compat.py:122
-msgid "1 heure"
-msgstr "1 time"
-
-#: products/choices.py:23 rent/tests/pricing_compat.py:127
-msgid "1 jour"
-msgstr "1 dag"
 
 #: products/choices.py:27 rent/tests/pricing_compat.py:131
 msgid "week-end"
@@ -4954,7 +6108,6 @@ msgstr "1 weekend"
 
 #: products/choices.py:32 rent/utils.py:78 rent/tests/pricing_compat.py:136
 #: rent/tests/pricing_compat.py:206 rent/tests/pricing_compat.py:214
-#, fuzzy
 msgid "semaine"
 msgstr "uge"
 
@@ -4971,11 +6124,6 @@ msgstr "to uger"
 msgid "2 semaines"
 msgstr "2 uger"
 
-#: products/choices.py:42 rent/utils.py:77 rent/tests/pricing_compat.py:146
-#, fuzzy
-msgid "mois"
-msgstr "måned"
-
 #: products/choices.py:43 rent/tests/pricing_compat.py:147
 msgid "1 mois"
 msgstr "1 måned"
@@ -4984,16 +6132,8 @@ msgstr "1 måned"
 msgid "3jours"
 msgstr "3 dage"
 
-#: products/choices.py:48 rent/tests/pricing_compat.py:152
-msgid "3 jours"
-msgstr "3 dage"
-
 #: products/choices.py:52 rent/tests/pricing_compat.py:156
 msgid "15jours"
-msgstr "15 dage"
-
-#: products/choices.py:53 rent/tests/pricing_compat.py:157
-msgid "15 jours"
 msgstr "15 dage"
 
 #: products/choices.py:61
@@ -5226,10 +6366,6 @@ msgstr "udfra kategori"
 msgid "Dépôt de garantie"
 msgstr "Depositum"
 
-#: products/models.py:92
-msgid "Quantité"
-msgstr "Antal"
-
 #: products/models.py:93
 msgid "Livraison possible"
 msgstr "Mulig fragt"
@@ -5263,10 +6399,6 @@ msgid "Nombre de kilomètres maximum que le locataire peut effectuer par jour."
 msgstr "Lejers maksimum antal kilometer"
 
 #: products/models.py:427
-msgid "Prix par kilomètres supplémentaires"
-msgstr "Pris per ekstra kilometer"
-
-#: products/models.py:427
 msgid ""
 "Prix du kilomètre supplémentaire. Si le locataire dépasse le nombre de "
 "kilomètre inclus par jour."
@@ -5285,10 +6417,6 @@ msgstr "servostyring"
 #: products/models.py:432
 msgid "régulateur de vitesse"
 msgstr "Hastighedsregulation"
-
-#: products/models.py:433
-msgid "GPS"
-msgstr "GPS"
 
 #: products/models.py:434
 msgid "siège bébé"
@@ -5322,10 +6450,6 @@ msgstr "CD afspiller"
 msgid "entrée audio/iPod"
 msgstr "indgang til iPod "
 
-#: products/models.py:445
-msgid "N° d'immatriculation"
-msgstr "Indregistringsnummer"
-
 #: products/models.py:519
 msgid "capacité"
 msgstr "kapacitet"
@@ -5334,17 +6458,9 @@ msgstr "kapacitet"
 msgid "Nombre de personne que peux accueillir votre locgement"
 msgstr "Antal tilladte personer i boligen"
 
-#: products/models.py:520
-msgid "Type de logement"
-msgstr "Boligtype"
-
 #: products/models.py:522
 msgid "nombre de chambre"
 msgstr "antal værelser"
-
-#: products/models.py:523
-msgid "Règles d'utilisation"
-msgstr "Husregler"
 
 #: products/models.py:526
 msgid "air conditionné"
@@ -5413,10 +6529,6 @@ msgstr "rygning tilladt"
 #: products/models.py:542
 msgid "idéal pour des évènements"
 msgstr "ideal til afholdelse af sammenkomster"
-
-#: products/models.py:543
-msgid "TV"
-msgstr "Tv"
 
 #: products/models.py:544
 msgid "machine à laver"
@@ -5760,10 +6872,6 @@ msgstr "tusinde"
 #: rent/utils.py:177
 msgid "zéro"
 msgstr "nul"
-
-#: rent/utils.py:187
-msgid "et"
-msgstr "og"
 
 #: rent/utils.py:195
 msgid "moins"

@@ -1,40 +1,38 @@
+-load i18n
 include ../jade/_mixins
 
 block content-view
-  {% verbatim %}
   section.tabs-vertical-static.lg.scrollbar-custom
     ul.text-gray
       li.tab-vertical
          .block-with-thumbnail.indent-xs
           .col-thumbnail
-            .thumbnail.round.indent-sm-r: span.lg: img(style="background-image: url({{currentUser.avatar.profil}})")
+            .thumbnail.round.indent-sm-r: span.lg: img(style="background-image: url({% verbatim %}{{currentUser.avatar.profil}}{% endverbatim %})")
           .col-exposition
-            h2.small.text-black.indent-xs-b {{currentUser.username}}
-            {% endverbatim %}
+            h2.small.text-black.indent-xs-b {% verbatim %}{{currentUser.username}}{% endverbatim %}
             +average-rate("userStats.average_rating")
-            {% verbatim %}
-            p.indent-sm-v Membre depus le {{currentUser.date_joined | date:'dd.MM.yyyy'}}
-            a(ui-sref="account.profile").btn.bg-success-hover.text-white Mettre à jour mes infos
+            p.indent-sm-v {% trans "Membre depuis le" %} {% verbatim %}{{currentUser.date_joined | date:'dd.MM.yyyy'}}{% endverbatim %}
+            a(ui-sref="account.profile").btn.bg-success-hover.text-white {% trans "Mettre à jour mes infos" %}
 
       li.tab-vertical
         .indent-xs
-          h2.text-black.indent-xs-b Statistiques
+          h2.text-black.indent-xs-b {% trans "Statistiques" %}
           ul
             li
-              big.large.text-success {{userStats.products_count}}
-              | annonces publiées
+              big.large.text-success {% verbatim %}{{userStats.products_count}}{% endverbatim %}
+              | {% trans "annonces publiées" %}
             li
-              big.large.text-success {{userStats.bookings_count}}
-              | locations effectuées
+              big.large.text-success {% verbatim %}{{userStats.bookings_count}}{% endverbatim %}
+              | {% trans "locations effectuées" %}
             li
-              big.large.text-success {{userStats.ratings_count}}
-              | évaluations
+              big.large.text-success {% verbatim %}{{userStats.ratings_count}}{% endverbatim %}
+              | {% trans "évaluations" %}
             li
-              big.large.text-success {{userStats.response_rate | number: 0}}%&nbsp;
-              | de taux de réponse
+              big.large.text-success {% verbatim %}{{userStats.response_rate | number: 0}}{% endverbatim %}%&nbsp;
+              | {% trans "de taux de réponse" %}
             li
-              big.large.text-success {{userStats.response_time}}
-              | de temps de réponse en moyenne
+              big.large.text-success {% verbatim %}{{userStats.response_time}}{% endverbatim %}
+              | {% trans "de temps de réponse en moyenne" %}
 
       li.tab-vertical
         .indent-xs
@@ -66,7 +64,7 @@ block content-view
                select(ng-model="selectedActivityType", ng-change="filterByActivityType()", eloue-chosen)
                 option(ng-repeat="type in activityTypes | orderBy:'id':true", value="{{type.id}}") {{type.name}}
           li.col-sm-8.text-center
-            h4 Votre activité sur e-loue
+            h4 {% trans "Votre activité sur e-loue" %}
           li.col-sm-2.text-success.text-right: p
            //-
             a(href="#")
@@ -75,7 +73,6 @@ block content-view
             a(href="#c")
               i.icon-lg.flaticon.stroke.calendar-5
                 span.badge-count-action(ng-show="!!newBookingRequestsCount", ng-bind="newBookingRequestsCount")
-  {% endverbatim %}
 
   //-
     .section-header

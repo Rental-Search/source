@@ -1,24 +1,20 @@
+-load i18n
 include ../jade/_mixins
 
-{% verbatim %}
 #comment-and-rank.modal.fade
     .modal-dialog
         .modal-content(style="padding: 0 30px")
             .modal-body
-                h3 Noter et commenter votre réservation
-                {% endverbatim %}
+                h3 {% trans "Noter et commenter votre réservation" %}
                 +average-rate-editable("comment.rate").form-control
 
                 form(name="commentForm", ng-submit="postComment()")
                     fieldset(data-ng-disabled="submitInProgress")
-                        textarea.expand.form-control(name="comment.text", rows="7", placeholder="Comment s’est passé votre réservation ?", ng-model="comment.text", required)
-
-                        {% verbatim %}
+                        textarea.expand.form-control(name="comment.text", rows="7", placeholder="{% trans 'Comment s’est passé votre réservation ?' %}", ng-model="comment.text", required)
                         .row
                             .col-xs-6
                                 button(type="button", data-dismiss="modal").btn
-                                    | Annuler
+                                    | {% trans "Annuler" %}
                             .col-xs-6
-                                button(type="submit", class="{{submitInProgress ? 'loading' : ''}}", ng-disabled="submitInProgress || !commentForm.$valid || comment.rate == 0").btn.bg-success-hover.text-white
-                                    | Enregistrer
-{% endverbatim %}
+                                button(type="submit", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}", ng-disabled="submitInProgress || !commentForm.$valid || comment.rate == 0").btn.bg-success-hover.text-white
+                                    | {% trans "Enregistrer" %}

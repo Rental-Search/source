@@ -1,18 +1,17 @@
-{% verbatim %}
+-load i18n
 section.tabs-vertical-static.pull-nothing
     ul#messages-list.scrollbar-custom.messages-container(eloue-lazy-load, lazy-data="items", lazy-data-provider="ProductRelatedMessagesService", lazy-load-method="getThreadMessages", lazy-load-config="lazyLoadConfig")
         li.tab-vertical.block-with-thumbnail.display-table(ng-repeat="message in items | orderBy:'id'")
             .col-thumbnail
-                .thumbnail.round: a(href="/loueur/{{message.sender.slug}}").sm
-                    img(style="background-image: url({{message.sender.avatar.thumbnail}});")
+                .thumbnail.round: a(href="/loueur/{% verbatim %}{{message.sender.slug}}{% endverbatim %}").sm
+                    img(style="background-image: url({% verbatim %}{{message.sender.avatar.thumbnail}}{% endverbatim %});")
             .col-exposition
-                h3: a(href="/loueur/{{message.sender.slug}}").text-underline-hover {{message.sender.username}}
-                p.small.text-gray-light {{message.sent_at | date : "dd.MM.yyyy HH'h'mm"}}
-                p.normal.text-gray.text-justify(style="white-space: pre-line;") {{message.body}}
+                h3: a(href="/loueur/{% verbatim %}{{message.sender.slug}}{% endverbatim %}").text-underline-hover {% verbatim %}{{message.sender.username}}{% endverbatim %}
+                p.small.text-gray-light {% verbatim %}{{message.sent_at | date : "dd.MM.yyyy HH'h'mm"}}{% endverbatim %}
+                p.normal.text-gray.text-justify(style="white-space: pre-line;") {% verbatim %}{{message.body}}{% endverbatim %}
 
     form(ng-submit="postNewMessage()").send-dialog-message.clearfix
       fieldset(data-ng-disabled="messageSubmitInProgress")
         .textarea-wrapper
             textarea#message-text.expand(name="message-text", tabindex="1", placeholder="Rédigez votre message ici...", ng-model="message")
-        button(type="submit", ng-disabled="!message", class="{{messageSubmitInProgress ? 'loading' : ''}}").btn.bg-success-hover.text-white Envoyez
-{% endverbatim %}
+        button(type="submit", ng-disabled="!message", class="{% verbatim %}{{messageSubmitInProgress ? 'loading' : ''}}{% endverbatim %}").btn.bg-success-hover.text-white {% trans "Envoyez" %}

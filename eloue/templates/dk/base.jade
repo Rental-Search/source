@@ -1,0 +1,65 @@
+-load compressed staticfiles seo i18n
+
+doctype 5
+html(lang="fr")
+  head
+    style [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide { display: none !important; }
+    block variables
+      include jade/variables
+
+    block head
+      title {% filter striplinebreak %}{% block title %}{% endblock %}{% if is_paginated and page_obj.has_previous %} - {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}
+      meta(charset="UTF-8")
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      meta(name="description", content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}")
+      link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
+
+    block styles
+      link(rel="stylesheet", href="http{% if request.is_secure %}s{% endif %}://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
+      {% compressed_css "extrastyles" %}
+
+    block scripts
+      {% compressed_js "public_js" %}
+    script
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-8258979-1']);
+      _gaq.push(['_setDomainName', 'www.e-loue.com']);
+      _gaq.push(['_trackPageview']);
+      {% spaceless %}
+      {% if request.user.is_authenticated %}
+      _gaq.push(['_setVar', 'authenticated']);
+      {% else %}
+      _gaq.push(['_setVar', 'anonymous']);
+      {% endif %}
+      {% endspaceless %}
+    script
+      !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";
+        analytics.load("CK4wf1QXZEjeqFRo75zZQ7DfZWzYJwHC");
+        analytics.page()
+      }}();
+
+    script
+      (function(){var c=encodeURIComponent,s="SCRIPT",d=document,e=d.createElement(s),t=d.getElementsByTagName(s)[0],p="t="+c(d.title||"")+"&u="+c(d.location.href||"")+"&r="+c(d.referrer||"");e.src="https://api.autopilothq.com/anywhere/4fd1743ca0b0494ab62a862694f0925b0f506b051bd64c4789d8d5260c7dc2af?"+p;e.type="text/javascript";e.async=true;t.parentNode.insertBefore(e, t);})();
+      
+  body
+    input(id="eloue_url_redirect_facebook", value="{% url 'login_facebook' %}", type="hidden")
+    block content-body
+    block tail
+      script
+          (function() {
+               var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
+               ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
+               var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+           })();
+      script
+          var form = document.getElementById('searh-form');
+          if (form != 'undefined') {
+            analytics.trackForm(form, 'Search', {
+              'what': document.getElementsByClassName('what-field')[0].value,
+              'where': document.getElementById('geolocate').value
+            });
+          }
+    #ngModals
+        eloue-login-form
+        eloue-registration-form
+        eloue-reset-password-form

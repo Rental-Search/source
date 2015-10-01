@@ -1,17 +1,17 @@
+-load i18n
 block details
   .section-content
-    {% verbatim %}
-    h2.pull-right.clear-both Total des revenus générés : {{totalProfit}}€
-    h3.pull-right.clear-both.indent-sm-b Nombre de réservation : {{numberOfBookings}} en
+    h2.pull-right.clear-both {% trans "Total des revenus générés" %} : {% verbatim %}{{totalProfit}}{% endverbatim %}{% trans "€" %}
+    h3.pull-right.clear-both.indent-sm-b {% trans "Nombre de réservation" %} : {% verbatim %}{{numberOfBookings}}{% endverbatim %} {% trans "en" %}
       span(ng-show="durationYears > 0")
-       | {{durationYears}} ans et
+       | {% verbatim %}{{durationYears}}{% endverbatim %} {% trans "ans" %} {% trans "et" %}
       span(ng-show="durationMonths > 0")
-       | {{durationMonths}} mois et
-      | {{durationDays}} jours
+       | {% verbatim %}{{durationMonths}}{% endverbatim %} {% trans "mois" %} {% trans "et" %}
+      | {% verbatim %}{{durationDays}}{% endverbatim %} {% trans "jours" %}
     .row: .col-xs-12
       table.calendar.text-center
         thead: tr
-          td Réservation
+          td {% trans "Réservation" %}
          //-
           td Date de virement
           td Compte crédité
@@ -19,18 +19,17 @@ block details
         tbody
             tr(ng-repeat="booking in bookings")
               td.text-left
-                a(ui-sref="bookings.detail({uuid: booking.uuid})").text-success.text-underline-hover Du {{booking.start_date.day}} &nbsp;
-                  span(translate="{{booking.start_date.month}}")
-                  | {{booking.start_date.year}}
-                  | au {{booking.end_date.day}} &nbsp;
-                  span(translate="{{booking.end_date.month}}")
-                  | {{booking.end_date.year}}
+                a(ui-sref="bookings.detail({uuid: booking.uuid})").text-success.text-underline-hover {% trans "Du" %} {% verbatim %}{{booking.start_date.day}}{% endverbatim %} &nbsp;
+                  span(translate="{% verbatim %}{{booking.start_date.month}}{% endverbatim %}")
+                  | {% verbatim %}{{booking.start_date.year}}{% endverbatim %}
+                  | {% trans "au" %} {% verbatim %}{{booking.end_date.day}}{% endverbatim %} &nbsp;
+                  span(translate="{% verbatim %}{{booking.end_date.month}}{% endverbatim %}")
+                  | {% verbatim %}{{booking.end_date.year}}{% endverbatim %}
                 br
-                | Montant : {{booking.total_amount}}€/J
+                | {% trans "Montant" %} : {% verbatim %}{{booking.total_amount}}{% endverbatim %}(% trans "€" %%}/{% trans "J" %}
                 br
-                | Locataire : {{booking.borrower.username}}
+                | {% trans "Locataire" %} : {% verbatim %}{{booking.borrower.username}}{% endverbatim %}
              //-
               td
               td
               td
-     {% endverbatim %}

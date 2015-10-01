@@ -1,71 +1,68 @@
+-load i18n
 include ../jade/_global_variables
 
 block details
   .section-content
-    {% verbatim %}
     form(action="itmes")
       .row
         .col-xs-7
-          h2 Sélectionner le mois
+          h2 {% trans "Sélectionner le mois" %}
         .col-xs-5
           .form-control.without-search.select-gradient
             select(ng-model="selectedMonthAndYear", ng-change="updateCalendar()", eloue-chosen, opts="monthOptions")
-                option(ng-repeat="month in monthOptions", value="{{month.value}}") {{month.name}}
+                option(ng-repeat="month in monthOptions", value="{% verbatim %}{{month.value}}{%endverbatim %}") {% verbatim %}{{month.name}}{%endverbatim %}
       .row
         .col-xs-12.indent-sm-b
           table.calendar.text-center
-            {% endverbatim %}
             thead
               tr: each day in days_of_week
-                td {{ day }}
-            {% verbatim %}
+                td {% verbatim %}{{ day }}{%endverbatim %}
             tbody
                   tr(ng-repeat="week in weeks")
-                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : '' || day.isUnavailable && showUnavailable ? 'outages' : ''}}") {{day.dayOfMonth}}
+                    td(ng-repeat="day in week.weekDays", class="{% verbatim %}{{day.isBooked && showBookings ? 'booking' : '' || day.isUnavailable && showUnavailable ? 'outages' : ''}}{%endverbatim %}") {% verbatim %}{{day.dayOfMonth}}{%endverbatim %}
       .row(style="text-align: center;")
           div(style="display: inline-block; width: 70%;")
             .col-xs-6
               label.check-btn.form-control.text-danger-light
                 input(type="checkbox", ng-model="showUnavailable", ng-change="onShowUnavailable()")
                 span: i.flaticon.stroke.checkmark
-                | Indisponiblités
+                | {% trans "Indisponiblités" %}
             .col-xs-6
               label.check-btn.form-control.text-success-light
                 input(type="checkbox", ng-model="showBookings", ng-change="onShowBookings()")
                 span: i.flaticon.stroke.checkmark
-                | Réservations
+                | {% trans "Réservations" %}
       .row.indent-xs-b
         .col-xs-12.indent-sm-b
           table.calendar.bg-light.text-center
             thead
               tr
-                td Date de début
-                td Date de fin
-                td Motifs
-                td Action
+                td {% trans "Date de début" %}
+                td {% trans "Date de fin" %}
+                td {% trans "Motifs" %}
+                td {% trans "Action" %}
             tbody
               tr(ng-repeat="period in productUnavailablePeriods track by period.uuid", ng-show="(showBookings && period.reason=='booked') || (showUnavailable && period.reason=='unavailable')")
-                td {{period.startDay | date:'dd/MM/yyyy'}}
-                td {{period.endDay | date:'dd/MM/yyyy'}}
-                td(ng-show="showBookings && period.reason=='booked'").text-success-light Réservé
-                td(ng-show="showUnavailable && period.reason=='unavailable'").text-danger-light Indisponible
+                td {% verbatim %}{{period.startDay | date:'dd/MM/yyyy'}}{%endverbatim %}
+                td {% verbatim %}{{period.endDay | date:'dd/MM/yyyy'}}{%endverbatim %}
+                td(ng-show="showBookings && period.reason=='booked'").text-success-light {% trans "Réservé" %}
+                td(ng-show="showUnavailable && period.reason=='unavailable'").text-danger-light {% trans "Indisponible" %}
                 td
                   //a(href="", ng-click="showUpdatePeriodForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") Modifier &nbsp;
-                  a(href="", ng-click="showConfirmForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") Supprimer
+                  a(href="", ng-click="showConfirmForm(period)", ng-show="showUnavailable && period.reason=='unavailable'") {% trans "Supprimer" %}
       .row
         .col-xs-12
-          button(type="button", ng-click="showAddPeriodForm()").btn.bg-success-hover.text-white.center Ajouter une nouvelle indisponibilité
-    {% endverbatim %}
+          button(type="button", ng-click="showAddPeriodForm()").btn.bg-success-hover.text-white.center {% trans "Ajouter une nouvelle indisponibilité" %}
 #confirm-delete-period.modal.fade
     .modal-dialog
         .modal-content(style="padding: 30px")
             .modal-body
-                h3 Supprimer l'indisponibilité ?
+                h3 {% trans "Supprimer l'indisponibilité ?" %}
                 .row
                     .col-xs-6
                         button(type="button", data-dismiss="modal").btn
-                            | Non
+                            | {% trans "Non" }
                     .col-xs-6
                         button(type="button", data-dismiss="modal", ng-click="deleteUnavailabilityPeriod(selectedPeriod)").btn.bg-success
-                            | Oui
+                            | {% trans "Oui" %}
 include add_period

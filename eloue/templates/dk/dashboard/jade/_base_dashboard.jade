@@ -1,5 +1,5 @@
 extends ../../base
--load compressed staticfiles
+-load compressed staticfiles i18n
 
 block append styles
   {% compressed_css "dashboard_styles" %}
@@ -26,11 +26,29 @@ block append content-body
     article.dashboard
       nav(ng-show="!!currentUser")
         ul
-          li(ng-repeat="tab in dashboardTabs")
-            {% verbatim %}
-            a(ui-sref="{{tab.sref}}").text-success-dark
-              i.flaticon(class="{{tab.icon}}")
-                span.badge-count-action(ng-show="tab.badge", ng-bind="tab.badge")
-              | {{tab.title}}
-            {% endverbatim %}
+          li
+            a(ui-sref="{% verbatim %}{{dashboardTabs[0].sref}}{% endverbatim %}").text-success-dark
+              i.flaticon(class="{% verbatim %}{{dashboardTabs[0].icon}}{% endverbatim %}")
+                span.badge-count-action(ng-show="dashboardTabs[0].badge", ng-bind="dashboardTabs[0].badge")
+              | {% trans "Tableau de board"%}
+          li
+            a(ui-sref="{% verbatim %}{{dashboardTabs[1].sref}}{% endverbatim %}").text-success-dark
+              i.flaticon(class="{% verbatim %}{{dashboardTabs[1].icon}}{% endverbatim %}")
+                span.badge-count-action(ng-show="dashboardTabs[1].badge", ng-bind="dashboardTabs[1].badge")
+              | {% trans "Messages" %}
+          li
+            a(ui-sref="{% verbatim %}{{dashboardTabs[2].sref}}{% endverbatim %}").text-success-dark
+              i.flaticon(class="{% verbatim %}{{dashboardTabs[2].icon}}{% endverbatim %}")
+                span.badge-count-action(ng-show="dashboardTabs[2].badge", ng-bind="dashboardTabs[2].badge")
+              | {% trans "Réservations" %}
+          li
+            a(ui-sref="{% verbatim %}{{dashboardTabs[3].sref}}{% endverbatim %}").text-success-dark
+              i.flaticon(class="{% verbatim %}{{dashboardTabs[3].icon}}{% endverbatim %}")
+                span.badge-count-action(ng-show="dashboardTabs[3].badge", ng-bind="dashboardTabs[3].badge")
+              | {% trans "Annonces" %}
+          li
+            a(ui-sref="{% verbatim %}{{dashboardTabs[4].sref}}{% endverbatim %}").text-success-dark
+              i.flaticon(class="{% verbatim %}{{dashboardTabs[4].icon}}{% endverbatim %}")
+                span.badge-count-action(ng-show="dashboardTabs[4].badge", ng-bind="dashboardTabs[4].badge")
+              | {% trans "Compte" %}
       .content-view(ui-view)

@@ -1,9 +1,7 @@
 section.pull-nothing(ng-hide="addressList && (addressList.length > 0)").content-view
   .notification-empty
     .notification-container
-      {% verbatim %}
-      i(class="{{routeChangeInProgress ? 'loading' : ''}}").icon-5x.indent-sm-b.flaticon.solid.menu-list-4
-      {% endverbatim %}
+      i(class="{% verbatim %}{{routeChangeInProgress ? 'loading' : ''}}{% endverbatim %}").icon-5x.indent-sm-b.flaticon.solid.menu-list-4
       h2(ng-show="!routeChangeInProgress", translate="noAddressTitle")
       p(ng-show="!routeChangeInProgress", translate="noAddressInfo").indent-md-v.text-black
       a(ng-show="!routeChangeInProgress", href="#/account/profile", translate="noAddressButton").btn-inline.bg-success-hover.text-white

@@ -1,28 +1,27 @@
-{% verbatim %}
+-load i18n
 #add-period.modal.fade
     .modal-dialog
         .modal-content(style="padding: 30px")
             .modal-body
-                h3 Ajouter une nouvelle indisponibilité
+                h3 {% trans "Ajouter une nouvelle indisponibilité" %}
                 .alert.alert-danger(ng-show="!!unavailabilityPeriodValidationError")
-                    span.text-danger {{unavailabilityPeriodValidationError}}
+                    span.text-danger {% verbatim %}{{unavailabilityPeriodValidationError}}{% endverbatim %}
                 form(name="addPeriodForm", ng-submit="periodSubmitted = true").table-form
                     fieldset(data-ng-disabled="submitInProgress")
                         .row
                             .col-sm-12(style="z-index: 1050")
                                 input(type="text", name="started_at", ng-model="newUnavailabilityPeriod.started_at", placeholder="Du", eloue-extended-datepicker, required).form-control
                                 span.text-danger(ng-show="addPeriodForm.started_at.$error.required && periodSubmitted", translate="required_field")
-                                span.text-danger(eloue-form-field-message, field-name="started_at") {{value}}
+                                span.text-danger(eloue-form-field-message, field-name="started_at") {% verbatim %}{{value}}{% endverbatim %}
                         .row
                             .col-sm-12(style="z-index: 1050")
                                 input(type="text", name="ended_at", ng-model="newUnavailabilityPeriod.ended_at", placeholder="Au", eloue-extended-datepicker, required).form-control
                                 span.text-danger(ng-show="addPeriodForm.ended_at.$error.required && periodSubmitted", translate="required_field")
-                                span.text-danger(eloue-form-field-message, field-name="ended_at") {{value}}
+                                span.text-danger(eloue-form-field-message, field-name="ended_at") {% verbatim %}{{value}}{% endverbatim %}
                         .row
                             .col-xs-6
                                 button(type="button", data-dismiss="modal").btn
-                                    | Annuler
+                                    | {% trans "Annuler" %}
                             .col-xs-6
-                                button(type="button", ng-click="saveUnavailabilityPeriod()", ng-disabled="submitInProgress || !addPeriodForm.$valid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success
-                                    | Enregistrer
-{% endverbatim %}
+                                button(type="button", ng-click="saveUnavailabilityPeriod()", ng-disabled="submitInProgress || !addPeriodForm.$valid", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").btn.bg-success
+                                    | {% trans "Enregistrer" %}

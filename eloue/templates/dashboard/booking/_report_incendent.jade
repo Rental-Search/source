@@ -1,9 +1,9 @@
-{% verbatim %}
+-load i18n
 #report-incendent.modal.fade
     .modal-dialog
         .modal-content(style="padding: 0 30px")
             .modal-body
-                h3 Déclarer un incident
+                h3 {% trans "Déclarer un incident" %}
 
                 form(name="incidentForm", ng-submit="postIncident()").table-form
                     fieldset(data-ng-disabled="submitInProgress")
@@ -13,8 +13,7 @@
                         .row
                             .col-xs-6
                                 button(type="button", data-dismiss="modal").btn
-                                    | Annuler
+                                    | {% trans "Annuler" %}
                             .col-xs-6
-                                button(type="submit", ng-disabled="submitInProgress || !incidentForm.$valid", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success
-                                    | Enregistrer
-{% endverbatim %}
+                                button(type="submit", ng-disabled="submitInProgress || !incidentForm.$valid", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").btn.bg-success
+                                    | {% trans "Enregistrer" %}

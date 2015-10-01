@@ -1,7 +1,6 @@
+-load i18n
 section.pull-nothing
   .notification-empty
-    .notification-container
-      {% verbatim %}
-      i(class="{{routeChangeInProgress ? 'loading' : ''}}").icon-5x.indent-sm-b.flaticon.solid.menu-list-4
-      {% endverbatim %}
-      h2(ng-show="!routeChangeInProgress") Aucune annonce sélectionnée
+    .notification-containers
+      i(class="{% verbatim %}{{routeChangeInProgress ? 'loading' : ''}}{% endverbatim %}").icon-5x.indent-sm-b.flaticon.solid.menu-list-4
+      h2(ng-show="!routeChangeInProgress") {% trans "Aucune annonce sélectionnée" %}

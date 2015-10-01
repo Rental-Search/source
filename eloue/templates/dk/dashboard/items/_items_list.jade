@@ -1,27 +1,26 @@
+-load i18n
 include ../jade/_mixins
 
-{% verbatim %}
 section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selectedCategory)")
   .section-header
     .row
       .indent-xs-t.col-xs-6.col-xs-offset-6
         .select-gradient.without-search
           select#categoryFilterSelect(ng-model="selectedCategory", ng-change="filterByCategory()")
-            option(value="") Catégories
-            option(ng-repeat="category in categories", value="{{category.id}}") {{category.name}}
+            option(value="") {% trans "Catégories" %}
+            option(ng-repeat="category in categories", value="{% verbatim %}{{category.id}}{% endverbatim %}") {% verbatim %}{{category.name}}{% endverbatim %}
   ul.scrollbar-custom(eloue-lazy-load, lazy-data="items", lazy-data-provider="ProductsService", lazy-load-method="getProductsByOwnerAndRootCategory")
-      li.tab-vertical.block-with-thumbnail(ng-repeat="item in items | filter:itemsFilter track by item.id", id="item-{{item.id}}", ui-sref="items.info({id: item.id})", ng-class="{current: isItemSelected('item-', item.id)}")
+      li.tab-vertical.block-with-thumbnail(ng-repeat="item in items | filter:itemsFilter track by item.id", id="item-{% verbatim %}{{item.id}}{% endverbatim %}", ui-sref="items.info({id: item.id})", ng-class="{current: isItemSelected('item-', item.id)}")
         .col-thumbnail
           .thumbnail
-            a(ui-sref="items.info({id: item.id})").lg-p: img(style="background-image: url({{item.picture}});")
+            a(ui-sref="items.info({id: item.id})").lg-p: img(style="background-image: url({% verbatim %}{{item.picture}}{% endverbatim %});")
         .col-exposition
           h3.small
-            | Location&nbsp;
-            a(ui-sref="items.info({id: item.id})", id="item-title-link-{{item.id}}") {{item.summary}}
+            | {% trans "Location" %}&nbsp;
+            a(ui-sref="items.info({id: item.id})", id="item-title-link-{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.summary}}{% endverbatim %}
           p.normal.text-gray
-            big(id="item-title-price-{{item.id}}").text-primary {{item.pricePerDay}}€ / jour
+            big(id="item-title-price-{% verbatim %}{{item.id}}{% endverbatim %}").text-primary {% verbatim %}{{item.pricePerDay}}{% endverbatim %}{% trans "€" %} / {% trans "jour" %}
             br
-            {% endverbatim %}
             span(ng-hide="item.stats.booking_comments_count == 0 && item.stats.bookings_count == 0")
              +average-rate("item.stats.average_rating")
              +number-of-comments("item.stats.booking_comments_count")

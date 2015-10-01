@@ -1,8 +1,7 @@
+-load i18n
 block content-view
   section.tabs-vertical-active.sm.scrollbar-custom
-    ul(ng-init="account_tabs=[{title: 'Profil', sref: 'account.profile'}, {title: 'Adresses', sref: 'account.addresses'}, {title: 'Mot de passe', sref: 'account.password'}]")
-      {% verbatim %}
-      li(ng-repeat="tab in account_tabs", id="account-part-{{tab.sref}}"): a.tab-vertical(ui-sref="{{tab.sref}}", class="{{tab.sref == 'account.profile' ? 'current' : ''}}")
+    ul(ng-init="account_tabs=[{title: '{% trans 'Profil'%}', sref: 'account.profile'}, {title: '{% trans 'Adresses'%}', sref: 'account.addresses'}, {title: '{% trans 'Mot de passe'%}', sref: 'account.password'}]")
+      li(ng-repeat="tab in account_tabs", id="account-part-{% verbatim %}{{tab.sref}}{% endverbatim %}"): a.tab-vertical(ui-sref="{% verbatim %}{{tab.sref}}{% endverbatim %}", class="{% verbatim %}{{tab.sref == 'account.profile' ? 'current' : ''}}{% endverbatim %}")
         h3(ng-bind="tab.title")
-      {% endverbatim %}
   .content-view(ui-view)
