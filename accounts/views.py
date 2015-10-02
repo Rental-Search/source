@@ -250,8 +250,8 @@ class ContactProView(View):
 
             if activity_field and name and sender:
                 try:
-                    message = "%s ; %s ; %s ; %s" % (name, activity_field, sender, phone_number)
-                    send_mail("Formulaire de contact Pro", message, sender, recipients)
+                    message = "%s ; %s ; %s" % (name, activity_field, phone_number)
+                    send_mail("Formulaire de contact Pro", "Email de contact : %s\n\nInformations du pro :\n%s" %(sender, message), "contact@e-loue.com", recipients)
                 except BadHeaderError:
                     messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
                     return render(request, self.template_name, {'form': form, 'tag' : "error"})
