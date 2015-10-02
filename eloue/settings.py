@@ -110,7 +110,6 @@ LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-fr')
 ugettext = lambda s: s
 LANGUAGES = (
     ('fr-fr', ugettext('Français')),
-    ('en-gb', ugettext('English')),
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
@@ -243,6 +242,7 @@ INSTALLED_APPS = (
     'eloue.api',
     'south', # South must be the last in the list of applications that contains models
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
+    'core',
 )
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
@@ -833,3 +833,8 @@ FILTER_CATEGORIES = env('FILTER_CATEGORIES', tuple())
 PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
+
+
+#Parse credential
+PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')
+PARSE_REST_API_KEY = env('PARSE_REST_API_KEY', 'VQdNVFgacql3M7T1uTnk8jO7mjqM3Q5yCiaqyXyv')

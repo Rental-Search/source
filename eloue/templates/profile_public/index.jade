@@ -1,7 +1,8 @@
 extends ../base
 -load compressed i18n l10n
+-load i18n
 
-{% block title %}Location entre particulier : loueur {{ patron.username }}{% endblock %}
+{% block title %}{% trans "Location entre particulier : loueur" %} {{ patron.username }}{% endblock %}
 
 {% block description %}{% blocktrans with patron.username as username %}Toutes les locations de {{ username }}{% endblocktrans %}{% endblock %}
 

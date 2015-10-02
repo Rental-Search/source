@@ -1,17 +1,19 @@
+-load i18n
+
 .container.text-center
-    h3 Inscrivez-vous en 2 secondes
+    h3 {% trans "Inscrivez-vous en 2 secondes" %}
     .form-group: a(ng-click="loginFacebook()", style='width:300px; height:35px; margin-left: 10px;').btn.bg-info
         i.flaticon.social.facebook
-        | Inscription via Facebook
+        | {% trans "Inscription via Facebook" %}
     //-
      .form-group: a(href="#").btn.bg-danger
        i.flaticon.social.google-plus
        | Inscription via Google
     p.info
-        | Nous ne publierons jamais rien sur votre mur sans votre accord
-    p.center(style='font-size:15px; font-weight:bold; padding-top: 15px;') ou
+        | {% trans "Nous ne publierons jamais rien sur votre mur sans votre accord" %}
+    p.center(style='font-size:15px; font-weight:bold; padding-top: 15px;') {% trans "ou" %}
     //- span.or
-    h3 Inscrivez-vous en 30 secondes
+    h3 {% trans "Inscrivez-vous en 30 secondes" %}
     form(action="")
         .form-group: a( href = "", ng-click="openRegistrationForm()", style='width:300px; height:35px; margin-left: 10px;').btn.bg-success Inscription via Email
     {% verbatim %}
@@ -33,7 +35,7 @@
                         option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
                     {% endverbatim %}
                 .col-xs-7
-                    input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
+                    input(type="text", placeholder="{% trans 'Nom *' %}", name="last_name", ng-model="account.last_name", required).form-control
                     span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted", translate="required_field")
             -var registration_form_fields = [["text", "Prénom", "first_name"], ["text", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
             each type, placeholder, name in registration_form_fields
@@ -49,15 +51,15 @@
                 label(for="inform")
                     input(type="checkbox", checked)#inform
                     span.flaticon.stroke.checkmark
-                | Tenez moi informé de l'actualité et des bonnes affaires e-loue
-            .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success Inscription via Email
+                | {% trans "Tenez moi informé de l'actualité et des bonnes affaires e-loue" %}
+            .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success {% trans "Inscription via Email" %}
             p
-                | En créant un compte e-loue, vous acceptez les &nbsp;
-                a(href="{% url 'terms' %}") Conditions Générales
+                | {% trans "En créant un compte e-loue, vous acceptez les &nbsp;" %}
+                a(href="{% url 'terms' %}") {% trans "Conditions Générales" %}
                 br
-                | et la &nbsp;
-                a(href="/respect-vie-privee/") Politique de Confidentialité
-                | de notre site
+                | {% trans "et la" %} &nbsp;
+                a(href="/respect-vie-privee/") {% trans "Politique de Confidentialité" %}
+                | {% trans "de notre site" %}
     span.or
-    h4 Vous êtes déjà membre e-loue ?
-    a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion Connexion
+    h4 {% trans "Vous êtes déjà membre e-loue ?" %}
+    a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion {% trans "Connexion" %}

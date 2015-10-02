@@ -1,3 +1,5 @@
+-load i18n
+
 .modal#pro-popin-shop(tabindex="-1", role="dialog", aria-hidden="true")
 	-var is_agencies = false
 	.modal-dialog.large
@@ -6,7 +8,7 @@
 				button(type="button", data-dismiss="modal").close
 					span(aria-hidden="true")&times;
 					span.sr-only Close
-				h4.modal-title {{ patron.company_name }} - Venez en magasin
+				h4.modal-title {{ patron.company_name }} - {% trans "Venez en magasin" %}
 			.modal-body.table-cell.text-justify.pro-shop-modal
 				//-.static-part.table-cell
 				//-	section.product-info

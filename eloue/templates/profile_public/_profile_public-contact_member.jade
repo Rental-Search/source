@@ -1,15 +1,19 @@
+-load i18n
+
 .section-header
-  h4 Contactez le membre
+  h4 {% trans "Contactez le membre" %}
 .section-body: .part
+  {% if patron.slug != "loxam" %}
   a(href="#/message", data-toggle="modal", data-target="#pro-popin-message").btn.bg-success
     i.flaticon.stroke.mail-2
-    | Envoyez un message
+    {% trans "Envoyez un message" %}
   a(href="#/phone", data-toggle="modal", data-target="#pro-popin-phone").btn.bg-success
     i.flaticon.stroke.phone-3
-    | Appelez
+    {% trans "Appelez" %}
+  {% endif %}
   a(href="#/shop", data-toggle="modal", data-target="#pro-popin-shop").btn.bg-success
     i.flaticon.stroke.shop-1
-    | Venez en magasin
+    {% trans "Venez en magasin" %}
   a(href="#/website", data-toggle="modal", data-target="#pro-popin-website-link").btn.bg-success
     i.flaticon.stroke.imac-1
-    | Visitez notre site web
+    {% trans "Visitez notre site web" %}

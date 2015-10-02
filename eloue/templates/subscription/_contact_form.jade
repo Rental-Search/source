@@ -1,0 +1,62 @@
+style
+  .indent-v-lg {
+    margin-top: 0px;}
+  p{
+  margin-bottom: 0px;}
+  label{
+  margin-bottom: 0px;
+  margin-top: 5px;}
+  
+.container.indent-v-lg
+  -var select_items = [{'text': "Demande d'information", 'value': "request_information"},{'text': "Problème technique", 'value': "technical_problem"}, {'text': "Inscription / Connexion", 'value': "register_login"}, {'text': "Tableau de bord / Espace client", 'value': "dashboard_client_area"}, {'text': "Recherche", 'value': "research"}, {'text': "Réservations / Locations", 'value': "booking_rentals"}, {'text': "Paiement / Caution", 'value': "payment_deposit"}, {'text': "Assurance", 'value': "insurance"}, {'text': "Suggestions", 'value': "suggestions"}, {'text': "Félicitations", 'value': "congratulations"}, {'text': "Relation presse", 'value': "press_relations"}, {'text': "Proposition de partenariat", 'value': "partnership_proposal"}, {'text': "Autre", 'value': "other"}]
+  form(action="/offre-professionnel/" method="POST").form-wrapper
+    {% csrf_token %}
+    .row.indent-v-xs
+      .col-xs-4.text-right: label Nom, Prenom&nbsp;:
+      .col-xs-8.col-sm-6.col-md-4
+        input(name="{{ form.name.html_name }}", value="{{ form.name.value }}" , required).form-control
+        {% if form.name.errors %}
+        {% for error in form.name.errors %}
+        p.alert-danger{{ error|escape }}
+        {% endfor %}
+        {% endif %}
+    .row.indent-v-xs
+      .col-xs-4.text-right: label Domaine d'activité&nbsp;:
+      .col-xs-8.col-sm-6.col-md-4
+        input(name="{{ form.activity_field.html_name }}", value="{{ form.activity_field.value }}" , required).form-control
+        {% if form.activity_field.errors %}
+        {% for error in form.activity_field.errors %}
+        p.alert-danger{{ error|escape }}
+        {% endfor %}
+        {% endif %}
+    .row.indent-v-xs
+      .col-xs-4.text-right: label Votre email&nbsp;:
+      .col-xs-8.col-sm-6.col-md-4
+        input(type="email",  name="{{ form.sender.html_name }}", value="{{ form.sender.value }}" , required).form-control
+        {% if form.sender.errors %}
+        {% for error in form.sender.errors %}
+        p.alert-danger{{ error|escape }}
+        {% endfor %}
+        {% endif %}
+    .row.indent-v-xs
+      .col-xs-4.text-right: label Votre numéro de téléphone&nbsp;:
+      .col-xs-8.col-sm-6.col-md-4
+        input(type="number", name="{{ form.phone_number.html_name }}", value="{{ form.phone_number.value }}" , required).form-control
+        {% if form.phone_number.errors %}
+        {% for error in form.phone_number.errors %}
+        p.alert-danger{{ error|escape }}
+        {% endfor %}
+        {% endif %}
+
+    .row
+      .col-xs-4.col-sm-3.col-xs-offset-4
+          p: em &nbsp;Tous les champs sont obligatoires
+
+    .row.indent-v-md
+      .col-xs-8.col-sm-4.col-xs-offset-4
+        input(type="submit", value="Envoyer solicitation", style="width: 100%;").btn.btn-lg.bg-success
+
+  p.text-center.indent-v-xs
+    | Vous pouvez également nous joindre, du lundi au vendredi de 9h à 18h,
+    br
+    | par chat ou par téléphone au 01 85 08 99 77

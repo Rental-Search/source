@@ -7,6 +7,8 @@ from django.db import transaction
 
 from eloue.utils import cache_key, create_alternative_email
 from django.core import exceptions
+from parse_rest.connection import register
+from parse_rest.installation import Push
 
 
 def post_save_answer(sender, instance, created, **kwargs):
@@ -117,3 +119,12 @@ def new_message_email(sender, instance, created, **kwargs):
         message = create_alternative_email(
             'django_messages/new_message', context, settings.DEFAULT_FROM_EMAIL, [instance.recipient.email])
         message.send()
+        #Parse notification
+        print instance.recipient.email
+        print instance.recipient.device_token
+        if instance.recipient.device_token:
+            print "NOTIFICATION"
+            register(settings.PARSE_APPLICATION_ID, settings.PARSE_REST_API_KEY)
+            unread_count = instance.recipient.received_messages.filter(read_at=None).count()
+            Push.alert({"alert": "Vous avez reçu un nouveau message", "type": "MSG_NEW", "user_id": instance.recipient.pk, "count": unread_count, "badge": unread_count, "sound": "default"}, where={"deviceToken": instance.recipient.device_token})
+

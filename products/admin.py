@@ -81,7 +81,7 @@ class ProductCurrentSiteAdmin(CurrentSiteAdmin):
 
 class ProductAdmin(ProductCurrentSiteAdmin):
     date_hierarchy = 'created_at'
-    search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email']
+    search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email', 'owner__pk']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address", "phone")
     list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')

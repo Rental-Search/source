@@ -32,7 +32,7 @@ class BookingAdmin(CurrentSiteAdmin):
         'started_at', 'ended_at', 'created_at', 'total_amount', 'state')
     ordering = ['-created_at']
     actions = ['send_recovery_email']
-    search_fields = ['product__summary', 'owner__username', 'owner__email', 'borrower__email', 'borrower__username']
+    search_fields = ['product__summary', 'owner__username', 'owner__email', 'borrower__email', 'borrower__username', 'ip']
 
     def queryset(self, request):
         current_site = Site.objects.get_current()
