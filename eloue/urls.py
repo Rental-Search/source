@@ -12,7 +12,7 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 from eloue.api.urls import router
 
 from products.views import HomepageView, PublishItemView
-from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView
+from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView, ContactView
 
 admin.autodiscover()
 
@@ -214,7 +214,7 @@ urlpatterns = patterns('',
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
     url(r'^%s/' % _('nos-partenaires'), TemplateView.as_view(template_name='our_partners/index.jade'), name='our_partners'),
-    url(r'^%s/' % _('contactez-nous'), TemplateView.as_view(template_name='contact_us/index.jade'), name='contact_us'),
+    url(r'^%s/' % _('contact_nous'), ContactView.as_view() , name='contact_us'),
     #url(r'^espace-presse/', TemplateView.as_view(template_name='press/index.jade'), name='press_page'),
     url(r'^%s/' % _('qui-sommes-nous'), TemplateView.as_view(template_name='who_are_we/index.jade'), name='who_are_we'),
     url(r'^%s/' % _('securite'), TemplateView.as_view(template_name='security/index.jade'), name='security'),
