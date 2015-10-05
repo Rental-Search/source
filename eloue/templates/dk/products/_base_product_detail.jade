@@ -71,9 +71,6 @@ block append content-body
                   li: a(href="#tabs-photos", ng-click="selectTab('#{'#tabs-photos'}')").pad-v-2.current {% trans "Photos et Localisation" %}
                   li.spacer
                   li: a(href="#tabs-tarifs", ng-click="selectTab('#{'#tabs-tarifs'}')").pad-v-2 {% trans "Tarifs" %}
-                  if insurance_available
-                    li.spacer
-                    li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 {% trans "Conditions d'assurance" %}
                   li.spacer
                   {% if shipping_available %}
                   li: a(href="#tabs-shipping", ng-click="selectTab('#tabs-shipping')").pad-v-2 {% trans "Livraison" %}
@@ -81,8 +78,6 @@ block append content-body
                 include ./product_detail
                 include ./tab_tarifs
                 //-include ./tab_available
-                if insurance_available
-                  include ./tab_terms
                 {% if shipping_available %}
                 include ./tab_shipping
                 {% endif %}
