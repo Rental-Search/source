@@ -290,7 +290,7 @@ class ProAdmin(PatronAdmin):
 
     def products_count(self, obj):
         return obj.products.all().count()
-    products_count.short_description = _(u"noubre d'annonce")
+    products_count.short_description = _(u"nombre d'annonce")
 
     def edit_product_link(self, obj):
         edit_product_link = '<a href="/edit/products/product/?q=%s" target="_blank">Editer les annonces</a>' % obj.pk
