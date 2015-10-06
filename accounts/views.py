@@ -33,7 +33,8 @@ from eloue.api.exceptions import (
 from products.search import product_search
 from rent.models import Comment
 
-from .forms import PatronSetPasswordForm, EmailPasswordResetForm, ContactForm
+from .forms import PatronSetPasswordForm, EmailPasswordResetForm, ContactForm, ContactFormPro
+
 from .models import Patron, FacebookSession
 from .utils import viva_check_phone
 from . import serializers, models, search
@@ -41,7 +42,6 @@ from . import serializers, models, search
 from django.shortcuts import render
 from django.core.mail import send_mail, BadHeaderError
 from django.contrib import messages
-
 
 USER_ME = 'me'
 PAGINATE_USERS_BY = getattr(settings, 'PAGINATE_USERS_BY', 9) # UI v3: changed from 10 to 9
@@ -225,6 +225,48 @@ class LoginFacebookView(View):
         return response
 
 
+
+class ContactProView(View):
+    form_class = ContactFormPro
+    template_name = 'subscription/index.jade'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            sender = form.cleaned_data['sender']
+            phone_number = form.cleaned_data['phone_number']
+            activity_field = form.cleaned_data['activity_field']
+            
+
+            new_form = self.form_class()
+            recipients = ['benjamin.laroche@e-loue.com']
+
+
+            if activity_field and name and sender:
+                try:
+                    message = "%s ; %s ; %s" % (name, activity_field, phone_number)
+                    send_mail("Formulaire de contact Pro", "Email de contact : %s\n\nInformations du pro :\n%s" %(sender, message), "contact@e-loue.com", recipients)
+                except BadHeaderError:
+                    messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+                    return render(request, self.template_name, {'form': form, 'tag' : "error"})
+                messages.add_message(request, messages.INFO, _('Le message a ete envoye avec succes'), extra_tags='safe')
+                return render(request, self.template_name, {'form': new_form, 'tag' : "success"})
+            else:
+                messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+                return render(request, self.template_name, {'form': form, 'tag' : "error"})
+        
+        else:
+            messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
+            return render(request, self.template_name, {'form': form, 'tag' : "error"})
+
+
+
 class ContactView(View):
     form_class = ContactForm
     template_name = 'contact_us/index.jade'
@@ -250,7 +292,7 @@ class ContactView(View):
             if subject and message and sender:
                 try:
                     sujet = "Formulaire de contact : %s" % (subject)
-                    send_mail(sujet, "Email de contact : %s\n\nMessage :\n%s" %(sender, message), "contact@e-loue.com", recipients)
+                    send_mail(sujet, "Email de contact : %s\n\nMessage :\n%s" %(sender, message), "contact@e-loue.com", recipients) 
                 except BadHeaderError:
                     messages.add_message(request, messages.INFO, _('Erreur dans le formulaire'), extra_tags='safe')
                     return render(request, self.template_name, {'form': form, 'tag' : "error"})
