@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-01 18:59+0200\n"
-"PO-Revision-Date: 2015-09-25 14:15+0200\n"
+"PO-Revision-Date: 2015-10-09 10:34+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
 "Language: da_DK\n"
@@ -44,11 +44,11 @@ msgstr "Gensend aktiverings e-mail"
 
 #: accounts/admin.py:125
 msgid "Indexer les produits"
-msgstr ""
+msgstr "Inddel produkterne i kategorier"
 
 #: accounts/admin.py:133
 msgid "Désindexer les produits"
-msgstr ""
+msgstr "Fjern kategoriseringen af produkterne"
 
 #: accounts/admin.py:143
 msgid "Geolocation"
@@ -56,15 +56,15 @@ msgstr "Stedsbestemmelse"
 
 #: accounts/admin.py:163
 msgid "Signature"
-msgstr ""
+msgstr "Underskrift"
 
 #: accounts/admin.py:169
 msgid "Avec signature"
-msgstr ""
+msgstr "Med underskrift"
 
 #: accounts/admin.py:170
 msgid "Sans signature"
-msgstr ""
+msgstr "Uden underskrift"
 
 #: accounts/admin.py:185
 msgid "Abonnement"
@@ -76,15 +76,15 @@ msgstr "Arbejdsgiver"
 
 #: accounts/admin.py:256
 msgid "Contact"
-msgstr "Kontakt mig"
+msgstr "Kontakt os"
 
 #: accounts/admin.py:257
 msgid "Boutique"
-msgstr "Automatisk"
+msgstr "Butik"
 
 #: accounts/admin.py:289
 msgid "lien boutique"
-msgstr "Elektrisk"
+msgstr "Link til butik"
 
 #: accounts/admin.py:293
 msgid "noubre d'annonce"
@@ -96,19 +96,19 @@ msgstr "Annoncer"
 
 #: accounts/admin.py:307
 msgid "Souscription"
-msgstr "leje"
+msgstr "Abonnement"
 
 #: accounts/admin.py:311
 msgid "mise en lignes"
-msgstr ""
+msgstr "Online"
 
 #: accounts/admin.py:315
 msgid "fin de souscription"
-msgstr "Aktivering af din konto"
+msgstr "Afslutningen på din indskrivning"
 
 #: accounts/admin.py:320
 msgid "dernier rapport"
-msgstr ""
+msgstr "Seneste rapport"
 
 #: accounts/admin.py:328
 msgid "tickets résolus"
@@ -116,7 +116,7 @@ msgstr ""
 
 #: accounts/admin_views.py:66
 msgid "Cett email est déjà pris."
-msgstr "Denne email adresse er allerede eksisterende"
+msgstr "Denne e-mailadresse eksisterer allerede i vores system"
 
 #: accounts/auth.py:28
 msgid "username"
@@ -141,7 +141,7 @@ msgstr "efternavn"
 
 #: accounts/auth.py:36
 msgid "email address"
-msgstr "email adresse"
+msgstr "e-mailadresse"
 
 #: accounts/auth.py:37
 msgid "staff status"
@@ -510,7 +510,7 @@ msgid ""
 "The user account associated with this email address cannot reset the "
 "password."
 msgstr ""
-"Brugernavnet som er opgivet med denne email adresse kan ikke nulstille "
+"Brugernavnet som er opgivet med denne e-mailadresse kan ikke nulstille "
 "kodeordet"
 
 #: accounts/forms.py:107 accounts/forms.py:203
@@ -533,8 +533,7 @@ msgstr "Bekræftelse af ny adgangskode"
 msgid "User record is empty."
 msgstr "Brugerposten er tom."
 
-#: accounts/forms.py:181 accounts/serializers.py:183
-#: accounts/tests/api2.py:217
+#: accounts/forms.py:181 accounts/serializers.py:183 accounts/tests/api2.py:217
 msgid "The two password fields didn't match."
 msgstr "Brugernavnet og adgangskoder passer ikke sammen"
 
@@ -572,7 +571,7 @@ msgstr "Angiv firmanavn"
 
 #: accounts/forms.py:227
 msgid "Ce champ est obligatoire."
-msgstr "Dette felt er obligatorisk"
+msgstr "(*)Dette felt er obligatorisk"
 
 #: accounts/forms.py:317
 msgid "Professionnel"
@@ -691,8 +690,8 @@ msgid ""
 "Commissions offertes pendant 3 mois si vous êtes parrainé par membre e-loue. "
 "Offre valable entre le 18 avril et le 30 avril 2013."
 msgstr ""
-"Der tilbydes 3 mdrs kommision, hvis du er proponent for nye medlemmer. "
-"Tilbuddet gælder fra ...."
+"Der tilbydes 3 måneders kommision, hvis du kommer med nye medlemmer til for "
+"e-loue. Tilbuddet gælder fra ...."
 
 #: accounts/forms.py:356 accounts/models.py:560 accounts/models.py:638
 #: eloue/templates/dashboard/items/index.jade:35
@@ -775,7 +774,7 @@ msgstr "dato for modifikation"
 
 #: accounts/models.py:85
 msgid "à propos"
-msgstr ""
+msgstr "Om os"
 
 #: accounts/models.py:86
 msgid "travail"
@@ -783,11 +782,11 @@ msgstr "Arbejde"
 
 #: accounts/models.py:87
 msgid "ecole"
-msgstr ""
+msgstr "Skole"
 
 #: accounts/models.py:88
 msgid "hobbies"
-msgstr ""
+msgstr "Fritid"
 
 #: accounts/models.py:91
 msgid "Date d'obtention"
@@ -803,7 +802,7 @@ msgstr "Hjemmeside"
 
 #: accounts/models.py:170 accounts/models.py:175
 msgid "Un utilisateur utilisant cet email existe déjà"
-msgstr "En bruger er allerede registreret under denne e-mail adresse"
+msgstr "En bruger er allerede registreret under denne e-mailadresse"
 
 #: accounts/models.py:172 accounts/models.py:177
 msgid "Un utilisateur utilisant ce nom d'utilisateur existe déjà"
@@ -853,11 +852,11 @@ msgstr "Stedsbetegnet"
 
 #: accounts/models.py:693
 msgid "Mise en ligne"
-msgstr ""
+msgstr "Online"
 
 #: accounts/models.py:694
 msgid "Fin de souscription"
-msgstr "Proponent email"
+msgstr "Afslutning på din indskrivning"
 
 #: accounts/models.py:695
 msgid "Date de signature"
@@ -865,7 +864,7 @@ msgstr "Fødselsdag"
 
 #: accounts/models.py:696
 msgid "Gratuit"
-msgstr ""
+msgstr "Gratis"
 
 #: accounts/models.py:697
 msgid "Nombre de mois gratuit"
@@ -888,11 +887,11 @@ msgstr "Kommentar "
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:89
 #: eloue/templates/jade/pop_up_sections/_terms.jade:20
 msgid "Total"
-msgstr ""
+msgstr "I alt"
 
 #: accounts/models.py:702
 msgid "Frais de dossier"
-msgstr ""
+msgstr "Oprettelsesgebyr"
 
 #: accounts/models.py:741
 msgid "clôturé"
@@ -922,15 +921,15 @@ msgstr "Attributten enten manglede eller meldes ugyldig: %s"
 
 #: accounts/serializers.py:267
 msgid "Sending messages is allowed only to pro-accounts."
-msgstr "Afsendelse af beskeder er kun tilladt med pro-konti."
+msgstr "Afsendelse af beskeder er kun tilladt med erhvervskonti."
 
 #: accounts/views.py:61 accounts/views.py:264
 msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
 msgstr ""
-"Vi har emailet dig vejledning i at angive adgangskoden til oplyste email "
-"adresse. "
+"Vi har e-mailet dig en vejledning i, hvordan du angiver adgangskoden til "
+"oplyste e-mailadresse. "
 
 #: accounts/views.py:91
 msgid "Your password has been set.  You may go ahead and log in now."
@@ -949,8 +948,8 @@ msgid ""
 "We've e-mailed you instructions for activating your account to the e-mail "
 "address you submitted. You should be receiving it shortly."
 msgstr ""
-"Vi har emailet dig instruktioner om aktivering af din konto, til email-"
-"adressen du oplyste"
+"Vi har e-mailet dig instruktioner om aktivering af din konto, til e-"
+"mailadressen du oplyste"
 
 #: accounts/views.py:297
 msgid "Your message has been sent sucessfully."
@@ -996,8 +995,8 @@ msgid ""
 "com dans le métro, vous ne pouvez pas vous enregistrer avec une adresse "
 "email jetable. Ne craignez rien, vous ne recevrez aucun courrier indésirable."
 msgstr ""
-"For at kunne garantere e-loue's brugere kvalitets service og "
-"sikkerhedsgaranti i metroen, frabeder vi inregistrering med midlertidige "
+"For at kunne garantere e-loue's brugere kvalitet, service og "
+"sikkerhedsgaranti i metroen, frabeder vi indregistrering med midlertidige "
 "mailadresser. Du har intet at frygte, du vil ikke modtage uønsket post. "
 
 #: eloue/decorators.py:154
@@ -1019,7 +1018,7 @@ msgstr "Engelsk"
 
 #: eloue/settings.py:114
 msgid "Danish"
-msgstr ""
+msgstr "Dansk"
 
 #: eloue/urls.py:206
 #: eloue/templates/dashboard/messages/_aside_product_detail.jade:18
@@ -1037,8 +1036,7 @@ msgstr "lejere"
 #: eloue/templates/gosport/jade/_nav_home.jade:10
 #: eloue/templates/jade/_breadcrumbs.jade:23
 #: eloue/templates/jade/_breadcrumbs.jade:25
-#: eloue/templates/jade/_nav_home.jade:6
-#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
 #: eloue/templates/jade/_nav_home.jade:17 products/models.py:739
 #: products/models.py:741 products/templatetags/facets.py:72
 msgid "location"
@@ -1066,7 +1064,7 @@ msgstr "Hvem-er-vi?"
 
 #: eloue/urls.py:220
 msgid "securite"
-msgstr ""
+msgstr "Forsikring"
 
 #: eloue/urls.py:221
 msgid "conditions-generales-particuliers"
@@ -1222,11 +1220,11 @@ msgstr "Ugyldig anmodning"
 
 #: eloue/templates/404.html:8
 msgid "e-loue - La page demandée est introuvable"
-msgstr ""
+msgstr "e-loue - siden kan ikke findes"
 
 #: eloue/templates/404.html:14
 msgid "La page est introuvable"
-msgstr ""
+msgstr "Siden kan ikke findes"
 
 #: eloue/templates/404.html:16
 msgid ""
@@ -1235,14 +1233,18 @@ msgid ""
 "contact@e-loue.com\">contacter</a>.\n"
 "\t        \t"
 msgstr ""
+"\n"
+"\t         \t\tHvis fejlen fortsætter, bedes du venligst <a href=\"emailTo:"
+"contact@e-loue.com\">kontakte os</a>.\n"
+"\t        \t"
 
 #: eloue/templates/500.html:8
 msgid "e-loue - La page est pour le moment indisponible"
-msgstr ""
+msgstr "e-loue - siden er for øjeblikket utilgængelig"
 
 #: eloue/templates/500.html:15
 msgid "Erreur sur le serveur"
-msgstr ""
+msgstr "Fejl på serveren"
 
 #: eloue/templates/500.html:17
 msgid ""
@@ -1251,6 +1253,9 @@ msgid ""
 "loue.com\">contacter</a>.\n"
 "          "
 msgstr ""
+"\n"
+"Hvis fejlen fortsætter, bedes du venligst  <a href=\"emailTo:contact@e-loue."
+"com\"> kontakte os </a>."
 
 #: eloue/templates/base.jade:5 eloue/templates/dk/base.jade:5
 msgid "Page"
@@ -1259,7 +1264,7 @@ msgstr "Side"
 #: eloue/templates/index.jade:2 eloue/templates/autovoisin/index.jade:2
 #: eloue/templates/dk/index.jade:2
 msgid "Location entre particuliers ou professionnels de tout type d'objet"
-msgstr "Leje mellem privatperson og erhverv ved alle former for genstande"
+msgstr "Leje mellem privatperson og erhverv "
 
 #: eloue/templates/accounts/password_reset_confirm.jade:8
 msgid "Mise à jour du mot de passe effectuée"
@@ -1274,8 +1279,8 @@ msgid ""
 "Votre lien n'est plus valide. Merci de recommencer la procédure de "
 "réinitialisation de mot de passe en cliquant sur ce lien"
 msgstr ""
-"Dette link er ikke længere gyldigt. Du bedes påbegynde adgangskode bootingen "
-"ved at klikke på dette link"
+"Dette link er ikke længere gyldigt. Du bedes derfor på ny anmode om et nyt "
+"kodeord ved at klikke på dette link"
 
 #: eloue/templates/accounts/password_reset_confirm.jade:10
 #: eloue/templates/accounts/emails/password_reset_email.html:5
@@ -1299,11 +1304,11 @@ msgstr "Glemt adgangskode"
 #: eloue/templates/reporting/admin/top_city.html:9
 #: eloue/templates/reporting/admin/top_patron.html:9
 msgid "Home"
-msgstr ""
+msgstr "Hjem"
 
 #: eloue/templates/accounts/admin/patron_create_subscription.html:60
 msgid "Créer le compte"
-msgstr ""
+msgstr "Opret en konto"
 
 #: eloue/templates/accounts/emails/activation_email.html:5
 #: eloue/templates/activate/_breadcrumbs.jade:6
@@ -1325,6 +1330,13 @@ msgid ""
 "\n"
 "                            "
 msgstr ""
+"\n"
+"                                Hej %(username)s,<br><br>\n"
+"\n"
+"                                Vi beder dig om at registrere dig på <a href="
+"\"%(protocol)s://%(domain)s\">%(domain)s</a>.<br><br>\n"
+"                                For at aktivere din konto og blive en del af "
+"e-loue's lejefællesskab, skal du klikke på knappen nedenfor. .<br><br>"
 
 #: eloue/templates/accounts/emails/activation_email.html:24
 #: eloue/templates/accounts/emails/contact_pro_email.html:25
@@ -1336,7 +1348,7 @@ msgstr "Aktivering af din konto"
 #: eloue/templates/accounts/emails/activation_email.txt:11
 #: eloue/templates/accounts/emails/password_reset_email.html:27
 msgid "A très vite"
-msgstr ""
+msgstr "På gensyn"
 
 #: eloue/templates/accounts/emails/activation_email.html:29
 #: eloue/templates/accounts/emails/activation_email.txt:13
@@ -1349,7 +1361,7 @@ msgstr ""
 #: eloue/templates/accounts/emails/professional_subscription_changed_email.html:22
 #: eloue/templates/accounts/emails/professional_subscription_changed_email.txt:13
 msgid "L'équipe"
-msgstr ""
+msgstr "Dit team"
 
 #: eloue/templates/accounts/emails/activation_email.txt:2
 #, python-format
@@ -1362,16 +1374,23 @@ msgid ""
 "\tAfin d’activer votre compte et de rejoindre notre communauté de loueurs, "
 "vous devez cliquer sur le bouton ci-dessous.\n"
 msgstr ""
+"\n"
+"\tHej %(username)s,\n"
+"\n"
+" \tTak for din registrering på <a href=\"%(protocol)s://%(domain)s\">"
+"%(domain)s</a>.\n"
+"\tAfin d’activer votre compte et de rejoindre notre communauté de loueurs, "
+"vous devez cliquer sur le bouton ci-dessous.\n"
 
 #: eloue/templates/accounts/emails/activation_email_subject.txt:1
 #: eloue/templates/accounts/emails/professional_activation_email_subject.txt:1
 msgid "Validation de votre inscription"
-msgstr "Aktivering af din konto"
+msgstr "Validering af din tilmelding"
 
 #: eloue/templates/accounts/emails/contact_pro_email.html:5
 #: eloue/templates/django_messages/new_message_email.html:5
 msgid "Vous avez reçu un nouveau message"
-msgstr ""
+msgstr "Du har modtaget en besked"
 
 #: eloue/templates/accounts/emails/contact_pro_email.html:15
 #, python-format
@@ -1402,15 +1421,19 @@ msgid ""
 "\n"
 "Bonjour %(username)s,\n"
 msgstr ""
+"\n"
+"Sendt fra %(email)s :\n"
+"\n"
+"Hej %(username)s,\n"
 
 #: eloue/templates/accounts/emails/contact_pro_email.txt:13
 #: eloue/templates/accounts/emails/professional_activation_email.txt:15
 msgid "Cordialement"
-msgstr ""
+msgstr "De bedste hilsner"
 
 #: eloue/templates/accounts/emails/gmail_invitation_email.html:5
 msgid "Rejoins moi dans la communauté des e-loueurs !"
-msgstr ""
+msgstr "Bliv en del af e-loue's lejefællesskab"
 
 #: eloue/templates/accounts/emails/gmail_invitation_email.html:14
 #, python-format
@@ -1431,6 +1454,21 @@ msgid ""
 "\t\t\t\t\t\t\t<p>%(first_name)s</p>\n"
 "\t\t\t\t\t\t"
 msgstr ""
+"\n"
+"\t\t\t\t\t\t\t<p>Hej,</p>\n"
+"\n"
+"\t\t\t\t\t\t\t<p>Jeg har lige oprettet en konto hos e-loue. En super god "
+"hjemmeside! Blive en del af lejefælleskab hos e-loue, så har du også "
+"mulighed for at leje alt mellem himmel og jord (bil, kamera, havetraktor, "
+"boremaskine osv.).</p>\n"
+"\n"
+"\t\t\t\t\t\t\t<p>Her er linket: <a href=\"%(protocol)s://%(domain)s\">"
+"%(domain)s</a></p>\n"
+"\n"
+"\t\t\t\t\t\t\t<p>De bedste hilsner</p>\n"
+"\n"
+"\t\t\t\t\t\t\t<p>%(first_name)s</p>\n"
+"\t\t\t\t\t\t"
 
 #: eloue/templates/accounts/emails/gmail_invitation_email.txt:2
 #, python-format
@@ -1443,10 +1481,17 @@ msgid ""
 "\n"
 "L'équipe e-loue\n"
 msgstr ""
+"\n"
+"Hej \n"
+"%(first_name)s inviterer dig til at blive en del af e-loue's lejefælleskab\n"
+"\n"
+"De bedste hilsner\n"
+"\n"
+"Team e-loue\n"
 
 #: eloue/templates/accounts/emails/gmail_invitation_email_subject.txt:1
 msgid "vous invite sur e-loue"
-msgstr ""
+msgstr "inviterer dig til til at blive en del af e-loue's lejefællesskab"
 
 #: eloue/templates/accounts/emails/password_reset_email.html:15
 #, python-format
@@ -1460,15 +1505,23 @@ msgid ""
 "un nouveau.<br>\n"
 "\t\t\t\t\t\t\t"
 msgstr ""
+"\n"
+"\t\t\t\t\t\t\t\tHej %(username)s,<br><br>\n"
+"\t \n"
+"\t\t\t\t\t\t\t\tVi har en modtaget en meddelelse om, at kodeordet er glemt."
+"<br>\n"
+"\t\t\t\t\t\t\t\tDet eneste du skal gøre, for at skabe et nyt kodeord, er at "
+"klikke på knappen nedenfor.<br>\n"
+"\t\t\t\t\t\t\t"
 
 #: eloue/templates/accounts/emails/password_reset_email.html:23
 msgid "Créer un nouveau mot de passe"
-msgstr ""
+msgstr "Skab et nyt kodeord"
 
 #: eloue/templates/accounts/emails/password_reset_email.html:29
 #: eloue/templates/accounts/emails/password_reset_email.txt:14
 msgid "L'équipe e-loue"
-msgstr ""
+msgstr "Dit team e-loue"
 
 #: eloue/templates/accounts/emails/password_reset_email.txt:2
 #, python-format
@@ -1481,6 +1534,14 @@ msgid ""
 " Il vous suffit de cliquer sur le lien ci-après pour en déterminer un "
 "nouveau :\n"
 msgstr ""
+"\n"
+"Hej %(username)s,\n"
+" \n"
+" Vi har en modtaget en meddelelse om, at kodeordet er glemt. \n"
+" \n"
+" Det eneste du skal gøre, for at skabe et nyt kodeord, er at klikke på "
+"knappen nedenfor:\n"
+"\n"
 
 #: eloue/templates/accounts/emails/password_reset_email.txt:11
 msgid ""
@@ -1490,10 +1551,15 @@ msgid ""
 "message. Il vous suffit donc de vous connecter à votre compte avec le "
 "nouveau mot de passe puis d’aller dans votre profil pour en changer. \n"
 msgstr ""
+"\n"
+"Har du ikke anmodet om denne ændring? Mener du, at der er hændt en fejl? "
+"Frem for alt kan du være forsikret om, at du er den eneste, som har modtaget "
+"denne meddelelse. Det eneste du skal gøre, er at logge ind på din konto med "
+"det nye kodeord og derefter ændre kodeordet på din profil.\n"
 
 #: eloue/templates/accounts/emails/password_reset_email_subject.txt:1
 msgid "Oubli de votre mot de passe"
-msgstr ""
+msgstr "Glemt kodeord"
 
 #: eloue/templates/accounts/emails/professional_activation_email.html:5
 #: eloue/templates/accounts/emails/professional_subscribed_email.html:5
@@ -1516,6 +1582,16 @@ msgid ""
 "\n"
 "                            "
 msgstr ""
+"\n"
+"                                Hej %(username)s,<br><br>\n"
+"\n"
+"                               Du er nu registreret på<a href="
+"\"%(protocol)s://%(domain)s\">%(domain)s</a>.<br><br>\n"
+"                               Klik på knappen nedenfor for at godkende "
+"oprettelsen af din konto.<br><br>\n"
+"\n"
+" \n"
+"                            "
 
 #: eloue/templates/accounts/emails/professional_activation_email.txt:3
 #, python-format
@@ -1530,6 +1606,15 @@ msgid ""
 "votre compte :\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"Hej %(username)s,\n"
+"\n"
+"Du er nu registreret på %(protocol)s://%(domain)s.\n"
+"\n"
+"Klik på knappen nedenfor for at godkende oprettelsen af din konto:\n"
+"\n"
+"\n"
 
 #: eloue/templates/accounts/emails/professional_subscribed_email.html:15
 msgid ""
@@ -1612,7 +1697,7 @@ msgstr ""
 
 #: eloue/templates/accounts/emails/professional_subscribed_email_subject.txt:1
 msgid "Confirmation inscription compte professionnel e-loue"
-msgstr ""
+msgstr "Bekræftelse på din erhvervskonto hos e-loue"
 
 #: eloue/templates/accounts/emails/professional_subscription_changed_email.html:15
 #, python-format
@@ -1626,6 +1711,14 @@ msgid ""
 "\n"
 "                            "
 msgstr ""
+"\n"
+"                                Hej %(username)s,<br><br>\n"
+"\n"
+"                                Vi bekræfter din ændring i dit abonnement."
+"<br><br>\n"
+"                                %(current_subscription)s\n"
+"\n"
+"                            "
 
 #: eloue/templates/accounts/emails/professional_subscription_changed_email.txt:6
 #, python-format
@@ -1637,10 +1730,16 @@ msgid ""
 "    %(current_subscription)s\n"
 "\n"
 msgstr ""
+"\n"
+"    Hej %(username)s,<br><br>\n"
+"\n"
+"    Vi bekræfter din ændring i dit abonnement.<br><br>\n"
+"    %(current_subscription)s\n"
+"\n"
 
 #: eloue/templates/accounts/emails/professional_subscription_changed_email_subject.txt:1
 msgid "Confirmation de changement de votre abonnement"
-msgstr ""
+msgstr "Bekræftelse på ændringen i dit abonnement"
 
 #: eloue/templates/activate/_breadcrumbs.jade:4
 #: eloue/templates/autovoisin/our_partners/_breadcrumbs.jade:4
@@ -1734,7 +1833,7 @@ msgstr "Beskeder"
 #: eloue/templates/jade/_header_site.jade:37
 #: eloue/templates/products/tab_available.jade:55
 msgid "Réservations"
-msgstr "Reservér"
+msgstr "Reservationer"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:31
 #: eloue/templates/dashboard/jade/_base_dashboard.jade:29
@@ -1771,7 +1870,7 @@ msgstr "Hjælp"
 #: eloue/templates/jade/_header_site.jade:61
 #: eloue/templates/jade/_product_list_aside.jade:24
 msgid "Où ça ?"
-msgstr "Hvor ligger det?"
+msgstr "Hvor?"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:55
 #: eloue/templates/dk/jade/_header_site.jade:60
@@ -1801,7 +1900,7 @@ msgstr "Aktivering af din konto"
 #: eloue/templates/autovoisin/jade/_log_in.jade:19
 #: eloue/templates/jade/_reset_password.jade:20
 msgid "E-mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: eloue/templates/autovoisin/jade/_log_in.jade:28
 #: eloue/templates/jade/_log_in.jade:38
@@ -1913,7 +2012,7 @@ msgstr ""
 #: eloue/templates/dashboard/account/_address_detail.jade:27
 #: eloue/templates/dk/dashboard/account/_address_detail.jade:27
 msgid "Addresse par défaut"
-msgstr ""
+msgstr "Standard adresse"
 
 #: eloue/templates/dashboard/account/_address_detail.jade:33
 #: eloue/templates/dashboard/items/calendar.jade:64
@@ -1934,12 +2033,12 @@ msgstr "slettet"
 #: eloue/templates/dk/dashboard/items/add_period.jade:27
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:20
 msgid "Enregistrer"
-msgstr ""
+msgstr "Indskrivning"
 
 #: eloue/templates/dashboard/account/_address_detail.jade:41
 #: eloue/templates/dk/dashboard/account/_address_detail.jade:41
 msgid "Annonces associées à cette adresse"
-msgstr ""
+msgstr "Annoncer knyttet til denne adresse"
 
 #: eloue/templates/dashboard/account/_address_detail.jade:51
 #: eloue/templates/dashboard/booking/_bookings_list.jade:38
@@ -1948,8 +2047,7 @@ msgstr ""
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:38
 #: eloue/templates/dk/dashboard/items/_items_list.jade:22
 #: eloue/templates/dk/jade/_product_list.jade:11
-#: eloue/templates/jade/_nav_home.jade:6
-#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
 #: eloue/templates/jade/_nav_home.jade:17
 #: eloue/templates/jade/_porduct_details_title.jade:2
 #: eloue/templates/jade/_product_list.jade:11
@@ -2024,7 +2122,7 @@ msgstr "Adresse"
 #: eloue/templates/dashboard/account/_notification_not_selected_address.jade:5
 #: eloue/templates/dk/dashboard/account/_notification_not_selected_address.jade:5
 msgid "Aucune adresse sélectionnée"
-msgstr ""
+msgstr "Ingen adresse er valgt"
 
 #: eloue/templates/dashboard/account/password.jade:4
 #: eloue/templates/dk/dashboard/account/password.jade:4
@@ -2040,7 +2138,7 @@ msgstr "Adgangskode"
 #: eloue/templates/dashboard/account/password.jade:6
 #: eloue/templates/dk/dashboard/account/password.jade:6
 msgid "Modification de votre mot de passe"
-msgstr "Lejekontrakter"
+msgstr "Ændring af dit kodeord"
 
 #: eloue/templates/dashboard/account/password.jade:14
 #: eloue/templates/dashboard/booking/_comment_and_rank.jade:12
@@ -2061,7 +2159,7 @@ msgstr "Dine personlige oplysninger"
 #: eloue/templates/dashboard/account/profil.jade:13
 #: eloue/templates/dk/dashboard/account/profil.jade:13
 msgid "Modifiez mon image"
-msgstr ""
+msgstr "Ændre mit billede"
 
 #: eloue/templates/dashboard/account/profil.jade:26
 #: eloue/templates/dk/dashboard/account/profil.jade:26
@@ -2079,7 +2177,7 @@ msgstr "professionel"
 #: eloue/templates/dk/dashboard/items/calendar.jade:89
 #: eloue/templates/dk/dashboard/items/index.jade:99
 msgid "Oui"
-msgstr ""
+msgstr "Ja"
 
 #: eloue/templates/dashboard/account/profil.jade:34
 #: eloue/templates/dashboard/account/profil.jade:111
@@ -2138,7 +2236,7 @@ msgstr "Oplysninger om dit abonnement"
 #: eloue/templates/dashboard/account/profil.jade:120
 #: eloue/templates/dk/dashboard/account/profil.jade:120
 msgid "Jour"
-msgstr ""
+msgstr "Dag"
 
 #: eloue/templates/dashboard/account/profil.jade:149
 #: eloue/templates/dk/dashboard/account/profil.jade:149
@@ -2172,7 +2270,7 @@ msgstr "Send forespørgsel"
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:44
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:44
 msgid "Demande de réservation par"
-msgstr "Forespørgsel på overslag"
+msgstr "Anmodning om reservation via"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:46
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:46
@@ -2182,60 +2280,60 @@ msgstr ""
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:48
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:48
 msgid "Réservation annulée"
-msgstr "Antal reservationer"
+msgstr "Annulleret reservation"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:50
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:50
 msgid "Réservation acceptée par"
-msgstr "Antal reservationer"
+msgstr "Reservationen godkendt af"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:52
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:52
 msgid "Réservation rejetée par"
-msgstr "Antal reservationer"
+msgstr "Reservationen er annulleret af"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:54
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:54
 msgid "Réservation terminée"
-msgstr "Antal reservationer"
+msgstr "Reservationen er afsluttet"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:56
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:56
 msgid "Réservation dépassée"
-msgstr "Reservér"
+msgstr "Reservationen er overskredet"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:58
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:58
 msgid "Réservation en cours"
-msgstr "Reservér"
+msgstr "Reservationen er under behandling"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:62
 #: eloue/templates/dashboard/messages/_details_reservation.jade:4
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:62
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:4
 msgid "Statut"
-msgstr ""
+msgstr "Statu"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:67
 #: eloue/templates/dashboard/messages/_details_reservation.jade:9
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:67
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:9
 msgid "Début"
-msgstr "Kreditkort"
+msgstr "Begyndelse"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:72
 #: eloue/templates/dashboard/messages/_details_reservation.jade:14
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:72
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:14
 msgid "Fin"
-msgstr ""
+msgstr "Afslutning"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:77
 #: eloue/templates/dashboard/messages/_details_reservation.jade:19
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:77
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:19
 msgid "Période"
-msgstr ""
+msgstr "Periode"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:81
 #: eloue/templates/dashboard/items/_item_characteristics.jade:83
@@ -2284,14 +2382,14 @@ msgstr "Depositum"
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:97
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:31
 msgid "Contrat"
-msgstr "Kontakt mig"
+msgstr "Kontrakt"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:98
 #: eloue/templates/dashboard/messages/_details_reservation.jade:32
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:98
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:32
 msgid "Télécharger le contrat"
-msgstr ""
+msgstr "Download kontrakt"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:117
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:117
@@ -2316,7 +2414,7 @@ msgstr "Produktbeskrivelse"
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:157
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:157
 msgid "Note et commentaires"
-msgstr "Vores partnere"
+msgstr "Bemærkninger og kommentarer"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:168
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:168
@@ -2360,17 +2458,17 @@ msgstr ""
 #: eloue/templates/dashboard/booking/_comment_and_rank.jade:6
 #: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:6
 msgid "Noter et commenter votre réservation"
-msgstr "Proponent email"
+msgstr "Kommentarer"
 
 #: eloue/templates/dashboard/booking/_comment_and_rank.jade:9
 #: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:9
 msgid "Comment s’est passé votre réservation ?"
-msgstr "Proponent email"
+msgstr "Hvordan går det med din reservation?"
 
 #: eloue/templates/dashboard/booking/_notification_empty_booking.jade:5
 #: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:5
 msgid "Pas encore de réservation"
-msgstr "Forespørgsel på overslag"
+msgstr "Ingen reservationer registreret"
 
 #: eloue/templates/dashboard/booking/_notification_empty_booking.jade:6
 #: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:6
@@ -2404,12 +2502,12 @@ msgstr "Medlem siden"
 #: eloue/templates/dashboard/dashboard/index.jade:12
 #: eloue/templates/dk/dashboard/dashboard/index.jade:12
 msgid "Mettre à jour mes infos"
-msgstr ""
+msgstr "Opdatér mine oplysninger"
 
 #: eloue/templates/dashboard/dashboard/index.jade:18
 #: eloue/templates/dk/dashboard/dashboard/index.jade:18
 msgid "Statistiques"
-msgstr "Martinique"
+msgstr "Statistik"
 
 #: eloue/templates/dashboard/dashboard/index.jade:21
 #: eloue/templates/dk/dashboard/dashboard/index.jade:21
@@ -2443,7 +2541,7 @@ msgstr "Svartid"
 #: eloue/templates/dashboard/dashboard/index.jade:53
 #: eloue/templates/dk/dashboard/dashboard/index.jade:53
 msgid "Votre activité sur e-loue"
-msgstr "e-loue"
+msgstr "Din aktivitet hos e-loue"
 
 #: eloue/templates/dashboard/items/_item_characteristics.jade:6
 #: eloue/templates/dashboard/items/_item_characteristics.jade:8
@@ -2771,7 +2869,7 @@ msgstr ""
 #: eloue/templates/dk/dashboard/items/calendar.jade:51
 #: eloue/templates/products/partials/product_option_edit_history.html:6
 msgid "Date de début"
-msgstr "Kreditkort"
+msgstr "Begyndelsesdato"
 
 #: eloue/templates/dashboard/items/calendar.jade:52
 #: eloue/templates/dk/dashboard/items/calendar.jade:52
@@ -2790,7 +2888,7 @@ msgstr ""
 #: eloue/templates/django_messages/trash.html:30
 #: eloue/templates/dk/dashboard/items/calendar.jade:54
 msgid "Action"
-msgstr "leje"
+msgstr "Handling"
 
 #: eloue/templates/dashboard/items/calendar.jade:61
 #: eloue/templates/dk/dashboard/items/calendar.jade:61
@@ -2863,7 +2961,7 @@ msgstr ""
 #: eloue/templates/dashboard/items/profits.jade:4
 #: eloue/templates/dk/dashboard/items/profits.jade:4
 msgid "Nombre de réservation"
-msgstr "Forespørgsel på overslag"
+msgstr "Antal reservation"
 
 #: eloue/templates/dashboard/items/profits.jade:4
 #: eloue/templates/dk/dashboard/items/profits.jade:4
@@ -2895,7 +2993,7 @@ msgstr "dage"
 #: eloue/templates/dk/dashboard/items/profits.jade:12
 #: eloue/templates/jade/_pop_up_reserve.jade:8
 msgid "Réservation"
-msgstr "Antal reservationer"
+msgstr "Reservation"
 
 #: eloue/templates/dashboard/items/profits.jade:18
 #: eloue/templates/dk/dashboard/items/profits.jade:18
@@ -2920,7 +3018,7 @@ msgstr "Leje"
 #: eloue/templates/dashboard/items/tabs.jade:7
 #: eloue/templates/dk/dashboard/items/tabs.jade:7
 msgid "Photos et infos"
-msgstr "Lejekontrakter"
+msgstr "Billeder og information"
 
 #: eloue/templates/dashboard/items/tabs.jade:12
 #: eloue/templates/dk/dashboard/items/tabs.jade:12
@@ -2937,7 +3035,7 @@ msgstr ""
 #: eloue/templates/dashboard/items/tabs.jade:22
 #: eloue/templates/dk/dashboard/items/tabs.jade:22
 msgid "Conditions"
-msgstr "Lejemål"
+msgstr "Betingelser"
 
 #: eloue/templates/dashboard/items/tabs.jade:27
 #: eloue/templates/dk/dashboard/items/tabs.jade:27
@@ -3145,7 +3243,7 @@ msgstr "Dashboard"
 #: eloue/templates/dashboard/messages/_aside_product_detail.jade:4
 #: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:4
 msgid "Réservation associée à"
-msgstr "Reservér"
+msgstr "Reservationen er knyttet til "
 
 #: eloue/templates/dashboard/messages/_details_reservation.jade:20
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:20
@@ -3265,7 +3363,7 @@ msgstr "Min konto"
 #: eloue/templates/django_messages/view.html:13
 #, python-format
 msgid "Messages(%(messages_inbox_count)s)"
-msgstr ""
+msgstr "Beskeder(%(messages_inbox_count)s)"
 
 #: eloue/templates/django_messages/compose.html:18
 #: eloue/templates/django_messages/inbox.html:20
@@ -3274,7 +3372,7 @@ msgstr ""
 #: eloue/templates/django_messages/trash.html:18
 #: eloue/templates/django_messages/view.html:18
 msgid "Messages reçus"
-msgstr "Beskeder"
+msgstr "Modtaget beskeder"
 
 #: eloue/templates/django_messages/compose.html:19
 #: eloue/templates/django_messages/inbox.html:21
@@ -3283,7 +3381,7 @@ msgstr "Beskeder"
 #: eloue/templates/django_messages/trash.html:19
 #: eloue/templates/django_messages/view.html:19
 msgid "Messages envoyés"
-msgstr "Beskeder"
+msgstr "Sendte beskeder"
 
 #: eloue/templates/django_messages/compose.html:20
 #: eloue/templates/django_messages/inbox.html:22
@@ -3291,7 +3389,7 @@ msgstr "Beskeder"
 #: eloue/templates/django_messages/trash.html:20
 #: eloue/templates/django_messages/view.html:20
 msgid "Messages supprimés"
-msgstr "slettet"
+msgstr "Slettede beskeder"
 
 #: eloue/templates/django_messages/compose.html:24
 msgid "Nouveau Message"
@@ -3343,7 +3441,7 @@ msgstr ""
 #: eloue/templates/django_messages/outbox.html:51
 #: eloue/templates/django_messages/trash.html:52
 msgid "No messages."
-msgstr "Beskeder"
+msgstr "Ingen beskeder"
 
 #: eloue/templates/django_messages/message_create.html:3
 msgid "Composer un message"
@@ -3400,7 +3498,7 @@ msgstr ""
 
 #: eloue/templates/django_messages/new_message_email.html:43
 msgid "Répondre au message"
-msgstr "Send en besked"
+msgstr "Besvar beskeden"
 
 #: eloue/templates/django_messages/new_message_email.txt:3
 #, python-format
@@ -3413,11 +3511,11 @@ msgstr ""
 
 #: eloue/templates/django_messages/new_message_email.txt:12
 msgid "Voici le lien pour répondre :"
-msgstr ""
+msgstr "Her er linket til at besvare:"
 
 #: eloue/templates/django_messages/trash.html:24
 msgid "Deleted Messages"
-msgstr "Beskeder"
+msgstr "Slettede Beskeder"
 
 #: eloue/templates/django_messages/trash.html:45
 msgid "undelete"
@@ -3530,7 +3628,7 @@ msgstr "Se samtlige lejeannoncer"
 #: eloue/templates/dk/products/_base_product_detail.jade:53
 #: eloue/templates/products/_base_product_detail.jade:53
 msgid "Photos et Localisation"
-msgstr "Lejekontrakter"
+msgstr "Billeder og leje"
 
 #: eloue/templates/dk/products/_base_product_detail.jade:59
 #: eloue/templates/products/_base_product_detail.jade:59
@@ -3618,7 +3716,7 @@ msgstr "Abonnement"
 
 #: eloue/templates/jade/_date_picker_border.jade:18
 msgid "Il manque la date de début"
-msgstr "Kreditkort"
+msgstr "Der mangler en begyndelsesdato"
 
 #: eloue/templates/jade/_date_picker_border.jade:19
 #: eloue/templates/jade/_date_picker_border.jade:38
@@ -3782,7 +3880,7 @@ msgstr "Pris per dag"
 #: eloue/templates/jade/_pop_up_publish_item.jade:100
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:38
 msgid "&euro;"
-msgstr "kr."
+msgstr "&kr.;"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:75
 msgid "Kilomètres inclus"
@@ -3856,7 +3954,7 @@ msgstr "værelser"
 
 #: eloue/templates/jade/_pro_popin_message.jade:8
 msgid "Demande de devis"
-msgstr "Forespørgsel på overslag"
+msgstr "Forespørgsel på pris"
 
 #: eloue/templates/jade/_pro_popin_shop.jade:8
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:36
@@ -3918,7 +4016,7 @@ msgstr "hvor"
 
 #: eloue/templates/jade/_product_list_aside.jade:30
 msgid "rayon"
-msgstr "distrikt"
+msgstr "Område"
 
 #: eloue/templates/jade/_product_list_aside.jade:37
 msgid "loueurs"
@@ -3988,7 +4086,7 @@ msgstr "Vælg en kategori til din annonce"
 
 #: eloue/templates/jade/_publish_items_categories.jade:6
 msgid "Bricolage"
-msgstr "Boligbyggeri"
+msgstr "Gør-Det-Selv"
 
 #: eloue/templates/jade/_publish_items_categories.jade:10
 msgid "Jardinage"
@@ -3996,15 +4094,15 @@ msgstr "Havearbejde"
 
 #: eloue/templates/jade/_publish_items_categories.jade:14
 msgid "High-tech"
-msgstr "High-tech"
+msgstr "Elektronik"
 
 #: eloue/templates/jade/_publish_items_categories.jade:18
 msgid "Réception"
-msgstr "Reservationer"
+msgstr "Fest og Særlige Lejligheder"
 
 #: eloue/templates/jade/_publish_items_categories.jade:24
 msgid "Véhicule"
-msgstr "køretøj"
+msgstr "Køretøj"
 
 #: eloue/templates/jade/_publish_items_categories.jade:28
 msgid "Mode et accessoires"
@@ -4012,7 +4110,7 @@ msgstr "Mode og accessoires"
 
 #: eloue/templates/jade/_publish_items_categories.jade:32
 msgid "Santé et bien-etre"
-msgstr "Sundhed og Wellness"
+msgstr "Sundhed og Velvære"
 
 #: eloue/templates/jade/_reset_password.jade:8
 msgid "Réinitialisation du mot de passe"
@@ -4052,7 +4150,7 @@ msgstr ""
 #: eloue/templates/jade/_reset_password_confirm.jade:18
 #: eloue/templates/jade/_sign_in.jade:65
 msgid "Confirmation du mot de passe"
-msgstr "Lejekontrakter"
+msgstr "Bekræftelse af kodeord"
 
 #: eloue/templates/jade/_reset_password_confirm.jade:22
 msgid "Modifier"
@@ -4098,7 +4196,7 @@ msgstr "Adresse"
 
 #: eloue/templates/jade/_sign_in.jade:37
 msgid "Confirmation de mot de passe"
-msgstr ""
+msgstr "Bekræftelse af kodeord"
 
 #: eloue/templates/jade/_sign_in.jade:73
 #: eloue/templates/landing_pages/_sign_in_content.jade:56
@@ -4268,7 +4366,7 @@ msgid ""
 "toutes vos questions..."
 msgstr ""
 "Tøv ikke med at skrive til os via formularen nedenfor. Vi svarer med stor "
-"fornøjelse på allehenvendelser..."
+"fornøjelse på alle henvendelser..."
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:38
 msgid "Votre adresse e‐mail"
@@ -4276,7 +4374,7 @@ msgstr "Adresse"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:39
 msgid "Objet de votre message"
-msgstr "automatgear"
+msgstr "Din beskeds emne"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:39
 msgid "Votre message"
@@ -4335,7 +4433,7 @@ msgid ""
 "répondre à toutes vos questions…\n"
 msgstr ""
 "\n"
-"<b>øv ikke med at ringe til os. </b> Vi svarer med stor fornøjelse på alle "
+"<b>Tøv ikke med at ringe til os. </b> Vi svarer med stor fornøjelse på alle "
 "henvendelser...\n"
 
 #: eloue/templates/jade/pop_up_sections/_phone_form.jade:7
@@ -4477,7 +4575,7 @@ msgstr ""
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:3
 msgid "Demandez un devis"
-msgstr "Forespørgsel på overslag"
+msgstr "Forespørgsel på pris"
 
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:7
 msgid "à partir de"
@@ -4595,7 +4693,7 @@ msgstr ""
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:46
 msgid "Comfirmation de mot de passe"
-msgstr "Lejekontrakter"
+msgstr "Bekræftelse på kodeord"
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:61
 msgid "En créant un compte e-loue, vous acceptez les &nbsp;"
@@ -4646,7 +4744,7 @@ msgstr ""
 
 #: eloue/templates/products/subcategory_list.jade:5
 msgid "annonces de location"
-msgstr "Lejekontrakter"
+msgstr "Lejeannoncer"
 
 #: eloue/templates/products/subcategory_list.jade:5
 msgid "dans toute la France"
@@ -4706,7 +4804,7 @@ msgstr "Arkiveret"
 
 #: eloue/templates/products/partials/product_option_edit_form.html:29
 msgid "Désactiver"
-msgstr "aktiv"
+msgstr "Desaktiver"
 
 #: eloue/templates/products/partials/product_option_edit_form.html:31
 msgid "Activer"
@@ -4722,7 +4820,7 @@ msgstr ""
 
 #: eloue/templates/products/partials/top_ads.html:2
 msgid "Top annonces"
-msgstr "Annoncer"
+msgstr "Bedste annoncer"
 
 #: eloue/templates/profile_public/_profile_public-comments.jade:3
 #, python-format
@@ -4777,7 +4875,7 @@ msgstr "Samtlige lejemål under dette %(username)s"
 #: eloue/templates/rent/emails/borrower_acceptation_email.html:5
 #: eloue/templates/rent/emails/owner_acceptation_email.html:4
 msgid "Confirmation de votre réservation"
-msgstr "Proponent email"
+msgstr "Bekræftelse på din reservation"
 
 #: eloue/templates/rent/emails/borrower_acceptation_email.html:15
 #, python-format
@@ -4877,14 +4975,14 @@ msgstr ""
 #: eloue/templates/rent/emails/borrower_acceptation_email_subject.txt:1
 #: eloue/templates/rent/emails/owner_acceptation_email_subject.txt:1
 msgid "Confirmation de votre location"
-msgstr "Lejekontrakter"
+msgstr "Bekræftelse på din leje"
 
 #: eloue/templates/rent/emails/borrower_ask_email.html:4
 #: eloue/templates/rent/emails/borrower_ask_pro_email.html:4
 #: eloue/templates/rent/emails/owner_ask_email.html:5
 #: eloue/templates/rent/emails/owner_ask_pro_email.html:5
 msgid "Demande de réservation"
-msgstr "Forespørgsel på overslag"
+msgstr "Anmodning om reservation"
 
 #: eloue/templates/rent/emails/borrower_ask_email.html:14
 #, python-format
@@ -4975,7 +5073,7 @@ msgstr ""
 
 #: eloue/templates/rent/emails/borrower_ask_email_subject.txt:1
 msgid "Votre demande de location"
-msgstr "Lejekontrakter"
+msgstr "Din forespørgsel om leje"
 
 #: eloue/templates/rent/emails/borrower_ask_pro_email.html:14
 #, python-format
@@ -5060,7 +5158,7 @@ msgstr ""
 #: eloue/templates/rent/emails/borrower_ask_pro_email_subject.txt:1
 #: eloue/templates/rent/emails/owner_ask_pro_email_subject.txt:1
 msgid "Demande de location"
-msgstr "Forespørgsel på overslag"
+msgstr "Anmodning om leje"
 
 #: eloue/templates/rent/emails/borrower_cancelation_to_borrower_email.html:5
 #: eloue/templates/rent/emails/borrower_cancelation_to_borrower_email_subject.txt:1
@@ -5071,7 +5169,7 @@ msgstr "Forespørgsel på overslag"
 #: eloue/templates/rent/emails/owner_cancelation_to_owner_email.html:5
 #: eloue/templates/rent/emails/owner_cancelation_to_owner_email_subject.txt:1
 msgid "Annulation de votre location"
-msgstr "Aktivering af din konto"
+msgstr "Annullering af dit lejemål"
 
 #: eloue/templates/rent/emails/borrower_cancelation_to_borrower_email.html:15
 #, python-format
@@ -5189,7 +5287,7 @@ msgstr ""
 #: eloue/templates/rent/emails/borrower_closed_email.html:4
 #: eloue/templates/rent/emails/owner_closed_email.html:5
 msgid "Clôture de votre réservation"
-msgstr "Proponent email"
+msgstr "Afslutningen på din reservation"
 
 #: eloue/templates/rent/emails/borrower_closed_email.html:14
 #, python-format
@@ -5237,12 +5335,12 @@ msgstr ""
 #: eloue/templates/rent/emails/borrower_closed_email_subject.txt:1
 #: eloue/templates/rent/emails/owner_closed_email_subject.txt:1
 msgid "Clôture de votre location"
-msgstr "Lejekontrakter"
+msgstr "Afslutning på din lejeperiode"
 
 #: eloue/templates/rent/emails/borrower_ended_email.html:4
 #: eloue/templates/rent/emails/owner_ended_email.html:4
 msgid "Fin de votre réservation"
-msgstr "Proponent email"
+msgstr "Afslutning på din reservation"
 
 #: eloue/templates/rent/emails/borrower_ended_email.html:15
 #, python-format
@@ -5255,6 +5353,12 @@ msgid ""
 "<br>\n"
 "                           \t"
 msgstr ""
+"\n"
+"\n"
+"                         Hej %(borrower_name)s<br><br>\n"
+"\n"
+"Reservationen er nu afsluttet :<br>\n"
+"                           \t"
 
 #: eloue/templates/rent/emails/borrower_ended_email.html:24
 #, python-format
@@ -5311,12 +5415,12 @@ msgstr ""
 #: eloue/templates/rent/emails/borrower_ended_email_subject.txt:1
 #: eloue/templates/rent/emails/owner_ended_email_subject.txt:1
 msgid "Fin de votre location"
-msgstr "Proponent email"
+msgstr "Afslutningen på din lejeperiode"
 
 #: eloue/templates/rent/emails/borrower_receipt_email.html:4
 #: eloue/templates/rent/emails/borrower_receipt_email_subject.txt:1
 msgid "Débit de votre réservation"
-msgstr "Proponent email"
+msgstr "Debitering på din reservation"
 
 #: eloue/templates/rent/emails/borrower_receipt_email.html:14
 #, python-format
@@ -5412,7 +5516,7 @@ msgstr ""
 
 #: eloue/templates/rent/emails/borrower_recovery_email_subject.txt:1
 msgid "Terminer votre réservation"
-msgstr "Proponent email"
+msgstr "Afslut din reservation"
 
 #: eloue/templates/rent/emails/borrower_rejection_email.html:4
 #: eloue/templates/rent/emails/borrower_rejection_email_subject.txt:1
@@ -6020,7 +6124,7 @@ msgstr ""
 
 #: eloue/templates/rent/emails/owner_receipt_email_subject.txt:1
 msgid "Facture e-loue"
-msgstr "e-loue"
+msgstr "Kvittering e-loue"
 
 #: eloue/templates/rent/emails/partials/booking_details_email.html:3
 #, python-format
@@ -6340,7 +6444,7 @@ msgstr "De..."
 
 #: products/choices.py:188
 msgid "Location Automobile"
-msgstr "Billeje"
+msgstr "Leje af køretøjer"
 
 #: products/choices.py:189
 msgid "Location saisonnière"
@@ -6403,7 +6507,7 @@ msgid ""
 "Prix du kilomètre supplémentaire. Si le locataire dépasse le nombre de "
 "kilomètre inclus par jour."
 msgstr ""
-"Pris pr ekstra kilometer, hvis lejer overskrider inkluderede kilometer pr "
+"Pris per ekstra kilometer, hvis lejer overskrider inkluderede kilometer per "
 "dag."
 
 #: products/models.py:430
@@ -6588,8 +6692,8 @@ msgid ""
 "Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
 "effectué de réservations"
 msgstr ""
-"Du kan ikke kommentere en lejerprofil, ved hvilken du aldrig har foretaget "
-"reservationer"
+"Du kan udelukkende give en kommentar på hjemmesiden vedrørende lejen af en "
+"given genstand, hvis du har lejet denne genstand.  "
 
 #: products/models.py:975 products/models.py:976
 msgid "Archived"
