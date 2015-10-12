@@ -3612,7 +3612,7 @@ msgid ""
 " Appelez-nous au <b>01 85 08 99 77 </b> (numéro gratuit)\n"
 msgstr ""
 "\n"
-" Kontakt os på <b>01 85 08 99 77 </b> (gratis opkald)\n"
+"Kontakt os på e-mailadressen <b>contact@e-loue.com</b>\n"
 
 #: eloue/templates/dk/jade/_product_list.jade:3
 #: eloue/templates/jade/_product_list.jade:3

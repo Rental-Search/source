@@ -1,0 +1,16 @@
+.container
+  -var sections = [["inden et lejemål", [["owner-column",  [["Jeg indskriver mig gratis", "en quelques secondes"], ["Jeg indrykker min annonce", "en toute simplicité"], ["Jeg besvarer spørgsmål", "des locataires <br> intéressés  par mes annonces <br> (par téléphone ou par messagerie)"], ["Jeg accepterer et lejemål", "afin d’être couvert par l’assurance <br> et d’éviter les échanges d’argent"]]], ["tenant-column", [["Jeg indskriver mig gratis", "en quelques secondes"], ["Jeg søger et lejemål", "parmi plus de  100 000 annonces"], ["Jeg stiller mine spørgsmål", "au propriétaire <br> de l’objet qui m’intéresse <br> (par téléphone ou par messagerie)"], ["Jeg betaler for lejen", "via un serveur sécurisé <br> (Société Générale)"]]]]], ["Under lejen", [["owner-column",  [["Jeg modtager en lejekontrakt", "pré-rempli <br> que je présenterai au locataire <br> lors de la transaction"], ["Jeg møder udlejer", "pour lui confier le bien loué"], ["Jeg modtager min betaling", "48h après le début de la location"], ["Jeg modtager min betaling", "en rencontrant le locataire"]]], ["tenant-column", [["Jeg modtager en lejekontrakt", "pré-rempli <br> que je présenterai au propriétaire <br> lors de la transaction"], ["Jeg møder ejer", "pour récupérer le bien loué"], ["Jeg nyder godt af mine lejemål", "en toute sécurité car il est assuré"], ["Jeg tilbageleverer lejemålet", "en rencontrant son propriétaire"]]]]], ["Efter lejen", [["owner-column",  [["Jeg skriver til lejer", "pour aider les autres loueurs"]]], ["tenant-column", [["Jeg skriver til ejer", "pour aider les autres loueurs"]]]]]]
+
+  {% autoescape off %}
+  each section, columns in sections
+    section.row
+      .col-xs-12: h4: != section
+      each style, items in columns
+        .col-xs-6: ul.timeline-steps(class="{{ style }}")
+          each title, content in items
+            li
+              h5: != title
+              p.content: != content
+              span.toggle-content &#149;&nbsp;&#149;&nbsp;&#149;
+              .addons: i: b
+  {% endautoescape %}
