@@ -23,13 +23,6 @@ section(ng-controller="SendProMessageCtrl", ng-init="setUserId({% verbatim %}{{ 
       {% endblocktrans %}
     div(ng-show="!isSent")
       h4
-        {% blocktrans %}
-        b N’hésitez pas à nous écrire
-        | via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions...
-        {% endblocktrans %}
-        {% trans "L’équipe e-loue" %}
-    div(ng-show="!isSent")
-      h4
         b {% trans "N’hésitez pas à nous écrire" %}
         {% trans "via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à toutes vos questions..." %}
 

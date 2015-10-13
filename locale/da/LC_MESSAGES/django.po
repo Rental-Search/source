@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-12 18:36+0200\n"
+"POT-Creation-Date: 2015-10-13 15:22+0200\n"
 "PO-Revision-Date: 2015-10-13 13:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
@@ -519,7 +519,7 @@ msgstr ""
 #: eloue/templates/jade/_log_in.jade:25 eloue/templates/jade/_sign_in.jade:56
 #: eloue/templates/landing_pages/_sign_in_content.jade:37
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: accounts/forms.py:164
 msgid "New password"
@@ -533,7 +533,8 @@ msgstr "Bekræftelse af ny adgangskode"
 msgid "User record is empty."
 msgstr "Brugerposten er tom."
 
-#: accounts/forms.py:181 accounts/serializers.py:183 accounts/tests/api2.py:217
+#: accounts/forms.py:181 accounts/serializers.py:183
+#: accounts/tests/api2.py:217
 msgid "The two password fields didn't match."
 msgstr "Brugernavnet og adgangskoder passer ikke sammen"
 
@@ -1045,7 +1046,8 @@ msgstr "lejere"
 #: eloue/templates/gosport/jade/_nav_home.jade:10
 #: eloue/templates/jade/_breadcrumbs.jade:23
 #: eloue/templates/jade/_breadcrumbs.jade:25
-#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:6
+#: eloue/templates/jade/_nav_home.jade:10
 #: eloue/templates/jade/_nav_home.jade:17 products/models.py:739
 #: products/models.py:741 products/templatetags/facets.py:72
 msgid "location"
@@ -2081,6 +2083,10 @@ msgstr "Send besked til egen e-mail"
 msgid "champs obligatoires"
 msgstr "Dette felt er obligatorisk"
 
+#: eloue/templates/contact_us/_new_contact_form.html:94
+msgid "Envoyer le message"
+msgstr "Send forespørgsel"
+
 #: eloue/templates/contact_us/_new_contact_form.html:101
 msgid ""
 "\n"
@@ -2195,7 +2201,8 @@ msgstr "Annoncer knyttet til denne adresse"
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:38
 #: eloue/templates/dk/dashboard/items/_items_list.jade:22
 #: eloue/templates/dk/jade/_product_list.jade:11
-#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:6
+#: eloue/templates/jade/_nav_home.jade:10
 #: eloue/templates/jade/_nav_home.jade:17
 #: eloue/templates/jade/_porduct_details_title.jade:2
 #: eloue/templates/jade/_product_list.jade:11
@@ -3828,7 +3835,7 @@ msgstr "/dag"
 #: eloue/templates/dk/jade/product_details/_booking_form.jade:18
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 msgid "indicatif"
-msgstr "indikerende"
+msgstr ""
 
 #: eloue/templates/dk/jade/product_details/_booking_form.jade:18
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:18
@@ -4386,12 +4393,12 @@ msgstr "Tilmeld dig"
 #: eloue/templates/jade/_sign_in.jade:12
 #: eloue/templates/landing_pages/_sign_in_content.jade:4
 msgid "Inscription via Facebook"
-msgstr ""
+msgstr "Tilmeld dig via Facebook"
 
 #: eloue/templates/jade/_sign_in.jade:15
 #: eloue/templates/landing_pages/_sign_in_content.jade:7
 msgid "Nous ne publierons jamais rien sur votre mur sans votre accord"
-msgstr ""
+msgstr "Vi slår ikke noget op på din væg uden dit sammentykke"
 
 #: eloue/templates/jade/_sign_in.jade:17
 #: eloue/templates/landing_pages/_sign_in_content.jade:10
@@ -4401,7 +4408,7 @@ msgstr "Tilmeld dig"
 #: eloue/templates/jade/_sign_in.jade:19 eloue/templates/jade/_sign_in.jade:76
 #: eloue/templates/landing_pages/_sign_in_content.jade:59
 msgid "Inscription via Email"
-msgstr ""
+msgstr "Tilmeld dig via e-mail"
 
 #: eloue/templates/jade/_sign_in.jade:34
 msgid "Addresse email"
@@ -4556,46 +4563,32 @@ msgstr ""
 "    </p>\n"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:26
-msgid ""
-"\n"
-"<b>N’hésitez pas à nous écrire</b> via le formulaire ci‐dessous, nous nous "
-"ferons un plaisir de répondre à toutes vos questions...\n"
-msgstr ""
-"\n"
-"<b>Tøv ikke med at skrive til os</b> via formularen nedenfor. Vi svarer med "
-"stor fornøjelse på alle henvendelser...\n"
-
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:29
-msgid "L’équipe e-loue"
-msgstr "Virksomheden e-loue"
-
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:34
 msgid "N’hésitez pas à nous écrire"
 msgstr "Tøv ikke med at kontakte os"
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:34
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:26
 msgid ""
 "via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à "
 "toutes vos questions..."
 msgstr ""
-"Tøv ikke med at skrive til os via formularen nedenfor. Vi svarer med stor "
-"fornøjelse på alle henvendelser..."
+"via formularen nedenfor. Vi svarer med stor fornøjelse på alle "
+"henvendelser..."
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:38
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:30
 msgid "Votre adresse e‐mail"
 msgstr "Adresse"
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:39
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:31
 msgid "Objet de votre message"
 msgstr "Din beskeds emne"
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:39
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:31
 msgid "Votre message"
-msgstr "leSend en besked"
+msgstr "Send en besked"
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:40
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:32
 msgid "Envoyer"
-msgstr ""
+msgstr "Send"
 
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:2
 msgid "Vos informations personnelles"
@@ -4692,12 +4685,12 @@ msgid ""
 "plaisir de répondre à toutes vos questions…\n"
 msgstr ""
 "\n"
-"<b>Tøv ikke med at kom forbi i butikken.</b> Vi svarer med stor fornøjelse "
+"<b>Tøv ikke med at komme forbi i butikken.</b> Vi svarer med stor fornøjelse "
 "på alle henvendelser...\n"
 
 #: eloue/templates/jade/pop_up_sections/_shop_form.jade:8
 msgid "Nos boutiques sont situées au&nbsp;"
-msgstr "Vores butikker ligger placeret;"
+msgstr "Vores butikker ligger placeret"
 
 #: eloue/templates/jade/pop_up_sections/_shop_form.jade:18
 msgid "Ville de l'agence"
@@ -4705,7 +4698,7 @@ msgstr "By med filial"
 
 #: eloue/templates/jade/pop_up_sections/_shop_form.jade:35
 msgid "Notre boutique est située au&nbsp;"
-msgstr "Vores butik ligger placeret;"
+msgstr "Vores butik ligger placeret"
 
 #: eloue/templates/jade/pop_up_sections/_terms.jade:30
 msgid ""
@@ -4778,7 +4771,7 @@ msgid ""
 "les réponses à toutes vos questions.\n"
 msgstr ""
 "\n"
-"<b>Tøv ikke med at besøge vores hjemmeside.</b> er vil du finde samtlige "
+"<b>Tøv ikke med at besøge vores hjemmeside.</b> Her vil du finde samtlige "
 "svar på dine spørgsmål.\n"
 
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:3
@@ -4919,7 +4912,7 @@ msgstr "Lejeannoncer"
 
 #: eloue/templates/products/subcategory_list.jade:5
 msgid "dans toute la France"
-msgstr "Lejeannoncer i hele landet"
+msgstr "i hele landet"
 
 #: eloue/templates/products/tab_available.jade:36
 msgid ""
@@ -7283,6 +7276,18 @@ msgstr ""
 #: shipping/serializers.py:114
 msgid "Latitude\\longitude or address are required"
 msgstr "Latitude\\longitude eller adresse er påkrævet"
+
+#~ msgid ""
+#~ "\n"
+#~ "<b>N’hésitez pas à nous écrire</b> via le formulaire ci‐dessous, nous "
+#~ "nous ferons un plaisir de répondre à toutes vos questions...\n"
+#~ msgstr ""
+#~ "\n"
+#~ "<b>Tøv ikke med at skrive til os</b> via formularen nedenfor. Vi svarer "
+#~ "med stor fornøjelse på alle henvendelser...\n"
+
+#~ msgid "L’équipe e-loue"
+#~ msgstr "Virksomheden e-loue"
 
 #~ msgid "professionnels"
 #~ msgstr "erhversfolk"

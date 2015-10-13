@@ -9,7 +9,7 @@ section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span
-      | {% trans "Bonjour" %}, 
+      | {% trans "Bonjour" %}! 
       a#registration-link(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b {% trans "inscrivez-vous" %}
       | {% trans "ou" %} 
       a#login-link(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b {% trans "connectez-vous" %}
