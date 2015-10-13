@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-01 18:59+0200\n"
-"PO-Revision-Date: 2015-10-09 10:34+0200\n"
+"POT-Creation-Date: 2015-10-12 18:36+0200\n"
+"PO-Revision-Date: 2015-10-13 13:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
 "Language: da_DK\n"
@@ -87,7 +87,7 @@ msgid "lien boutique"
 msgstr "Link til butik"
 
 #: accounts/admin.py:293
-msgid "noubre d'annonce"
+msgid "nombre d'annonce"
 msgstr "Indsæt en annonce"
 
 #: accounts/admin.py:299
@@ -415,7 +415,7 @@ msgstr "Mobil"
 msgid "Fax"
 msgstr "Fax"
 
-#: accounts/choices.py:70
+#: accounts/choices.py:70 eloue/templates/contact_us/_new_contact_form.html:54
 msgid "Autre"
 msgstr "Andet"
 
@@ -923,7 +923,7 @@ msgstr "Attributten enten manglede eller meldes ugyldig: %s"
 msgid "Sending messages is allowed only to pro-accounts."
 msgstr "Afsendelse af beskeder er kun tilladt med erhvervskonti."
 
-#: accounts/views.py:61 accounts/views.py:264
+#: accounts/views.py:66 accounts/views.py:351
 msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
@@ -931,19 +931,28 @@ msgstr ""
 "Vi har e-mailet dig en vejledning i, hvordan du angiver adgangskoden til "
 "oplyste e-mailadresse. "
 
-#: accounts/views.py:91
+#: accounts/views.py:96
 msgid "Your password has been set.  You may go ahead and log in now."
 msgstr "Din bruger profil er aktiveret. Du har nu adgang til at logge ind."
 
-#: accounts/views.py:256 accounts/tests/api2.py:200
+#: accounts/views.py:256 accounts/views.py:261 accounts/views.py:265
+#: accounts/views.py:297 accounts/views.py:302 accounts/views.py:306
+msgid "Erreur dans le formulaire"
+msgstr "Fejl på serveren"
+
+#: accounts/views.py:258 accounts/views.py:299
+msgid "Le message a ete envoye avec succes"
+msgstr ""
+
+#: accounts/views.py:343 accounts/tests/api2.py:200
 msgid "Votre mot de passe à bien été modifié"
 msgstr "Din adgangskode er blevet ændret"
 
-#: accounts/views.py:273
+#: accounts/views.py:360
 msgid "User with this email not registered"
 msgstr "Bruger med denne email er ikke registreret"
 
-#: accounts/views.py:275
+#: accounts/views.py:362
 msgid ""
 "We've e-mailed you instructions for activating your account to the e-mail "
 "address you submitted. You should be receiving it shortly."
@@ -951,23 +960,23 @@ msgstr ""
 "Vi har e-mailet dig instruktioner om aktivering af din konto, til e-"
 "mailadressen du oplyste"
 
-#: accounts/views.py:297
+#: accounts/views.py:384
 msgid "Your message has been sent sucessfully."
 msgstr "Din besked er blevet sendt"
 
-#: accounts/views.py:318
+#: accounts/views.py:405
 msgid "The address is default address of current user"
 msgstr "Adressen er standardadressen for aktuelle bruger"
 
-#: accounts/views.py:324
+#: accounts/views.py:411
 msgid "The address is used in products"
 msgstr "Adressen, der bruges i produkter"
 
-#: accounts/views.py:356
+#: accounts/views.py:443
 msgid "The phone is default number of current user"
 msgstr "Dette telefonnummer er brugers standard nummer"
 
-#: accounts/views.py:362
+#: accounts/views.py:449
 msgid "The phone is used in products"
 msgstr ""
 
@@ -1020,7 +1029,7 @@ msgstr "Engelsk"
 msgid "Danish"
 msgstr "Dansk"
 
-#: eloue/urls.py:206
+#: eloue/urls.py:208
 #: eloue/templates/dashboard/messages/_aside_product_detail.jade:18
 #: eloue/templates/dashboard/messages/_aside_product_detail.jade:21
 #: eloue/templates/django_messages/new_message_email.html:17
@@ -1030,7 +1039,7 @@ msgstr "Dansk"
 msgid "loueur"
 msgstr "lejere"
 
-#: eloue/urls.py:208 eloue/templates/autovoisin/jade/_nav_home.jade:4
+#: eloue/urls.py:210 eloue/templates/autovoisin/jade/_nav_home.jade:4
 #: eloue/templates/autovoisin/jade/_nav_home.jade:10
 #: eloue/templates/gosport/jade/_nav_home.jade:4
 #: eloue/templates/gosport/jade/_nav_home.jade:10
@@ -1042,51 +1051,51 @@ msgstr "lejere"
 msgid "location"
 msgstr "leje"
 
-#: eloue/urls.py:209
+#: eloue/urls.py:211 eloue/templates/dk/jade/_footer_links.jade:9
 msgid "comment-ca-marche"
 msgstr "Hvordan-fungerer-det?"
 
-#: eloue/urls.py:210 eloue/templates/dk/jade/_footer_links.jade:9
+#: eloue/urls.py:212 eloue/templates/dk/jade/_footer_links.jade:11
 msgid "offre-professionnel"
 msgstr "professionel"
 
-#: eloue/urls.py:216
+#: eloue/urls.py:218 eloue/templates/dk/jade/_footer_links.jade:35
 msgid "nos-partenaires"
 msgstr "Vores-partnere"
 
-#: eloue/urls.py:217
+#: eloue/urls.py:219 eloue/templates/dk/jade/_footer_links.jade:45
 msgid "contactez-nous"
 msgstr "Kontakt-os"
 
-#: eloue/urls.py:219
+#: eloue/urls.py:221 eloue/templates/dk/jade/_footer_links.jade:33
 msgid "qui-sommes-nous"
 msgstr "Hvem-er-vi?"
 
-#: eloue/urls.py:220
+#: eloue/urls.py:222 eloue/templates/dk/jade/_footer_links.jade:13
 msgid "securite"
 msgstr "Forsikring"
 
-#: eloue/urls.py:221
+#: eloue/urls.py:223
 msgid "conditions-generales-particuliers"
 msgstr "Generelle-betingelser-privat"
 
-#: eloue/urls.py:222 eloue/templates/dk/jade/_footer_links.jade:19
+#: eloue/urls.py:224 eloue/templates/dk/jade/_footer_links.jade:23
 msgid "conditions-generales-professionnels"
 msgstr "Generelle-betingelser-PRO-Erhverv"
 
-#: eloue/urls.py:223
+#: eloue/urls.py:225
 msgid "contrat-de-location"
 msgstr "Lejekontrakter"
 
-#: eloue/urls.py:225 eloue/templates/dk/jade/_footer_links.jade:29
+#: eloue/urls.py:227 eloue/templates/dk/jade/_footer_links.jade:47
 msgid "mentions-legales"
 msgstr "Omtale"
 
-#: eloue/urls.py:227
+#: eloue/urls.py:229
 msgid "assurance-tranquillite"
 msgstr "Garanteret-tilfredshed"
 
-#: eloue/urls.py:228
+#: eloue/urls.py:230
 msgid "nous-recrutons"
 msgstr "Rekruttering"
 
@@ -1751,8 +1760,10 @@ msgstr "Bekræftelse på ændringen i dit abonnement"
 #: eloue/templates/cancel_terms/_breadcrumbs.jade:4
 #: eloue/templates/contact_us/_breadcrumbs.jade:4
 #: eloue/templates/deposit_amount/_breadcrumbs.jade:4
+#: eloue/templates/dk/security/_breadcrumbs.jade:4
 #: eloue/templates/dk/subscription/_breadcrumbs.jade:4
 #: eloue/templates/dk/terms_pro/_breadcrumbs.jade:4
+#: eloue/templates/dk/who_are_we/_breadcrumbs.jade:4
 #: eloue/templates/gosport/how_it_works/_breadcrumb.jade:4
 #: eloue/templates/gosport/imprint/_breadcrumbs.jade:4
 #: eloue/templates/gosport/our_partners/_breadcrumbs.jade:4
@@ -1787,8 +1798,10 @@ msgstr "Kontakt os"
 
 #: eloue/templates/autovoisin/how_it_works/index.jade:1
 #: eloue/templates/autovoisin/jade/_header_site.jade:41
+#: eloue/templates/dk/jade/_footer_links.jade:9
 #: eloue/templates/dk/jade/_header_site.jade:49
 #: eloue/templates/gosport/how_it_works/index.jade:1
+#: eloue/templates/how_it_works/_breadcrumb.jade:7
 #: eloue/templates/jade/_footer_links.jade:9
 #: eloue/templates/jade/_header_site.jade:49
 msgid "Comment ça marche ?"
@@ -1918,7 +1931,9 @@ msgid "Inscription"
 msgstr "Indskrivning"
 
 #: eloue/templates/autovoisin/our_partners/index.jade:1
+#: eloue/templates/dk/jade/_footer_links.jade:35
 #: eloue/templates/jade/_footer_links.jade:43
+#: eloue/templates/our_partners/_breadcrumbs.jade:7
 msgid "Nos partenaires"
 msgstr "Vores partnere"
 
@@ -1928,6 +1943,7 @@ msgid "Contrats de location"
 msgstr "Lejekontrakter"
 
 #: eloue/templates/autovoisin/security/_list_securisty.jade:1
+#: eloue/templates/dk/security/index.jade:1
 #: eloue/templates/gosport/security/_list_securisty.jade:1
 #: eloue/templates/security/index.jade:1
 msgid "Sécurité"
@@ -1943,9 +1959,141 @@ msgid "Conditions Générales Particuliers"
 msgstr "Generelle betingelser (privat) "
 
 #: eloue/templates/autovoisin/who_are_we/_static_content.jade:1
+#: eloue/templates/dk/who_are_we/_breadcrumbs.jade:7
+#: eloue/templates/dk/who_are_we/index.jade:1
 #: eloue/templates/who_are_we/index.jade:1
 msgid "Qui sommes nous ?"
 msgstr "Hvem er vi?"
+
+#: eloue/templates/contact_us/_breadcrumbs.jade:6
+#: eloue/templates/dk/jade/_footer_links.jade:43
+#: eloue/templates/jade/_footer_links.jade:53
+msgid "En savoir plus"
+msgstr "For yderligere information"
+
+#: eloue/templates/contact_us/_breadcrumbs.jade:7
+msgid "Contactez‐nous"
+msgstr "Kontakt os"
+
+#: eloue/templates/contact_us/_head_content.jade:2
+msgid ""
+"\n"
+"\n"
+"  <h2 class=\"text-uppercase\">nous avons essayé de tout vous dire.<br> mais "
+"si ce n’est pas suffisant,<br> n’hésitez pas, nous sommes là pour vous "
+"aider...\n"
+"  </h2>\n"
+"  <p class=\"indent-v-md\"> Vous ne trouvez pas de réponses dans nos "
+"FAQ&nbsp;? Vous avez besoin d’aide&nbsp;?<br> Vous avez une question, une "
+"remarque, un commentaire à faire passer à nos équipes&nbsp;?\n"
+"  </p>\n"
+"  <p class=\"indent-v-md\"> Vous pouvez nous laisser votre message 24h/24 "
+"via le formulaire de contact ci-dessous.<br> Nous nous engageons à vous "
+"répondre dans les 24 heures (ou dans les 48h les WE).<br> Si vous souhaitez "
+"que nous vous rappelions, n’hésitez pas à le préciser&nbsp;...\n"
+"  </p>\n"
+msgstr ""
+"\n"
+"\n"
+"  <h2 class=\"text-uppercase\">Vi har prøvet at give dig al den information, "
+"som du behøver.<br> men hvis du stadig undrer dig over noget<br> så tøv ikke "
+"med at kontakte os, vi er her for at hjælpe dig... \n"
+"  </h2>\n"
+"\n"
+"  <p class=\"indent-v-md\"> Finder du ikke svarene, på det du søger, under "
+"punktet FAQ&nbsp;? Har du brug for hjælp&nbsp;?<br> Har du et spørgsmål, en "
+"bemærkning eller en kommentar til vores team\n"
+"\n"
+"</p>\n"
+"  <p class=\"indent-v-md\"> Du kan kontakte os 24/7 via kontaktformularen "
+"nedenfor.  <br> Vi besvarer dine spørgsmål hurtigst muligt.<br> Hvis du "
+"ønsker, at vi skal kontakte dig per telefon, så er du meget velkommen til at "
+"skrive det i din besked&nbsp;...\n"
+"  </p>\n"
+
+#: eloue/templates/contact_us/_new_contact_form.html:24
+msgid "Votre e‐mail"
+msgstr "Din e-mailadresse"
+
+#: eloue/templates/contact_us/_new_contact_form.html:38
+msgid "Sujet"
+msgstr "Emne"
+
+#: eloue/templates/contact_us/_new_contact_form.html:42
+msgid "Demande d'information"
+msgstr "Forspørgsel"
+
+#: eloue/templates/contact_us/_new_contact_form.html:43
+msgid "Problème technique"
+msgstr "Tekniske problemer"
+
+#: eloue/templates/contact_us/_new_contact_form.html:44
+msgid "Inscription / Connexion"
+msgstr "Indskrivning"
+
+#: eloue/templates/contact_us/_new_contact_form.html:45
+msgid "Tableau de bord / Espace client"
+msgstr "Dashboard"
+
+#: eloue/templates/contact_us/_new_contact_form.html:46
+msgid "Recherche"
+msgstr "Søgning"
+
+#: eloue/templates/contact_us/_new_contact_form.html:47
+msgid "Réservations / Locations"
+msgstr "Reservationen er under behandling"
+
+#: eloue/templates/contact_us/_new_contact_form.html:48
+msgid "Paiement / Caution"
+msgstr "Lejlighed/hus"
+
+#: eloue/templates/contact_us/_new_contact_form.html:49
+msgid "Assurance"
+msgstr "Inklusiv forsikring"
+
+#: eloue/templates/contact_us/_new_contact_form.html:50
+msgid "Suggestions"
+msgstr "Abonnement"
+
+#: eloue/templates/contact_us/_new_contact_form.html:51
+msgid "Félicitations"
+msgstr "Vurderinger"
+
+#: eloue/templates/contact_us/_new_contact_form.html:52
+msgid "Relation presse"
+msgstr "Reservationen er overskredet"
+
+#: eloue/templates/contact_us/_new_contact_form.html:53
+msgid "Proposition de partenariat"
+msgstr "Ønske om et partnerskab"
+
+#: eloue/templates/contact_us/_new_contact_form.html:65
+#: eloue/templates/django_messages/view.html:3
+#: eloue/templates/jade/_pop_up_send_message.jade:8
+msgid "Message"
+msgstr "Beskeder"
+
+#: eloue/templates/contact_us/_new_contact_form.html:83
+msgid "être en copie du mail"
+msgstr "Send besked til egen e-mail"
+
+#: eloue/templates/contact_us/_new_contact_form.html:88
+msgid "champs obligatoires"
+msgstr "Dette felt er obligatorisk"
+
+#: eloue/templates/contact_us/_new_contact_form.html:101
+msgid ""
+"\n"
+"    \t<p class=\"text-center\"> Vous pouvez également nous joindre, du lundi "
+"au vendredi de 9h à 18h,<br> par chat ou par téléphone au 01 85 08 99 77\n"
+"  \t\t</p>\n"
+"  \t\t"
+msgstr ""
+"\n"
+"    \t<p class=\"text-center\">Du kan kontakte os 24/7 på e-mailadressen "
+"<br> contact@e-loue.com\n"
+"  \t\t</p>\n"
+"  \t\t"
 
 #: eloue/templates/contest/contest_auth_login.html:4
 msgid "Jeu concours - Identification"
@@ -2347,6 +2495,7 @@ msgstr "Periode"
 #: eloue/templates/dk/dashboard/items/tarifs.jade:52
 #: eloue/templates/dk/dashboard/items/tarifs.jade:85
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:23
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:18
 #: eloue/templates/jade/pop_up_sections/_terms.jade:10
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 #: eloue/templates/products/tab_tarifs.jade:11
@@ -2358,7 +2507,7 @@ msgstr "Pris"
 #: eloue/templates/dashboard/items/tabs.jade:32
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:85
 #: eloue/templates/dk/dashboard/items/tabs.jade:32
-#: eloue/templates/dk/products/_base_product_detail.jade:63
+#: eloue/templates/dk/products/_base_product_detail.jade:60
 #: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:2
 #: eloue/templates/jade/pop_up_sections/_terms.jade:15
@@ -3268,18 +3417,21 @@ msgstr "Til"
 
 #: eloue/templates/dashboard/messages/_form_reservation.jade:26
 #: eloue/templates/dk/dashboard/messages/_form_reservation.jade:26
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:11
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:11
 msgid "Cet article est disponible à ces dates"
 msgstr "Genstanden er tilgængelig på følgende datoer "
 
 #: eloue/templates/dashboard/messages/_form_reservation.jade:27
 #: eloue/templates/dk/dashboard/messages/_form_reservation.jade:27
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:12
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:12
 msgid "Cet article n'est pas disponible à ces dates"
 msgstr ""
 
 #: eloue/templates/dashboard/messages/_form_reservation.jade:30
 #: eloue/templates/dk/dashboard/messages/_form_reservation.jade:30
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:16
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:16
 msgid "Durée de la location"
 msgstr "Lejeperiodens varighed"
@@ -3297,6 +3449,7 @@ msgstr "Inklusiv forsikring"
 
 #: eloue/templates/dashboard/messages/_form_reservation.jade:37
 #: eloue/templates/dk/dashboard/messages/_form_reservation.jade:37
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:22
 #: eloue/templates/jade/_pop_up_call.jade:14
 #: eloue/templates/jade/_pop_up_send_message.jade:14
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:45
@@ -3328,6 +3481,7 @@ msgstr ""
 
 #: eloue/templates/dashboard/messages/_section_communication.jade:21
 #: eloue/templates/dk/dashboard/messages/_section_communication.jade:21
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:22
 #: eloue/templates/jade/pop_up_sections/_input_message.jade:6
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:25
 msgid "Envoyez"
@@ -3521,41 +3675,66 @@ msgstr "Slettede Beskeder"
 msgid "undelete"
 msgstr ""
 
-#: eloue/templates/django_messages/view.html:3
-#: eloue/templates/jade/_pop_up_send_message.jade:8
-msgid "Message"
-msgstr "Beskeder"
-
 #: eloue/templates/django_messages/view.html:32
 msgid "Reply"
 msgstr ""
 
+#: eloue/templates/dk/how_it_works/index.jade:1
+#: eloue/templates/how_it_works/index.jade:1
+msgid "Comment ça marche"
+msgstr "Hvordan fungerer det?"
+
 #: eloue/templates/dk/jade/_footer_links.jade:7
+#: eloue/templates/how_it_works/_breadcrumb.jade:6
 #: eloue/templates/jade/_footer_links.jade:7
 msgid "Le concept e-loue"
 msgstr "E-loue's koncept"
 
-#: eloue/templates/dk/jade/_footer_links.jade:9
+#: eloue/templates/dk/jade/_footer_links.jade:11
 #: eloue/templates/jade/_footer_links.jade:13
 msgid "L'offre e-loue Pro"
 msgstr "E-loue Pro tilbud"
 
-#: eloue/templates/dk/jade/_footer_links.jade:17
+#: eloue/templates/dk/jade/_footer_links.jade:13
+#: eloue/templates/dk/security/_breadcrumbs.jade:7
+#: eloue/templates/jade/_footer_links.jade:11
+#: eloue/templates/security/_breadcrumbs.jade:7
+msgid "e-loue et la sécurité"
+msgstr "E-loue og sikkerhed"
+
+#: eloue/templates/dk/jade/_footer_links.jade:21
+#: eloue/templates/dk/security/_breadcrumbs.jade:6
 #: eloue/templates/jade/_footer_links.jade:23
+#: eloue/templates/security/_breadcrumbs.jade:6
 msgid "Pourquoi choisir e-loue ?"
 msgstr "Hvorfor vælge e-loue?"
 
-#: eloue/templates/dk/jade/_footer_links.jade:19
+#: eloue/templates/dk/jade/_footer_links.jade:23
 #: eloue/templates/jade/_footer_links.jade:31
 msgid "Conditions générales professionnels"
 msgstr "Generelle betingelser (PRO/Erhverv)"
 
-#: eloue/templates/dk/jade/_footer_links.jade:27
-#: eloue/templates/jade/_footer_links.jade:53
-msgid "En savoir plus"
-msgstr "For yderligere information"
+#: eloue/templates/dk/jade/_footer_links.jade:31
+#: eloue/templates/dk/who_are_we/_breadcrumbs.jade:6
+#: eloue/templates/imprint/_breadcrumbs.jade:6
+#: eloue/templates/jade/_footer_links.jade:39
+#: eloue/templates/our_partners/_breadcrumbs.jade:6
+msgid "L’entreprise e-loue"
+msgstr "Virksomheden e-loue"
 
-#: eloue/templates/dk/jade/_footer_links.jade:29
+#: eloue/templates/dk/jade/_footer_links.jade:33
+#: eloue/templates/jade/_footer_links.jade:41
+msgid "Qui sommes-nous ?"
+msgstr "Hvem er vi?"
+
+#: eloue/templates/dk/jade/_footer_links.jade:45
+#: eloue/templates/jade/_footer_links.jade:57
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:2
+msgid "Contactez-nous"
+msgstr "Kontakt os"
+
+#: eloue/templates/dk/jade/_footer_links.jade:47
+#: eloue/templates/imprint/_breadcrumbs.jade:7
 #: eloue/templates/imprint/index.jade:1
 #: eloue/templates/jade/_footer_links.jade:59
 msgid "Mentions légales"
@@ -3625,22 +3804,66 @@ msgstr "Lejeannoncer i hele landet"
 msgid "Explorez toutes les annonces de location"
 msgstr "Se samtlige lejeannoncer"
 
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:3
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:3
+msgid "Demandez un devis"
+msgstr "Forespørgsel på pris"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:3
+#: eloue/templates/jade/pop_up_sections/_variants_call.jade:37
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:3
+msgid "Réservez en ligne"
+msgstr "Online reservering"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:7
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:7
+msgid "à partir de"
+msgstr "Op til "
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:8
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
+msgid "/jour"
+msgstr "/dag"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:18
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
+msgid "indicatif"
+msgstr "indikerende"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:18
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
+msgid "de la location"
+msgstr "for leje"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:23
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:26
+msgid ""
+"\n"
+" Vous allez envoyer<br> une demande de location. <br> &ndash;<br> Le loueur "
+"vous recontactera <br> très rapidement <br> pour vous confirmer la location."
+"<br> &ndash;<br> Le paiement se fera directement <br> chez le loueur.\n"
+msgstr ""
+"\n"
+" Du sender nu<br> en forespørgsel om leje. <br> &ndash;<br> Lejeren "
+"kontakter dig <br> snarligst <br> for at bekræfte lejen.<br> &ndash;<br> "
+"Betalingen foretages <br> hos ejeren.\n"
+
+#: eloue/templates/dk/our_partners/index.jade:1
+#: eloue/templates/our_partners/index.jade:1
+msgid "Nos Partenaires"
+msgstr "Vores partnere"
+
 #: eloue/templates/dk/products/_base_product_detail.jade:53
 #: eloue/templates/products/_base_product_detail.jade:53
 msgid "Photos et Localisation"
 msgstr "Billeder og leje"
 
-#: eloue/templates/dk/products/_base_product_detail.jade:59
-#: eloue/templates/products/_base_product_detail.jade:59
-msgid "Conditions d'assurance"
-msgstr "Forsikringsmæssige betingelser"
-
-#: eloue/templates/dk/products/_base_product_detail.jade:74
+#: eloue/templates/dk/products/_base_product_detail.jade:71
 #: eloue/templates/products/_base_product_detail.jade:74
 msgid "Commentaires liés à cette annonce"
 msgstr "Kommentarer i forbindelse med denne annonce"
 
-#: eloue/templates/dk/products/_base_product_detail.jade:79
+#: eloue/templates/dk/products/_base_product_detail.jade:76
 #: eloue/templates/products/_base_product_detail.jade:79
 msgid "Commentaire liés au propriétaire"
 msgstr "Kommentarer i forbindelse med ejer"
@@ -3689,10 +3912,6 @@ msgstr "Lejekontrakter"
 msgid "Condtitions Générales Particuliers"
 msgstr "Generelle betingelser (privat)"
 
-#: eloue/templates/how_it_works/index.jade:1
-msgid "Comment ça marche"
-msgstr "Hvordan fungerer det?"
-
 #: eloue/templates/insurances/_text_content.html:34
 #: eloue/templates/insurances/_text_content.html:307
 #: eloue/templates/insurances/_text_content.html:449
@@ -3737,10 +3956,6 @@ msgid ""
 "Android."
 msgstr "Find alle de egenskaber du sætter pris på via iPhone, iPad og Android."
 
-#: eloue/templates/jade/_footer_links.jade:11
-msgid "e-loue et la sécurité"
-msgstr "E-loue og sikkerhed"
-
 #: eloue/templates/jade/_footer_links.jade:15
 msgid "La livraison"
 msgstr "Fragt"
@@ -3749,22 +3964,9 @@ msgstr "Fragt"
 msgid "Conditions générales particuliers"
 msgstr "Generelle betingelser (privat)"
 
-#: eloue/templates/jade/_footer_links.jade:39
-msgid "L’entreprise e-loue"
-msgstr "Virksomheden e-loue"
-
-#: eloue/templates/jade/_footer_links.jade:41
-msgid "Qui sommes-nous ?"
-msgstr "Hvem er vi?"
-
 #: eloue/templates/jade/_footer_links.jade:55
 msgid "FAQ"
 msgstr ""
-
-#: eloue/templates/jade/_footer_links.jade:57
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:2
-msgid "Contactez-nous"
-msgstr "Kontakt os"
 
 #: eloue/templates/jade/_footer_links.jade:61
 msgid "Blog e-loue"
@@ -3865,6 +4067,9 @@ msgid ""
 " e-loue vous permet de gagner de l'argent en louant vos biens,<br> en toute "
 "sécurité, quand vous ne les utilisez pas\n"
 msgstr ""
+"\n"
+" e-loue giver dig mulighed for at tjene penge ved at udleje dine "
+"ejendele<br> med fuld sikkerhed under lejeperioden\n"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:64
 msgid "Prix à la nuit"
@@ -3880,7 +4085,7 @@ msgstr "Pris per dag"
 #: eloue/templates/jade/_pop_up_publish_item.jade:100
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:38
 msgid "&euro;"
-msgstr "&kr.;"
+msgstr "kr."
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:75
 msgid "Kilomètres inclus"
@@ -3965,6 +4170,12 @@ msgstr "Kom ind i butikken"
 #: eloue/templates/jade/_pro_popin_website_link.jade:8
 msgid "Visitez notre site"
 msgstr "Besøg vores hjemmeside"
+
+#: eloue/templates/jade/_product_list.jade:7
+#: eloue/templates/jade/product_details/aside/_similar_listing.jade:17
+#: eloue/templates/products/partials/result_list.html:22
+msgid "Sur devis"
+msgstr "efter tilbud"
 
 #: eloue/templates/jade/_product_list_article_head.jade:2
 #, python-format
@@ -4114,17 +4325,19 @@ msgstr "Sundhed og Velvære"
 
 #: eloue/templates/jade/_reset_password.jade:8
 msgid "Réinitialisation du mot de passe"
-msgstr ""
+msgstr "Nulstilling af din adgangskode"
 
 #: eloue/templates/jade/_reset_password.jade:11
 msgid ""
 "Mot de passe perdu ? Saisissez votre adresse électronique ci-dessous et nous "
 "vous enverrons les instructions pour en créer un nouveau."
 msgstr ""
+"Har du glemt din adgangskode? Indtast din e-mailadresse nedenfor, og så "
+"sender vi dig instruktioner til, hvordan du skaber et nyt kodeord."
 
 #: eloue/templates/jade/_reset_password.jade:24
 msgid "Réinitialiser"
-msgstr ""
+msgstr "Nulstilling"
 
 #: eloue/templates/jade/_reset_password.jade:29
 msgid "Lien envoyé avec succés"
@@ -4214,7 +4427,7 @@ msgstr ""
 #: eloue/templates/jade/_sign_in.jade:86
 #: eloue/templates/landing_pages/_sign_in_content.jade:65
 msgid "Vous êtes déjà membre e-loue ?"
-msgstr ""
+msgstr "Er du allerede medlem af e-loue?"
 
 #: eloue/templates/jade/_talk_about_us.jade:3
 msgid "Ils parlent de nous"
@@ -4358,7 +4571,7 @@ msgstr "Virksomheden e-loue"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:34
 msgid "N’hésitez pas à nous écrire"
-msgstr ""
+msgstr "Tøv ikke med at kontakte os"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:34
 msgid ""
@@ -4547,11 +4760,6 @@ msgstr ""
 "Så er du meget velkommen til at kontakte vores kundeservice. De hjælper dig "
 "med glæde!"
 
-#: eloue/templates/jade/pop_up_sections/_variants_call.jade:37
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:3
-msgid "Réservez en ligne"
-msgstr "Online reservering"
-
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:38
 msgid ""
 "En réservant sur e-loue, vous avez l’assurance de ne pas avoir de mauvaise "
@@ -4573,38 +4781,6 @@ msgstr ""
 "<b>Tøv ikke med at besøge vores hjemmeside.</b> er vil du finde samtlige "
 "svar på dine spørgsmål.\n"
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:3
-msgid "Demandez un devis"
-msgstr "Forespørgsel på pris"
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:7
-msgid "à partir de"
-msgstr "Op til "
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
-msgid "/jour"
-msgstr "/dag"
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
-msgid "indicatif"
-msgstr "indikerende"
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
-msgid "de la location"
-msgstr "for leje"
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:26
-msgid ""
-"\n"
-" Vous allez envoyer<br> une demande de location. <br> &ndash;<br> Le loueur "
-"vous recontactera <br> très rapidement <br> pour vous confirmer la location."
-"<br> &ndash;<br> Le paiement se fera directement <br> chez le loueur.\n"
-msgstr ""
-"\n"
-" Du sender nu<br> en forespørgsel om leje. <br> &ndash;<br> Lejeren "
-"kontakter dig <br> snarligst <br> for at bekræfte lejen.<br> &ndash;<br> "
-"Betalingen foretages <br> hos ejeren.\n"
-
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:3
 msgid "Contactez-moi"
 msgstr "Kontakt mig"
@@ -4621,11 +4797,6 @@ msgstr "Alle kategorier"
 #: eloue/templates/jade/product_details/aside/_similar_listing.jade:3
 msgid "Annonces similaires"
 msgstr "Tilsvarende annoncer"
-
-#: eloue/templates/jade/product_details/aside/_similar_listing.jade:17
-#: eloue/templates/products/partials/result_list.html:22
-msgid "Sur devis"
-msgstr "efter tilbud"
 
 #: eloue/templates/jade/product_details/main/_description.jade:2
 msgid "Description"
@@ -4734,13 +4905,13 @@ msgstr ""
 msgid "Vous aussi faites comme Thomas ..."
 msgstr ""
 
-#: eloue/templates/our_partners/index.jade:1
-msgid "Nos Partenaires"
-msgstr "Vores partnere"
-
 #: eloue/templates/proapp/app.html:4
 msgid "Vos statistiques"
 msgstr ""
+
+#: eloue/templates/products/_base_product_detail.jade:59
+msgid "Conditions d'assurance"
+msgstr "Forsikringsmæssige betingelser"
 
 #: eloue/templates/products/subcategory_list.jade:5
 msgid "annonces de location"
