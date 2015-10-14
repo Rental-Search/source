@@ -3835,7 +3835,7 @@ msgstr "/dag"
 #: eloue/templates/dk/jade/product_details/_booking_form.jade:18
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:18
 msgid "indicatif"
-msgstr ""
+msgstr " "
 
 #: eloue/templates/dk/jade/product_details/_booking_form.jade:18
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:18
