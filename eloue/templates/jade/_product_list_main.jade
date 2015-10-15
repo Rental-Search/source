@@ -7,7 +7,10 @@ ol.product-layout
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
-          span.badge.price {{ product.price|currency }} /{{ by_day }}
+          if product.price
+            span.badge.price {{ product.price|currency }} /{{ by_day }}
+          else
+            span.badge.price {% trans "Sur devis" %}
           span.badge-order {{ forloop.counter }}
         .declarer-container
           .declarer
