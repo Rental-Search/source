@@ -7,7 +7,10 @@
       li.col-sm-3: .product-item
         .product-image
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}")
-          span.badge.price {{ product.price|currency }} /{% trans "jour" %}
+          if product.price
+            span.badge.price {{ product.price|currency }} /{% trans "jour" %}
+          else
+            span.badge.price {% trans "Sur devis" %}
           if product.pro_owner
             span.badge-pro pro
         .product-info
