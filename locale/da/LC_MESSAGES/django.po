@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: e-loue\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-13 15:22+0200\n"
-"PO-Revision-Date: 2015-10-13 13:33+0200\n"
+"PO-Revision-Date: 2015-10-16 16:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: victoria1307@hotmail.com\n"
 "Language: da_DK\n"
@@ -533,8 +533,7 @@ msgstr "Bekræftelse af ny adgangskode"
 msgid "User record is empty."
 msgstr "Brugerposten er tom."
 
-#: accounts/forms.py:181 accounts/serializers.py:183
-#: accounts/tests/api2.py:217
+#: accounts/forms.py:181 accounts/serializers.py:183 accounts/tests/api2.py:217
 msgid "The two password fields didn't match."
 msgstr "Brugernavnet og adgangskoder passer ikke sammen"
 
@@ -943,7 +942,7 @@ msgstr "Fejl på serveren"
 
 #: accounts/views.py:258 accounts/views.py:299
 msgid "Le message a ete envoye avec succes"
-msgstr ""
+msgstr "Meddelelsen er blevet sendt"
 
 #: accounts/views.py:343 accounts/tests/api2.py:200
 msgid "Votre mot de passe à bien été modifié"
@@ -1046,8 +1045,7 @@ msgstr "lejere"
 #: eloue/templates/gosport/jade/_nav_home.jade:10
 #: eloue/templates/jade/_breadcrumbs.jade:23
 #: eloue/templates/jade/_breadcrumbs.jade:25
-#: eloue/templates/jade/_nav_home.jade:6
-#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
 #: eloue/templates/jade/_nav_home.jade:17 products/models.py:739
 #: products/models.py:741 products/templatetags/facets.py:72
 msgid "location"
@@ -2201,8 +2199,7 @@ msgstr "Annoncer knyttet til denne adresse"
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:38
 #: eloue/templates/dk/dashboard/items/_items_list.jade:22
 #: eloue/templates/dk/jade/_product_list.jade:11
-#: eloue/templates/jade/_nav_home.jade:6
-#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
 #: eloue/templates/jade/_nav_home.jade:17
 #: eloue/templates/jade/_porduct_details_title.jade:2
 #: eloue/templates/jade/_product_list.jade:11
@@ -2361,7 +2358,7 @@ msgstr "Opgiv en adresse"
 #: eloue/templates/dashboard/account/profil.jade:88
 #: eloue/templates/dk/dashboard/account/profil.jade:88
 msgid "téléphone par défaut"
-msgstr ""
+msgstr "telefon"
 
 #: eloue/templates/dashboard/account/profil.jade:90
 #: eloue/templates/dk/dashboard/account/profil.jade:90
@@ -2371,17 +2368,17 @@ msgstr "Telefon"
 #: eloue/templates/dashboard/account/profil.jade:97
 #: eloue/templates/dk/dashboard/account/profil.jade:97
 msgid "quelques mots sur vous"
-msgstr ""
+msgstr "om dig"
 
 #: eloue/templates/dashboard/account/profil.jade:98
 #: eloue/templates/dk/dashboard/account/profil.jade:98
 msgid "A propos de vous..."
-msgstr ""
+msgstr "Om dig"
 
 #: eloue/templates/dashboard/account/profil.jade:103
 #: eloue/templates/dk/dashboard/account/profil.jade:103
 msgid "J’accepte de recevoir la newsletter e-loue"
-msgstr ""
+msgstr "Jeg accepterer at modtage e-loue’s nyhedsbrevet"
 
 #: eloue/templates/dashboard/account/profil.jade:117
 #: eloue/templates/dk/dashboard/account/profil.jade:117
@@ -2401,7 +2398,7 @@ msgstr "Arbejdsgiver"
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
 msgid "Joignable au"
-msgstr ""
+msgstr "Kan nås her"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
@@ -2430,7 +2427,7 @@ msgstr "Anmodning om reservation via"
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:46
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:46
 msgid "Incident declare par "
-msgstr ""
+msgstr "Hændelse rapporteret af"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:48
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:48
@@ -2575,14 +2572,14 @@ msgstr "Bemærkninger og kommentarer"
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:168
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:168
 msgid "Etes-vous sûr de vouloir annuler la réservation ?"
-msgstr ""
+msgstr "Er du sikker på, at du vil annullere reservationen"
 
 #: eloue/templates/dashboard/booking/_bookings_list.jade:9
 #: eloue/templates/dashboard/booking/_bookings_list.jade:24
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:9
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:24
 msgid "Tous"
-msgstr ""
+msgstr "Alle"
 
 #: eloue/templates/dashboard/booking/_bookings_list.jade:13
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:13
@@ -2609,7 +2606,7 @@ msgstr "Fra"
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:42
 #: eloue/templates/dk/dashboard/items/profits.jade:18
 msgid "au"
-msgstr ""
+msgstr "til"
 
 #: eloue/templates/dashboard/booking/_comment_and_rank.jade:6
 #: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:6
@@ -2632,21 +2629,23 @@ msgid ""
 "A tout moment vous pouvez faire une demande de réservation auprès d'un "
 "propriétaire si son objet vous intéresse"
 msgstr ""
+"Du kan på ethvert tidspunkt anmode om en reservation på en lejegenstand, som "
+"interesserer dig, hos ejer"
 
 #: eloue/templates/dashboard/booking/_notification_empty_booking.jade:7
 #: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:7
 msgid "Commencez à rechercher un objet"
-msgstr ""
+msgstr "Begynde at lede efter et objekt"
 
 #: eloue/templates/dashboard/booking/_notification_not_selected_booking.jade:5
 #: eloue/templates/dk/dashboard/booking/_notification_not_selected_booking.jade:5
 msgid "Aucune réservation sélectionnée"
-msgstr ""
+msgstr "Ingen reservation er valgt"
 
 #: eloue/templates/dashboard/booking/_report_incendent.jade:6
 #: eloue/templates/dk/dashboard/booking/_report_incendent.jade:6
 msgid "Déclarer un incident"
-msgstr ""
+msgstr "Rapporter en hændelse"
 
 #: eloue/templates/dashboard/dashboard/index.jade:12
 #: eloue/templates/dk/dashboard/dashboard/index.jade:12
@@ -2990,7 +2989,7 @@ msgstr "Indsæt en annonce"
 msgid ""
 "Vos objets peuvent vous rapporter de l'argent : karcher, appareil photo, "
 "caméra ..."
-msgstr ""
+msgstr "Dine genstande kan give dig penge: havetraktor, kamera, kjole ..."
 
 #: eloue/templates/dashboard/items/_notification_empty_items.jade:7
 #: eloue/templates/dk/dashboard/items/_notification_empty_items.jade:7
@@ -3000,26 +2999,26 @@ msgstr "Indsæt en annonce"
 #: eloue/templates/dashboard/items/_notification_not_selected_item.jade:5
 #: eloue/templates/dk/dashboard/items/_notification_not_selected_item.jade:5
 msgid "Aucune annonce sélectionnée"
-msgstr ""
+msgstr "Ingen annonce er valgt"
 
 #: eloue/templates/dashboard/items/add_period.jade:6
 #: eloue/templates/dashboard/items/calendar.jade:73
 #: eloue/templates/dk/dashboard/items/add_period.jade:6
 #: eloue/templates/dk/dashboard/items/calendar.jade:73
 msgid "Ajouter une nouvelle indisponibilité"
-msgstr ""
+msgstr "Tilføj ny utilgængelig"
 
 #: eloue/templates/dashboard/items/calendar.jade:6
 #: eloue/templates/dk/dashboard/items/calendar.jade:6
 #: eloue/templates/products/tab_available.jade:7
 msgid "Sélectionner le mois"
-msgstr ""
+msgstr "Vælg måned"
 
 #: eloue/templates/dashboard/items/calendar.jade:36
 #: eloue/templates/dk/dashboard/items/calendar.jade:36
 #: eloue/templates/products/tab_available.jade:48
 msgid "Indisponiblités"
-msgstr ""
+msgstr "Utilgængelig"
 
 #: eloue/templates/dashboard/items/calendar.jade:51
 #: eloue/templates/dk/dashboard/items/calendar.jade:51
@@ -3036,7 +3035,7 @@ msgstr "Fødselsdag"
 #: eloue/templates/dashboard/items/calendar.jade:53
 #: eloue/templates/dk/dashboard/items/calendar.jade:53
 msgid "Motifs"
-msgstr ""
+msgstr "Grunde"
 
 #: eloue/templates/dashboard/items/calendar.jade:54
 #: eloue/templates/django_messages/inbox.html:32
@@ -3054,12 +3053,12 @@ msgstr "Reservér"
 #: eloue/templates/dashboard/items/calendar.jade:62
 #: eloue/templates/dk/dashboard/items/calendar.jade:62
 msgid "Indisponible"
-msgstr ""
+msgstr "Utilgængelig"
 
 #: eloue/templates/dashboard/items/calendar.jade:82
 #: eloue/templates/dk/dashboard/items/calendar.jade:82
 msgid "Supprimer l'indisponibilité ?"
-msgstr ""
+msgstr "Slet utilgængelighed"
 
 #: eloue/templates/dashboard/items/index.jade:9
 #: eloue/templates/dk/dashboard/items/index.jade:9
@@ -3090,12 +3089,12 @@ msgstr "Titel"
 #: eloue/templates/dashboard/items/index.jade:50
 #: eloue/templates/dk/dashboard/items/index.jade:50
 msgid "Photos"
-msgstr ""
+msgstr "Fotos"
 
 #: eloue/templates/dashboard/items/index.jade:79
 #: eloue/templates/dk/dashboard/items/index.jade:79
 msgid "Caractéristiques"
-msgstr ""
+msgstr "Karakteristika"
 
 #: eloue/templates/dashboard/items/index.jade:86
 #: eloue/templates/dashboard/items/tarifs.jade:131
@@ -3107,12 +3106,12 @@ msgstr "dato for modifikation"
 #: eloue/templates/dashboard/items/index.jade:96
 #: eloue/templates/dk/dashboard/items/index.jade:96
 msgid "Etes-vous sûr de vouloir supprimer l'image?"
-msgstr ""
+msgstr "Er du sikker på, at du vil slette billedet"
 
 #: eloue/templates/dashboard/items/profits.jade:3
 #: eloue/templates/dk/dashboard/items/profits.jade:3
 msgid "Total des revenus générés"
-msgstr ""
+msgstr "Samlede indtægter"
 
 #: eloue/templates/dashboard/items/profits.jade:4
 #: eloue/templates/dk/dashboard/items/profits.jade:4
@@ -3159,7 +3158,7 @@ msgstr "Kontakt mig"
 #: eloue/templates/dashboard/items/profits.jade:18
 #: eloue/templates/dk/dashboard/items/profits.jade:18
 msgid "J"
-msgstr ""
+msgstr "D"
 
 #: eloue/templates/dashboard/items/profits.jade:18
 #: eloue/templates/django_messages/compose.html:11
@@ -3186,7 +3185,7 @@ msgstr "Priser"
 #: eloue/templates/dashboard/items/tabs.jade:17
 #: eloue/templates/dk/dashboard/items/tabs.jade:17
 msgid "Calendrier"
-msgstr ""
+msgstr "Kalendere"
 
 #: eloue/templates/dashboard/items/tabs.jade:22
 #: eloue/templates/dk/dashboard/items/tabs.jade:22
@@ -3196,7 +3195,7 @@ msgstr "Betingelser"
 #: eloue/templates/dashboard/items/tabs.jade:27
 #: eloue/templates/dk/dashboard/items/tabs.jade:27
 msgid "Revenus"
-msgstr ""
+msgstr "Indtjening"
 
 #: eloue/templates/dashboard/items/tarifs.jade:5
 #: eloue/templates/dk/dashboard/items/tarifs.jade:5
@@ -3280,27 +3279,27 @@ msgstr "Inkluderede kilometre pr dag"
 #: eloue/templates/dk/dashboard/items/tarifs.jade:74
 #: eloue/templates/jade/_pop_up_publish_item.jade:77
 msgid "Km"
-msgstr ""
+msgstr "Km"
 
 #: eloue/templates/dashboard/items/tarifs.jade:90
 #: eloue/templates/dk/dashboard/items/tarifs.jade:90
 msgid "1 nuit"
-msgstr ""
+msgstr "1 nat"
 
 #: eloue/templates/dashboard/items/tarifs.jade:96
 #: eloue/templates/dk/dashboard/items/tarifs.jade:96
 msgid "3 nuits"
-msgstr ""
+msgstr "3 nætter"
 
 #: eloue/templates/dashboard/items/tarifs.jade:102
 #: eloue/templates/dk/dashboard/items/tarifs.jade:102
 msgid "7 nuits"
-msgstr ""
+msgstr "7 nætter"
 
 #: eloue/templates/dashboard/items/tarifs.jade:108
 #: eloue/templates/dk/dashboard/items/tarifs.jade:108
 msgid "15 nuits"
-msgstr ""
+msgstr "15 nætter"
 
 #: eloue/templates/dashboard/items/tarifs.jade:122
 #: eloue/templates/dk/dashboard/items/tarifs.jade:122
@@ -3404,7 +3403,7 @@ msgstr "Reservationen er knyttet til "
 #: eloue/templates/dashboard/messages/_details_reservation.jade:20
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:20
 msgid "jours et"
-msgstr ""
+msgstr "dage og"
 
 #: eloue/templates/dashboard/messages/_details_reservation.jade:20
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:20
@@ -3414,7 +3413,7 @@ msgstr "time"
 #: eloue/templates/dashboard/messages/_details_reservation.jade:36
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:36
 msgid "Détails de la réservation"
-msgstr ""
+msgstr "Booking detaljer"
 
 #: eloue/templates/dashboard/messages/_form_reservation.jade:17
 #: eloue/templates/dk/dashboard/messages/_form_reservation.jade:17
@@ -3434,7 +3433,7 @@ msgstr "Genstanden er tilgængelig på følgende datoer "
 #: eloue/templates/dk/jade/product_details/_booking_form.jade:12
 #: eloue/templates/jade/product_details/aside/_booking_form.jade:12
 msgid "Cet article n'est pas disponible à ces dates"
-msgstr ""
+msgstr "Denne genstand er desværre "
 
 #: eloue/templates/dashboard/messages/_form_reservation.jade:30
 #: eloue/templates/dk/dashboard/messages/_form_reservation.jade:30
@@ -3475,6 +3474,8 @@ msgid ""
 "Avant de faire une demande réservation, il est possible d'envoyer un message "
 "au propriétaire"
 msgstr ""
+"Før du foretager en anmodning om reservation, er det muligt at sende en "
+"besked til ejeren"
 
 #: eloue/templates/dashboard/messages/_notification_empty_messages.jade:7
 #: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:7
@@ -3484,7 +3485,7 @@ msgstr "Kommentarer i forbindelse med denne annonce"
 #: eloue/templates/dashboard/messages/_notification_not_selected_dialog.jade:5
 #: eloue/templates/dk/dashboard/messages/_notification_not_selected_dialog.jade:5
 msgid "Aucune conversation sélectionnée"
-msgstr ""
+msgstr "Ingen samtale er valgt"
 
 #: eloue/templates/dashboard/messages/_section_communication.jade:21
 #: eloue/templates/dk/dashboard/messages/_section_communication.jade:21
@@ -3507,7 +3508,7 @@ msgstr "Dashboard"
 #: eloue/templates/django_messages/trash.html:10
 #: eloue/templates/django_messages/view.html:10
 msgid "Propriétaire"
-msgstr ""
+msgstr "Ejer"
 
 #: eloue/templates/django_messages/compose.html:12
 #: eloue/templates/django_messages/inbox.html:14
@@ -3576,7 +3577,7 @@ msgstr ""
 #: eloue/templates/django_messages/outbox.html:30
 #: eloue/templates/django_messages/trash.html:30
 msgid "Reçu le"
-msgstr ""
+msgstr "Modtaget den"
 
 #: eloue/templates/django_messages/inbox.html:44
 #: eloue/templates/django_messages/outbox.html:42
@@ -3591,7 +3592,7 @@ msgstr ""
 #: eloue/templates/django_messages/trash.html:44
 #: eloue/templates/products/partials/message_list.html:43
 msgid "Lire"
-msgstr ""
+msgstr "Læs"
 
 #: eloue/templates/django_messages/inbox.html:47
 #: eloue/templates/django_messages/view.html:34
@@ -3615,7 +3616,7 @@ msgstr "Send en besked"
 
 #: eloue/templates/django_messages/message_missing.html:4
 msgid "Complétez votre profil"
-msgstr ""
+msgstr "Udfyld din profil"
 
 #: eloue/templates/django_messages/message_missing.html:10
 #: eloue/templates/django_messages/message_register.html:10
@@ -3625,25 +3626,25 @@ msgstr "Send en besked"
 #: eloue/templates/django_messages/message_missing.html:13
 #: eloue/templates/django_messages/message_register.html:13
 msgid "1. Remplissez la fiche"
-msgstr ""
+msgstr "1. Udfyld formularen"
 
 #: eloue/templates/django_messages/message_missing.html:14
 #: eloue/templates/django_messages/message_register.html:14
 msgid "2. Identifiez-vous"
-msgstr ""
+msgstr "2. Identificer dig selv"
 
 #: eloue/templates/django_messages/message_missing.html:16
 #: eloue/templates/django_messages/message_register.html:16
 msgid "Obtenir de l'aide"
-msgstr ""
+msgstr "Få hjælp"
 
 #: eloue/templates/django_messages/message_missing.html:20
 msgid "Choisissez une adresse pour l'objet :"
-msgstr ""
+msgstr "Vælg en adresse for lejegenstanden"
 
 #: eloue/templates/django_messages/message_missing.html:22
 msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
-msgstr ""
+msgstr "Udfyld din profil og vælge en adresse for lejegenstanden :"
 
 #: eloue/templates/django_messages/new_message_email.html:30
 #, python-format
@@ -3656,6 +3657,12 @@ msgid ""
 "                            Bonjour %(recipient)s,<br><br>\n"
 "                        "
 msgstr ""
+"\n"
+"                           <h1 style=\"color: #6EB924;display: block;font-"
+"family: Arial;font-size: 22px;font-weight: normal;line-height: 100%%;margin-"
+"top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left; "
+"font-style: italic;\">%(sender)s</h1>\n"
+"                            Godag %(recipient)s,<br><br>"
 
 #: eloue/templates/django_messages/new_message_email.html:43
 msgid "Répondre au message"
@@ -3669,6 +3676,10 @@ msgid ""
 "\n"
 "Bonjour %(recipient)s,\n"
 msgstr ""
+"\n"
+"Sendt af %(sender)s :\n"
+"\n"
+"Godag %(recipient)s,\n"
 
 #: eloue/templates/django_messages/new_message_email.txt:12
 msgid "Voici le lien pour répondre :"
@@ -3924,14 +3935,14 @@ msgstr "Generelle betingelser (privat)"
 #: eloue/templates/insurances/_text_content.html:449
 #: eloue/templates/insurances/_text_content.html:629
 msgid "Objets"
-msgstr ""
+msgstr "Genstande"
 
 #: eloue/templates/insurances/_text_content.html:89
 #: eloue/templates/insurances/_text_content.html:346
 #: eloue/templates/insurances/_text_content.html:509
 #: eloue/templates/insurances/_text_content.html:654
 msgid "Voitures"
-msgstr ""
+msgstr "Biler"
 
 #: eloue/templates/insurances/_text_content.html:195
 #: eloue/templates/insurances/_text_content.html:405
@@ -4046,7 +4057,7 @@ msgstr "Er du ikke medlem af e-loue endnu?"
 
 #: eloue/templates/jade/_mixins.jade:11
 msgid "verifié"
-msgstr ""
+msgstr "bekræftet"
 
 #: eloue/templates/jade/_nav_home.jade:15
 msgid "Locations"
@@ -4348,7 +4359,7 @@ msgstr "Nulstilling"
 
 #: eloue/templates/jade/_reset_password.jade:29
 msgid "Lien envoyé avec succés"
-msgstr ""
+msgstr "Linket er sendt"
 
 #: eloue/templates/jade/_reset_password.jade:30
 msgid ""
@@ -4356,16 +4367,20 @@ msgid ""
 "passe à l'adresse que vous avez indiquée. Vous devreuez le recevoir "
 "rapidement."
 msgstr ""
+"Vi har sendt instruktioner til, hvordan du ændrer kodeordet til den e-"
+"mailadresse, du har opgivet. Du vil modtage mailen hurtigt."
 
 #: eloue/templates/jade/_reset_password_confirm.jade:6
 msgid "Saisissez un nouveau mot de passe"
-msgstr ""
+msgstr "Indtast en ny adgangskode"
 
 #: eloue/templates/jade/_reset_password_confirm.jade:9
 msgid ""
 "Soisissez deux fois votre nouveau mot de passe afin de vérifier qu'il est "
 "correctement saisi."
 msgstr ""
+"Indtast to gange din nye adgangskode for at bekræfte, at den indtastede kode "
+"er korrekt."
 
 #: eloue/templates/jade/_reset_password_confirm.jade:18
 #: eloue/templates/jade/_sign_in.jade:65
@@ -4374,12 +4389,12 @@ msgstr "Bekræftelse af kodeord"
 
 #: eloue/templates/jade/_reset_password_confirm.jade:22
 msgid "Modifier"
-msgstr ""
+msgstr "Ændr"
 
 #: eloue/templates/jade/_reset_password_confirm.jade:27
 msgid ""
 "Votre mot de passe a été défini. Vous pouvez maintenant vous authentifier."
-msgstr ""
+msgstr "Dit kodeord er blevet ændret. Du kan nu godkende det."
 
 #: eloue/templates/jade/_reset_password_confirm.jade:29
 msgid "Accéder à mon compte"
@@ -4421,7 +4436,7 @@ msgstr "Bekræftelse af kodeord"
 #: eloue/templates/jade/_sign_in.jade:73
 #: eloue/templates/landing_pages/_sign_in_content.jade:56
 msgid "Tenez moi informé de l'actualité et des bonnes affaires e-loue"
-msgstr ""
+msgstr "Hold mig orienteret om gode tilbud fra e-loue"
 
 #: eloue/templates/jade/_sign_in.jade:79
 msgid ""
@@ -4430,6 +4445,10 @@ msgid ""
 "\">Conditions Générales</a><br> et la &nbsp;<a href=\"/respect-vie-privee/"
 "\">Politique de Confidentialité</a> de notre site\n"
 msgstr ""
+" \n"
+" Ved at oprette en konto e-loue, accepterer du &nbsp;<a href=\"tems_url"
+"\">Conditions Générales</a><br> et la &nbsp;<a href=\"/respect-vie-privee/"
+"\">Politique de Confidentialité</a> vores hjemsite\n"
 
 #: eloue/templates/jade/_sign_in.jade:86
 #: eloue/templates/landing_pages/_sign_in_content.jade:65
@@ -4497,7 +4516,7 @@ msgstr "Sikkerheds kryptogram"
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:20
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:25
 msgid "Nom et prénom du titulaire"
-msgstr ""
+msgstr "Navn og efternavn på kortholder"
 
 #: eloue/templates/jade/pop_up_sections/_bank_information.jade:33
 msgid "Conserver mes coordonnées bancaires"
@@ -4520,7 +4539,7 @@ msgstr ""
 
 #: eloue/templates/jade/pop_up_sections/_input_message.jade:3
 msgid "Rédigez votre message ici..."
-msgstr ""
+msgstr "Skriv din besked her ..."
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:4
 msgid "Demande de devis envoyé"
@@ -4630,7 +4649,7 @@ msgstr ""
 
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:63
 msgid "Les champs marqués d'une étoile (*) sont obligatoires."
-msgstr ""
+msgstr "Felter markeret med en stjerne (*) skal udfyldes."
 
 #: eloue/templates/jade/pop_up_sections/_phone_form.jade:2
 msgid ""
@@ -4648,7 +4667,7 @@ msgstr "Du kan træffe os på;"
 
 #: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
 msgid "Nouveau !"
-msgstr ""
+msgstr "Ny!"
 
 #: eloue/templates/jade/pop_up_sections/_pickup_info.jade:6
 msgid "Option livraison 10 € :"
@@ -4853,7 +4872,7 @@ msgstr "værelsesnummer"
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:31
 msgid "Nom *"
-msgstr ""
+msgstr "Navn*"
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:46
 msgid "Comfirmation de mot de passe"
@@ -4861,7 +4880,7 @@ msgstr "Bekræftelse på kodeord"
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:61
 msgid "En créant un compte e-loue, vous acceptez les &nbsp;"
-msgstr ""
+msgstr "Ved at oprette en konto e-loue, accepterer du & nbsp;"
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:61
 msgid "Conditions Générales"
@@ -4869,11 +4888,11 @@ msgstr "Generelle betingelser"
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:61
 msgid "et la"
-msgstr ""
+msgstr "og"
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:61
 msgid "Politique de Confidentialité"
-msgstr ""
+msgstr "Privatlivspolitik"
 
 #: eloue/templates/landing_pages/_sign_in_content.jade:61
 msgid "de notre site"
@@ -4883,7 +4902,7 @@ msgstr "Besøg vores hjemmeside"
 #: eloue/templates/landing_pages/publish.jade:20
 #: eloue/templates/landing_pages/publish.jade:38
 msgid "Vous aussi faites comme Emma ..."
-msgstr ""
+msgstr "Du gør også ligesom Emma ..."
 
 #: eloue/templates/landing_pages/publish.jade:15
 #: eloue/templates/landing_pages/publish.jade:21
@@ -4891,16 +4910,16 @@ msgstr ""
 #: eloue/templates/landing_pages/publish.jade:33
 #: eloue/templates/landing_pages/publish.jade:39
 msgid "et gagnez de l’argent en déposant vos annonces sur e-loue !"
-msgstr ""
+msgstr "og tjen penge ved at indrykke annoncer hos e-loue!"
 
 #: eloue/templates/landing_pages/publish.jade:26
 #: eloue/templates/landing_pages/publish.jade:32
 msgid "Vous aussi faites comme Thomas ..."
-msgstr ""
+msgstr "Du gør også som Thomas ..."
 
 #: eloue/templates/proapp/app.html:4
 msgid "Vos statistiques"
-msgstr ""
+msgstr "Dine statistik"
 
 #: eloue/templates/products/_base_product_detail.jade:59
 msgid "Conditions d'assurance"
@@ -4976,11 +4995,11 @@ msgstr "aktiv"
 
 #: eloue/templates/products/partials/product_option_edit_history.html:8
 msgid "Coût"
-msgstr ""
+msgstr "Omkostninger"
 
 #: eloue/templates/products/partials/product_option_edit_history.html:21
 msgid "Pas encore d'historique pour cette annonce"
-msgstr ""
+msgstr "Ingen historik for denne annonce endnu"
 
 #: eloue/templates/products/partials/top_ads.html:2
 msgid "Top annonces"
@@ -4997,11 +5016,11 @@ msgstr ""
 
 #: eloue/templates/profile_public/_profile_public-comments.jade:15
 msgid "loué par"
-msgstr ""
+msgstr "lejet af"
 
 #: eloue/templates/profile_public/_profile_public-comments.jade:18
 msgid "Le"
-msgstr ""
+msgstr "Den"
 
 #: eloue/templates/profile_public/_profile_public-contact_member.jade:3
 msgid "Contactez le membre"
@@ -5013,7 +5032,7 @@ msgstr "Arbejdsgiver"
 
 #: eloue/templates/profile_public/_profile_public-owner_information.jade:4
 msgid "Informations sur le membre"
-msgstr ""
+msgstr "Medlemsoplysninger"
 
 #: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:3
 msgid "Les"
@@ -5052,6 +5071,12 @@ msgid ""
 "acceptée :<br>\n"
 "                           \t"
 msgstr ""
+"\n"
+"\n"
+"                            Godag %(borrower_name)s<br><br>\n"
+"\n"
+"                            Din reservation er blevet accepteret :<br>\n"
+"                           \t"
 
 #: eloue/templates/rent/emails/borrower_acceptation_email.html:25
 #, python-format
