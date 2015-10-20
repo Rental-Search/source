@@ -31,3 +31,5 @@ DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
     'region_coords': (55.6751812, 12.54932610000003),
     'region_radius': 100,
 })
+
+DEFAULT_LOCATION_CITY = env("DEFAULT_LOCATION_CITY", {'city': u"Copenhague, Danemark", 'radius': 200})
