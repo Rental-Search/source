@@ -12,7 +12,7 @@ ol.product-layout
           if product.price
             span.badge.price {{ product.price|currency }} /{% trans "jour" %}
           else
-            span badge.price {% trans "Sur devis" %}
+            span.badge.price {% trans "Sur devis" %}
           //-span.badge-order {{ forloop.counter }}
         .info
           h6
