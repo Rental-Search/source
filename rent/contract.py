@@ -25,7 +25,7 @@ def first_or_empty(alist):
 
 class ContractGenerator(object):
     templates = {
-        'fr-fr': local_path("contract/contrat_sans_assurance.pdf"),
+        'fr-FR': local_path("contract/contrat_sans_assurance.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
     }
     
@@ -110,7 +110,7 @@ class ContractGenerator(object):
 
 class ContractGeneratorNormal(ContractGenerator):
     templates = {
-        'fr-fr': local_path("contract/contrat_objet.pdf")
+        'fr-FR': local_path("contract/contrat_objet.pdf")
     }
     
     def draw(self, canvas, booking):
@@ -171,7 +171,7 @@ class ContractGeneratorNormal(ContractGenerator):
 
 class ContractGeneratorCar(ContractGenerator):
     templates = {
-        'fr-fr': local_path("contract/contrat_voiture.pdf"),
+        'fr-FR': local_path("contract/contrat_voiture.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
     }
     def draw(self, canvas, booking):
@@ -249,7 +249,7 @@ class ContractGeneratorCar(ContractGenerator):
 
 class ContractGeneratorRealEstate(ContractGenerator):
     templates = {
-        'fr-fr': local_path("contract/contrat_location_saisonniere.pdf"),
+        'fr-FR': local_path("contract/contrat_location_saisonniere.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
     }
     def draw(self, canvas, booking):
