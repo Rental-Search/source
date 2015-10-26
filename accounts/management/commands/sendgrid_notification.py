@@ -67,8 +67,11 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 
+		patron1 = Patron.objects.filter(email="hugo.woog@gmail.com")
+		emails = [patron.email for patron in patron1]
+
 		notifications = [
-			{"recipient": ["hugo.woog@gmail.com"], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": emails, "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
 			{"recipient": ["hugo.woog@e-loue.com"], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"}
 		]
 
