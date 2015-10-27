@@ -1,7 +1,11 @@
 # coding: utf-8
 from django.core.management.base import BaseCommand, CommandError
-import sendgrid, time
+import sendgrid, time, datetime
+from datetime import timedelta
 from accounts.models import Patron
+from rent.models import Booking, BookingLog
+from products.models import Product
+from rent.choices import BOOKING_STATE
 
 
 
@@ -67,22 +71,37 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 
-		patron1 = Patron.objects.filter(email="hugo.woog@gmail.com")
-		emails = [patron.email for patron in patron1]
+		date = datetime.datetime.now()
+
+		bookings_ended = Booking.objects.filter(ended_at__day=date.day, ended_at__month=date.month, ended_at__year=date.year, state=BOOKING_STATE.ENDED)
+		bookings_rejected = Booking.objects.filter(ended_at__day=date.day, ended_at__month=date.month, ended_at__year=date.year, state=BOOKING_STATE.REJECTED)
+		bookings_outdated = Booking.objects.filter(started_at__day=date.day, started_at__month=date.month, started_at__year=date.year, state=BOOKING_STATE.OUTDATED)
+		bookings_canceled = BookingLog.objects.filter(created_at__day=date.day, created_at__month=date.month, created_at__year=date.year, target_state=BOOKING_STATE.CANCELED)
+
+		products_complete = Product.objects.filter(pictures__isnull=False).exclude(description="")
+		products_miss_pic = Product.objects.filter(pictures__isnull=True).exclude(description="")
+		products_miss_desc = Product.objects.filter(description="", pictures__isnull=False)
+		products_empty = Product.objects.filter(description="", pictures__isnull=True)
+
 
 		notifications = [
-			{"recipient": emails, "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
-			{"recipient": ["hugo.woog@e-loue.com"], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"}
+			{"recipient": [borrower.email for borrower in Patron.objects.filter(rentals=bookings_ended, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": [borrower.email for borrower in Patron.objects.filter(rentals=bookings_ended, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": [borrower.email for borrower in Patron.objects.filter(rentals=bookings_ended, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": [borrower.email for borrower in Patron.objects.filter(rentals=bookings_ended, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+
+			{"recipient": [product.owner.email for product in Patron.objects.filter(products=products_complete, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": [product.owner.email for product in Patron.objects.filter(products=products_miss_pic, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": [product.owner.email for product in Patron.objects.filter(products=products_miss_desc, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": [product.owner.email for product in Patron.objects.filter(products=products_empty, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+
+			{"recipient": [patron.email for patron in Patron.objects.filter(rentals__isnull=True, products__isnull=True, date_joined__gte=datetime.date.today() - timedelta(days=1))], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"}
 		]
 
 		for notification in notifications:
-			self._send_notification(notification)
+			# self._send_notification(notification)
+			print "bi1 ouej"
 			time.sleep(5)
-
-		# while notification in notifications:
-		# 	self._send_notification(notification)
-		# 	time.sleep(5)
-
 
 
 
