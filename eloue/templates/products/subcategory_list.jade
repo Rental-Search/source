@@ -9,7 +9,7 @@
   ul.product-list.row
     {% arrange_categories categories_map category.id as categories %}
 
-    each subcategory in categories|slice:":8"
+    each subcategory in categories
       li.col-sm-3: .product-item
         .product-image
           a(href="{{ subcategory.get_absolute_url }}").img-wrapper: img(style="{% if subcategory.thumbnail %}background-image: url({{ subcategory.thumbnail.url }}){% else %}{% if subcategory.product %}background-image: url({{ subcategory.product.pictures.first.profile.url }}){% endif %}{% endif %}")
@@ -20,12 +20,6 @@
             h6: a(href="{{ subcategory.get_absolute_url }}")
               b {{ subcategory.name }}
           .product-owner
-
-  .subcategory
-    ul.subcategory__list.row
-      each subcategory in categories|slice:"8:"
-        li.subcategory__item.col-xs-3
-          a(href="{{ subcategory.get_absolute_url }}").subcategory__link {% trans "Location" %}<br>{{ subcategory.name }}
   {% endcache %}
 
   .row.text-center.indent-v-lg

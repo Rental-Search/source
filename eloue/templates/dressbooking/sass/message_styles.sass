@@ -1,0 +1,73 @@
+// Core variables and mixins
+@import bootstrap/variables
+@import bootstrap/mixins
+@import variables
+@import sprites
+@import mixins
+
+html
+  height: 100%
+body
+  min-height: 100%
+  position: relative
+
+article
+  padding-bottom: px(180)
+
+footer
+  position: absolute
+  bottom: 0
+  right: 0
+  left: 0
+  font-size: px(12)
+  color: $gray-lite
+  text-align: center
+  p,
+  address
+    margin: 0.5em 0
+
+.social-dounr-btns
+  a
+    text-decoration: none
+    line-height: 2em
+    width: 2em
+    display: inline-block
+    margin: 0 1em
+    font-size: 1.5em
+    border-radius: 50%
+  .facebook
+    background-color: $brand-info
+    &:hover
+      background-color: darken($brand-info, 10%)
+  .twitter
+    background-color: $brand-blue
+    &:hover
+      background-color: darken($brand-blue, 10%)
+
+
+
+.thumbnail-content
+  +block-with-thumbnail(null, null)
+  padding-top: $indent-sm
+  padding-bottom: $indent-sm
+
+  .thumbnail-img a img
+    width: auto
+
+  .thumbnail-content
+    vertical-align: middle
+  h3
+    margin: 0
+
+.message-container
+  +block-with-thumbnail(86px, 50%)
+  .thumbnail-img a
+    +default-user
+  .thumbnail-content
+    padding: 0 0 0 $indent-md
+    color: $gray-strong
+  h2
+    margin: 0 0 $indent-md
+  p
+    line-height: 2
+

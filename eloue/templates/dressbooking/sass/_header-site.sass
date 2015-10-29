@@ -1,0 +1,203 @@
+.header-site
+  .framing,
+  .divide:before
+    border-color: rgb(77,77,77)
+  .framing
+    background-color: transparent !important
+
+  .signs-links
+    color: white
+    font-weight: $fw-bold
+    font-size: px(12)
+    padding-top: 1em
+    padding-bottom: 1em
+    height: 50px
+    a
+      color: $brand-secondary
+    .signs-links-black
+      color: #000000
+  .cookies-alert
+    color: #ffffff
+    font-weight: $fw-semibold
+    font-size: px(12)
+    padding-top: 1em
+    padding-bottom: 1em
+    text-align: center
+    a
+      color: #bcbe32
+    .cross
+      float: right
+      padding-right: 1em
+      padding-left: 1em
+      cursor: pointer
+  .guest-veiw
+    margin-top: -.5em
+    margin-bottom: -.5em
+  .badge-count
+    font-weight: $fw-bold
+    padding: .25em .75em
+    color: white
+    display: inline-block
+    position: absolute
+    top: -.5em
+    right: -1em
+    background-color: $brand-secondary
+    border-radius: 1em
+    font-size: .75em
+
+  .search-form
+    font-size: px(14)
+    font-weight: $fw-bold
+    form
+      width: 100%
+      padding: 1.5em 2em
+    .what-field
+      color: $brand-success
+      border-right-width: 0
+      border-color: $gray-medium
+      +placeholder($gray-dark)
+    .where-field
+      width: 40%
+      .location-pin-3
+        color: $brand-secondary
+        font-size: 1.2em
+        position: absolute
+        top: 0
+        line-height: (3/1.2)
+        z-index: 50
+        right: auto
+        left: .5em
+      input
+        width: 100%
+        padding-left: 2.5em
+        border-radius: 0
+        color: $gray-dark
+        border-color: $gray-medium $gray-lighter
+        font-weight: $fw-semibold
+        +placeholder($gray-dark)
+    .btn-search
+      border-left-width: 0
+      z-index: 2
+      .zoom-2
+        font-size: 1.2em
+        line-height: 1.8
+
+    .btn-advertise
+      color: white
+      font-weight: inherit
+      padding: 0 1.5em
+
+    .form-control,
+    .btn
+      height: 3em
+
+.dropdown
+  display: table-cell
+  vertical-align: middle
+  width: 1%
+  & + .dropdown
+    padding-left: $indent-md
+  .dropdown-menu
+    margin-top: 1em
+    left: auto
+    right: -.75em
+    width: 280px
+    padding: 0
+    // triangle
+    &:before,
+    &:after
+      content: ""
+      position: absolute
+      border: .75em solid
+      top: -1.5em
+      right: .75em
+      border-top-color: transparent
+      border-left-color: transparent
+      border-right-color: transparent
+    &:before
+      color: $gray-medium
+    &:after
+      color: white
+      margin-top: 1px
+    // end triangle
+    > li
+      padding: px(20)
+      & + li
+        border-top: px(1) solid $gray-lighter
+      a
+        color: inherit
+        text-decoration: none
+      > div
+        vertical-align: middle
+        display: table-cell
+      .middle-round span
+        width: px(10)
+        height: px(10)
+        background-color: $gray-lighter
+        display: inline-block
+        border-radius: 50%
+      .autor-img
+        padding-left: px(20)
+        padding-right: px(10)
+        a
+          display: block
+          border-radius: 50%
+          overflow: hidden
+          width: $thumbnail-xsm
+          height: $thumbnail-xsm
+          +default-user
+          +opacity(.9)
+      .content
+        width: 100%
+        max-width: 0px
+        font-weight: $fw-semibold
+        a:hover
+          text-decoration: underline
+        h5,
+        p
+          font-size: px(11)
+        h4
+          font-size: px(12)
+          margin-bottom: .25em
+          color: $gray-dark
+        h5
+          color: $gray-light
+        p
+          margin-top: .125em
+          line-height: $line-height-base
+          color: $gray-dark
+        &,
+        > *
+          +text-overflow
+        > *
+          margin: 0
+      &:hover
+        .middle-round span
+          background-color: $brand-success
+        .autor-img a
+          +opacity(1)
+        .content
+          h4
+            color: darken($gray-dark, 30%)
+          h5
+            color: darken($gray-light, 20%)
+          p
+            color: darken($gray-dark, 20%)
+  .dropdown-toggle
+    font-weight: bolder
+    cursor: pointer
+    i
+      font-size: 2em
+  .caret
+    color: $gray-dark
+    margin-left: .5em
+  .dropdown-img
+    margin: 0 $indent-xs
+    a
+      display: inline-block
+      vertical-align: middle
+      overflow: hidden
+      border-radius: 50%
+      width: $thumbnail-xsm
+      height: $thumbnail-xsm
+      +default-user

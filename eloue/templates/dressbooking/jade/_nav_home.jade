@@ -1,0 +1,13 @@
+-load i18n
+
+ul.without-spaces
+  each category in category_list|slice:":8"
+    {% url 'category_homepage' category.slug as category_url %}
+    li.spacer
+    {% ifequal category_url request.path %}
+    li.center-text: a(style="font-weight: 900 ! important;" href="{{ category_url }}", title="{{ category.name }}")
+      {{ category.name|capfirst }}
+    {% else %}
+    li.center-text: a(href="{{ category_url }}", title="{% trans 'location'%} {{ category.name }}")
+      {{ category.name|capfirst }}
+    {% endifequal %}

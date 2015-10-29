@@ -1,0 +1,7 @@
+.container.thumbnail-content
+  .thumbnail-img: a(href="/templates"): img(src="#{STATIC_URL}img/logo.png", alt="")
+  .thumbnail-content
+    if message_type == "ativation"
+      h3.text-white Activation de votre compte
+    elif message_type == "message"
+      h3.text-white Vous avez reçu un nouveau message

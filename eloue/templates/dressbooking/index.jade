@@ -1,0 +1,53 @@
+extends ./base
+-load compressed prefixed_cache i18n
+
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "homepage_styles" %}
+
+block append content-body
+  .container-flex(data-ng-controller="HomePageCtrl")
+    -var categories_map = {2969: [2971, 2972, 2973, 2974, 2975, 2976, 2978, 2979, 2980, 2981, 2982, 2984, 2985, 2986, 2987, 2988, 2989], 2990: [2992, 2993, 2994, 2995, 2997, 2998, 2999, 3000, 3001, 3002, 3004, 3005, 3006], 3007: [3009, 3010, 3011, 3013, 3014, 3015]}
+    -var cities_list = [["Location PARIS", "Location MARSEILLE", "Location LYON"], ['Location TOULOUSE', 'Location BORDEAUX', 'Location MONTPELLIER'], ['Location LILLE', 'Location NICE', 'Location NANTES']]
+
+    header.header-site
+      include ./jade/_header_site
+    nav.nav-home.container
+      include ./jade/_nav_home
+
+    block content-homepage
+      article
+        {% cache 43200 'homepage_banner_static' LANGUAGE_CODE %}
+        section.banner
+          include ./jade/_homepage_carousel_banner
+        {% endcache %}
+        {% cache 43200 'homepage_insurance_static' LANGUAGE_CODE %}
+        section.insurances.framing
+          include ./jade/_insurances
+        {% endcache %}
+        section.product-list
+          include ./jade/_product_list
+        section.float-comments.framing
+          include ./jade/_comments
+        {% cache 43200 'homepage_city_list_static' LANGUAGE_CODE %}
+        section.location-list
+          include ./jade/_location_list
+        {% endcache %}
+
+      main
+        {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
+        section.download-mobile-apps.framing: include ./jade/_download_mobile_apps
+        section.watch-video: include ./jade/_watch_video
+        section.professional-renter-content.framing: include ./jade/_professional_renter_content
+        section.talk-about-us: include ./jade/_talk_about_us
+        {% endcache %}
+
+    footer
+      {% cache 43200 'homepage_footer_static' LANGUAGE_CODE %}
+      section.footer-links.framing: include ./jade/_footer_links
+      section.rss.framing: include ./jade/_rss
+      {% endcache %}
