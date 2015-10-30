@@ -20,8 +20,8 @@ class Command(BaseCommand):
 		# Fill in the variables below with your SendGrid 
 		# username and password.
 		#========================================================#
-		sg_username = "hugow"
-		sg_password = "Hl131193"
+		sg_username = "benoit.woj@e-loue.com"
+		sg_password = "mWv49fVx"
 
 
 		# CREATE THE SENDGRID MAIL OBJECT
@@ -64,8 +64,6 @@ class Command(BaseCommand):
 		# SEND THE MESSAGE
 		#========================================================
 		return sg.send(message)
-			
-		#print msg
 
 
 
@@ -83,7 +81,7 @@ class Command(BaseCommand):
 		products_miss_desc = Product.objects.filter(description="", pictures__isnull=False, created_at__day=date.day, created_at__month=date.month, created_at__year=date.year).annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
 		products_empty = Product.objects.filter(description="", pictures__isnull=True, created_at__day=date.day, created_at__month=date.month, created_at__year=date.year).annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
 		
-		patron_inactives = Patron.objects.filter(rentals__isnull=True, products__isnull=True, date_joined__gte=datetime.date.today() - timedelta(days=1))
+		patron_inactives = Patron.objects.filter(rentals__isnull=True, products__isnull=True, date_joined__gte=datetime.date.today() - timedelta(days=7))
 
 		notifications = [
 			{"recipient": [booking['borrower__email'] for booking in bookings_ended], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
@@ -92,57 +90,37 @@ class Command(BaseCommand):
 			{"recipient": [booking['booking__borrower__email'] for booking in bookings_canceled], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
 
 			{"recipient": [product['owner__email'] for product in products_complete],"template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
-			{"recipient": [product['owner__email'] for product in products_miss_pic],"template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
-			{"recipient": [product['owner__email'] for product in products_miss_desc],"template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
 			{"recipient": [product['owner__email'] for product in products_empty],"template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": [product['owner__email'] for product in products_miss_desc],"template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
+			{"recipient": [product['owner__email'] for product in products_miss_pic],"template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"}, 	
 
 			{"recipient": [patron.email for patron in patron_inactives], "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"}
 		]
 
-		for notification in notifications:
-			#self._send_notification(notification)
-			print notification
-			time.sleep(0.5)
-
-
-
 
 		# notifications = [
-		# 	{"recipient": "hugo.woog@gmail.com", "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"},
-		# 	{"recipient": "hugo.woog@e-loue.com", "template_id": "4deb82f6-c3b3-4caf-8faf-d99cf56d8520"}
+			
+		# 	{"name": "loc1", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "02bfa8c5-db75-4e36-84ac-56e957f3792a"},
+		# 	{"name": "locdr1_rejected", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "3ee35da2-d85a-439e-b69e-a6e51861f634"},
+		# 	{"name": "locdr1_outdated", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "3ee35da2-d85a-439e-b69e-a6e51861f634"},
+		# 	{"name": "loca1", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "98b4f200-209a-4053-b30e-c7a4d5bd5d87"},
+
+		# 	{"name": "prop1", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "28faa11f-cd33-403e-a47f-9abb8dfaebb5"},
+		# 	{"name": "proppd1", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "1b026ada-fc64-41d4-8a8d-e3e2e55b9a7f"},
+		# 	{"name": "propd1", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "db6f7b78-fd0b-4614-8852-f56ccd305803"},
+		# 	{"name": "propp1", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "1648216c-b81c-4a69-95a4-2f4f97bdf2fd"},
+
+		# 	{"name": "ina1", "recipient": ["victoria.dorgnon@e-loue.com"], "template_id": "eaa65d7d-9908-4d44-9f80-6ccd6d0c90d6"}
 		# ]
 
-		# while True:
-		# 	try:
-		# 		recipient = recipients.pop()
-		# 	except:
-		# 		return False
+		while len(notifications) > 0:
+			try:
+				notification = notifications.pop()
+				status, msg = self._send_notification(notification)
+			except:
+				print "error"
 
-		# 	status, msg = self._send_notification(recipient)
-
-		# 	if status == 200:
-		# 		return True
-		# 	else:
-		# 		print "error %s" % msg 
+			print "%s : %s : %s" % (notification["name"], status, msg)
 
 
 
-	#FOR LATER
-
-	# notifications = [
-	# 		(bookings_ended, 'borrower_email'),
-	# 		(bookings_ended, 'borrower_email'),
-	# 		(bookings_ended, 'borrower_email')
-	# 	]
-
-	# 	for notification in notifications:
-	# 		[element[notification[1]] for element in notification[0]]	
-		
-
-	# 	[element[notification[1]] for element in notification[0]]
-	# 	[element['borrower_email'] for element in Booking.objects.filter(ended_at__day=date.day, ended_at__month=date.month, ended_at__year=date.year, state=BOOKING_STATE.ENDED)]
-		
-
-
-
-		
