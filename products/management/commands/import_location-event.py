@@ -10,33 +10,33 @@ from contextlib import closing
 
 category_mapping = { 
     '/28-lumiere-noire':'lumière noire',
-    '/33-stroboscopes/':'strobocope',
-    '/34-lasers/':'laser',
-    '/35-machines-a-effet/':'strobocope',
-    '/44-machine-a-fumee/':'machine à fumée',
-    '/45-machine-a-bulles/':'machine à bulle',
-    '/76-machine-a-brouillard-/':'machine à fumée',
-    '/77-machine-a-mousse/':'machine à fumée',
-    '/36-projecteur-traditionnel/':'spot',
-    '/37-accessoires-eclairages/':'eclairage',
-    '/38-bloc-de-puissance/':'eclairage',
-    '/39-consoles-lumiere/':'eclairage',
-    '/41-packs-lumiere-sans-sono/':'jeu de lumière',
-    '/42-effet-lumieres/':'jeu de lumière',
-    '/43-scanner-et-lyres-dmx/':'lyres',
-    '/70-location-consoles-video-ps4xbox-one-wii/':'jeux vidéo',
-    '/81-videoprojecteur/':'vidéoprojecteur',
-    '/18-nos-packs-son-eclairage/':'jeu de lumière',
-    '/20-location-flight-case/':'équipement DJ',
-    '/40-location-structure/':'extérieurs',
-    '/53-location-de-nacelle/':'travaux',
-    '/30-table-de-mixage/':'télévision',
+    '/33-stroboscopes':'strobocope',
+    '/34-lasers':'laser',
+    '/35-machines-a-effet':'strobocope',
+    '/44-machine-a-fumee':'machine à fumée',
+    '/45-machine-a-bulles':'machine à bulle',
+    '/76-machine-a-brouillard-':'machine à fumée',
+    '/77-machine-a-mousse':'machine à fumée',
+    '/36-projecteur-traditionnel':'spot',
+    '/37-accessoires-eclairages':'eclairage',
+    '/38-bloc-de-puissance':'eclairage',
+    '/39-consoles-lumiere':'eclairage',
+    '/41-packs-lumiere-sans-sono':'jeu de lumière',
+    '/42-effet-lumieres':'jeu de lumière',
+    '/43-scanner-et-lyres-dmx':'lyres',
+    '/70-location-consoles-video-ps4xbox-one-wii':'jeux vidéo',
+    '/81-videoprojecteur':'vidéoprojecteur',
+    '/18-nos-packs-son-eclairage':'jeu de lumière',
+    '/20-location-flight-case':'équipement DJ',
+    '/40-location-structure':'extérieurs',
+    '/53-location-de-nacelle':'travaux',
+    '/30-table-de-mixage':'télévision',
     '/31-micro/':'télévision',
-    '/32-packs-sono-sans-lumiere/':'télévision',
-    '/66-platines-dj-cd-et-midi/':'télévision',
-    '/71-boitier-de-scene-multipaires/':'télévision',
-    '/83-caissons-de-basses/':'télévision',
-    '/84-enceintes-sono/':'enceinte DJ',
+    '/32-packs-sono-sans-lumiere':'télévision',
+    '/66-platines-dj-cd-et-midi':'télévision',
+    '/71-boitier-de-scene-multipaires':'télévision',
+    '/83-caissons-de-basses':'télévision',
+    '/84-enceintes-sono':'enceinte DJ',
 }
 
 
@@ -61,9 +61,36 @@ class Command(BaseCommand):
                 for product in product_list:
                     product_url = product.find('a').get('href')
                     self.product_links[product_url] = self.base_url + family
-                print self.product_links
+                #print self.product_links
 
-        
+    def _product_crawler(self):
+        from products.models import Product, Picture, Price
+
+        # Return the price in the right format
+        def _to_decimal(s):
+            from decimal import Decimal as D
+            return D(s.strip().replace(u'€', '').replace(',', '.').replace(' ', ''))   
+
+        while True:
+            try:
+                product_url, category = self.product_links.popitem()
+            except KeyError:
+                break
+
+            product_url = quote(product_url)
+            try:
+                with closing(urlopen(self.base_url + product_url)) as product_page:
+                    product_soup = BeautifulSoup(product_page, 'html.parser')
+            except HTTPError:
+                print 'error loading page for object at url', self.base_url + product_url
+
+        # #get the image
+        #     try:
+        #         #image_url =  product_soup.find('a', class_="product-image-container").find('img').get('src')
+        #         print "image_url"
+        #     except:
+        #         pass
+ 
 
     def handle(self, *args, **options):
         if len(args) > 1:
@@ -95,33 +122,33 @@ class Command(BaseCommand):
         # Get families list of products
         self.product_families = [
 		'/28-lumiere-noire',
-		'/33-stroboscopes/',
-		'/34-lasers/',
-		'/35-machines-a-effet/',
-		'/44-machine-a-fumee/',
-		'/45-machine-a-bulles/',
-		'/76-machine-a-brouillard-/',
-		'/77-machine-a-mousse/',
-		'/36-projecteur-traditionnel/',
-		'/37-accessoires-eclairages/',
-		'/38-bloc-de-puissance/',
-		'/39-consoles-lumiere/',
-		'/41-packs-lumiere-sans-sono/',
-		'/42-effet-lumieres/',
-		'/43-scanner-et-lyres-dmx/',
-		'/70-location-consoles-video-ps4xbox-one-wii/',
-		'/81-videoprojecteur/',
-		'/18-nos-packs-son-eclairage/',
-		'/20-location-flight-case/',
-		'/40-location-structure/',
-		'/53-location-de-nacelle/',
-		'/30-table-de-mixage/',
-		'/31-micro/',
-		'/32-packs-sono-sans-lumiere/',
-		'/66-platines-dj-cd-et-midi/',
-		'/71-boitier-de-scene-multipaires/',
-		'/83-caissons-de-basses/',
-		'/84-enceintes-sono/',
+		'/33-stroboscopes',
+		'/34-lasers',
+		'/35-machines-a-effet',
+		'/44-machine-a-fumee',
+		'/45-machine-a-bulles',
+		'/76-machine-a-brouillard-',
+		'/77-machine-a-mousse',
+		'/36-projecteur-traditionnel',
+		'/37-accessoires-eclairages',
+		'/38-bloc-de-puissance',
+		'/39-consoles-lumiere',
+		'/41-packs-lumiere-sans-sono',
+		'/42-effet-lumieres',
+		'/43-scanner-et-lyres-dmx',
+		'/70-location-consoles-video-ps4xbox-one-wii',
+		'/81-videoprojecteur',
+		'/18-nos-packs-son-eclairage',
+		'/20-location-flight-case',
+		'/40-location-structure',
+		'/53-location-de-nacelle',
+		'/30-table-de-mixage',
+		'/31-micro',
+		'/32-packs-sono-sans-lumiere',
+		'/66-platines-dj-cd-et-midi',
+		'/71-boitier-de-scene-multipaires',
+		'/83-caissons-de-basses',
+		'/84-enceintes-sono',
         ]
         
         # List the products and create the product in the database
