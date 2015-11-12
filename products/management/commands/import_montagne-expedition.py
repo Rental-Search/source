@@ -210,9 +210,9 @@ class Command(BaseCommand):
 
         # Get the user
         try:
-            self.patron = Patron.objects.get(username='hwoog')
+            self.patron = Patron.objects.get(username='montagneexpedition')
         except Patron.DoesNotExist:
-            print "Can't find user 'Event-location hwoog'"
+            print "Can't find user 'Event-location montagneexpedition'"
             return
 
         # Get the default address of the user to add to the product
