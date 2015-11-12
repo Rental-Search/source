@@ -61,6 +61,9 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     fieldsets = (
         (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
         (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
+        (_('Bookings'), {'fields': ('rib',)}),
+        (_('Products'), {'fields': ('work',)}),
+        (_('Messages'), {'fields': ('school',)}),
         (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
         (_('Permissions'), {
             'classes': ('collapse',),
