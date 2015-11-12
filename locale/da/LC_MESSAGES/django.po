@@ -5044,7 +5044,7 @@ msgstr "Kontakt mig"
 
 #: eloue/templates/profile_public/_profile_public-owner_information.jade:3
 msgid "Informations"
-msgstr "Arbejdsgiver"
+msgstr "Information"
 
 #: eloue/templates/profile_public/_profile_public-owner_information.jade:4
 msgid "Informations sur le membre"
