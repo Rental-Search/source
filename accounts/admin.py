@@ -58,11 +58,12 @@ class ProTicketInline(admin.TabularInline):
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
+    readonly_fields = ('store_link', 'products_count','owner_products')
     fieldsets = (
         (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
         (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
         (_('Bookings'), {'fields': ('rib',)}),
-        (_('Products'), {'fields': ('work',)}),
+        (_('Products'), {'fields': ('store_link', 'products_count', 'owner_products',)}),
         (_('Messages'), {'fields': ('school',)}),
         (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
         (_('Permissions'), {
@@ -86,6 +87,20 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, ProAgencyInline]
     actions = ['export_as_csv', 'send_activation_email', 'index_user_products', 'unindex_user_products']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
+
+    def store_link(self, obj):
+        store_link = '<a href="%s" target="_blank">Lien vers le profil</a>' % obj.get_absolute_url()
+        return store_link   
+    store_link.allow_tags = True
+    store_link.short_description = _(u"lien profil")
+
+    def products_count(self, obj):
+        return obj.products.all().count()
+    products_count.short_description = _(u"nombre d'annonce")
+    
+    def owner_products (self, obj):
+        owner_products = obj.products.get_absolute_url()
+        return owner_products
 
     def queryset(self, request):
         current_site = Site.objects.get_current()
@@ -293,7 +308,7 @@ class ProAdmin(PatronAdmin):
 
     def products_count(self, obj):
         return obj.products.all().count()
-    products_count.short_description = _(u"noubre d'annonce")
+    products_count.short_description = _(u"nombre d'annonce")
 
     def edit_product_link(self, obj):
         edit_product_link = '<a href="/edit/products/product/?q=%s" target="_blank">Editer les annonces</a>' % obj.pk
