@@ -24,7 +24,7 @@ $animation-fill-mode: infinite
 	position: absolute
 	left: 0
 	bottom: -2px
-	pointer-events: none !important
+	pointer-events: none
 
 .float-comments
 	height: $comments-height
@@ -68,7 +68,7 @@ $animation-fill-mode: infinite
 			a
 				padding: $pad $pad $pad ($pad * 5.5) !important
 				color: white
-				background-color: $brand-secondary
+				background-color: $brand-primary
 				font-weight: $fw-semibold
 				display: block
 				+border-top-radius(px(5))
@@ -84,15 +84,15 @@ $animation-fill-mode: infinite
 					width: 0
 					height: 0
 					border-style: solid
-					border-color: $brand-secondary transparent transparent
+					border-color: $brand-primary transparent transparent
 					border-width: $pad
 					left: $pad*1.5
 					top: 100%
 				&:focus,
 				&:hover
-					background-color: darken($brand-secondary,10%) !important
+					background-color: darken($brand-primary,10%) !important
 					&:before
-						border-top-color: darken($brand-secondary,10%)
+						border-top-color: darken($brand-primary,10%)
 
 				p
 					color: inherit

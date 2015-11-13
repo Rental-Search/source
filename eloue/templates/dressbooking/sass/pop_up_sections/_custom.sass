@@ -14,12 +14,67 @@
     background-position: center center
     background-size: auto 80%
     color: transparent !important
+.classic-form
+  display: none
 
-aside
-  .booking-form
-    .available
-      color: rgb(36,189,119)
+
+.pro-shop
+  ul.scrollbar-custom
+    position: relative
+    max-height: 400px
+    overflow: auto
+  li
+    position: relative
+    margin-bottom: 1em
+  .section-body
+    background-color: white
+    border: px(1) solid $gray-lighter
+    +border-top-radius($bd-rad)
+    +border-bottom-radius($bd-rad)
+    padding: 5px 35px
+    &.hovered
+      background-color: rgba(212, 212, 212, 0.2)
+  .badge-order
+    position: absolute
+    top: 0
+    left: 0
+    background-color: rgba($brand-success, .8)
+    color: white
+    font-weight: $fw-bold
+    min-width: ($line-height-base * 1em)
+    padding: 0 2px
+    text-align: center
+  h6
+    font-size: px(13)
+    font-weight: $fw-bold
+    margin: 0 0 .25em
+  p
+    margin: 0
+
+.pro-shop-modal
+  padding-bottom: 1em !important
+
+.map
+  &.pro-shop-map
+    width: 300px
+    height: 300px
+
+.pro-shop-where
+  margin-left: px(40)
+  margin-bottom: 1.5em
+  .location-pin-3
+    position: absolute
+    z-index: 50
+    left: 0.5em
+    line-height: 2.5
+    color: #9d9d9d
+  input
+    padding-left: 2.5em
 
 .payment-error
   display: table
   margin: 0 auto
+
+
+
+

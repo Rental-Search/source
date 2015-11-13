@@ -9,19 +9,18 @@ section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span
-      | Bonjour, 
-      a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b inscrivez-vous 
-      | ou 
-      a(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b connectez-vous
-    li.divide
-    li: span
-        | Vous êtes un loueur professionnel, découvrez les 
-        a(href="{% url 'subscription' %}"): b offres GO Sport Location
-    li.divide
-    li: span
       | Appelez-nous au 
       b 01 85 08 99 70 
       | (numéro gratuit)
+    li.divide
+    li: span
+        | Vous êtes un loueur professionnel, découvrez des 
+        a(href="{% url 'subscription' %}"): b solutions de ventes adaptées
+    li.divide
+    li: span
+      a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b inscrivez-vous 
+      | ou 
+      a(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b connectez-vous
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser", style="display: none;").without-spaces
     li: span
@@ -88,7 +87,7 @@ section(ng-controller="AuthCtrl").container.signs-links
 .framing
   section.container.search-form
     .table-cell
-      a(href="{% url 'home' %}"): img(src="{% static 'img/logo_gosport.png' %}", alt="e-loue logo")
+      a(href="{% url 'home' %}"): img(src="{% static 'img/logo_dressbooking.png' %}", alt="dressbooking logo")
     .table-cell.main-cell
       form(action="{% url 'product_list' %}").input-group
         input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="Que voulez-vous louer ?", title="{% if form.cleaned_data.q %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field

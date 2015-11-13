@@ -1,30 +1,23 @@
 .header-site
-  .framing,
-  .divide:before
-    border-color: rgb(77,77,77)
-  .framing
-    background-color: transparent !important
-
   .signs-links
-    color: white
-    font-weight: $fw-bold
+    color: $gray-light
+    font-weight: $fw-semibold
     font-size: px(12)
     padding-top: 1em
     padding-bottom: 1em
     height: 50px
     a
-      color: $brand-secondary
-    .signs-links-black
-      color: #000000
+      color: $brand-primary
   .cookies-alert
-    color: #ffffff
+    background: #FFFFFF
+    color: $gray-light
     font-weight: $fw-semibold
     font-size: px(12)
     padding-top: 1em
     padding-bottom: 1em
     text-align: center
     a
-      color: #bcbe32
+      color: $brand-primary
     .cross
       float: right
       padding-right: 1em
@@ -41,25 +34,27 @@
     position: absolute
     top: -.5em
     right: -1em
-    background-color: $brand-secondary
+    background-color: $brand-primary
     border-radius: 1em
     font-size: .75em
 
   .search-form
+    padding-top: 1.5em
+    padding-bottom: 1.5em
     font-size: px(14)
     font-weight: $fw-bold
     form
       width: 100%
-      padding: 1.5em 2em
+      padding: 0 2em
     .what-field
       color: $brand-success
       border-right-width: 0
       border-color: $gray-medium
-      +placeholder($gray-dark)
+      +placeholder($brand-success)
     .where-field
       width: 40%
       .location-pin-3
-        color: $brand-secondary
+        color: $gray-strong
         font-size: 1.2em
         position: absolute
         top: 0
@@ -71,13 +66,12 @@
         width: 100%
         padding-left: 2.5em
         border-radius: 0
-        color: $gray-dark
+        color: $gray-strong
         border-color: $gray-medium $gray-lighter
         font-weight: $fw-semibold
-        +placeholder($gray-dark)
+        +placeholder($gray-strong)
     .btn-search
       border-left-width: 0
-      z-index: 2
       .zoom-2
         font-size: 1.2em
         line-height: 1.8
@@ -165,7 +159,7 @@
         p
           margin-top: .125em
           line-height: $line-height-base
-          color: $gray-dark
+          color: $gray-strong
         &,
         > *
           +text-overflow
@@ -182,14 +176,14 @@
           h5
             color: darken($gray-light, 20%)
           p
-            color: darken($gray-dark, 20%)
+            color: darken($gray-strong, 20%)
   .dropdown-toggle
     font-weight: bolder
     cursor: pointer
     i
       font-size: 2em
   .caret
-    color: $gray-dark
+    color: $gray-strong
     margin-left: .5em
   .dropdown-img
     margin: 0 $indent-xs

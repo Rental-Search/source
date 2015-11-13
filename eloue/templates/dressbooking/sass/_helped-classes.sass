@@ -19,14 +19,13 @@ h1
   color: rgb(82,82,82)
   line-height: 1.5
 
-.rss,
-.header-site
-  background-color: black
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0))
+.banner
+  position: relative
 
-.s-eloue
-//  +sprite($s-eloue)
-  display: inline-block
+.product-thumbnail
+  background: $gray-lighter url($default-product-picture) center no-repeat !important
+  background-size: 40% auto !important
+  border-radius: $bd-rad !important
 
 .part.comments .list-group
   max-height: px(600) !important
@@ -294,9 +293,6 @@ a, a:hover, a:focus
 .bg-success
   +make-bg($brand-success)
 
-.bg-secondary
-  +make-bg($brand-secondary)
-
 .bg-info
   background-color: $brand-info !important
 
@@ -339,9 +335,10 @@ a, a:hover, a:focus
   background-color: transparent
   margin: 0
   font-size: px(13)
+  font-weight: $fw-semibold
   margin: 0
   padding: 0
-  color: $brand-secondary
+  color: $brand-success
   > li
     color: inherit
     & + li:before
@@ -357,9 +354,9 @@ a, a:hover, a:focus
       text-decoration: none
     &.active,
     &:hover
-      color: lighten($gray-strong,20%)
-    &:hover ~ li
       color: $gray-strong
+    &:hover ~ li
+      color: lighten($gray-strong,20%)
       &:before
         color: inherit
 
@@ -420,8 +417,6 @@ a, a:hover, a:focus
     &:hover ~ span
       color: $gray-lighter !important
 
-.text-secondary
-  color: $brand-secondary !important
 .text-success
   color: $brand-success !important
 .text-blue
@@ -437,7 +432,7 @@ a, a:hover, a:focus
   vertical-align: middle
 
 .badge.price
-  background-color: $brand-secondary
+  background-color: $brand-primary
   letter-spacing: .02em
   font-weight: $fw-bold
   $br: 1.5em

@@ -4,7 +4,6 @@
   big
     font-size: 2em
     font-weight: $fw-bold
-
   .modal-dialog
     margin-top: 4em
     width: $modal-width
@@ -15,18 +14,8 @@
     text-align: center
     +border-left-radius(0)
     +border-right-radius(0)
-  .modal-footer
-    text-align: center
-    background-color: $gray-lite
-    p
-      margin: 0
-      font-weight: $fw-bold
-      color: $gray-medium
-    .s-eloue
-      vertical-align: middle
-
   .modal-header
-    background-color: $brand-secondary
+    background-color: $brand-primary
     color: white
   .modal-title
     font-size: px(17)
@@ -126,95 +115,34 @@
     width: $item-width
     +center-block()
     input
-      color: inherit
+      color: $gray-dark
       height: 3em
       padding-top: .6em
-      +placeholder(inherit)
+      +placeholder($placeholder_color)
   .forgot-password
     font-size: px(12)
     min-height: 20px
-
-  .bg-wrapper
-    padding-top: (100 / 150 * 100%)
-    display: block
-    position: relative
-    img
-      position: absolute
-      top: 0
-      left: 0
-      width: 100%
-      height: 100%
-      background-repeat: no-repeat
-      background-position: center center
-    &.redirection-arrows img
-      right: 0
-      bottom: 0
-      margin: auto
-      width: auto
-      height: auto
-    + p
-      line-height: $line-height-base
-      margin: 1em 0
-  a.bg-wrapper
-    border: px(1) solid $gray-lighter
-    &:hover
-      border-color: $gray-medium
-
 
   input[type="text"],
   input[type="email"],
   input[type="number"],
   input[type="password"]
-    &:invalid,
     &:empty
-      border-color: $brand-danger
+      border-color: $gray-medium
     &:valid
       border-color: $gray-medium
     &[disabled]
       border-color: $gray-medium !important
+  .submitted input.input-invalid
+    border-color: $input-invalid-color
+  .submitted input.ng-invalid
+    border-color: $input-invalid-color
 
   .chosen-container
     font-size: 14px
     .chosen-choices,
     .chosen-single
       height: 3em
-
-  .eloue-rents
-    .question
-      color: $brand-secondary
-      font-size: px(12) !important
-      cursor: pointer
-      &:after
-        content: "?"
-        display: inline-block
-        line-height: 1.4
-        width: 1.4em
-        background-color: $brand-secondary
-        color: white
-        margin-left: .5em
-        text-align: center
-        font-weight: $fw-bold
-        border-radius: 50%
-
-    .tooltip
-      white-space: pre-wrap
-      width: 250px
-      margin-top: .5em
-      background-color: white
-      box-shadow: 0 0 5px rgba(0,0,0,.3)
-      padding: 2em
-      height: auto
-      transition-delay: 0.5s
-      z-index: -1
-      color: $brand-primary
-      font-weight: $fw-bold
-      @include opacity(0)
-
-    &:hover
-      .tooltip
-        z-index: 10
-        transition-delay: 0.25s
-        @include opacity(1)
 
   .map-wrapper
     width: 100%
@@ -324,10 +252,14 @@
             height: 3em
             line-height: 2.6em
             text-align: center
-            border: px(2) solid
+            border: px(2) solid $gray
             border-radius: 50%
           &.text-gray:before
             color: $gray
+          &.text-primary:before
+            border-color: $brand-primary
+          &.text-success:before
+            border-color: $brand-success
         .thumbnail-content
           padding: 1em 2em 0 !important
           h3

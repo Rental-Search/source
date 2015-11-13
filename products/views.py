@@ -175,6 +175,8 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         product_list = last_added(product_search, self.location, limit=8)
+        from django.db.models import Count
+        product_list = Product.objects.filter(category_id=150).annotate(count_prices=Count('prices')).order_by("-count_prices")[:8]
         comment_list = Comment.objects.select_related(
             'booking__product__address'
         ).filter(

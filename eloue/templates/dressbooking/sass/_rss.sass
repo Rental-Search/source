@@ -1,7 +1,8 @@
 .rss
 	padding: $block-section-pad 0
-	color: lighten($brand-primary, 80%)
+	color: lighten($brand-success, 40%)
 	$bor-rad: px(5)
+	background-color: $brand-success
 	p
 		font-weight: $fw-light
 		min-width: 22em
@@ -18,10 +19,7 @@
 		color: $gray
 	button
 		font-weight: $fw-bold
-		background-color: #fff
-		background-color: $brand-success
-		&:hover
-			background-color: darken($brand-success, 10%)
+		color: $brand-success !important
 	.input-group-btn
 		width: auto
 		padding-left: 14px
@@ -34,7 +32,7 @@
 		+border-bottom-radius($bor-rad !important)
 	.social-btns
 		white-space: nowrap
-		background-color: lighten($brand-primary, 20%)
+		background-color: lighten($brand-success, 10%)
 		display: inline-block
 		+border-top-radius($bor-rad)
 		+border-bottom-radius($bor-rad)
@@ -51,8 +49,7 @@
 			margin: $mrg
 			background-color: white
 			text-align: center
-			color: $brand-primary
-			color: lighten($brand-primary, 20%)
+			color: $brand-success
 			&:hover
-				background-color: $brand-primary
+				background-color: $brand-success
 				color: white
