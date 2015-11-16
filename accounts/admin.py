@@ -58,13 +58,13 @@ class ProTicketInline(admin.TabularInline):
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
-    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'owner_products')
+    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link')
     fieldsets = (
         (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
         (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
-        # (_('Bookings'), {'fields': ('owner_bookings',)}),
+        (_('Bookings'), {'fields': ('bookings_link',)}),
         (_('Products'), {'fields': ('profil_link', 'owner_products','owner_car_products','owner_realestate_products',)}),
-        (_('Messages'), {'fields': ('school',)}),
+        (_('Messages'), {'fields': ('messages_link',)}),
         (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
         (_('Permissions'), {
             'classes': ('collapse',),
@@ -89,18 +89,22 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
 
 
-    # def owner_bookings (self, obj):
-    #     email = smart_urlquote(obj.email)
-    #     owner_booking = '<a href="http://localhost:8000/edit/rent/booking?q=%s" target="_blank">Lien vers les annonces</a>' % email
-    #     return owner_booking
-    # owner_bookings.allow_tags = True
-    # owner_bookings.short_description = _(u"liens vers les bookings")
+    def bookings_link (self, obj):
+        email = obj.email
+        bookings_link = '<a href="http://localhost:8000/edit/rent/booking?q=%s" target="_blank">Lien vers les bookings</a>' % email
+        return bookings_link
+    bookings_link.allow_tags = True
+    bookings_link.short_description = _(u"lien vers les bookings")
 
     def profil_link(self, obj):
         profil_link = '<a href="%s" target="_blank">Lien vers le profil</a>' % obj.get_absolute_url()
         return profil_link   
     profil_link.allow_tags = True
     profil_link.short_description = _(u"lien profil")
+
+    def products_count(self, obj):
+        return obj.products.all().count()
+    products_count.short_description = _(u"nombre d'annonce")
 
     def owner_products (self, obj):
         owner_product = '<a href="http://localhost:8000/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.pk
@@ -120,10 +124,14 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     owner_realestate_products.allow_tags = True
     owner_realestate_products.short_description = _(u"annonces de logements")
 
+    def messages_link (self, obj):
+        username = obj.username
+        messages_link = '<a href="http://localhost:8000/edit/django_messages/message/?q=%s" target="_blank">Lien vers les messages</a>' % username
+        return messages_link
+    messages_link.allow_tags = True
+    messages_link.short_description = _(u"lien vers les messages")
 
-
-
-        
+    
 
     def queryset(self, request):
         current_site = Site.objects.get_current()
