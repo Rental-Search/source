@@ -17,6 +17,7 @@ from django import forms
 
 from products.forms import ProductAdminForm
 from products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage
+from accounts.models import Patron
 
 from eloue.admin import CurrentSiteAdmin
 
@@ -84,13 +85,23 @@ class ProductAdmin(ProductCurrentSiteAdmin):
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email', 'owner__pk']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address", "phone")
-    list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
+    readonly_fields = ('is_pro',)
+    list_display = ('summary', 'is_pro', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
     list_filter = ('shipping', 'is_archived', 'is_allowed', 'category')
     list_editable = ('category',)
     ordering = ['-created_at']
     list_per_page = 20
     form = ProductAdminForm
     actions = [convert_to_carproduct, convert_to_realestateproduct]
+
+    def is_pro(self, obj):
+        if obj.owner.current_subscription != None:
+            is_pro = _("Particulier") 
+        else:
+            is_pro = _("Professionnel")
+        return is_pro
+    is_pro.allow_tags = True
+    is_pro.short_description = _(u"Pro ou Part")
 
     def queryset(self, request):
         qs = super(ProductAdmin, self).queryset(request).filter(carproduct=None, realestateproduct=None)
@@ -109,7 +120,9 @@ class ProductAdmin(ProductCurrentSiteAdmin):
             kwargs['queryset'] = Category.tree.all()
         return super(ProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
-
+class ProductOwner(ProductCurrentSiteAdmin):
+    def function():
+        pass
 class RealEstateProductAdmin(ProductCurrentSiteAdmin):
 
     def formfield_for_dbfield(self, db_field, **kwargs):

@@ -91,7 +91,7 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
 
     def bookings_link (self, obj):
         email = obj.email
-        bookings_link = '<a href="http://localhost:8000/edit/rent/booking?q=%s" target="_blank">Lien vers les bookings</a>' % email
+        bookings_link = '<a href="/edit/rent/booking?q=%s" target="_blank">Lien vers les bookings</a>' % email
         return bookings_link
     bookings_link.allow_tags = True
     bookings_link.short_description = _(u"lien vers les bookings")
@@ -107,26 +107,26 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     products_count.short_description = _(u"nombre d'annonce")
 
     def owner_products (self, obj):
-        owner_product = '<a href="http://localhost:8000/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.pk
+        owner_product = '<a href="/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.pk
         return owner_product
     owner_products.allow_tags = True
     owner_products.short_description = _(u"annonces")
 
     def owner_car_products (self, obj):
-        owner_car_product = '<a href="http://localhost:8000/edit/products/carproduct/?q=%s" target="_blank">Lien vers les annonces de voiture</a>' % obj.pk
+        owner_car_product = '<a href="/edit/products/carproduct/?q=%s" target="_blank">Lien vers les annonces de voiture</a>' % obj.pk
         return owner_car_product
     owner_car_products.allow_tags = True
     owner_car_products.short_description = _(u"annonces de voiture")
 
     def owner_realestate_products (self, obj):
-        owner_realestate_product = '<a href="http://localhost:8000/edit/products/realestateproduct/?q=%s" target="_blank">Lien vers les annonces de logement</a>' % obj.pk
+        owner_realestate_product = '<a href="/edit/products/realestateproduct/?q=%s" target="_blank">Lien vers les annonces de logement</a>' % obj.pk
         return owner_realestate_product
     owner_realestate_products.allow_tags = True
     owner_realestate_products.short_description = _(u"annonces de logements")
 
     def messages_link (self, obj):
         username = obj.username
-        messages_link = '<a href="http://localhost:8000/edit/django_messages/message/?q=%s" target="_blank">Lien vers les messages</a>' % username
+        messages_link = '<a href="/edit/django_messages/message/?q=%s" target="_blank">Lien vers les messages</a>' % username
         return messages_link
     messages_link.allow_tags = True
     messages_link.short_description = _(u"lien vers les messages")
