@@ -105,10 +105,10 @@ class ProductAdmin(ProductCurrentSiteAdmin):
 
     def user_link(self, obj):
         user = obj.owner
-        user_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page du propriétaire</a>' % user.pk
+        user_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page du proprietaire</a>' % user.pk
         return _(user_link) 
     user_link.allow_tags = True
-    user_link.short_description = _(u"Propriétaire")
+    user_link.short_description = _(u"Proprietaire")
 
     def queryset(self, request):
         qs = super(ProductAdmin, self).queryset(request).filter(carproduct=None, realestateproduct=None)
@@ -206,7 +206,7 @@ class EloueMessageAdmin(MessageAdmin):
 
     list_filter = ('sent_at',)
     search_fields = ('subject', 'body', 'recipient__username', 'sender__username',)
-    readonly_fields = ('recipient', 'sender', 'parent_msg', 'sender_profil_link', 'recipient_profil_link')
+    readonly_fields = ('recipient', 'sender', 'parent_msg','sender_profil_link', 'recipient_profil_link',)
 
 
     fieldsets = (
@@ -240,7 +240,7 @@ class EloueMessageAdmin(MessageAdmin):
     sender_profil_link.short_description = _(u" ")
 
     def recipient_profil_link(self, obj):
-        recipient_profil_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page de l\'expediteur</a>' % obj.recipient.pk
+        recipient_profil_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page du destinataire</a>' % obj.recipient.pk
         return _(recipient_profil_link) 
     recipient_profil_link.allow_tags = True
     recipient_profil_link.short_description = _(u" ")

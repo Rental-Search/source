@@ -58,9 +58,9 @@ class ProTicketInline(admin.TabularInline):
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
-    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link',)
+    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link', 'products_count')
     fieldsets = (
-        (_('Liens'), {'fields': ('profil_link',
+        (_('Liens'), {'fields': (('profil_link', 'products_count'),
                                  ('owner_products','owner_car_products','owner_realestate_products'),
                                  'messages_link','bookings_link',)}),
         (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
@@ -130,7 +130,6 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
         return _(messages_link)
     messages_link.allow_tags = True
     messages_link.short_description = _(u"Messages")
-
     
 
     def queryset(self, request):
