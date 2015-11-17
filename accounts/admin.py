@@ -79,7 +79,11 @@ class ProCampaignInline(admin.TabularInline):
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
+    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link', 'products_count')
     fieldsets = (
+        (_('Liens'), {'fields': (('profil_link'),
+                                 ('owner_products','owner_car_products','owner_realestate_products', 'products_count'),
+                                 'messages_link','bookings_link',)}),
         (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
         (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
@@ -104,6 +108,50 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, ProAgencyInline]
     actions = ['export_as_csv', 'send_activation_email', 'index_user_products', 'unindex_user_products']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
+
+
+    def bookings_link(self, obj):
+        email = obj.email
+        bookings_link = '<a href="/edit/rent/booking?q=%s" target="_blank">Lien vers les bookings</a>' % email
+        return _(bookings_link)
+    bookings_link.allow_tags = True
+    bookings_link.short_description = _(u"Bookings")
+
+    def profil_link(self, obj):
+        profil_link = '<a href="%s" target="_blank">Lien vers le profil e-loue</a>' % obj.get_absolute_url()
+        return _(profil_link)   
+    profil_link.allow_tags = True
+    profil_link.short_description = _(u"Profil")
+
+    def products_count(self, obj):
+        return obj.products.all().count()
+    products_count.short_description = _(u"Nombre d'annonce")
+
+    def owner_products(self, obj):
+        owner_product = '<a href="/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.pk
+        return _(owner_product)
+    owner_products.allow_tags = True
+    owner_products.short_description = _(u"Objets")
+
+    def owner_car_products(self, obj):
+        owner_car_product = '<a href="/edit/products/carproduct/?q=%s" target="_blank">Lien vers les annonces de voiture</a>' % obj.pk
+        return _(owner_car_product)
+    owner_car_products.allow_tags = True
+    owner_car_products.short_description = _(u"Voitures")
+
+    def owner_realestate_products(self, obj):
+        owner_realestate_product = '<a href="/edit/products/realestateproduct/?q=%s" target="_blank">Lien vers les annonces de logement</a>' % obj.pk
+        return _(owner_realestate_product)
+    owner_realestate_products.allow_tags = True
+    owner_realestate_products.short_description = _(u"Logements")
+
+    def messages_link(self, obj):
+        username = obj.username
+        messages_link = '<a href="/edit/django_messages/message/?q=%s" target="_blank">Lien vers les messages</a>' % username
+        return _(messages_link)
+    messages_link.allow_tags = True
+    messages_link.short_description = _(u"Messages")
+    
 
     def queryset(self, request):
         current_site = Site.objects.get_current()

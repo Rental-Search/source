@@ -21,11 +21,11 @@ class BookingLogInline(admin.TabularInline):
 
 class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
-    readonly_fields = ('transaction_line',)
+    readonly_fields = ('borrower_profil_link', 'owner_profil_link', 'transaction_line')
     fieldsets = (
         (None, {'fields': ('state', 'product', 'started_at', 'ended_at')}),
         (_('Transaction'), {'fields': ('transaction_line',)}),
-        (_('Borrower & Owner'), {'fields': ('borrower', 'owner', 'ip')}),
+        (_('Borrower & Owner'), {'fields': (('borrower', 'borrower_profil_link'), ('owner', 'owner_profil_link'), 'ip')}),
         (_('Payment'), {'fields': ('total_amount', 'insurance_amount', 'deposit_amount', 'currency')}),
     )
     list_filter = ('started_at', 'ended_at', 'state', 'created_at')
@@ -35,6 +35,21 @@ class BookingAdmin(CurrentSiteAdmin):
     ordering = ['-created_at']
     actions = ['send_recovery_email']
     search_fields = ['product__summary', 'owner__username', 'owner__email', 'borrower__email', 'borrower__username', 'ip']
+
+    def owner_profil_link(self, obj):
+        owner = obj.owner
+        owner_profil_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page du proprietaire</a>' % owner.pk
+        return _(owner_profil_link) 
+    owner_profil_link.allow_tags = True
+    owner_profil_link.short_description = _(u"Profil Owner")
+
+    def borrower_profil_link(self, obj):
+        borrower = obj.borrower
+        borrower_profil_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page du locataire</a>' % borrower.pk
+        return _(borrower_profil_link) 
+    borrower_profil_link.allow_tags = True
+    borrower_profil_link.short_description = _(u"Profil locataire")
+
 
     def queryset(self, request):
         current_site = Site.objects.get_current()

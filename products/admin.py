@@ -19,6 +19,7 @@ from modeltranslation.admin import TranslationAdmin
 
 from products.forms import ProductAdminForm
 from products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage
+from accounts.models import Patron
 
 from eloue.admin import CurrentSiteAdmin
 
@@ -86,13 +87,30 @@ class ProductAdmin(ProductCurrentSiteAdmin):
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email', 'owner__pk']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address", "phone")
-    list_display = ('summary', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
+    readonly_fields = ('is_pro', 'user_link')
+    list_display = ('summary', 'is_pro','user_link', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
     list_filter = ('shipping', 'is_archived', 'is_allowed', 'category')
     list_editable = ('category',)
     ordering = ['-created_at']
     list_per_page = 20
     form = ProductAdminForm
     actions = [convert_to_carproduct, convert_to_realestateproduct]
+
+    def is_pro(self, obj):
+        if obj.owner.current_subscription != None:
+            is_pro = _("Particulier") 
+        else:
+            is_pro = _("Professionnel")
+        return is_pro
+    is_pro.allow_tags = True
+    is_pro.short_description = _(u"Pro ou Part")
+
+    def user_link(self, obj):
+        user = obj.owner
+        user_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page du proprietaire</a>' % user.pk
+        return _(user_link) 
+    user_link.allow_tags = True
+    user_link.short_description = _(u"Proprietaire")
 
     def queryset(self, request):
         qs = super(ProductAdmin, self).queryset(request).filter(carproduct=None, realestateproduct=None)
@@ -111,7 +129,9 @@ class ProductAdmin(ProductCurrentSiteAdmin):
             kwargs['queryset'] = Category.tree.all()
         return super(ProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
-
+class ProductOwner(ProductCurrentSiteAdmin):
+    def function():
+        pass
 class RealEstateProductAdmin(ProductCurrentSiteAdmin):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
@@ -187,10 +207,46 @@ class EloueMessageAdminForm(forms.ModelForm):
 class EloueMessageAdmin(MessageAdmin):
     form = EloueMessageAdminForm
 
-    list_filter = ('sent_at', )
+    list_filter = ('sent_at',)
     search_fields = ('subject', 'body', 'recipient__username', 'sender__username',)
-    readonly_fields = ('recipient', 'sender', 'parent_msg')
+    readonly_fields = ('recipient', 'sender', 'parent_msg','sender_profil_link', 'recipient_profil_link',)
 
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                ('sender', 'sender_profil_link'),
+                ('recipient', 'recipient_profil_link', 'group'),
+            ),
+        }),
+        (_('Message'), {
+            'fields': (
+                'parent_msg',
+                'subject', 'body',
+            ),
+            'classes': ('monospace' ),
+        }),
+        (_('Date/time'), {
+            'fields': (
+                'sent_at', 'read_at', 'replied_at',
+                'sender_deleted_at', 'recipient_deleted_at',
+            ),
+            'classes': ('collapse', 'wide'),
+        }),
+    )
+
+    def sender_profil_link(self, obj):
+        sender = obj.sender
+        sender_profil_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page de l\'expediteur</a>' % sender.pk
+        return _(sender_profil_link) 
+    sender_profil_link.allow_tags = True
+    sender_profil_link.short_description = _(u" ")
+
+    def recipient_profil_link(self, obj):
+        recipient_profil_link = '<a href="/edit/accounts/patron/%s" target="_blank">Lien vers la page du destinataire</a>' % obj.recipient.pk
+        return _(recipient_profil_link) 
+    recipient_profil_link.allow_tags = True
+    recipient_profil_link.short_description = _(u" ")
 
 try:
     admin.site.register(Product, ProductAdmin)
