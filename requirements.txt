@@ -77,3 +77,4 @@ django-iban==0.3.0
 django-sslify==0.2.3
 suds-jurko==0.6
 -e git://github.com/dgrtwo/ParsePy.git#egg=parsepy
+django-modeltranslation

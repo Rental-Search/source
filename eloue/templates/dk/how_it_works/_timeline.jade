@@ -1,0 +1,16 @@
+.container
+  -var sections = [["inden et lejemål", [["owner-column",  [["Jeg indskriver mig gratis", "på få sekunder"], ["Jeg indrykker min annonce", "hurtigt og nemt"], ["Jeg besvarer spørgsmål", "fra kunder, som er interesserede i mine annoncer (enten per telefon eller e-mail)"], ["Jeg accepterer et lejemål", "for at være dækket af forsikring og undgå betaling med kontanter"]]], ["tenant-column", [["Jeg indskriver mig gratis", "på få sekunder"], ["Jeg søger et lejemål", "mellem et stort udvalg af annoncer"], ["Jeg stiller mine spørgsmål", "til udlejere omkring de genstande, som interesserer mig (enten per telefon eller e-mail)"], ["Jeg betaler for lejen", "via en sikker server"]]]]], ["Under lejen", [["owner-column",  [["Jeg modtager en lejekontrakt", "udfyldt på forhånd som jeg giver til kunden ved transanktionen"], ["Jeg møder lejer", "for at aflevere den genstand, jeg udlejer"], ["Jeg modtager min betaling", "48 timer efter lejens påbegyndelse"], ["Jeg modtager min udlejede genstand", "ved at mødes med lejeren"]]], ["tenant-column", [["Jeg modtager en lejekontrakt", "udfyldt på forhånd, som jeg giver til udlejer ved transanktionen"], ["Jeg møder udlejer", "for at modtage den genstand, jeg lejer"], ["Jeg nyder godt af mine lejemål", "sikkert, fordi genstanden er forsikret"], ["Jeg tilbageleverer lejemålet", "ved at mødes med udlejeren"]]]]], ["Efter lejen", [["owner-column",  [["Jeg laver en vurdering af lejer", "for at hjælpe andre på hjemmesiden"]]], ["tenant-column", [["Jeg laver en vurdering af udlejer", "for at hjælpe andre på hjemmesiden"]]]]]]
+
+  {% autoescape off %}
+  each section, columns in sections
+    section.row
+      .col-xs-12: h4: != section
+      each style, items in columns
+        .col-xs-6: ul.timeline-steps(class="{{ style }}")
+          each title, content in items
+            li
+              h5: != title
+              p.content: != content
+              span.toggle-content &#149;&nbsp;&#149;&nbsp;&#149;
+              .addons: i: b
+  {% endautoescape %}

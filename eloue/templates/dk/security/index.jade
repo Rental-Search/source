@@ -1,0 +1,33 @@
+extends ../base
+-load compressed staticfiles i18n
+
+block append title
+  {% trans "Sécurité" %}
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "security_styles" %}
+
+block append scripts
+  script(src="{% static 'bower_components/jquery/dist/jquery.min.js' %}")
+  script
+    $(document).ready(function() {
+      $('.toggle-content').on('click', function () {
+        $(this).closest('li').find('.content').toggleClass('text-overflow');
+        });
+    });
+
+block append content-body
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+    nav.bd-b
+      include _breadcrumbs
+    article.indent-v-lg
+      section: include _list_securisty
+
+    footer
+      section.row-fluid.footer-links.framing
+        include ../jade/_footer_links
+      section.row-fluid.rss
+        include ../jade/_rss

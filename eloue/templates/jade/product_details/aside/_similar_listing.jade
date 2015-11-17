@@ -1,6 +1,4 @@
--load i18n
-
--load product
+-load i18n product
 
 .section-header
 	h4 {% if is_pro %} {% trans "Toutes nos annonces" %}{% else %}{% trans "Annonces similaires" %}{% endif %}
@@ -16,4 +14,8 @@
 							a(href="{{ product.url }}") {{ product.summary }}
 						p
 							small {{ product.city|title }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
-						span.badge.price {{ product.price|price:"&euro; /jour" }}
+						{% if product.price %}
+						span.badge.price {{ product.price|currency }} /{% trans "jour" %}
+						{% else %}
+						span.badge.price {% trans "Sur devis" %}
+						{% endif %}

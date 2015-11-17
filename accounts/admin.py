@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.sites.models import Site
 
 from eloue.admin import CurrentSiteAdmin
-from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency, ProReport, Ticket
+from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency, ProReport, Ticket, Campaign
 from accounts.forms import PatronChangeForm, PatronCreationForm
 from products.models import Product
 
@@ -39,9 +39,24 @@ class ProAgencyInline(admin.TabularInline):
 class SubscriptionInline(admin.StackedInline):
     model = Subscription
     extra = 0
+    readonly_fields = ('slimpay_code', 'slimpay_link',)
     fieldsets = (
         (None, {'fields': ('seller', 'propackage', 'signed_at', 'subscription_started', 'subscription_ended','amount', 'fee', 'free', 'number_of_free_month', 'payment_type', 'comment')}),
+        ("Slimpay", {'fields': ('slimpay_code', 'slimpay_link',)}),
     )
+
+    def slimpay_code(self, obj):
+        try:
+            slimpay = obj.patron.slimpaymandateinformation_set.latest('pk')
+            return slimpay.RUM
+        except:
+            return None
+
+    def slimpay_link(self, obj):
+        slimpay_link = '<a href="/edit/accounts/slimpay/%s/"">Ajouter un iban</a>' % obj.patron.pk
+        return slimpay_link
+
+    slimpay_link.allow_tags = True
 
 class ProReportInline(admin.TabularInline):
     readonly_fields = ('agent',)
@@ -55,13 +70,19 @@ class ProTicketInline(admin.TabularInline):
     extra = 0
     fk_name = 'pro'
 
+class ProCampaignInline(admin.TabularInline):
+    readonly_fields = ('created_at',)
+    model = Campaign
+    extra = 0
+    fk_name = 'pro'
+
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
     readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link', 'products_count')
     fieldsets = (
-        (_('Liens'), {'fields': (('profil_link', 'products_count'),
-                                 ('owner_products','owner_car_products','owner_realestate_products'),
+        (_('Liens'), {'fields': (('profil_link'),
+                                 ('owner_products','owner_car_products','owner_realestate_products', 'products_count'),
                                  'messages_link','bookings_link',)}),
         (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
         (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
@@ -297,7 +318,7 @@ class ProAgencyAdmin(admin.ModelAdmin):
 class ProAdmin(PatronAdmin):
     list_display = ('company_name', 'closed_ticket', 'last_report_date', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
     list_filter = ()
-    inlines = [SubscriptionInline, ProReportInline, ProTicketInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
+    inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
     readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
     fieldsets = (
         (_('Company info'), {'fields': ('company_name', 'civility', 'first_name', 'last_name', 'username', 'is_professional', 'password')}),

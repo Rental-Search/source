@@ -21,10 +21,11 @@ class BookingLogInline(admin.TabularInline):
 
 class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
-    readonly_fields = ('borrower_profil_link', 'owner_profil_link')
+    readonly_fields = ('borrower_profil_link', 'owner_profil_link', 'transaction_line')
     fieldsets = (
         (None, {'fields': ('state', 'product', 'started_at', 'ended_at')}),
-        (_('Borrower & Owner'), {'fields': ('borrower', 'owner', 'ip', 'borrower_profil_link', 'owner_profil_link')}),
+        (_('Transaction'), {'fields': ('transaction_line',)}),
+        (_('Borrower & Owner'), {'fields': (('borrower', 'borrower_profil_link'), ('owner', 'owner_profil_link'), 'ip')}),
         (_('Payment'), {'fields': ('total_amount', 'insurance_amount', 'deposit_amount', 'currency')}),
     )
     list_filter = ('started_at', 'ended_at', 'state', 'created_at')
@@ -103,6 +104,26 @@ class BookingAdmin(CurrentSiteAdmin):
             return obj.owner.phones.all()[0]
     owner_phone.short_description = _('Owner phone')
     inlines = [BookingLogInline, ]
+
+    def transaction_line(self, obj):
+        product_type = None
+        try:
+            obj.product.carproduct
+            product_type = "voiture"
+        except:
+            pass
+        try:
+            obj.product.realestateproduct
+            product_type = "logement"
+        except:
+            pass
+        
+        if not product_type:
+            product_type = "objet"
+
+        infos = ["%s" % obj.uuid, "%s" % obj.product.summary.replace("\n", " ").replace("\r", " ").replace("|", " "), "%s" % obj.state, product_type, "%s" % obj.total_amount, "%s" % obj.started_at.strftime("%d/%m/%y"), "%s" % obj.ended_at.strftime("%d/%m/%y"), "%s" % obj.created_at.strftime("%d/%m/%y")]
+
+        return "|".join(infos)
 
 class CommentAdmin(admin.ModelAdmin):
     raw_id_fields = ('booking',)

@@ -3,38 +3,30 @@
 .section-header
     h4 {% if is_pro %} {% trans "Demandez un devis" %} {% else %} {% trans "Réservez en ligne" %} {% endif %}
 form.form-inline.section-body.text-center
-    {% verbatim %}
     .part
         p
-            small à partir de
-            big.ng-cloak.text-primary &nbsp;{{pricePerDay}}&nbsp;/jour
-        {% endverbatim %}
+            small {% trans "à partir de" %}
+            big.ng-cloak.text-primary &nbsp;{% verbatim %}{{pricePerDay}}{% endverbatim %}&nbsp;{% trans "/jour" %}
         include ../../_date_picker_border
-        {% verbatim %}
-        // p.available.unavailable Cet article est disponible à ces dates
-        span(ng-show="dateRangeError").ng-cloak.text-danger {{dateRangeError}}
-        {% endverbatim %}
+        span(ng-show="dateRangeError").ng-cloak.text-danger {% verbatim %}{{dateRangeError}}{% endverbatim %}
         {% if not is_pro %}
-        p(ng-show="available").ng-cloak.available Cet article est disponible à ces dates
-        p(ng-show="!available").ng-cloak.available.unavailable Cet article n'est pas disponible à ces dates
+        p(ng-show="available").ng-cloak.available {% trans "Cet article est disponible à ces dates" %}
+        p(ng-show="!available").ng-cloak.available.unavailable {% trans "Cet article n'est pas disponible à ces dates" %}
         {% endif %}
-        {% verbatim %}
     .part
         p
-            | Durée de la location&nbsp;:&nbsp;
-            b.period-days.ng-cloak {{duration}}
+            | {% trans "Durée de la location" %}&nbsp;:&nbsp;
+            b.period-days.ng-cloak {% verbatim %}{{duration}}{% endverbatim %}
         p.price
-            | Prix {% endverbatim %}{% if is_pro %}{% trans "indicatif" %}{% else %}{% trans "de la location" %}{% endif %}&nbsp;:{% verbatim %}
-            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
-        {% endverbatim %}
-
+            | {% trans "Prix" %} {% if is_pro %}{% trans "indicatif" %}{% else %}{% trans "de la location" %}{% endif %}&nbsp;:
+            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{% verbatim %}{{ bookingPriceCurrency }}{% endverbatim %}
         {% if not is_pro and product.need_insurance %}
         p {% trans "Assurance incluse" %}
         {% endif %}
     .part
         a(href = "", data-dismiss="modal", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success.calendar-ok
-            i.flaticon.stroke.calendar-2
-            | {% if is_pro %}Envoyez{% else %}{% trans "Réservez" %}{% endif %}
+            i.flaticon.stroke.calendar-2glio
+            | {% if is_pro %}{% trans "Envoyez" %}{% else %}{% trans "Réservez" %}{% endif %}
         p.mrg-v-1
             if is_pro
                 {% blocktrans %}

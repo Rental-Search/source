@@ -1,0 +1,27 @@
+extends ../index
+-load compressed prefixed_cache i18n staticfiles
+{% get_current_language as LANGUAGE_CODE %}
+
+
+{% block title %}#{category}{% endblock %}
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "homepage_styles" %}
+
+block content-homepage
+    article
+      {% cache 43200 'homepage_banner_static' category.slug LANGUAGE_CODE %}
+      section.banner
+        -var banners = ['img/banner-1.jpg', 'img/banner-2.jpg', 'img/banner-3.jpg']
+        .item(style="{% if category.profile %}background-image: url({{ category.profile.url }}){% else %}background-image: url({% static banners|random %}){% endif %}")
+        //include ../jade/_category_menu
+      {% endcache %}
+
+      section.product-list
+        include ./subcategory_list
+
+      {% cache 43200 'homepage_insurance_static' LANGUAGE_CODE %}
+      section.insurances
+        include ../jade/_insurances
+      {% endcache %}

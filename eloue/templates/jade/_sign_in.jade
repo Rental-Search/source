@@ -43,30 +43,29 @@
                         {% trans "Code postal" as zipcode %}
                         .form-group: .row
                             .col-xs-5.clear-selector
-                                {% verbatim %}
-                                select(ng-model="account.civility", data-placeholder="Civilité", eloue-chosen).form-control
-                                    option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
-                                {% endverbatim %}
+                                
+                                select(ng-model="account.civility", data-placeholder="{% trans 'Civilité' %}", eloue-chosen).form-control
+                                    option(ng-repeat="item in civilityOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
                             .col-xs-7
-                                input(type="text", placeholder="{{ last_name }} *", name="last_name", ng-model="account.last_name", required).form-control
+                                input(type="text", placeholder="{% trans 'Nom' %} *", name="last_name", ng-model="account.last_name", required).form-control
                                 span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted", translate="required_field")
                         .form-group
-                            input(type="text", placeholder="{{ first_name }}*", name="first_name", ng-model="account.first_name", required).form-control
+                            input(type="text", placeholder="{% trans 'Prénom' %} *", name="first_name", ng-model="account.first_name", required).form-control
                             span.text-danger(ng-show="registrationForm.first_name.$error.required && registrationSubmitted", translate="required_field")
                         .form-group
-                            input(type="text", placeholder="{{ email }} *", name="email", ng-model="account.email", required).form-control
+                            input(type="text", placeholder="{% trans 'Email' %} *", name="email", ng-model="account.email", required).form-control
                             span.text-danger(ng-show="registrationForm.email.$error.required && registrationSubmitted", translate="required_field")
                         .form-group
-                            input(type="text", placeholder="{{ username }} *", name="username", ng-model="account.username", required).form-control
+                            input(type="text", placeholder="{% trans 'Pseudo' %} *", name="username", ng-model="account.username", required).form-control
                             span.text-danger(ng-show="registrationForm.username.$error.required && registrationSubmitted", translate="required_field")
                         .form-group
-                            input(type="password", placeholder="{{ password }} *", name="password", ng-model="account.password", required).form-control
+                            input(type="password", placeholder="{% trans 'Mot de passe' %} *", name="password", ng-model="account.password", required).form-control
                             span.text-danger(ng-show="registrationForm.password.$error.required && registrationSubmitted", translate="required_field")
                         .form-group
-                            input(type="password", placeholder="{{ confirm_password }} *", name="confirmPassword", ng-model="account.confirmPassword", required).form-control
+                            input(type="password", placeholder="{% trans 'Confirmation du mot de passe' %} *", name="confirmPassword", ng-model="account.confirmPassword", required).form-control
                             span.text-danger(ng-show="registrationForm.confirmPassword.$error.required && registrationSubmitted", translate="required_field")
                         .form-group
-                            input(type="text", placeholder="{{ zipcode }} *", name="zipcode", ng-model="account.zipcode", required, eloue-zipcode).form-control
+                            input(type="text", placeholder="{% trans 'Code postal' %} *", name="zipcode", ng-model="account.zipcode", required, eloue-zipcode).form-control
                             span.text-danger(ng-show="registrationForm.zipcode.$error.badFormat && registrationSubmitted", translate="zipcode_invalid")
                             span.text-danger(ng-show="registrationForm.zipcode.$error.required && registrationSubmitted", translate="required_field")
 
@@ -76,7 +75,7 @@
                                 input(type="checkbox", checked)#inform
                                 span.flaticon.stroke.checkmark
                             | {% trans "Tenez moi informé de l'actualité et des bonnes affaires e-loue" %}
-                        .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success Inscription via Email
+                        .form-group: button(type="submit", ng-class="{'loading': !!submitting}").btn.bg-success {% trans "Inscription via Email" %}
                         p
                             {% url 'terms' as terms_url %}
                             {% blocktrans %} 
@@ -89,4 +88,4 @@
                             {% endblocktrans%}
                 span.or
                 h4 {% trans "Vous êtes déjà membre e-loue ?" %}
-                a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion Connexion
+                a( href = "#connectez-vous", data-toggle="modal", data-target="#loginModal", data-dismiss="modal").modal-fotter-link.connexion {% trans "Connexion" %}

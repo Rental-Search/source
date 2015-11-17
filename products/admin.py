@@ -15,6 +15,8 @@ from django_messages.models import Message
 from django_messages.admin import MessageAdmin
 from django import forms
 
+from modeltranslation.admin import TranslationAdmin
+
 from products.forms import ProductAdminForm
 from products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage
 from accounts.models import Patron
@@ -151,11 +153,12 @@ class CarProductAdmin(ProductCurrentSiteAdmin):
         return super(CarProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
 
-class CategoryAdmin(MPTTModelAdmin):
+class CategoryAdmin(MPTTModelAdmin, TranslationAdmin):
     list_display = ('name', 'parent')
     search_fields = ['name', 'parent__name']
     prepopulated_fields = {"slug": ("name",)}
     raw_id_fields = ("product",)
+
 
 
 class PropertyAdmin(admin.ModelAdmin):

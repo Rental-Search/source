@@ -283,7 +283,7 @@ define([
 
                     ProductsService.saveProduct($scope.product).then(
                         function (product) {
-                            $scope.price.currency = Currency.EUR.name;
+                            $scope.price.currency = $scope.product.currency;
                             $scope.price.product = $scope.productsBaseUrl + product.id + "/";
                             PricesService.savePrice($scope.price).then(
                                 function () {

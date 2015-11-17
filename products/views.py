@@ -134,7 +134,7 @@ def get_booking_price_from_form(form):
           'duration': duration,
           'total_price': total_price,
           'unit_name': UNIT[price_unit][1],
-          'unit_value': smart_str(currency(product.prices.filter(unit=price_unit)[0].amount)),
+          'unit_value': smart_str(currency(product.prices.filter(unit=price_unit)[0].local_currency_amount)),
           'max_available': max_available,
           'quantity': max_available if quantity > max_available else quantity,
         }
@@ -146,7 +146,7 @@ def get_booking_price_from_form(form):
             price_unit = product.prices.filter(unit=1)[0]
             response_dict = {
               'unit_name': UNIT[1][1],
-              'unit_value': smart_str(currency(price_unit.amount)),
+              'unit_value': smart_str(currency(price_unit.local_currency_amount)),
               'max_available': max_available,
               'quantity': 1,
             }
