@@ -7,110 +7,111 @@ msgid ""
 msgstr ""
 "Project-Id-Version: e-loue rental israel 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 12:59+0200\n"
+"POT-Creation-Date: 2015-11-17 12:12+0200\n"
 "PO-Revision-Date: 2015-10-19 19:40+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 1.8.5\n"
 
-#: accounts/admin.py:62 accounts/admin.py:73
+#: accounts/admin.py:83 accounts/admin.py:94
 msgid "Personal info"
 msgstr "פרטים אישים "
 
-#: accounts/admin.py:63
+#: accounts/admin.py:84
 msgid "Profile"
 msgstr "פרופיל"
 
-#: accounts/admin.py:64 accounts/admin.py:74 accounts/admin.py:255
+#: accounts/admin.py:85 accounts/admin.py:95 accounts/admin.py:276
 msgid "Company info"
 msgstr "פרטי החברה"
 
-#: accounts/admin.py:65 accounts/admin.py:75 accounts/admin.py:258
+#: accounts/admin.py:86 accounts/admin.py:96 accounts/admin.py:279
 msgid "Permissions"
 msgstr "הרשאות"
 
-#: accounts/admin.py:107
+#: accounts/admin.py:128
 msgid "Exporter en csv"
 msgstr "ייצוא ל- csv"
 
-#: accounts/admin.py:117
+#: accounts/admin.py:138
 msgid "Envoyer à nouveau l'email d'activation"
 msgstr "שלח שנית האיי מייל להפעלה "
 
-#: accounts/admin.py:125
+#: accounts/admin.py:146
 msgid "Indexer les produits"
 msgstr "רשימה מוצרים "
 
-#: accounts/admin.py:133
+#: accounts/admin.py:154
 msgid "Désindexer les produits"
 msgstr "הוצאה מוצרים מהרשימה  "
 
-#: accounts/admin.py:143
+#: accounts/admin.py:164
 msgid "Geolocation"
 msgstr "מיקום גאולוגי "
 
-#: accounts/admin.py:163
+#: accounts/admin.py:184
 msgid "Signature"
 msgstr "חתימה"
 
-#: accounts/admin.py:169
+#: accounts/admin.py:190
 msgid "Avec signature"
 msgstr " עם חתימה"
 
-#: accounts/admin.py:170
+#: accounts/admin.py:191
 msgid "Sans signature"
 msgstr "ללא חתימה"
 
-#: accounts/admin.py:185
+#: accounts/admin.py:206
 msgid "Abonnement"
 msgstr "מנוי"
 
-#: accounts/admin.py:186
+#: accounts/admin.py:207
 msgid "Patron informations"
 msgstr "פרטי המנהל "
 
-#: accounts/admin.py:256
+#: accounts/admin.py:277
 msgid "Contact"
 msgstr "צור קשר "
 
-#: accounts/admin.py:257
+#: accounts/admin.py:278
 msgid "Boutique"
 msgstr "חנות "
 
-#: accounts/admin.py:289
+#: accounts/admin.py:310
 msgid "lien boutique"
 msgstr "קישור חנות"
 
-#: accounts/admin.py:293
-msgid "noubre d'annonce"
+#: accounts/admin.py:314
+#, fuzzy
+msgid "nombre d'annonce"
 msgstr "מספר  מודעות "
 
-#: accounts/admin.py:299
+#: accounts/admin.py:320
 msgid "annonces"
 msgstr "מודעות  "
 
-#: accounts/admin.py:307
+#: accounts/admin.py:328
 msgid "Souscription"
 msgstr "הרשמה"
 
-#: accounts/admin.py:311
+#: accounts/admin.py:332
 msgid "mise en lignes"
 msgstr "פירסום"
 
-#: accounts/admin.py:315
+#: accounts/admin.py:336
 msgid "fin de souscription"
 msgstr "סיום מנוי "
 
-#: accounts/admin.py:320
+#: accounts/admin.py:341
 msgid "dernier rapport"
 msgstr "הדיווח האחרון"
 
-#: accounts/admin.py:328
+#: accounts/admin.py:349
 msgid "tickets résolus"
 msgstr "כרטיסים שנפתרו"
 
@@ -415,7 +416,7 @@ msgstr "טלפון נייד"
 msgid "Fax"
 msgstr "פקס"
 
-#: accounts/choices.py:70
+#: accounts/choices.py:70 eloue/templates/contact_us/_new_contact_form.html:54
 msgid "Autre"
 msgstr "אחר"
 
@@ -427,7 +428,10 @@ msgstr "כרטיס אשראי "
 msgid "Chèque"
 msgstr "המחאה "
 
-#: accounts/choices.py:76
+#: accounts/choices.py:76 eloue/templates/dashboard/account/profil.jade:141
+#: eloue/templates/dashboard/account/profil.jade:144
+#: eloue/templates/dk/dashboard/account/profil.jade:141
+#: eloue/templates/dk/dashboard/account/profil.jade:144
 msgid "IBAN"
 msgstr "יש לציין פרטי חשבון בנק שלך   IBAN"
 
@@ -508,6 +512,8 @@ msgid ""
 msgstr "חשבון המשתמש המשויך לכתובת הדוא''ל זה  אינו יכול לאפס את הסיסמה."
 
 #: accounts/forms.py:107 accounts/forms.py:203
+#: eloue/templates/dashboard/account/profil.jade:44
+#: eloue/templates/dk/dashboard/account/profil.jade:44
 #: eloue/templates/jade/_log_in.jade:25 eloue/templates/jade/_sign_in.jade:56
 #: eloue/templates/landing_pages/_sign_in_content.jade:37
 msgid "Email"
@@ -525,7 +531,8 @@ msgstr "אימות סיסמה חדשה "
 msgid "User record is empty."
 msgstr "רשומת המשתמש ריקה."
 
-#: accounts/forms.py:181 accounts/serializers.py:183 accounts/tests/api2.py:217
+#: accounts/forms.py:181 accounts/serializers.py:183
+#: accounts/tests/api2.py:217
 msgid "The two password fields didn't match."
 msgstr " אין אימות בין  2 הסיסמאות ."
 
@@ -542,12 +549,16 @@ msgid "Enter the same password as above, for verification."
 msgstr "הזן את  אותו הסיסמה שוב , לצורך אימות."
 
 #: accounts/forms.py:204 accounts/forms.py:326
+#: eloue/templates/dashboard/account/profil.jade:56
+#: eloue/templates/dk/dashboard/account/profil.jade:56
 #: eloue/templates/jade/_sign_in.jade:33 eloue/templates/jade/_sign_in.jade:53
 #: eloue/templates/landing_pages/_sign_in_content.jade:34
 msgid "Prénom"
 msgstr "שם פרטי"
 
 #: accounts/forms.py:205 accounts/forms.py:327
+#: eloue/templates/dashboard/account/profil.jade:59
+#: eloue/templates/dk/dashboard/account/profil.jade:59
 #: eloue/templates/jade/_sign_in.jade:32 eloue/templates/jade/_sign_in.jade:48
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:13
 msgid "Nom"
@@ -569,8 +580,9 @@ msgstr "מפרסם המקצועי"
 msgid "Nom de la société"
 msgstr "שם חברה"
 
-#: accounts/forms.py:319 eloue/templates/jade/_sign_in.jade:35
-#: eloue/templates/jade/_sign_in.jade:59
+#: accounts/forms.py:319 eloue/templates/dashboard/account/profil.jade:41
+#: eloue/templates/dk/dashboard/account/profil.jade:41
+#: eloue/templates/jade/_sign_in.jade:35 eloue/templates/jade/_sign_in.jade:59
 #: eloue/templates/landing_pages/_sign_in_content.jade:40
 msgid "Pseudo"
 msgstr "שם משתמש "
@@ -583,7 +595,9 @@ msgstr "נדרש. 30 תווים או פחות. אותיות, ספרות ו @/-/ 
 msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr "ערך זה עשוי להכיל רק אותיות, מספרים, @/-/ + /-/ _ תווים."
 
-#: accounts/forms.py:324 eloue/templates/autovoisin/jade/_log_in.jade:22
+#: accounts/forms.py:324 eloue/templates/autovoisin/jade/_log_in.jade:23
+#: eloue/templates/dashboard/account/_base_account.jade:3
+#: eloue/templates/dk/dashboard/account/_base_account.jade:3
 #: eloue/templates/jade/_log_in.jade:26 eloue/templates/jade/_sign_in.jade:36
 #: eloue/templates/jade/_sign_in.jade:62
 #: eloue/templates/landing_pages/_sign_in_content.jade:43
@@ -594,11 +608,25 @@ msgstr "סיסמה"
 msgid "Mot de passe à nouveau"
 msgstr "סיסמה שלך שוב "
 
-#: accounts/forms.py:328 eloue/templates/jade/_pop_up_publish_item.jade:53
+#: accounts/forms.py:328
+#: eloue/templates/dashboard/account/_address_detail.jade:8
+#: eloue/templates/dashboard/account/profil.jade:77
+#: eloue/templates/dashboard/items/index.jade:38
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:8
+#: eloue/templates/dk/dashboard/account/profil.jade:77
+#: eloue/templates/dk/dashboard/items/index.jade:38
+#: eloue/templates/jade/_pop_up_publish_item.jade:53
 msgid "Rue"
 msgstr "רחוב"
 
-#: accounts/forms.py:329 eloue/templates/jade/_pop_up_publish_item.jade:56
+#: accounts/forms.py:329
+#: eloue/templates/dashboard/account/_address_detail.jade:15
+#: eloue/templates/dashboard/account/profil.jade:80
+#: eloue/templates/dashboard/items/index.jade:43
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:15
+#: eloue/templates/dk/dashboard/account/profil.jade:80
+#: eloue/templates/dk/dashboard/items/index.jade:43
+#: eloue/templates/jade/_pop_up_publish_item.jade:56
 #: eloue/templates/jade/_sign_in.jade:38 eloue/templates/jade/_sign_in.jade:68
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:23
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:11
@@ -607,6 +635,12 @@ msgid "Code postal"
 msgstr "מיקוד"
 
 #: accounts/forms.py:332 accounts/models.py:563 accounts/models.py:641
+#: eloue/templates/dashboard/account/_address_detail.jade:20
+#: eloue/templates/dashboard/account/profil.jade:83
+#: eloue/templates/dashboard/items/index.jade:46
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:20
+#: eloue/templates/dk/dashboard/account/profil.jade:83
+#: eloue/templates/dk/dashboard/items/index.jade:46
 #: eloue/templates/jade/_pop_up_publish_item.jade:59
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:26
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:14
@@ -625,7 +659,8 @@ msgstr "תמונת פרופיל"
 msgid "Téléphone"
 msgstr "טלפון"
 
-#: accounts/forms.py:336
+#: accounts/forms.py:336 eloue/templates/dashboard/account/profil.jade:138
+#: eloue/templates/dk/dashboard/account/profil.jade:138
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:50
 msgid "Numéro de permis"
 msgstr "מספר רשיון"
@@ -655,6 +690,8 @@ msgid ""
 msgstr "מבצע לזמן מוגבל עם מבצע  חבר מביא חבר "
 
 #: accounts/forms.py:356 accounts/models.py:560 accounts/models.py:638
+#: eloue/templates/dashboard/items/index.jade:35
+#: eloue/templates/dk/dashboard/items/index.jade:35
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:18
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:6
 msgid "Adresse"
@@ -692,7 +729,9 @@ msgstr "הסימה שלך אינו תואם "
 msgid "Permis de conduire"
 msgstr "מספר רשיון נהיגה "
 
-#: accounts/models.py:64 eloue/templates/jade/_sign_in.jade:43
+#: accounts/models.py:64 eloue/templates/dashboard/account/profil.jade:50
+#: eloue/templates/dk/dashboard/account/profil.jade:50
+#: eloue/templates/jade/_sign_in.jade:43
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:5
 msgid "Civilité"
 msgstr "מצב משפחתי "
@@ -767,7 +806,7 @@ msgstr "שם  משתמש זה כבר  תפוס"
 
 #: accounts/models.py:227 eloue/templates/base.jade:5
 #: eloue/templates/admin/base_site.html:4
-#: eloue/templates/admin/base_site.html:7
+#: eloue/templates/admin/base_site.html:7 eloue/templates/dk/base.jade:5
 msgid "e-loue"
 msgstr "אי-לו"
 
@@ -839,7 +878,10 @@ msgstr "תאריך תשלום שנתי "
 msgid "Commentaire"
 msgstr "הערות "
 
-#: accounts/models.py:701 eloue/templates/jade/pop_up_sections/_terms.jade:20
+#: accounts/models.py:701
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:89
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:89
+#: eloue/templates/jade/pop_up_sections/_terms.jade:20
 msgid "Total"
 msgstr "סכה''ל"
 
@@ -876,7 +918,7 @@ msgstr "התכונה  שוגיה או לא חוקית: %s"
 msgid "Sending messages is allowed only to pro-accounts."
 msgstr "שליחת הודעות מותר רק למנוים המשכירים באופן מקצועי "
 
-#: accounts/views.py:61 accounts/views.py:264
+#: accounts/views.py:66 accounts/views.py:351
 msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
@@ -884,19 +926,30 @@ msgstr ""
 "נשלח אי מייל עם הנחיות  איך להגדיר את סיסמתך אל האימייל שמסרת לנו , תקבל "
 "אותו בקרוב."
 
-#: accounts/views.py:91
+#: accounts/views.py:96
 msgid "Your password has been set.  You may go ahead and log in now."
 msgstr "הסיסמה שלך הוגדרה בהצלחה כעת אתה יכול לגלוש  חופשי באתר "
 
-#: accounts/views.py:256 accounts/tests/api2.py:200
+#: accounts/views.py:256 accounts/views.py:261 accounts/views.py:265
+#: accounts/views.py:297 accounts/views.py:302 accounts/views.py:306
+#, fuzzy
+msgid "Erreur dans le formulaire"
+msgstr "טעות ברשת "
+
+#: accounts/views.py:258 accounts/views.py:299
+#, fuzzy
+msgid "Le message a ete envoye avec succes"
+msgstr "הקישור נשלח בהצלחה"
+
+#: accounts/views.py:343 accounts/tests/api2.py:200
 msgid "Votre mot de passe à bien été modifié"
 msgstr "סיסמה שלך שונה בהצלחה "
 
-#: accounts/views.py:273
+#: accounts/views.py:360
 msgid "User with this email not registered"
 msgstr "אין משתמש  עם אי מייל  זה  "
 
-#: accounts/views.py:275
+#: accounts/views.py:362
 msgid ""
 "We've e-mailed you instructions for activating your account to the e-mail "
 "address you submitted. You should be receiving it shortly."
@@ -904,31 +957,33 @@ msgstr ""
 "נשלח אי מייל עם הנחיות  איך להגדיר את סיסמתך אל האימייל שמסרת לנו , תקבל "
 "אותו בקרוב."
 
-#: accounts/views.py:297
+#: accounts/views.py:384
 msgid "Your message has been sent sucessfully."
 msgstr "הודעתך נשלחה בהצלחה."
 
-#: accounts/views.py:318
+#: accounts/views.py:405
 msgid "The address is default address of current user"
 msgstr "הכתובת היא כתובת ברירת המחדל של המשתמש הנוכחי"
 
-#: accounts/views.py:324
+#: accounts/views.py:411
 msgid "The address is used in products"
 msgstr "הכתובת בשימוש במוצרים "
 
-#: accounts/views.py:356
+#: accounts/views.py:443
 msgid "The phone is default number of current user"
 msgstr "הטלפון  הזה הוא מספר ברירת המחדל של המשתמש הנוכחי"
 
-#: accounts/views.py:362
+#: accounts/views.py:449
 msgid "The phone is used in products"
 msgstr "מספר הטלפון הזה כבר בשימוש באתר "
 
-#: accounts/widgets.py:8
+#: accounts/widgets.py:8 eloue/templates/dashboard/account/profil.jade:125
+#: eloue/templates/dk/dashboard/account/profil.jade:125
 msgid "Mois"
 msgstr "חודש"
 
-#: accounts/widgets.py:23
+#: accounts/widgets.py:23 eloue/templates/dashboard/account/profil.jade:130
+#: eloue/templates/dk/dashboard/account/profil.jade:130
 msgid "Année"
 msgstr "שנה"
 
@@ -971,8 +1026,91 @@ msgid "Danish"
 msgstr "דנית"
 
 #: eloue/settings.py:115
-msgid "Hebrew"
+#, fuzzy
+msgid "Hebrews"
 msgstr "עברית"
+
+#: eloue/urls.py:208
+#: eloue/templates/dashboard/messages/_aside_product_detail.jade:18
+#: eloue/templates/dashboard/messages/_aside_product_detail.jade:21
+#: eloue/templates/django_messages/new_message_email.html:17
+#: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:18
+#: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:21
+#: eloue/templates/rent/emails/comment_email.html:18
+msgid "loueur"
+msgstr "משכיר"
+
+#: eloue/urls.py:210 eloue/templates/autovoisin/jade/_nav_home.jade:4
+#: eloue/templates/autovoisin/jade/_nav_home.jade:10
+#: eloue/templates/gosport/jade/_nav_home.jade:4
+#: eloue/templates/gosport/jade/_nav_home.jade:10
+#: eloue/templates/jade/_breadcrumbs.jade:23
+#: eloue/templates/jade/_breadcrumbs.jade:25
+#: eloue/templates/jade/_nav_home.jade:6
+#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:17 products/models.py:739
+#: products/models.py:741 products/templatetags/facets.py:72
+msgid "location"
+msgstr "השכרה"
+
+#: eloue/urls.py:211 eloue/templates/dk/jade/_footer_links.jade:9
+#, fuzzy
+msgid "comment-ca-marche"
+msgstr "איך זה עובד?"
+
+#: eloue/urls.py:212 eloue/templates/dk/jade/_footer_links.jade:11
+#, fuzzy
+msgid "offre-professionnel"
+msgstr "הצעות מעוסקים בהשכרות באופן מקצועי"
+
+#: eloue/urls.py:218 eloue/templates/dk/jade/_footer_links.jade:35
+#, fuzzy
+msgid "nos-partenaires"
+msgstr "שותפים"
+
+#: eloue/urls.py:219 eloue/templates/dk/jade/_footer_links.jade:45
+#, fuzzy
+msgid "contactez-nous"
+msgstr "צור קשר"
+
+#: eloue/urls.py:221 eloue/templates/dk/jade/_footer_links.jade:33
+#, fuzzy
+msgid "qui-sommes-nous"
+msgstr "מי אנחנו ?"
+
+#: eloue/urls.py:222 eloue/templates/dk/jade/_footer_links.jade:13
+msgid "securite"
+msgstr ""
+
+#: eloue/urls.py:223
+#, fuzzy
+msgid "conditions-generales-particuliers"
+msgstr "תנאים כללים"
+
+#: eloue/urls.py:224 eloue/templates/dk/jade/_footer_links.jade:23
+#, fuzzy
+msgid "conditions-generales-professionnels"
+msgstr "תנאים כללים לבעלי עסקים "
+
+#: eloue/urls.py:225
+#, fuzzy
+msgid "contrat-de-location"
+msgstr "חוזים להשכות "
+
+#: eloue/urls.py:227 eloue/templates/dk/jade/_footer_links.jade:47
+#, fuzzy
+msgid "mentions-legales"
+msgstr "אזהרות משפטיות "
+
+#: eloue/urls.py:229
+#, fuzzy
+msgid "assurance-tranquillite"
+msgstr "/ביטוח/"
+
+#: eloue/urls.py:230
+#, fuzzy
+msgid "nous-recrutons"
+msgstr "גיוס עובדים "
 
 #: eloue/views.py:63
 #, python-format
@@ -1138,11 +1276,12 @@ msgstr ""
 "\n"
 "If the error persists, please <a href=\"%(contact_url)s\">contact us</a>."
 
-#: eloue/templates/base.jade:5
+#: eloue/templates/base.jade:5 eloue/templates/dk/base.jade:5
 msgid "Page"
 msgstr "דף"
 
 #: eloue/templates/index.jade:2 eloue/templates/autovoisin/index.jade:2
+#: eloue/templates/dk/index.jade:2
 msgid "Location entre particuliers ou professionnels de tout type d'objet"
 msgstr "השכרה  כל סוגי חפצים בין אדם פרטי  או חברה לאדם פרטי  "
 
@@ -1162,7 +1301,7 @@ msgstr "הקשורית כבר לא תקפה,נא איפס את  סיסמאתך  
 
 #: eloue/templates/accounts/password_reset_confirm.jade:10
 #: eloue/templates/accounts/emails/password_reset_email.html:5
-#: eloue/templates/autovoisin/jade/_log_in.jade:30
+#: eloue/templates/autovoisin/jade/_log_in.jade:31
 #: eloue/templates/jade/_log_in.jade:40
 msgid "Mot de passe oublié"
 msgstr "שכחת סיסמא "
@@ -1628,6 +1767,10 @@ msgstr "אישור  שינוי במנוי שלך "
 #: eloue/templates/cancel_terms/_breadcrumbs.jade:4
 #: eloue/templates/contact_us/_breadcrumbs.jade:4
 #: eloue/templates/deposit_amount/_breadcrumbs.jade:4
+#: eloue/templates/dk/security/_breadcrumbs.jade:4
+#: eloue/templates/dk/subscription/_breadcrumbs.jade:4
+#: eloue/templates/dk/terms_pro/_breadcrumbs.jade:4
+#: eloue/templates/dk/who_are_we/_breadcrumbs.jade:4
 #: eloue/templates/gosport/how_it_works/_breadcrumb.jade:4
 #: eloue/templates/gosport/imprint/_breadcrumbs.jade:4
 #: eloue/templates/gosport/our_partners/_breadcrumbs.jade:4
@@ -1662,7 +1805,10 @@ msgstr "צור קשר"
 
 #: eloue/templates/autovoisin/how_it_works/index.jade:1
 #: eloue/templates/autovoisin/jade/_header_site.jade:41
+#: eloue/templates/dk/jade/_footer_links.jade:9
+#: eloue/templates/dk/jade/_header_site.jade:49
 #: eloue/templates/gosport/how_it_works/index.jade:1
+#: eloue/templates/how_it_works/_breadcrumb.jade:7
 #: eloue/templates/jade/_footer_links.jade:9
 #: eloue/templates/jade/_header_site.jade:49
 msgid "Comment ça marche ?"
@@ -1675,7 +1821,7 @@ msgstr "אזהרות משפטיות "
 
 #: eloue/templates/autovoisin/insurances/index.jade:1
 #: eloue/templates/insurances/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:42
+#: eloue/templates/jade/_footer_links.jade:27
 msgid "Assurance tranquilité"
 msgstr "/ביטוח/"
 
@@ -1685,37 +1831,54 @@ msgstr "/ביטוח/"
 #: eloue/templates/django_messages/outbox.html:9
 #: eloue/templates/django_messages/trash.html:9
 #: eloue/templates/django_messages/view.html:9
+#: eloue/templates/dk/jade/_header_site.jade:33
 #: eloue/templates/jade/_header_site.jade:33
 msgid "Tableau de bord"
 msgstr "דך הבית "
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:27
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:25
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:25
+#: eloue/templates/dk/jade/_header_site.jade:35
 #: eloue/templates/jade/_header_site.jade:35
 msgid "Messages"
 msgstr "הודעות "
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:29
+#: eloue/templates/dashboard/items/calendar.jade:41
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:27
+#: eloue/templates/dk/dashboard/items/calendar.jade:41
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:27
+#: eloue/templates/dk/jade/_header_site.jade:37
 #: eloue/templates/jade/_header_site.jade:37
 #: eloue/templates/products/tab_available.jade:55
 msgid "Réservations"
 msgstr "ההזמנות "
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:31
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:29
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:29
+#: eloue/templates/dk/jade/_header_site.jade:39
 #: eloue/templates/jade/_header_site.jade:39
 msgid "Annonces"
 msgstr "מודעה "
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:33
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:31
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:31
+#: eloue/templates/dk/jade/_header_site.jade:41
 #: eloue/templates/jade/_header_site.jade:41
 msgid "Compte"
 msgstr "חשבון"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:35
+#: eloue/templates/dk/jade/_header_site.jade:43
 #: eloue/templates/jade/_header_site.jade:43
 msgid "Déconnexion"
 msgstr "יציאה מהמערכת"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:39
+#: eloue/templates/dk/jade/_header_site.jade:47
 #: eloue/templates/jade/_header_site.jade:47
 msgid "Aide"
 msgstr "עזרה"
@@ -1723,81 +1886,82 @@ msgstr "עזרה"
 #: eloue/templates/autovoisin/jade/_header_site.jade:55
 #: eloue/templates/autovoisin/jade/_header_site.jade:57
 #: eloue/templates/autovoisin/jade/_header_site.jade:60
+#: eloue/templates/dk/jade/_header_site.jade:61
 #: eloue/templates/jade/_header_site.jade:61
 #: eloue/templates/jade/_product_list_aside.jade:24
 msgid "Où ça ?"
 msgstr "איפה ? "
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:55
+#: eloue/templates/dk/jade/_header_site.jade:60
 #: eloue/templates/jade/_header_site.jade:60 products/forms.py:46
 msgid "Que voulez-vous louer ?"
 msgstr "מה  ברצונך לשכור ? "
 
-#: eloue/templates/autovoisin/jade/_header_site.jade:60
-#: eloue/templates/jade/_date_picker_border.jade:23
-msgid "Au"
-msgstr "עד "
-
 #: eloue/templates/autovoisin/jade/_header_site.jade:70
+#: eloue/templates/dk/jade/_header_site.jade:75
 #: eloue/templates/jade/_header_site.jade:75
 msgid "Déposez une annonce"
 msgstr "להכניס המודעה "
 
-#: eloue/templates/autovoisin/jade/_log_in.jade:7
-#: eloue/templates/autovoisin/jade/_log_in.jade:34
+#: eloue/templates/autovoisin/jade/_log_in.jade:8
+#: eloue/templates/autovoisin/jade/_log_in.jade:35
 #: eloue/templates/jade/_log_in.jade:8 eloue/templates/jade/_log_in.jade:44
 #: eloue/templates/jade/_sign_in.jade:86
 #: eloue/templates/landing_pages/_sign_in_content.jade:65
 msgid "Connexion"
 msgstr "התקשרות "
 
-#: eloue/templates/autovoisin/jade/_log_in.jade:10
+#: eloue/templates/autovoisin/jade/_log_in.jade:11
 #: eloue/templates/jade/_log_in.jade:11
 msgid "Connectez-vous à votre compte"
 msgstr "כניסה לחשבון שלך"
 
-#: eloue/templates/autovoisin/jade/_log_in.jade:19
+#: eloue/templates/autovoisin/jade/_log_in.jade:20
 #: eloue/templates/jade/_reset_password.jade:20
 msgid "E-mail"
 msgstr "דואר אלקטרוני"
 
-#: eloue/templates/autovoisin/jade/_log_in.jade:28
+#: eloue/templates/autovoisin/jade/_log_in.jade:29
 #: eloue/templates/jade/_log_in.jade:38
 msgid "Se souvenir de moi"
 msgstr "זוכר אותי"
 
-#: eloue/templates/autovoisin/jade/_log_in.jade:37
+#: eloue/templates/autovoisin/jade/_log_in.jade:38
 msgid "Vous n'êtes pas encore membre AutoVoisin ?"
 msgstr "עדיין לא חבר AutoVoisin?"
 
-#: eloue/templates/autovoisin/jade/_log_in.jade:37
+#: eloue/templates/autovoisin/jade/_log_in.jade:38
 #: eloue/templates/jade/_log_in.jade:47 eloue/templates/jade/_sign_in.jade:8
 #: eloue/templates/landing_pages/_sign_in_content.jade:12
 msgid "Inscription"
 msgstr "הרשמה "
 
-#: eloue/templates/autovoisin/jade/_nav_home.jade:4
-#: eloue/templates/autovoisin/jade/_nav_home.jade:10
-#: eloue/templates/gosport/jade/_nav_home.jade:4
-#: eloue/templates/gosport/jade/_nav_home.jade:10
-#: eloue/templates/jade/_breadcrumbs.jade:23
-#: eloue/templates/jade/_breadcrumbs.jade:25
-#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
-#: eloue/templates/jade/_nav_home.jade:17
-msgid "location"
-msgstr "השכרה"
+#: eloue/templates/autovoisin/jade/_product_list.jade:7
+#: eloue/templates/dk/jade/_product_list.jade:7
+#: eloue/templates/gosport/jade/_product_list_main.jade:6
+#: eloue/templates/jade/_product_list.jade:7
+#: eloue/templates/jade/_product_list_main.jade:7
+#: eloue/templates/jade/product_details/aside/_similar_listing.jade:17
+#: eloue/templates/products/partials/result_list.html:22
+#: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
+msgid "Sur devis"
+msgstr "בהתאם להצעה מחיר "
 
 #: eloue/templates/autovoisin/our_partners/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:58
+#: eloue/templates/dk/jade/_footer_links.jade:35
+#: eloue/templates/jade/_footer_links.jade:43
+#: eloue/templates/our_partners/_breadcrumbs.jade:7
 msgid "Nos partenaires"
 msgstr "שותפים"
 
 #: eloue/templates/autovoisin/rental_agreement/_text_content.jade:1
-#: eloue/templates/jade/_footer_links.jade:40
+#: eloue/templates/jade/_footer_links.jade:25
 msgid "Contrats de location"
 msgstr "חוזים להשכות "
 
 #: eloue/templates/autovoisin/security/_list_securisty.jade:1
+#: eloue/templates/dk/security/index.jade:1
 #: eloue/templates/gosport/security/_list_securisty.jade:1
 #: eloue/templates/security/index.jade:1
 msgid "Sécurité"
@@ -1813,9 +1977,136 @@ msgid "Conditions Générales Particuliers"
 msgstr "תנאים כללים "
 
 #: eloue/templates/autovoisin/who_are_we/_static_content.jade:1
+#: eloue/templates/dk/who_are_we/_breadcrumbs.jade:7
+#: eloue/templates/dk/who_are_we/index.jade:1
 #: eloue/templates/who_are_we/index.jade:1
 msgid "Qui sommes nous ?"
 msgstr "מי אנחנו ? "
+
+#: eloue/templates/contact_us/_breadcrumbs.jade:6
+#: eloue/templates/dk/jade/_footer_links.jade:43
+#: eloue/templates/jade/_footer_links.jade:53
+msgid "En savoir plus"
+msgstr "פרטים נוספים "
+
+#: eloue/templates/contact_us/_breadcrumbs.jade:7
+#, fuzzy
+msgid "Contactez‐nous"
+msgstr "צור קשר"
+
+#: eloue/templates/contact_us/_head_content.jade:2
+msgid ""
+"\n"
+"\n"
+"  <h2 class=\"text-uppercase\">nous avons essayé de tout vous dire.<br> mais "
+"si ce n’est pas suffisant,<br> n’hésitez pas, nous sommes là pour vous "
+"aider...\n"
+"  </h2>\n"
+"  <p class=\"indent-v-md\"> Vous ne trouvez pas de réponses dans nos "
+"FAQ&nbsp;? Vous avez besoin d’aide&nbsp;?<br> Vous avez une question, une "
+"remarque, un commentaire à faire passer à nos équipes&nbsp;?\n"
+"  </p>\n"
+"  <p class=\"indent-v-md\"> Vous pouvez nous laisser votre message 24h/24 "
+"via le formulaire de contact ci-dessous.<br> Nous nous engageons à vous "
+"répondre dans les 24 heures (ou dans les 48h les WE).<br> Si vous souhaitez "
+"que nous vous rappelions, n’hésitez pas à le préciser&nbsp;...\n"
+"  </p>\n"
+msgstr ""
+
+#: eloue/templates/contact_us/_new_contact_form.html:24
+#, fuzzy
+msgid "Votre e‐mail"
+msgstr "דואר אלקטרוני שלך "
+
+#: eloue/templates/contact_us/_new_contact_form.html:38
+msgid "Sujet"
+msgstr ""
+
+#: eloue/templates/contact_us/_new_contact_form.html:42
+#, fuzzy
+msgid "Demande d'information"
+msgstr "הבקשה להשכרה "
+
+#: eloue/templates/contact_us/_new_contact_form.html:43
+msgid "Problème technique"
+msgstr ""
+
+#: eloue/templates/contact_us/_new_contact_form.html:44
+#, fuzzy
+msgid "Inscription / Connexion"
+msgstr "הרשמה "
+
+#: eloue/templates/contact_us/_new_contact_form.html:45
+#, fuzzy
+msgid "Tableau de bord / Espace client"
+msgstr "דך הבית "
+
+#: eloue/templates/contact_us/_new_contact_form.html:46
+msgid "Recherche"
+msgstr ""
+
+#: eloue/templates/contact_us/_new_contact_form.html:47
+#, fuzzy
+msgid "Réservations / Locations"
+msgstr "ההזמנות "
+
+#: eloue/templates/contact_us/_new_contact_form.html:48
+#, fuzzy
+msgid "Paiement / Caution"
+msgstr "דירה/בית "
+
+#: eloue/templates/contact_us/_new_contact_form.html:49
+#, fuzzy
+msgid "Assurance"
+msgstr "ביטוח כלול"
+
+#: eloue/templates/contact_us/_new_contact_form.html:50
+#, fuzzy
+msgid "Suggestions"
+msgstr "הרשמה"
+
+#: eloue/templates/contact_us/_new_contact_form.html:51
+#, fuzzy
+msgid "Félicitations"
+msgstr "הערכות"
+
+#: eloue/templates/contact_us/_new_contact_form.html:52
+#, fuzzy
+msgid "Relation presse"
+msgstr "שולמו דמי קדימה "
+
+#: eloue/templates/contact_us/_new_contact_form.html:53
+msgid "Proposition de partenariat"
+msgstr ""
+
+#: eloue/templates/contact_us/_new_contact_form.html:65
+#: eloue/templates/django_messages/view.html:3
+#: eloue/templates/jade/_pop_up_send_message.jade:8
+msgid "Message"
+msgstr "הודעה"
+
+#: eloue/templates/contact_us/_new_contact_form.html:83
+msgid "être en copie du mail"
+msgstr ""
+
+#: eloue/templates/contact_us/_new_contact_form.html:88
+#, fuzzy
+msgid "champs obligatoires"
+msgstr "* = שדה חובה"
+
+#: eloue/templates/contact_us/_new_contact_form.html:94
+#, fuzzy
+msgid "Envoyer le message"
+msgstr "שלח הודעה"
+
+#: eloue/templates/contact_us/_new_contact_form.html:101
+msgid ""
+"\n"
+"    \t<p class=\"text-center\"> Vous pouvez également nous joindre, du lundi "
+"au vendredi de 9h à 18h,<br> par chat ou par téléphone au 01 85 08 99 77\n"
+"  \t\t</p>\n"
+"  \t\t"
+msgstr ""
 
 #: eloue/templates/contest/contest_auth_login.html:4
 msgid "Jeu concours - Identification"
@@ -1848,6 +2139,8 @@ msgid "Sans engagement et sans frais de résiliation."
 msgstr "ללא מחויבות וללא דמי ביטול ."
 
 #: eloue/templates/contest/contest_auth_missing.html:32
+#: eloue/templates/dashboard/items/index.jade:80
+#: eloue/templates/dk/dashboard/items/index.jade:80
 msgid "Informations complémentaires"
 msgstr "פרטים נוספים "
 
@@ -1876,6 +2169,1437 @@ msgstr "הוספת מחיר בהתאם לתקופת השכרת"
 msgid "Continuer"
 msgstr "להמשיך  "
 
+#: eloue/templates/dashboard/account/_address_detail.jade:27
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:27
+msgid "Addresse par défaut"
+msgstr ""
+
+#: eloue/templates/dashboard/account/_address_detail.jade:33
+#: eloue/templates/dashboard/items/calendar.jade:64
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:33
+#: eloue/templates/dk/dashboard/items/calendar.jade:64
+#, fuzzy
+msgid "Supprimer"
+msgstr "מחוק"
+
+#: eloue/templates/dashboard/account/_address_detail.jade:34
+#: eloue/templates/dashboard/account/password.jade:15
+#: eloue/templates/dashboard/booking/_comment_and_rank.jade:16
+#: eloue/templates/dashboard/booking/_report_incendent.jade:19
+#: eloue/templates/dashboard/items/add_period.jade:27
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:34
+#: eloue/templates/dk/dashboard/account/password.jade:15
+#: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:16
+#: eloue/templates/dk/dashboard/booking/_report_incendent.jade:19
+#: eloue/templates/dk/dashboard/items/add_period.jade:27
+#: eloue/templates/jade/pop_up_sections/_shipping.jade:20
+msgid "Enregistrer"
+msgstr "להרשמם "
+
+#: eloue/templates/dashboard/account/_address_detail.jade:41
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:41
+msgid "Annonces associées à cette adresse"
+msgstr ""
+
+#: eloue/templates/dashboard/account/_address_detail.jade:51
+#: eloue/templates/dashboard/booking/_bookings_list.jade:38
+#: eloue/templates/dashboard/items/_items_list.jade:22
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:51
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:38
+#: eloue/templates/dk/dashboard/items/_items_list.jade:22
+#: eloue/templates/dk/jade/_product_list.jade:11
+#: eloue/templates/jade/_nav_home.jade:6
+#: eloue/templates/jade/_nav_home.jade:10
+#: eloue/templates/jade/_nav_home.jade:17
+#: eloue/templates/jade/_porduct_details_title.jade:2
+#: eloue/templates/jade/_product_list.jade:11
+#: eloue/templates/jade/_product_list_article_head.jade:7
+#: eloue/templates/products/product_list.jade:5
+#: eloue/templates/products/product_list.jade:12
+#: eloue/templates/products/subcategory_list.jade:16
+#: eloue/templates/products/subcategory_list.jade:28
+msgid "Location"
+msgstr "השכרה"
+
+#: eloue/templates/dashboard/account/_address_detail.jade:54
+#: eloue/templates/dashboard/items/_items_list.jade:25
+#: eloue/templates/dashboard/items/profits.jade:3
+#: eloue/templates/dashboard/items/tarifs.jade:20
+#: eloue/templates/dashboard/items/tarifs.jade:26
+#: eloue/templates/dashboard/items/tarifs.jade:32
+#: eloue/templates/dashboard/items/tarifs.jade:38
+#: eloue/templates/dashboard/items/tarifs.jade:44
+#: eloue/templates/dashboard/items/tarifs.jade:59
+#: eloue/templates/dashboard/items/tarifs.jade:92
+#: eloue/templates/dashboard/items/tarifs.jade:98
+#: eloue/templates/dashboard/items/tarifs.jade:104
+#: eloue/templates/dashboard/items/tarifs.jade:110
+#: eloue/templates/dashboard/messages/_details_reservation.jade:24
+#: eloue/templates/dashboard/messages/_form_reservation.jade:33
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:54
+#: eloue/templates/dk/dashboard/items/_items_list.jade:25
+#: eloue/templates/dk/dashboard/items/profits.jade:3
+#: eloue/templates/dk/dashboard/items/tarifs.jade:20
+#: eloue/templates/dk/dashboard/items/tarifs.jade:26
+#: eloue/templates/dk/dashboard/items/tarifs.jade:32
+#: eloue/templates/dk/dashboard/items/tarifs.jade:38
+#: eloue/templates/dk/dashboard/items/tarifs.jade:44
+#: eloue/templates/dk/dashboard/items/tarifs.jade:59
+#: eloue/templates/dk/dashboard/items/tarifs.jade:92
+#: eloue/templates/dk/dashboard/items/tarifs.jade:98
+#: eloue/templates/dk/dashboard/items/tarifs.jade:104
+#: eloue/templates/dk/dashboard/items/tarifs.jade:110
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:24
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:33
+#: eloue/templates/jade/pop_up_sections/_terms.jade:11
+#: eloue/templates/jade/pop_up_sections/_terms.jade:16
+#: eloue/templates/jade/pop_up_sections/_terms.jade:21
+#: eloue/templates/jade/pop_up_sections/_terms.jade:26 products/choices.py:60
+msgid "€"
+msgstr "€"
+
+#: eloue/templates/dashboard/account/_address_detail.jade:54
+#: eloue/templates/dashboard/items/_items_list.jade:25
+#: eloue/templates/dk/dashboard/account/_address_detail.jade:54
+#: eloue/templates/dk/dashboard/items/_items_list.jade:25
+#: eloue/templates/dk/jade/_product_list.jade:7
+#: eloue/templates/jade/_product_list.jade:7
+#: eloue/templates/jade/_product_list_main.jade:2
+#: eloue/templates/jade/product_details/aside/_similar_listing.jade:16
+#: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
+#: products/choices.py:22 rent/utils.py:79 rent/tests/pricing_compat.py:126
+msgid "jour"
+msgstr "יום"
+
+#: eloue/templates/dashboard/account/_base_account.jade:3
+#: eloue/templates/dk/dashboard/account/_base_account.jade:3
+#, fuzzy
+msgid "Profil"
+msgstr "פרופיל"
+
+#: eloue/templates/dashboard/account/_base_account.jade:3
+#: eloue/templates/dk/dashboard/account/_base_account.jade:3
+#, fuzzy
+msgid "Adresses"
+msgstr "כתובת"
+
+#: eloue/templates/dashboard/account/_notification_not_selected_address.jade:5
+#: eloue/templates/dk/dashboard/account/_notification_not_selected_address.jade:5
+msgid "Aucune adresse sélectionnée"
+msgstr ""
+
+#: eloue/templates/dashboard/account/password.jade:4
+#: eloue/templates/dk/dashboard/account/password.jade:4
+#, fuzzy
+msgid "Ancien mot de passe"
+msgstr "סיסמה "
+
+#: eloue/templates/dashboard/account/password.jade:4
+#: eloue/templates/dk/dashboard/account/password.jade:4
+#: eloue/templates/jade/_reset_password_confirm.jade:15
+msgid "Nouveau mot de passe"
+msgstr "סיסמא החדשה  "
+
+#: eloue/templates/dashboard/account/password.jade:6
+#: eloue/templates/dk/dashboard/account/password.jade:6
+#, fuzzy
+msgid "Modification de votre mot de passe"
+msgstr "אישור סיסמא "
+
+#: eloue/templates/dashboard/account/password.jade:14
+#: eloue/templates/dashboard/booking/_comment_and_rank.jade:12
+#: eloue/templates/dashboard/booking/_report_incendent.jade:15
+#: eloue/templates/dashboard/items/add_period.jade:23
+#: eloue/templates/dk/dashboard/account/password.jade:14
+#: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:12
+#: eloue/templates/dk/dashboard/booking/_report_incendent.jade:15
+#: eloue/templates/dk/dashboard/items/add_period.jade:23
+#, fuzzy
+msgid "Annuler"
+msgstr "בוטל"
+
+#: eloue/templates/dashboard/account/profil.jade:5
+#: eloue/templates/dk/dashboard/account/profil.jade:5
+#, fuzzy
+msgid "Informations personnelles"
+msgstr "פרטים שלי "
+
+#: eloue/templates/dashboard/account/profil.jade:13
+#: eloue/templates/dk/dashboard/account/profil.jade:13
+msgid "Modifiez mon image"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:26
+#: eloue/templates/dk/dashboard/account/profil.jade:26
+#, fuzzy
+msgid "Je suis un professionnel ?"
+msgstr "הצעות מעוסקים בהשכרות באופן מקצועי"
+
+#: eloue/templates/dashboard/account/profil.jade:29
+#: eloue/templates/dashboard/account/profil.jade:106
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:171
+#: eloue/templates/dashboard/items/calendar.jade:89
+#: eloue/templates/dashboard/items/index.jade:99
+#: eloue/templates/dk/dashboard/account/profil.jade:29
+#: eloue/templates/dk/dashboard/account/profil.jade:106
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:171
+#: eloue/templates/dk/dashboard/items/calendar.jade:89
+#: eloue/templates/dk/dashboard/items/index.jade:99
+msgid "Oui"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:34
+#: eloue/templates/dashboard/account/profil.jade:111
+#: eloue/templates/dashboard/items/index.jade:103
+#: eloue/templates/dk/dashboard/account/profil.jade:34
+#: eloue/templates/dk/dashboard/account/profil.jade:111
+#: eloue/templates/dk/dashboard/items/index.jade:103
+#, fuzzy
+msgid "Non"
+msgstr "שם משפחה"
+
+#: eloue/templates/dashboard/account/profil.jade:64
+#: eloue/templates/dk/dashboard/account/profil.jade:64
+msgid "adresse par défaut"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:66
+#: eloue/templates/dk/dashboard/account/profil.jade:66
+msgid "Adresse par défaut"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:71
+#: eloue/templates/dk/dashboard/account/profil.jade:71
+#, fuzzy
+msgid "Modifier une adresse"
+msgstr "עלך למסור כתובת"
+
+#: eloue/templates/dashboard/account/profil.jade:88
+#: eloue/templates/dk/dashboard/account/profil.jade:88
+msgid "téléphone par défaut"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:90
+#: eloue/templates/dk/dashboard/account/profil.jade:90
+#, fuzzy
+msgid "Téléphone par défaut"
+msgstr "טלפון"
+
+#: eloue/templates/dashboard/account/profil.jade:97
+#: eloue/templates/dk/dashboard/account/profil.jade:97
+msgid "quelques mots sur vous"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:98
+#: eloue/templates/dk/dashboard/account/profil.jade:98
+msgid "A propos de vous..."
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:103
+#: eloue/templates/dk/dashboard/account/profil.jade:103
+msgid "J’accepte de recevoir la newsletter e-loue"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:117
+#: eloue/templates/dk/dashboard/account/profil.jade:117
+#, fuzzy
+msgid "Informations sur le permis"
+msgstr "מידע על בעל המנוי "
+
+#: eloue/templates/dashboard/account/profil.jade:120
+#: eloue/templates/dk/dashboard/account/profil.jade:120
+msgid "Jour"
+msgstr ""
+
+#: eloue/templates/dashboard/account/profil.jade:149
+#: eloue/templates/dk/dashboard/account/profil.jade:149
+#, fuzzy
+msgid "Enregistrez les informations"
+msgstr "פרטי המנהל "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
+msgid "Joignable au"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+#: eloue/templates/landing_pages/_sign_in_content.jade:9
+msgid "ou"
+msgstr "או "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
+#: eloue/templates/is/jade/_pro_popin_message.jade:9
+#: eloue/templates/jade/_pop_up_call.jade:15
+#: eloue/templates/jade/_pop_up_reserve.jade:14
+#: eloue/templates/jade/_pro_popin_message.jade:9
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:34
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:38
+#: eloue/templates/profile_public/_profile_public-contact_member.jade:7
+msgid "Envoyez un message"
+msgstr "שלח הודעה"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:44
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:44
+#, fuzzy
+msgid "Demande de réservation par"
+msgstr "בקשה להזמנה "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:46
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:46
+msgid "Incident declare par "
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:48
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:48
+#, fuzzy
+msgid "Réservation annulée"
+msgstr "ההזמנה"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:50
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:50
+#, fuzzy
+msgid "Réservation acceptée par"
+msgstr "ההזמנה"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:52
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:52
+#, fuzzy
+msgid "Réservation rejetée par"
+msgstr "ההזמנה"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:54
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:54
+#, fuzzy
+msgid "Réservation terminée"
+msgstr "ההזמנה"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:56
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:56
+#, fuzzy
+msgid "Réservation dépassée"
+msgstr "ההזמנות "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:58
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:58
+#, fuzzy
+msgid "Réservation en cours"
+msgstr "ההזמנות "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:62
+#: eloue/templates/dashboard/messages/_details_reservation.jade:4
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:62
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:4
+msgid "Statut"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:67
+#: eloue/templates/dashboard/messages/_details_reservation.jade:9
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:67
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:9
+#, fuzzy
+msgid "Début"
+msgstr "תאריך התחלה "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:72
+#: eloue/templates/dashboard/messages/_details_reservation.jade:14
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:72
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:14
+msgid "Fin"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:77
+#: eloue/templates/dashboard/messages/_details_reservation.jade:19
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:77
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:19
+msgid "Période"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:81
+#: eloue/templates/dashboard/items/_item_characteristics.jade:83
+#: eloue/templates/dashboard/items/tarifs.jade:13
+#: eloue/templates/dashboard/items/tarifs.jade:52
+#: eloue/templates/dashboard/items/tarifs.jade:85
+#: eloue/templates/dashboard/messages/_details_reservation.jade:23
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:81
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:83
+#: eloue/templates/dk/dashboard/items/tarifs.jade:13
+#: eloue/templates/dk/dashboard/items/tarifs.jade:52
+#: eloue/templates/dk/dashboard/items/tarifs.jade:85
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:23
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:18
+#: eloue/templates/jade/pop_up_sections/_terms.jade:10
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
+#: eloue/templates/products/tab_tarifs.jade:11
+#: eloue/templates/products/tab_tarifs.jade:41 products/forms.py:169
+msgid "Prix"
+msgstr "מחיר "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:85
+#: eloue/templates/dashboard/items/tabs.jade:32
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:85
+#: eloue/templates/dk/dashboard/items/tabs.jade:32
+#: eloue/templates/dk/products/_base_product_detail.jade:60
+#: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
+#: eloue/templates/jade/pop_up_sections/_shipping.jade:2
+#: eloue/templates/jade/pop_up_sections/_terms.jade:15
+#: eloue/templates/products/_base_product_detail.jade:63
+msgid "Livraison"
+msgstr "משלוח"
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:93
+#: eloue/templates/dashboard/items/tarifs.jade:120
+#: eloue/templates/dashboard/messages/_details_reservation.jade:27
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:93
+#: eloue/templates/dk/dashboard/items/tarifs.jade:120
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:27
+#: eloue/templates/jade/pop_up_sections/_terms.jade:25
+#: eloue/templates/products/tab_tarifs.jade:56
+msgid "Caution"
+msgstr "פיקדון "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:97
+#: eloue/templates/dashboard/messages/_details_reservation.jade:31
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:97
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:31
+#, fuzzy
+msgid "Contrat"
+msgstr "צור קשר "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:98
+#: eloue/templates/dashboard/messages/_details_reservation.jade:32
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:98
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:32
+msgid "Télécharger le contrat"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:117
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:117
+msgid "Relais de départ"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:124
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:124
+msgid "Relais de d’arrivée"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:132
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:132
+msgid "Télécharger l'étiquette"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:144
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:144
+#, fuzzy
+msgid "Description de l'incident"
+msgstr "דיווח על תקלה "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:157
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:157
+#, fuzzy
+msgid "Note et commentaires"
+msgstr "השותף שלנו "
+
+#: eloue/templates/dashboard/booking/_bookings_detaild.jade:168
+#: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:168
+msgid "Etes-vous sûr de vouloir annuler la réservation ?"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:9
+#: eloue/templates/dashboard/booking/_bookings_list.jade:24
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:9
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:24
+msgid "Tous"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:13
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:13
+#, fuzzy
+msgid "Propriétaires"
+msgstr "בעלים "
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:17
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:17
+#, fuzzy
+msgid "Locataires"
+msgstr "שוכר "
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:41
+#: eloue/templates/dashboard/items/profits.jade:17
+#: eloue/templates/dashboard/messages/_form_reservation.jade:6
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:41
+#: eloue/templates/dk/dashboard/items/profits.jade:17
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:6
+#: eloue/templates/jade/_date_picker_border.jade:4
+msgid "Du"
+msgstr "מי "
+
+#: eloue/templates/dashboard/booking/_bookings_list.jade:42
+#: eloue/templates/dashboard/items/profits.jade:18
+#: eloue/templates/dk/dashboard/booking/_bookings_list.jade:42
+#: eloue/templates/dk/dashboard/items/profits.jade:18
+msgid "au"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_comment_and_rank.jade:6
+#: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:6
+#, fuzzy
+msgid "Noter et commenter votre réservation"
+msgstr "הודעה חדשה על ההזמנה שלך "
+
+#: eloue/templates/dashboard/booking/_comment_and_rank.jade:9
+#: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:9
+#, fuzzy
+msgid "Comment s’est passé votre réservation ?"
+msgstr "הודעה חדשה על ההזמנה שלך "
+
+#: eloue/templates/dashboard/booking/_notification_empty_booking.jade:5
+#: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:5
+#, fuzzy
+msgid "Pas encore de réservation"
+msgstr "בקשה להזמנה "
+
+#: eloue/templates/dashboard/booking/_notification_empty_booking.jade:6
+#: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:6
+msgid ""
+"A tout moment vous pouvez faire une demande de réservation auprès d'un "
+"propriétaire si son objet vous intéresse"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_notification_empty_booking.jade:7
+#: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:7
+msgid "Commencez à rechercher un objet"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_notification_not_selected_booking.jade:5
+#: eloue/templates/dk/dashboard/booking/_notification_not_selected_booking.jade:5
+msgid "Aucune réservation sélectionnée"
+msgstr ""
+
+#: eloue/templates/dashboard/booking/_report_incendent.jade:6
+#: eloue/templates/dk/dashboard/booking/_report_incendent.jade:6
+#, fuzzy
+msgid "Déclarer un incident"
+msgstr "דיווח על תקלה "
+
+#: eloue/templates/dashboard/dashboard/index.jade:12
+#: eloue/templates/dk/dashboard/dashboard/index.jade:12
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:25
+#: eloue/templates/profile_public/_profile_public-owner_information.jade:14
+msgid "Membre depuis le"
+msgstr "חבר/ה מאז"
+
+#: eloue/templates/dashboard/dashboard/index.jade:12
+#: eloue/templates/dk/dashboard/dashboard/index.jade:12
+msgid "Mettre à jour mes infos"
+msgstr ""
+
+#: eloue/templates/dashboard/dashboard/index.jade:18
+#: eloue/templates/dk/dashboard/dashboard/index.jade:18
+#, fuzzy
+msgid "Statistiques"
+msgstr "הסטטיסטיקה שלך "
+
+#: eloue/templates/dashboard/dashboard/index.jade:21
+#: eloue/templates/dk/dashboard/dashboard/index.jade:21
+#: eloue/templates/jade/_patron_stats.jade:4
+msgid "annonces publiées"
+msgstr "מודעות שפורסמו "
+
+#: eloue/templates/dashboard/dashboard/index.jade:24
+#: eloue/templates/dk/dashboard/dashboard/index.jade:24
+#, fuzzy
+msgid "locations effectuées"
+msgstr "השכרות שבוצעו "
+
+#: eloue/templates/dashboard/dashboard/index.jade:27
+#: eloue/templates/dk/dashboard/dashboard/index.jade:27
+#: eloue/templates/jade/_patron_stats.jade:10
+msgid "évaluations"
+msgstr "הערכות"
+
+#: eloue/templates/dashboard/dashboard/index.jade:30
+#: eloue/templates/dk/dashboard/dashboard/index.jade:30
+#: eloue/templates/jade/_patron_stats.jade:13
+msgid "de taux de réponse"
+msgstr "אחוז  מענה "
+
+#: eloue/templates/dashboard/dashboard/index.jade:33
+#: eloue/templates/dk/dashboard/dashboard/index.jade:33
+#: eloue/templates/jade/_patron_stats.jade:16
+msgid "de temps de réponse en moyenne"
+msgstr "זמן התגובה הממוצע"
+
+#: eloue/templates/dashboard/dashboard/index.jade:53
+#: eloue/templates/dk/dashboard/dashboard/index.jade:53
+#, fuzzy
+msgid "Votre activité sur e-loue"
+msgstr "מזמין אותך  לאי-לו "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:6
+#: eloue/templates/dashboard/items/_item_characteristics.jade:8
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:6
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:8
+#: products/models.py:92
+msgid "Quantité"
+msgstr "כמות"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:12
+#: eloue/templates/dashboard/items/_item_characteristics.jade:14
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:12
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:14
+#: eloue/templates/jade/_pop_up_publish_item.jade:28
+msgid "Marque"
+msgstr "מותג / סוג/סימון "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:19
+#: eloue/templates/dashboard/items/_item_characteristics.jade:21
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:19
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:21
+#: eloue/templates/jade/_pop_up_publish_item.jade:31
+msgid "Modèle"
+msgstr "מודל"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:26
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:26
+#, fuzzy
+msgid "Nombre de place"
+msgstr "מספר מקומות "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:34
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:34
+#, fuzzy
+msgid "Nombre de porte"
+msgstr "מספר דלתות "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:42
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:42
+#, fuzzy
+msgid "Énergie"
+msgstr "אנרגיה"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:50
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:50
+#, fuzzy
+msgid "Boite de vitesse"
+msgstr "תיבת הילוכים"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:58
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:58
+#, fuzzy
+msgid "Kilométrage"
+msgstr "קילומטרג' "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:66
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:66
+#, fuzzy
+msgid "Consommation"
+msgstr "צריכת דלק "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:74
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:74
+#, fuzzy
+msgid "Kilomètres inclus/jour"
+msgstr "קילומטרג' כלול / יום "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:81
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:81
+#: products/models.py:427
+msgid "Prix par kilomètres supplémentaires"
+msgstr "תוספת לכל קילומטר נוסף"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:87
+#: eloue/templates/dashboard/items/_item_characteristics.jade:89
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:87
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:89
+#, fuzzy
+msgid "Climatisation"
+msgstr "מזוגן"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:93
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:93
+#, fuzzy
+msgid "Direction assistée"
+msgstr "הגה כוח"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:99
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:99
+#, fuzzy
+msgid "Régulateur de vitesse"
+msgstr "בקר מהירות"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:105
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:105
+#: products/models.py:433
+msgid "GPS"
+msgstr "GPS"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:111
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:111
+#, fuzzy
+msgid "Siège bébé"
+msgstr "מושב תינוק"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:117
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:117
+#, fuzzy
+msgid "Coffre de toit"
+msgstr "גגון"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:123
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:123
+#, fuzzy
+msgid "Porte-vélo"
+msgstr "מנשא אופניים"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:129
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:129
+#, fuzzy
+msgid "Pneus neige"
+msgstr "צמיגי שלג"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:135
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:135
+#, fuzzy
+msgid "Chaines"
+msgstr "שרשראות "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:141
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:141
+#, fuzzy
+msgid "Porte-skis"
+msgstr "מתקן להובלת סקי "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:147
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:147
+#, fuzzy
+msgid "Lecteur CD"
+msgstr "נגן תקליטורים"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:153
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:153
+#, fuzzy
+msgid "Entrée audio/iPod"
+msgstr "קלט אודיו/iPod"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:159
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:159
+#: eloue/templates/jade/_pop_up_publish_item.jade:105 products/models.py:444
+msgid "CV fiscaux"
+msgstr "כוחות סוס "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:168
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:168
+#: products/models.py:445
+msgid "N° d'immatriculation"
+msgstr "מס רשוי "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:176
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:176
+#: eloue/templates/jade/_pop_up_publish_item.jade:90 products/models.py:446
+msgid "1er mise en circulation"
+msgstr "תאריך עליה לכביש  "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:183
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:183
+#, fuzzy
+msgid "Capacité"
+msgstr "קיבולת "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:191
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:191
+#: products/models.py:520
+msgid "Type de logement"
+msgstr "סוג נכס "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:199
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:199
+#, fuzzy
+msgid "Nombre de chambre"
+msgstr "מספר חדרים "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:205
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:205
+#: products/models.py:523
+msgid "Règles d'utilisation"
+msgstr "הוראות שימוש "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:211
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:211
+#, fuzzy
+msgid "Air conditionné"
+msgstr "מזגן "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:217
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:217
+#, fuzzy
+msgid "Petit déjeuner"
+msgstr "ארוחת בוקר "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:223
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:223
+#, fuzzy
+msgid "Balcon/terasse"
+msgstr "מרפסת "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:229
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:229
+#, fuzzy
+msgid "Chambre avec serrure"
+msgstr "חדר עם מנעול "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:235
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:235
+#, fuzzy
+msgid "Serviettes"
+msgstr "מגבות "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:241
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:241
+#, fuzzy
+msgid "Ascenseur dans l\\'immeuble"
+msgstr "מעלית "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:247
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:247
+#, fuzzy
+msgid "Adapté aux familles/enfants"
+msgstr "מתואם למשפחות/ילדים "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:253
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:253
+#, fuzzy
+msgid "Salle de sport"
+msgstr "אולם ספורט "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:259
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:259
+#, fuzzy
+msgid "Accessible aux personnes handicapées"
+msgstr "נגישות לנכים "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:265
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:265
+#, fuzzy
+msgid "Chauffage"
+msgstr "הסקה"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:271
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:271
+#, fuzzy
+msgid "Jacuzzi"
+msgstr "ג'קוזי"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:277
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:277
+#, fuzzy
+msgid "Cheminée intérieure"
+msgstr "אח"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:283
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:283
+#, fuzzy
+msgid "Accès internet"
+msgstr "אינטרנט"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:289
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:289
+#, fuzzy
+msgid "Cuisine"
+msgstr "מטבח"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:295
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:295
+#, fuzzy
+msgid "Parking"
+msgstr "חניה"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:301
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:301
+#, fuzzy
+msgid "Fumeurs acceptées"
+msgstr "עישון מקובל "
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:307
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:307
+#, fuzzy
+msgid "Idéal pour des évènements"
+msgstr "אידיאלי לאירועים"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:313
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:313
+#: products/models.py:543
+msgid "TV"
+msgstr "טלוויזיה"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:319
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:319
+#, fuzzy
+msgid "Machine à laver"
+msgstr "מכונה כביסה"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:325
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:325
+#, fuzzy
+msgid "Sèche linge"
+msgstr "מייבש כביסה"
+
+#: eloue/templates/dashboard/items/_item_characteristics.jade:331
+#: eloue/templates/dk/dashboard/items/_item_characteristics.jade:331
+#, fuzzy
+msgid "Ordinateur avec Internet"
+msgstr "מחשב עם אינטרנט"
+
+#: eloue/templates/dashboard/items/_items_list.jade:8
+#: eloue/templates/dashboard/items/index.jade:5
+#: eloue/templates/dk/dashboard/items/_items_list.jade:8
+#: eloue/templates/dk/dashboard/items/index.jade:5
+#, fuzzy
+msgid "Catégories"
+msgstr "קטגוריה "
+
+#: eloue/templates/dashboard/items/_notification_empty_items.jade:5
+#: eloue/templates/dk/dashboard/items/_notification_empty_items.jade:5
+#, fuzzy
+msgid "Pas encore d'annonce déposée"
+msgstr "מספר  מודעות "
+
+#: eloue/templates/dashboard/items/_notification_empty_items.jade:6
+#: eloue/templates/dk/dashboard/items/_notification_empty_items.jade:6
+msgid ""
+"Vos objets peuvent vous rapporter de l'argent : karcher, appareil photo, "
+"caméra ..."
+msgstr ""
+
+#: eloue/templates/dashboard/items/_notification_empty_items.jade:7
+#: eloue/templates/dk/dashboard/items/_notification_empty_items.jade:7
+#, fuzzy
+msgid "Déposez votre première annonce"
+msgstr "להכניס המודעה "
+
+#: eloue/templates/dashboard/items/_notification_not_selected_item.jade:5
+#: eloue/templates/dk/dashboard/items/_notification_not_selected_item.jade:5
+msgid "Aucune annonce sélectionnée"
+msgstr ""
+
+#: eloue/templates/dashboard/items/add_period.jade:6
+#: eloue/templates/dashboard/items/calendar.jade:73
+#: eloue/templates/dk/dashboard/items/add_period.jade:6
+#: eloue/templates/dk/dashboard/items/calendar.jade:73
+msgid "Ajouter une nouvelle indisponibilité"
+msgstr ""
+
+#: eloue/templates/dashboard/items/calendar.jade:6
+#: eloue/templates/dk/dashboard/items/calendar.jade:6
+#: eloue/templates/products/tab_available.jade:7
+msgid "Sélectionner le mois"
+msgstr "חודש"
+
+#: eloue/templates/dashboard/items/calendar.jade:36
+#: eloue/templates/dk/dashboard/items/calendar.jade:36
+#: eloue/templates/products/tab_available.jade:48
+msgid "Indisponiblités"
+msgstr "לא זמין "
+
+#: eloue/templates/dashboard/items/calendar.jade:51
+#: eloue/templates/dk/dashboard/items/calendar.jade:51
+#: eloue/templates/products/partials/product_option_edit_history.html:6
+msgid "Date de début"
+msgstr "תאריך התחלה "
+
+#: eloue/templates/dashboard/items/calendar.jade:52
+#: eloue/templates/dk/dashboard/items/calendar.jade:52
+#: eloue/templates/products/partials/product_option_edit_history.html:7
+msgid "Date de fin"
+msgstr "תאריך סיום "
+
+#: eloue/templates/dashboard/items/calendar.jade:53
+#: eloue/templates/dk/dashboard/items/calendar.jade:53
+msgid "Motifs"
+msgstr ""
+
+#: eloue/templates/dashboard/items/calendar.jade:54
+#: eloue/templates/django_messages/inbox.html:32
+#: eloue/templates/django_messages/outbox.html:30
+#: eloue/templates/django_messages/trash.html:30
+#: eloue/templates/dk/dashboard/items/calendar.jade:54
+msgid "Action"
+msgstr "פעולה "
+
+#: eloue/templates/dashboard/items/calendar.jade:61
+#: eloue/templates/dk/dashboard/items/calendar.jade:61
+#, fuzzy
+msgid "Réservé"
+msgstr "הזמן "
+
+#: eloue/templates/dashboard/items/calendar.jade:62
+#: eloue/templates/dk/dashboard/items/calendar.jade:62
+#, fuzzy
+msgid "Indisponible"
+msgstr "לא זמין "
+
+#: eloue/templates/dashboard/items/calendar.jade:82
+#: eloue/templates/dk/dashboard/items/calendar.jade:82
+#, fuzzy
+msgid "Supprimer l'indisponibilité ?"
+msgstr "לא זמין "
+
+#: eloue/templates/dashboard/items/index.jade:9
+#: eloue/templates/dk/dashboard/items/index.jade:9
+#: eloue/templates/jade/_pop_up_publish_item.jade:36
+msgid "Catégorie Niv.1"
+msgstr "קטגוריה רמה .1"
+
+#: eloue/templates/dashboard/items/index.jade:16
+#: eloue/templates/dk/dashboard/items/index.jade:16
+#: eloue/templates/jade/_pop_up_publish_item.jade:41
+msgid "Catégorie Niv.2"
+msgstr "קטגוריה רמה.2"
+
+#: eloue/templates/dashboard/items/index.jade:23
+#: eloue/templates/dk/dashboard/items/index.jade:23
+#: eloue/templates/jade/_pop_up_publish_item.jade:46
+msgid "Catégorie Niv.3"
+msgstr "קטגוריה רמה.3"
+
+#: eloue/templates/dashboard/items/index.jade:29
+#: eloue/templates/dashboard/items/index.jade:32
+#: eloue/templates/dk/dashboard/items/index.jade:29
+#: eloue/templates/dk/dashboard/items/index.jade:32
+#: eloue/templates/jade/_pop_up_publish_item.jade:25 products/models.py:86
+msgid "Titre"
+msgstr "כותרת "
+
+#: eloue/templates/dashboard/items/index.jade:50
+#: eloue/templates/dk/dashboard/items/index.jade:50
+msgid "Photos"
+msgstr ""
+
+#: eloue/templates/dashboard/items/index.jade:79
+#: eloue/templates/dk/dashboard/items/index.jade:79
+#, fuzzy
+msgid "Caractéristiques"
+msgstr "הסטטיסטיקה שלך "
+
+#: eloue/templates/dashboard/items/index.jade:86
+#: eloue/templates/dashboard/items/tarifs.jade:131
+#: eloue/templates/dk/dashboard/items/index.jade:86
+#: eloue/templates/dk/dashboard/items/tarifs.jade:131
+#, fuzzy
+msgid "Enregistrez les modifications"
+msgstr "תאריך שינוי"
+
+#: eloue/templates/dashboard/items/index.jade:96
+#: eloue/templates/dk/dashboard/items/index.jade:96
+msgid "Etes-vous sûr de vouloir supprimer l'image?"
+msgstr ""
+
+#: eloue/templates/dashboard/items/profits.jade:3
+#: eloue/templates/dk/dashboard/items/profits.jade:3
+msgid "Total des revenus générés"
+msgstr ""
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4
+#, fuzzy
+msgid "Nombre de réservation"
+msgstr "בקשה להזמנה "
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4
+#, fuzzy
+msgid "en"
+msgstr "מאה "
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4
+#, fuzzy
+msgid "ans"
+msgstr "דנית"
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4 rent/utils.py:187
+msgid "et"
+msgstr "ו"
+
+#: eloue/templates/dashboard/items/profits.jade:4
+#: eloue/templates/dk/dashboard/items/profits.jade:4 products/choices.py:42
+#: rent/utils.py:77 rent/tests/pricing_compat.py:146
+msgid "mois"
+msgstr "חודש"
+
+#: eloue/templates/dashboard/items/profits.jade:5
+#: eloue/templates/dk/dashboard/items/profits.jade:5
+#, fuzzy
+msgid "jours"
+msgstr "3ימים"
+
+#: eloue/templates/dashboard/items/profits.jade:12
+#: eloue/templates/dk/dashboard/items/profits.jade:12
+#: eloue/templates/jade/_pop_up_reserve.jade:8
+msgid "Réservation"
+msgstr "ההזמנה"
+
+#: eloue/templates/dashboard/items/profits.jade:18
+#: eloue/templates/dk/dashboard/items/profits.jade:18
+#, fuzzy
+msgid "Montant"
+msgstr "צור קשר "
+
+#: eloue/templates/dashboard/items/profits.jade:18
+#: eloue/templates/dk/dashboard/items/profits.jade:18
+msgid "J"
+msgstr ""
+
+#: eloue/templates/dashboard/items/profits.jade:18
+#: eloue/templates/django_messages/compose.html:11
+#: eloue/templates/django_messages/inbox.html:13
+#: eloue/templates/django_messages/outbox.html:11
+#: eloue/templates/django_messages/trash.html:11
+#: eloue/templates/django_messages/view.html:11
+#: eloue/templates/dk/dashboard/items/profits.jade:18
+msgid "Locataire"
+msgstr "שוכר "
+
+#: eloue/templates/dashboard/items/tabs.jade:7
+#: eloue/templates/dk/dashboard/items/tabs.jade:7
+#, fuzzy
+msgid "Photos et infos"
+msgstr "תמונות ומיקום "
+
+#: eloue/templates/dashboard/items/tabs.jade:12
+#: eloue/templates/dk/dashboard/items/tabs.jade:12
+#: eloue/templates/dk/products/_base_product_detail.jade:56
+#: eloue/templates/products/_base_product_detail.jade:56
+msgid "Tarifs"
+msgstr "מחירון "
+
+#: eloue/templates/dashboard/items/tabs.jade:17
+#: eloue/templates/dk/dashboard/items/tabs.jade:17
+msgid "Calendrier"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tabs.jade:22
+#: eloue/templates/dk/dashboard/items/tabs.jade:22
+#, fuzzy
+msgid "Conditions"
+msgstr "השכרות "
+
+#: eloue/templates/dashboard/items/tabs.jade:27
+#: eloue/templates/dk/dashboard/items/tabs.jade:27
+msgid "Revenus"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:5
+#: eloue/templates/dk/dashboard/items/tarifs.jade:5
+#: eloue/templates/products/tab_tarifs.jade:3
+msgid "Grille tarifaire"
+msgstr "לוח מחירים "
+
+#: eloue/templates/dashboard/items/tarifs.jade:12
+#: eloue/templates/dashboard/items/tarifs.jade:51
+#: eloue/templates/dashboard/items/tarifs.jade:84
+#: eloue/templates/dk/dashboard/items/tarifs.jade:12
+#: eloue/templates/dk/dashboard/items/tarifs.jade:51
+#: eloue/templates/dk/dashboard/items/tarifs.jade:84
+#: eloue/templates/jade/pop_up_sections/_terms.jade:5
+#: eloue/templates/products/tab_tarifs.jade:10
+#: eloue/templates/products/tab_tarifs.jade:40
+msgid "Durée"
+msgstr "אורך"
+
+#: eloue/templates/dashboard/items/tarifs.jade:18
+#: eloue/templates/dk/dashboard/items/tarifs.jade:18 products/choices.py:18
+#: rent/tests/pricing_compat.py:122
+msgid "1 heure"
+msgstr "1 שעה"
+
+#: eloue/templates/dashboard/items/tarifs.jade:20
+#: eloue/templates/dashboard/items/tarifs.jade:26
+#: eloue/templates/dashboard/items/tarifs.jade:32
+#: eloue/templates/dashboard/items/tarifs.jade:38
+#: eloue/templates/dashboard/items/tarifs.jade:44
+#: eloue/templates/dashboard/items/tarifs.jade:59
+#: eloue/templates/dashboard/items/tarifs.jade:92
+#: eloue/templates/dashboard/items/tarifs.jade:98
+#: eloue/templates/dashboard/items/tarifs.jade:104
+#: eloue/templates/dashboard/items/tarifs.jade:110
+#: eloue/templates/dk/dashboard/items/tarifs.jade:20
+#: eloue/templates/dk/dashboard/items/tarifs.jade:26
+#: eloue/templates/dk/dashboard/items/tarifs.jade:32
+#: eloue/templates/dk/dashboard/items/tarifs.jade:38
+#: eloue/templates/dk/dashboard/items/tarifs.jade:44
+#: eloue/templates/dk/dashboard/items/tarifs.jade:59
+#: eloue/templates/dk/dashboard/items/tarifs.jade:92
+#: eloue/templates/dk/dashboard/items/tarifs.jade:98
+#: eloue/templates/dk/dashboard/items/tarifs.jade:104
+#: eloue/templates/dk/dashboard/items/tarifs.jade:110
+#, fuzzy
+msgid "Prix..."
+msgstr "מחיר "
+
+#: eloue/templates/dashboard/items/tarifs.jade:24
+#: eloue/templates/dashboard/items/tarifs.jade:57
+#: eloue/templates/dk/dashboard/items/tarifs.jade:24
+#: eloue/templates/dk/dashboard/items/tarifs.jade:57 products/choices.py:23
+#: rent/tests/pricing_compat.py:127
+msgid "1 jour"
+msgstr "1 יום"
+
+#: eloue/templates/dashboard/items/tarifs.jade:30
+#: eloue/templates/dk/dashboard/items/tarifs.jade:30 products/choices.py:48
+#: rent/tests/pricing_compat.py:152
+msgid "3 jours"
+msgstr "3 ימים"
+
+#: eloue/templates/dashboard/items/tarifs.jade:36
+#: eloue/templates/dk/dashboard/items/tarifs.jade:36
+#, fuzzy
+msgid "7 jours"
+msgstr "3 ימים"
+
+#: eloue/templates/dashboard/items/tarifs.jade:42
+#: eloue/templates/dk/dashboard/items/tarifs.jade:42 products/choices.py:53
+#: rent/tests/pricing_compat.py:157
+msgid "15 jours"
+msgstr "15 ימים "
+
+#: eloue/templates/dashboard/items/tarifs.jade:72
+#: eloue/templates/dk/dashboard/items/tarifs.jade:72
+#: eloue/templates/products/tab_tarifs.jade:26
+msgid "Kilomètres inclus par jour"
+msgstr "ק ילומטרים כלול ליום "
+
+#: eloue/templates/dashboard/items/tarifs.jade:74
+#: eloue/templates/dk/dashboard/items/tarifs.jade:74
+#: eloue/templates/jade/_pop_up_publish_item.jade:77
+msgid "Km"
+msgstr "קילומטר"
+
+#: eloue/templates/dashboard/items/tarifs.jade:90
+#: eloue/templates/dk/dashboard/items/tarifs.jade:90
+msgid "1 nuit"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:96
+#: eloue/templates/dk/dashboard/items/tarifs.jade:96
+msgid "3 nuits"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:102
+#: eloue/templates/dk/dashboard/items/tarifs.jade:102
+msgid "7 nuits"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:108
+#: eloue/templates/dk/dashboard/items/tarifs.jade:108
+msgid "15 nuits"
+msgstr ""
+
+#: eloue/templates/dashboard/items/tarifs.jade:122
+#: eloue/templates/dk/dashboard/items/tarifs.jade:122
+#: eloue/templates/jade/_pop_up_publish_item.jade:70
+#: eloue/templates/jade/_pop_up_publish_item.jade:98
+msgid "Caution demandée"
+msgstr "פיקדון "
+
+#: eloue/templates/dashboard/items/tarifs.jade:129
+#: eloue/templates/dk/dashboard/items/tarifs.jade:129
+#, fuzzy
+msgid "Tarif obligatoire"
+msgstr "* = שדה חובה"
+
+#: eloue/templates/dashboard/items/terms/car_terms.jade:1
+#: eloue/templates/dk/dashboard/items/terms/car_terms.jade:1
+msgid ""
+"\n"
+"\n"
+"<h2 class=\"indent-lg-t\">Asssurance du véhicule</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Assurance accident et vol inclus dans le prix du montant de la "
+"réservation. La franchise de cette assurance est de 2000&euro;.</li>\n"
+"</ul>\n"
+"<h2 class=\"indent-lg-t\">Condition de location</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Le conducteur doit avoir au moins 21 ans.</li>\n"
+"  <li>Le conducteur doit être titulaire d'un permis de conduire obtenu "
+"depuis plus de 2 ans valable en France.</li>\n"
+"  <li>Le conducteur doit payer la location sur le site avec une carte "
+"bancaire à son nom qu'il présentera au propriétaire au début de la location, "
+"ainsi que son permis de conduire.</li>\n"
+"  <li>Il est possible d'avoir plusieurs conducteurs. Dans ce cas, chaque "
+"conducteur devra être mentionné sur le contrat de location et répondre aux "
+"conditions d'age et de permis de conduire.</li>\n"
+"  <li>Le véhicule ne doit circuler qu'en France métropolitaine.</li>\n"
+"  <li>L'usage est exclusivement privé.</li>\n"
+"  <li>Le transport de passagers à titre onéreux est exclus.</li>\n"
+"</ul>"
+msgstr ""
+
+#: eloue/templates/dashboard/items/terms/professional_terms.jade:2
+#: eloue/templates/dk/dashboard/items/terms/professional_terms.jade:2
+msgid "Le professionnel se charge de l’assurance."
+msgstr ""
+
+#: eloue/templates/dashboard/items/terms/real_estate_terms.jade:1
+#: eloue/templates/dk/dashboard/items/terms/real_estate_terms.jade:1
+msgid ""
+"\n"
+"\n"
+"<h2 class=\"indent-lg-t\">Assurance du logement</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Annulation de séjour</li>\n"
+"  <li>Intéruption de séjour</li>\n"
+"  <li>Responsabilité civile villégiature</li>\n"
+"  <li class=\"last\">Non-conformité du bien loué</li>\n"
+"</ul>\n"
+"<h2 class=\"indent-lg-t\">Conditions de location</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Le locataire doit être un particulier.</li>\n"
+"  <li>La durée de la location ne peut pas excéder 90 jours.</li>\n"
+"</ul>"
+msgstr ""
+
+#: eloue/templates/dashboard/items/terms/simple_terms.jade:1
+#: eloue/templates/dk/dashboard/items/terms/simple_terms.jade:1
+#, python-format
+msgid ""
+"\n"
+"\n"
+"<h2 class=\"indent-lg-t\">Assurance de l'objet</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Casse accidentelle (vol exclu) pour un montant maximum de 750&euro;.</"
+"li>\n"
+"  <li>Pour les réparations n'excédant pas 750&euro; : franchise de 15%% du "
+"montant des réparations.</li>\n"
+"  <li class=\"last\">Pour les réparations supérieures à 750&euro; : "
+"franchise de 112,5&euro; plus le montant des réparations excédant 750&euro;."
+"</li>\n"
+"</ul>\n"
+"<h2 class=\"indent-lg-t\">Condition de location</h2>\n"
+"<ul class=\"not-ordered text-gray-strong\">\n"
+"  <li>Le locataire doit être un particulier.</li>\n"
+"  <li>Le locataire doit payer sur le site avec une carte bancaire à son nom "
+"qu'il présentera au propriétaire au début de la location.</li>\n"
+"  <li>La location doit se faire en France métropolitaine.</li>\n"
+"  <li>La durée de la location ne peut pas excéder 90 jours.</li>\n"
+"</ul>"
+msgstr ""
+
+#: eloue/templates/dashboard/jade/_base_dashboard.jade:23
+#: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:23
+#, fuzzy
+msgid "Tableau de board"
+msgstr "דך הבית "
+
+#: eloue/templates/dashboard/messages/_aside_product_detail.jade:4
+#: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:4
+#, fuzzy
+msgid "Réservation associée à"
+msgstr "ההזמנות "
+
+#: eloue/templates/dashboard/messages/_details_reservation.jade:20
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:20
+#, fuzzy
+msgid "jours et"
+msgstr "3ימים"
+
+#: eloue/templates/dashboard/messages/_details_reservation.jade:20
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:20
+#, fuzzy
+msgid "heures"
+msgstr "שעה"
+
+#: eloue/templates/dashboard/messages/_details_reservation.jade:36
+#: eloue/templates/dk/dashboard/messages/_details_reservation.jade:36
+#, fuzzy
+msgid "Détails de la réservation"
+msgstr "חיוב ההזמנה לך "
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:17
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:17
+#: eloue/templates/jade/_date_picker_border.jade:23
+msgid "Au"
+msgstr "עד "
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:26
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:26
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:11
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:11
+msgid "Cet article est disponible à ces dates"
+msgstr "מוצר  זה זמין בתאריכים האלה"
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:27
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:27
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:12
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:12
+msgid "Cet article n'est pas disponible à ces dates"
+msgstr "מוצר זה  אינו זמין בתאריכים אלו"
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:30
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:30
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:16
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:16
+msgid "Durée de la location"
+msgstr "אורך  ההשכרה שלך  "
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:32
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:32
+#, fuzzy
+msgid "Prix de la location"
+msgstr "של ההשכרה "
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:35
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:35
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:22
+msgid "Assurance incluse"
+msgstr "ביטוח כלול"
+
+#: eloue/templates/dashboard/messages/_form_reservation.jade:37
+#: eloue/templates/dk/dashboard/messages/_form_reservation.jade:37
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:22
+#: eloue/templates/jade/_pop_up_call.jade:14
+#: eloue/templates/jade/_pop_up_send_message.jade:14
+#: eloue/templates/jade/pop_up_sections/_bank_information.jade:45
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
+msgid "Réservez"
+msgstr "הזמן "
+
+#: eloue/templates/dashboard/messages/_notification_empty_messages.jade:5
+#: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:5
+#, fuzzy
+msgid "Pas encore de conversation"
+msgstr "אימות סיסמה חדשה"
+
+#: eloue/templates/dashboard/messages/_notification_empty_messages.jade:6
+#: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:6
+msgid ""
+"Avant de faire une demande réservation, il est possible d'envoyer un message "
+"au propriétaire"
+msgstr ""
+
+#: eloue/templates/dashboard/messages/_notification_empty_messages.jade:7
+#: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:7
+#, fuzzy
+msgid "Commencer à rechercher une annonce"
+msgstr "הערות הקשורות  למודעה הזו"
+
+#: eloue/templates/dashboard/messages/_notification_not_selected_dialog.jade:5
+#: eloue/templates/dk/dashboard/messages/_notification_not_selected_dialog.jade:5
+msgid "Aucune conversation sélectionnée"
+msgstr ""
+
+#: eloue/templates/dashboard/messages/_section_communication.jade:21
+#: eloue/templates/dk/dashboard/messages/_section_communication.jade:21
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:22
+#: eloue/templates/jade/pop_up_sections/_input_message.jade:6
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
+msgid "Envoyez"
+msgstr "שלח "
+
 #: eloue/templates/django_messages/compose.html:3
 #: eloue/templates/django_messages/inbox.html:3
 #: eloue/templates/django_messages/outbox.html:3
@@ -1890,14 +3614,6 @@ msgstr "דף הבית "
 #: eloue/templates/django_messages/view.html:10
 msgid "Propriétaire"
 msgstr "בעלים "
-
-#: eloue/templates/django_messages/compose.html:11
-#: eloue/templates/django_messages/inbox.html:13
-#: eloue/templates/django_messages/outbox.html:11
-#: eloue/templates/django_messages/trash.html:11
-#: eloue/templates/django_messages/view.html:11
-msgid "Locataire"
-msgstr "שוכר "
 
 #: eloue/templates/django_messages/compose.html:12
 #: eloue/templates/django_messages/inbox.html:14
@@ -1952,7 +3668,7 @@ msgstr "* = שדה חובה"
 
 #: eloue/templates/django_messages/inbox.html:32
 #: eloue/templates/django_messages/outbox.html:30
-#: eloue/templates/django_messages/trash.html:30 products/models.py:978
+#: eloue/templates/django_messages/trash.html:30 products/models.py:974
 msgid "Subject"
 msgstr "נושא"
 
@@ -1967,12 +3683,6 @@ msgstr "השולח"
 #: eloue/templates/django_messages/trash.html:30
 msgid "Reçu le"
 msgstr "התקבל ב-"
-
-#: eloue/templates/django_messages/inbox.html:32
-#: eloue/templates/django_messages/outbox.html:30
-#: eloue/templates/django_messages/trash.html:30
-msgid "Action"
-msgstr "פעולה "
 
 #: eloue/templates/django_messages/inbox.html:44
 #: eloue/templates/django_messages/outbox.html:42
@@ -2041,11 +3751,6 @@ msgstr "בחר כתובת : "
 msgid "Complétez votre profil et choisissez une adresse pour la l'objet :"
 msgstr "להשלים את הפרופיל שלך ובחר כתובת עבור האובייקט:"
 
-#: eloue/templates/django_messages/new_message_email.html:17
-#: eloue/templates/rent/emails/comment_email.html:18
-msgid "loueur"
-msgstr "משכיר"
-
 #: eloue/templates/django_messages/new_message_email.html:30
 #, python-format
 msgid ""
@@ -2094,14 +3799,210 @@ msgstr " ביטול הודעות "
 msgid "undelete"
 msgstr "לבטל ביטול "
 
-#: eloue/templates/django_messages/view.html:3
-#: eloue/templates/jade/_pop_up_send_message.jade:8
-msgid "Message"
-msgstr "הודעה"
-
 #: eloue/templates/django_messages/view.html:32
 msgid "Reply"
 msgstr "תגובה"
+
+#: eloue/templates/dk/how_it_works/index.jade:1
+#: eloue/templates/how_it_works/index.jade:1
+msgid "Comment ça marche"
+msgstr "איך זה עובד?"
+
+#: eloue/templates/dk/jade/_footer_links.jade:7
+#: eloue/templates/how_it_works/_breadcrumb.jade:6
+#: eloue/templates/jade/_footer_links.jade:7
+msgid "Le concept e-loue"
+msgstr "הקונספט של אי-לו "
+
+#: eloue/templates/dk/jade/_footer_links.jade:11
+#: eloue/templates/jade/_footer_links.jade:13
+msgid "L'offre e-loue Pro"
+msgstr "ההצעות  של אי-לו לעסקים "
+
+#: eloue/templates/dk/jade/_footer_links.jade:13
+#: eloue/templates/dk/security/_breadcrumbs.jade:7
+#: eloue/templates/jade/_footer_links.jade:11
+#: eloue/templates/security/_breadcrumbs.jade:7
+msgid "e-loue et la sécurité"
+msgstr "אי-לו - וההבטחה מידע "
+
+#: eloue/templates/dk/jade/_footer_links.jade:21
+#: eloue/templates/dk/security/_breadcrumbs.jade:6
+#: eloue/templates/jade/_footer_links.jade:23
+#: eloue/templates/security/_breadcrumbs.jade:6
+msgid "Pourquoi choisir e-loue ?"
+msgstr " למה  אי-לו השכרות ?"
+
+#: eloue/templates/dk/jade/_footer_links.jade:23
+#: eloue/templates/jade/_footer_links.jade:31
+msgid "Conditions générales professionnels"
+msgstr "תנאים כללים לבעלי עסקים "
+
+#: eloue/templates/dk/jade/_footer_links.jade:31
+#: eloue/templates/dk/who_are_we/_breadcrumbs.jade:6
+#: eloue/templates/imprint/_breadcrumbs.jade:6
+#: eloue/templates/jade/_footer_links.jade:39
+#: eloue/templates/our_partners/_breadcrumbs.jade:6
+msgid "L’entreprise e-loue"
+msgstr "כרטיס ביקור של אי-לו "
+
+#: eloue/templates/dk/jade/_footer_links.jade:33
+#: eloue/templates/jade/_footer_links.jade:41
+msgid "Qui sommes-nous ?"
+msgstr "מי אנחנו ?"
+
+#: eloue/templates/dk/jade/_footer_links.jade:45
+#: eloue/templates/jade/_footer_links.jade:57
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:2
+msgid "Contactez-nous"
+msgstr "צור קשר"
+
+#: eloue/templates/dk/jade/_footer_links.jade:47
+#: eloue/templates/imprint/_breadcrumbs.jade:7
+#: eloue/templates/imprint/index.jade:1
+#: eloue/templates/jade/_footer_links.jade:59
+msgid "Mentions légales"
+msgstr "אזהרות משפטיות "
+
+#: eloue/templates/dk/jade/_header_site.jade:3
+#: eloue/templates/jade/_header_site.jade:3
+msgid ""
+"En poursuivant votre navigation, vous acceptez l’utilisation des cookies "
+"pour disposer de services et d’offres adaptées à vos centres d’intérêts. "
+"Pour en savoir plus,&nbsp;"
+msgstr ""
+"בהיותך ממשיך לגלוש , אתה מקבל את השימוש בקובצי cookie כדי לשפר את שירותוו "
+"ולהתאים לך מבצעים  ותחומי עניין. כדי ללמוד עוד,&nbsp;"
+
+#: eloue/templates/dk/jade/_header_site.jade:3
+#: eloue/templates/jade/_header_site.jade:3
+msgid "cliquez ici"
+msgstr "לחץ כאן"
+
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+msgid "Bonjour"
+msgstr "שלום"
+
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+msgid "inscrivez-vous"
+msgstr "תרשמו "
+
+#: eloue/templates/dk/jade/_header_site.jade:8
+#: eloue/templates/jade/_header_site.jade:8
+msgid "connectez-vous"
+msgstr "תתחבר "
+
+#: eloue/templates/dk/jade/_header_site.jade:12
+#: eloue/templates/jade/_header_site.jade:12
+#, python-format
+msgid ""
+"\n"
+" Vous êtes un loueur professionnel, découvrez les <a href="
+"\"%(subscription_url)s\"><b>offres e-loue Pro</b></a>"
+msgstr ""
+"\n"
+"|אם  אתה בעל חברה  בוא ללמוד על ההצעות שלנו  לבעלי עסקים <a href="
+"\"%(subscription_url)s\"><b>offres e-loue Pro</b></a>"
+
+#: eloue/templates/dk/jade/_header_site.jade:17
+#: eloue/templates/dk/jade/_header_site.jade:24
+#: eloue/templates/jade/_header_site.jade:17
+#: eloue/templates/jade/_header_site.jade:24
+msgid ""
+"\n"
+" Appelez-nous au <b>01 85 08 99 77 </b> (numéro gratuit)\n"
+msgstr ""
+"\n"
+" התקשר אלינו-0544998859\n"
+
+#: eloue/templates/dk/jade/_product_list.jade:3
+#: eloue/templates/jade/_product_list.jade:3
+msgid "annonces de location dans toute la France"
+msgstr "השכרות בכל ישראל "
+
+#: eloue/templates/dk/jade/_product_list.jade:24
+#: eloue/templates/jade/_product_list.jade:24
+#: eloue/templates/products/subcategory_list.jade:34
+msgid "Explorez toutes les annonces de location"
+msgstr "לגלות  את כל המודעות ההשכרות"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:3
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:3
+msgid "Demandez un devis"
+msgstr "בקש הצעת מחיר "
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:3
+#: eloue/templates/jade/pop_up_sections/_variants_call.jade:37
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:3
+msgid "Réservez en ligne"
+msgstr "הזמו באינטרנט"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:7
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:7
+msgid "à partir de"
+msgstr "החל מ-"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:8
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
+#, fuzzy
+msgid "/jour"
+msgstr "יום"
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:18
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
+msgid "indicatif"
+msgstr "קידומת "
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:18
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
+msgid "de la location"
+msgstr "של ההשכרה "
+
+#: eloue/templates/dk/jade/product_details/_booking_form.jade:23
+#: eloue/templates/jade/product_details/aside/_booking_form.jade:26
+msgid ""
+"\n"
+" Vous allez envoyer<br> une demande de location. <br> &ndash;<br> Le loueur "
+"vous recontactera <br> très rapidement <br> pour vous confirmer la location."
+"<br> &ndash;<br> Le paiement se fera directement <br> chez le loueur.\n"
+msgstr ""
+"\n"
+"אתה תשלח<br>השכרת לפי דרישה.<br>–<br>השימוש במשרדים ניצור איתך קשר<br>מהר "
+"מאוד<br>כדי לאשר את העיסקה.<br>–<br>התשלום יהיה ישירות<br>ב- השימוש אצל "
+"המשכיר .\n"
+
+#: eloue/templates/dk/our_partners/index.jade:1
+#: eloue/templates/our_partners/index.jade:1
+msgid "Nos Partenaires"
+msgstr "שותפים"
+
+#: eloue/templates/dk/products/_base_product_detail.jade:53
+#: eloue/templates/products/_base_product_detail.jade:53
+msgid "Photos et Localisation"
+msgstr "תמונות ומיקום "
+
+#: eloue/templates/dk/products/_base_product_detail.jade:71
+#: eloue/templates/products/_base_product_detail.jade:74
+msgid "Commentaires liés à cette annonce"
+msgstr "הערות הקשורות  למודעה הזו"
+
+#: eloue/templates/dk/products/_base_product_detail.jade:76
+#: eloue/templates/products/_base_product_detail.jade:79
+msgid "Commentaire liés au propriétaire"
+msgstr "הערות הקשורות לבעל הנכס "
+
+#: eloue/templates/dk/subscription/index.jade:1
+#: eloue/templates/gosport/subscription/index.jade:1
+#: eloue/templates/subscription/index.jade:1
+msgid "Offre Professionnel"
+msgstr "הצעות מבית עסק "
+
+#: eloue/templates/dk/terms_pro/index.jade:1
+#: eloue/templates/terms_pro/index.jade:1
+msgid "Conditions Générales Professionnel"
+msgstr "תנאים כללים לבעלי מקצוע"
 
 #: eloue/templates/enroll/_text_content.jade:107
 msgid "Vous n'avez pas trouvé le job idéal ?"
@@ -2112,7 +4013,7 @@ msgid "Notre partenaire"
 msgstr "השותף שלנו "
 
 #: eloue/templates/enroll/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:60
+#: eloue/templates/jade/_footer_links.jade:45
 msgid "Nous recrutons"
 msgstr "גיוס עובדים "
 
@@ -2123,6 +4024,7 @@ msgstr "גו ספורט ההשכות  "
 
 #: eloue/templates/gosport/jade/_nav_home.jade:8
 #: eloue/templates/jade/_nav_home.jade:15
+#: eloue/templates/jade/_publish_items_categories.jade:36
 msgid "Autres"
 msgstr "אחר"
 
@@ -2131,23 +4033,9 @@ msgstr "אחר"
 msgid "Contrats de Location"
 msgstr "חוזים להשכרה  "
 
-#: eloue/templates/gosport/subscription/index.jade:1
-#: eloue/templates/subscription/index.jade:1
-msgid "Offre Professionnel"
-msgstr "הצעות מבית עסק "
-
 #: eloue/templates/gosport/terms/index.jade:1
 msgid "Condtitions Générales Particuliers"
 msgstr "תנאים כללים"
-
-#: eloue/templates/how_it_works/index.jade:1
-msgid "Comment ça marche"
-msgstr "איך זה עובד?"
-
-#: eloue/templates/imprint/index.jade:1
-#: eloue/templates/jade/_footer_links.jade:74
-msgid "Mentions légales"
-msgstr "אזהרות משפטיות "
 
 #: eloue/templates/insurances/_text_content.html:34
 #: eloue/templates/insurances/_text_content.html:307
@@ -2170,9 +4058,32 @@ msgstr "רכבים "
 msgid "Logements"
 msgstr "דירות"
 
-#: eloue/templates/jade/_date_picker_border.jade:4
-msgid "Du"
-msgstr "מי "
+#: eloue/templates/is/jade/_pro_popin_message.jade:8
+#: eloue/templates/jade/_pro_popin_message.jade:8
+msgid "Demande de devis"
+msgstr "בקשה להצעת מחיר  "
+
+#: eloue/templates/is/jade/_pro_popin_phone.jade:8
+#: eloue/templates/jade/_pop_up_reserve.jade:15
+#: eloue/templates/jade/_pop_up_send_message.jade:15
+#: eloue/templates/jade/_pro_popin_phone.jade:8
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:34
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:39
+#: eloue/templates/profile_public/_profile_public-contact_member.jade:8
+msgid "Appelez"
+msgstr "צור קשר"
+
+#: eloue/templates/is/jade/_pro_popin_shop.jade:8
+#: eloue/templates/jade/_pro_popin_shop.jade:8
+#: eloue/templates/jade/product_details/aside/_owner_information.jade:36
+#: eloue/templates/profile_public/_profile_public-contact_member.jade:10
+msgid "Venez en magasin"
+msgstr "לבוא לחנות "
+
+#: eloue/templates/is/jade/_pro_popin_website_link.jade:8
+#: eloue/templates/jade/_pro_popin_website_link.jade:8
+msgid "Visitez notre site"
+msgstr "בקר באתר אינטרנט שלנו"
 
 #: eloue/templates/jade/_date_picker_border.jade:18
 msgid "Il manque la date de début"
@@ -2197,108 +4108,21 @@ msgid ""
 "Android."
 msgstr "מצא את כל התכונות שאתה אוהב על iPhone, iPad, אנדרואיד."
 
-#: eloue/templates/jade/_footer_links.jade:7
-msgid "Le concept e-loue"
-msgstr "הקונספט של אי-לו "
-
-#: eloue/templates/jade/_footer_links.jade:11
-msgid "e-loue et la sécurité"
-msgstr "אי-לו - וההבטחה מידע "
-
-#: eloue/templates/jade/_footer_links.jade:13
-msgid "L'offre e-loue Pro"
-msgstr "ההצעות  של אי-לו לעסקים "
-
 #: eloue/templates/jade/_footer_links.jade:15
 msgid "La livraison"
 msgstr "משלוח"
 
-#: eloue/templates/jade/_footer_links.jade:38
-msgid "Pourquoi choisir e-loue ?"
-msgstr " למה  אי-לו השכרות ?"
-
-#: eloue/templates/jade/_footer_links.jade:44
+#: eloue/templates/jade/_footer_links.jade:29
 msgid "Conditions générales particuliers"
 msgstr "תנאים כללים"
 
-#: eloue/templates/jade/_footer_links.jade:46
-msgid "Conditions générales professionnels"
-msgstr "תנאים כללים לבעלי עסקים "
-
-#: eloue/templates/jade/_footer_links.jade:54
-msgid "L’entreprise e-loue"
-msgstr "כרטיס ביקור של אי-לו "
-
-#: eloue/templates/jade/_footer_links.jade:56
-msgid "Qui sommes-nous ?"
-msgstr "מי אנחנו ?"
-
-#: eloue/templates/jade/_footer_links.jade:68
-msgid "En savoir plus"
-msgstr "פרטים נוספים "
-
-#: eloue/templates/jade/_footer_links.jade:70
+#: eloue/templates/jade/_footer_links.jade:55
 msgid "FAQ"
 msgstr "שאלות נפוצות"
 
-#: eloue/templates/jade/_footer_links.jade:72
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:2
-msgid "Contactez-nous"
-msgstr "צור קשר"
-
-#: eloue/templates/jade/_footer_links.jade:76
+#: eloue/templates/jade/_footer_links.jade:61
 msgid "Blog e-loue"
 msgstr "בלוג אי-לו"
-
-#: eloue/templates/jade/_header_site.jade:3
-msgid ""
-"En poursuivant votre navigation, vous acceptez l’utilisation des cookies "
-"pour disposer de services et d’offres adaptées à vos centres d’intérêts. "
-"Pour en savoir plus,&nbsp;"
-msgstr ""
-"בהיותך ממשיך לגלוש , אתה מקבל את השימוש בקובצי cookie כדי לשפר את שירותוו "
-"ולהתאים לך מבצעים  ותחומי עניין. כדי ללמוד עוד,&nbsp;"
-
-#: eloue/templates/jade/_header_site.jade:3
-msgid "cliquez ici"
-msgstr "לחץ כאן"
-
-#: eloue/templates/jade/_header_site.jade:8
-msgid "Bonjour"
-msgstr "שלום"
-
-#: eloue/templates/jade/_header_site.jade:8
-msgid "inscrivez-vous"
-msgstr "תרשמו "
-
-#: eloue/templates/jade/_header_site.jade:8
-#: eloue/templates/landing_pages/_sign_in_content.jade:9
-msgid "ou"
-msgstr "או "
-
-#: eloue/templates/jade/_header_site.jade:8
-msgid "connectez-vous"
-msgstr "תתחבר "
-
-#: eloue/templates/jade/_header_site.jade:12
-#, python-format
-msgid ""
-"\n"
-" Vous êtes un loueur professionnel, découvrez les <a href="
-"\"%(subscription_url)s\"><b>offres e-loue Pro</b></a>"
-msgstr ""
-"\n"
-"|אם  אתה בעל חברה  בוא ללמוד על ההצעות שלנו  לבעלי עסקים <a href="
-"\"%(subscription_url)s\"><b>offres e-loue Pro</b></a>"
-
-#: eloue/templates/jade/_header_site.jade:17
-#: eloue/templates/jade/_header_site.jade:24
-msgid ""
-"\n"
-" Appelez-nous au <b>01 85 08 99 77 </b> (numéro gratuit)\n"
-msgstr ""
-"\n"
-" התקשר אלינו-0544998859\n"
 
 #: eloue/templates/jade/_insurances.jade:8
 msgid "Louez en toute sécurité"
@@ -2367,60 +4191,17 @@ msgstr "אתה עדיין לא חבר באי-לו  - להשכרה?"
 msgid "verifié"
 msgstr "אומת"
 
-#: eloue/templates/jade/_nav_home.jade:6 eloue/templates/jade/_nav_home.jade:10
-#: eloue/templates/jade/_porduct_details_title.jade:2
-#: eloue/templates/jade/_product_list.jade:11
-#: eloue/templates/jade/_product_list_article_head.jade:7
-#: eloue/templates/products/product_list.jade:5
-#: eloue/templates/products/product_list.jade:12
-#: eloue/templates/products/subcategory_list.jade:16
-#: eloue/templates/products/subcategory_list.jade:28
-msgid "Location"
-msgstr "השכרה"
-
 #: eloue/templates/jade/_nav_home.jade:15
 msgid "Locations"
 msgstr "השכרות "
-
-#: eloue/templates/jade/_patron_stats.jade:4
-msgid "annonces publiées"
-msgstr "מודעות שפורסמו "
 
 #: eloue/templates/jade/_patron_stats.jade:7
 msgid "locations effectués"
 msgstr "השכרות שבוצעו "
 
-#: eloue/templates/jade/_patron_stats.jade:10
-msgid "évaluations"
-msgstr "הערכות"
-
-#: eloue/templates/jade/_patron_stats.jade:13
-msgid "de taux de réponse"
-msgstr "אחוז  מענה "
-
-#: eloue/templates/jade/_patron_stats.jade:16
-msgid "de temps de réponse en moyenne"
-msgstr "זמן התגובה הממוצע"
-
 #: eloue/templates/jade/_pop_up_call.jade:8
 msgid "Appel"
 msgstr "שיחה"
-
-#: eloue/templates/jade/_pop_up_call.jade:14
-#: eloue/templates/jade/_pop_up_send_message.jade:14
-#: eloue/templates/jade/pop_up_sections/_bank_information.jade:45
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
-msgid "Réservez"
-msgstr "הזמן "
-
-#: eloue/templates/jade/_pop_up_call.jade:15
-#: eloue/templates/jade/_pop_up_reserve.jade:14
-#: eloue/templates/jade/_pro_popin_message.jade:9
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:34
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:38
-#: eloue/templates/profile_public/_profile_public-contact_member.jade:7
-msgid "Envoyez un message"
-msgstr "שלח הודעה"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:8
 msgid "Dépot d'annonce"
@@ -2440,30 +4221,6 @@ msgstr ""
 "אי-לו השכרות  מאפשר לך להרוויח כסף על ידי השכרת הנכסים/החפצים  שלכם."
 "<br>בצורה בטוחה , ושקטה , כאשר אינם בשימוש על ידך \n"
 
-#: eloue/templates/jade/_pop_up_publish_item.jade:25 products/models.py:86
-msgid "Titre"
-msgstr "כותרת "
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:28
-msgid "Marque"
-msgstr "מותג / סוג/סימון "
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:31
-msgid "Modèle"
-msgstr "מודל"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:36
-msgid "Catégorie Niv.1"
-msgstr "קטגוריה רמה .1"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:41
-msgid "Catégorie Niv.2"
-msgstr "קטגוריה רמה.2"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:46
-msgid "Catégorie Niv.3"
-msgstr "קטגוריה רמה.3"
-
 #: eloue/templates/jade/_pop_up_publish_item.jade:64
 msgid "Prix à la nuit"
 msgstr "מחיר ללילה "
@@ -2480,18 +4237,9 @@ msgstr "מחיר ליום "
 msgid "&euro;"
 msgstr "אירו"
 
-#: eloue/templates/jade/_pop_up_publish_item.jade:70
-#: eloue/templates/jade/_pop_up_publish_item.jade:98
-msgid "Caution demandée"
-msgstr "פיקדון "
-
 #: eloue/templates/jade/_pop_up_publish_item.jade:75
 msgid "Kilomètres inclus"
 msgstr "קילומטרג' כלול"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:77
-msgid "Km"
-msgstr "קילומטר"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:80
 #: eloue/templates/jade/_pop_up_publish_item.jade:113
@@ -2501,10 +4249,6 @@ msgstr "פרסם מודעתך "
 #: eloue/templates/jade/_pop_up_publish_item.jade:83
 msgid "Prix km supp"
 msgstr "מחיר לקילומטר נוסף "
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:90 products/models.py:448
-msgid "1er mise en circulation"
-msgstr "תאריך עליה לכביש  "
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:92
 msgid ""
@@ -2519,23 +4263,6 @@ msgstr ""
 "   <input type=\"text\" name=\"licence_plate\" ng-model=\"product."
 "licence_plate\" placeholder=\"N° d'immatriculation\" ng-required=\"isAuto\" "
 "class=\"form-control\">"
-
-#: eloue/templates/jade/_pop_up_publish_item.jade:105 products/models.py:446
-msgid "CV fiscaux"
-msgstr "כוחות סוס "
-
-#: eloue/templates/jade/_pop_up_reserve.jade:8
-msgid "Réservation"
-msgstr "ההזמנה"
-
-#: eloue/templates/jade/_pop_up_reserve.jade:15
-#: eloue/templates/jade/_pop_up_send_message.jade:15
-#: eloue/templates/jade/_pro_popin_phone.jade:8
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:34
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:39
-#: eloue/templates/profile_public/_profile_public-contact_member.jade:8
-msgid "Appelez"
-msgstr "צור קשר"
 
 #: eloue/templates/jade/_pop_up_reserve.jade:36
 msgid "Alerte : Notre service location de voitures est en maintenance."
@@ -2578,38 +4305,6 @@ msgstr "אנשים "
 msgid "chambres"
 msgstr "חדרים"
 
-#: eloue/templates/jade/_pro_popin_message.jade:8
-msgid "Demande de devis"
-msgstr "בקשה להצעת מחיר  "
-
-#: eloue/templates/jade/_pro_popin_shop.jade:8
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:36
-#: eloue/templates/profile_public/_profile_public-contact_member.jade:10
-msgid "Venez en magasin"
-msgstr "לבוא לחנות "
-
-#: eloue/templates/jade/_pro_popin_website_link.jade:8
-msgid "Visitez notre site"
-msgstr "בקר באתר אינטרנט שלנו"
-
-#: eloue/templates/jade/_product_list.jade:3
-msgid "annonces de location dans toute la France"
-msgstr "השכרות בכל ישראל "
-
-#: eloue/templates/jade/_product_list.jade:7
-#: eloue/templates/jade/_product_list_main.jade:2
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:8
-#: eloue/templates/jade/product_details/aside/_similar_listing.jade:15
-#: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:7
-#: products/choices.py:22 rent/utils.py:78 rent/tests/pricing_compat.py:126
-msgid "jour"
-msgstr "יום"
-
-#: eloue/templates/jade/_product_list.jade:24
-#: eloue/templates/products/subcategory_list.jade:34
-msgid "Explorez toutes les annonces de location"
-msgstr "לגלות  את כל המודעות ההשכרות"
-
 #: eloue/templates/jade/_product_list_article_head.jade:2
 #, python-format
 msgid ""
@@ -2630,7 +4325,7 @@ msgid "Les plus récents"
 msgstr " החדשות ביותר "
 
 #: eloue/templates/jade/_product_list_article_head.jade:14
-#: products/choices.py:171 products/choices.py:178
+#: products/choices.py:172 products/choices.py:179
 msgid "Les plus proches"
 msgstr "הכי קרוב"
 
@@ -2674,24 +4369,25 @@ msgstr "אדם פרטי "
 msgid " Particuliers"
 msgstr "אדם פרטי "
 
-#: eloue/templates/jade/_product_list_aside.jade:50
-msgid "professionnels"
-msgstr "בעלי עסקים "
-
-#: eloue/templates/jade/_product_list_aside.jade:57
+#: eloue/templates/jade/_product_list_aside.jade:56
 msgid " Professionnels"
 msgstr "בעלי עסקים "
 
-#: eloue/templates/jade/_product_list_aside.jade:61
+#: eloue/templates/jade/_product_list_aside.jade:60
 msgid "Filtrer"
 msgstr "פילטרים "
 
-#: eloue/templates/jade/_product_list_pagination.jade:4
+#: eloue/templates/jade/_product_list_pagination.jade:3 products/views.py:243
+#: products/views.py:246 products/views.py:254
+msgid "page"
+msgstr "דף"
+
+#: eloue/templates/jade/_product_list_pagination.jade:5
 #: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:28
 msgid "Page précédente"
 msgstr "דף קודם "
 
-#: eloue/templates/jade/_product_list_pagination.jade:10
+#: eloue/templates/jade/_product_list_pagination.jade:11
 #: eloue/templates/profile_public/_profile_public-products_of_the_owner.jade:34
 msgid "Page suivante"
 msgstr "דף הבאה "
@@ -2720,14 +4416,40 @@ msgid ""
 "      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">en "
 "savoir plus</a>"
 msgstr ""
-"\n"
-"\n"
-"    <p>       אי לו הוא האתר הראשון של השכרות 100% מכוון ומתאים  לאנשי "
-"מקצוע. ח\n"
-" ברי  הקהילה שלנו באים כדי לקבל כל סוג של מוצר להשכרה בישראל, אנו  הכי גדול  "
-"הכי בטוח , אז למה לא אתה \n"
-"        </p>      <a href=\"%(subscription_url)s\" class=\"link-success-color"
-"\">לפרטי נוספים </a>"
+
+#: eloue/templates/jade/_publish_items_categories.jade:3
+#, fuzzy
+msgid "Choisissez une catégorie pour votre annonce"
+msgstr "בחר כתובת : "
+
+#: eloue/templates/jade/_publish_items_categories.jade:6
+msgid "Bricolage"
+msgstr ""
+
+#: eloue/templates/jade/_publish_items_categories.jade:10
+msgid "Jardinage"
+msgstr ""
+
+#: eloue/templates/jade/_publish_items_categories.jade:14
+msgid "High-tech"
+msgstr ""
+
+#: eloue/templates/jade/_publish_items_categories.jade:18
+#, fuzzy
+msgid "Réception"
+msgstr "ההזמנה"
+
+#: eloue/templates/jade/_publish_items_categories.jade:24
+msgid "Véhicule"
+msgstr ""
+
+#: eloue/templates/jade/_publish_items_categories.jade:28
+msgid "Mode et accessoires"
+msgstr ""
+
+#: eloue/templates/jade/_publish_items_categories.jade:32
+msgid "Santé et bien-etre"
+msgstr ""
 
 #: eloue/templates/jade/_reset_password.jade:8
 msgid "Réinitialisation du mot de passe"
@@ -2767,10 +4489,6 @@ msgid ""
 "Soisissez deux fois votre nouveau mot de passe afin de vérifier qu'il est "
 "correctement saisi."
 msgstr "הכנס פעמיים את הסיסמה החדשה שלך כדי לוודא כי שזה  הוכנס כראוי ."
-
-#: eloue/templates/jade/_reset_password_confirm.jade:15
-msgid "Nouveau mot de passe"
-msgstr "סיסמא החדשה  "
 
 #: eloue/templates/jade/_reset_password_confirm.jade:18
 #: eloue/templates/jade/_sign_in.jade:65
@@ -2929,11 +4647,6 @@ msgstr ""
 msgid "Rédigez votre message ici..."
 msgstr "לכתוב את הודעתך פה "
 
-#: eloue/templates/jade/pop_up_sections/_input_message.jade:6
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:25
-msgid "Envoyez"
-msgstr "שלח "
-
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:4
 msgid "Demande de devis envoyé"
 msgstr "בקשה להצעת מחיר "
@@ -2975,24 +4688,10 @@ msgstr ""
 "</p>\n"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:26
-msgid ""
-"\n"
-"<b>N’hésitez pas à nous écrire</b> via le formulaire ci‐dessous, nous nous "
-"ferons un plaisir de répondre à toutes vos questions...\n"
-msgstr ""
-"\n"
-" אל תהססו לכתוב לנו. באמצעות הטופס שלהלן, אנחנו  נשמח לענות על כל השאלות "
-"שלך...\n"
-
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:29
-msgid "L’équipe e-loue"
-msgstr "צוות אי-לו "
-
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:34
 msgid "N’hésitez pas à nous écrire"
 msgstr " אל תהססו לכתוב לנו"
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:34
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:26
 msgid ""
 "via le formulaire ci‐dessous, nous nous ferons un plaisir de répondre à "
 "toutes vos questions..."
@@ -3000,19 +4699,19 @@ msgstr ""
 " אל תהססו לכתוב לנו. באמצעות הטופס שלהלן, אנחנו בוודאי ישמח לענות על כל "
 "השאלות שלך..."
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:38
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:30
 msgid "Votre adresse e‐mail"
 msgstr "דואר אלקטרוני שלך "
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:39
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:31
 msgid "Objet de votre message"
 msgstr "נשאה פנייתך  "
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:39
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:31
 msgid "Votre message"
 msgstr "הודעה שלך "
 
-#: eloue/templates/jade/pop_up_sections/_message_form.jade:40
+#: eloue/templates/jade/pop_up_sections/_message_form.jade:32
 msgid "Envoyer"
 msgstr "לשלוח "
 
@@ -3079,13 +4778,6 @@ msgstr "נתן להשיג אותנו ב&nbsp;"
 msgid "Nouveau !"
 msgstr "חדש ! "
 
-#: eloue/templates/jade/pop_up_sections/_pickup_info.jade:3
-#: eloue/templates/jade/pop_up_sections/_shipping.jade:2
-#: eloue/templates/jade/pop_up_sections/_terms.jade:15
-#: eloue/templates/products/_base_product_detail.jade:63
-msgid "Livraison"
-msgstr "משלוח"
-
 #: eloue/templates/jade/pop_up_sections/_pickup_info.jade:6
 msgid "Option livraison 10 € :"
 msgstr "אופציה למשלוח "
@@ -3112,10 +4804,6 @@ msgstr ""
 msgid "Vous devez mettre une adresse dans le formulaire ci-dessus"
 msgstr "אתה חייב לשים כתובת בטופס לעיל"
 
-#: eloue/templates/jade/pop_up_sections/_shipping.jade:20
-msgid "Enregistrer"
-msgstr "להרשמם "
-
 #: eloue/templates/jade/pop_up_sections/_shipping.jade:24
 msgid "Sélectionner un point relais ci-dessous"
 msgstr "בחר  נקודה העברה  להלן "
@@ -3140,31 +4828,6 @@ msgstr "מיקום הסניף"
 #: eloue/templates/jade/pop_up_sections/_shop_form.jade:35
 msgid "Notre boutique est située au&nbsp;"
 msgstr "החנות שלנו ממוקם ב-au&nbsp;"
-
-#: eloue/templates/jade/pop_up_sections/_terms.jade:5
-#: eloue/templates/products/tab_tarifs.jade:10
-#: eloue/templates/products/tab_tarifs.jade:40
-msgid "Durée"
-msgstr "אורך"
-
-#: eloue/templates/jade/pop_up_sections/_terms.jade:10
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
-#: eloue/templates/products/tab_tarifs.jade:11
-#: eloue/templates/products/tab_tarifs.jade:41 products/forms.py:169
-msgid "Prix"
-msgstr "מחיר "
-
-#: eloue/templates/jade/pop_up_sections/_terms.jade:11
-#: eloue/templates/jade/pop_up_sections/_terms.jade:16
-#: eloue/templates/jade/pop_up_sections/_terms.jade:21
-#: eloue/templates/jade/pop_up_sections/_terms.jade:26 products/choices.py:60
-msgid "€"
-msgstr "€"
-
-#: eloue/templates/jade/pop_up_sections/_terms.jade:25
-#: eloue/templates/products/tab_tarifs.jade:56
-msgid "Caution"
-msgstr "פיקדון "
 
 #: eloue/templates/jade/pop_up_sections/_terms.jade:30
 msgid ""
@@ -3218,11 +4881,6 @@ msgstr ""
 "המיקום ועל לוח הזמנים של  המפגש ? אל תפחד, חברי האי-לו  הם מאוד מועיל ישמחו "
 "לעזור לך..."
 
-#: eloue/templates/jade/pop_up_sections/_variants_call.jade:37
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:3
-msgid "Réservez en ligne"
-msgstr "הזמו באינטרנט"
-
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:38
 msgid ""
 "En réservant sur e-loue, vous avez l’assurance de ne pas avoir de mauvaise "
@@ -3243,58 +4901,9 @@ msgstr ""
 "     אל תהססו לבקר באתר שלנו .  </b>   תמצאו שם תשובות  על הרבה נושאים . \n"
 "\n"
 
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:3
-msgid "Demandez un devis"
-msgstr "בקש הצעת מחיר "
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:7
-msgid "à partir de"
-msgstr "החל מ-"
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:11
-msgid "Cet article est disponible à ces dates"
-msgstr "מוצר  זה זמין בתאריכים האלה"
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:12
-msgid "Cet article n'est pas disponible à ces dates"
-msgstr "מוצר זה  אינו זמין בתאריכים אלו"
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:16
-msgid "Durée de la location"
-msgstr "אורך  ההשכרה שלך  "
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
-msgid "indicatif"
-msgstr "קידומת "
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:18
-msgid "de la location"
-msgstr "של ההשכרה "
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:22
-msgid "Assurance incluse"
-msgstr "ביטוח כלול"
-
-#: eloue/templates/jade/product_details/aside/_booking_form.jade:26
-msgid ""
-"\n"
-" Vous allez envoyer<br> une demande de location. <br> &ndash;<br> Le loueur "
-"vous recontactera <br> très rapidement <br> pour vous confirmer la location."
-"<br> &ndash;<br> Le paiement se fera directement <br> chez le loueur.\n"
-msgstr ""
-"\n"
-"אתה תשלח<br>השכרת לפי דרישה.<br>–<br>השימוש במשרדים ניצור איתך קשר<br>מהר "
-"מאוד<br>כדי לאשר את העיסקה.<br>–<br>התשלום יהיה ישירות<br>ב- השימוש אצל "
-"המשכיר .\n"
-
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:3
 msgid "Contactez-moi"
 msgstr "צור קשר "
-
-#: eloue/templates/jade/product_details/aside/_owner_information.jade:25
-#: eloue/templates/profile_public/_profile_public-owner_information.jade:14
-msgid "Membre depuis le"
-msgstr "חבר/ה מאז"
 
 #: eloue/templates/jade/product_details/aside/_owner_information.jade:36
 #: eloue/templates/profile_public/_profile_public-contact_member.jade:11
@@ -3318,42 +4927,42 @@ msgid "Notation"
 msgstr "דירוג"
 
 #: eloue/templates/jade/product_details/main/_description.jade:20
-#: products/models.py:416
+#: products/models.py:414
 msgid "marque"
 msgstr "מותג / סוג/סימון "
 
 #: eloue/templates/jade/product_details/main/_description.jade:25
-#: products/models.py:417
+#: products/models.py:415
 msgid "modèle"
 msgstr "מודל"
 
 #: eloue/templates/jade/product_details/main/_description.jade:30
-#: products/models.py:420
+#: products/models.py:418
 msgid "nombre de place"
 msgstr "מספר מקומות "
 
 #: eloue/templates/jade/product_details/main/_description.jade:35
-#: products/models.py:421
+#: products/models.py:419
 msgid "nombre de porte"
 msgstr "מספר דלתות "
 
 #: eloue/templates/jade/product_details/main/_description.jade:40
-#: products/models.py:422
+#: products/models.py:420
 msgid "énergie"
 msgstr "אנרגיה"
 
 #: eloue/templates/jade/product_details/main/_description.jade:45
-#: products/models.py:423
+#: products/models.py:421
 msgid "boite de vitesse"
 msgstr "תיבת הילוכים"
 
 #: eloue/templates/jade/product_details/main/_description.jade:50
-#: products/models.py:424
+#: products/models.py:422
 msgid "kilométrage"
 msgstr "קילומטרג' "
 
 #: eloue/templates/jade/product_details/main/_description.jade:55
-#: products/models.py:425
+#: products/models.py:423
 msgid "consommation"
 msgstr "צריכת דלק "
 
@@ -3417,33 +5026,13 @@ msgstr "וגם  אפשר להרוויח כסף על ידי פירסום  מוד�
 msgid "Vous aussi faites comme Thomas ..."
 msgstr "אתה עושה כמו אחרים ....."
 
-#: eloue/templates/our_partners/index.jade:1
-msgid "Nos Partenaires"
-msgstr "שותפים"
-
 #: eloue/templates/proapp/app.html:4
 msgid "Vos statistiques"
 msgstr "הסטטיסטיקה שלך "
 
-#: eloue/templates/products/_base_product_detail.jade:53
-msgid "Photos et Localisation"
-msgstr "תמונות ומיקום "
-
-#: eloue/templates/products/_base_product_detail.jade:56
-msgid "Tarifs"
-msgstr "מחירון "
-
 #: eloue/templates/products/_base_product_detail.jade:59
 msgid "Conditions d'assurance"
 msgstr "תנאים לביטוח "
-
-#: eloue/templates/products/_base_product_detail.jade:74
-msgid "Commentaires liés à cette annonce"
-msgstr "הערות הקשורות  למודעה הזו"
-
-#: eloue/templates/products/_base_product_detail.jade:79
-msgid "Commentaire liés au propriétaire"
-msgstr "הערות הקשורות לבעל הנכס "
 
 #: eloue/templates/products/subcategory_list.jade:5
 msgid "annonces de location"
@@ -3452,10 +5041,6 @@ msgstr "מודעות על השכרות "
 #: eloue/templates/products/subcategory_list.jade:5
 msgid "dans toute la France"
 msgstr "השכרות בכל ישראל "
-
-#: eloue/templates/products/tab_available.jade:7
-msgid "Sélectionner le mois"
-msgstr "חודש"
 
 #: eloue/templates/products/tab_available.jade:36
 msgid ""
@@ -3475,25 +5060,13 @@ msgstr ""
 "adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, "
 "necessitatibus quis illum enim.</p>"
 
-#: eloue/templates/products/tab_available.jade:48
-msgid "Indisponiblités"
-msgstr "לא זמין "
-
 #: eloue/templates/products/tab_tarifs.jade:3
 msgid "Tarif"
 msgstr "מחירון "
 
-#: eloue/templates/products/tab_tarifs.jade:3
-msgid "Grille tarifaire"
-msgstr "לוח מחירים "
-
 #: eloue/templates/products/tab_tarifs.jade:16
 msgid "1 jours*"
 msgstr "1 יום *"
-
-#: eloue/templates/products/tab_tarifs.jade:26
-msgid "Kilomètres inclus par jour"
-msgstr "ק ילומטרים כלול ליום "
 
 #: eloue/templates/products/tab_tarifs.jade:30
 msgid "Coût du kilomètre supplémentaire"
@@ -3537,14 +5110,6 @@ msgstr "בטל"
 msgid "Activer"
 msgstr "הפעל"
 
-#: eloue/templates/products/partials/product_option_edit_history.html:6
-msgid "Date de début"
-msgstr "תאריך התחלה "
-
-#: eloue/templates/products/partials/product_option_edit_history.html:7
-msgid "Date de fin"
-msgstr "תאריך סיום "
-
 #: eloue/templates/products/partials/product_option_edit_history.html:8
 msgid "Coût"
 msgstr "עלות "
@@ -3552,10 +5117,6 @@ msgstr "עלות "
 #: eloue/templates/products/partials/product_option_edit_history.html:21
 msgid "Pas encore d'historique pour cette annonce"
 msgstr "אין היסטוריה עבור רישום זה"
-
-#: eloue/templates/products/partials/result_list.html:22
-msgid "Sur devis"
-msgstr "בהתאם להצעה מחיר "
 
 #: eloue/templates/products/partials/top_ads.html:2
 msgid "Top annonces"
@@ -5515,11 +7076,7 @@ msgstr ""
 msgid "la Livraison"
 msgstr "משלוח"
 
-#: eloue/templates/terms_pro/index.jade:1
-msgid "Conditions Générales Professionnel"
-msgstr "תנאים כללים לבעלי מקצוע"
-
-#: payments/paybox_payment.py:37
+#: payments/paybox_payment.py:43
 #, python-brace-format
 msgid "PayboxError with code {0} and message \"{1}\""
 msgstr "PayboxError עם קוד הודעה {0} ו \"{1}"
@@ -5536,17 +7093,9 @@ msgstr "תיצור הודעה אופציונלי עבור כל המשתמשים 
 msgid "All users"
 msgstr "כל המשתמשים"
 
-#: products/choices.py:17 rent/utils.py:79 rent/tests/pricing_compat.py:121
+#: products/choices.py:17 rent/utils.py:80 rent/tests/pricing_compat.py:121
 msgid "heure"
 msgstr "שעה"
-
-#: products/choices.py:18 rent/tests/pricing_compat.py:122
-msgid "1 heure"
-msgstr "1 שעה"
-
-#: products/choices.py:23 rent/tests/pricing_compat.py:127
-msgid "1 jour"
-msgstr "1 יום"
 
 #: products/choices.py:27 rent/tests/pricing_compat.py:131
 msgid "week-end"
@@ -5556,7 +7105,7 @@ msgstr "סוף שבוע"
 msgid "1 week-end"
 msgstr "1 סוף שבוע"
 
-#: products/choices.py:32 rent/utils.py:77 rent/tests/pricing_compat.py:136
+#: products/choices.py:32 rent/utils.py:78 rent/tests/pricing_compat.py:136
 #: rent/tests/pricing_compat.py:206 rent/tests/pricing_compat.py:214
 msgid "semaine"
 msgstr "שבוע"
@@ -5574,10 +7123,6 @@ msgstr "שבועים "
 msgid "2 semaines"
 msgstr "2 שבועות "
 
-#: products/choices.py:42 rent/utils.py:76 rent/tests/pricing_compat.py:146
-msgid "mois"
-msgstr "חודש"
-
 #: products/choices.py:43 rent/tests/pricing_compat.py:147
 msgid "1 mois"
 msgstr "1 חודש"
@@ -5586,221 +7131,217 @@ msgstr "1 חודש"
 msgid "3jours"
 msgstr "3ימים"
 
-#: products/choices.py:48 rent/tests/pricing_compat.py:152
-msgid "3 jours"
-msgstr "3 ימים"
-
 #: products/choices.py:52 rent/tests/pricing_compat.py:156
 msgid "15jours"
 msgstr "15יום "
 
-#: products/choices.py:53 rent/tests/pricing_compat.py:157
-msgid "15 jours"
-msgstr "15 ימים "
-
 #: products/choices.py:61
+msgid "kr."
+msgstr ""
+
+#: products/choices.py:62
 msgid "$"
 msgstr "$"
 
-#: products/choices.py:62
+#: products/choices.py:63
 msgid "£"
 msgstr "£"
 
-#: products/choices.py:63
+#: products/choices.py:64
 msgid "¥"
 msgstr "¥"
 
-#: products/choices.py:64
+#: products/choices.py:65
 msgid "F"
 msgstr "F"
 
-#: products/choices.py:68
+#: products/choices.py:69
 msgid "brouillon"
 msgstr "טיוטה"
 
-#: products/choices.py:69
+#: products/choices.py:70
 msgid "privé"
 msgstr "פרטי"
 
-#: products/choices.py:70
+#: products/choices.py:71
 msgid "public"
 msgstr "ציבורי"
 
-#: products/choices.py:71
+#: products/choices.py:72
 msgid "supprimé"
 msgstr "מחוק"
 
-#: products/choices.py:75
+#: products/choices.py:76
 msgid "Le locataire me paye directement et mon objet n'est pas assuré"
 msgstr "השוכר משלם לי ישירות, אבל המוצר לא מבוטח"
 
-#: products/choices.py:76
+#: products/choices.py:77
 msgid "Le locataire paye en ligne et mon objet est assuré"
 msgstr "השוכר משלם באינטרנט, והמוצר  מבוטח"
 
-#: products/choices.py:77
+#: products/choices.py:78
 msgid ""
 "Le locataire paye en ligne par son carte bancaire et mon objet est assuré"
 msgstr "השוכר  משלם באינטרנט על ידי כרטיס אשראי שלו  והאובייקט שלי מבוטח"
 
-#: products/choices.py:81 products/choices.py:93 products/choices.py:101
-#: products/choices.py:142
+#: products/choices.py:82 products/choices.py:94 products/choices.py:102
+#: products/choices.py:143
 msgid "2"
 msgstr "2"
 
-#: products/choices.py:82 products/choices.py:94 products/choices.py:102
-#: products/choices.py:143
+#: products/choices.py:83 products/choices.py:95 products/choices.py:103
+#: products/choices.py:144
 msgid "3"
 msgstr "3"
 
-#: products/choices.py:83 products/choices.py:95 products/choices.py:103
-#: products/choices.py:144
+#: products/choices.py:84 products/choices.py:96 products/choices.py:104
+#: products/choices.py:145
 msgid "4"
 msgstr "4"
 
-#: products/choices.py:84 products/choices.py:96 products/choices.py:104
-#: products/choices.py:145
+#: products/choices.py:85 products/choices.py:97 products/choices.py:105
+#: products/choices.py:146
 msgid "5"
 msgstr "5"
 
-#: products/choices.py:85 products/choices.py:97 products/choices.py:105
-#: products/choices.py:146
+#: products/choices.py:86 products/choices.py:98 products/choices.py:106
+#: products/choices.py:147
 msgid "6"
 msgstr "6"
 
-#: products/choices.py:86 products/choices.py:106 products/choices.py:147
+#: products/choices.py:87 products/choices.py:107 products/choices.py:148
 msgid "7"
 msgstr "7"
 
-#: products/choices.py:87 products/choices.py:107 products/choices.py:148
+#: products/choices.py:88 products/choices.py:108 products/choices.py:149
 msgid "8"
 msgstr "8"
 
-#: products/choices.py:88 products/choices.py:108 products/choices.py:149
+#: products/choices.py:89 products/choices.py:109 products/choices.py:150
 msgid "9"
 msgstr "9"
 
-#: products/choices.py:89 products/choices.py:109 products/choices.py:150
+#: products/choices.py:90 products/choices.py:110 products/choices.py:151
 msgid "10"
 msgstr "10"
 
-#: products/choices.py:110 products/choices.py:151
+#: products/choices.py:111 products/choices.py:152
 msgid "11"
 msgstr "11"
 
-#: products/choices.py:111 products/choices.py:152
+#: products/choices.py:112 products/choices.py:153
 msgid "12"
 msgstr "12"
 
-#: products/choices.py:112 products/choices.py:153
+#: products/choices.py:113 products/choices.py:154
 msgid "13"
 msgstr "13"
 
-#: products/choices.py:113 products/choices.py:154
+#: products/choices.py:114 products/choices.py:155
 msgid "14"
 msgstr "14"
 
-#: products/choices.py:114 products/choices.py:155
+#: products/choices.py:115 products/choices.py:156
 msgid "15"
 msgstr "15"
 
-#: products/choices.py:115 products/choices.py:156
+#: products/choices.py:116 products/choices.py:157
 msgid "16"
 msgstr "16"
 
-#: products/choices.py:116 products/choices.py:157
+#: products/choices.py:117 products/choices.py:158
 msgid "17"
 msgstr "17"
 
-#: products/choices.py:117 products/choices.py:158
+#: products/choices.py:118 products/choices.py:159
 msgid "18"
 msgstr "18"
 
-#: products/choices.py:118
+#: products/choices.py:119
 msgid "19"
 msgstr "19"
 
-#: products/choices.py:122
+#: products/choices.py:123
 msgid "Essence"
 msgstr "דלק"
 
-#: products/choices.py:123
+#: products/choices.py:124
 msgid "Diesel"
 msgstr "דיזל"
 
-#: products/choices.py:124
+#: products/choices.py:125
 msgid "GPL"
 msgstr "GPL"
 
-#: products/choices.py:125
+#: products/choices.py:126
 msgid "Electrique"
 msgstr "חשמלי "
 
-#: products/choices.py:126
+#: products/choices.py:127
 msgid "Hybride"
 msgstr "היבריד"
 
-#: products/choices.py:130
+#: products/choices.py:131
 msgid "Manuel"
 msgstr "ידני"
 
-#: products/choices.py:131
+#: products/choices.py:132
 msgid "Automatique"
 msgstr "אוטומטי "
 
-#: products/choices.py:135
+#: products/choices.py:136
 msgid "- de 10000 km"
 msgstr "-מ- 10000 ק מ"
 
-#: products/choices.py:136
+#: products/choices.py:137
 msgid "Entre 10001 et 50000 km"
 msgstr "בין  10001  ל   50000 ק מ"
 
-#: products/choices.py:137
+#: products/choices.py:138
 msgid "Plus de 50000 km"
 msgstr "מעל -  50000 ק מ"
 
-#: products/choices.py:141
+#: products/choices.py:142
 msgid "1"
 msgstr "1"
 
-#: products/choices.py:159
+#: products/choices.py:160
 msgid "19+"
 msgstr "19+"
 
-#: products/choices.py:165
+#: products/choices.py:166
 msgid "Appartement/Maison"
 msgstr "דירה/בית "
 
-#: products/choices.py:166
+#: products/choices.py:167
 msgid "Chambre partagé"
 msgstr "חדר במשותף "
 
-#: products/choices.py:167
+#: products/choices.py:168
 msgid "Chambre privée"
 msgstr "חדר פרטי "
 
-#: products/choices.py:172 products/choices.py:179
+#: products/choices.py:173 products/choices.py:180
 msgid "Les plus récentes"
 msgstr "הכי חדש "
 
-#: products/choices.py:173 products/choices.py:180
+#: products/choices.py:174 products/choices.py:181
 msgid "Les pris les plus bas"
 msgstr "המחירים  הנמוכים ביותר "
 
-#: products/choices.py:174 products/choices.py:181
+#: products/choices.py:175 products/choices.py:182
 msgid "Les pris les plus haut"
 msgstr "המחירים הגבוהים ביותר "
 
-#: products/choices.py:182 products/choices.py:183
+#: products/choices.py:183 products/choices.py:184
 msgid "Les ..."
 msgstr "ה-......"
 
-#: products/choices.py:187
+#: products/choices.py:188
 msgid "Location Automobile"
 msgstr "השכרה רכב "
 
-#: products/choices.py:188
+#: products/choices.py:189
 msgid "Location saisonnière"
 msgstr "השכרה עונתית "
 
@@ -5823,10 +7364,6 @@ msgstr "לפי-קטגוריה "
 #: products/models.py:87
 msgid "Dépôt de garantie"
 msgstr "פיקדון "
-
-#: products/models.py:92
-msgid "Quantité"
-msgstr "כמות"
 
 #: products/models.py:93
 msgid "Livraison possible"
@@ -5852,19 +7389,15 @@ msgstr "סוג תשלום"
 msgid "product"
 msgstr "מוצר "
 
-#: products/models.py:428
+#: products/models.py:426
 msgid "kilomètres inclus/jour"
 msgstr "קילומטרג' כלול / יום "
 
-#: products/models.py:428
+#: products/models.py:426
 msgid "Nombre de kilomètres maximum que le locataire peut effectuer par jour."
 msgstr "מספר קילומטרים מירבי שהשוכר יכול לבצע ביום ."
 
-#: products/models.py:429
-msgid "Prix par kilomètres supplémentaires"
-msgstr "תוספת לכל קילומטר נוסף"
-
-#: products/models.py:429
+#: products/models.py:427
 msgid ""
 "Prix du kilomètre supplémentaire. Si le locataire dépasse le nombre de "
 "kilomètre inclus par jour."
@@ -5872,210 +7405,190 @@ msgstr ""
 "מחיר קילומטר נוספים. אם השוכר עובר את הספר הקילומטרים ה\n"
 "מוסכם  ליום."
 
-#: products/models.py:432
+#: products/models.py:430
 msgid "climatisation"
 msgstr "מזוגן"
 
-#: products/models.py:433
+#: products/models.py:431
 msgid "direction assistée"
 msgstr "הגה כוח"
 
-#: products/models.py:434
+#: products/models.py:432
 msgid "régulateur de vitesse"
 msgstr "בקר מהירות"
 
-#: products/models.py:435
-msgid "GPS"
-msgstr "GPS"
-
-#: products/models.py:436
+#: products/models.py:434
 msgid "siège bébé"
 msgstr "מושב תינוק"
 
-#: products/models.py:437
+#: products/models.py:435
 msgid "coffre de toit"
 msgstr "גגון"
 
-#: products/models.py:438
+#: products/models.py:436
 msgid "porte-vélo"
 msgstr "מנשא אופניים"
 
-#: products/models.py:439
+#: products/models.py:437
 msgid "pneus neige"
 msgstr "צמיגי שלג"
 
-#: products/models.py:440
+#: products/models.py:438
 msgid "chaines"
 msgstr "שרשראות "
 
-#: products/models.py:441
+#: products/models.py:439
 msgid "porte-skis"
 msgstr "מתקן להובלת סקי "
 
-#: products/models.py:442
+#: products/models.py:440
 msgid "lecteur CD"
 msgstr "נגן תקליטורים"
 
-#: products/models.py:443
+#: products/models.py:441
 msgid "entrée audio/iPod"
 msgstr "קלט אודיו/iPod"
 
-#: products/models.py:447
-msgid "N° d'immatriculation"
-msgstr "מס רשוי "
-
-#: products/models.py:521
+#: products/models.py:519
 msgid "capacité"
 msgstr "קיבולת "
 
-#: products/models.py:521
+#: products/models.py:519
 msgid "Nombre de personne que peux accueillir votre locgement"
 msgstr "מספר  אנשים היכולים ללון בנכס "
 
 #: products/models.py:522
-msgid "Type de logement"
-msgstr "סוג נכס "
-
-#: products/models.py:524
 msgid "nombre de chambre"
 msgstr "מספר חדרים "
 
-#: products/models.py:525
-msgid "Règles d'utilisation"
-msgstr "הוראות שימוש "
-
-#: products/models.py:528
+#: products/models.py:526
 msgid "air conditionné"
 msgstr "מזגן "
 
-#: products/models.py:529
+#: products/models.py:527
 msgid "petit déjeuner"
 msgstr "ארוחת בוקר "
 
-#: products/models.py:530
+#: products/models.py:528
 msgid "balcon/terasse"
 msgstr "מרפסת "
 
-#: products/models.py:531
+#: products/models.py:529
 msgid "chambre avec serrure"
 msgstr "חדר עם מנעול "
 
-#: products/models.py:532
+#: products/models.py:530
 msgid "serviettes"
 msgstr "מגבות "
 
-#: products/models.py:533
+#: products/models.py:531
 msgid "ascenseur dans l'immeuble"
 msgstr "מעלית "
 
-#: products/models.py:534
+#: products/models.py:532
 msgid "adapté aux familles/enfants"
 msgstr "מתואם למשפחות/ילדים "
 
-#: products/models.py:535
+#: products/models.py:533
 msgid "salle de sport"
 msgstr "אולם ספורט "
 
-#: products/models.py:536
+#: products/models.py:534
 msgid "accessible aux personnes handicapées"
 msgstr "נגישות לנכים "
 
-#: products/models.py:537
+#: products/models.py:535
 msgid "chauffage"
 msgstr "הסקה"
 
-#: products/models.py:538
+#: products/models.py:536
 msgid "jacuzzi"
 msgstr "ג'קוזי"
 
-#: products/models.py:539
+#: products/models.py:537
 msgid "cheminée intérieure"
 msgstr "אח"
 
-#: products/models.py:540
+#: products/models.py:538
 msgid "accès internet"
 msgstr "אינטרנט"
 
-#: products/models.py:541
+#: products/models.py:539
 msgid "cuisine"
 msgstr "מטבח"
 
-#: products/models.py:542
+#: products/models.py:540
 msgid "parking"
 msgstr "חניה"
 
-#: products/models.py:543
+#: products/models.py:541
 msgid "fumeurs acceptées"
 msgstr "עישון מקובל "
 
-#: products/models.py:544
+#: products/models.py:542
 msgid "idéal pour des évènements"
 msgstr "אידיאלי לאירועים"
 
-#: products/models.py:545
-msgid "TV"
-msgstr "טלוויזיה"
-
-#: products/models.py:546
+#: products/models.py:544
 msgid "machine à laver"
 msgstr "מכונה כביסה"
 
-#: products/models.py:547
+#: products/models.py:545
 msgid "sèche linge"
 msgstr "מייבש כביסה"
 
-#: products/models.py:548
+#: products/models.py:546
 msgid "ordinateur avec Internet"
 msgstr "מחשב עם אינטרנט"
 
-#: products/models.py:695
+#: products/models.py:693
 msgid "category"
 msgstr "קטגוריה"
 
-#: products/models.py:696
+#: products/models.py:694
 msgid "categories"
 msgstr "קטגוריות"
 
-#: products/models.py:710
+#: products/models.py:708
 #, python-format
 msgid "Category with name %s (%s) already exists. Site_id is %d."
 msgstr "קטגוריה בשם %s (%s) כבר קיים. Xrchdet_e.asp?Site_ID=1466 הוא %d."
 
-#: products/models.py:768
+#: products/models.py:766
 msgid "properties"
 msgstr "מאפייני"
 
-#: products/models.py:825
+#: products/models.py:823
 msgid "Le prix ne peut pas être négatif"
 msgstr "המחיר אינו יכול להיות שלילי"
 
-#: products/models.py:879
+#: products/models.py:875
 msgid "Score can't be higher than 1"
 msgstr "התוצאה אינה יכולה להיות גבוה מ- 1"
 
-#: products/models.py:881
+#: products/models.py:877
 msgid "Score can't be a negative value"
 msgstr "התוצאה אינה  יכולה  להיות ערך שלילי"
 
-#: products/models.py:890
+#: products/models.py:886
 msgid "Vous ne pouvez pas commenter vos propres locations"
 msgstr "אתה לא יכול לתת חווה דעת על המוצרים שלך "
 
-#: products/models.py:892
+#: products/models.py:888
 msgid "Vous ne pouvez pas commenter un produit que vous n'avez pas loué"
 msgstr "אתה לא  יכול להגיב ולתת חוות דעת   על מוצרים  שלא שכרת "
 
-#: products/models.py:902
+#: products/models.py:898
 msgid "Vous ne pouvez pas commenter votre profil"
 msgstr "אתה לא יכול לתת חוות דעת על הפרופיל שלך  ."
 
-#: products/models.py:904
+#: products/models.py:900
 msgid ""
 "Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas "
 "effectué de réservations"
 msgstr "אתה לא יכול לתת חחות דעת על משכיר איתו  לא  ביצעת הזמנה "
 
-#: products/models.py:979 products/models.py:980
+#: products/models.py:975 products/models.py:976
 msgid "Archived"
 msgstr "בארכיון"
 
@@ -6098,6 +7611,10 @@ msgstr "ההשכרה לא יכולה להסתיים לפני שהיא התחיל
 #: products/serializers.py:358
 msgid "HyperlinkedByIdField requires 'source' argument"
 msgstr "HyperlinkedByIdField דורשת ארגומנט 'מקור'"
+
+#: products/urls.py:14 products/views.py:232
+msgid "categorie"
+msgstr "קטגוריה "
 
 #: products/urls.py:15
 msgid "deposer"
@@ -6135,14 +7652,6 @@ msgstr "כמות פנויה לתקופה זאת   : %s"
 msgid "par-"
 msgstr "על ידי/.לפי "
 
-#: products/views.py:232
-msgid "categorie"
-msgstr "קטגוריה "
-
-#: products/views.py:243 products/views.py:246 products/views.py:254
-msgid "page"
-msgstr "דף"
-
 #: products/views.py:522 products/views.py:539
 msgid "Departure point not specified"
 msgstr "המוצא לא צוין"
@@ -6155,43 +7664,48 @@ msgstr "השכרה/"
 msgid "sur devis"
 msgstr "לפי הצעת מחיר "
 
-#: rent/admin.py:26
+#: rent/admin.py:27
+#, fuzzy
+msgid "Transaction"
+msgstr "הרשמה "
+
+#: rent/admin.py:28
 msgid "Borrower & Owner"
 msgstr "Borrower & Owner"
 
-#: rent/admin.py:27
+#: rent/admin.py:29
 msgid "Payment"
 msgstr "תשלום"
 
-#: rent/admin.py:48
+#: rent/admin.py:50
 msgid "Envoyer un email de relance"
 msgstr "שלח אי מיל  תזכורת "
 
-#: rent/admin.py:52
+#: rent/admin.py:54
 msgid "Product"
 msgstr "מוצר"
 
-#: rent/admin.py:59
+#: rent/admin.py:61
 msgid "Borrower"
 msgstr "שוכר "
 
-#: rent/admin.py:64
+#: rent/admin.py:66
 msgid "Borrower email"
 msgstr "אי מייל שוכר "
 
-#: rent/admin.py:70
+#: rent/admin.py:72
 msgid "Borrower phone"
 msgstr "Borrower phone"
 
-#: rent/admin.py:77
+#: rent/admin.py:79
 msgid "Owner"
 msgstr "בעלים "
 
-#: rent/admin.py:82
+#: rent/admin.py:84
 msgid "Owner email"
 msgstr "אי מייל הבעלים "
 
-#: rent/admin.py:88
+#: rent/admin.py:90
 msgid "Owner phone"
 msgstr "מספר טלפון הבעלים "
 
@@ -6319,157 +7833,153 @@ msgstr ""
 "Author of the comment must be either owner or borrower of the related "
 "booking record"
 
-#: rent/utils.py:75
+#: rent/utils.py:76
 msgid "année"
 msgid_plural "années"
 msgstr[0] "שנה"
 msgstr[1] ""
 
-#: rent/utils.py:80 rent/utils.py:100
+#: rent/utils.py:81 rent/utils.py:101
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "דקה "
 msgstr[1] ""
 
-#: rent/utils.py:81
+#: rent/utils.py:82
 msgid "seconde"
 msgid_plural "secondes"
 msgstr[0] "שניה"
 msgstr[1] ""
 
-#: rent/utils.py:135
+#: rent/utils.py:136
 msgid "milliard"
 msgstr "מליארד "
 
-#: rent/utils.py:141
+#: rent/utils.py:142
 msgid "million"
 msgstr "מיליון"
 
-#: rent/utils.py:150 rent/utils.py:165
+#: rent/utils.py:151 rent/utils.py:166
 msgid "cent"
 msgstr "מאה "
 
-#: rent/utils.py:160
+#: rent/utils.py:161
 msgid "mille"
 msgstr "אלף "
 
-#: rent/utils.py:176
+#: rent/utils.py:177
 msgid "zéro"
 msgstr "אפס "
 
-#: rent/utils.py:186
-msgid "et"
-msgstr "ו"
-
-#: rent/utils.py:194
+#: rent/utils.py:195
 msgid "moins"
 msgstr "פחות "
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "un"
 msgstr "אחד"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "deux"
 msgstr "שתיים "
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "trois"
 msgstr "שלוש"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "quatre"
 msgstr "ארבע "
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "cinq"
 msgstr "חמש"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "six"
 msgstr "שש"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "sept"
 msgstr "שבע"
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "huit"
 msgstr "שמונה "
 
-#: rent/utils.py:197
+#: rent/utils.py:198
 msgid "neuf"
 msgstr "תשע"
 
-#: rent/utils.py:197 rent/utils.py:201
+#: rent/utils.py:198 rent/utils.py:202
 msgid "dix"
 msgstr "עשר "
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "onze"
 msgstr "אחד עשר"
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "douze"
 msgstr "שתים עשר "
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "treize"
 msgstr "שלוש עשר "
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "quatorze"
 msgstr "ארבע עשר "
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "quinze"
 msgstr "חמש עשר "
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "seize"
 msgstr "שש עשר "
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "dix-sept"
 msgstr "שבע עשר "
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "dix-huit"
 msgstr "שמונה עשר "
 
-#: rent/utils.py:198
+#: rent/utils.py:199
 msgid "dix-neuf"
 msgstr "תשע עשר "
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "vingt"
 msgstr "עשרים "
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "trente"
 msgstr "שלושים "
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "quarante"
 msgstr "ארבעים "
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "cinquante"
 msgstr "חמשים "
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "soixante"
 msgstr "שישים "
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "soixante-dix"
 msgstr "שבעים "
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "quatre-vingt"
 msgstr "שמונים "
 
-#: rent/utils.py:201
+#: rent/utils.py:202
 msgid "quatre-vingt-dix"
 msgstr "תשעים "
 
@@ -6495,3 +8005,18 @@ msgstr "Can't find shipping point for lat: %s, lng: %s, type: %s, site_id: %s"
 #: shipping/serializers.py:114
 msgid "Latitude\\longitude or address are required"
 msgstr "Latitude\\longitude or address are required"
+
+#~ msgid "professionnels"
+#~ msgstr "בעלי עסקים "
+
+#~ msgid ""
+#~ "\n"
+#~ "<b>N’hésitez pas à nous écrire</b> via le formulaire ci‐dessous, nous "
+#~ "nous ferons un plaisir de répondre à toutes vos questions...\n"
+#~ msgstr ""
+#~ "\n"
+#~ " אל תהססו לכתוב לנו. באמצעות הטופס שלהלן, אנחנו  נשמח לענות על כל השאלות "
+#~ "שלך...\n"
+
+#~ msgid "L’équipe e-loue"
+#~ msgstr "צוות אי-לו "
