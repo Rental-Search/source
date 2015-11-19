@@ -1,30 +1,28 @@
 -load i18n
 
-h2 Vos informations personnelles
+h2 {% trans "Vos informations personnelles" %}
 .row
   .col-sm-2
-      {% verbatim %}
-      select(ng-model="currentUser.civility", name="", data-placeholder="Civilité", eloue-chosen, data-ng-disabled="submitInProgress").form-control
-          option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
-      span.text-danger(eloue-form-field-message, field-name="civility") {{value}}
-      {% endverbatim %}
+      select(ng-model="currentUser.civility", name="", data-placeholder="{% trans 'Civilité' %}", eloue-chosen, data-ng-disabled="submitInProgress").form-control
+        option(ng-repeat="item in civilityOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
+      span.text-danger(eloue-form-field-message, field-name="civility") {% verbatim %}{{value}}{% endverbatim %}
   .col-sm-5
       input(type="text", name="first_name", placeholder="{% trans 'Prénom *' %}", ng-model="currentUser.first_name", required).form-control
       span.text-danger(ng-show="bookingForm.first_name.$error.required && bookingSubmitted", translate="required_field")
   .col-sm-5
-      input(type="text", name="last_name", placeholder="{% trans 'Nom *' %}", ng-model="currentUser.last_name", required).form-control
+      input(type="text", name="last_name", placeholder="{% trans 'Nom' %} *", ng-model="currentUser.last_name", required).form-control
       span.text-danger(ng-show="bookingForm.last_name.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-show="!addShipping || (addShipping && !noAddress)")
   .col-sm-12
-      input(type="text", name="street", placeholder="{% trans 'Adresse *' %}", ng-model="currentUser.default_address.street", required).form-control
+      input(type="text", name="street", placeholder="{% trans 'Adresse' %} *", ng-model="currentUser.default_address.street", required).form-control
       span.text-danger(ng-show="bookingForm.street.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-if="!addShipping || (addShipping && !noAddress)")
   .col-sm-6
-      input(type="text", name="zipcode", placeholder="{% trans 'Code postal *' %}", required, eloue-zipcode, ng-model="currentUser.default_address.zipcode").form-control
+      input(type="text", name="zipcode", placeholder="{% trans 'Code postal' %} *", required, eloue-zipcode, ng-model="currentUser.default_address.zipcode").form-control
       span.text-danger(ng-show="bookingForm.zipcode.$error.required && bookingSubmitted", translate="required_field")
       span.text-danger(ng-show="bookingForm.zipcode.$error.badFormat && bookingSubmitted", translate="zipcode_invalid")
     .col-sm-6
-      input(type="text", name="city", placeholder="{% trans 'Ville *' %}", ng-model="currentUser.default_address.city", required).form-control
+      input(type="text", name="city", placeholder="{% trans 'Ville' %} *", ng-model="currentUser.default_address.city", required).form-control
       span.text-danger(ng-show="bookingForm.city.$error.required && bookingSubmitted", translate="required_field")
 .row: .col-xs-12
     .shipping-option(ng-show="shippingAllowed")
@@ -37,18 +35,20 @@ h2 Vos informations personnelles
     a(href="", ng-show="loadingProductShippingPoint").btn.bg-gray-light-hover.text-white.loading2 &nbsp;&nbsp;&nbsp;
 .row(ng-show="isAuto")
   .col-sm-6(style="z-index: 1050")
-      input#date_of_birth(type="text", name="date_of_birth", data-date-format="yyyy-mm-dd" , placeholder="{% trans 'Date de naissance *' %}", ng-model="currentUser.date_of_birth", ng-required="isAuto").form-control
+      input#date_of_birth(type="text", name="date_of_birth", data-date-format="yyyy-mm-dd" , placeholder="{% trans 'Date de naissance' %} *", ng-model="currentUser.date_of_birth", ng-required="isAuto").form-control
       span.text-danger(ng-show="bookingForm.date_of_birth.$error.required && bookingSubmitted", translate="required_field")
   .col-sm-6
-      input(type="text", name="place_of_birth", placeholder="{% trans 'Lieu de naissance *' %}", ng-model="currentUser.place_of_birth", ng-required="isAuto").form-control
+      input(type="text", name="place_of_birth", placeholder="{% trans 'Lieu de naissance' %} *", ng-model="currentUser.place_of_birth", ng-required="isAuto").form-control
       span.text-danger(ng-show="bookingForm.place_of_birth.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-show="isAuto")
   .col-sm-12
-      input(type="text", name="drivers_license_number", placeholder="{% trans 'Numéro de permis *' %}", ng-model="currentUser.drivers_license_number", ng-required="isAuto").form-control
+      input(type="text", name="drivers_license_number", placeholder="{% trans 'Numéro de permis' %} *", ng-model="currentUser.drivers_license_number", ng-required="isAuto").form-control
       span.text-danger(ng-show="bookingForm.drivers_license_number.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-show="isAuto")
   .col-sm-6(style="z-index: 1050")
-      input#drivers_license_date(type="text", name="drivers_license_date", data-date-format="yyyy-mm-dd", ng-model="currentUser.drivers_license_date", placeholder="{% trans 'Date d’obtention du permis' %}").form-control
+      {% blocktrans %}
+      input#drivers_license_date(type="text", name="drivers_license_date", data-date-format="yyyy-mm-dd", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis").form-control
+      {% endblocktrans %}
   //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
   //  input(type="file", ng-model="bookingDetails.photo")#photo.form-control
 p.info(ng-hide="shippingAllowed") {% trans "Vous devrez présenter votre pièce d'identité, au propriétaire, avant le début de la location. Si les coordonnées que vous saisissez ici ne sont pas les mêmes que celles de votre pièce d'identité,  le propriétaire pourra refuser la transaction. Les champs marqués d'une étoile (*) sont obligatoires." %}

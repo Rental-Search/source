@@ -1,4 +1,0 @@
-{{ object.summary }}
-{{ object.description }}
-{{ object.brand }}
-{{ object.model }}

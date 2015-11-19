@@ -1,4 +1,4 @@
--load product
+-load product i18n
 
 ol.product-layout
     {% for product in product_list %}
@@ -6,7 +6,10 @@ ol.product-layout
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
-          span.badge.price {{ product.price|price:"&euro; /jour" }}
+          if product.price
+            span.badge.price {{ product.price|currency }} /{{ by_day }}
+          else
+            span.badge.price {% trans "Sur devis" %}
           span.badge-order {{ forloop.counter }}
         .info
           h6

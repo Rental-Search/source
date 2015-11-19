@@ -1,7 +1,8 @@
+-load i18n
 .date-picker.form-wrapper
     .table-cell.main-cell
         .table-cell
-            span Du
+            span {% trans "Du" %}
         .table-cell.main-cell
             input(type="text", placeholder="", name="fromDate", ng-model="bookingDetails.fromDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
@@ -14,13 +15,13 @@
                div
                 b
 
-    .span(ng-show="fromDate.$dirty && fromDate.$error.required").ng-cloak.text-danger From date is required.
-    .span(ng-show="fromDate.$dirty && fromDate.$error.pattern").ng-cloak.text-danger Invalid date.
+    .span(ng-show="fromDate.$dirty && fromDate.$error.required").ng-cloak.text-danger {% trans "Il manque la date de début" %}
+    .span(ng-show="fromDate.$dirty && fromDate.$error.pattern").ng-cloak.text-danger {% trans "Le format de la date n'est pas valide" %}
     span.text-danger(ng-show="!!errors.started_at", ng-bind="errors.started_at")
 .date-picker.form-wrapper
     .table-cell.main-cell
         .table-cell
-            span Au
+            span {% trans "Au" %}
         .table-cell.main-cell
             input(type="text", placeholder="", name="toDate", ng-model="bookingDetails.toDate", ng-change="updatePrice()", eloue-datepicker).form-control.date
             i.flaticon.stroke.calendar-3
@@ -32,6 +33,6 @@
                 span
                 div
                     b
-    .span(ng-show="toDate.$dirty && toDate.$error.required").ng-cloak.text-danger To date is required.
-    .span(ng-show="toDate.$dirty && toDate.$error.pattern").ng-cloak.text-danger Invalid date.
+    .span(ng-show="toDate.$dirty && toDate.$error.required").ng-cloak.text-danger {% trans "Il manque la date de fin" %}
+    .span(ng-show="toDate.$dirty && toDate.$error.pattern").ng-cloak.text-danger {% trans "Le format de la date n'est pas valide" %}
     span.text-danger(ng-show="!!errors.ended_at", ng-bind="errors.ended_at")

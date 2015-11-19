@@ -5,8 +5,8 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
      * Directive to validate zipcode.
      */
 
-    // Regexp to validate zipcode. Must contain 5 numbers.
-    var ZIPCODE_REGEXP = /\b[0-9]{5}\b/;
+    // Regexp to validate zipcode. Must contain numbers.
+    var ZIPCODE_REGEXP = /\b[0-9]+\b/;
 
     //TODO fix eloue/templates/jade/pop_up_sections/_personal_information_form.jade
     EloueCommon.directive("eloueZipcode", function () {

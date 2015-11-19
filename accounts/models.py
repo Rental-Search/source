@@ -742,7 +742,15 @@ class Ticket(models.Model):
     comment = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class Campaign(models.Model):
+    pro = models.ForeignKey(Patron, related_name='campaigns')
+    month = models.DateField()
+    comment = models.TextField(null=True, blank=True)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 class Notification(models.Model):
+    """Functionnality for pro"""
     patron = models.ForeignKey(Patron)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(editable=False, null=True, blank=True)

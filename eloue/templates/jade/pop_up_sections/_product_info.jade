@@ -1,22 +1,18 @@
 include ../../jade/_mixins
 
-{% verbatim %}
 .thumbnail-img
-    a(href="#"): img(style="background-image: url({{product.picture}})").bg-image
+    a(href="#"): img(style="background-image: url({% verbatim %}{{product.picture}}{% endverbatim %})").bg-image
 .thumbnail-content
-    h3 {{product.summary}}
+    h3 {% verbatim %}{{product.summary}}{% endverbatim %}
     p.location
         i.flaticon.stroke.location-pin-3
-        | {{product.address.city}}, {{product.address.zipcode}}
+        | {% verbatim %}{{product.address.city}}{% endverbatim %}, {% verbatim %}{{product.address.zipcode}}{% endverbatim %}
     p.stats
-        {% endverbatim %}
         +average-rate("product.stats.average_rating")
         +rate-counter("product.stats.ratings_count")
         +number-of-comments("product.stats.booking_comments_count")
-        {% verbatim %}
     .declarer
         .thumbnail-img
-            a(href="#"): img(style="background-image: url({{product.owner.avatar.thumbnail}})").bg-image
+            a(href="#"): img(style="background-image: url({% verbatim %}{{product.owner.avatar.thumbnail}}{% endverbatim %})").bg-image
         .thumbnail-content
-            p {{product.owner.first_name}} {{product.owner.last_name}}
-{% endverbatim %}
+            p {% verbatim %}{{product.owner.first_name}}{% endverbatim %} {% verbatim %}{{product.owner.last_name}}{% endverbatim %}

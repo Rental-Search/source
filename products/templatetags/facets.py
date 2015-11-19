@@ -69,7 +69,7 @@ class FacetUrlNode(Node):
             else:
                 slugs.append(''.join('%s/%s/' % (key, value)))
 
-        path = urljoin('/%s' % _("location/"), ''.join(slugs))
+        path = urljoin('/%s/' % _('location'), ''.join(slugs))
         if any([value for key, value in params.iteritems()]):
             path = '?'.join([path, self.urlencode(params)])
         return path
