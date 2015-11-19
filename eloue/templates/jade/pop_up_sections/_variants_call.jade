@@ -2,22 +2,22 @@
 
 ul.table
   li.table-row:.table-cell
-    {% verbatim %}
     .text
       .thumbnail-img.text-primary
       .thumbnail-content
-        h3 Appelez le propriétaire
+        h3 {% trans "Appelez le propriétaire" %}
         a(href="#", ng-click="callOwner()", ng-show="!ownerCallDetailsError").btn.bg-primary
-          | {{ownerCallDetails.number}}
+          | {% verbatim %}{{ownerCallDetails.number}}{% endverbatim %}
           br
-          small ({{ownerCallDetails.tariff}})
+          small ({% verbatim %}{{ownerCallDetails.tariff}}{% endverbatim %})
         .alert.alert-danger(ng-show="!!ownerCallDetailsError")
-           | {{ownerCallDetailsError}}
+           | {% verbatim %}{{ownerCallDetailsError}}{% endverbatim %}
+        {% blocktrans %}
         p
           | Après 21h, afin de respecter la tranquillité des membres e-loue, nous vous remercions  de  poser vos questions par 
           a(href="", ng-click="openModal('message')").text-success messagerie.
           | Et oui, tout le monde a le droit de se reposer.
-    {% endverbatim %}
+        {% endblocktrans %}
   li.table-row:.table-cell
     .text
       .thumbnail-img.text-gray

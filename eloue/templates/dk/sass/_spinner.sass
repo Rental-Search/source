@@ -1,0 +1,23 @@
+@keyframes whirly
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(359deg)
+
+
+.whirly 
+  font-family: sans-serif
+  font-weight: 100
+
+.whirly:not(:required)
+  border: 8px solid #fff
+  border-right-color: transparent
+  border-radius: 100%
+  text-indent: -9999px
+  box-sizing: content-box
+  width: 30%
+  padding-top: 30%
+  height: 0
+  animation: whirly 1.5s infinite linear
+
+

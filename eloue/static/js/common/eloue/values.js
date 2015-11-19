@@ -47,7 +47,8 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         "USD": {name: "USD", symbol: "$"},
         "GBP": {name: "GPB", symbol: "£"},
         "JPY": {name: "YEN", symbol: "¥"},
-        "XPF": {name: "XPF", symbol: "F"}
+        "XPF": {name: "XPF", symbol: "F"},
+        "DKK": {name: "DKK", symbol: "kr."},
     });
 
     EloueCommon.constant("Unit", {

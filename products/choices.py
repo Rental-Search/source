@@ -58,6 +58,7 @@ UNIT = UnitEnum([
 
 CURRENCY = Enum([
     ('EUR', 'EUR', _(u'€')),
+    ('DKK', 'DKK', _(u'kr.')),
     ('USD', 'USD', _(u'$')),
     ('GBP', 'GPB', _(u'£')),
     ('JPY', 'YEN', _(u'¥')),

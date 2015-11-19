@@ -1,16 +1,14 @@
 .dialog-scroll-container
     .dialog-container(scroll-bottom="productRelatedMessages")
-        {% verbatim %}
         div.text.text-success.text-underline-hover(ng-show="threadId && hasNextPage")
-          a(href="/dashboard/#/messages/{{threadId}}", translate="getAllMessages")
-        .message(ng-repeat="message in productRelatedMessages | orderBy:'sent_at'", class="{{(product.owner.id == message.sender.id ? 'from-declarer' : 'from-customer')}}")
+          a(href="/dashboard/#/messages/{% verbatim %}{{threadId}}{% endverbatim %}", translate="getAllMessages")
+        .message(ng-repeat="message in productRelatedMessages | orderBy:'sent_at'", class="{% verbatim %}{{(product.owner.id == message.sender.id ? 'from-declarer' : 'from-customer')}}{% endverbatim %}")
             div(ng-if="product.owner.id == message.sender.id").thumbnail-img
-                a(href="{{message.sender.url}}"): img(style="background-image: url({{ message.sender.avatar.thumbnail }})").bg-image
+                a(href="{% verbatim %}{{message.sender.url}}{% endverbatim %}"): img(style="background-image: url({% verbatim %}{{ message.sender.avatar.thumbnail }}{% endverbatim %})").bg-image
             .thumbnail-content
                 .thumbnail-frame
-                    h4 {{message.sender.username}}
+                    h4 {% verbatim %}{{message.sender.username}}{% endverbatim %}
                     p(style="white-space: pre-line;", ng-bind="message.body")
                 p(ng-bind="message.sent_at | date : 'Le dd.MM.yyyy à HH:mm'").time
             div(ng-if="product.owner.id != message.sender.id").thumbnail-img
-                a(href="{{message.sender.url}}"): img(style="background-image: url({{ message.sender.avatar.thumbnail }})").bg-image
-        {% endverbatim %}
+                a(href="{% verbatim %}{{message.sender.url}}{% endverbatim %}"): img(style="background-image: url({% verbatim %}{{ message.sender.avatar.thumbnail }}{% endverbatim %})").bg-image

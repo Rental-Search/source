@@ -7,4 +7,4 @@ from eloue.settings import *
 
 TIME_ZONE = 'Europe/London'
 
-LANGUAGE_CODE = 'en-gb'
+LANGUAGE_CODE = 'en-GB'

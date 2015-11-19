@@ -1,0 +1,145 @@
+extends ../base
+-load compressed i18n staticfiles
+
+{% block title %}Location {{ product.summary }} - {{ product.city }}{% endblock %}
+{% block description %}{{ product.summary }} {{ product.description }}{% endblock %}
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "product_detail_styles" %}
+
+block append scripts
+  script(type="text/javascript", src="https://www.googleadservices.com/pagead/conversion_async.js", charset="utf-8")
+
+
+block append head
+  {% with product.pictures.all|first as picture %}
+  {% with product.object.get_absolute_url as absolute_url %}
+  meta(property="og:title", content="A louer sur e-loue : {{product.summary}}")
+  meta(property="og:type", content="product")
+  meta(property="og:url", content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}{{ absolute_url }}")
+  {% with product.object.address as address %}
+  meta(property="og:locality", content="{{address.city}}")
+  meta(property="og:postal-code", content="{{address.zipcode}}")
+  meta(property="og:country-name", content="{{address.get_country_display}}")
+  {% endwith %}
+  {% if picture %}
+  meta(property="og:image", content="{{picture.display.url}}")
+  {% endif %}
+  meta(property="og:site_name", content="e-loue")
+  meta(property="fb:app_id", content="197983240245844")
+  meta(property="og:description", content="{{product.description}}")
+  {% if picture %}
+  meta(itemprop="image", content="{{picture.display.url}}")
+  {% endif %}
+  meta(itemprop="name", content="{{product.summary}}")
+  link(rel="canonical", href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}{{ absolute_url }}")
+  {% endwith %}
+  {% endwith %}
+
+
+block append content-body
+
+  -var is_pro = product.pro_owner
+  #fb-root
+  if is_pro
+    {% with product.object.owner as patron %}
+    include ../jade/_pro_popin_message
+    include ../jade/_pro_popin_phone
+    include ../jade/_pro_popin_website_link
+    include ../jade/_pro_popin_shop
+    {% endwith %}
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+    nav.bd-b
+      include ../jade/_breadcrumbs
+    article.container.indent-t-lg.indent-b-lg
+      .row
+        .col-sm-8.product-details-title
+          include ../jade/_porduct_details_title
+        .col-sm-4.share-btns
+          include ../jade/_share-btns
+      .row
+        main.col-sm-8
+          section(data-ng-controller="ProductDetailsCtrl")
+            .section-body
+              .part.picture-tab#tabs
+                {% with product.object.shipping_available as shipping_available %}
+                ul.nav.nav-justified.text-nowrap
+                  li.spacer
+                  li: a(href="#tabs-photos", ng-click="selectTab('#{'#tabs-photos'}')").pad-v-2.current {% trans "Photos et Localisation" %}
+                  li.spacer
+                  li: a(href="#tabs-tarifs", ng-click="selectTab('#{'#tabs-tarifs'}')").pad-v-2 {% trans "Tarifs" %}
+                  li.spacer
+                  {% if shipping_available %}
+                  li: a(href="#tabs-shipping", ng-click="selectTab('#tabs-shipping')").pad-v-2 {% trans "Livraison" %}
+                  {% endif %}
+                include ./product_detail
+                include ./tab_tarifs
+                //-include ./tab_available
+                {% if shipping_available %}
+                include ./tab_shipping
+                {% endif %}
+                {% endwith %}
+              .part.description
+                include ../jade/product_details/main/_description
+              if product_comments and not is_pro
+                .part.comments.comments-ad
+                  h3 {% trans "Commentaires liés à cette annonce" %}
+                  {% with product_comments as comment_list %}
+                  include ../jade/product_details/main/_comments
+                  {% endwith %}
+              if owner_comments and not is_pro
+                .part.comments.comments-owner
+                  h3 {% trans "Commentaire liés au propriétaire" %}
+                  {% with owner_comments as comment_list %}
+                  include ../jade/product_details/main/_comments
+                  {% endwith %}
+        aside(data-ng-controller="BookingCtrl").col-sm-4
+          {% if is_pro %}
+          section.owner-information
+            include ../jade/product_details/aside/_owner_information
+          {% else %}
+          section.booking-form
+            include  ../jade/product_details/aside/_booking_form.jade
+          {% endif %}
+          //-section.add-to-wishlist
+          //-  include ../jade/product_details/aside/_add_to_wishlist
+          {% if is_pro %}
+          {% if patron.slug != "loxam" %}
+          section.booking-form
+            include  ../jade/product_details/aside/_booking_form.jade
+          {% endif %} 
+          {% else %}
+          section.owner-information
+            include ../jade/product_details/aside/_owner_information
+          {% endif %}
+          //-section.connected-with-owner
+          //-  include ../jade/product_details/aside/_connected_with_owner
+          include ../jade/_pop_up_reserve.jade
+          include ../jade/_pop_up_send_message.jade
+          include ../jade/_pop_up_call.jade
+    footer
+      section.row-fluid.insurances.framing: include ../jade/_insurances
+      section.row-fluid.footer-links: include ../jade/_footer_links
+      section.row-fluid.rss: include ../jade/_rss
+
+block append tail
+  script
+    var pro_popin_message_link = document.getElementById('pro-popin-message');
+    analytics.trackLink(pro_popin_message_link, "Pro Cost Request Modal");
+    var pro_popin_message_link = document.getElementById('pro-popin-phone');
+    analytics.trackLink(pro_popin_message_link, "Pro Phone Modal");
+    var pro_popin_message_link = document.getElementById('pro-popin-shop');
+    analytics.trackLink(pro_popin_message_link, "Pro Shop Modal");
+    var pro_popin_message_link = document.getElementById('pro-popin-website-link');
+    analytics.trackLink(pro_popin_message_link, "Pro Website Link Modal");
+
+    var pro_message_form = document.getElementById('proMessageForm');
+    if (pro_message_form != 'undefined') {
+      analytics.trackForm(pro_message_form, 'Pro Cost Request Sended');
+    }
+
+    var websiteProLink = document.getElementById('websiteProLink');
+    analytics.trackLink(websiteProLink, "Pro Website Link Redirected");

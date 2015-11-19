@@ -86,7 +86,11 @@ class BreadcrumbsMixin(object):
         location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         query_data = request.GET.copy()
         if 'l' not in query_data or not query_data['l']:
-            query_data['l'] = location['country']
+            if settings.DEFAULT_LOCATION_CITY:
+                query_data['l'] = settings.DEFAULT_LOCATION_CITY['city']
+                query_data['r'] = settings.DEFAULT_LOCATION_CITY['radius']
+            else:
+                query_data['l'] = location['country']
         form = self.form_class(query_data)
         return form
 

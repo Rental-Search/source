@@ -2,8 +2,8 @@
 
 {% with borrowercomments|length as comments_count %}
 {% if comments_count %}
-{% blocktrans %}
-h3.indent-b-xs Les {{ comments_count }} commentaires de {{ patron.username }}
+{% blocktrans with username=patron.username%}
+h3.indent-b-xs Les {{ comments_count }} commentaires de {{ username }}
 {% endblocktrans %}
 
 ul.list-group

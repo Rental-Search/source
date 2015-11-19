@@ -1,27 +1,28 @@
 include ../_date_picker_border
-{% verbatim %}
-span(ng-show="dateRangeError").text-danger {{dateRangeError}}
+-load i18n
+span(ng-show="dateRangeError").text-danger {% verbatim %}{{dateRangeError}}{% endverbatim %}
 table.calendar.bd-wrap.indent-t-md.indent-b-md
     tbody
         tr
-            td Durée
+            td {% trans "Durée" %}
             td
-                b {{duration}}
+                b {% verbatim %}{{duration}}{% endverbatim %}
         tr
-            td Prix
+            td {% trans "Prix" %}
             td
-                b.text-success {{bookingPrice | number}}&nbsp;€
+                b.text-success {% verbatim %}{{bookingPrice | number}}{% endverbatim %}&nbsp;{% trans "€" %}
         tr(ng-show="shippingPrice > 0")
-            td Livraison
+            td {% trans "Livraison" %}
             td
-                b.text-success {{shippingPrice | number: 2}}&nbsp;€
+                b.text-success {% verbatim %}{{shippingPrice | number: 2}}{% endverbatim %}&nbsp;{% trans "€" %}
         tr(ng-show="shippingPrice > 0")
-            td Total
+            td {% trans "Total" %}
             td
-                b.text-success {{bookingPrice + shippingPrice | number}}&nbsp;€
+                b.text-success {% verbatim %}{{bookingPrice + shippingPrice | number}}{% endverbatim %}&nbsp;{% trans "€" %}
         tr
-            td Caution
+            td {% trans "Caution" %}
             td
-                b {{product.deposit_amount}}&nbsp;€
+                b {% verbatim %}{{product.deposit_amount}}{% endverbatim %}&nbsp;{% trans "€" %}
+{% blocktrans %}
 p En cliquant sur "Réservez", vous enverrez une demande de location au propriétaire. Vous serez débité du montant de la location dès qu'il  acceptera votre demande. La caution ne sera pas débitée de votre compte (e-loue prendra simplement une empreinte de votre carte bancaire en cas de problème pendant la location).
-{% endverbatim %}
+{% endblocktrans %}

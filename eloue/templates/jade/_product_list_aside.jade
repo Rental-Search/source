@@ -84,11 +84,10 @@
     {% trans " Particuliers" %}
   .checkbox
     label(for="professional")
-      {% trans "professionnels" as professional %}
       {% if form.cleaned_data.renter == 'professionnels' %}
-      input(type="checkbox", name="renter", value="{{ professional }}", checked)#professional
+      input(type="checkbox", name="renter", value="professionnels", checked)#professional
       {% else %}
-      input(type="checkbox", name="renter", value="{{ professional }}")#professional
+      input(type="checkbox", name="renter", value="professionnels")#professional
       {% endif %}
       span.flaticon.stroke.checkmark-1
     {% trans " Professionnels" %}
