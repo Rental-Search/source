@@ -6,11 +6,14 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sites.models import Site
 
+from accounts.models import Patron
+from datetime import timedelta
+import datetime
+
 from rent.models import Booking, OwnerComment, BorrowerComment, Sinister, BookingLog
 from rent.choices import BOOKING_STATE
 
 from eloue.admin import CurrentSiteAdmin
-
 
 log = logbook.Logger('eloue')
 
@@ -18,6 +21,41 @@ class BookingLogInline(admin.TabularInline):
     model = BookingLog
     readonly_fields = ('source_state', 'target_state', 'created_at')
     extra = 0
+
+
+class FraudeFilter(admin.SimpleListFilter):
+    title = _('fraudes')
+    parameter_name = 'total_amount'
+    d1 = datetime.datetime.now() - timedelta(days=1)
+
+    def lookups(self, request, model_admin):
+        return (
+            ('100+', _('plus de 100e')),
+            ('outlook_bor', _('proprietaire email outlook')),
+            ('outlook_own', _('locataire email outlook')),
+            ('created-started', _('demande et debut de location le meme jour')),
+        )
+    def queryset(self, request, queryset):
+        if self.value() == '100+':
+            return queryset.filter(total_amount__gte=100.00)
+        if self.value() == 'outlook_bor':
+            return queryset.filter(borrower__email__icontains='outlook')
+        if self.value() == 'outlook_own':
+            return queryset.filter(owner__email__icontains='outlook')
+        if self.value() == 'created-started':
+            return queryset.filter(started_at=self.d1, created_at=self.d1)
+        #il reste a faire les reservations pour un produit sans messages echanges.
+        #et enfin à combiner les filtre
+
+#pas certain que ca marche vraiment... meme avec 300days de timedelta cela ne s'affiche pas
+class Mechants(FraudeFilter):
+    def lookups(self, request, model_admin):
+        qs = model_admin.get_queryset(request)
+        if qs.filter(borrower__date_joined__day=self.d1.day, borrower__date_joined__month=self.d1.month, borrower__date_joined__year=self.d1.year).filter(owner__date_joined__day=self.d1.day, owner__date_joined__month=self.d1.month, owner__date_joined__year=self.d1.year):
+            yield ('subscribe_date', _('date inscriptions louche'))
+        if qs.filter(started_at=self.d1, created_at=self.d1):
+            yield ('subscribe_date', _('date inscriptions louche'))
+
 
 class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
@@ -28,7 +66,7 @@ class BookingAdmin(CurrentSiteAdmin):
         (_('Borrower & Owner'), {'fields': (('borrower', 'borrower_profil_link'), ('owner', 'owner_profil_link'), 'ip')}),
         (_('Payment'), {'fields': ('total_amount', 'insurance_amount', 'deposit_amount', 'currency')}),
     )
-    list_filter = ('started_at', 'ended_at', 'state', 'created_at')
+    list_filter = ('started_at', 'ended_at', 'state', 'created_at', FraudeFilter, Mechants)
     raw_id_fields = ('owner', 'borrower', 'product')
     list_display = ('product_name', 'borrower_url', 'borrower_phone', 'borrower_email', 'owner_url', 'owner_phone', 'owner_email',
         'started_at', 'ended_at', 'created_at', 'total_amount', 'state')
@@ -149,3 +187,23 @@ try:
     admin.site.register(Sinister, SinisterAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
