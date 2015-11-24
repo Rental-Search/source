@@ -98,9 +98,9 @@ class ProductAdmin(ProductCurrentSiteAdmin):
 
     def is_pro(self, obj):
         if obj.owner.current_subscription != None:
-            is_pro = _("Particulier") 
+            is_pro = _("Professionnel") 
         else:
-            is_pro = _("Professionnel")
+            is_pro = _("Particulier")
         return is_pro
     is_pro.allow_tags = True
     is_pro.short_description = _(u"Pro ou Part")
