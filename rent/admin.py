@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sites.models import Site
+from django.db.models import F, Count, Q
 
 from accounts.models import Patron
 from datetime import timedelta
@@ -25,36 +26,60 @@ class BookingLogInline(admin.TabularInline):
 
 class FraudeFilter(admin.SimpleListFilter):
     title = _('fraudes')
-    parameter_name = 'total_amount'
-    d1 = datetime.datetime.now() - timedelta(days=1)
+    parameter_name = 'critere'
 
     def lookups(self, request, model_admin):
         return (
-            ('100+', _('plus de 100e')),
-            ('outlook_bor', _('proprietaire email outlook')),
-            ('outlook_own', _('locataire email outlook')),
-            ('created-started', _('demande et debut de location le meme jour')),
+            # ('100+', _('plus de 100e')),
+            # ('created-started', _('demande et debut de location la meme heure')),
+            # ('no-messages', _('booking sans messages enchanges')),
+
+            # ('outlook', _('proprietaire ou locataire email outlook')),
+            ('bookings_loads-without-mess', _('bcp de demandes de booking sans messages enchanges')),
+            ('bookings_loads-100+', _('bcp de demandes de booking de plus de 100e')),
+            ('bookings_loads', _('bcp de demandes de booking de plus de 100e ou sans messages')),
+            # ('stolen-card-1', _('commence 1h apres creation')),
+            # ('stolen-card-2', _('loc et prop inscris moins de 1h avant la loc')),
+            
         )
     def queryset(self, request, queryset):
-        if self.value() == '100+':
-            return queryset.filter(total_amount__gte=100.00)
-        if self.value() == 'outlook_bor':
-            return queryset.filter(borrower__email__icontains='outlook')
-        if self.value() == 'outlook_own':
-            return queryset.filter(owner__email__icontains='outlook')
-        if self.value() == 'created-started':
-            return queryset.filter(started_at=self.d1, created_at=self.d1)
-        #il reste a faire les reservations pour un produit sans messages echanges.
-        #et enfin à combiner les filtre
+        # if self.value() == '100+':
+        #     return queryset.filter(Q(total_amount__gte=100.00))
+        # if self.value() == 'created-started':
+        #     return queryset.filter(started_at__lte=F('created_at') + timedelta(hours=1))
+        # if self.value() == 'no-messages':
+        #     return queryset.annotate(count_messages=Count('product__messages')).filter(count_messages=0)
+          
+        # #OUTLOOK
+        # if self.value() == 'outlook':
+        #     return queryset.filter(Q(owner__email__icontains='outlook') | Q(borrower__email__icontains='outlook'))
+        #     #Booking dont le locataire ou propriétaire à une adresse outlook 
+        
+        #VOLEUR 1
+        if self.value() == 'bookings_loads-without-mess':
+            return queryset.annotate(count_messages=Count('product__messages'), count_bookings=Count('borrower__bookings')).filter(Q(count_messages=0) & Q(count_bookings__gte=3) & Q(borrower__date_joined__gte=F('started_at') - timedelta(days=1)))
+            #Booking sans message dont le locataire a fait plus de 3 demandes de location moins de 1 jour apres son inscription
 
-#pas certain que ca marche vraiment... meme avec 300days de timedelta cela ne s'affiche pas
-class Mechants(FraudeFilter):
-    def lookups(self, request, model_admin):
-        qs = model_admin.get_queryset(request)
-        if qs.filter(borrower__date_joined__day=self.d1.day, borrower__date_joined__month=self.d1.month, borrower__date_joined__year=self.d1.year).filter(owner__date_joined__day=self.d1.day, owner__date_joined__month=self.d1.month, owner__date_joined__year=self.d1.year):
-            yield ('subscribe_date', _('date inscriptions louche'))
-        if qs.filter(started_at=self.d1, created_at=self.d1):
-            yield ('subscribe_date', _('date inscriptions louche'))
+        #VOLEUR 2
+        if self.value() == 'bookings_loads-100+':
+            return queryset.annotate(count_bookings=Count('borrower__bookings')).filter(Q(total_amount__gte=100.00) & Q(count_bookings__gte=3) & Q(borrower__date_joined__gte=F('started_at') - timedelta(days=1)))
+            #Booking de plus de 100€ effectuée moins de 1h après l'inscription du locataire, qui lui meme a fait plus de 3 demandes de location en moins de 1j après son inscription
+
+       #VOLEUR 3
+        if self.value() == 'bookings_loads':
+            return queryset.annotate(count_bookings=Count('borrower__bookings'), count_messages=Count('product__messages')).filter( Q(Q(total_amount__gte=100.00) & Q(count_bookings__gte=3) & Q(borrower__date_joined__gte=F('started_at') - timedelta(hours=3))) | Q(Q(count_messages=0) & Q(count_bookings__gte=3) & Q(borrower__date_joined__gte=F('started_at') - timedelta(days=1))))
+
+
+
+        # #FRAUDE 1
+        # if self.value() == 'stolen-card-1':
+        #     return queryset.annotate(count_messages=Count('product__messages')).filter(Q(count_messages=0) & Q(total_amount__gte=100.00) & Q(started_at__lte=F('created_at') + timedelta(hours=1)))
+        #     #Booking de plus de 100€ sans aucun message et qui a commencé 1heure apres avoir été bookée
+
+        # #FRAUDE 2
+        # if self.value() == 'stolen-card-2':
+        #     return queryset.filter(Q(total_amount__gte=100.00) & Q(borrower__date_joined__gte=F('started_at') - timedelta(hours=3)) | Q(owner__date_joined__gte=F('started_at') - timedelta(hours=3)))
+        #     #Booking de plus de 100€, dont le locataire ou le propriétaire a été crée moins de 3h avant le début de la location
 
 
 class BookingAdmin(CurrentSiteAdmin):
@@ -66,7 +91,7 @@ class BookingAdmin(CurrentSiteAdmin):
         (_('Borrower & Owner'), {'fields': (('borrower', 'borrower_profil_link'), ('owner', 'owner_profil_link'), 'ip')}),
         (_('Payment'), {'fields': ('total_amount', 'insurance_amount', 'deposit_amount', 'currency')}),
     )
-    list_filter = ('started_at', 'ended_at', 'state', 'created_at', FraudeFilter, Mechants)
+    list_filter = ('started_at', 'ended_at', 'state', 'created_at', FraudeFilter)
     raw_id_fields = ('owner', 'borrower', 'product')
     list_display = ('product_name', 'borrower_url', 'borrower_phone', 'borrower_email', 'owner_url', 'owner_phone', 'owner_email',
         'started_at', 'ended_at', 'created_at', 'total_amount', 'state')
