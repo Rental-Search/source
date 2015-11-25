@@ -83,14 +83,14 @@ class BreadcrumbsMixin(object):
     form_class = FacetedSearchForm
 
     def get_form(self, request):
-        #location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
+        location = request.session.setdefault('location', settings.DEFAULT_LOCATION)
         query_data = request.GET.copy()
         if 'l' not in query_data or not query_data['l']:
             if settings.DEFAULT_LOCATION_CITY:
                 query_data['l'] = settings.DEFAULT_LOCATION_CITY['city']
                 query_data['r'] = settings.DEFAULT_LOCATION_CITY['radius']
             else:
-                query_data['l'] = settings.DEFAULT_LOCATION['country']
+                query_data['l'] = location['country']
         form = self.form_class(query_data)
         return form
 
