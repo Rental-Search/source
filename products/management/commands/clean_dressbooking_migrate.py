@@ -20,6 +20,9 @@ class Command(BaseCommand):
 						u'Robes de luxe',
 						u'Robes de mariage',
 						u'Robes de maternité'
+					],
+					'children': [
+						'name': u'Robes de coktails',
 					]
 				},
 				{

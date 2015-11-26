@@ -717,6 +717,7 @@ class Category(MPTTModel):
         conformity = None
         eloue_site_id = 1
         gosport_site_id = 13
+        dressbooking_site_id = 15
         while category and not conformity:
             try:
                 conformity = CategoryConformity.objects.filter(
@@ -728,7 +729,7 @@ class Category(MPTTModel):
         if not conformity:
             return None
         else:
-            return conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else None
+            return conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else conformity.gosport_category if site_id == dressbooking_site_id else None
 
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
