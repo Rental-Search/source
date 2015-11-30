@@ -7,6 +7,9 @@ from decimal import Decimal as D
 from backports.ssl_match_hostname import match_hostname
 from django.conf import settings
 from django.utils.translation import ugettext as _
+from django.utils.formats import get_format
+
+from eloue.utils import convert
 
 import abstract_payment
 
@@ -30,6 +33,9 @@ TYPES = {
     'SUBSCRIBER_DELETE': 58,
     'SUBSCRIBER_FORCAGE': 61,
 }
+
+# FIXME: a regression has appeared that get_format() returns values for en-gb instead of fr-fr
+DEFAULT_CURRENCY = get_format('CURRENCY', lang=settings.LANGUAGE_CODE) if not settings.CONVERT_XPF else "XPF"
 
 class PayboxException(abstract_payment.PaymentException):
 
@@ -218,9 +224,8 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
         self.paybox_manager = PayboxManager()
 
     def preapproval(self, reference, amount, currency, cvv):
-        from eloue.utils import convert_from_xpf
-        if currency == "XPF":
-            amount = convert_from_xpf(D(amount*100)).quantize(0)
+        if currency != "EUR":
+            amount = convert(D(amount*100), "EUR", currency).quantize(0)
         else:
             amount = D(amount*100).quantize(0)
         amount = str(amount)
@@ -231,9 +236,8 @@ class PayboxDirectPlusPayment(abstract_payment.AbstractPayment):
         )
 
     def pay(self, reference, amount, currency):
-        from eloue.utils import convert_from_xpf
-        if currency == "XPF":
-            amount = convert_from_xpf(D(amount*100)).quantize(0)
+        if currency != "EUR":
+            amount = convert(D(amount*100), "EUR", currency).quantize(0)
         else:
             amount = D(amount*100).quantize(0)
         amount = str(amount)

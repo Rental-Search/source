@@ -33,14 +33,17 @@
         tbody: each price in product_object.prices.all
           tr
             td {{ price.get_prefixed_unit_display }}{% if price.unit == 1 %}*{% endif %}
-            td {{ price.amount }} &euro;
+            td {{ price.local_currency_amount|currency }}
       {% endif %}
       .indent-b-md
       table.calendar.text-center
         tbody: tr
           td {% trans "Caution" %}
-          td {{ product_object.deposit_amount }} &euro;
+          td {{ product_object.local_currency_deposit_amount|currency }} ;
     .col-sm-6
+      {% if is_pro %}
+      {% else %}
       p.indent-sm-b {% trans "Certains propriétaires proposent des prix degressifs pour les locations de plusieurs jours. Si vous effectuez une demande de location pour plusieurs jours, e-loue vous propose automatiquement le prix le plus avantageux." %}
       p.indent-sm-b {% trans "Lorsque vous effectuez une réservation sur e-loue, seul le prix de la location est débité de votre carte bancaire." %}
       p.indent-sm-b {% trans "Si le propriétaire demande une caution, e-loue procédera à une empreinte bancaire au moment du paiement. Cette empreinte ne sera pas débitée, sauf  si vous constatez un sinistre à la fin de la location." %}
+      {% endif %}

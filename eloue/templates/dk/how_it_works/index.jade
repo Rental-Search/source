@@ -1,0 +1,33 @@
+extends ../base
+-load compressed staticfiles i18n
+
+block append title
+  {% trans "Comment ça marche" %}
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "how_it_works_styles" %}
+
+block append scripts
+  script(src="{% static 'bower_components/jquery/dist/jquery.min.js' %}")
+  script
+    $(document).ready(function() {
+      $('p.content').hide();
+      $('.toggle-content').on('click', function () {
+        $(this).closest('li').find('.content').slideToggle('fast');
+        });
+    });
+
+block append content-body
+  .container-flex
+    header.header-site: include ../jade/_header_site
+    nav:                include _breadcrumb
+    article.text-center
+      section.framing:             include _top_content
+      section:                     include _steps
+      section.timeline:            include _timeline
+      section.indent-v-lg:         include _bottom_content
+    footer
+      //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
+      section.footer-links.framing:         include ../jade/_footer_links
+      section.rss:                          include ../jade/_rss

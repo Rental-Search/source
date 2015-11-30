@@ -1,7 +1,6 @@
+-load i18n
 form(name="sendMessageForm", ng-submit="sendMessage()", novalidate)
-    {% verbatim %}
     .table-cell.main-cell
-        textarea(name="", rows="4", placeholder="Rédigez votre message ici...", ng-model="newMessage.body", ng-disabled="submitInProgress", required)
+        textarea(name="", rows="4", placeholder="{% trans 'Rédigez votre message ici...' %}", ng-model="newMessage.body", ng-disabled="submitInProgress", required)
     .table-cell
-        button(ng-disabled="sendMessageForm.$invalid || !sendMessageForm.$dirty", ng-disabled="submitInProgress || !newMessage.body", class="{{submitInProgress ? 'loading' : ''}}").btn.bg-success Envoyez
-    {% endverbatim %}
+        button(ng-disabled="sendMessageForm.$invalid || !sendMessageForm.$dirty", ng-disabled="submitInProgress || !newMessage.body", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").btn.bg-success {% trans "Envoyez" %}

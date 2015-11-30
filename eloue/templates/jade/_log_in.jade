@@ -22,23 +22,21 @@
                     br
                     | Vos données personnelles ne seront jamais cédées ou vendues.
                     {% endblocktrans %} 
-                {% verbatim %}
                 .alert.alert-danger(ng-show="!!loginError")
-                    | {{loginError}}&nbsp;
-                    a(ng-show="!!inactiveUserError", href="", ng-click="sendActivationLink()") {{inactiveUserError}}
+                    | {% verbatim %}{{loginError}}{% endverbatim %}&nbsp;
+                    a(ng-show="!!inactiveUserError", href="", ng-click="sendActivationLink()") {% verbatim %}{{inactiveUserError}}{% endverbatim %}
                 .alert.alert-info(ng-show="!!activationLinkSentMsg")
-                    | {{activationLinkSentMsg}}
-                {% endverbatim %}
+                    | {% verbatim %}{{activationLinkSentMsg}}{% endverbatim %}
                 //-
                  span.or
                 form(name="loginForm", ng-submit="loginSubmitted=true; login()", novalidate, ng-class="{'submitted':!!loginSubmitted}")
                     {% trans "Email" as email %}
                     {% trans "Mot de passe" as password %}
                     .form-group
-                        input(type="text", placeholder="{{ email }} *", name="username", data-ng-model="credentials.username", required).form-control
+                        input(type="text", placeholder="{% trans 'email' %} *", name="username", data-ng-model="credentials.username", required).form-control
                         span.text-danger(data-ng-show="loginForm.username.$error.required && !!loginSubmitted", translate="required_field")
                     .form-group
-                        input(type="password", placeholder="{{ password }} *", name="password", data-ng-model="credentials.password", required).form-control
+                        input(type="password", placeholder="{% trans 'mot de passe' %} *", name="password", data-ng-model="credentials.password", required).form-control
                         span.text-danger(data-ng-show="loginForm.password.$error.required && !!loginSubmitted", translate="required_field")
                     .form-group.clearfix
                         .checkbox.pull-left

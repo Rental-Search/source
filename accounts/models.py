@@ -253,7 +253,7 @@ class Patron(AbstractUser):
 
     @property
     def current_subscription(self):
-        subscriptions = self.subscription_set.filter(subscription_ended__gte=datetime.datetime.now()-datetime.timedelta(days=365)).order_by('-subscription_started')[:1]
+        subscriptions = self.subscription_set.filter(Q(subscription_ended__gte=datetime.datetime.now()-datetime.timedelta(days=365))| Q(subscription_ended__isnull=True)).order_by('-subscription_started')[:1]
         if subscriptions:
             return subscriptions[0]
         return None
@@ -742,7 +742,15 @@ class Ticket(models.Model):
     comment = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class Campaign(models.Model):
+    pro = models.ForeignKey(Patron, related_name='campaigns')
+    month = models.DateField()
+    comment = models.TextField(null=True, blank=True)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 class Notification(models.Model):
+    """Functionnality for pro"""
     patron = models.ForeignKey(Patron)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(editable=False, null=True, blank=True)

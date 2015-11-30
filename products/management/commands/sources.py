@@ -22,7 +22,7 @@ log = logbook.Logger('eloue.rent.sources')
 
 class Command(BaseCommand):
     help = "Update sources for affiliation."
-    args = "[source_prefix source_prefix ...]"
+    args = "[source_prefix source_prefix...]"
 
     def handle(self, *args, **options):
         from products.sources import SourceManager

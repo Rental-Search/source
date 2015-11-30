@@ -11,14 +11,13 @@ block append styles
 block append content-body
   .container-flex
     header.header-site:              include ../jade/_header_site
-    nav.bd-b:                        include _breadcrumbs
 
-    article
+    article.insurance-pro
+      section.text_content:          include _text_content
       section.introduction:          include _introduction
-      section.insurances.framing:    include _insurances
-      section.pro-logo:              include _pro_logo
       section.pricing-table.framing: include _pricing_table
       section.process:               include _process
+      section.contact-form:          include _contact_form.html
 
     footer
       section.footer-links.framing:  include ../jade/_footer_links

@@ -1,34 +1,49 @@
-.container.indent-t-md.indent-b-lg
-  h2.text-center.text-uppercase vous êtes loueur professionnel&nbsp;? nous aussi&nbsp;!
+
+style
+  .border{
+    border: 1px solid #313226;
+  }
+  .gray-back{
+    background-color: #f6f6f6;
+  } 
+  .pad-b-xs {
+   padding-bottom: 20px;
+  }
+  .thicker {
+      font-weight: 600;
+  }
+
+.container.indent-t-lg.indent-b-lg
+  h3.text-center Vous êtes loueur professionnel&nbsp;? Nous aussi&nbsp;!
 
   .row.indent-t-md
-    .col-md-8: .text-justify.text-gray-strong
+    .col-md-6.indent-l-lg: .text-justify.text-gray-strong.text-width.indent-t-xs.pad-t-xs
       br
-      br
-      p
+      p#first
         | e-loue est  le premier  site de  location dédié aux particuliers et
-        | aux professionnels. Quel que soit votre domaine d’activité, quelque
+        | aux professionnels. Quel que soit votre domaine d’activité, quelle que
         | soit votre localité, nos membres seront intéressés par vos produits à
         | louer : bricolage, jardinage, photo/vidéo, sports, véhicules, mode,
         | réception, déguisements, … 
         //- | Et  nos  clients  se  connectant  sur  e-loue  depuis  5  ans  pour    
         //- | chercher – et trouver - des biens à louer, nous  vous garantissons     
         //- | des leads hyper qualifiés…   
-      p.indent-t-sm: b 
+      p.indent-t-sm: .thicker
         | Alors n’hésitez pas à souscrire un Pack e-loue PRO pour profiter
         | d’un canal de distribution complémentaire et augmenter
         | facilement vos revenus&nbsp;!
         
-    .col-md-4: .bg-primary.pad-sm
-      p
+    .col-md-4.indent-l-lg.pad-l-lg: .border.gray-back
+      p: .bg-gray.pad-v-xs.pad-h-xs.text-white
         | e-loue PRO, le partenaire qu’il vous faut :
-      ul.reset_list
-        li Visibilité illimitée de vos annonces
-        li Point mensuel avec vous
-        li Service dédié
-
-      
-      p
+      p.pad-sm
+        | - Visibilité illimitée de vos annonces
+        br
+        | - Point mensuel avec vous
+        br
+        | - Service dédié
+      p.pad-h-sm.pad-b-xs
         | Autant d’atouts que nous mettons
         | à votre disposition pour vous 
         | apporter de nouveaux clients !
+

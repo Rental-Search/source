@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.conf.urls import patterns, url, include
+from django.utils.translation import ugettext as _
 from django.contrib import admin
 from django.utils import translation
 from django.views.generic import TemplateView
@@ -11,7 +12,9 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 from eloue.api.urls import router
 
 from products.views import HomepageView, PublishItemView
-from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView
+
+from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView, ContactView, ContactProView
+
 
 admin.autodiscover()
 
@@ -202,29 +205,29 @@ urlpatterns = patterns('',
     url(r'^$', HomepageView.as_view(), name='home'),
     url(r'^redirect/', LoginAndRedirectView.as_view(), name='redirect'),
     url(r'^login_facebook/', LoginFacebookView.as_view(), name='login_facebook'),
-    url(r'^loueur/', include(accounts_urlpatterns)),
+    url(r'^%s/' % _('loueur'), include(accounts_urlpatterns)),
     url(r'^reset/', include(reset_urlpatterns)),
-    url(r'^location/', include(products_urlpatterns)),
-    url(r'^comment-ca-marche/', TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
-    url(r'^offre-professionnel/', TemplateView.as_view(template_name='subscription/index.jade'), name='subscription'),
+    url(r'^%s/' % _('location'), include(products_urlpatterns)),
+    url(r'^%s/' % _('comment-ca-marche'), TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
+    url(r'^%s/' % _('offre-professionnel'), TemplateView.as_view(template_name='subscription/index.jade'), name='subscription'),
     #url(r'^simulez-vos-revenus/', TemplateView.as_view(template_name='simulator/index.jade'), name='simulator'),
     url(r'^dashboard/#/bookings/(?P<pk>[0-9a-f]{32})/$', dashboard_base_view, name='booking_detail'),
     url(r'^dashboard/#/messages/(?P<pk>[0-9]+)/$', dashboard_base_view, name='messages'),
     url(r'^dashboard/', include(dashboard_urlpatterns, namespace='dashboard')),
     url(r'^partials/', include(partials_urlpatterns, namespace='partials')),
-    url(r'^nos-partenaires/', TemplateView.as_view(template_name='our_partners/index.jade'), name='our_partners'),
-    url(r'^contactez-nous/', TemplateView.as_view(template_name='contact_us/index.jade'), name='contact_us'),
+    url(r'^%s/' % _('nos-partenaires'), TemplateView.as_view(template_name='our_partners/index.jade'), name='our_partners'),
+    url(r'^%s/' % _('contactez-nous'), ContactView.as_view() , name='contact_us'),
     #url(r'^espace-presse/', TemplateView.as_view(template_name='press/index.jade'), name='press_page'),
-    url(r'^qui-sommes-nous/', TemplateView.as_view(template_name='who_are_we/index.jade'), name='who_are_we'),
-    url(r'^securite/', TemplateView.as_view(template_name='security/index.jade'), name='security'),
-    url(r'^conditions-generales-particuliers/', TemplateView.as_view(template_name='terms/index.jade'), name='terms'),
-    url(r'^conditions-generales-professionnels/', TemplateView.as_view(template_name='terms_pro/index.jade'), name='terms'),
-    url(r'^contrat-de-location/', TemplateView.as_view(template_name='rental_agreement/index.jade'), name='agreement'),
+    url(r'^%s/' % _('qui-sommes-nous'), TemplateView.as_view(template_name='who_are_we/index.jade'), name='who_are_we'),
+    url(r'^%s/' % _('securite'), TemplateView.as_view(template_name='security/index.jade'), name='security'),
+    url(r'^%s/' % _('conditions-generales-particuliers'), TemplateView.as_view(template_name='terms/index.jade'), name='terms'),
+    url(r'^%s/' % _('conditions-generales-professionnels'), TemplateView.as_view(template_name='terms_pro/index.jade'), name='terms'),
+    url(r'^%s/' % _('contrat-de-location'), TemplateView.as_view(template_name='rental_agreement/index.jade'), name='agreement'),
     # url(r'^depot-de-garantie/', TemplateView.as_view(template_name='deposit_amount/index.jade'), name='agreement'),
-    url(r'^mentions-legales/', TemplateView.as_view(template_name='imprint/index.jade'), name='notices'),
+    url(r'^%s/' % _('mentions-legales'), TemplateView.as_view(template_name='imprint/index.jade'), name='notices'),
     # url(r'^politique_annulation/', TemplateView.as_view(template_name='cancel_terms/index.jade'), name='notices'),
-    url(r'^assurance-tranquillite/', TemplateView.as_view(template_name='insurances/index.jade'), name='notices'),
-    url(r'^nous-recrutons/', TemplateView.as_view(template_name='enroll/index.jade'), name='enroll'),
+    url(r'^%s/' % _('assurance-tranquillite'), TemplateView.as_view(template_name='insurances/index.jade'), name='notices'),
+    url(r'^%s/' % _('nous-recrutons'), TemplateView.as_view(template_name='enroll/index.jade'), name='enroll'),
     url(r'^activate/(?P<activation_key>\w+)/$', ActivationView.as_view(), name='auth_activate'),
     url(r'^sitemap.xml$', index, {'sitemaps': sitemaps}, name="sitemap"),
     url(r'^sitemap-(?P<section>.+).xml$', sitemap, {'sitemaps': sitemaps}),
@@ -240,13 +243,15 @@ urlpatterns = patterns('',
 
     # social: support for sign-in by Google and/or Facebook
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
+
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 )
 
 if settings.DEBUG:
-
     from django.conf.urls.static import static
     urlpatterns += patterns('',
         url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+        url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    )
 
 #handler404 = 'eloue.views.custom404'

@@ -1,6 +1,8 @@
 extends ./base
 -load compressed prefixed_cache i18n
 
+{% get_current_language as LANGUAGE_CODE %}
+
 {% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
 
 block append styles
@@ -19,11 +21,11 @@ block append content-body
 
     block content-homepage
       article
-        {% cache 43200 'homepage_banner_static' %}
+        {% cache 43200 'homepage_banner_static' LANGUAGE_CODE %}
         section.banner
           include ./jade/_homepage_carousel_banner
         {% endcache %}
-        {% cache 43200 'homepage_insurance_static' %}
+        {% cache 43200 'homepage_insurance_static' LANGUAGE_CODE %}
         section.insurances.framing
           include ./jade/_insurances
         {% endcache %}
@@ -31,13 +33,13 @@ block append content-body
           include ./jade/_product_list
         section.float-comments.framing
           include ./jade/_comments
-        {% cache 43200 'homepage_city_list_static' %}
+        {% cache 43200 'homepage_city_list_static' LANGUAGE_CODE %}
         section.location-list
           include ./jade/_location_list
         {% endcache %}
 
       main
-        {% cache 43200 'homepage_main_static' %}
+        {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
         section.download-mobile-apps.framing: include ./jade/_download_mobile_apps
         section.watch-video: include ./jade/_watch_video
         section.professional-renter-content.framing: include ./jade/_professional_renter_content
@@ -45,7 +47,7 @@ block append content-body
         {% endcache %}
 
     footer
-      {% cache 43200 'homepage_footer_static' %}
+      {% cache 43200 'homepage_footer_static' LANGUAGE_CODE %}
       section.footer-links.framing: include ./jade/_footer_links
       section.rss.framing: include ./jade/_rss
       {% endcache %}
