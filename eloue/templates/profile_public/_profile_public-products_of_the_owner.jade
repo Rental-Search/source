@@ -1,7 +1,7 @@
 -load paginator i18n product
 
 {% if paginator.count %}
-h3.indent-b-xs {% trans "Les" %} {{ paginator.count }} {% trans "annonces de" %} {{ patron.username }}{% if is_pro %}&nbsp;{% trans "Pro" %}{% endif %}
+h3.indent-b-xs {% trans "Les" %} {{ paginator.count }} {% trans "annonces de" %} {{ patron.username }}
 
 ol.product-layout
   each product in product_list
