@@ -1,10 +1,29 @@
+-load i18n
 .container
   ul.nav.nav-justified
-    -var footer_links = [["Le concept Dressbooking", [["Comment ça marche ?", "/comment-ca-marche/"]]], ["Pourquoi choisir Dressbooking ?", [["Dressbooking et la sécurité", "/securite/"], ["Contrats de location", "/contrat-de-location/"], ["L’offre Dressbooking Pro", "/offre-professionnel/"]]], ["L’entreprise Dressbooking", [["Nos partenaires", "/nos-partenaires/"], ["Conditions générales", "/conditions-generales/"], ["Mentions légales", "/mentions-legales/"]]], ["En savoir plus", [["Contactez-nous", "/contactez-nous/"]]]]
-    each header, group in footer_links
-      li.divide
-      li.ul-wrapper: .centering
-        h4.text-nowrap {{ header }}
-        ul.nav
-          each title, link in group
-            li.link-wrapper: a(href="{{ link }}") {{ title }}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "Le concept Dressbooking" %}
+      ul.nav
+        li.link-wrapper: a(href="/comment-ca-marche/") {% trans "Comment ça marche ?" %}
+        li.link-wrapper: a(href="/securite/") {% trans "e-loue et la sécurité" %}
+        li.link-wrapper: a(href="/offre-professionnel/") {% trans "L'offre e-loue Pro" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "Pourquoi choisir Dressbooking ?" %}
+      ul.nav
+        li.link-wrapper: a(href="/contrat-de-location/") {% trans "Contrats de location" %}
+        li.link-wrapper: a(href="/assurance-tranquillite/") {% trans "Assurance tranquilité" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "L’entreprise Dressbooking" %}
+      ul.nav
+        li.link-wrapper: a(href="/qui-sommes-nous/") {% trans "Qui sommes-nous ?" %}
+        li.link-wrapper: a(href="/conditions-generales-particuliers/") {% trans "Conditions générales particuliers" %}
+        li.link-wrapper: a(href="/conditions-generales-professionnels/") {% trans "Conditions générales professionnels" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "En savoir plus" %}
+      ul.nav
+        //- li.link-wrapper: a(href="https://eloue1.zendesk.com/hc/fr") {% trans "FAQ" %}
+        li.link-wrapper: a(href="/contactez-nous/") {% trans "Contactez-nous" %}

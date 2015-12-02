@@ -1,0 +1,138 @@
+{% load i18n %}
+-load staticfiles
+
+style
+  #content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    padding-bottom: 6%;
+  }
+  #tabs li{width: 25%;}
+  #tabs li a {
+    padding-top: 4%;
+    border-top: 5px solid transparent;
+    height: 110px;
+    background-color: #eee;
+    //- font-size: 22px;
+  }
+  #tabs li a:hover, #tabs li.active a, #tabs li.active a:hover {
+    text-decoration: none;
+    border-top: 5px solid #f53d6c;
+    background-color: white;
+  }
+  .tab-pane p a {
+    text-decoration: none;
+    color: #f53d6c;
+  }
+  .tab-pane {margin: 40px 0 0;}
+  #tabs li a img {
+    height: 35px;
+    margin-left: 40%;
+  }
+  #tabs li a:hover, #tabs li.active a, #tabs li.active a:hover {color: #f53d6c;}
+  #objet:hover img, #tabs li.active #objet img {content:url("{% static 'images/objet.png' %}");}
+
+.container(style="color: #666; text-align: justify;")
+  ul.nav.nav-tabs(data-tabs="tabs")#tabs
+    li.active
+      a(href="#object", data-toggle="tab")#objet
+        h4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assurance objet&nbsp;&nbsp;&nbsp;
+        img(src="#{STATIC_URL}images/objet.png")
+
+  
+  #content
+    .container(style="width:90%;"): .tab-content
+      .tab-pane.active#object
+        h2 SYNTHÈSE 
+        ul
+          li.indent-v-sm En effectuant votre location sur Dressbooking, l’objet loué est automatiquement assuré pour tous les dommages matériels accidentels causés au bien pendant la durée de location, sans coût supplémentaire. 
+          li.indent-v-sm L’assurance ne couvre pas le vol par le locataire.
+          li.indent-v-sm L’assurance est incluse dans le montant réglé en ligne par le locataire.
+          li.indent-v-sm Le montant de remboursement maximum est de 750 € (incluant une franchise de 15%).
+          li.indent-v-sm Pour déclarer un sinistre, la procédure est simple et rapide.
+        br
+        h3 CONDITIONS PORTANT SUR LE BIEN LOUÉ
+        p Pour être couvert par l’assurance Dressbooking / Assur’One, le bien loué doit : 
+        ul
+          li être au nom d’un particulier
+          li être immatriculé en France métropolitaine
+        p  L’assurance couvre uniquement les transactions effectuées et finalisées sur le site, aux dates enregistrées. En cas de modification de date ou d’allongement de durée, il est indispensable de refaire une demande de réservation sur le site afin d’être couvert par l’assurance.
+        br
+        h3  CONDITIONS PORTANT SUR LE LOCATAIRE
+        p Pour être couvert par l’assurance Dressbooking / Assur’One, le locataire doit :
+        ul
+          li être un particulier 
+          li s'engager à utiliser le bien en France métropolitaine uniquement
+          li louer le bien pour une durée qui n’excède pas 90 jours
+          li payer la location sur le site avec une carte bancaire à son nom
+          li présenter tous les documents au propriétaire, au début de la location (contrat + carte bancaire, tous les 2 au même nom)
+
+        br
+        h3 CONDITIONS PORTANT SUR LE PROPRIETAIRE DU BIEN LOUÉ
+
+        p Pour être couvert par l’assurance Dressbooking / Assur’One, le propriétaire du bien loué doit : 
+        ul
+          li être un particulier
+          li résider en France métropolitaine
+        br
+        h3 GARANTIES ACCORDÉES PAR L’ASSURANCE
+        p Pendant la durée de la location, l’assurance Dressbooking / Assur’One inclut les garanties suivantes : 
+        ul
+          li dommages matériels accidentels causés au bien 
+          li destruction
+          li détérioration totale ou partielle extérieurement visible 
+        p Ces dommages doivent provenir d’un événement extérieur et soudain et doivent rendre le bien garanti impropre à toute utilisation. L’assurance ne couvre pas le vol par le locataire.
+         p Le montant de l’indemnisation : 
+        ul 
+          li correspondra au montant de la caution (demandée par le propriétaire, lors de son dépôt d’annonce)
+          li sera minoré d’une franchise de 15%
+          li ne pourra pas dépasser 750€
+
+        br
+        h3 QUE FAIRE POUR DÉCLARER UN INCIDENT ?
+        p En cas de casse ou de panne, le locataire doit : 
+        ul
+          li prévenir le propriétaire de l’objet loué,  en lui expliquant le problème qu’il rencontre 
+          li déclarer le sinistre auprès d’Dressbooking sur le site, par mail (contact@dressbooking.com) ou par téléphone (01.85.08.99.77) 
+          li restituer l’objet loué au propriétaire
+          li compléter et signer l'état des lieux de sortie en précisant les dommages constatés
+          li déclarer le sinistre auprès de l’assureur par téléphone (Assur’One – 01.76.29.75.22)
+        br
+
+        h3 QUE FAIRE POUR ÊTRE INDEMNISÉ ?
+        p Une fois l’incident déclaré auprès d’Dressbooking et de l’assurance, le propriétaire pourra alors être indemnisé : 
+        ul 
+          li Dressbooking utilisera la caution en ligne laissée par le locataire (au moment de la réservation) pour prélever le montant correspondant à la franchise (plafonné au montant de la caution ou à 750€)
+          li cette somme sera versée au propriétaire par Dressbooking
+        br
+        p  Pour pouvoir obtenir le remboursement selon les modalités du contrat d’assurance, le locataire devra ensuite envoyer un courrier à l’assureur (Gestion Assurance Assur’One Group – BP 30200 – 95210 Saint Gratien), dans un délai de 5 jours ouvrés suivant le constat du dommage, avec les documents suivants :
+        ul 
+          li déclaration sur l’honneur décrivant très précisément la date, le lieu et les circonstances du dommage
+          li copie du contrat de location liant le propriétaire et le locataire
+          li copie du certificat de garantie
+        br
+        p  Après analyse de cette déclaration, l’assureur pourra réclamer au propriétaire d’autres documents : 
+        ul 
+          li une photocopie du bien avant réparation
+          li si le bien est réparable : le devis de réparation du bien (à demander au propriétaire) 
+          li si le bien n’est pas réparable : une attestation d’irréparabilité établie par un SAV compétent et la facture d’achat initiale du bien (ou toute autre preuve de sa valeur)
+        p L’assureur se réserve le droit de demander au propriétaire l’envoi du bien endommagé s’il est irréparable.
+        br
+        p Sous réserve de l’éligibilité du dossier, la prise en charge consistera à indemniser le locataire : 
+          ul
+            li en cas de non-restitution du bien : du montant de la caution prélevée par le propriétaire du fait de la non-restitution du bien garanti, après déduction de la franchise
+            li en cas de réparation du bien : du montant de la facture de réparation dans la limite de la caution et après déduction de la franchise    
+        
+        br
+        h3 CONTRAT D’ASSURANCE 
+        p Un contrat d’assurance est associé pour chaque transaction effectuée sur le site www.dressbooking.com.  Le contrat d’assurance est établi entre le locataire et notre partenaire Assur’One. Le montant de l’assurance est inclus dans le montant réglé en ligne par le locataire. 
+        p 
+          | L’ensemble des garanties d’assurance est régi par une Notice d’information (téléchargeable à 
+          a(href="http://eloue.s3.amazonaws.com/media/assurances/Assurone.pdf", target="_blank", style="color:#f53d6c;") cette adresse 
+          | et un Certificat de garantie (reçu avec votre contrat de location). Il est demandé aux utilisateurs d’en prendre connaissance et de s’assurer de les avoir bien comprises. 
+  br
+  br
+  .text-center
+    a(href="#tabs", style="color: #f53d6c") Retourner au haut de la page
