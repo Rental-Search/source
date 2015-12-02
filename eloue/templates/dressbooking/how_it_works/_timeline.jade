@@ -1,0 +1,16 @@
+.container
+  -var sections = [["avant la location", [["owner-column",  [["Je m’inscris gratuitement", "en quelques secondes"], ["Je dépose mes annonces", "en toute simplicité"], ["Je réponds aux questions", "des locataires <br> intéressés  par mes annonces <br> par messagerie"], ["J’accepte la location", "afin d’être couvert par l’assurance <br> et d’éviter les échanges d’argent"]]], ["tenant-column", [["Je m’inscris gratuitement", "en quelques secondes"], ["Je recherche une tenue à louer", "parmi plus de  100 000 annonces"], ["Je pose mes questions", "au propriétaire <br> de l’objet qui m’intéresse <br> par messagerie"], ["Je  paie la location", "via un serveur sécurisé <br> (Société Générale)"]]]]], ["pendant la location", [["owner-column",  [["Je reçois un contrat de location", "pré-rempli <br> que je présenterai au locataire <br> lors de la transaction"], ["Je rencontre le locataire", "pour lui confier le bien loué"], ["Je  reçois mon paiement", "48h après le début de la location"], ["Je  récupère ma tenue", "en rencontrant le locataire"]]], ["tenant-column", [["Je reçois un contrat de location", "pré-rempli <br> que je présenterai au propriétaire <br> lors de la transaction"], ["Je rencontre le propriétaire", "pour récupérer le bien loué"], ["Je profite de la tenue louée", "en toute sécurité car il est assuré"], ["Je rends la tenue louée", "en rencontrant son propriétaire"]]]]], ["apres la location", [["owner-column",  [["Je donne mon avis <br> sur le locataire", "pour aider les autres loueurs"]]], ["tenant-column", [["Je donne mon avis <br> sur le propriétaire", "pour aider les autres loueurs"]]]]]]
+
+  {% autoescape off %}
+  each section, columns in sections
+    section.row
+      .col-xs-12: h4: != section
+      each style, items in columns
+        .col-xs-6: ul.timeline-steps(class="{{ style }}")
+          each title, content in items
+            li
+              h5: != title
+              p.content: != content
+              span.toggle-content &#149;&nbsp;&#149;&nbsp;&#149;
+              .addons: i: b
+  {% endautoescape %}

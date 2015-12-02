@@ -1,0 +1,125 @@
+{% load i18n %}
+<style>
+  .text-red{
+  color: #a94442;}
+</style>
+
+ <script>
+    setTimeout(function() {
+    $('#toast-container').fadeOut('slow');
+    }, 3000);
+</script>
+
+<div class="container indent-v-lg">
+	<form action="/contactez-nous/" method="POST" class="form-wrapper ng-pristine ng-valid">
+	{% csrf_token %}
+
+	{% if messages %}
+    {% for message in messages %}
+   	<div id="toast-container" class="toast-top-full-width" aria-live="polite"><div class="toast toast-{{ tag }}"><div class="toast-message">{{ message|safe }}</div></div></div>
+    {% endfor %}
+    {% endif %}
+		<div class="row indent-v-sm">
+			<div class="col-xs-4 text-right">
+			<label>{% trans "Votre e‐mail" %}*&nbsp;:</label>
+			</div>
+			<div class="col-xs-8 col-sm-6 col-md-4">
+			<input type="email" required class="form-control" name="{{ form.sender.html_name }}" value="{{ form.sender.value }}">
+			{% if form.sender.errors %}
+	        {% for error in form.sender.errors %}
+	        <p class="text-red">{{ error|escape }}</p>
+	        {% endfor %}
+	        {% endif %}
+	    
+			</div>
+		</div>
+		<div class="row indent-v-sm">
+			<div class="col-xs-4 text-right">
+				<label>{% trans "Sujet" %}*&nbsp;:</label>
+			</div>
+			 <div class="col-xs-8 col-sm-6 col-md-4" name="objet">
+        	<select data-placeholder="Sélectionner une catégorie" name="{{ form.category.html_name }}" value="{{ form.category.value }}" class="form-control" eloue-chosen="">
+        		<option value="Demande d'information" selected="selected" >{% trans "Demande d'information" %}</option>
+        		<option value="Problème technique">{% trans "Problème technique" %}</option>
+        		<option value="Inscription / Connexion">{% trans "Inscription / Connexion" %}</option>
+        		<option value="Tableau de bord / Espace client">{% trans "Tableau de bord / Espace client" %}</option>
+        		<option value="Recherche">{% trans "Recherche" %}</option>
+        		<option value="Réservations / Locations">{% trans "Réservations / Locations" %}</option>
+        		<option value="Paiement / Caution">{% trans "Paiement / Caution" %}</option>
+        		<option value="Assurance">{% trans "Assurance" %}</option>
+        		<option value="Suggestions">{% trans "Suggestions" %}</option>
+        		<option value="Félicitations">{% trans "Félicitations" %}</option>
+        		<option value="Relation presse">{% trans "Relation presse" %}</option>
+        		<option value="Proposition de partenariat">{% trans "Proposition de partenariat" %}</option>
+        		<option value="Autre">{% trans "Autre" %}</option></select>
+
+			{% if form.category.errors %}
+	        {% for error in form.category.errors %}
+	        <p class="text-red">{{ error|escape }}</p>
+	        {% endfor %}
+	        {% endif %}
+			</div>
+		</div> 
+
+			<div class="row indent-t-sm"><div class="col-xs-4 text-right">
+			<label>{% trans "Message" %}*&nbsp;:</label>
+			</div>
+			<div class="col-xs-8 col-sm-6">
+			<textarea name="{{ form.message.html_name }}" rows="5" required class="expand form-control">{{ form.message.value }}</textarea>
+			{% if form.message.errors %}
+	        {% for error in form.message.errors %}
+	        <p class="text-red">{{ error|escape }}</p>
+	        {% endfor %}
+	        {% endif %}
+			</div>
+		</div>
+
+		<div class="row indent-v-xs">
+			<div class="col-xs-4 col-sm-3 col-xs-offset-4">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="particular" name="{{ form.cc_myself.html_name }}" value="{{ form.cc_myself.value }}">
+						<span class="flaticon stroke checkmark-1"></span>
+					</label> {% trans "être en copie du mail" %}
+        		</div>
+        	</div>
+
+        	<div class="col-xs-4 col-sm-3 text-right">
+        		<p><em>*&nbsp;{% trans "champs obligatoires" %}</em></p>
+        	</div>
+        </div>
+
+        <div class="row indent-v-md">
+        	<div class="col-xs-8 col-sm-4 col-xs-offset-4">
+        		<input type="submit" value="{% trans 'Envoyer le message' %}" style="width: 100%;" class="btn btn-lg bg-primary">
+        	</div>
+        </div>
+
+        <div class="row"><hr class="col-xs-6 col-sm-4 col-xs-offset-3 col-sm-offset-4">
+        </div>
+    </form>
+    	{% blocktrans %}
+    	<p class="text-center"> Vous pouvez également nous joindre, du lundi au vendredi de 9h à 18h,<br> par chat ou par téléphone au 01 85 08 99 77
+  		</p>
+  		{% endblocktrans %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
