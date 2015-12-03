@@ -1,0 +1,28 @@
+-load humanize facets product i18n
+
+.container
+  h3.text-center.indent-v-lg {% trans "Annonces de location dans toute la France" %}
+  ul.product-list.row
+    each product in product_list
+      li.col-sm-3: .product-item
+        .product-image
+          a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}")
+          if product.price
+            span.badge.price {{ product.price|currency }} /{% trans "jour" %}
+          else
+            span.badge.price {% trans "Sur devis" %}
+          if product.pro_owner
+            span.badge-pro pro
+        .product-info
+          .product-description
+            h6
+              | {% trans "Location" %}
+            h6: a(href="{{ product.url }}") {{ product.summary }}
+            p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
+          .product-owner
+            a(href="{{ product.owner_url }}"): img(style="{% if product.owner_avatar %}background-image: url({{ product.owner_avatar }}){% endif %}")
+  .row.text-center.indent-v-lg
+    //- TODO: should use AJAX to fetch and insert next 8 items
+    button(type="button", onclick="location.href='{% facet_url breadcrumbs 'sort' '' %}';").btn.bg-primary.btn-explore.btn-lg
+      i.flaticon.stroke.zoom-2.indent-r-xs
+      | {% trans "Explorez toutes les annonces de location" %}
