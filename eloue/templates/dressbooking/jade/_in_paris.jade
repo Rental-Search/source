@@ -1,0 +1,25 @@
+-load staticfiles i18n
+style
+    .col-sm-6 img {
+    width: 100%;
+    height: 270px;
+    }
+
+.container
+    .row
+        .col-sm-6
+            .description
+                {% blocktrans %}
+                h3
+                    | Dressbooking à paris et bientôt dans toute la France
+                {% endblocktrans %}
+                {% url 'howto' as howto_url %}
+                {% blocktrans %}
+                p.lg-ln-height
+                    | Notre fabuleux dressing collaboratif vient d'ouvir ses portes en Ile-de-France.
+                p.lg-ln-height
+                    | Préparez-vous pour les prochaines ouvertures à Marseille, Lyon, Toulouse, Bordeaux, Montpellier, Lille, Nice, Nantes et dans bien d'autres villes encore.
+                {% endblocktrans %}
+
+        .col-sm-6
+                img(src="{% static 'images/paris-ballon.jpg' %}")
