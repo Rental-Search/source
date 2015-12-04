@@ -435,6 +435,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'smartbanner_styles': {
+        'source_filenames': (
+            'css/jquery.smartbanner.css',
+        ),
+        'output_filename': 'css/jquery.smartbanner.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
 }
 
 PIPELINE_JS = {
@@ -462,19 +471,11 @@ PIPELINE_JS = {
             #'async': False,
         },
     },
-    'dashboard_js': {
+    'smartbanner_js': {
         'source_filenames': (
-            'js/dashboard/main.js',
+            'js/jquery.smartbanner.js',
         ),
-        'output_filename': 'js/dashboard.js',
-        'template_name': 'pipeline/requirejs.html',
-        'extra_context': {
-            'build': 'js/dashboard/build.js',
-            'require_args': {'static-path': STATIC_URL},
-            'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
-            #'defer': False,
-            #'async': False,
-        },
+        'output_filename': 'js/jquery.smartbanner.js',
     },
 }
 
