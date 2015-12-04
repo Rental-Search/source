@@ -9,16 +9,16 @@ import threading
 from contextlib import closing
 
 category_mapping = { 
-    '/particuliers/activités-sportives-ludiques/nature-dextérité-1/':'jeux-dadresse',
+    '925-amplificateurs':'amplificateur',
 
 }
 
 
 class Command(BaseCommand):
     args = ''
-    help = "Imports given xls file for user 'hwoog'"
+    help = "Imports given xls file for user 'hugow'"
     
-    base_url = 'http://www.locsport64.fr'
+    base_url = 'http://location.music-and-lights.com/'
     thread_num = 1
 
     def _subpage_crawler(self):
@@ -32,7 +32,7 @@ class Command(BaseCommand):
             
             with closing(urlopen(self.base_url + family)) as product_list_page:
                 product_list_soup = BeautifulSoup(product_list_page, 'html.parser')
-                product_list = product_list_soup.find_all('div',class_='product-container')
+                product_list = product_list_soup.find_all('h3')
                 for product in product_list:
                     product_url = product.find('a').get('href')
                     self.product_links[product_url] = family
@@ -65,7 +65,7 @@ class Command(BaseCommand):
 
             #Get the image
             try:
-                image_url = product_soup.find('img', id="bigpic").get('src')
+                image_url = product_soup.find('a', class_="MagicZoomPlus").find('img').get('src')
                 #print "image_url : %s" % image_url
             except:
                 print "pass image"
@@ -81,7 +81,7 @@ class Command(BaseCommand):
             
             # Get the description
             try:
-                description = product_soup.find('div', id='short_description_content').text
+                description = product_soup.find('div', id='short_description_content').find('p').text
                 #print "description : %s" % description
             except:
                 description = " "
@@ -90,56 +90,57 @@ class Command(BaseCommand):
 
             # Get the price
             try:
-                price = product_soup.find('div', class_='price').find('span').text
+                price = product_soup.find('span', id='our_price_display').text
+                #price1 = re.findall('\d', price)
                 price = _to_decimal(price)
-                #print "price : %s" % price
+                print "price1 : %s" % price
             except:
                 price = "10.00"
                 print 'pass price'
                 pass
 
-            # Create deposit
-            deposit_amount = 0.0
+        #     # Create deposit
+        #     deposit_amount = 0.0
 
-            # Create the product
-            from products.models import Category, Price
-            from products.choices import UNIT
-            try:
-                #print "try create"
-                product = Product.objects.create(
-                    summary=summary, description=description, 
-                    deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-                    category=Category.objects.get(slug=category_mapping[category])
-                )
-                #print "product_id : %s" % product.pk
+        #     # Create the product
+        #     from products.models import Category, Price
+        #     from products.choices import UNIT
+        #     try:
+        #         #print "try create"
+        #         product = Product.objects.create(
+        #             summary=summary, description=description, 
+        #             deposit_amount=deposit_amount, address=self.address, owner=self.patron,
+        #             category=Category.objects.get(slug=category_mapping[category])
+        #         )
+        #         #print "product_id : %s" % product.pk
 
-                try:
-                    #print "try upload image"
-                    with closing(urlopen(image_url)) as image:
-                        product.pictures.add(Picture.objects.create(
-                            image=uploadedfile.SimpleUploadedFile(
-                                name='img', content=image.read())
-                        )
-                    )
-                    #print "picture : %s" % product.pictures.all()[0]
-                except HTTPError as e:
-                    print '\nerror loading image for object at url:', self.base_url + product_url
+        #         try:
+        #             #print "try upload image"
+        #             with closing(urlopen(image_url)) as image:
+        #                 product.pictures.add(Picture.objects.create(
+        #                     image=uploadedfile.SimpleUploadedFile(
+        #                         name='img', content=image.read())
+        #                 )
+        #             )
+        #             #print "picture : %s" % product.pictures.all()[0]
+        #         except HTTPError as e:
+        #             print '\nerror loading image for object at url:', self.base_url + product_url
 
-                # Add the price to the product
-                try:
-                    product.prices.add(Price(amount=price, unit=UNIT.DAY))
-                    #print "price : %s" % product.prices.all()[0]
-                except:
-                    print 'PRICE ERROR'
-                    pass
+        #         # Add the price to the product
+        #         try:
+        #             product.prices.add(Price(amount=price, unit=UNIT.DAY))
+        #             #print "price : %s" % product.prices.all()[0]
+        #         except:
+        #             print 'PRICE ERROR'
+        #             pass
 
-                # sys.stdout.write('.')
-                # sys.stdout.flush()
-            except:
-                print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
-                pass
+        #         # sys.stdout.write('.')
+        #         # sys.stdout.flush()
+        #     except:
+        #         print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
+        #         pass
 
-        print "\n %s products created" % self.patron.products.all().count()
+        # print "\n %s products created" % self.patron.products.all().count()
  
 
     def handle(self, *args, **options):
@@ -157,9 +158,9 @@ class Command(BaseCommand):
 
         # Get the user
         try:
-            self.patron = Patron.objects.get(username='locationevents')
+            self.patron = Patron.objects.get(username='hugow') #rslocation18 aussi ?
         except Patron.DoesNotExist:
-            print "Can't find user 'Event-location locationevents'"
+            print "Can't find user 'Music and Lights'"
             return
 
         # Get the default address of the user to add to the product
@@ -167,11 +168,12 @@ class Command(BaseCommand):
 
         # Get families list of products
         self.product_families = [
-        '/particuliers/activités-sportives-ludiques/nature-dextérité-1/',
+        '925-amplificateurs',
 
         ]
+
         self._subpage_crawler()
-        #self._product_crawler()
+        self._product_crawler()
 
         # #List the products and create the product in the database
         # for i in xrange(self.thread_num):
