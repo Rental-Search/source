@@ -503,7 +503,7 @@ msgid ""
 "That email address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr ""
-"כתובת הדואר אלקטרוני שלך לא מקושר לחשבון משתמש ,האם אתה בטוח שכבר נרשמת?"
+"?כתובת הדואר אלקטרוני שלך לא מקושר לחשבון משתמש ,האם אתה בטוח שכבר נרשמת"
 
 #: accounts/forms.py:103
 msgid ""
@@ -1056,7 +1056,7 @@ msgstr "השכרה"
 #: eloue/urls.py:211 eloue/templates/dk/jade/_footer_links.jade:9
 #, fuzzy
 msgid "comment-ca-marche"
-msgstr "איך זה עובד?"
+msgstr "?איך זה עובד"
 
 #: eloue/urls.py:212 eloue/templates/dk/jade/_footer_links.jade:11
 #, fuzzy
@@ -1076,7 +1076,7 @@ msgstr "צור קשר"
 #: eloue/urls.py:221 eloue/templates/dk/jade/_footer_links.jade:33
 #, fuzzy
 msgid "qui-sommes-nous"
-msgstr "מי אנחנו ?"
+msgstr "?מי אנחנו "
 
 #: eloue/urls.py:222 eloue/templates/dk/jade/_footer_links.jade:13
 msgid "securite"
@@ -1566,7 +1566,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"לא ביקשת את השינוי? אתה חושב שזו טעות? קודם כל, אל דאגה: אתה היחיד שמקבל "
+"?לא ביקשת את השינוי אתה ?חושב שזו טעות קודם כל, אל דאגה: אתה היחיד שמקבל "
 "הודעה זו. , פשוט תכנס לחשבון שלך עם הסיסמה החדשה, ואז לך  לפרופיל שלך "
 "לשינוי.\n"
 
@@ -1812,7 +1812,7 @@ msgstr "צור קשר"
 #: eloue/templates/jade/_footer_links.jade:9
 #: eloue/templates/jade/_header_site.jade:49
 msgid "Comment ça marche ?"
-msgstr "איך זה עובד?"
+msgstr "?איך זה עובד"
 
 #: eloue/templates/autovoisin/imprint/_text_content.jade:1
 #: eloue/templates/gosport/imprint/index.jade:1
@@ -1890,13 +1890,13 @@ msgstr "עזרה"
 #: eloue/templates/jade/_header_site.jade:61
 #: eloue/templates/jade/_product_list_aside.jade:24
 msgid "Où ça ?"
-msgstr "איפה ? "
+msgstr "?איפה"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:55
 #: eloue/templates/dk/jade/_header_site.jade:60
 #: eloue/templates/jade/_header_site.jade:60 products/forms.py:46
 msgid "Que voulez-vous louer ?"
-msgstr "מה  ברצונך לשכור ? "
+msgstr "? מה  ברצונך לשכור"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:70
 #: eloue/templates/dk/jade/_header_site.jade:75
@@ -1929,7 +1929,7 @@ msgstr "זוכר אותי"
 
 #: eloue/templates/autovoisin/jade/_log_in.jade:38
 msgid "Vous n'êtes pas encore membre AutoVoisin ?"
-msgstr "עדיין לא חבר AutoVoisin?"
+msgstr "?עדיין לא חבר AutoVoisin"
 
 #: eloue/templates/autovoisin/jade/_log_in.jade:38
 #: eloue/templates/jade/_log_in.jade:47 eloue/templates/jade/_sign_in.jade:8
@@ -1981,7 +1981,7 @@ msgstr "תנאים כללים "
 #: eloue/templates/dk/who_are_we/index.jade:1
 #: eloue/templates/who_are_we/index.jade:1
 msgid "Qui sommes nous ?"
-msgstr "מי אנחנו ? "
+msgstr "?מי אנחנו"
 
 #: eloue/templates/contact_us/_breadcrumbs.jade:6
 #: eloue/templates/dk/jade/_footer_links.jade:43
@@ -3806,7 +3806,7 @@ msgstr "תגובה"
 #: eloue/templates/dk/how_it_works/index.jade:1
 #: eloue/templates/how_it_works/index.jade:1
 msgid "Comment ça marche"
-msgstr "איך זה עובד?"
+msgstr "?איך זה עובד"
 
 #: eloue/templates/dk/jade/_footer_links.jade:7
 #: eloue/templates/how_it_works/_breadcrumb.jade:6
@@ -3831,7 +3831,7 @@ msgstr "אי-לו - וההבטחה מידע "
 #: eloue/templates/jade/_footer_links.jade:23
 #: eloue/templates/security/_breadcrumbs.jade:6
 msgid "Pourquoi choisir e-loue ?"
-msgstr " למה  אי-לו השכרות ?"
+msgstr "? למה  אי-לו השכרות"
 
 #: eloue/templates/dk/jade/_footer_links.jade:23
 #: eloue/templates/jade/_footer_links.jade:31
@@ -3849,7 +3849,7 @@ msgstr "כרטיס ביקור של אי-לו "
 #: eloue/templates/dk/jade/_footer_links.jade:33
 #: eloue/templates/jade/_footer_links.jade:41
 msgid "Qui sommes-nous ?"
-msgstr "מי אנחנו ?"
+msgstr "? מי אנחנו"
 
 #: eloue/templates/dk/jade/_footer_links.jade:45
 #: eloue/templates/jade/_footer_links.jade:57
@@ -4006,7 +4006,7 @@ msgstr "תנאים כללים לבעלי מקצוע"
 
 #: eloue/templates/enroll/_text_content.jade:107
 msgid "Vous n'avez pas trouvé le job idéal ?"
-msgstr "לא מצאת את העבודה האידיאלי?"
+msgstr "? לא מצאת את העבודה האידיאלי"
 
 #: eloue/templates/enroll/_text_content.jade:110
 msgid "Notre partenaire"
@@ -4184,8 +4184,8 @@ msgid "mot de passe"
 msgstr "סיסמה "
 
 #: eloue/templates/jade/_log_in.jade:47
-msgid "Vous n'êtes pas encore membre e-loue ?"
-msgstr "אתה עדיין לא חבר באי-לו  - להשכרה?"
+msgid "Vous n'êtes pas encore membre e-loue"
+msgstr "? אתה עדיין לא חבר באי-לו  - להשכרה"
 
 #: eloue/templates/jade/_mixins.jade:11
 msgid "verifié"
@@ -4351,7 +4351,7 @@ msgstr "כל הקטגוריות"
 
 #: eloue/templates/jade/_product_list_aside.jade:23
 msgid "où"
-msgstr "איפה ? "
+msgstr "? איפה"
 
 #: eloue/templates/jade/_product_list_aside.jade:30
 msgid "rayon"
@@ -4401,7 +4401,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-" <h3>     אתה עוסק בהשכרות באופן מקצועי ? <br> גם אנחנו !! \n"
+" <h3>? אתה עוסק בהשכרות באופן מקצועי<br>!! גם אנחנו \n"
 "   </h3>\n"
 
 #: eloue/templates/jade/_professional_renter_content.jade:10
@@ -4460,7 +4460,7 @@ msgid ""
 "Mot de passe perdu ? Saisissez votre adresse électronique ci-dessous et nous "
 "vous enverrons les instructions pour en créer un nouveau."
 msgstr ""
-"איבדת את סיסמאתך? הזן את כתובת המייל שלכם, ואנו נשלח לך את ההוראות כדי ליצור "
+"?איבדת את סיסמאתך הזן את כתובת המייל שלכם, ואנו נשלח לך את ההוראות כדי ליצור "
 "חדש."
 
 #: eloue/templates/jade/_reset_password.jade:24
@@ -4697,7 +4697,7 @@ msgid ""
 "toutes vos questions..."
 msgstr ""
 " אל תהססו לכתוב לנו. באמצעות הטופס שלהלן, אנחנו בוודאי ישמח לענות על כל "
-"השאלות שלך..."
+"...השאלות שלך"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:30
 msgid "Votre adresse e‐mail"
@@ -4815,7 +4815,7 @@ msgid ""
 "plaisir de répondre à toutes vos questions…\n"
 msgstr ""
 "\n"
-"<b>  אל תהססו להגיע לחנות שלנו,</b> אנחנו   נשמח לענות על כל השאלות שלך...\n"
+"<b>  ...אל תהססו להגיע לחנות שלנו,</b> אנחנו   נשמח לענות על כל השאלות שלך\n"
 
 #: eloue/templates/jade/pop_up_sections/_shop_form.jade:8
 msgid "Nos boutiques sont situées au&nbsp;"
@@ -4877,9 +4877,9 @@ msgid ""
 "les modalités de locations ? Sur le  lieu et l’horaire du RDV ? N’ayez pas "
 "peur, les membres e-loue  sont très  serviables, et vous répondront..."
 msgstr ""
-"צריך פרטים על האובייקט להשכרה?  שאלות בנוגע לתנאים ולהתניות של השכרות? על "
-"המיקום ועל לוח הזמנים של  המפגש ? אל תפחד, חברי האי-לו  הם מאוד מועיל ישמחו "
-"לעזור לך..."
+"?צריך פרטים על האובייקט להשכרה  שאלות בנוגע לתנאים ולהתניות של השכרות? על "
+"?המיקום ועל לוח הזמנים של  המפגש אל תפחד, חברי האי-לו  הם מאוד מועיל ישמחו "
+"...לעזור לך"
 
 #: eloue/templates/jade/pop_up_sections/_variants_call.jade:38
 msgid ""
@@ -5011,7 +5011,7 @@ msgstr "מהאתר אינטרנט שלנו"
 #: eloue/templates/landing_pages/publish.jade:20
 #: eloue/templates/landing_pages/publish.jade:38
 msgid "Vous aussi faites comme Emma ..."
-msgstr "גם אתה תעשה כמו אחרים ..."
+msgstr "...גם אתה תעשה כמו אחרים"
 
 #: eloue/templates/landing_pages/publish.jade:15
 #: eloue/templates/landing_pages/publish.jade:21
@@ -5024,7 +5024,7 @@ msgstr "וגם  אפשר להרוויח כסף על ידי פירסום  מוד�
 #: eloue/templates/landing_pages/publish.jade:26
 #: eloue/templates/landing_pages/publish.jade:32
 msgid "Vous aussi faites comme Thomas ..."
-msgstr "אתה עושה כמו אחרים ....."
+msgstr "...אתה עושה כמו אחרים"
 
 #: eloue/templates/proapp/app.html:4
 msgid "Vos statistiques"
@@ -7347,7 +7347,7 @@ msgstr "השכרה עונתית "
 
 #: products/forms.py:47
 msgid "Où voulez-vous louer?"
-msgstr "איפה ברצונך להשכיר? "
+msgstr "? איפה ברצונך להשכיר "
 
 #: products/forms.py:169
 msgid "par-prix"
@@ -7552,7 +7552,7 @@ msgstr "קטגוריות"
 #: products/models.py:708
 #, python-format
 msgid "Category with name %s (%s) already exists. Site_id is %d."
-msgstr "קטגוריה בשם %s (%s) כבר קיים. Xrchdet_e.asp?Site_ID=1466 הוא %d."
+msgstr "קטגוריה בשם %s (%s) כבר קיים."
 
 #: products/models.py:766
 msgid "properties"
@@ -8016,7 +8016,7 @@ msgstr "Latitude\\longitude or address are required"
 #~ msgstr ""
 #~ "\n"
 #~ " אל תהססו לכתוב לנו. באמצעות הטופס שלהלן, אנחנו  נשמח לענות על כל השאלות "
-#~ "שלך...\n"
+#~ "...שלך\n"
 
 #~ msgid "L’équipe e-loue"
 #~ msgstr "צוות אי-לו "
