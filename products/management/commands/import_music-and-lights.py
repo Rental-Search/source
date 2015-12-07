@@ -137,7 +137,11 @@ class Command(BaseCommand):
             
             # Get the description
             try:
-                description = product_soup.find('div', id='short_description_content').find('p').text
+                description1 = product_soup.find('div', id='short_description_content').find('p').text
+                description2 = product_soup.find('div', id='more_info_sheets').find('p').text
+                description3 = product_soup.find('div', id='more_info_sheets').find_all('span', style="box-sizing: border-box; font-size: 12.222222328186px;")
+                description4 = "\n".join([description.text for description in description3])
+                description = "%s\n%s\n%s" % (description1, description2, description4)
                 #print "description : %s" % description
             except:
                 description = " "
@@ -214,7 +218,7 @@ class Command(BaseCommand):
 
         # Get the user
         try:
-            self.patron = Patron.objects.get(username='hugow') #rslocation18 aussi ?
+            self.patron = Patron.objects.get(username='musicandlights') #rslocation18 aussi ?
         except Patron.DoesNotExist:
             print "Can't find user 'Music and Lights'"
             return
