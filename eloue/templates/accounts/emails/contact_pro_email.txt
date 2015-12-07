@@ -1,15 +1,21 @@
 {% load i18n %}
 
-{% blocktrans with patron.username as username %}
-Envoyé par {{ email }} :
+{% blocktrans with patron.first_name as first_name and patron.last_name as last_name %}
+Bonjour {{ first_name }} {{ last_name }},
 
-Bonjour {{ username }},
+Vous avez reçu une demande de devis.
+
 {% endblocktrans %}
 
+{% blocktrans with email as email and phone as phone %}
+Coordonnées du client :
+Numéro de téléphone  : {{ phone }}
+Adresse email : {{ email }}
+{% endblocktrans %}
+                            
+{% trans "Demande du client :"%}
+                            
 {{ message }}
 
-{{ protocol }}://{{ site.domain }}.
-
-{% trans "Cordialement" %},
-
+                            
 {% trans "L'équipe" %} {{ site.name }}.
