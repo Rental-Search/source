@@ -471,11 +471,19 @@ PIPELINE_JS = {
             #'async': False,
         },
     },
-    'smartbanner_js': {
+    'dashboard_js': {
         'source_filenames': (
-            'js/jquery.smartbanner.js',
+            'js/dashboard/main.js',
         ),
-        'output_filename': 'js/jquery.smartbanner.js',
+        'output_filename': 'js/dashboard.js',
+        'template_name': 'pipeline/requirejs.html',
+        'extra_context': {
+            'build': 'js/dashboard/build.js',
+            'require_args': {'static-path': STATIC_URL},
+            'requirejs': 'js/require.js' if PIPELINE_ENABLED else 'bower_components/requirejs/require.js',
+            #'defer': False,
+            #'async': False,
+        },
     },
 }
 
