@@ -3,6 +3,12 @@
 doctype 5
 html(lang="fr")
   head
+    <meta name="apple-itunes-app" content="app-id=427538545">
+    <meta name="google-play-app" content="app-id=com.eloue.appandroid">
+    <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/ios-icon.jpeg">
+    
+
+
     style [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide { display: none !important; }
     block variables
       include jade/variables
@@ -13,11 +19,10 @@ html(lang="fr")
       meta(name="viewport", content="width=device-width, initial-scale=1.0")
       meta(name="description", content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}")
       link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
-
     block styles
       link(rel="stylesheet", href="http{% if request.is_secure %}s{% endif %}://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
       {% compressed_css "extrastyles" %}
-
+      {% compressed_css "smartbanner_styles" %}
     block scripts
       {% compressed_js "public_js" %}
     script
@@ -75,7 +80,6 @@ html(lang="fr")
         fbq('track', "PageView");
       noscript
         <img height="1" width="1" style="display:none"src="https://www.facebook.com/tr?id=631094037033631&ev=PageView&noscript=1"/>
-
     #ngModals
         eloue-login-form
         eloue-registration-form

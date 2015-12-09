@@ -9,10 +9,7 @@
 					span(aria-hidden="true")&times;
 					span.sr-only Close
 				h4.modal-title 
-				if is_send
-					| {% trans "Demande de devis" %}
-				else
-					| {{ patron.company_name }} - {% trans "Envoyez un message" %}
+					{{ patron.company_name }} - {% trans "Demandez un devis" %}
 			.modal-body.table-cell.text-justify
 				//-.static-part.table-cell
 				//-	section.product-info

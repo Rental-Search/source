@@ -435,6 +435,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'smartbanner_styles': {
+        'source_filenames': (
+            'css/jquery.smartbanner.css',
+        ),
+        'output_filename': 'css/jquery.smartbanner.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
 }
 
 PIPELINE_JS = {

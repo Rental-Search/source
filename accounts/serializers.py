@@ -237,21 +237,12 @@ class BillingSubscriptionSerializer(serializers.ModelSerializer):
 
 class ContactProSerializer(serializers.SimpleSerializer):
     email = EmailField(required=True)
-    subject = CharField(max_length=78, required=True)
     message = CharField(required=True)
+    phone = CharField(required=True)
 
     def __init__(self, *args, **kwargs):
         self.recipient = kwargs['context']['recipient']
         super(ContactProSerializer, self).__init__(*args, **kwargs)
-
-    def validate_subject(self, attrs, source):
-        try:
-            subject = strip_tags(attrs.pop(source))
-            attrs[source] = normalize_newlines(subject.replace('\n', ' '))
-        except (KeyError, IndexError):
-            raise ValidationError(
-                    _("Attribute missed or invalid: %s" % 'subject'))
-        return attrs
 
     def validate_message(self, attrs, source):
         try:
@@ -270,7 +261,7 @@ class ContactProSerializer(serializers.SimpleSerializer):
     def save_object(self, obj, **kwargs):
         context = {
             'email': obj.get('email'),
-            'subject': obj.get('subject'),
+            'phone': obj.get('phone'),
             'message': obj.get('message'),
             'patron': self.recipient,
         }
