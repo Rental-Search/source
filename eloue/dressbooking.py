@@ -20,9 +20,9 @@ NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [2862, 2883, 2900])
 #FILTER_CATEGORIES = env('FILTER_CATEGORIES', NAVBAR_CATEGORIES)
 
 PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', (
-	(("Femmme", NAVBAR_CATEGORIES[0], "robe"),
-    ("Homme", NAVBAR_CATEGORIES[1], "Vestes classiques"),
-    ("Enfant", NAVBAR_CATEGORIES[2], "Robe et cotèges")),
+	(("Femmme", NAVBAR_CATEGORIES[0], "dress"),
+    ("Homme", NAVBAR_CATEGORIES[1], "golf"),
+    ("Enfant", NAVBAR_CATEGORIES[2], "basket")),
 ))
 
 #DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')

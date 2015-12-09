@@ -36,12 +36,12 @@ block append content-body
         {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
         section.professional-renter-content.framing: include ./jade/_professional_renter_content
         section.watch-video: include ./jade/_watch_video
-        section.watch-video: include ./jade/_in_paris
+        section.watch-video.framing: include ./jade/_in_paris
         {% endcache %}
 
 
     footer
       {% cache 43200 'homepage_footer_static' LANGUAGE_CODE %}
-      section.footer-links.framing: include ./jade/_footer_links
-      section.rss.framing: include ./jade/_rss
+      section.footer-links: include ./jade/_footer_links
+      section.rss: include ./jade/_rss
       {% endcache %}

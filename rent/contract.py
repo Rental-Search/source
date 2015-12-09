@@ -111,11 +111,11 @@ class ContractGenerator(object):
 class ContractGeneratorNormal(ContractGenerator):
     if settings.SITE_ID == 15:
         templates = {
-            'fr-fr': local_path("contract/fr_template_normal_dressbooking.pdf")
+            'fr-FR': local_path("contract/fr_template_normal_dressbooking.pdf")
         }
     else:
         templates = {
-            'fr-fr': local_path("contract/fr_template_normal.pdf")
+            'fr-FR': local_path("contract/fr_template_normal.pdf")
         }
     
     def draw(self, canvas, booking):
