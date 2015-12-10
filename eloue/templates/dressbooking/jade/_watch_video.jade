@@ -3,9 +3,9 @@
 .container
     .row
         .col-sm-6
-            .video(data-toggle="modal", data-target="#videoModal", data-property="{videoURL:'https://www.youtube.com/watch?v=a0SyuOTkBGc'}")
+            .video(data-toggle="modal", data-target="#videoModal")
                 .smoke
-                img(src="{% static 'img/video-screen.jpg' %}")
+                img(src="{% static 'img/video-screen-dressbooking.png' %}")
                 span.btn-play
         .col-sm-6
             .description
@@ -31,4 +31,5 @@
                     span.sr-only Close
                 h4.modal-title {% trans "Présentation de Dressbooking" %}
             .modal-body
+                input(id="videoId", value="a3T8q5E60xg", type="hidden")
                 #videoContainer
