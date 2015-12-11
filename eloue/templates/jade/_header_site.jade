@@ -1,5 +1,19 @@
 -load staticfiles i18n
-
+style
+  .bg-primary {
+    border-color: #f27e36 !important;
+    background-color: #f27e36 !important; }
+    .bg-primary:hover {
+      background-color: #e6610f !important;
+      border-color: #e6610f !important; }
+    img {vertical-align: text-center;}
+  .what-color {
+    border-radius: 0;
+    color: #9d9d9d !important;
+    font-weight: 500;
+    border-right-width: 0;
+    border-color: #c4c4c4;
+  }
 section.framing(ng-controller="CookiesCtrl")
     div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") {% trans "En poursuivant votre navigation, vous acceptez l’utilisation des cookies pour disposer de services et d’offres adaptées à vos centres d’intérêts. Pour en savoir plus,&nbsp;" %}
         a(href="/conditions-generales-particuliers/#cookies") {% trans "cliquez ici" %}
@@ -9,31 +23,34 @@ section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span
-      | {% trans "Bonjour" %}! 
-      a#registration-link(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b {% trans "inscrivez-vous" %}
-      | {% trans "ou" %} 
-      a#login-link(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b {% trans "connectez-vous" %}
-    li.divide
+      li: <img  src="{% static 'images/phone-grey.png' %}", style="width: 17px;height: 16px; margin-right: 8px;vertical-align: top"/>
+        {% blocktrans %}
+        span
+        b 01 85 08 99 77 
+        | (numéro gratuit)
+        {% endblocktrans %}
+        li.divide
     li: span
         {% url 'subscription' as subscription_url %}
         {% blocktrans %}
-        | Vous êtes un loueur professionnel, découvrez les 
-        a(href="{{ subscription_url }}"): b offres e-loue Pro
+        b Louez tous types d'objets auprès de particuliers et professionnels 
         {% endblocktrans %}
+        a(href="{% url 'howto' %}"): b {% blocktrans %}(en savoir plus){% endblocktrans %}
     li.divide
     li: span
       {% blocktrans %}
-      | Appelez-nous au 
-      b 01 85 08 99 77 
-      | (numéro gratuit)
+      a#registration-link(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b Inscription 
+      | -     
+      a#login-link(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b Connexion
       {% endblocktrans %}
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser", style="display: none;").without-spaces
     li: span
-      {% blocktrans %}
-      | Appelez-nous au 
-      b 01 85 08 99 77 
-      | (numéro gratuit)
+      li: <img  src="{% static 'images/phone-grey.png' %}", style="width: 17px;height: 16px; margin-right: 8px;vertical-align: top"/>
+        {% blocktrans %}
+        span
+        b 01 85 08 99 77 
+        | (numéro gratuit)
       {% endblocktrans %}
     li.spacer
     li.guest-veiw
@@ -94,8 +111,8 @@ section(ng-controller="AuthCtrl").container.signs-links
       a(href="{% url 'home' %}"): img(src="{% static 'img/logo.png' %}", alt="e-loue logo")
     .table-cell.main-cell
       {% trans "Que voulez-vous louer ?" as what %}
-      {% trans "Où ça ?" as where %}
-      form(action="{% url 'product_list' %}")#searh-form.input-group
+      {% trans "Où ?" as where %}
+      form(action="{% url 'product_list' %}")#search-form.input-group
         input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", title="{% if form.cleaned_data.q %}{{ what }}{% endif %}").table-cell.main-cell.form-control.what-field
         .table-cell.input-group.where-field
           i.flaticon.stroke.location-pin-3
@@ -103,4 +120,4 @@ section(ng-controller="AuthCtrl").container.signs-links
         .table-cell.input-group-btn
           button(type="submit", default).btn.bg-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
     .table-cell
-      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}
+      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposer mes annonces" %}
