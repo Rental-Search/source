@@ -21,15 +21,14 @@ block content-homepage
       section.product-list
         include ./subcategory_list
 
-      {% cache 43200 'homepage_city_list_static' LANGUAGE_CODE %}
-      section.location-list.framing
-        include ../jade/_location_list
-      {% endcache %}
+      section.watch-video.framing: include ../jade/_in_paris
 
       {% cache 43200 'category_homepage_info_static' category.slug LANGUAGE_CODE %}
+      {% if category.footer %}
       section.text-info
         .container
           .text-info__paragraph {{ category.footer|safe }}
+      {% endif %}
       {% endcache %}
 
       {% cache 43200 'homepage_insurance_static' LANGUAGE_CODE %}
