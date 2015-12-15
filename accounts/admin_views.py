@@ -82,8 +82,6 @@ def patron_create_subscription(request):
 		patron.default_number = patron.phones.all()[0]
 		patron.save()
 		messages.success(request, 'Create user successed')
-
-		patron.subscribe(form.cleaned_data['subscription'])
 		patron.current_subscription.save()
 
 		#redirect to to slimplay only if it's not free
