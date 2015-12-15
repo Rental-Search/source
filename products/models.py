@@ -682,6 +682,15 @@ class Category(MPTTModel):
         ],
     )
 
+    home = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=265, height=250),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
+
     on_site = CurrentSiteManager()
     objects = models.Manager()
     tree = TreeManager()
