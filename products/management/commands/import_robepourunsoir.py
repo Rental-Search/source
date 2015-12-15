@@ -25,7 +25,7 @@ category_mapping = {
 
 class Command(BaseCommand):
     args = ''
-    help = "Imports given xls file for user 'DEGUIZLAND'"
+    help = "Imports given xls file for user 'cestmarobe'"
     
     base_url = 'http://1robepour1soir.com'
     thread_num = 1
