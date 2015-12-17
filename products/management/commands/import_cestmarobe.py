@@ -41,7 +41,9 @@ class Command(BaseCommand):
     def _product_crawler(self):
         from products.models import Product, Picture, Price
 
-        product_links = {u'http://www.cestmarobe.com/fr/robes-courtes/54-robe-miu-miu-rose-et-ivoire.html': '17-robes-courtes', u'http://www.cestmarobe.com/fr/robes-courtes/121-robe-jessica-choay-decollete-dentelle.html': '17-robes-courtes'}
+        product_links = {u'http://www.cestmarobe.com/fr/robes-courtes/54-robe-miu-miu-rose-et-ivoire.html': '17-robes-courtes',
+        #u'http://www.cestmarobe.com/fr/robes-courtes/121-robe-jessica-choay-decollete-dentelle.html': '17-robes-courtes'
+        }
         
         # Return the price in the right format
         def _to_decimal(s):
@@ -71,15 +73,17 @@ class Command(BaseCommand):
 
             # Get the title
             try:
-                infosProduits = product_soup.find('h1', class_='title_main product_title')
-                [script.extract() for script in infosProduits(["script", "p", "strong"])]
-
+                # infosProduits = product_soup.find('h1', class_='title_main product_title')
+                # [script.extract() for script in infosProduits(["script", "p", "strong"])]
+                print "text"
+                title = product_soup.find('img', id='bigpic').get('title')
+                print title
                 #infosProduits.script.decompose()
                 # script = [s.extract() for s in h1('script')]
 
-                #title = infosProduits.text
+                title = infosProduits.text
                 #print text
-                print infosProduits
+                #print infosProduits
             except:
                 infosProduits = ' '
 
