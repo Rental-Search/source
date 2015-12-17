@@ -1,7 +1,64 @@
 -load staticfiles
+style
+	.carousel-inner > .item { 
+		-webkit-filter: brightness(85%);
+		filter: brightness(85%);
+	}
+	.top-content {position: relative;}
+	h2 {
+	position: absolute;
+	bottom: 40%;
+	right: 7%;
+	z-index: 100;
+	color: white;
+	width: 600px;
+	text-align: center;
+	}
+	@media all and (transform-3d), (-webkit-transform-3d) {
+		.carousel-inner > .item {
+			-webkit-transition: opacity 0.6s ease-in-out;
+			-moz-transition: opacity 0.6s ease-in-out;
+			transition: opacity 0.6s ease-in-out;
+		}
 
+		.carousel-inner > .item.next,
+		.carousel-inner > .item.active.right {
+			left: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			opacity: 0;
+		}
+		.carousel-inner > .item.prev,
+		.carousel-inner > .item.active.left {
+			left: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			opacity: 0;
+		}
+		.carousel-inner > .item.next.left,
+		.carousel-inner > .item.prev.right,
+		.carousel-inner > .item.active {
+			left: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			opacity: 1;
+		}
+	}
+
+.top-content
 #homepage-carousel-banner.carousel.slide(data-ride="carousel")
-  .carousel-inner
-    .item.active(style="background-image: url({% static 'img/banner-1.jpg' %});")
-    .item(style="background-image: url({% static 'img/banner-2.jpg' %});")
-    .item(style="background-image: url({% static 'img/banner-3.jpg' %});")
+	h2 Trouvez toutes les annonces de location près de chez vous
+	.carousel-inner
+		.item.active(style="background-image: url({% static 'img/banner-1.jpg' %});")
+		.item(style="background-image: url({% static 'img/banner-2.jpg' %});")
+		.item(style="background-image: url({% static 'img/banner-3.jpg' %});")
+		//- .item.active(style="background-image: url(http://localhost:8000/media/CACHE/images/pictures/categories/e8a1aade346d487bb7db6c896af8b018.62077dcc25cf.jpg)")
+		//- .item(style="background-image: url(http://localhost:8000/media/CACHE/images/pictures/categories/47881c3eecfc4164925b95818ea8263f.9b30ab2fff89.jpg);")
+		//- .item(style="background-image: url(http://localhost:8000/media/CACHE/images/pictures/categories/d0777393163a4f348a9a97e81ae2689c.a0c923dc4a65.jpg);")
+		//- .item(style="background-image: url(http://localhost:8000/media/CACHE/images/pictures/categories/7e27f0683ca0406eaa4ed6fb3d81a391.3a6542bd1b93.jpg);")
+		//- .item(style="background-image: url(http://localhost:8000/media/CACHE/images/pictures/categories/8d3fb407baf64487a6c63af51b12213a.e45f2092c45c.jpg);")
+		//- .item(style="background-image: url(http://localhost:8000/media/CACHE/images/pictures/categories/a72f565a755648dbb6df9aa3531ccc54.4588f159cae5.jpg);")
+		//- .item(style="background-image: url(http://localhost:8000/media/CACHE/images/pictures/categories/08be6d541d064c8db1aab15504fed9f2.97f410209dd2.jpg);")
+		//- .item(style="background-image: url(http://localhost:8000/media/CACHE/images/pictures/categories/394454fc98114bb1a54af10f952b06fe.77f7206d20f0.jpg);")
+
+	

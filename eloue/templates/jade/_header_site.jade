@@ -14,6 +14,7 @@ style
     border-right-width: 0;
     border-color: #c4c4c4;
   }
+  
 section.framing(ng-controller="CookiesCtrl")
     div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") {% trans "En poursuivant votre navigation, vous acceptez l’utilisation des cookies pour disposer de services et d’offres adaptées à vos centres d’intérêts. Pour en savoir plus,&nbsp;" %}
         a(href="/conditions-generales-particuliers/#cookies") {% trans "cliquez ici" %}
@@ -120,4 +121,4 @@ section(ng-controller="AuthCtrl").container.signs-links
         .table-cell.input-group-btn
           button(type="submit", default).btn.bg-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
     .table-cell
-      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposer mes annonces" %}
+      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-primary.btn-advertise {% trans "Déposer mes annonces" %}
