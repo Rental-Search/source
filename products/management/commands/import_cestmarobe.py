@@ -50,7 +50,7 @@ class Command(BaseCommand):
 
         while True:
             try:
-                product_url, category = self.product_links.popitem()
+                product_url, category = product_links.popitem()
             except KeyError:
                 break
 
@@ -60,21 +60,28 @@ class Command(BaseCommand):
             except HTTPError:
                 print 'error loading page for object at url', self.base_url + product_url
 
-            #get the image
-            try:
-                image_url =  product_soup.find('div', id='big_img_scroll')
-                #image_url = smart_urlquote(image_url)
-                print image_url
-            except:
-                print "pass image"
-                pass
+            # #get the image
+            # try:
+            #     image_url =  product_soup.find('div', id='big_img_scroll').find('img').get('src')
+            #     #image_url = smart_urlquote(image_url)
+            #     print image_url
+            # except:
+            #     print "pass image"
+            #     pass
 
-        #     # Get the title
-        #     try:
-        #         infosProduits = product_soup.find('h1').text.strip()
-        #         #print infosProduits
-        #     except:
-        #         infosProduits = ' '
+            # Get the title
+            try:
+                infosProduits = product_soup.find('h1', class_='title_main product_title')
+                [script.extract() for script in infosProduits(["script", "p", "strong"])]
+
+                #infosProduits.script.decompose()
+                # script = [s.extract() for s in h1('script')]
+
+                #title = infosProduits.text
+                #print text
+                print infosProduits
+            except:
+                infosProduits = ' '
 
         #     # Get the description
         #     try:
