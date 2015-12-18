@@ -1,18 +1,65 @@
 -load staticfiles
 style
 	.carousel-inner > .item { 
-		-webkit-filter: brightness(75%);
-		filter: brightness(75%);
+		-webkit-filter: brightness(60%);
+		filter: brightness(60%);
 	}
 	.top-content {position: relative;}
 	h1 {
 		position: absolute;
-		bottom: 40%;
 		z-index: 100;
 		color: white;
 		text-align: center;
 		font-weight: 600;
-		right: 7%;
+		right: 2%;
+	}
+	@media all and (transform-3d), (-webkit-transform-3d) {
+		.carousel-inner > .item {
+			-webkit-transition: opacity 0.6s ease-in-out;
+			-moz-transition: opacity 0.6s ease-in-out;
+			transition: opacity 0.6s ease-in-out;
+		}
+
+		.carousel-inner > .item.next,
+		.carousel-inner > .item.active.right {
+			left: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			opacity: 0;
+		}
+		.carousel-inner > .item.prev,
+		.carousel-inner > .item.active.left {
+			left: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			opacity: 0;
+		}
+		.carousel-inner > .item.next.left,
+		.carousel-inner > .item.prev.right,
+		.carousel-inner > .item.active {
+			left: 0;
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+			opacity: 1;
+		}
+	}
+	@media (min-width: 1200px) {
+		h1 {
+			font-size: 3.3em;
+			bottom: 35%;
+		}
+	}
+	@media (min-width: 768px) and (max-width: 1199px) {
+		h1 {
+			font-size: 3.3em;
+			bottom: 32%;
+		}
+	}
+	@media (max-width: 767px) {
+		h1 {
+			font-size: 3.1em;
+			bottom: 27%;
+		}
 	}
 
 .top-content
