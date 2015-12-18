@@ -40,14 +40,13 @@ class Command(BaseCommand):
                 for product in product_list:
                     product_url = product.get('href')
                     self.product_links[product_url] = family
-                print self.product_links
+                #print self.product_links
 
 
     
     def _product_crawler(self):
         from products.models import Product, Picture, Price
 
-        
         # Return the price in the right format
         def _to_decimal(s):
             from decimal import Decimal as D
@@ -69,7 +68,7 @@ class Command(BaseCommand):
             try:
                 image_url =  product_soup.find('div', id='big_img_scroll').find('img').get('src')
                 #image_url = smart_urlquote(image_url)
-                print image_url
+                #print image_url
             except:
                 print "pass image"
                 pass
@@ -85,7 +84,7 @@ class Command(BaseCommand):
             # Get the description
             try:
                 description = product_soup.find('ul', class_='menu_accordeon').findAll('li')[-4].text
-                print description
+                #print description
             except:
                 description = 'NO DESCRIPTION'
                 pass
@@ -101,7 +100,7 @@ class Command(BaseCommand):
                 price1 = product_soup.find('div', class_='price price_big').text
                 price2 = (re.findall('\d+', price1 ))
                 price = "%s.%s" % (int(price2[0]), int(price2[1]))
-                print price
+                #print price
             except:
                 pass
             
@@ -154,7 +153,8 @@ class Command(BaseCommand):
 
         # Get the user
         try:
-            self.patron = Patron.objects.get(username='hugow')
+            self.patron = Patron.objects.get(username='cestmarobe')
+            #user pas encore crée ... a modifier si ce n'est pas "cestmarobe"
         except Patron.DoesNotExist:
             print "Can't find user 'cestmarobe'"
             return
