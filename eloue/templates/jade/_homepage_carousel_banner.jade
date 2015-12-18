@@ -1,8 +1,23 @@
 -load staticfiles
+style
+	.carousel-inner > .item { 
+		-webkit-filter: brightness(75%);
+		filter: brightness(75%);
+	}
+	.top-content {position: relative;}
+	h1 {
+		position: absolute;
+		bottom: 40%;
+		z-index: 100;
+		color: white;
+		text-align: center;
+		font-weight: 600;
+		right: 7%;
+	}
 
 .top-content
 #homepage-carousel-banner.carousel.slide(data-ride="carousel")
-	h3 Trouvez toutes les annonces de location près de chez vous
+	h1 Trouvez toutes les annonces de location près de chez vous
 	.carousel-inner
 		.item.active(style="background-image: url({% static 'img/banniere-hightech.jpg' %});")
 		.item(style="background-image: url({% static 'img/banniere-bricolage.jpg' %});")
