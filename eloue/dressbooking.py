@@ -21,7 +21,7 @@ NAVBAR_CATEGORIES = env('NAVBAR_CATEGORIES', [2862, 2883, 2900])
 
 PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', (
 	(("Femmme", NAVBAR_CATEGORIES[0], "dress"),
-    ("Homme", NAVBAR_CATEGORIES[1], "golf"),
+    ("Homme", NAVBAR_CATEGORIES[1], "group"),
     ("Enfant", NAVBAR_CATEGORIES[2], "basket")),
 ))
 

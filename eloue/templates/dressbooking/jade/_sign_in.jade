@@ -41,7 +41,7 @@
                         .col-xs-7
                             input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control
                             span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationForm.last_name.$dirty") Required field
-                    -var registration_form_fields = [["text", "Prénom", "first_name"], ["email", "Adresse email", "email"], ["text", "Username", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
+                    -var registration_form_fields = [["text", "Prénom", "first_name"], ["email", "Adresse email", "email"], ["text", "Pseudo", "username"],  ["password", "Mot de passe", "password"], ["password", "Confirmation de mot de passe", "confirmPassword"], ["text", "Code postal", "zipcode"]]
                     each type, placeholder, name in registration_form_fields
                         .form-group
                             if name == "zipcode"
