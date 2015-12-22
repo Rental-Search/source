@@ -41,6 +41,7 @@ block append head
 block append content-body
 
   -var is_pro = product.pro_owner
+  -var pro_online_booking = product.object.owner.pro_online_booking
   #fb-root
   if is_pro
     {% with product.object.owner as patron %}
@@ -103,6 +104,10 @@ block append content-body
                   {% endwith %}
         aside(data-ng-controller="BookingCtrl").col-sm-4
           {% if is_pro %}
+          {% if pro_online_booking %}
+          section.booking-form
+            include  ../jade/product_details/aside/_booking_form.jade
+          {% endif %}           
           section.owner-information
             include ../jade/product_details/aside/_owner_information
           {% else %}
