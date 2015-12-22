@@ -2,7 +2,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 .container
   {% cache 43200 'products_on_category_homepage' category.id  LANGUAGE_CODE %}
-  h3.text-center.indent-v-lg 1{{ products_on_category.count|intcomma }} {% trans "annonces de location" %} {{ category }} {% trans "dans toute la France" %}
+  h3.text-center.indent-v-lg {{ products_on_category.count|intcomma }} {% trans "annonces de location" %} {{ category }} {% trans "dans toute la France" %}
   {% endcache %}
 
   {% cache 43200 'category_homepage' category.slug LANGUAGE_CODE %}

@@ -14,7 +14,7 @@ class Command(BaseCommand):
 				{
 					'name': u'Robes',
 					'new_children': [
-						u'Robes de coktails',
+						u'Robes de cocktails',
 						u'Robes longues',
 						u'Robes orientales',
 						u'Robes de luxe',

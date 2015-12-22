@@ -12,11 +12,11 @@ section(ng-controller="AuthCtrl").container.signs-links
       a(href="/contactez-nous/"): b Contactez-nous
       | par mail
       
-    li.divide
+    li(style="width: 5% !important").divide
     li: span
-        | Vous êtes un loueur professionnel, découvrez des 
-        a(href="{% url 'subscription' %}"): b solutions de ventes adaptées
-    li.divide
+        | C'est votre première fois sur le site ? On vous explique 
+        a(href="{% url 'howto' %}"): b comment ça marche
+    li(style="width: 5% !important").divide
     li: span
       a(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b inscrivez-vous 
       | ou 
@@ -87,7 +87,7 @@ section(ng-controller="AuthCtrl").container.signs-links
 .framing
   section.container.search-form
     .table-cell
-      a(href="{% url 'home' %}"): img(src="{% static 'img/logo_dressbooking.png' %}", alt="dressbooking logo")
+      a(href="{% url 'home' %}"): img(src="{% static 'img/logo_dressbooking.png' %}", alt="dressbooking logo", height="40")
     .table-cell.main-cell
       form(action="{% url 'product_list' %}").input-group
         input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="Que voulez-vous louer ?", title="{% if form.cleaned_data.q %}Que voulez-vous louer ?{% endif %}").table-cell.main-cell.form-control.what-field

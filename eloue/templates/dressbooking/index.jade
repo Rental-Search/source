@@ -34,8 +34,8 @@ block append content-body
 
       main
         {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
-        section.professional-renter-content.framing: include ./jade/_professional_renter_content
         section.watch-video: include ./jade/_watch_video
+        section.professional-renter-content.framing: include ./jade/_professional_renter_content
         section.watch-video.framing: include ./jade/_in_paris
         {% endcache %}
 
