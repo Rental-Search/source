@@ -50,7 +50,8 @@ define([
 
             $scope.applyBookingDetails = function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
-                $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1;
+                $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1
+                	&& !bookingDetails.owner.is_professional;
                 $scope.showIncidentDescription = $scope.bookingDetails.state === "incident";
                 if (!$scope.currentUserPromise) {
                     $scope.currentUserPromise = UsersService.getMe();
