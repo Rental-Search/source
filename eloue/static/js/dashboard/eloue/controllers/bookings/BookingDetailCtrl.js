@@ -88,7 +88,8 @@ define([
                     if (commentList.length > 0) {
                         $scope.comment = commentList[0];
                     }
-                    $scope.showCommentForm = $scope.commentList.length === 0 && $scope.bookingDetails.state === "ended";
+                    $scope.showCommentForm = $scope.commentList.length === 0 && $scope.bookingDetails.state === "ended"
+                        && !($scope.isOwner && $scope.bookingDetail.is_professional);
                 });
 
                 if ($scope.showIncidentDescription) {
