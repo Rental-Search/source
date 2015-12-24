@@ -19,7 +19,9 @@ class Command(BaseCommand):
 						u'Robes orientales',
 						u'Robes de luxe',
 						u'Robes de mariage',
-						u'Robes de maternité'
+						u'Robes de maternité',
+						u'Robes de mariée',
+						u'Robes de soirée'
 					]
 				},
 				{
