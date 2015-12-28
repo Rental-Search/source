@@ -1,7 +1,14 @@
 -load staticfiles
 
+.top-content
 #homepage-carousel-banner.carousel.slide(data-ride="carousel")
-  .carousel-inner
-    .item.active(style="background-image: url({% static 'img/banner-1.jpg' %});")
-    .item(style="background-image: url({% static 'img/banner-2.jpg' %});")
-    .item(style="background-image: url({% static 'img/banner-3.jpg' %});")
+	h1.banner-title Trouvez toutes les annonces de location près de chez vous
+	.carousel-inner
+		.item.active(style="background-image: url({% static 'img/banniere-hightech.jpg' %});")
+		.item(style="background-image: url({% static 'img/banniere-bricolage.jpg' %});")
+		.item(style="background-image: url({% static 'img/banniere-hebergement.jpg' %});")
+		.item(style="background-image: url({% static 'img/banniere-jardinage.jpg' %});")
+		.item(style="background-image: url({% static 'img/banniere-loisirs.jpg' %});")
+		.item(style="background-image: url({% static 'img/banniere-mode.jpg' %});")
+		.item(style="background-image: url({% static 'img/banniere-reception.jpg' %});")
+		.item(style="background-image: url({% static 'img/banniere-voiture.jpg' %});")
