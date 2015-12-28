@@ -51,7 +51,7 @@ define([
             $scope.applyBookingDetails = function (bookingDetails) {
                 $scope.bookingDetails = bookingDetails;
                 $scope.allowDownloadContract = $.inArray($scope.bookingDetails.state, ["pending", "ongoing", "ended", "incident", "closed"]) !== -1
-                	&& !bookingDetails.owner.is_professional;
+                	&& !bookingDetails.owner.has_pro_subscription;
                 $scope.showIncidentDescription = $scope.bookingDetails.state === "incident";
                 if (!$scope.currentUserPromise) {
                     $scope.currentUserPromise = UsersService.getMe();
@@ -89,7 +89,7 @@ define([
                         $scope.comment = commentList[0];
                     }
                     $scope.showCommentForm = $scope.commentList.length === 0 && $scope.bookingDetails.state === "ended"
-                        && !($scope.isOwner && $scope.bookingDetail.is_professional);
+                        && !($scope.isOwner && $scope.bookingDetail.has_pro_subscription);
                 });
 
                 if ($scope.showIncidentDescription) {

@@ -25,7 +25,7 @@
                             Nous espérons que tout s’est déroulé selon votre convenance, et que vous êtes satisfaite(e) de votre location.<br>
 							{% endblocktrans %}
 							
-							{% if not booking.owner.is_professional %}
+							{% if not booking.owner.has_pro_subscription %}
 							{% blocktrans with site.domain as domain and protocol as protocol and comment_link as comment_link %}
                             <p style="margin-top: 15px; text-align: center;">
                                 <a href="{{ protocol }}://{{ domain }}{{ comment_link }}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">

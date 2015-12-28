@@ -9,7 +9,7 @@ Début de la location : {{ starting_at }}
 Durée de la location : {{ duration }}
 {% endblocktrans %}
 
-{% if not booking.owner.is_professional %} Vous trouverez en pièce jointe votre contrat de location. {% endif %} {% blocktrans with booking.borrower.get_full_name as borrower_name  and booking.borrower.phones.all|first as borrower_phone and booking.borrower.email as borrower_email and site.name as site_name %}
+{% if not booking.owner.has_pro_subscription %} Vous trouverez en pièce jointe votre contrat de location. {% endif %} {% blocktrans with booking.borrower.get_full_name as borrower_name  and booking.borrower.phones.all|first as borrower_phone and booking.borrower.email as borrower_email and site.name as site_name %}
 Il ne vous reste donc plus qu'à contacter {{ borrower_name }} pour effectuer la location.
  
 Numéro de téléphone : {{ borrower_phone }}

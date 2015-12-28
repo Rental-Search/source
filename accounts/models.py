@@ -256,6 +256,10 @@ class Patron(AbstractUser):
         if subscriptions:
             return subscriptions[0]
         return None
+    
+    @property
+    def has_pro_subscription(self):
+        return self.current_subscription is not None
 
     @property
     def is_verified(self):

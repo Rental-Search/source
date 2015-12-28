@@ -103,6 +103,7 @@ class UserSerializer(serializers.ModelSerializer):
     email = EmailField(required=False)
     is_professional = serializers.NullBooleanField(required=False)
     pro_online_booking = serializers.NullBooleanField(read_only=True)
+    has_pro_subscription = BooleanField(read_only=True)
     avatar = serializers.EncodedImageField(('thumbnail', 'profil', 'display', 'product_page'), required=False)
     default_address = NestedAddressSerializer(required=False)
     default_number = NestedPhoneNumberSerializer(required=False)
@@ -148,13 +149,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = models.Patron
         fields = (
             'id', 'email', 'company_name', 'username', 'first_name', 'last_name',
-            'is_professional', 'pro_online_booking', 'slug', 'avatar', 'default_address', 'default_number',
+            'is_professional', 'has_pro_subscription', 'pro_online_booking', 'slug', 'avatar', 'default_address', 'default_number',
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url', 'average_note',
             'date_joined', 'is_active', 'iban', 'password', 'is_subscribed', 'creditcard', 'comment_count', 'device_token',
         )
         public_fields = (
-            'id', 'company_name', 'username', 'is_professional', 'pro_online_booking', 'slug', 'avatar',
+            'id', 'company_name', 'username', 'is_professional', 'has_pro_subscription', 'pro_online_booking', 'slug', 'avatar',
             'default_address', 'default_number', 'about', 'school', 'work', 'hobby',
             'languages', 'url', 'date_joined', 'comment_count', 'average_note'
         )
