@@ -28,7 +28,7 @@
 								<li><strong>Adresse électronique :</strong> {{ borrower_email }}</li>
 							</ul>
 							{% endblocktrans %}
-							{% if not booking.owner.is_professional %}
+							{% if not booking.owner.has_pro_subscription %}
 							
                             {% blocktrans %} Vous trouverez en pièce jointe votre contrat de location.<br> {% endblocktrans %}
                             {% endif %}

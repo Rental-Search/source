@@ -262,7 +262,8 @@ class CommentSerializer(serializers.ModelSerializer):
     def full_clean(self, instance):
         instance = super(CommentSerializer, self).full_clean(instance)
         if instance and instance.booking:
-            if instance.type == COMMENT_TYPE_CHOICES.OWNER and instance.booking.owner.is_professional:
+            if instance.type == COMMENT_TYPE_CHOICES.OWNER \
+                    and instance.booking.owner.has_pro_subscription:
                 self._errors.update({
                     'author': _(u'Only borrowers can comment professional bookings')
                 })

@@ -7,7 +7,7 @@ La location de l’objet {{ summary }}, qui a débutée le {{ starting_at }} pou
 
 Nous espérons que tout s’est déroulé selon votre convenance.
 {% endblocktrans %}
-{% if not booking.owner.is_professional %}
+{% if not booking.owner.has_pro_subscription %}
 
 {% blocktrans with site.domain as domain %} 
     Maintentant que la réservation est terminée, vous pouvez la commenter : {{ protocol }}://{{ domain }}{{ comment_link }} 
