@@ -57,6 +57,10 @@
                             .col-sm-4
                                 input(type="text", name="city", placeholder="{% trans 'Ville' %} *", required, ng-model="currentUser.default_address.city").form-control
                                 span.text-danger(ng-show="publishAdForm.city.$error.required && !!publishAdSubmitted", translate="required_field")
+                        .row(ng-show="noPhone")
+                            .col-sm-12
+                                input(type="text", name="phoneNumber", placeholder="{% trans 'Téléphone' %} *", required, ng-model="currentUser.default_number.number").form-control
+                                span.text-danger(ng-show="!currentUser.default_number.number && !!publishAdSubmitted", translate="required_field")
                         .row
                             .col-sm-3
                                 input(ng-if="isRealEstate==true" "type="text", eloue-placeholder-fix, name="amount", placeholder="{% trans 'Prix à la nuit' %} *", required, ng-model="price.amount").form-control
