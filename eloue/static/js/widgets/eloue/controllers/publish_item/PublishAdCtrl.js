@@ -262,12 +262,12 @@ define([
                     var patchPromises = {};
                     
                     if ($scope.noAddress){
-                    	$scope.currentUser.default_address.country = "FR";
+                        $scope.currentUser.default_address.country = "FR";
                         patchPromises.default_address = AddressesService
-                            	.saveAddress($scope.currentUser.default_address)
-                            	.then(function(result){
-                            		$scope.currentUser.default_address = result;
-                            		UsersService.updateUser({
+                                .saveAddress($scope.currentUser.default_address)
+                                .then(function(result){
+                                    $scope.currentUser.default_address = result;
+                                    return UsersService.updateUser({
                                         default_address: $scope.addressesBaseUrl + result.id + "/"
                                     });
                             });
@@ -277,8 +277,8 @@ define([
                         patchPromises.default_number = PhoneNumbersService
                                 .savePhoneNumber($scope.currentUser.default_number)
                                 .then(function(result){
-                                	$scope.currentUser.default_number = result;
-                                	UsersService.updateUser({
+                                    $scope.currentUser.default_number = result;
+                                    return UsersService.updateUser({
                                         default_number: $scope.phonesBaseUrl + result.id + "/"
                                     });
                             });
