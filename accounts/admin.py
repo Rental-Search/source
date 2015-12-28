@@ -322,8 +322,8 @@ class ProAdmin(PatronAdmin):
     readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
     fieldsets = (
         (_('Company info'), {'fields': ('company_name', 'civility', 'first_name', 'last_name', 'username', 'is_professional', 'password')}),
-        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url')}),
-        (_('Boutique'), {'fields': ('store_link', 'pro_online_booking', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
+        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url', 'pro_online_booking')}),
+        (_('Boutique'), {'fields': ('store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
         (_('Permissions'), {
             'classes': ('collapse',),
             'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')

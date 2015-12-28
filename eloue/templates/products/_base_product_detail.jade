@@ -103,13 +103,13 @@ block append content-body
                   include ../jade/product_details/main/_comments
                   {% endwith %}
         aside(data-ng-controller="BookingCtrl").col-sm-4
-          {% if is_pro %}
+          {% if is_pro %}         
+          section.owner-information
+            include ../jade/product_details/aside/_owner_information
           {% if pro_online_booking %}
           section.booking-form
             include  ../jade/product_details/aside/_booking_form.jade
-          {% endif %}           
-          section.owner-information
-            include ../jade/product_details/aside/_owner_information
+          {% endif %}  
           {% else %}
           section.booking-form
             include  ../jade/product_details/aside/_booking_form.jade
