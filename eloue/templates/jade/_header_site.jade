@@ -1,19 +1,4 @@
 -load staticfiles i18n
-style
-  .bg-primary {
-    border-color: #f27e36 !important;
-    background-color: #f27e36 !important; }
-    .bg-primary:hover {
-      background-color: #e6610f !important;
-      border-color: #e6610f !important; }
-    img {vertical-align: text-center;}
-  .what-color {
-    border-radius: 0;
-    color: #9d9d9d !important;
-    font-weight: 500;
-    border-right-width: 0;
-    border-color: #c4c4c4;
-  }
   
 section.framing(ng-controller="CookiesCtrl")
     div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") {% trans "En poursuivant votre navigation, vous acceptez l’utilisation des cookies pour disposer de services et d’offres adaptées à vos centres d’intérêts. Pour en savoir plus,&nbsp;" %}
