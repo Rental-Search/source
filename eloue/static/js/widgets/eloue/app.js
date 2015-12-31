@@ -14,6 +14,7 @@ define([
         "ngCookies",
         "ipCookie",
         "ngResource",
-        "pascalprecht.translate"
+        "pascalprecht.translate",
+        "algoliasearch"
     ]);
 });

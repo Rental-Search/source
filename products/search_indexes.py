@@ -29,9 +29,29 @@ class LocationMultiValueField(indexes.SearchField):
             return None
 
 
+class AlgoliaLocationField(indexes.SearchField):
+    field_type = 'location'
+    
+    index_fieldname = "_geoloc"
+    
+    def prepare(self, obj):
+        from haystack.utils.geo import ensure_point
+
+        value = super(indexes.LocationField, self).prepare(obj)
+
+        if value is None:
+            return None
+
+        pnt = ensure_point(value)
+        pnt_lng, pnt_lat = pnt.get_coords()
+        return '{"lat":%s, "lng":%s}' % (pnt_lat, pnt_lng)
+
+
+
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
     location = indexes.LocationField(model_attr='address__position', null=True)
+    algolia_location = AlgoliaLocationField(model_attr='address__position', null=True)
     locations = LocationMultiValueField()
     categories = indexes.MultiValueField(faceted=True, null=True)
     created_at = indexes.DateTimeField(model_attr='created_at')
@@ -70,7 +90,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     agencies = indexes.BooleanField(default=False)
 
     need_insurance = indexes.BooleanField(default=True)
-
+    
     
     def prepare_locations(self, obj):
         agencies = obj.owner.pro_agencies.all()

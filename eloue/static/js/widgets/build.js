@@ -39,7 +39,8 @@
         "toastr": "../../bower_components/toastr/toastr",
         "formmapper": "../formmapper",
         "filesaver": "../FileSaver.min",
-        "angular-cookie": "../../bower_components/angular-cookie/angular-cookie"
+        "angular-cookie": "../../bower_components/angular-cookie/angular-cookie",
+        "algoliasearch": "../../bower_components/algoliasearch/dist/algoliasearch.angular"
     },
     shim: {
         "angular": {
@@ -79,7 +80,8 @@
         "jquery-mousewheel": ["jquery"],
         "custom-scrollbar": ["jquery", "jquery-mousewheel"],
         "toastr": ["jquery"],
-        "angular-cookie": ["angular"]
+        "angular-cookie": ["angular"],
+        "algoliasearch": ["angular"]
     },
     removeCombined: true,
     findNestedDependencies: true,

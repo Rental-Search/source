@@ -3,41 +3,41 @@
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
-  label.caption(for="what") {% trans "quoi" %}
-  input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
+  //label.caption(for="what") {% trans "quoi" %}
+  //input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
 
   p.caption {% trans "catégories" %}
   .clear-selector
-    select#category-selection.form-control(name="categories", form="")
-      option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}") {% trans "Toutes les catégories" %}
+    select#category-selection.form-control(name="categories", form="", ng-model="category")
+      option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}", value="all") {% trans "Toutes les catégories" %}
       if form.cleaned_data.q
         {% for value, count in facets.fields.categories %}
         if count and value
           {% with value|category as category %}
           if breadcrumbs.categorie
             if breadcrumbs.categorie.value == category.slug
-              option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
+              option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}", value="{{ category.slug }}") {{ category.name }}
             else
               if breadcrumbs.categorie.label
-                option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+                option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}", value="{{ category.slug }}") {{ category.name }}
               else
-                option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
+                option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}", value="{{ category.slug }}") {{ category.name }}
           else
-            option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
+            option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}", value="{{ category.slug }}") {{ category.name }}
           {% endwith %}
         {% endfor %}
       else
         for category in category_list
           if breadcrumbs.categorie
             if breadcrumbs.categorie.value == category.slug
-              option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
+              option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}", value="{{ category.slug }}") {{ category.name }}
             else
               if breadcrumbs.categorie.label
-                option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
+                option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}", value="{{ category.slug }}") {{ category.name }}
               else
-                option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
+                option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}", value="{{ category.slug }}") {{ category.name }}
           else
-            option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
+            option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}", value="{{ category.slug }}") {{ category.name }}
 
   label.caption(for="where") {% trans "où" %}
   input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
@@ -92,8 +92,8 @@
       span.flaticon.stroke.checkmark-1
     {% trans " Professionnels" %}
 
-  .indent-t-md
-    input(id="submitButton", type="submit", style="width: 100%", value="{% trans 'Filtrer' %}").btn.btn-lg.btn-advertise.bg-success
+//  .indent-t-md
+//    input(id="submitButton", type="submit", style="width: 100%", value="{% trans 'Filtrer' %}").btn.btn-lg.btn-advertise.bg-success
 
 //-
   p.caption champ 1
