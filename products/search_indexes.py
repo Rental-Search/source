@@ -29,11 +29,31 @@ class LocationMultiValueField(indexes.SearchField):
             return None
 
 
+class AlgoliaLocationField(indexes.LocationField):
+    field_type = 'location'
+    
+    index_fieldname = "_geoloc"
+    
+    def prepare(self, obj):
+        from haystack.utils.geo import ensure_point
+
+        value = super(indexes.LocationField, self).prepare(obj)
+
+        if value is None:
+            return None
+
+        pnt = ensure_point(value)
+        pnt_lng, pnt_lat = pnt.get_coords()
+        return {"lat":pnt_lat, "lng":pnt_lng}
+    
+
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
     location = indexes.LocationField(model_attr='address__position', null=True)
+    _geoloc = AlgoliaLocationField(model_attr='address__position', null=True)
     locations = LocationMultiValueField()
     categories = indexes.MultiValueField(faceted=True, null=True)
+    algolia_categories = indexes.MultiValueField(faceted=True, null=True)
     created_at = indexes.DateTimeField(model_attr='created_at')
     created_at_date = indexes.DateField(model_attr='created_at__date')
     description = indexes.EdgeNgramField(model_attr='description')
@@ -101,6 +121,21 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if category:
             qs = category.get_ancestors(ascending=False, include_self=True)
             return tuple(qs.values_list('slug', flat=True))
+    
+    def prepare_algolia_categories(self, obj):
+        category = obj._get_category()
+        if category:
+            cats = list(category\
+                        .get_ancestors(ascending=False, include_self=True)\
+                        .values_list('slug', flat=True))
+            cat = cats.pop(0)
+            cats_dict = {"lvl0":cat}
+            i = 1
+            for c in cats:
+                cat = "%s > %s" % (cat, c)
+                cats_dict["lvl%s" % i] = cat
+                i = i + 1
+            return cats_dict
     
     def prepare_ends_unavailable(self, obj):
         started_at = datetime.now()
@@ -172,4 +207,5 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return Product
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.select_related('category', 'address', 'owner')
+        ids = self.get_model().on_site.values_list('pk', flat=True)[:200]
+        return self.get_model().on_site.select_related('category', 'address', 'owner').filter(pk__in=ids)
