@@ -423,22 +423,6 @@ define([
 	                	$scope.results_per_page = result.hitsPerPage;
 	                	$scope.page = result.page;
 	                	
-	                	var WINDOW_SIZE = 10;
-	                	if (result.nbPages < WINDOW_SIZE){
-	                	    $scope.pages_range = new Array(result.nbPages);
-	                	    for (var i=0; i<result.nbPages; i++){
-	                	    	$scope.pages_range[i] = i;
-	                	    }
-	                	} else {
-	                	    var first = Math.max(0, result.page-WINDOW_SIZE/2);
-	                	    var last = Math.min(first+WINDOW_SIZE, result.nbPages);
-	                	    $log.debug("First: "+first);
-	                    	$log.debug("Last: "+last); 
-	                	    $scope.pages_range = new Array(last-first);
-	                	    for (var i=0; i<last-first; i++){
-	                	    	$scope.pages_range[i] = first + i;
-	                	    }
-	                	}
 	                	
 	                	$log.debug("Query: " + $scope.search_query);
 	                	$log.debug("Query params: ");
@@ -452,6 +436,27 @@ define([
                 	} else {
                 		$log.debug("No results");
                 	}
+                        var WINDOW_SIZE = 9;
+                        if (result.nbPages < WINDOW_SIZE){
+                            $scope.pages_range = new Array(result.nbPages);
+                            for (var i=0; i<result.nbPages; i++){
+                                $scope.pages_range[i] = i;
+                            }
+                        } else {
+                            if ($scope.page > result.nbPages/2){
+                                var last = Math.min(result.page+Math.ceil(WINDOW_SIZE/2), result.nbPages);    
+                                var first = Math.max(0, last-WINDOW_SIZE);
+                            } else {
+                                var first = Math.max(0, result.page-Math.floor(WINDOW_SIZE/2));
+                                var last = Math.min(first+WINDOW_SIZE, result.nbPages);    
+                            }
+                            $log.debug("First: "+first);
+                            $log.debug("Last: "+last); 
+                            $scope.pages_range = new Array(last-first);
+                            for (var i=0; i<last-first; i++){
+                                $scope.pages_range[i] = first + i;
+                            }
+                        }
                 }).catch(function(error){
                 	$log.debug(error);
                 });
