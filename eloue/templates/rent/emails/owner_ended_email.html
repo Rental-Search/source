@@ -12,7 +12,7 @@
                 <tr>
                     <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
                         <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
-                        	{% blocktrans with booking.owner.get_full_name as owner_name and booking.owner.username as owner and comment_link as comment_link %}
+                        	{% blocktrans with booking.owner.get_full_name as owner_name %}
 
                             Bonjour {{ owner_name }}<br><br>
 
@@ -21,17 +21,22 @@
 
                             {% include "rent/emails/partials/booking_details_email.html" %}
 
-                            {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
-
+                            {% blocktrans %}
                             Nous espérons que tout s’est déroulé selon votre convenance, et que vous êtes satisfaite(e) de votre location.<br>
-
+							{% endblocktrans %}
+							
+							{% if not booking.owner.has_pro_subscription %}
+							{% blocktrans with site.domain as domain and protocol as protocol and comment_link as comment_link %}
                             <p style="margin-top: 15px; text-align: center;">
                                 <a href="{{ protocol }}://{{ domain }}{{ comment_link }}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
                                     Commenter la réservation
                                 </a>
                             </p>
-
-                           	Si vous rencontrez un quelconque problème, nous vous invitons à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">signaler l'incident.</a><br><br>
+                            {% endblocktrans %}
+                            {% endif %}
+							
+							{% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
+							Si vous rencontrez un quelconque problème, nous vous invitons à nous <a href="{{ protocol }}://{{ domain }}{{ booking_url }}">signaler l'incident.</a><br><br>
 
                             A très vite,<br>
 
