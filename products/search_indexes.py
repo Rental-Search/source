@@ -55,6 +55,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     categories = indexes.MultiValueField(faceted=True, null=True)
     algolia_categories = indexes.MultiValueField(faceted=True, null=True)
     created_at = indexes.DateTimeField(model_attr='created_at')
+    created_at_timestamp = indexes.DateTimeField(model_attr='created_at')
     created_at_date = indexes.DateField(model_attr='created_at__date')
     description = indexes.EdgeNgramField(model_attr='description')
     city = indexes.CharField(model_attr='address__city', indexed=False)
@@ -136,6 +137,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
                 cats_dict["lvl%s" % i] = cat
                 i = i + 1
             return cats_dict
+        
+    def prepare_created_at_timestamp(self, obj):
+        return (obj.created_at-datetime(1970,1,1)).total_seconds()
     
     def prepare_ends_unavailable(self, obj):
         started_at = datetime.now()
