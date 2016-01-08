@@ -2,7 +2,7 @@
 
 {% verbatim %}
 
-.text-center: ul(ng-if="search_result_count").pagination
+.text-center: ul(ng-if="search_result_count", ng-cloak).pagination
   li
     a(ng-if="page > 0", href="#", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
     a(ng-if="page == 0").chevron.active: i.flaticon.stroke.left-2

@@ -49,7 +49,9 @@ require.config(
                 "formmapper": "../formmapper",
                 "filesaver": "../FileSaver.min",
                 "angular-cookie": "../../bower_components/angular-cookie/angular-cookie",
-                "algoliasearch": "../../bower_components/algoliasearch/dist/algoliasearch.angular"
+                "algoliasearch": "../../bower_components/algoliasearch/dist/algoliasearch.angular",
+                "algoliasearch-helper": "../../bower_components/algoliasearch-helper/dist/algoliasearch.helper",
+                "rzModule": "../../bower_components/angularjs-slider/dist/rzslider"
             },
             shim: {
                 "angular": {
@@ -90,7 +92,9 @@ require.config(
                 "custom-scrollbar": ["jquery", "jquery-mousewheel"],
                 "toastr": ["jquery"],
                 "angular-cookie": ["angular"],
-                "algoliasearch": ["angular"]
+                "algoliasearch": ["angular"],
+                "algoliasearch-helper": ["algoliasearch"],
+                "rzModule": ["angular"]
             }
         };
     })()
@@ -133,7 +137,9 @@ require([
     "../common/eloue/i18n",
     "eloue/config",
     "angular-cookie",
-    "algoliasearch"
+    "algoliasearch",
+    "algoliasearch-helper",
+    "rzModule"
 ], function ($, _, angular) {
     "use strict";
     $(function () {

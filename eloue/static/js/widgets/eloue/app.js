@@ -5,6 +5,7 @@ define([
     "angular-resource",
     "angular-translate",
     "angular-i18n",
+    "algoliasearch-helper",
     "../../common/eloue/commonApp"
 ], function (angular) {
     "use strict";
@@ -15,6 +16,7 @@ define([
         "ipCookie",
         "ngResource",
         "pascalprecht.translate",
-        "algoliasearch"
+        "algoliasearch",
+        "rzModule"
     ]);
 });

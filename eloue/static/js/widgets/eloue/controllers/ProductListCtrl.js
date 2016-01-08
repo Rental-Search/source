@@ -1,7 +1,8 @@
 define([
     "eloue/app",
-    "../../../common/eloue/services/MapsService"
-], function (EloueWidgetsApp) {
+    "../../../common/eloue/services/MapsService",
+    "algoliasearch-helper"
+], function (EloueWidgetsApp, MapsService, algoliasearchHelper) {
     "use strict";
     /* 
      * http://ericclemmons.com/angular/angular-trust-filter/
@@ -15,6 +16,7 @@ define([
         }
       }
     ]);
+    
     /**
      * Controller to run scripts necessary for product list page.
      */
@@ -26,23 +28,219 @@ define([
         "algolia",
         "$log",
         function ($scope, $window, $document, MapsService, algolia, $log) {
-        	
+           
             $scope.submitInProgress = false;
             
-//            $scope.search_query = "";
+            $scope.search_query = "";
             $scope.search_location = "";
             $scope.search_results = [];
             $scope.searchPage = 0;
-            $scope.searchResultsPerPage = 10;
+            $scope.searchResultsPerPage = 12;
             $scope.search_result_count = 0;
+            $scope.search_results_price_max = 1000;
+            $scope.search_results_price_min = 0;
             $scope.price_from = 0;
             $scope.price_to = 1000;
-            $scope.category = "all";
+//            $scope.category = "all";
             $scope.search_pro = false;
+            $scope.search_part = false;
+            $scope.search_pro_count = 0;
+            $scope.search_part_count = 0;
             
+            $scope.price_slider = {
+                min: 0,
+                max: 1000,
+                options: {
+                    floor: 0,
+                    ceil: 1000,
+                    onEnd: function(sliderId){
+                        $scope.submitForm();
+                    }
+                }
+            };
+            
+            var SEARCH_PARAMETERS = {
+                hierarchicalFacets: [{
+                    name: 'category',
+                    attributes: ['algolia_categories.lvl0',
+                                 'algolia_categories.lvl1',
+                                 'algolia_categories.lvl2'],
+                    sortBy: ['count:desc', 'name:asc']
+                }],
+                disjunctiveFacets: ["pro_owner",
+                                    "price"],
+                hitsPerPage: $scope.searchResultsPerPage
+            };
             
             var client = algolia.Client('F2G181ROXT', '1892770732420446ef9165ec76bdbdbd');
-            var index = client.initIndex('e-loue-test-products.product');
+            
+            $scope.search_ordering = "-created_at";
+            
+            $scope.search_index = 'e-loue-test-geo-multilvl-products.product';
+            
+            $scope.search = algoliasearchHelper(client, $scope.search_index, SEARCH_PARAMETERS);
+            
+            $scope.renderPagination = function(result){
+                $scope.page = Math.min(result.nbPages-1, Math.max(0, result.page));
+                var WINDOW_SIZE = 9;
+                if (result.nbPages < WINDOW_SIZE){
+                    $scope.pages_range = new Array(result.nbPages);
+                    for (var i=0; i<result.nbPages; i++){
+                        $scope.pages_range[i] = i;
+                    }
+                } else {
+                    if ($scope.page > result.nbPages/2){
+                        var last = Math.min(result.page+Math.ceil(WINDOW_SIZE/2), result.nbPages);    
+                        var first = Math.max(0, last-WINDOW_SIZE);
+                    } else {
+                        var first = Math.max(0, result.page-Math.floor(WINDOW_SIZE/2));
+                    }
+                    $scope.pages_range = new Array(WINDOW_SIZE);
+                    for (var i=0; i<WINDOW_SIZE; i++){
+                        $scope.pages_range[i] = first + i;
+                    }
+                }
+            };
+            
+            $scope.renderPriceSlider = function(result, state){
+                
+//                var facetResult = result.getFacetByName("price");
+//                
+//                var floor = state.getNumericRefinement("price", '>=') || facetResult.stats.min;
+//                var ceil = state.getNumericRefinement("price", '<=') || facetResult.stats.max;
+//                
+//                var min = Math.min(facetResult.stats.max, Math.max(facetResult.stats.min, min));
+//                var max = Math.min(facetResult.stats.max, Math.max(facetResult.stats.min, max));
+//                
+//                $scope.price_slider = {
+//                    min: min,
+//                    max: max,
+//                    options: {
+//                        floor: floor,
+//                        ceil: ceil,
+//                        onEnd: function(sliderId){
+//                            var lowerBound = state.getNumericRefinement("price", '>=');
+//                            lowerBound = lowerBound && lowerBound[0] || $scope.price_slider.options.floor;
+//                            if ($scope.price_slider.min !== lowerBound) {
+//                                $scope.search.removeNumericRefinement("price", '>=');
+//                                $scope.search.addNumericRefinement("price", '>=', $scope.price_slider.min);
+//                            }
+//                            var upperBound = state.getNumericRefinement("price", '<=');
+//                            upperBound = upperBound && upperBound[0] || $scope.price_slider.options.ceil;
+//                            if ($scope.price_slider.max !== upperBound) {
+//                                $scope.search.removeNumericRefinement("price", '<=');
+//                                $scope.search.addNumericRefinement("price", '<=', $scope.price_slider.max);
+//                            }
+//                            $scope.submitForm();
+//                        }
+//                    }
+//                };
+                
+            };
+            
+
+            $scope.renderRangeSlider = function(result){
+                
+            };
+            
+            $scope.renderSearchCategories = function(result){
+                if (result.hierarchicalFacets && result.hierarchicalFacets[0]) {
+                    $scope.category = result.hierarchicalFacets[0];    
+                }
+            };
+            
+            $scope.refineCategory = function(path) {
+                $scope.search.toggleRefinement("category", path).search();
+            };
+            
+            $scope.renderBreadcrumbs = function(state) {
+//                $scope.search_breadcrumbs = state.getHierarchicalFacetBreadcrumb("category");
+            };
+            
+            $scope.refineRenterPart = function(newVal){
+                $log.debug(newVal);
+                var state = $scope.search.getState();
+                if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
+                    $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
+                }
+                if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", false)){
+                    $scope.search.removeDisjunctiveFacetRefinement("pro_owner", false);
+                }
+                $scope.search.search();
+            };
+            
+            $scope.refineRenterPro = function(newVal){
+                $log.debug(newVal);
+                var state = $scope.search.getState();
+                if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", true)){
+                    $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
+                }
+                if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", true)){
+                    $scope.search.removeDisjunctiveFacetRefinement("pro_owner", true);
+                }
+                $scope.search.search();
+            };
+            
+            $scope.renderRenterTypes = function(result, state){
+                var facetResult = result.getFacetByName("pro_owner");
+                $scope.search_pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
+                $scope.search_part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
+//                $scope.search_pro = state.isDisjunctiveFacetRefined("pro_owner", true);
+//                $scope.search_part = state.isDisjunctiveFacetRefined("pro_owner", false);
+            };
+            
+            $scope.processResult = function(result, state){
+                $log.debug(result);
+                $scope.search_result_count = result.nbHits;
+
+                $log.debug($scope.search_pro+' '+state.isDisjunctiveFacetRefined("pro_owner", true));
+                $log.debug($scope.search_part+' '+state.isDisjunctiveFacetRefined("pro_owner", false));
+                
+                if ($scope.search_result_count){
+                    $scope.search_results = result.hits;
+                    
+//                    $scope.price_slider.options.min = Math.min($scope.price_slider.min, result.facets_stats.price.min);
+//                    $scope.price_slider.options.max = Math.max($scope.price_slider.max, result.facets_stats.price.max);
+                    
+                    $scope.pages_count = result.nbPages;
+                    $scope.results_per_page = result.hitsPerPage;
+                    $scope.page = result.page;
+                    
+                    //$scope.renderResults(result);
+                    $scope.renderPagination(result);
+                    $scope.renderSearchCategories(result);
+                    $scope.renderPriceSlider(result, state);
+                    $scope.renderBreadcrumbs(state);
+                    $scope.renderRenterTypes(result, state);
+//                    $log.debug($scope.search.getHierarchicalFacetBreadcrumb("category"));
+                    
+//                    $scope.renderRangeSlider(result);
+                    
+                    
+//                    $scope.updatePriceSlider();
+                    
+//                    $log.debug("Query: " + $scope.search_query);
+////                    $log.debug("Query params: ");
+////                    $log.debug(params);
+//                    $log.debug("X, Y, R: " + $scope.search_cordinates+ " " + $scope.search_radius);
+//                    $log.debug("Hits count: " + $scope.search_result_count);
+//                    $log.debug("Price: " + $scope.price_from + " to " + $scope.price_to);
+//                    $log.debug("Pro: " + $scope.search_pro);
+//                    $log.debug("Pages count: "+$scope.pages_count);
+//                    $log.debug("Pages range: "+$scope.pages_range);
+                } else {
+                    $log.debug("No results");
+                }
+                
+                $scope.$apply();
+            };
+            
+            $scope.processError = function(error){
+                $log.debug(error);
+            };
+            
+            $scope.search.on('result', $scope.processResult)
+                .on('error', $scope.processError);
 
             /**
              * Callback function for Google maps script loaded event.
@@ -78,7 +276,7 @@ define([
                         function (result, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
                                 map.setCenter(result[0].geometry.location);
-                            	$log.debug("Location: " + result[0].geometry.location);
+                                $log.debug("Location: " + result[0].geometry.location);
                                 $scope.search_cordinates = result[0].geometry.location;
                                 var circle = new google.maps.Circle({
                                     map: map,
@@ -195,30 +393,30 @@ define([
             $scope.activateCategoryAndSortSelector = function () {
                 var detailSearchForm = $("#detail-search"), categorySelection = $("#category-selection"),
                     sortSelector = $("#sort-selector");
-                if (detailSearchForm && categorySelection) {
-                    categorySelection.change(function () {
-                        var location = $(this).find(":selected").attr("location");
-                        var location = $(this).find(":selected").attr("value");
-//                        $scope.category = location;
-                        $log.debug("Category: "+$scope.category);
-                        detailSearchForm.attr("action", location);
-                    });
-                }
+//                if (detailSearchForm && categorySelection) {
+//                    categorySelection.change(function () {
+//                        var location = $(this).find(":selected").attr("location");
+//                        var location = $(this).find(":selected").attr("value");
+////                        $scope.category = location;
+//                        $log.debug("Category: "+$scope.category);
+//                        detailSearchForm.attr("action", location);
+//                    });
+//                }
                 if (sortSelector) {
                     sortSelector.change(function (e) {
                         if (detailSearchForm) {
-//                        	$scope.submitForm();
-                        	$scope.newSearch();
+//                            $scope.submitForm();
+                            $scope.newSearch();
 //                            detailSearchForm.submit();
                         }
                     });
                 }
                 // Submit form on category change.
-                categorySelection.change(function(){
-//                	$scope.submitForm();
-                	$scope.newSearch();
-//                    detailSearchForm.submit();
-                })
+//                categorySelection.change(function(){
+////                    $scope.submitForm();
+//                    $scope.newSearch();
+////                    detailSearchForm.submit();
+//                })
             };
 
             $scope.activatePriceSlider = function () {
@@ -267,6 +465,13 @@ define([
                 }
             };
 
+            $scope.updatePriceSlider = function(){
+                var priceSlider = $("#price-slider");
+                priceSlider.slider("option", "min", $scope.search_results_price_min);
+                priceSlider.slider("option", "max", $scope.search_results_price_max);    
+                $log.debug("Price: "+$scope.search_results_price_min+' - '+$scope.search_results_price_max);
+            };
+            
             $scope.setMarkers = function (map, locations, markerId) {
                 var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
                     product, image, imageHover, myLatLng, marker;
@@ -392,96 +597,38 @@ define([
             };
             
             $scope.submitForm = function() {
-            	
-            	var facetFilters = ["pro:"+$scope.search_pro];
-            	
-            	if ($scope.category != "all"){
-            		facetFilters.push("categories:"+$scope.category);
-            	}
-            	
-            	var params = {
-//                  	  attributesToRetrieve: ['url', 'summary', 'django_id'],
-                  	  page: $scope.searchPage,
-                  	  hitsPerPage: $scope.searchResultsPerPage,
-                  	  facets: "*",
-                  	  maxValuesPerFacet: 10,
-                  	  numericFilters: ["price>="+$scope.price_from, "price<="+$scope.price_to],
-                  	  facetFilters: facetFilters
-//                  	  aroundLatLng: $scope.search_location,
-//                  	  aroundRadius: $scope.search_radius
-                  	};
-            	
-                index.search($scope.search_query, params).then(function(result){
-                	$log.debug(result);
-                	$scope.search_result_count = result.nbHits;
-                	
-                	if ($scope.search_result_count){
-                		$scope.search_results = result.hits;
-                		$scope.search_results_price_max = result.facets_stats.price.max;
-	                	$scope.search_results_price_min = result.facets_stats.price.min;
-	                	$scope.pages_count = result.nbPages;
-	                	$scope.results_per_page = result.hitsPerPage;
-	                	$scope.page = result.page;
-	                	
-	                	
-	                	$log.debug("Query: " + $scope.search_query);
-	                	$log.debug("Query params: ");
-	                	$log.debug(params);
-	                	$log.debug("X, Y, R: " + $scope.search_cordinates+ " " + $scope.search_radius);
-	                	$log.debug("Hits count: " + $scope.search_result_count);
-	                	$log.debug("Price: " + $scope.price_from + " to " + $scope.price_to);
-	                	$log.debug("Pro: " + $scope.search_pro);
-	                	$log.debug("Pages count: "+$scope.pages_count);
-	                	$log.debug("Pages range: "+$scope.pages_range);
-                	} else {
-                		$log.debug("No results");
-                	}
-                        var WINDOW_SIZE = 9;
-                        if (result.nbPages < WINDOW_SIZE){
-                            $scope.pages_range = new Array(result.nbPages);
-                            for (var i=0; i<result.nbPages; i++){
-                                $scope.pages_range[i] = i;
-                            }
-                        } else {
-                            if ($scope.page > result.nbPages/2){
-                                var last = Math.min(result.page+Math.ceil(WINDOW_SIZE/2), result.nbPages);    
-                                var first = Math.max(0, last-WINDOW_SIZE);
-                            } else {
-                                var first = Math.max(0, result.page-Math.floor(WINDOW_SIZE/2));
-                                var last = Math.min(first+WINDOW_SIZE, result.nbPages);    
-                            }
-                            $log.debug("First: "+first);
-                            $log.debug("Last: "+last); 
-                            $scope.pages_range = new Array(last-first);
-                            for (var i=0; i<last-first; i++){
-                                $scope.pages_range[i] = first + i;
-                            }
-                        }
-                }).catch(function(error){
-                	$log.debug(error);
-                });
-//                $("#detail-search").submit();
+                
+                $scope.search.setQuery($scope.search_query)
+                    .setCurrentPage($scope.searchPage)
+                    .search();
+                
             };
 
             $scope.newSearch = function(){
-            	$scope.searchPage = 0;
-            	$scope.submitForm();
+                $scope.searchPage = 0;
+                $scope.submitForm();
             }
             
             $scope.nextPage = function(){
-            	$log.debug("Going to next page");
-            	$scope.setPage(Math.min($scope.page + 1, $scope.pages_count-1));
+                $log.debug("Going to next page");
+                $scope.setPage(Math.min($scope.page + 1, $scope.pages_count-1));
             };
 
             $scope.prevPage = function(){
-            	$log.debug("Going to prev page");
-            	$scope.setPage(Math.max(0, $scope.page - 1));
+                $log.debug("Going to prev page");
+                $scope.setPage(Math.max(0, $scope.page - 1));
             };
             
             $scope.setPage = function(page){
-            	$log.debug("Going to page " + page);
-            	$scope.searchPage = page;
-            	$scope.submitForm();
+                $log.debug("Going to page " + page);
+                $scope.searchPage = page;
+                $scope.submitForm();
+            };
+            
+            $scope.setOrdering = function(ordering){
+                $scope.search
+                    .setIndex(!!ordering ? $scope.search_index+"_"+ordering : $scope.search_index)
+                    .search();
             };
             
             $scope.disableForm = function() {
@@ -503,6 +650,7 @@ define([
             $scope.activateLayoutSwitcher();
             $scope.activateCategoryAndSortSelector();
             $scope.activatePriceSlider();
-            $scope.activateRenterSelect();
+//            $scope.activateRenterSelect();
+//            $scope.submitForm();
         }]);
 });
