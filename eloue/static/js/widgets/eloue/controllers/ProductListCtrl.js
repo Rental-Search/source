@@ -29,35 +29,12 @@ define([
         "$log",
         function ($scope, $window, $document, MapsService, algolia, $log) {
            
-            $scope.submitInProgress = false;
-            
-            $scope.search_query = "";
-            $scope.search_location = "";
-            $scope.search_results = [];
-            $scope.searchPage = 0;
             $scope.searchResultsPerPage = 12;
-            $scope.search_result_count = 0;
-            $scope.search_results_price_max = 1000;
-            $scope.search_results_price_min = 0;
-            $scope.price_from = 0;
-            $scope.price_to = 1000;
-//            $scope.category = "all";
-            $scope.search_pro = false;
-            $scope.search_part = false;
-            $scope.search_pro_count = 0;
-            $scope.search_part_count = 0;
             
-            $scope.price_slider = {
-                min: 0,
-                max: 1000,
-                options: {
-                    floor: 0,
-                    ceil: 1000,
-                    onEnd: function(sliderId){
-                        $scope.submitForm();
-                    }
-                }
-            };
+            
+            /* 
+             * Algolia config 
+             * */
             
             var SEARCH_PARAMETERS = {
                 hierarchicalFacets: [{
@@ -79,6 +56,100 @@ define([
             $scope.search_index = 'e-loue-test-geo-multilvl-products.product';
             
             $scope.search = algoliasearchHelper(client, $scope.search_index, SEARCH_PARAMETERS);
+            
+            
+            /* 
+             * Filter refinement 
+             * */
+            
+            $scope.refinePrices = function(sliderId){
+                
+                var state = $scope.search.getState();
+                var newVal, oldVal;
+                
+                newVal = $scope.price_slider.min;
+                if (state.isNumericRefined("price", '>=')){
+                    oldVal = state.getNumericRefinement("price", '>=')[0];
+                    if (oldVal != newVal) {
+                        $scope.search.removeNumericRefinement("price", '>=');
+                        $scope.search.addNumericRefinement("price", '>=', newVal);
+                    }
+                } else {
+                    $scope.search.addNumericRefinement("price", '>=', newVal);
+                }
+                
+                newVal = $scope.price_slider.max;
+                if (state.isNumericRefined("price", '<=')){
+                    oldVal = state.getNumericRefinement("price", '<=')[0];
+                    if (oldVal != newVal) {
+                        $scope.search.removeNumericRefinement("price", '<=');
+                        $scope.search.addNumericRefinement("price", '<=', newVal);
+                    }
+                } else {
+                    $scope.search.addNumericRefinement("price", '<=', newVal);
+                }
+                
+                $scope.submitForm();
+                
+            };
+            
+            $scope.refineRenterPart = function(newVal){
+                var state = $scope.search.getState();
+                if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
+                    $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
+                }
+                if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", false)){
+                    $scope.search.removeDisjunctiveFacetRefinement("pro_owner", false);
+                }
+                $scope.search.search();
+            };
+            
+            $scope.refineRenterPro = function(newVal){
+                var state = $scope.search.getState();
+                if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", true)){
+                    $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
+                }
+                if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", true)){
+                    $scope.search.removeDisjunctiveFacetRefinement("pro_owner", true);
+                }
+                $scope.search.search();
+            };
+            
+            $scope.refineCategory = function(path) {
+                $scope.search.toggleRefinement("category", path).search();
+            };
+            
+            
+            /*
+             * Pagination & ordering 
+             */
+            
+            $scope.nextPage = function(){
+                $log.debug("Going to next page");
+                $scope.setPage(Math.min($scope.page + 1, $scope.pages_count-1));
+            };
+
+            $scope.prevPage = function(){
+                $log.debug("Going to prev page");
+                $scope.setPage(Math.max(0, $scope.page - 1));
+            };
+            
+            $scope.setPage = function(page){
+                $log.debug("Going to page " + page);
+                $scope.searchPage = page;
+                $scope.submitForm();
+            };
+            
+            $scope.setOrdering = function(ordering){
+                $scope.search
+                    .setIndex(!!ordering ? $scope.search_index+"_"+ordering : $scope.search_index)
+                    .search();
+            };
+            
+            
+            /* 
+             * Filter rendering
+             * */
             
             $scope.renderPagination = function(result){
                 $scope.page = Math.min(result.nbPages-1, Math.max(0, result.page));
@@ -104,40 +175,23 @@ define([
             
             $scope.renderPriceSlider = function(result, state){
                 
-//                var facetResult = result.getFacetByName("price");
-//                
-//                var floor = state.getNumericRefinement("price", '>=') || facetResult.stats.min;
-//                var ceil = state.getNumericRefinement("price", '<=') || facetResult.stats.max;
-//                
-//                var min = Math.min(facetResult.stats.max, Math.max(facetResult.stats.min, min));
-//                var max = Math.min(facetResult.stats.max, Math.max(facetResult.stats.min, max));
-//                
-//                $scope.price_slider = {
-//                    min: min,
-//                    max: max,
-//                    options: {
-//                        floor: floor,
-//                        ceil: ceil,
-//                        onEnd: function(sliderId){
-//                            var lowerBound = state.getNumericRefinement("price", '>=');
-//                            lowerBound = lowerBound && lowerBound[0] || $scope.price_slider.options.floor;
-//                            if ($scope.price_slider.min !== lowerBound) {
-//                                $scope.search.removeNumericRefinement("price", '>=');
-//                                $scope.search.addNumericRefinement("price", '>=', $scope.price_slider.min);
-//                            }
-//                            var upperBound = state.getNumericRefinement("price", '<=');
-//                            upperBound = upperBound && upperBound[0] || $scope.price_slider.options.ceil;
-//                            if ($scope.price_slider.max !== upperBound) {
-//                                $scope.search.removeNumericRefinement("price", '<=');
-//                                $scope.search.addNumericRefinement("price", '<=', $scope.price_slider.max);
-//                            }
-//                            $scope.submitForm();
-//                        }
-//                    }
-//                };
+                var facetResult = result.getFacetByName("price");
+                var ref;
+                var statsMin = facetResult.stats.min, statsMax = facetResult.stats.max;
+                
+                $scope.price_slider.options.floor = $scope.price_slider.min = statsMin;
+                if (state.isNumericRefined("price", '>=')){
+                    ref = state.getNumericRefinement("price", '>=')[0];
+                    $scope.price_slider.min = Math.max(statsMin, ref);
+                }
+                
+                $scope.price_slider.options.ceil = $scope.price_slider.max = statsMax;
+                if (state.isNumericRefined("price", '<=')){
+                    ref = state.getNumericRefinement("price", '<=')[0];
+                    $scope.price_slider.max = Math.min(statsMax, ref);
+                }
                 
             };
-            
 
             $scope.renderRangeSlider = function(result){
                 
@@ -148,37 +202,9 @@ define([
                     $scope.category = result.hierarchicalFacets[0];    
                 }
             };
-            
-            $scope.refineCategory = function(path) {
-                $scope.search.toggleRefinement("category", path).search();
-            };
-            
+                       
             $scope.renderBreadcrumbs = function(state) {
 //                $scope.search_breadcrumbs = state.getHierarchicalFacetBreadcrumb("category");
-            };
-            
-            $scope.refineRenterPart = function(newVal){
-                $log.debug(newVal);
-                var state = $scope.search.getState();
-                if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
-                    $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
-                }
-                if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", false)){
-                    $scope.search.removeDisjunctiveFacetRefinement("pro_owner", false);
-                }
-                $scope.search.search();
-            };
-            
-            $scope.refineRenterPro = function(newVal){
-                $log.debug(newVal);
-                var state = $scope.search.getState();
-                if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", true)){
-                    $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
-                }
-                if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", true)){
-                    $scope.search.removeDisjunctiveFacetRefinement("pro_owner", true);
-                }
-                $scope.search.search();
             };
             
             $scope.renderRenterTypes = function(result, state){
@@ -188,6 +214,10 @@ define([
 //                $scope.search_pro = state.isDisjunctiveFacetRefined("pro_owner", true);
 //                $scope.search_part = state.isDisjunctiveFacetRefined("pro_owner", false);
             };
+            
+            /* 
+             * Process search results 
+             * */
             
             $scope.processResult = function(result, state){
                 $log.debug(result);
@@ -233,6 +263,8 @@ define([
                 }
                 
                 $scope.$apply();
+                
+                $window.googleMapsLoaded();
             };
             
             $scope.processError = function(error){
@@ -241,11 +273,48 @@ define([
             
             $scope.search.on('result', $scope.processResult)
                 .on('error', $scope.processError);
+            
+            
+            $scope.resetQuery = function(){
+                $scope.search_query = "";
+            };
+            
+            $scope.resetFilters = function(){
+                
+            };
+            
+            $scope.submitInProgress = false;
+            
+            $scope.search_location = "";
+            $scope.search_results = [];
+            $scope.searchPage = 0;
+            $scope.search_result_count = 0;
+            $scope.search_results_price_max = 1000;
+            $scope.search_results_price_min = 0;
+            $scope.price_from = 0;
+            $scope.price_to = 1000;
+            $scope.search_pro = false;
+            $scope.search_part = false;
+            $scope.search_pro_count = 0;
+            $scope.search_part_count = 0;
+            $scope.price_slider = {
+                min: 0,
+                max: 1000,
+                options: {
+                    floor: 0,
+                    ceil: 1000,
+                    onEnd: $scope.refinePrices
+                }
+            };
+            
 
             /**
              * Callback function for Google maps script loaded event.
              */
             $window.googleMapsLoaded = function () {
+                
+                $log.debug("Google maps loaded");
+                
                 $("#geolocate").formmapper({
                     details: "form"
                 });
@@ -609,27 +678,7 @@ define([
                 $scope.submitForm();
             }
             
-            $scope.nextPage = function(){
-                $log.debug("Going to next page");
-                $scope.setPage(Math.min($scope.page + 1, $scope.pages_count-1));
-            };
 
-            $scope.prevPage = function(){
-                $log.debug("Going to prev page");
-                $scope.setPage(Math.max(0, $scope.page - 1));
-            };
-            
-            $scope.setPage = function(page){
-                $log.debug("Going to page " + page);
-                $scope.searchPage = page;
-                $scope.submitForm();
-            };
-            
-            $scope.setOrdering = function(ordering){
-                $scope.search
-                    .setIndex(!!ordering ? $scope.search_index+"_"+ordering : $scope.search_index)
-                    .search();
-            };
             
             $scope.disableForm = function() {
                 setTimeout(function() {
