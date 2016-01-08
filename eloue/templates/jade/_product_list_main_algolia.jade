@@ -4,7 +4,7 @@ ol.product-layout
     {% trans "jour" as by_day %} 
     {% verbatim %}
     
-    li(ng-if="search_result_count", ng-repeat="product in search_results track by product.django_id", id="marker-{{ product.django_id }}", locationY="{{ product.location.y }}", locationX="{{ product.location.x }}", name="{{ product.summary }}", ng-cloak) 
+    li(ng-if="search_result_count", ng-repeat="product in search_results track by product.django_id", id="marker-{{ product.django_id }}", locationY="{{ product._geoloc.lat }}", locationX="{{ product._geoloc.lng }}", name="{{ product.summary }}", ng-cloak) 
 
       .section-body
         .thumbnail-img

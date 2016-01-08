@@ -426,6 +426,7 @@ define([
                                 lng: item.attr("locationY"),
                                 zIndex: Number(item.attr("id").replace("marker-", ""))
                             };
+                        $log.debug(product);
                         products.push(product);
                     });
 
