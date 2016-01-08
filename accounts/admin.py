@@ -206,7 +206,7 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ('patron', 'address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
     list_filter = ('country',)
     save_on_top = True
-    search_fields = ('address1', 'address2', 'zipcode', 'city')
+    search_fields = ('address1', 'address2', 'zipcode', 'city', 'patron__username')
     fieldsets = (
         (None, {'fields': ('address1', 'address2', 'zipcode', 'city')}),
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
