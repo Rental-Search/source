@@ -14,6 +14,7 @@ from eloue.admin import CurrentSiteAdmin
 from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency, ProReport, Ticket, Campaign
 from accounts.forms import PatronChangeForm, PatronCreationForm
 from products.models import Product
+from django.core.urlresolvers import reverse, reverse_lazy
 
 log = logbook.Logger('eloue')
 
@@ -319,10 +320,12 @@ class ProAdmin(PatronAdmin):
     list_display = ('company_name', 'closed_ticket', 'last_report_date', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
     list_filter = ()
     inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
+#     readonly_fields = ('import_products_link', 'store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
     readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
     fieldsets = (
         (_('Company info'), {'fields': ('company_name', 'civility', 'first_name', 'last_name', 'username', 'is_professional', 'password')}),
         (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url', 'pro_online_booking')}),
+#         (_('Boutique'), {'fields': ('import_products_link', 'store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
         (_('Boutique'), {'fields': ('store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
         (_('Permissions'), {
             'classes': ('collapse',),
@@ -351,6 +354,13 @@ class ProAdmin(PatronAdmin):
                 pass
         formset.save_m2m()
 
+#     def import_products_link(self, obj):
+#         url = reverse("admin:products_product_import") + "?pro=%s" % (obj.pk, )
+#         import_link = '<a href="%s" target="_blank">Importer des annonces</a>' % (url, )
+#         return import_link
+#     import_products_link.allow_tags = True
+#     import_products_link.short_description = _(u"import d'annonces")
+    
     def store_link(self, obj):
         store_link = '<a href="%s" target="_blank">Voir la boutique</a>' % obj.get_absolute_url()
         return store_link   
