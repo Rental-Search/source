@@ -206,7 +206,7 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ('patron', 'address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
     list_filter = ('country',)
     save_on_top = True
-    search_fields = ('address1', 'address2', 'zipcode', 'city')
+    search_fields = ('address1', 'address2', 'zipcode', 'city', 'patron__username')
     fieldsets = (
         (None, {'fields': ('address1', 'address2', 'zipcode', 'city')}),
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
@@ -322,7 +322,7 @@ class ProAdmin(PatronAdmin):
     readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
     fieldsets = (
         (_('Company info'), {'fields': ('company_name', 'civility', 'first_name', 'last_name', 'username', 'is_professional', 'password')}),
-        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url')}),
+        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url', 'pro_online_booking')}),
         (_('Boutique'), {'fields': ('store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
         (_('Permissions'), {
             'classes': ('collapse',),

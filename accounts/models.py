@@ -64,11 +64,13 @@ class Patron(AbstractUser):
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(_(u"Nom de l'entreprise"), null=True, blank=True, max_length=255)
     subscriptions = models.ManyToManyField('ProPackage', through='Subscription')
-
+    
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=True, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
     new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=True, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
     is_professional = models.NullBooleanField(_('professionnel'), blank=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
+    pro_online_booking = models.NullBooleanField(_(u"Location en ligne"), default=None, 
+                                             help_text=_(u"Précise si la location en ligne est disponible"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False, auto_now=True)
     affiliate = models.CharField(null=True, blank=True, max_length=10)
     slug = models.SlugField(unique=True, db_index=True)
@@ -254,6 +256,10 @@ class Patron(AbstractUser):
         if subscriptions:
             return subscriptions[0]
         return None
+    
+    @property
+    def has_pro_subscription(self):
+        return self.current_subscription is not None
 
     @property
     def is_verified(self):
