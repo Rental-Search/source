@@ -29,14 +29,37 @@ block append content-body
         section.insurances.framing
           include ./jade/_insurances
         {% endcache %}
-        section.product-list
+        section.how-it-works
+          include ./how_it_works/_top_content
+          .container.indent-t-md.indent-b-md
+            .row
+              .col-sm-6: div(style="background-color:#419bbf; border-color: #419bbf; border-radius: 15px").pad-v-xs.indent-r-sm
+                h3(style="text-align: center; border-radius: 15px").text-white
+                  b Je suis 
+                  b propriétaire, 
+                  br
+                  b J’ai des tenues à mettre en location,
+                  br
+                  b Je peux gagner de l’argent !
+              .col-sm-6: div(style="border-radius: 15px").pad-v-xs.indent-l-sm.bg-primary
+                h3(style="text-align: center").text-white
+                  b Je suis 
+                  b.text-secondary locataire,
+                  br
+                  b Je veux louer des tenues,
+                  br
+                  b Je peux économiser de l’argent !
+        section.product-list.framing
           include ./jade/_product_list
 
       main
         {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
-        section.watch-video.framing: include ./jade/_watch_video
-        section.professional-renter-content: include ./jade/_professional_renter_content
-        section.watch-video.framing: include ./jade/_in_paris
+        section.watch-video: include ./jade/_watch_video
+        section.professional-renter-content.framing: include ./jade/_professional_renter_content
+        {% endcache %}
+        {% cache 43200 'homepage_city_list_static' LANGUAGE_CODE %}
+        section.location-list
+          include ./jade/_location_list
         {% endcache %}
 
 

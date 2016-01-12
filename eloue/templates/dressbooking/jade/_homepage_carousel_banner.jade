@@ -1,7 +1,9 @@
 -load staticfiles
 
 #homepage-carousel-banner.carousel.slide(data-ride="carousel")
-  .carousel-inner
-    .item.active(style="background-image: url({% static 'img/dressbooking_banner-0.jpg' %});")
-    .item(style="background-image: url({% static 'img/dressbooking_banner-1.jpg' %});")
-    .item(style="background-image: url({% static 'img/dressbooking_banner-2.jpg' %});")
+	h1.banner-title Bienvenue dans votre nouveau dressing <br>
+		span Louez facilement des tenues de cérémonies haut-de-gamme près de chez vous partout en France
+	.carousel-inner
+		.item.active(style="background-image: url({% static 'img/dressbooking_banner-0.jpg' %});")
+		.item(style="background-image: url({% static 'img/dressbooking_banner-1.jpg' %});")
+		.item(style="background-image: url({% static 'img/dressbooking_banner-2.jpg' %});")
