@@ -11,7 +11,7 @@ from .views import (
 )
 
 urlpatterns = patterns('',
-    url(r'^categorie/(?P<slug>[-\w]+)/$', CategoryDetailView.as_view(), name='category_homepage'),
+    url(r'^%s/(?P<slug>[-\w]+)/$' % _('categorie'), CategoryDetailView.as_view(), name='category_homepage'),
     url(r'^%s/(?P<campagn_name>\w+)/$' % _('deposer'), LandingPagePublishItemView.as_view(), name='landing_page_publish_item'),
     url(r'^%s/category/$' % _('ajouter'), SuggestCategoryView.as_view(), name='suggest_category'),
     url(r'^%s/$' % _('ajouter'), PublishItemView.as_view(), name='publish_item'),

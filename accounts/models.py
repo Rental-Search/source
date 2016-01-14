@@ -64,11 +64,13 @@ class Patron(AbstractUser):
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(_(u"Nom de l'entreprise"), null=True, blank=True, max_length=255)
     subscriptions = models.ManyToManyField('ProPackage', through='Subscription')
-
+    
     activation_key = models.CharField(null=True, blank=True, max_length=40)
     is_subscribed = models.BooleanField(_(u'newsletter'), default=True, help_text=_(u"Précise si l'utilisateur est abonné à la newsletter"))
     new_messages_alerted = models.BooleanField(_(u'alerts if new messages come'), default=True, help_text=_(u"Précise si l'utilisateur est informé par email s'il a nouveaux messages"))
     is_professional = models.NullBooleanField(_('professionnel'), blank=True, default=None, help_text=_(u"Précise si l'utilisateur est un professionnel"))
+    pro_online_booking = models.NullBooleanField(_(u"Location en ligne"), default=None, 
+                                             help_text=_(u"Précise si la location en ligne est disponible"))
     modified_at = models.DateTimeField(_('date de modification'), editable=False, auto_now=True)
     affiliate = models.CharField(null=True, blank=True, max_length=10)
     slug = models.SlugField(unique=True, db_index=True)
@@ -244,11 +246,8 @@ class Patron(AbstractUser):
             current_subscription.subscription_ended = datetime.datetime.now()
             current_subscription.save()
             subscription = Subscription.objects.create(patron=self, propackage=propackage)
-            message = create_alternative_email('accounts/emails/professional_subscription_changed', context, settings.DEFAULT_FROM_EMAIL, [self.email])
         else:
             subscription = Subscription.objects.create(patron=self, propackage=propackage)
-            message = create_alternative_email('accounts/emails/professional_subscribed', context, settings.DEFAULT_FROM_EMAIL, [self.email])
-        message.send()
         return subscription
 
     @property
@@ -257,6 +256,10 @@ class Patron(AbstractUser):
         if subscriptions:
             return subscriptions[0]
         return None
+    
+    @property
+    def has_pro_subscription(self):
+        return self.current_subscription is not None
 
     @property
     def is_verified(self):
@@ -742,7 +745,15 @@ class Ticket(models.Model):
     comment = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class Campaign(models.Model):
+    pro = models.ForeignKey(Patron, related_name='campaigns')
+    month = models.DateField()
+    comment = models.TextField(null=True, blank=True)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 class Notification(models.Model):
+    """Functionnality for pro"""
     patron = models.ForeignKey(Patron)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(editable=False, null=True, blank=True)

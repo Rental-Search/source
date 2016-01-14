@@ -1,41 +1,41 @@
--load product
+-load product i18n
 
 .block-tab.ng-hide(data-ng-controller="CalendarCtrl")#tabs-availability
     form
       {% monthcalendar %}
       .row.indent-t-sm.indent-b-sm
         .col-xs-7
-          h3 Sélectionner le mois
+          h3 {% trans "Sélectionner le mois" %}
         .col-xs-5
           .without-search.select-gradient
               select(ng-model="selectedMonthAndYear", ng-change="updateCalendar()", eloue-chosen, opts="monthOptions").ng-hide(ng-show="true")
-                  {% verbatim %}
-                  option(ng-repeat="month in monthOptions", value="{{month.value}}") {{month.name}}
-                  {% endverbatim %}
+                  option(ng-repeat="month in monthOptions", value="{% verbatim %}{{month.value}}{% endverbatim %}") {% verbatim %}{{month.name}}{% endverbatim %}
       .row
         .col-xs-6
           table.calendar.text-center
             thead
               tr
                 {% for week_day in week_days %}
-                td {{ week_day|date:'D' }}
+                td {% verbatim %}{{ week_day|date:'D' }}{% endverbatim %}
                 {% endfor %}
             tbody.ng-hide(ng-show="true")
                 {% verbatim %}
                 tr(ng-repeat="week in weeks")
-                    td(ng-repeat="day in week.weekDays", class="{{day.isBooked && showBookings ? 'booking' : ''}}") {{day.dayOfMonth}}
+                    td(ng-repeat="day in week.weekDays", class="{% verbatim %}{{day.isBooked && showBookings ? 'booking' : ''}}{% endverbatim %}") {% verbatim %}{{day.dayOfMonth}}{% endverbatim %}
                 {% endverbatim %}
         .col-sm-6
+          {% blocktrans %}
           p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo tempore, facere reprehenderit commodi fugit quas, delectus laudantium temporibus nam vel voluptatem sit repellat velit. Modi commodi maiores ex adipisci quam aspernatur dolor, molestiae, ipsa nostrum pariatur, necessitatibus quis illum enim.
+          {% endblocktrans %}
       {% endmonthcalendar %}
       .row.indent-t-sm
         .col-xs-4: .checkbox
           label(for="inform")
             input(type="checkbox", ng-model="showUnavailable", ng-change="onShowUnavailable()")#inform
             span.flaticon.stroke.checkmark
-          | Indisponiblités
+          | {% trans "Indisponiblités" %}
         .col-xs-4: .checkbox
           label(for="reserve")
             input(type="checkbox", ng-model="showBookings", ng-change="onShowBookings()")#reserve
             span.flaticon.stroke.checkmark
-          | Réservations
+          | {% trans "Réservations" %}

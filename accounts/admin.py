@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.sites.models import Site
 
 from eloue.admin import CurrentSiteAdmin
-from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency, ProReport, Ticket
+from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency, ProReport, Ticket, Campaign
 from accounts.forms import PatronChangeForm, PatronCreationForm
 from products.models import Product
 
@@ -39,9 +39,24 @@ class ProAgencyInline(admin.TabularInline):
 class SubscriptionInline(admin.StackedInline):
     model = Subscription
     extra = 0
+    readonly_fields = ('slimpay_code', 'slimpay_link',)
     fieldsets = (
         (None, {'fields': ('seller', 'propackage', 'signed_at', 'subscription_started', 'subscription_ended','amount', 'fee', 'free', 'number_of_free_month', 'payment_type', 'comment')}),
+        ("Slimpay", {'fields': ('slimpay_code', 'slimpay_link',)}),
     )
+
+    def slimpay_code(self, obj):
+        try:
+            slimpay = obj.patron.slimpaymandateinformation_set.latest('pk')
+            return slimpay.RUM
+        except:
+            return None
+
+    def slimpay_link(self, obj):
+        slimpay_link = '<a href="/edit/accounts/slimpay/%s/"">Ajouter un iban</a>' % obj.patron.pk
+        return slimpay_link
+
+    slimpay_link.allow_tags = True
 
 class ProReportInline(admin.TabularInline):
     readonly_fields = ('agent',)
@@ -55,10 +70,20 @@ class ProTicketInline(admin.TabularInline):
     extra = 0
     fk_name = 'pro'
 
+class ProCampaignInline(admin.TabularInline):
+    readonly_fields = ('created_at',)
+    model = Campaign
+    extra = 0
+    fk_name = 'pro'
+
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
+    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link', 'products_count')
     fieldsets = (
+        (_('Liens'), {'fields': (('profil_link'),
+                                 ('owner_products','owner_car_products','owner_realestate_products', 'products_count'),
+                                 'messages_link','bookings_link',)}),
         (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
         (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
@@ -83,6 +108,50 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     inlines = [AddressInline, PhoneNumberInline, OpeningTimesInline, ProAgencyInline]
     actions = ['export_as_csv', 'send_activation_email', 'index_user_products', 'unindex_user_products']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
+
+
+    def bookings_link(self, obj):
+        email = obj.email
+        bookings_link = '<a href="/edit/rent/booking?q=%s" target="_blank">Lien vers les bookings</a>' % email
+        return _(bookings_link)
+    bookings_link.allow_tags = True
+    bookings_link.short_description = _(u"Bookings")
+
+    def profil_link(self, obj):
+        profil_link = '<a href="%s" target="_blank">Lien vers le profil e-loue</a>' % obj.get_absolute_url()
+        return _(profil_link)   
+    profil_link.allow_tags = True
+    profil_link.short_description = _(u"Profil")
+
+    def products_count(self, obj):
+        return obj.products.all().count()
+    products_count.short_description = _(u"Nombre d'annonce")
+
+    def owner_products(self, obj):
+        owner_product = '<a href="/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.pk
+        return _(owner_product)
+    owner_products.allow_tags = True
+    owner_products.short_description = _(u"Objets")
+
+    def owner_car_products(self, obj):
+        owner_car_product = '<a href="/edit/products/carproduct/?q=%s" target="_blank">Lien vers les annonces de voiture</a>' % obj.pk
+        return _(owner_car_product)
+    owner_car_products.allow_tags = True
+    owner_car_products.short_description = _(u"Voitures")
+
+    def owner_realestate_products(self, obj):
+        owner_realestate_product = '<a href="/edit/products/realestateproduct/?q=%s" target="_blank">Lien vers les annonces de logement</a>' % obj.pk
+        return _(owner_realestate_product)
+    owner_realestate_products.allow_tags = True
+    owner_realestate_products.short_description = _(u"Logements")
+
+    def messages_link(self, obj):
+        username = obj.username
+        messages_link = '<a href="/edit/django_messages/message/?q=%s" target="_blank">Lien vers les messages</a>' % username
+        return _(messages_link)
+    messages_link.allow_tags = True
+    messages_link.short_description = _(u"Messages")
+    
 
     def queryset(self, request):
         current_site = Site.objects.get_current()
@@ -137,7 +206,7 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ('patron', 'address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
     list_filter = ('country',)
     save_on_top = True
-    search_fields = ('address1', 'address2', 'zipcode', 'city')
+    search_fields = ('address1', 'address2', 'zipcode', 'city', 'patron__username')
     fieldsets = (
         (None, {'fields': ('address1', 'address2', 'zipcode', 'city')}),
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
@@ -249,11 +318,11 @@ class ProAgencyAdmin(admin.ModelAdmin):
 class ProAdmin(PatronAdmin):
     list_display = ('company_name', 'closed_ticket', 'last_report_date', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
     list_filter = ()
-    inlines = [SubscriptionInline, ProReportInline, ProTicketInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
+    inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
     readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
     fieldsets = (
         (_('Company info'), {'fields': ('company_name', 'civility', 'first_name', 'last_name', 'username', 'is_professional', 'password')}),
-        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url')}),
+        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url', 'pro_online_booking')}),
         (_('Boutique'), {'fields': ('store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
         (_('Permissions'), {
             'classes': ('collapse',),
@@ -290,7 +359,7 @@ class ProAdmin(PatronAdmin):
 
     def products_count(self, obj):
         return obj.products.all().count()
-    products_count.short_description = _(u"noubre d'annonce")
+    products_count.short_description = _(u"nombre d'annonce")
 
     def edit_product_link(self, obj):
         edit_product_link = '<a href="/edit/products/product/?q=%s" target="_blank">Editer les annonces</a>' % obj.pk

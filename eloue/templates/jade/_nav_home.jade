@@ -6,22 +6,16 @@ ul.without-spaces
     li.spacer
     {% ifequal category_url request.path %}
     li.center-text: a(style="font-weight: 900 ! important;" href="{{ category_url }}", title="{% trans 'location'%} {{ category.name }}")
-      |{% trans "Location" %}
-      br
       {{ category.name|capfirst }}
     {% else %}
     li.center-text: a(href="{{ category_url }}", title="{% trans 'location'%} {{ category.name }}")
-      |{% trans "Location" %}
-      br
       {{ category.name|capfirst }}
     {% endifequal %}
   li.spacer
   li.center-text.dropdown
     a(data-toggle="dropdown").dropdown-toggle
       | {% trans "Autres" %}
-      br
-      | {% trans "Locations" %}
     ul(role="menu", aria-labelledby="dLabel").dropdown-menu
       each category in category_list|slice:"8:"
         li.content: a(href="{{ category.get_absolute_url }}", title="{% trans 'location'%} {{ category.name }}")
-          |{% if category.slug == 'location-saisonniere' %}{{ category.name|capfirst }}{% else %}Location {{ category.name|capfirst }}{% endif %}
+          |{% if category.slug == 'location-saisonniere' %}{{ category.name|capfirst }}{% else %}{{ category.name|capfirst }}{% endif %}

@@ -1,0 +1,8 @@
+.container.text-center.indent-v-lg
+  h3.text-uppercase ils nous font confiance
+
+  -var partners = ["loxam", "go_sport", "inter_sport", "leroy_merlin"]
+  ul.nav.nav-pills.partner-list.row.indent-l-md
+    each partner in partners
+      li: a: span(class="partner-#{partner}")
+  p.text-gray-strong ...&nbsp;et plus de 500 autres loueurs professionnels

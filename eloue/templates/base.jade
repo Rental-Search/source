@@ -3,6 +3,12 @@
 doctype 5
 html(lang="fr")
   head
+    <meta name="apple-itunes-app" content="app-id=427538545">
+    <meta name="google-play-app" content="app-id=com.eloue.appandroid">
+    <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/ios-icon.jpeg">
+    
+
+
     style [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide { display: none !important; }
     block variables
       include jade/variables
@@ -13,11 +19,10 @@ html(lang="fr")
       meta(name="viewport", content="width=device-width, initial-scale=1.0")
       meta(name="description", content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}")
       link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
-
     block styles
       link(rel="stylesheet", href="http{% if request.is_secure %}s{% endif %}://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
       {% compressed_css "extrastyles" %}
-
+      {% compressed_css "smartbanner_styles" %}
     block scripts
       {% compressed_js "public_js" %}
     script
@@ -38,9 +43,6 @@ html(lang="fr")
         analytics.page()
       }}();
 
-    script
-      (function(){var c=encodeURIComponent,s="SCRIPT",d=document,e=d.createElement(s),t=d.getElementsByTagName(s)[0],p="t="+c(d.title||"")+"&u="+c(d.location.href||"")+"&r="+c(d.referrer||"");e.src="https://api.autopilothq.com/anywhere/4fd1743ca0b0494ab62a862694f0925b0f506b051bd64c4789d8d5260c7dc2af?"+p;e.type="text/javascript";e.async=true;t.parentNode.insertBefore(e, t);})();
-      
   body
     input(id="eloue_url_redirect_facebook", value="{% url 'login_facebook' %}", type="hidden")
     block content-body
@@ -67,6 +69,17 @@ html(lang="fr")
               'where': document.getElementById('geolocate').value
             });
           }
+      //Facebook Pixel Code
+      script
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+        document,'script','//connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '631094037033631');
+        fbq('track', "PageView");
+      noscript
+        <img height="1" width="1" style="display:none"src="https://www.facebook.com/tr?id=631094037033631&ev=PageView&noscript=1"/>
     #ngModals
         eloue-login-form
         eloue-registration-form

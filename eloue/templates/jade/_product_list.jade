@@ -1,13 +1,16 @@
 -load humanize facets product i18n
 
 .container
-  h3.text-center.indent-v-lg 1{{ products_on_site.count|intcomma }} {% trans "annonces de location dans toute la France" %}
+  h3.text-center.indent-v-lg {% trans "Annonces de location dans toute la France" %}
   ul.product-list.row
     each product in product_list
       li.col-sm-3: .product-item
         .product-image
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}")
-          span.badge.price {{ product.price|price:"&euro; /jour" }}
+          if product.price
+            span.badge.price {{ product.price|currency }} /{% trans "jour" %}
+          else
+            span.badge.price {% trans "Sur devis" %}
           if product.pro_owner
             span.badge-pro pro
         .product-info

@@ -1,38 +1,37 @@
-h2 Livraison
-{% verbatim %}
-p(ng-show="noAddress").text-black Vous devez mettre une adresse dans le formulaire ci-dessus
+-load i18n
+h2 {% trans "Livraison" %}
+p(ng-show="noAddress").text-black {% trans "Vous devez mettre une adresse dans le formulaire ci-dessus" %}
 .row(ng-show="noAddress")
     .col-sm-12
-        input(type="text", name="street", placeholder="Adresse *", ng-model="currentUser.default_address.street", required).form-control
+        input(type="text", name="street", placeholder="{% trans 'Adresse' %} *", ng-model="currentUser.default_address.street", required).form-control
         span.text-danger(ng-show="bookingForm.street.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-show="noAddress")
     .col-sm-6
-        input(type="text", name="zipcode", placeholder="Code postal *", ng-model="currentUser.default_address.zipcode", required).form-control
+        input(type="text", name="zipcode", placeholder="{% trans 'Code postal' %} *", ng-model="currentUser.default_address.zipcode", required).form-control
         span.text-danger(ng-show="bookingForm.zipcode.$error.required && bookingSubmitted", translate="required_field")
     .col-sm-6
-        input(type="text", name="city", placeholder="Ville *", ng-model="currentUser.default_address.city", required).form-control
+        input(type="text", name="city", placeholder="{% trans 'Ville' %} *", ng-model="currentUser.default_address.city", required).form-control
         span.text-danger(ng-show="bookingForm.city.$error.required && bookingSubmitted", translate="required_field")
 .row(ng-show="noAddress")
     .col-sm-8
     .col-sm-4
-        button(type="button", class="{{submitInProgress ? 'loading' : ''}}", ng-click="saveDefaultAddress()").btn.bg-success.indent-t Enregistrer
+        button(type="button", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}", ng-click="saveDefaultAddress()").btn.bg-success.indent-t {% trans "Enregistrer" %}
 
 #point-contatiner.indent-b-md(style="max-height: 300px;")
-    p(ng-show="!noAddress").text-black Sélectionner un point relais ci-dessous :
+    p(ng-show="!noAddress").text-black {% trans "Sélectionner un point relais ci-dessous" %} :
     .zebra.indent-xs-t-
         a(href="", ng-show="shippingPointsRequestInProgress").btn.bg-gray-light-hover.text-white.loading2 &nbsp;&nbsp;&nbsp;
         label(ng-repeat="point in borrowerShippingPoints").zebra-row
-            input(type="radio", name="pickup", value="{{point.site_id}}", ng-model="point.selected", ng-change="pointSelected('{{point.site_id}}')")
+            input(type="radio", name="pickup", value="{% verbatim %}{{point.site_id}}{% endverbatim %}", ng-model="point.selected", ng-change="pointSelected('{% verbatim %}{{point.site_id}}{% endverbatim %}')")
             .zebra-row-wrapper
                 .zebra-col
                     span.radio-indicator
                 .zebra-col
                     span.sprite-pickup-logo
                 .zebra-col.main-cell: p
-                    | {{point.name}}
+                    | {% verbatim %}{{point.name}}{% endverbatim %}
                     br
-                    | {{point.address}}
+                    | {% verbatim %}{{point.address}}{% endverbatim %}
                     br
-                    | {{point.zipcode}} {{point.city}}
-                .zebra-col: p.indent-r-md +{{point.price}}&euro;
-        {% endverbatim %}
+                    | {% verbatim %}{{point.zipcode}}{% endverbatim %} {% verbatim %}{{point.city}}{% endverbatim %}
+                .zebra-col: p.indent-r-md +{% verbatim %}{{point.price}}{% endverbatim %}{% trans "&euro;" %}

@@ -1,0 +1,46 @@
+{% extends "base_email.html"%}
+
+{% load i18n %}
+
+{% block title_email %}{% trans "Demande de réservation" %}{% endblock %}
+
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+		<table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.username as borrower %}
+
+                            Bonjour {{ owner_name }},<br><br>
+
+                            {{ borrower }} souhaite louer l’un de vos objets.<br>
+                            Voici les détails de la réservation :<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+
+                            {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.borrower.phones.all|first as borrower_phone and booking.borrower.email as borrower_email %}
+
+                            Voici les coordonnées du client pour le contacter rapidement :<br>
+
+                            <ul>
+								<li><strong>Numéro de téléphone :</strong> {{ borrower_phone }}</li>
+								<li><strong>Adresse électronique :</strong> {{ borrower_email }}</li>
+							</ul>
+
+                            A très vite,<br>
+
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+	</td>
+</tr>
+{% endblock %}

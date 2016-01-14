@@ -150,6 +150,7 @@ define([
                 startDate: Date.today().add(1).days().toString("dd/MM/yyyy")
             });
             $scope.duration = "0 jour";
+            $scope.bookingPriceCurrency = "";
             $scope.bookingPrice = 0;
             $scope.shippingPrice = 0;
             //not show zero price before request ended
@@ -262,8 +263,9 @@ define([
              */
             $scope.parseProductAvailabilityResponse = function (result) {
                 var price = result.total_price;
-                price = price.replace("€", "").replace("\u20ac", "").replace("Eu", "").replace(",", ".").replace(" ", "");
+                price = price.replace("€", "").replace("\u20ac", "").replace("Eu", "").replace(",", ".").replace(" ", "").replace("kr", "");
                 price = Number(price);
+                $scope.bookingPriceCurrency = result.total_price;
                 $scope.duration = result.duration;
                 $scope.pricePerDay = result.unit_value;
                 $scope.bookingPrice = price;

@@ -1,0 +1,77 @@
+extends ./base
+-load compressed prefixed_cache i18n facets
+
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
+
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "homepage_styles" %}
+
+block append content-body
+  .container-flex(data-ng-controller="HomePageCtrl")
+    -var categories_map = {2856: [2857, 2872, 2866], 2879: [2892, 2885, 2880], 2896: [2897, 2901]}
+    -var cities_list = [["Paris", "Marseille", "Lyon"], ['Toulouse', 'Bordeaux', 'Montpellier'], ['Lille', 'Nice', 'Nantes']]
+
+    header.header-site
+      include ./jade/_header_site
+    nav.nav-home.container
+      include ./jade/_nav_home
+
+    block content-homepage
+      article
+        {% cache 43200 'homepage_banner_static' LANGUAGE_CODE %}
+        section.banner
+          include ./jade/_homepage_carousel_banner
+        {% endcache %}
+        {% cache 43200 'homepage_insurance_static' LANGUAGE_CODE %}
+        section.insurances.framing
+          include ./jade/_insurances
+        {% endcache %}
+        section.how-it-works
+          .container
+            h3.text-center.indent-t-lg.indent-b-lg.text-uppercase
+              avec e-loue, vous pouvez gagner de l’argent et économiser de l’argent ! 
+              br
+              br
+              b c’est pratique, c’est simple, et c’est 100% sécurisé
+          .container.indent-t-md.indent-b-md
+            .row
+              .col-sm-6: div(style="background-color:#419bbf; border-color: #419bbf; border-radius: 15px").pad-v-xs.indent-r-sm
+                h3(style="text-align: center; border-radius: 15px").text-white
+                  a(href="{% url 'publish_item' %}")
+                    b Je suis 
+                    b propriétaire, 
+                    br
+                    b J’ai des tenues à mettre en location,
+                    br
+                    b Je peux gagner de l’argent !
+              .col-sm-6: div(style="border-radius: 15px").pad-v-xs.indent-l-sm.bg-primary
+                h3(style="text-align: center").text-white
+                  a(href="{% facet_url breadcrumbs 'sort' '' %}")
+                    b Je suis 
+                    b.text-secondary locataire,
+                    br
+                    b Je veux louer des tenues,
+                    br
+                    b Je peux économiser de l’argent !
+        section.product-list.framing
+          include ./jade/_product_list
+
+      main
+        {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
+        section.watch-video: include ./jade/_watch_video
+        section.professional-renter-content.framing: include ./jade/_professional_renter_content
+        {% endcache %}
+        {% cache 43200 'homepage_city_list_static' LANGUAGE_CODE %}
+        section.location-list
+          include ./jade/_location_list
+        {% endcache %}
+
+
+    footer
+      {% cache 43200 'homepage_footer_static' LANGUAGE_CODE %}
+      section.footer-links: include ./jade/_footer_links
+      section.rss: include ./jade/_rss
+      {% endcache %}

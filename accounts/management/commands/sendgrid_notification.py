@@ -69,23 +69,25 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 
-		date = datetime.datetime.now()
+		today = datetime.datetime.now()
+		d2 = today - timedelta(days=2)
+		d3 = today - timedelta(days=3)
+		d5 = today - timedelta(days=5)
 
-		bookings_ended = Booking.objects.filter(ended_at__day=date.day, ended_at__month=date.month, ended_at__year=date.year, state=BOOKING_STATE.ENDED).annotate(borrower_rentals_count=Count('borrower__rentals')).filter(borrower_rentals_count=1).values('borrower__email')
-		bookings_rejected = Booking.objects.filter(ended_at__day=date.day, ended_at__month=date.month, ended_at__year=date.year, state=BOOKING_STATE.REJECTED).annotate(borrower_rentals_count=Count('borrower__rentals')).filter(borrower_rentals_count=1).values('borrower__email')
-		bookings_outdated = Booking.objects.filter(started_at__day=date.day, started_at__month=date.month, started_at__year=date.year, state=BOOKING_STATE.OUTDATED).annotate(borrower_rentals_count=Count('borrower__rentals')).filter(borrower_rentals_count=1).values('borrower__email')
-		bookings_canceled = BookingLog.objects.filter(created_at__day=date.day, created_at__month=date.month, created_at__year=date.year, target_state=BOOKING_STATE.CANCELED).annotate(borrower_rentals_count=Count('booking__borrower__rentals')).filter(borrower_rentals_count=1).values('booking__borrower__email')
+		bookings_ended = Booking.objects.filter(ended_at__day=d5.day, ended_at__month=d5.month, ended_at__year=d5.year, state=BOOKING_STATE.ENDED).annotate(borrower_rentals_count=Count('borrower__rentals')).filter(borrower_rentals_count=1).values('borrower__email')
+		bookings_rejected = Booking.objects.filter(ended_at__day=d2.day, ended_at__month=d2.month, ended_at__year=d2.year, state=BOOKING_STATE.REJECTED).annotate(borrower_rentals_count=Count('borrower__rentals')).filter(borrower_rentals_count=1).values('borrower__email')
+		bookings_outdated = Booking.objects.filter(started_at__day=d2.day, started_at__month=d2.month, started_at__year=d2.year, state=BOOKING_STATE.OUTDATED).annotate(borrower_rentals_count=Count('borrower__rentals')).filter(borrower_rentals_count=1).values('borrower__email')
+		bookings_canceled = BookingLog.objects.filter(created_at__day=d2.day, created_at__month=d2.month, created_at__year=d2.year, target_state=BOOKING_STATE.CANCELED).annotate(borrower_rentals_count=Count('booking__borrower__rentals')).filter(borrower_rentals_count=1).values('booking__borrower__email')
 		
-		products_complete = Product.objects.filter(pictures__isnull=False, created_at__day=date.day, created_at__month=date.month, created_at__year=date.year).exclude(description="").annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
-		products_miss_pic = Product.objects.filter(pictures__isnull=True, created_at__day=date.day, created_at__month=date.month, created_at__year=date.year).exclude(description="").annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
-		products_miss_desc = Product.objects.filter(description="", pictures__isnull=False, created_at__day=date.day, created_at__month=date.month, created_at__year=date.year).annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
-		products_empty = Product.objects.filter(description="", pictures__isnull=True, created_at__day=date.day, created_at__month=date.month, created_at__year=date.year).annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
+		products_complete = Product.objects.filter(pictures__isnull=False, created_at__day=d5.day, created_at__month=d5.month, created_at__year=d5.year).exclude(description="").annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
+		products_miss_pic = Product.objects.filter(pictures__isnull=True, created_at__day=d3.day, created_at__month=d3.month, created_at__year=d3.year).exclude(description="").annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
+		products_miss_desc = Product.objects.filter(description="", pictures__isnull=False, created_at__day=d3.day, created_at__month=d3.month, created_at__year=d3.year).annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
+		products_empty = Product.objects.filter(description="", pictures__isnull=True, created_at__day=d3.day, created_at__month=d3.month, created_at__year=d3.year).annotate(owner_products_count=Count('owner__products')).filter(owner_products_count=1).values('owner__email')
 		
-		patron_inactives = Patron.objects.filter(rentals__isnull=True, products__isnull=True, date_joined__gte=datetime.date.today() - timedelta(days=7))
+		patron_inactives = Patron.objects.filter(rentals__isnull=True, products__isnull=True, date_joined__day=d5.day, date_joined__month=d5.day, date_joined__year=d5.year)
 
 
 		notifications = [
-			
 			{"name": "loc1", "recipient": [booking['borrower__email'] for booking in bookings_ended], "template_id": "02bfa8c5-db75-4e36-84ac-56e957f3792a"},
 			{"name": "locdr1_rejected", "recipient": [booking['borrower__email'] for booking in bookings_rejected], "template_id": "3ee35da2-d85a-439e-b69e-a6e51861f634"},
 			{"name": "locdr1_outdated", "recipient": [booking['borrower__email'] for booking in bookings_outdated], "template_id": "3ee35da2-d85a-439e-b69e-a6e51861f634"},
@@ -98,6 +100,7 @@ class Command(BaseCommand):
 
 			{"name": "ina1", "recipient": [patron.email for patron in patron_inactives], "template_id": "eaa65d7d-9908-4d44-9f80-6ccd6d0c90d6"}
 		]
+
 
 
 		while len(notifications) > 0:

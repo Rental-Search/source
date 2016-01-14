@@ -105,18 +105,20 @@ TIME_ZONE = 'Europe/Paris'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-fr')
+LANGUAGE_CODE = env("LANGUAGE_CODE", 'fr-FR')
 
 ugettext = lambda s: s
 LANGUAGES = (
-    ('fr-fr', ugettext('Français')),
+    ('fr', ugettext('Francais')),
+    ('en', ugettext('English')),
+    ('da', ugettext('Danish'))
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
-DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14])
+DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14, 15])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -155,6 +157,7 @@ if not DEBUG:
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
     'django.core.context_processors.request',
@@ -211,6 +214,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.flatpages',
     'django.contrib.redirects',
@@ -230,7 +234,7 @@ INSTALLED_APPS = (
     'queued_search',
     'django_messages',
     'oauth_provider',
-#    'oauth2_provider', # django-oauth-toolkit
+    #'oauth2_provider', # django-oauth-toolkit
     'provider', 'provider.oauth2', # django-oauth2-provider
     'rest_framework',
     # 'faq',
@@ -244,6 +248,7 @@ INSTALLED_APPS = (
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
     'core',
 )
+
 if DEBUG_TOOLBAR:
     INSTALLED_APPS += ('debug_toolbar',)
 
@@ -430,6 +435,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'smartbanner_styles': {
+        'source_filenames': (
+            'css/jquery.smartbanner.css',
+        ),
+        'output_filename': 'css/jquery.smartbanner.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
 }
 
 PIPELINE_JS = {
@@ -471,91 +485,7 @@ PIPELINE_JS = {
             #'async': False,
         },
     },
-    # 'application': {
-    #     'source_filenames': (
-    #         'js/jquery-1.7.1.min.js',
-    #         'js/jquery-ui-1.8.17.custom.min.js',
-    #         'js/jquery.ui.datepicker-fr.js',
-    #         'js/modernizr.js',
-    #         'js/mustache.js',
-    #         'js/chosen.jquery.min.js',
-    #         'js/bootstrap-alert.js',
-    #         'js/jquery.cookie.js',
-    #         'js/jquery.cycle.all.latest.js',
-    #         'js/application2.js',
-    #     ),
-    #     'output_filename': 'js/application2r.js',
-    #     'extra_context': {
-    #         'defer': False,
-    #     },
-    # },
-    # 'proapplibs': {
-    #     'source_filenames': (
-    #         'proapp/js/libs/jquery.js',
-    #         'proapp/js/libs/underscore-min.js',
-    #         'proapp/js/libs/backbone.js',
-    #         'proapp/js/libs/backbone-tastypie.js',
-    #         'proapp/js/libs/backbone.layoutmanager.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-transition.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-alert.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-modal.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-dropdown.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-scrollspy.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-tab.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-tooltip.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-popover.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-button.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-collapse.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-carousel.js',
-    #         'proapp/js/libs/bootstrap/bootstrap-typeahead.js',
-    #         'proapp/js/libs/flot/jquery.flot.js',
-    #         'proapp/js/libs/flot/jquery.flot.pie.js',
-    #         'proapp/js/libs/flot/jquery.flot.time.js',
-    #         'proapp/js/libs/ui/jquery.ui.core.js',
-    #         'proapp/js/libs/ui/jquery.ui.datepicker.js',
-    #         'proapp/js/libs/ui/i18n/jquery.ui.datepicker-fr.js'
-    #     ),
-    #     'output_filename': 'js/proapplibs.js',
-    #     'extra_context': {
-    #         'defer': False,
-    #     },
-    # },
-
-    # 'proapp': {
-    #     'source_filenames': (
-    #         'proapp/js/models/redirectionevents.js',
-    #         'proapp/js/models/phoneevents.js',
-    #         'proapp/js/models/addressevents.js',
-    #         'proapp/js/models/trafficevents.js',
-    #         'proapp/js/views/core/loading.js',
-    #         'proapp/js/views/core/navtabitem.js',
-    #         'proapp/js/views/core/navtab.js',
-    #         'proapp/js/views/core/navtabitems.js',
-    #         'proapp/js/views/core/nav.js',
-    #         'proapp/js/views/stats/timeseries.js',
-    #         'proapp/js/views/stats/charts.js',
-    #         'proapp/js/views/stats/chartsdetails.js',
-    #         'proapp/js/views/stats/statstabcontent.js',
-    #         'proapp/js/views/stats/traffictabcontent.js',
-    #         'proapp/js/views/stats/addresstabcontent.js',
-    #         'proapp/js/views/stats/redirectiontabcontent.js',
-    #         'proapp/js/views/stats/phonetabcontent.js',
-    #         'proapp/js/views/stats/statspillcontent.js',
-    #         'proapp/js/views/layout.js',
-    #         'proapp/js/routers/routes.js',
-    #         'proapp/js/utils.js',
-    #         'proapp/js/app.js',
-    #     ),
-    #     'output_filename': 'js/proapplibs.js',
-    #     'extra_context': {
-    #         'defer': False,
-    #     },
-    # },
-
 }
-
-
-
 
 # South configuration
 SOUTH_TESTS_MIGRATE = env('SOUTH_TESTS_MIGRATE', False)
@@ -585,7 +515,6 @@ SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 QUEUE_BACKEND = env('QUEUE_BACKEND', 'dummy')
 QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = env('QUEUE_REDIS_DB', 1)
-
 
 REST_FRAMEWORK = {
 #     'DEFAULT_RENDERER_CLASSES': (
@@ -768,6 +697,8 @@ DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
     'region_radius': 100,
     'source': 4
 })
+
+DEFAULT_LOCATION_CITY = None
 
 USE_PAYBOX_SANDBOX = env('USE_PAYBOX_SANDBOX', DEBUG)
 if USE_PAYBOX_SANDBOX:

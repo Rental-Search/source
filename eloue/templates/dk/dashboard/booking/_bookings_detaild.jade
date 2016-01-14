@@ -1,0 +1,224 @@
+-load i18n
+include ../jade/_mixins
+
+
+aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
+    .section-content
+        .block-with-thumbnail
+            .col-thumbnail
+                .thumbnail
+                    a(ui-sref="items.info({id: bookingDetails.product.id})", ng-if="currentUser.id == bookingDetails.owner.id").lg-p
+                    a(href="{% verbatim %}{{productUrl}}{% endverbatim %}", ng-if="currentUser.id != bookingDetails.owner.id").lg-p
+                        img(style="background-image: url({% verbatim %}{{bookingDetails.product.picture}}{% endverbatim %});", width="200")
+            .col-exposition
+                .indent-sm-h
+                    h3: b {% verbatim %}{{bookingDetails.product.summary}}{% endverbatim %}
+                    p.text-gray.indent-sm-h.indent-xs-v
+                        i.icon-lg.flaticon.stroke.location-pin-3.icon-li
+                        | {% verbatim %}{{bookingDetails.product.address.street}}{% endverbatim %}, {% verbatim %}{{bookingDetails.product.address.zipcode}}{% endverbatim %}
+                        br
+                        | {% verbatim %}{{bookingDetails.product.address.city}}{% endverbatim %}
+                        .block-with-thumbnail.indent-sm-v
+                            .col-thumbnail
+                                .thumbnail.round: a(href="#").sm
+                                    img(style="background-image: url({% verbatim %}{{userInfo.avatar.thumbnail}}{% endverbatim %});")
+                            .col-exposition.text-gray
+                                .indent-xs-h
+                                    h3.small: a(href="#").text-underline-hover {% verbatim %}{{userInfo.username}}{% endverbatim %}
+                                    p.indent-xs-v
+                                        
+                                        +average-rate("userInfo.stats.average_rating")
+                                        
+                                    p
+                                        
+                                        +number-of-comments("userInfo.stats.booking_comments_count")
+                                        +number-of-bookings("userInfo.stats.bookings_count")
+                                        
+
+        .bg-success-light.text-success.text-right.bd-rad
+            i(ng-show="!!phoneNumber").icon-lg.flaticon.stroke.phone.indent-xs-l
+            span(ng-show="!!phoneNumber").indent-sm-h
+                | {% trans "Joignable au" %} &nbsp;
+                b {% verbatim %}{{phoneNumber}}{% endverbatim %}
+                | {% trans "ou" %}
+            a(ui-sref="messages.detail({id: bookingDetails.lastThreadId})", ng-show="!!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover {% trans "Envoyez un message" %}
+            a(ui-sref="messages.new({bookingId: bookingDetails.uuid})", ng-show="!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover {% trans "Envoyez un message" %}
+
+        .block-with-thumbnail.notification.indent-md-t.col-bg-line
+            .col-thumbnail
+                .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
+            .col-exposition.text-action
+                h3(ng-show="bookingDetails.state=='authorized'")
+                    b {% trans "Demande de réservation par" %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{borrowerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{borrowerName}}{% endverbatim %}
+                h3(ng-show="bookingDetails.state=='incident'")
+                    b {% trans "Incident declare par " %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{borrowerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{borrowerName}}{% endverbatim %}
+                h3(ng-show="bookingDetails.state=='canceled'")
+                    b {% trans "Réservation annulée" %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{ownerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{ownerName}}{% endverbatim %}
+                h3(ng-show="bookingDetails.state=='pending'")
+                    b {% trans "Réservation acceptée par" %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{ownerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{ownerName}}{% endverbatim %}
+                h3(ng-show="bookingDetails.state=='rejected'")
+                    b {% trans "Réservation rejetée par" %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{ownerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{ownerName}}{% endverbatim %}
+                h3(ng-show="bookingDetails.state=='ended'")
+                    b {% trans "Réservation terminée" %} &nbsp;
+                h3(ng-show="bookingDetails.state=='outdated'")
+                    b {% trans "Réservation dépassée" %} &nbsp;
+                h3(ng-show="bookingDetails.state=='ongoing'")
+                    b {% trans "Réservation en cours" %} &nbsp;
+                ul.zebra-list.indent-md-v
+                    li.clearfix
+                        .col-xs-3 {% trans "Statut" %}
+                        .col-xs-9: span(class="{% verbatim %}{{bookingDetails.state}}{% endverbatim %}")
+                            span(translate="{% verbatim %}{{bookingDetails.state}}{% endverbatim %}").booking-bage
+                    li.clearfix
+                        .col-xs-3 {% trans "Début" %}
+                        .col-xs-9
+                            span(translate="{% verbatim %}{{bookingDetails.start_date.week_day}}{% endverbatim %}")
+                            span
+                                | {% verbatim %}{{bookingDetails.start_date.day}}{% endverbatim %} &nbsp;
+                            span(translate="{% verbatim %}{{bookingDetails.start_date.month}}{% endverbatim %}")
+                            span
+                                | {% verbatim %}{{bookingDetails.start_date.year}}{% endverbatim %} &nbsp;
+                            span(translate="at")
+                            span
+                                | {% verbatim %}{{bookingDetails.start_time}}{% endverbatim %}
+                    li.clearfix
+                        .col-xs-3 {% trans "Fin" %}
+                        .col-xs-9
+                            span(translate="{% verbatim %}{{bookingDetails.end_date.week_day}}{% endverbatim %}")
+                            span
+                                | {% verbatim %}{{bookingDetails.end_date.day}}{% endverbatim %} &nbsp;
+                            span(translate="{% verbatim %}{{bookingDetails.end_date.month}}{% endverbatim %}")
+                            span
+                                | {% verbatim %}{{bookingDetails.end_date.year}}{% endverbatim %} &nbsp;
+                            span(translate="at")
+                            span
+                                | {% verbatim %}{{bookingDetails.end_time}}{% endverbatim %}
+                    li.clearfix
+                        .col-xs-3 {% trans "Période" %}
+                        .col-xs-9 {% verbatim %}{{bookingDetails.period_days}}{% endverbatim %} jours et {% verbatim %}{{bookingDetails.period_hours}}{% endverbatim %} heures
+                    li.clearfix
+                        .col-xs-3 {% trans "Prix" %}
+                        .col-xs-9.text-primary {% verbatim %}{{bookingDetails.total_amount}}{% endverbatim %}€
+                    li(ng-show="bookingDetails.shipping.enabled").clearfix
+                        .col-xs-3 {% trans "Livraison" %}
+                        .col-xs-9.text-primary {% verbatim %}{{bookingDetails.shipping.price | number: 2}}{% endverbatim %}€
+                    li(ng-show="bookingDetails.shipping.enabled").clearfix
+                        .col-xs-3 {% trans "Total" %}
+                        .col-xs-9.text-primary {% verbatim %}{{totalBookingPrice}}{% endverbatim %}€
+                    li.clearfix
+                        .col-xs-3 {% trans "Caution" %}
+                        .col-xs-9 {% verbatim %}{{bookingDetails.deposit_amount}}{% endverbatim %}€
+                    li.clearfix(ng-show="allowDownloadContract")
+                        .col-xs-3 {% trans "Contrat" %}
+                        .col-xs-9
+                            a(href="", ng-click="downloadContract()").text-success.text-underline-hover {% trans "Télécharger le contrat" %}
+                .text-danger(ng-show="!!serverError")
+                    | {% verbatim %}{{serverError}}{% endverbatim %}
+                .text-right
+                    a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : rejectingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-gray-light-hover Refuser
+                    a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : acceptingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-success-hover Accepter la Réservation
+                    a(href="", ng-click="showCancelConfirm()", ng-show="isBorrower && (bookingDetails.state=='authorized' || bookingDetails.state=='pending')", ng-class="{ loading : cancellingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-gray-light-hover Annuler
+                    a(href="", ng-click="declareIncident()", ng-show="bookingDetails.state=='ended' || bookingDetails.state=='ongoing'", ng-disabled="submitInProgress").btn-inline.text-red.bg-gray-light-hover Déclarer un incident
+                    a(href="", ng-click="showComment()", ng-show="showCommentForm", ng-disabled="submitInProgress").btn-inline.text-white.bg-success-hover Ajouter un commentaire
+
+        .block-with-thumbnail.notification.indent-md-b(ng-show="bookingDetails.shipping.enabled")
+          .col-thumbnail
+            .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
+          .col-exposition.text-action
+            a(href="", ng-show="searchShippingPointsInProgres").btn.btn-inline.bg-gray-light-hover.text-white.loading &nbsp;&nbsp;&nbsp;
+            h3(ng-show="shippingServiceError").text-danger {% verbatim %}{{shippingServiceError}}{% endverbatim %}
+            h3(ng-show="!!departure_point && !shippingServiceError"): b.indent-xs-b {% trans "Relais de départ" %}
+            ul(ng-show="!!departure_point&& !shippingServiceError").text-uppercase.indent-md-b
+              li {% verbatim %}{{departure_point.name}}{% endverbatim %}
+              li {% verbatim %}{{departure_point.address}}{% endverbatim %}
+              li {% verbatim %}{{departure_point.zipcode}}{% endverbatim %} {% verbatim %}{{departure_point.city}}{% endverbatim %}
+            h3(ng-show="!!arrival_point&& !shippingServiceError"): b.indent-xs-b {% trans "Relais de d’arrivée" %}
+            ul(ng-show="!!arrival_point&& !shippingServiceError").text-uppercase
+              li {% verbatim %}{{arrival_point.name}}{% endverbatim %}
+              li {% verbatim %}{{arrival_point.address}}{% endverbatim %}
+              li {% verbatim %}{{arrival_point.zipcode}}{% endverbatim %} {% verbatim %}{{arrival_point.city}}{% endverbatim %}
+            hr
+            .text-center(ng-show="!!shipping && bookingDetails.state!='authorized'"): a(href="", ng-click="downloadVoucher()").text-success.text-underline-hover {% trans "Télécharger l'étiquette" %}
+
+        .block-with-thumbnail.notification.indent-md-v(ng-show="showIncidentDescription")
+            .col-thumbnail
+                .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
+            .col-exposition.text-action
+                h3
+                    b {% trans "Description de l'incident" %}
+                p(ng-bind="sinister.description")
+        .block-with-thumbnail.notification.indent-md-v(ng-show="commentList")
+            .col-thumbnail
+                .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
+            .col-exposition.text-action
+                h3.comment-title
+                    b {% trans "Note et commentaires" %}
+                
+                +average-rate("comment.rate")
+                
+                p.comment-body(ng-bind="comment.comment")
+                
+#confirm.modal.fade
+    .modal-dialog
+        .modal-content(style="padding: 30px")
+            .modal-body
+                h3 {% trans "Etes-vous sûr de vouloir annuler la réservation ?" %}
+                .row
+                    .col-xs-6
+                      button(type="button", data-dismiss="modal", ng-click="cancelBooking()").btn
+                        | {% trans "Oui" %}
+                    .col-xs-6
+                      button(type="button", data-dismiss="modal").btn.bg-success
+                        | {% trans "Non" %
+include _report_incendent
+
+include _comment_and_rank
+//-
+  section.text-gray-strong.bg-lite
+    ul.section-content.booking-activity-feed
+      li.reply-to-message: a(href="#").text-success.text-underline-hover
+        i.flaticon.stroke.reply &nbsp;&nbsp;
+        | Répondre au message
+
+      each item in booking_detail.feed
+        if item.type == "date"
+          li.feed-date-bage: span #{item.value}
+        else
+          li.block-with-thumbnail.notification.indent-md-v
+            .col-thumbnail
+              .thumbnail: .icon-action: i.icon-lg(class="#{item.icon}")
+            .col-exposition.text-action
+              .block-with-thumbnail
+
+                .col-thumbnail
+                  if item.type == "amount"
+                    .thumbnail.indent-sm-r
+                      img(src="#{STATIC_URL}/img/money.png", alt="", width="40", height="40")
+                  else
+                    .thumbnail.indent-sm-r.round: a(href="#")
+                      case item.type
+                        when "message"
+                        when "request"
+                          img(style="background-image: url(#{STATIC_URL}/#{booking_detail.lot.owner.thumbnail});")
+                        when "booking"
+                          img(style="background-image: url(#{STATIC_URL}#{tenant.thumbnail});")
+
+                .col-exposition
+                  case item.type
+                    when "message"
+                      h3.text-black.indent-xs-b: b Message envoyé par
+                        a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                      p.norm #{item.value}
+                    when "booking"
+                      p.norm Demande acceptée par
+                        a(href="#").text-success.text-underline-hover #{tenant.first_name}
+                    when "request"
+                      p.norm Demande de réservation par
+                        a(href="#").text-success.text-underline-hover #{booking_detail.lot.owner.first_name}
+                    when "amount"
+                      p.norm Prix de la location débitée avec succès !

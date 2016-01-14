@@ -1,123 +1,124 @@
+-load i18n
 include ../jade/_mixins
 
-{% verbatim %}
+
 aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
     .section-content
         .block-with-thumbnail
             .col-thumbnail
                 .thumbnail
                     a(ui-sref="items.info({id: bookingDetails.product.id})", ng-if="currentUser.id == bookingDetails.owner.id").lg-p
-                    a(href="{{productUrl}}", ng-if="currentUser.id != bookingDetails.owner.id").lg-p
-                        img(style="background-image: url({{bookingDetails.product.picture}});", width="200")
+                    a(href="{% verbatim %}{{productUrl}}{% endverbatim %}", ng-if="currentUser.id != bookingDetails.owner.id").lg-p
+                        img(style="background-image: url({% verbatim %}{{bookingDetails.product.picture}}{% endverbatim %});", width="200")
             .col-exposition
                 .indent-sm-h
-                    h3: b {{bookingDetails.product.summary}}
+                    h3: b {% verbatim %}{{bookingDetails.product.summary}}{% endverbatim %}
                     p.text-gray.indent-sm-h.indent-xs-v
                         i.icon-lg.flaticon.stroke.location-pin-3.icon-li
-                        | {{bookingDetails.product.address.street}}, {{bookingDetails.product.address.zipcode}}
+                        | {% verbatim %}{{bookingDetails.product.address.street}}{% endverbatim %}, {% verbatim %}{{bookingDetails.product.address.zipcode}}{% endverbatim %}
                         br
-                        | {{bookingDetails.product.address.city}}
+                        | {% verbatim %}{{bookingDetails.product.address.city}}{% endverbatim %}
                         .block-with-thumbnail.indent-sm-v
                             .col-thumbnail
                                 .thumbnail.round: a(href="#").sm
-                                    img(style="background-image: url({{userInfo.avatar.thumbnail}});")
+                                    img(style="background-image: url({% verbatim %}{{userInfo.avatar.thumbnail}}{% endverbatim %});")
                             .col-exposition.text-gray
                                 .indent-xs-h
-                                    h3.small: a(href="#").text-underline-hover {{userInfo.username}}
+                                    h3.small: a(href="#").text-underline-hover {% verbatim %}{{userInfo.username}}{% endverbatim %}
                                     p.indent-xs-v
-                                        {% endverbatim %}
+                                        
                                         +average-rate("userInfo.stats.average_rating")
-                                        {% verbatim %}
+                                        
                                     p
-                                        {% endverbatim %}
+                                        
                                         +number-of-comments("userInfo.stats.booking_comments_count")
                                         +number-of-bookings("userInfo.stats.bookings_count")
-                                        {% verbatim %}
+                                        
 
         .bg-success-light.text-success.text-right.bd-rad
             i(ng-show="!!phoneNumber").icon-lg.flaticon.stroke.phone.indent-xs-l
             span(ng-show="!!phoneNumber").indent-sm-h
-                | Joignable au &nbsp;
-                b {{phoneNumber}}
-                | ou
-            a(ui-sref="messages.detail({id: bookingDetails.lastThreadId})", ng-show="!!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover Envoyez un message
-            a(ui-sref="messages.new({bookingId: bookingDetails.uuid})", ng-show="!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover Envoyez un message
+                | {% trans "Joignable au" %} &nbsp;
+                b {% verbatim %}{{phoneNumber}}{% endverbatim %}
+                | {% trans "ou" %}
+            a(ui-sref="messages.detail({id: bookingDetails.lastThreadId})", ng-show="!!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover {% trans "Envoyez un message" %}
+            a(ui-sref="messages.new({bookingId: bookingDetails.uuid})", ng-show="!bookingDetails.lastThreadId").btn-inline.text-white.bg-success-hover {% trans "Envoyez un message" %}
 
         .block-with-thumbnail.notification.indent-md-t.col-bg-line
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.checkmark-2
             .col-exposition.text-action
                 h3(ng-show="bookingDetails.state=='authorized'")
-                    b Demande de réservation par &nbsp;
-                    a(href="/loueur/{{borrowerSlug}}/").text-success.text-underline-hover {{borrowerName}}
+                    b {% trans "Demande de réservation par" %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{borrowerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{borrowerName}}{% endverbatim %}
                 h3(ng-show="bookingDetails.state=='incident'")
-                    b Incident declare par &nbsp;
-                    a(href="/loueur/{{borrowerSlug}}/").text-success.text-underline-hover {{borrowerName}}
+                    b {% trans "Incident declare par " %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{borrowerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{borrowerName}}{% endverbatim %}
                 h3(ng-show="bookingDetails.state=='canceled'")
-                    b Réservation annulée &nbsp;
-                    a(href="/loueur/{{ownerSlug}}/").text-success.text-underline-hover {{ownerName}}
+                    b {% trans "Réservation annulée" %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{ownerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{ownerName}}{% endverbatim %}
                 h3(ng-show="bookingDetails.state=='pending'")
-                    b Réservation acceptée par &nbsp;
-                    a(href="/loueur/{{ownerSlug}}/").text-success.text-underline-hover {{ownerName}}
+                    b {% trans "Réservation acceptée par" %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{ownerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{ownerName}}{% endverbatim %}
                 h3(ng-show="bookingDetails.state=='rejected'")
-                    b Réservation rejetée par &nbsp;
-                    a(href="/loueur/{{ownerSlug}}/").text-success.text-underline-hover {{ownerName}}
+                    b {% trans "Réservation rejetée par" %} &nbsp;
+                    a(href="/loueur/{% verbatim %}{{ownerSlug}}{% endverbatim %}/").text-success.text-underline-hover {% verbatim %}{{ownerName}}{% endverbatim %}
                 h3(ng-show="bookingDetails.state=='ended'")
-                    b Réservation terminée &nbsp;
+                    b {% trans "Réservation terminée" %} &nbsp;
                 h3(ng-show="bookingDetails.state=='outdated'")
-                    b Réservation dépassée &nbsp;
+                    b {% trans "Réservation dépassée" %} &nbsp;
                 h3(ng-show="bookingDetails.state=='ongoing'")
-                    b Réservation en cours &nbsp;
+                    b {% trans "Réservation en cours" %} &nbsp;
                 ul.zebra-list.indent-md-v
                     li.clearfix
-                        .col-xs-3 Statut
-                        .col-xs-9: span(class="{{bookingDetails.state}}")
-                            span(translate="{{bookingDetails.state}}").booking-bage
+                        .col-xs-3 {% trans "Statut" %}
+                        .col-xs-9: span(class="{% verbatim %}{{bookingDetails.state}}{% endverbatim %}")
+                            span(translate="{% verbatim %}{{bookingDetails.state}}{% endverbatim %}").booking-bage
                     li.clearfix
-                        .col-xs-3 Début
+                        .col-xs-3 {% trans "Début" %}
                         .col-xs-9
-                            span(translate="{{bookingDetails.start_date.week_day}}")
+                            span(translate="{% verbatim %}{{bookingDetails.start_date.week_day}}{% endverbatim %}")
                             span
-                                | {{bookingDetails.start_date.day}} &nbsp;
-                            span(translate="{{bookingDetails.start_date.month}}")
+                                | {% verbatim %}{{bookingDetails.start_date.day}}{% endverbatim %} &nbsp;
+                            span(translate="{% verbatim %}{{bookingDetails.start_date.month}}{% endverbatim %}")
                             span
-                                | {{bookingDetails.start_date.year}} &nbsp;
+                                | {% verbatim %}{{bookingDetails.start_date.year}}{% endverbatim %} &nbsp;
                             span(translate="at")
                             span
-                                | {{bookingDetails.start_time}}
+                                | {% verbatim %}{{bookingDetails.start_time}}{% endverbatim %}
                     li.clearfix
-                        .col-xs-3 Fin
+                        .col-xs-3 {% trans "Fin" %}
                         .col-xs-9
-                            span(translate="{{bookingDetails.end_date.week_day}}")
+                            span(translate="{% verbatim %}{{bookingDetails.end_date.week_day}}{% endverbatim %}")
                             span
-                                | {{bookingDetails.end_date.day}} &nbsp;
-                            span(translate="{{bookingDetails.end_date.month}}")
+                                | {% verbatim %}{{bookingDetails.end_date.day}}{% endverbatim %} &nbsp;
+                            span(translate="{% verbatim %}{{bookingDetails.end_date.month}}{% endverbatim %}")
                             span
-                                | {{bookingDetails.end_date.year}} &nbsp;
+                                | {% verbatim %}{{bookingDetails.end_date.year}}{% endverbatim %} &nbsp;
                             span(translate="at")
                             span
-                                | {{bookingDetails.end_time}}
+                                | {% verbatim %}{{bookingDetails.end_time}}{% endverbatim %}
                     li.clearfix
-                        .col-xs-3 Période
-                        .col-xs-9 {{bookingDetails.period_days}} jours et {{bookingDetails.period_hours}} heures
+                        .col-xs-3 {% trans "Période" %}
+                        .col-xs-9 {% verbatim %}{{bookingDetails.period_days}}{% endverbatim %} jours et {% verbatim %}{{bookingDetails.period_hours}}{% endverbatim %} heures
                     li.clearfix
-                        .col-xs-3 Prix
-                        .col-xs-9.text-primary {{bookingDetails.total_amount}}€
+                        .col-xs-3 {% trans "Prix" %}
+                        .col-xs-9.text-primary {% verbatim %}{{bookingDetails.total_amount}}{% endverbatim %}€
                     li(ng-show="bookingDetails.shipping.enabled").clearfix
-                        .col-xs-3 Livraison
-                        .col-xs-9.text-primary {{bookingDetails.shipping.price | number: 2}}€
+                        .col-xs-3 {% trans "Livraison" %}
+                        .col-xs-9.text-primary {% verbatim %}{{bookingDetails.shipping.price | number: 2}}{% endverbatim %}€
                     li(ng-show="bookingDetails.shipping.enabled").clearfix
-                        .col-xs-3 Total
-                        .col-xs-9.text-primary {{totalBookingPrice}}€
+                        .col-xs-3 {% trans "Total" %}
+                        .col-xs-9.text-primary {% verbatim %}{{totalBookingPrice}}{% endverbatim %}€
                     li.clearfix
-                        .col-xs-3 Caution
-                        .col-xs-9 {{bookingDetails.deposit_amount}}€
+                        .col-xs-3 {% trans "Caution" %}
+                        .col-xs-9 {% verbatim %}{{bookingDetails.deposit_amount}}{% endverbatim %}€
                     li.clearfix(ng-show="allowDownloadContract")
-                        .col-xs-3 Contrat
+                        .col-xs-3 {% trans "Contrat" %}
                         .col-xs-9
-                            a(href="", ng-click="downloadContract()").text-success.text-underline-hover Télécharger le contrat
+                            a(href="", ng-click="downloadContract()").text-success.text-underline-hover {% trans "Télécharger le contrat" %}
                 .text-danger(ng-show="!!serverError")
-                    | {{serverError}}
+                    | {% verbatim %}{{serverError}}{% endverbatim %}
                 .text-right
                     a(href="", ng-click="rejectBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : rejectingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-gray-light-hover Refuser
                     a(href="", ng-click="acceptBooking()", ng-show="isOwner && bookingDetails.state=='authorized'", ng-class="{ loading : acceptingInProgress }", ng-disabled="submitInProgress").btn-inline.text-white.bg-success-hover Accepter la Réservation
@@ -130,50 +131,50 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
             .thumbnail: .icon-action: span.sprite-pickup-logo-short-green
           .col-exposition.text-action
             a(href="", ng-show="searchShippingPointsInProgres").btn.btn-inline.bg-gray-light-hover.text-white.loading &nbsp;&nbsp;&nbsp;
-            h3(ng-show="shippingServiceError").text-danger {{shippingServiceError}}
-            h3(ng-show="!!departure_point && !shippingServiceError"): b.indent-xs-b Relais de départ
+            h3(ng-show="shippingServiceError").text-danger {% verbatim %}{{shippingServiceError}}{% endverbatim %}
+            h3(ng-show="!!departure_point && !shippingServiceError"): b.indent-xs-b {% trans "Relais de départ" %}
             ul(ng-show="!!departure_point&& !shippingServiceError").text-uppercase.indent-md-b
-              li {{departure_point.name}}
-              li {{departure_point.address}}
-              li {{departure_point.zipcode}} {{departure_point.city}}
-            h3(ng-show="!!arrival_point&& !shippingServiceError"): b.indent-xs-b Relais de d’arrivée
+              li {% verbatim %}{{departure_point.name}}{% endverbatim %}
+              li {% verbatim %}{{departure_point.address}}{% endverbatim %}
+              li {% verbatim %}{{departure_point.zipcode}}{% endverbatim %} {% verbatim %}{{departure_point.city}}{% endverbatim %}
+            h3(ng-show="!!arrival_point&& !shippingServiceError"): b.indent-xs-b {% trans "Relais de d’arrivée" %}
             ul(ng-show="!!arrival_point&& !shippingServiceError").text-uppercase
-              li {{arrival_point.name}}
-              li {{arrival_point.address}}
-              li {{arrival_point.zipcode}} {{arrival_point.city}}
+              li {% verbatim %}{{arrival_point.name}}{% endverbatim %}
+              li {% verbatim %}{{arrival_point.address}}{% endverbatim %}
+              li {% verbatim %}{{arrival_point.zipcode}}{% endverbatim %} {% verbatim %}{{arrival_point.city}}{% endverbatim %}
             hr
-            .text-center(ng-show="!!shipping && bookingDetails.state!='authorized'"): a(href="", ng-click="downloadVoucher()").text-success.text-underline-hover Télécharger l'étiquette
+            .text-center(ng-show="!!shipping && bookingDetails.state!='authorized'"): a(href="", ng-click="downloadVoucher()").text-success.text-underline-hover {% trans "Télécharger l'étiquette" %}
 
         .block-with-thumbnail.notification.indent-md-v(ng-show="showIncidentDescription")
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
             .col-exposition.text-action
                 h3
-                    b Description de l'incident
+                    b {% trans "Description de l'incident" %}
                 p(ng-bind="sinister.description")
         .block-with-thumbnail.notification.indent-md-v(ng-show="commentList")
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
             .col-exposition.text-action
                 h3.comment-title
-                    b Note et commentaires
-                {% endverbatim %}
+                    b {% trans "Note et commentaires" %}
+                
                 +average-rate("comment.rate")
-                {% verbatim %}
+                
                 p.comment-body(ng-bind="comment.comment")
-                {% endverbatim %}
+                
 #confirm.modal.fade
     .modal-dialog
         .modal-content(style="padding: 30px")
             .modal-body
-                h3 Etes-vous sûr de vouloir annuler la réservation ?
+                h3 {% trans "Etes-vous sûr de vouloir annuler la réservation ?" %}
                 .row
                     .col-xs-6
                       button(type="button", data-dismiss="modal", ng-click="cancelBooking()").btn
-                        | Oui
+                        | {% trans "Oui" %}
                     .col-xs-6
                       button(type="button", data-dismiss="modal").btn.bg-success
-                        | Non
+                        | {% trans "Non" %}
 include _report_incendent
 
 include _comment_and_rank

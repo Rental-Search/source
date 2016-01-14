@@ -1,0 +1,84 @@
+-load i18n
+block details
+    .section-content
+      fieldset(data-ng-disabled="submitInProgress", novalidate)
+        form(name="generalItemInfoForm")
+            h2 {% trans "Catégories" %}
+            .row
+                .col-md-4
+                    .form-control.without-search
+                        select(name="rootCategory", ng-model="rootCategory", ng-change="updateNodeCategories(true)", eloue-chosen, opts="rootCategories", data-ng-disabled="submitInProgress", data-placeholder="{% trans 'Catégorie Niv.1' %}")
+                            option(ng-repeat="category in rootCategories", ng-selected="category.id == rootCategory", value="{% verbatim %}{{category.id}}{% endverbatim %}") {% verbatim %}{{category.name}}{% endverbatim %}
+                        span.text-danger(ng-show="generalItemInfoForm.rootCategory.$error.required && itemInfoSubmitted", translate="required_field")
+                .col-md-4
+                    .form-control.without-search
+                        select(name="nodeCategory", ng-model="nodeCategory", ng-change="updateLeafCategories(true)", eloue-chosen, opts="nodeCategories", ng-required="isAuto || isRealEstate || nodeCategories.length>0", data-ng-disabled="submitInProgress", data-placeholder="{% trans 'Catégorie Niv.2' %}")
+                            option(ng-repeat="category in nodeCategories", ng-selected="category.id == nodeCategory", value="{% verbatim %}{{category.id}}{% endverbatim %}") {% verbatim %}{{category.name}}{% endverbatim %}
+                        span.text-danger(ng-show="generalItemInfoForm.nodeCategory.$error.required && itemInfoSubmitted", translate="required_field")
+                .col-md-4
+                    .form-control.without-search
+                        select(name="category", ng-model="product.category", ng-required="!isAuto && !isRealEstate", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate", data-placeholder="{% trans 'Catégorie Niv.3' %}")
+                            option(ng-repeat="category in leafCategories", ng-selected="(categoriesBaseUrl + category.id + '/') == product.category", value="{% verbatim %}{{categoriesBaseUrl}}{% endverbatim %}{% verbatim %}{{category.id}}{% endverbatim %}/") {% verbatim %}{{category.name}}{% endverbatim %}
+                        span.text-danger(ng-show="generalItemInfoForm.category.$error.required && itemInfoSubmitted", translate="required_field")
+            h2 {% trans "Titre" %}
+            .row
+                .col-xs-12
+                    input#title.form-control(type="text", name="title", placeholder="{% trans 'Titre' %}", ng-model="product.summary", required)
+                    span.text-danger(ng-show="generalItemInfoForm.title.$error.required && itemInfoSubmitted", translate="required_field")
+            h2 {% trans "Adresse" %}
+            .row
+                .col-sm-12
+                 input(type="text", name="street", placeholder="{% trans 'Rue'%} *", required, ng-model="product.addressDetails.street").form-control
+                 span.text-danger(ng-show="generalItemInfoForm.street.$error.required && itemInfoSubmitted", translate="required_field")
+            .row
+                .col-sm-6
+                    input(type="text", name="zipcode", placeholder="{% trans 'Code postal' %} *", required, eloue-zipcode, ng-model="product.addressDetails.zipcode").form-control
+                    span.text-danger(ng-show="generalItemInfoForm.zipcode.$error.required && itemInfoSubmitted", translate="required_field")
+                    span.text-danger(ng-show="generalItemInfoForm.zipcode.$error.badFormat && itemInfoSubmitted", translate="zipcode_invalid")
+                .col-sm-6
+                    input(type="text", name="city", placeholder="{% trans 'Ville' %} *", required, ng-model="product.addressDetails.city").form-control
+                    span.text-danger(ng-show="generalItemInfoForm.city.$error.required && itemInfoSubmitted", translate="required_field")
+        h2 {% trans "Photos" %}
+        p Vous pouvez ajouter 3 photos :
+        .row
+            form#add-picture
+              fieldset(data-ng-disabled="submitInProgress")
+                ul.text-gray.container-with-square-thumbnail.indent-xs-b
+                    li(ng-show="(product.pictures.length+loadingPicture) <3").block-with-thumbnail
+                        label(for="image").file-input-drag
+                            i.icon-3x.flaticon.solid.plus
+                            input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image
+                            input(type="hidden", name="product", value="{% verbatim %}{{productsBaseUrl}}{% endverbatim %}{% verbatim %}{{product.id}}{% endverbatim %}/")#product
+                    li(ng-repeat="picture in product.pictures track by picture.id", style="padding-top: 0;").block-with-thumbnail
+                         .col-thumbnail
+                           .thumbnail: span.lg-p
+                             img(style="background-image: url({% verbatim %}{{picture.image.thumbnail}}{% endverbatim %});")
+                             a(href="", ng-click="showRemoveConfirm(picture.id)").delete x
+                    li(ng-repeat="t in getTimes(loadingPicture) track by $index", style="padding-top: 0;").block-with-thumbnail
+                         .col-thumbnail
+                           .thumbnail: span.lg-p
+                             img(style="background-image: url('/static/img/preloader2.gif');")
+        form(name="itemInfoForm", ng-submit="itemInfoSubmitted=true;itemInfoForm.$valid && generalItemInfoForm.$valid && updateProduct()", novalidate, ng-class="{'submitted':itemInfoSubmitted}")
+          fieldset(data-ng-disabled="submitInProgress")
+            h2(ng-show="isAuto || isRealEstate") {% trans "Caractéristiques" %}
+            include ./_item_characteristics
+            h2 {% trans "Informations complémentaires" %}
+            p Soyez le plus précis possible dans la description de votre produit (Taille, longueur, marque, matière, couleur, état de la robe, prix d’achat, prix de location avec ou sans pressing, lieu de remise…)Une description complète vous permettra de louer plus facilement votre produit.
+            .row.indent-md-b
+                .col-sm-12
+                    textarea#description.expand(name="description", tabindex="1", rows="6", placeholder="", ng-model="product.description")
+            .row
+                button(type="submit", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 {% trans "Enregistrez les modifications" %}
+
+#confirm.modal.fade
+    .modal-dialog
+        .modal-content(style="padding: 30px")
+            .modal-body
+                h3 {% trans "Etes-vous sûr de vouloir supprimer l'image?" %}
+                .row
+                    .col-xs-6
+                        button(type="button", data-dismiss="modal", ng-click="deletePicture()").btn
+                            | {% trans "Oui" %}
+                    .col-xs-6
+                        button(type="button", data-dismiss="modal").btn.bg-success
+                            | {% trans "Non" %}

@@ -1,0 +1,88 @@
+-load staticfiles
+
+style
+  #tabs li a{
+    border-top: 5px solid transparent;
+    height: 110px;
+    background-color: #eee;
+  }
+
+  #tabs li a:hover, #tabs li.active a, #tabs li.active a:hover{
+    text-decoration: none;
+    color: #f53d6c;
+    border-top: 5px solid #f53d6c;
+    background-color: white;
+  }
+
+  .tab-pane p a{
+    text-decoration: none;
+    color: #f53d6c;
+  }
+
+  .tab-pane{
+    margin: 40px 0 0;
+  }
+
+  #text{
+    color: #666;
+    text-align: justify;
+  }
+
+  #tabs li a img{
+    height: 35px;
+  }
+
+  #objet:hover img, #tabs li.active #objet img{
+    content:url("{% static 'images/objet.png' %}");
+  }
+
+  #content{
+    background-color: white;
+    height: 250px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+  }
+
+.container#text
+  .container
+    h2.text-uppercase.text-center
+      | Chez Dressbooking nous pensons qu’être PRUDENT, c’est bien
+      | Mais qu’être TRES PRUDENT, c’est encore mieux&nbsp;!
+    .indent-t-lg
+      p
+        | Lors de chaque location, un contrat de location dûment rempli par les deux parties est obligatoire. 
+        | Il permet simplement aux deux parties de pouvoir bénéficier de l'assurance proposée par Dressbooking. 
+        | Pour vous faciliter les choses, nous vous envoyons, dès la validation de la transaction, 
+        | un contrat pré-rempli contenant les informations qui ont été communiquées par le propriétaire et le locataire&nbsp;: 
+        | noms, prénoms, description du bien loué, état du bien, prix de la location, montant de la caution, 
+        | conditions de la location, ...  Si vous préférez un autre modèle de contrat , il n’y a pas de problème, 
+        | mais vous devrez le rédiger.
+      p
+        | Lors de la rencontre propriétaire-locataire, il ne vous restera plus qu’à vérifier que les informations 
+        | précisées sur le contrat sont exactes.
+      br
+      br
+
+  .container
+    ul.nav.nav-tabs.nav-justified(data-tabs="tabs")#tabs
+      li.active
+        a(href="#object", data-toggle="tab")#objet
+          h4 &nbsp;&nbsp;&nbsp;Contrat vêtements, chaussures et accessoires&nbsp;&nbsp;&nbsp;
+          img(src="#{STATIC_URL}images/objet.png")
+
+    #content
+      .container(style="width:90%;"): .tab-content
+        .tab-pane.active#object
+          p Notre assurance couvre la location des vêtements, des chaussures ainsi que de tous les types d’accessoires (bijoux, chapeaux,…). 
+          p Voici le contrat de location standard que nous proposons pour ce type de location. Lorsque vous effectuez une location, ce contrat vous est envoyé pré-rempli avec les informations que vous avez renseignées.
+          p: a(href="{% static 'contracts/dressbooking/normal.pdf' %}", target="_blank") Télécharger un exemplaire
+
+  .container
+    br
+    br
+    br
+    p 
+      | Se référer à la 
+      a(href="/assurance-tranquillite/", target="_blank", style="color: #f53d6c") page Assurance tranquillité 
+      | pour plus d’informations.

@@ -25,7 +25,7 @@ def first_or_empty(alist):
 
 class ContractGenerator(object):
     templates = {
-        'fr-fr': local_path("contract/contrat_sans_assurance.pdf"),
+        'fr-FR': local_path("contract/contrat_sans_assurance.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
     }
     
@@ -109,9 +109,14 @@ class ContractGenerator(object):
 
 
 class ContractGeneratorNormal(ContractGenerator):
-    templates = {
-        'fr-fr': local_path("contract/contrat_objet.pdf")
-    }
+    if settings.SITE_ID == 15:
+        templates = {
+            'fr-FR': local_path("contract/fr_template_normal_dressbooking.pdf")
+        }
+    else:
+        templates = {
+            'fr-FR': local_path("contract/fr_template_normal.pdf")
+        }
     
     def draw(self, canvas, booking):
         """Draw stuff in the carbon"""
@@ -153,13 +158,13 @@ class ContractGeneratorNormal(ContractGenerator):
             expires2=booking.payment.creditcard.expires[2:],
         ))
 
-        canvas.drawString(80, 610, u"{summary}".format(summary=booking.product.summary))
+        canvas.drawString(80, 615, u"{summary}".format(summary=booking.product.summary))
 
         booking_total_amount = "%s %s" % (str(booking.total_amount), u"\u20AC")
         booking_deposit_amount = "%s %s" % (str(booking.product.deposit_amount), u"\u20AC")
 
-        canvas.drawString(81, 589, format(booking.started_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(81, 568, format(booking.ended_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(81, 595, format(booking.started_at, _(u"d F Y à H\hi.")))
+        canvas.drawString(81, 573, format(booking.ended_at, _(u"d F Y à H\hi.")))
         canvas.drawString(389, 621, u"{booking_total_amount}".format(booking_total_amount=booking_total_amount))
         canvas.drawString(156, 557 , u"{booking_total_amount}".format(booking_total_amount=booking_total_amount))
         
@@ -171,7 +176,7 @@ class ContractGeneratorNormal(ContractGenerator):
 
 class ContractGeneratorCar(ContractGenerator):
     templates = {
-        'fr-fr': local_path("contract/contrat_voiture.pdf"),
+        'fr-FR': local_path("contract/contrat_voiture.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
     }
     def draw(self, canvas, booking):
@@ -249,7 +254,7 @@ class ContractGeneratorCar(ContractGenerator):
 
 class ContractGeneratorRealEstate(ContractGenerator):
     templates = {
-        'fr-fr': local_path("contract/contrat_location_saisonniere.pdf"),
+        'fr-FR': local_path("contract/contrat_location_saisonniere.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
     }
     def draw(self, canvas, booking):

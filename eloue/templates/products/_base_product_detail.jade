@@ -41,6 +41,7 @@ block append head
 block append content-body
 
   -var is_pro = product.pro_owner
+  -var pro_online_booking = product.object.owner.pro_online_booking
   #fb-root
   if is_pro
     {% with product.object.owner as patron %}
@@ -67,19 +68,16 @@ block append content-body
               .part.picture-tab#tabs
                 {% with product.object.shipping_available as shipping_available %}
                 ul.nav.nav-justified.text-nowrap
-                  -var tabs = [["Photos et Localisation", "#tabs-photos"], ["Tarifs", "#tabs-tarifs"]]
-                  each title, href, i in tabs
-                    li.spacer
-                    if i == 0
-                      li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2.current {{ title }}
-                    else
-                      li: a(href="{{ href }}", ng-click="selectTab('#{href}')").pad-v-2 {{ title }}
+                  li.spacer
+                  li: a(href="#tabs-photos", ng-click="selectTab('#{'#tabs-photos'}')").pad-v-2.current {% trans "Photos et Localisation" %}
+                  li.spacer
+                  li: a(href="#tabs-tarifs", ng-click="selectTab('#{'#tabs-tarifs'}')").pad-v-2 {% trans "Tarifs" %}
                   if insurance_available
                     li.spacer
-                    li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 Conditions d'assurance
+                    li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 {% trans "Conditions d'assurance" %}
                   li.spacer
                   {% if shipping_available %}
-                  li: a(href="#tabs-shipping", ng-click="selectTab('#tabs-shipping')").pad-v-2 Livraison
+                  li: a(href="#tabs-shipping", ng-click="selectTab('#tabs-shipping')").pad-v-2 {% trans "Livraison" %}
                   {% endif %}
                 include ./product_detail
                 include ./tab_tarifs
@@ -105,21 +103,20 @@ block append content-body
                   include ../jade/product_details/main/_comments
                   {% endwith %}
         aside(data-ng-controller="BookingCtrl").col-sm-4
-          {% if is_pro %}
+          {% if is_pro %}         
           section.owner-information
             include ../jade/product_details/aside/_owner_information
+          {% if pro_online_booking %}
+          section.booking-form
+            include  ../jade/product_details/aside/_booking_form.jade
+          {% endif %}  
           {% else %}
           section.booking-form
             include  ../jade/product_details/aside/_booking_form.jade
           {% endif %}
           //-section.add-to-wishlist
           //-  include ../jade/product_details/aside/_add_to_wishlist
-          {% if is_pro %}
-          {% if patron.slug != "loxam" %}
-          section.booking-form
-            include  ../jade/product_details/aside/_booking_form.jade
-          {% endif %} 
-          {% else %}
+          {% if not is_pro %}
           section.owner-information
             include ../jade/product_details/aside/_owner_information
           {% endif %}

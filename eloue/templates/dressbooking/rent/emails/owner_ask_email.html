@@ -1,0 +1,48 @@
+{% extends "base_email.html"%}
+
+{% load i18n %}
+
+{% block title_email %}{% trans "Demande de réservation"%}{% endblock %}
+
+
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.username as borrower %}
+
+                            Bonjour {{ owner_name }},<br><br>
+
+                            {{ borrower }} souhaite louer l’un de vos objets.<br>
+                            Voici les détails de la réservation :<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+
+                            {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.get_absolute_url as booking_url %}
+
+                            Cliquez au plus vite sur le bouton ci dessous pour lui répondre :
+
+                           	<p style="margin-top: 15px; text-align: center;">
+                            	<a href="{{ protocol }}://{{ domain }}{{ booking_url }}" style="text-decoration: none; cursor: pointer; display: inline-block; background-color: #f36100; padding: 10px; font-family: Arial, sans-serif; line-height: 18px; font-size: 14px; color: #fff; border: 1px solid #c85007; vertical-align: 7%;">
+                                    Accepter ou refuser la réservation
+                            	</a>
+                            </p>
+
+                            A très vite,<br>
+
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

@@ -1,0 +1,19 @@
+.container.indent-v-lg
+  .message-container
+    .thumbnail-img: a(href="/templates"): img(style="background-image: url(http://lorempixel.com/100/100)", alt="").bg-image
+    .thumbnail-content
+      .text-content
+        h2.text-secondary EgestasLigula
+        h4.indent-b-lg Bonjour Tortor,
+        p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi possimus, eum voluptatem quas quis sequi laboriosam rem nesciunt similique aliquam perspiciatis, debitis blanditiis vero rerum obcaecati optio quae expedita, error a quo ullam eaque fugiat. Minus accusamus optio possimus quas voluptates alias tempora beatae quia, libero, ratione perferendis et. Quia nulla quaerat qui distinctio dolorum aliquam. Architecto, quis illum pariatur. Eos ratione possimus qui quod, quos consequuntur voluptas eum consequatur. Cupiditate qui possimus commodi, velit blanditiis labore vitae fugiat veritatis numquam quo, aut consequuntur odit sapiente magni harum esse repudiandae ab nesciunt ex maxime quam tempore distinctio? Itaque, magnam, totam!
+      if message_type == "ativation"
+        .indent-v-md.text-center
+          a(href="#").btn.btn-lg.bg-success Activer votre compte
+        .footer
+          p
+            | A très vite
+            br
+            | L’équipe Dressbooking
+      elif message_type == "message"
+        .indent-v-md
+          a(href="#").btn.btn-lg.bg-success.pull-right Répondre au message

@@ -1,1 +1,1 @@
-{% load i18n %}{{ subject }}
+{% load i18n %}{% trans "e-loue : demande de devis" %}

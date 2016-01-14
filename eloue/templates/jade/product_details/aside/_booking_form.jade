@@ -1,60 +1,33 @@
 -load i18n
 
 .section-header
-    h4 {% if is_pro %} {% trans "Demandez un devis" %} {% else %} {% trans "Réservez en ligne" %} {% endif %}
+    {% if is_pro %} 
+    span.badge-pro.pull-right pro 
+    {% endif %}
+    h4 {% trans "Réservez en ligne" %}
 form.form-inline.section-body.text-center
-    {% verbatim %}
     .part
         p
-            small à partir de
-            big.ng-cloak.text-primary &nbsp;{{pricePerDay}}&nbsp;/jour
-        {% endverbatim %}
+            small {% trans "à partir de" %}
+            big.ng-cloak.text-primary &nbsp;{% verbatim %}{{pricePerDay}}{% endverbatim %}&nbsp;{% trans "/jour" %}
         include ../../_date_picker_border
-        {% verbatim %}
-        // p.available.unavailable Cet article est disponible à ces dates
-        span(ng-show="dateRangeError").ng-cloak.text-danger {{dateRangeError}}
-        {% endverbatim %}
-        {% if not is_pro %}
-        p(ng-show="available").ng-cloak.available Cet article est disponible à ces dates
-        p(ng-show="!available").ng-cloak.available.unavailable Cet article n'est pas disponible à ces dates
-        {% endif %}
-        {% verbatim %}
+        span(ng-show="dateRangeError").ng-cloak.text-danger {% verbatim %}{{dateRangeError}}{% endverbatim %}
+        
+        p(ng-show="available").ng-cloak.available {% trans "Cet article est disponible à ces dates" %}
+        p(ng-show="!available").ng-cloak.available.unavailable {% trans "Cet article n'est pas disponible à ces dates" %}
+        
     .part
         p
-            | Durée de la location&nbsp;:&nbsp;
-            b.period-days.ng-cloak {{duration}}
+            | {% trans "Durée de la location" %}&nbsp;:&nbsp;
+            b.period-days.ng-cloak {% verbatim %}{{duration}}{% endverbatim %}
         p.price
-            | Prix {% endverbatim %}{% if is_pro %}{% trans "indicatif" %}{% else %}{% trans "de la location" %}{% endif %}&nbsp;:{% verbatim %}
-            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{{bookingPrice + shippingPrice | number}}&nbsp;€
-        {% endverbatim %}
-
+            | {% trans "Prix" %} {% trans "de la location" %}&nbsp;:
+            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{% verbatim %}{{ bookingPriceCurrency }}{% endverbatim %}
         {% if not is_pro and product.need_insurance %}
         p {% trans "Assurance incluse" %}
         {% endif %}
     .part
         a(href = "", data-dismiss="modal", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success.calendar-ok
-            i.flaticon.stroke.calendar-2
-            | {% if is_pro %}Envoyez{% else %}{% trans "Réservez" %}{% endif %}
-        p.mrg-v-1
-            if is_pro
-                {% blocktrans %}
-                | Vous allez envoyer
-                br
-                | une demande de location. 
-                br
-                | &ndash;
-                br
-                | Le loueur vous recontactera 
-                br
-                | très rapidement 
-                br
-                | pour vous confirmer la location.
-                br
-                | &ndash;
-                br
-                | Le paiement se fera directement 
-                br
-                | chez le loueur.
-                {% endblocktrans %}
-        //-
-            small Cette somme vous sera débitée lorsque le propriétaire validera la location
+            i.flaticon.stroke.calendar-2glio
+            | {% if is_pro %}{% trans "Envoyez" %}{% else %}{% trans "Réservez" %}{% endif %}
+        
