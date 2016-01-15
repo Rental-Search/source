@@ -24,10 +24,11 @@ define([
         "$scope",
         "$window",
         "$document",
+        "$location",
         "MapsService",
         "algolia",
         "$log",
-        function ($scope, $window, $document, MapsService, algolia, $log) {
+        function ($scope, $window, $document, $location, MapsService, algolia, $log) {
            
             $scope.searchResultsPerPage = 12;
             
@@ -35,6 +36,7 @@ define([
             /* 
              * Algolia config 
              * */
+            
             
             var SEARCH_PARAMETERS = {
                 hierarchicalFacets: [{
@@ -57,10 +59,20 @@ define([
             
             $scope.search = algoliasearchHelper(client, $scope.search_index, SEARCH_PARAMETERS);
             
+            var trackedParameters = ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
             
             /* 
              * Filter refinement 
              * */
+            
+            $scope.onLocationChangeStart = function(event) {
+//            	event.preventDefault();
+            	$scope.search.setStateFromQueryString($location.url());
+            	$log.debug(" ==============\n STATE FROM QUERY \n ==============");
+            	$log.debug($scope.search);
+            	$scope.search.search();
+            };
+//            $scope.$on("$locationChangeSuccess", $scope.onLocationChangeStart);
             
             $scope.refinePrices = function(sliderId){
                 
@@ -215,6 +227,16 @@ define([
 //                $scope.search_part = state.isDisjunctiveFacetRefined("pro_owner", false);
             };
             
+            
+            $scope.renderLocation = function(result, state) {
+            	var query = $scope.search.getStateAsQueryString({filters: trackedParameters});
+            	$log.debug("QUERY: ");
+            	$log.debug(query);
+            	$location.search(query);
+            };
+            
+            
+            
             /* 
              * Process search results 
              * */
@@ -237,6 +259,7 @@ define([
                     $scope.page = result.page;
                     
                     //$scope.renderResults(result);
+                    $scope.renderLocation(result, state);
                     $scope.renderPagination(result);
                     $scope.renderSearchCategories(result);
                     $scope.renderPriceSlider(result, state);
@@ -264,7 +287,7 @@ define([
                 
                 $scope.$apply();
                 
-                $window.googleMapsLoaded();
+//                $window.googleMapsLoaded();
             };
             
             $scope.processError = function(error){
