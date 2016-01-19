@@ -1,8 +1,9 @@
 define([
     "eloue/app",
-    "../../../common/eloue/services/MapsService",
+//    "../../../common/eloue/services/MapsService",
+    "../../../common/eloue/services/UtilsService",
     "algoliasearch-helper"
-], function (EloueWidgetsApp, MapsService, algoliasearchHelper) {
+], function (EloueWidgetsApp, UtilsService, algoliasearchHelper) {
     "use strict";
     /* 
      * http://ericclemmons.com/angular/angular-trust-filter/
@@ -17,26 +18,138 @@ define([
       }
     ]);
     
+    EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
+        uiGmapGoogleMapApiProvider.configure({
+            v: '3',
+            libraries: 'places',
+            language: 'fr-FR',
+            region: 'FR'
+        });
+    }]);
+    
     /**
      * Controller to run scripts necessary for product list page.
      */
     EloueWidgetsApp.controller("ProductListCtrl", [
         "$scope",
         "$window",
+        "$timeout",
         "$document",
         "$location",
-        "MapsService",
+        "UtilsService",
+        "uiGmapGoogleMapApi",
+        "uiGmapIsReady",
         "algolia",
         "$log",
-        function ($scope, $window, $document, $location, MapsService, algolia, $log) {
+        function ($scope, $window, $timeout, $document, $location, UtilsService, uiGmapGoogleMapApi, uiGmapIsReady, algolia, $log) {
            
-            $scope.searchResultsPerPage = 12;
+            $scope.search_max_range = 1000;
+        	
+        	var countries = {
+			  'fr': {
+			    center: {latitude: 46.2, longitude: 2.2},
+			    zoom: UtilsService.zoom($scope.search_max_range)
+			  }
+			};
+
+        	
+            /*
+             * Map config
+             */
+
+            $scope.map = {
+            	loaded: false,
+                zoom: countries['fr'].zoom,
+                center: countries['fr'].center,
+        		options:{
+        			disableDefaultUI: true,
+        			zoomControl: true
+    			},
+    			control: {}
+    		};
+        	
+            $scope.rangeUpdatedBySlider = false;
+
+            
+            // On map loaded
+            uiGmapGoogleMapApi.then(function(maps) {
+
+            	var geocoder = new maps.Geocoder();
+            	var placeInput = $document[0].getElementById('where');
+            	var autocomplete = new maps.places.Autocomplete(placeInput);
+            	
+                uiGmapIsReady.promise(1).then(function(instances) {
+                	instances.forEach(function(inst) {
+                        var map = inst.map;
+
+                    	$scope.map.options.mapTypeId = maps.MapTypeId.ROADMAP;
+                    	
+                    	map.addListener("zoom_changed", function () {
+                            if (!$scope.rangeUpdatedBySlider) {
+                                var zoomLevel = map.getZoom(),
+                                    calcRange = UtilsService.range(zoomLevel);
+                                if (calcRange && calcRange <= $scope.search_max_range) {
+                                    $scope.range_slider.max = calcRange;
+                                }
+                            	$scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
+                            	$scope.submitForm();
+                                
+                            }
+                            $scope.rangeUpdatedBySlider = false;
+                            $scope.$apply();
+                        });
+                    	
+                    	autocomplete.addListener('place_changed', function(){
+                    		var place = autocomplete.getPlace();
+                    		
+                    		geocoder.geocode(
+                                {address: placeInput.value},
+                                function (result, status) {
+                                    if (status === maps.GeocoderStatus.OK) {
+                                    	$log.debug(result[0]);
+                                    	var location = result[0].geometry.location;
+                                    	$scope.map.center = {latitude:location.lat(), longitude:location.lng()};
+                                        $log.debug("Location: " + location);
+                                        $scope.search_center = location;
+                                        var circle = new google.maps.Circle({
+                                            map: map,
+                                            radius: $scope.range_slider.max * 1000,
+                                            fillColor: "#FFFFFF",
+                                            editable: false
+                                        });
+                                        $scope.search.setQueryParameter('aroundLatLng', location.lat()+', '+location.lng());
+                                        $scope.submitForm();
+                                        $scope.$apply();
+                                    }
+                                }
+                            );
+                    		
+//                    		$log.debug(place);
+//                    		$log.debug($scope.map.bounds);
+                    	});
+                    	
+                    	
+                    	
+                    });
+                	
+                	
+                });
+            	
+                
+
+            	$scope.map.loaded = true;
+
+            	
+
+            	
+            });
             
             
             /* 
              * Algolia config 
              * */
             
+            $scope.searchResultsPerPage = 12;
             
             var SEARCH_PARAMETERS = {
                 hierarchicalFacets: [{
@@ -59,20 +172,31 @@ define([
             
             $scope.search = algoliasearchHelper(client, $scope.search_index, SEARCH_PARAMETERS);
             
+//            $scope.search.setQueryParameter('aroundRadius', $scope.search_max_range * 1000);
+//            $scope.search.setQueryParameter('aroundLatLng', countries['fr'].center.latitude + ", " + countries['fr'].center.longitude);
+            
             var trackedParameters = ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
+            
+            $scope.locationUIChanged = false;
+            
             
             /* 
              * Filter refinement 
              * */
             
-            $scope.onLocationChangeStart = function(event) {
-//            	event.preventDefault();
-            	$scope.search.setStateFromQueryString($location.url());
-            	$log.debug(" ==============\n STATE FROM QUERY \n ==============");
-            	$log.debug($scope.search);
-            	$scope.search.search();
+            $scope.onLocationChangeStart = function(event, current, next) {
+            	$log.debug("onLocationChangeStart");
+            	if (!$scope.locationUIChanged){	
+            		$log.debug("!locationUIChanged");
+            		$log.debug(UtilsService.urlEncodeObject($location.search()));
+            		$log.debug(current);
+            		$scope.search.setStateFromQueryString(
+            				UtilsService.urlEncodeObject($location.search()));
+            		$scope.search.search();
+            	}
+        		$scope.locationUIChanged = false;
             };
-//            $scope.$on("$locationChangeSuccess", $scope.onLocationChangeStart);
+            $scope.$on("$locationChangeStart", $scope.onLocationChangeStart);
             
             $scope.refinePrices = function(sliderId){
                 
@@ -105,6 +229,29 @@ define([
                 
             };
             
+            $scope.refineRange = function(sliderId){
+            	$scope.rangeUpdatedBySlider = true;
+            	$scope.map.zoom = UtilsService.zoom($scope.range_slider.max);
+            	$scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
+            	
+//            	
+//                $scope.range_slider = {
+//                    max: 1000,
+//                    options: {
+//                        floor: 1,
+//                        ceil: 1000,
+//                        onEnd: $scope.refineRange
+//                    }	
+//                }; 
+//            	
+                $scope.submitForm();
+                
+            };
+            
+            $scope.refineRangeWithMap = function(){
+            	
+            };
+            
             $scope.refineRenterPart = function(newVal){
                 var state = $scope.search.getState();
                 if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
@@ -113,7 +260,8 @@ define([
                 if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", false)){
                     $scope.search.removeDisjunctiveFacetRefinement("pro_owner", false);
                 }
-                $scope.search.search();
+//                $scope.search.search();
+                $scope.submitForm();
             };
             
             $scope.refineRenterPro = function(newVal){
@@ -124,11 +272,13 @@ define([
                 if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", true)){
                     $scope.search.removeDisjunctiveFacetRefinement("pro_owner", true);
                 }
-                $scope.search.search();
+//                $scope.search.search();
+                $scope.submitForm();
             };
             
             $scope.refineCategory = function(path) {
-                $scope.search.toggleRefinement("category", path).search();
+                $scope.search.toggleRefinement("category", path);
+                $scope.submitForm();
             };
             
             
@@ -154,8 +304,9 @@ define([
             
             $scope.setOrdering = function(ordering){
                 $scope.search
-                    .setIndex(!!ordering ? $scope.search_index+"_"+ordering : $scope.search_index)
-                    .search();
+                    .setIndex(!!ordering ? $scope.search_index+"_"+ordering : $scope.search_index);
+//                    .search();
+                $scope.submitForm();
             };
             
             
@@ -205,18 +356,36 @@ define([
                 
             };
 
-            $scope.renderRangeSlider = function(result){
-                
+            $scope.renderRangeSlider = function(result){                
+            	$scope.map.zoom = UtilsService.zoom($scope.search.getQueryParameter('aroundRadius'));
             };
             
-            $scope.renderSearchCategories = function(result){
+            $scope.renderSearchCategories = function(result, state){
                 if (result.hierarchicalFacets && result.hierarchicalFacets[0]) {
-                    $scope.category = result.hierarchicalFacets[0];    
+                    $scope.category = result.hierarchicalFacets[0];
+//                    var hbcs = result.getHierarchicalFacetBreadcrumb('category');
+//                    var hbc = [];
+//                    for (i in hbcs){
+//                    	hbc.push(hbcs[i]);
+//                    	$scope.categories.push({long:hbcs.join(' > '), short:hbcs[i]});	
+//                    }
                 }
             };
                        
             $scope.renderBreadcrumbs = function(state) {
-//                $scope.search_breadcrumbs = state.getHierarchicalFacetBreadcrumb("category");
+        		$log.debug("renderBreadcrumbs");
+            	if ("category" in state.hierarchicalFacetsRefinements){
+            		$scope.search_breadcrumbs = [];
+            		var cat = state.hierarchicalFacetsRefinements.category[0];
+            		if (cat){
+            			var catparts = cat.split(' > ');
+                		for (var i=0; i< catparts.length; i++){
+                			$scope.search_breadcrumbs.push(
+                					{short: catparts[i], long: catparts.slice(0,i+1).join(' > ')});
+                		}
+                		$log.debug($scope.search_breadcrumbs);	
+            		}
+            	}
             };
             
             $scope.renderRenterTypes = function(result, state){
@@ -227,16 +396,52 @@ define([
 //                $scope.search_part = state.isDisjunctiveFacetRefined("pro_owner", false);
             };
             
+            $scope.cooldown = false;
+            $scope.searchDuringCooldown = false;
+            $scope.cooldown_duration = 1000;
+            
+            $scope.resetCooldown = function(){
+            	$log.debug("resetCooldown");
+        		$scope.cooldown = false;
+        		if ($scope.searchDuringCooldown){
+        			$log.debug("searchDuringCooldown");
+        			$scope.searchDuringCooldown = false;
+                	$location.search($scope.search.getStateAsQueryString({filters: trackedParameters}));
+        		}
+        	};
             
             $scope.renderLocation = function(result, state) {
-            	var query = $scope.search.getStateAsQueryString({filters: trackedParameters});
-            	$log.debug("QUERY: ");
-            	$log.debug(query);
-            	$location.search(query);
-            };
+            	$log.debug("renderLocation");
+            	if ($scope.cooldown){
+            		$log.debug("cooldown");
+            		$scope.searchDuringCooldown = true;
+            	} else {
+            		$log.debug("!cooldown");
+            		$scope.cooldown = true;
+                	$location.search($scope.search.getStateAsQueryString({filters: trackedParameters}));
+                	$timeout($scope.resetCooldown, $scope.cooldown_duration);
+            	}
+            	
+        	};
+        	
+        	$scope.renderQueryText = function(result) {
+        		if (!$scope.locationUIChanged){
+                	$scope.search_query = result.query;
+                }
+        	};
             
-            
-            
+        	$scope.renderOrdering = function(result) {
+        		$scope.search_ordering = result.index.substr($scope.search_index.length+1);
+        		$log.debug('Ordering: ' + $scope.search_ordering);
+        	};
+        	
+        	$scope.renderMap = function(result, state) {
+        		for (var ri in $scope.search_results){
+        			var res = $scope.search_results[ri];
+        			res.location_obj = {latitude: res.locations[0], longitude: res.locations[1]};
+        		};
+        	};
+        	
             /* 
              * Process search results 
              * */
@@ -249,7 +454,16 @@ define([
                 $log.debug($scope.search_part+' '+state.isDisjunctiveFacetRefined("pro_owner", false));
                 
                 if ($scope.search_result_count){
-                    $scope.search_results = result.hits;
+                	
+                	var hits = result.hits
+                	
+            		for (var ri in hits){
+            			var res = hits[ri];
+            			res.location_obj = {latitude: res.locations[0], longitude: res.locations[1]};
+            		};
+                	
+            		$scope.search_results = hits;
+//            		$scope.search_results = result.hits;
                     
 //                    $scope.price_slider.options.min = Math.min($scope.price_slider.min, result.facets_stats.price.min);
 //                    $scope.price_slider.options.max = Math.max($scope.price_slider.max, result.facets_stats.price.max);
@@ -260,11 +474,15 @@ define([
                     
                     //$scope.renderResults(result);
                     $scope.renderLocation(result, state);
+                    $scope.renderQueryText(result);
+                    $scope.renderOrdering(result);
                     $scope.renderPagination(result);
-                    $scope.renderSearchCategories(result);
+                    $scope.renderSearchCategories(result, state);
                     $scope.renderPriceSlider(result, state);
                     $scope.renderBreadcrumbs(state);
                     $scope.renderRenterTypes(result, state);
+                    $scope.renderMap(result, state);
+                    $log.debug($scope.search_results);
 //                    $log.debug($scope.search.getHierarchicalFacetBreadcrumb("category"));
                     
 //                    $scope.renderRangeSlider(result);
@@ -275,7 +493,7 @@ define([
 //                    $log.debug("Query: " + $scope.search_query);
 ////                    $log.debug("Query params: ");
 ////                    $log.debug(params);
-//                    $log.debug("X, Y, R: " + $scope.search_cordinates+ " " + $scope.search_radius);
+//                    $log.debug("X, Y, R: " + $scope.search_center+ " " + $scope.search_radius);
 //                    $log.debug("Hits count: " + $scope.search_result_count);
 //                    $log.debug("Price: " + $scope.price_from + " to " + $scope.price_to);
 //                    $log.debug("Pro: " + $scope.search_pro);
@@ -320,6 +538,7 @@ define([
             $scope.search_part = false;
             $scope.search_pro_count = 0;
             $scope.search_part_count = 0;
+            $scope.search_breadcrumbs = [];
             $scope.price_slider = {
                 min: 0,
                 max: 1000,
@@ -328,6 +547,14 @@ define([
                     ceil: 1000,
                     onEnd: $scope.refinePrices
                 }
+            };
+            $scope.range_slider = {
+                max: $scope.search_max_range,
+                options: {
+                    floor: 1,
+                    ceil: $scope.search_max_range,
+                    onEnd: $scope.refineRange
+                }	
             };
             
 
@@ -341,9 +568,13 @@ define([
                 $("#geolocate").formmapper({
                     details: "form"
                 });
+                
+                var autocomplete = new google.maps.places.Autocomplete($document[0].getElementById('where'));
 
+                
                 var mapCanvas = $document[0].getElementById("map-canvas"), rangeEl, radius, mapOptions, map, geocoder,
                     rangeSlider, rangeInput, rangeMax, rangeVal, notUpdateBySlider, notUpdateByMap, products;
+                /*
                 if (mapCanvas) {
 
                     $("#where").formmapper({
@@ -369,7 +600,7 @@ define([
                             if (status === google.maps.GeocoderStatus.OK) {
                                 map.setCenter(result[0].geometry.location);
                                 $log.debug("Location: " + result[0].geometry.location);
-                                $scope.search_cordinates = result[0].geometry.location;
+                                $scope.search_center = result[0].geometry.location;
                                 var circle = new google.maps.Circle({
                                     map: map,
                                     radius: radius * 1000,
@@ -456,6 +687,8 @@ define([
 
                     $scope.setMarkers(map, products, "li#marker-");
                 }
+                */
+                
             };
 
             $scope.applyDatePicker = function (fieldId) {
@@ -690,19 +923,15 @@ define([
             };
             
             $scope.submitForm = function() {
-                
                 $scope.search.setQuery($scope.search_query)
-                    .setCurrentPage($scope.searchPage)
-                    .search();
-                
+                	.setCurrentPage($scope.searchPage).search();
+        		$scope.locationUIChanged = true;
             };
 
             $scope.newSearch = function(){
                 $scope.searchPage = 0;
-                $scope.submitForm();
-            }
-            
-
+                $scope.submitForm();            	
+            };
             
             $scope.disableForm = function() {
                 setTimeout(function() {
@@ -719,7 +948,7 @@ define([
                 return true;
             });
 
-            MapsService.loadGoogleMaps();
+//            MapsService.loadGoogleMaps();
             $scope.activateLayoutSwitcher();
             $scope.activateCategoryAndSortSelector();
             $scope.activatePriceSlider();

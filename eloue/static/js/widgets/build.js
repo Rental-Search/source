@@ -3,7 +3,7 @@
     baseUrl: "./",
     paths: {
         "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
-        "lodash": "../../bower_components/lodash/dist/lodash",
+        "lodash": "../../bower_components/lodash/lodash",
         "jquery": "../../bower_components/jquery/dist/jquery",
         "jquery-ui": "../../bower_components/jqueryui/jquery-ui",
         "jshashtable": "../jshashtable-2.1_src",
@@ -42,7 +42,9 @@
         "angular-cookie": "../../bower_components/angular-cookie/angular-cookie",
         "algoliasearch": "../../bower_components/algoliasearch/dist/algoliasearch.angular",
         "algoliasearch-helper/": "../../bower_components/algoliasearch-helper/dist/algoliasearch.helper",
-        "rzModule": "../../bower_components/angularjs-slider/dist/rzslider"
+        "rzModule": "../../bower_components/angularjs-slider/dist/rzslider",
+        "nemSimpleLogger": "../../bower_components/angular-simple-logger/dist/angular-simple-logger",
+        "uiGmapgoogle-maps": "../../bower_components/angular-google-maps/dist/angular-google-maps"
     },
     shim: {
         "angular": {
@@ -88,7 +90,9 @@
             deps: ["algoliasearch"],
             "exports": "algoliasearchHelper"
         },
-        "rzModule": ["angular"]
+        "rzModule": ["angular"],
+        "nemSimpleLogger": ["angular"],
+        "uiGmapgoogle-maps": ["angular", "lodash", "nemSimpleLogger"]
     },
     removeCombined: true,
     findNestedDependencies: true,

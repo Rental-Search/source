@@ -17,19 +17,24 @@ mixin category_crumbs(category_list)
         li.active: {{ product.summary|capfirst }}
         {% endcache %}
       else
+        {% verbatim %}
+        li(ng-repeat="cat in search_breadcrumbs", ng-cloak)
+          a(href="#", ng-click="refineCategory(cat.long)") {{ cat.short }}
+        {% endverbatim %}
+        
         //-if breadcrumbs.categorie
-        for crumb in breadcrumbs|facets
-          {% cache 122400 category:breadcrumb crumb.object.pk LANGUAGE_CODE %}
-          +category_crumbs(crumb.object|ancestors)
-          {% endcache %}
-          if form.cleaned_data.q or form.cleaned_data.l
-            li: a(href="{{ crumb.url }}") {{ crumb.pretty_value|capfirst }}
-          else
-            li.active: {{ crumb.pretty_value|capfirst }}
-        if form.cleaned_data.q
-          if form.cleaned_data.l
-            li: a(href="{% facet_url breadcrumbs -'l' -'r' %}"){% trans 'location' %} {{ form.cleaned_data.q }}
-          else
-            li.active: {% trans 'location' %} {{ form.cleaned_data.q }}
-        if form.cleaned_data.l
-          li.active: {{ form.cleaned_data.l|capfirst }}
+//-        for crumb in breadcrumbs|facets
+//-          {% cache 122400 category:breadcrumb crumb.object.pk LANGUAGE_CODE %}
+//-          +category_crumbs(crumb.object|ancestors)
+//-          {% endcache %}
+//-          if form.cleaned_data.q or form.cleaned_data.l
+//-            li: a(href="{{ crumb.url }}") {{ crumb.pretty_value|capfirst }}
+//-          else
+//-            li.active: {{ crumb.pretty_value|capfirst }}
+//-        if form.cleaned_data.q
+//-          if form.cleaned_data.l
+//-            li: a(href="{% facet_url breadcrumbs -'l' -'r' %}"){% trans 'location' %} {{ form.cleaned_data.q }}
+//-          else
+//-            li.active: {% trans 'location' %} {{ form.cleaned_data.q }}
+//-        if form.cleaned_data.l
+//-          li.active: {{ form.cleaned_data.l|capfirst }}

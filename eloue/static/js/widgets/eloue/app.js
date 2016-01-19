@@ -17,6 +17,7 @@ define([
         "ngResource",
         "pascalprecht.translate",
         "algoliasearch",
-        "rzModule"
+        "rzModule",
+        "uiGmapgoogle-maps"
     ]);
 });

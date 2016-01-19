@@ -12,7 +12,7 @@ require.config(
             baseUrl: STATIC_URL + "js/widgets",
             paths: {
                 "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
-                "lodash": "../../bower_components/lodash/dist/lodash",
+                "lodash": "../../bower_components/lodash/lodash",
                 "jquery": "../../bower_components/jquery/dist/jquery",
                 "jquery-ui": "../../bower_components/jqueryui/jquery-ui",
                 "jshashtable": "../jshashtable-2.1_src",
@@ -51,7 +51,9 @@ require.config(
                 "angular-cookie": "../../bower_components/angular-cookie/angular-cookie",
                 "algoliasearch": "../../bower_components/algoliasearch/dist/algoliasearch.angular",
                 "algoliasearch-helper": "../../bower_components/algoliasearch-helper/dist/algoliasearch.helper",
-                "rzModule": "../../bower_components/angularjs-slider/dist/rzslider"
+                "rzModule": "../../bower_components/angularjs-slider/dist/rzslider",
+                "nemSimpleLogger": "../../bower_components/angular-simple-logger/dist/angular-simple-logger",
+                "uiGmapgoogle-maps": "../../bower_components/angular-google-maps/dist/angular-google-maps"
             },
             shim: {
                 "angular": {
@@ -94,7 +96,9 @@ require.config(
                 "angular-cookie": ["angular"],
                 "algoliasearch": ["angular"],
                 "algoliasearch-helper": ["algoliasearch"],
-                "rzModule": ["angular"]
+                "rzModule": ["angular"],
+                "nemSimpleLogger": ["angular"],
+                "uiGmapgoogle-maps": ["angular", "lodash", "nemSimpleLogger"]
             }
         };
     })()
@@ -139,7 +143,9 @@ require([
     "angular-cookie",
     "algoliasearch",
     "algoliasearch-helper",
-    "rzModule"
+    "rzModule",
+    "nemSimpleLogger",
+    "uiGmapgoogle-maps"
 ], function ($, _, angular) {
     "use strict";
     $(function () {

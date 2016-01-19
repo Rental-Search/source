@@ -3,6 +3,9 @@
 
 link(rel="stylesheet", type="text/css", href="/static/bower_components/angularjs-slider/dist/rzslider.css")
 
+style.
+  .angular-google-map-container { height: 250px; }
+
 {% verbatim %}
 script(type="text/ng-template" id="_category_tree_item.html").
   <ul ng-if="category['isRefined']">
@@ -24,14 +27,18 @@ script(type="text/ng-template" id="_category_tree_item.html").
   input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
 
   .map-container
-    .whirly
-    .map#map-canvas
-      //- map here
+    .whirly(ng-if='!map.loaded')
+    ui-gmap-google-map(ng-if='map.loaded', center='map.center', zoom='map.zoom', options='map.options', control='map.control', pan=true)
+      ui-gmap-markers(ng-if='search_results', models="search_results", coords="location_obj", idkey="objectID")
 
   //- .slider
   label.caption(for="range-slider") {% trans "rayon" %}
-  input#range(type="hidden", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}", disabled)
-  input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
+  {% verbatim %}
+  rzslider(rz-slider-model="range_slider.max", ng-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
+  {% endverbatim %}
+  
+  //- input#range(type="hidden", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}", disabled)
+  //- input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
 
   //-label.caption(for="start-date") date de début
   //-.date-picker
@@ -51,7 +58,7 @@ script(type="text/ng-template" id="_category_tree_item.html").
   label#price-label.caption(for="price-slider") prix
   
   {% verbatim %}
-  rzslider(rz-slider-model="price_slider.min", rz-slider-high="price_slider.max", rz-slider-options="price_slider.options", ng-change="submitForm()")
+  rzslider(rz-slider-model="price_slider.min", rz-slider-high="price_slider.max", ng-model="price_slider.min", rz-slider-options="price_slider.options", ng-change="submitForm()")
   {% endverbatim %}
   
   //- input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
