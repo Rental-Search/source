@@ -238,10 +238,6 @@ define([
                 
             };
             
-            $scope.refineRangeWithMap = function(){
-            	
-            };
-            
             $scope.refineRenterPart = function(newVal){
                 var state = $scope.search.getState();
                 if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
