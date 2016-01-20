@@ -19,7 +19,10 @@ mixin category_crumbs(category_list)
       else
         {% verbatim %}
         li(ng-repeat="cat in search_breadcrumbs", ng-cloak)
-          a(href="#", ng-click="refineCategory(cat.long)") {{ cat.short }}
+          a(href="#", ng-click="refineBreadcrumbCategory(cat.long)") {{ cat.short }}
+        li(ng-if="search_query")
+          a(href="#", ng-click="refineLocation()") {{ search_query }}
+        li.active: {{ search_location_str }}
         {% endverbatim %}
         
         //-if breadcrumbs.categorie
