@@ -234,16 +234,6 @@ define([
             	$scope.map.zoom = UtilsService.zoom($scope.range_slider.max);
             	$scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
             	
-//            	
-//                $scope.range_slider = {
-//                    max: 1000,
-//                    options: {
-//                        floor: 1,
-//                        ceil: 1000,
-//                        onEnd: $scope.refineRange
-//                    }	
-//                }; 
-//            	
                 $scope.submitForm();
                 
             };
