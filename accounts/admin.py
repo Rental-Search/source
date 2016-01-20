@@ -362,7 +362,7 @@ class ProAdmin(PatronAdmin):
     products_count.short_description = _(u"nombre d'annonce")
 
     def edit_product_link(self, obj):
-        edit_product_link = '<a href="/edit/products/product/?q=%s" target="_blank">Editer les annonces</a>' % obj.pk
+        edit_product_link = '<a href="/edit/products/product/?q=%s" target="_blank">Editer les annonces</a>' % obj.email
         return edit_product_link
     edit_product_link.allow_tags = True
     edit_product_link.short_description = _(u"annonces")
