@@ -363,12 +363,6 @@ define([
             $scope.renderSearchCategories = function(result, state){
                 if (result.hierarchicalFacets && result.hierarchicalFacets[0]) {
                     $scope.category = result.hierarchicalFacets[0];
-//                    var hbcs = result.getHierarchicalFacetBreadcrumb('category');
-//                    var hbc = [];
-//                    for (i in hbcs){
-//                    	hbc.push(hbcs[i]);
-//                    	$scope.categories.push({long:hbcs.join(' > '), short:hbcs[i]});	
-//                    }
                 }
             };
                        
