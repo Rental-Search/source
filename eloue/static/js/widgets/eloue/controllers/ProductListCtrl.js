@@ -483,29 +483,12 @@ define([
                     $scope.renderRenterTypes(result, state);
                     $scope.renderMap(result, state);
                     $log.debug($scope.search_results);
-//                    $log.debug($scope.search.getHierarchicalFacetBreadcrumb("category"));
-                    
-//                    $scope.renderRangeSlider(result);
-                    
-                    
-//                    $scope.updatePriceSlider();
-                    
-//                    $log.debug("Query: " + $scope.search_query);
-////                    $log.debug("Query params: ");
-////                    $log.debug(params);
-//                    $log.debug("X, Y, R: " + $scope.search_center+ " " + $scope.search_radius);
-//                    $log.debug("Hits count: " + $scope.search_result_count);
-//                    $log.debug("Price: " + $scope.price_from + " to " + $scope.price_to);
-//                    $log.debug("Pro: " + $scope.search_pro);
-//                    $log.debug("Pages count: "+$scope.pages_count);
-//                    $log.debug("Pages range: "+$scope.pages_range);
                 } else {
                     $log.debug("No results");
                 }
                 
                 $scope.$apply();
                 
-//                $window.googleMapsLoaded();
             };
             
             $scope.processError = function(error){
