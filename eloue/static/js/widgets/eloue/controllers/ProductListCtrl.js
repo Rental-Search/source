@@ -84,7 +84,7 @@ define([
         			types: ['geocode']
         		};
             	
-            	var autocomplete_aside = new maps.places.Autocomplete(placeInputAside, ac_params);
+//            	var autocomplete_aside = new maps.places.Autocomplete(placeInputAside, ac_params);
             	var autocomplete_head = new maps.places.Autocomplete(placeInputHead,ac_params);
             	
                 uiGmapIsReady.promise(1).then(function(instances) {
@@ -187,7 +187,7 @@ define([
 	                    	};
                     	};
                     	autocomplete_head.addListener('place_changed', autocompleteChangeListener(autocomplete_head));
-                    	autocomplete_aside.addListener('place_changed', autocompleteChangeListener(autocomplete_aside));
+//                    	autocomplete_aside.addListener('place_changed', autocompleteChangeListener(autocomplete_aside));
                     	
                     	
                     });
