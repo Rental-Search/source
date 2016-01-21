@@ -94,11 +94,9 @@ define([
                         $scope.refineLocationByPlace = function(place){
                         	$log.debug('refineLocationByPlace');
                             $scope.search_location = place.name;
-                            var ne = place.geometry.viewport.getNorthEast(), sw = place.geometry.viewport.getSouthWest();
                             map.fitBounds(place.geometry.viewport);
                             													// p1Lat, p1Lng, p2Lat, p2Lng
-                            $scope.search.setQueryParameter('insideBoundingBox', sw.lng()+','+sw.lat()+','+ne.lng()+','+ne.lat());
-                            $scope.submitForm();
+
                         };
                         
                     	$scope.refineLocation = function(placeStr){
@@ -139,13 +137,43 @@ define([
                                 if (calcRange && calcRange <= $scope.search_max_range) {
                                     $scope.range_slider.max = calcRange;
                                 }
-                            	$scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
+//                            	$scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
                             	$scope.submitForm();
                                 
                             }
                             $scope.rangeUpdatedBySlider = false;
                             $scope.$apply();
                         });
+                    	
+                    	
+                    	$scope.refineLocationByMap = function(){
+                    		if ($scope.search_bounds_changed){
+                    			$scope.search_bounds_changed = false;
+                    			var bds = map.getBounds();
+                                var ne = bds.getNorthEast(), sw = bds.getSouthWest();
+                                $scope.search.setQueryParameter('insideBoundingBox', sw.lng()+','+sw.lat()+','+ne.lng()+','+ne.lat());
+                                $scope.submitForm();	
+                    		}
+                    	};
+                    	
+                    	map.addListener("bounds_changed", function () {
+                    		$scope.search_bounds_changed = true;
+                    	});
+                    	map.addListener("dragend", function () {
+                    		$scope.refineLocationByMap();
+                    	});
+                    	
+                    	map.addListener("zoom_changed", function () {
+                    		$scope.search_bounds_changed = true;
+                    		$scope.refineLocationByMap();
+                    	});
+                    	
+                    	map.addListener("zoom_changed", function () {
+                    		$scope.search_bounds_changed = true;
+                    		$scope.refineLocationByMap();
+                    	});
+                    	
+                    	
                     	var autocompleteChangeListener = function(autocomplete) {
                     		return function(){
 	                    		var place = autocomplete.getPlace();
@@ -180,6 +208,7 @@ define([
     	                        new maps.Point(29, $scope.markers_config.markerHeight * ri),
     	                        new maps.Point(14, $scope.markers_config.markerHeight));
             			$log.debug(ri);
+            			res.markerId = ri;
             			res.zIndex = ri;
             			res.markerOptions = {
             				icon: res.image,
@@ -637,6 +666,7 @@ define([
             $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
             $scope.search_breadcrumbs = [];
             $scope.search_location = getParameterByName('l') || "";
+			$scope.search_bounds_changed = false;
             $scope.price_slider = {
                 min: 0,
                 max: 1000,

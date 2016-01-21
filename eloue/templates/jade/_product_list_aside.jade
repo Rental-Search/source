@@ -29,7 +29,7 @@ script(type="text/ng-template" id="_category_tree_item.html").
   .map-container
     .whirly(ng-if='!map.loaded')
     ui-gmap-google-map(ng-if='map.loaded', center='map.center', zoom='map.zoom', options='map.options', control='map.control', pan='true')
-      ui-gmap-markers(ng-if='search_results', models="search_results", coords="'location_obj'", idKey="'objectID'", events="marker_event_handlers", options="'markerOptions'")
+      ui-gmap-markers(ng-if='search_results', models="search_results", coords="'location_obj'", idKey="'markerId'", events="marker_event_handlers", options="'markerOptions'")
 
   //- .slider
   label.caption(for="range-slider") {% trans "rayon" %}
