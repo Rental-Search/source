@@ -291,24 +291,34 @@ define([
             };
             
             $scope.refineRenterPart = function(newVal){
+            	$log.debug("refineRenterPart "+$scope.owner_type.part + ' ' + $scope.owner_type.pro);
                 var state = $scope.search.getState();
                 if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
                     $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
                 }
                 if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", false)){
                     $scope.search.removeDisjunctiveFacetRefinement("pro_owner", false);
+                    if (!$scope.owner_type.pro){
+                    	$scope.refineRenterPro(true);
+                    	return;
+                    };
                 }
 //                $scope.search.search();
                 $scope.submitForm();
             };
             
             $scope.refineRenterPro = function(newVal){
+            	$log.debug("refineRenterPro "+$scope.owner_type.part + ' ' + $scope.owner_type.pro);
                 var state = $scope.search.getState();
                 if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", true)){
                     $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
                 }
                 if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", true)){
                     $scope.search.removeDisjunctiveFacetRefinement("pro_owner", true);
+                    if (!$scope.owner_type.part){
+                    	$scope.refineRenterPart(true);
+                    	return;
+                    };
                 }
 //                $scope.search.search();
                 $scope.submitForm();
@@ -434,10 +444,11 @@ define([
             
             $scope.renderRenterTypes = function(result, state){
                 var facetResult = result.getFacetByName("pro_owner");
-                $scope.search_pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
-                $scope.search_part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
-//                $scope.search_pro = state.isDisjunctiveFacetRefined("pro_owner", true);
-//                $scope.search_part = state.isDisjunctiveFacetRefined("pro_owner", false);
+                $scope.owner_type.pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
+                $scope.owner_type.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
+                $scope.owner_type.pro = state.isDisjunctiveFacetRefined("pro_owner", true);
+                $scope.owner_type.part = state.isDisjunctiveFacetRefined("pro_owner", false);
+                $log.debug($scope.owner_type.pro+' '+$scope.owner_type.part);
             };
             
             $scope.cooldown = false;
@@ -540,8 +551,8 @@ define([
                 $log.debug(result);
                 $scope.search_result_count = result.nbHits;
 
-                $log.debug($scope.search_pro+' '+state.isDisjunctiveFacetRefined("pro_owner", true));
-                $log.debug($scope.search_part+' '+state.isDisjunctiveFacetRefined("pro_owner", false));
+                $log.debug($scope.owner_type.pro+' '+state.isDisjunctiveFacetRefined("pro_owner", true));
+                $log.debug($scope.owner_type.part+' '+state.isDisjunctiveFacetRefined("pro_owner", false));
                 
                 if ($scope.search_result_count){
                 	              	
@@ -613,10 +624,14 @@ define([
             $scope.search_results_price_min = 0;
             $scope.price_from = 0;
             $scope.price_to = 1000;
-            $scope.search_pro = false;
-            $scope.search_part = false;
-            $scope.search_pro_count = 0;
-            $scope.search_part_count = 0;
+            $scope.owner_type = {
+            	pro: true,
+	            part: true,
+	            pro_count: 0,
+	            part_count: 0
+            };
+            $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
+            $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
             $scope.search_breadcrumbs = [];
             $scope.search_location_str = getParameterByName('l') || "";
             $scope.price_slider = {
@@ -989,7 +1004,7 @@ define([
                     function(){
                         if (this.checked) {
                             proCheckbox.prop("checked", false);
-                            $scope.search_pro = false;
+                            $scope.owner_type.pro = false;
                         }
                         $scope.submitForm();
                     });
@@ -997,7 +1012,7 @@ define([
                     function(){
                         if (this.checked) {
                             particularCheckbox.prop("checked", false);
-                            $scope.search_pro = true;
+                            $scope.owner_type.pro = true;
                         }
                         $scope.submitForm();
                     });

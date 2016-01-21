@@ -66,17 +66,17 @@ script(type="text/ng-template" id="_category_tree_item.html").
   //- input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
 
   p.caption {% trans "loueurs" %}
-  .checkbox(ng-if="search_part_count")
+  .checkbox(ng-if="owner_type.part_count")
     label(for="particular")
       {% trans "particuliers" as particular %}
-      input(type="checkbox", name="renter", ng-change="refineRenterPart(search_part)", ng-model="search_part")#particular
+      input(type="checkbox", name="renter", ng-change="refineRenterPart(owner_type.part)", ng-model="owner_type.part")#particular
       span.flaticon.stroke.checkmark-1
-    {% trans " Particuliers" %} {% verbatim %} {{ " ("+search_part_count+")" }} {% endverbatim %}
-  .checkbox(ng-if="search_pro_count")
+    {% trans " Particuliers" %} {% verbatim %} {{ " ("+owner_type.part_count+")" }} {% endverbatim %}
+  .checkbox(ng-if="owner_type.pro_count")
     label(for="professional")
-      input(type="checkbox", name="renter", ng-change="refineRenterPro(search_pro)", ng-model="search_pro")#professional
+      input(type="checkbox", name="renter", ng-change="refineRenterPro(owner_type.pro)", ng-model="owner_type.pro")#professional
       span.flaticon.stroke.checkmark-1
-    {% trans " Professionnels" %} {% verbatim %} {{ " ("+search_pro_count+")" }} {% endverbatim %}
+    {% trans " Professionnels" %} {% verbatim %} {{ " ("+owner_type.pro_count+")" }} {% endverbatim %}
 
 //  .indent-t-md
 //    input(id="submitButton", type="submit", style="width: 100%", value="{% trans 'Filtrer' %}").btn.btn-lg.btn-advertise.bg-success
