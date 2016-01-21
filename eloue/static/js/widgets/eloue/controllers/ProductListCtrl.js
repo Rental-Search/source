@@ -94,9 +94,10 @@ define([
                         $scope.refineLocationByPlace = function(place){
                         	$log.debug('refineLocationByPlace');
                             $scope.search_location = place.name;
-                            var nw = place.geometry.viewport.getNorthEast(), se = place.geometry.viewport.getSouthWest();
+                            var ne = place.geometry.viewport.getNorthEast(), sw = place.geometry.viewport.getSouthWest();
                             map.fitBounds(place.geometry.viewport);
-                            $scope.search.setQueryParameter('insideBoundingBox', nw.lat()+','+nw.lng()+','+se.lat()+','+se.lng());
+                            													// p1Lat, p1Lng, p2Lat, p2Lng
+                            $scope.search.setQueryParameter('insideBoundingBox', sw.lng()+','+sw.lat()+','+ne.lng()+','+ne.lat());
                             $scope.submitForm();
                         };
                         
