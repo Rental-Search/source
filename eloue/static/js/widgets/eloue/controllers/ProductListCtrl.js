@@ -75,15 +75,30 @@ define([
             uiGmapGoogleMapApi.then(function(maps) {
 
             	var geocoder = new maps.Geocoder();
-            	var placeInput = $document[0].getElementById('where');
-            	$scope.search_location_str = placeInput.value;
-            	var autocomplete = new maps.places.Autocomplete(placeInput);
+            	var placeInputAside = $document[0].getElementById('where');
+            	var placeInputHead = $document[0].getElementById('geolocate');
+            	$scope.search_location_str = placeInputHead.value;
             	
+            	var ac_params = {
+        			componentRestrictions: {country: 'fr'},
+        			types: ['geocode']
+        		};
+            	
+            	var autocomplete_aside = new maps.places.Autocomplete(placeInputAside, ac_params);
+            	var autocomplete_head = new maps.places.Autocomplete(placeInputHead,ac_params);
             	
                 uiGmapIsReady.promise(1).then(function(instances) {
                 	instances.forEach(function(inst) {
                         var map = inst.map;
                        
+                        $scope.refineLocationByPlace = function(place){
+                        	$log.debug('refineLocationByPlace');
+                            $scope.search_location_str = place.name;
+                            var nw = place.geometry.viewport.getNorthEast(), se = place.geometry.viewport.getSouthWest();
+                            $scope.search.setQueryParameter('insideBoundingBox', nw.lat()+','+nw.lng()+','+se.lat()+','+se.lng());
+                            $scope.submitForm();
+                        };
+                        
                     	$scope.refineLocation = function(placeStr){
                     		if (!placeStr){
                     			placeStr = "France"; // TODO remove hardcoded value
@@ -91,6 +106,8 @@ define([
                     		geocoder.geocode(
                                     {address: placeStr},
                                     function (result, status) {
+//                                    	$log.debug("PLACE: ");
+//                                    	$log.debug(result);
                                         if (status === maps.GeocoderStatus.OK) {
                                         	$log.debug(result[0]);
                                         	var location = result[0].geometry.location;
@@ -106,7 +123,6 @@ define([
                                             $scope.search_location_str = placeStr;
                                             $scope.search.setQueryParameter('aroundLatLng', location.lat()+', '+location.lng());
                                             $scope.submitForm();
-//                                            $scope.$apply();
                                         }
                                     }
                                 );	
@@ -128,15 +144,18 @@ define([
                             $scope.rangeUpdatedBySlider = false;
                             $scope.$apply();
                         });
-                    	
-                    	autocomplete.addListener('place_changed', function(){
-                    		var place = autocomplete.getPlace();
+                    	var autocompleteChangeListener = function(){
+                    		var place = autocomplete_aside.getPlace();
                     		
-                    		$scope.refineLocation(placeInput.value);
+                    		$log.debug("PLACE: ");
+                    		$log.debug(place);
                     		
+                    		$scope.refineLocationByPlace(place);
 //                    		$log.debug(place);
 //                    		$log.debug($scope.map.bounds);
-                    	});
+                    	};
+                    	autocomplete_head.addListener('place_changed', autocompleteChangeListener);
+                    	autocomplete_aside.addListener('place_changed', autocompleteChangeListener);
                     	
                     	
                     	
@@ -572,7 +591,21 @@ define([
             
             $scope.submitInProgress = false;
             
-            $scope.search_location = "";
+//            https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+            var getParameterByName = function(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+            
+            var orig_params = $location.search();
+            
+            $log.debug(orig_params);
+            
+            $scope.search_query = getParameterByName('q') || "";
+            $scope.search.setQuery($scope.search_query);
+            $scope.search_location = getParameterByName('l') || "";
             $scope.search_results = [];
             $scope.searchPage = 0;
             $scope.search_result_count = 0;
@@ -585,7 +618,7 @@ define([
             $scope.search_pro_count = 0;
             $scope.search_part_count = 0;
             $scope.search_breadcrumbs = [];
-            $scope.search_location_str = "";
+            $scope.search_location_str = getParameterByName('l') || "";
             $scope.price_slider = {
                 min: 0,
                 max: 1000,
@@ -616,7 +649,8 @@ define([
                     details: "form"
                 });
                 
-                var autocomplete = new google.maps.places.Autocomplete($document[0].getElementById('where'));
+                var autocomplete = new google.maps.places.Autocomplete(
+                		$document[0].getElementById('where'));
 
                 
                 var mapCanvas = $document[0].getElementById("map-canvas"), rangeEl, radius, mapOptions, map, geocoder,

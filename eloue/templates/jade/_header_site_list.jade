@@ -96,11 +96,11 @@ section(ng-controller="AuthCtrl").container.signs-links
       {% trans "Que voulez-vous louer ?" as what %}
       {% trans "Où ça ?" as where %}
       form(action="{% url 'product_list' %}")#searh-form.input-group
-        input(type="text", name="q", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", title="{% if form.cleaned_data.q %}{{ what }}{% endif %}").table-cell.main-cell.form-control.what-field
+        input(ng-model="search_query", ng-change="submitForm()", type="text", name="q", autocomplete="off", spellcheck="false", autocorrect="off", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", title="{% if form.cleaned_data.q %}{{ what }}{% endif %}").table-cell.main-cell.form-control.what-field
         .table-cell.input-group.where-field
           i.flaticon.stroke.location-pin-3
           input(type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="{{ where }}", title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
-        .table-cell.input-group-btn
-          button(type="submit", default).btn.bg-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
     .table-cell
       button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}
+      //button(type="button", ng-click="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}
+      
