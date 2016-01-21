@@ -95,6 +95,7 @@ define([
                         	$log.debug('refineLocationByPlace');
                             $scope.search_location_str = place.name;
                             var nw = place.geometry.viewport.getNorthEast(), se = place.geometry.viewport.getSouthWest();
+                            map.fitBounds(place.geometry.viewport);
                             $scope.search.setQueryParameter('insideBoundingBox', nw.lat()+','+nw.lng()+','+se.lat()+','+se.lng());
                             $scope.submitForm();
                         };
@@ -144,18 +145,20 @@ define([
                             $scope.rangeUpdatedBySlider = false;
                             $scope.$apply();
                         });
-                    	var autocompleteChangeListener = function(){
-                    		var place = autocomplete_aside.getPlace();
-                    		
-                    		$log.debug("PLACE: ");
-                    		$log.debug(place);
-                    		
-                    		$scope.refineLocationByPlace(place);
-//                    		$log.debug(place);
-//                    		$log.debug($scope.map.bounds);
+                    	var autocompleteChangeListener = function(autocomplete) {
+                    		return function(){
+	                    		var place = autocomplete.getPlace();
+	                    		
+	                    		$log.debug("PLACE: ");
+	                    		$log.debug(place);
+	                    		
+	                    		$scope.refineLocationByPlace(place);
+	//                    		$log.debug(place);
+	//                    		$log.debug($scope.map.bounds);
+	                    	};
                     	};
-                    	autocomplete_head.addListener('place_changed', autocompleteChangeListener);
-                    	autocomplete_aside.addListener('place_changed', autocompleteChangeListener);
+                    	autocomplete_head.addListener('place_changed', autocompleteChangeListener(autocomplete_head));
+                    	autocomplete_aside.addListener('place_changed', autocompleteChangeListener(autocomplete_aside));
                     	
                     	
                     	
