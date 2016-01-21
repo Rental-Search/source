@@ -77,7 +77,7 @@ define([
             	var geocoder = new maps.Geocoder();
             	var placeInputAside = $document[0].getElementById('where');
             	var placeInputHead = $document[0].getElementById('geolocate');
-            	$scope.search_location_str = placeInputHead.value;
+            	$scope.search_location = placeInputHead.value;
             	
             	var ac_params = {
         			componentRestrictions: {country: 'fr'},
@@ -93,7 +93,7 @@ define([
                        
                         $scope.refineLocationByPlace = function(place){
                         	$log.debug('refineLocationByPlace');
-                            $scope.search_location_str = place.name;
+                            $scope.search_location = place.name;
                             var nw = place.geometry.viewport.getNorthEast(), se = place.geometry.viewport.getSouthWest();
                             map.fitBounds(place.geometry.viewport);
                             $scope.search.setQueryParameter('insideBoundingBox', nw.lat()+','+nw.lng()+','+se.lat()+','+se.lng());
@@ -121,7 +121,7 @@ define([
                                                 fillColor: "#FFFFFF",
                                                 editable: false
                                             });
-                                            $scope.search_location_str = placeStr;
+                                            $scope.search_location = placeStr;
                                             $scope.search.setQueryParameter('aroundLatLng', location.lat()+', '+location.lng());
                                             $scope.submitForm();
                                         }
@@ -159,7 +159,6 @@ define([
                     	};
                     	autocomplete_head.addListener('place_changed', autocompleteChangeListener(autocomplete_head));
                     	autocomplete_aside.addListener('place_changed', autocompleteChangeListener(autocomplete_aside));
-                    	
                     	
                     	
                     });
@@ -636,7 +635,7 @@ define([
             $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
             $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
             $scope.search_breadcrumbs = [];
-            $scope.search_location_str = getParameterByName('l') || "";
+            $scope.search_location = getParameterByName('l') || "";
             $scope.price_slider = {
                 min: 0,
                 max: 1000,

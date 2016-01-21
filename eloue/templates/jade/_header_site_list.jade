@@ -99,7 +99,7 @@ section(ng-controller="AuthCtrl").container.signs-links
         input(ng-model="search_query", ng-change="submitForm()", type="text", name="q", autocomplete="off", spellcheck="false", autocorrect="off", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", title="{% if form.cleaned_data.q %}{{ what }}{% endif %}").table-cell.main-cell.form-control.what-field
         .table-cell.input-group.where-field
           i.flaticon.stroke.location-pin-3
-          input(type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="{{ where }}", title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
+          input(ng-model="search_location", type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="{{ where }}", title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
     .table-cell
       button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}
       //button(type="button", ng-click="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}

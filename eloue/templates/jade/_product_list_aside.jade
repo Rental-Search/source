@@ -24,7 +24,7 @@ script(type="text/ng-template" id="_category_tree_item.html").
     div(ng-include="'_category_tree_item.html'")
 
   label.caption(for="where") {% trans "où" %}
-  input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
+  input#where(ng-model="search_location", name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
 
   .map-container
     .whirly(ng-if='!map.loaded')
