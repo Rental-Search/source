@@ -44,74 +44,74 @@ define([
         function ($scope, $window, $timeout, $document, $location, UtilsService, uiGmapGoogleMapApi, uiGmapIsReady, algolia, $log) {
            
             $scope.search_max_range = 1000;
-        	
-        	var countries = {
-			  'fr': {
-			    center: {latitude: 46.2, longitude: 2.2},
-			    zoom: UtilsService.zoom($scope.search_max_range)
-			  }
-			};
+            
+            var countries = {
+              'fr': {
+                center: {latitude: 46.2, longitude: 2.2},
+                zoom: UtilsService.zoom($scope.search_max_range)
+              }
+            };
 
-        	
+            
             /*
              * Map config
              */
 
             $scope.map = {
-            	loaded: false,
+                loaded: false,
                 zoom: countries['fr'].zoom,
                 center: countries['fr'].center,
-        		options:{
-        			disableDefaultUI: true,
-        			zoomControl: true
-    			},
-    			control: {}
-    		};
-        	
+                options:{
+                    disableDefaultUI: true,
+                    zoomControl: true
+                },
+                control: {}
+            };
+            
             $scope.rangeUpdatedBySlider = false;
 
             
             // On map loaded
             uiGmapGoogleMapApi.then(function(maps) {
 
-            	var geocoder = new maps.Geocoder();
-            	var placeInputAside = $document[0].getElementById('where');
-            	var placeInputHead = $document[0].getElementById('geolocate');
-            	$scope.search_location = placeInputHead.value;
-            	
-            	var ac_params = {
-        			componentRestrictions: {country: 'fr'},
-        			types: ['geocode']
-        		};
-            	
-//            	var autocomplete_aside = new maps.places.Autocomplete(placeInputAside, ac_params);
-            	var autocomplete_head = new maps.places.Autocomplete(placeInputHead,ac_params);
-            	
+                var geocoder = new maps.Geocoder();
+                var placeInputAside = $document[0].getElementById('where');
+                var placeInputHead = $document[0].getElementById('geolocate');
+                $scope.search_location = placeInputHead.value;
+                
+                var ac_params = {
+                    componentRestrictions: {country: 'fr'},
+                    types: ['geocode']
+                };
+                
+//                var autocomplete_aside = new maps.places.Autocomplete(placeInputAside, ac_params);
+                var autocomplete_head = new maps.places.Autocomplete(placeInputHead,ac_params);
+                
                 uiGmapIsReady.promise(1).then(function(instances) {
-                	instances.forEach(function(inst) {
+                    instances.forEach(function(inst) {
                         var map = inst.map;
                        
                         $scope.refineLocationByPlace = function(place){
-                        	$log.debug('refineLocationByPlace');
+//                            $log.debug('refineLocationByPlace');
                             $scope.search_location = place.name;
                             map.fitBounds(place.geometry.viewport);
-                            													// p1Lat, p1Lng, p2Lat, p2Lng
+                                                                                // p1Lat, p1Lng, p2Lat, p2Lng
 
                         };
                         
-                    	$scope.refineLocation = function(placeStr){
-                    		if (!placeStr){
-                    			placeStr = "France"; // TODO remove hardcoded value
-                    		}
-                    		geocoder.geocode(
+                        $scope.refineLocation = function(placeStr){
+                            if (!placeStr){
+                                placeStr = "France"; // TODO remove hardcoded value
+                            }
+                            geocoder.geocode(
                                     {address: placeStr},
                                     function (result, status) {
-//                                    	$log.debug("PLACE: ");
-//                                    	$log.debug(result);
+//                                        $log.debug("PLACE: ");
+//                                        $log.debug(result);
                                         if (status === maps.GeocoderStatus.OK) {
-                                        	$log.debug(result[0]);
-                                        	var location = result[0].geometry.location;
-                                        	$scope.map.center = {latitude:location.lat(), longitude:location.lng()};
+                                            $log.debug(result[0]);
+                                            var location = result[0].geometry.location;
+                                            $scope.map.center = {latitude:location.lat(), longitude:location.lng()};
                                             $log.debug("Location: " + location);
                                             $scope.search_center = location;
                                             var circle = new google.maps.Circle({
@@ -125,98 +125,98 @@ define([
                                             $scope.submitForm();
                                         }
                                     }
-                                );	
-                    	};
+                                );    
+                        };
                         
-                    	$scope.map.options.mapTypeId = maps.MapTypeId.ROADMAP;
-                    	
-                    	map.addListener("zoom_changed", function () {
+                        $scope.map.options.mapTypeId = maps.MapTypeId.ROADMAP;
+                        
+                        map.addListener("zoom_changed", function () {
                             if (!$scope.rangeUpdatedBySlider) {
                                 var zoomLevel = map.getZoom(),
                                     calcRange = UtilsService.range(zoomLevel);
                                 if (calcRange && calcRange <= $scope.search_max_range) {
                                     $scope.range_slider.max = calcRange;
                                 }
-//                            	$scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
-                            	$scope.submitForm();
+//                                $scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
+                                $scope.submitForm();
                                 
                             }
                             $scope.rangeUpdatedBySlider = false;
                             $scope.$apply();
                         });
-                    	
-                    	
-                    	$scope.refineLocationByMap = function(){
-                    		if ($scope.search_bounds_changed){
-                    			$scope.search_bounds_changed = false;
-                    			var bds = map.getBounds();
+                        
+                        
+                        $scope.refineLocationByMap = function(){
+                            if ($scope.search_bounds_changed){
+                                $scope.search_bounds_changed = false;
+                                var bds = map.getBounds();
                                 var ne = bds.getNorthEast(), sw = bds.getSouthWest();
                                 $scope.search.setQueryParameter('insideBoundingBox', sw.lng()+','+sw.lat()+','+ne.lng()+','+ne.lat());
-                                $scope.submitForm();	
-                    		}
-                    	};
-                    	
-                    	map.addListener("bounds_changed", function () {
-                    		$scope.search_bounds_changed = true;
-                    	});
-                    	map.addListener("dragend", function () {
-                    		$scope.refineLocationByMap();
-                    	});
-                    	
-                    	map.addListener("zoom_changed", function () {
-                    		$scope.search_bounds_changed = true;
-                    		$scope.refineLocationByMap();
-                    	});
-                    	
-                    	map.addListener("zoom_changed", function () {
-                    		$scope.search_bounds_changed = true;
-                    		$scope.refineLocationByMap();
-                    	});
-                    	
-                    	
-                    	var autocompleteChangeListener = function(autocomplete) {
-                    		return function(){
-	                    		var place = autocomplete.getPlace();
-	                    		
-	                    		$log.debug("PLACE: ");
-	                    		$log.debug(place);
-	                    		
-	                    		$scope.refineLocationByPlace(place);
-	//                    		$log.debug(place);
-	//                    		$log.debug($scope.map.bounds);
-	                    	};
-                    	};
-                    	autocomplete_head.addListener('place_changed', autocompleteChangeListener(autocomplete_head));
-//                    	autocomplete_aside.addListener('place_changed', autocompleteChangeListener(autocomplete_aside));
-                    	
-                    	
+                                $scope.submitForm();    
+                            }
+                        };
+                        
+                        map.addListener("bounds_changed", function () {
+                            $scope.search_bounds_changed = true;
+                        });
+                        map.addListener("dragend", function () {
+                            $scope.refineLocationByMap();
+                        });
+                        
+                        map.addListener("zoom_changed", function () {
+                            $scope.search_bounds_changed = true;
+                            $scope.refineLocationByMap();
+                        });
+                        
+                        map.addListener("zoom_changed", function () {
+                            $scope.search_bounds_changed = true;
+                            $scope.refineLocationByMap();
+                        });
+                        
+                        
+                        var autocompleteChangeListener = function(autocomplete) {
+                            return function(){
+                                var place = autocomplete.getPlace();
+                                
+//                                $log.debug("PLACE: ");
+//                                $log.debug(place);
+                                
+                                $scope.refineLocationByPlace(place);
+    //                            $log.debug(place);
+    //                            $log.debug($scope.map.bounds);
+                            };
+                        };
+                        autocomplete_head.addListener('place_changed', autocompleteChangeListener(autocomplete_head));
+//                        autocomplete_aside.addListener('place_changed', autocompleteChangeListener(autocomplete_aside));
+                        
+                        
                     });
-                	
-                	
+                    
+                    
                 });
-            	
-            	$scope.get_marker_images = function(){
-            		
-            		var MARKER_IMAGE_COUNT = 19;
-            		
+                
+                $scope.get_marker_images = function(){
+                    
+                    var MARKER_IMAGE_COUNT = 19;
+                    
                     var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
-    	                product, image, imageHover, myLatLng, marker;
-    	            for (i = 0, l = scripts.length; i < l; i += 1) {
-    	                if (scripts[i].getAttribute("data-static-path")) {
-    	                    staticUrl = scripts[i].getAttribute("data-static-path");
-    	                    break;
-    	                }
-    	            }
-    	
-    	            var markersUrl = staticUrl + "images/markers_smooth_aligned.png";
-    	
-    	            var mapCanvas= $("#map-canvas");
-    	
-    	            var markerFilename = mapCanvas.attr('markers-filename');
-    	            if (markerFilename) {
-    	                markersUrl = staticUrl + "images/" + markerFilename;
-    	            }
-    	            
+                        product, image, imageHover, myLatLng, marker;
+                    for (i = 0, l = scripts.length; i < l; i += 1) {
+                        if (scripts[i].getAttribute("data-static-path")) {
+                            staticUrl = scripts[i].getAttribute("data-static-path");
+                            break;
+                        }
+                    }
+        
+                    var markersUrl = staticUrl + "images/markers_smooth_aligned.png";
+        
+                    var mapCanvas= $("#map-canvas");
+        
+                    var markerFilename = mapCanvas.attr('markers-filename');
+                    if (markerFilename) {
+                        markersUrl = staticUrl + "images/" + markerFilename;
+                    }
+                    
                     var markerHeight = 28;
 
                     var markerHeightAttr = mapCanvas.attr('marker-height');
@@ -225,47 +225,47 @@ define([
                     }
                     
                     var imgs = [];
-    	            
+                    
                     for (var i=0; i<MARKER_IMAGE_COUNT; i++){
-                    	imgs.push({
-                    		image: new maps.MarkerImage(markersUrl,
+                        imgs.push({
+                            image: new maps.MarkerImage(markersUrl,
                                     new maps.Size(26, markerHeight),
                                     new maps.Point(0, markerHeight * i),
                                     new maps.Point(14, markerHeight)),
-                			imageHover: new google.maps.MarkerImage(markersUrl,
+                            imageHover: new google.maps.MarkerImage(markersUrl,
                                     new maps.Size(26, markerHeight),
                                     new maps.Point(29, markerHeight * i),
                                     new maps.Point(14, markerHeight)) 
-                    	});
-                	};
+                        });
+                    };
                     
-    	            return imgs;
-            	};
-            	
-            	$scope.marker_images = $scope.get_marker_images();
+                    return imgs;
+                };
                 
-            	$scope.renderMap = function(result, state) {
-            		for (var ri=0; ri<$scope.search_results.length; ri++){
-            			var res = $scope.search_results[ri];
-            			res.location_obj = {latitude: res.locations[0], longitude: res.locations[1]};
-            			res.images = $scope.marker_images[ri];
-            			res.markerId = ri;
-            			res.markerOptions = {
-            				icon: res.images.image,
-            				title: res.summary,
-            				zIndex: ri
-            			};
-            			
-            		};
-            	};
-            	
+                $scope.marker_images = $scope.get_marker_images();
+                
+                $scope.renderMap = function(result, state) {
+                    for (var ri=0; ri<$scope.search_results.length; ri++){
+                        var res = $scope.search_results[ri];
+                        res.location_obj = {latitude: res.locations[0], longitude: res.locations[1]};
+                        res.images = $scope.marker_images[ri];
+                        res.markerId = ri;
+                        res.markerOptions = {
+                            icon: res.images.image,
+                            title: res.summary,
+                            zIndex: ri
+                        };
+                        
+                    };
+                };
+                
 
-            	$scope.map.loaded = true;
+                $scope.map.loaded = true;
 
-//            	$scope.$apply();
-            	
+//                $scope.$apply();
+                
 
-            	
+                
             });
             
             
@@ -288,6 +288,8 @@ define([
                 hitsPerPage: $scope.searchResultsPerPage
             };
             
+            var ALGOLIA_PREFIX = "sp_";
+            
             var client = algolia.Client('F2G181ROXT', '1892770732420446ef9165ec76bdbdbd');
             
             $scope.search_ordering = "-created_at";
@@ -309,16 +311,30 @@ define([
              * */
             
             $scope.onLocationChangeStart = function(event, current, next) {
-            	$log.debug("onLocationChangeStart");
-            	if (!$scope.locationUIChanged){	
-            		$log.debug("!locationUIChanged");
-            		$log.debug(UtilsService.urlEncodeObject($location.search()));
-            		$log.debug(current);
-            		$scope.search.setStateFromQueryString(
-            				UtilsService.urlEncodeObject($location.search()));
-            		$scope.search.search();
-            	}
-        		$scope.locationUIChanged = false;
+                $log.debug("onLocationChangeStart");
+                $log.debug($location.search());
+                if (!$scope.locationUIChanged){    
+                    $log.debug("!locationUIChanged");
+                    $log.debug(UtilsService.urlEncodeObject($location.search()));
+                    
+                    var qs = UtilsService.urlEncodeObject($location.search());
+                    
+                    $log.debug(current);
+                    $scope.search.setStateFromQueryString(qs, {
+                        prefix: ALGOLIA_PREFIX
+                    });
+                    
+                    var other_params = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs, {
+                        prefixForParameters: ALGOLIA_PREFIX
+                    });
+                    
+                    $log.debug("other_params");
+                    $log.debug(other_params);
+                    $scope.search_location = other_params.location_name || "";
+                    
+                    $scope.search.search();
+                }
+                $scope.locationUIChanged = false;
             };
             $scope.$on("$locationChangeStart", $scope.onLocationChangeStart);
             
@@ -354,16 +370,16 @@ define([
             };
             
             $scope.refineRange = function(sliderId){
-            	$scope.rangeUpdatedBySlider = true;
-            	$scope.map.zoom = UtilsService.zoom($scope.range_slider.max);
-            	$scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
-            	
+                $scope.rangeUpdatedBySlider = true;
+                $scope.map.zoom = UtilsService.zoom($scope.range_slider.max);
+                $scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
+                
                 $scope.submitForm();
                 
             };
             
             $scope.refineRenterPart = function(newVal){
-            	$log.debug("refineRenterPart "+$scope.owner_type.part + ' ' + $scope.owner_type.pro);
+//                $log.debug("refineRenterPart "+$scope.owner_type.part + ' ' + $scope.owner_type.pro);
                 var state = $scope.search.getState();
                 if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
                     $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
@@ -371,8 +387,8 @@ define([
                 if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", false)){
                     $scope.search.removeDisjunctiveFacetRefinement("pro_owner", false);
                     if (!$scope.owner_type.pro){
-                    	$scope.refineRenterPro(true);
-                    	return;
+                        $scope.refineRenterPro(true);
+                        return;
                     };
                 }
 //                $scope.search.search();
@@ -380,7 +396,7 @@ define([
             };
             
             $scope.refineRenterPro = function(newVal){
-            	$log.debug("refineRenterPro "+$scope.owner_type.part + ' ' + $scope.owner_type.pro);
+//                $log.debug("refineRenterPro "+$scope.owner_type.part + ' ' + $scope.owner_type.pro);
                 var state = $scope.search.getState();
                 if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", true)){
                     $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
@@ -388,8 +404,8 @@ define([
                 if (!newVal && state.isDisjunctiveFacetRefined("pro_owner", true)){
                     $scope.search.removeDisjunctiveFacetRefinement("pro_owner", true);
                     if (!$scope.owner_type.part){
-                    	$scope.refineRenterPart(true);
-                    	return;
+                        $scope.refineRenterPart(true);
+                        return;
                     };
                 }
 //                $scope.search.search();
@@ -402,16 +418,16 @@ define([
             };
             
             $scope.refineCategoryClearChildren = function(path) {
-            	$scope.search.toggleRefinement("category", path);
-            	$scope.search.toggleRefinement("category", path);
+                $scope.search.toggleRefinement("category", path);
+                $scope.search.toggleRefinement("category", path);
                 $scope.submitForm();
             };
 
             $scope.refineBreadcrumbCategory = function(path) {
-            	$scope.search.toggleRefinement("category", path);
-            	$scope.search.toggleRefinement("category", path);
-            	$scope.search_query = '';
-            	$scope.refineLocation();
+                $scope.search.toggleRefinement("category", path);
+                $scope.search.toggleRefinement("category", path);
+                $scope.search_query = '';
+                $scope.refineLocation();
             };
             
             /*
@@ -419,17 +435,17 @@ define([
              */
             
             $scope.nextPage = function(){
-                $log.debug("Going to next page");
+//                $log.debug("Going to next page");
                 $scope.setPage(Math.min($scope.page + 1, $scope.pages_count-1));
             };
 
             $scope.prevPage = function(){
-                $log.debug("Going to prev page");
+//                $log.debug("Going to prev page");
                 $scope.setPage(Math.max(0, $scope.page - 1));
             };
             
             $scope.setPage = function(page){
-                $log.debug("Going to page " + page);
+//                $log.debug("Going to page " + page);
                 $scope.searchPage = page;
                 $scope.submitForm();
             };
@@ -489,7 +505,7 @@ define([
             };
 
             $scope.renderRangeSlider = function(result){                
-            	$scope.map.zoom = UtilsService.zoom($scope.search.getQueryParameter('aroundRadius'));
+                $scope.map.zoom = UtilsService.zoom($scope.search.getQueryParameter('aroundRadius'));
             };
             
             $scope.renderSearchCategories = function(result, state){
@@ -499,19 +515,19 @@ define([
             };
                        
             $scope.renderBreadcrumbs = function(state) {
-        		$log.debug("renderBreadcrumbs");
-            	if ("category" in state.hierarchicalFacetsRefinements){
-            		$scope.search_breadcrumbs = [];
-            		var cat = state.hierarchicalFacetsRefinements.category[0];
-            		if (cat){
-            			var catparts = cat.split(' > ');
-                		for (var i=0; i< catparts.length; i++){
-                			$scope.search_breadcrumbs.push(
-                					{short: catparts[i], long: catparts.slice(0,i+1).join(' > ')});
-                		}
-                		$log.debug($scope.search_breadcrumbs);	
-            		}
-            	}
+//                $log.debug("renderBreadcrumbs");
+                if ("category" in state.hierarchicalFacetsRefinements){
+                    $scope.search_breadcrumbs = [];
+                    var cat = state.hierarchicalFacetsRefinements.category[0];
+                    if (cat){
+                        var catparts = cat.split(' > ');
+                        for (var i=0; i< catparts.length; i++){
+                            $scope.search_breadcrumbs.push(
+                                    {short: catparts[i], long: catparts.slice(0,i+1).join(' > ')});
+                        }
+                        $log.debug($scope.search_breadcrumbs);    
+                    }
+                }
             };
             
             $scope.renderRenterTypes = function(result, state){
@@ -527,66 +543,79 @@ define([
             $scope.searchDuringCooldown = false;
             $scope.cooldown_duration = 1000;
             
+            $scope.get_query_string_options = function() {
+                return {
+                    filters: trackedParameters, 
+                    prefix: ALGOLIA_PREFIX,
+                    moreAttributes: {
+                        location_name: $scope.search_location
+                    }
+                };
+            };
+            
             $scope.resetCooldown = function(){
-            	$log.debug("resetCooldown");
-        		$scope.cooldown = false;
-        		if ($scope.searchDuringCooldown){
-        			$log.debug("searchDuringCooldown");
-        			$scope.searchDuringCooldown = false;
-                	$location.search($scope.search.getStateAsQueryString({filters: trackedParameters}));
-        		}
-        	};
+                $log.debug("resetCooldown");
+                $scope.cooldown = false;
+                if ($scope.searchDuringCooldown){
+                    $log.debug("searchDuringCooldown");
+                    $scope.searchDuringCooldown = false;
+                    $location.search(
+                        $scope.search.getStateAsQueryString(
+                            $scope.get_query_string_options()));
+                }
+            };
             
             $scope.renderLocation = function(result, state) {
-            	$log.debug("renderLocation");
-            	if ($scope.cooldown){
-            		$log.debug("cooldown");
-            		$scope.searchDuringCooldown = true;
-            	} else {
-            		$log.debug("!cooldown");
-            		$scope.cooldown = true;
-                	$location.search($scope.search.getStateAsQueryString({filters: trackedParameters}));
-                	$timeout($scope.resetCooldown, $scope.cooldown_duration);
-            	}
-            	
-        	};
-        	
-        	$scope.renderQueryText = function(result) {
-        		if (!$scope.locationUIChanged){
-                	$scope.search_query = result.query;
+                $log.debug("renderLocation");
+                if ($scope.cooldown){
+                    $log.debug("cooldown");
+                    $scope.searchDuringCooldown = true;
+                } else {
+                    $log.debug("!cooldown");
+                    $scope.cooldown = true;
+                    $location.search($scope.search.getStateAsQueryString(
+                        $scope.get_query_string_options()));
+                    $timeout($scope.resetCooldown, $scope.cooldown_duration);
                 }
-        	};
+                
+            };
             
-        	$scope.renderOrdering = function(result) {
-        		$scope.search_ordering = result.index.substr($scope.search_index.length+1);
-        		$log.debug('Ordering: ' + $scope.search_ordering);
-        	};
-        	
+            $scope.renderQueryText = function(result) {
+                if (!$scope.locationUIChanged){
+                    $scope.search_query = result.query;
+                }
+            };
+            
+            $scope.renderOrdering = function(result) {
+                $scope.search_ordering = result.index.substr($scope.search_index.length+1);
+//                $log.debug('Ordering: ' + $scope.search_ordering);
+            };
+            
 
 
-        	
+            
 
-        	
-        	$scope.marker_event_handlers = {
+            
+            $scope.marker_event_handlers = {
                 mouseover: function(marker, eventName, model, args){
-                	marker.setOptions({
-                		icon: model.images.imageHover,
-                		zIndex: 200
-                	});
+                    marker.setOptions({
+                        icon: model.images.imageHover,
+                        zIndex: 200
+                    });
                 },
                 click: function(marker, eventName, model, args){
-                	$("html, body").animate({
+                    $("html, body").animate({
                         scrollTop: $("li#marker-" + model.markerId).offset().top - 20
                     }, 1000);
                 },
                 mouseout: function(marker, eventName, model, args){
-                	marker.setOptions({
-                		icon: model.images.image,
-                		zIndex: parseInt(model.markerId) // TODO remove parseInt
-                	});
+                    marker.setOptions({
+                        icon: model.images.image,
+                        zIndex: parseInt(model.markerId) // TODO remove parseInt
+                    });
                 }
-        	};
-        	
+            };
+            
             /* 
              * Process search results 
              * */
@@ -595,12 +624,12 @@ define([
                 $log.debug(result);
                 $scope.search_result_count = result.nbHits;
 
-                $log.debug($scope.owner_type.pro+' '+state.isDisjunctiveFacetRefined("pro_owner", true));
-                $log.debug($scope.owner_type.part+' '+state.isDisjunctiveFacetRefined("pro_owner", false));
+//                $log.debug($scope.owner_type.pro+' '+state.isDisjunctiveFacetRefined("pro_owner", true));
+//                $log.debug($scope.owner_type.part+' '+state.isDisjunctiveFacetRefined("pro_owner", false));
                 
                 if ($scope.search_result_count){
-                	              	
-            		$scope.search_results = result.hits;
+                                      
+                    $scope.search_results = result.hits;
                     
 //                    $scope.price_slider.options.min = Math.min($scope.price_slider.min, result.facets_stats.price.min);
 //                    $scope.price_slider.options.max = Math.max($scope.price_slider.max, result.facets_stats.price.max);
@@ -619,7 +648,7 @@ define([
                     $scope.renderBreadcrumbs(state);
                     $scope.renderRenterTypes(result, state);
                     $scope.renderMap(result, state);
-                    $log.debug($scope.search_results);
+//                    $log.debug($scope.search_results);
                 } else {
                     $log.debug("No results");
                 }
@@ -656,7 +685,7 @@ define([
             
             var orig_params = $location.search();
             
-            $log.debug(orig_params);
+//            $log.debug(orig_params);
             
             $scope.search_query = getParameterByName('q') || "";
             $scope.search.setQuery($scope.search_query);
@@ -669,16 +698,16 @@ define([
             $scope.price_from = 0;
             $scope.price_to = 1000;
             $scope.owner_type = {
-            	pro: true,
-	            part: true,
-	            pro_count: 0,
-	            part_count: 0
+                pro: true,
+                part: true,
+                pro_count: 0,
+                part_count: 0
             };
             $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
             $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
             $scope.search_breadcrumbs = [];
             $scope.search_location = getParameterByName('l') || "";
-			$scope.search_bounds_changed = false;
+            $scope.search_bounds_changed = false;
             $scope.price_slider = {
                 min: 0,
                 max: 1000,
@@ -694,7 +723,7 @@ define([
                     floor: 1,
                     ceil: $scope.search_max_range,
                     onEnd: $scope.refineRange
-                }	
+                }    
             };
             
 
@@ -710,7 +739,7 @@ define([
                 });
                 
                 var autocomplete = new google.maps.places.Autocomplete(
-                		$document[0].getElementById('where'));
+                        $document[0].getElementById('where'));
 
                 
                 var mapCanvas = $document[0].getElementById("map-canvas"), rangeEl, radius, mapOptions, map, geocoder,
@@ -1065,13 +1094,13 @@ define([
             
             $scope.submitForm = function() {
                 $scope.search.setQuery($scope.search_query)
-                	.setCurrentPage($scope.searchPage).search();
-        		$scope.locationUIChanged = true;
+                    .setCurrentPage($scope.searchPage).search();
+                $scope.locationUIChanged = true;
             };
 
             $scope.newSearch = function(){
                 $scope.searchPage = 0;
-                $scope.submitForm();            	
+                $scope.submitForm();                
             };
             
             $scope.disableForm = function() {
