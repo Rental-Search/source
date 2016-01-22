@@ -3,14 +3,18 @@ li
   span
     big.text-secondary {{ stats.products_count }}&nbsp;
   span annonces publiées
+{% if stats.bookings_count > 0 %}
 li
   span
     big.text-secondary {{ stats.bookings_count }}&nbsp;
   span locations effectués
+{% endif %}
+{% if stats.ratings_count > 0 %}
 li
   span
     big.text-secondary {{ stats.ratings_count }}&nbsp;
   span évaluations
+{% endif %}
 li
   span
     big.text-secondary {{ stats.response_rate|floatformat:"0" }}%&nbsp;
