@@ -195,23 +195,63 @@ define([
                 	
                 });
             	
+            	$scope.get_marker_images = function(){
+            		
+            		var MARKER_IMAGE_COUNT = 19;
+            		
+                    var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
+    	                product, image, imageHover, myLatLng, marker;
+    	            for (i = 0, l = scripts.length; i < l; i += 1) {
+    	                if (scripts[i].getAttribute("data-static-path")) {
+    	                    staticUrl = scripts[i].getAttribute("data-static-path");
+    	                    break;
+    	                }
+    	            }
+    	
+    	            var markersUrl = staticUrl + "images/markers_smooth_aligned.png";
+    	
+    	            var mapCanvas= $("#map-canvas");
+    	
+    	            var markerFilename = mapCanvas.attr('markers-filename');
+    	            if (markerFilename) {
+    	                markersUrl = staticUrl + "images/" + markerFilename;
+    	            }
+    	            
+                    var markerHeight = 28;
+
+                    var markerHeightAttr = mapCanvas.attr('marker-height');
+                    if (markerHeightAttr) {
+                        markerHeight = parseInt(markerHeightAttr);
+                    }
+                    
+                    var imgs = [];
+    	            
+                    for (var i=0; i<MARKER_IMAGE_COUNT; i++){
+                    	imgs.push({
+                    		image: new maps.MarkerImage(markersUrl,
+                                    new maps.Size(26, markerHeight),
+                                    new maps.Point(0, markerHeight * i),
+                                    new maps.Point(14, markerHeight)),
+                			imageHover: new google.maps.MarkerImage(markersUrl,
+                                    new maps.Size(26, markerHeight),
+                                    new maps.Point(29, markerHeight * i),
+                                    new maps.Point(14, markerHeight)) 
+                    	});
+                	};
+                    
+    	            return imgs;
+            	};
+            	
+            	$scope.marker_images = $scope.get_marker_images();
+                
             	$scope.renderMap = function(result, state) {
-            		for (var ri in $scope.search_results){
+            		for (var ri=0; ri<$scope.search_results.length; ri++){
             			var res = $scope.search_results[ri];
             			res.location_obj = {latitude: res.locations[0], longitude: res.locations[1]};
-            			res.image = new maps.MarkerImage($scope.markers_config.markersUrl,
-    	                        new maps.Size(26, $scope.markers_config.markerHeight),
-    	                        new maps.Point(0, $scope.markers_config.markerHeight * ri),
-    	                        new maps.Point(14, $scope.markers_config.markerHeight));
-            			res.imageHover = new google.maps.MarkerImage($scope.markers_config.markersUrl,
-    	                        new maps.Size(26, $scope.markers_config.markerHeight),
-    	                        new maps.Point(29, $scope.markers_config.markerHeight * ri),
-    	                        new maps.Point(14, $scope.markers_config.markerHeight));
-            			$log.debug(ri);
+            			res.images = $scope.marker_images[ri];
             			res.markerId = ri;
-            			res.zIndex = ri;
             			res.markerOptions = {
-            				icon: res.image,
+            				icon: res.images.image,
             				title: res.summary,
             				zIndex: ri
             			};
@@ -523,54 +563,26 @@ define([
         	};
         	
 
-        	$scope.get_markers_config = function(){
-                var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
-	                product, image, imageHover, myLatLng, marker;
-	            for (i = 0, l = scripts.length; i < l; i += 1) {
-	                if (scripts[i].getAttribute("data-static-path")) {
-	                    staticUrl = scripts[i].getAttribute("data-static-path");
-	                    break;
-	                }
-	            }
-	
-	            var markersUrl = staticUrl + "images/markers_smooth_aligned.png";
-	
-	            var mapCanvas= $("#map-canvas");
-	
-	            var markerFilename = mapCanvas.attr('markers-filename');
-	            if (markerFilename) {
-	                markersUrl = staticUrl + "images/" + markerFilename;
-	            }
-	            
-                var markerHeight = 28;
 
-                var markerHeightAttr = mapCanvas.attr('marker-height');
-                if (markerHeightAttr) {
-                    markerHeight = parseInt(markerHeightAttr);
-                }
-	            
-	            return {markersUrl:markersUrl, markerHeight:markerHeight};
-	            
-        	};
         	
-        	$scope.markers_config = $scope.get_markers_config();
+
         	
         	$scope.marker_event_handlers = {
                 mouseover: function(marker, eventName, model, args){
                 	marker.setOptions({
-                		icon: model.imageHover,
+                		icon: model.images.imageHover,
                 		zIndex: 200
                 	});
                 },
                 click: function(marker, eventName, model, args){
                 	$("html, body").animate({
-                        scrollTop: $("li#marker-" + model.zIndex).offset().top - 20
+                        scrollTop: $("li#marker-" + model.markerId).offset().top - 20
                     }, 1000);
                 },
                 mouseout: function(marker, eventName, model, args){
                 	marker.setOptions({
-                		icon: model.image,
-                		zIndex: parseInt(model.zIndex) // TODO remove parseInt
+                		icon: model.images.image,
+                		zIndex: parseInt(model.markerId) // TODO remove parseInt
                 	});
                 }
         	};

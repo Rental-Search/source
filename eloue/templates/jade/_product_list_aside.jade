@@ -19,22 +19,24 @@ script(type="text/ng-template" id="_category_tree_item.html").
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
 
-  p.caption {% trans "catégories" %}
-  .clear-selector
-    div(ng-include="'_category_tree_item.html'")
-
-  //-input#where(ng-model="search_location", name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
   label.caption(for="where") {% trans "où" %}
   .map-container
     .whirly(ng-if='!map.loaded')
     ui-gmap-google-map(ng-if='map.loaded', center='map.center', zoom='map.zoom', options='map.options', control='map.control', pan='true')
-      ui-gmap-markers(ng-if='search_results', models="search_results", coords="'location_obj'", idKey="'markerId'", events="marker_event_handlers", options="'markerOptions'")
+      ui-gmap-markers(models="search_results", coords="'location_obj'", idKey="'markerId'", events="marker_event_handlers", options="'markerOptions'")
 
   //- .slider
   label.caption(for="range-slider") {% trans "rayon" %}
   {% verbatim %}
   rzslider(rz-slider-model="range_slider.max", ng-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
   {% endverbatim %}
+  
+  p.caption {% trans "catégories" %}
+  .clear-selector
+    div(ng-show="search_result_count", ng-include="'_category_tree_item.html'")
+
+  //-input#where(ng-model="search_location", name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
+
   
   //- input#range(type="hidden", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}", disabled)
   //- input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)

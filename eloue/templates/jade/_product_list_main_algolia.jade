@@ -1,10 +1,10 @@
 -load product i18n
 
-ol.product-layout
+ol(ng-show="search_result_count").product-layout
     {% trans "jour" as by_day %} 
     {% verbatim %}
     
-    li(ng-if="search_result_count", ng-repeat="product in search_results track by product.django_id", id="marker-{{ $index }}", locationY="{{ product._geoloc.lat }}", locationX="{{ product._geoloc.lng }}", name="{{ product.summary }}", ng-cloak) 
+    li(ng-repeat="product in search_results track by product.django_id", id="marker-{{ $index }}", locationY="{{ product._geoloc.lat }}", locationX="{{ product._geoloc.lng }}", name="{{ product.summary }}", ng-cloak) 
 
       .section-body
         .thumbnail-img
@@ -31,5 +31,7 @@ ol.product-layout
               span(ng-if="product.city && product.zipcode"): {{ product.zipcode }}
     
     {% endverbatim %}
+    
+p(ng-hide="search_result_count") {% trans "Aucun annconce trouvé. Veuillez modifier vos critères de recherche" %}
     
 include ./_product_list_pagination
