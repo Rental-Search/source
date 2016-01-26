@@ -165,7 +165,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
     'eloue.context_processors.unread_message_count_context',
-    'eloue.context_processors.facebook_context'
+    'eloue.context_processors.facebook_context',
+    'eloue.context_processors.analytics_context',
 )
 
 
@@ -765,6 +766,12 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
 
+# Analytics services IDs. Replace these for each site
+ANALYTICS = {
+             'FACEBOOK_ID': '631094037033631',
+             'GOOGLE_ID': 'UA-8258979-1',
+             'SEGMENT_ID': 'CK4wf1QXZEjeqFRo75zZQ7DfZWzYJwHC',
+             }
 
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')
