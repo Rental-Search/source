@@ -43,7 +43,7 @@ class AlgoliaLocationField(indexes.LocationField):
             return None
 
         pnt = ensure_point(value)
-        pnt_lng, pnt_lat = pnt.get_coords()
+        pnt_lat, pnt_lng  = pnt.get_coords()
         return {"lat":pnt_lat, "lng":pnt_lng}
     
 
@@ -128,14 +128,12 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if category:
             cats = list(category\
                         .get_ancestors(ascending=False, include_self=True)\
-                        .values_list('slug', flat=True))
-            cat = cats.pop(0)
-            cats_dict = {"lvl0":cat}
-            i = 1
-            for c in cats:
-                cat = "%s > %s" % (cat, c)
-                cats_dict["lvl%s" % i] = cat
-                i = i + 1
+                        .values_list('name', flat=True))
+            
+            cats_dict = {}
+            for i in range(len(cats)):
+                cats_dict['lvl'+str(i)] = " > ".join(cats[:i+1])
+            
             return cats_dict
         
     def prepare_created_at_timestamp(self, obj):
