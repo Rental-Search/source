@@ -33,3 +33,7 @@ DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
 })
 
 DEFAULT_LOCATION_CITY = env("DEFAULT_LOCATION_CITY", {'city': u"Copenhague, Danemark", 'radius': 200})
+
+ANALYTICS.update({
+                  'GOOGLE_ID': 'UA-58724631-1'
+                  })
