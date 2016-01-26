@@ -69,12 +69,12 @@ script(type="text/ng-template" id="_category_tree_item.html").
   .checkbox(ng-if="owner_type.part_count")
     label(for="particular")
       {% trans "particuliers" as particular %}
-      input(type="checkbox", name="renter", ng-change="refineRenterPart(owner_type.part)", ng-model="owner_type.part")#particular
+      input(type="checkbox", name="renter", ng-change="refineRenterPart(owner_type.part)", ng-model="owner_type.part", ng-disabled="noProPartChoice()")#particular
       span.flaticon.stroke.checkmark-1
     {% trans " Particuliers" %} {% verbatim %} {{ " ("+owner_type.part_count+")" }} {% endverbatim %}
   .checkbox(ng-if="owner_type.pro_count")
     label(for="professional")
-      input(type="checkbox", name="renter", ng-change="refineRenterPro(owner_type.pro)", ng-model="owner_type.pro")#professional
+      input(type="checkbox", name="renter", ng-change="refineRenterPro(owner_type.pro)", ng-model="owner_type.pro", ng-disabled="noProPartChoice()")#professional
       span.flaticon.stroke.checkmark-1
     {% trans " Professionnels" %} {% verbatim %} {{ " ("+owner_type.pro_count+")" }} {% endverbatim %}
 
