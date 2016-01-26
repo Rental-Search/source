@@ -739,7 +739,7 @@ class Category(MPTTModel):
             return None
         else:
             conformity_category = conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else conformity.gosport_category if site_id == dressbooking_site_id else None
-            if conformity_category.sites.filter(pk=site_id):
+            if conformity_category and conformity_category.sites.filter(pk=site_id):
                 return conformity_category
             else:
                 return None
