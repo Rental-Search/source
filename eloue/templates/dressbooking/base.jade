@@ -22,7 +22,7 @@ html(lang="fr")
       {% compressed_js "public_js" %}
     script
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-58724631-1']);
+      _gaq.push(['_setAccount', '{{ ANALYTICS_GOOGLE_ID }}']);
       _gaq.push(['_setDomainName', '{{ ANALYTICS_SITE }}']);
       _gaq.push(['_trackPageview']);
       {% spaceless %}
