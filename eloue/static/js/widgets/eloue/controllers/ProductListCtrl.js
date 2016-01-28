@@ -20,12 +20,38 @@ define([
     
     EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
         uiGmapGoogleMapApiProvider.configure({
-            v: '3',
+            v: '3.exp',
             libraries: 'places',
             language: 'fr-FR',
-            region: 'FR'
+            region: 'FR',
+            key: 'AIzaSyD3LwG42VzGikefts9fR1AfbhmQmeRLHvU'
         });
     }]);
+    
+    EloueWidgetsApp.constant("SearchConstants", {
+    	MASTER_INDEX: 'e-loue-test-geo-multilvl-products.product',
+        PARAMETERS: {
+            hierarchicalFacets: [{
+                name: 'category',
+                attributes: ['algolia_categories.lvl0',
+                             'algolia_categories.lvl1',
+                             'algolia_categories.lvl2'],
+                sortBy: ['count:desc', 'name:asc']
+            }],
+            disjunctiveFacets: ["pro_owner",
+                                "price"],
+            hitsPerPage: 12
+        },
+        ALGOLIA_PREFIX: "sp_",
+        URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 'hitsPerPage', 'insideBoundingBox'],
+        DEFAULT_ORDERING: "-created_at",
+        COUNTRIES: {
+          'fr': {
+            center: {latitude: 46.2, longitude: 2.2},
+            radius: 1000
+          }
+        }
+    });
     
     /**
      * Controller to run scripts necessary for product list page.
@@ -37,32 +63,40 @@ define([
         "$document",
         "$location",
         "UtilsService",
+        "SearchConstants",
         "uiGmapGoogleMapApi",
         "uiGmapIsReady",
         "algolia",
         "$log",
-        function ($scope, $window, $timeout, $document, $location, UtilsService, uiGmapGoogleMapApi, uiGmapIsReady, algolia, $log) {
+        function ($scope, $window, $timeout, $document, $location, UtilsService, SearchConstants, uiGmapGoogleMapApi, uiGmapIsReady, algolia, $log) {
            
+        	
             $scope.search_max_range = 1000;
             
             $scope.country = 'fr';
-            
-            var countries = {
-              'fr': {
-                center: {latitude: 46.2, longitude: 2.2},
-                zoom: UtilsService.zoom($scope.search_max_range)
-              }
-            };
 
+            
+            
+            
+            /* 
+             * Algolia config 
+             */
+            var client = algolia.Client('F2G181ROXT', '1892770732420446ef9165ec76bdbdbd');
+            $scope.search_ordering = SearchConstants.DEFAULT_ORDERING;
+            $scope.search_index = SearchConstants.MASTER_INDEX;
+            $scope.search = algoliasearchHelper(client, $scope.search_index, SearchConstants.PARAMETERS);
+            $scope.search_default_state = $scope.search.getState();
+            
+            $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
+            $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
             
             /*
              * Map config
              */
-
             $scope.map = {
                 loaded: false,
-                zoom: countries[$scope.country].zoom,
-                center: countries[$scope.country].center,
+                zoom: UtilsService.zoom(SearchConstants.COUNTRIES[$scope.country].radius),
+                center: SearchConstants.COUNTRIES[$scope.country].center,
                 options:{
                     disableDefaultUI: true,
                     zoomControl: true
@@ -71,13 +105,10 @@ define([
             };
             
             $scope.rangeUpdatedBySlider = false;
-
             
             // On map loaded
             uiGmapGoogleMapApi.then(function(maps) {
 
-                var geocoder = new maps.Geocoder();
-                var placeInputAside = $document[0].getElementById('where');
                 var placeInputHead = $document[0].getElementById('geolocate');
                 $scope.search_location = placeInputHead.value;
                 
@@ -86,7 +117,6 @@ define([
                     types: ['geocode']
                 };
                 
-//                var autocomplete_aside = new maps.places.Autocomplete(placeInputAside, ac_params);
                 var autocomplete_head = new maps.places.Autocomplete(placeInputHead,ac_params);
                 
                 uiGmapIsReady.promise(1).then(function(instances) {
@@ -97,7 +127,6 @@ define([
 //                            $log.debug('refineLocationByPlace');
                             $scope.search_location = place.name;
                             map.fitBounds(place.geometry.viewport);
-                                                                                // p1Lat, p1Lng, p2Lat, p2Lng
 
                         };
 
@@ -139,8 +168,8 @@ define([
                         map.addListener("bounds_changed", function () {
                             $log.debug("bounds_changed");
                             $scope.refineLocationByMap();
-                            
                         });
+                        
                         
 //                        map.addListener("dragend", function () {
 //                            $log.debug("dragend");
@@ -150,7 +179,7 @@ define([
 //                            }
 //                            
 //                        });
-                        
+//                        
 //                        map.addListener("center_changed", function () {
 //                            $log.debug("center_changed");
 //                            if ($scope.search_bounds_changed){
@@ -213,11 +242,11 @@ define([
                     
                     for (var i=0; i<MARKER_IMAGE_COUNT; i++){
                         imgs.push({
-                            image: new maps.MarkerImage(markersUrl,
+                            normal: new maps.MarkerImage(markersUrl,
                                     new maps.Size(26, markerHeight),
                                     new maps.Point(0, markerHeight * i),
                                     new maps.Point(14, markerHeight)),
-                            imageHover: new google.maps.MarkerImage(markersUrl,
+                            hover: new google.maps.MarkerImage(markersUrl,
                                     new maps.Size(26, markerHeight),
                                     new maps.Point(29, markerHeight * i),
                                     new maps.Point(14, markerHeight)) 
@@ -239,7 +268,7 @@ define([
                         res.images = $scope.marker_images[ri];
                         res.markerId = ri;
                         res.markerOptions = {
-                            icon: res.images.image,
+                            icon: res.images.normal,
                             title: res.summary,
                             zIndex: ri
                         };
@@ -268,76 +297,74 @@ define([
                     
                 };
                 
-
+                
+                $scope.marker_event_handlers = {
+                    mouseover: function(marker, eventName, model, args){
+                        marker.setOptions({
+                            icon: model.images.hover,
+                            zIndex: 200
+                        });
+                    },
+                    click: function(marker, eventName, model, args){
+                        $("html, body").animate({
+                            scrollTop: $("li#marker-" + model.markerId).offset().top - 20
+                        }, 1000);
+                    },
+                    mouseout: function(marker, eventName, model, args){
+                        marker.setOptions({
+                            icon: model.images.normal,
+                            zIndex: parseInt(model.markerId) // TODO remove parseInt
+                        });
+                    }
+                };
+                
+//                $scope.triggerMouseOverGenerator = function (marker) {
+//                    return function () {
+//                        marker.setAnimation(google.maps.Animation.BOUNCE);
+//                        google.maps.event.trigger(marker, "mouseover");
+//                    };
+//                };
+//
+//                $scope.triggerMouseOutGenerator = function (marker) {
+//                    return function () {
+//                        marker.setAnimation(null);
+//                        google.maps.event.trigger(marker, "mouseout");
+//                    };
+//                };
+                
                 $scope.map.loaded = true;
 
-
-
-                
             });
             
             
-            /* 
-             * Algolia config 
-             * */
-            
-            $scope.searchResultsPerPage = 12;
-            
-            var SEARCH_PARAMETERS = {
-                hierarchicalFacets: [{
-                    name: 'category',
-                    attributes: ['algolia_categories.lvl0',
-                                 'algolia_categories.lvl1',
-                                 'algolia_categories.lvl2'],
-                    sortBy: ['count:desc', 'name:asc']
-                }],
-                disjunctiveFacets: ["pro_owner",
-                                    "price"],
-                hitsPerPage: $scope.searchResultsPerPage
-            };
-            
-            var ALGOLIA_PREFIX = "sp_";
-            
-            var client = algolia.Client('F2G181ROXT', '1892770732420446ef9165ec76bdbdbd');
-            
-            $scope.search_ordering = "-created_at";
-            
-            $scope.search_index = 'e-loue-test-geo-multilvl-products.product';
-            
-            $scope.search = algoliasearchHelper(client, $scope.search_index, SEARCH_PARAMETERS);
-            
-            $scope.search_default_state = $scope.search.getState();
-            
-            var trackedParameters = ['query', 'attribute:*', 'index', 'page', 'hitsPerPage', 'insideBoundingBox'];
-            
-            $scope.locationUIChanged = false;
+
             
             
             /* 
              * Filter refinement 
-             * */
+             */
             
             $scope.onLocationChangeStart = function(event, current, next) {
                 
-                if (!$scope.locationUIChanged){    
+                if (!$scope.search_location_ui_changed){    
                     
                     var qs = UtilsService.urlEncodeObject($location.search());
                         
                     $scope.search.setState($scope.search_default_state);
                     
                     $scope.search.setStateFromQueryString(qs, {
-                        prefix: ALGOLIA_PREFIX
+                        prefix: SearchConstants.ALGOLIA_PREFIX
                     });
                     
                     var other_params = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs, {
-                        prefixForParameters: ALGOLIA_PREFIX
+                        prefixForParameters: SearchConstants.ALGOLIA_PREFIX
                     });
                     
                     $scope.search_location = other_params.location_name || "";
                     
                     $scope.search.search();
                 }
-                $scope.locationUIChanged = false;
+                $scope.search_location_ui_changed = false;
             };
             $scope.$on("$locationChangeStart", $scope.onLocationChangeStart);
             
@@ -375,6 +402,7 @@ define([
             };
             
             $scope.refineRange = function(sliderId){
+            	
                 $scope.rangeUpdatedBySlider = true;
                 $scope.map.zoom = UtilsService.zoom($scope.range_slider.max);
                 $scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
@@ -458,11 +486,14 @@ define([
                 $scope.submitForm();
             };
             
+            $scope.resetMap = function(){};
+            
             $scope.clearRefinements = function(){
                 $scope.search.clearRefinements();
-                $scope.map.zoom = countries[$scope.country].zoom;
-                $scope.map.center = countries[$scope.country].center;
+                $scope.map.zoom = UtilsService.zoom(SearchConstants.COUNTRIES[$scope.country].radius);
+                $scope.map.center = SearchConstants.COUNTRIES[$scope.country].center;
             };
+            
             
             /* 
              * Filter rendering
@@ -540,7 +571,6 @@ define([
                 $scope.owner_type.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
                 $scope.owner_type.pro = state.isDisjunctiveFacetRefined("pro_owner", true);
                 $scope.owner_type.part = state.isDisjunctiveFacetRefined("pro_owner", false);
-                $log.debug($scope.owner_type.pro+' '+$scope.owner_type.part);
             };
             
             $scope.cooldown = false;
@@ -549,8 +579,8 @@ define([
             
             $scope.get_query_string_options = function() {
                 return {
-                    filters: trackedParameters, 
-                    prefix: ALGOLIA_PREFIX,
+                    filters: SearchConstants.URL_PARAMETERS, 
+                    prefix: SearchConstants.ALGOLIA_PREFIX,
                     moreAttributes: {
                         location_name: $scope.search_location
                     }
@@ -558,10 +588,8 @@ define([
             };
             
             $scope.resetCooldown = function(){
-                $log.debug("resetCooldown");
                 $scope.cooldown = false;
                 if ($scope.searchDuringCooldown){
-                    $log.debug("searchDuringCooldown");
                     $scope.searchDuringCooldown = false;
                     $location.search(
                         $scope.search.getStateAsQueryString(
@@ -570,12 +598,9 @@ define([
             };
             
             $scope.renderLocation = function(result, state) {
-                $log.debug("renderLocation");
                 if ($scope.cooldown){
-                    $log.debug("cooldown");
                     $scope.searchDuringCooldown = true;
                 } else {
-                    $log.debug("!cooldown");
                     $scope.cooldown = true;
                     $location.search($scope.search.getStateAsQueryString(
                         $scope.get_query_string_options()));
@@ -585,7 +610,7 @@ define([
             };
             
             $scope.renderQueryText = function(result) {
-                if (!$scope.locationUIChanged){
+                if (!$scope.search_location_ui_changed){
                     $scope.search_query = result.query;
                 }
             };
@@ -594,29 +619,9 @@ define([
                 $scope.search_ordering = result.index.substr($scope.search_index.length+1);
             };
             
-            $scope.marker_event_handlers = {
-                mouseover: function(marker, eventName, model, args){
-                    marker.setOptions({
-                        icon: model.images.imageHover,
-                        zIndex: 200
-                    });
-                },
-                click: function(marker, eventName, model, args){
-                    $("html, body").animate({
-                        scrollTop: $("li#marker-" + model.markerId).offset().top - 20
-                    }, 1000);
-                },
-                mouseout: function(marker, eventName, model, args){
-                    marker.setOptions({
-                        icon: model.images.image,
-                        zIndex: parseInt(model.markerId) // TODO remove parseInt
-                    });
-                }
-            };
-            
             /* 
              * Process search results 
-             * */
+             */
             
             $scope.processResult = function(result, state){
                 $scope.search_result_count = result.nbHits;
@@ -638,6 +643,7 @@ define([
                     $scope.renderBreadcrumbs(state);
                     $scope.renderRenterTypes(result, state);
                     $scope.renderMap(result, state);
+                    
                 } else {
                     $log.debug("No results");
                 }
@@ -647,7 +653,7 @@ define([
             };
             
             $scope.processError = function(error){
-                $log.debug(error);
+                $log.error(error);
             };
             
             $scope.search.on('result', $scope.processResult)
@@ -662,21 +668,13 @@ define([
                 
             };
             
-            $scope.submitInProgress = false;
-            
-//            https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-            var getParameterByName = function(name) {
-                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                    results = regex.exec(location.search);
-                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-            }
             
             var orig_params = $location.search();
-                        
-            $scope.search_query = getParameterByName('q') || "";
+            
+            $scope.search_location_ui_changed = false;
+            $scope.search_query = UtilsService.getParameterByName('q') || "";
             $scope.search.setQuery($scope.search_query);
-            $scope.search_location = getParameterByName('l') || "";
+            $scope.search_location = UtilsService.getParameterByName('l') || "";
             $scope.search_results = [];
             $scope.searchPage = 0;
             $scope.search_result_count = 0;
@@ -690,10 +688,8 @@ define([
                 pro_count: 0,
                 part_count: 0
             };
-            $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
-            $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
             $scope.search_breadcrumbs = [];
-            $scope.search_location = getParameterByName('l') || "";
+            $scope.search_location = UtilsService.getParameterByName('l') || "";
             $scope.search_bounds_changed = false;
             $scope.boundsChangedByRender = false;
             $scope.price_slider = {
@@ -713,150 +709,6 @@ define([
                     onEnd: $scope.refineRange
                 }    
             };
-            
-
-            /**
-             * Callback function for Google maps script loaded event.
-             */
-            $window.googleMapsLoaded = function () {
-                
-                $log.debug("Google maps loaded");
-                
-                $("#geolocate").formmapper({
-                    details: "form"
-                });
-                
-                var autocomplete = new google.maps.places.Autocomplete(
-                        $document[0].getElementById('where'));
-
-                
-                var mapCanvas = $document[0].getElementById("map-canvas"), rangeEl, radius, mapOptions, map, geocoder,
-                    rangeSlider, rangeInput, rangeMax, rangeVal, notUpdateBySlider, notUpdateByMap, products;
-                /*
-                if (mapCanvas) {
-
-                    $("#where").formmapper({
-                        details: "form"
-                    });
-
-                    $scope.applyDatePicker("start-date");
-                    $scope.applyDatePicker("end-date");
-
-                    rangeEl = $("#range");
-                    radius = Number(rangeEl.val().replace(",", "."));
-                    mapOptions = {
-                        zoom: MapsService.zoom(radius),
-                        disableDefaultUI: true,
-                        zoomControl: true,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    map = new google.maps.Map(mapCanvas, mapOptions);
-                    geocoder = new google.maps.Geocoder();
-                    geocoder.geocode(
-                        {address: $document[0].getElementById("where").value},
-                        function (result, status) {
-                            if (status === google.maps.GeocoderStatus.OK) {
-                                map.setCenter(result[0].geometry.location);
-                                $log.debug("Location: " + result[0].geometry.location);
-                                $scope.search_center = result[0].geometry.location;
-                                var circle = new google.maps.Circle({
-                                    map: map,
-                                    radius: radius * 1000,
-                                    fillColor: "#FFFFFF",
-                                    editable: false
-                                });
-                            }
-                        }
-                    );
-
-                    // Submit form on location change.
-                    var autocomplete = new google.maps.places.Autocomplete($document[0].getElementById('where'));
-                    google.maps.event.addListener(autocomplete, "place_changed", function() {
-                        $scope.submitForm();
-                    });
-
-                    rangeSlider = $("#range-slider");
-                    if (rangeSlider) {
-                        rangeInput = rangeEl;
-                        rangeMax = rangeSlider.attr("max-value");
-                        if (!rangeMax) {
-                            $("#range-label").hide();
-                        } else {
-                            var updatedBySlider = false;
-                            rangeVal = rangeInput.attr("value");
-                            if (rangeVal) {
-                                rangeSlider.attr("value", "1;" + rangeVal);
-                            } else {
-                                rangeSlider.attr("value", "1;" + rangeMax);
-                            }
-                            rangeSlider.slider({
-                                from: 1,
-                                to: Number(rangeMax),
-                                limits: false,
-                                dimension: "&nbsp;km",
-                                // On mouse up submit form.
-                                callback: function(value) {
-                                    updatedBySlider = true;
-                                    var rangeValue = value.split(";")[1];
-                                    // enable the input so its value could be now posted with a form data
-                                    rangeInput.prop("disabled", false);
-                                    // set new values to the hidden input
-                                    rangeInput.attr("value", rangeValue);
-                                    // change map's zoom level
-                                    map.setZoom(MapsService.zoom(rangeValue));
-                                    
-                                    $scope.search_radius = rangeValue;
-                                    
-                                    $scope.submitForm();
-                                }
-                            });
-
-                            google.maps.event.addListener(map, "zoom_changed", function () {
-                                if ($scope.submitInProgress) {
-                                    return;
-                                }
-                                if (!updatedBySlider) {
-                                    var zoomLevel = map.getZoom(),
-                                        calcRange = MapsService.range(zoomLevel);
-                                    if (calcRange && calcRange <= rangeMax) {
-                                        rangeSlider.slider("value", 1, calcRange);
-                                    }
-                                    rangeInput.prop("disabled", false);
-                                    rangeInput.attr("value", calcRange);
-                                }
-                                updatedBySlider = false;
-                            });
-                        }
-                    }
-
-                    products = [];
-                    $("li[id^='marker-']").each(function () {
-                        var item = $(this),
-                            product = {
-                                title: item.attr("name"),
-                                lat: item.attr("locationX"),
-                                lng: item.attr("locationY"),
-                                zIndex: Number(item.attr("id").replace("marker-", ""))
-                            };
-                        $log.debug(product);
-                        products.push(product);
-                    });
-
-
-                    $scope.setMarkers(map, products, "li#marker-");
-                }
-                */
-                
-            };
-
-            $scope.applyDatePicker = function (fieldId) {
-                $("#" + fieldId).datepicker({
-                    language: "fr",
-                    autoclose: true,
-                    todayHighlight: true,
-                    startDate: Date.today()
-                });
-            };
 
             $scope.activateLayoutSwitcher = function () {
                 var layoutSwitcher = $(".layout-switcher"), article = $("article");
@@ -873,215 +725,9 @@ define([
                     });
                 }
             };
-
-            $scope.activateCategoryAndSortSelector = function () {
-                var detailSearchForm = $("#detail-search"), categorySelection = $("#category-selection"),
-                    sortSelector = $("#sort-selector");
-//                if (detailSearchForm && categorySelection) {
-//                    categorySelection.change(function () {
-//                        var location = $(this).find(":selected").attr("location");
-//                        var location = $(this).find(":selected").attr("value");
-////                        $scope.category = location;
-//                        $log.debug("Category: "+$scope.category);
-//                        detailSearchForm.attr("action", location);
-//                    });
-//                }
-                if (sortSelector) {
-                    sortSelector.change(function (e) {
-                        if (detailSearchForm) {
-//                            $scope.submitForm();
-                            $scope.newSearch();
-//                            detailSearchForm.submit();
-                        }
-                    });
-                }
-                // Submit form on category change.
-//                categorySelection.change(function(){
-////                    $scope.submitForm();
-//                    $scope.newSearch();
-////                    detailSearchForm.submit();
-//                })
-            };
-
-            $scope.activatePriceSlider = function () {
-                var priceSlider = $("#price-slider"), priceMinInput, priceMaxInput, min, max, minValue, maxValue;
-                if (priceSlider) {
-                    priceMinInput = $("#price-min");
-                    priceMaxInput = $("#price-max");
-                    min = priceSlider.attr("min-value");
-                    max = priceSlider.attr("max-value");
-                    if (!min || !max) {
-                        $("#price-label").hide();
-                    } else {
-                        minValue = priceMinInput.attr("value");
-                        maxValue = priceMaxInput.attr("value");
-                        if (!minValue) {
-                            minValue = min;
-                        }
-                        if (!maxValue) {
-                            maxValue = max;
-                        }
-                        priceSlider.attr("value", minValue + ";" + maxValue);
-                        priceSlider.slider({
-                            from: Number(min),
-                            to: Number(max),
-                            limits: false,
-                            dimension: "&nbsp;&euro;",
-                            onstatechange: function (value) {
-                                var values = value.split(";");
-                                // enable inputs so their values could be now posted with a form data
-                                priceMinInput.prop("disabled", false);
-                                priceMaxInput.prop("disabled", false);
-                                // set new values to hidden inputs
-                                priceMinInput.attr("value", values[0]);
-                                priceMaxInput.attr("value", values[1]);
-                                
-                                $scope.price_from = values[0];
-                                $scope.price_to = values[1];
-                                
-                            },
-                            // On mouse up submit form.
-                            callback: function() {
-                                $scope.submitForm();
-                            }
-                        });
-                    }
-                }
-            };
-
-            $scope.updatePriceSlider = function(){
-                var priceSlider = $("#price-slider");
-                priceSlider.slider("option", "min", $scope.search_results_price_min);
-                priceSlider.slider("option", "max", $scope.search_results_price_max);    
-                $log.debug("Price: "+$scope.search_results_price_min+' - '+$scope.search_results_price_max);
-            };
-            
-            $scope.setMarkers = function (map, locations, markerId) {
-                var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
-                    product, image, imageHover, myLatLng, marker;
-                for (i = 0, l = scripts.length; i < l; i += 1) {
-                    if (scripts[i].getAttribute("data-static-path")) {
-                        staticUrl = scripts[i].getAttribute("data-static-path");
-                        break;
-                    }
-                }
-
-                var markersUrl = staticUrl + "images/markers_smooth_aligned.png";
-
-                var mapCanvas= $("#map-canvas");
-
-                var markerFilename = mapCanvas.attr('markers-filename');
-                if (markerFilename) {
-                    markersUrl = staticUrl + "images/" + markerFilename;
-                }
-
-                var markerHeight = 28;
-
-                var markerHeightAttr = mapCanvas.attr('marker-height');
-                if (markerHeightAttr) {
-                    markerHeight = parseInt(markerHeightAttr);
-                }
-
-
-
-                for (j = 0; j < locations.length; j += 1) {
-                    product = locations[j];
-                    if (markerId === "li#marker-") {
-                        image = new google.maps.MarkerImage(markersUrl,
-                            new google.maps.Size(26, markerHeight),
-                            new google.maps.Point(0, markerHeight * j),
-                            new google.maps.Point(14, markerHeight));
-
-                        imageHover = new google.maps.MarkerImage(markersUrl,
-                            new google.maps.Size(26, markerHeight),
-                            new google.maps.Point(29, markerHeight * j),
-                            new google.maps.Point(14, markerHeight));
-                    }
-                    myLatLng = new google.maps.LatLng(product.lat, product.lng);
-                    marker = new google.maps.Marker({
-                        position: myLatLng,
-                        map: map,
-                        title: product.title,
-                        zIndex: product.zIndex,
-                        icon: image
-                    });
-                    marker.set("myZIndex", marker.getZIndex());
-                    google.maps.event.addListener(marker, "mouseover", $scope.mouseOverListenerGenerator(imageHover, marker, markerId));
-                    google.maps.event.addListener(marker, "click", $scope.mouseClickListenerGenerator(marker, markerId));
-                    google.maps.event.addListener(marker, "mouseout", $scope.mouseOutListenerGenerator(image, marker, markerId));
-
-                    $(markerId + marker.get("myZIndex")).mouseover($scope.triggerMouseOverGenerator(marker));
-                    $(markerId + marker.get("myZIndex")).mouseout($scope.triggerMouseOutGenerator(marker));
-                }
-            };
-
-            $scope.mouseClickListenerGenerator = function (marker, markerId) {
-                return function () {
-                    // Jump to product item
-                    $("html, body").animate({
-                        scrollTop: $(markerId + marker.get("myZIndex")).offset().top - 20
-                    }, 1000);
-                };
-            };
-
-            $scope.mouseOverListenerGenerator = function (imageHover, marker, markerId) {
-                return function () {
-                    this.setOptions({
-                        icon: imageHover,
-                        zIndex: 200
-                    });
-
-                    //TODO: toggle ":hover" styles
-//                $(markerId + marker.get("myZIndex")).find(".declarer-container")[0].trigger("hover");
-                };
-            };
-
-            $scope.mouseOutListenerGenerator = function (image, marker, markerId) {
-                return function () {
-                    this.setOptions({
-                        icon: image,
-                        zIndex: this.get("myZIndex")
-                    });
-                    $(markerId + marker.get("myZIndex")).removeAttr("style");
-                };
-            };
-
-            $scope.triggerMouseOverGenerator = function (marker) {
-                return function () {
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                    google.maps.event.trigger(marker, "mouseover");
-                };
-            };
-
-            $scope.triggerMouseOutGenerator = function (marker) {
-                return function () {
-                    marker.setAnimation(null);
-                    google.maps.event.trigger(marker, "mouseout");
-                };
-            };
-            
-            $scope.activateRenterSelect = function () {
-                var particularCheckbox = $("#particular"), proCheckbox = $("#professional");
-                particularCheckbox.change(
-                    function(){
-                        if (this.checked) {
-                            proCheckbox.prop("checked", false);
-                            $scope.owner_type.pro = false;
-                        }
-                        $scope.submitForm();
-                    });
-                proCheckbox.change(
-                    function(){
-                        if (this.checked) {
-                            particularCheckbox.prop("checked", false);
-                            $scope.owner_type.pro = true;
-                        }
-                        $scope.submitForm();
-                    });
-            };
             
             $scope.submitForm = function() {
-                $scope.locationUIChanged = true;
+                $scope.search_location_ui_changed = true;
                 $scope.search.setQuery($scope.search_query)
                     .setCurrentPage($scope.searchPage).search();
             };
@@ -1100,12 +746,7 @@ define([
 
             };
 
-            $("#detail-search").on("submit", function() {
-                $scope.submitInProgress = true;
-                $scope.disableForm();
-                return true;
-            });
-
             $scope.activateLayoutSwitcher();
+            
         }]);
 });
