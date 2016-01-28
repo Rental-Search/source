@@ -122,6 +122,8 @@ class ProductResource(resources.ModelResource):
         prices = []
         for f in PRICE_FIELDS:
             amount = self.fields[f].clean(data)
+            if amount is None:
+                continue
             unit = f.split('_', 1)[1].upper()
             prices.append(Price(amount=amount, unit=UNIT[unit]))
         self._prices = prices
@@ -134,7 +136,7 @@ class ProductResource(resources.ModelResource):
     
         
     def after_save_instance(self, instance, dry_run):
-        if not dry_run:
+        if not dry_run and len(self._prices)>0:
             instance.prices = self._prices
         
     
