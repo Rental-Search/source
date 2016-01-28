@@ -766,6 +766,8 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
 
+if not DEBUG:
+    IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.MediaStorage"
 
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')
