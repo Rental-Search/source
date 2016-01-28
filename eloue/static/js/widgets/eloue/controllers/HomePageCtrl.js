@@ -28,7 +28,9 @@ define([
                 var tag = $document[0].createElement("script"),
                     firstScriptTag = $document[0].getElementsByTagName("script")[0],
                     videoModal = $("#videoModal"),
+                    videoId = $("#videoId"),
                     player;
+
 
                 tag.src = "https://www.youtube.com/iframe_api";
                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -36,7 +38,7 @@ define([
                     player = new YT.Player("videoContainer", {
                         height: "480",
                         width: "640",
-                        videoId: "nERu_2pSSb0",
+                        videoId: videoId.val(),
                         events: {
                             "onReady": $scope.onPlayerReady
                         }

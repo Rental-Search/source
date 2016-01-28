@@ -5,14 +5,18 @@ li
   span
     big.text-success {{ stats.products_count }}&nbsp;
   span {% trans "annonces publiées" %}
+{% if stats.bookings_count > 0 %}
 li
   span
     big.text-success {{ stats.bookings_count }}&nbsp;
   span {% trans "locations effectués" %}
+{% endif %}
+{% if stats.ratings_count > 0 %}
 li
   span
     big.text-success {{ stats.ratings_count }}&nbsp;
   span {% trans "évaluations" %}
+{% endif %}
 li
   span
     big.text-success {{ stats.response_rate|floatformat:"0" }}%&nbsp;

@@ -1,0 +1,52 @@
+-load compressed staticfiles
+
+doctype 5
+html(lang="fr")
+  head
+    style [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide { display: none !important; }
+    block variables
+      include jade/variables
+
+    block head
+      title Dressbooking
+      meta(charset="UTF-8")
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      link(rel="shortcut icon", href="{% static 'img/favicon_db.ico' %}")
+      meta(name="google-site-verification" content="B_3aP48LqEe91ANrbjfbLVhMmIfiZA33gmsclTvz5t4")
+
+    block styles
+      link(rel="stylesheet", href="http{% if request.is_secure %}s{% endif %}://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
+      {% compressed_css "extrastyles" %}
+
+    block scripts
+      {% compressed_js "public_js" %}
+    script
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-58724631-1']);
+      _gaq.push(['_setDomainName', 'www.e-loue.com']);
+      _gaq.push(['_trackPageview']);
+      {% spaceless %}
+      {% if request.user.is_authenticated %}
+      _gaq.push(['_setVar', 'authenticated']);
+      {% else %}
+      _gaq.push(['_setVar', 'anonymous']);
+      {% endif %}
+      {% endspaceless %}
+    script
+      !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";
+        analytics.load("CK4wf1QXZEjeqFRo75zZQ7DfZWzYJwHC");
+        analytics.page()
+      }}();
+  body
+    
+    block content-body
+    script
+        (function() {
+             var ga = document.createElement('script');     ga.type = 'text/javascript'; ga.async = true;
+             ga.src = ('https:'   == document.location.protocol ? 'https://ssl'   : 'http://www') + '.google-analytics.com/ga.js';
+             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+    #ngModals
+        eloue-login-form
+        eloue-registration-form
+        eloue-reset-password-form

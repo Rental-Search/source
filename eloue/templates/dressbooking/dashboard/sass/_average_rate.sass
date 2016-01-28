@@ -1,0 +1,26 @@
+.average-rate
+  margin-right: 1.5em
+  .star
+    white-space: nowrap
+    display: inline-block
+    vertical-align: middle
+    color: $brand-gold
+    cursor: default
+    +clearfix()
+
+    i
+      display: inline-block
+      padding-right: .25em
+      &.current ~ i
+        color: $gray-lighter
+
+    &.setting i
+      cursor: pointer
+      color: $brand-gold !important
+      &:hover ~ i
+        color: $gray-lighter !important
+
+  .rate-counter
+    color: inherit
+    margin-left: .5em
+

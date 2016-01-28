@@ -1,0 +1,24 @@
+extends ../base
+-load compressed staticfiles i18n
+
+block append title
+  {% trans "Conditions Générales Professionnel" %}
+  
+block append styles
+  {% compressed_css "bootstrap" %}
+  {% compressed_css "security_styles" %}
+
+block append content-body
+  .container-flex
+    header.header-site
+      include ../jade/_header_site
+    nav.bd-b
+      include _breadcrumbs
+    article.indent-v-lg
+      section: include _text_content
+
+    footer
+      section.row-fluid.footer-links
+        include ../jade/_footer_links
+      section.row-fluid.rss
+        include ../jade/_rss

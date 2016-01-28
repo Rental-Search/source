@@ -9,13 +9,23 @@ import threading
 from contextlib import closing
 
 category_mapping = { 
-    'http://1robepour1soir.com/robes/': 'robe',
+    '/categorie-produit/robes/robes-de-cocktail/?products_per_page=all': 'robes-de-coktails',
+    '/categorie-produit/robes/robes-de-luxe/?products_per_page=all': 'robes-de-luxe',
+    '/categorie-produit/robes/robes-de-mariage/la-mariee/?products_per_page=all': 'robes-de-mariee',
+    '/categorie-produit/robes/robes-de-mariage/les-invitees/?products_per_page=all': 'robes-de-marriage',
+    '/categorie-produit/robes/robes-de-maternite/?products_per_page=all': 'robes-de-maternite',
+    '/categorie-produit/robes/robes-longues/?products_per_page=all': 'robes-longues',
+    '/categorie-produit/accessoires/bibis/?products_per_page=all': 'chapeaux-accessoire-de-tete',
+    '/categorie-produit/accessoires/bijoux/?products_per_page=all': 'bijoux',
+    '/categorie-produit/accessoires/pochettes/?products_per_page=all': 'pochettes',
+    '/categorie-produit/chaussures/?products_per_page=all': 'escarpins-classiques',
+    '/categorie-produit/vestes/?products_per_page=all': 'manteaux-vestes',
 }
 
 
 class Command(BaseCommand):
     args = ''
-    help = "Imports given xls file for user 'DEGUIZLAND'"
+    help = "Imports given xls file for user 'cestmarobe'"
     
     base_url = 'http://1robepour1soir.com'
     thread_num = 1
@@ -30,10 +40,13 @@ class Command(BaseCommand):
 
             with closing(urlopen(self.base_url + family)) as product_list_page:
                 product_list_soup = BeautifulSoup(product_list_page, 'html.parser')
-                product_list = product_list_soup.find_all('div', id=re.compile('post-[0-9]*'))
+                product_list = product_list_soup.find_all('div', class_='mpcth-product-wrap')
                 for product in product_list:
                     product_url = product.find('a').get('href')
-                    self.product_links[product_url] = self.base_url + family
+                    self.product_links[product_url] = family
+                #print self.product_links
+
+
     
     def _product_crawler(self):
         from products.models import Product, Picture, Price
@@ -55,57 +68,83 @@ class Command(BaseCommand):
             except HTTPError:
                 print 'error loading page for object at url', self.base_url + product_url
 
-            #get the iomage
+            #get the image
             try:
-                image_url =  product_soup.find('div', class_="szg-thumbs").find('img').get('data-medium')
+                image_url =  product_soup.find('ul', class_='slides').find('li').find('a').find('img').get('src')
                 image_url = smart_urlquote(image_url)
+                #print image_url
             except:
                 pass
+
             # Get the title
             try:
-                infosProduits = product_soup.find('h2', class_='supertitre').text
-                print infosProduits
+                infosProduits = product_soup.find('h1').text.strip()
+                #print infosProduits
             except:
-                infosProduits = ''
+                infosProduits = ' '
 
             # Get the description
             try:
-                description = product_soup.find('div', id='tab1').text
-                description = re.sub(r"\s{2,}","",description).strip()
+                description = product_soup.find('div', class_='info entry-info').find('div', id='tab-description').text
+                #print description
             except:
                 description = 'NO DESCRIPTION'
                 pass
 
             # Format the title
             summary = infosProduits
+
+            # Create deposit
+            deposit_amount = 0.0
+
+            # Add the price to the product
+            try:
+                price = product_soup.find('div', class_='product-price').find('p').text
+                price = _to_decimal(price)
+            except:
+                pass
             
             # Create the product
             from products.models import Category, Price
             from products.choices import UNIT
-            product = Product.objects.create(
-                summary=summary, description=description, 
-                deposit_amount=0.0, address=self.address, owner=self.patron,
-                category=Category.objects.get(slug=category_mapping[category]))
             try:
-                with closing(urlopen(image_url)) as image:
-                    product.pictures.add(Picture.objects.create(
-                        image=uploadedfile.SimpleUploadedFile(
-                            name='img', content=image.read())
-                    )
+                #print "try create"
+                product = Product.objects.create(
+                    summary=summary, description=description, 
+                    deposit_amount=deposit_amount, address=self.address, owner=self.patron,
+                    category=Category.objects.get(slug=category_mapping[category])
                 )
-            except HTTPError as e:
-                print '\nerror loading image for object at url:', self.base_url + product_url
+                #print "product_id : %s" % product.pk
 
-            
-            # Add the price to the product
-            try:
-                price = product_soup.find('div', class_='prix').find('p').text
-                price = _to_decimal(price)
-                product.prices.add(Price(amount=price, unit=UNIT.DAY))
-                sys.stdout.flush()
+                try:
+                    #print "try upload image"
+                    with closing(urlopen(image_url)) as image:
+                        product.pictures.add(Picture.objects.create(
+                            image=uploadedfile.SimpleUploadedFile(
+                                name='img', content=image.read())
+                        )
+                    )
+                    #print "picture : %s" % product.pictures.all()[0]
+                except HTTPError as e:
+                    print '\nerror loading image for object at url:', self.base_url + product_url
+
+                # Add the price to the product
+                try:
+                    product.prices.add(Price(amount=price, unit=UNIT.DAY))
+                    #print "price : %s" % product.prices.all()[0]
+                except:
+                    print 'PRICE ERROR'
+                    pass
+
+                # sys.stdout.write('.')
+                # sys.stdout.flush()
             except:
-                print 'NO PRICE'
+                print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
                 pass
+
+        print "\n %s products created" % self.patron.products.all().count()
+            
+
 
 
     def handle(self, *args, **options):
@@ -129,8 +168,20 @@ class Command(BaseCommand):
 
         # Get families list of products
         self.product_families = [
-            '/robes/',
+            '/categorie-produit/robes/robes-de-cocktail/?products_per_page=all',
+            '/categorie-produit/robes/robes-de-luxe/?products_per_page=all',
+            '/categorie-produit/robes/robes-de-mariage/la-mariee/?products_per_page=all',
+            '/categorie-produit/robes/robes-de-mariage/les-invitees/?products_per_page=all',
+            '/categorie-produit/robes/robes-de-maternite/?products_per_page=all',
+            '/categorie-produit/robes/robes-longues/?products_per_page=all',
+            '/categorie-produit/accessoires/bibis/?products_per_page=all',
+            '/categorie-produit/accessoires/bijoux/?products_per_page=all',
+            '/categorie-produit/accessoires/pochettes/?products_per_page=all',
+            '/categorie-produit/chaussures/?products_per_page=all',
+            '/categorie-produit/vestes/?products_per_page=all',
         ]
+        #self._subpage_crawler()
+        #self._product_crawler()
         
         # List the products
         for i in xrange(self.thread_num):

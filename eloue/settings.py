@@ -118,7 +118,7 @@ LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
-DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14])
+DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14, 15])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -488,9 +488,6 @@ PIPELINE_JS = {
     },
 }
 
-
-
-
 # South configuration
 SOUTH_TESTS_MIGRATE = env('SOUTH_TESTS_MIGRATE', False)
 SOUTH_MIGRATION_MODULES = {
@@ -519,7 +516,6 @@ SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 QUEUE_BACKEND = env('QUEUE_BACKEND', 'dummy')
 QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = env('QUEUE_REDIS_DB', 1)
-
 
 REST_FRAMEWORK = {
 #     'DEFAULT_RENDERER_CLASSES': (

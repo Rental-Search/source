@@ -109,9 +109,14 @@ class ContractGenerator(object):
 
 
 class ContractGeneratorNormal(ContractGenerator):
-    templates = {
-        'fr-FR': local_path("contract/contrat_objet.pdf")
-    }
+    if settings.SITE_ID == 15:
+        templates = {
+            'fr-FR': local_path("contract/fr_template_normal_dressbooking.pdf")
+        }
+    else:
+        templates = {
+            'fr-FR': local_path("contract/fr_template_normal.pdf")
+        }
     
     def draw(self, canvas, booking):
         """Draw stuff in the carbon"""

@@ -1,0 +1,25 @@
+extends ../base
+-load compressed staticfiles i18n
+
+block append title
+  {% trans "Offre Professionnel" %}
+  
+block append styles
+    {% compressed_css "bootstrap" %}
+    {% compressed_css "subscription_styles" %}
+
+block append content-body
+  .container-flex
+    header.header-site:              include ../jade/_header_site
+    nav.bd-b:                        include _breadcrumbs
+
+    article
+      section.introduction:          include _introduction
+      section.insurances.framing:    include _insurances
+      section.pricing-table.framing: include _pricing_table
+      section.process:               include _process
+      section.contact-form:          include _contact_form.html
+
+    footer
+      section.footer-links:  include ../jade/_footer_links
+      section.rss:                   include ../jade/_rss

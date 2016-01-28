@@ -1,0 +1,25 @@
+style
+  .pad-v-xs {
+  border-radius: 15px;
+  }
+
+.container
+  .row(style="position: relative;")
+    .col-sm-6: div(style="background-color:#419bbf; border-color: #419bbf,").pad-v-xs.indent-r-sm
+      h3.text-white
+        b Je gagne de l’argent
+        br
+        b Grâce à Dressbooking
+    .col-sm-6: .pad-v-xs.indent-l-sm.bg-primary
+      h3.text-white
+        b J’économise de l’argent
+        br
+        b Grâce à Dressbooking
+  .row.indent-v-md
+    .col-sm-6: .indent-r-sm
+      a(href="{% url 'publish_item' %}", style="width: 100%;").btn.btn-lg.bg-success Déposez vos annonces
+    .col-sm-6: .indent-l-sm
+      a(href="{% url 'product_list' %}", style="width: 100%;").btn.btn-lg.bg-primary Cherchez des tenues à louer
+//-
+  .row
+    .col-sm-6: a(href="#").link-success Simulez vos revenus
