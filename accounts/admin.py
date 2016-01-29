@@ -129,19 +129,19 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     products_count.short_description = _(u"Nombre d'annonce")
 
     def owner_products(self, obj):
-        owner_product = '<a href="/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.pk
+        owner_product = '<a href="/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.email
         return _(owner_product)
     owner_products.allow_tags = True
     owner_products.short_description = _(u"Objets")
 
     def owner_car_products(self, obj):
-        owner_car_product = '<a href="/edit/products/carproduct/?q=%s" target="_blank">Lien vers les annonces de voiture</a>' % obj.pk
+        owner_car_product = '<a href="/edit/products/carproduct/?q=%s" target="_blank">Lien vers les annonces de voiture</a>' % obj.email
         return _(owner_car_product)
     owner_car_products.allow_tags = True
     owner_car_products.short_description = _(u"Voitures")
 
     def owner_realestate_products(self, obj):
-        owner_realestate_product = '<a href="/edit/products/realestateproduct/?q=%s" target="_blank">Lien vers les annonces de logement</a>' % obj.pk
+        owner_realestate_product = '<a href="/edit/products/realestateproduct/?q=%s" target="_blank">Lien vers les annonces de logement</a>' % obj.email
         return _(owner_realestate_product)
     owner_realestate_products.allow_tags = True
     owner_realestate_products.short_description = _(u"Logements")
