@@ -138,8 +138,9 @@ class Command(BaseCommand):
 
                 # sys.stdout.write('.')
                 # sys.stdout.flush()
-            except:
+            except Exception, e:
                 print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
+                print 'fail error %s' % str(e)
                 pass
 
         print "\n %s products created" % self.patron.products.all().count()
