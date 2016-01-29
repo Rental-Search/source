@@ -9,10 +9,10 @@ import threading
 from contextlib import closing
 
 category_mapping = { 
-    '/categorie-produit/robes/robes-de-cocktail/?products_per_page=all': 'robes-de-coktails',
+    '/categorie-produit/robes/robes-de-cocktail/?products_per_page=all': 'robes-de-cocktails',
     '/categorie-produit/robes/robes-de-luxe/?products_per_page=all': 'robes-de-luxe',
     '/categorie-produit/robes/robes-de-mariage/la-mariee/?products_per_page=all': 'robes-de-mariee',
-    '/categorie-produit/robes/robes-de-mariage/les-invitees/?products_per_page=all': 'robes-de-marriage',
+    '/categorie-produit/robes/robes-de-mariage/les-invitees/?products_per_page=all': 'robes-de-mariage',
     '/categorie-produit/robes/robes-de-maternite/?products_per_page=all': 'robes-de-maternite',
     '/categorie-produit/robes/robes-longues/?products_per_page=all': 'robes-longues',
     '/categorie-produit/accessoires/bibis/?products_per_page=all': 'chapeaux-accessoire-de-tete',
