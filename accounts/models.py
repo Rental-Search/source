@@ -143,13 +143,16 @@ class Patron(AbstractUser):
             processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
-
-    def save(self, *args, **kwargs):
+    
+    def init_slug(self):
         if not self.slug:
             if self.is_professional:
                 self.slug = slugify(self.company_name)
             else:
                 self.slug = slugify(self.username)
+    
+    def save(self, *args, **kwargs):
+        self.init_slug()
         if not self.source:
             self.source = Site.objects.get_current()
         super(Patron, self).save(*args, **kwargs)
@@ -562,9 +565,10 @@ class Address(models.Model):
     patron = models.ForeignKey(Patron, related_name='addresses')
     address1 = models.CharField(_(u'Adresse'), max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
-    zipcode = models.CharField(max_length=9)
+    zipcode = models.CharField(max_length=15)
     city = models.CharField(_(u'Ville'), max_length=255)
     country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES)
+    state = models.CharField(_(u'État'), max_length=50, null=True, blank=True) #TODO Add choices
     position = models.PointField(null=True, blank=True)
     objects = models.GeoManager()
 
@@ -640,8 +644,9 @@ class ProAgency(models.Model):
     #address
     address1 = models.CharField(_(u'Adresse'), max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
-    zipcode = models.CharField(max_length=9)
+    zipcode = models.CharField(max_length=15)
     city = models.CharField(_(u'Ville'), max_length=255)
+    state = models.CharField(_(u'État'), max_length=50, null=True, blank=True) #TODO Add choices
     country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES, default='FR')
     position = models.PointField(null=True, blank=True)
 
