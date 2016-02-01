@@ -41,7 +41,7 @@
         "filesaver": "../FileSaver.min",
         "angular-cookie": "../../bower_components/angular-cookie/angular-cookie",
         "algoliasearch": "../../bower_components/algoliasearch/dist/algoliasearch.angular",
-        "algoliasearch-helper/": "../../bower_components/algoliasearch-helper/dist/algoliasearch.helper",
+        "algoliasearch-helper": "../../bower_components/algoliasearch-helper/dist/algoliasearch.helper",
         "rzModule": "../../bower_components/angularjs-slider/dist/rzslider",
         "nemSimpleLogger": "../../bower_components/angular-simple-logger/dist/angular-simple-logger",
         "uiGmapgoogle-maps": "../../bower_components/angular-google-maps/dist/angular-google-maps"
