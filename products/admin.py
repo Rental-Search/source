@@ -272,7 +272,7 @@ class EloueMessageAdmin(MessageAdmin):
     form = EloueMessageAdminForm
 
     list_filter = ('sent_at',)
-    search_fields = ('subject', 'body', 'recipient__username', 'sender__username',)
+    search_fields = ('subject', 'body', 'recipient__username', 'sender__username', 'recipient__email', 'sender__email',)
     readonly_fields = ('recipient', 'sender', 'parent_msg','sender_profil_link', 'recipient_profil_link',)
 
 
