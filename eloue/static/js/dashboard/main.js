@@ -12,7 +12,7 @@ require.config(
             baseUrl: STATIC_URL + "js/dashboard",
             paths: {
                 "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
-                "underscore": "../../bower_components/lodash/dist/lodash",
+                "underscore": "../../bower_components/lodash/lodash",
                 "jQuery": "../../bower_components/jquery/dist/jquery",
                 "angular": "../../bower_components/angular/angular",
                 "angular-resource": "../../bower_components/angular-resource/angular-resource",

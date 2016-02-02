@@ -5,7 +5,7 @@ define([
     "angular-resource",
     "angular-translate",
     "angular-i18n",
-    "algoliasearch-helper",
+    "angularjs-slider",
     "../../common/eloue/commonApp"
 ], function (angular) {
     "use strict";
