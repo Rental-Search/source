@@ -110,6 +110,11 @@ class Patron(AbstractUser):
     url = models.URLField(_(u"Site internet"), blank=True)
 
     source = models.ForeignKey(Site, null=True, blank=True)
+    
+    # The company the account was imported from
+    origin = models.URLField(_(u"Source"), blank=True, null=True)
+    # Id in the DB of that company
+    original_id = models.BigIntegerField(null=True)
 
     thumbnail = ImageSpecField(
         source='avatar',

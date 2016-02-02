@@ -1,16 +1,18 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
+from django.db import connection
 
 import mysql.connector
 
-from accounts.models import Patron, PhoneNumber, Address
-from products.models import Product, Category
+from accounts.models import Patron, PhoneNumber, Address, ProAgency
+from products.models import Product, Category, Price
 from collections import namedtuple
-from itertools import imap
+from itertools import imap, izip
 from accounts.choices import PHONE_TYPES
 import signal
 from optparse import make_option
 from django.template import Template, Context
+from products.choices import UNIT
 
 
 class Command(BaseCommand):
@@ -24,8 +26,14 @@ class Command(BaseCommand):
     """
 
     USERS_CHUNK_SIZE = 2000
+    
+    # How much products to save in one go
     PRODUCTS_CHUNK_SIZE = 5000
 
+    # Patron.origin value 
+    ORIGIN = "rentalcompare.com"
+
+    # Product descriptions will be buildt with this template
     PRODUCT_DESC_TEMPLATE=\
 """
 {{ description }}
@@ -50,6 +58,11 @@ Weight: {{ weight }}
             dest='dryrun',
             default=False,
             help='Roll back all changes after command completion'),
+        make_option('--export-skipped',
+            action='store_true',
+            dest='export-skipped',
+            default=False,
+            help='Export all skipped objects to a .json file'),                                             
         )
     
     def __init__(self):
@@ -110,7 +123,7 @@ Weight: {{ weight }}
                        'password': 'root'}
         
         dry_run = options['dryrun']
-        export_skipped = True
+        export_skipped = options['export-skipped']
         
         user_prg = 0
         prod_prg = 0
@@ -130,6 +143,8 @@ Weight: {{ weight }}
             self.stderr.write("Could not establish connection "
                                +"to the rentalcompare database. Cause:")
             raise
+        
+        el_c = connection.cursor()
         
         try:
             
@@ -176,22 +191,29 @@ Weight: {{ weight }}
                          'last_name': rc_user.lastname[:30],
                          'url': rc_user.website if rc_user.website is not None else "",
                          'about': rc_user.about_me,
+                         'origin': self.ORIGIN,
+                         'original_id': rc_user.id,
                          # logo/userpic
 #                          '': ,
-                         }
+                        }
                         
                     # addresse(s)
                     
                     if rc_user.level == "vendor":
+                        
+                        if rc_user.phonenumber is None:
+                            self.skip_user(rc_user, "pro with no phone")
+                            continue
+                        
+                        if not rc_user.has_address:
+                            self.skip_user(rc_user, "pro with no address")
+                            continue
                         
                         # pro-specific fields
                         u.update({
                                   'company_name': rc_user.company[:50],
                                   'is_professional': True,
                                   })
-
-                        # TODO boutiques
-                                   
                         
                     elif rc_user.level == "user":
                         pass
@@ -234,7 +256,16 @@ Weight: {{ weight }}
                     if rc_user.level == "vendor":
 
                         # boutique(s)
-                   
+                        # TODO refactor into User.build_boutique
+                        agency = ProAgency.objects.create(patron=user,
+                                                 name=rc_user.company[:50],
+                                                 phone_number=user.default_number,
+                                                 address1=addr.address1,
+                                                 address2=addr.address2,
+                                                 zipcode=addr.zipcode,
+                                                 city=addr.city,
+                                                 state=addr.state,
+                                                 country=addr.country)
                         
                         # products
                         c.execute("select count(*) from ob_products where vendor_id=%(user_id)s;", 
@@ -253,8 +284,13 @@ Weight: {{ weight }}
                         
                         while(len(prod_chunk)>0):
                             
-                            for rc_product in imap(RcProduct._make, prod_chunk):
+                            el_c.execute("select nextval('products_product_id_seq')"+
+                                         " from generate_series(1,%(prod_count)s)",
+                                         {'prod_count':len(prod_chunk)})
+                            
+                            for (rc_product, (alloc_id, )) in izip(imap(RcProduct._make, prod_chunk), el_c):
                                 p = {
+                                    "id": alloc_id,
                                     #owner
                                     "owner": user,
                                     # desc/summary
@@ -273,26 +309,35 @@ Weight: {{ weight }}
                                     "quantity": rc_product.qty if rc_product.qty is not None else 0,
                                     # category
                                     "category": DIVERS_CAT, #TODO add real category
-                                    # TODO prix par jour
-                                     }
+                                    }
                                 
                                 #TODO prices
                                 product = Product(**p)
                                 product.prepare_for_save()
                                 products.append(product)
-#                                 product.save()
+                                prices.append(Price(product_id=alloc_id,
+                                                    amount=rc_product.price, 
+                                                    currency=rc_user.currency, 
+                                                    unit=UNIT.DAY))
+                                if rc_product.price_weekly is not None:
+                                    prices.append(Price(product_id=alloc_id,
+                                                        amount=rc_product.price_weekly, 
+                                                        currency=rc_user.currency, 
+                                                        unit=UNIT.WEEK))
                                 
                             Product.objects.bulk_create(products)
+                            agency.products.add(*products)
+                            Price.objects.bulk_create(prices)
                             #TODO index products
     
                             prod_prg = prod_prg + len(prod_chunk)
                             prod_chunk = c.fetchmany(size=self.PRODUCTS_CHUNK_SIZE)
                             products = []
+                            prices = []
                             self.stdout.write("\rImporting products for user %s: %s / %s" % 
-                                              (rc_user.username, prod_prg, prod_count, ), ending='\r')
+                                              (rc_user.username, prod_prg, prod_count, ), 
+                                              ending='\r')
                               
-                            
-        
                     user_prg = user_prg + 1
                     
                 
@@ -305,6 +350,8 @@ Weight: {{ weight }}
             if dry_run:
                 self.stdout.write(self.style.NOTICE("Dry run was enabled, rolling back."), ending='\n')
                 transaction.rollback()
+            else:
+                transaction.commit()
             
         except:
             transaction.rollback()
@@ -326,8 +373,11 @@ Weight: {{ weight }}
             f.close()
 
         self.stdout.write("Done.", ending='\n')
-                
             
+                
+    def undo(self):
+        #TODO
+        pass
                 
             
         
