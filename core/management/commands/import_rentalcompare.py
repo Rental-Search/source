@@ -18,6 +18,15 @@ from django.contrib.sites.models import Site
 from products.signals import ELOUE_SITE_ID
 import sys
 from django.utils.datetime_safe import datetime
+import requests
+from PIL import Image
+from StringIO import StringIO
+from django.core.files.storage import DefaultStorage
+from django.core.files.base import ContentFile
+from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
+from requests.exceptions import HTTPError
+
 
 class Command(BaseCommand):
     """
@@ -38,22 +47,24 @@ class Command(BaseCommand):
     
     FILENAME = "darryl_rentcomp"
 
+    LOGOS_URL = "http://cdn.rentalcompare.com/logo/"
+
     # Product descriptions will be built with this template
     PRODUCT_DESC_TEMPLATE=\
 """
 {{ description }}
 
 {% if width %}
-Width: {{ width }}
+Width: {{ width }}"
 {% endif %}
 {% if height %}
-Height: {{ height }}
+Height: {{ height }}"
 {% endif %}
 {% if length %}
-Length: {{ length }}
+Length: {{ length }}"
 {% endif %}
 {% if weight %}
-Weight: {{ weight }}
+Weight: {{ weight }} lbs.
 {% endif %}
 """
     option_list = BaseCommand.option_list + (
@@ -77,17 +88,28 @@ Weight: {{ weight }}
             dest='limit-users',
             default=sys.maxint,
             help='Import only a number of users'),       
+        make_option('--logos',
+            action='store_true',
+            dest='logos',
+            default=False,
+            help='Imports pro logos'),        
         make_option('--undo',
             action='store_true',
             dest='undo',
             default=False,
-            help='Undoes ALL imports done with this command'),                                                                                                
+            help='Undoes ALL imports done with this command'), 
+         make_option('--index',
+            action='store_true',
+            dest='index',
+            default=False,
+            help='Indexes imported users and products'),                                                                                               
         )
     
     def __init__(self):
         BaseCommand.__init__(self)
         self.skipped_users = []
         self.skipped_products = []
+        self.skipped_logos = []
         signal.signal(signal.SIGINT, self.handle_interrupt)
 
     _user_type=None
@@ -115,6 +137,11 @@ Weight: {{ weight }}
         if self._product_type is None:
             self._product_type = namedtuple("RcProduct", cols)
         return self._product_type
+    
+    
+    def get_record_queryset(self):
+        return ImportRecord.objects.filter(file_name=self.FILENAME, origin=self.ORIGIN)
+    
         
     def skip_user(self, tup, reason):
         dic = tup._asdict()
@@ -128,6 +155,14 @@ Weight: {{ weight }}
         dic = tup._asdict()
         dic["REASON"] = reason
         self.skipped_products.append(dic)
+
+
+    def skip_logo(self, obj, reason):
+        dic = {k:v for k,v in obj.__dict__.iteritems()\
+                if k in ['username', 'avatar', 'id']}
+        dic['avatar'] = dic['avatar'].name
+        dic['REASON'] = reason
+        self.skipped_logos.append(dic)
     
     
     def handle_interrupt(self, signal, frame):
@@ -137,9 +172,13 @@ Weight: {{ weight }}
     def handle(self, *args, **options):
         if options['undo']:
             self.handle_undo()
+        elif options['logos']:
+            self.handle_logos(**options)
+        elif options['index']:
+            self.handle_index()
         else:
             self.handle_import(*args, **options)
-
+        
         
     def handle_import(self, *args, **options):
         
@@ -209,6 +248,12 @@ Weight: {{ weight }}
                         self.skip_user(rc_user, "email missing")
                         continue
 
+                    if not rc_user.email:
+                        # TODO do not skip w/o emails
+                        self.skip_user(rc_user, "email missing")
+                        continue
+                    
+                    
 #                 PRO:
 #                     Nom entrprise company
 #                     Email email
@@ -233,7 +278,7 @@ Weight: {{ weight }}
                          'about': rc_user.about_me,
                          'import_record': ir,
                          'original_id': rc_user.id,
-                         # logo/userpic
+                         'avatar': rc_user.logo,
 #                          '': ,
                         }
                         
@@ -358,15 +403,15 @@ Weight: {{ weight }}
                                     "original_id": rc_product.id,
                                     }
                                 
-                                #TODO prices
                                 product = Product(**p)
                                 product.prepare_for_save()
                                 products.append(product)
-                                prices.append(Price(product_id=alloc_id,
+                                if rc_product.price:
+                                    prices.append(Price(product_id=alloc_id,
                                                     amount=rc_product.price, 
                                                     currency=rc_user.currency, 
                                                     unit=UNIT.DAY))
-                                if rc_product.price_weekly is not None:
+                                if rc_product.price_weekly:
                                     prices.append(Price(product_id=alloc_id,
                                                         amount=rc_product.price_weekly, 
                                                         currency=rc_user.currency, 
@@ -418,6 +463,7 @@ Weight: {{ weight }}
                 self.stdout.write(self.style.NOTICE("Dry run was enabled, rolling back."), ending='\n')
                 transaction.rollback()
             else:
+                self.stdout.write("Committing...", ending='\n')
                 transaction.commit()
                 
             c.close()
@@ -441,11 +487,71 @@ Weight: {{ weight }}
             f = open("skipped_products.json", "w")
             json.dump(self.skipped_products, f, default=date_handler, indent=1)
             f.close()
-
+            f = open("skipped_logos.json", "w")
+            json.dump(self.skipped_logos, f, default=date_handler, indent=1)
+            f.close()
+            
         self.stdout.write("Done.", ending='\n')
                
-               
-     
+    
+    def handle_logos(self, **options):
+        
+        from gevent import monkey, pool
+        monkey.patch_socket()
+        
+        export_skipped = options['export-skipped']
+        
+        transaction.set_autocommit(False)
+        
+        
+        def worker(pat):
+            try:
+                resp = requests.get(self.LOGOS_URL + pat.avatar.name)
+                resp.raise_for_status()
+                pat.avatar.save('', ContentFile(resp.content))
+            except HTTPError, e:
+                self.skip_logo(pat, str(e))
+
+        poool = pool.Pool(10)
+        
+        try:
+            
+            irs = self.get_record_queryset()
+            
+            if not irs.count():
+                self.stdout.write("No users to get images for.", ending='\n')
+                return
+            
+            for ir in irs:
+                
+                self.stdout.write(ir.imported_at.isoformat(), ending='\n')
+                pats = ir.patrons.exclude(avatar__isnull=True).exclude(avatar__exact='')
+                cnt = pats.count()
+                if not cnt:
+                    self.stdout.write("No users to get images for.", ending='\n')
+                    return
+                self.stdout.write("Setting avatar for %5s patrons" % (cnt, ), ending='\n')
+            
+                poool.map(worker, pats)        
+                
+            self.stdout.write("")
+            
+            transaction.commit()
+        
+        except:
+            transaction.rollback()
+            self.stderr.write("\nGot an error, rolling back. Cause:", ending='\n')
+            raise
+        
+        if export_skipped:
+            import json
+            f = open("skipped_logos.json", "w")
+            json.dump(self.skipped_logos, f, indent=1)
+            f.close()
+        
+        self.stdout.write("Done.", ending='\n')
+        
+        
     def handle_undo(self):
         self.stdout.write("Undoing imports:", ending='\n')
         
@@ -453,8 +559,7 @@ Weight: {{ weight }}
         
         try:
             
-            irs = ImportRecord.objects.filter(file_name=self.FILENAME,
-                                                  origin=self.ORIGIN)
+            irs = self.get_record_queryset()
             
             if not irs.count():
                 self.stdout.write("Nothing to undo.", ending='\n')
@@ -476,11 +581,11 @@ Weight: {{ weight }}
                 Address.objects.filter(patron__in=pats).delete()
                 pats.delete()
                 
-                #the record
                 ir.delete()
                 
-                self.stdout.write("OK", ending='\n')
+                self.stdout.write("deleted", ending='\n')
             
+            self.stdout.write("Committing...", ending='\n')
             transaction.commit()
             
         except:
@@ -491,8 +596,24 @@ Weight: {{ weight }}
         self.stdout.write("Done.", ending='\n')
         
         
-                
+    def handle_index(self):
+        from products.search_indexes import ProductIndex
+        from accounts.search_indexes import PatronIndex
+        
+        pati = PatronIndex()
+        prodi = ProductIndex()
+        
+        irs = self.get_record_queryset()
+        
+        if not irs.count():
+            self.stdout.write("Nothing to index.", ending='\n')
+            return
+        
+        for ir in irs:
+            map(pati.update_object, ir.patrons.all())
+            map(prodi.update_object, ir.products.all())
             
+        self.stdout.write("Done.", ending='\n')
         
         
         
