@@ -4,8 +4,9 @@ from django.db import connection
 
 import mysql.connector
 
-from accounts.models import Patron, PhoneNumber, Address, ProAgency
-from products.models import Product, Category, Price
+from accounts.models import Patron, PhoneNumber, Address, ProAgency,\
+    ImportRecord
+from products.models import Product, Category, Price, Product2Category
 from collections import namedtuple
 from itertools import imap, izip
 from accounts.choices import PHONE_TYPES
@@ -13,7 +14,10 @@ import signal
 from optparse import make_option
 from django.template import Template, Context
 from products.choices import UNIT
-
+from django.contrib.sites.models import Site
+from products.signals import ELOUE_SITE_ID
+import sys
+from django.utils.datetime_safe import datetime
 
 class Command(BaseCommand):
     """
@@ -29,11 +33,12 @@ class Command(BaseCommand):
     
     # How much products to save in one go
     PRODUCTS_CHUNK_SIZE = 5000
-
-    # Patron.origin value 
+ 
     ORIGIN = "rentalcompare.com"
+    
+    FILENAME = "darryl_rentcomp"
 
-    # Product descriptions will be buildt with this template
+    # Product descriptions will be built with this template
     PRODUCT_DESC_TEMPLATE=\
 """
 {{ description }}
@@ -51,18 +56,32 @@ Length: {{ length }}
 Weight: {{ weight }}
 {% endif %}
 """
-
     option_list = BaseCommand.option_list + (
-        make_option('--dryrun',
+        make_option('-d', '--dryrun',
             action='store_true',
             dest='dryrun',
             default=False,
             help='Roll back all changes after command completion'),
-        make_option('--export-skipped',
+        make_option('-e', '--export-skipped',
             action='store_true',
             dest='export-skipped',
             default=False,
-            help='Export all skipped objects to a .json file'),                                             
+            help='Export all skipped objects to a .json file'),
+        make_option('--limit-products',
+            action='store',
+            dest='limit-products',
+            default=sys.maxint,
+            help='Import only a number of products per user'),
+        make_option('--limit-users',
+            action='store',
+            dest='limit-users',
+            default=sys.maxint,
+            help='Import only a number of users'),       
+        make_option('--undo',
+            action='store_true',
+            dest='undo',
+            default=False,
+            help='Undoes ALL imports done with this command'),                                                                                                
         )
     
     def __init__(self):
@@ -116,6 +135,13 @@ Weight: {{ weight }}
     
     
     def handle(self, *args, **options):
+        if options['undo']:
+            self.handle_undo()
+        else:
+            self.handle_import(*args, **options)
+
+        
+    def handle_import(self, *args, **options):
         
         credentials = {
                        'user': 'root', 
@@ -124,13 +150,16 @@ Weight: {{ weight }}
         
         dry_run = options['dryrun']
         export_skipped = options['export-skipped']
+        lp = int(options['limit-products'])
+        lu = int(options['limit-users'])
         
         user_prg = 0
         prod_prg = 0
         
-        slug_attempt = 0
+        user_total = 0
+        prod_total = 0
         
-        DIVERS_CAT = Category.objects.get(slug="divers");
+        slug_attempt = 0
         
         product_desc_template = Template(self.PRODUCT_DESC_TEMPLATE)
         
@@ -148,12 +177,20 @@ Weight: {{ weight }}
         
         try:
             
+            DIVERS_CAT = Category.objects.get(slug="divers");
+            ELOUE_SITE = Site.objects.get(id=ELOUE_SITE_ID)
+            
+            ir = ImportRecord.objects.create(origin=self.ORIGIN,
+                                             file_name=self.FILENAME,
+                                             imported_at=datetime.now())
+            
             c.execute("select count(*) from ob_users;")
             (user_count, ) = c.fetchone()
+            user_count = min(user_count, lu)
             
             self.stdout.write("Importing %s users" % (user_count, ))
             
-            c.execute("select * from ob_users;")
+            c.execute("select * from ob_users limit %s;", (lu,))
             RcUser = self.get_user_type(c.column_names)
             
             chunk = c.fetchmany(size=self.USERS_CHUNK_SIZE)
@@ -162,7 +199,9 @@ Weight: {{ weight }}
                 
                 for rc_user in imap(RcUser._make, chunk):
                     
-                    self.stdout.write("Importing user %5s out of %5s : %-50s" % \
+                    user_prg = user_prg + 1
+                    
+                    self.stdout.write("Importing user %5s out of %5s: %-50s" % \
                                       (user_prg, user_count, rc_user.username, ), ending='\r')
                     
                     if not rc_user.email:
@@ -186,12 +225,13 @@ Weight: {{ weight }}
                     
                     u = {
                          'username': rc_user.username[:30],
+                         'password': rc_user.password,
                          'email': rc_user.email,
                          'first_name': rc_user.display_name[:30],
                          'last_name': rc_user.lastname[:30],
                          'url': rc_user.website if rc_user.website is not None else "",
                          'about': rc_user.about_me,
-                         'origin': self.ORIGIN,
+                         'import_record': ir,
                          'original_id': rc_user.id,
                          # logo/userpic
 #                          '': ,
@@ -245,7 +285,6 @@ Weight: {{ weight }}
                                        kind=PHONE_TYPES.OTHER)
                     
                     user.save()
-                    #TODO index users
                     
                     # user address
                     if rc_user.has_address:
@@ -268,22 +307,28 @@ Weight: {{ weight }}
                                                  country=addr.country)
                         
                         # products
-                        c.execute("select count(*) from ob_products where vendor_id=%(user_id)s;", 
-                                  {'user_id':rc_user.id})
+                        c.execute("select count(*) from ob_products where vendor_id=%(user_id)s limit %(quantity)s;", 
+                                  {'user_id':rc_user.id,
+                                   'quantity':lp})
                         (prod_count, ) = c.fetchone()
+                        prod_count = min(prod_count, lp)
                             
-                        c.execute("select * from ob_products where vendor_id=%(user_id)s;", 
-                                  {'user_id':rc_user.id})
+                        c.execute("select * from ob_products where vendor_id=%(user_id)s limit %(quantity)s;", 
+                                  {'user_id':rc_user.id,
+                                   'quantity':lp})
                             
                         RcProduct = self.get_product_type(c.column_names)
                             
-                        prod_chunk = c.fetchmany(size=self.PRODUCTS_CHUNK_SIZE)
+                        prod_chunk = c.fetchmany(size=min(self.PRODUCTS_CHUNK_SIZE, lp))
                         products = []
                         prices = []
+                        prod_cat = []
                         prod_prg = 0
                         
                         while(len(prod_chunk)>0):
                             
+                            
+                            # prepare products and related objects for bulk save
                             el_c.execute("select nextval('products_product_id_seq')"+
                                          " from generate_series(1,%(prod_count)s)",
                                          {'prod_count':len(prod_chunk)})
@@ -308,7 +353,9 @@ Weight: {{ weight }}
                                     # qty
                                     "quantity": rc_product.qty if rc_product.qty is not None else 0,
                                     # category
-                                    "category": DIVERS_CAT, #TODO add real category
+                                    "category": DIVERS_CAT, #TODO add real category,
+                                    "import_record": ir,
+                                    "original_id": rc_product.id,
                                     }
                                 
                                 #TODO prices
@@ -324,34 +371,57 @@ Weight: {{ weight }}
                                                         amount=rc_product.price_weekly, 
                                                         currency=rc_user.currency, 
                                                         unit=UNIT.WEEK))
-                                
+                                    
+                                prod_cat.append(Product2Category(product=product,
+                                                                 category=DIVERS_CAT,
+                                                                 site=ELOUE_SITE))
+                            
+                            
+                            # bulk save products and related objects
+                            
                             Product.objects.bulk_create(products)
+                            Product2Category.objects.bulk_create(prod_cat)
+                            ELOUE_SITE.products.add(*products)
                             agency.products.add(*products)
                             Price.objects.bulk_create(prices)
-                            #TODO index products
-    
+                            
+                            
+                            # get next chunk of products
+                            
                             prod_prg = prod_prg + len(prod_chunk)
-                            prod_chunk = c.fetchmany(size=self.PRODUCTS_CHUNK_SIZE)
+                            
+                            prod_chunk = c.fetchmany(size=min(self.PRODUCTS_CHUNK_SIZE, lp))
                             products = []
                             prices = []
                             self.stdout.write("\rImporting products for user %s: %s / %s" % 
                                               (rc_user.username, prod_prg, prod_count, ), 
                                               ending='\r')
-                              
-                    user_prg = user_prg + 1
+                        
+                        prod_total = prod_total + prod_prg
                     
-                
-                self.stdout.write("\n")
-                
+                    ELOUE_SITE.patrons.add(user)
+                    ir.patrons.add(user)
+                    user_total = user_total + 1
+                                    
                 chunk = c.fetchmany(size=self.USERS_CHUNK_SIZE)
                 users = []
                 
+            self.stdout.write("\n")
+                
+            self.stdout.write("\rTotal users imported: %s" % 
+              (user_total, ), ending='\n')
+                
+            self.stdout.write("\rTotal products imported: %s" % 
+              (prod_total, ), ending='\n')
             
             if dry_run:
                 self.stdout.write(self.style.NOTICE("Dry run was enabled, rolling back."), ending='\n')
                 transaction.rollback()
             else:
                 transaction.commit()
+                
+            c.close()
+            cnx.close()
             
         except:
             transaction.rollback()
@@ -373,11 +443,54 @@ Weight: {{ weight }}
             f.close()
 
         self.stdout.write("Done.", ending='\n')
+               
+               
+     
+    def handle_undo(self):
+        self.stdout.write("Undoing imports:", ending='\n')
+        
+        transaction.set_autocommit(False)
+        
+        try:
             
+            irs = ImportRecord.objects.filter(file_name=self.FILENAME,
+                                                  origin=self.ORIGIN)
+            
+            if not irs.count():
+                self.stdout.write("Nothing to undo.", ending='\n')
+                return
+            
+            for ir in irs:
                 
-    def undo(self):
-        #TODO
-        pass
+                self.stdout.write(ir.imported_at.isoformat(), ending='   ')
+                
+                prods = ir.products.all()
+                pats = ir.patrons.all()
+                
+                self.stdout.write("%6s products" % (prods.count()), ending='   ')
+                Price.objects.filter(product__in=prods).delete()
+                prods.delete()
+                
+                self.stdout.write("%6s patrons" % (pats.count()), ending='   ')
+                ProAgency.objects.filter(patron__in=pats).delete()
+                Address.objects.filter(patron__in=pats).delete()
+                pats.delete()
+                
+                #the record
+                ir.delete()
+                
+                self.stdout.write("OK", ending='\n')
+            
+            transaction.commit()
+            
+        except:
+            transaction.rollback()
+            self.stderr.write("\nGot an error, rolling back. Cause:", ending='\n')
+            raise
+        
+        self.stdout.write("Done.", ending='\n')
+        
+        
                 
             
         

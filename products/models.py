@@ -110,6 +110,8 @@ class Product(models.Model):
 
     source = models.ForeignKey(Site, null=True, blank=True)
 
+    import_record = models.ForeignKey('accounts.ImportRecord', related_name='products', null=True)
+    original_id = models.BigIntegerField(null=True)
 
     class Meta:
         verbose_name = _('product')

@@ -43,6 +43,7 @@ from payments import paypal_payment
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, json
+from django.db.models.fields.related import ForeignKey
 
 
 DEFAULT_CURRENCY = get_format('CURRENCY')
@@ -58,6 +59,7 @@ class Language(models.Model):
 
     def __unicode__(self):
         return ugettext(self.lang)
+
     
 class Patron(AbstractUser):
     """A member"""
@@ -110,10 +112,8 @@ class Patron(AbstractUser):
     url = models.URLField(_(u"Site internet"), blank=True)
 
     source = models.ForeignKey(Site, null=True, blank=True)
-    
-    # The company the account was imported from
-    origin = models.URLField(_(u"Source"), blank=True, null=True)
-    # Id in the DB of that company
+
+    import_record = models.ForeignKey('accounts.ImportRecord', related_name='patrons', null=True)
     original_id = models.BigIntegerField(null=True)
 
     thumbnail = ImageSpecField(
@@ -930,6 +930,20 @@ class BillingHistory(models.Model):
 
     class Meta:
         ordering = ['date']
+    
+    
+class ImportRecord(models.Model):
+    
+    # The company the object was imported from
+    origin = models.URLField(_(u"source"), editable=False)
+    # File or database name
+    file_name = models.CharField(_(u"nom du fichier"), max_length=255, editable=False, blank=True, null=True)
+    
+    imported_at = models.DateTimeField(_(u"importé à"), auto_now_add=True, editable=False)
+    imported_by = models.ForeignKey("Patron", related_name='import_records', editable=False, null=True, verbose_name=_(u"importé par"))
+    
+    class Meta:
+        verbose_name = _("importation")
 
 
 signals.post_save.connect(post_save_sites, sender=Patron)
