@@ -111,7 +111,8 @@ ugettext = lambda s: s
 LANGUAGES = (
     ('fr', ugettext('Francais')),
     ('en', ugettext('English')),
-    ('da', ugettext('Danish'))
+    ('da', ugettext('Danish')),
+    ('en-US', ugettext('English (United States)'))
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
