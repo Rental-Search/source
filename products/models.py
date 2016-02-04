@@ -604,7 +604,7 @@ def upload_to(instance, filename):
 class Picture(models.Model):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)
-    image = models.ImageField(null=True, blank=True, upload_to=upload_to)
+    image = models.ImageField(null=True, blank=True, upload_to=upload_to, max_length=200)
     created_at = models.DateTimeField(blank=True, editable=False)
 
     thumbnail = ImageSpecField(

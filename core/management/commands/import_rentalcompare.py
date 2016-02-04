@@ -6,7 +6,7 @@ import mysql.connector
 
 from accounts.models import Patron, PhoneNumber, Address, ProAgency,\
     ImportRecord
-from products.models import Product, Category, Price, Product2Category
+from products.models import Product, Category, Price, Product2Category, Picture
 from collections import namedtuple
 from itertools import imap, izip
 from accounts.choices import PHONE_TYPES
@@ -26,6 +26,7 @@ from django.core.files.base import ContentFile
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 from requests.exceptions import HTTPError
+import threading
 
 
 class Command(BaseCommand):
@@ -48,6 +49,7 @@ class Command(BaseCommand):
     FILENAME = "darryl_rentcomp"
 
     LOGOS_URL = "http://cdn.rentalcompare.com/logo/"
+    PICTURES_URL = "http://cdn.rentalcompare.com/uploads/"
 
     # Product descriptions will be built with this template
     PRODUCT_DESC_TEMPLATE=\
@@ -97,12 +99,17 @@ Weight: {{ weight }} lbs.
             action='store_true',
             dest='undo',
             default=False,
-            help='Undoes ALL imports done with this command'), 
-         make_option('--index',
+            help='Undoes ALL imports done with this command (does not delete images)'), 
+        make_option('--index',
             action='store_true',
             dest='index',
             default=False,
-            help='Indexes imported users and products'),                                                                                               
+            help='Indexes imported users and products'),  
+        make_option('--pictures',
+            action='store_true',
+            dest='pictures',
+            default=False,
+            help='Imports product pictures'),                                                                                              
         )
     
     def __init__(self):
@@ -110,6 +117,7 @@ Weight: {{ weight }} lbs.
         self.skipped_users = []
         self.skipped_products = []
         self.skipped_logos = []
+        self.skipped_pics = []
         signal.signal(signal.SIGINT, self.handle_interrupt)
 
     _user_type=None
@@ -159,10 +167,17 @@ Weight: {{ weight }} lbs.
 
     def skip_logo(self, obj, reason):
         dic = {k:v for k,v in obj.__dict__.iteritems()\
-                if k in ['username', 'avatar', 'id']}
-        dic['avatar'] = dic['avatar'].name
+                if k in ['username', 'id']}
+        dic['avatar'] = obj.avatar.name
         dic['REASON'] = reason
         self.skipped_logos.append(dic)
+        
+    def skip_picture(self, obj, reason):
+        dic = {k:v for k,v in obj.__dict__.iteritems()\
+                if k in ['product_id', 'id']}
+        dic['image'] = obj.image.name
+        dic['REASON'] = reason
+        self.skipped_pics.append(dic)
     
     
     def handle_interrupt(self, signal, frame):
@@ -170,10 +185,13 @@ Weight: {{ weight }} lbs.
     
     
     def handle(self, *args, **options):
+        
         if options['undo']:
             self.handle_undo()
         elif options['logos']:
             self.handle_logos(**options)
+        elif options['pictures']:
+            self.handle_pictures(args, **options)
         elif options['index']:
             self.handle_index()
         else:
@@ -367,6 +385,7 @@ Weight: {{ weight }} lbs.
                         prod_chunk = c.fetchmany(size=min(self.PRODUCTS_CHUNK_SIZE, lp))
                         products = []
                         prices = []
+                        pictures = []
                         prod_cat = []
                         prod_prg = 0
                         
@@ -406,6 +425,7 @@ Weight: {{ weight }} lbs.
                                 product = Product(**p)
                                 product.prepare_for_save()
                                 products.append(product)
+                                
                                 if rc_product.price:
                                     prices.append(Price(product_id=alloc_id,
                                                     amount=rc_product.price, 
@@ -417,11 +437,12 @@ Weight: {{ weight }} lbs.
                                                         currency=rc_user.currency, 
                                                         unit=UNIT.WEEK))
                                     
-                                prod_cat.append(Product2Category(product=product,
-                                                                 category=DIVERS_CAT,
-                                                                 site=ELOUE_SITE))
-                            
-                            
+                                if rc_product.primary_photo:
+                                    pictures.append(Picture(product_id=alloc_id,
+                                                    image=rc_product.primary_photo,
+                                                    created_at=datetime.now()))
+
+
                             # bulk save products and related objects
                             
                             Product.objects.bulk_create(products)
@@ -429,6 +450,7 @@ Weight: {{ weight }} lbs.
                             ELOUE_SITE.products.add(*products)
                             agency.products.add(*products)
                             Price.objects.bulk_create(prices)
+                            Picture.objects.bulk_create(pictures)
                             
                             
                             # get next chunk of products
@@ -438,6 +460,7 @@ Weight: {{ weight }} lbs.
                             prod_chunk = c.fetchmany(size=min(self.PRODUCTS_CHUNK_SIZE, lp))
                             products = []
                             prices = []
+                            pictures = []
                             self.stdout.write("\rImporting products for user %s: %s / %s" % 
                                               (rc_user.username, prod_prg, prod_count, ), 
                                               ending='\r')
@@ -496,52 +519,42 @@ Weight: {{ weight }} lbs.
     
     def handle_logos(self, **options):
         
-        from gevent import monkey, pool
-        monkey.patch_socket()
+        from threading import Thread
         
+        NUM_THREADS = 4
         export_skipped = options['export-skipped']
         
-        transaction.set_autocommit(False)
-        
-        
-        def worker(pat):
-            try:
-                resp = requests.get(self.LOGOS_URL + pat.avatar.name)
-                resp.raise_for_status()
-                pat.avatar.save('', ContentFile(resp.content))
-            except HTTPError, e:
-                self.skip_logo(pat, str(e))
-
-        poool = pool.Pool(10)
-        
-        try:
-            
-            irs = self.get_record_queryset()
-            
-            if not irs.count():
-                self.stdout.write("No users to get images for.", ending='\n')
-                return
-            
+        skip_lock = threading.Lock()
+        progress_lock = threading.Lock()
+        self.progress = 0
+   
+        def worker(part):
+            irs = self.get_record_queryset()        
             for ir in irs:
-                
-                self.stdout.write(ir.imported_at.isoformat(), ending='\n')
                 pats = ir.patrons.exclude(avatar__isnull=True).exclude(avatar__exact='')
-                cnt = pats.count()
-                if not cnt:
-                    self.stdout.write("No users to get images for.", ending='\n')
-                    return
-                self.stdout.write("Setting avatar for %5s patrons" % (cnt, ), ending='\n')
-            
-                poool.map(worker, pats)        
-                
-            self.stdout.write("")
-            
-            transaction.commit()
+                count = pats.count()
+                pats_slice = pats[(count/NUM_THREADS)*part:(count/NUM_THREADS)*(part+1)]
+                for pat in pats_slice:
+                    try:
+                        with progress_lock:
+                            self.progress = self.progress + 1
+                            self.stdout.write("Logo %5s out of %5s" % (self.progress, count), ending='\r')
+                        resp = requests.get(self.LOGOS_URL + pat.avatar.name)
+                        resp.raise_for_status()
+                        pat.avatar.save('', ContentFile(resp.content))
+                    except HTTPError, e:
+                        with skip_lock:
+                            self.skip_logo(pat, str(e))
         
-        except:
-            transaction.rollback()
-            self.stderr.write("\nGot an error, rolling back. Cause:", ending='\n')
-            raise
+        for ti in range(NUM_THREADS):
+            Thread(target=worker, args=(ti,)).start()
+            
+        for t in threading.enumerate():
+            if t is threading.current_thread():
+                continue
+            t.join()
+            
+        self.stdout.write("")
         
         if export_skipped:
             import json
@@ -551,7 +564,60 @@ Weight: {{ weight }} lbs.
         
         self.stdout.write("Done.", ending='\n')
         
+  
+    def handle_pictures(self, *args, **options):
+        from threading import Thread
         
+        NUM_THREADS = 4
+        export_skipped = options['export-skipped']
+        
+        skip_lock = threading.Lock()
+        progress_lock = threading.Lock()
+        self.progress = 0
+        
+        def worker(part):
+            storage = Picture._meta.get_field('image').storage
+            irs = self.get_record_queryset()        
+            for ir in irs:
+                pics = Picture.objects.filter(product__import_record=ir)
+                count = pics.count()
+                pics_slice = pics[(count/NUM_THREADS)*part:(count/NUM_THREADS)*(part+1)]
+                for pic in pics_slice:
+                    try:
+                        name = pic.image.name
+                        with progress_lock:
+                            self.progress = self.progress + 1
+                            self.stdout.write("Picture %7s out of %7s: %50s" % (self.progress, count, name), ending='\r')
+                        if storage.exists(pic.image.name):
+                            with skip_lock:
+                                self.skip_picture(pic, str('already exists'))
+                        name = name if name.startswith('http') else self.PICTURES_URL + name
+                        resp = requests.get(name)
+                        resp.raise_for_status()
+                        pic.image.save('', ContentFile(resp.content))
+                    except Exception, e:
+                        with skip_lock:
+                            self.skip_picture(pic, str(e))
+        
+        for ti in range(NUM_THREADS):
+            Thread(target=worker, args=(ti,)).start()
+            
+        for t in threading.enumerate():
+            if t is threading.current_thread():
+                continue
+            t.join()
+        
+        self.stdout.write("")
+        
+        if export_skipped:
+            import json
+            f = open("skipped_pics.json", "w")
+            json.dump(self.skipped_pics, f, indent=1)
+            f.close()
+        
+        self.stdout.write("Done.", ending='\n')
+                
+    
     def handle_undo(self):
         self.stdout.write("Undoing imports:", ending='\n')
         
@@ -569,8 +635,9 @@ Weight: {{ weight }} lbs.
                 
                 self.stdout.write(ir.imported_at.isoformat(), ending='   ')
                 
-                prods = ir.products.all()
-                pats = ir.patrons.all()
+                # TODO find out why delete trough related manager failed
+                prods = Product.objects.filter(import_record=ir)
+                pats = Patron.objects.filter(import_record=ir)
                 
                 self.stdout.write("%6s products" % (prods.count()), ending='   ')
                 Price.objects.filter(product__in=prods).delete()
@@ -579,6 +646,7 @@ Weight: {{ weight }} lbs.
                 self.stdout.write("%6s patrons" % (pats.count()), ending='   ')
                 ProAgency.objects.filter(patron__in=pats).delete()
                 Address.objects.filter(patron__in=pats).delete()
+                PhoneNumber.objects.filter(patron__in=pats).delete()
                 pats.delete()
                 
                 ir.delete()
@@ -610,8 +678,8 @@ Weight: {{ weight }} lbs.
             return
         
         for ir in irs:
-            map(pati.update_object, ir.patrons.all())
-            map(prodi.update_object, ir.products.all())
+            map(pati.update_object, Patron.objects.filter(import_record=ir))
+            map(prodi.update_object, Product.objects.filter(import_record=ir))
             
         self.stdout.write("Done.", ending='\n')
         
