@@ -248,6 +248,7 @@ INSTALLED_APPS = (
     'south', # South must be the last in the list of applications that contains models
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
     'core',
+    'import_export',
 )
 
 if DEBUG_TOOLBAR:
@@ -772,6 +773,9 @@ ANALYTICS = {
              'GOOGLE_ID': 'UA-8258979-1',
              'SEGMENT_ID': 'CK4wf1QXZEjeqFRo75zZQ7DfZWzYJwHC',
              }
+
+if not DEBUG:
+    IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.MediaStorage"
 
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')
