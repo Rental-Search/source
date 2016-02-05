@@ -9,13 +9,13 @@ import threading
 from contextlib import closing
 
 category_mapping = { 
-    '13-robes#/longueur-courte': 'robes-courtes',
-    '13-robes#/longueur-longue': 'robes-longues',
-    '25-bijoux': 'bijoux',
+    '13-robes#/longueur-courte': 'robes-de-soiree',
+    '13-robes#/longueur-longue': 'rrobes-longues',
+    '25-bijoux': 'bijoux-1',
     '26-sacs': 'pochettes',
     '27-vestes': 'pochettes',
     '24-mariage': 'robes-de-mariage',
-    '21-cocktail': 'robes-de-coktails',
+    '21-cocktail': 'robes-de-cocktails',
 }
 
 
@@ -138,8 +138,9 @@ class Command(BaseCommand):
 
                 # sys.stdout.write('.')
                 # sys.stdout.flush()
-            except:
+            except Exception, e:
                 print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
+                print 'fail error %s' % str(e)
                 pass
 
         print "\n %s products created" % self.patron.products.all().count()

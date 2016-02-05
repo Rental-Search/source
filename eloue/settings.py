@@ -111,7 +111,8 @@ ugettext = lambda s: s
 LANGUAGES = (
     ('fr', ugettext('Francais')),
     ('en', ugettext('English')),
-    ('da', ugettext('Danish'))
+    ('da', ugettext('Danish')),
+    ('en-US', ugettext('English (United States)'))
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
@@ -247,6 +248,7 @@ INSTALLED_APPS = (
     'south', # South must be the last in the list of applications that contains models
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
     'core',
+    'import_export',
 )
 
 if DEBUG_TOOLBAR:
@@ -765,6 +767,8 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
 
+if not DEBUG:
+    IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.MediaStorage"
 
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')

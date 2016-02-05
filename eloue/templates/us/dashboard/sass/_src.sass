@@ -1,0 +1,20 @@
+input#sourse
+	position: fixed
+	z-index: 1000000 !important
+#sourse-img
+	overflow: hidden
+	+opacity(0)
+	position: fixed
+	position: absolute
+	transition: opacity 1s, z-index 0s 1s
+	z-index: -1000
+	width: 100%
+	img
+		display: block
+		margin: 0 auto
+
+input#sourse:checked + #sourse-img
+	transition: opacity 1s
+	+opacity(1)
+	z-index: 100000
+	height: auto
