@@ -18,7 +18,7 @@ html(lang="fr")
       meta(charset="UTF-8")
       meta(name="viewport", content="width=device-width, initial-scale=1.0")
       meta(name="description", content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}")
-      link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
+      link(rel="shortcut icon", href="{% static 'img/rc_fav.ico' %}")
     block styles
       link(rel="stylesheet", href="http{% if request.is_secure %}s{% endif %}://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
       {% compressed_css "extrastyles" %}
