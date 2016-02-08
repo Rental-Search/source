@@ -501,9 +501,9 @@ SOUTH_MIGRATION_MODULES = {
 # Haystack configuration
 HAYSTACK_CONNECTIONS = {                
     'default': {
-        'ENGINE': 'haystack_algolia.algolia_backend.AlgoliaEngine',
         'APP_ID': '',
         'API_KEY': '',
+        'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
         'INDEX_NAME_PREFIX': 'e-loue-test-geo-multilvl-',
         'TIMEOUT': 60 * 5
     }

@@ -45,15 +45,27 @@ class AlgoliaLocationField(indexes.LocationField):
         pnt = ensure_point(value)
         pnt_lat, pnt_lng  = pnt.get_coords()
         return {"lat":pnt_lat, "lng":pnt_lng}
+
+
+class AlgoliaTagsField(indexes.MultiValueField):
     
+    index_fieldname = "_tags"
+    
+    def prepare(self, obj):
+        
+        category = obj._get_category()
+        if category:
+            qs = category.get_ancestors(ascending=False, include_self=True)
+            return tuple(qs.values_list('slug', flat=True))
+        
+        return tuple()
+            
 
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
     location = indexes.LocationField(model_attr='address__position', null=True)
-    _geoloc = AlgoliaLocationField(model_attr='address__position', null=True)
     locations = LocationMultiValueField()
     categories = indexes.MultiValueField(faceted=True, null=True)
-    algolia_categories = indexes.MultiValueField(faceted=True, null=True)
     created_at = indexes.DateTimeField(model_attr='created_at')
     created_at_timestamp = indexes.DateTimeField(model_attr='created_at')
     created_at_date = indexes.DateField(model_attr='created_at__date')
@@ -92,6 +104,10 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     need_insurance = indexes.BooleanField(default=True)
 
+    django_id_int = indexes.IntegerField(model_attr='id')
+    algolia_categories = indexes.MultiValueField(faceted=True, null=True)
+    _geoloc = AlgoliaLocationField(model_attr='address__position', null=True)
+    _tags = AlgoliaTagsField(model_attr='categories', null=True)
     
     def prepare_locations(self, obj):
         agencies = obj.owner.pro_agencies.all()
