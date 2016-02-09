@@ -498,16 +498,14 @@ SOUTH_MIGRATION_MODULES = {
 }
 
 # Haystack configuration
-HAYSTACK_CONNECTIONS = {
+HAYSTACK_CONNECTIONS = {                
     'default': {
-        'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
-        'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
-        'KWARGS': {
-            'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
-            'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
-        }
-    },
+        'APP_ID': '',
+        'API_KEY': '',
+        'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
+        'INDEX_NAME_PREFIX': 'e-loue-test-geo-multilvl-',
+        'TIMEOUT': 60 * 5
+    }
 }
 #HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 HAYSTACK_SIGNAL_PROCESSOR = 'eloue.search.HaystackSignalProcessor'

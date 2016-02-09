@@ -29,4 +29,5 @@ class PatronIndex(indexes.Indexable, indexes.SearchIndex):
         return Patron
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.select_related('default_address__position')
+        ids = self.get_model().on_site.values_list('pk', flat=True)[:20]
+        return self.get_model().on_site.select_related('default_address__position').filter(pk__in=ids)
