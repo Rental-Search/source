@@ -1,5 +1,5 @@
 from haystack_algolia.algolia_backend import AlgoliaSearchBackend
-from haystack.backends import BaseEngine, BaseSearchQuery, log_query
+from haystack.backends import BaseEngine, BaseSearchQuery, log_query, SQ
 from __builtin__ import NotImplementedError
 from haystack.models import SearchResult
 import re
@@ -59,7 +59,18 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
 
 class EloueAlgoliaSearchQuery(BaseSearchQuery):
     
-    #TODO: facet, narrow, models
+    #TODO: facet, models
+    
+    
+    def add_narrow_query(self, query):
+        # TODO better implementation of narrow
+        k, v = query.split(':')
+        try:
+            v = int(v)
+        except ValueError:
+            pass
+        self.add_filter(SQ(**{k:v}))
+    
     
     def build_query_fragment(self, field, filter_type, value):
         
