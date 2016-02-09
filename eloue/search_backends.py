@@ -8,6 +8,7 @@ from products.models import Product
 
 EQ_NUMERIC = '%s=%s'
 EQ_FACET = '%s:"%s"'
+EQ_FACET_NOQ = '%s:%s'
 OR = ' OR '
 AND = ' AND '
 TAG_JOIN = ','
@@ -55,32 +56,43 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
             'results': results["results"],
             'hits': results["hits"],
         }
-    
 
 class EloueAlgoliaSearchQuery(BaseSearchQuery):
-
+    
+    #TODO: facet, narrow, models
+    
     def build_query_fragment(self, field, filter_type, value):
         
-        if type(value) is list:
+        prepare = lambda x:x
+        
+        val = value
+        
+        if type(val) is list:
             if len(value) == 0:
                 return ""
-            # Assuming all elements are of same type
+            vtypes = set(type(x) for x in val)
+            if len(vtypes) > 1:
+                raise NotImplementedError("Multiple types not supported in iterable: %s" % (vtypes,))
             val = value[0]
-        elif type(value) in (str, int, bool):
-            val = value
+            
+        if type(val) is int:
+            kv = EQ_NUMERIC
+        elif type(val) is bool:
+            kv = EQ_FACET_NOQ
+            prepare = lambda x:str(x).lower()
+        elif type(val) in (str, unicode): #TODO handle unicode and str correctly
+            kv = EQ_FACET
         else:
             raise NotImplementedError("Unsupported value type: field=%s, filter_type=%s, value=%s" 
-                                      % (field, filter_type, type(value)) )
-        
-        kv = EQ_NUMERIC if type(val) is int else EQ_FACET
-        
-        import pdb ; pdb.set_trace()
+                                      % (field, filter_type, type(val)) )
         
         if filter_type in ('contains', 'exact'):
-            return kv % (field, value)
+            return kv % (field, prepare(value))
         elif filter_type == 'in':
-            kvps = map(lambda x:kv % (field, x), value)
-            res = ('('+OR.join(kvps)+')') if len(kvps) > 1 else OR.join(kvps)
+            kvps = map(lambda x:kv % (field, prepare(x)), value)
+            res = OR.join(kvps)
+            if len(kvps) > 1:
+                res = '('+res+')'
             return res
         else:
             raise NotImplementedError("Unsupported lookup: field=%s, filter_type=%s, value=%s" 
