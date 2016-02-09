@@ -33,9 +33,9 @@ block append styles
 block append content-body
   .container-flex(data-ng-controller="ProductListCtrl")
     header.header-site
-      include ../jade/_header_site
-     nav.bd-b
-      include ../jade/_breadcrumbs
+      include ../jade/_header_site_list
+     //-nav.bd-b
+      //-include ../jade/_breadcrumbs
     article.container.list-layout.indent-b-lg
       //- we shall calculate pagination for both the article head and the list below
       {% pagination %}
@@ -46,7 +46,7 @@ block append content-body
           aside.col-xs-3
             include ../jade/_product_list_aside
           main.col-xs-9
-            include ../jade/_product_list_main
+            include ../jade/_product_list_main_algolia
     footer
       //-section.download-mobile-apps.framing: include ../jade/_download_mobile_apps
       section.footer-links: include ../jade/_footer_links

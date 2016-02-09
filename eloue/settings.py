@@ -349,6 +349,7 @@ PIPELINE_CSS = {
             'sass/product_list_styles.sass',
             #'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css',
             'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/angularjs-slider/dist/rzslider.css',
         ),
         'output_filename': 'css/product_list_styles.css',
         'extra_context': {

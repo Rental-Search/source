@@ -25,7 +25,7 @@
                       fieldset(data-ng-disabled="submitInProgress")
                         .row
                             .col-sm-12
-                                input(type="text", name="summary", placeholder="{% trans 'Titre' %}", ng-required="!isAuto", ng-model="product.summary", ng-show="!isAuto").form-control
+                                input(type="text", name="summary", placeholder="{% trans 'Titre' %} *", ng-required="!isAuto", ng-model="product.summary", ng-show="!isAuto").form-control
                                 span.text-danger(ng-show="publishAdForm.summary.$error.required && !!publishAdSubmitted", translate="required_field")
                             .col-sm-6
                                 input(type="text", name="brand", placeholder="{% trans 'Marque' %} *", ng-required="isAuto", ng-model="product.brand", ng-show="isAuto").form-control

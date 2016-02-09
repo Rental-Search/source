@@ -1,0 +1,38 @@
+-load product i18n
+
+ol(ng-show="search_result_count").product-layout
+    {% trans "jour" as by_day %} 
+    {% verbatim %}
+    
+    li(ng-repeat="product in search_results track by product.django_id", id="marker-{{ $index }}", locationY="{{ product._geoloc.lat }}", locationX="{{ product._geoloc.lng }}", name="{{ product.summary }}", ng-cloak) 
+
+      .section-body
+        .thumbnail-img
+          a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
+          span(ng-if="product.price").badge.price {{ product.price|currency }} /{{ by_day }}
+          span(ng-if="!product.price").badge.price {% trans "Sur devis" %}
+          span.badge-order {{ $index+1 }}
+        .declarer-container
+          .declarer
+            span.declarer-name {{ product.owner }}
+            a(href="{{ product.owner_url }}").declarer-thumbnail: img(style="{% if product.owner_avatar %}background-image: url({{ product.owner_avatar }}){% endif %}").bg-image
+          .btns
+          //-
+            a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
+            a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2
+        .info
+          h6
+            a(href="{{ product.url }}", ng-bind-html="product._highlightResult.summary.value | trust") {{ product.summary }}
+            
+            span(ng-if="product.pro_owner").badge-pro pro
+          p
+            span(ng-if="product.agencies"): &nbsp;
+            span(ng-if="!product.agencies"): {{ product.city }}
+              span(ng-if="product.city && product.zipcode"): {{ product.zipcode }}
+    
+    {% endverbatim %}
+    
+p(ng-hide="search_result_count") {% trans "Aucune annconce trouvée." %} 
+  a(ng-click="clearRefinements()") {% trans "Reinitialiser les critères de la recherche"  %}
+    
+include ./_product_list_pagination

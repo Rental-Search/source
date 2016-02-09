@@ -12,7 +12,7 @@ require.config(
             baseUrl: STATIC_URL + "js/widgets",
             paths: {
                 "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
-                "lodash": "../../bower_components/lodash/dist/lodash",
+                "lodash": "../../bower_components/lodash/lodash",
                 "jquery": "../../bower_components/jquery/dist/jquery",
                 "jquery-ui": "../../bower_components/jqueryui/jquery-ui",
                 "jshashtable": "../jshashtable-2.1_src",
@@ -48,7 +48,12 @@ require.config(
                 "toastr": "../../bower_components/toastr/toastr",
                 "formmapper": "../formmapper",
                 "filesaver": "../FileSaver.min",
-                "angular-cookie": "../../bower_components/angular-cookie/angular-cookie"
+                "angular-cookie": "../../bower_components/angular-cookie/angular-cookie",
+                "algoliasearch": "../../bower_components/algoliasearch/dist/algoliasearch.angular",
+                "algoliasearch-helper": "../../bower_components/algoliasearch-helper/dist/algoliasearch.helper",
+                "angularjs-slider": "../../bower_components/angularjs-slider/dist/rzslider",
+                "nemSimpleLogger": "../../bower_components/angular-simple-logger/dist/angular-simple-logger",
+                "uiGmapgoogle-maps": "../../bower_components/angular-google-maps/dist/angular-google-maps"
             },
             shim: {
                 "angular": {
@@ -88,7 +93,12 @@ require.config(
                 "jquery-mousewheel": ["jquery"],
                 "custom-scrollbar": ["jquery", "jquery-mousewheel"],
                 "toastr": ["jquery"],
-                "angular-cookie": ["angular"]
+                "angular-cookie": ["angular"],
+                "algoliasearch": ["angular"],
+                "algoliasearch-helper": ["algoliasearch"],
+                "angularjs-slider": ["angular"],
+                "nemSimpleLogger": ["angular"],
+                "uiGmapgoogle-maps": ["angular", "lodash", "nemSimpleLogger"]
             }
         };
     })()
@@ -130,7 +140,12 @@ require([
     "../common/eloue/commonApp",
     "../common/eloue/i18n",
     "eloue/config",
-    "angular-cookie"
+    "angular-cookie",
+    "algoliasearch",
+    "algoliasearch-helper",
+    "angularjs-slider",
+    "nemSimpleLogger",
+    "uiGmapgoogle-maps"
 ], function ($, _, angular) {
     "use strict";
     $(function () {

@@ -13,7 +13,8 @@ h3.col-md-7
 .col-xs-5.layout-switcher
   i.flaticon.stroke.menu-list-4.list
   i.flaticon.stroke.window-1.grid
-  .clear-selector: select#sort-selector.form-control(name="sort", form="detail-search")
+  .clear-selector: select#sort-selector.form-control(name="sort", form="detail-search", ng-model="search_ordering", ng-change="setOrdering(search_ordering)")
+    <option value="" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les plus pertinents" %}
     <option value="-created_at" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les plus récents" %}
     <option value="distance" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les plus proches" %}
     <option value="price" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les prix les plus bas" %}
