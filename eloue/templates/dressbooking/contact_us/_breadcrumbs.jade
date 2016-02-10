@@ -1,0 +1,7 @@
+-load i18n
+
+.container
+  ol.breadcrumb
+    li: a(href="{% url 'home' %}") {% trans 'Accueil' %}
+    li {% trans "En savoir plus" %}
+    li.active {% trans "Contactez‐nous" %}

@@ -2,8 +2,8 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db.models import Count
-
 from products.models import ProductRelatedMessage
+from django.contrib.sites.models import get_current_site
 
 def site(request):
     try:
@@ -30,3 +30,13 @@ def unread_message_count_context(request):
     else:
         return {}
 
+
+def analytics_context(request):
+    site = get_current_site(request)
+    return {
+            'ANALYTICS_SITE': site.domain,
+            'ANALYTICS_FACEBOOK_ID': settings.ANALYTICS['FACEBOOK_ID'],
+            'ANALYTICS_GOOGLE_ID':  settings.ANALYTICS['GOOGLE_ID'],
+            'ANALYTICS_SEGMENT_ID': settings.ANALYTICS['SEGMENT_ID'],
+            }
+    

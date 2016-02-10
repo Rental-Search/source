@@ -1,0 +1,26 @@
+{% with borrowercomments|length as comments_count %}
+{% if comments_count %}
+h3.indent-b-xs Les {{ comments_count }} commentaires de {{ patron.username }}
+
+ul.list-group
+  each comment in borrowercomments
+    {% with comment.booking.product as product %}
+    li.list-group-item.thumbnail
+      .thumbnail-img
+        {% with product.pictures.all|first as picture %}
+        a(href="{{ product.get_absolute_url }}").img-wrapper.product-thumbnail: img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}").bg-image
+        {% endwith %}
+      .thumbnail-content
+        p
+          a(href="{{ product.get_absolute_url }}").text-secondary: b {{ product.summary }}
+          small loué par 
+          a(href="{{ comment.author.get_absolute_url }}").text-secondary: b {{ comment.author.username }}
+        .indent-t-xs.indent-b-xs //- this is a change against HTML dev's branch, should be checked that it looks like expected
+          {% with comment.note as rate %}
+          include ../jade/_rate
+          {% endwith %}
+        p {{ comment.comment|truncatechars:145 }}
+        small Le {{ comment.created_at|date:"d F Y" }}
+    {% endwith %}
+{% endif %}
+{% endwith %}

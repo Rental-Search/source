@@ -259,6 +259,18 @@ class CommentSerializer(serializers.ModelSerializer):
     rate = fields.ChoiceField(source='note', choices=models.Comment._meta.get_field('note').choices)
     author = CommentAuthorField()
 
+    def full_clean(self, instance):
+        instance = super(CommentSerializer, self).full_clean(instance)
+        if instance and instance.booking:
+            if instance.type == COMMENT_TYPE_CHOICES.OWNER \
+                    and instance.booking.owner.has_pro_subscription:
+                self._errors.update({
+                    'author': _(u'Only borrowers can comment professional bookings')
+                })
+                return None
+
+        return instance
+
     class Meta:
         model = models.Comment
         fields = ('id', 'booking', 'comment', 'rate', 'created_at', 'author') # 'author' must follow after the 'booking'

@@ -1,0 +1,50 @@
+{% extends "base_email.html" %}
+{% load i18n %}
+
+{% block title_email %}{% trans "Votre proposition de location a été refusée" %}{% endblock %}
+
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.borrower.get_full_name as borrower_name and booking.owner.username as owner and booking.total_amount as total_amount %}
+
+                            Bonjour {{ borrower_name }}<br><br>
+
+                            Hélas, le propriétaire a refusé votre proposition de réservation suivante <br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+                            {% with booking.product.more_like_this as related_products %}
+							{% if related_products %}
+
+                            Cependant, d’autres objets similaires peuvent peut-être vous intéresser :<br>
+
+                            {% include "rent/emails/partials/product_list_email.html" %}
+
+                            {% endif %}
+                            {% endwith %}
+
+                            {% blocktrans with site.name as site_name and protocol as protocol and site.domain as domain and booking.product.category.get_absolute_url as category_url %}
+
+                            Retrouvez tous les objets de cette catégorie sur <a href="{{ protocol }}://{{ domain }}{{ category_url }}">{{ domain }}</a>.<br>
+
+                            Aussi n'hésitez pas à nous appeler au 0826 800 200 (0,15€/min) pour qu'un conseiller Dressbooking vous aide.<br><br>
+
+                            A très vite<br>
+                            
+                            L'équipe {{ site_name }}<br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

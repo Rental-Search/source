@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% block title_email %}{% trans "Validation de votre inscription pro" %}{% endblock %}
+
+
+{% blocktrans with patron.username as username %}
+	Bonjour,
+
+	Nous vous confirmons la souscription à l'abonnement.
+
+	Nous vous invitons à prendre connaissance des conditions générales : <a href="https://www.dressbooking.com/conditions-generales-professionnels/« >Conditions générales Dressbooking</a>
+
+	Nous allons vous recontacter pour la mise en place de votre e-boutique sur le site.
+
+	Merci pour votre confiance et bienvenue chez Dressbooking !
+
+	Bonnes e-locations,
+
+{% endblocktrans %}
+{% trans "L'équipe" %} {{ site.name }}.
