@@ -29,7 +29,7 @@ define([
     }]);
     
     EloueWidgetsApp.constant("SearchConstants", {
-    	MASTER_INDEX: 'e-loue-test-geo-multilvl-products.product',
+        MASTER_INDEX: 'e-loue-test-geo-multilvl-products.product',
         PARAMETERS: {
             hierarchicalFacets: [{
                 name: 'category',
@@ -262,8 +262,8 @@ define([
                 
                 $scope.renderMap = function(result, state) {
                     
-                    for (var ri=0; ri<$scope.search_results.length; ri++){
-                        var res = $scope.search_results[ri];
+                    for (var ri=0; ri<$scope.product_list.length; ri++){
+                        var res = $scope.product_list[ri];
                         res.location_obj = {latitude: res.locations[0], longitude: res.locations[1]};
                         res.images = $scope.marker_images[ri];
                         res.markerId = ri;
@@ -366,7 +366,6 @@ define([
                 }
                 $scope.search_location_ui_changed = false;
             };
-            $scope.$on("$locationChangeStart", $scope.onLocationChangeStart);
             
             
             $scope.refinePrices = function(sliderId){
@@ -402,7 +401,7 @@ define([
             };
             
             $scope.refineRange = function(sliderId){
-            	
+                
                 $scope.rangeUpdatedBySlider = true;
                 $scope.map.zoom = UtilsService.zoom($scope.range_slider.max);
                 $scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
@@ -624,11 +623,12 @@ define([
              */
             
             $scope.processResult = function(result, state){
+                
                 $scope.search_result_count = result.nbHits;
                 
                 if ($scope.search_result_count){
                                       
-                    $scope.search_results = result.hits;
+                    $scope.product_list = result.hits;
                     
                     $scope.pages_count = result.nbPages;
                     $scope.results_per_page = result.hitsPerPage;
@@ -642,12 +642,13 @@ define([
                     $scope.renderPriceSlider(result, state);
                     $scope.renderBreadcrumbs(state);
                     $scope.renderRenterTypes(result, state);
-                    $scope.renderMap(result, state);
+//                    $scope.renderMap(result, state);
                     
                 } else {
                     $log.debug("No results");
                 }
                 
+                $scope.ui_pristine = false;
                 $scope.$apply();
                 
             };
@@ -675,11 +676,11 @@ define([
             $scope.search_query = UtilsService.getParameterByName('q') || "";
             $scope.search.setQuery($scope.search_query);
             $scope.search_location = UtilsService.getParameterByName('l') || "";
-            $scope.search_results = [];
+            $scope.product_list = [];
             $scope.searchPage = 0;
             $scope.search_result_count = 0;
-            $scope.search_results_price_max = 1000;
-            $scope.search_results_price_min = 0;
+            $scope.product_list_price_max = 1000;
+            $scope.product_list_price_min = 0;
             $scope.price_from = 0;
             $scope.price_to = 1000;
             $scope.owner_type = {
@@ -692,6 +693,7 @@ define([
             $scope.search_location = UtilsService.getParameterByName('l') || "";
             $scope.search_bounds_changed = false;
             $scope.boundsChangedByRender = false;
+            $scope.ui_pristine = true;
             $scope.price_slider = {
                 min: 0,
                 max: 1000,
@@ -727,6 +729,10 @@ define([
             };
             
             $scope.submitForm = function() {
+                // TODO remove from here
+                if ($scope.ui_pristine) {
+                    $scope.$on("$locationChangeStart", $scope.onLocationChangeStart);
+                } 
                 $scope.search_location_ui_changed = true;
                 $scope.search.setQuery($scope.search_query)
                     .setCurrentPage($scope.searchPage).search();

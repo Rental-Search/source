@@ -249,6 +249,7 @@ INSTALLED_APPS = (
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
     'core',
     'import_export',
+    'djangular',
 )
 
 if DEBUG_TOOLBAR:

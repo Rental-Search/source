@@ -1,50 +1,21 @@
 -load product i18n
 
-ol.product-layout
-    {% trans "jour" as by_day %} 
+ol(ng-show="ui_pristine").product-layout
+  if product_list
     {% for product in product_list %}
-    li(id="marker-{{ forloop.counter }}", locationY="{{ product.location.y|stringformat:'f' }}", locationX="{{ product.location.x|stringformat:'f' }}", name="{{ product.summary }}")
-      .section-body
-        .thumbnail-img
-          a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
-          if product.price
-            span.badge.price {{ product.price|currency }} /{{ by_day }}
-          else
-            span.badge.price {% trans "Sur devis" %}
-          span.badge-order {{ forloop.counter }}
-        .declarer-container
-          .declarer
-            span.declarer-name {{ product.owner }}
-            a(href="{{ product.owner_url }}").declarer-thumbnail: div(style="{% if product.owner_avatar %}background-image: url({{ product.owner_avatar }}){% endif %}").bg-image
-          .btns
-          //-
-            a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
-            a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2
-        .info
-          h6
-            if request.GET.date_from2
-                if request.GET.date_to2
-                    a(href="{{ product.url }}?date_from={{request.GET.date_from|urlencode:''}}&date_to={{request.GET.date_to|urlencode:''}}") {{ product.summary }}
-                else
-                    a(href="{{ product.url }}") {{ product.summary }}
-            else
-                a(href="{{ product.url }}") {{ product.summary }}
-            if product.pro_owner
-              span.badge-pro pro
-          p
-            {% if product.agencies %}
-            &nbsp;
-            {% else %}
-            {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
-            {% endif %}
-          //- TODO: need a better solution here to hit SQL DB only once for all products in the list
-          if product.comment_count
-            {% with product.average_rate as rate %}
-            include ./_rate
-            {% endwith %}
-            span.sprite-comment
-              i.flaticon.stroke.writing-comment
-              != product.comment_count
-          p.full_description {% if product.description %}{{ product.description|truncatechars:145 }}{% else %}&nbsp;{% endif %}
+    {% with ng=0 index=forloop.counter %}
+    include ./_product_list_item
+    {% endwith %}
     {% endfor %}
+  else
+    p {% trans "Aucune annconce trouvée." %} 
+      a(ng-click="clearRefinements()") {% trans "Reinitialiser les critères de la recherche"  %}
+ol(ng-hide="ui_pristine").product-layout
+  {% with ng=1 %}
+  include ./_product_list_item
+  {% endwith %}
+  
+p(ng-show="!ui_pristine && !search_result_count") {% trans "Aucune annconce trouvée." %} 
+  a(ng-click="clearRefinements()") {% trans "Reinitialiser les critères de la recherche"  %}
+  
 include ./_product_list_pagination
