@@ -1,17 +1,37 @@
 -load i18n facets
+-load djangular_tags
 
-{% verbatim %}
+{% trans "page" as page %}
 
-.text-center: ul(ng-if="search_result_count", ng-cloak).pagination
+{% angularjs %}
+.text-center: ul(ng-show="search_result_count && !ui_pristine", ng-cloak).pagination
   li
-    a(ng-if="page > 0", href="#", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
-    a(ng-if="page == 0").chevron.active: i.flaticon.stroke.left-2
-  li(ng-repeat="page_num in pages_range track by page_num")
-    a(ng-if="page == page_num").active {{ page_num+1 }}
-    a(ng-if="page != page_num", href="#", ng-click="setPage(page_num)") {{ page_num+1 }}
-  li
-    a(ng-if="page < pages_count-1", href="#", ng-click="nextPage()", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
-    a(ng-if="page == pages_count-1").chevron.active: i.flaticon.stroke.right-2
+    a(ng-if="page > 1", href="#", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
+    a(ng-if="page == 1").chevron.active: i.flaticon.stroke.left-2
+    li(ng-repeat="page_num in pages_range track by page_num")
+      a(ng-if="page == page_num").active {{ page_num }}
+      a(ng-if="page != page_num", href="#", ng-click="setPage(page_num)") {{ page_num }}
+    li
+      a(ng-if="page < pages_count", href="#", ng-click="nextPage()", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
+      a(ng-if="page == pages_count").chevron.active: i.flaticon.stroke.right-2   
+{% endangularjs %}
 
-{% endverbatim %}
-
+{% angularjs 0 %}
+if is_paginated
+  .text-center: ul(ng-show="ui_pristine").pagination
+    if page_obj.has_previous
+      li: a(href="#", title="{% trans 'Page précédente' %}", ng-click="prevPage()").chevron: i.flaticon.stroke.left-2
+    else
+      li: a.chevron.active: i.flaticon.stroke.left-2
+    for page_number in page_range
+      li
+        if page_obj.number == page_number
+          a.active {{ page_number }}
+        else
+          a(href="#", ng-click="setPage({{page_number}})") {{ page_number }}
+    if page_obj.has_next
+      li: a(href="#", title="{% trans 'Page suivante' %}", ng-click="nextPage()").chevron: i.flaticon.stroke.right-2
+    else
+      li: a.chevron.active: i.flaticon.stroke.right-2
+{% endangularjs %}
+      

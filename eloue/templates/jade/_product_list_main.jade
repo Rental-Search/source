@@ -15,7 +15,7 @@ ol(ng-hide="ui_pristine").product-layout
   include ./_product_list_item
   {% endwith %}
   
-p(ng-show="!ui_pristine && !search_result_count") {% trans "Aucune annconce trouvée." %} 
+p(ng-show="!ui_pristine && !product_list") {% trans "Aucune annconce trouvée." %} 
   a(ng-click="clearRefinements()") {% trans "Reinitialiser les critères de la recherche"  %}
   
 include ./_product_list_pagination

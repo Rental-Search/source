@@ -45,6 +45,7 @@ define([
         ALGOLIA_PREFIX: "sp_",
         URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 'hitsPerPage', 'insideBoundingBox'],
         DEFAULT_ORDERING: "-created_at",
+        WINDOW_SIZE: 10,
         COUNTRIES: {
           'fr': {
             center: {latitude: 46.2, longitude: 2.2},
@@ -467,15 +468,15 @@ define([
              */
             
             $scope.nextPage = function(){
-                $scope.setPage(Math.min($scope.page + 1, $scope.pages_count-1));
+                $scope.setPage(Math.min($scope.page + 1, $scope.pages_count));
             };
 
             $scope.prevPage = function(){
-                $scope.setPage(Math.max(0, $scope.page - 1));
+                $scope.setPage(Math.max(1, $scope.page - 1));
             };
             
             $scope.setPage = function(page){
-                $scope.searchPage = page;
+                $scope.searchPage = page-1;
                 $scope.submitForm();
             };
             
@@ -499,12 +500,12 @@ define([
              * */
             
             $scope.renderPagination = function(result){
-                $scope.page = Math.min(result.nbPages-1, Math.max(0, result.page));
-                var WINDOW_SIZE = 9;
+                $scope.page = Math.min(result.nbPages, Math.max(1, result.page+1));
+                var WINDOW_SIZE = SearchConstants.WINDOW_SIZE;
                 if (result.nbPages < WINDOW_SIZE){
                     $scope.pages_range = new Array(result.nbPages);
                     for (var i=0; i<result.nbPages; i++){
-                        $scope.pages_range[i] = i;
+                        $scope.pages_range[i] = i+1;
                     }
                 } else {
                     if ($scope.page > result.nbPages/2){
@@ -515,7 +516,7 @@ define([
                     }
                     $scope.pages_range = new Array(WINDOW_SIZE);
                     for (var i=0; i<WINDOW_SIZE; i++){
-                        $scope.pages_range[i] = first + i;
+                        $scope.pages_range[i] = first+i+1;
                     }
                 }
             };
@@ -642,7 +643,7 @@ define([
                     $scope.renderPriceSlider(result, state);
                     $scope.renderBreadcrumbs(state);
                     $scope.renderRenterTypes(result, state);
-//                    $scope.renderMap(result, state);
+                    $scope.renderMap(result, state);
                     
                 } else {
                     $log.debug("No results");

@@ -15,7 +15,7 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
     name="{{ product.summary }}")
   .section-body
     .thumbnail-img
-      a(ng-href="{{ product.url }}" href=("{{ product.url }}" if not ng else None)).img-wrapper 
+      a(ng-href="{{ product.url }}", href=(product.url if not ng else None)).img-wrapper 
       if ng
         img(ng-if="product.owner_avatar", style="background-image: {{ product.owner_avatar }}").bg-image
         img(ng-if="!product.owner_avatar").bg-image
@@ -30,23 +30,20 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
         //-TODO currency angular filter
         span.badge.price {% if product.price %} {{ product.price | currency }} /{{ by_day }} {% else %} {% trans "Sur devis" %} {% endif %} 
         //-TODO remove verbatim
-      span.badge-order {% if ng %} {% verbatim %} "marker-{{ $index }}" {% endverbatim %} {% else %} "marker-{{ index }}" {% endif %}
+      span.badge-order {% if ng %} {% verbatim %} {{ $index+1 }} {% endverbatim %} {% else %} {{ index }} {% endif %}
     .declarer-container
       .declarer
         span.declarer-name {{ product.owner }}
-        a(ng-href="{{ product.owner_url }}" href="{{ product.owner_url }}" if not ng else None).declarer-thumbnail
+        a(ng-href="{{ product.owner_url }}", href=(product.owner_url if not ng else None)).declarer-thumbnail
         if ng
           div(ng-if="product.owner_avatar", style="background-image: {{ product.owner_avatar }}").bg-image
           div(ng-if="!product.owner_avatar").bg-image
         else
           div(style=("background-image: {{ product.owner_avatar }}" if product.owner_avatar else None)).bg-image 
           //-TODO url django function?
-      .btns
-        a(href="#").btn.bg-success: i.text-white.flaticon.stroke.mail-2
-        a(href="#").btn.bg-success: i.text-white.flaticon.stroke.calendar-2
     .info
       h6
-        a(ng-href="{{ product.url }}", href=("{{ product.url }}" if not ng else None)) {{ product.summary }} 
+        a(ng-href="{{ product.url }}", href=(product.url if not ng else None)) {{ product.summary }} 
         if ng
           span(ng-if="product.pro_owner").badge-pro pro
         else
