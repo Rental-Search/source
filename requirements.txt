@@ -82,3 +82,5 @@ sendgrid
 django-import-export==0.4.2
 openpyxl==2.3.2
 django-angular==0.7.15
+algoliasearch==1.7.1
+-e git+https://github.com/matagus/haystack-algolia.git#egg=dev
