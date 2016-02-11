@@ -502,9 +502,9 @@ SOUTH_MIGRATION_MODULES = {
 # Haystack configuration
 HAYSTACK_CONNECTIONS = {                
     'default': {
-        'APP_ID': '',
-        'API_KEY': '',
         'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
+        'APP_ID': 'F2G181ROXT',
+        'API_KEY': 'd110d212b9608a408ac30aa35d3582e5',
         'INDEX_NAME_PREFIX': 'e-loue-test-geo-multilvl-',
         'TIMEOUT': 60 * 5
     }
