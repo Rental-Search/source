@@ -61,3 +61,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
+
+ANALYTICS.update({
+                  'GOOGLE_ID': 'UA-58724631-1'
+                  })

@@ -1,0 +1,52 @@
+{% extends "base_email.html" %}
+{% load i18n %}
+
+{% block title_email %}{% trans "Confirmation de votre réservation" %}{% endblock %}
+
+{% block content_email %}
+<tr>
+	<td valign="top" width="100%" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="510" class="leftColumnContent">
+            <tbody>
+                <tr>
+                    <td valign="top" style="padding-top: 20px;border-collapse: collapse;">
+                        <div style="color: #505050;font-family: Arial;font-size: 14px;line-height: 200%;text-align: left;">
+                        	{% blocktrans with booking.owner.get_full_name as owner_name %}
+
+                            Bonjour {{ owner_name }}<br><br>
+
+                            Vous venez d'accepter la proposition de location suivante<br>
+                           	{% endblocktrans %}
+
+                            {% include "rent/emails/partials/booking_details_email.html" %}
+
+
+                            {% blocktrans with booking.borrower.phones.all|first as borrower_phone and booking.borrower.email as borrower_email %}
+                            Voici les informations pour contacter le locataire :<br>
+                            <ul>
+								<li><strong>Numéro de téléphone :</strong> {{ borrower_phone }}</li>
+								<li><strong>Adresse électronique :</strong> {{ borrower_email }}</li>
+							</ul>
+							{% endblocktrans %}
+
+							{% if not booking.owner.is_professional %}
+                            Vous trouverez en pièce jointe votre contrat de location.<br>
+                            {% endif %}
+
+                            {% blocktrans with booking.borrower.get_full_name as borrower_name and booking.product.summary as summary and site.name as site_name %}
+
+                            Il ne vous reste donc plus qu'à contacter {{ borrower_name }} pour effectuer la location.<br>
+                            
+                             
+                            Bonne location !<br><br>
+
+                            L'équipe {{ site_name }}<br><br>
+                            {% endblocktrans %}
+                        </div>                                                                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+{% endblock %}

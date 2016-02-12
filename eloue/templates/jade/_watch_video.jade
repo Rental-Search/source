@@ -3,7 +3,7 @@
 .container
     .row
         .col-sm-6
-            .video(data-toggle="modal", data-target="#videoModal", data-property="{videoURL:'http://youtu.be/nERu_2pSSb0'}")
+            .video(data-toggle="modal", data-target="#videoModal")
                 .smoke
                 img(src="{% static 'img/video-screen.jpg' %}")
                 span.btn-play
@@ -31,4 +31,5 @@
                     span.sr-only Close
                 h4.modal-title {% trans "Présentation de e-loue" %}
             .modal-body
+                input(id="videoId", value="nERu_2pSSb0", type="hidden")
                 #videoContainer

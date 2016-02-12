@@ -7,13 +7,19 @@
   a(href="#/message", data-toggle="modal", data-target="#pro-popin-message").btn.bg-success
     i.flaticon.stroke.mail-2
     {% trans "Demandez un devis" %}
+  {% if patron.default_number %}
   a(href="#/phone", data-toggle="modal", data-target="#pro-popin-phone").btn.bg-success
     i.flaticon.stroke.phone-3
     {% trans "Appelez" %}
   {% endif %}
+  {% endif %}
+  {% if patron.default_address %}
   a(href="#/shop", data-toggle="modal", data-target="#pro-popin-shop").btn.bg-success
     i.flaticon.stroke.shop-1
     {% trans "Venez en magasin" %}
+  {% endif %}
+  {% if patron.url %}
   a(href="#/website", data-toggle="modal", data-target="#pro-popin-website-link").btn.bg-success
     i.flaticon.stroke.imac-1
     {% trans "Visitez notre site web" %}
+  {% endif %}

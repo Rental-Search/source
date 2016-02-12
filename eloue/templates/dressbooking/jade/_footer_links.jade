@@ -1,0 +1,30 @@
+-load i18n
+.container
+  ul.nav.nav-justified
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "Le concept Dressbooking" %}
+      ul.nav
+        li.link-wrapper: a(href="/comment-ca-marche/") {% trans "Comment ça marche ?" %}
+        li.link-wrapper: a(href="/securite/") {% trans "Dressbooking et la sécurité" %}
+        li.link-wrapper: a(href="/offre-professionnel/") {% trans "L'offre Dressbooking Pro" %}
+        li.link-wrapper: a(href="/navette/") {% trans "La livraison" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "Pourquoi choisir Dressbooking ?" %}
+      ul.nav
+        li.link-wrapper: a(href="/contrat-de-location/") {% trans "Contrat de location" %}
+        li.link-wrapper: a(href="/assurance-tranquillite/") {% trans "Assurance tranquilité" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "L’entreprise Dressbooking" %}
+      ul.nav
+        li.link-wrapper: a(href="/qui-sommes-nous/") {% trans "Qui sommes-nous ?" %}
+        li.link-wrapper: a(href="/conditions-generales-particuliers/") {% trans "Conditions générales particuliers" %}
+        li.link-wrapper: a(href="/conditions-generales-professionnels/") {% trans "Conditions générales professionnels" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "En savoir plus" %}
+      ul.nav
+        //- li.link-wrapper: a(href="https://eloue1.zendesk.com/hc/fr") {% trans "FAQ" %}
+        li.link-wrapper: a(href="/contactez-nous/") {% trans "Contactez-nous" %}
