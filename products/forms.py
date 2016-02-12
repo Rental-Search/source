@@ -108,8 +108,8 @@ class FilteredProductSearchForm(SearchForm):
         date_from = search_params.get('date_from', None)
         date_to = search_params.get('date_to', None)
         if all((date_from, date_to)):
-            range_query = 'NOT starts_unavailable_exact:[{0} TO {1}] AND NOT ends_unavailable_exact:[{0} TO {1}]'
-            sqs = sqs.raw_search(range_query.format(date_from.strftime('%F'), date_to.strftime('%F')))
+            sqs = sqs.filter(created_at_timestamp__lt=date_from,
+                             created_at_timestamp__gt=date_to)
         return sqs
 
     def sqs_filter_date_to(self, sqs, search_params):
