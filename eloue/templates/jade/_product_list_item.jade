@@ -1,0 +1,69 @@
+-load product i18n
+-load djangular_tags
+
+{% angularjs ng %}
+
+{% trans "jour" as by_day %}
+
+//-TODO marker indices
+//-TODO rate
+
+li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
+    ng-repeat=("product in product_list track by product.django_id" if ng else None),
+    locationY="{{ product.locations.0 }}",
+    locationX="{{ product.locations.1 }}",
+    name="{{ product.summary }}")
+  .section-body
+    .thumbnail-img
+      a(ng-href="{{ product.url }}", href=(product.url if not ng else None)).img-wrapper 
+      if ng
+        img(ng-if="product.owner_avatar", style="background-image: {{ product.owner_avatar }}").bg-image
+        img(ng-if="!product.owner_avatar").bg-image
+      else
+        img(style=("background-image: {{ product.owner_avatar }}" if product.owner_avatar else None)).bg-image 
+        //-TODO url django function?
+      if ng
+        //-TODO currency angular filter, remove verbatim
+        span(ng-if="product.price").badge.price {% verbatim %} {{ product.price | currency }} {% endverbatim %} /{{ by_day }} 
+        span(ng-if="!product.price").badge.price {% trans "Sur devis" %}
+      else
+        //-TODO currency angular filter
+        span.badge.price {% if product.price %} {{ product.price | currency }} /{{ by_day }} {% else %} {% trans "Sur devis" %} {% endif %} 
+        //-TODO remove verbatim
+      span.badge-order {% if ng %} {% verbatim %} {{ $index+1 }} {% endverbatim %} {% else %} {{ index }} {% endif %}
+    .declarer-container
+      .declarer
+        span.declarer-name {{ product.owner }}
+        a(ng-href="{{ product.owner_url }}", href=(product.owner_url if not ng else None)).declarer-thumbnail
+        if ng
+          div(ng-if="product.owner_avatar", style="background-image: {{ product.owner_avatar }}").bg-image
+          div(ng-if="!product.owner_avatar").bg-image
+        else
+          div(style=("background-image: {{ product.owner_avatar }}" if product.owner_avatar else None)).bg-image 
+          //-TODO url django function?
+    .info
+      h6
+        a(ng-href="{{ product.url }}", href=(product.url if not ng else None)) {{ product.summary }} 
+        if ng
+          span(ng-if="product.pro_owner").badge-pro pro
+        else
+          {% if product.pro_owner %} span.badge-pro pro {% endif %}
+      p
+        if ng
+          span(ng-if='product.agencies') &nbsp;
+          //- TODO title filter
+          span(ng-if='!product.agencies') {{ product.city }} 
+            span(ng-if='product.city && product.zipcode'), {{ product.zipcode }}
+        else
+          if product.agencies
+            &nbsp;
+          else
+            {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
+      if ng
+        //- TODO remove verbatim
+        p(ng-if='product.description').full_description {% verbatim %} {{ product.description|limitTo:145 }} {% endverbatim %}
+        p(ng-if='!product.description').full_description &nbsp;
+      else
+        p.full_description {% if product.description %} {{ product.description|truncatechars:145 }} {% else %} &nbsp; {% endif %}
+
+{% endangularjs %}

@@ -5,6 +5,7 @@ define([
     "angular-resource",
     "angular-translate",
     "angular-i18n",
+    "angularjs-slider",
     "../../common/eloue/commonApp"
 ], function (angular) {
     "use strict";
@@ -14,6 +15,9 @@ define([
         "ngCookies",
         "ipCookie",
         "ngResource",
-        "pascalprecht.translate"
+        "pascalprecht.translate",
+        "algoliasearch",
+        "rzModule",
+        "uiGmapgoogle-maps"
     ]);
 });

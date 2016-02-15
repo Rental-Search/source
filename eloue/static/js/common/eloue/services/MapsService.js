@@ -25,7 +25,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
             $document[0].body.appendChild(script);
         };
-
+        
+        // TODO remove from here, use same one in UtilsService instead
         mapsService.range = function (zoom) {
             if (zoom >= 14) {
                 return 0.5;
@@ -62,7 +63,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
             }
             return 1000;
         };
-
+        // TODO remove from here, use same one in UtilsService instead
         mapsService.zoom = function (radius) {
             if (radius <= 0.5) {
                 return 14;
