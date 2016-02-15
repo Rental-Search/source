@@ -5,8 +5,8 @@ from haystack.models import SearchResult
 import re
 from products.models import Product
 from django.utils.datetime_safe import datetime
-from products.choices import SORT
 from haystack.inputs import AutoQuery
+from haystack.constants import DEFAULT_ALIAS
 
 
 EQ_NUMERIC = '%s=%s'
@@ -41,14 +41,14 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
     @log_query
     def search(self, query_string, **kwargs):
         
-#         raise Exception("Query: " + str(kwargs))
-        
         if re.match("\(.*\)", query_string):
             query_string = query_string[1:-1]
         
         result_class = kwargs.get('result_class') or SearchResult
 
         models = kwargs.get('models')
+        
+        search_terms = kwargs.get('search_terms')
         
         # TODO query multiple models and choose index
         if models is None or len(models) > 1:
@@ -78,7 +78,7 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
             params['aroundLatLng'] = POINT % dwithin['point'].get_coords()
             params['aroundRadius'] = int(dwithin['distance'].m)
             
-        raw_results = index.search("", params)
+        raw_results = index.search(search_terms, params)
 
         results = self._process_results(raw_results, result_class=result_class)
 
@@ -88,6 +88,11 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
         }
 
 class EloueAlgoliaSearchQuery(BaseSearchQuery):
+    
+    def __init__(self, using=DEFAULT_ALIAS):
+        BaseSearchQuery.__init__(self, using=using)
+        self.search_terms = ""
+        
     
     #TODO: facet, models
     
@@ -128,8 +133,8 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
             prepare = lambda x:(x.created_at-datetime(1970,1,1)).total_seconds()
             # TODO better AutoQuery handling
         elif isinstance(value, AutoQuery):
-            prepare = lambda x:str(x)
-            kv = EQ_FACET_STR
+            self.search_terms = str(value)
+            return ""
         else:
             raise NotImplementedError("Unsupported value type: field=%s, filter_type=%s, value=%s" 
                                       % (field, filter_type, type(val)) )
@@ -147,6 +152,12 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
                                       % (field, filter_type, type(value)) ) 
 
 
+    def build_params(self, spelling_query=None):
+        kwargs = BaseSearchQuery.build_params(self, spelling_query=spelling_query)
+        kwargs['search_terms'] = self.search_terms
+        return kwargs
+        
+            
 class EloueAlgoliaEngine(BaseEngine):
     """
     Provides a minimum of functionality to
