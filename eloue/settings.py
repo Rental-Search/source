@@ -501,12 +501,88 @@ SOUTH_MIGRATION_MODULES = {
 HAYSTACK_CONNECTIONS = {                
     'default': {
         'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
-        'APP_ID': 'F2G181ROXT',
-        'API_KEY': 'd110d212b9608a408ac30aa35d3582e5',
-        'INDEX_NAME_PREFIX': 'e-loue-test-geo-multilvl-',
+        'APP_ID': 'NSV6X2HQLR',
+        'API_KEY': 'b89ed5c201bbb00eddec2b626eff456f',
+        'INDEX_NAME_PREFIX': 'e-loue_',
         'TIMEOUT': 60 * 5
     }
 }
+
+ALGOLIA_INDICES = {
+    "products.product":{
+        'attributesToSnippet': ['summary',
+                                'description',],
+        'customRanking': ['desc(average_rate)'],
+        'attributesToIndex': ['categories', 
+                              'summary',
+                              'description',],
+        'attributesForFaceting': [
+            'algolia_categories.lvl0',
+            'algolia_categories.lvl1',
+            'algolia_categories.lvl2',
+            'categories',
+            'django_id_int',
+            'is_archived',
+            'pro_owner',
+            'sites',
+            'price',
+            'created_at_timestamp'],
+        'attributesToHighlight': ['summary',
+                                  'description',],
+        'removeStopWords':True,
+        'hitsPerPage': 12,
+        "slaves":{
+            "price":{
+                'ranking': [
+                    'asc(price)',
+                    'geo',
+                    'words',
+                    'typo',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "-price":{
+                'ranking': [
+                    'desc(price)',
+                    'geo',
+                    'words',
+                    'typo',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "-created_at":{
+                'ranking': [
+                    'desc(created_at_timestamp)',
+                    'geo',
+                    'words',
+                    'typo',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "geo":{
+                'ranking': [
+                    'geo',
+                    'words',
+                    'typo',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+        },
+    },            
+}
+
 #HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 HAYSTACK_SIGNAL_PROCESSOR = 'eloue.search.HaystackSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO

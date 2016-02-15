@@ -12,10 +12,10 @@ from haystack.inputs import AutoQuery
 EQ_NUMERIC = '%s=%s'
 CMP = {'lt':'%s<%s',
        'lte': '%s<=%s', 
-       'gt':'%s>=%s', 
+       'gt':'%s>%s', 
        'gte':'%s>=%s'}
-EQ_FACET = '%s:"%s"'
-EQ_FACET_NOQ = '%s:%s'
+EQ_FACET_STR = '%s:"%s"'
+EQ_FACET = '%s:%s'
 OR = ' OR '
 AND = ' AND '
 TAG_JOIN = ','
@@ -25,9 +25,11 @@ DEFAULT_PAGE_SIZE = 12
 
 class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
     
+    
     def __init__(self, connection_alias, **connection_options):
         AlgoliaSearchBackend.__init__(self, connection_alias, **connection_options)
         self.setup_complete = True
+    
     
     def _get_index_for(self, model, orderby=''):
         index_name = "{}{}.{}".format(self.index_name_prefix, model._meta.app_label, model._meta.model_name)
@@ -116,10 +118,10 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
         if type(val) is int:
             kv = EQ_NUMERIC
         elif type(val) is bool:
-            kv = EQ_FACET_NOQ
+            kv = EQ_FACET
             prepare = lambda x:str(x).lower()
         elif type(val) in (str, unicode): #TODO handle unicode and str correctly
-            kv = EQ_FACET
+            kv = EQ_FACET_STR
         elif isinstance(val, datetime):
             # TODO inclusive/exclusive range?
             kv = CMP[filter_type]
@@ -127,7 +129,7 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
             # TODO better AutoQuery handling
         elif isinstance(value, AutoQuery):
             prepare = lambda x:str(x)
-            kv = EQ_FACET
+            kv = EQ_FACET_STR
         else:
             raise NotImplementedError("Unsupported value type: field=%s, filter_type=%s, value=%s" 
                                       % (field, filter_type, type(val)) )
@@ -146,6 +148,20 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
 
 
 class EloueAlgoliaEngine(BaseEngine):
-
+    """
+    Provides a minimum of functionality to
+    support existing usages:
+        auto_query
+        narrow
+        filter(facet, numeric)
+        dwithin
+        order_by
+    TODO:
+        highlight
+        distance
+        more_like_this
+        facet_counts
+    """
+    
     backend = EloueAlgoliaSearchBackend
     query = EloueAlgoliaSearchQuery
