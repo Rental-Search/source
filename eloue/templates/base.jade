@@ -3,6 +3,12 @@
 doctype 5
 html(lang="fr")
   head
+    <meta name="apple-itunes-app" content="app-id=427538545">
+    <meta name="google-play-app" content="app-id=com.eloue.appandroid">
+    <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/ios-icon.jpeg">
+    
+
+
     style [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide { display: none !important; }
     block variables
       include jade/variables
@@ -13,17 +19,17 @@ html(lang="fr")
       meta(name="viewport", content="width=device-width, initial-scale=1.0")
       meta(name="description", content="{% filter striplinebreak %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endfilter %}")
       link(rel="shortcut icon", href="{% static 'img/favicon.ico' %}")
-
     block styles
       link(rel="stylesheet", href="http{% if request.is_secure %}s{% endif %}://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600")
       {% compressed_css "extrastyles" %}
-
+      {% compressed_css "smartbanner_styles" %}
     block scripts
       {% compressed_js "public_js" %}
     script
+    
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-8258979-1']);
-      _gaq.push(['_setDomainName', 'www.e-loue.com']);
+      _gaq.push(['_setAccount', '{{ ANALYTICS_GOOGLE_ID }}']);
+      _gaq.push(['_setDomainName', '{{ ANALYTICS_SITE }}']);
       _gaq.push(['_trackPageview']);
       {% spaceless %}
       {% if request.user.is_authenticated %}
@@ -34,7 +40,7 @@ html(lang="fr")
       {% endspaceless %}
     script
       !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";
-        analytics.load("CK4wf1QXZEjeqFRo75zZQ7DfZWzYJwHC");
+        analytics.load("{{ ANALYTICS_SEGMENT_ID }}");
         analytics.page()
       }}();
 
@@ -64,6 +70,17 @@ html(lang="fr")
               'where': document.getElementById('geolocate').value
             });
           }
+      //Facebook Pixel Code
+      script
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+        document,'script','//connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ ANALYTICS_FACEBOOK_ID }}');
+        fbq('track', "PageView");
+      noscript
+        <img height="1" width="1" style="display:none"src="https://www.facebook.com/tr?id={{ ANALYTICS_FACEBOOK_ID }}&ev=PageView&noscript=1"/>
     #ngModals
         eloue-login-form
         eloue-registration-form

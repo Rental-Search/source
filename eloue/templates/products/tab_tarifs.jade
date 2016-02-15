@@ -2,6 +2,10 @@
 -load i18n
 
 .block-tab.ng-hide#tabs-tarifs
+  {% if not product_object.prices.all %}
+  h3.indent-t-md.indent-b-xs {% trans "Tarif"%}
+  p {% trans "Les prix sont sur devis. Contacter le profesionnel pour avoir plus d'information" %}
+  {% else %}
   h3.indent-t-md.indent-b-xs {% if product_type == 'carproduct' %}{% trans "Tarif" %}{% else %}{% trans "Grille tarifaire" %}{% endif %}
   .row
     .col-xs-6
@@ -41,6 +45,10 @@
           td {% trans "Caution" %}
           td {{ product_object.local_currency_deposit_amount|currency }} ;
     .col-sm-6
+      {% if is_pro %}
+      {% else %}
       p.indent-sm-b {% trans "Certains propriétaires proposent des prix degressifs pour les locations de plusieurs jours. Si vous effectuez une demande de location pour plusieurs jours, e-loue vous propose automatiquement le prix le plus avantageux." %}
       p.indent-sm-b {% trans "Lorsque vous effectuez une réservation sur e-loue, seul le prix de la location est débité de votre carte bancaire." %}
       p.indent-sm-b {% trans "Si le propriétaire demande une caution, e-loue procédera à une empreinte bancaire au moment du paiement. Cette empreinte ne sera pas débitée, sauf  si vous constatez un sinistre à la fin de la location." %}
+      {% endif %}
+  {% endif %}

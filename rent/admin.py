@@ -5,12 +5,16 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sites.models import Site
+from django.db.models import F, Count, Q
+
+from accounts.models import Patron
+from datetime import timedelta
+import datetime
 
 from rent.models import Booking, OwnerComment, BorrowerComment, Sinister, BookingLog
 from rent.choices import BOOKING_STATE
 
 from eloue.admin import CurrentSiteAdmin
-
 
 log = logbook.Logger('eloue')
 
@@ -19,6 +23,44 @@ class BookingLogInline(admin.TabularInline):
     readonly_fields = ('source_state', 'target_state', 'created_at')
     extra = 0
 
+
+class FraudeFilter(admin.SimpleListFilter):
+    title = _('fraudes')
+    parameter_name = 'critere'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('filtre-1', _('1er TRI')),
+            ('joined-created', _('inscrip_prop<demande+2j')),
+            ('joined-joined', _('inscr_prop+/-1j inscr_loc')),
+            ('requ_accept', _('demande>acceptation-15min')),
+            ('book_requ', _('demande_loc>2 (en_attente,a_venir,en_cours)')),
+            
+        )
+    def queryset(self, request, queryset):
+        #1er TRI
+        if self.value() == 'filtre-1':
+            return queryset.annotate(count_bookings=Count('borrower__rentals')).filter(Q(total_amount__gte=100.00) | Q(started_at__lte=F('created_at') + timedelta(hours=1)) & Q(total_amount__gte=50.00) | Q(owner__email__icontains='outlook') | Q(borrower__email__icontains='outlook') | Q(Q(borrower__date_joined__gte=F('owner__date_joined') - timedelta(days=1)) & Q(borrower__date_joined__lte=F('owner__date_joined') + timedelta(days=1))) | Q(owner__date_joined__gte=F('created_at') - timedelta(days=2)) | Q(Q(count_bookings__gte=3) & Q(Q(state=BOOKING_STATE.AUTHORIZED) | Q(state=BOOKING_STATE.PENDING))))
+            #Bookings de plus de 100€ OU de plus de 50€ et ayant commencé moins de 1h après sa création OU avec un locataire ou propriétaire avec email outlook OU dont le propriétaire et locataire se sont inscrits à moins de 1jour d'interval OU dont le propriétaire s'est inscrit moins de 2 jours avant la création de la location
+        
+        #loc_creation<owner_joined+2j
+        if self.value() == 'joined-created':
+            return queryset.filter(Q(owner__date_joined__gte=F('created_at') - timedelta(days=2)))
+
+        #borrower_joined= +/- 1j owner_joined
+        if self.value() == 'joined-joined':
+            return queryset.filter(Q(borrower__date_joined__gte=F('owner__date_joined') - timedelta(days=1)) & Q(borrower__date_joined__lte=F('owner__date_joined') + timedelta(days=1)))
+
+        #demande>acceptation-15min
+        if self.value() == 'requ_accept':
+            bookinglogs = BookingLog.objects.filter(Q(source_state=BOOKING_STATE.AUTHORIZED) & Q(target_state=BOOKING_STATE.PENDING) & Q(created_at__lte=F('booking__created_at') + timedelta(minutes=15)))
+            return queryset.filter(pk__in=[bookinglog.booking.pk for bookinglog in bookinglogs])
+        
+        #borrower_book-requ>2(en_attente,a_venir,en_cours)
+        if self.value() == 'book_requ':
+            return queryset.annotate(count_bookings=Count('borrower__rentals')).filter(Q(count_bookings__gte=2) & Q(Q(state=BOOKING_STATE.AUTHORIZED) | Q(state=BOOKING_STATE.PENDING) | Q(state=BOOKING_STATE.ONGOING)))
+        
+        
 class BookingAdmin(CurrentSiteAdmin):
     date_hierarchy = 'created_at'
     readonly_fields = ('borrower_profil_link', 'owner_profil_link', 'transaction_line')
@@ -28,7 +70,7 @@ class BookingAdmin(CurrentSiteAdmin):
         (_('Borrower & Owner'), {'fields': (('borrower', 'borrower_profil_link'), ('owner', 'owner_profil_link'), 'ip')}),
         (_('Payment'), {'fields': ('total_amount', 'insurance_amount', 'deposit_amount', 'currency')}),
     )
-    list_filter = ('started_at', 'ended_at', 'state', 'created_at')
+    list_filter = (FraudeFilter, 'created_at','state', 'started_at', 'ended_at')
     raw_id_fields = ('owner', 'borrower', 'product')
     list_display = ('product_name', 'borrower_url', 'borrower_phone', 'borrower_email', 'owner_url', 'owner_phone', 'owner_email',
         'started_at', 'ended_at', 'created_at', 'total_amount', 'state')
@@ -149,3 +191,23 @@ try:
     admin.site.register(Sinister, SinisterAdmin)
 except admin.sites.AlreadyRegistered, e:
     log.warn('Site is already registered : %s' % e)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

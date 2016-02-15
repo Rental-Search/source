@@ -102,6 +102,8 @@ class UserSerializer(serializers.ModelSerializer):
     password = CharField(required=False, write_only=True, max_length=128)
     email = EmailField(required=False)
     is_professional = serializers.NullBooleanField(required=False)
+    pro_online_booking = serializers.NullBooleanField(read_only=True)
+    has_pro_subscription = BooleanField(read_only=True)
     avatar = serializers.EncodedImageField(('thumbnail', 'profil', 'display', 'product_page'), required=False)
     default_address = NestedAddressSerializer(required=False)
     default_number = NestedPhoneNumberSerializer(required=False)
@@ -147,13 +149,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = models.Patron
         fields = (
             'id', 'email', 'company_name', 'username', 'first_name', 'last_name',
-            'is_professional', 'slug', 'avatar', 'default_address', 'default_number',
+            'is_professional', 'has_pro_subscription', 'pro_online_booking', 'slug', 'avatar', 'default_address', 'default_number',
             'about', 'work', 'school', 'hobby', 'languages', 'drivers_license_date',
             'drivers_license_number', 'date_of_birth', 'place_of_birth', 'url', 'average_note',
             'date_joined', 'is_active', 'iban', 'password', 'is_subscribed', 'creditcard', 'comment_count', 'device_token',
         )
         public_fields = (
-            'id', 'company_name', 'username', 'is_professional', 'slug', 'avatar',
+            'id', 'company_name', 'username', 'is_professional', 'has_pro_subscription', 'pro_online_booking', 'slug', 'avatar',
             'default_address', 'default_number', 'about', 'school', 'work', 'hobby',
             'languages', 'url', 'date_joined', 'comment_count', 'average_note'
         )
@@ -237,21 +239,12 @@ class BillingSubscriptionSerializer(serializers.ModelSerializer):
 
 class ContactProSerializer(serializers.SimpleSerializer):
     email = EmailField(required=True)
-    subject = CharField(max_length=78, required=True)
     message = CharField(required=True)
+    phone = CharField(required=True)
 
     def __init__(self, *args, **kwargs):
         self.recipient = kwargs['context']['recipient']
         super(ContactProSerializer, self).__init__(*args, **kwargs)
-
-    def validate_subject(self, attrs, source):
-        try:
-            subject = strip_tags(attrs.pop(source))
-            attrs[source] = normalize_newlines(subject.replace('\n', ' '))
-        except (KeyError, IndexError):
-            raise ValidationError(
-                    _("Attribute missed or invalid: %s" % 'subject'))
-        return attrs
 
     def validate_message(self, attrs, source):
         try:
@@ -270,7 +263,7 @@ class ContactProSerializer(serializers.SimpleSerializer):
     def save_object(self, obj, **kwargs):
         context = {
             'email': obj.get('email'),
-            'subject': obj.get('subject'),
+            'phone': obj.get('phone'),
             'message': obj.get('message'),
             'patron': self.recipient,
         }

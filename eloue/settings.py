@@ -119,7 +119,7 @@ LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
-DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14])
+DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14, 15])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -166,7 +166,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
     'eloue.context_processors.unread_message_count_context',
-    'eloue.context_processors.facebook_context'
+    'eloue.context_processors.facebook_context',
+    'eloue.context_processors.analytics_context',
 )
 
 
@@ -248,6 +249,7 @@ INSTALLED_APPS = (
     'south', # South must be the last in the list of applications that contains models
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
     'core',
+    'import_export',
 )
 
 if DEBUG_TOOLBAR:
@@ -436,6 +438,15 @@ PIPELINE_CSS = {
             'media': 'screen',
         },
     },
+    'smartbanner_styles': {
+        'source_filenames': (
+            'css/jquery.smartbanner.css',
+        ),
+        'output_filename': 'css/jquery.smartbanner.css',
+        'extra_context': {
+            'media': 'screen',
+        },
+    },
 }
 
 PIPELINE_JS = {
@@ -479,9 +490,6 @@ PIPELINE_JS = {
     },
 }
 
-
-
-
 # South configuration
 SOUTH_TESTS_MIGRATE = env('SOUTH_TESTS_MIGRATE', False)
 SOUTH_MIGRATION_MODULES = {
@@ -510,7 +518,6 @@ SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 QUEUE_BACKEND = env('QUEUE_BACKEND', 'dummy')
 QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = env('QUEUE_REDIS_DB', 1)
-
 
 REST_FRAMEWORK = {
 #     'DEFAULT_RENDERER_CLASSES': (
@@ -761,6 +768,15 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
 
+# Analytics services IDs. Replace these for each site
+ANALYTICS = {
+             'FACEBOOK_ID': '631094037033631',
+             'GOOGLE_ID': 'UA-8258979-1',
+             'SEGMENT_ID': 'CK4wf1QXZEjeqFRo75zZQ7DfZWzYJwHC',
+             }
+
+if not DEBUG:
+    IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.MediaStorage"
 
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')

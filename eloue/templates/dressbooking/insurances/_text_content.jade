@@ -1,0 +1,147 @@
+{% load i18n %}
+-load staticfiles
+
+style
+  #content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    padding-bottom: 6%;
+  }
+  #tabs li{width: 25%;}
+  #tabs li a {
+    padding-top: 4%;
+    border-top: 5px solid transparent;
+    height: 110px;
+    background-color: #eee;
+    //- font-size: 22px;
+  }
+  #tabs li a:hover, #tabs li.active a, #tabs li.active a:hover {
+    text-decoration: none;
+    border-top: 5px solid #f53d6c;
+    background-color: white;
+  }
+  .tab-pane p a {
+    text-decoration: none;
+    color: #f53d6c;
+  }
+  .tab-pane {margin: 40px 0 0;}
+  #tabs li a img {
+    height: 35px;
+    margin-left: 40%;
+  }
+  #tabs li a:hover, #tabs li.active a, #tabs li.active a:hover {color: #f53d6c;}
+  #objet:hover img, #tabs li.active #objet img {content:url("{% static 'images/objet.png' %}");}
+
+.container(style="color: #666; text-align: justify;")
+  ul.nav.nav-tabs(data-tabs="tabs")#tabs
+    li.active
+      a(href="#object", data-toggle="tab")#objet
+        h4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assurance objet&nbsp;&nbsp;&nbsp;
+        img(src="#{STATIC_URL}images/objet.png")
+
+  
+  #content
+    .container(style="width:90%;"): .tab-content
+      .tab-pane.active#object
+        h2 SYNTHÈSE 
+        ul
+          li.indent-v-sm En effectuant votre location sur Dressbooking, l’objet loué est automatiquement assuré pour tous les dommages matériels accidentels causés au bien pendant la durée de location, sans coût supplémentaire. 
+          li.indent-v-sm L’assurance ne couvre pas le vol par le locataire.
+          li.indent-v-sm L’assurance est incluse dans le montant réglé en ligne par le locataire.
+          li.indent-v-sm Le montant de remboursement maximum est de 750 € (incluant une franchise de 15%).
+          li.indent-v-sm Pour déclarer un sinistre, la procédure est simple et rapide.
+        br
+        h3 CONDITIONS PORTANT SUR LE BIEN LOUÉ
+        p Pour être couvert par l’assurance du groupe e-loue / Allianz, le bien loué doit : 
+        ul
+          li être au nom d’un particulier
+        p  L’assurance couvre uniquement les transactions effectuées et finalisées sur le site, aux dates enregistrées. En cas de modification de date ou d’allongement de durée, il est indispensable de refaire une demande de réservation sur le site afin d’être couvert par l’assurance.
+        br
+        h3  CONDITIONS PORTANT SUR LE LOCATAIRE
+        p Pour être couvert par l’assurance du groupe e-loue / Allianz, le locataire doit :
+        ul
+          li être un particulier 
+          li s'engager à utiliser le bien en France métropolitaine uniquement
+          li louer le bien pour une durée qui n’excède pas 90 jours
+          li payer la location sur le site avec une carte bancaire à son nom
+          li présenter tous les documents au propriétaire, au début de la location (contrat incluant l'état du bien à sa prise de possession et lors de son retour + carte bancaire, tous les 2 au même nom)
+
+        br
+        h3 CONDITIONS PORTANT SUR LE PROPRIETAIRE DU BIEN LOUÉ
+
+        p Pour être couvert par l’assurance du groupe e-loue / Allianz, le propriétaire du bien loué doit : 
+        ul
+          li être un particulier
+          li résider en France métropolitaine
+        br
+        h3 GARANTIES ACCORDÉES PAR L’ASSURANCE
+        p Pendant la durée de la location, l’assurance Dressbooking / Assur’One inclut les garanties suivantes : 
+        ul
+          li dommages matériels accidentels causés au bien 
+          li destruction
+          li détérioration totale ou partielle extérieurement visible 
+        p Ces dommages doivent provenir d’un événement extérieur et soudain et doivent rendre le bien garanti impropre à toute utilisation. L’assurance ne couvre pas le vol par le locataire.
+         
+        p Le montant de l’indemnisation : 
+        ul 
+          li correspondra au montant de la caution (demandée par le propriétaire, lors de son dépôt d’annonce)
+          li sera minoré d’une franchise de 15%
+          li ne pourra pas dépasser 750€
+
+        br
+        h3 QUE FAIRE POUR DÉCLARER UN INCIDENT ?
+        p En cas de dommage matériel, le locataire doit : 
+        ul
+          li prévenir le propriétaire de l’objet loué,  en lui expliquant le problème qu’il rencontre 
+          li déclarer le sinistre auprès de Dressbooking sur le site par mail (contact@dressbooking.com)
+          li restituer l’objet loué au propriétaire
+          li compléter et signer l'état des lieux de sortie en précisant les dommages constatés
+          li Après prélévement de sa caution, déclarer le sinistre auprès de l’assureur par mail (richard.behague@agents.allianz.fr) ou par courrier (Agent Richard Béhague – Allianz – 45 Rue du Mont Valérien – 92210 Saint Cloud) et se conformer aux instructions figurant dans la notice d’assurance consultable sur le site Dressbooking
+        br
+        p  En cas de dommages matériels accidentels au bien loué, le propriétaire doit : 
+          ul
+            li récupérer le bien loué 
+            li signer l’état des lieux de sortie en précisant les dommages constatés
+            li déclarer le sinistre auprès de Dressbooking sur le site, par mail (contact@dressbooking.com)
+            li transmettre à Dressbooking la facture de réparation ou (si le bien n’est pas réparable) une attestation d’irréparabilité à transmettre à Dressbooking dans les 48 heures à compter du dommage
+        br
+
+
+        h3 QUE FAIRE POUR ÊTRE INDEMNISÉ ?
+        p Une fois l’incident déclaré auprès de Dressbooking et de l’assurance et le dossier constitué de l’ensemble des pièces, le propriétaire pourra alors être indemnisé : 
+        ul 
+          li Dressbooking utilisera la caution en ligne laissée par le locataire (au moment de la réservation) pour prélever le montant correspondant à la franchise (plafonné au montant de la caution ou à 750€)
+          li cette somme sera versée au propriétaire par Dressbooking
+        br
+        p  Dressbooking communiquera par mail (richard.behague@agents.allianz.fr) ou par courrier (Agent Richard Béhague – Allianz – 45 Rue du Mont Valérien – 92210 Saint Cloud),l’ensemble des pièces ci-dessous :
+        ul 
+          li Le contrat de location
+          li L’état contradictoire du bien loué signé du locataire et du propriétaire lors de la remise au locataire et lors de sa récupération par le propriétaire
+          li La déclaration des dommages constatés accompagnée d’une photo de ce dommage
+          li Si le bien a fait l’objet d’une réparation la facture de la réparation
+          li Si le bien est irréparable la facture d’achat initiale du bien loué
+          li Le justificatif du versement de l’indemnité versée au propriétaire
+        br
+        p  Pour pouvoir obtenir le remboursement selon les modalités du contrat d’assurance, le locataire devra ensuite envoyer un courrier à l’assureur par mail (richard.behague@agents.allianz.fr) ou par courrier (Agent Richard Béhague – Allianz – 45 Rue du Mont Valérien – 92210 Saint Cloud), dans un délai de 5 jours ouvrés suivant  le prélèvement du montant de la caution, avec les documents suivants :
+        ul 
+          li déclaration sur l’honneur décrivant très précisément la date, le lieu et les circonstances du dommage
+          li le justificatif du prélèvement de sa caution
+          li copie du contrat de location liant le propriétaire et le locataire
+        br
+        p Sous réserve de l’éligibilité du dossier, la prise en charge consistera à indemniser le locataire : 
+          ul
+            li en cas de réparation du bien : du montant de la caution prélevée par Dressbooking et versé au propriétaire en règlement de la facture de réparation et après déduction de la franchise
+            li en cas de non réparation du bien : du montant de la caution prélevée par Dressboookinget versée au propriétaire sans excéder le plafond de la garantie, après  déduction de la franchise     
+        
+        br
+        h3 CONTRAT D’ASSURANCE 
+        p 
+          | L’ensemble des garanties d’assurance est régi par une Notice d’information (téléchargeable à
+          a(href="http://eloue.s3.amazonaws.com/media/assurances/Allianz.pdf", target="_blank", style="color:#24bd77;") cette adresse).
+          | Il est demandé aux utilisateurs d’en prendre connaissance.
+  br
+  br
+  .text-center
+    a(href="#tabs", style="color: #f53d6c") Retourner au haut de la page

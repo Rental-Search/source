@@ -1,0 +1,41 @@
+-load product
+
+.block-tab.ng-hide#tabs-tarifs
+  h3.indent-t-md.indent-b-xs {% if product_type == 'carproduct' %}Tarif{% else %}Grille tarifaire{% endif %}
+  .row
+    .col-xs-6
+      {% if product_type == 'carproduct' %}
+      table.calendar.text-center
+        thead: tr
+          td Durée
+          td Prix
+        tbody
+          tr
+            td 1 jours*
+            td {{ product.price|price:"&euro;" }}
+      {% if product_object.km_included %}
+      .indent-b-md
+      table.calendar.text-center
+        tbody: tr
+          td Kilomêtres inclus par jour
+          td {{ product_object.km_included }} Km
+      {% endif %}
+      {% else %}
+      table.calendar.text-center
+        thead: tr
+          td Durée
+          td Prix
+        tbody: each price in product_object.prices.all
+          tr
+            td {{ price.get_prefixed_unit_display }}{% if price.unit == 1 %}*{% endif %}
+            td {{ price.amount }} &euro;
+      {% endif %}
+      .indent-b-md
+      table.calendar.text-center
+        tbody: tr
+          td Caution
+          td {{ product_object.deposit_amount }} &euro;
+    .col-sm-6
+      p.indent-sm-b Certains propriétaires proposent des prix degressifs pour les locations de plusieurs jours. Si vous effectuez une demande de location pour plusieurs jours, Dressbooking vous propose automatiquement le prix le plus avantageux.
+      p.indent-sm-b Lorsque vous effectuez une réservation sur Dressbooking, seul le prix de la location est débité de votre carte bancaire.
+      p.indent-sm-b Si le propriétaire demande une caution, Dressbooking procédera à une empreinte bancaire au moment du paiement. Cette empreinte ne sera pas débitée, sauf  si vous constatez un sinistre à la fin de la location.

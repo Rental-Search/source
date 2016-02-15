@@ -245,7 +245,7 @@ class ContactProView(View):
             
 
             new_form = self.form_class()
-            recipients = ['benjamin.laroche@e-loue.com']
+            recipients = ['contact@e-loue.com']
 
 
             if activity_field and name and sender:

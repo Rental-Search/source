@@ -1,0 +1,18 @@
+.modal.fade#redirect(tabindex="-1", role="dialog", aria-hidden="true")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title Redirection en cours
+      .modal-body
+        section.clearfix.indent-h-sm
+          .col-xs-4
+            .bg-wrapper: img(style="background-image: url(#{STATIC_URL}img/logo_gosport.png);", alt="")
+            p Vous naviguiez sur Dressbooking
+          .col-xs-4
+            span.bg-wrapper.redirection-arrows: img(src="#{STATIC_URL}img/redirection.gif", alt="")
+            p Nous vous redirigeons sur le site e-loue
+          .col-xs-4
+            .bg-wrapper: img(style="background-image: url(#{STATIC_URL}img/logo.png);", alt="")
+            p Effectuez à present votre location sur e-loue
+        section.indent-h-sm
+          h4.text-primary Dressbooking utilise e-loue comme outil technique pour gérer vos locations.

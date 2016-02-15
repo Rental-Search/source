@@ -1,7 +1,7 @@
 -load facets i18n
 
 .container.center-text
-  h3 {% trans "Les villes les plus attractives" %}
+  h3 {% trans "Location partout en France" %}
   .row
     ul.nav.nav-justified
       each column in cities_list
@@ -9,5 +9,5 @@
         li: ul.nav
           each city in column
             li.item-city
-              .col-sm-12: a(href="{% facet_url breadcrumbs 'l' city 'r' 30 'sort' '-created_at' %}").link-success-color.normal-case {{ city }}
+              .col-sm-12: a(href="{% facet_url breadcrumbs 'l' city 'r' 30 'sort' '-created_at' %}").link-success-color.normal-case Location {{ city }}
               //-.col-sm-4: span.actives-count count

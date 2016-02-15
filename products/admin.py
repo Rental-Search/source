@@ -19,9 +19,13 @@ from modeltranslation.admin import TranslationAdmin
 
 from products.forms import ProductAdminForm
 from products.models import Alert, Product, CarProduct, RealEstateProduct, Picture, Category, Property, PropertyValue, Price, ProductReview, PatronReview, Curiosity, ProductRelatedMessage
-from accounts.models import Patron
 
 from eloue.admin import CurrentSiteAdmin
+
+from import_export import resources, widgets, fields
+from import_export.admin import ImportMixin
+from products.choices import UNIT
+from import_export.formats import base_formats
 
 log = logbook.Logger('eloue')
 
@@ -82,7 +86,61 @@ class ProductCurrentSiteAdmin(CurrentSiteAdmin):
     form = ProductAdminForm
 
 
-class ProductAdmin(ProductCurrentSiteAdmin):
+PRICE_FIELDS=['price_hour',
+                    'price_day',
+                    'price_three_days',
+                    'price_week',
+                    'price_fifteen_days',
+                    'price_month',]
+
+
+class ProductResource(resources.ModelResource):
+    
+    price_hour = fields.Field(widget=widgets.DecimalWidget())
+    price_day = fields.Field(widget=widgets.DecimalWidget())
+    price_three_days = fields.Field(widget=widgets.DecimalWidget())
+    price_week = fields.Field(widget=widgets.DecimalWidget())
+    price_fifteen_days = fields.Field(widget=widgets.DecimalWidget())
+    price_month = fields.Field(widget=widgets.DecimalWidget())
+    
+     
+    class Meta:
+        model = Product
+        report_skipped = True
+        use_transactions = True
+        fields = ['id', 'summary', 'description', 'category', 'sites',
+                   'deposit_amount', 'currency', 'owner', ] + PRICE_FIELDS
+    
+    
+    def __init__(self, *args, **kwargs):
+        super(ProductResource, self).__init__(*args, **kwargs)
+        self._prices = []
+    
+    
+    def import_obj(self, obj, data, dry_run):
+        super(ProductResource, self).import_obj(obj, data, dry_run)
+        prices = []
+        for f in PRICE_FIELDS:
+            amount = self.fields[f].clean(data)
+            if amount is None:
+                continue
+            unit = f.split('_', 1)[1].upper()
+            prices.append(Price(amount=amount, unit=UNIT[unit]))
+        self._prices = prices
+    
+            
+    def before_save_instance(self, instance, dry_run):
+        owner = instance.owner
+        instance.phone = owner.default_number
+        instance.address = owner.default_address
+    
+        
+    def after_save_instance(self, instance, dry_run):
+        if not dry_run and len(self._prices)>0:
+            instance.prices = self._prices
+        
+    
+class ProductAdmin(ImportMixin, ProductCurrentSiteAdmin):
     date_hierarchy = 'created_at'
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email', 'owner__pk']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
@@ -95,12 +153,17 @@ class ProductAdmin(ProductCurrentSiteAdmin):
     list_per_page = 20
     form = ProductAdminForm
     actions = [convert_to_carproduct, convert_to_realestateproduct]
+    resource_class = ProductResource
+    formats = (
+        base_formats.XLSX,
+        base_formats.XLS,
+    )
 
     def is_pro(self, obj):
         if obj.owner.current_subscription != None:
-            is_pro = _("Particulier") 
+            is_pro = _("Professionnel") 
         else:
-            is_pro = _("Professionnel")
+            is_pro = _("Particulier")
         return is_pro
     is_pro.allow_tags = True
     is_pro.short_description = _(u"Pro ou Part")
@@ -128,6 +191,7 @@ class ProductAdmin(ProductCurrentSiteAdmin):
             kwargs['level_indicator'] = u"--"
             kwargs['queryset'] = Category.tree.all()
         return super(ProductAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+
 
 class ProductOwner(ProductCurrentSiteAdmin):
     def function():
@@ -208,7 +272,7 @@ class EloueMessageAdmin(MessageAdmin):
     form = EloueMessageAdminForm
 
     list_filter = ('sent_at',)
-    search_fields = ('subject', 'body', 'recipient__username', 'sender__username',)
+    search_fields = ('subject', 'body', 'recipient__username', 'sender__username', 'recipient__email', 'sender__email',)
     readonly_fields = ('recipient', 'sender', 'parent_msg','sender_profil_link', 'recipient_profil_link',)
 
 
