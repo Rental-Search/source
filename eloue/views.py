@@ -12,6 +12,7 @@ from haystack.constants import DJANGO_ID
 
 from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
+from products.search import product_search
 
 
 class LoginRequiredMixin(View):
@@ -22,7 +23,7 @@ class LoginRequiredMixin(View):
 
 class SearchQuerySetMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        self.sqs = kwargs.pop('sqs', None) or SearchQuerySet()
+        self.sqs = kwargs.pop('sqs', None) or product_search
         self.load_all = kwargs.pop('load_all', False)
         return super(SearchQuerySetMixin, self).dispatch(request, *args, **kwargs)
 
