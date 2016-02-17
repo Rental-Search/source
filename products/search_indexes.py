@@ -109,6 +109,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     _geoloc = AlgoliaLocationField(model_attr='address__position', null=True)
     _tags = AlgoliaTagsField(model_attr='categories', null=True)
     
+    def get_updated_field(self):
+        return "created_at"
+    
     def prepare_locations(self, obj):
         agencies = obj.owner.pro_agencies.all()
         if agencies.count() > 0:
@@ -225,5 +228,5 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return Product
 
     def index_queryset(self, using=None):
-        ids = self.get_model().on_site.values_list('pk', flat=True)[:200]
-        return self.get_model().on_site.select_related('category', 'address', 'owner').filter(pk__in=ids)
+#         ids = self.get_model().on_site.values_list('pk', flat=True)
+        return self.get_model().on_site.select_related('category', 'address', 'owner')#.filter(pk__in=ids)
