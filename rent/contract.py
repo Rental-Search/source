@@ -27,6 +27,7 @@ class ContractGenerator(object):
     templates = {
         'fr-FR': local_path("contract/contrat_sans_assurance.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
+        'da': local_path("contract/dk_contract_whitout_insurance.pdf")
     }
     
     def __call__(self, booking):
@@ -96,8 +97,8 @@ class ContractGenerator(object):
 
         canvas.drawString(80, 610, u"{summary}".format(summary=smart_str(booking.product.summary)))
 
-        booking_total_amount = "%s %s" % (str(booking.total_amount), u"\u20AC")
-        booking_deposit_amount = "%s %s" % (str(booking.product.deposit_amount), u"\u20AC")
+        booking_total_amount = "%s %s" % (str(booking.total_amount), booking.currency)
+        booking_deposit_amount = "%s %s" % (str(booking.product.deposit_amount), booking.currency)
         
         canvas.drawString(81, 589, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(81, 568, format(booking.ended_at, _(u"d F Y à H\hi.")))
@@ -115,7 +116,8 @@ class ContractGeneratorNormal(ContractGenerator):
         }
     else:
         templates = {
-            'fr-FR': local_path("contract/fr_template_normal.pdf")
+            'fr-FR': local_path("contract/fr_template_normal.pdf"),
+            'da': local_path("contract/dk_contract_whitout_insurance.pdf")
         }
     
     def draw(self, canvas, booking):
@@ -160,8 +162,8 @@ class ContractGeneratorNormal(ContractGenerator):
 
         canvas.drawString(80, 615, u"{summary}".format(summary=booking.product.summary))
 
-        booking_total_amount = "%s %s" % (str(booking.total_amount), u"\u20AC")
-        booking_deposit_amount = "%s %s" % (str(booking.product.deposit_amount), u"\u20AC")
+        booking_total_amount = "%s %s" % (str(booking.total_amount), booking.currency)
+        booking_deposit_amount = "%s %s" % (str(booking.product.deposit_amount), booking.currency)
 
         canvas.drawString(81, 595, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(81, 573, format(booking.ended_at, _(u"d F Y à H\hi.")))
@@ -178,6 +180,7 @@ class ContractGeneratorCar(ContractGenerator):
     templates = {
         'fr-FR': local_path("contract/contrat_voiture.pdf"),
         'en-uk': local_path("contract/uk_template.pdf"),
+        'da': local_path("contract/dk_contract_whitout_insurance.pdf")
     }
     def draw(self, canvas, booking):
         canvas.showPage()
@@ -233,8 +236,8 @@ class ContractGeneratorCar(ContractGenerator):
         km_included = "%s %s" % (booking.product.carproduct.km_included or 0, "km")
         delta = booking.ended_at - booking.started_at
         total_km_included = "%s %s" % (round(delta.days + delta.seconds/60/60/24., 2)*booking.product.carproduct.km_included or 0, "km")
-        costs_per_km = "%s %s" % (booking.product.carproduct.costs_per_km or 0, u"\u20AC")
-        booking_total_amount = "%s %s" % (str(booking.total_amount), u"\u20AC")
+        costs_per_km = "%s %s" % (booking.product.carproduct.costs_per_km or 0, booking.currency)
+        booking_total_amount = "%s %s" % (str(booking.total_amount), booking.currency)
 
         canvas.drawString(205, 581, u"{km_included}".format(km_included=km_included))
         canvas.drawString(198, 571, u"{total_km_included}".format(total_km_included=total_km_included))
@@ -296,8 +299,8 @@ class ContractGeneratorRealEstate(ContractGenerator):
        
         canvas.drawString(80, 608, u"{summary}".format(summary=booking.product.summary))
 
-        booking_total_amount = "%s %s" % (str(booking.total_amount), u"\u20AC")
-        booking_deposit_amount = "%s %s" % (str(booking.product.deposit_amount), u"\u20AC")
+        booking_total_amount = "%s %s" % (str(booking.total_amount), booking.currency)
+        booking_deposit_amount = "%s %s" % (str(booking.product.deposit_amount), booking.currency)
 
         canvas.drawString(81, 587, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(81, 566, format(booking.ended_at, _(u"d F Y à H\hi.")))
