@@ -284,12 +284,13 @@ define([
                             });
                     };
                     
-                    publishPromise = $q.all(patchPromises)
-                        .catch($scope.handleResponseErrors);
+                    $q.all(patchPromises)
+                        .catch($scope.handleResponseErrors)
+                        .then($scope.saveProduct);
                     
+                } else {
+                    $scope.saveProduct();
                 }
-                
-                publishPromise = publishPromise.then($scope.saveProduct);
                 
             };
 

@@ -361,12 +361,13 @@ define([
                             });
                     };
                     
-                    publishPromise = $q.all(patchPromises)
-                        .catch($scope.handleResponseErrors);
+                    $q.all(patchPromises)
+                        .catch($scope.handleResponseErrors)
+                        .then($scope.saveCardAndRequestBooking);
                     
+                } else {
+                    $scope.saveCardAndRequestBooking();
                 }
-                
-                publishPromise = publishPromise.then($scope.saveCardAndRequestBooking);
 
             };
 
