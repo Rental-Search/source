@@ -5,6 +5,7 @@ define([
     "../../../../common/eloue/services/ProductsService",
     "../../../../common/eloue/services/UsersService",
     "../../../../common/eloue/services/AddressesService",
+    "../../../../common/eloue/services/PhoneNumbersService",
     "../../../../common/eloue/services/AuthService",
     "../../../../common/eloue/services/CategoriesService",
     "../../../../common/eloue/services/PricesService",
@@ -17,6 +18,7 @@ define([
 
     EloueWidgetsApp.controller("PublishAdCtrl", [
         "$scope",
+        "$q",
         "$window",
         "$location",
         "Endpoints",
@@ -25,6 +27,7 @@ define([
         "ProductsService",
         "UsersService",
         "AddressesService",
+        "PhoneNumbersService",
         "AuthService",
         "CategoriesService",
         "PricesService",
@@ -33,7 +36,7 @@ define([
         "ServerValidationService",
         "ScriptTagService",
         "MapsService",
-        function ($scope, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService, ScriptTagService, MapsService) {
+        function ($scope, $q, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, PhoneNumbersService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService, ScriptTagService, MapsService) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -63,6 +66,8 @@ define([
             ];
             $scope.productsBaseUrl = Endpoints.api_url + "products/";
             $scope.categoriesBaseUrl = Endpoints.api_url + "categories/";
+            $scope.phonesBaseUrl = Endpoints.api_url + "phones/";
+            $scope.addressesBaseUrl = Endpoints.api_url + "addresses/";
             $scope.product = {};
             $scope.isAuto = false;
             $scope.isRealEstate = false;
@@ -117,6 +122,9 @@ define([
                     if (!currentUser.default_address) {
                         $scope.noAddress = true;
                     }
+                    if (!currentUser.default_number) {
+                        $scope.noPhone = true;
+                    }
                 });
             }
 
@@ -158,8 +166,13 @@ define([
                     $scope.publishAdError = null;
                     // load categories for comboboxes
                     CategoriesService.getRootCategories().then(function (categories) {
-                        if ($scope.currentUser && !$scope.currentUser.default_address) {
-                            $scope.noAddress = true;
+                        if ($scope.currentUser) {
+                            if (!$scope.currentUser.default_address) {
+                                $scope.noAddress = true;
+                            }
+                            if (!$scope.currentUser.default_number) {
+                                $scope.noPhone = true;
+                            }
                         }
                         $scope.rootCategories = categories;
 
@@ -238,23 +251,46 @@ define([
              * Publish product ad.
              */
             $scope.publishAd = function () {
-                //if user has no default address, firstly save his address
-                if ($scope.noAddress) {
+                
+                var publishPromise = $q.defer().promise;
+                
+                // Add required user info
+                if ($scope.noAddress || $scope.noPhone) {
+                    
                     $scope.submitInProgress = true;
-                    $scope.currentUser.default_address.country = "FR";
-                    AddressesService.saveAddress($scope.currentUser.default_address).then(
-                        $scope.applyUserAddress,
-                        $scope.handleResponseErrors
-                    );
-                } else {
-                    $scope.saveProduct();
-                }
-            };
+                    
+                    var patchPromises = {};
+                    
+                    if ($scope.noAddress){
+                        $scope.currentUser.default_address.country = "FR";
+                        patchPromises.default_address = AddressesService
+                                .saveAddress($scope.currentUser.default_address)
+                                .then(function(result){
+                                    $scope.currentUser.default_address = result;
+                                    return UsersService.updateUser({
+                                        default_address: $scope.addressesBaseUrl + result.id + "/"
+                                    });
+                            });
+                    };
 
-            $scope.applyUserAddress = function (result) {
-                $scope.currentUser.default_address = result;
-                UsersService.updateUser({default_address: Endpoints.api_url + "addresses/" + result.id + "/"});
-                $scope.saveProduct();
+                    if ($scope.noPhone){
+                        patchPromises.default_number = PhoneNumbersService
+                                .savePhoneNumber($scope.currentUser.default_number)
+                                .then(function(result){
+                                    $scope.currentUser.default_number = result;
+                                    return UsersService.updateUser({
+                                        default_number: $scope.phonesBaseUrl + result.id + "/"
+                                    });
+                            });
+                    };
+                    
+                    publishPromise = $q.all(patchPromises)
+                        .catch($scope.handleResponseErrors);
+                    
+                }
+                
+                publishPromise = publishPromise.then($scope.saveProduct);
+                
             };
 
             /**
@@ -263,7 +299,7 @@ define([
             $scope.saveProduct = function () {
                 $scope.submitInProgress = true;
                 $scope.product.description = "";
-                $scope.product.address = Endpoints.api_url + "addresses/" + $scope.currentUser.default_address.id + "/";
+                $scope.product.address = $scope.addressesBaseUrl + $scope.currentUser.default_address.id + "/";
                 if ($scope.price.amount > 0) {
                     if (!$scope.leafCategories || $scope.leafCategories.length === 0) {
                         if (!!$scope.nodeCategories && $scope.nodeCategories.length > 0) {
