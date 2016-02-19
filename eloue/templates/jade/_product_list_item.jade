@@ -47,7 +47,8 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
         if ng
           span(ng-if="product.pro_owner").badge-pro pro
         else
-          {% if product.pro_owner %} span.badge-pro pro {% endif %}
+          if product.pro_owner
+            span.badge-pro pro
       p
         if ng
           span(ng-if='product.agencies') &nbsp;

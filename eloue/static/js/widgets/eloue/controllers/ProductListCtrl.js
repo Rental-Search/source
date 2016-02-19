@@ -29,7 +29,7 @@ define([
     }]);
     
     EloueWidgetsApp.constant("SearchConstants", {
-        MASTER_INDEX: 'e-loue-test-geo-multilvl-products.product',
+        MASTER_INDEX: 'e-loue_products.product',
         PARAMETERS: {
             hierarchicalFacets: [{
                 name: 'category',
@@ -43,6 +43,8 @@ define([
             hitsPerPage: 12
         },
         ALGOLIA_PREFIX: "sp_",
+        ALGOLIA_APP_ID: 'NSV6X2HQLR',
+        ALGOLIA_KEY:'1f470a5fbfd05ca06ac97a01bca6a4eb',
         URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 'hitsPerPage', 'insideBoundingBox'],
         DEFAULT_ORDERING: "-created_at",
         WINDOW_SIZE: 10,
@@ -63,26 +65,22 @@ define([
         "$timeout",
         "$document",
         "$location",
+        "$log",
         "UtilsService",
         "SearchConstants",
         "uiGmapGoogleMapApi",
         "uiGmapIsReady",
         "algolia",
-        "$log",
-        function ($scope, $window, $timeout, $document, $location, UtilsService, SearchConstants, uiGmapGoogleMapApi, uiGmapIsReady, algolia, $log) {
+        function ($scope, $window, $timeout, $document, $location, $log, 
+        		UtilsService, SearchConstants, uiGmapGoogleMapApi, uiGmapIsReady, algolia) {
            
-        	
             $scope.search_max_range = 1000;
-            
             $scope.country = 'fr';
-
-            
-            
             
             /* 
              * Algolia config 
              */
-            var client = algolia.Client('F2G181ROXT', '1892770732420446ef9165ec76bdbdbd');
+            var client = algolia.Client(SearchConstants.ALGOLIA_APP_ID, SearchConstants.ALGOLIA_KEY);
             $scope.search_ordering = SearchConstants.DEFAULT_ORDERING;
             $scope.search_index = SearchConstants.MASTER_INDEX;
             $scope.search = algoliasearchHelper(client, $scope.search_index, SearchConstants.PARAMETERS);
@@ -347,6 +345,8 @@ define([
             
             $scope.onLocationChangeStart = function(event, current, next) {
                 
+            	if ($scope.ui_pristine) return;
+            	
                 if (!$scope.search_location_ui_changed){    
                     
                     var qs = UtilsService.urlEncodeObject($location.search());
@@ -557,10 +557,13 @@ define([
                     var cat = state.hierarchicalFacetsRefinements.category[0];
                     if (cat){
                         var catparts = cat.split(' > ');
+                    	$scope.leaf_category = catparts[catparts.length-1];
                         for (var i=0; i< catparts.length; i++){
                             $scope.search_breadcrumbs.push(
                                     {short: catparts[i], long: catparts.slice(0,i+1).join(' > ')});
                         }
+                    } else {
+                    	$scope.leaf_category = "";
                     }
                 }
             };
