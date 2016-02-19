@@ -89,12 +89,12 @@ define([
                         $scope.comment = commentList[0];
                     }
 
-                    $scope.showCommentForm = $scope.bookingDetails.state = "ended" && !$scope.bookingDetails.owner.has_pro_subscription;
+                    $scope.showCommentForm = $scope.bookingDetails.state === "ended" && !$scope.bookingDetails.owner.has_pro_subscription;
 
                     angular.forEach($scope.commentList, function(value, key) {
                         var author_id = value.author.id;
 
-                        if (value.author.id == $scope.currentUser.id) {
+                        if (value.author.id === $scope.currentUser.id) {
                             $scope.showCommentForm = false;
                         }
                     });
