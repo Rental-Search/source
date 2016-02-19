@@ -614,7 +614,7 @@ class Picture(models.Model):
         source='image',
         processors=[
             processors.Transpose(processors.Transpose.AUTO),
-            processors.SmartResize(width=300, height=200),
+            processors.SmartResize(width=300, height=300),
             processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
