@@ -88,8 +88,8 @@ define([
             $scope.search = algoliasearchHelper(client, $scope.search_index, SearchConstants.PARAMETERS);
             $scope.search_default_state = $scope.search.getState();
             
-            $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
-            $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
+//            $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
+//            $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
             
             /*
              * Map config
@@ -101,6 +101,9 @@ define([
                 options:{
                     disableDefaultUI: true,
                     zoomControl: true
+                },
+                clustererOptions:{
+                    maxZoom:12
                 },
                 events: {
                     idle: function(){
