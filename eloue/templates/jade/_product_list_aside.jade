@@ -22,7 +22,7 @@ script(type="text/ng-template" id="_category_tree_item.html").
   label.caption(for="where") {% trans "où" %}
   .map-container
     .whirly(ng-if='!map.loaded')
-    ui-gmap-google-map(ng-if='map.loaded', center='map.center', zoom='map.zoom', options='map.options', control='map.control', pan='true')
+    ui-gmap-google-map(ng-if='map.loaded', center='map.center', zoom='map.zoom', options='map.options', control='map.control', events='map.events', pan='true')
       ui-gmap-markers(models="product_list", coords="'location_obj'", idKey="'markerId'", events="marker_event_handlers", options="'markerOptions'")
 
   //- .slider

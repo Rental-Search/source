@@ -40,12 +40,14 @@ define([
             }],
             disjunctiveFacets: ["pro_owner",
                                 "price"],
-            hitsPerPage: 12
+            hitsPerPage: 12,
+            aroundLatLng:"46.2,2.2",
+            aroundRadius:1000000
         },
         ALGOLIA_PREFIX: "sp_",
         ALGOLIA_APP_ID: 'NSV6X2HQLR',
         ALGOLIA_KEY:'1f470a5fbfd05ca06ac97a01bca6a4eb',
-        URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 'hitsPerPage', 'insideBoundingBox'],
+        URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 'hitsPerPage', 'aroundLatLng', 'aroundRadius'],
         DEFAULT_ORDERING: "-created_at",
         WINDOW_SIZE: 10,
         COUNTRIES: {
@@ -72,7 +74,7 @@ define([
         "uiGmapIsReady",
         "algolia",
         function ($scope, $window, $timeout, $document, $location, $log, 
-        		UtilsService, SearchConstants, uiGmapGoogleMapApi, uiGmapIsReady, algolia) {
+                UtilsService, SearchConstants, uiGmapGoogleMapApi, uiGmapIsReady, algolia) {
            
             $scope.search_max_range = 1000;
             $scope.country = 'fr';
@@ -100,9 +102,45 @@ define([
                     disableDefaultUI: true,
                     zoomControl: true
                 },
+                events: {
+                    idle: function(){
+                        $log.debug('== idle ==');
+                        $log.debug($scope.map.center);
+                        $log.debug($scope.map.zoom);
+                        $log.debug($scope.boundsChangedByRender);
+                        if ($scope.boundsChangedByRender){
+                            $scope.boundsChangedByRender = false;
+                        } else {
+                            $log.debug(UtilsService.range($scope.map.zoom));
+                            var gmap = $scope.map.control.getGMap();
+                            var center = gmap.getCenter();
+                            $log.debug(center.toString());
+                            var zoom = gmap.getZoom();
+                            $scope.search.setQueryParameter('aroundLatLng', center.lat()+','+center.lng());
+                            $scope.search.setQueryParameter('aroundRadius', UtilsService.range(zoom) * 1000);
+                            $scope.submitForm();
+                        }
+                    }
+                },
                 control: {}
             };
             
+            $scope.refineRange = function(sliderid){
+                $scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
+                $scope.submitForm();
+            };
+            
+
+            function algoliaCoords(point){
+                return point.latitude + ',' + point.longitude;
+            };
+            
+            function angularGmapCords(point){
+                var arr = point.split(',');
+                return {latitude:parseFloat(arr[0]), longitude:parseFloat(arr[1])};
+            };
+            
+
             $scope.rangeUpdatedBySlider = false;
             
             // On map loaded
@@ -131,72 +169,18 @@ define([
 
                         $scope.map.options.mapTypeId = maps.MapTypeId.ROADMAP;
                         
-                        $scope.refineLocationByMap = function(){
-//                            if ($scope.boundsChangedByRender){
-//                                $scope.boundsChangedByRender = false;
-//                            } else {
-                                var bds = map.getBounds();
-                                var ne = bds.getNorthEast(), sw = bds.getSouthWest();
-                                $scope.search.setQueryParameter('insideBoundingBox', sw.lat()+','+sw.lng()+','+ne.lat()+','+ne.lng());
-                                $scope.submitForm();        
-//                            }
-                        };
-                        
                         // TODO bounds are used for the search, but dragend, zoom changed and center_changed do not guarantee that bounds changes will be available
                         
-                        map.addListener("zoom_changed", function () {
-                            $log.debug("zoom_changed");
-                            if (!$scope.rangeUpdatedBySlider) {
-                                var zoomLevel = map.getZoom(),
-                                    calcRange = UtilsService.range(zoomLevel);
-                                if (calcRange && calcRange <= $scope.search_max_range) {
-                                    $scope.range_slider.max = calcRange;
-                                }
-//                                $scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
-//                                $scope.submitForm();
-
-//                                $scope.search_bounds_changed = false;
-//                                $scope.refineLocationByMap();
-                                
-                            }
-                            $scope.rangeUpdatedBySlider = false;
-                            $scope.$apply();
-                        });
-                        
-                        
-                        map.addListener("bounds_changed", function () {
-                            $log.debug("bounds_changed");
-                            $scope.refineLocationByMap();
-                        });
-                        
-                        
-//                        map.addListener("dragend", function () {
-//                            $log.debug("dragend");
-//                            if ($scope.search_bounds_changed){
-//                                $scope.search_bounds_changed = false;
-//                                $scope.refineLocationByMap();
-//                            }
-//                            
-//                        });
-//                        
-//                        map.addListener("center_changed", function () {
-//                            $log.debug("center_changed");
-//                            if ($scope.search_bounds_changed){
-//                                $scope.refineLocationByMap();
-//                                $scope.search_bounds_changed = false;
-//                            }
+//                        map.addListener("idle", function () {
+//                            $log.debug("idle");
+//                            $scope.refineLocationByMap();
 //                        });
                         
                         var autocompleteChangeListener = function(autocomplete) {
                             return function(){
                                 var place = autocomplete.getPlace();
                                 
-//                                $log.debug("PLACE: ");
-//                                $log.debug(place);
-                                
                                 $scope.refineLocationByPlace(place);
-    //                            $log.debug(place);
-    //                            $log.debug($scope.map.bounds);
                             };
                         };
                         autocomplete_head.addListener('place_changed', autocompleteChangeListener(autocomplete_head));
@@ -261,6 +245,10 @@ define([
                 
                 $scope.renderMap = function(result, state) {
                     
+                    $scope.boundsChangedByRender = true;
+                    
+                    $log.debug('== renderMap ==');
+                    
                     for (var ri=0; ri<$scope.product_list.length; ri++){
                         var res = $scope.product_list[ri];
                         res.location_obj = {latitude: res.locations[0], longitude: res.locations[1]};
@@ -273,26 +261,15 @@ define([
                         };
                         
                     };
+                    var gmap = $scope.map.control.getGMap();
                     
-                    var bb = state.getQueryParameter('insideBoundingBox');
-                    if (bb){
-                        bb = bb.split(',');
-                        
-                        $scope.boundsChangedByRender = true;
+                    $log.debug(state.getQueryParameter('aroundLatLng'));
+                    $log.debug(state.getQueryParameter('aroundRadius'));
                     
-
-                        //TODO validation
-                            
-//                        $scope.map.control.getGMap().fitBounds({
-//                            east: parseFloat(bb[NE_LNG]),
-//                            north: parseFloat(bb[NE_LAT]),
-//                            south: parseFloat(bb[SW_LAT]),
-//                            west: parseFloat(bb[SW_LNG])
-//                        });
-                    }
-
-                    
-
+                    $scope.map.center = angularGmapCords(state.getQueryParameter('aroundLatLng'));
+                    var radius = parseFloat(state.getQueryParameter('aroundRadius'))/1000;
+                    $scope.map.zoom = UtilsService.zoom(radius);
+                    $scope.range_slider.max = radius;
                     
                 };
                 
@@ -345,8 +322,8 @@ define([
             
             $scope.onLocationChangeStart = function(event, current, next) {
                 
-            	if ($scope.ui_pristine) return;
-            	
+                if ($scope.ui_pristine) return;
+                
                 if (!$scope.search_location_ui_changed){    
                     
                     var qs = UtilsService.urlEncodeObject($location.search());
@@ -364,8 +341,9 @@ define([
                     $scope.search_location = other_params.location_name || "";
                     
                     $scope.search.search();
+                } else {
+                    $scope.search_location_ui_changed = false;
                 }
-                $scope.search_location_ui_changed = false;
             };
             
             
@@ -397,20 +375,12 @@ define([
                     $scope.search.addNumericRefinement("price", '<', newVal);
                 }
                 
-                $scope.submitForm();
-                
-            };
-            
-            $scope.refineRange = function(sliderId){
-                
-                $scope.rangeUpdatedBySlider = true;
-                $scope.map.zoom = UtilsService.zoom($scope.range_slider.max);
-                $scope.search.setQueryParameter('aroundRadius', $scope.range_slider.max * 1000);
+                $scope.searchPage = 0;
                 
                 $scope.submitForm();
                 
             };
-            
+                        
             $scope.refineRenterPart = function(newVal){
                 var state = $scope.search.getState();
                 if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
@@ -423,6 +393,9 @@ define([
                         return;
                     };
                 }
+                
+                $scope.searchPage = 0;
+                
                 $scope.submitForm();
             };
             
@@ -438,6 +411,9 @@ define([
                         return;
                     };
                 }
+                
+                $scope.searchPage = 0;
+                
                 $scope.submitForm();
             };
             
@@ -447,19 +423,22 @@ define([
             
             $scope.refineCategory = function(path) {
                 $scope.search.toggleRefinement("category", path);
+                $scope.searchPage = 0;
                 $scope.submitForm();
             };
             
             $scope.refineCategoryClearChildren = function(path) {
                 $scope.search.toggleRefinement("category", path);
                 $scope.search.toggleRefinement("category", path);
+                $scope.searchPage = 0;
                 $scope.submitForm();
-            };
 
+            };
             $scope.refineBreadcrumbCategory = function(path) {
                 $scope.search.toggleRefinement("category", path);
                 $scope.search.toggleRefinement("category", path);
                 $scope.search_query = '';
+                $scope.searchPage = 0;
                 $scope.refineLocation();
             };
             
@@ -483,6 +462,7 @@ define([
             $scope.setOrdering = function(ordering){
                 $scope.search
                     .setIndex(!!ordering ? $scope.search_index+"_"+ordering : $scope.search_index);
+                $scope.searchPage = 0;
                 $scope.submitForm();
             };
             
@@ -490,8 +470,13 @@ define([
             
             $scope.clearRefinements = function(){
                 $scope.search.clearRefinements();
-                $scope.map.zoom = UtilsService.zoom(SearchConstants.COUNTRIES[$scope.country].radius);
-                $scope.map.center = SearchConstants.COUNTRIES[$scope.country].center;
+                var center = SearchConstants.COUNTRIES['fr'].center;
+                var radius = SearchConstants.COUNTRIES['fr'].radius;
+                $scope.search.setQueryParameter('aroundLatLng', center.latitude + ',' + center.longitude);
+                $scope.search.setQueryParameter('aroundRadius', radius * 1000);
+                $log.debug($scope.search.getState());
+//                $scope.searchPage = 0;
+                $scope.submitForm();
             };
             
             
@@ -541,9 +526,9 @@ define([
                 
             };
 
-            $scope.renderRangeSlider = function(result){                
-                $scope.map.zoom = UtilsService.zoom($scope.search.getQueryParameter('aroundRadius'));
-            };
+//            $scope.renderRangeSlider = function(result){                
+//                $scope.map.zoom = UtilsService.zoom($scope.search.getQueryParameter('aroundRadius'));
+//            };
             
             $scope.renderSearchCategories = function(result, state){
                 if (result.hierarchicalFacets && result.hierarchicalFacets[0]) {
@@ -557,13 +542,13 @@ define([
                     var cat = state.hierarchicalFacetsRefinements.category[0];
                     if (cat){
                         var catparts = cat.split(' > ');
-                    	$scope.leaf_category = catparts[catparts.length-1];
+                        $scope.leaf_category = catparts[catparts.length-1];
                         for (var i=0; i< catparts.length; i++){
                             $scope.search_breadcrumbs.push(
                                     {short: catparts[i], long: catparts.slice(0,i+1).join(' > ')});
                         }
                     } else {
-                    	$scope.leaf_category = "";
+                        $scope.leaf_category = "";
                     }
                 }
             };
@@ -628,26 +613,27 @@ define([
             
             $scope.processResult = function(result, state){
                 
-                $scope.search_result_count = result.nbHits;
+                $log.debug(result);
                 
+                $scope.search_result_count = result.nbHits;
+                                                 
+                $scope.product_list = result.hits;
+                
+                $scope.pages_count = result.nbPages;
+                $scope.results_per_page = result.hitsPerPage;
+                $scope.page = result.page;
+                
+                $scope.renderQueryText(result);
+                $scope.renderOrdering(result);
+                $scope.renderPagination(result);
+                $scope.renderBreadcrumbs(state);
+                $scope.renderMap(result, state);
+            
                 if ($scope.search_result_count){
-                                      
-                    $scope.product_list = result.hits;
-                    
-                    $scope.pages_count = result.nbPages;
-                    $scope.results_per_page = result.hitsPerPage;
-                    $scope.page = result.page;
-                    
                     $scope.renderLocation(result, state);
-                    $scope.renderQueryText(result);
-                    $scope.renderOrdering(result);
-                    $scope.renderPagination(result);
                     $scope.renderSearchCategories(result, state);
                     $scope.renderPriceSlider(result, state);
-                    $scope.renderBreadcrumbs(state);
                     $scope.renderRenterTypes(result, state);
-                    $scope.renderMap(result, state);
-                    
                 } else {
                     $log.debug("No results");
                 }
