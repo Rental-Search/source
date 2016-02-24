@@ -7,6 +7,7 @@ from getenv import env
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 DEBUG = env('DEBUG', False)
+STAGING = env('STAGING', False)
 DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', DEBUG)
 TEMPLATE_DEBUG = DEBUG
 
@@ -185,6 +186,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
+
+if STAGING:
+    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ("eloue.middleware.StagingRestrictionMiddleware",)
 
 PASSWORD_HASHERS =(
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -867,6 +871,7 @@ ANALYTICS = {
 
 if not DEBUG:
     IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.MediaStorage"
+
 
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')
