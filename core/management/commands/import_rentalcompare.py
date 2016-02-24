@@ -5,7 +5,7 @@ from django.db import connection
 import mysql.connector
 
 from accounts.models import Patron, PhoneNumber, Address, ProAgency,\
-    ImportRecord
+    ImportRecord, ProPackage, Subscription
 from products.models import Product, Category, Price, Product2Category, Picture
 from collections import namedtuple
 from itertools import imap, izip
@@ -50,6 +50,8 @@ class Command(BaseCommand):
 
     LOGOS_URL = "http://cdn.rentalcompare.com/logo/"
     PICTURES_URL = "http://cdn.rentalcompare.com/uploads/"
+    
+    PRO_PACKAGE_NAME = "Rentalcompare"
 
     # Product descriptions will be built with this template
     PRODUCT_DESC_TEMPLATE=\
@@ -236,6 +238,8 @@ Weight: {{ weight }} lbs.
             
             DIVERS_CAT = Category.objects.get(slug="divers");
             ELOUE_SITE = Site.objects.get(id=ELOUE_SITE_ID)
+            propack = ProPackage.objects.create(name=self.PRO_PACKAGE_NAME,
+                                                price=0)
             
             ir = ImportRecord.objects.create(origin=self.ORIGIN,
                                              file_name=self.FILENAME,
@@ -368,6 +372,9 @@ Weight: {{ weight }} lbs.
                                                  city=addr.city,
                                                  state=addr.state,
                                                  country=addr.country)
+                        
+                        Subscription.objects.create(patron=user,
+                                                    propackage=propack)
                         
                         # products
                         c.execute("select count(*) from ob_products where vendor_id=%(user_id)s limit %(quantity)s;", 
