@@ -4,6 +4,8 @@ from __builtin__ import NotImplementedError
 from haystack.models import SearchResult
 import re
 from products.models import Product
+from algoliasearch.client import Client
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.datetime_safe import datetime
 from haystack.inputs import AutoQuery
 from haystack.constants import DEFAULT_ALIAS
@@ -36,16 +38,35 @@ def model_label(model):
 
 
 class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
-    
+
     def __init__(self, connection_alias, **connection_options):
-        AlgoliaSearchBackend.__init__(self, connection_alias, **connection_options)
+        super(AlgoliaSearchBackend, self).__init__(connection_alias, **connection_options)
+        
+        required_params = {"APP_ID", "API_KEY", "INDEX_NAME_PREFIX"}
+        
+        required_params.difference_update(connection_options.keys())
+        
+        if required_params:
+            raise ImproperlyConfigured(
+                'Parameters {} are missing for connection {}'\
+                    .format(", ".join(required_params), connection_alias)) 
+
+        self.connection_options = connection_options
+
+        self.conn = Client(
+            connection_options["APP_ID"], connection_options["API_KEY"])
+
+        self.index_name_prefix = connection_options.get("INDEX_NAME_PREFIX", "") or ""
+
         self.setup_complete = True
+        
     
     def _get_index_for(self, model, orderby=''):
         index_name = "{}{}".format(self.index_name_prefix, model_label(model))
         if orderby:
             index_name = index_name + '_' + orderby
         return self.conn.initIndex(index_name)
+    
     
     @log_query
     def search(self, query_string, **kwargs):
@@ -56,8 +77,7 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
         result_class = kwargs.get('result_class') or SearchResult
         
         models = kwargs.get('models')
-        
-        
+    
         # TODO query multiple models and choose index
         
         models = list(models)
@@ -110,6 +130,7 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
             'results': results["results"],
             'hits': results["hits"],
         }
+
 
 class EloueAlgoliaSearchQuery(BaseSearchQuery):
     
