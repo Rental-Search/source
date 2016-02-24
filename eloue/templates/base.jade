@@ -29,7 +29,6 @@ html(lang="fr")
     
       var _gaq = _gaq || [];
       _gaq.push(['_setDomainName', '{{ ANALYTICS_SITE }}']);
-      _gaq.push(['_trackPageview']);
       {% spaceless %}
       {% if request.user.is_authenticated %}
       _gaq.push(['_setVar', 'authenticated']);
