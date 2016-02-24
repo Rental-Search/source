@@ -4,8 +4,7 @@
 .block-tab.ng-hide#tabs-tarifs
   {% if not product_object.prices.all %}
   h3.indent-t-md.indent-b-xs {% trans "Tarif"%}
-  p {% trans "Les prix sont sur devis. Contacter
-  z le profesionnel pour avoir plus d'information" %}
+  p {% trans "Les prix sont sur devis. Contacter le profesionnel pour avoir plus d'information" %}
   {% else %}
   h3.indent-t-md.indent-b-xs {% if product_type == 'carproduct' %}{% trans "Tarif" %}{% else %}{% trans "Grille tarifaire" %}{% endif %}
   .row
