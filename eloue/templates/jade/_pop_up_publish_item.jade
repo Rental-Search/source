@@ -25,7 +25,7 @@
                       fieldset(data-ng-disabled="submitInProgress")
                         .row
                             .col-sm-12
-                                input(type="text", name="summary", placeholder="{% trans 'Titre' %}", ng-required="!isAuto", ng-model="product.summary", ng-show="!isAuto").form-control
+                                input(type="text", name="summary", placeholder="{% trans 'Titre' %} *", ng-required="!isAuto", ng-model="product.summary", ng-show="!isAuto").form-control
                                 span.text-danger(ng-show="publishAdForm.summary.$error.required && !!publishAdSubmitted", translate="required_field")
                             .col-sm-6
                                 input(type="text", name="brand", placeholder="{% trans 'Marque' %} *", ng-required="isAuto", ng-model="product.brand", ng-show="isAuto").form-control
@@ -57,6 +57,10 @@
                             .col-sm-4
                                 input(type="text", name="city", placeholder="{% trans 'Ville' %} *", required, ng-model="currentUser.default_address.city").form-control
                                 span.text-danger(ng-show="publishAdForm.city.$error.required && !!publishAdSubmitted", translate="required_field")
+                        .row(ng-show="noPhone")
+                            .col-sm-12
+                                input(type="text", name="phoneNumber", placeholder="{% trans 'Téléphone' %} *", required, ng-model="currentUser.default_number.number").form-control
+                                span.text-danger(ng-show="!currentUser.default_number.number && !!publishAdSubmitted", translate="required_field")
                         .row
                             .col-sm-3
                                 input(ng-if="isRealEstate==true" "type="text", eloue-placeholder-fix, name="amount", placeholder="{% trans 'Prix à la nuit' %} *", required, ng-model="price.amount").form-control
