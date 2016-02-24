@@ -504,15 +504,33 @@ SOUTH_MIGRATION_MODULES = {
 }
 
 # Haystack configuration
-HAYSTACK_CONNECTIONS = {                
-    'default': {
-        'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
-        'APP_ID': 'NSV6X2HQLR',
-        'API_KEY': 'b89ed5c201bbb00eddec2b626eff456f',
-        'INDEX_NAME_PREFIX': 'e-loue_',
-        'TIMEOUT': 60 * 5
+SEARCH_ENGINE = env('SEARCH_ENGINE', 
+       'eloue.elasticsearch_backend.ElasticsearchSearchEngine')
+
+
+if SEARCH_ENGINE == 'eloue.elasticsearch_backend.ElasticsearchSearchEngine':
+    HAYSTACK_CONNECTIONS = {                
+       'default': {
+            'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
+            'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
+            'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
+            'KWARGS': {
+                'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
+                'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
+            }
+        },
     }
-}
+elif SEARCH_ENGINE == 'eloue.search_backends.EloueAlgoliaEngine':
+    HAYSTACK_CONNECTIONS = {                
+        'default': {
+            'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
+            'APP_ID': 'NSV6X2HQLR',
+            'API_KEY': 'b89ed5c201bbb00eddec2b626eff456f',
+            'INDEX_NAME_PREFIX': 'e-loue_',
+            'TIMEOUT': 60 * 5
+        }
+    }
+
 
 ALGOLIA_INDICES = {
     "products.product":{

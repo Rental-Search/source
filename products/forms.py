@@ -18,6 +18,7 @@ from eloue.geocoder import GoogleGeocoder
 from .fields import FacetField
 from .models import Product, Category
 from .choices import SORT, SORT_SEARCH_RESULT
+from eloue.search_backends import is_algolia
 
     
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -107,9 +108,15 @@ class FilteredProductSearchForm(SearchForm):
     def sqs_filter_date_from(self, sqs, search_params):
         date_from = search_params.get('date_from', None)
         date_to = search_params.get('date_to', None)
+        
         if all((date_from, date_to)):
-            sqs = sqs.filter(created_at_timestamp__lt=date_from,
-                             created_at_timestamp__gt=date_to)
+            if is_algolia(sqs): #FIXME move into EloueAlgoliaSearchQuery
+                    sqs = sqs.filter(created_at_timestamp__lt=date_from,
+                                     created_at_timestamp__gt=date_to)
+            else:
+                range_query = 'NOT starts_unavailable_exact:[{0} TO {1}] AND NOT ends_unavailable_exact:[{0} TO {1}]'
+                sqs = sqs.raw_search(range_query.format(date_from.strftime('%F'), date_to.strftime('%F')))
+            
         return sqs
 
     def sqs_filter_date_to(self, sqs, search_params):

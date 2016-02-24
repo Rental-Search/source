@@ -9,7 +9,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.datetime_safe import datetime
 from haystack.inputs import AutoQuery
 from haystack.constants import DEFAULT_ALIAS
-from eloue.settings import ALGOLIA_INDICES
+from eloue.settings import ALGOLIA_INDICES, HAYSTACK_CONNECTIONS
 
 
 EQ_NUMERIC = '%s=%s'
@@ -36,6 +36,8 @@ ORDERINGS_MAP = {
 def model_label(model):
     return "{}.{}".format(model._meta.app_label, model._meta.model_name)
 
+def is_algolia(sqs):
+    return HAYSTACK_CONNECTIONS[sqs._using]['ENGINE'] == 'eloue.search_backends.EloueAlgoliaEngine'
 
 class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
 

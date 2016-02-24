@@ -228,5 +228,4 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         return Product
 
     def index_queryset(self, using=None):
-#         ids = self.get_model().on_site.values_list('pk', flat=True)
-        return self.get_model().on_site.select_related('category', 'address', 'owner')#.filter(pk__in=ids)
+        return self.get_model().on_site.select_related('category', 'address', 'owner')
