@@ -1152,24 +1152,24 @@ msgstr "location"
 # depends on context
 #: eloue/urls.py:211 eloue/templates/dk/jade/_footer_links.jade:9
 msgid "comment-ca-marche"
-msgstr "How it works"
+msgstr "how-it-works"
 
 # ?
 #: eloue/urls.py:212 eloue/templates/dk/jade/_footer_links.jade:11
 msgid "offre-professionnel"
-msgstr "professional quote"
+msgstr "professional-plan"
 
 #: eloue/urls.py:218 eloue/templates/dk/jade/_footer_links.jade:35
 msgid "nos-partenaires"
-msgstr "our partners"
+msgstr "our-partners"
 
 #: eloue/urls.py:219 eloue/templates/dk/jade/_footer_links.jade:45
 msgid "contactez-nous"
-msgstr "Contact us"
+msgstr "contact-us"
 
 #: eloue/urls.py:221 eloue/templates/dk/jade/_footer_links.jade:33
 msgid "qui-sommes-nous"
-msgstr "Who we are"
+msgstr "who-we-are"
 
 #: eloue/urls.py:222 eloue/templates/dk/jade/_footer_links.jade:13
 msgid "securite"
@@ -1177,20 +1177,20 @@ msgstr "security"
 
 #: eloue/urls.py:223
 msgid "conditions-generales-particuliers"
-msgstr "General Terms - individuals"
+msgstr "general-terms-individuals"
 
 #: eloue/urls.py:224 eloue/templates/dk/jade/_footer_links.jade:23
 msgid "conditions-generales-professionnels"
-msgstr "general terms - professionals"
+msgstr "general-terms-professionals"
 
 # i might be confusing 'location' with location and not 'rental'.  needs another pass with those words and phrases
 #: eloue/urls.py:225
 msgid "contrat-de-location"
-msgstr "rental agreement"
+msgstr "rental-agreement"
 
 #: eloue/urls.py:227 eloue/templates/dk/jade/_footer_links.jade:47
 msgid "mentions-legales"
-msgstr "legal notices"
+msgstr "legal-notices"
 
 #: eloue/urls.py:229
 msgid "assurance-tranquillite"
@@ -1198,7 +1198,7 @@ msgstr "insurance"
 
 #: eloue/urls.py:230
 msgid "nous-recrutons"
-msgstr "we are hiring"
+msgstr "we-are-hiring"
 
 #: eloue/views.py:63
 #, python-format
