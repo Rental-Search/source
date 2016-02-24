@@ -81,4 +81,4 @@ django-modeltranslation
 sendgrid
 django-import-export==0.4.2
 openpyxl==2.3.2
-
+mysql-connector-python==2.0.4
