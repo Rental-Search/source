@@ -248,6 +248,7 @@ Weight: {{ weight }} lbs.
         transaction.set_autocommit(False)
 
         try:
+            self.stdout.write("Connecting to {user}@{host}:{port}/{database} ...".format(**credentials))
             cnx = mysql.connector.connect(**credentials)
             c = cnx.cursor()
         except:
