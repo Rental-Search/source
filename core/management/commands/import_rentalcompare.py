@@ -135,7 +135,12 @@ Weight: {{ weight }} lbs.
             action='store_true',
             dest='pictures',
             default=False,
-            help='Imports product pictures'),   
+            help='Imports product pictures'),
+        make_option('--category',
+            action='store',
+            dest='category',
+            default='687',
+            help='Default category id'),   
         )
 
     def __init__(self):
@@ -234,6 +239,7 @@ Weight: {{ weight }} lbs.
         export_skipped = options['export-skipped']
         lp = int(options['limit-products'])
         lu = int(options['limit-users'])
+        cat_id = int(options['category'])
         
         user_prg = 0
         prod_prg = 0
@@ -248,9 +254,10 @@ Weight: {{ weight }} lbs.
         transaction.set_autocommit(False)
 
         try:
-            self.stdout.write("Connecting to {user}@{host}:{port}/{database} ...".format(**credentials))
+            self.stdout.write("Connecting to {user}:*****@{host}:{port}/{database} ...".format(**credentials))
             cnx = mysql.connector.connect(**credentials)
             c = cnx.cursor()
+            del options['password']
         except:
             self.stderr.write("Could not establish connection "
                                +"to the rentalcompare database. Cause:")
@@ -260,7 +267,7 @@ Weight: {{ weight }} lbs.
         
         try:
             
-            DIVERS_CAT = Category.objects.get(slug="divers");
+            DIVERS_CAT = Category.objects.get(id=cat_id);
             ELOUE_SITE = Site.objects.get(id=ELOUE_SITE_ID)
             propack = ProPackage.objects.create(name=self.PRO_PACKAGE_NAME,
                                                 price=0)
