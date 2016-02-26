@@ -72,6 +72,30 @@ Weight: {{ weight }} lbs.
 {% endif %}
 """
     option_list = BaseCommand.option_list + (
+                                             
+        # Credentials                                                                                                   
+        make_option('--user',
+            action='store',
+            dest='user',
+            default='root'),
+        make_option('--password',
+            action='store',
+            dest='password',
+            default='root'),
+        make_option('--host',
+            action='store',
+            dest='host',
+            default='127.0.0.1'),
+        make_option('--port',
+            action='store',
+            dest='port',
+            default='3306'),
+        make_option('--database',
+            action='store',
+            dest='database',
+            default='rentalcompare'),
+                                             
+        # Other options                                       
         make_option('-d', '--dryrun',
             action='store_true',
             dest='dryrun',
@@ -111,9 +135,9 @@ Weight: {{ weight }} lbs.
             action='store_true',
             dest='pictures',
             default=False,
-            help='Imports product pictures'),                                                                                              
+            help='Imports product pictures'),   
         )
-    
+
     def __init__(self):
         BaseCommand.__init__(self)
         self.skipped_users = []
@@ -202,10 +226,9 @@ Weight: {{ weight }} lbs.
         
     def handle_import(self, *args, **options):
         
-        credentials = {
-                       'user': 'root', 
-                       'database': 'rentalcompare', 
-                       'password': 'root'}
+        credentials_keys = ('user', 'password', 'host', 'port', 'database', )
+        
+        credentials = {k:v for k,v in options.items() if k in credentials_keys}
         
         dry_run = options['dryrun']
         export_skipped = options['export-skipped']
