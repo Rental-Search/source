@@ -1,0 +1,87 @@
+aside
+  color: $gray-strong
+  padding-top: $section-pad
+
+  .booking-form
+    p
+      margin: 0 0 .5em 
+    .available
+      padding-top: 1em
+      color: $brand-success
+      &:before
+        font-family: "Flaticons Solid"
+        content: "\e1ce"
+        display: inline-block
+        font-size: 1.3em
+        vertical-align: middle
+        margin-right: .5em
+      &.unavailable
+        color: $brand-danger
+        &:before
+          content: "\e1cf"
+        
+
+  .btn
+    +btn(px(14,$section-fz))
+    margin-bottom: $section-pad/2
+    color: white !important
+    i
+      font-size: 1.2em
+      display: inline-block
+      margin-right: .7em
+      vertical-align: middle
+  .add-to-wishlist a
+    margin: 0
+
+  .owner-information
+    .block-thumbnail
+      +block-with-thumbnail($thumbnail-md, 50%)
+    .thumbnail-img a
+      +default-user
+
+      .rate
+        margin: .5em 0
+    .connection
+      > div
+        padding: 0
+        p
+          margin: 0
+
+    .connection
+      .friend-photo-wrapper
+        display: inline-block
+        margin-right: .5em
+        margin-bottom: .5em
+        width: $thumbnail-sm
+        height: $thumbnail-sm
+        +default-user
+        vertical-align: middle
+        img
+          height: 100%
+          width: 100%
+      p
+        display: inline-block
+        *display: inline
+        *zoom: 1
+        a
+          color: lighten($brand-info, 15%)
+          font-weight: bolder
+  .similar-listing
+    li
+      +block-with-thumbnail($thumbnail-md)
+      h6
+        color: $gray-dark
+        font-weight: $fw-semibold
+        font-size: px(13)
+        margin: .5em 0 0
+      p
+        margin: .25em 0 .5em !important
+    .thumbnail-img a
+      +default-product
+
+  .connected-with-owner
+    p
+      margin: 1em 0 0
+    i
+      color: $brand-info
+      font-size: 5em

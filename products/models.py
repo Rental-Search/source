@@ -619,10 +619,11 @@ class Picture(models.Model):
         source='image',
         processors=[
             processors.Transpose(processors.Transpose.AUTO),
-            processors.SmartResize(width=300, height=200),
+            processors.SmartResize(width=300, height=300),
             processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
+
     home = ImageSpecField(
         source='image',
         processors=[
@@ -639,6 +640,17 @@ class Picture(models.Model):
             processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
+
+    db_display = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=450, height=650),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
+
+
 
     def save(self, *args, **kwargs):
         if not self.created_at:
@@ -743,7 +755,11 @@ class Category(MPTTModel):
         if not conformity:
             return None
         else:
-            return conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else conformity.gosport_category if site_id == dressbooking_site_id else None
+            conformity_category = conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else conformity.gosport_category if site_id == dressbooking_site_id else None
+            if conformity_category and conformity_category.sites.filter(pk=site_id):
+                return conformity_category
+            else:
+                return None
 
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')

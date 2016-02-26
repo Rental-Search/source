@@ -88,8 +88,16 @@ define([
                     if (commentList.length > 0) {
                         $scope.comment = commentList[0];
                     }
-                    $scope.showCommentForm = $scope.commentList.length === 0 && $scope.bookingDetails.state === "ended"
-                        && !($scope.isOwner && $scope.bookingDetail.has_pro_subscription);
+
+                    $scope.showCommentForm = $scope.bookingDetails.state === "ended" && !$scope.bookingDetails.owner.has_pro_subscription;
+
+                    angular.forEach($scope.commentList, function(value, key) {
+                        var author_id = value.author.id;
+
+                        if (value.author.id === $scope.currentUser.id) {
+                            $scope.showCommentForm = false;
+                        }
+                    });
                 });
 
                 if ($scope.showIncidentDescription) {
