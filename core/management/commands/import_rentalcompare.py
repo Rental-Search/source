@@ -136,6 +136,11 @@ Weight: {{ weight }} lbs.
             dest='pictures',
             default=False,
             help='Imports product pictures'),
+        make_option('--threads',
+            action='store',
+            dest='threads',
+            default=4,
+            help='Number of threads, for image downloads'),
         make_option('--category',
             action='store',
             dest='category',
@@ -564,7 +569,7 @@ Weight: {{ weight }} lbs.
         
         from threading import Thread
         
-        NUM_THREADS = 4
+        NUM_THREADS = int(options['threads'])
         export_skipped = options['export-skipped']
         
         skip_lock = threading.Lock()
@@ -611,7 +616,7 @@ Weight: {{ weight }} lbs.
     def handle_pictures(self, *args, **options):
         from threading import Thread
         
-        NUM_THREADS = 4
+        NUM_THREADS = int(options['threads'])
         export_skipped = options['export-skipped']
         
         skip_lock = threading.Lock()
