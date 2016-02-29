@@ -292,14 +292,20 @@ Weight: {{ weight }} lbs.
             
             chunk = c.fetchmany(size=self.USERS_CHUNK_SIZE)
             
+            username_counts = {}
+            
             while len(chunk)>0:
                 
                 for rc_user in imap(RcUser._make, chunk):
                     
                     user_prg = user_prg + 1
                     
-                    self.stdout.write("Importing user %5s out of %5s: %-50s" % \
-                                      (user_prg, user_count, rc_user.username, ), ending='\r')
+                    email_exists = Patron.objects.exists(email=rc_user.email)
+                    
+                    mess = "Importing user %5s out of %5s: %-50s" % \
+                                      (user_prg, user_count, ("reusing " if email_exists else "") + rc_user.username, )
+                    
+                    self.stdout.write(mess, ending='\r')
                     
                     if not rc_user.email:
                         # TODO do not skip w/o emails
@@ -310,7 +316,6 @@ Weight: {{ weight }} lbs.
                         # TODO do not skip w/o emails
                         self.skip_user(rc_user, "email missing")
                         continue
-                    
                     
 #                 PRO:
 #                     Nom entrprise company
@@ -361,26 +366,34 @@ Weight: {{ weight }} lbs.
                     elif rc_user.level == "user":
                         pass
                     
-                    if Patron.objects.exists(username=rc_user.username):
-                        # TODO generate new login properly
-                        u['username'] = u['username'] + "_1"
+                    if not email_exists:
+                        username_counts[rc_user.username] = 0
+                        new_username = rc_user.username
+                        while Patron.objects.exists(username=new_username): 
+                            username_counts[rc_user.username] = username_counts[rc_user.username] + 1
+                            new_username = rc_user.username + '_' + str(username_counts[rc_user.username])
+                        u['username'] = new_username 
                     
-                    user = Patron(**u)
+#                     if email_exists:
+#                         # TODO do not skip existing emails
+#                         self.skip_user(rc_user, "email exists")
+#                         continue
+#                     
+
+                    if not email_exists:
+                        user = Patron(**u)
+                        user.init_slug()
+                        slug_attempt = 0
+                        while Patron.objects.exists(slug=user.slug):
+                            # TODO generate new slug properly
+                            slug_attempt = slug_attempt + 1
+                            user.slug = user.slug + "-" + str(slug_attempt)
+                        user.slug = user.slug[:50]
+                    else:
+                        user = Patron.objects.get(email=rc_user.email)
+                        
                     
-                    user.init_slug()
-                    
-                    slug_attempt = 0
-                    while Patron.objects.exists(slug=user.slug):
-                        # TODO generate new slug properly
-                        slug_attempt = slug_attempt + 1
-                        user.slug = user.slug + "-" + str(slug_attempt)
-                                        
-                    if Patron.objects.exists(email=rc_user.email):
-                        # TODO do not skip existing emails
-                        self.skip_user(rc_user, "email exists")
-                        continue
-                    
-                    user.slug = user.slug[:50]
+
                     
                     if rc_user.phonenumber is not None:
                         user.default_number = PhoneNumber(patron=user,
@@ -572,6 +585,8 @@ Weight: {{ weight }} lbs.
         NUM_THREADS = int(options['threads'])
         export_skipped = options['export-skipped']
         
+        self.stdout.write("Using %s threads" % NUM_THREADS, ending='\n')
+        
         skip_lock = threading.Lock()
         progress_lock = threading.Lock()
         self.progress = 0
@@ -618,6 +633,8 @@ Weight: {{ weight }} lbs.
         
         NUM_THREADS = int(options['threads'])
         export_skipped = options['export-skipped']
+        
+        self.stdout.write("Using %s threads" % NUM_THREADS, ending='\n')
         
         skip_lock = threading.Lock()
         progress_lock = threading.Lock()
