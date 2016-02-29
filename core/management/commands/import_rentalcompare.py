@@ -464,6 +464,10 @@ Weight: {{ weight }} lbs.
                                 product.prepare_for_save()
                                 products.append(product)
                                 
+                                prod_cat.append(Product2Category(product=product,
+                                                                 category=DIVERS_CAT,
+                                                                 site=ELOUE_SITE))
+                                
                                 if rc_product.price:
                                     prices.append(Price(product_id=alloc_id,
                                                     amount=rc_product.price, 
@@ -497,6 +501,7 @@ Weight: {{ weight }} lbs.
                             
                             prod_chunk = c.fetchmany(size=min(self.PRODUCTS_CHUNK_SIZE, lp))
                             products = []
+                            prod_cat = []
                             prices = []
                             pictures = []
                             self.stdout.write("\rImporting products for user %s: %s / %s" % 
