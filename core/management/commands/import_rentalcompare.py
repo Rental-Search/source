@@ -289,7 +289,7 @@ Weight: {{ weight }} lbs.
             
             self.stdout.write("Importing %s users" % (user_count, ))
             
-            c.execute("select * from ob_users limit %s;", (lu,))
+            c.execute("select * from ob_users order by registered desc limit %s;", (lu,))
             RcUser = self.get_user_type(c.column_names)
             
             chunk = c.fetchmany(size=self.USERS_CHUNK_SIZE)
@@ -434,7 +434,7 @@ Weight: {{ weight }} lbs.
                         (prod_count, ) = c.fetchone()
                         prod_count = min(prod_count, lp)
                             
-                        c.execute("select * from ob_products where vendor_id=%(user_id)s limit %(quantity)s;", 
+                        c.execute("select * from ob_products where vendor_id=%(user_id)s order by date_lastaction desc limit %(quantity)s;", 
                                   {'user_id':rc_user.id,
                                    'quantity':lp})
                             
