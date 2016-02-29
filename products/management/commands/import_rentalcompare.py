@@ -367,35 +367,33 @@ Weight: {{ weight }} lbs.
                         
                     elif rc_user.level == "user":
                         pass
-                    
-                    if not email_exists:
-                        username_counts[rc_user.username] = 0
-                        new_username = rc_user.username
-                        while Patron.objects.exists(username=new_username): 
-                            username_counts[rc_user.username] = username_counts[rc_user.username] + 1
-                            new_username = rc_user.username + '_' + str(username_counts[rc_user.username])
-                        u['username'] = new_username 
-                    
+
 #                     if email_exists:
 #                         # TODO do not skip existing emails
 #                         self.skip_user(rc_user, "email exists")
 #                         continue
-#                     
-
+                    
                     if not email_exists:
+                        username_counts[rc_user.username] = 0
+                        username_base = rc_user.username if len(rc_user.username)<=27 else rc_user.username[:27]
+                        new_username = rc_user.username[:30]
+                        while Patron.objects.exists(username=new_username):
+                            username_counts[rc_user.username] = username_counts[rc_user.username] + 1
+                            new_username = username_base + '_' + str(username_counts[rc_user.username])
+                        u['username'] = new_username
+                    
                         user = Patron(**u)
                         user.init_slug()
+                        user.slug = user.slug[:50]
+                        slug_base = user.slug if len(user.slug)<=47 else user.slug[:47]
                         slug_attempt = 0
                         while Patron.objects.exists(slug=user.slug):
                             # TODO generate new slug properly
                             slug_attempt = slug_attempt + 1
-                            user.slug = user.slug + "-" + str(slug_attempt)
-                        user.slug = user.slug[:50]
+                            user.slug = slug_base + "-" + str(slug_attempt)
                     else:
                         user = Patron.objects.get(email=rc_user.email)
                         
-                    
-
                     
                     if rc_user.phonenumber is not None:
                         user.default_number = PhoneNumber(patron=user,
