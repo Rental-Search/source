@@ -18,6 +18,8 @@ from django.contrib.sites.models import Site
 from products.signals import ELOUE_SITE_ID
 import sys
 from django.utils.datetime_safe import datetime
+from django.utils import datetime_safe
+import datetime as datetime_orig
 import requests
 from PIL import Image
 from StringIO import StringIO
@@ -476,6 +478,7 @@ Weight: {{ weight }} lbs.
                                     "category": DIVERS_CAT, #TODO add real category,
                                     "import_record": ir,
                                     "original_id": rc_product.id,
+                                    "created_at":datetime.combine(rc_product.date_added, datetime_orig.time.min),
                                     }
                                 
                                 product = Product(**p)
