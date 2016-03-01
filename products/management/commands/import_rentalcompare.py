@@ -188,6 +188,11 @@ Weight: {{ weight }} lbs.
     def get_record_queryset(self):
         return ImportRecord.objects.filter(file_name=self.FILENAME, origin=self.ORIGIN)
     
+    def get_imported_products_qs(self):
+        return Product.objects.filter(import_record__in=self.get_record_queryset())
+        
+    def get_imported_users_qs(self):
+        return Patron.objects.filter(import_record__in=self.get_record_queryset())
         
     def skip_user(self, tup, reason):
         dic = tup._asdict()
@@ -283,6 +288,9 @@ Weight: {{ weight }} lbs.
                                              file_name=self.FILENAME,
                                              imported_at=datetime.now())
             
+            imported_users_ids = self.get_imported_users_qs().values_list('original_id', flat=True)
+            imported_products_ids = self.get_imported_products_qs().values_list('original_id', flat=True)
+            
             c.execute("select count(*) from ob_users;")
             (user_count, ) = c.fetchone()
             user_count = min(user_count, lu)
@@ -301,6 +309,9 @@ Weight: {{ weight }} lbs.
                 for rc_user in imap(RcUser._make, chunk):
                     
                     user_prg = user_prg + 1
+                    
+                    if rc_user.id in imported_users_ids:
+                        continue
                     
                     email_exists = Patron.objects.exists(email=rc_user.email)
                     
@@ -447,13 +458,16 @@ Weight: {{ weight }} lbs.
                         
                         while(len(prod_chunk)>0):
                             
-                            
                             # prepare products and related objects for bulk save
                             el_c.execute("select nextval('products_product_id_seq')"+
                                          " from generate_series(1,%(prod_count)s)",
                                          {'prod_count':len(prod_chunk)})
                             
                             for (rc_product, (alloc_id, )) in izip(imap(RcProduct._make, prod_chunk), el_c):
+                                
+                                if rc_product.id in imported_products_ids:
+                                    continue
+                                
                                 p = {
                                     "id": alloc_id,
                                     #owner
