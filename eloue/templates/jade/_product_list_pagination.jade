@@ -6,32 +6,32 @@
 {% angularjs %}
 .text-center: ul(ng-show="search_result_count && !ui_pristine", ng-cloak).pagination
   li
-    button(type="button", ng-if="page > 1", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
-    button(type="button", ng-if="page == 1").chevron.disabled: i.flaticon.stroke.left-2
+    a( href="#", ng-if="page > 1", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
+    a( href="#", ng-if="page == 1").chevron.active: i.flaticon.stroke.left-2
     li(ng-repeat="page_num in pages_range track by page_num")
-      button(type="button", ng-if="page == page_num").disabled {{ page_num }}
-      button(type="button", ng-if="page != page_num", ng-click="setPage(page_num, 1)") {{ page_num }}
+      a( href="#", ng-if="page == page_num").active {{ page_num }}
+      a( href="#", ng-if="page != page_num", ng-click="setPage(page_num, 1)") {{ page_num }}
     li
-      button(type="button", ng-if="page < pages_count", ng-click="nextPage()", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
-      button(type="button", ng-if="page == pages_count").chevron.disabled: i.flaticon.stroke.right-2   
+      a( href="#", ng-if="page < pages_count", ng-click="nextPage()", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
+      a( href="#", ng-if="page == pages_count").chevron.active: i.flaticon.stroke.right-2   
 {% endangularjs %}
 
 {% angularjs 0 %}
 if is_paginated
   .text-center: ul(ng-show="ui_pristine").pagination
     if page_obj.has_previous
-      li: button(type="button", title="{% trans 'Page précédente' %}", ng-click="prevPage()").chevron: i.flaticon.stroke.left-2
+      li: a(href="#", title="{% trans 'Page précédente' %}", ng-click="prevPage()").chevron: i.flaticon.stroke.left-2
     else
-      li: button.chevron.disabled: i.flaticon.stroke.left-2
+      li: a(href="#").chevron.active: i.flaticon.stroke.left-2
     for page_number in page_range
       li
         if page_obj.number == page_number
-          button.disabled {{ page_number }}
+          a(href="#").active {{ page_number }}
         else
-          button(type="button", ng-click="setPage({{page_number}}, 2)") {{ page_number }}
+          a(href="#", ng-click="setPage({{page_number}}, 2)") {{ page_number }}
     if page_obj.has_next
-      li: button(type="button", title="{% trans 'Page suivante' %}", ng-click="nextPage()").chevron: i.flaticon.stroke.right-2
+      li: a(href="#", title="{% trans 'Page suivante' %}", ng-click="nextPage()").chevron: i.flaticon.stroke.right-2
     else
-      li: button.chevron.disabled: i.flaticon.stroke.right-2
+      li: a(href="#").chevron.active: i.flaticon.stroke.right-2
 {% endangularjs %}
       

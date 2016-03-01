@@ -8,7 +8,7 @@ style.
 
 {% verbatim %}
 script(type="text/ng-template" id="_category_tree_item.html").
-  <ul ng-if="category['isRefined']">
+  <ul class="category_tree" ng-if="category['isRefined']">
     <li ng-repeat="category in category['data'] track by category['path']">
       <a ng-click="refineCategory(category['path'])" ng-style="category['isRefined'] ? {'font-weight':'bold'} : {}">
         {{ category['name'] + "&nbsp(" + category['count'] + ")" }} 
@@ -20,8 +20,11 @@ script(type="text/ng-template" id="_category_tree_item.html").
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
+  label.caption {% trans "catégories" %}
+  .clear-selector
+    div(ng-show="search_result_count", ng-include="'_category_tree_item.html'")
 
-  label.caption(for="where") {% trans "où" %}
+  label.caption(for="where") {% trans "carte" %}
   .map-container
     .whirly(ng-if='!map.loaded')
     ui-gmap-google-map(ng-if='map.loaded', center='map.center', zoom='map.zoom', options='map.options', control='map.control', events='map.events', pan="true")
@@ -32,10 +35,6 @@ script(type="text/ng-template" id="_category_tree_item.html").
   {% verbatim %}
   rzslider(rz-slider-model="range_slider.max", ng-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
   {% endverbatim %}
-  
-  p.caption {% trans "catégories" %}
-  .clear-selector
-    div(ng-show="search_result_count", ng-include="'_category_tree_item.html'")
 
   //-input#where(ng-model="search_location", name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
 
