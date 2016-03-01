@@ -147,7 +147,12 @@ Weight: {{ weight }} lbs.
             action='store',
             dest='category',
             default='687',
-            help='Default category id'),   
+            help='Default category id'),
+        make_option('--user-type',
+            action='store',
+            dest='level',
+            default=None,
+            help='User type: user, administrator, editor, vendor'),   
         )
 
     def __init__(self):
@@ -252,6 +257,7 @@ Weight: {{ weight }} lbs.
         lp = int(options['limit-products'])
         lu = int(options['limit-users'])
         cat_id = int(options['category'])
+        level = options['level']
         
         user_prg = 0
         prod_prg = 0
@@ -291,13 +297,15 @@ Weight: {{ weight }} lbs.
             imported_users_ids = self.get_imported_users_qs().values_list('original_id', flat=True)
             imported_products_ids = self.get_imported_products_qs().values_list('original_id', flat=True)
             
-            c.execute("select count(*) from ob_users;")
+            where = ("where level='%s'" % level) if level else ""
+            
+            c.execute("select count(*) from ob_users "+where)
             (user_count, ) = c.fetchone()
             user_count = min(user_count, lu)
             
-            self.stdout.write("Importing %s users" % (user_count, ))
+            self.stdout.write("Importing %s users (type=%s)" % (user_count, level if level else "*", ))
             
-            c.execute("select * from ob_users order by registered desc limit %s;", (lu,))
+            c.execute("select * from ob_users "+where+" order by registered desc limit %s", (lu,))
             RcUser = self.get_user_type(c.column_names)
             
             chunk = c.fetchmany(size=self.USERS_CHUNK_SIZE)
