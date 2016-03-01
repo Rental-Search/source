@@ -728,13 +728,10 @@ Weight: {{ weight }} lbs.
                 pats = Patron.objects.filter(import_record=ir)
                 
                 self.stdout.write("%6s products" % (prods.count()), ending='   ')
-                Price.objects.filter(product__in=prods).delete()
                 prods.delete()
                 
                 self.stdout.write("%6s patrons" % (pats.count()), ending='   ')
-                ProAgency.objects.filter(patron__in=pats).delete()
-                Address.objects.filter(patron__in=pats).delete()
-                PhoneNumber.objects.filter(patron__in=pats).delete()
+                pats.update(default_address=None, default_number=None)
                 pats.delete()
                 
                 ir.delete()
