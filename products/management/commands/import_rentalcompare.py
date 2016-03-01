@@ -424,7 +424,7 @@ Weight: {{ weight }} lbs.
                         # boutique(s)
                         # TODO refactor into User.build_boutique
                         agency = ProAgency.objects.create(patron=user,
-                                                 name=rc_user.company[:50],
+                                                 name=rc_user.company,
                                                  phone_number=user.default_number,
                                                  address1=addr.address1,
                                                  address2=addr.address2,
