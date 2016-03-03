@@ -518,8 +518,8 @@ elif SEARCH_ENGINE == 'eloue.search_backends.EloueAlgoliaEngine':
     HAYSTACK_CONNECTIONS = {                
         'default': {
             'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
-            'APP_ID': 'NSV6X2HQLR',
-            'API_KEY': 'b89ed5c201bbb00eddec2b626eff456f',
+            'APP_ID': env('ALGOLIA_APP_ID'),
+            'API_KEY': env('ALGOLIA_API_KEY'),
             'INDEX_NAME_PREFIX': 'e-loue_',
             'TIMEOUT': 60 * 5
         }
