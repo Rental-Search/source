@@ -12,6 +12,8 @@ from haystack.constants import DEFAULT_ALIAS
 from eloue.settings import ALGOLIA_INDICES, HAYSTACK_CONNECTIONS
 from decimal import Decimal, InvalidOperation
 
+import haystack_algolia
+haystack_algolia.algolia_backend.UPDATE_CHUNK_SIZE = 1000 # FIXME do not monkeypatch
 
 EQ_NUMERIC = '%s=%s'
 CMP = {'lt':'%s<%s',

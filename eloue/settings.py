@@ -498,33 +498,29 @@ SOUTH_MIGRATION_MODULES = {
 }
 
 # Haystack configuration
-SEARCH_ENGINE = env('SEARCH_ENGINE', 
-       'eloue.elasticsearch_backend.ElasticsearchSearchEngine')
 
+SEARCH_ENGINE = env('SEARCH_ENGINE', 'elasticsearch')
 
-if SEARCH_ENGINE == 'eloue.elasticsearch_backend.ElasticsearchSearchEngine':
-    HAYSTACK_CONNECTIONS = {                
-       'default': {
-            'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
-            'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
-            'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
-            'KWARGS': {
-                'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
-                'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
-            }
-        },
-    }
-elif SEARCH_ENGINE == 'eloue.search_backends.EloueAlgoliaEngine':
-    HAYSTACK_CONNECTIONS = {                
-        'default': {
-            'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
-            'APP_ID': env('ALGOLIA_APP_ID'),
-            'API_KEY': env('ALGOLIA_API_KEY'),
-            'INDEX_NAME_PREFIX': 'e-loue_',
-            'TIMEOUT': 60 * 5
+HAYSTACK_CONNECTIONS = {                
+   'elasticsearch': {
+        'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
+        'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
+        'KWARGS': {
+            'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
+            'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
         }
-    }
+    },              
+    'algolia': {
+        'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
+        'APP_ID': env('ALGOLIA_APP_ID', None),
+        'API_KEY': env('ALGOLIA_API_KEY', None),
+        'INDEX_NAME_PREFIX': 'e-loue_',
+        'TIMEOUT': 60 * 5
+    },
+}
 
+HAYSTACK_CONNECTIONS['default'] = HAYSTACK_CONNECTIONS[SEARCH_ENGINE]
 
 ALGOLIA_INDICES = {
     "products.product":{
