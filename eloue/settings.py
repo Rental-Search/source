@@ -522,11 +522,13 @@ HAYSTACK_CONNECTIONS = {
 
 HAYSTACK_CONNECTIONS['default'] = HAYSTACK_CONNECTIONS[SEARCH_ENGINE]
 
+# Algolia configuration
 ALGOLIA_INDICES = {
     "products.product":{
         'attributesToSnippet': ['summary',
                                 'description',],
-        'customRanking': ['desc(average_rate)'],
+        'customRanking': ['desc(average_rate)', 
+                          'desc(comment_count)'],
         'attributesToIndex': ['categories', 
                               'summary',
                               'description',],
@@ -553,7 +555,7 @@ ALGOLIA_INDICES = {
         'hitsPerPage': 12,
         'ranking': [
             'typo',
-            'geo',
+#             'geo',
             'words',
             'filters',
             'proximity',
@@ -563,9 +565,9 @@ ALGOLIA_INDICES = {
         "slaves":{
             "price":{
                 'ranking': [
-                    'asc(price)',
                     'typo',
-                    'geo',
+                    'asc(price)',
+#                     'geo',
                     'words',
                     'filters',
                     'proximity',
@@ -575,9 +577,9 @@ ALGOLIA_INDICES = {
             },
             "-price":{
                 'ranking': [
-                    'desc(price)',
                     'typo',
-                    'geo',
+                    'desc(price)',
+#                     'geo',
                     'words',
                     'filters',
                     'proximity',
@@ -587,9 +589,9 @@ ALGOLIA_INDICES = {
             },
             "-created_at":{
                 'ranking': [
-                    'desc(created_at_timestamp)',
                     'typo',
-                    'geo',
+                    'desc(created_at_timestamp)',
+#                     'geo',
                     'words',
                     'filters',
                     'proximity',
