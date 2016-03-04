@@ -12,6 +12,8 @@ from haystack.constants import DJANGO_ID
 
 from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
+from products.search import product_search
+from eloue.search_backends import is_algolia
 
 
 class LoginRequiredMixin(View):
@@ -22,7 +24,7 @@ class LoginRequiredMixin(View):
 
 class SearchQuerySetMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        self.sqs = kwargs.pop('sqs', None) or SearchQuerySet()
+        self.sqs = kwargs.pop('sqs', None) or product_search
         self.load_all = kwargs.pop('load_all', False)
         return super(SearchQuerySetMixin, self).dispatch(request, *args, **kwargs)
 
@@ -43,7 +45,10 @@ class SearchQuerySetMixin(object):
         pk = self.kwargs.get(self.pk_url_kwarg, None)
         slug = self.kwargs.get(self.slug_url_kwarg, None)
         if pk is not None:
-            queryset = queryset.filter(**{DJANGO_ID: pk})
+            if is_algolia(): #FIXME move into EloueAlgoliaSearchQuery
+                queryset = queryset.filter(**{"django_id_int": int(pk)})
+            else:
+                queryset = queryset.filter(**{DJANGO_ID: pk})
 
         # Next, try looking up by slug.
         elif slug is not None:

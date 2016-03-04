@@ -30,4 +30,5 @@ DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')
 ANALYTICS.update({
              'GOOGLE_ID': 'UA-61044932-1',
              'FACEBOOK_ID': '926313257437753',
+             'SEGMENT_ID': 'n2kUgtK68yCoincEcsFNO4Xgkaw6PrUi',
              })

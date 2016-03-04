@@ -498,8 +498,11 @@ SOUTH_MIGRATION_MODULES = {
 }
 
 # Haystack configuration
-HAYSTACK_CONNECTIONS = {
-    'default': {
+
+SEARCH_ENGINE = env('SEARCH_ENGINE', 'elasticsearch')
+
+HAYSTACK_CONNECTIONS = {                
+   'elasticsearch': {
         'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
         'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
         'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
@@ -507,8 +510,110 @@ HAYSTACK_CONNECTIONS = {
             'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
             'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
         }
+    },              
+    'algolia': {
+        'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
+        'APP_ID': env('ALGOLIA_APP_ID', None),
+        'API_KEY': env('ALGOLIA_API_KEY', None),
+        'INDEX_NAME_PREFIX': 'e-loue_',
+        'TIMEOUT': 60 * 5
     },
 }
+
+HAYSTACK_CONNECTIONS['default'] = HAYSTACK_CONNECTIONS[SEARCH_ENGINE]
+
+# Algolia configuration
+ALGOLIA_INDICES = {
+    "products.product":{
+        'attributesToSnippet': ['summary',
+                                'description',],
+        'customRanking': ['desc(average_rate)', 
+                          'desc(comment_count)'],
+        'attributesToIndex': ['categories', 
+                              'summary',
+                              'description',],
+        'attributesForFaceting': [
+            'algolia_categories.lvl0',
+            'algolia_categories.lvl1',
+            'algolia_categories.lvl2',
+            'categories',
+            'categories_exact',
+            'django_id_int',
+            'is_archived',
+            'is_good',
+            'pro_owner',
+            'sites',
+            'sites_exact',
+            'price',
+            'price_exact',
+            'owner',
+            'owner_exact',
+            'created_at_timestamp'],
+        'attributesToHighlight': ['summary',
+                                  'description',],
+        'removeStopWords':True,
+        'hitsPerPage': 12,
+        'ranking': [
+            'typo',
+#             'geo',
+            'words',
+            'filters',
+            'proximity',
+            'attribute',
+            'exact',
+            'custom'],
+        "slaves":{
+            "price":{
+                'ranking': [
+                    'typo',
+                    'asc(price)',
+#                     'geo',
+                    'words',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "-price":{
+                'ranking': [
+                    'typo',
+                    'desc(price)',
+#                     'geo',
+                    'words',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "-created_at":{
+                'ranking': [
+                    'typo',
+                    'desc(created_at_timestamp)',
+#                     'geo',
+                    'words',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "distance":{
+                'ranking': [
+                    'typo',
+                    'geo',
+                    'words',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+        },
+    },            
+}
+
 #HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 HAYSTACK_SIGNAL_PROCESSOR = 'eloue.search.HaystackSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
