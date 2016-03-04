@@ -321,12 +321,12 @@ class ProAdmin(PatronAdmin):
     list_filter = ()
     inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
 #     readonly_fields = ('import_products_link', 'store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
-    readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
+    readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket', 'regular_expression_filter',)
     fieldsets = (
         (_('Company info'), {'fields': ('company_name', 'civility', 'first_name', 'last_name', 'username', 'is_professional', 'password')}),
         (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url', 'pro_online_booking')}),
 #         (_('Boutique'), {'fields': ('import_products_link', 'store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
-        (_('Boutique'), {'fields': ('store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
+        (_('Boutique'), {'fields': ('store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites', 'regular_expression_filter')}),
         (_('Permissions'), {
             'classes': ('collapse',),
             'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')
@@ -406,6 +406,15 @@ class ProAdmin(PatronAdmin):
             return False
     closed_ticket.short_description = _(u"tickets résolus")
     closed_ticket.boolean = True
+
+    def regular_expression_filter(self, obj):
+        regular_expression = [obj.slug]
+        if obj.products.all():
+            regular_expression += ["%s" % product.pk for product in obj.products.all()]
+        return '<p style="width: 500px; overflow-y: hidden">%s</p>' % "|".join(regular_expression)
+
+    regular_expression_filter_description = _(u"filtre expression régulière")
+    regular_expression_filter.allow_tags = True
 
 
 try:
