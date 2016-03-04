@@ -9,38 +9,34 @@ import threading
 from contextlib import closing
 
 
-category_mapping = { 
-    '/electroportatif/':'outillage-electroportatif',
-    '/elevation/': 'echafaudage',
-    '/energie-soudure/': 'groupe-electrogene',
-    '/espaces-verts/': 'outils-a-moteur',
-    '/nettoyage/': 'nettoyeur-haute-pression',
-    '/poncage-surfacage/': 'ponceuse',
-    '/sciage-percage/': 'tronconneuse-a-metaux',
-    '/terrassement/': 'manutention',
-    '/batiment/': 'construction',
-    '/chauffageclimatisation/': 'chauffage',
-    '/levagemanutention/': 'travaux',
-    '/compactage/': 'pelle-pioche-et-tariere',
-    '/demolition/': 'marteau-piqueur',
-    '/compresseurs/': 'compresseur',
-    '/plomberie/': 'poste-a-souder-a-flamme',
-    '/perforation/': 'perforateur',
-    '/pompage/': 'pompe-immergee'
+category_mapping = {
+	'/manutention/chariot-elevateur.html': 'travaux',
+	'/manutention/chariot-elevateur/page2.html': 'travaux',
+	'/manutention/chariot-elevateur/page3.html': 'travaux',
+	'/manutention/materiel-de-magasinage.html': 'travaux',
+	'/manutention/materiel-de-magasinage/page2.html': 'travaux',
+	'/manutention/materiel-de-magasinage/page3.html': 'travaux',
+	'/manutention/materiel-de-magasinage/page4.html': 'travaux',
+	'/manutention/nacelle.html': 'travaux',
+	'/manutention/nacelle/page2.html': 'travaux',
+	'/manutention/nacelle/page3.html': 'travaux',
+	'/manutention/nacelle/page4.html': 'travaux',
+	'/manutention/nettoyage-industriel.html': 'travaux',
+	'/manutention/nettoyage-industriel/page2.html': 'travaux'
 }
 
 
 class Command(BaseCommand):
 	args = ''
-	help = "Imports af-location pro"
+	help = "Imports aprolis pro"
 
-	base_url = 'http://af-location.fr/categorie-produit'
+	base_url = 'http://www.aprolis.com'
 	thread_num = 1
 
-	username='aflocation'
+	username='Aprolis'
 
 	product_list_tag = {
-		"name": "li",
+		"name": "div",
 		"attrs": {
 			"class": "product"
 		}
@@ -48,27 +44,27 @@ class Command(BaseCommand):
 
 	product_url_tag = {
 		"name": "a",
-		"attrs": ""
+		"attrs": {
+			"class": "titleProduct"
+		}
 	}
 
 	image_url_tag = {
 		"name": "img",
 		"attrs": {
-			"class": "attachment-shop_single"
+			"class": "visuelPrincipal"
 		}
 	}
 
 	summary_tag = {
 		"name": "h1",
-		"attrs": {
-			"class": "product_title"
-		}
+		"attrs": ""
 	}
 
 	description_tag = {
-		"name": "section",
+		"name": "div",
 		"attrs": {
-			"class": "product-section"
+			"class": "details"
 		}
 	}
 
@@ -88,7 +84,7 @@ class Command(BaseCommand):
 				product_list = product_list_soup.find_all(self.product_list_tag["name"], self.product_list_tag["attrs"])
 				for product in product_list:
 					product_url = product.find(self.product_url_tag["name"], self.product_url_tag["attrs"]).get('href')
-					self.product_links[product_url] = family
+					self.product_links[self.base_url + product_url] = family
 
 	def _product_crawler(self):
 		from products.models import Product, Picture, Price
@@ -113,7 +109,7 @@ class Command(BaseCommand):
 			
 			#Get the image
 			try:
-				image_url = product_soup.find(self.image_url_tag["name"], self.image_url_tag["attrs"]).get('src')
+				image_url = self.base_url + product_soup.find(self.image_url_tag["name"], self.image_url_tag["attrs"]).get('src')
 				#print "image_url : %s" % image_url
 			except Exception, e:
 				print "pass image: %s" % str(e)
@@ -129,11 +125,10 @@ class Command(BaseCommand):
             
 			# Get the description
 			try:
-				description = product_soup.find(self.description_tag["name"], self.description_tag["attrs"]).text
-				#print "description : %s" % description
+				description = product_soup.find(self.description_tag["name"], self.description_tag["attrs"]).find("p").text
 			except Exception, e:
 				description = " "
-				print 'pass description: %s' % str(e)
+				#print 'pass description: %s' % str(e)
 				pass
 
             # Get the price
@@ -141,8 +136,8 @@ class Command(BaseCommand):
 				try:
 					price = product_soup.find('span', class_='amount').find('span').text
 					price = _to_decimal(price)
-				except Exception, e:
-					print 'pass price: %s' % str(e)
+				except:
+					print 'pass price'
 					pass
 
 			# Create deposit
@@ -152,7 +147,6 @@ class Command(BaseCommand):
 			from products.models import Category, Price
 			from products.choices import UNIT
 			try:
-				#print "try create"
 				product = Product.objects.create(
 					summary=summary, description=description, 
 					deposit_amount=deposit_amount, address=self.address, owner=self.patron,
@@ -172,14 +166,14 @@ class Command(BaseCommand):
 				except HTTPError as e:
 					print '\nerror loading image for object at url:', self.base_url + product_url
 
-                # Add the price to the product
-				if self.price_tag:                
+				# Add the price to the product
+				if self.price_tag:
 					try:
 						if price:
 							product.prices.add(Price(amount=price, unit=UNIT.DAY))
 						#print "price : %s" % product.prices.all()[0]
 					except Exception, e:
-						print 'PRICE ERROR: %s' % str(e)
+						print 'PRICE ERROR'
 						pass
 
                 # sys.stdout.write('.')
@@ -201,7 +195,7 @@ class Command(BaseCommand):
 		try:
 			self.patron = Patron.objects.get(username=self.username)
 		except Patron.DoesNotExist:
-			print "Can't find user 'passionloisir'"
+			print "Can't find user 'aprolis'"
 			return
 
 		# Get the default address of the user to add to the product
@@ -209,23 +203,19 @@ class Command(BaseCommand):
 
 		# Get families list of products
 		self.product_families = [
-			'/electroportatif/',
-			'/elevation/'
-    		'/energie-soudure/',
-    		'/espaces-verts/',
-    		'/nettoyage/',
-    		'/poncage-surfacage/',
-    		'/sciage-percage/',
-    		'/terrassement/',
-    		'/batiment/',
-    		'/chauffageclimatisation/',
-    		'/levagemanutention/',
-    		'/compactage/',
-    		'/demolition/',
-    		'/compresseurs/',
-    		'/plomberie/',
-    		'/perforation/',
-    		'/pompage/',
+			'/manutention/chariot-elevateur.html',
+			'/manutention/chariot-elevateur/page2.html',
+			'/manutention/chariot-elevateur/page3.html',
+			'/manutention/materiel-de-magasinage.html',
+			'/manutention/materiel-de-magasinage/page2.html',
+			'/manutention/materiel-de-magasinage/page3.html',
+			'/manutention/materiel-de-magasinage/page4.html',
+			'/manutention/nacelle.html',
+			'/manutention/nacelle/page2.html',
+			'/manutention/nacelle/page3.html',
+			'/manutention/nacelle/page4.html',
+			'/manutention/nettoyage-industriel.html',
+			'/manutention/nettoyage-industriel/page2.html'
 		]
         
         # List the products
