@@ -10,7 +10,7 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         
-        conn_settings = settings.HAYSTACK_CONNECTIONS['default']
+        conn_settings = settings.HAYSTACK_CONNECTIONS['algolia']
         app_id = conn_settings['APP_ID']
         app_key = conn_settings['API_KEY']
         prefix = conn_settings['INDEX_NAME_PREFIX']
