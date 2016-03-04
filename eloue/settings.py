@@ -503,40 +503,40 @@ SOUTH_MIGRATION_MODULES = {
     'auth': 'eloue.migrations.auth', # here we have Django 1.5+ new auth migration
 }
 
+
 # Haystack configuration
-SEARCH_ENGINE = env('SEARCH_ENGINE', 
-       'eloue.elasticsearch_backend.ElasticsearchSearchEngine')
 
+SEARCH_ENGINE = env('SEARCH_ENGINE', 'elasticsearch')
 
-if SEARCH_ENGINE == 'eloue.elasticsearch_backend.ElasticsearchSearchEngine':
-    HAYSTACK_CONNECTIONS = {                
-       'default': {
-            'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
-            'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
-            'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
-            'KWARGS': {
-                'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
-                'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
-            }
-        },
-    }
-elif SEARCH_ENGINE == 'eloue.search_backends.EloueAlgoliaEngine':
-    HAYSTACK_CONNECTIONS = {                
-        'default': {
-            'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
-            'APP_ID': 'NSV6X2HQLR',
-            'API_KEY': 'b89ed5c201bbb00eddec2b626eff456f',
-            'INDEX_NAME_PREFIX': 'e-loue_',
-            'TIMEOUT': 60 * 5
+HAYSTACK_CONNECTIONS = {                
+   'elasticsearch': {
+        'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
+        'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
+        'KWARGS': {
+            'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
+            'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
         }
-    }
+    },              
+    'algolia': {
+        'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
+        'APP_ID': env('ALGOLIA_APP_ID', None),
+        'API_KEY': env('ALGOLIA_API_KEY', None),
+        'INDEX_NAME_PREFIX': 'e-loue_',
+        'TIMEOUT': 60 * 5
+    },
+}
+
+HAYSTACK_CONNECTIONS['default'] = HAYSTACK_CONNECTIONS[SEARCH_ENGINE]
 
 
+# Algolia configuration
 ALGOLIA_INDICES = {
     "products.product":{
         'attributesToSnippet': ['summary',
                                 'description',],
-        'customRanking': ['desc(average_rate)'],
+        'customRanking': ['desc(average_rate)', 
+                          'desc(comment_count)'],
         'attributesToIndex': ['categories', 
                               'summary',
                               'description',],
@@ -563,7 +563,7 @@ ALGOLIA_INDICES = {
         'hitsPerPage': 12,
         'ranking': [
             'typo',
-            'geo',
+#             'geo',
             'words',
             'filters',
             'proximity',
@@ -573,9 +573,9 @@ ALGOLIA_INDICES = {
         "slaves":{
             "price":{
                 'ranking': [
-                    'asc(price)',
                     'typo',
-                    'geo',
+                    'asc(price)',
+#                     'geo',
                     'words',
                     'filters',
                     'proximity',
@@ -585,9 +585,9 @@ ALGOLIA_INDICES = {
             },
             "-price":{
                 'ranking': [
-                    'desc(price)',
                     'typo',
-                    'geo',
+                    'desc(price)',
+#                     'geo',
                     'words',
                     'filters',
                     'proximity',
@@ -597,9 +597,9 @@ ALGOLIA_INDICES = {
             },
             "-created_at":{
                 'ranking': [
-                    'desc(created_at_timestamp)',
                     'typo',
-                    'geo',
+                    'desc(created_at_timestamp)',
+#                     'geo',
                     'words',
                     'filters',
                     'proximity',

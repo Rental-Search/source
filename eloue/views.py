@@ -45,7 +45,7 @@ class SearchQuerySetMixin(object):
         pk = self.kwargs.get(self.pk_url_kwarg, None)
         slug = self.kwargs.get(self.slug_url_kwarg, None)
         if pk is not None:
-            if is_algolia(queryset): #FIXME move into EloueAlgoliaSearchQuery
+            if is_algolia(): #FIXME move into EloueAlgoliaSearchQuery
                 queryset = queryset.filter(**{"django_id_int": int(pk)})
             else:
                 queryset = queryset.filter(**{DJANGO_ID: pk})

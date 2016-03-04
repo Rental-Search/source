@@ -110,7 +110,7 @@ class FilteredProductSearchForm(SearchForm):
         date_to = search_params.get('date_to', None)
         
         if all((date_from, date_to)):
-            if is_algolia(sqs): #FIXME move into EloueAlgoliaSearchQuery
+            if is_algolia(): #FIXME move into EloueAlgoliaSearchQuery
                     sqs = sqs.filter(created_at_timestamp__lt=date_from,
                                      created_at_timestamp__gt=date_to)
             else:
