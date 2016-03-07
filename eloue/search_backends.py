@@ -3,13 +3,12 @@ from haystack.backends import BaseEngine, BaseSearchQuery, log_query, SQ
 from __builtin__ import NotImplementedError
 from haystack.models import SearchResult
 import re
-from products.models import Product
 from algoliasearch.client import Client
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.datetime_safe import datetime
+import datetime
 from haystack.inputs import AutoQuery
 from haystack.constants import DEFAULT_ALIAS
-from eloue.settings import ALGOLIA_INDICES, HAYSTACK_CONNECTIONS
+from django.conf import settings
 from decimal import Decimal, InvalidOperation
 
 import haystack_algolia
@@ -39,7 +38,12 @@ def model_label(model):
     return "{}.{}".format(model._meta.app_label, model._meta.model_name)
 
 def is_algolia():
-    return HAYSTACK_CONNECTIONS['default']['ENGINE'] == 'eloue.search_backends.EloueAlgoliaEngine'
+    return settings.HAYSTACK_CONNECTIONS['default']['ENGINE'] == 'eloue.search_backends.EloueAlgoliaEngine'
+
+
+class IndexDoesNotExistException(Exception):
+    pass
+
 
 class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
 
@@ -77,14 +81,19 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
         if re.match("\(.*\)", query_string):
             query_string = query_string[1:-1]
         
-        models = kwargs.get('models')
+        models = kwargs.get('models', [])
     
         # TODO query multiple models and choose index
         
         models = list(models)
         
-        if models is None or len(models) > 1:
-            models = [Product, ]
+        if not models or len(models) > 1:
+            raise NotImplementedError("Querying multiple models is not supported")
+        
+        label = model_label(models[0])
+            
+        if label not in settings.ALGOLIA_INDICES:
+            raise IndexDoesNotExistException("Model %s is not configured" % label)
         
         distance_point = kwargs.get('distance_point')
         # TODO get distances
@@ -96,17 +105,17 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
         
         orderby = kwargs.get('sort_by', [])
         
-        if len(orderby) >=1:
+        if orderby:
             if len(orderby) == 1:
                 orderby = ORDERINGS_MAP.get(orderby[0])\
                     if orderby[0] in ORDERINGS_MAP else orderby[0]
             elif len(orderby) > 1:
                 orderby = ORDERINGS_MAP.get(','.join(orderby))
+            
+            master_settings = settings.ALGOLIA_INDICES[label]
                 
-            master_settings = ALGOLIA_INDICES[model_label(models[0])]
-        
             if 'slaves' in master_settings and orderby not in master_settings['slaves']:
-                raise NotImplementedError("Unsupported ordering %s" % orderby)
+                raise IndexDoesNotExistException('Ordering %s is not configured for model %s' % (orderby, label))
         
         index = self._get_index_for(list(models)[0], orderby=orderby)
         
@@ -186,7 +195,12 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
     # full text search query ("query")
     def add_filter(self, query_filter, use_or=False):
     
-        for i,(k,v) in enumerate(query_filter.children):
+        for i, child in enumerate(query_filter.children):
+            
+            if isinstance(child, SQ): 
+                continue
+            
+            k, v = child
             
             if k == 'content':
                 self.search_terms = str(v)
@@ -253,9 +267,9 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
         
         elif filter_type in CMP.keys():
             kv = CMP[filter_type]
-            if isinstance(val, datetime):
+            if isinstance(val, datetime.datetime):
                 # TODO inclusive/exclusive range?
-                prepare = lambda x:(x.created_at-datetime(1970,1,1)).total_seconds()
+                prepare = lambda x:(x-datetime.datetime.fromtimestamp(0)).total_seconds()
 
             elif type(val) in [int, float, Decimal]:
                 pass
@@ -275,7 +289,9 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
         kwargs['search_terms'] = self.search_terms
         return kwargs
         
-            
+
+#TODO remove dependencies on other eloue apps 
+#TODO separate into an app
 class EloueAlgoliaEngine(BaseEngine):
     """
     Provides a minimum of functionality to
