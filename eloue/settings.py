@@ -532,6 +532,14 @@ HAYSTACK_CONNECTIONS['default'] = HAYSTACK_CONNECTIONS[SEARCH_ENGINE]
 
 # Algolia configuration
 ALGOLIA_INDICES = {
+    "accounts.patron":{
+        'attributesForFaceting': ['django_ct', 
+                              'django_id',
+                              'sites',
+                              'sites_exact',
+                              'username',
+                              'date_joined_date',],
+    },
     "products.product":{
         'attributesToSnippet': ['summary',
                                 'description',],
