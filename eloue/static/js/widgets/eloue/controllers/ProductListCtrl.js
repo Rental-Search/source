@@ -162,8 +162,11 @@ define([
                     styles:[
                         {
                             textColor: 'white',
-                            url: '/static/img/markerclustericon.png'
-                        }
+                            textSize: 14,
+                            url: '/static/img/markerclustericon.png',
+                            height: 43,
+                            width: 43,
+                        },
                     ]
                 },
                 control: {}
