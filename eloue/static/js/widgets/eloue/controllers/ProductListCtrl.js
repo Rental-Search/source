@@ -158,7 +158,13 @@ define([
                     maxZoom: 14
                 },
                 clustererOptions:{
-                    maxZoom:13
+                    maxZoom:13,
+                    styles:[
+                        {
+                            textColor: 'white',
+                            url: '/static/img/markerclustericon.png'
+                        }
+                    ]
                 },
                 control: {}
             };
@@ -311,7 +317,6 @@ define([
                             title: res.summary,
                             zIndex: ri
                         };
-                        
                     };
                     var gmap = $scope.map.control.getGMap();
                     
