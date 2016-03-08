@@ -98,7 +98,7 @@ class Product(models.Model):
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
     categories = models.ManyToManyField('Category', related_name='product_categories', through='Product2Category')
     owner = models.ForeignKey(Patron, related_name='products')
-    created_at = models.DateTimeField(blank=True, editable=False) # FIXME should be auto_now_add=True
+    created_at = models.DateTimeField(blank=True, editable=True) # FIXME should be auto_now_add=True
     sites = models.ManyToManyField(Site, related_name='products')
     payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
