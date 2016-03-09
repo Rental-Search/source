@@ -14,6 +14,7 @@ from eloue.admin import CurrentSiteAdmin
 from accounts.models import Patron, Pro, Address, PhoneNumber, PatronAccepted, ProPackage, Subscription, OpeningTimes, Billing, ProAgency, ProReport, Ticket, Campaign
 from accounts.forms import PatronChangeForm, PatronCreationForm
 from products.models import Product
+from django.core.urlresolvers import reverse, reverse_lazy
 
 log = logbook.Logger('eloue')
 
@@ -128,19 +129,19 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     products_count.short_description = _(u"Nombre d'annonce")
 
     def owner_products(self, obj):
-        owner_product = '<a href="/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.pk
+        owner_product = '<a href="/edit/products/product/?q=%s" target="_blank">Lien vers les annonces</a>' % obj.email
         return _(owner_product)
     owner_products.allow_tags = True
     owner_products.short_description = _(u"Objets")
 
     def owner_car_products(self, obj):
-        owner_car_product = '<a href="/edit/products/carproduct/?q=%s" target="_blank">Lien vers les annonces de voiture</a>' % obj.pk
+        owner_car_product = '<a href="/edit/products/carproduct/?q=%s" target="_blank">Lien vers les annonces de voiture</a>' % obj.email
         return _(owner_car_product)
     owner_car_products.allow_tags = True
     owner_car_products.short_description = _(u"Voitures")
 
     def owner_realestate_products(self, obj):
-        owner_realestate_product = '<a href="/edit/products/realestateproduct/?q=%s" target="_blank">Lien vers les annonces de logement</a>' % obj.pk
+        owner_realestate_product = '<a href="/edit/products/realestateproduct/?q=%s" target="_blank">Lien vers les annonces de logement</a>' % obj.email
         return _(owner_realestate_product)
     owner_realestate_products.allow_tags = True
     owner_realestate_products.short_description = _(u"Logements")
@@ -206,7 +207,7 @@ class AddressAdmin(admin.ModelAdmin):
     list_display = ('patron', 'address1', 'address2', 'zipcode', 'city', 'country', 'is_geocoded')
     list_filter = ('country',)
     save_on_top = True
-    search_fields = ('address1', 'address2', 'zipcode', 'city')
+    search_fields = ('address1', 'address2', 'zipcode', 'city', 'patron__username')
     fieldsets = (
         (None, {'fields': ('address1', 'address2', 'zipcode', 'city')}),
         (_('Geolocation'), {'classes': ('collapse',), 'fields': ('position',)})
@@ -319,11 +320,13 @@ class ProAdmin(PatronAdmin):
     list_display = ('company_name', 'closed_ticket', 'last_report_date', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
     list_filter = ()
     inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
-    readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
+#     readonly_fields = ('import_products_link', 'store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
+    readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket', 'regular_expression_filter',)
     fieldsets = (
         (_('Company info'), {'fields': ('company_name', 'civility', 'first_name', 'last_name', 'username', 'is_professional', 'password')}),
-        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url')}),
-        (_('Boutique'), {'fields': ('store_link', 'pro_online_booking', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
+        (_('Contact'), {'fields': ('email', 'default_number', 'default_address', 'url', 'pro_online_booking')}),
+#         (_('Boutique'), {'fields': ('import_products_link', 'store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites')}),
+        (_('Boutique'), {'fields': ('store_link', 'edit_product_link', 'products_count', 'slug', 'avatar',  'about', 'sites', 'regular_expression_filter')}),
         (_('Permissions'), {
             'classes': ('collapse',),
             'fields': ('is_staff', 'is_active', 'is_superuser', 'is_subscribed', 'new_messages_alerted', 'user_permissions')
@@ -351,6 +354,13 @@ class ProAdmin(PatronAdmin):
                 pass
         formset.save_m2m()
 
+#     def import_products_link(self, obj):
+#         url = reverse("admin:products_product_import") + "?pro=%s" % (obj.pk, )
+#         import_link = '<a href="%s" target="_blank">Importer des annonces</a>' % (url, )
+#         return import_link
+#     import_products_link.allow_tags = True
+#     import_products_link.short_description = _(u"import d'annonces")
+    
     def store_link(self, obj):
         store_link = '<a href="%s" target="_blank">Voir la boutique</a>' % obj.get_absolute_url()
         return store_link   
@@ -362,7 +372,7 @@ class ProAdmin(PatronAdmin):
     products_count.short_description = _(u"nombre d'annonce")
 
     def edit_product_link(self, obj):
-        edit_product_link = '<a href="/edit/products/product/?q=%s" target="_blank">Editer les annonces</a>' % obj.pk
+        edit_product_link = '<a href="/edit/products/product/?q=%s" target="_blank">Editer les annonces</a>' % obj.email
         return edit_product_link
     edit_product_link.allow_tags = True
     edit_product_link.short_description = _(u"annonces")
@@ -396,6 +406,15 @@ class ProAdmin(PatronAdmin):
             return False
     closed_ticket.short_description = _(u"tickets résolus")
     closed_ticket.boolean = True
+
+    def regular_expression_filter(self, obj):
+        regular_expression = [obj.slug]
+        if obj.products.all():
+            regular_expression += ["%s" % product.pk for product in obj.products.all()]
+        return '<p style="width: 500px; overflow-y: hidden">%s</p>' % "|".join(regular_expression)
+
+    regular_expression_filter_description = _(u"filtre expression régulière")
+    regular_expression_filter.allow_tags = True
 
 
 try:

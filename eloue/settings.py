@@ -118,7 +118,7 @@ LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
-DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14])
+DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14, 15])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -165,7 +165,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'eloue.context_processors.site',
     'eloue.context_processors.debug',
     'eloue.context_processors.unread_message_count_context',
-    'eloue.context_processors.facebook_context'
+    'eloue.context_processors.facebook_context',
+    'eloue.context_processors.analytics_context',
 )
 
 
@@ -247,6 +248,7 @@ INSTALLED_APPS = (
     'south', # South must be the last in the list of applications that contains models
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
     'core',
+    'import_export',
 )
 
 if DEBUG_TOOLBAR:
@@ -487,9 +489,6 @@ PIPELINE_JS = {
     },
 }
 
-
-
-
 # South configuration
 SOUTH_TESTS_MIGRATE = env('SOUTH_TESTS_MIGRATE', False)
 SOUTH_MIGRATION_MODULES = {
@@ -499,8 +498,11 @@ SOUTH_MIGRATION_MODULES = {
 }
 
 # Haystack configuration
-HAYSTACK_CONNECTIONS = {
-    'default': {
+
+SEARCH_ENGINE = env('SEARCH_ENGINE', 'elasticsearch')
+
+HAYSTACK_CONNECTIONS = {                
+   'elasticsearch': {
         'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
         'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
         'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
@@ -508,8 +510,110 @@ HAYSTACK_CONNECTIONS = {
             'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
             'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
         }
+    },              
+    'algolia': {
+        'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
+        'APP_ID': env('ALGOLIA_APP_ID', None),
+        'API_KEY': env('ALGOLIA_API_KEY', None),
+        'INDEX_NAME_PREFIX': 'e-loue_',
+        'TIMEOUT': 60 * 5
     },
 }
+
+HAYSTACK_CONNECTIONS['default'] = HAYSTACK_CONNECTIONS[SEARCH_ENGINE]
+
+# Algolia configuration
+ALGOLIA_INDICES = {
+    "products.product":{
+        'attributesToSnippet': ['summary',
+                                'description',],
+        'customRanking': ['desc(average_rate)', 
+                          'desc(comment_count)'],
+        'attributesToIndex': ['categories', 
+                              'summary',
+                              'description',],
+        'attributesForFaceting': [
+            'algolia_categories.lvl0',
+            'algolia_categories.lvl1',
+            'algolia_categories.lvl2',
+            'categories',
+            'categories_exact',
+            'django_id_int',
+            'is_archived',
+            'is_good',
+            'pro_owner',
+            'sites',
+            'sites_exact',
+            'price',
+            'price_exact',
+            'owner',
+            'owner_exact',
+            'created_at_timestamp'],
+        'attributesToHighlight': ['summary',
+                                  'description',],
+        'removeStopWords':True,
+        'hitsPerPage': 12,
+        'ranking': [
+            'typo',
+#             'geo',
+            'words',
+            'filters',
+            'proximity',
+            'attribute',
+            'exact',
+            'custom'],
+        "slaves":{
+            "price":{
+                'ranking': [
+                    'typo',
+                    'asc(price)',
+#                     'geo',
+                    'words',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "-price":{
+                'ranking': [
+                    'typo',
+                    'desc(price)',
+#                     'geo',
+                    'words',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "-created_at":{
+                'ranking': [
+                    'typo',
+                    'desc(created_at_timestamp)',
+#                     'geo',
+                    'words',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+            "distance":{
+                'ranking': [
+                    'typo',
+                    'geo',
+                    'words',
+                    'filters',
+                    'proximity',
+                    'attribute',
+                    'exact',
+                    'custom'],
+            },
+        },
+    },            
+}
+
 #HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 HAYSTACK_SIGNAL_PROCESSOR = 'eloue.search.HaystackSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
@@ -518,7 +622,6 @@ SEARCH_QUEUE_LOG_LEVEL = logging.INFO
 QUEUE_BACKEND = env('QUEUE_BACKEND', 'dummy')
 QUEUE_REDIS_CONNECTION = env('QUEUE_REDIS_CONNECTION', 'localhost:6379')
 QUEUE_REDIS_DB = env('QUEUE_REDIS_DB', 1)
-
 
 REST_FRAMEWORK = {
 #     'DEFAULT_RENDERER_CLASSES': (
@@ -769,6 +872,15 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', tuple())
 
 TEST_MODE = False
 
+# Analytics services IDs. Replace these for each site
+ANALYTICS = {
+             'FACEBOOK_ID': '631094037033631',
+             'GOOGLE_ID': 'UA-8258979-1',
+             'SEGMENT_ID': 'CK4wf1QXZEjeqFRo75zZQ7DfZWzYJwHC',
+             }
+
+if not DEBUG:
+    IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.MediaStorage"
 
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')

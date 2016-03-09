@@ -1,0 +1,35 @@
+-load staticfiles i18n
+
+.container
+    .row
+        .col-sm-6
+            .video(data-toggle="modal", data-target="#videoModal")
+                .smoke
+                img(src="{% static 'img/video-screen-dressbooking.png' %}")
+                span.btn-play
+        .col-sm-6
+            .description
+                {% blocktrans %}
+                h3
+                    | Dressbooking c'est simple, rapide
+                    br
+                    | et sécurisé
+                {% endblocktrans %}
+                {% url 'howto' as howto_url %}
+                {% blocktrans %}
+                p.lg-ln-height
+                    | Avec Dressbooking, mettez en location vos tenues de cérémonies et accessoires quand vous ne les portez pas: robes de mariée, robes de cocktail, smokings, jaquettes, bijoux, chaussures... Gagnez de l'argent en toute simplicté et sans aucun risque&nbsp;: nos locations sont assurées automatiquement par Allianz et sécurisées !
+                a(href="{{ howto_url }}").link-success-color en savoir plus
+                {% endblocktrans %}
+
+.modal.fade#videoModal(tabindex="-1", role="dialog", aria-hidden="true")
+    .modal-dialog.large
+        .modal-content
+            .modal-header
+                button(type="button", data-dismiss="modal").close
+                    span(aria-hidden="true")&times;
+                    span.sr-only Close
+                h4.modal-title {% trans "Présentation de Dressbooking" %}
+            .modal-body
+                input(id="videoId", value="a3T8q5E60xg", type="hidden")
+                #videoContainer

@@ -29,12 +29,45 @@ class LocationMultiValueField(indexes.SearchField):
             return None
 
 
+class AlgoliaLocationField(indexes.LocationField):
+    field_type = 'location'
+    
+    index_fieldname = "_geoloc"
+    
+    def prepare(self, obj):
+        from haystack.utils.geo import ensure_point
+
+        value = super(indexes.LocationField, self).prepare(obj)
+
+        if value is None:
+            return None
+
+        pnt = ensure_point(value)
+        pnt_lat, pnt_lng  = pnt.get_coords()
+        return {"lat":pnt_lat, "lng":pnt_lng}
+
+
+class AlgoliaTagsField(indexes.MultiValueField):
+    
+    index_fieldname = "_tags"
+    
+    def prepare(self, obj):
+        
+        category = obj._get_category()
+        if category:
+            qs = category.get_ancestors(ascending=False, include_self=True)
+            return tuple(qs.values_list('slug', flat=True))
+        
+        return tuple()
+            
+
 class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
     location = indexes.LocationField(model_attr='address__position', null=True)
     locations = LocationMultiValueField()
     categories = indexes.MultiValueField(faceted=True, null=True)
     created_at = indexes.DateTimeField(model_attr='created_at')
+    created_at_timestamp = indexes.DateTimeField(model_attr='created_at')
     created_at_date = indexes.DateField(model_attr='created_at__date')
     description = indexes.EdgeNgramField(model_attr='description')
     city = indexes.CharField(model_attr='address__city', indexed=False)
@@ -71,6 +104,13 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     need_insurance = indexes.BooleanField(default=True)
 
+    django_id_int = indexes.IntegerField(model_attr='id')
+    algolia_categories = indexes.MultiValueField(faceted=True, null=True)
+    _geoloc = AlgoliaLocationField(model_attr='address__position', null=True)
+    _tags = AlgoliaTagsField(model_attr='categories', null=True)
+    
+    def get_updated_field(self):
+        return "created_at"
     
     def prepare_locations(self, obj):
         agencies = obj.owner.pro_agencies.all()
@@ -101,6 +141,22 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if category:
             qs = category.get_ancestors(ascending=False, include_self=True)
             return tuple(qs.values_list('slug', flat=True))
+    
+    def prepare_algolia_categories(self, obj):
+        category = obj._get_category()
+        if category:
+            cats = list(category\
+                        .get_ancestors(ascending=False, include_self=True)\
+                        .values_list('name', flat=True))
+            
+            cats_dict = {}
+            for i in range(len(cats)):
+                cats_dict['lvl'+str(i)] = " > ".join(cats[:i+1])
+            
+            return cats_dict
+        
+    def prepare_created_at_timestamp(self, obj):
+        return (obj.created_at-datetime(1970,1,1)).total_seconds()
     
     def prepare_ends_unavailable(self, obj):
         started_at = datetime.now()

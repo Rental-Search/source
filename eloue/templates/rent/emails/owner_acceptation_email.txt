@@ -1,4 +1,4 @@
-{% load i18n %}{% blocktrans with booking.owner.get_full_name as owner_name and booking.borrower.get_full_name as borrower_name and booking.product.summary as summary and booking.product.category.name as category and booking.product.summary as summary and booking.borrower.phones.all|first as borrower_phone and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration and booking.borrower.email as borrower_email and site.name as site_name %}
+{% load i18n %}{% blocktrans with booking.owner.get_full_name as owner_name and booking.product.summary as summary and booking.product.category.name as category and booking.started_at|date:"DATETIME_FORMAT" as starting_at and booking.started_at|timesince:booking.ended_at as duration %}
 Bonjour {{ owner_name }},
 
 Vous venez d'accepter la proposition de location suivante
@@ -7,8 +7,10 @@ Type : {{ category }}
 Objet : {{ summary }}
 Début de la location : {{ starting_at }} 
 Durée de la location : {{ duration }}
- 
-Vous trouverez en pièce jointe votre contrat de location. Il ne vous reste donc plus qu'à contacter {{ borrower_name }} pour effectuer la location.
+{% endblocktrans %}
+
+{% if not booking.owner.has_pro_subscription %} Vous trouverez en pièce jointe votre contrat de location. {% endif %} {% blocktrans with booking.borrower.get_full_name as borrower_name  and booking.borrower.phones.all|first as borrower_phone and booking.borrower.email as borrower_email and site.name as site_name %}
+Il ne vous reste donc plus qu'à contacter {{ borrower_name }} pour effectuer la location.
  
 Numéro de téléphone : {{ borrower_phone }}
 Adresse électronique : {{ borrower_email }}

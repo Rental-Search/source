@@ -98,7 +98,7 @@ class Product(models.Model):
     category = models.ForeignKey('Category', verbose_name=_(u"Catégorie"), related_name='products')
     categories = models.ManyToManyField('Category', related_name='product_categories', through='Product2Category')
     owner = models.ForeignKey(Patron, related_name='products')
-    created_at = models.DateTimeField(blank=True, editable=False) # FIXME should be auto_now_add=True
+    created_at = models.DateTimeField(blank=True, editable=True) # FIXME should be auto_now_add=True
     sites = models.ManyToManyField(Site, related_name='products')
     payment_type = models.PositiveSmallIntegerField(_(u"Type de payments"), default=PAYMENT_TYPE.PAYPAL, choices=PAYMENT_TYPE)
     on_site = CurrentSiteProductManager()
@@ -614,10 +614,11 @@ class Picture(models.Model):
         source='image',
         processors=[
             processors.Transpose(processors.Transpose.AUTO),
-            processors.SmartResize(width=300, height=200),
+            processors.SmartResize(width=300, height=300),
             processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
+
     home = ImageSpecField(
         source='image',
         processors=[
@@ -634,6 +635,17 @@ class Picture(models.Model):
             processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
+
+    db_display = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=450, height=650),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
+
+
 
     def save(self, *args, **kwargs):
         if not self.created_at:
@@ -682,6 +694,15 @@ class Category(MPTTModel):
         ],
     )
 
+    home = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=265, height=250),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
+
     on_site = CurrentSiteManager()
     objects = models.Manager()
     tree = TreeManager()
@@ -717,6 +738,7 @@ class Category(MPTTModel):
         conformity = None
         eloue_site_id = 1
         gosport_site_id = 13
+        dressbooking_site_id = 15
         while category and not conformity:
             try:
                 conformity = CategoryConformity.objects.filter(
@@ -728,7 +750,11 @@ class Category(MPTTModel):
         if not conformity:
             return None
         else:
-            return conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else None
+            conformity_category = conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else conformity.gosport_category if site_id == dressbooking_site_id else None
+            if conformity_category and conformity_category.sites.filter(pk=site_id):
+                return conformity_category
+            else:
+                return None
 
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')

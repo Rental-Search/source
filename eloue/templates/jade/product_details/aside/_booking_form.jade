@@ -1,7 +1,10 @@
 -load i18n
 
 .section-header
-    h4 {% if is_pro %} {% trans "Demandez un devis" %} {% else %} {% trans "Réservez en ligne" %} {% endif %}
+    {% if is_pro %} 
+    span.badge-pro.pull-right pro 
+    {% endif %}
+    h4 {% trans "Réservez en ligne" %}
 form.form-inline.section-body.text-center
     .part
         p
@@ -9,16 +12,16 @@ form.form-inline.section-body.text-center
             big.ng-cloak.text-primary &nbsp;{% verbatim %}{{pricePerDay}}{% endverbatim %}&nbsp;{% trans "/jour" %}
         include ../../_date_picker_border
         span(ng-show="dateRangeError").ng-cloak.text-danger {% verbatim %}{{dateRangeError}}{% endverbatim %}
-        {% if not is_pro %}
+        
         p(ng-show="available").ng-cloak.available {% trans "Cet article est disponible à ces dates" %}
         p(ng-show="!available").ng-cloak.available.unavailable {% trans "Cet article n'est pas disponible à ces dates" %}
-        {% endif %}
+        
     .part
         p
             | {% trans "Durée de la location" %}&nbsp;:&nbsp;
             b.period-days.ng-cloak {% verbatim %}{{duration}}{% endverbatim %}
         p.price
-            | {% trans "Prix" %} {% if is_pro %}{% trans "indicatif" %}{% else %}{% trans "de la location" %}{% endif %}&nbsp;:
+            | {% trans "Prix" %} {% trans "de la location" %}&nbsp;:
             big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{% verbatim %}{{ bookingPriceCurrency }}{% endverbatim %}
         {% if not is_pro and product.need_insurance %}
         p {% trans "Assurance incluse" %}
@@ -27,26 +30,4 @@ form.form-inline.section-body.text-center
         a(href = "", data-dismiss="modal", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success.calendar-ok
             i.flaticon.stroke.calendar-2glio
             | {% if is_pro %}{% trans "Envoyez" %}{% else %}{% trans "Réservez" %}{% endif %}
-        p.mrg-v-1
-            if is_pro
-                {% blocktrans %}
-                | Vous allez envoyer
-                br
-                | une demande de location. 
-                br
-                | &ndash;
-                br
-                | Le loueur vous recontactera 
-                br
-                | très rapidement 
-                br
-                | pour vous confirmer la location.
-                br
-                | &ndash;
-                br
-                | Le paiement se fera directement 
-                br
-                | chez le loueur.
-                {% endblocktrans %}
-        //-
-            small Cette somme vous sera débitée lorsque le propriétaire validera la location
+        

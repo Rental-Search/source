@@ -1,0 +1,18 @@
+.container.text-center.indent-v-lg
+  table.calendar.bd-full
+    thead
+      tr.text-white.text-uppercase
+        td.empty
+        td.bg-gray-dark: b pack Dressbooking Location pro premium
+    tbody.text-gray-strong
+      -var table_data = [["Importation automatique de votre catalogue", "-"], ["Nombre d’annonces illimité", "+"], ["Annonces visibles 24h/24 par nos membres", "+"], ["Mise en place rapide de votre boutique", "-"], ["Affichage de votre numéro de téléphone,<br> de votre site web et de votre adresse postale", "-"], ["Assistance & Conseils via notre Service Client dédié Pro<br> (mise à jour de vos annonces, modification de vos prix, ...)", "-"], ["Référencement Google optimisé", "-"], ["Affichage prioritaire sur nos résultats de recherche", "-"], ["Présence dans notre annuaire de loueurs Pro<br> & mises en avant sur notre page Facebook et nos newsletters", "-"]]
+      each functionalities, classic in table_data
+        tr
+          td {{ functionalities|safe }}
+          td
+            i.flaticon.solid.checkmark-2.text-success.icon-lg
+
+  p.text-primary.indent-t-md
+    | Vous payez seulement un abonnement mensuel : pas de pourcentage sur vos locations, pas de frais de résiliation...
+    br
+    u: b Il n’y a  aucun frais caché&nbsp;!
