@@ -295,7 +295,7 @@ class TestEloueAlgoliaEngine(object):
         
         assert search_params.index.index_name == prefix + product_label
         assert search_params.params['filters'] == 'is_archived:false AND sites=%s' % (settings.SITE_ID, )
-        assert set(search_params.params['facets']) == set(['sites_exact','categories_exact','owner_exact', 'price_exact'])
+        assert set(search_params.params['facets']) == set(['sites_exact','categories_exact','owner_exact', 'price_exact', 'pro_owner_exact'])
         
         # patrons search
         

@@ -12,7 +12,7 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
     ng-repeat=("product in product_list track by product.django_id" if ng else None),
     locationY="{{ product.locations.0 }}",
     locationX="{{ product.locations.1 }}",
-    name="{{ product.summary }}")
+    name="{{ product.summary|title }}")
   .section-body
     .thumbnail-img
       a(ng-href="{{ product.url }}", href=(product.url if not ng else None)).img-wrapper 
@@ -43,7 +43,8 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
           //-TODO url django function?
     .info
       h6
-        a(ng-href="{{ product.url }}", href=(product.url if not ng else None)) {{ product.summary }} 
+        //- TODO check if this is really safe
+        a(ng-href="{{ product.url }}", href=(product.url if not ng else None), ng-bind-html="product.summary|title|safe") {{ product.summary|title|safe }}
         if ng
           span(ng-if="product.pro_owner").badge-pro pro
         else
@@ -53,8 +54,10 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
         if ng
           span(ng-if='product.agencies') &nbsp;
           //- TODO title filter
-          span(ng-if='!product.agencies') {{ product.city }} 
+          {% verbatim %}
+          span(ng-if='!product.agencies') {{ product.city|title }}
             span(ng-if='product.city && product.zipcode'), {{ product.zipcode }}
+          {% endverbatim %}
         else
           if product.agencies
             &nbsp;
@@ -62,9 +65,10 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
             {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
       if ng
         //- TODO remove verbatim
-        p(ng-if='product.description').full_description {% verbatim %} {{ product.description|limitTo:145 }} {% endverbatim %}
+        //- TODO check if this is really safe
+        p(ng-if='product.description', ng-bind-html="product.description|safe").full_description
         p(ng-if='!product.description').full_description &nbsp;
       else
-        p.full_description {% if product.description %} {{ product.description|truncatechars:145 }} {% else %} &nbsp; {% endif %}
+        p.full_description {% if product.description %} {{ product.description|safe }} {% else %} &nbsp; {% endif %}
 
 {% endangularjs %}

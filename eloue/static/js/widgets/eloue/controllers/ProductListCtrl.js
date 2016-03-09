@@ -1,6 +1,5 @@
 define([
     "eloue/app",
-//    "../../../common/eloue/services/MapsService",
     "../../../common/eloue/services/UtilsService",
     "algoliasearch-helper"
 ], function (EloueWidgetsApp, UtilsService, algoliasearchHelper) {
@@ -31,27 +30,34 @@ define([
     function geoJsonToAlgolia(point){
         return point.coordinates[1]+','+point.coordinates[0];
     };
-    
-    /* 
-     * http://ericclemmons.com/angular/angular-trust-filter/
-     */
-    EloueWidgetsApp.filter('trust', [
+        
+    EloueWidgetsApp.filter('safe', [
       '$sce',
       function($sce) {
         return function(text, type) {
-          // Defaults to treating trusted text as `html`
           return $sce.trustAs(type || 'html', text);
         }
       }
     ]);
+    
+    EloueWidgetsApp.filter('title', [
+	function() {
+		return function(text) {
+			var words = text.split(" ");
+			for (var i=0; i<words.length; i++){
+				words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+			}
+			return words.join(" ");
+		}
+    }]);
+                                  
     
     EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
         uiGmapGoogleMapApiProvider.configure({
             v: '3.exp',
             libraries: 'places',
             language: 'fr-FR',
-            region: 'FR',
-            key: 'AIzaSyD3LwG42VzGikefts9fR1AfbhmQmeRLHvU'
+            region: 'FR'
         });
     }]);
     
@@ -104,13 +110,14 @@ define([
         "$timeout",
         "$document",
         "$location",
+        "$filter",
         "$log",
         "UtilsService",
         "SearchConstants",
         "uiGmapGoogleMapApi",
         "uiGmapIsReady",
         "algolia",
-        function ($scope, $window, $timeout, $document, $location, $log, 
+        function ($scope, $window, $timeout, $document, $location, $filter, $log, 
                 UtilsService, SearchConstants, uiGmapGoogleMapApi, uiGmapIsReady, algolia) {
             
             $scope.search_max_range = 1000;
@@ -141,8 +148,8 @@ define([
             $scope.search = algoliasearchHelper(client, $scope.get_index(), SearchConstants.PARAMETERS);
             $scope.search.addDisjunctiveFacetRefinement("pro_owner", true);
             $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
+            $scope.search.addDisjunctiveFacetRefinement("sites", 1);
             $scope.search.addFacetRefinement("is_archived", false);
-            $scope.search.addFacetRefinement("is_good", true);
             $scope.search_default_state = $scope.search.getState();
             
             /*
@@ -204,12 +211,6 @@ define([
 
                 var placeInputHead = $document[0].getElementById('geolocate');
                 var geoc = new maps.Geocoder();
-                
-//                var ac_params = {
-//                    componentRestrictions: {country: 'fr'},
-//                    types: ['geocode']
-//                };
-                
 
                 var ac_params = {
                     componentRestrictions: {country: 'fr'}
@@ -221,8 +222,6 @@ define([
                     instances.forEach(function(inst) {
                         var map = inst.map;
                        
-
-
                         $scope.map.options.mapTypeId = maps.MapTypeId.ROADMAP;
                         
                         var autocompleteChangeListener = function(autocomplete) {
@@ -690,6 +689,13 @@ define([
                 $scope.search_result_count = result.nbHits;
                 $scope.product_list = result.hits;
                 
+                for (var ri=0; ri<$scope.product_list.length; ri++){
+                    var res = $scope.product_list[ri];
+                    for (var k in res['_highlightResult']){
+                    	res[k] = res['_highlightResult'][k]['value'];
+                    }
+                }
+                
                 $scope.results_per_page = result.hitsPerPage;
                 
                 if ($scope.search_result_count){
@@ -763,20 +769,26 @@ define([
             $scope.map.boundsChangedByRender = false;
             $scope.ui_pristine = !$scope.orig_params_present();
             $scope.price_slider = {
-                min: 0,
-                max: 1000,
+//                min: 0,
+//                max: 1000,
                 options: {
-                    floor: 0,
-                    ceil: 1000,
-                    onEnd: $scope.refinePrices
+//                    floor: 0,
+//                    ceil: 1000,
+                    onEnd: $scope.refinePrices,
+                    translate: function(value) {
+                        return value + " €";
+                    }
                 }
             };
             $scope.range_slider = {
-                max: $scope.search_max_range,
+//                max: $scope.search_max_range,
                 options: {
                     floor: 1,
                     ceil: $scope.search_max_range,
-                    onEnd: $scope.refineRange
+                    onEnd: $scope.refineRange,
+                    translate: function(value) {
+                        return value + " km";
+                    }
                 }    
             };            
 

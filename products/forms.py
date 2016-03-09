@@ -111,6 +111,7 @@ class FilteredProductSearchForm(SearchForm):
         
         if all((date_from, date_to)):
             if is_algolia(): #FIXME move into EloueAlgoliaSearchQuery
+                    # FIXME this is wrong:
                     sqs = sqs.filter(created_at_timestamp__lt=date_from,
                                      created_at_timestamp__gt=date_to)
             else:

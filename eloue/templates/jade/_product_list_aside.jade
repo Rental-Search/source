@@ -1,6 +1,8 @@
 -load category facets
 -load i18n
 
+
+//- TODO remove hardcoded CSS link
 link(rel="stylesheet", type="text/css", href="/static/bower_components/angularjs-slider/dist/rzslider.css")
 
 style.
@@ -32,15 +34,14 @@ script(type="text/ng-template" id="_category_tree_item.html").
 
   //- .slider
   label.caption(for="range-slider") {% trans "rayon" %}
-  {% verbatim %}
-  rzslider(rz-slider-model="range_slider.max", ng-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
-  {% endverbatim %}
+
+  //- input#range(type="hidden", name="r", ng-value="{{ form.cleaned_data.r|floatformat:'0' }}", ng-model='range_slider.max', disabled)
+  //- input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
+  rzslider(ng-init="range_slider.max={% firstof form.cleaned_data.r|floatformat:'0' form.max_range|floatformat:'0' %} ", ng-model="range_slider.max", rz-slider-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
 
   //-input#where(ng-model="search_location", name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
 
   
-  //- input#range(type="hidden", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}", disabled)
-  //- input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
 
   //-label.caption(for="start-date") date de début
   //-.date-picker
@@ -58,24 +59,23 @@ script(type="text/ng-template" id="_category_tree_item.html").
 
   
   label#price-label.caption(for="price-slider") prix
-  {% verbatim %}
-  rzslider(rz-slider-model="price_slider.min", rz-slider-high="price_slider.max", ng-model="price_slider.min", rz-slider-options="price_slider.options", ng-change="submitForm()")
-  {% endverbatim %}
+  rzslider(ng-init="price_slider.min={% firstof form.cleaned_data.price_from|stringformat:'.2f' price_min|stringformat:'.2f' %} ; price_slider.max={% firstof form.cleaned_data.price_to|stringformat:'.2f' price_max|stringformat:'.2f' %} ; price_slider.options.floor={{ price_min|stringformat:'.2f' }} ; price_slider.options.ceil={{ price_max|stringformat:'.2f' }}", rz-slider-model="price_slider.min", rz-slider-high="price_slider.max", ng-model="price_slider.min", rz-slider-options="price_slider.options", ng-change="submitForm()")
+
   
-  //- input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
-  //- input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
-  //- input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
+  //-input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
+  //-input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
+  //-input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
 
   p.caption {% trans "loueurs" %}
-  .checkbox(ng-if="owner_type.part_count", ng-cloak)
+  .checkbox(ng-init="owner_type.part_count={{ facets.fields_dict.pro_owner.false }}", ng-show="owner_type.part_count", ng-cloak)
     label(for="particular")
       {% trans "particuliers" as particular %}
-      input(type="checkbox", name="renter", ng-change="refineRenterPart(owner_type.part)", ng-model="owner_type.part", ng-disabled="noProPartChoice()")#particular
+      input(ng-init='owner_type.part={% if renter != "professionnels" %}true{% else %}false{% endif %}', type="checkbox", name="renter", ng-change="refineRenterPart(owner_type.part)", ng-model="owner_type.part", ng-disabled="noProPartChoice()")#particular
       span.flaticon.stroke.checkmark-1
     {% trans " Particuliers" %} {% verbatim %} {{ " ("+owner_type.part_count+")" }} {% endverbatim %}
-  .checkbox(ng-if="owner_type.pro_count", ng-cloak)
+  .checkbox(ng-init="owner_type.pro_count={{ facets.fields_dict.pro_owner.true }}", ng-show="owner_type.pro_count", ng-cloak)
     label(for="professional")
-      input(type="checkbox", name="renter", ng-change="refineRenterPro(owner_type.pro)", ng-model="owner_type.pro", ng-disabled="noProPartChoice()")#professional
+      input(ng-init='owner_type.pro={% if renter != "particuliers" %}true{% else %}false{% endif %}', type="checkbox", name="renter", ng-change="refineRenterPro(owner_type.pro)", ng-model="owner_type.pro", ng-disabled="noProPartChoice()")#professional
       span.flaticon.stroke.checkmark-1
     {% trans " Professionnels" %} {% verbatim %} {{ " ("+owner_type.pro_count+")" }} {% endverbatim %}
 

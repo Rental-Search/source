@@ -154,10 +154,21 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
         }
 
     
-    def _process_results(self, raw_results, result_class, **kwargs):
+    def _process_results(self, raw_results, result_class, **kwargs): #TODO tests
+        
+        # highlighting
+        
+        for hit in raw_results['hits']:
+            hit.update({k:v['value'] for k,v in hit["_highlightResult"].items()})
+        
+        # main processing
+        
         results = super(EloueAlgoliaSearchBackend, self)._process_results(raw_results, result_class)
         
+        # facet stats
+        
         fields = {}
+        fields_dict = {}
         
         if "facets" in raw_results and "facets_stats" in raw_results:
             for facet in raw_results["facets"]:
@@ -167,11 +178,14 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
                 except InvalidOperation:
                     fields[facet] = [(k,v) 
                                      for k,v in raw_results["facets"][facet].items()]
+                    
+                fields_dict[facet] = dict(fields[facet])
         
         results['facets'] = {
                              'dates':{},
                              'fields':fields,
                              'queries':{},
+                             'fields_dict':fields_dict,
                              }
         
         return results
