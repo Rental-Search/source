@@ -759,6 +759,10 @@ class Category(MPTTModel):
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
     
+    
+    def get_algolia_path(self):
+        return " > ".join([cat.name for cat in self.get_ancestors(include_self=True)])
+    
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
         if ancestors_slug:

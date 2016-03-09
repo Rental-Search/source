@@ -17,14 +17,14 @@ script(type="text/ng-template" id="_category_tree_item.html").
       </a>
       <div ng-if="category['isRefined']" ng-include="'_category_tree_item.html'"></div>
     </li>
-  </ul>  
+  </ul>
 {% endverbatim %}
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
   label.caption {% trans "catégories" %}
   .clear-selector
-    div(ng-show="search_result_count", ng-include="'_category_tree_item.html'")
+    div(ng-show="search_result_count", ng-init="search_category_path='{{breadcrumbs.categorie.algolia_path}}'", ng-include="'_category_tree_item.html'")
 
   label.caption(for="where") {% trans "carte" %}
   .map-container
@@ -37,7 +37,7 @@ script(type="text/ng-template" id="_category_tree_item.html").
 
   //- input#range(type="hidden", name="r", ng-value="{{ form.cleaned_data.r|floatformat:'0' }}", ng-model='range_slider.max', disabled)
   //- input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
-  rzslider(ng-init="range_slider.max={% firstof form.cleaned_data.r|floatformat:'0' form.max_range|floatformat:'0' %} ", ng-model="range_slider.max", rz-slider-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
+  rzslider(ng-init="range_slider.max={% firstof form.cleaned_data.r|floatformat:'0' form.max_range|floatformat:'0' %}", ng-model="range_slider.max", rz-slider-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
 
   //-input#where(ng-model="search_location", name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
 
@@ -59,7 +59,7 @@ script(type="text/ng-template" id="_category_tree_item.html").
 
   
   label#price-label.caption(for="price-slider") prix
-  rzslider(ng-init="price_slider.min={% firstof form.cleaned_data.price_from|stringformat:'.2f' price_min|stringformat:'.2f' %} ; price_slider.max={% firstof form.cleaned_data.price_to|stringformat:'.2f' price_max|stringformat:'.2f' %} ; price_slider.options.floor={{ price_min|stringformat:'.2f' }} ; price_slider.options.ceil={{ price_max|stringformat:'.2f' }}", rz-slider-model="price_slider.min", rz-slider-high="price_slider.max", ng-model="price_slider.min", rz-slider-options="price_slider.options", ng-change="submitForm()")
+  rzslider(ng-init="price_slider.min={% firstof form.cleaned_data.price_from|stringformat:'.2f' price_min|stringformat:'.2f' %} ; price_slider.max={% firstof form.cleaned_data.price_to|stringformat:'.2f' price_max|stringformat:'.2f' %} ", rz-slider-model="price_slider.min", rz-slider-high="price_slider.max", ng-model="price_slider.min", rz-slider-options="price_slider.options", ng-change="submitForm()")
 
   
   //-input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)

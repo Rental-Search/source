@@ -18,7 +18,7 @@
 
 {% angularjs 0 %}
 if is_paginated
-  .text-center: ul(ng-show="ui_pristine").pagination
+  .text-center: ul(ng-show="ui_pristine", ng-init="searchPage={{page_obj.number|add:'-1'}}").pagination
     if page_obj.has_previous
       li: a(href="#", title="{% trans 'Page précédente' %}", ng-click="prevPage()").chevron: i.flaticon.stroke.left-2
     else

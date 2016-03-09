@@ -262,7 +262,8 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                 ancestors_slug = item.get_ancertors_slug()
                 self.breadcrumbs['categorie'] = {
                     'name': 'categories', 'value': value, 'label': ancestors_slug, 'object': item,
-                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
+                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name, 
+                    'algolia_path': item.get_algolia_path(),
                     'url': item.get_absolute_url(), 'facet': True
                 }
         # Django 1.5+ ignore *args and **kwargs in View.dispatch(),
