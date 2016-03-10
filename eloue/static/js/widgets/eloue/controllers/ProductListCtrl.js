@@ -42,37 +42,37 @@ define([
     
     if (el){
         EloueWidgetsApp.factory('$exceptionHandler', function() {
-            return function(exception, cause) {
-                
-                var log;
-                
-                if (typeof(Storage) !== 'undefined'){
-                    log = function(trace){
-                           var topFrame = trace[0];
-                        var key = frameKey(topFrame);
-                        var exceptionCount = parseInt(Cookies.get('eloue_ec')) || 0;
-                        if (exceptionCount<parseInt(el) && !(sessionStorage.getItem(key))){
-                            Cookies.set('eloue_ec', exceptionCount+1);
-                            sessionStorage.setItem(key,1);
-                            StackTrace.report(trace, "/logs/").then(function(resp){
-                            }).catch(function(resp){
-                            });
-                        };
-                    }
-                } else {
-                    log = function(trace){
-                           var topFrame = trace[0];
-                        var key = frameKey(topFrame);
-                        var exceptionCount = Cookies.get('eloue_ec');
-                        if (!exceptionCount){
-                            Cookies.set('eloue_ec', 1);
-                            StackTrace.report(trace, "/logs/").then(function(resp){
-                            }).catch(function(resp){
-                            });
-                        };
-                    }
+            
+            var log;
+            
+            if (typeof(Storage) !== 'undefined'){
+                log = function(trace){
+                       var topFrame = trace[0];
+                    var key = frameKey(topFrame);
+                    var exceptionCount = parseInt(Cookies.get('eloue_ec')) || 0;
+                    if (exceptionCount<parseInt(el) && !(sessionStorage.getItem(key))){
+                        Cookies.set('eloue_ec', exceptionCount+1);
+                        sessionStorage.setItem(key,1);
+                        StackTrace.report(trace, "/logs/").then(function(resp){
+                        }).catch(function(resp){
+                        });
+                    };
                 }
-                
+            } else {
+                log = function(trace){
+                       var topFrame = trace[0];
+                    var key = frameKey(topFrame);
+                    var exceptionCount = Cookies.get('eloue_ec');
+                    if (!exceptionCount){
+                        Cookies.set('eloue_ec', 1);
+                        StackTrace.report(trace, "/logs/").then(function(resp){
+                        }).catch(function(resp){
+                        });
+                    };
+                }
+            }
+        	
+        	return function(exception, cause) {                
                 StackTrace.fromError(exception, {offline:true})
                     .then(log).catch(function(trace){});
             };
