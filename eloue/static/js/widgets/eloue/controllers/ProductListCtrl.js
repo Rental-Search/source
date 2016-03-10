@@ -1,8 +1,10 @@
 define([
     "eloue/app",
     "../../../common/eloue/services/UtilsService",
-    "algoliasearch-helper"
-], function (EloueWidgetsApp, UtilsService, algoliasearchHelper) {
+    "algoliasearch-helper",
+    "stacktrace",
+    "js-cookie"
+], function (EloueWidgetsApp, UtilsService, algoliasearchHelper, StackTrace, Cookies) {
     "use strict";
     
     var Point = function(lat, lng){
@@ -31,6 +33,52 @@ define([
         return point.coordinates[1]+','+point.coordinates[0];
     };
         
+    
+    function frameKey(f) {
+        return f.functionName+'@'+f.fileName+':'+f.lineNumber+':'+f.columnNumber;
+    };
+    
+    var el = Cookies.get("eloue_el");
+    
+    if (el){
+        EloueWidgetsApp.factory('$exceptionHandler', function() {
+            return function(exception, cause) {
+                
+                var log;
+                
+                if (typeof(Storage) !== 'undefined'){
+                    log = function(trace){
+                           var topFrame = trace[0];
+                        var key = frameKey(topFrame);
+                        var exceptionCount = parseInt(Cookies.get('eloue_ec')) || 0;
+                        if (exceptionCount<parseInt(el) && !(sessionStorage.getItem(key))){
+                            Cookies.set('eloue_ec', exceptionCount+1);
+                            sessionStorage.setItem(key,1);
+                            StackTrace.report(trace, "/logs/").then(function(resp){
+                            }).catch(function(resp){
+                            });
+                        };
+                    }
+                } else {
+                    log = function(trace){
+                           var topFrame = trace[0];
+                        var key = frameKey(topFrame);
+                        var exceptionCount = Cookies.get('eloue_ec');
+                        if (!exceptionCount){
+                            Cookies.set('eloue_ec', 1);
+                            StackTrace.report(trace, "/logs/").then(function(resp){
+                            }).catch(function(resp){
+                            });
+                        };
+                    }
+                }
+                
+                StackTrace.fromError(exception, {offline:true})
+                    .then(log).catch(function(trace){});
+            };
+        });    
+    }
+
     EloueWidgetsApp.filter('safe', [
       '$sce',
       function($sce) {
@@ -41,18 +89,18 @@ define([
     ]);
     
     EloueWidgetsApp.filter('title', [
-	function() {
-		return function(text) {
-			if (text) {
-				var words = text.split(" ");
-				for (var i=0; i<words.length; i++){
-					words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
-				}
-				return words.join(" ");	
-			} else {
-				return "";
-			}
-		}
+    function() {
+        return function(text) {
+            if (text) {
+                var words = text.split(" ");
+                for (var i=0; i<words.length; i++){
+                    words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+                }
+                return words.join(" ");    
+            } else {
+                return "";
+            }
+        }
     }]);
                                   
     
@@ -219,9 +267,9 @@ define([
                 $scope.setLatLongRadiusFromPlace = function(place){
                     $scope.search_location = place.formatted_address;
                     if ("viewport" in place.geometry){
-                    	$scope.range_slider.max = Math.ceil(maps.geometry.spherical.computeDistanceBetween(
-                        		place.geometry.viewport.getNorthEast(),
-                        		place.geometry.viewport.getSouthWest())/2000);
+                        $scope.range_slider.max = Math.ceil(maps.geometry.spherical.computeDistanceBetween(
+                                place.geometry.viewport.getNorthEast(),
+                                place.geometry.viewport.getSouthWest())/2000);
                     } 
                     $scope.search_center = gmapToGeoJson(place.geometry.location);
                 };
@@ -241,29 +289,29 @@ define([
 
                             return function(){
                                 
-                            	$scope.$apply(function(){
+                                $scope.$apply(function(){
 
                                     var place = autocomplete.getPlace();
                                     
                                     if (!('location' in place.geometry)){
                                         
                                         geoc.geocode({address:place.formatted_address}, function(results, status){
-                                        	$scope.$apply(function(){
-	                                            if (status==maps.GeocoderStatus.OK){
-	                                                //$log.debug(results);
-	                                                place.geometry = results[0].geometry;
-	                                                $scope.refineLocationByPlace(place);
-	                                            } else {
-	                                                //$log.debug("GEOCODER ERROR: "+status);
-	                                                //TODO handle geocoding error
-	                                            }
-                                        	});
+                                            $scope.$apply(function(){
+                                                if (status==maps.GeocoderStatus.OK){
+                                                    //$log.debug(results);
+                                                    place.geometry = results[0].geometry;
+                                                    $scope.refineLocationByPlace(place);
+                                                } else {
+                                                    //$log.debug("GEOCODER ERROR: "+status);
+                                                    //TODO handle geocoding error
+                                                }
+                                            });
                                         });
                                     } else {
                                         $scope.refineLocationByPlace(place);
                                     }
-                            	});
-                            	
+                                });
+                                
                             };
                         };
                         autocomplete_head.addListener('place_changed', autocompleteChangeListener(autocomplete_head));
@@ -388,8 +436,8 @@ define([
                 
                 if ($scope.search_location) {
                     geoc.geocode({address:$scope.search_location}, function(results, status){
-                    	$scope.$apply(function(){
-                    		if (status==maps.GeocoderStatus.OK){
+                        $scope.$apply(function(){
+                            if (status==maps.GeocoderStatus.OK){
                                 //$log.debug("geocoded");
                                 $scope.search_center = gmapToGeoJson(results[0].geometry.location);
                                 $scope.search_location_geocoded_deferred.resolve(results, status);
@@ -397,10 +445,10 @@ define([
                                 //$log.debug("GEOCODER ERROR: "+status);
                                 $scope.search_location_geocoded_deferred.reject(results, status);
                             }
-                    	});
+                        });
                     });
                 } else {
-                	$scope.search_location_geocoded_deferred.resolve();
+                    $scope.search_location_geocoded_deferred.resolve();
                 }
                 
                 $scope.map.loaded = true;
@@ -414,18 +462,20 @@ define([
             $scope.onLocationChangeStart = function(event, current, next) { //$log.debug('onLocationChangeStart');
                 
 //                if (!$scope.orig_params_present()) return;
-            	
+                
                 if (!$scope.search_location_ui_changed){    
-                	
+                    
                     var qs = UtilsService.urlEncodeObject($location.search());
                         
                     $scope.search.setState($scope.search_default_state);
                    
                     if ($scope.ui_pristine) {
-
-                		$scope.search_location_geocoded_promise.finally($scope.submitForm);
-                    	
-                    	return;
+                        $scope.search_location_geocoded_promise.finally($scope.submitForm);
+                        return;
+                    }
+                    
+                    if (!$location.search()) {
+                        return;
                     }
                     
                     $scope.search.setStateFromQueryString(qs, {
@@ -713,8 +763,8 @@ define([
             
             $scope.processResult = function(result, state){ //$log.debug('processResult');
                 
-            	$scope.$apply(function(){
-            		//$log.debug(result.page);
+                $scope.$apply(function(){
+                    //$log.debug(result.page);
                     //$log.debug(result);
                     
                     $scope.search_result_count = result.nbHits;
@@ -723,7 +773,7 @@ define([
                     for (var ri=0; ri<$scope.product_list.length; ri++){
                         var res = $scope.product_list[ri];
                         for (var k in res['_highlightResult']){
-                        	res[k] = res['_highlightResult'][k]['value'];
+                            res[k] = res['_highlightResult'][k]['value'];
                         }
                     }
                     
@@ -745,11 +795,11 @@ define([
                     $scope.renderBreadcrumbs(state);
                     $scope.renderRangeSlider(result, state);
                     if ($scope.map.loaded){
-                    	$scope.renderMap(result, state);
+                        $scope.renderMap(result, state);
                     } else {
-                    	$scope.mapLoadedPromise.then(function(){
-                    		$scope.renderMap(result, state);
-                    	});
+                        $scope.mapLoadedPromise.then(function(){
+                            $scope.renderMap(result, state);
+                        });
                     }
                     $scope.renderLocation(result, state);
                     
@@ -759,15 +809,15 @@ define([
                     
                     $scope.request_pending = false;
                     
-            	});
+                });
                 
             };
             
             $scope.processError = function(error){ //$log.debug('processError');
-            	
-            	$scope.$apply(function(){
-	                $scope.request_pending = false;
-            	});
+                
+                $scope.$apply(function(){
+                    $scope.request_pending = false;
+                });
             };
             
             $scope.search.on('result', $scope.processResult)
@@ -867,7 +917,7 @@ define([
                 $scope.search_location_ui_changed = true;
                 
                 if ($scope.ui_pristine){
-                	$scope.search.toggleRefinement("category", $scope.search_category_path);
+                    $scope.search.toggleRefinement("category", $scope.search_category_path);
                 }
                 
                 $scope.search.setQuery($scope.search_query)

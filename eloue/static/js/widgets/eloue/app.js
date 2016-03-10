@@ -6,6 +6,7 @@ define([
     "angular-translate",
     "angular-i18n",
     "angularjs-slider",
+    "js-cookie",
     "../../common/eloue/commonApp"
 ], function (angular) {
     "use strict";

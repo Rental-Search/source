@@ -8,6 +8,7 @@ local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 DEBUG = env('DEBUG', False)
 STAGING = env('STAGING', False)
+CLIENT_EXCEPTION_LOGGING = env('CLIENT_EXCEPTION_LOGGING', False)
 DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', DEBUG)
 TEMPLATE_DEBUG = DEBUG
 
@@ -189,6 +190,10 @@ MIDDLEWARE_CLASSES = (
 
 if STAGING:
     MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ("eloue.middleware.StagingRestrictionMiddleware",)
+
+if CLIENT_EXCEPTION_LOGGING:
+    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ("client_logging.middleware.ClientLoggingMiddleware",)
+    EXCEPTIONS_PER_SESSION = env('EXCEPTIONS_PER_SESSION', 10)
 
 PASSWORD_HASHERS =(
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -678,19 +683,30 @@ OAUTH2_PROVIDER = {
 }
 
 # Logging configuration
+
 try:
     import logbook
     import logbook.compat
+    from client_logging import views as cl_views 
     logbook.compat.redirect_logging()
     null_handler = logbook.NullHandler()
     if DEBUG:
         log_handler = logbook.StderrHandler(level=logbook.WARNING)
+        if CLIENT_EXCEPTION_LOGGING:
+            js_log_handler = logbook.StderrHandler(filter=cl_views.js_error_log_filter, level=logbook.INFO)
+            js_log_handler.formatter = cl_views.js_error_formatter_stderr
     else:
         log_handler = logbook.SyslogHandler(level=logbook.WARNING)
+        if CLIENT_EXCEPTION_LOGGING:
+            js_log_handler = logbook.SyslogHandler(filter=cl_views.js_error_log_filter, level=logbook.INFO)
+            js_log_handler.formatter = cl_views.js_error_formatter_syslog
     null_handler.push_application()
     log_handler.push_application()
+    if CLIENT_EXCEPTION_LOGGING:
+        js_log_handler.push_application()
 except ImportError:
     pass
+
 
 logging.getLogger('suds.client').setLevel(logging.ERROR)
 logging.getLogger('suds.transport').setLevel(logging.ERROR)

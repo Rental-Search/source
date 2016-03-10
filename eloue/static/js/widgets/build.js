@@ -44,7 +44,14 @@
         "algoliasearch-helper": "../../bower_components/algoliasearch-helper/dist/algoliasearch.helper",
         "angularjs-slider": "../../bower_components/angularjs-slider/dist/rzslider",
         "nemSimpleLogger": "../../bower_components/angular-simple-logger/dist/angular-simple-logger",
-        "uiGmapgoogle-maps": "../../bower_components/angular-google-maps/dist/angular-google-maps"
+        "uiGmapgoogle-maps": "../../bower_components/angular-google-maps/dist/angular-google-maps",
+        "js-cookie": "../../bower_components/js-cookie/src/js.cookie",
+        "stacktrace": "../../bower_components/stacktrace-js/dist/stacktrace",
+        "stack-generator": "../../bower_components/stack-generator/dist/stack-generator",
+        "stackframe": "../../bower_components/stackframe/dist/stackframe",
+        "error-stack-parser": "../../bower_components/error-stack-parser/dist/error-stack-parser",
+        "stacktrace-gps": "../../bower_components/stacktrace-gps/dist/stacktrace-gps",
+        "source-map": "../../bower_components/source-map/dist/source-map"
     },
     shim: {
         "angular": {
@@ -92,7 +99,11 @@
         },
         "angularjs-slider": ["angular"],
         "nemSimpleLogger": ["angular"],
-        "uiGmapgoogle-maps": ["angular", "lodash", "nemSimpleLogger"]
+        "uiGmapgoogle-maps": ["angular", "lodash", "nemSimpleLogger"],
+        "stacktrace": ["error-stack-parser", "stack-generator", "stacktrace-gps"],
+        "error-stack-parser": ["stackframe"],
+        "stacktrace-gps": ["source-map"],
+        "js-cookie": {exports: "Cookies"}
     },
     removeCombined: true,
     findNestedDependencies: true,

@@ -35,7 +35,8 @@
     "angularjs-slider": "~2.4.0",
     "algoliasearch-helper": "~2.8.0",
     "angular-google-maps": "~2.2.1",
-    "angular-simple-logger": "~0.1.5"
+    "angular-simple-logger": "~0.1.5",
+    "js-cookie": "2.1.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.11",
