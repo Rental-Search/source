@@ -9,11 +9,10 @@ ol(ng-show="ui_pristine").product-layout
     {% endfor %}
   else
     button(type="button", ng-click="clearRefinements()", class="btn bg-success btn-advertise") {% trans "Reinitialiser les critères de la recherche"  %}
-ol(ng-hide="ui_pristine").product-layout
-  div(ng-show="search_result_count")
-    {% with ng=1 %}
-    include ./_product_list_item
-    {% endwith %}
-  button(type="button", ng-show="!search_result_count", ng-click="clearRefinements()", class="btn bg-success btn-advertise") {% trans "Reinitialiser les critères de la recherche"  %}
+ol(ng-hide="ui_pristine || !search_result_count").product-layout
+  {% with ng=1 %}
+  include ./_product_list_item
+  {% endwith %}
+button(type="button", ng-show="!ui_pristine && !search_result_count", ng-click="clearRefinements()", class="btn bg-success btn-advertise") {% trans "Reinitialiser les critères de la recherche"  %}
   
 include ./_product_list_pagination
