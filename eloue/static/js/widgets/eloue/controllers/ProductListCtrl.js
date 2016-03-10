@@ -208,6 +208,16 @@ define([
             /*
              * Map config
              */
+
+            var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
+                        product, image, imageHover, myLatLng, marker;
+                    for (i = 0, l = scripts.length; i < l; i += 1) {
+                        if (scripts[i].getAttribute("data-static-path")) {
+                            staticUrl = scripts[i].getAttribute("data-static-path");
+                            break;
+                        }
+                    }
+
             $scope.map = {
                 loaded: false,
                 zoom: UtilsService.zoom(SearchConstants.COUNTRIES[$scope.country].radius),
@@ -223,7 +233,7 @@ define([
                         {
                             textColor: 'white',
                             textSize: 14,
-                            url: '/static/img/markerclustericon.png',
+                            url: staticUrl + 'img/markerclustericon.png',
                             height: 43,
                             width: 43,
                         },
