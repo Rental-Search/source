@@ -33,22 +33,43 @@ define([
         return point.coordinates[1]+','+point.coordinates[0];
     };
         
+    var el = Cookies.get("eloue_el");
     
-    function frameKey(f) {
-        return f.functionName+'@'+f.fileName+':'+f.lineNumber+':'+f.columnNumber;
+    function hasStorage(){
+        return typeof(Storage) !== 'undefined';
     };
     
-    var el = Cookies.get("eloue_el");
+    function cleanup(){
+        if (hasStorage()){
+            var i = sessionStorage.length;
+            while (i--){
+                var key = sessionStorage.key(i);
+                if (key.match(/^eloue_err_.*/g)){
+                    sessionStorage.removeItem(key);
+                }
+            }
+        } 
+    };
     
     if (el){
         EloueWidgetsApp.factory('$exceptionHandler', function() {
             
+            function frameKey(f) {
+                return f.functionName+'@'+f.fileName+':'+f.lineNumber+':'+f.columnNumber;
+            };
+            
+            var ec = parseInt(Cookies.get('eloue_ec')) || 0;
+            
+            if (!ec){
+                cleanup();
+            }
+            
             var log;
             
-            if (typeof(Storage) !== 'undefined'){
+            if (hasStorage()){
                 log = function(trace){
                        var topFrame = trace[0];
-                    var key = frameKey(topFrame);
+                    var key = 'eloue_err_'+frameKey(topFrame);
                     var exceptionCount = parseInt(Cookies.get('eloue_ec')) || 0;
                     if (exceptionCount<parseInt(el) && !(sessionStorage.getItem(key))){
                         Cookies.set('eloue_ec', exceptionCount+1);
@@ -57,11 +78,11 @@ define([
                         }).catch(function(resp){
                         });
                     };
-                }
+                };
             } else {
                 log = function(trace){
                        var topFrame = trace[0];
-                    var key = frameKey(topFrame);
+                    var key = 'eloue_err_'+frameKey(topFrame);
                     var exceptionCount = Cookies.get('eloue_ec');
                     if (!exceptionCount){
                         Cookies.set('eloue_ec', 1);
@@ -69,14 +90,16 @@ define([
                         }).catch(function(resp){
                         });
                     };
-                }
+                };
             }
-        	
-        	return function(exception, cause) {                
-                StackTrace.fromError(exception, {offline:true})
+            
+            return function(exception, cause) {                
+                StackTrace.fromError(exception, {offline:false})
                     .then(log).catch(function(trace){});
             };
         });    
+    } else {
+        cleanup();
     }
 
     EloueWidgetsApp.filter('safe', [

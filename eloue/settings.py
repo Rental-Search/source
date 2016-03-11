@@ -193,7 +193,7 @@ if STAGING:
 
 if CLIENT_EXCEPTION_LOGGING:
     MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ("client_logging.middleware.ClientLoggingMiddleware",)
-    EXCEPTIONS_PER_SESSION = env('EXCEPTIONS_PER_SESSION', 10)
+
 
 PASSWORD_HASHERS =(
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -687,25 +687,28 @@ OAUTH2_PROVIDER = {
 try:
     import logbook
     import logbook.compat
-    from client_logging import views as cl_views 
+    from client_logging import util as cl_util 
     logbook.compat.redirect_logging()
     null_handler = logbook.NullHandler()
     if DEBUG:
         log_handler = logbook.StderrHandler(level=logbook.WARNING)
         if CLIENT_EXCEPTION_LOGGING:
-            js_log_handler = logbook.StderrHandler(filter=cl_views.js_error_log_filter, level=logbook.INFO)
-            js_log_handler.formatter = cl_views.js_error_formatter_stderr
+            js_log_handler = logbook.StderrHandler(filter=cl_util.js_error_log_filter, level=logbook.INFO)
+            js_log_handler.formatter = cl_util.js_error_formatter_stderr
     else:
         log_handler = logbook.SyslogHandler(level=logbook.WARNING)
         if CLIENT_EXCEPTION_LOGGING:
-            js_log_handler = logbook.SyslogHandler(filter=cl_views.js_error_log_filter, level=logbook.INFO)
-            js_log_handler.formatter = cl_views.js_error_formatter_syslog
+            js_log_handler = logbook.SyslogHandler(filter=cl_util.js_error_log_filter, level=logbook.INFO)
+            js_log_handler.formatter = cl_util.js_error_formatter_syslog
     null_handler.push_application()
     log_handler.push_application()
     if CLIENT_EXCEPTION_LOGGING:
         js_log_handler.push_application()
 except ImportError:
     pass
+
+
+CLIENT_EXCEPTION_RATE = env('CLIENT_EXCEPTION_RATE', "20/hour")
 
 
 logging.getLogger('suds.client').setLevel(logging.ERROR)
