@@ -417,7 +417,7 @@ define([
                         res.markerId = ri;
                         res.markerOptions = {
                             icon: res.images.normal,
-                            title: res.summary,
+                            title: res.plain_summary,
                             zIndex: ri
                         };
                     };
@@ -805,6 +805,7 @@ define([
                     for (var ri=0; ri<$scope.product_list.length; ri++){
                         var res = $scope.product_list[ri];
                         for (var k in res['_highlightResult']){
+                            res["plain_"+k] = res[k];
                             res[k] = res['_highlightResult'][k]['value'];
                         }
                     }
