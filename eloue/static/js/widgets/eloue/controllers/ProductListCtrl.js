@@ -68,7 +68,7 @@ define([
             
             if (hasStorage()){
                 log = function(trace){
-                       var topFrame = trace[0];
+                    var topFrame = trace[0];
                     var key = 'eloue_err_'+frameKey(topFrame);
                     var exceptionCount = parseInt(Cookies.get('eloue_ec')) || 0;
                     if (exceptionCount<parseInt(el) && !(sessionStorage.getItem(key))){
@@ -81,7 +81,7 @@ define([
                 };
             } else {
                 log = function(trace){
-                       var topFrame = trace[0];
+                    var topFrame = trace[0];
                     var key = 'eloue_err_'+frameKey(topFrame);
                     var exceptionCount = Cookies.get('eloue_ec');
                     if (!exceptionCount){
@@ -309,7 +309,8 @@ define([
                 
                 $scope.refineLocationByPlace = function(place){ //$log.debug('refineLocationByPlace');
                     $scope.setLatLongRadiusFromPlace(place);
-                    $scope.submitForm();
+                    $scope.search_ordering = "distance";
+                    $scope.setOrdering();
                 };
                 
                 uiGmapIsReady.promise(1).then(function(instances) {
