@@ -28,6 +28,6 @@ h3(ng-hide="ui_pristine", ng-cloak).col-md-7
   .clear-selector: select#sort-selector.form-control(name="sort", form="detail-search", ng-model="search_ordering", ng-change="setOrdering(search_ordering)")
     <option value="" {% if form.sort.data ==  "" %}selected {% endif %} /> {% trans "Les plus pertinents" %}
     <option value="-created_at" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les plus récents" %}
-    <option value="distance" {% if form.sort.data ==  "distance" %}selected {% endif %} /> {% trans "Les plus proches" %}
+    <option ng-show="search_location" value="distance" {% if form.sort.data ==  "distance" %}selected {% endif %} /> {% trans "Les plus proches" %}
     <option value="price" {% if form.sort.data ==  "price" %}selected {% endif %} /> {% trans "Les prix les plus bas" %}
     <option value="-price" {% if form.sort.data ==  "-price" %}selected {% endif %} /> {% trans "Les prix les plus haut" %}

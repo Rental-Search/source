@@ -508,10 +508,6 @@ define([
                         return;
                     }
                     
-                    if (!$location.search()) {
-                        return;
-                    }
-                    
                     $scope.search.setStateFromQueryString(qs, {
                         prefix: SearchConstants.ALGOLIA_PREFIX
                     });
@@ -769,6 +765,9 @@ define([
             };
             
             $scope.renderLocation = function(result, state) { //$log.debug('renderLocation');
+                if ($scope.ui_pristine){
+                    $location.replace();
+                }
                 if ($scope.cooldown){
                     $scope.searchDuringCooldown = true;
                 } else {
@@ -777,7 +776,6 @@ define([
                         $scope.get_query_string_options()));
                     $timeout($scope.resetCooldown, $scope.cooldown_duration);
                 }
-                
             };
             
             $scope.renderQueryText = function(result) { //$log.debug('renderQueryText');
