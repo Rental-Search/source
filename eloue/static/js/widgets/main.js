@@ -55,12 +55,12 @@ require.config(
                 "nemSimpleLogger": "../../bower_components/angular-simple-logger/dist/angular-simple-logger",
                 "uiGmapgoogle-maps": "../../bower_components/angular-google-maps/dist/angular-google-maps",
                 "js-cookie": "../../bower_components/js-cookie/src/js.cookie",
-                "stacktrace": "../../bower_components/stacktrace-js/dist/stacktrace",
-                "stack-generator": "../../bower_components/stack-generator/dist/stack-generator",
-                "stackframe": "../../bower_components/stackframe/dist/stackframe",
-                "error-stack-parser": "../../bower_components/error-stack-parser/dist/error-stack-parser",
-                "stacktrace-gps": "../../bower_components/stacktrace-gps/dist/stacktrace-gps",
-                "source-map": "../../bower_components/source-map/dist/source-map"
+                "stacktrace": "../../bower_components/stacktrace-js/stacktrace",
+                "stack-generator": "../../bower_components/stack-generator/stack-generator",
+                "stackframe": "../../bower_components/stackframe/stackframe",
+                "error-stack-parser": "../../bower_components/error-stack-parser/error-stack-parser",
+                "stacktrace-gps": "../../bower_components/stacktrace-gps/stacktrace-gps",
+                "source-map": "../../bower_components/source-map/source-map"
             },
             shim: {
                 "angular": {
