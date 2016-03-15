@@ -18,7 +18,7 @@ script(type="text/ng-template" id="_category_tree_item.html").
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
-  label.caption {% trans "catégories" %}
+  label(ng-show="search_result_count").caption {% trans "catégories" %}
   .clear-selector
     div(ng-show="search_result_count", ng-init="search_category_path='{{breadcrumbs.categorie.algolia_path}}'", ng-include="'_category_tree_item.html'")
 
