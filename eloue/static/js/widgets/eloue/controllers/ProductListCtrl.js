@@ -144,8 +144,7 @@ define([
                 attributes: ['algolia_categories.lvl0',
                              'algolia_categories.lvl1',
                              'algolia_categories.lvl2'],
-                sortBy: ['count:desc', 
-                         'name:asc']
+                sortBy: ['name:asc']
             }],
             disjunctiveFacets: ["pro_owner",
                                 "price",
