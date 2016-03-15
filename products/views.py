@@ -179,7 +179,7 @@ class HomepageView(NavbarCategoryMixin, BreadcrumbsMixin, TemplateView):
             'booking__product__address'
         ).filter(
             booking__product__sites__id=settings.SITE_ID
-        ).order_by('-created_at')
+        )#.order_by('-created_at')
 
         context = {
             'product_list': product_list,

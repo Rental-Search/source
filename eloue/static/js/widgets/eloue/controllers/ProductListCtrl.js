@@ -157,14 +157,14 @@ define([
             query:""
         },
         ALGOLIA_PREFIX: "sp_",
-        ALGOLIA_APP_ID: 'DZ2AR773WQ',
-        ALGOLIA_KEY:'36fe3114bb36ad618af27f32ed194ac8',
+        ALGOLIA_APP_ID: 'NSV6X2HQLR',
+        ALGOLIA_KEY:'1f470a5fbfd05ca06ac97a01bca6a4eb',
         URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 
                          'hitsPerPage', 'aroundLatLng', 'aroundRadius'],
         URL_PARAMETERS_EXCLUDE: ['is_archved', 
                                  'is_good', 
                                  'sites'],
-        DEFAULT_ORDERING: "-created_at",
+        DEFAULT_ORDERING: "",
         WINDOW_SIZE: 10,
         COUNTRIES: {
           'fr': {
@@ -198,7 +198,7 @@ define([
             $scope.search_max_range = 1000;
             $scope.country = 'fr';
             
-            $scope.search_ordering = SearchConstants.DEFAULT_ORDERING;
+//            $scope.search_ordering = SearchConstants.DEFAULT_ORDERING;
             $scope.search_index = SearchConstants.MASTER_INDEX;
             
             $scope.get_index = function(){
@@ -472,6 +472,7 @@ define([
                         $scope.$apply(function(){
                             if (status==maps.GeocoderStatus.OK){
                                 //$log.debug("geocoded");
+                                $scope.search_ordering = 'distance';
                                 $scope.search_center = gmapToGeoJson(results[0].geometry.location);
                                 $scope.search_location_geocoded_deferred.resolve(results, status);
                             } else {
@@ -640,8 +641,9 @@ define([
             };
             
             $scope.setOrdering = function(ordering){ //$log.debug('setOrdering');
-                $scope.search
-                    .setIndex($scope.get_index());
+//                $scope.search
+//                    .setIndex($scope.get_index());
+//                $scope.search_ordering = ordering;
                 $scope.searchPage = 0;
                 $scope.submitForm();
             };
@@ -652,6 +654,7 @@ define([
                 $scope.search.setState($scope.search_default_state);
                 //$log.debug($scope.search.getState());
 //                $scope.search_query = "";
+                $scope.search_location = "";
                 $scope.search.search();
             };
             
@@ -891,11 +894,11 @@ define([
             $scope.map.boundsChangedByRender = false;
             $scope.ui_pristine = !$scope.orig_params_present();
             $scope.price_slider = {
-//                min: 0,
-//                max: 1000,
+                min: 0,
+                max: 1000,
                 options: {
-//                    floor: 0,
-//                    ceil: 1000,
+                    floor: 0,
+                    ceil: 1000,
                     onEnd: $scope.refinePrices,
                     translate: function(value) {
                         return value + " €";
@@ -903,7 +906,7 @@ define([
                 }
             };
             $scope.range_slider = {
-//                max: $scope.search_max_range,
+                max: $scope.search_max_range,
                 options: {
                     floor: 1,
                     ceil: $scope.search_max_range,
@@ -956,6 +959,7 @@ define([
                     .setQueryParameter('aroundLatLng', geoJsonToAlgolia($scope.search_center))
                     .setQueryParameter('aroundRadius', $scope.range_slider.max * 1000)
                     .setCurrentPage($scope.searchPage)
+                    .setIndex($scope.get_index())
                     .search();
             };
 

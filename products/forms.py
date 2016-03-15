@@ -195,11 +195,18 @@ class FacetedSearchForm(FilteredSearchMixin, FilteredProductSearchForm):
         return sqs
 
     def sqs_filter_sort(self, sqs, search_params):
+        
+#         location = search_params.get('l', None)
+#         if location:
+#             sqs = sqs.order_by('distance')
+#             raise Exception(location)
+        
         sort = search_params.get('sort')
         if sort:
             sqs = sqs.order_by(sort)
-        else:
-            sqs = sqs.order_by(SORT.RECENT)
+#         else:
+#             sqs = sqs.order_by(SORT.RECENT)
+        
         return sqs
 
     def unspecified_sqs_filters(self, sqs, search_params):
