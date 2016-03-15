@@ -4,7 +4,7 @@
 {% trans "page" as page %}
 
 {% angularjs %}
-.text-center: ul(ng-show="search_result_count && !ui_pristine", ng-cloak).pagination
+.text-center(ng-show="search_result_count && !ui_pristine", ng-cloak): ul.pagination
   li
     button( type="button", ng-if="page > 1", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
     button( type="button", ng-if="page == 1").chevron.active: i.flaticon.stroke.left-2
@@ -18,20 +18,21 @@
 
 {% angularjs 0 %}
 if is_paginated
-  .text-center: ul(ng-show="ui_pristine", ng-init="searchPage={{page_obj.number|add:'-1'}}").pagination
+  .text-center(ng-show="ui_pristine", ng-init='searchPage={{page_obj.number|add:"-1"}}'): ul.pagination
+    {% trans "page" as page %}
     if page_obj.has_previous
-      li: a(href="#", title="{% trans 'Page précédente' %}", ng-click="prevPage()").chevron: i.flaticon.stroke.left-2
+      li: a(href="{% facet_url breadcrumbs page page_obj.previous_page_number %}", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
     else
-      li: a(href="#").chevron.active: i.flaticon.stroke.left-2
+      li: a.chevron.active: i.flaticon.stroke.left-2
     for page_number in page_range
       li
         if page_obj.number == page_number
-          a(href="#").active {{ page_number }}
+          a.active {{ page_number }}
         else
-          a(href="#", ng-click="setPage({{page_number}}, 2)") {{ page_number }}
+          a(href="{% facet_url breadcrumbs page page_number %}") {{ page_number }}
     if page_obj.has_next
-      li: a(href="#", title="{% trans 'Page suivante' %}", ng-click="nextPage()").chevron: i.flaticon.stroke.right-2
+      li: a(href="{% facet_url breadcrumbs page page_obj.next_page_number %}", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
     else
-      li: a(href="#").chevron.active: i.flaticon.stroke.right-2
+      li: a.chevron.active: i.flaticon.stroke.right-2
 {% endangularjs %}
       
