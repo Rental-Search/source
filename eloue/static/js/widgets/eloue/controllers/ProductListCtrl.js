@@ -115,11 +115,9 @@ define([
     function() {
         return function(text) {
             if (text) {
-                var words = text.split(" ");
-                for (var i=0; i<words.length; i++){
-                    words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
-                }
-                return words.join(" ");    
+                return text.replace(/(?:<em>)?([^\s]+)/g, function(txt, gr1){
+                    return txt.replace(gr1, gr1.charAt(0).toUpperCase() 
+                            + gr1.slice(1).toLowerCase());});
             } else {
                 return "";
             }
