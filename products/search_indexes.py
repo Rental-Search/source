@@ -11,6 +11,8 @@ from .models import Product
 from .choices import UNIT
 from .helpers import get_unavailable_periods
 
+from haystack.utils.geo import ensure_point
+
 __all__ = ['ProductIndex']
 
 
@@ -29,22 +31,11 @@ class LocationMultiValueField(indexes.SearchField):
             return None
 
 
-class AlgoliaLocationField(indexes.LocationField):
+class AlgoliaLocationMultiValueField(LocationMultiValueField):
     field_type = 'location'
     
     index_fieldname = "_geoloc"
     
-    def prepare(self, obj):
-        from haystack.utils.geo import ensure_point
-
-        value = super(indexes.LocationField, self).prepare(obj)
-
-        if value is None:
-            return None
-
-        pnt = ensure_point(value)
-        pnt_lat, pnt_lng  = pnt.get_coords()
-        return {"lat":pnt_lat, "lng":pnt_lng}
 
 
 class AlgoliaTagsField(indexes.MultiValueField):
@@ -106,8 +97,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     django_id_int = indexes.IntegerField(model_attr='id')
     algolia_categories = indexes.MultiValueField(faceted=True, null=True)
-    _geoloc = AlgoliaLocationField(model_attr='address__position', null=True)
     _tags = AlgoliaTagsField(model_attr='categories', null=True)
+    _geoloc = AlgoliaLocationMultiValueField()
+    
     
     def get_updated_field(self):
         return "created_at"
@@ -122,7 +114,14 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         else:
             return None
 
-
+    def prepare__geoloc(self, obj):
+        locations = self.prepare_locations(obj)
+        if locations:
+            it = iter(locations)
+            return [{"lat":x, "lng":y} for x,y in zip(it,it)]
+        else:
+            return None
+    
     def prepare_need_insurance(self, obj):
         return obj.category.need_insurance
             
