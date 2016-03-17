@@ -16,31 +16,27 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
   .section-body
     .thumbnail-img
       a(ng-href="{{ product.url }}", href=(product.url if not ng else None)).img-wrapper 
-      if ng
-        img(ng-if="product.owner_avatar", style="background-image: {{ product.owner_avatar }}").bg-image
-        img(ng-if="!product.owner_avatar").bg-image
-      else
-        img(style=("background-image: {{ product.owner_avatar }}" if product.owner_avatar else None)).bg-image 
-        //-TODO url django function?
-      if ng
-        //-TODO currency angular filter, remove verbatim
-        span(ng-if="product.price").badge.price {% verbatim %} {{ product.price | currency }} {% endverbatim %} /{{ by_day }} 
-        span(ng-if="!product.price").badge.price {% trans "Sur devis" %}
-      else
-        //-TODO currency angular filter
-        span.badge.price {% if product.price %} {{ product.price | currency }} /{{ by_day }} {% else %} {% trans "Sur devis" %} {% endif %} 
+        if ng
+          img(ng-style="product.profile && {'background-image':'url('+product.profile+')'}").bg-image
+        else
+          img(style=('background-image: url("'+product.profile+'");' if product.profile else None)).bg-image 
+        if ng
+          //-TODO currency angular filter, remove verbatim
+          span(ng-if="product.price").badge.price {% verbatim %} {{ product.price | currency }} {% endverbatim %} /{{ by_day }} 
+          span(ng-if="!product.price").badge.price {% trans "Sur devis" %}
+        else
+          //-TODO currency angular filter
+          span.badge.price {% if product.price %} {{ product.price | currency }} /{{ by_day }} {% else %} {% trans "Sur devis" %} {% endif %} 
         //-TODO remove verbatim
       span.badge-order {% if ng %} {% verbatim %} {{ $index+1 }} {% endverbatim %} {% else %} {{ index }} {% endif %}
     .declarer-container
       .declarer
         span.declarer-name {{ product.owner }}
         a(ng-href="{{ product.owner_url }}", href=(product.owner_url if not ng else None)).declarer-thumbnail
-        if ng
-          div(ng-if="product.owner_avatar", style="background-image: {{ product.owner_avatar }}").bg-image
-          div(ng-if="!product.owner_avatar").bg-image
-        else
-          div(style=("background-image: {{ product.owner_avatar }}" if product.owner_avatar else None)).bg-image 
-          //-TODO url django function?
+          if ng
+            div(ng-style="product.owner_avatar && {'background-image':'url('+product.owner_avatar+')'}").bg-image
+          else
+            div(style=('background-image: url("'+product.owner_avatar+'");' if product.owner_avatar else None)).bg-image
     .info
       h6
         //- TODO check if this is really safe
@@ -72,3 +68,5 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
         p.full_description {% if product.description %} {{ product.description|safe }} {% else %} &nbsp; {% endif %}
 
 {% endangularjs %}
+
+
