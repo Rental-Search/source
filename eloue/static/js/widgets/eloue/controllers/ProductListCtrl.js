@@ -155,8 +155,8 @@ define([
             query:""
         },
         ALGOLIA_PREFIX: "sp_",
-        ALGOLIA_APP_ID: 'NSV6X2HQLR',
-        ALGOLIA_KEY:'1f470a5fbfd05ca06ac97a01bca6a4eb',
+        ALGOLIA_APP_ID: 'DZ2AR773WQ',
+        ALGOLIA_KEY:'36fe3114bb36ad618af27f32ed194ac8',
         URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 
                          'hitsPerPage', 'aroundLatLng', 'aroundRadius'],
         URL_PARAMETERS_EXCLUDE: ['is_archved', 
