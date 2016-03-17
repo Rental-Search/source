@@ -8,7 +8,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
         mapsService.loadGoogleMaps = function () {
             
-            const URL = 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&region=FR&callback=googleMapsLoaded';
+            var URL = 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&region=FR&callback=googleMapsLoaded';
             
             var mapsLoaded = false;
             angular.forEach($document[0].body.childNodes, function(value) {

@@ -354,7 +354,7 @@ define([
                 
                 $scope.get_marker_images = function(){ //$log.debug('get_marker_images');
                     
-                    const MARKER_IMAGE_COUNT = 19;
+                    var MARKER_IMAGE_COUNT = 19;
                     
                     var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
                         product, image, imageHover, myLatLng, marker;
