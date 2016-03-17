@@ -59,6 +59,19 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
             &nbsp;
           else
             {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
+      if not ng and product.comment_count
+        {% with product.average_rate as rate %}
+        include ./_rate
+        {% endwith %}
+        span.sprite-comment
+          i.flaticon.stroke.writing-comment
+          != product.comment_count
+      else        
+        .rate(ng-if="product.comment_count")
+          span(ng-repeat="i in [1,2,3,4,5]").flaticon.solid.star-2(ng-class="i==product.average_rate && 'current-rate'")
+        span(ng-if="product.comment_count").sprite-comment
+          i.flaticon.stroke.writing-comment
+          {% verbatim %}{{ product.comment_count }}{% endverbatim %} 
       if ng
         //- TODO remove verbatim
         //- TODO check if this is really safe
@@ -68,5 +81,3 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
         p.full_description {% if product.description %} {{ product.description|safe }} {% else %} &nbsp; {% endif %}
 
 {% endangularjs %}
-
-
