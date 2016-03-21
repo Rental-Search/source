@@ -17,8 +17,7 @@ define([
              */
             $window.googleMapsLoaded = function () {
                 $("#geolocate").formmapper({
-                    details: "form",
-                    componentRestrictions: {country: 'fr'}
+                    details: "form"
                 });
             };
 

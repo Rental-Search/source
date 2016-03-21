@@ -8,12 +8,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
         mapsService.loadGoogleMaps = function () {
             
-            var URL = 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&region=FR&callback=googleMapsLoaded';
-            
             var mapsLoaded = false;
             angular.forEach($document[0].body.childNodes, function(value) {
                 if (value && value.src) {
-                    if (value.src == URL) {
+                    if (value.src == 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded') {
                         mapsLoaded = true;
                     }
                 }
@@ -24,7 +22,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
             var script = $document[0].createElement("script");
             script.type = "text/javascript";
-            script.src = URL;
+            script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
             $document[0].body.appendChild(script);
         };
         
