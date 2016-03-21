@@ -180,8 +180,7 @@ define([
             $window.googleMapsLoaded = function () {
                 //Activate geolocation search
                 $("#geolocate").formmapper({
-                    details: "form",
-                    componentRestrictions: {country: 'fr'}
+                    details: "form"
                 });
             };
 

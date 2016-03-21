@@ -13,8 +13,7 @@ define([
                 $rootScope.$broadcast("productMapLoaded");
 
                 $("#geolocate").formmapper({
-                    details: "form",
-                    componentRestrictions: {country: 'fr'}
+                    details: "form"
                 });
 
                 var canvasId = "map-canvas-small", mapCanvasSmall = $document[0].getElementById(canvasId), mapContainer,
