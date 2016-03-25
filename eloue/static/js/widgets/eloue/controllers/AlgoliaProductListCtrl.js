@@ -148,7 +148,8 @@ define([
                                 "price",
                                 "sites"],
             facets: ["is_archived", 
-                     'is_good'],
+                     'is_good',
+                     'is_allowed'],
             hitsPerPage: 12,
             aroundLatLng:"46.2,2.2",
             aroundRadius:1000000,
@@ -159,7 +160,8 @@ define([
         ALGOLIA_KEY:'36fe3114bb36ad618af27f32ed194ac8',
         URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 
                          'hitsPerPage', 'aroundLatLng', 'aroundRadius'],
-        URL_PARAMETERS_EXCLUDE: ['is_archved', 
+        URL_PARAMETERS_EXCLUDE: ['is_allowed',
+                                 'is_archived', 
                                  'is_good', 
                                  'sites'],
         DEFAULT_ORDERING: "",
@@ -223,6 +225,7 @@ define([
             $scope.search.addDisjunctiveFacetRefinement("pro_owner", false);
             $scope.search.addDisjunctiveFacetRefinement("sites", 1);
             $scope.search.addFacetRefinement("is_archived", false);
+            $scope.search.addFacetRefinement("is_allowed", true);
             $scope.search_default_state = $scope.search.getState();
             
             /*
