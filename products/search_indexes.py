@@ -116,9 +116,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     def prepare__geoloc(self, obj):
         locations = self.prepare_locations(obj)
+        print locations
         if locations:
-            it = iter(locations)
-            return [{"lat":x, "lng":y} for x,y in zip(it,it)]
+            return [{"lat":location[0], "lng":location[1]} for location in locations]
         else:
             return None
     
