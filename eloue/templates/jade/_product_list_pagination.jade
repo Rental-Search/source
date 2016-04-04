@@ -4,21 +4,23 @@
 {% trans "page" as page %}
 
 {% angularjs %}
-.text-center(ng-show="search_result_count && !ui_pristine", ng-cloak): ul.pagination
+.text-center(ng-if="search.pages_range", ng-show="search.result_count && !ui_pristine", ng-cloak): ul.pagination
   li
-    button( type="button", ng-if="page > 1", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
-    button( type="button", ng-if="page == 1").chevron.active: i.flaticon.stroke.left-2
-    li(ng-repeat="page_num in pages_range track by page_num")
-      button( type="button", ng-if="page == page_num").active {{ page_num }}
-      button( type="button", ng-if="page != page_num", ng-click="setPage(page_num, 1)") {{ page_num }}
-    li
-      button( type="button", ng-if="page < pages_count", ng-click="nextPage()", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
-      button( type="button", ng-if="page == pages_count").chevron.active: i.flaticon.stroke.right-2   
+    button( type="button", ng-if="search.page > 0", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
+    button( type="button", ng-if="search.page == 0").chevron.active: i.flaticon.stroke.left-2
+  {% verbatim %}
+  li(ng-repeat="page_num in search.pages_range track by page_num")
+    button( type="button", ng-if="search.page == page_num").active {{ page_num+1 }}
+    button( type="button", ng-if="search.page != page_num", ng-click="setPage(page_num)") {{ page_num+1 }}
+  {% endverbatim %}
+  li
+    button( type="button", ng-if="search.page < search.pages_count-1", ng-click="nextPage()", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
+    button( type="button", ng-if="search.page == search.pages_count-1").chevron.active: i.flaticon.stroke.right-2   
 {% endangularjs %}
 
 {% angularjs 0 %}
 if is_paginated
-  .text-center(ng-show="ui_pristine", ng-init='searchPage={{page_obj.number|add:"-1"}}'): ul.pagination
+  .text-center(ng-show="ui_pristine"): ul.pagination
     {% trans "page" as page %}
     if page_obj.has_previous
       li: a(href="{% facet_url breadcrumbs page page_obj.previous_page_number %}", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
