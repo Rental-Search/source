@@ -4,7 +4,7 @@
   "dependencies": {
     "angular": "1.2.11",
     "bootstrap": "~3.2.0",
-    "lodash": "~2.4.1",
+    "lodash": "3.10.1",
     "json3": "~3.2.6",
     "requirejs": "2.1.14",
     "es5-shim": "~2.1.0",
@@ -30,10 +30,20 @@
     "jquery-autosize": "https://github.com/jackmoore/autosize.git#~1.18.9",
     "angular-translate": "https://github.com/angular-translate/bower-angular-translate.git#~2.2.0",
     "toastr": "~2.0.3",
-    "angular-cookie": "~4.0.6"
+    "angular-cookie": "~4.0.6",
+    "algoliasearch": "~3.10.2",
+    "angularjs-slider": "~2.4.0",
+    "algoliasearch-helper": "~2.8.0",
+    "angular-google-maps": "~2.2.1",
+    "angular-simple-logger": "~0.1.5",
+    "js-cookie": "2.1.0",
+    "stacktrace-js": "1.0.4"
   },
   "devDependencies": {
     "angular-mocks": "1.2.11",
     "angular-scenario": "1.2.11"
+  },
+  "resolutions": {
+    "angular-simple-logger": "~0.1.5"
   }
 }

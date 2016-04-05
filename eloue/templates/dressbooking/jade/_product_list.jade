@@ -6,7 +6,7 @@
     each product in product_list
       li.col-sm-3: .product-item
         .product-image
-          a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}")
+          a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.vertical_profile }}){% endif %}")
           if product.price
             span.badge.price {{ product.price|currency }} /{% trans "jour" %}
           else
