@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 import re
-import urllib
-import urlparse
-import random
-import time, datetime
 
 from django.http import HttpResponsePermanentRedirect
 
@@ -13,8 +9,9 @@ from django.contrib.auth.views import logout_then_login, password_reset, passwor
 from django.utils.html import strip_spaces_between_tags as compress_html
 from django.utils.encoding import DjangoUnicodeDecodeError
 from django.views.static import serve
+from django.http.response import HttpResponseNotFound
+from django.core.urlresolvers import resolve
 
-from eloue.http_user_agents import *
 
 class SpacelessMiddleware(object):
     def process_response(self, request, response):
@@ -59,3 +56,13 @@ class UrlRedirectMiddleware:
             regex = re.compile(url_pattern)
             if regex.match(host):
                 return HttpResponsePermanentRedirect(redirect_url)
+            
+            
+class StagingRestrictionMiddleware(object):    
+    
+    def process_request(self, request):
+        if not (resolve(request.path_info).view_name == 'admin:index'
+                 or request.user.is_superuser):
+            return HttpResponseNotFound()
+        
+        

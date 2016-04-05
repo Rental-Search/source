@@ -7,6 +7,8 @@ from getenv import env
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 DEBUG = env('DEBUG', False)
+STAGING = env('STAGING', False)
+CLIENT_EXCEPTION_LOGGING = env('CLIENT_EXCEPTION_LOGGING', False)
 DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', DEBUG)
 TEMPLATE_DEBUG = DEBUG
 
@@ -186,6 +188,13 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
+if STAGING:
+    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ("eloue.middleware.StagingRestrictionMiddleware",)
+
+if CLIENT_EXCEPTION_LOGGING:
+    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ("client_logging.middleware.ClientLoggingMiddleware",)
+
+
 PASSWORD_HASHERS =(
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
@@ -249,6 +258,8 @@ INSTALLED_APPS = (
     'django_nose', # Make sure that django-nose comes after south in INSTALLED_APPS so that django_nose's test command is used.
     'core',
     'import_export',
+    'djangular',
+    #'django_faker',
 )
 
 if DEBUG_TOOLBAR:
@@ -349,6 +360,7 @@ PIPELINE_CSS = {
             'sass/product_list_styles.sass',
             #'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css',
             'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/angularjs-slider/dist/rzslider.css',
         ),
         'output_filename': 'css/product_list_styles.css',
         'extra_context': {
@@ -497,9 +509,17 @@ SOUTH_MIGRATION_MODULES = {
     'auth': 'eloue.migrations.auth', # here we have Django 1.5+ new auth migration
 }
 
+
 # Haystack configuration
 
 SEARCH_ENGINE = env('SEARCH_ENGINE', 'elasticsearch')
+
+ALGOLIA_CREDENTIALS = {
+    'APP_ID': env('ALGOLIA_APP_ID', None),
+    'API_KEY_SEARCH': env('ALGOLIA_API_KEY_SEARCH', None),
+    'API_KEY_WRITE': env('ALGOLIA_API_KEY', None),
+    'PREFIX': env('ALGOLIA_INDEX_PREFIX', 'e-loue_')
+}
 
 HAYSTACK_CONNECTIONS = {                
    'elasticsearch': {
@@ -513,17 +533,26 @@ HAYSTACK_CONNECTIONS = {
     },              
     'algolia': {
         'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
-        'APP_ID': env('ALGOLIA_APP_ID', None),
-        'API_KEY': env('ALGOLIA_API_KEY', None),
-        'INDEX_NAME_PREFIX': 'e-loue_',
+        'APP_ID': ALGOLIA_CREDENTIALS['APP_ID'],
+        'API_KEY': ALGOLIA_CREDENTIALS['API_KEY_WRITE'],
+        'INDEX_NAME_PREFIX': ALGOLIA_CREDENTIALS['PREFIX'],
         'TIMEOUT': 60 * 5
     },
 }
 
 HAYSTACK_CONNECTIONS['default'] = HAYSTACK_CONNECTIONS[SEARCH_ENGINE]
 
+
 # Algolia configuration
 ALGOLIA_INDICES = {
+    "accounts.patron":{
+        'attributesForFaceting': ['django_ct', 
+                              'django_id',
+                              'sites',
+                              'sites_exact',
+                              'username',
+                              'date_joined_date',],
+    },
     "products.product":{
         'attributesToSnippet': ['summary',
                                 'description',],
@@ -533,24 +562,27 @@ ALGOLIA_INDICES = {
                               'summary',
                               'description',],
         'attributesForFaceting': [
-            'algolia_categories.lvl0',
-            'algolia_categories.lvl1',
-            'algolia_categories.lvl2',
-            'categories',
-            'categories_exact',
-            'django_id_int',
-            'is_archived',
-            'is_good',
-            'pro_owner',
-            'sites',
-            'sites_exact',
-            'price',
-            'price_exact',
-            'owner',
-            'owner_exact',
-            'created_at_timestamp'],
+            u'algolia_categories.lvl0',
+            u'algolia_categories.lvl1',
+            u'algolia_categories.lvl2',
+            u'categories',
+            u'categories_exact',
+            u'django_id_int',
+            u'is_archived',
+            u'is_good',
+            u'pro_owner',
+            u'sites',
+            u'sites_exact',
+            u'price',
+            u'price_exact',
+            u'owner',
+            u'owner_exact',
+            u'created_at_timestamp',
+            u'is_allowed'],
         'attributesToHighlight': ['summary',
                                   'description',],
+        'highlightPreTag': '<em>',
+        'highlightPostTag': '</em>',
         'removeStopWords':True,
         'hitsPerPage': 12,
         'ranking': [
@@ -614,6 +646,39 @@ ALGOLIA_INDICES = {
     },            
 }
 
+
+ALGOLIA_CLIENT_CONFIG = {
+    'MASTER_INDEX': ALGOLIA_CREDENTIALS['PREFIX'] + 'products.product',
+    'PARAMETERS': {
+        'hierarchicalFacets': [{
+            'name': 'category',
+            'attributes': ['algolia_categories.lvl0',
+                         'algolia_categories.lvl1',
+                         'algolia_categories.lvl2'],
+            'sortBy': ['name:asc']
+        }],
+        'disjunctiveFacets': ["pro_owner",
+                            "price",
+                            "sites"],
+        'facets': ["is_archived", 
+                 'is_good',
+                 'is_allowed'],
+        'hitsPerPage': 12,
+        'query':""
+    },
+    'ALGOLIA_PREFIX': "sp_",
+    'ALGOLIA_APP_ID': ALGOLIA_CREDENTIALS['APP_ID'],
+    'ALGOLIA_KEY': ALGOLIA_CREDENTIALS['API_KEY_SEARCH'],
+    'URL_PARAMETERS': ['query', 'attribute:*', 'index', 'page', 
+                     'hitsPerPage', 'aroundLatLng', 'aroundRadius'],
+    'URL_PARAMETERS_EXCLUDE': ['is_archved', 
+                             'is_good', 
+                             'sites',
+                             'is_allowed'],
+    'PAGINATION_WINDOW_SIZE': 10
+}
+
+
 #HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 HAYSTACK_SIGNAL_PROCESSOR = 'eloue.search.HaystackSignalProcessor'
 SEARCH_QUEUE_LOG_LEVEL = logging.INFO
@@ -662,19 +727,33 @@ OAUTH2_PROVIDER = {
 }
 
 # Logging configuration
+
 try:
     import logbook
     import logbook.compat
+    from client_logging import util as cl_util 
     logbook.compat.redirect_logging()
     null_handler = logbook.NullHandler()
     if DEBUG:
         log_handler = logbook.StderrHandler(level=logbook.WARNING)
+        if CLIENT_EXCEPTION_LOGGING:
+            js_log_handler = logbook.StderrHandler(filter=cl_util.js_error_log_filter, level=logbook.INFO)
+            js_log_handler.formatter = cl_util.js_error_formatter_stderr
     else:
         log_handler = logbook.SyslogHandler(level=logbook.WARNING)
+        if CLIENT_EXCEPTION_LOGGING:
+            js_log_handler = logbook.SyslogHandler(filter=cl_util.js_error_log_filter, level=logbook.INFO)
+            js_log_handler.formatter = cl_util.js_error_formatter_syslog
     null_handler.push_application()
     log_handler.push_application()
+    if CLIENT_EXCEPTION_LOGGING:
+        js_log_handler.push_application()
 except ImportError:
     pass
+
+
+CLIENT_EXCEPTION_RATE = env('CLIENT_EXCEPTION_RATE', "20/hour")
+
 
 logging.getLogger('suds.client').setLevel(logging.ERROR)
 logging.getLogger('suds.transport').setLevel(logging.ERROR)
@@ -796,6 +875,8 @@ DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
     'city': u'Paris',
     'coordinates': (48.856614, 2.3522219),
     'country': u'France',
+    'country_coordinates': (46.2, 2.2),
+    'country_radius': 800,
     'fallback': None,
     'radius': 11,
     'formatted_address': u'Paris, France',
@@ -881,6 +962,7 @@ ANALYTICS = {
 
 if not DEBUG:
     IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.MediaStorage"
+
 
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')

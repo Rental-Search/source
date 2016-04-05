@@ -1,5 +1,6 @@
 define(["eloue/app",
         "eloue/controllers/HomePageCtrl",
+        "eloue/controllers/AlgoliaProductListCtrl",
         "eloue/controllers/ProductListCtrl",
         "eloue/controllers/ProShopCtrl",
         "eloue/controllers/SendProMessageCtrl",
