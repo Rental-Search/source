@@ -52,8 +52,8 @@ block details
                     li(ng-repeat="picture in product.pictures track by picture.id", style="padding-top: 0;").block-with-thumbnail
                          .col-thumbnail
                            .thumbnail: span.lg-p
-                             img(style="background-image: url({% verbatim %}{{picture.image.thumbnail}}{% endverbatim %});" ng-click="showRemoveConfirm(picture.id)").delete x
-                             //a(href="", ng-click="showRemoveConfirm(picture.id)").delete x
+                             img(style="background-image: url({% verbatim %}{{picture.image.thumbnail}}{% endverbatim %});")
+                             a(href="", ng-click="showRemoveConfirm(picture.id)").delete x
                     li(ng-repeat="t in getTimes(loadingPicture) track by $index", style="padding-top: 0;").block-with-thumbnail
                          .col-thumbnail
                            .thumbnail: span.lg-p
