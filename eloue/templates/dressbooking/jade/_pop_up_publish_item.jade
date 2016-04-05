@@ -53,10 +53,6 @@
                             .col-sm-4
                                 input(type="text", name="city", placeholder="Ville *", required, ng-model="currentUser.default_address.city").form-control
                                 span.text-danger(ng-show="publishAdForm.city.$error.required && !!publishAdSubmitted", translate="required_field")
-                        .row(ng-show="noAddress")
-                            .col-sm-5
-                                input(type="text", name="street", placeholder="Rue *", required, ng-model="currentUser.default_address.street").form-control
-                                span.text-danger(ng-show="publishAdForm.street.$error.required && !!publishAdSubmitted", translate="required_field")
                         .row(ng-show="noPhone")
                             .col-sm-12
                                 input(type="text", name="phoneNumber", placeholder="Téléphone *", required, ng-model="currentUser.default_number.number").form-control
