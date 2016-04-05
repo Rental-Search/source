@@ -619,6 +619,15 @@ class Picture(models.Model):
         ],
     )
 
+    vertical_profile = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=225, height=325),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
+
     home = ImageSpecField(
         source='image',
         processors=[
