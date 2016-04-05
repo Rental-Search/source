@@ -11,7 +11,7 @@ block append styles
 
 block append content-body
   .container-flex(data-ng-controller="HomePageCtrl")
-    -var categories_map = {2856: [2857, 2872, 2866], 2879: [2880, 2885, 2892], 2896: [2897, 2901]}
+    -var categories_map = {2856: [2857, 2872, 2866], 2879: [2880, 2892, 2885], 2896: [2897, 2901]}
     -var cities_list = [["Paris", "Marseille", "Lyon"], ['Toulouse', 'Bordeaux', 'Montpellier'], ['Lille', 'Nice', 'Nantes']]
 
     header.header-site
@@ -38,24 +38,28 @@ block append content-body
               b C'est pratique, simple et 100% sécurisé !
           .container.indent-t-md.indent-b-md
             .row
-              .col-sm-6: div(style="background-color:#419bbf; border-color: #419bbf; border-radius: 15px").pad-v-xs.indent-r-sm
-                h3(style="text-align: center; border-radius: 15px").text-white
-                  a(href="{% url 'publish_item' %}")
-                    b Je suis 
-                    b propriétaire, 
-                    br
-                    b J’ai des tenues à mettre en location,
-                    br
-                    b Je peux gagner de l’argent !
-              .col-sm-6: div(style="border-radius: 15px").pad-v-xs.indent-l-sm.bg-primary
-                h3(style="text-align: center").text-white
-                  a(href="{% facet_url breadcrumbs 'sort' '' %}")
-                    b Je suis 
-                    b.text-secondary locataire,
-                    br
-                    b Je veux louer des tenues,
-                    br
-                    b Je peux économiser de l’argent !
+              .col-sm-6: div.pad-v-xs.indent-r-sm.ownerborrower
+                a(href="{% url 'publish_item' %}")
+                    h3(style="text-align: center; border-radius: 15px").text-white
+                      | Je suis 
+                      b propriétaire, 
+                      br
+                      b J’ai des tenues à mettre en location,
+                      br
+                      | Je peux 
+                      b gagner 
+                      | de l’argent !
+              .col-sm-6: div.pad-v-xs.indent-l-sm.bg-primary.ownerborrower-second
+                a(href="{% facet_url breadcrumbs 'sort' '' %}")
+                    h3(style="text-align: center").text-white          
+                        | Je suis 
+                        b.text-secondary locataire,
+                        br
+                        b Je veux louer des tenues,
+                        br
+                        | Je peux 
+                        b économiser
+                        | de l’argent !
         section.product-list.framing
           include ./jade/_product_list
 
