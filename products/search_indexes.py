@@ -11,6 +11,8 @@ from .models import Product
 from .choices import UNIT
 from .helpers import get_unavailable_periods
 
+from haystack.utils.geo import ensure_point
+
 __all__ = ['ProductIndex']
 
 
@@ -29,22 +31,11 @@ class LocationMultiValueField(indexes.SearchField):
             return None
 
 
-class AlgoliaLocationField(indexes.LocationField):
+class AlgoliaLocationMultiValueField(LocationMultiValueField):
     field_type = 'location'
     
     index_fieldname = "_geoloc"
     
-    def prepare(self, obj):
-        from haystack.utils.geo import ensure_point
-
-        value = super(indexes.LocationField, self).prepare(obj)
-
-        if value is None:
-            return None
-
-        pnt = ensure_point(value)
-        pnt_lat, pnt_lng  = pnt.get_coords()
-        return {"lat":pnt_lat, "lng":pnt_lng}
 
 
 class AlgoliaTagsField(indexes.MultiValueField):
@@ -83,6 +74,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     thumbnail = indexes.CharField(indexed=False, null=True)
     thumbnail_medium = indexes.CharField(indexed=False, null=True)
     profile = indexes.CharField(indexed=False, null=True)
+    vertical_profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
     is_archived = indexes.BooleanField(model_attr='is_archived')
@@ -106,8 +98,9 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     django_id_int = indexes.IntegerField(model_attr='id')
     algolia_categories = indexes.MultiValueField(faceted=True, null=True)
-    _geoloc = AlgoliaLocationField(model_attr='address__position', null=True)
     _tags = AlgoliaTagsField(model_attr='categories', null=True)
+    _geoloc = AlgoliaLocationMultiValueField()
+    
     
     def get_updated_field(self):
         return "created_at"
@@ -122,7 +115,16 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         else:
             return None
 
-
+    def prepare__geoloc(self, obj):
+        locations = self.prepare_locations(obj)
+        if locations:
+            if isinstance(locations[0], list):
+                return [{"lat":location[0], "lng":location[1]} for location in locations]
+            else:
+                return {"lat":locations[0], "lng":locations[1]}
+        else:
+            return None
+    
     def prepare_need_insurance(self, obj):
         return obj.category.need_insurance
             
@@ -179,6 +181,10 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     def prepare_profile(self, obj):
         for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
             return picture.profile.url if picture.profile else None
+
+    def prepare_vertical_profile(self, obj):
+        for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
+            return picture.vertical_profile.url if picture.vertical_profile else None
 
     def prepare_owner_avatar(self, obj):
         obj = obj.owner

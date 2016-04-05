@@ -619,6 +619,15 @@ class Picture(models.Model):
         ],
     )
 
+    vertical_profile = ImageSpecField(
+        source='image',
+        processors=[
+            processors.Transpose(processors.Transpose.AUTO),
+            processors.SmartResize(width=225, height=325),
+            processors.Adjust(contrast=1.2, sharpness=1.1),
+        ],
+    )
+
     home = ImageSpecField(
         source='image',
         processors=[
@@ -758,6 +767,10 @@ class Category(MPTTModel):
 
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
+    
+    
+    def get_algolia_path(self):
+        return " > ".join([cat.name for cat in self.get_ancestors(include_self=True)])
     
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()

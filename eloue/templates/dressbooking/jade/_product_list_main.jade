@@ -5,7 +5,7 @@ ol.product-layout
     li(id="marker-{{ forloop.counter }}", locationY="{{ product.location.y|stringformat:'f' }}", locationX="{{ product.location.x|stringformat:'f' }}", name="{{ product.summary }}")
       .section-body
         .thumbnail-img
-          a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
+          a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.vertical_profile }}){% endif %}").bg-image
           if product.price
             span.badge.price {{ product.price|currency }} /{{ by_day }}
           else

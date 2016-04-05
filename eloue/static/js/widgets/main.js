@@ -12,7 +12,7 @@ require.config(
             baseUrl: STATIC_URL + "js/widgets",
             paths: {
                 "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
-                "lodash": "../../bower_components/lodash/dist/lodash",
+                "lodash": "../../bower_components/lodash/lodash",
                 "jquery": "../../bower_components/jquery/dist/jquery",
                 "jquery-ui": "../../bower_components/jqueryui/jquery-ui",
                 "jshashtable": "../jshashtable-2.1_src",
@@ -48,7 +48,19 @@ require.config(
                 "toastr": "../../bower_components/toastr/toastr",
                 "formmapper": "../formmapper",
                 "filesaver": "../FileSaver.min",
-                "angular-cookie": "../../bower_components/angular-cookie/angular-cookie"
+                "angular-cookie": "../../bower_components/angular-cookie/angular-cookie",
+                "algoliasearch": "../../bower_components/algoliasearch/dist/algoliasearch.angular",
+                "algoliasearch-helper": "../../bower_components/algoliasearch-helper/dist/algoliasearch.helper",
+                "angularjs-slider": "../../bower_components/angularjs-slider/dist/rzslider",
+                "nemSimpleLogger": "../../bower_components/angular-simple-logger/dist/angular-simple-logger",
+                "uiGmapgoogle-maps": "../../bower_components/angular-google-maps/dist/angular-google-maps",
+                "js-cookie": "../../bower_components/js-cookie/src/js.cookie",
+                "stacktrace": "../../bower_components/stacktrace-js/stacktrace",
+                "stack-generator": "../../bower_components/stack-generator/stack-generator",
+                "stackframe": "../../bower_components/stackframe/stackframe",
+                "error-stack-parser": "../../bower_components/error-stack-parser/error-stack-parser",
+                "stacktrace-gps": "../../bower_components/stacktrace-gps/stacktrace-gps",
+                "source-map": "../../bower_components/source-map/dist/source-map"
             },
             shim: {
                 "angular": {
@@ -88,7 +100,16 @@ require.config(
                 "jquery-mousewheel": ["jquery"],
                 "custom-scrollbar": ["jquery", "jquery-mousewheel"],
                 "toastr": ["jquery"],
-                "angular-cookie": ["angular"]
+                "angular-cookie": ["angular"],
+                "algoliasearch": ["angular"],
+                "algoliasearch-helper": ["algoliasearch"],
+                "angularjs-slider": ["angular"],
+                "nemSimpleLogger": ["angular"],
+                "uiGmapgoogle-maps": ["angular", "lodash", "nemSimpleLogger"],
+                "stacktrace": ["error-stack-parser", "stack-generator", "stacktrace-gps"],
+                "error-stack-parser": ["stackframe"],
+                "stacktrace-gps": ["source-map"],
+                "js-cookie": {exports: "Cookies"}
             }
         };
     })()
@@ -130,7 +151,14 @@ require([
     "../common/eloue/commonApp",
     "../common/eloue/i18n",
     "eloue/config",
-    "angular-cookie"
+    "angular-cookie",
+    "algoliasearch",
+    "algoliasearch-helper",
+    "angularjs-slider",
+    "nemSimpleLogger",
+    "uiGmapgoogle-maps",
+    "js-cookie",
+    "stacktrace"
 ], function ($, _, angular) {
     "use strict";
     $(function () {

@@ -83,3 +83,9 @@ django-import-export==0.4.2
 openpyxl==2.3.2
 algoliasearch==1.8.0
 -e git+https://github.com/matagus/haystack-algolia.git#egg=haystack_algolia
+django-angular==0.7.15
+pytest==2.9.0
+pytest-django==2.9.1
+fake-factory==0.5.7
+django-faker==0.2
+factory_boy==2.6.1

@@ -1,22 +1,29 @@
+
 style
   .pad-v-xs {
   border-radius: 15px;
   }
 .container.indent-t-md.indent-b-md
   .row
-    .col-sm-6: div(style="background-color:#419bbf; border-color: #419bbf, text-align: center").pad-v-xs.indent-r-sm
-      h3.text-white
-        b Je suis 
-        b propriétaire, 
-        br
-        b J’ai des tenues à mettre en location,
-        br
-        b Je peux gagner de l’argent !
-    .col-sm-6: .pad-v-xs.indent-l-sm.bg-primary
-      h3.text-white
-        b Je suis 
-        b.text-secondary locataire,
-        br
-        b Je veux louer des tenues,
-        br
-        b Je peux économiser de l’argent !
+    .col-sm-6: div.pad-v-xs.indent-r-sm.ownerborrower
+        a(href="{% url 'publish_item' %}")
+            h3(style="text-align: center; border-radius: 15px").text-white
+                | Je suis 
+                b propriétaire, 
+                br
+                b J’ai des tenues à mettre en location,
+                br
+                | Je peux 
+                b gagner 
+                | de l’argent !
+    .col-sm-6: div.pad-v-xs.indent-l-sm.bg-primary.ownerborrower-second
+        a(href="/location/")
+            h3.text-white
+                | Je suis 
+                b.text-secondary locataire,
+                br
+                b Je veux louer des tenues,
+                br
+                | Je peux 
+                b économiser
+                | de l’argent !
