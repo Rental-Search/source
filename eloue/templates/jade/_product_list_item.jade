@@ -9,7 +9,7 @@
 //-TODO rate
 
 li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
-    ng-repeat=("product in product_list track by product.django_id" if ng else None),
+    ng-repeat=("product in search.product_list track by product.django_id" if ng else None),
     locationY="{{ product.locations.0 }}",
     locationX="{{ product.locations.1 }}",
     name="{{ product.summary|title }}")
