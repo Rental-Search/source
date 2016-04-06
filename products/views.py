@@ -221,7 +221,7 @@ SEARCH_DEFAULTS = {
              'pro': True,
              'part': True,
              'pro_count':None,
-             'part_count':None},       
+             'part_count':None},
      'price': {
              'min': None,
              'max': None,
@@ -241,7 +241,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
     context_object_name = 'product_list'
     paginate_by = PAGINATE_PRODUCTS_BY
     form_class = ProductFacetedSearchForm
-    
+
     @method_decorator(mobify)
     @method_decorator(vary_on_cookie)
     def dispatch(self, request, urlbits=None, sqs=None, **kwargs):
@@ -288,7 +288,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                 ancestors_slug = item.get_ancertors_slug()
                 self.breadcrumbs['categorie'] = {
                     'name': 'categories', 'value': value, 'label': ancestors_slug, 'object': item,
-                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name, 
+                    'pretty_name': _(u"Catégorie"), 'pretty_value': item.name,
                     'algolia_path': item.get_algolia_path(),
                     'url': item.get_absolute_url(), 'facet': True
                 }
@@ -320,7 +320,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         breadcrumbs['price_to'] = {'name': 'price_to', 'value': form.cleaned_data.get('price_to', None), 'label': 'price_to', 'facet': False}
         breadcrumbs['categorie'] = {'name': 'categorie', 'value': None, 'label': 'categorie', 'facet': True}
         return breadcrumbs
-    
+
     def get_context_data(self, **kwargs):
         if settings.FILTER_CATEGORIES:
             category_list = Category.on_site.filter(id__in=settings.FILTER_CATEGORIES)
@@ -328,9 +328,9 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
             category_list = Category.on_site.filter(
                 Q(parent__isnull=True) | ~Q(parent__sites__id=settings.SITE_ID)
             ).exclude(slug='divers')
-                
+
         facet_counts = self.sqs.facet_counts()
-                
+
         context = {
             'category_list': category_list,
             'facets': facet_counts,
@@ -340,25 +340,26 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         if filter_limits:
             context.update(filter_limits)
         context.update(super(ProductListView, self).get_context_data(**kwargs))
-        
+
         renter = self.form.cleaned_data.get('renter')
         category = self.breadcrumbs['categorie'].get('value','')
-        
+        algolia_path = self.breadcrumbs['categorie']['algolia_path'] if category else None
+
         context.update({'search_params': simplejson.dumps({
 
             # Configuration for algolia js client and helper
             'config':settings.ALGOLIA_CLIENT_CONFIG,
-            
+
             # Default values for filters
             'defaults':SEARCH_DEFAULTS,
-            
+
             # Initial values for filters
             'init':{
                  'query':self.form.cleaned_data.get('q', u''),
                  'order_by': self.form.cleaned_data.get('sort', u''),
                  'page': context['page_obj'].number-1 if context['is_paginated'] else 0,
                  'result_count': self.sqs.count(),
-                 'category_path': category.get_algolia_path() if category else '', #TODO take from form
+                 'category_path': algolia_path if algolia_path else '', #TODO take from form
                  'owner_type': {
                          'pro': not renter or renter==u'professionnels',
                          'part': not renter or renter==u'particuliers',
@@ -373,7 +374,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                  'location':self.form.cleaned_data.get('l'),
                  'center':settings.DEFAULT_LOCATION['country_coordinates'],
                  },},separators=(',', ':'))})
-        
+
         return context
 
 
@@ -745,7 +746,7 @@ class ProductViewSet(mixins.OwnerListPublicSearchMixin, mixins.SetOwnerMixin, vi
         """
         Return the serializer instance that should be used for validating and
         deserializing input, and for serializing output.
-        
+
         We should use different Seializer classes for instances of
         Product, CarProduct and RealEstateProduct models
         """
