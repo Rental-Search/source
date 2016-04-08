@@ -148,48 +148,7 @@ define([
             region: 'FR'
         });
     }]);
-    
-    EloueWidgetsApp.constant("search_params.config", {
-        MASTER_INDEX: 'e-loue_products.product',
-        PARAMETERS: {
-            hierarchicalFacets: [{
-                name: 'category',
-                attributes: ['algolia_categories.lvl0',
-                             'algolia_categories.lvl1',
-                             'algolia_categories.lvl2'],
-                sortBy: ['name:asc']
-            }],
-            disjunctiveFacets: ["pro_owner",
-                                "price",
-                                "sites"],
-            facets: ["is_archived", 
-                     'is_good',
-                     'is_allowed'],
-            hitsPerPage: 12,
-            aroundLatLng:"46.2,2.2",
-            aroundRadius:1000000,
-            query:""
-        },
-        ALGOLIA_PREFIX: "sp_",
-        ALGOLIA_APP_ID: 'DZ2AR773WQ',
-        ALGOLIA_KEY:'36fe3114bb36ad618af27f32ed194ac8',
-        URL_PARAMETERS: ['query', 'attribute:*', 'index', 'page', 
-                         'hitsPerPage', 'aroundLatLng', 'aroundRadius'],
-        URL_PARAMETERS_EXCLUDE: ['is_allowed',
-                                 'is_archived', 
-                                 'is_good', 
-                                 'sites'],
-        DEFAULT_ORDERING: "",
-        PAGINATION_WINDOW_SIZE: 10,
-        COUNTRIES: {
-          'fr': {
-            center: Point(46.2, 2.2),
-            radius: 1000,
-            location_name: "France"
-          }
-        }
-    });
-  
+   
     
     /**
      * Controller to run scripts necessary for product list page.
@@ -257,7 +216,7 @@ define([
                 $scope.search.helper = algoliasearchHelper(client, $scope.get_index(), search_params.config.PARAMETERS);
                 $scope.search.helper.addDisjunctiveFacetRefinement("pro_owner", true);
                 $scope.search.helper.addDisjunctiveFacetRefinement("pro_owner", false);
-                $scope.search.helper.addDisjunctiveFacetRefinement("sites", 1);
+                $scope.search.helper.addDisjunctiveFacetRefinement("sites", $scope.search.site);
                 $scope.search.helper.addFacetRefinement("is_archived", false);
                 $scope.search.helper.addFacetRefinement("is_allowed", true);
                 $scope.search_default_state = $scope.search.helper.getState();
