@@ -232,7 +232,8 @@ SEARCH_DEFAULTS = {
              'floor':1,
              'ceil':settings.DEFAULT_LOCATION['country_radius']},
      'location':settings.DEFAULT_LOCATION['country'],
-     'center':settings.DEFAULT_LOCATION['country_coordinates'],}
+     'center':settings.DEFAULT_LOCATION['country_coordinates'],
+     'site': settings.SITE_ID,}
 
 
 class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
