@@ -219,6 +219,9 @@ define([
                 $scope.search.helper.addDisjunctiveFacetRefinement("sites", $scope.search.site);
                 $scope.search.helper.addFacetRefinement("is_archived", false);
                 $scope.search.helper.addFacetRefinement("is_allowed", true);
+                $scope.search.helper.setQueryParameter('aroundRadius', search_params.defaults.range.max * 1000);
+                $scope.search.helper.setQueryParameter('aroundLatLng', search_params.defaults.center[0]+
+                		','+search_params.defaults.center[1]);
                 $scope.search_default_state = $scope.search.helper.getState();
                 
                 /*
@@ -406,16 +409,17 @@ define([
                         
                         for (var ri=0; ri<$scope.search.product_list.length; ri++){
                             var res = $scope.search.product_list[ri];
-                            res.location_obj = Point(res.locations[0], res.locations[1]);
-                            res.images = $scope.marker_images[ri];
-                            res.markerId = ri;
-                            res.markerOptions = {
-                                icon: res.images.normal,
-                                title: res.plain_summary,
-                                zIndex: ri
-                            };
+                            if (res.locations){
+                                res.location_obj = Point(res.locations[0], res.locations[1]);
+                                res.images = $scope.marker_images[ri];
+                                res.markerId = ri;
+                                res.markerOptions = {
+                                    icon: res.images.normal,
+                                    title: res.plain_summary,
+                                    zIndex: ri
+                                };	
+                            }
                         };
-                        var gmap = $scope.search.map.control.getGMap();
                         
                         $log.debug(state.getQueryParameter('aroundLatLng'));
                         $log.debug(state.getQueryParameter('aroundRadius'));
@@ -979,11 +983,12 @@ define([
             
         }]);
 
-    EloueWidgetsApp.controller("CategoryController", function($scope, $log){
+    EloueWidgetsApp.controller("CategoryController", ['$scope', '$log', function($scope, $log){
     	$log.debug("CategoryController parent scope:");
     	$log.debug($scope.$parent);
     	$scope.$parent.$watch("search.category", function(category){
     		$scope.category = category;
     	});
-    });
+    }]);
+    
 });
