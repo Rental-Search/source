@@ -69,7 +69,7 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
       else        
         .rate(ng-if="product.comment_count")
           span(ng-repeat="i in [1,2,3,4,5]").flaticon.solid.star-2(ng-class="i==product.average_rate && 'current-rate'")
-        span(ng-if="product.comment_count").sprite-comment
+        span(ng-if="product.comment_count", ng-cloak).sprite-comment
           i.flaticon.stroke.writing-comment
           {% verbatim %}{{ product.comment_count }}{% endverbatim %} 
       if ng
