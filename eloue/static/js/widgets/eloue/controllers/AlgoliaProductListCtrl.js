@@ -32,20 +32,6 @@ define([
     function geoJsonToAlgolia(point){
         return point.coordinates[1]+','+point.coordinates[0];
     };
-        
-    
-    function deepUpdate(c1, c2){
-        for (var k in c2){
-            if (c2.hasOwnProperty(k)){
-                if (c1[k] instanceof Object) {
-                    c1[k] = deepUpdate(c1[k], c2[k]); 
-                } else {
-                    c1[k] = c2[k];
-                }
-            }
-        }
-        return c1;
-    };
     
     var el = Cookies.get("eloue_el");
     
@@ -173,9 +159,10 @@ define([
                 
                 unsubscribe();
                 
-                $scope.search = deepUpdate(search_params.defaults, search_params.init);
-                //$log.debug('Initial parameters:');
-                //$log.debug($scope.search);
+                $scope.search = $.extend(true, {}, search_params.defaults, search_params.init);
+                
+//                $log.debug('Initial parameters:');
+//                $log.debug($scope.search);
                 
                 $scope.search.index = search_params.config.MASTER_INDEX;
                 $scope.search.pages_count = Math.ceil($scope.search.result_count/search_params.config.PARAMETERS.hitsPerPage);
@@ -223,6 +210,8 @@ define([
                 $scope.search.helper.setQueryParameter('aroundLatLng', search_params.defaults.center[0]+
                         ','+search_params.defaults.center[1]);
                 $scope.search_default_state = $scope.search.helper.getState();
+                
+//                $log.debug($scope.search_default_state);
                 
                 /*
                  * Map config
@@ -652,7 +641,8 @@ define([
                 
                 $scope.clearRefinements = function(){ //$log.debug('clearRefinements');
                     $scope.search.helper.setState($scope.search_default_state);
-                    //$log.debug($scope.search.helper.getState());
+//                    $log.debug($scope.search_default_state);
+//                    $log.debug($scope.search.helper.getState());
 //                    $scope.search.query = "";
                     $scope.search.location = $scope.search.location_geocoded = search_params.defaults.location;
                     $scope.search.helper.search();
