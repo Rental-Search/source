@@ -31,13 +31,13 @@ from django.utils.translation import ugettext as _
 
 from mptt.models import MPTTModel
 
-from django_messages.models import Message 
+from django_messages.models import Message
 from django.db.models import signals
 
 from accounts.models import Patron, Address, ProAgency, PhoneNumber
 from products.fields import SimpleDateField
 from products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, CurrentSiteProduct2CategoryManager, TreeManager
-from products.signals import (post_save_answer, post_save_product, 
+from products.signals import (post_save_answer, post_save_product,
     post_save_curiosity, post_save_to_update_product, post_save_message)
 from products.choices import UNIT, CURRENCY, STATUS, PAYMENT_TYPE, SEAT_NUMBER, DOOR_NUMBER, CONSUMPTION, FUEL, TRANSMISSION, MILEAGE, CAPACITY, TAX_HORSEPOWER, PRIVATE_LIFE
 from rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
@@ -113,11 +113,13 @@ class Product(models.Model):
 
     class Meta:
         verbose_name = _('product')
-    
+
     def __unicode__(self):
         return smart_unicode(self.summary)
-    
+
     def save(self, *args, **kwargs):
+        if not self.phone:
+            self.phone = self.owner.default_number
         self.summary = strip_tags(self.summary)
         self.description = strip_tags(self.description)
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
@@ -141,7 +143,7 @@ class Product(models.Model):
         else:
             path = '%s/' % self.category.slug
         return 'booking_create', [path, self.slug, self.pk]
-    
+
     def more_like_this(self):
         from products.search import product_search
         sqs = product_search.dwithin(
@@ -149,17 +151,17 @@ class Product(models.Model):
             Distance(km=DEFAULT_RADIUS)
         ) #.distance('location', self.address.position)
         return sqs.more_like_this(self)[:3]
-    
+
     @property
     def slug(self):
         return slugify(self.summary) or 'none'
-    
+
     @property
     def has_insurance(self):
         return not self.owner.is_professional \
             and self.deposit_amount <= INSURANCE_MAX_DEPOSIT \
             and self.category.need_insurance
-    
+
     @property
     def daily_price(self):
         if not hasattr(self, '_daily_price'):
@@ -175,7 +177,7 @@ class Product(models.Model):
             else:
                 return convert(self.deposit_amount, DEFAULT_CURRENCY, self.daily_price.currency)
         else:
-            return self.deposit_amount 
+            return self.deposit_amount
 
     @property
     def average_note(self):
@@ -222,7 +224,7 @@ class Product(models.Model):
         except models.Model.DoesNotExist:
             return False
         return True
-    
+
     def monthly_availability(self, year, month):
 
         year = int(year)
@@ -231,8 +233,8 @@ class Product(models.Model):
 
         started_at = datetime(year, month, 1, 0, 0)
         ended_at = started_at + timedelta(days=days_num)
-        
-        # the bookings 
+
+        # the bookings
         bookings = self.bookings.filter(
             Q(state="pending")|Q(state="ongoing")
         ).filter(
@@ -244,20 +246,20 @@ class Product(models.Model):
 
         START = 1
         END = -1
-        
+
         bookings_tuple = [(booking.started_at, booking.ended_at, booking.quantity) for booking in bookings]
 
         for day in xrange(days_num):
             bookings_tuple += ((
-                datetime(year, month, 1 + day), 
-                datetime(year, month, 1 + day) + _one_day, 
+                datetime(year, month, 1 + day),
+                datetime(year, month, 1 + day) + _one_day,
                 0
             ),)
         grouped_dates = itertools.groupby(
             sorted(
                 itertools.chain.from_iterable(
-                    ((start, START, value), (end, END, value)) 
-                    for start, end, value 
+                    ((start, START, value), (end, END, value))
+                    for start, end, value
                     in bookings_tuple)
             ),
             key=operator.itemgetter(0)
@@ -273,12 +275,12 @@ class Product(models.Model):
             itertools_accumulate(map(operator.itemgetter(1), changements))
         )
         availables = [(key, self.quantity - value) for key, value in borrowed]
-        
+
         return [
-            (d.date(), available) 
+            (d.date(), available)
             for (d, available) in (
                 min(group, key=lambda x: x[1])
-                for (key, group) 
+                for (key, group)
                 in itertools.groupby(availables, key=lambda x:x[0].date())
                 if key.year == year and key.month == month and key >= date.today()
             )
@@ -290,7 +292,7 @@ class Product(models.Model):
             return 'product'
         else:
             return self.subtype.name
-    
+
     @property
     def subtype(self):
         if hasattr(self, '_subtype'):
@@ -473,13 +475,13 @@ class CarProduct(Product):
     @property
     def options(self):
         option_names = [
-            field.name 
-            for field in self.__class__._meta.fields 
+            field.name
+            for field in self.__class__._meta.fields
             if isinstance(field, models.BooleanField) and field.model == self.__class__
         ]
         return [
-            self._meta.get_field(field_name).verbose_name 
-            for field_name in option_names 
+            self._meta.get_field(field_name).verbose_name
+            for field_name in option_names
             if getattr(self, field_name)
         ]
 
@@ -515,7 +517,7 @@ class CarProduct(Product):
             return ContractGenerator()
 
 class RealEstateProduct(Product):
-    
+
     capacity = models.IntegerField(_(u'capacité'), null=True, blank=True, choices=CAPACITY, default=1, help_text=_(u'Nombre de personne que peux accueillir votre locgement'))
     private_life = models.IntegerField(_(u'Type de logement'),
         choices=PRIVATE_LIFE, null=True, blank=True, default=1)
@@ -547,28 +549,28 @@ class RealEstateProduct(Product):
 
     objects = ProductManager()
     on_site = CurrentSiteProductManager()
-    
+
     @property
     def options(self):
         option_names = [
-            field.name 
-            for field in self.__class__._meta.fields 
+            field.name
+            for field in self.__class__._meta.fields
             if isinstance(field, models.BooleanField) and field.model == self.__class__
         ]
         return [
-            self._meta.get_field(field_name).verbose_name 
-            for field_name in option_names 
+            self._meta.get_field(field_name).verbose_name
+            for field_name in option_names
             if getattr(self, field_name)
         ]
 
     @property
     def subtype(self):
         return self
-    
+
     @property
     def name(self):
         return 'realestateproduct'
-        
+
     @property
     def commission(self):
         return settings.COMMISSION
@@ -651,11 +653,11 @@ class Picture(models.Model):
         if not self.created_at:
             self.created_at = datetime.now()
         super(Picture, self).save(*args, **kwargs)
-    
+
     def delete(self, *args, **kwargs):
         self.image.delete()
         super(Picture, self).delete(*args, **kwargs)
-    
+
 
 def category_upload_to(instance, filename):
     return 'pictures/categories/%s.jpg' % uuid.uuid4().hex
@@ -713,7 +715,7 @@ class Category(MPTTModel):
         ordering = ['name']
         verbose_name = _('category')
         verbose_name_plural = _('categories')
-    
+
     def __unicode__(self):
         """
         >>> category = Category(name='Travaux - Bricolage')
@@ -721,7 +723,7 @@ class Category(MPTTModel):
         u'Travaux - Bricolage'
         """
         return smart_unicode(self.name)
-    
+
     def save(self, *args, **kwargs):
         if not self.slug:
             slug = slugify(self.name)
@@ -758,11 +760,11 @@ class Category(MPTTModel):
 
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
-    
-    
+
+
     def get_algolia_path(self):
         return " > ".join([cat.name for cat in self.get_ancestors(include_self=True)])
-    
+
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
         if ancestors_slug:
@@ -791,10 +793,10 @@ class Property(models.Model):
     """A property"""
     category = models.ForeignKey(Category, related_name='properties')
     name = models.CharField(max_length=255)
-    
+
     class Meta:
         verbose_name_plural = _('properties')
-    
+
     def __unicode__(self):
         """
         >>> property = Property(name="Marque")
@@ -802,16 +804,16 @@ class Property(models.Model):
         u'Marque'
         """
         return smart_unicode(self.name)
-    
+
 
 class PropertyValue(models.Model):
     property = models.ForeignKey(Property, related_name='values')
     value = models.CharField(max_length=255)
     product = models.ForeignKey(Product, related_name='properties')
-    
+
     class Meta:
         unique_together = ('property', 'product')
-    
+
     def __unicode__(self):
         """
         >>> property = PropertyValue(value="Mercedes")
@@ -834,24 +836,24 @@ class Price(models.Model):
     currency = models.CharField(max_length=3, choices=CURRENCY, default=DEFAULT_CURRENCY)
     product = models.ForeignKey(Product, related_name='prices')
     unit = models.PositiveSmallIntegerField(choices=UNIT, db_index=True)
-    
+
     started_at = SimpleDateField(null=True, blank=True)
     ended_at = SimpleDateField(null=True, blank=True)
-    
+
     objects = PriceManager()
-    
+
     @property
     def day_amount(self):
         return UNIT.units[self.unit](self.local_currency_amount)
-    
+
     def __unicode__(self):
         return smart_unicode(currency(self.local_currency_amount))
-    
+
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.amount <= 0:
             raise ValidationError({'amount': _(u"Le prix ne peut pas être négatif")})
-    
+
     def delta(self, started_at, ended_at):
         """Return delta of time passed in this season price"""
         increase = 0
@@ -863,7 +865,7 @@ class Price(models.Model):
             started_at = self.started_at.datetime(started_at.year)
         delta = (ended_at - started_at)
         return delta if delta > timedelta(days=0) else timedelta(days=0)
-    
+
     @property
     def local_currency_amount(self):
         # XXX: ugly and not very well tested hack
@@ -887,29 +889,29 @@ class Review(models.Model):
     created_at = models.DateTimeField(blank=True, editable=False)
     ip = models.IPAddressField(null=True, blank=True)
     reviewer = models.ForeignKey(Patron, related_name="%(class)s_reviews")
-    
+
     class Meta:
         abstract = True
-    
+
     def __unicode__(self):
         return smart_unicode(self.summary)
-    
+
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
         super(Review, self).save(*args, **kwargs)
-    
+
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.score > 1:
             raise ValidationError(_("Score can't be higher than 1"))
         if self.score < 0:
             raise ValidationError(_("Score can't be a negative value"))
-    
+
 
 class ProductReview(Review):
     product = models.ForeignKey(Product, related_name='reviews')
-    
+
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.reviewer == self.product.owner:
@@ -917,11 +919,11 @@ class ProductReview(Review):
         if not self.product.bookings.filter(borrower=self.reviewer).exists():
             raise ValidationError(_(u"Vous ne pouvez pas commenter un produit que vous n'avez pas loué"))
         super(ProductReview, self).clean()
-    
+
 
 class PatronReview(Review):
     patron = models.ForeignKey(Patron, related_name='reviews')
-    
+
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.reviewer == self.patron:
@@ -929,23 +931,23 @@ class PatronReview(Review):
         if not self.patron.bookings.filter(borrower=self.reviewer).exists():
             raise ValidationError(_(u"Vous ne pouvez pas commenter le profil d'un loueur avec lequel n'avez pas effectué de réservations"))
         super(PatronReview, self).clean()
-    
+
 
 class Question(models.Model):
     text = models.CharField(max_length=255)
     created_at = models.DateTimeField(editable=False)
     modified_at = models.DateTimeField(editable=False)
     status = models.PositiveSmallIntegerField(choices=STATUS, db_index=True, default=STATUS.DRAFT)
-    
+
     product = models.ForeignKey(Product, related_name="questions")
     author = models.ForeignKey(Patron, related_name="questions")
-    
+
     objects = QuestionManager()
-    
+
     class Meta:
         ordering = ('modified_at', 'created_at')
         get_latest_by = 'modified_at'
-    
+
     def __unicode__(self):
         """
         >>> question = Question(text='Quel est le nombre de place de cette voiture ?')
@@ -953,20 +955,20 @@ class Question(models.Model):
         u'Quel est le nombre de place de cette voiture ?'
         """
         return smart_unicode(self.text)
-    
+
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
         else:
             self.modified_at = datetime.now()
         super(Question, self).save(*args, **kwargs)
-    
+
 
 class Answer(models.Model):
     text = models.CharField(max_length=255)
     created_at = models.DateTimeField(editable=False)
     question = models.ForeignKey(Question, related_name="answers")
-    
+
     def __unicode__(self):
         """
         >>> answer = Answer(text='Cette voiture comporte 5 places')
@@ -974,26 +976,26 @@ class Answer(models.Model):
         u'Cette voiture comporte 5 places'
         """
         return smart_unicode(self.text)
-    
+
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
         super(Answer, self).save(*args, **kwargs)
-    
+
 
 class Curiosity(models.Model):
     product = models.ForeignKey(Product, related_name='curiosities')
     sites = models.ManyToManyField(Site, related_name='curiosities')
-    
+
     on_site = CurrentSiteManager()
     objects = models.Manager()
-    
+
     def __unicode__(self):
         return smart_unicode(self.product.summary)
-    
+
     class Meta:
         verbose_name_plural = "curiosities"
-        
+
 
 class MessageThread(models.Model):
     sender = models.ForeignKey(Patron, related_name='initiated_threads')
@@ -1004,7 +1006,7 @@ class MessageThread(models.Model):
     subject = models.CharField(_("Subject"), max_length=120)
     sender_archived = models.BooleanField(_("Archived"), default=False)
     recipient_archived = models.BooleanField(_("Archived"), default=False)
-    
+
     def __unicode__(self):
         return unicode(self.subject)
 
@@ -1016,7 +1018,7 @@ class MessageThread(models.Model):
         """Returns True if self.recipient has unread message in the thread
         """
         return self.last_message.recipient == self.recipient and not self.last_message.read_at
-    
+
     def new_sender(self):
         """Return True if self.sender has unread message in the thread
         """
@@ -1051,7 +1053,7 @@ if "notification" not in settings.INSTALLED_APPS:
 
     # register pre-processing filters for both ProductRelatedMessage and Message
     signals.pre_save.connect(eloue_signals.message_content_filter, sender=ProductRelatedMessage)
-    signals.pre_save.connect(eloue_signals.message_site_filter, sender=ProductRelatedMessage) 
+    signals.pre_save.connect(eloue_signals.message_site_filter, sender=ProductRelatedMessage)
     signals.pre_save.connect(eloue_signals.message_content_filter, sender=Message)
     signals.pre_save.connect(eloue_signals.message_site_filter, sender=Message)
 
@@ -1063,34 +1065,34 @@ class Alert(models.Model):
     created_at = models.DateTimeField(editable=False)
     address = models.ForeignKey(Address, related_name='alerts')
     sites = models.ManyToManyField(Site, related_name='alerts')
-    
+
     on_site = CurrentSiteManager()
     objects = models.Manager()
-    
+
     def __unicode__(self):
         return smart_unicode(self.designation)
-    
+
     def geocode(self):
         name, coords, radius = GoogleGeocoder().geocode(self.location)
         if all(coords):
             return Point(coords)
-    
+
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = datetime.now()
         super(Alert, self).save(*args, **kwargs)
-    
+
     @property
     def position(self):
         return self.address.position
-    
+
     @property
     def nearest_patrons(self):
         if self.position:
             nearest_addresses = Address.objects.distance(self.position).filter(position__distance_lt=(self.position, Distance(km=ALERT_RADIUS))).order_by('distance')
             return Patron.objects.distinct().filter(addresses__in=nearest_addresses)[:10]
         else:
-            return None 
+            return None
 
     def send_alerts(self):
         if self.nearest_patrons:
@@ -1100,18 +1102,18 @@ class Alert(models.Model):
                     'alert': self
                     }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
                 message.send()
-    
+
     def send_alerts_answer(self, product):
         message = create_alternative_email('products/emails/alert_answer', {
             'product': product,
             'alert': self
         }, settings.DEFAULT_FROM_EMAIL, [self.patron.email])
         message.send()
-            
+
     @permalink
     def get_absolute_url(self):
         return ('alert_inform', [self.pk])
-    
+
     class Meta:
         get_latest_by = 'created_at'
 
