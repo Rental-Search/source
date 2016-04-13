@@ -118,7 +118,7 @@ class Product(models.Model):
         return smart_unicode(self.summary)
 
     def save(self, *args, **kwargs):
-        if not self.phone:
+        if not self.phone and self.owner.default_number:
             self.phone = self.owner.default_number
         self.summary = strip_tags(self.summary)
         self.description = strip_tags(self.description)
