@@ -52,7 +52,7 @@ class FilteredProductSearchForm(SearchForm):
     date_to = forms.DateTimeField(required=False)
 
     filter_limits = {}
-    _max_range = _point = None
+    max_range = point = _max_range = _point = None
 
     def clean_r(self):
         location = self.cleaned_data.get('l', None)
@@ -85,10 +85,10 @@ class FilteredProductSearchForm(SearchForm):
     def sqs_filter_l(self, sqs, search_params):
         location = search_params.get('l', None)
         if location:
-            point, self.max_range = self._get_location(location)
-            if point:
+            self.point, self.max_range = self._get_location(location)
+            if self.point:
                 sqs = sqs.dwithin(
-                    'locations', point, Distance(
+                    'locations', self.point, Distance(
                         km=search_params.get('r', self.max_range))
                 )
         return sqs

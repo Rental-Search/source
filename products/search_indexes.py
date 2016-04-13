@@ -74,6 +74,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     thumbnail = indexes.CharField(indexed=False, null=True)
     thumbnail_medium = indexes.CharField(indexed=False, null=True)
     profile = indexes.CharField(indexed=False, null=True)
+    vertical_profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
     is_archived = indexes.BooleanField(model_attr='is_archived')
@@ -180,6 +181,10 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     def prepare_profile(self, obj):
         for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
             return picture.profile.url if picture.profile else None
+
+    def prepare_vertical_profile(self, obj):
+        for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
+            return picture.vertical_profile.url if picture.vertical_profile else None
 
     def prepare_owner_avatar(self, obj):
         obj = obj.owner

@@ -31,11 +31,12 @@ block append styles
   {% compressed_css "product_list_styles" %}
 
 block append content-body
-  .container-flex(data-ng-controller="AlgoliaProductListCtrl")
+  .container-flex(data-ng-controller="AlgoliaProductListCtrl", 
+      ng-init="search_params={{search_params}}")
     header.header-site
       include ../jade/_header_site_list
-     //-nav.bd-b
-      //-include ../jade/_breadcrumbs
+    //-nav.bd-b
+    //-  include ../jade/_product_list_breadcrumbs
     article.container.list-layout.indent-b-lg
       //- we shall calculate pagination for both the article head and the list below
       {% pagination %}
