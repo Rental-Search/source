@@ -66,7 +66,7 @@ category_mapping = {
 }
 
 class Command(BaseCommand):
-    help = 'Imports Mega Fete'
+    help = 'Imports Centre Location Service'
 
     base_url = 'http://www.centre-location-service.com'
 
@@ -76,10 +76,6 @@ class Command(BaseCommand):
 
     # For Test
     #username = 'arclite'
-
-
-    price_tag_exist = False;
-    description_tag_exist = False;
 
     product_list_tag = {
 		"name": "li",
@@ -124,7 +120,7 @@ class Command(BaseCommand):
                 for product in product_list:
                 	product_url = product.find(self.product_url_tag["name"]).get('href')
                 	self.product_links[product_url] = family
-                	print product
+                	#print product_url
 
     def _product_crawler(self):
     	from products.models import Product, Picture, Price
@@ -132,7 +128,7 @@ class Command(BaseCommand):
     	while True:
 			try:
 				product_url, category = self.product_links.popitem()
-				#print "product_url : %s" % product_url
+				print "product_url : %s" % product_url
 			except KeyError:
 				break
 
@@ -145,7 +141,6 @@ class Command(BaseCommand):
 			#Get the image
 			try:
 				image_url = product_soup.find(self.image_url_tag["name"], self.image_url_tag["attrs"]).get('src')
-				image_url = remove_img_url_double_slash(image_url)
 				#print "image_url : %s" % image_url
 			except Exception, e:
 				print "pass image: %s" % str(e)
@@ -262,10 +257,10 @@ class Command(BaseCommand):
         #self._subpage_crawler()
         #self._product_crawler()
         for i in xrange(self.thread_num):
-			threading.Thread(target=self._subpage_crawler).start()
+        	threading.Thread(target=self._subpage_crawler).start()
         for thread in threading.enumerate():
-            if thread is not threading.currentThread():
-                thread.join()
+        	if thread is not threading.currentThread():
+        		thread.join()
 
 		# Create the products in the database
 		for i in xrange(self.thread_num):
