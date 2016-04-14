@@ -32,17 +32,14 @@ class Command(BaseCommand):
     #username = 'arclite'
 
     product_list_tag = {
-		"name": "tr",
+		"name": "tbody",
 		"attrs": {
-			"class": "alternate"
+			"id": "search_items"
 		}
 	}
 
     product_url_tag = {
     	"name": "a",
-		"attrs": {
-			"class": "link"
-		}
     }
 
     image_url_tag = {
@@ -83,10 +80,12 @@ class Command(BaseCommand):
 
             with closing(urlopen(self.base_url + family)) as product_list_page:
                 product_list_soup = BeautifulSoup(product_list_page, 'html.parser')
-                product_list = product_list_soup.find_all(self.product_list_tag["name"], self.product_list_tag["attrs"])
+                tmp_list = product_list_soup.find(self.product_list_tag["name"], self.product_list_tag["attrs"])
+                product_list = tmp_list.find_all("tr")
                 for product in product_list:
-                	product_url = product.find(self.product_url_tag["name"], self.product_url_tag["attrs"]).get('href')
-                	self.product_links[product_url] = family
+                	product_url = product.find(self.product_url_tag["name"]).get('href')
+   	             	self.product_links[product_url] = family
+
 
     def _product_crawler(self):
     	from products.models import Product, Picture, Price
@@ -105,7 +104,7 @@ class Command(BaseCommand):
     	while True:
 			try:
 				product_url, category = self.product_links.popitem()
-				#print "product_url : %s" % product_url
+				print "product_url : %s" % product_url
 			except KeyError:
 				break
 
