@@ -3,17 +3,33 @@ extends ./base
 
 {% get_current_language as LANGUAGE_CODE %}
 
+{% block title %}{% trans "Location entre particuliers ou professionnels de tout type d'objet" %}{% endblock %}
+
 block append styles
   {% compressed_css "bootstrap" %}
   {% compressed_css "homepage_styles" %}
 
+
 block append content-body
+
   .container-flex(data-ng-controller="HomePageCtrl")
+    //- Sport d'hiver et de galce : 4
+    //- Sport de raquette : 4
+    //- Cycle : 5
+    //- Sport d'exterieur : 6
+    //- Sport d'equipe : 5
+    //- Fitness, gym et danse : 8
+    //- Loisir : 5
+    -var categories_map = {35: [558, 109, 556, 106], 390: [643, 400, 399, 401], 253: [342, 626, 369, 706, 2111], 418: [465, 726, 457, 662, 449, 450], 3: [671, 2701, 2703, 2705, 2706], 379: [2714, 2718, 2731, 2720, 639, 1111, 2222, 3333], 126: [561, 150, 143, 171, 158]}
+    -var cities_list = [["PARIS", "MARSEILLE", "LYON"], ['TOULOUSE', 'BORDEAUX', 'MONTPELLIER'], ['LILLE', 'NICE', 'NANTES']]
+
     header.header-site
       include ./jade/_header_site
     nav.nav-home.container
       include ./jade/_nav_home
 
+
+  block content-homepage
     article
       {% cache 43200 'homepage_banner_static' LANGUAGE_CODE %}
       section.banner
