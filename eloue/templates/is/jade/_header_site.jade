@@ -29,60 +29,31 @@ section(ng-controller="AuthCtrl").container.signs-links
       {% endblocktrans %}
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser", style="display: none;").without-spaces
+    li.guest-veiw
+      .dropdown
+        span.dropdown-img: a(href="#"): img(data-ng-src="{% verbatim %}{{currentUser.avatar.profil}}{% endverbatim %}").bg-image
+        span(data-toggle="dropdown").dropdown-toggle.text-success {% verbatim %}{{currentUser.username}}{% endverbatim %}
+          span.caret
+        ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+          li: a(href="{% url 'dashboard:dashboard' %}") {% trans "Tableau de bord" %}
+          li: a(href="{% url 'dashboard:messages' %}") {% trans "Messages" %}
+          li: a(href="{% url 'dashboard:bookings' %}") {% trans "Réservations" %}
+          li: a(href="{% url 'dashboard:items' %}") {% trans "Annonces" %}
+          li: a(href="{% url 'dashboard:account' %}") {% trans "Compte" %}
+          li: a(href="", ng-click="logout()") {% trans "Déconnexion" %}
+      .dropdown
+        span(data-toggle="dropdown").dropdown-toggle.text-success {% trans "Aide" %}
+          span.caret
+        ul(role="menu", aria-labelledby="dLabel").dropdown-menu
+          li: a(href="{% url 'howto' %}") {% trans "Comment ça marche ?" %}
+    li.spacer 
     li: span
       {% blocktrans %}
       | Appelez-nous au 
       b 01 85 08 99 77 
       | (numéro gratuit)
       {% endblocktrans %}
-    li.spacer
-    li.guest-veiw
-        .dropdown
-          span.dropdown-img: a(href="#"): img(data-ng-src="{% verbatim %}{{currentUser.avatar.profil}}{% endverbatim %}").bg-image
-          span(data-toggle="dropdown").dropdown-toggle.text-success {% verbatim %}{{currentUser.username}}{% endverbatim %}
-            span.caret
-          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-            li: a(href="{% url 'dashboard:dashboard' %}") {% trans "Tableau de bord" %}
-            li: a(href="{% url 'dashboard:messages' %}") {% trans "Messages" %}
-            li: a(href="{% url 'dashboard:bookings' %}") {% trans "Réservations" %}
-            li: a(href="{% url 'dashboard:items' %}") {% trans "Annonces" %}
-            li: a(href="{% url 'dashboard:account' %}") {% trans "Compte" %}
-            li: a(href="", ng-click="logout()") {% trans "Déconnexion" %}
-        //-
-         .dropdown
-          span(data-toggle="dropdown").dropdown-toggle.text-success
-            i.flaticon.stroke.mail
-            span.badge-count {{userStats.unread_message_threads_count}}
-          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-          //-
-            each item in header_popover
-              li
-                .middle-round: span
-                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="").bg-image
-                .content
-                  h4: a(href="#") #{item.first_name}
-                  h5: a(href="#") #{item.topic}
-                  p #{item.text}
-        //-
-         .dropdown
-          span(data-toggle="dropdown").dropdown-toggle.text-success
-            i.flaticon.stroke.calendar-5
-            span.badge-count {{userStats.booking_requests_count}}
-          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-          //-
-            each item in header_popover
-              li
-                .middle-round: span
-                .autor-img: a(href="#"): img(src="http://lorempixel.com/40/40/people", alt="")
-                .content
-                  h4: a(href="#") #{item.first_name}
-                  h5: a(href="#") #{item.topic}
-                  p #{item.text}
-        .dropdown
-          span(data-toggle="dropdown").dropdown-toggle.text-success {% trans "Aide" %}
-            span.caret
-          ul(role="menu", aria-labelledby="dLabel").dropdown-menu
-            li: a(href="{% url 'howto' %}") {% trans "Comment ça marche ?" %}
+    //li.spacer
             //-
              li: a Simulez vos revenus
              li: a Conseils pour les propriétaires
