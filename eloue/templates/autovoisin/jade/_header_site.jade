@@ -87,7 +87,7 @@ section(ng-controller="AuthCtrl").container.signs-links
       a(href="{% url 'home' %}"): img(src="{% static 'img/logo_autovoisin.png' %}", alt="e-loue logo").site-logo
     .table-cell.main-cell
       form(action="{% url 'product_list' %}")
-        .search-form-wrapper.input-group
+        .search-form-wrapper.input-group.ng-cloak
           input#geolocate(type="text", name="l", value="{% verbatim %}{{ form.cleaned_data.l }}{% endverbatim %}", autocomplete="off", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}{% trans 'Que voulez-vous louer ?' %}{% endif %}").table-cell.main-cell.form-control.what-field
           i.search-form-icon.flaticon.stroke.location-pin-3
           .table-cell.input-group.where-field
