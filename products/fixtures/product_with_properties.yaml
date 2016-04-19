@@ -62,7 +62,6 @@
   fields:
     sites: [1,]
     username: johndoe
-    password: johndoe
     email: johndoe@example.com
     default_address: 1
     modified_at: 2016-05-6

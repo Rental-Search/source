@@ -3,31 +3,16 @@ from products.serializers import ProductSerializer
 import pytest
 from rest_framework.fields import CharField, IntegerField
 from django.core.urlresolvers import reverse
-from pytest_django.fixtures import transactional_db
-from products.tests.conftest import product_with_properties
-from rest_framework.test import APIClient
 
 
 def _location(name, *args, **kwargs):
     return reverse(name, args=args, kwargs=kwargs)
 
 
-
-# @pytest.mark.usefixtures('product_with_properties')
-# def test_update_product_with_properties(product_with_properties, client, transactional_db):
-#     client.login(username='johndoe', password='johndoe')
-#     response = client.patch(_location('product-detail', pk=1), data={'size':38})
-#     assert response.status_code == 200
-#     assert response.data['id'] == 1
-#     assert response.data['size'] == 38
-
-
 @pytest.mark.usefixtures('product_with_properties')
-def test_create_product_with_properties(transactional_db):
+def test_create_product_with_properties(api_client):
     
-    client = APIClient()
-    
-    client.login(username='johndoe@example.com', password='johndoe')
+    api_client.login(username='johndoe@example.com', password='johndoe')
     
     product = { 
         'summary': u'Orange', 
@@ -40,15 +25,29 @@ def test_create_product_with_properties(transactional_db):
         'color': u'orange',
         'size': 25}
     
-    response = client.post(_location('product-list'), data=product, follow=True)
+    response = api_client.post(_location('product-list'), data=product)#, follow=True)
+    
+#     import pdb ; pdb.set_trace()
     
     assert response.status_code == 201
     
     data = response.data
     
+    from pprint import pprint
+    pprint(data)
+    
     assert data['size'] == 20 \
         and data['color'] == 'red' \
         and data['default_value'] == 5
+        
+        
+# @pytest.mark.usefixtures('product_with_properties')
+# def test_update_product_with_properties(product_with_properties, client, transactional_db):
+#     client.login(username='johndoe', password='johndoe')
+#     response = client.patch(_location('product-detail', pk=1), data={'size':38})
+#     assert response.status_code == 200
+#     assert response.data['id'] == 1
+#     assert response.data['size'] == 38
         
 
 
