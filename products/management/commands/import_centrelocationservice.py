@@ -161,7 +161,7 @@ class Command(BaseCommand):
 			print category_mapping[category]
 			try:
 				product = Product.objects.create(
-					summary=summary, description=description, 
+					summary=summary, 
 					deposit_amount=deposit_amount, address=self.address, owner=self.patron,
 					category=Category.objects.get(slug=category_mapping[category])
 				)
