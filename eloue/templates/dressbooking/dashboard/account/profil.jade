@@ -106,23 +106,6 @@ block sections
               input(type="radio", name="is_subscribed", ng-checked="!currentUser.is_subscribed", value="false")
               i
               //input#is_subscribed(type="hidden", name="is_subscribed", ng-model="currentUser.is_subscribed")
-        h2.text-black {% trans "Informations sur le permis" %}
-        //- date birthday
-        .row.form-control
-          .col-sm-2
-            select#select-day(name="select-day", data-placeholder="{% trans 'Jour' %}", ng-model="licenceDay", eloue-chosen, data-ng-disabled="submitInProgress")
-                option(ng-repeat="item in dayOptions", value="{% verbatim %}{{item}}{% endverbatim %}", ng-selected="item == licenceDay") {% verbatim %}{{item}}{% endverbatim %}
-          .col-sm-4
-            select#select-month(name="select-month", data-placeholder="{% trans 'Mois' %}", ng-model="licenceMonth", eloue-chosen, data-ng-disabled="submitInProgress")
-                option(ng-repeat="item in monthOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}", ng-selected="item.id == licenceMonth") {% verbatim %}{{item.value | translate}}{% endverbatim %}
-          .col-sm-3
-            select#select-year(name="select-year", data-placeholder="{% trans 'Année' %}", ng-model="licenceYear", eloue-chosen, data-ng-disabled="submitInProgress")
-                option(ng-repeat="item in yearOptions", value="{% verbatim %}{{item}}{% endverbatim %}", ng-selected="item == licenceYear") {% verbatim %}{{item}}{% endverbatim %}
-           input#drivers_license_date(type="hidden", name="drivers_license_date", ng-model="currentUser.drivers_license_date")
-        //- license-number
-        .row
-          .col-sm-12
-            input#drivers_license_number.form-control(type="text", name="drivers_license_number", placeholder="{% trans 'Numéro de permis' %}", ng-model="currentUser.drivers_license_number")
         h2.text-black {% trans "IBAN" %}
         .row
           .col-sm-12

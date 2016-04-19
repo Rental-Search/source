@@ -129,9 +129,13 @@ class BookingSerializer(serializers.ModelSerializer):
             product = obj.product
             unit = product.calculate_price(obj.started_at, obj.ended_at)
             max_available = self.opts.model.calculate_available_quantity(product, obj.started_at, obj.ended_at)
+            #handle the ip of the borrower
+            remotes = self.context['request'].META.get('HTTP_X_FORWARDED_FOR', self.context['request'].META.get('REMOTE_ADDR'))
+            ips = remotes.split(',')
+            
             obj.quantity = quantity = min(obj.quantity or 1, max_available)
             obj.total_amount = unit[1] * quantity
-            obj.ip = self.context['request'].META.get('HTTP_X_FORWARDED_FOR', self.context['request'].META.get('REMOTE_ADDR'))
+            obj.ip = ips[0]
         return obj
 
     class Meta:

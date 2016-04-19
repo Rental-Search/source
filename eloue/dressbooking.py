@@ -25,4 +25,7 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', (
     ("Enfant", NAVBAR_CATEGORIES[2], "basket")),
 ))
 
+ALGOLIA_CREDENTIALS['PREFIX'] = 'dressbooking_'
+
+
 #DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')

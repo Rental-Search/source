@@ -40,17 +40,20 @@
       text-align: center
 
   .info
-    display: table-cell
-    max-width: 0
-    width: 100%
-    vertical-align: middle
+    // display: table-cell
+    // max-width: 0
+    // width: 100%
+    // vertical-align: middle
     p
       +empty-element
       color: $gray-medium
       font-weight: $fw-semibold
+    em
+      font-style: normal
+      background-color: $gray-lighter
 
-  .declarer-container
-    display: table-cell
+  // .declarer-container
+  //   display: table-cell
 
   .declarer-thumbnail
     +default-user
@@ -95,6 +98,7 @@
 
     .declarer-container
       padding: $indent-xs
+      float: right
 
     .info
       padding: $indent-xs
@@ -146,9 +150,11 @@
       margin-bottom: $indent
 
     .info
-      width: auto
+      // width: auto
       position: relative
       padding: $indent-xs $indent-sm
+      overflow: hidden
+      margin-left: $list-img-wrapper-width
       h6
         font-weight: $fw-bold
         font-size: px(15)
@@ -169,6 +175,10 @@
         z-index: 10
 
     .thumbnail-img
+      position: absolute
+      height: 100%
+      left: 0
+      top: 0
       width: $list-img-wrapper-width
 
     .btns,
@@ -177,7 +187,8 @@
 
     .declarer-container
       padding-left: 0
-      width: 1%
+      float: right
+      // width: 1%
 
     .btns
       position: absolute
@@ -193,12 +204,15 @@
         line-height: $thumbnail-sm
         padding: 0
 
-    .info,
-    .thumbnail-img,
-    .declarer-name,
-    .declarer-thumbnail
-      display: table-cell
-      vertical-align: middle
+    // .info,
+    // .thumbnail-img,
+    // .declarer-name,
+    // .declarer-thumbnail
+    //   display: table-cell
+    //   vertical-align: middle
+
+    .declarer
+      display: table
 
     .declarer-name
       font-size: px(13)
@@ -207,6 +221,7 @@
       padding-right: $indent-xs
       vertical-align: middle
       font-weight: $fw-semibold
+      display: table-cell
 
     .section-body:hover
       .declarer-name
@@ -218,3 +233,7 @@
       color: $gray-medium
       i
         font-size: 1.1em
+
+.jslider-bg
+  .v
+    border-radius: 3.5px 3.5px 3.5px 3.5px !important
