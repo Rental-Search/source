@@ -12,6 +12,10 @@ from .choices import UNIT
 from .helpers import get_unavailable_periods
 
 from haystack.utils.geo import ensure_point
+from haystack.indexes import DeclarativeMetaclass
+from django.utils.six import with_metaclass
+from products.models import PropertyValue
+from django.db.models import F
 
 __all__ = ['ProductIndex']
 
@@ -50,9 +54,42 @@ class AlgoliaTagsField(indexes.MultiValueField):
             return tuple(qs.values_list('slug', flat=True))
         
         return tuple()
-            
 
-class ProductIndex(indexes.Indexable, indexes.SearchIndex):
+
+class ProductPropertyFieldMixin(object):
+    
+    def __init__(self, *args, **kwargs):
+        self.property_type = kwargs.pop('property_type')
+        kwargs.update({'default':self.property_type.default, 
+                        'faceted':self.property_type.faceted,
+                        'null':True,})
+        super(ProductPropertyFieldMixin, self).__init__(*args, **kwargs)
+        self.index_fieldname = self.instance = \
+                self.model_attr = self.property_type.attr_name 
+        
+
+
+class DynamicFieldsDeclarativeMetaClass(DeclarativeMetaclass):
+    
+    def __new__(cls, name, bases, attrs):
+        clazz = DeclarativeMetaclass.__new__(cls, name, bases, attrs)
+        if hasattr(clazz, '_get_dynamic_fields') \
+                and hasattr(clazz, '_set_dynamic_fields'):
+            clazz._fields = clazz.fields
+            clazz.fields = property(fget=clazz._get_dynamic_fields, 
+                          fset=clazz._set_dynamic_fields)
+        return clazz
+    
+
+TYPE_FIELD_MAP = {'int':type('IntegerField', (ProductPropertyFieldMixin, indexes.IntegerField), {}),
+                  'str':type('CharField', (ProductPropertyFieldMixin, indexes.CharField), {}),
+                  'float':type('FloatField', (ProductPropertyFieldMixin, indexes.FloatField), {}),
+                  'bool':type('BooleanField', (ProductPropertyFieldMixin, indexes.BooleanField), {}),}
+
+
+class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass, 
+                                  indexes.Indexable, indexes.SearchIndex)):
+    
     text = indexes.CharField(document=True, use_template=True)
     location = indexes.LocationField(model_attr='address__position', null=True)
     locations = LocationMultiValueField()
@@ -96,10 +133,33 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     need_insurance = indexes.BooleanField(default=True)
 
     django_id_int = indexes.IntegerField(model_attr='id')
+#     category_id = indexes.IntegerField(model_attr='category_id')
     algolia_categories = indexes.MultiValueField(faceted=True, null=True)
     _tags = AlgoliaTagsField(model_attr='categories', null=True)
     _geoloc = AlgoliaLocationMultiValueField()
     
+    
+    def __init__(self):
+        super(ProductIndex, self).__init__()
+        self._obj = None
+    
+    def _get_dynamic_fields(self):
+        if hasattr(self, '_obj') and self._obj is not None:
+            props = self._obj.fields_from_properties(TYPE_FIELD_MAP)
+            fc = self._fields.copy()
+            fc.update(props)
+            return fc
+        else:
+            return self._fields
+    
+    def _set_dynamic_fields(self, obj):
+        self._fields = obj
+    
+    def full_prepare(self, obj):
+        self._obj = obj
+        self._obj.annotate_with_property_values()
+        return indexes.SearchIndex.full_prepare(self, self._obj)
+            
     
     def get_updated_field(self):
         return "created_at"
@@ -222,9 +282,13 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if obj.address and len(obj.description.split()) > 1 and self.prepare_thumbnail(obj):
             return True
         return False
+#     
+#     def prepare_category_id(self, obj):
+#         return obj.category.id
 
     def get_model(self):
         return Product
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.select_related('category', 'address', 'owner')
+        return self.get_model().on_site.select_related('category', 'address', 'owner')\
+            .prefetch_related('category__properties', 'properties__property')

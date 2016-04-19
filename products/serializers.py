@@ -12,7 +12,7 @@ from rest_framework.fields import (
 )
 from rest_framework.relations import HyperlinkedIdentityField
 from rest_framework.reverse import reverse
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 from products import models
 from accounts.serializers import NestedAddressSerializer, BooleanField, NestedUserSerializer
@@ -28,6 +28,11 @@ from products.choices import PRODUCT_TYPE
 from rent.utils import DATE_TIME_FORMAT
 from rent.models import Booking
 from rent.choices import BOOKING_STATE
+from rest_framework.serializers import SerializerMetaclass
+from django.utils import six
+from products.models import PropertyValue
+import rest_framework
+
 
 
 def category_cache_key(*args):
@@ -42,21 +47,51 @@ def get_root_category(category):
     return category.get_root().id
 
 
+
+class PropertySerializer(ModelSerializer):
+    
+    default = fields.SerializerMethodField('get_default')
+    min = fields.SerializerMethodField('get_min')
+    max = fields.SerializerMethodField('get_max')
+    choices = fields.SerializerMethodField('get_choices')
+    
+    def get_default(self, obj):
+        return obj.default
+    
+    def get_min(self, obj):
+        return obj.min
+    
+    def get_max(self, obj):
+        return obj.max
+    
+    def get_choices(self, obj):
+        return obj.choices
+    
+    class Meta:
+        model = models.Property
+        fields = ('id', 'attr_name', 'name', 'value_type', 'default', 'max', 'min', 'choices')
+        public_fields = ('id', 'name', 'value_type', 'default', 'max', 'min', 'choices')
+        view_name = 'property-detail'
+        read_only_fields = ('id', 'name', 'value_type')
+
+
 class CategorySerializer(ModelSerializer):
     is_child_node = ObjectMethodBooleanField('is_child_node', read_only=True)
     is_leaf_node = ObjectMethodBooleanField('is_leaf_node', read_only=True)
     is_root_node = ObjectMethodBooleanField('is_root_node', read_only=True)
-
+    
+    properties = PropertySerializer(many=True)
+    
     class Meta:
         model = models.Category
         fields = ('id', 'parent', 'name', 'need_insurance', 'slug',
                   'title', 'description', 'header', 'footer',
-                  'is_child_node', 'is_leaf_node', 'is_root_node')
+                  'is_child_node', 'is_leaf_node', 'is_root_node', 'properties', )
         public_fields = (
             'id', 'parent', 'name', 'need_insurance', 'slug',
             'title', 'description', 'header', 'footer',
-            'is_child_node', 'is_leaf_node', 'is_root_node')
-        read_only_fields = ('slug',)
+            'is_child_node', 'is_leaf_node', 'is_root_node', 'properties', )
+        read_only_fields = ('slug', )
         immutable_fields = ('parent',)
 
 class NestedCategorySerializer(NestedModelSerializerMixin, CategorySerializer):
@@ -101,7 +136,39 @@ def map_require_boolean_field(field_mapping):
 class RequiredBooleanFieldSerializerMixin(object):
     field_mapping = map_require_boolean_field(ModelSerializer.field_mapping)
 
-class ProductSerializer(ModelSerializer):
+
+class ProductPropertyFieldMixin(object):
+    
+    def __init__(self, *args, **kwargs):
+        self.property = kwargs.pop('property_type')
+        kwargs.update({'default':self.property.default,
+                       'source': self.property.attr_name,
+                       'required':False})
+        if isinstance(self, CharField):
+            kwargs['max_length'] = 255
+        super(ProductPropertyFieldMixin, self).__init__(*args, **kwargs)
+
+
+TYPE_FIELD_MAP = {'float': type('FloatField', (ProductPropertyFieldMixin, FloatField), {}),
+                  'int': type('IntegerField', (ProductPropertyFieldMixin, IntegerField), {}),
+                  'str': type('CharField', (ProductPropertyFieldMixin, CharField), {}),
+                  'bool': type('BooleanField', (ProductPropertyFieldMixin, BooleanField), {}),}
+            
+
+class DynamicFieldsDeclarativeMetaClass(SerializerMetaclass):
+    
+    def __new__(cls, name, bases, attrs):
+#         import pdb ; pdb.set_trace()
+        clazz = SerializerMetaclass.__new__(cls, name, bases, attrs)
+        if hasattr(clazz, '_get_dynamic_fields') \
+                and hasattr(clazz, '_set_dynamic_fields'):
+            clazz._fields = {}
+            clazz.fields = property(fget=clazz._get_dynamic_fields, 
+                          fset=clazz._set_dynamic_fields)
+        return clazz
+
+
+class ProductSerializer(six.with_metaclass(DynamicFieldsDeclarativeMetaClass, ModelSerializer)):
     address = NestedAddressSerializer()
     average_note = FloatField(read_only=True)
     comment_count = IntegerField(read_only=True)
@@ -110,6 +177,89 @@ class ProductSerializer(ModelSerializer):
     pictures = NestedPictureSerializer(read_only=True, many=True)
     owner = NestedUserSerializer()
     slug = CharField(read_only=True, source='slug')
+        
+    def _get_dynamic_fields(self):
+        fc = self._fields.copy()
+        
+        if self.object:
+            props = self.object.fields_from_properties(TYPE_FIELD_MAP)
+            fc.update(props)
+        elif self.init_data:
+            # At this point, there is no category
+            # object yet, so it has to be retrieved.
+            # This is done the same way as in restore_fields
+            if self.init_data is not None and not isinstance(self.init_data, dict):
+                self._errors['non_field_errors'] = ['Invalid data']
+                return None
+            
+            data = {'category':self.init_data['category']}
+            
+            reverted_data = {}
+
+            field = self._fields['category']
+            field.initialize(parent=self, field_name='category')
+            try:
+                field.field_from_native(data, None, 'category', reverted_data)
+            except ValidationError as err:
+                self._errors['category'] = list(err.messages)
+                return fc
+            
+            props = reverted_data['category'].fields_from_properties(TYPE_FIELD_MAP)
+            fc.update(props)
+        
+        return fc
+    
+    
+    def _set_dynamic_fields(self, obj):
+        self._fields = obj
+        
+    
+    @property
+    def data(self):
+        if self.object:
+            self.object.annotate_with_property_values()
+        return super(ProductSerializer, self).data
+    
+    
+    def restore_object(self, attrs, instance=None):
+        
+        # Set attributes with dynamic fields
+        instance = super(ProductSerializer, self).restore_object(attrs, instance=instance)
+        
+        existing = set()
+        properties = []
+        
+        # Update or create property values from attributes
+        
+#         import pdb ; pdb.set_trace()
+        
+        # Update existing PropertyValues
+        for prop_val in instance.properties.all():
+            prop_type = prop_val.property_type
+            existing.add(prop_type)
+            try:
+                prop_val.value = getattr(instance, prop_type.attr_name)
+            except AttributeError:
+                pass
+            properties.append(prop_val)
+        
+        # Create added PropertyValues
+        for prop_type in instance.category.properties.all():
+            if prop_type not in existing:
+                try:
+                    value=getattr(instance, prop_type.attr_name)
+                except AttributeError:
+                    continue
+            properties.append(PropertyValue(property_type=prop_type,
+                                        value=value,
+                                        product=instance))
+        
+        # Set product.properties to updated properties
+        instance = super(ProductSerializer, self)\
+                .restore_object({'properties':properties}, 
+                                instance=instance)
+        
+        return instance
 
 
     def validate(self, attrs):
