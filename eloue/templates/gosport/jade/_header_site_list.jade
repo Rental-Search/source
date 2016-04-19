@@ -94,7 +94,7 @@ section(ng-controller="AuthCtrl").container.signs-links
 .framing
   section.container.search-form
     .table-cell
-      a(href="{% url 'home' %}"): img(src="{% static 'img/logo.png' %}", alt="e-loue logo")
+      a(href="{% url 'home' %}"): img(src="{% static 'img/logo_gosport.png' %}", alt="gosport logo")
     .table-cell.main-cell
       {% trans "Que voulez-vous louer ?" as what %}
       {% trans "Où ça ?" as where %}
@@ -107,5 +107,5 @@ section(ng-controller="AuthCtrl").container.signs-links
           input(class="nobtn", ng-model="search.location", type="text", name="l", 
               value="{{ form.cleaned_data.l }}", placeholder="{{ where }}", title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
     .table-cell
-      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-primary.btn-advertise {% trans "Déposez une annonce" %}
+      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}
       

@@ -18,23 +18,29 @@ script(type="text/ng-template" id="_category_tree_item.html").
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
-  label(ng-show="search_result_count").caption {% trans "catégories" %}
-  .clear-selector
-    div(ng-show="search_result_count", ng-init="search_category_path='{{breadcrumbs.categorie.algolia_path}}'", ng-include="'_category_tree_item.html'")
+  label(ng-if="search.result_count").caption {% trans "catégories" %}
+  .clear-selector(ng-show="search.result_count")
+    div(ng-controller="CategoryController" ng-include="'_category_tree_item.html'")
 
   label.caption(for="where") {% trans "carte" %}
   .map-container
-    .whirly(ng-if='!map.loaded')
-    ui-gmap-google-map(ng-if='map.loaded', center='map.center', zoom='map.zoom', options='map.options', control='map.control', events='map.events', pan="true")
-      ui-gmap-markers(ng-show="search_result_count", models="product_list", coords="'location_obj'", idKey="'markerId'", events="marker_event_handlers", type="'cluster'", typeOptions="map.clustererOptions", options="'markerOptions'")
+    .whirly(ng-if='!search.map.loaded')
+    ui-gmap-google-map(ng-if='search.map.loaded', center='search.map.center', zoom='search.map.zoom', 
+        options='search.map.options', control='search.map.control', events='search.map.events', pan="true")
+      ui-gmap-markers(ng-show="search.result_count", models="search.product_list", coords="'location_obj'", 
+          idKey="'markerId'", events="marker_event_handlers", type="'cluster'", typeOptions="search.map.clustererOptions", options="'markerOptions'")
 
   //- .slider
   label.caption(for="range-slider") {% trans "rayon" %}
-
+  rzslider#range-slider(ng-if="search.range", ng-model="search.range.max", rz-slider-model="search.range.max", 
+    rz-slider-options="search.range.options", ng-change="perform_search()")
+    
   //- input#range(type="hidden", name="r", ng-value="{{ form.cleaned_data.r|floatformat:'0' }}", ng-model='range_slider.max', disabled)
   //- input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
-  rzslider(ng-init="range_slider.max={% firstof form.cleaned_data.r|floatformat:'0' form.max_range|floatformat:'0' %}", ng-model="range_slider.max", rz-slider-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
 
+    
+  //- rzslider(ng-model="range_slider.max", rz-slider-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
+  
   //-input#where(ng-model="search_location", name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
 
   
@@ -55,7 +61,8 @@ script(type="text/ng-template" id="_category_tree_item.html").
 
   
   label#price-label.caption(for="price-slider") prix
-  rzslider(ng-init="price_slider.min={% firstof form.cleaned_data.price_from|stringformat:'.2f' price_min|stringformat:'.2f' %} ; price_slider.max={% firstof form.cleaned_data.price_to|stringformat:'.2f' price_max|stringformat:'.2f' %} ", rz-slider-model="price_slider.min", rz-slider-high="price_slider.max", ng-model="price_slider.min", rz-slider-options="price_slider.options", ng-change="submitForm()")
+  rzslider#price-slider(ng-if="search.price", rz-slider-model="search.price.min", rz-slider-high="search.price.max", 
+    ng-model="search.price.min", rz-slider-options="search.price.options", ng-change="perform_search()")
 
   
   //-input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
@@ -63,17 +70,17 @@ script(type="text/ng-template" id="_category_tree_item.html").
   //-input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
 
   p.caption {% trans "loueurs" %}
-  .checkbox(ng-init="owner_type.part_count={{ facets.fields_dict.pro_owner.false }}", ng-show="owner_type.part_count", ng-cloak)
+  .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.part_count", ng-cloak)
     label(for="particular")
       {% trans "particuliers" as particular %}
-      input(ng-init='owner_type.part={% if renter != "professionnels" %}true{% else %}false{% endif %}', type="checkbox", name="renter", ng-change="refineRenterPart(owner_type.part)", ng-model="owner_type.part", ng-disabled="noProPartChoice()")#particular
+      input(type="checkbox", name="renter", ng-change="refineRenterPart(search.owner_type.part)", ng-model="search.owner_type.part", ng-disabled="noProPartChoice()")#particular
       span.flaticon.stroke.checkmark-1
-    {% trans " Particuliers" %} {% verbatim %} {{ " ("+owner_type.part_count+")" }} {% endverbatim %}
-  .checkbox(ng-init="owner_type.pro_count={{ facets.fields_dict.pro_owner.true }}", ng-show="owner_type.pro_count", ng-cloak)
+    {% trans " Particuliers" %} {% verbatim %} {{ " ("+search.owner_type.part_count+")" }} {% endverbatim %}
+  .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.pro_count", ng-cloak)
     label(for="professional")
-      input(ng-init='owner_type.pro={% if renter != "particuliers" %}true{% else %}false{% endif %}', type="checkbox", name="renter", ng-change="refineRenterPro(owner_type.pro)", ng-model="owner_type.pro", ng-disabled="noProPartChoice()")#professional
+      input(type="checkbox", name="renter", ng-change="refineRenterPro(search.owner_type.pro)", ng-model="search.owner_type.pro", ng-disabled="noProPartChoice()")#professional
       span.flaticon.stroke.checkmark-1
-    {% trans " Professionnels" %} {% verbatim %} {{ " ("+owner_type.pro_count+")" }} {% endverbatim %}
+    {% trans " Professionnels" %} {% verbatim %} {{ " ("+search.owner_type.pro_count+")" }} {% endverbatim %}
 
 //  .indent-t-md
 //    input(id="submitButton", type="submit", style="width: 100%", value="{% trans 'Filtrer' %}").btn.btn-lg.btn-advertise.bg-success
