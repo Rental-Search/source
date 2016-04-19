@@ -259,6 +259,7 @@ INSTALLED_APPS = (
     'core',
     'import_export',
     'djangular',
+    #'django_faker',
 )
 
 if DEBUG_TOOLBAR:
@@ -513,6 +514,13 @@ SOUTH_MIGRATION_MODULES = {
 
 SEARCH_ENGINE = env('SEARCH_ENGINE', 'elasticsearch')
 
+ALGOLIA_CREDENTIALS = {
+    'APP_ID': env('ALGOLIA_APP_ID', None),
+    'API_KEY_SEARCH': env('ALGOLIA_API_KEY_SEARCH', None),
+    'API_KEY_WRITE': env('ALGOLIA_API_KEY', None),
+    'PREFIX': env('ALGOLIA_INDEX_PREFIX', 'e-loue_')
+}
+
 HAYSTACK_CONNECTIONS = {                
    'elasticsearch': {
         'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
@@ -525,9 +533,9 @@ HAYSTACK_CONNECTIONS = {
     },              
     'algolia': {
         'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
-        'APP_ID': env('ALGOLIA_APP_ID', None),
-        'API_KEY': env('ALGOLIA_API_KEY', None),
-        'INDEX_NAME_PREFIX': 'e-loue_',
+        'APP_ID': ALGOLIA_CREDENTIALS['APP_ID'],
+        'API_KEY': ALGOLIA_CREDENTIALS['API_KEY_WRITE'],
+        'INDEX_NAME_PREFIX': ALGOLIA_CREDENTIALS['PREFIX'],
         'TIMEOUT': 60 * 5
     },
 }
@@ -637,6 +645,39 @@ ALGOLIA_INDICES = {
         },
     },            
 }
+
+
+ALGOLIA_CLIENT_CONFIG = {
+    'MASTER_INDEX': ALGOLIA_CREDENTIALS['PREFIX'] + 'products.product',
+    'PARAMETERS': {
+        'hierarchicalFacets': [{
+            'name': 'category',
+            'attributes': ['algolia_categories.lvl0',
+                         'algolia_categories.lvl1',
+                         'algolia_categories.lvl2'],
+            'sortBy': ['name:asc']
+        }],
+        'disjunctiveFacets': ["pro_owner",
+                            "price",
+                            "sites"],
+        'facets': ["is_archived", 
+                 'is_good',
+                 'is_allowed'],
+        'hitsPerPage': 12,
+        'query':""
+    },
+    'ALGOLIA_PREFIX': "sp_",
+    'ALGOLIA_APP_ID': ALGOLIA_CREDENTIALS['APP_ID'],
+    'ALGOLIA_KEY': ALGOLIA_CREDENTIALS['API_KEY_SEARCH'],
+    'URL_PARAMETERS': ['query', 'attribute:*', 'index', 'page', 
+                     'hitsPerPage', 'aroundLatLng', 'aroundRadius'],
+    'URL_PARAMETERS_EXCLUDE': ['is_archved', 
+                             'is_good', 
+                             'sites',
+                             'is_allowed'],
+    'PAGINATION_WINDOW_SIZE': 10
+}
+
 
 #HAYSTACK_SIGNAL_PROCESSOR = 'queued_search.signals.QueuedSignalProcessor'
 HAYSTACK_SIGNAL_PROCESSOR = 'eloue.search.HaystackSignalProcessor'
@@ -834,6 +875,8 @@ DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
     'city': u'Paris',
     'coordinates': (48.856614, 2.3522219),
     'country': u'France',
+    'country_coordinates': (46.2, 2.2),
+    'country_radius': 800,
     'fallback': None,
     'radius': 11,
     'formatted_address': u'Paris, France',
