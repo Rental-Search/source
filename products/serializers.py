@@ -9,7 +9,7 @@ from rest_framework.fields import (
         FloatField, DateTimeField,
         IntegerField, DecimalField,
         CharField, SerializerMethodField,
-)
+        ChoiceField)
 from rest_framework.relations import HyperlinkedIdentityField
 from rest_framework.reverse import reverse
 from rest_framework import serializers, fields
@@ -146,13 +146,20 @@ class ProductPropertyFieldMixin(object):
                        'required':False})
         if isinstance(self, CharField):
             kwargs['max_length'] = 255
+        if self.property.choices_str:
+            kwargs['choices'] = ((k,k) for k in self.property.choices)
+        if self.property.min_str:
+            kwargs['min_value'] = self.property.min
+        if self.property.max_str:
+            kwargs['max_value'] = self.property.max
         super(ProductPropertyFieldMixin, self).__init__(*args, **kwargs)
 
 
 TYPE_FIELD_MAP = {'float': type('FloatField', (ProductPropertyFieldMixin, FloatField), {}),
                   'int': type('IntegerField', (ProductPropertyFieldMixin, IntegerField), {}),
                   'str': type('CharField', (ProductPropertyFieldMixin, CharField), {}),
-                  'bool': type('BooleanField', (ProductPropertyFieldMixin, BooleanField), {}),}
+                  'bool': type('BooleanField', (ProductPropertyFieldMixin, BooleanField), {}),
+                  'choice': type('ChoiceField', (ProductPropertyFieldMixin, ChoiceField), {}),}
             
 
 class DynamicFieldsDeclarativeMetaClass(SerializerMetaclass):
@@ -231,8 +238,6 @@ class ProductSerializer(six.with_metaclass(DynamicFieldsDeclarativeMetaClass, Mo
         
         # Update or create property values from attributes
         
-#         import pdb ; pdb.set_trace()
-        
         # Update existing PropertyValues
         for prop_val in instance.properties.all():
             prop_type = prop_val.property_type
@@ -250,14 +255,13 @@ class ProductSerializer(six.with_metaclass(DynamicFieldsDeclarativeMetaClass, Mo
                     value=getattr(instance, prop_type.attr_name)
                 except AttributeError:
                     continue
-            properties.append(PropertyValue(property_type=prop_type,
-                                        value=value,
-                                        product=instance))
+                if value is not None: 
+                    properties.append(PropertyValue(property_type=prop_type,
+                                                value=value,
+                                                product=instance))
         
         # Set product.properties to updated properties
-        instance = super(ProductSerializer, self)\
-                .restore_object({'properties':properties}, 
-                                instance=instance)
+        instance._related_data['properties'] = properties
         
         return instance
 

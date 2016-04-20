@@ -84,7 +84,8 @@ class DynamicFieldsDeclarativeMetaClass(DeclarativeMetaclass):
 TYPE_FIELD_MAP = {'int':type('IntegerField', (ProductPropertyFieldMixin, indexes.IntegerField), {}),
                   'str':type('CharField', (ProductPropertyFieldMixin, indexes.CharField), {}),
                   'float':type('FloatField', (ProductPropertyFieldMixin, indexes.FloatField), {}),
-                  'bool':type('BooleanField', (ProductPropertyFieldMixin, indexes.BooleanField), {}),}
+                  'bool':type('BooleanField', (ProductPropertyFieldMixin, indexes.BooleanField), {}),
+                  'choice':type('CharField', (ProductPropertyFieldMixin, indexes.CharField), {}),}
 
 
 class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass, 

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
 from django.core.management import call_command
-from _pytest.monkeypatch import monkeypatch
-
 
 @pytest.fixture()
 def product_with_properties(settings, transactional_db):
@@ -30,7 +28,5 @@ def api_client(monkeypatch):
         return response
      
     monkeypatch.setattr(APIClient, 'post', post_with_redirects)
-     
-    APIClient.post = post_with_redirects
     
     return APIClient()

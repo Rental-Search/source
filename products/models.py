@@ -784,7 +784,7 @@ class Category(MPTTModel):
             return u"/%(location)s/%(slug)s/" % {'location': _('location'), 'slug': self.slug}
         
     def fields_from_properties(self, field_map):
-        prop_fields = {p.attr_name:field_map[p.value_type](property_type=p)
+        prop_fields = {p.attr_name:field_map[p.value_type if not p.choices_str else 'choice'](property_type=p)
             for p in self.properties.all()}
         return prop_fields
 

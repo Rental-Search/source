@@ -20,6 +20,7 @@
     name: Couleur
     attr_name: color
     value_type: str
+    choices_str: "red, green, blue, cyan, magenta, yellow, black"
     category: 1
 
 - model: products.property
@@ -28,6 +29,8 @@
     name: Taille
     attr_name: size
     value_type: int
+    min_str: 1
+    max_str: 100
     category: 1
     faceted: true
 
