@@ -98,13 +98,19 @@ class Command(BaseCommand):
             }
         }
 
+
+    description_tag = {
+		"name": "div",
+		"attrs": {
+			"class": "short-description"
+		}
+	}
     summary_tag = {
 		"name": "h1",
 		"attrs": {
 			"class": "product_title"
 		}
 	}
-
 
     def _subpage_crawler(self):
         """Create the list of products by finding the link of each product page"""
@@ -154,6 +160,17 @@ class Command(BaseCommand):
 				print "pass title: %s" % str(e)
 				pass
 
+
+			#Get the description
+			try:
+				description = product_soup.find(self.description_tag["name"], self.description_tag["attrs"]).text
+				#print "description : %s" % description
+			except Exception, e:
+				description = " "
+				print "pass description: %s" % str(e)
+				pass
+
+
 			deposit_amount = 0.0
 
 			from products.models import Category, Price
@@ -161,7 +178,7 @@ class Command(BaseCommand):
 			print category_mapping[category]
 			try:
 				product = Product.objects.create(
-					summary=summary, 
+					summary=summary, description=description,
 					deposit_amount=deposit_amount, address=self.address, owner=self.patron,
 					category=Category.objects.get(slug=category_mapping[category])
 				)
@@ -181,13 +198,14 @@ class Command(BaseCommand):
 				print 'error: %s' % str(e)
 				pass
 
+
     def handle(self, *args, **options):
     	from accounts.models import Patron, Address
 
         self.product_links = {}
 
         self.product_families = [
-        	# Art de la table
+        	Art de la table
 			'/shop/art-de-la-table/accessoires-inox/',
 			'/shop/art-de-la-table/accessoires-verrerie/',
 			'/shop/art-de-la-table/assiettes/',
