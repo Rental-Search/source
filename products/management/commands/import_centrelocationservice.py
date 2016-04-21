@@ -72,10 +72,10 @@ class Command(BaseCommand):
 
     thread_num = 1
 
-    #username = 'centrelocationservices'
+    username = 'centrelocationservices'
 
     # For Test
-    username = 'benoit'
+    #username = 'benoit'
 
     product_list_tag = {
 		"name": "li",
