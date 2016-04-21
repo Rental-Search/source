@@ -72,10 +72,10 @@ class Command(BaseCommand):
 
     thread_num = 1
 
-    username = 'centrelocationservices'
+    #username = 'centrelocationservices'
 
     # For Test
-    #username = 'arclite'
+    username = 'benoit'
 
     product_list_tag = {
 		"name": "li",
@@ -180,7 +180,7 @@ class Command(BaseCommand):
 				product = Product.objects.create(
 					summary=summary, description=description,
 					deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-					category=Category.objects.get(slug=category_mapping[category])
+					category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
 				)
 
 				try:
@@ -205,7 +205,7 @@ class Command(BaseCommand):
         self.product_links = {}
 
         self.product_families = [
-        	Art de la table
+        	# Art de la table
 			'/shop/art-de-la-table/accessoires-inox/',
 			'/shop/art-de-la-table/accessoires-verrerie/',
 			'/shop/art-de-la-table/assiettes/',
