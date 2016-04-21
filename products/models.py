@@ -893,7 +893,7 @@ class PropertyValue(models.Model):
     product = models.ForeignKey(Product, related_name='properties')
     
     value = property(fget=lambda self:self.property_type.value_type_func(self.value_str), 
-               fset=lambda self, val:setattr(self, 'value_str', str(val)))
+               fset=lambda self, val:setattr(self, 'value_str', smart_unicode(val)))
     
     class Meta:
         unique_together = ('property_type', 'product')
