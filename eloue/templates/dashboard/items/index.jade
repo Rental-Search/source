@@ -40,7 +40,11 @@ block details
                     span.text-danger(ng-show="generalItemInfoForm.city.$error.required && itemInfoSubmitted", translate="required_field")
             h2(ng-if="properties") {% trans "Propriétés" %}
             .row(ng-if="properties")
-                .col-sm-4(ng-repeat='property in properties', eloue-property-dropdown, property-type="property", product="product")
+                table.calendar
+                    tbody
+                        tr(ng-repeat='property in properties')
+                            td {% verbatim %} {{ property.name }} {% endverbatim %}
+                            td.without-search(eloue-property-dropdown, property-type="property", product="product")
         h2 {% trans "Photos" %}
         .row
             form#add-picture
