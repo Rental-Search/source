@@ -12,10 +12,11 @@ define([
     "../../../../common/eloue/services/UtilsService",
     "../../../../common/eloue/services/ToDashboardRedirectService",
     "../../../../common/eloue/services/ServerValidationService",
-    "../../../../common/eloue/services/ScriptTagService"
+    "../../../../common/eloue/services/ScriptTagService",
+    "../../../../common/eloue/directives/Properties"
 ], function (EloueWidgetsApp, toastr) {
     "use strict";
-
+    
     EloueWidgetsApp.controller("PublishAdCtrl", [
         "$scope",
         "$q",
@@ -36,7 +37,8 @@ define([
         "ServerValidationService",
         "ScriptTagService",
         "MapsService",
-        function ($scope, $q, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, PhoneNumbersService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService, ScriptTagService, MapsService) {
+        "$log",
+        function ($scope, $q, $window, $location, Endpoints, Unit, Currency, ProductsService, UsersService, AddressesService, PhoneNumbersService, AuthService, CategoriesService, PricesService, UtilsService, ToDashboardRedirectService, ServerValidationService, ScriptTagService, MapsService, $log) {
 
             $scope.submitInProgress = false;
             $scope.publishAdError = null;
@@ -92,7 +94,9 @@ define([
                 licence_plate: "",
                 tax_horsepower: ""
             };
-
+            
+            $scope.properties = [];
+            
             /**
              * Activate geolocation search.
              */
@@ -214,7 +218,7 @@ define([
                 $location.path(newPath);
                 $scope.$apply();
             });
-
+            
             /**
              * Update options for node category combobox
              */
@@ -225,6 +229,9 @@ define([
                 });
                 CategoriesService.getCategory($scope.rootCategory).then(function (rootCategory) {
                     $scope.updateFieldSet(rootCategory);
+                    $log.debug('root category:');
+                    $log.debug(rootCategory);
+                    $scope.properties = rootCategory.properties;
                 });
             };
 
@@ -236,8 +243,25 @@ define([
                 CategoriesService.getChildCategories($scope.nodeCategory).then(function (categories) {
                     $scope.leafCategories = categories;
                 });
+                CategoriesService.getCategory($scope.nodeCategory).then(function (nodeCategory) {
+                    $log.debug('node category:');
+                    $scope.updateFieldSet(nodeCategory);
+                    $scope.properties = nodeCategory.properties;
+                });
             };
-
+            
+            
+            /**
+             * Update category properties from leaf category
+             */
+            $scope.updateProperties = function(){ $log.debug('updateProperties');
+                $log.debug($scope.product.category);
+                CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).then(function (leafCategory) {
+                    $log.debug('leaf category:');
+                    $log.debug(leafCategory);
+                    $scope.properties = leafCategory.properties;
+                });
+            };
 
             $scope.isCategorySelectorsValid = function () {
                 return !!$scope.rootCategories && !!$scope.rootCategory &&

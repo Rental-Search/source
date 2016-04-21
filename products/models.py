@@ -833,17 +833,18 @@ class Property(models.Model):
     
     @property
     def value_type_func(self):
-        func = getattr(__builtin__, self.value_type)
+        func = smart_unicode if self.value_type=='str' \
+            else getattr(__builtin__, self.value_type)
         return lambda x: func(x) if x is not None else None
     
     min = property(fget=lambda self:self.value_type_func(self.min_str), 
-                   fset=lambda self, val:setattr(self, 'min_str', str(val)))
+                   fset=lambda self, val:setattr(self, 'min_str', smart_unicode(val)))
     
     max = property(fget=lambda self:self.value_type_func(self.max_str), 
-                   fset=lambda self, val:setattr(self, 'max_str', str(val)))
+                   fset=lambda self, val:setattr(self, 'max_str', smart_unicode(val)))
     
     default = property(fget=lambda self:self.value_type_func(self.default_str), 
-                   fset=lambda self, val:setattr(self, 'default_str', str(val)))
+                   fset=lambda self, val:setattr(self, 'default_str', smart_unicode(val)))
     
     def _get_choices(self):
         if self.choices_str is None:

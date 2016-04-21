@@ -176,6 +176,8 @@ class DynamicFieldsDeclarativeMetaClass(SerializerMetaclass):
 
 
 class ProductSerializer(six.with_metaclass(DynamicFieldsDeclarativeMetaClass, ModelSerializer)):
+    # FIXME category required during update
+    # FIXME check if same category
     address = NestedAddressSerializer()
     average_note = FloatField(read_only=True)
     comment_count = IntegerField(read_only=True)

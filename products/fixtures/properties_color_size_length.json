@@ -1,0 +1,47 @@
+[
+{
+  "pk": 1, 
+  "model": "products.property", 
+  "fields": {
+    "category": 150, 
+    "choices_str": "Toutes tailles, 34, 36, 38, 40, 42, 44, 46, Grandes tailles", 
+    "name": "Taille", 
+    "default_str": "Toutes tailles", 
+    "min_str": "", 
+    "attr_name": "size", 
+    "faceted": false, 
+    "value_type": "str", 
+    "max_str": ""
+  }
+},
+{
+  "pk": 4, 
+  "model": "products.property", 
+  "fields": {
+    "category": 150, 
+    "choices_str": "Toutes couleurs, Argent\u00e9, Beige, Blanc, Bleu, Dor\u00e9, Gris, Jaune, Marron, Multicolore, Noir, Orange, Rose, Rouge, Vert, Violet", 
+    "name": "Couleur", 
+    "default_str": "Toutes couleurs", 
+    "min_str": "", 
+    "attr_name": "color", 
+    "faceted": false, 
+    "value_type": "str", 
+    "max_str": ""
+  }
+},
+{
+  "pk": 5, 
+  "model": "products.property", 
+  "fields": {
+    "category": 150, 
+    "choices_str": "Toutes longueurs, Courte, Longue", 
+    "name": "Longueur", 
+    "default_str": "Toutes longueurs", 
+    "min_str": "", 
+    "attr_name": "length", 
+    "faceted": false, 
+    "value_type": "str", 
+    "max_str": ""
+  }
+}
+]

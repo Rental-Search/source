@@ -292,4 +292,4 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
 
     def index_queryset(self, using=None):
         return self.get_model().on_site.select_related('category', 'address', 'owner')\
-            .prefetch_related('category__properties', 'properties__property')
+            .prefetch_related('category__properties', 'properties__property_type')
