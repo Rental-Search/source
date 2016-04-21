@@ -17,7 +17,7 @@ block details
                         span.text-danger(ng-show="generalItemInfoForm.nodeCategory.$error.required && itemInfoSubmitted", translate="required_field")
                 .col-md-4
                     .form-control.without-search
-                        select(name="category", ng-model="product.category", ng-required="!isAuto && !isRealEstate", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate", data-placeholder="{% trans 'Catégorie Niv.3' %}")
+                        select(name="category", ng-model="product.category", ng-change="updateProperties()", ng-required="!isAuto && !isRealEstate", eloue-chosen, opts="leafCategories", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate", data-placeholder="{% trans 'Catégorie Niv.3' %}")
                             option(ng-repeat="category in leafCategories", ng-selected="(categoriesBaseUrl + category.id + '/') == product.category", value="{% verbatim %}{{categoriesBaseUrl}}{% endverbatim %}{% verbatim %}{{category.id}}{% endverbatim %}/") {% verbatim %}{{category.name}}{% endverbatim %}
                         span.text-danger(ng-show="generalItemInfoForm.category.$error.required && itemInfoSubmitted", translate="required_field")
             h2 {% trans "Titre" %}
@@ -38,6 +38,13 @@ block details
                 .col-sm-6
                     input(type="text", name="city", placeholder="{% trans 'Ville' %} *", required, ng-model="product.addressDetails.city").form-control
                     span.text-danger(ng-show="generalItemInfoForm.city.$error.required && itemInfoSubmitted", translate="required_field")
+            h2(ng-if="properties") {% trans "Propriétés" %}
+            .row(ng-if="properties")
+                table.calendar
+                    tbody
+                        tr(ng-repeat='property in properties')
+                            td {% verbatim %} {{ property.name }} {% endverbatim %}
+                            td.without-search(eloue-property-dropdown, property-type="property", product="product")
         h2 {% trans "Photos" %}
         p Vous pouvez ajouter 3 photos :
         .row
