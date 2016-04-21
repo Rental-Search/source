@@ -158,7 +158,7 @@ class Command(BaseCommand):
 				product = Product.objects.create(
 					summary=summary, description=description, 
 					deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-					category=Category.objects.get(slug=category_mapping[category])
+					category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
 				)
 
 				try:
