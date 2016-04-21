@@ -112,6 +112,7 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
     thumbnail = indexes.CharField(indexed=False, null=True)
     thumbnail_medium = indexes.CharField(indexed=False, null=True)
     profile = indexes.CharField(indexed=False, null=True)
+    vertical_profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
     is_archived = indexes.BooleanField(model_attr='is_archived')
@@ -178,8 +179,10 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
     def prepare__geoloc(self, obj):
         locations = self.prepare_locations(obj)
         if locations:
-            it = iter(locations)
-            return [{"lat":x, "lng":y} for x,y in zip(it,it)]
+            if isinstance(locations[0], list):
+                return [{"lat":location[0], "lng":location[1]} for location in locations]
+            else:
+                return {"lat":locations[0], "lng":locations[1]}
         else:
             return None
     
@@ -239,6 +242,10 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
     def prepare_profile(self, obj):
         for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
             return picture.profile.url if picture.profile else None
+
+    def prepare_vertical_profile(self, obj):
+        for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
+            return picture.vertical_profile.url if picture.vertical_profile else None
 
     def prepare_owner_avatar(self, obj):
         obj = obj.owner

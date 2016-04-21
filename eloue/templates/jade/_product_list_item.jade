@@ -17,9 +17,9 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
     .thumbnail-img
       a(ng-href="{{ product.url }}", href=(product.url if not ng else None)).img-wrapper 
         if ng
-          img(ng-style="product.profile && {'background-image':'url('+product.profile+')'}").bg-image
+          img(ng-style="product.vertical_profile && {'background-image':'url('+product.vertical_profile+')'}").bg-image
         else
-          img(style=('background-image: url("'+product.profile+'");' if product.profile else None)).bg-image 
+          img(style=('background-image: url("'+product.vertical_profile+'");' if product.vertical_profile else None)).bg-image 
         if ng
           //-TODO currency angular filter, remove verbatim
           span(ng-if="product.price").badge.price {% verbatim %} {{ product.price | currency }} {% endverbatim %} /{{ by_day }} 
@@ -69,7 +69,7 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
       else        
         .rate(ng-if="product.comment_count")
           span(ng-repeat="i in [1,2,3,4,5]").flaticon.solid.star-2(ng-class="i==product.average_rate && 'current-rate'")
-        span(ng-if="product.comment_count").sprite-comment
+        span(ng-if="product.comment_count", ng-cloak).sprite-comment
           i.flaticon.stroke.writing-comment
           {% verbatim %}{{ product.comment_count }}{% endverbatim %} 
       if ng

@@ -9,6 +9,7 @@
     margin-bottom: $grid-gutter-width
     position: relative
     overflow: hidden
+    height: 325px
 
   .thumbnail-img
     +default-product
@@ -81,6 +82,8 @@
 
   // > GRID LAYOUT
   .grid-layout &
+    .secton-body
+      height: 340px
 
     .declarer-name,
     .full_description
@@ -91,7 +94,7 @@
       +make-md-column(4)
 
     .thumbnail-img
-      padding-top: (100%/1.4)
+      padding-top: 100%
 
     .declarer-container
       padding: $indent-xs
@@ -142,7 +145,7 @@
       +make-sm-column(12)
 
     .full_description
-      max-height: (2em * $line-height-base)
+      max-height: (11em * $line-height-base)
       position: relative
       margin-bottom: $indent
 

@@ -512,7 +512,7 @@ SOUTH_MIGRATION_MODULES = {
 
 # Haystack configuration
 
-SEARCH_ENGINE = env('SEARCH_ENGINE', 'elasticsearch')
+SEARCH_ENGINE = env('SEARCH_ENGINE', 'algolia')
 
 ALGOLIA_CREDENTIALS = {
     'APP_ID': env('ALGOLIA_APP_ID', None),
@@ -522,15 +522,15 @@ ALGOLIA_CREDENTIALS = {
 }
 
 HAYSTACK_CONNECTIONS = {                
-   'elasticsearch': {
-        'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
-        'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
-        'KWARGS': {
-            'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
-            'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
-        }
-    },              
+#    'elasticsearch': {
+#         'ENGINE': 'eloue.elasticsearch_backend.ElasticsearchSearchEngine',
+#         'URL': env('ELASTICSEARCH_URL', '127.0.0.1:9200'),
+#         'INDEX_NAME': env('ELASTICSEARCH_INDEX_NAME', 'eloue'),
+#         'KWARGS': {
+#             'use_ssl': env('ELASTICSEARCH_USE_SSL', False),
+#             'http_auth': env('ELASTICSEARCH_HTTP_AUTH', None)
+#         }
+#     },              
     'algolia': {
         'ENGINE': 'eloue.search_backends.EloueAlgoliaEngine',
         'APP_ID': ALGOLIA_CREDENTIALS['APP_ID'],
