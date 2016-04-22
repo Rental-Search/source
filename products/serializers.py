@@ -80,7 +80,7 @@ class CategorySerializer(ModelSerializer):
     is_leaf_node = ObjectMethodBooleanField('is_leaf_node', read_only=True)
     is_root_node = ObjectMethodBooleanField('is_root_node', read_only=True)
     
-    properties = PropertySerializer(many=True)
+    properties = PropertySerializer(many=True, source='inherited_properties')
     
     class Meta:
         model = models.Category
@@ -251,7 +251,7 @@ class ProductSerializer(six.with_metaclass(DynamicFieldsDeclarativeMetaClass, Mo
             properties.append(prop_val)
         
         # Create added PropertyValues
-        for prop_type in instance.category.properties.all():
+        for prop_type in instance.category.inherited_properties:
             if prop_type not in existing:
                 try:
                     value=getattr(instance, prop_type.attr_name)

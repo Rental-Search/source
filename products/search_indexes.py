@@ -148,6 +148,7 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
     def _get_dynamic_fields(self):
         if hasattr(self, '_obj') and self._obj is not None:
             props = self._obj.fields_from_properties(TYPE_FIELD_MAP)
+            props = {k:props[k] for k in props if props[k].faceted}
             fc = self._fields.copy()
             fc.update(props)
             return fc

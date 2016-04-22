@@ -135,7 +135,7 @@ class Product(models.Model):
         return qs[0].category
     
     def annotate_with_property_values(self):
-        properties = self.category.properties.all()
+        properties = self.category.inherited_properties
         for prop in properties:
             setattr(self, prop.attr_name, prop.default)
         values = self.properties.all()
@@ -730,6 +730,14 @@ class Category(MPTTModel):
     tree = TreeManager()
 
     product = models.OneToOneField(Product, related_name='category_product', null=True, blank=True)
+    
+    @property
+    def inherited_properties(self):
+        res = {}
+        for cat in self.get_ancestors(include_self=True)\
+                        .prefetch_related('properties').order_by('level'):
+            res.update({prop.attr_name:prop for prop in cat.properties.all()})
+        return res.values()
 
     class Meta:
         ordering = ['name']
@@ -794,7 +802,7 @@ class Category(MPTTModel):
         
     def fields_from_properties(self, field_map):
         prop_fields = {p.attr_name:field_map[p.value_type if not p.choices_str else 'choice'](property_type=p)
-            for p in self.properties.all()}
+            for p in self.inherited_properties}
         return prop_fields
 
 
@@ -819,8 +827,11 @@ class Property(models.Model):
     """
     A category-specific product property 
     
-    Stores data useful for creation of Serialiazer
-    and SearchIndex fields
+    Stores data useful for creation of:
+     * Serialiazer fields
+     * SearchIndex fields
+     * product editing widgets
+     * filter widgets
     """
 
     CHOICES_SEPARATOR = ','
@@ -831,7 +842,8 @@ class Property(models.Model):
     value_type = models.CharField(verbose_name=_(u"Type de la proprieté"), max_length=255, choices=PROPERTY_TYPES, 
                                   default='str')
     
-    faceted = models.BooleanField(verbose_name=_(u"Facet"), default=False)
+    faceted = models.BooleanField(verbose_name=_(u"Facet"), default=False,
+                                  help_text=u"Le proprité est un facet lors de recherches ")
     
     default_str = models.CharField(verbose_name=_(u"Valeur par defaut"), max_length=255, null=True, blank=True)
     max_str = models.CharField(verbose_name=_(u"Valeur maximale"), max_length=255, null=True, blank=True)
@@ -875,8 +887,21 @@ class Property(models.Model):
     
     choices = property(fget=_get_choices, fset=_set_choices)
     
+    @classmethod
+    def get_attr_names(clazz, faceted=True):
+        """
+        Return all property attr_name values for this site
+        """
+        cats = Category.objects.filter(sites=settings.SITE_ID).values_list('pk', flat=True)
+        attr_names = clazz.objects.filter(category_id__in=cats, faceted=faceted)\
+                                    .values_list('attr_name', flat=True).distinct()
+        return attr_names
+        
+    
     class Meta:
         verbose_name_plural = _('properties')
+        unique_together = ('category', 'attr_name')
+        
     
     def __unicode__(self):
         """
