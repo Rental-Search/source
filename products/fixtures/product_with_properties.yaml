@@ -1,0 +1,96 @@
+- model: sites.site 
+  pk: 1
+  fields:
+    name: Example
+    domain: www.example.com
+
+- model: products.category
+  pk: 1
+  fields:
+    sites: [1,]
+    name: clothes
+    rght: 1
+    lft: 1
+    level: 1
+    tree_id: 1
+
+- model: products.property
+  pk: 1
+  fields:
+    name: Couleur
+    attr_name: color
+    value_type: str
+    choices_str: "red, green, blue, cyan, magenta, yellow, black"
+    category: 1
+
+- model: products.property
+  pk: 2
+  fields:
+    name: Taille
+    attr_name: size
+    value_type: int
+    min_str: 1
+    max_str: 100
+    category: 1
+    faceted: true
+
+- model: products.property
+  pk: 3
+  fields:
+    name: No Value
+    attr_name: no_value
+    value_type: int
+    category: 1
+    
+- model: products.property
+  pk: 4
+  fields:
+    name: Default Value
+    attr_name: default_value
+    value_type: int
+    category: 1
+    default_str: 5
+    
+- model: accounts.address
+  pk: 1
+  fields:
+    address1: Street
+    zipcode: 50000
+    city: City
+    country: GB
+    patron: 1
+
+- model: accounts.patron
+  pk: 1
+  fields:
+    sites: [1,]
+    username: johndoe
+    email: johndoe@example.com
+    default_address: 1
+    modified_at: 2016-05-6
+
+- model: products.product
+  pk: 1
+  fields:
+    sites: [1,]
+    category: 1
+    summary: Apple
+    address: 1
+    owner: 1
+    deposit_amount: 10
+    created_at: 2016-05-6
+    
+- model: products.propertyvalue
+  pk: 1
+  fields:
+    property_type: 1
+    value_str: red
+    product: 1
+
+- model: products.propertyvalue
+  pk: 2
+  fields:
+    property_type: 2
+    value_str: 20
+    product: 1           
+        

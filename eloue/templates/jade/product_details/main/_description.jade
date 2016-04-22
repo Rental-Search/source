@@ -60,7 +60,7 @@ h3 {% trans "Description" %}
       //- generic properties from products.models.ProperyValue model
       {% for property in properties %}
       tr
-        td {{ property.proeprty.name }}
+        td {{ property.property_type.name }}
         td: b {{ property.value }}&nbsp;&nbsp;
       {% endfor %}
   {% else %}

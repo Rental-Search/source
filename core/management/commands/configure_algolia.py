@@ -1,12 +1,25 @@
 from django.core.management.base import BaseCommand
 from eloue import settings
 from algoliasearch import algoliasearch
+from copy import deepcopy
+from products.models import Property
+from optparse import make_option
 
 
 class Command(BaseCommand):
     
     help =\
-'''Configures all indices from the ALGOLIA_INDICES setting'''
+'''
+Configures all indices from the ALGOLIA_INDICES setting.
+'''
+    option_list = BaseCommand.option_list + (
+        make_option('--with-property-facets',
+            action='store_true',
+            dest='property_facets',
+            default=False,
+            help='Add all attribute names that can appear "+\
+                "in indexed objects to product index facets'),
+        )
     
     def handle(self, *args, **options):
         
@@ -17,7 +30,15 @@ class Command(BaseCommand):
         
         c = algoliasearch.Client(app_id, app_key)
         
-        masters = settings.ALGOLIA_INDICES
+        masters = deepcopy(settings.ALGOLIA_INDICES)
+        
+        if options['property_facets']:
+            # FIXME add generic attributes when there are many properties
+            # Add all attribute names that can appear in indexed objects
+            property_facets = Property.get_attr_names()
+            self.stdout.write('Adding {} property facets'.format(property_facets.count()))
+            masters['products.product']['attributesForFaceting']\
+                    .extend(property_facets)
         
         self.stdout.write("Configuring:")
         for m_name, m_sett in masters.items():

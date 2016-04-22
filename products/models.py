@@ -39,7 +39,8 @@ from products.fields import SimpleDateField
 from products.manager import ProductManager, PriceManager, QuestionManager, CurrentSiteProductManager, CurrentSiteProduct2CategoryManager, TreeManager
 from products.signals import (post_save_answer, post_save_product,
     post_save_curiosity, post_save_to_update_product, post_save_message)
-from products.choices import UNIT, CURRENCY, STATUS, PAYMENT_TYPE, SEAT_NUMBER, DOOR_NUMBER, CONSUMPTION, FUEL, TRANSMISSION, MILEAGE, CAPACITY, TAX_HORSEPOWER, PRIVATE_LIFE
+from products.choices import UNIT, CURRENCY, STATUS, PAYMENT_TYPE, SEAT_NUMBER, DOOR_NUMBER, CONSUMPTION, FUEL, TRANSMISSION, MILEAGE, CAPACITY, TAX_HORSEPOWER, PRIVATE_LIFE,\
+    PROPERTY_TYPES
 from rent.contract import ContractGenerator, ContractGeneratorNormal, ContractGeneratorCar, ContractGeneratorRealEstate
 
 from eloue.geocoder import GoogleGeocoder
@@ -50,6 +51,7 @@ from eloue.utils import currency, create_alternative_email, itertools_accumulate
 
 import copy
 import types
+import __builtin__
 
 #http://stackoverflow.com/questions/5614741/cant-use-a-list-of-methods-in-a-python-class-it-breaks-deepcopy-workaround
 def _deepcopy_method(x, memo):
@@ -133,7 +135,18 @@ class Product(models.Model):
             category_count = qs.count()
             # assert category_count == 1, 'product_id: %d; category_count: %d; site_id: %d' % (self.id, category_count, Site.objects.get_current().id)
         return qs[0].category
-
+    
+    def annotate_with_property_values(self):
+        properties = self.category.inherited_properties
+        for prop in properties:
+            setattr(self, prop.attr_name, prop.default)
+        values = self.properties.all()
+        for val in values:
+            setattr(self, val.property_type.attr_name, val.property_type.value_type_func(val.value))
+    
+    def fields_from_properties(self, field_map):
+        return self.category.fields_from_properties(field_map)
+    
     @permalink
     def get_absolute_url(self):
         category = self._get_category()
@@ -717,6 +730,14 @@ class Category(MPTTModel):
     tree = TreeManager()
 
     product = models.OneToOneField(Product, related_name='category_product', null=True, blank=True)
+    
+    @property
+    def inherited_properties(self):
+        res = {}
+        for cat in self.get_ancestors(include_self=True)\
+                        .prefetch_related('properties').order_by('level'):
+            res.update({prop.attr_name:prop for prop in cat.properties.all()})
+        return res.values()
 
     class Meta:
         ordering = ['name']
@@ -778,6 +799,12 @@ class Category(MPTTModel):
             return u"/%(location)s/%(ancestors_slug)s/%(slug)s/" % {'location': _('location'), 'ancestors_slug': ancestors_slug, 'slug': self.slug }
         else:
             return u"/%(location)s/%(slug)s/" % {'location': _('location'), 'slug': self.slug}
+        
+    def fields_from_properties(self, field_map):
+        prop_fields = {p.attr_name:field_map[p.value_type if not p.choices_str else 'choice'](property_type=p)
+            for p in self.inherited_properties}
+        return prop_fields
+
 
 class Product2Category(models.Model):
     product = models.ForeignKey('Product')
@@ -797,12 +824,84 @@ class CategoryConformity(models.Model):
 
 
 class Property(models.Model):
-    """A property"""
-    category = models.ForeignKey(Category, related_name='properties')
-    name = models.CharField(max_length=255)
+    """
+    A category-specific product property 
+    
+    Stores data useful for creation of:
+     * Serialiazer fields
+     * SearchIndex fields
+     * product editing widgets
+     * filter widgets
+    """
 
+    CHOICES_SEPARATOR = ','
+    
+    category = models.ForeignKey(Category, verbose_name=_(u"Catégorie"), related_name='properties')
+    name = models.CharField(verbose_name=_(u"Nom affiché"), max_length=255)
+    attr_name = models.CharField(verbose_name=_(u"Nom de l'attribut"), max_length=255)
+    value_type = models.CharField(verbose_name=_(u"Type de la proprieté"), max_length=255, choices=PROPERTY_TYPES, 
+                                  default='str')
+    
+    faceted = models.BooleanField(verbose_name=_(u"Facet"), default=False,
+                                  help_text=u"Le proprité est un facet lors de recherches ")
+    
+    default_str = models.CharField(verbose_name=_(u"Valeur par defaut"), max_length=255, null=True, blank=True)
+    max_str = models.CharField(verbose_name=_(u"Valeur maximale"), max_length=255, null=True, blank=True)
+    min_str = models.CharField(verbose_name=_(u"Valeur minimale"), max_length=255, null=True, blank=True)
+    choices_str = models.CharField(verbose_name=_(u"Valeurs permis"), max_length=255, null=True, blank=True,
+                                   help_text=u"Des valeurs separés par \"%s\""%CHOICES_SEPARATOR)
+    
+    
+    @property
+    def value_type_func(self):
+        func = smart_unicode if self.value_type=='str' \
+            else getattr(__builtin__, self.value_type)
+        return lambda x: func(x) if x is not None else None
+    
+    min = property(fget=lambda self:self.value_type_func(self.min_str), 
+                   fset=lambda self, val:setattr(self, 'min_str', smart_unicode(val)))
+    
+    max = property(fget=lambda self:self.value_type_func(self.max_str), 
+                   fset=lambda self, val:setattr(self, 'max_str', smart_unicode(val)))
+    
+    default = property(fget=lambda self:self.value_type_func(self.default_str), 
+                   fset=lambda self, val:setattr(self, 'default_str', smart_unicode(val)))
+    
+    def _get_choices(self):
+        if self.choices_str is None:
+            return None
+        return (self.value_type_func(c.strip()) 
+                for c in self.choices_str.split(self.CHOICES_SEPARATOR))
+    
+    def _set_choices(self, choices):
+        if type(choices) not in (list, tuple, None):
+            raise ValueError('Wrong value type')
+        if not choices:
+            self.choices_str = None
+        else:
+            try:
+                map(self.value_type_func, choices)
+            except:
+                raise Exception('Wrong choice format for type %s' % self.value_type)
+            self.choices_str = self.CHOICES_SEPARATOR.join(map(str, choices))
+    
+    choices = property(fget=_get_choices, fset=_set_choices)
+    
+    @classmethod
+    def get_attr_names(clazz, faceted=True):
+        """
+        Return all property attr_name values for this site
+        """
+        cats = Category.objects.filter(sites=settings.SITE_ID).values_list('pk', flat=True)
+        attr_names = clazz.objects.filter(category_id__in=cats, faceted=faceted)\
+                                    .values_list('attr_name', flat=True).distinct()
+        return attr_names
+        
+    
     class Meta:
         verbose_name_plural = _('properties')
+        unique_together = ('category', 'attr_name')
+        
 
     def __unicode__(self):
         """
@@ -814,20 +913,23 @@ class Property(models.Model):
 
 
 class PropertyValue(models.Model):
-    property = models.ForeignKey(Property, related_name='values')
-    value = models.CharField(max_length=255)
+    property_type = models.ForeignKey(Property, related_name='values')
+    value_str = models.CharField(max_length=255)
     product = models.ForeignKey(Product, related_name='properties')
 
+    value = property(fget=lambda self:self.property_type.value_type_func(self.value_str), 
+               fset=lambda self, val:setattr(self, 'value_str', smart_unicode(val)))
+    
     class Meta:
-        unique_together = ('property', 'product')
-
+        unique_together = ('property_type', 'product')
+    
     def __unicode__(self):
         """
         >>> property = PropertyValue(value="Mercedes")
         >>> property.__unicode__()
         u'Mercedes'
         """
-        return smart_unicode(self.value)
+        return smart_unicode(self.value_str)
 
 class UnavailabilityPeriod(models.Model):
     """A period of time when the product is marked as uniavailable."""

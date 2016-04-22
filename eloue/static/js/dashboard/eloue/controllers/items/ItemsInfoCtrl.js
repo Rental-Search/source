@@ -4,7 +4,10 @@ define([
     "../../../../common/eloue/services/AddressesService",
     "../../../../common/eloue/services/CategoriesService",
     "../../../../common/eloue/services/PicturesService",
-    "../../../../common/eloue/services/ProductsService"
+    "../../../../common/eloue/services/ProductsService",
+    "../../../../common/eloue/services/UtilsService",
+    "../../../../common/eloue/directives/Properties"
+    
 ], function (EloueDashboardApp) {
     "use strict";
     /**
@@ -23,11 +26,14 @@ define([
         "CategoriesService",
         "PicturesService",
         "ProductsService",
-        function ($q, $scope, $stateParams, Endpoints, PrivateLife, Fuel, Transmission, Mileage, AddressesService, CategoriesService, PicturesService, ProductsService) {
+        "UtilsService",
+        "$log",
+        function ($q, $scope, $stateParams, Endpoints, PrivateLife, Fuel, Transmission, Mileage, AddressesService, CategoriesService, PicturesService, ProductsService, UtilsService, $log) {
 
             $scope.rootCategories = {};
             $scope.nodeCategories = {};
             $scope.leafCategories = {};
+            $scope.properties = [];
             $scope.rootCategory = {};
             $scope.nodeCategory = {};
             $scope.loadingPicture = 0;
@@ -136,6 +142,7 @@ define([
                         });
                     }
                 });
+                $scope.properties = $scope.product.category.properties;
                 $scope.product.category = $scope.categoriesBaseUrl + $scope.product.category.id + "/";
                 $scope.product.addressDetails = $scope.product.address;
                 $scope.product.phoneDetails = $scope.product.phone;
@@ -235,15 +242,30 @@ define([
                 });
                 CategoriesService.getCategory($scope.rootCategory).then(function (rootCategory) {
                     $scope.updateFieldSet(rootCategory);
+                    if (reset){
+                        $scope.properties = rootCategory.properties;    
+                    }
                 });
             };
 
             $scope.updateLeafCategories = function (reset) {
                 if (reset) {
                     $scope.product.category = undefined;
+                    CategoriesService.getCategory($scope.nodeCategory).then(function (nodeCategory) {
+                        $scope.properties = nodeCategory.properties;
+                    });
                 }
                 CategoriesService.getChildCategories($scope.nodeCategory).then(function (categories) {
                     $scope.leafCategories = categories;
+                });
+            };
+            
+            $scope.updateProperties = function(){ $log.debug('updateProperties');
+                $log.debug($scope.product.category);
+                CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).then(function (leafCategory) {
+                    $log.debug('leaf category:');
+                    $log.debug(leafCategory);
+                    $scope.properties = leafCategory.properties;
                 });
             };
 
