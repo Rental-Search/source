@@ -9,7 +9,7 @@
   fields:
     sites: [1,]
     name: clothes
-    rght: 1
+    rght: 2
     lft: 1
     level: 1
     tree_id: 1

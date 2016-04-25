@@ -520,6 +520,7 @@ class CategoryViewSet(viewsets.NonDeletableModelViewSet):
         serializer = self.get_serializer(obj.get_descendants(), many=True)
         return Response(serializer.data)
 
+    
 
 class ProductFilterSet(filters.FilterSet):
     category__isdescendant = filters.MPTTModelFilter(name='categories', lookup_type='descendants', queryset=Category.objects.all())

@@ -823,6 +823,17 @@ class CategoryConformity(models.Model):
     gosport_category = models.ForeignKey('Category', related_name='+')
 
 
+forbidden_property_names = dir(Product)\
+     + list(f.name for f in Product._meta.fields)\
+     + list(f.name for f in Product._meta.virtual_fields)
+     
+
+def validate_property_name(val):
+    if val in forbidden_property_names:
+        raise ValidationError("Attribute name {} collides with "\
+                              +"Product model attribute of the same name".format(val))
+
+
 class Property(models.Model):
     """
     A category-specific product property 
@@ -838,7 +849,8 @@ class Property(models.Model):
     
     category = models.ForeignKey(Category, verbose_name=_(u"Catégorie"), related_name='properties')
     name = models.CharField(verbose_name=_(u"Nom affiché"), max_length=255)
-    attr_name = models.CharField(verbose_name=_(u"Nom de l'attribut"), max_length=255)
+    attr_name = models.CharField(verbose_name=_(u"Nom de l'attribut"), max_length=255, \
+                                 validators=[validate_property_name,])
     value_type = models.CharField(verbose_name=_(u"Type de la proprieté"), max_length=255, choices=PROPERTY_TYPES, 
                                   default='str')
     
@@ -900,7 +912,7 @@ class Property(models.Model):
     
     class Meta:
         verbose_name_plural = _('properties')
-        unique_together = ('category', 'attr_name')
+        unique_together = (('category', 'attr_name'), ('category', 'name'))
         
     
     def __unicode__(self):
