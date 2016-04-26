@@ -69,21 +69,30 @@ block append content-body
                 {% with product.object.shipping_available as shipping_available %}
                 ul.nav.nav-justified.text-nowrap
                   li.spacer
-                  li: a(href="#tabs-photos", ng-click="selectTab('#{'#tabs-photos'}')").pad-v-2.current {% trans "Photos et Localisation" %}
+                  if is_pro
+                    li: a(href="#tabs-photos", ng-click="selectTab('#{'#tabs-photos'}')").pad-v-2.current {% trans "Photos" %}
+                  else
+                    li: a(href="#tabs-photos", ng-click="selectTab('#{'#tabs-photos'}')").pad-v-2.current {% trans "Photos et Localisation" %}
                   li.spacer
-                  li: a(href="#tabs-tarifs", ng-click="selectTab('#{'#tabs-tarifs'}')").pad-v-2 {% trans "Tarifs" %}
+                  if product.object.owner.slug != "carrefourlocation"
+                    li: a(href="#tabs-tarifs", ng-click="selectTab('#{'#tabs-tarifs'}')").pad-v-2 {% trans "Tarifs" %}
                   if insurance_available
+                    {% if product.object.owner.slug != "carrefourlocation" %}
                     li.spacer
                     li: a(href="#tabs-insurance", ng-click="selectTab('#tabs-insurance')").pad-v-2 {% trans "Conditions d'assurance" %}
+                    {% endif %}
                   li.spacer
                   {% if shipping_available %}
                   li: a(href="#tabs-shipping", ng-click="selectTab('#tabs-shipping')").pad-v-2 {% trans "Livraison" %}
                   {% endif %}
                 include ./product_detail
-                include ./tab_tarifs
+                if product.object.owner.slug != "carrefourlocation"
+                  include ./tab_tarifs
                 //-include ./tab_available
                 if insurance_available
+                  {% if product.object.owner.slug != "carrefourlocation" %}
                   include ./tab_terms
+                  {% endif %}
                 {% if shipping_available %}
                 include ./tab_shipping
                 {% endif %}
