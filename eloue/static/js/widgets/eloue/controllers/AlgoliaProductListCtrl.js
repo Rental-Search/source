@@ -1,10 +1,11 @@
 define([
     "eloue/app",
     "../../../common/eloue/services/UtilsService",
+    "../../../common/eloue/services/CategoriesService",
     "algoliasearch-helper",
     "stacktrace",
     "js-cookie"
-], function (EloueWidgetsApp, UtilsService, algoliasearchHelper, StackTrace, Cookies) {
+], function (EloueWidgetsApp, UtilsService, CategoriesService, algoliasearchHelper, StackTrace, Cookies) {
     "use strict";
     
     var Point = function(lat, lng){
@@ -124,7 +125,22 @@ define([
             }
         }
     }]);
-                                  
+                
+    EloueWidgetsApp.filter('is_facet', [
+    function() {
+        return function(props) {
+            var res = [];
+            if (props) {
+                for (var i=0; i<props.length; i++){
+                    if (props[i].faceted){
+                        res.push(props[i]);   
+                    }
+                }
+            } 
+            return res;
+        }
+    }]);
+                                     
     
     EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
         uiGmapGoogleMapApiProvider.configure({
@@ -134,6 +150,33 @@ define([
             region: 'FR'
         });
     }]);
+   
+   
+   EloueWidgetsApp.directive('elouePropertyDropdownFilter', function(){
+        return {
+            template: '<label class="caption", for="{{proto.attr_name+proto.id}}">{{proto.name}}</label>'+
+                    '<select id="{{proto.attr_name+proto.id}}" ng-model="value" '+
+                      'ng-options="choice for choice in proto.choices" '+
+                      'data-placeholder="{{proto.name}}" '+
+                      'class="form-control" eloue-chosen></select>',
+            restrict: 'A',
+            require: 'ngModel', 
+            scope: {
+                proto: '=propertyType'
+            },
+            link: function (scope, element, attrs, ngModel) {
+                
+                ngModel.$render = function(){
+                    scope.value = ngModel.$viewValue;
+                };
+                
+                scope.$watch('value', function(newVal, oldVal, scope){
+                    ngModel.$setViewValue(newVal);
+                });
+              
+          }
+        };
+    });
    
     
     /**
@@ -149,11 +192,12 @@ define([
         "$q",
         "$log",
         "UtilsService",
+        "CategoriesService",
         "uiGmapGoogleMapApi",
         "uiGmapIsReady",
         "algolia",
         function ($scope, $window, $timeout, $document, $location, $filter, $q, $log, 
-                UtilsService, uiGmapGoogleMapApi, uiGmapIsReady, algolia) {
+                UtilsService, CategoriesService, uiGmapGoogleMapApi, uiGmapIsReady, algolia) {
             
             var unsubscribe = $scope.$watch('search_params', function(search_params){
                 
@@ -590,9 +634,18 @@ define([
                     return $scope.search.owner_type.pro_count==0 || $scope.search.owner_type.part_count==0;
                 };
                 
+                $scope.categoryName = function(categoryStr){
+                    return categoryStr.split('|')[0];
+                };
+                
+                $scope.categoryId = function (categoryStr){
+                    return parseInt(categoryStr.split('|')[1]);
+                };
+                
                 $scope.refineCategory = function(path) { //$log.debug('refineCategory');
-                    $scope.search.category_path = path;
-                    $scope.search.helper.toggleRefinement("category", $scope.search.category_path);
+                    $scope.search.algolia_category_path = path;
+                    $scope.search.helper.toggleRefinement("category", $scope.search.algolia_category_path);
+                    $scope.clearPropertyRefinements();
                     $scope.search.page = 0;
                     $scope.perform_search();
                 };
@@ -610,6 +663,20 @@ define([
                     $scope.search.query = '';
                     $scope.search.page = 0;
                     $scope.refineLocation();
+                };
+                
+                $scope.refineProperty = function(prop){
+                    // $log.debug("refineProperty");
+                    var val = $scope.search[prop.attr_name];
+                    if ($scope.search.helper.state.isFacetRefined(prop.attr_name)){
+                        $scope.search.helper.removeFacetRefinement(prop.attr_name);   
+                    }
+                    // FIXME a hack - shoud determine this otherwise
+                    if (val !== prop.choices[0]){
+                        $scope.search.helper.addFacetRefinement(
+                            prop.attr_name, val);   
+                    }
+                    $scope.perform_search();
                 };
                 
                 /*
@@ -639,8 +706,20 @@ define([
                 
                 $scope.resetMap = function(){};
                 
+                $scope.clearPropertyRefinements = function(){
+                    if ($scope.search.category && $scope.search.category.properties){
+                        var props = $scope.search.category.properties;
+                        for (var i=0; i<props.length; i++) {
+                            $scope.search.helper.clearRefinements(props[i].attr_name);
+                            delete $scope.search[props[i].attr_name];
+                        }   
+                    }
+                };
+                
                 $scope.clearRefinements = function(){ //$log.debug('clearRefinements');
+                    $scope.clearPropertyRefinements();
                     $scope.search.helper.setState($scope.search_default_state);
+                    $scope.search.category = null;
 //                    $log.debug($scope.search_default_state);
 //                    $log.debug($scope.search.helper.getState());
 //                    $scope.search.query = "";
@@ -687,7 +766,28 @@ define([
                 
                 $scope.renderSearchCategories = function(result, state){ //$log.debug('renderSearchCategories');
                     if (result.hierarchicalFacets && result.hierarchicalFacets[0]) {
-                        $scope.search.category = result.hierarchicalFacets[0];
+                        $scope.search.algolia_category = result.hierarchicalFacets[0];
+                        var catFacet = state.hierarchicalFacetsRefinements.category;
+                        if (catFacet){
+                            var cat = catFacet[0];
+                            if (cat){
+                                var catparts = cat.split(' > ');
+                                var categoryId = $scope.categoryId(catparts[catparts.length-1]);
+                                var facets = $scope.search_default_state.getQueryParameter('facets').slice(0);
+                                CategoriesService.getCategory(categoryId).then(function(cat){
+                                    $scope.search.category = cat;
+                                    for (var i=0; i<$scope.search.category.properties.length; i++){
+                                        facets.push($scope.search.category.properties[i].attr_name);
+                                    };
+                                }).finally(function(){
+                                    $scope.search.helper.setQueryParameter('facets', facets);
+                                    
+                                    // Render properties when the category is available
+                                    $scope.renderProperties(result, state);
+                                  
+                                });
+                            }   
+                        }
                     }
                 };
                            
@@ -697,7 +797,7 @@ define([
                         var cat = state.hierarchicalFacetsRefinements.category[0];
                         if (cat){
                             var catparts = cat.split(' > ');
-                            $scope.search.leaf_category = catparts[catparts.length-1];
+                            $scope.search.leaf_category = $scope.categoryName(catparts[catparts.length-1]);
                             for (var i=0; i< catparts.length; i++){
                                 $scope.search.breadcrumbs.push(
                                         {short: catparts[i], long: catparts.slice(0,i+1).join(' > ')});
@@ -714,6 +814,21 @@ define([
                     $scope.search.owner_type.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
                     $scope.search.owner_type.pro = state.isDisjunctiveFacetRefined("pro_owner", true);
                     $scope.search.owner_type.part = state.isDisjunctiveFacetRefined("pro_owner", false);
+                };
+                
+                $scope.renderProperties = function(result, state){
+                    if ($scope.search.category && 
+                                $scope.search.category.properties){
+                        var props = $scope.search.category.properties;
+                        for (var i=0; i<props.length; i++) {
+                            var attr_name = props[i].attr_name;
+                            if ((state.facets.indexOf(attr_name)>=0) && state.isFacetRefined(attr_name)){
+                                $scope.search[attr_name] = state.getConjunctiveRefinements(attr_name)[0];
+                            } else {
+                                $scope.search[attr_name] = props[i].default;
+                            }
+                        };
+                    }
                 };
                 
                 $scope.cooldown = false;
@@ -773,7 +888,7 @@ define([
                     
                     $scope.$apply(function(){
                         //$log.debug(result.page);
-                        //$log.debug(result);
+                        // $log.debug(result);
                         
                         $scope.search.result_count = result.nbHits;
                         $scope.search.product_list = result.hits;
@@ -797,8 +912,7 @@ define([
                             $scope.renderRenterTypes(result, state);
                         } else {
                             //$log.debug("No results");
-                        }
-                        
+                        }      
                         $scope.renderQueryText(result);
                         $scope.renderOrdering(result);
                         $scope.renderBreadcrumbs(state);
@@ -810,6 +924,7 @@ define([
                                 $scope.renderMap(result, state);
                             });
                         }
+                        // $scope.renderProperties(result, state);
                         $scope.renderLocation(result, state);
                         
                         //$log.debug($scope.search.product_list);
@@ -845,7 +960,7 @@ define([
                 }
                 //$log.debug('orig_params_present='+$scope.orig_params_present());
                 
-                $scope.search.category = null;
+                $scope.search.algolia_category = null;
                 
                 $scope.search.breadcrumbs = [];
                 
@@ -858,7 +973,7 @@ define([
 //                $scope.search.product_list = [];
 //                $scope.search.page = 0;
 //                $scope.search.result_count = 0;
-//                $scope.search.category_path = "";
+//                $scope.search.algolia_category_path = "";
 //                $scope.search.owner_type = {
 //                    pro: true,
 //                    part: true,
@@ -938,7 +1053,7 @@ define([
                     $scope.search.location_ui_changed = true;
                     
                     if ($scope.ui_pristine){
-                        $scope.search.helper.toggleRefinement("category", $scope.search.category_path);
+                        $scope.search.helper.toggleRefinement("category", $scope.search.algolia_category_path);
                     }
                     
                     //$log.debug($scope.search);
@@ -976,7 +1091,7 @@ define([
     EloueWidgetsApp.controller("CategoryController", ['$scope', '$log', function($scope, $log){
         //$log.debug("CategoryController parent scope:");
         //$log.debug($scope.$parent);
-        $scope.$parent.$watch("search.category", function(category){
+        $scope.$parent.$watch("search.algolia_category", function(category){
             $scope.category = category;
         });
     }]);

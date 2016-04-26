@@ -137,10 +137,10 @@ class Product(models.Model):
     def annotate_with_property_values(self):
         properties = self.category.inherited_properties
         for prop in properties:
-            setattr(self, prop.attr_name, prop.default)
+            setattr(self, prop.prefixed_attr_name, prop.default)
         values = self.properties.all()
         for val in values:
-            setattr(self, val.property_type.attr_name, val.property_type.value_type_func(val.value))
+            setattr(self, val.property_type.prefixed_attr_name, val.property_type.value_type_func(val.value))
     
     def fields_from_properties(self, field_map):
         return self.category.fields_from_properties(field_map)
@@ -736,7 +736,7 @@ class Category(MPTTModel):
         res = {}
         for cat in self.get_ancestors(include_self=True)\
                         .prefetch_related('properties').order_by('level'):
-            res.update({prop.attr_name:prop for prop in cat.properties.all()})
+            res.update({prop.prefixed_attr_name:prop for prop in cat.properties.all()})
         return res.values()
 
     class Meta:
@@ -791,7 +791,13 @@ class Category(MPTTModel):
     
     
     def get_algolia_path(self):
-        return " > ".join([cat.name for cat in self.get_ancestors(include_self=True)])
+        return " > ".join([cat.name+'|'+str(cat.id)\
+                           for cat in self.get_ancestors(include_self=True)])
+    
+    @classmethod
+    def from_algolia_path(clazz, path):
+        parts = path.split()
+        
     
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
@@ -801,7 +807,7 @@ class Category(MPTTModel):
             return u"/%(location)s/%(slug)s/" % {'location': _('location'), 'slug': self.slug}
         
     def fields_from_properties(self, field_map):
-        prop_fields = {p.attr_name:field_map[p.value_type if not p.choices_str else 'choice'](property_type=p)
+        prop_fields = {p.prefixed_attr_name:field_map[p.value_type if not p.choices_str else 'choice'](property_type=p)
             for p in self.inherited_properties}
         return prop_fields
 
@@ -846,6 +852,7 @@ class Property(models.Model):
     """
 
     CHOICES_SEPARATOR = ','
+    PREFIX = 'eloue_'
     
     category = models.ForeignKey(Category, verbose_name=_(u"Catégorie"), related_name='properties')
     name = models.CharField(verbose_name=_(u"Nom affiché"), max_length=255)
@@ -899,15 +906,26 @@ class Property(models.Model):
     
     choices = property(fget=_get_choices, fset=_set_choices)
     
+    def _get_prefixed_attr_name(self):
+        return self.PREFIX + self.attr_name
+    
+    def _set_prefixed_attr_name(self, val):
+        if val.startswith(self.PREFIX):
+            return val[len(self.PREFIX):]
+        else:
+            raise ValueError('Attribute name missing prefix')
+    
+    prefixed_attr_name = property(fget=_get_prefixed_attr_name,
+                                  fset=_set_prefixed_attr_name)
+    
     @classmethod
     def get_attr_names(clazz, faceted=True):
         """
         Return all property attr_name values for this site
         """
         cats = Category.objects.filter(sites=settings.SITE_ID).values_list('pk', flat=True)
-        attr_names = clazz.objects.filter(category_id__in=cats, faceted=faceted)\
-                                    .values_list('attr_name', flat=True).distinct()
-        return attr_names
+        attrs = clazz.objects.filter(category_id__in=cats, faceted=faceted).distinct('attr_name')
+        return {a.prefixed_attr_name for a in attrs}
         
     
     class Meta:

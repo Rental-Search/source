@@ -8,6 +8,8 @@ def product_with_properties(settings, transactional_db):
     from products.models import Product
     settings.SITE_ID = 1
     settings.DEFAULT_SITES = [1,]
+#     settings.INSTALLED_APPS = (k for k in settings.INSTALLED_APPS if k!='modeltranslation')
+    
     call_command('loaddata', 'product_with_properties.yaml')
     for p in Patron.objects.all(): 
         p.set_password(p.username)

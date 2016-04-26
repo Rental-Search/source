@@ -54,6 +54,7 @@ class PropertySerializer(ModelSerializer):
     min = fields.SerializerMethodField('get_min')
     max = fields.SerializerMethodField('get_max')
     choices = fields.SerializerMethodField('get_choices')
+    attr_name = fields.SerializerMethodField('get_prefixed_attr_name')
     
     def get_default(self, obj):
         return obj.default
@@ -67,10 +68,13 @@ class PropertySerializer(ModelSerializer):
     def get_choices(self, obj):
         return obj.choices
     
+    def get_prefixed_attr_name(self, obj):
+        return obj.prefixed_attr_name
+    
     class Meta:
         model = models.Property
-        fields = ('id', 'attr_name', 'name', 'value_type', 'default', 'max', 'min', 'choices')
-        public_fields = ('id', 'name', 'value_type', 'default', 'max', 'min', 'choices')
+        fields = ('id', 'attr_name', 'name', 'value_type', 'default', 'max', 'min', 'choices', 'faceted')
+        public_fields = ('id', 'attr_name', 'name', 'value_type', 'default', 'max', 'min', 'choices', 'faceted')
         view_name = 'property-detail'
         read_only_fields = ('id', 'name', 'value_type')
 
@@ -142,7 +146,7 @@ class ProductPropertyFieldMixin(object):
     def __init__(self, *args, **kwargs):
         self.property = kwargs.pop('property_type')
         kwargs.update({'default':self.property.default,
-                       'source': self.property.attr_name,
+                       'source': self.property.prefixed_attr_name,
                        'required':False})
         if isinstance(self, CharField):
             kwargs['max_length'] = 255
@@ -245,7 +249,7 @@ class ProductSerializer(six.with_metaclass(DynamicFieldsDeclarativeMetaClass, Mo
             prop_type = prop_val.property_type
             existing.add(prop_type)
             try:
-                prop_val.value = getattr(instance, prop_type.attr_name)
+                prop_val.value = getattr(instance, prop_type.prefixed_attr_name)
             except AttributeError:
                 pass
             properties.append(prop_val)
@@ -254,7 +258,7 @@ class ProductSerializer(six.with_metaclass(DynamicFieldsDeclarativeMetaClass, Mo
         for prop_type in instance.category.inherited_properties:
             if prop_type not in existing:
                 try:
-                    value=getattr(instance, prop_type.attr_name)
+                    value=getattr(instance, prop_type.prefixed_attr_name)
                 except AttributeError:
                     continue
                 if value is not None: 

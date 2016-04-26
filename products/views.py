@@ -216,7 +216,7 @@ SEARCH_DEFAULTS = {
      'order_by': u'',
      'page': 0,
      'result_count': 0,
-     'category_path': u'',
+     'algolia_category_path': u'',
      'owner_type': {
              'pro': True,
              'part': True,
@@ -359,7 +359,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                  'order_by': self.form.cleaned_data.get('sort', u''),
                  'page': context['page_obj'].number-1 if context['is_paginated'] else 0,
                  'result_count': self.sqs.count(),
-                 'category_path': algolia_path if algolia_path else '', #TODO take from form
+                 'algolia_category_path': algolia_path if algolia_path else '', #TODO take from form
                  'owner_type': {
                          'pro': not renter or renter==u'professionnels',
                          'part': not renter or renter==u'particuliers',

@@ -65,7 +65,7 @@ class ProductPropertyFieldMixin(object):
                         'null':True,})
         super(ProductPropertyFieldMixin, self).__init__(*args, **kwargs)
         self.index_fieldname = self.instance = \
-                self.model_attr = self.property_type.attr_name 
+                self.model_attr = self.property_type.prefixed_attr_name 
         
 
 

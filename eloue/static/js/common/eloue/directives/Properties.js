@@ -14,7 +14,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources"], f
           },
           controller: ['$scope', '$element', '$attrs', '$log', function ($scope, $element, $attrs, $log) {
               
-              $log.debug($scope);
+              //$log.debug($scope);
               
               var init = $scope.product[$scope.proto.attr_name];
               

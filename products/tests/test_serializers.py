@@ -19,15 +19,15 @@ def test_serialize_properties(product_with_properties):
     ps = ProductSerializer(instance=product_with_properties)
     fs = ps.fields
       
-    assert 'color' in fs and 'size' in fs
-    assert isinstance(fs['color'], ChoiceField) and isinstance(fs['size'], IntegerField)
+    assert 'eloue_color' in fs and 'eloue_size' in fs
+    assert isinstance(fs['eloue_color'], ChoiceField) and isinstance(fs['eloue_size'], IntegerField)
      
     data = ps.data
      
-    assert 'color' in data and 'size' in data
-    assert data['size'] == 20 \
-        and data['color'] == 'red' \
-        and data['default_value'] == 5
+    assert 'eloue_color' in data and 'eloue_size' in data
+    assert data['eloue_size'] == 20 \
+        and data['eloue_color'] == 'red' \
+        and data['eloue_default_value'] == 5
  
  
  
@@ -45,8 +45,8 @@ def test_deserialize_properties(transactional_db):
             'address': _location('address-detail', pk=1),
             'category': _location('category-detail', pk=1),
             'owner': _location('patron-detail', pk=1), 
-            'color': u'cyan',
-            'size': 25}
+            'eloue_color': u'cyan',
+            'eloue_size': 25}
  
     ps = ProductSerializer(data=data)
      
@@ -71,8 +71,8 @@ def test_deserialize_properties(transactional_db):
             'address': _location('address-detail', pk=1),
             'category': _location('category-detail', pk=1),
             'owner': _location('patron-detail', pk=1), 
-            'color': u'yellow',
-            'size': 1}
+            'eloue_color': u'yellow',
+            'eloue_size': 1}
      
     ps = ProductSerializer(Product.objects.get(pk=1), data=data)
      
@@ -105,13 +105,13 @@ def test_deserialize_properties_with_invalid_values(transactional_db):
             'address': _location('address-detail', pk=1),
             'category': _location('category-detail', pk=1),
             'owner': _location('patron-detail', pk=1), 
-            'color': u'beige', 
-            'size': 1000} 
+            'eloue_color': u'beige', 
+            'eloue_size': 1000} 
  
     ps = ProductSerializer(data=data)
      
     errs = ps.errors
-    assert 'color' in errs and 'size' in errs
+    assert 'eloue_color' in errs and 'eloue_size' in errs
     
 
 @pytest.mark.usefixtures('product_with_properties')
