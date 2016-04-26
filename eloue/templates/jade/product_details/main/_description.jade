@@ -2,7 +2,7 @@
 
 h3 {% trans "Description" %}
 .row
-  {% if product_type != 'product' or product.comment_count or properties %}
+  {% if product_type != 'product' or product.comment_count %}
   .col-sm-6.text {{ product.description|linebreaksp }}
   .col-sm-6.properties
     table.calendar.bd-clear: tbody
@@ -56,12 +56,6 @@ h3 {% trans "Description" %}
       tr
         td {{ option }}
         td: b oui&nbsp;&nbsp;
-      {% endfor %}
-      //- generic properties from products.models.ProperyValue model
-      {% for property in properties %}
-      tr
-        td {{ property.proeprty.name }}
-        td: b {{ property.value }}&nbsp;&nbsp;
       {% endfor %}
   {% else %}
   .col-sm-12.text {{ product.description|linebreaksp }}

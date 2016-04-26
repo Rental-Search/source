@@ -2,6 +2,7 @@
 import os
 import logging
 import decimal
+import analytics
 from getenv import env
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
@@ -967,3 +968,5 @@ if not DEBUG:
 #Parse credential
 PARSE_APPLICATION_ID = env('PARSE_APPLICATION_ID', '1WuJlTny9WGUINnphSb8kPbCOUUgymck6n8PwmYE')
 PARSE_REST_API_KEY = env('PARSE_REST_API_KEY', 'VQdNVFgacql3M7T1uTnk8jO7mjqM3Q5yCiaqyXyv')
+
+ANALYTICS_WRITE_KEY = env('ANALYTICS_WRITE_KEY', 'CK4wf1QXZEjeqFRo75zZQ7DfZWzYJwHC')
