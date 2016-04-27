@@ -88,7 +88,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                             }, prices = value.prices;
 
                         if ($.isArray(value.pictures) && (value.pictures.length > 0)) {
-                            product.picture = value.pictures[0].image.thumbnail;
+                            var lastIndex = value.pictures.length - 1;
+                            product.picture = value.pictures[lastIndex].image.thumbnail;
                         }
 
                         if (prices && prices.length > 0) {

@@ -40,6 +40,7 @@ class Command(BaseCommand):
 						patron=patron,
 						name=pro_agency_row["name"],
 						address1=pro_agency_row["address1"],
+						address2=pro_agency_row["address2"],
 						zipcode=str(int(float(pro_agency_row["zipcode"]))),
 						city=pro_agency_row["city"],
 						phone_number=pro_agency_row["phone"]

@@ -12,8 +12,8 @@ section(ng-controller="AuthCtrl").container.signs-links
       li: <img  src="{% static 'images/phone-grey.png' %}", style="width: 17px;height: 16px; margin-right: 8px;vertical-align: top"/>
         {% blocktrans %}
         span
-        b 01 85 08 99 77 
-        | (numéro gratuit)
+        a(href="/contactez-nous/"): b Contactez-nous
+        | par mail
         {% endblocktrans %}
         li.divide
     li: span
@@ -35,8 +35,8 @@ section(ng-controller="AuthCtrl").container.signs-links
       li: <img  src="{% static 'images/phone-grey.png' %}", style="width: 17px;height: 16px; margin-right: 8px;vertical-align: top"/>
         {% blocktrans %}
         span
-        b 01 85 08 99 77 
-        | (numéro gratuit)
+        a(href="/contactez-nous/"): b Contactez-nous
+        | par mail
       {% endblocktrans %}
     li.spacer
     li.guest-veiw
@@ -94,7 +94,7 @@ section(ng-controller="AuthCtrl").container.signs-links
 .framing
   section.container.search-form
     .table-cell
-      a(href="{% url 'home' %}"): img(src="{% static 'img/logo.png' %}", alt="e-loue logo")
+      a(href="{% url 'home' %}"): img(src="{% static 'img/logo_dressbooking.png' %}", alt="dressbooking logo")
     .table-cell.main-cell
       {% trans "Que voulez-vous louer ?" as what %}
       {% trans "Où ça ?" as where %}
