@@ -840,7 +840,6 @@ def validate_property_name(val):
 
 
 class Property(models.Model):
-<<<<<<< HEAD
     """
     A category-specific product property 
     
@@ -933,15 +932,6 @@ class Property(models.Model):
         unique_together = (('category', 'attr_name'), ('category', 'name'))
         
     
-=======
-    """A property"""
-    category = models.ForeignKey(Category, related_name='properties')
-    name = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name_plural = _('properties')
-
->>>>>>> master_algolia
     def __unicode__(self):
         """
         >>> property = Property(name="Marque")
@@ -955,20 +945,12 @@ class PropertyValue(models.Model):
     property_type = models.ForeignKey(Property, related_name='values')
     value_str = models.CharField(max_length=255)
     product = models.ForeignKey(Product, related_name='properties')
-<<<<<<< HEAD
-    
     value = property(fget=lambda self:self.property_type.value_type_func(self.value_str), 
                fset=lambda self, val:setattr(self, 'value_str', smart_unicode(val)))
     
     class Meta:
         unique_together = ('property_type', 'product')
     
-=======
-
-    class Meta:
-        unique_together = ('property', 'product')
-
->>>>>>> master_algolia
     def __unicode__(self):
         """
         >>> property = PropertyValue(value="Mercedes")
