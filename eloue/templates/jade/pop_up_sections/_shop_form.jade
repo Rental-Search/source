@@ -6,7 +6,7 @@ h4
   | nous nous ferons un plaisir de répondre à toutes vos questions…
   {% endblocktrans %}
 {% if patron.pro_agencies.all %}
-p {% trans "Nos boutiques sont situées au&nbsp;" %}:
+p {% trans "Nos magasins sont situés au&nbsp;" %}:
 aside.col-xs-4
   .map-container
     .whirly
@@ -28,7 +28,7 @@ main.col-xs-8.pro-shop
              p {{ agency.phone_number }}
 {% else %}
 {% if patron.default_address %}
-p {% trans "Notre magains est située au&nbsp;" %}:
+p {% trans "Notre magasin est situé au&nbsp;" %}:
 aside.col-xs-4
     .map-container
         .whirly
