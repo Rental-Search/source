@@ -43,6 +43,7 @@ main.col-xs-8.pro-shop
                 p {{ patron.default_address.address1 }}
                 p {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
                 {% if patron.default_address.phone_number %}
-                  p {{ patron.default_address.phone_number }}
+                p {{ patron.default_address.phone_number }}
+                {% endif %}
 {% endif %}
 {% endif %}
