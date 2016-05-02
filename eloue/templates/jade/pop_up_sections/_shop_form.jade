@@ -2,7 +2,7 @@
 
 h4
   {% blocktrans %}
-  b N’hésitez pas à venir dans notre boutique,
+  b N’hésitez pas à venir dans notre magasin,
   | nous nous ferons un plaisir de répondre à toutes vos questions…
   {% endblocktrans %}
 {% if patron.pro_agencies.all %}
@@ -28,7 +28,7 @@ main.col-xs-8.pro-shop
              p {{ agency.phone_number }}
 {% else %}
 {% if patron.default_address %}
-p {% trans "Notre boutique est située au&nbsp;" %}:
+p {% trans "Notre magains est située au&nbsp;" %}:
 aside.col-xs-4
     .map-container
         .whirly
