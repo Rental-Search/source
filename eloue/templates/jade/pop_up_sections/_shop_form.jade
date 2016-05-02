@@ -25,7 +25,9 @@ main.col-xs-8.pro-shop
              h6 {{ agency.name }}
              p {{ agency.address1 }}
              p {{ agency.zipcode }} {{ agency.city|upper }}
+             {% if agency.phone_number %}
              p {{ agency.phone_number }}
+             {% endif %}
 {% else %}
 {% if patron.default_address %}
 p {% trans "Notre magasin est situé au&nbsp;" %}:
