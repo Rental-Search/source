@@ -42,6 +42,7 @@ main.col-xs-8.pro-shop
                 h6 {{ patron.default_address.name }}
                 p {{ patron.default_address.address1 }}
                 p {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
-                p {{ patron.default_address.phone_number }}
+                {% if patron.default_address.phone_number %}
+                  p {{ patron.default_address.phone_number }}
 {% endif %}
 {% endif %}
