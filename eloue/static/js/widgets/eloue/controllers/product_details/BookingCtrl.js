@@ -193,7 +193,7 @@ define([
                 toDateSelector.datepicker("setStartDate", fromDateTime);
                 toDateSelector.datepicker("update");
                 $scope.dateRangeError = "";
-                
+
 
                 if (fromDateTime > toDateTime) {
                     //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
@@ -325,16 +325,16 @@ define([
             };
 
             $scope.sendBookingRequest = function () {
-                
+
                 var publishPromise = $q.defer().promise;
-                
+
                 // Add required user info
                 if ($scope.noAddress || $scope.noPhone) {
-                    
+
                     $scope.submitInProgress = true;
-                    
+
                     var patchPromises = {};
-                    
+
                     if ($scope.noAddress){
                         $scope.currentUser.default_address.country = "FR";
                         patchPromises.default_address = AddressesService
@@ -360,11 +360,11 @@ define([
                                     });
                             });
                     };
-                    
+
                     $q.all(patchPromises)
                         .catch($scope.handleResponseErrors)
                         .then($scope.saveCardAndRequestBooking);
-                    
+
                 } else {
                     $scope.saveCardAndRequestBooking();
                 }
@@ -504,7 +504,7 @@ define([
                     'start date': booking.started_at,
                     'end date': booking.ended_at,
                     'state': booking.state,
-                    'total amount': booking.total_amount 
+                    'total amount': booking.total_amount
                 });
                 toastr.options.positionClass = "toast-top-full-width";
                 toastr.success("Réservation enregistré");
@@ -561,6 +561,12 @@ define([
             $scope.$on("openModal", function (event, args) {
                 $scope.openModal(args.name);
             });
+
+            if (queryParams.show_booking == 'true') {
+                $scope.$watch('product', function(newValue, oldValue){
+                    $scope.openModal('booking');
+                });
+            }
 
             $scope.openModal = function (name) {
                 var currentUserToken = AuthService.getUserToken(), modalContainer;
@@ -841,8 +847,6 @@ define([
             $scope.applyDatePicker("date_of_birth");
             $scope.applyDatePicker("drivers_license_date");
 
-            if (queryParams.show_booking == 'true') {
-                $scope.openModal('booking');
-            }
+
         }]);
 });

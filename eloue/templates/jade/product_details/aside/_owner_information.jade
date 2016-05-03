@@ -31,9 +31,11 @@
     .part
         {% if is_pro %}
         {% if patron.slug != "loxam" %}
+        {% if patron.slug != "carrefourlocation" %}
         a(href="#/message", data-toggle="modal", data-target="#pro-popin-message")#pro-popin-message.btn.bg-success
             i.flaticon.stroke.mail-2
             | {% trans "Demandez un devis" %}
+        {% endif %}
         {% if patron.default_number %}
         a(href="#/phone", data-toggle="modal", data-target="#pro-popin-phone")#pro-popin-phone.btn.bg-success
             i.flaticon.stroke.phone-3

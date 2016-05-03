@@ -11,6 +11,12 @@ from .models import Product
 from .choices import UNIT
 from .helpers import get_unavailable_periods
 
+from haystack.utils.geo import ensure_point
+from haystack.indexes import DeclarativeMetaclass
+from django.utils.six import with_metaclass
+from products.models import PropertyValue
+from django.db.models import F
+
 __all__ = ['ProductIndex']
 
 
@@ -29,12 +35,68 @@ class LocationMultiValueField(indexes.SearchField):
             return None
 
 
-class ProductIndex(indexes.Indexable, indexes.SearchIndex):
+class AlgoliaLocationMultiValueField(LocationMultiValueField):
+    field_type = 'location'
+    
+    index_fieldname = "_geoloc"
+    
+
+
+class AlgoliaTagsField(indexes.MultiValueField):
+    
+    index_fieldname = "_tags"
+    
+    def prepare(self, obj):
+        
+        category = obj._get_category()
+        if category:
+            qs = category.get_ancestors(ascending=False, include_self=True)
+            return tuple(qs.values_list('slug', flat=True))
+        
+        return tuple()
+
+
+class ProductPropertyFieldMixin(object):
+    
+    def __init__(self, *args, **kwargs):
+        self.property_type = kwargs.pop('property_type')
+        kwargs.update({'default':self.property_type.default, 
+                        'faceted':self.property_type.faceted,
+                        'null':True,})
+        super(ProductPropertyFieldMixin, self).__init__(*args, **kwargs)
+        self.index_fieldname = self.instance = \
+                self.model_attr = self.property_type.prefixed_attr_name 
+        
+
+
+class DynamicFieldsDeclarativeMetaClass(DeclarativeMetaclass):
+    
+    def __new__(cls, name, bases, attrs):
+        clazz = DeclarativeMetaclass.__new__(cls, name, bases, attrs)
+        if hasattr(clazz, '_get_dynamic_fields') \
+                and hasattr(clazz, '_set_dynamic_fields'):
+            clazz._fields = clazz.fields
+            clazz.fields = property(fget=clazz._get_dynamic_fields, 
+                          fset=clazz._set_dynamic_fields)
+        return clazz
+    
+
+TYPE_FIELD_MAP = {'int':type('IntegerField', (ProductPropertyFieldMixin, indexes.IntegerField), {}),
+                  'str':type('CharField', (ProductPropertyFieldMixin, indexes.CharField), {}),
+                  'float':type('FloatField', (ProductPropertyFieldMixin, indexes.FloatField), {}),
+                  'bool':type('BooleanField', (ProductPropertyFieldMixin, indexes.BooleanField), {}),
+                  'choice':type('CharField', (ProductPropertyFieldMixin, indexes.CharField), {}),}
+
+
+class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass, 
+                                  indexes.Indexable, indexes.SearchIndex)):
+    
     text = indexes.CharField(document=True, use_template=True)
     location = indexes.LocationField(model_attr='address__position', null=True)
     locations = LocationMultiValueField()
     categories = indexes.MultiValueField(faceted=True, null=True)
     created_at = indexes.DateTimeField(model_attr='created_at')
+    created_at_timestamp = indexes.DateTimeField(model_attr='created_at')
     created_at_date = indexes.DateField(model_attr='created_at__date')
     description = indexes.EdgeNgramField(model_attr='description')
     city = indexes.CharField(model_attr='address__city', indexed=False)
@@ -50,6 +112,7 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     thumbnail = indexes.CharField(indexed=False, null=True)
     thumbnail_medium = indexes.CharField(indexed=False, null=True)
     profile = indexes.CharField(indexed=False, null=True)
+    vertical_profile = indexes.CharField(indexed=False, null=True)
     special = indexes.BooleanField()
     pro = indexes.BooleanField(model_attr='owner__is_professional', default=False)
     is_archived = indexes.BooleanField(model_attr='is_archived')
@@ -71,6 +134,38 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
 
     need_insurance = indexes.BooleanField(default=True)
 
+    django_id_int = indexes.IntegerField(model_attr='id')
+#     category_id = indexes.IntegerField(model_attr='category_id')
+    algolia_categories = indexes.MultiValueField(faceted=True, null=True)
+    _tags = AlgoliaTagsField(model_attr='categories', null=True)
+    _geoloc = AlgoliaLocationMultiValueField()
+    
+    
+    def __init__(self):
+        super(ProductIndex, self).__init__()
+        self._obj = None
+    
+    def _get_dynamic_fields(self):
+        if hasattr(self, '_obj') and self._obj is not None:
+            props = self._obj.fields_from_properties(TYPE_FIELD_MAP)
+            props = {k:props[k] for k in props if props[k].faceted}
+            fc = self._fields.copy()
+            fc.update(props)
+            return fc
+        else:
+            return self._fields
+    
+    def _set_dynamic_fields(self, obj):
+        self._fields = obj
+    
+    def full_prepare(self, obj):
+        self._obj = obj
+        self._obj.annotate_with_property_values()
+        return indexes.SearchIndex.full_prepare(self, self._obj)
+            
+    
+    def get_updated_field(self):
+        return "created_at"
     
     def prepare_locations(self, obj):
         agencies = obj.owner.pro_agencies.all()
@@ -82,7 +177,16 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         else:
             return None
 
-
+    def prepare__geoloc(self, obj):
+        locations = self.prepare_locations(obj)
+        if locations:
+            if isinstance(locations[0], list):
+                return [{"lat":location[0], "lng":location[1]} for location in locations]
+            else:
+                return {"lat":locations[0], "lng":locations[1]}
+        else:
+            return None
+    
     def prepare_need_insurance(self, obj):
         return obj.category.need_insurance
             
@@ -101,6 +205,21 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if category:
             qs = category.get_ancestors(ascending=False, include_self=True)
             return tuple(qs.values_list('slug', flat=True))
+    
+    def prepare_algolia_categories(self, obj):
+        category = obj._get_category()
+        if category:
+            cats = list(c.name+'|'+str(c.id) for c in category\
+                        .get_ancestors(ascending=False, include_self=True).all())
+            
+            cats_dict = {}
+            for i in range(len(cats)):
+                cats_dict['lvl'+str(i)] = " > ".join(cats[:i+1])
+            
+            return cats_dict
+        
+    def prepare_created_at_timestamp(self, obj):
+        return (obj.created_at-datetime(1970,1,1)).total_seconds()
     
     def prepare_ends_unavailable(self, obj):
         started_at = datetime.now()
@@ -123,6 +242,10 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
     def prepare_profile(self, obj):
         for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
             return picture.profile.url if picture.profile else None
+
+    def prepare_vertical_profile(self, obj):
+        for picture in obj.pictures.all()[:1]: # TODO: can we do this only once per product?
+            return picture.vertical_profile.url if picture.vertical_profile else None
 
     def prepare_owner_avatar(self, obj):
         obj = obj.owner
@@ -167,9 +290,13 @@ class ProductIndex(indexes.Indexable, indexes.SearchIndex):
         if obj.address and len(obj.description.split()) > 1 and self.prepare_thumbnail(obj):
             return True
         return False
+#     
+#     def prepare_category_id(self, obj):
+#         return obj.category.id
 
     def get_model(self):
         return Product
 
     def index_queryset(self, using=None):
-        return self.get_model().on_site.select_related('category', 'address', 'owner')
+        return self.get_model().on_site.select_related('category', 'address', 'owner')\
+            .prefetch_related('category__properties', 'properties__property_type')

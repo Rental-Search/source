@@ -1,99 +1,92 @@
 -load category facets
 -load i18n
 
+style.
+  .angular-google-map-container { height: 250px; }
+
+{% verbatim %}
+script(type="text/ng-template" id="_category_tree_item.html").
+  <ul class="category_tree" ng-if="category['isRefined']">
+    <li ng-repeat="category in category['data'] track by category['path']">
+      <a ng-click="refineCategory(category['path'])" ng-style="category['isRefined'] ? {'font-weight':'bold'} : {}">
+        {{ categoryName(category['name']) + "&nbsp(" + category['count'] + ")" }} 
+      </a>
+      <div ng-if="category['isRefined']" ng-include="'_category_tree_item.html'"></div>
+    </li>
+  </ul>
+{% endverbatim %}
+
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
-  label.caption(for="what") {% trans "quoi" %}
-  input#what(name="q", type="text", value="{{ form.cleaned_data.q }}", placeholder="", autofocus).form-control
+  label(ng-if="search.result_count").caption {% trans "catégories" %}
+  .clear-selector(ng-show="search.result_count")
+    div(ng-controller="CategoryController" ng-include="'_category_tree_item.html'")
 
-  p.caption {% trans "catégories" %}
-  .clear-selector
-    select#category-selection.form-control(name="categories", form="")
-      option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label %}") {% trans "Toutes les catégories" %}
-      if form.cleaned_data.q
-        {% for value, count in facets.fields.categories %}
-        if count and value
-          {% with value|category as category %}
-          if breadcrumbs.categorie
-            if breadcrumbs.categorie.value == category.slug
-              option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
-            else
-              if breadcrumbs.categorie.label
-                option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
-              else
-                option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
-          else
-            option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
-          {% endwith %}
-        {% endfor %}
-      else
-        for category in category_list
-          if breadcrumbs.categorie
-            if breadcrumbs.categorie.value == category.slug
-              option(selected, location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
-            else
-              if breadcrumbs.categorie.label
-                option(location="{% facet_url breadcrumbs -'page' -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}") {{ category.name }}
-              else
-                option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
-          else
-            option(location="{% facet_url breadcrumbs -'page' category.get_ancertors_slug category.slug %}") {{ category.name }}
-
-  label.caption(for="where") {% trans "où" %}
-  input#where(name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
-
+  label.caption(for="where") {% trans "carte" %}
   .map-container
-    .whirly
-    .map#map-canvas
-      //- map here
+    .whirly(ng-if='!search.map.loaded')
+    ui-gmap-google-map(ng-if='search.map.loaded', center='search.map.center', zoom='search.map.zoom', 
+        options='search.map.options', control='search.map.control', events='search.map.events', pan="true")
+      ui-gmap-markers(ng-show="search.result_count", models="search.product_list", coords="'location_obj'", 
+          idKey="'markerId'", events="marker_event_handlers", type="'cluster'", typeOptions="search.map.clustererOptions", options="'markerOptions'")
 
   //- .slider
   label.caption(for="range-slider") {% trans "rayon" %}
-  input#range(type="hidden", name="r", value="{{ form.cleaned_data.r|floatformat:'0' }}", disabled)
-  input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
+  rzslider#range-slider(ng-if="search.range", ng-model="search.range.max", rz-slider-model="search.range.max", 
+    rz-slider-options="search.range.options", ng-change="perform_search()")
+    
+  //- input#range(type="hidden", name="r", ng-value="{{ form.cleaned_data.r|floatformat:'0' }}", ng-model='range_slider.max', disabled)
+  //- input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
+
+    
+  //- rzslider(ng-model="range_slider.max", rz-slider-model="range_slider.max", rz-slider-options="range_slider.options", ng-change="submitForm()")
+  
+  //-input#where(ng-model="search_location", name="l", type="text", value="{{ form.cleaned_data.l }}", placeholder="{% trans 'Où ça ?' %}", title="{% if form.cleaned_data.l %}Où ça ?{% endif %}").form-control
+
+  
 
   //-label.caption(for="start-date") date de début
   //-.date-picker
   //-
-    .table-cell.main-cell
-      input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}").form-control.date
-      i(style="right: 1em;").flaticon.stroke.calendar-3
+    //-.table-cell.main-cell
+      //-input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}").form-control.date
+      //-i(style="right: 1em;").flaticon.stroke.calendar-3
 
   //-label.caption(for="end-date") date de fin
   //-.date-picker
   //-
-    .table-cell.main-cell
-      input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
-      i(style="right: 1em;").flaticon.stroke.calendar-3
+    //-.table-cell.main-cell
+      //-input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
+      //-i(style="right: 1em;").flaticon.stroke.calendar-3
 
+  
   label#price-label.caption(for="price-slider") prix
-  input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
-  input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
-  input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
+  rzslider#price-slider(ng-if="search.price", rz-slider-model="search.price.min", rz-slider-high="search.price.max", 
+    ng-model="search.price.min", rz-slider-options="search.price.options", ng-change="perform_search()")
+
+  
+  //-input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
+  //-input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
+  //-input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
 
   p.caption {% trans "loueurs" %}
-  .checkbox
+  .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.part_count", ng-cloak)
     label(for="particular")
       {% trans "particuliers" as particular %}
-      {% if form.cleaned_data.renter == 'particuliers' %}
-      input(type="checkbox", name="renter", value="{{ particular }}", checked)#particular
-      {% else %}
-      input(type="checkbox", name="renter", value="{{ particular }}")#particular
-      {% endif %}
+      input(type="checkbox", name="renter", ng-change="refineRenterPart(search.owner_type.part)", ng-model="search.owner_type.part", ng-disabled="noProPartChoice()")#particular
       span.flaticon.stroke.checkmark-1
-    {% trans " Particuliers" %}
-  .checkbox
+    {% trans " Particuliers" %} {% verbatim %} {{ " ("+search.owner_type.part_count+")" }} {% endverbatim %}
+  .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.pro_count", ng-cloak)
     label(for="professional")
-      {% if form.cleaned_data.renter == 'professionnels' %}
-      input(type="checkbox", name="renter", value="professionnels", checked)#professional
-      {% else %}
-      input(type="checkbox", name="renter", value="professionnels")#professional
-      {% endif %}
+      input(type="checkbox", name="renter", ng-change="refineRenterPro(search.owner_type.pro)", ng-model="search.owner_type.pro", ng-disabled="noProPartChoice()")#professional
       span.flaticon.stroke.checkmark-1
-    {% trans " Professionnels" %}
+    {% trans " Professionnels" %} {% verbatim %} {{ " ("+search.owner_type.pro_count+")" }} {% endverbatim %}
+  
+  div(eloue-property-dropdown-filter, ng-repeat="prop in search.category.properties | is_facet", 
+        property-type="prop", ng-model="search[prop.attr_name]", ng-change="refineProperty(prop)")
 
-  .indent-t-md
-    input(id="submitButton", type="submit", style="width: 100%", value="{% trans 'Filtrer' %}").btn.btn-lg.btn-advertise.bg-success
+//  .indent-t-md
+//    input(id="submitButton", type="submit", style="width: 100%", value="{% trans 'Filtrer' %}").btn.btn-lg.btn-advertise.bg-success
 
 //-
   p.caption champ 1

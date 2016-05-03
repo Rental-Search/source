@@ -18,6 +18,9 @@ class PatronIndex(indexes.Indexable, indexes.SearchIndex):
     date_joined_date = indexes.DateField(model_attr='date_joined__date')
     url = indexes.CharField(model_attr='get_absolute_url')
 
+    def get_updated_field(self):
+        return "date_joined_date"
+
     def prepare_sites(self, obj):
         return tuple(obj.sites.values_list('id', flat=True))
 
@@ -27,6 +30,6 @@ class PatronIndex(indexes.Indexable, indexes.SearchIndex):
 
     def get_model(self):
         return Patron
-
+    
     def index_queryset(self, using=None):
         return self.get_model().on_site.select_related('default_address__position')

@@ -43,9 +43,11 @@
                                     option(ng-repeat="category in nodeCategories", value="{% verbatim %}{{category.id}}{% endverbatim %}", ng-selected="category.id == nodeCategory") {% verbatim %}{{category.name}}{% endverbatim %}
                                 span.text-danger(ng-show="publishAdForm.nodeCategory.$error.required && !!publishAdSubmitted", translate="required_field")
                             .col-sm-4
-                                select(ng-model="product.category", ng-required="leafCategories.length>0", name="category", opts="leafCategories", eloue-chosen, data-placeholder="{% trans 'Catégorie Niv.3' %} *", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate").form-control
+                                select(ng-model="product.category", ng-required="leafCategories.length>0", name="category", ng-change="updateProperties()", opts="leafCategories", eloue-chosen, data-placeholder="{% trans 'Catégorie Niv.3' %} *", data-ng-disabled="submitInProgress", ng-if="!isAuto && !isRealEstate").form-control
                                     option(ng-repeat="category in leafCategories", value="{% verbatim %}{{categoriesBaseUrl}}{% endverbatim %}{% verbatim %}{{category.id}}{% endverbatim %}/", ng-selected="category.id == product.category") {% verbatim %}{{category.name}}{% endverbatim %}
                                 span.text-danger(ng-show="publishAdForm.category.$error.required && !!publishAdSubmitted", translate="required_field")
+                        .row(ng-if="properties")
+                            .col-sm-4(ng-repeat='property in properties', eloue-property-dropdown, property-type="property", product="product")
                         .row(ng-show="noAddress")
                             .col-sm-5
                                 input(type="text", name="street", placeholder="{% trans 'Rue' %} *", required, ng-model="currentUser.default_address.street").form-control

@@ -1,5 +1,5 @@
 .pagination
-  > li > a
+  > li > a, > li > button
     font-size: px(15,16)
     font-weight: $fw-bold
     color: $brand-success
@@ -27,3 +27,6 @@
       &.active
         background-color: $gray-lighter
         color: $gray-medium
+  > li > button
+    padding: $padding-base-vertical $padding-base-horizontal
+    float: left

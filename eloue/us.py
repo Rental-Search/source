@@ -20,10 +20,10 @@ TEMPLATE_DIRS = env('TEMPLATE_DIRS', (
 
 DEFAULT_LOCATION = env("DEFAULT_LOCATION", {
     'city': u'Los Angeles, California',
-    'coordinates': (34.0522342, -118.2436849),
+    'country_coordinates': (34.0522342, -118.2436849),
     'country': u'United States of America',
     'fallback': None,
-    'radius': 22,
+    'country_radius': 22,
     'formatted_address': u'Los Angeles, California',
     'region': u'California',
     'region_coords': (34.0522342, -118.2436849),

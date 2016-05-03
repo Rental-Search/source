@@ -4,7 +4,7 @@
       {% if pictures.count %}
       #carousel-product.carousel.slide(data-ride="carousel")
         .carousel-inner
-          {% for picture in pictures %}
+          {% for picture in pictures reversed%}
           .item(style="{% if picture.db_display.url %}background-image: url({{ picture.db_display.url }}){% endif %}", class="{% if forloop.first %}active{% endif %}")
           {% endfor %}
         a(href="#carousel-product", role="button", data-slide="prev").left.carousel-control
@@ -12,7 +12,7 @@
         a(href="#carousel-product", role="button", data-slide="next").right.carousel-control
           i.flaticon.solid.right-2
       .items-thumbnail-inner
-        each picture, index in product_object.pictures.all
+        each picture, index in product_object.pictures.all|dictsort:"id"
             div: a.items-thumbnail(href="#carousel-product", data-slide-to="{{ index }}"): img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}")
       {% else %}
       .carousel
