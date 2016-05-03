@@ -58,6 +58,8 @@ DATABASES['default'].update({
     'ENGINE': 'django.contrib.gis.db.backends.postgis',
 })
 
+POSTGIS_VERSION = (2, 1, 2)
+
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
