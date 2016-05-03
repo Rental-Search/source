@@ -1,13 +1,11 @@
 -load compressed staticfiles seo i18n
 
 doctype 5
-html(lang="fr")
+html(lang="fr", ng-strict-di)
   head
     <meta name="apple-itunes-app" content="app-id=427538545">
     <meta name="google-play-app" content="app-id=com.eloue.appandroid">
     <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/ios-icon.jpeg">
-    
-
 
     style [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide { display: none !important; }
     block variables
@@ -25,8 +23,8 @@ html(lang="fr")
       {% compressed_css "smartbanner_styles" %}
     block scripts
       {% compressed_js "public_js" %}
-    script
-    
+
+    script    
       var _gaq = _gaq || [];
       _gaq.push(['_setDomainName', '{{ ANALYTICS_SITE }}']);
       {% spaceless %}
@@ -73,6 +71,16 @@ html(lang="fr")
         fbq('track', "PageView");
       noscript
         <img height="1" width="1" style="display:none"src="https://www.facebook.com/tr?id={{ ANALYTICS_FACEBOOK_ID }}&ev=PageView&noscript=1"/>
+      script(type="text/javascript")
+        /* <![CDATA[ */
+        var google_conversion_id = 1027691277;
+        var google_custom_params = window.google_tag_params;
+        var google_remarketing_only = true;
+        /* ]]> */
+      script(type="text/javascript", src="//www.googleadservices.com/pagead/conversion.js")
+      noscript
+        div(style="display:inline;")
+          img(height="1", width="1", style="border-style:none;", alt="", src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1027691277/?value=0&amp;guid=ON&amp;script=0")
     #ngModals
         eloue-login-form
         eloue-registration-form

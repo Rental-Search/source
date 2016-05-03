@@ -1,0 +1,19 @@
+-load i18n
+.section-header(ng-controller="ItemsTabsCtrl")
+    .tabs-horisontal-active
+        ul.list-without-spaces.fixed.compress
+            li.divider
+            li(ui-sref="items.info({id: selectedItemId})")#item-tab-info.tab-horisontal: h3.small
+                | {% trans "Photos et infos" %}
+            li.divider
+            li(ui-sref="items.tariffs({id: selectedItemId})")#item-tab-tariffs.tab-horisontal: h3.small
+                | {% trans "Tarifs" %}
+            li.divider
+            li(ui-sref="items.calendar({id: selectedItemId})")#item-tab-calendar.tab-horisontal: h3.small
+                | {% trans "Calendrier" %}
+            li.divider
+            li(ui-sref="items.terms({id: selectedItemId})")#item-tab-terms.tab-horisontal: h3.small
+                | {% trans "Conditions" %}
+            li.divider
+            li(ui-sref="items.profits({id: selectedItemId})")#item-tab-profits.tab-horisontal: h3.small
+                | {% trans "Revenus" %}

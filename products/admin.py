@@ -226,7 +226,9 @@ class CategoryAdmin(MPTTModelAdmin, TranslationAdmin):
 
 
 class PropertyAdmin(admin.ModelAdmin):
-    pass
+    fieldsets = ((None, {'fields': (('attr_name', 'category', 'value_type'), 'name', 'default_str', 'choices_str', 'faceted'),}),
+                 (u"Propriétés numériques", {'fields': ('min_str', 'max_str'),}))
+    list_display = ('name', 'attr_name', 'category', 'value_type', 'faceted')
 
 
 class ProductReviewAdmin(admin.ModelAdmin):

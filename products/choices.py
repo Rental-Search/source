@@ -188,3 +188,10 @@ PRODUCT_TYPE = Enum([
     (2700, 'CAR', _(u"Location Automobile")),
     (2713, 'REALESTATE', _(u"Location saisonnière")),
 ])
+
+PROPERTY_TYPES = (
+    ('int', 'INT'),                       
+    ('bool', 'BOOL'),                       
+    ('float', 'FLOAT'),                       
+    ('str', 'STR'),                       
+)

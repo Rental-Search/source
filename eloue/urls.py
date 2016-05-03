@@ -14,6 +14,7 @@ from eloue.api.urls import router
 from products.views import HomepageView, PublishItemView
 
 from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView, ContactView, ContactProView
+from client_logging.views import ClientLogViewSet
 
 
 admin.autodiscover()
@@ -209,7 +210,7 @@ urlpatterns = patterns('',
     url(r'^reset/', include(reset_urlpatterns)),
     url(r'^%s/' % _('location'), include(products_urlpatterns)),
     url(r'^%s/' % _('comment-ca-marche'), TemplateView.as_view(template_name='how_it_works/index.jade'), name='howto'),
-    url(r'^%s/' % _('offre-professionnel'), TemplateView.as_view(template_name='subscription/index.jade'), name='subscription'),
+    url(r'^%s/' % _('offre-professionnel'), ContactProView.as_view(), name='subscription'),
     #url(r'^simulez-vos-revenus/', TemplateView.as_view(template_name='simulator/index.jade'), name='simulator'),
     url(r'^dashboard/#/bookings/(?P<pk>[0-9a-f]{32})/$', dashboard_base_view, name='booking_detail'),
     url(r'^dashboard/#/messages/(?P<pk>[0-9]+)/$', dashboard_base_view, name='messages'),
@@ -240,7 +241,10 @@ urlpatterns = patterns('',
 
     # API 2.0
     url(r'^', include(api2_urlpatterns)),
-
+    
+    # Client exception logging
+    url(r'^logs/$', ClientLogViewSet.as_view({'post':'log'})),
+    
     # social: support for sign-in by Google and/or Facebook
 #    url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
 

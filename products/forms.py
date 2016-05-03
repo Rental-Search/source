@@ -18,6 +18,7 @@ from eloue.geocoder import GoogleGeocoder
 from .fields import FacetField
 from .models import Product, Category
 from .choices import SORT, SORT_SEARCH_RESULT
+from eloue.search_backends import is_algolia
 
     
 DEFAULT_RADIUS = getattr(settings, 'DEFAULT_RADIUS', 50)
@@ -51,7 +52,7 @@ class FilteredProductSearchForm(SearchForm):
     date_to = forms.DateTimeField(required=False)
 
     filter_limits = {}
-    _max_range = _point = None
+    max_range = point = _max_range = _point = None
 
     def clean_r(self):
         location = self.cleaned_data.get('l', None)
@@ -84,10 +85,10 @@ class FilteredProductSearchForm(SearchForm):
     def sqs_filter_l(self, sqs, search_params):
         location = search_params.get('l', None)
         if location:
-            point, self.max_range = self._get_location(location)
-            if point:
+            self.point, self.max_range = self._get_location(location)
+            if self.point:
                 sqs = sqs.dwithin(
-                    'locations', point, Distance(
+                    'locations', self.point, Distance(
                         km=search_params.get('r', self.max_range))
                 )
         return sqs
@@ -107,9 +108,16 @@ class FilteredProductSearchForm(SearchForm):
     def sqs_filter_date_from(self, sqs, search_params):
         date_from = search_params.get('date_from', None)
         date_to = search_params.get('date_to', None)
+        
         if all((date_from, date_to)):
-            range_query = 'NOT starts_unavailable_exact:[{0} TO {1}] AND NOT ends_unavailable_exact:[{0} TO {1}]'
-            sqs = sqs.raw_search(range_query.format(date_from.strftime('%F'), date_to.strftime('%F')))
+            if is_algolia(): #FIXME move into EloueAlgoliaSearchQuery
+                    # FIXME this is wrong:
+                    sqs = sqs.filter(created_at_timestamp__lt=date_from,
+                                     created_at_timestamp__gt=date_to)
+            else:
+                range_query = 'NOT starts_unavailable_exact:[{0} TO {1}] AND NOT ends_unavailable_exact:[{0} TO {1}]'
+                sqs = sqs.raw_search(range_query.format(date_from.strftime('%F'), date_to.strftime('%F')))
+            
         return sqs
 
     def sqs_filter_date_to(self, sqs, search_params):
@@ -187,11 +195,18 @@ class FacetedSearchForm(FilteredSearchMixin, FilteredProductSearchForm):
         return sqs
 
     def sqs_filter_sort(self, sqs, search_params):
+        
+#         location = search_params.get('l', None)
+#         if location:
+#             sqs = sqs.order_by('distance')
+#             raise Exception(location)
+        
         sort = search_params.get('sort')
         if sort:
             sqs = sqs.order_by(sort)
-        else:
-            sqs = sqs.order_by(SORT.RECENT)
+#         else:
+#             sqs = sqs.order_by(SORT.RECENT)
+        
         return sqs
 
     def unspecified_sqs_filters(self, sqs, search_params):

@@ -1,0 +1,83 @@
+-load product i18n
+-load djangular_tags
+
+{% angularjs ng %}
+
+{% trans "jour" as by_day %}
+
+//-TODO marker indices
+//-TODO rate
+
+li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
+    ng-repeat=("product in search.product_list track by product.django_id" if ng else None),
+    locationY="{{ product.locations.0 }}",
+    locationX="{{ product.locations.1 }}",
+    name="{{ product.summary|title }}")
+  .section-body
+    .thumbnail-img
+      a(ng-href="{{ product.url }}", href=(product.url if not ng else None)).img-wrapper 
+        if ng
+          img(ng-style="product.profile && {'background-image':'url('+product.profile+')'}").bg-image
+        else
+          img(style=('background-image: url("'+product.profile+'");' if product.profile else None)).bg-image 
+        if ng
+          //-TODO currency angular filter, remove verbatim
+          span(ng-if="product.price").badge.price {% verbatim %} {{ product.price | currency }} {% endverbatim %} /{{ by_day }} 
+          span(ng-if="!product.price").badge.price {% trans "Sur devis" %}
+        else
+          //-TODO currency angular filter
+          span.badge.price {% if product.price %} {{ product.price | currency }} /{{ by_day }} {% else %} {% trans "Sur devis" %} {% endif %} 
+        //-TODO remove verbatim
+      span.badge-order {% if ng %} {% verbatim %} {{ $index+1 }} {% endverbatim %} {% else %} {{ index }} {% endif %}
+    .declarer-container
+      .declarer
+        span.declarer-name {{ product.owner }}
+        a(ng-href="{{ product.owner_url }}", href=(product.owner_url if not ng else None)).declarer-thumbnail
+          if ng
+            div(ng-style="product.owner_avatar && {'background-image':'url('+product.owner_avatar+')'}").bg-image
+          else
+            div(style=('background-image: url("'+product.owner_avatar+'");' if product.owner_avatar else None)).bg-image
+    .info
+      h6
+        //- TODO check if this is really safe
+        a(ng-href="{{ product.url }}", href=(product.url if not ng else None), ng-bind-html="product.summary|title|safe") {{ product.summary|title|safe }}
+        if ng
+          span(ng-if="product.pro_owner").badge-pro pro
+        else
+          if product.pro_owner
+            span.badge-pro pro
+      p
+        if ng
+          span(ng-if='product.agencies') &nbsp;
+          //- TODO title filter
+          {% verbatim %}
+          span(ng-if='!product.agencies') {{ product.city|title }}
+            span(ng-if='product.city && product.zipcode'), {{ product.zipcode }}
+          {% endverbatim %}
+        else
+          if product.agencies
+            &nbsp;
+          else
+            {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
+      if not ng and product.comment_count
+        {% with product.average_rate as rate %}
+        include ./_rate
+        {% endwith %}
+        span.sprite-comment
+          i.flaticon.stroke.writing-comment
+          != product.comment_count
+      else        
+        .rate(ng-if="product.comment_count")
+          span(ng-repeat="i in [1,2,3,4,5]").flaticon.solid.star-2(ng-class="i==product.average_rate && 'current-rate'")
+        span(ng-if="product.comment_count", ng-cloak).sprite-comment
+          i.flaticon.stroke.writing-comment
+          {% verbatim %}{{ product.comment_count }}{% endverbatim %} 
+      if ng
+        //- TODO remove verbatim
+        //- TODO check if this is really safe
+        p(ng-if='product.description', ng-bind-html="product.description|safe").full_description
+        p(ng-if='!product.description').full_description &nbsp;
+      else
+        p.full_description {% if product.description %} {{ product.description|safe }} {% else %} &nbsp; {% endif %}
+
+{% endangularjs %}

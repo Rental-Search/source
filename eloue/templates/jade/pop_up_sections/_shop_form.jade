@@ -2,11 +2,11 @@
 
 h4
   {% blocktrans %}
-  b N’hésitez pas à venir dans notre boutique,
+  b N’hésitez pas à venir dans notre magasin,
   | nous nous ferons un plaisir de répondre à toutes vos questions…
   {% endblocktrans %}
 {% if patron.pro_agencies.all %}
-p {% trans "Nos boutiques sont situées au&nbsp;" %}:
+p {% trans "Nos magasins sont situés au&nbsp;" %}:
 aside.col-xs-4
   .map-container
     .whirly
@@ -25,10 +25,12 @@ main.col-xs-8.pro-shop
              h6 {{ agency.name }}
              p {{ agency.address1 }}
              p {{ agency.zipcode }} {{ agency.city|upper }}
+             {% if agency.phone_number %}
              p {{ agency.phone_number }}
+             {% endif %}
 {% else %}
 {% if patron.default_address %}
-p {% trans "Notre boutique est située au&nbsp;" %}:
+p {% trans "Notre magasin est situé au&nbsp;" %}:
 aside.col-xs-4
     .map-container
         .whirly
@@ -42,6 +44,8 @@ main.col-xs-8.pro-shop
                 h6 {{ patron.default_address.name }}
                 p {{ patron.default_address.address1 }}
                 p {{ patron.default_address.zipcode }} {{ patron.default_address.city|upper }}
+                {% if patron.default_address.phone_number %}
                 p {{ patron.default_address.phone_number }}
+                {% endif %}
 {% endif %}
 {% endif %}

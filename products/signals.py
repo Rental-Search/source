@@ -9,6 +9,7 @@ from eloue.utils import cache_key, create_alternative_email
 from django.core import exceptions
 from parse_rest.connection import register
 from parse_rest.installation import Push
+from django.core.management import call_command
 
 
 def post_save_answer(sender, instance, created, **kwargs):
@@ -128,3 +129,7 @@ def new_message_email(sender, instance, created, **kwargs):
             unread_count = instance.recipient.received_messages.filter(read_at=None).count()
             Push.alert({"alert": "Vous avez reçu un nouveau message", "type": "MSG_NEW", "user_id": instance.recipient.pk, "count": unread_count, "badge": unread_count, "sound": "default"}, where={"deviceToken": instance.recipient.device_token})
 
+
+def post_save_property():
+    call_command("configure_algolia", interactive=False)
+    
