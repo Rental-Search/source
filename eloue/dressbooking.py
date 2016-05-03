@@ -31,3 +31,7 @@ DEFAULT_RADIUS = 600
 
 
 #DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')
+
+ANALYTICS.update({
+                  'GOOGLE_ID': 'UA-77168089-1'
+                  })

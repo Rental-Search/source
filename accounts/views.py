@@ -133,7 +133,9 @@ class PatronDetailView(BreadcrumbsMixin, ListView):
         return patron
 
     def get_queryset(self):
-        return product_search.filter(owner__exact=self.object.username).order_by('-created_at')
+        queryset = product_search.filter(owner__exact=self.object.username).order_by('-created_at')
+        list(queryset)
+        return queryset
 
     def get_context_data(self, **kwargs):
         patron = self.object
