@@ -189,7 +189,7 @@ define([
                     analytics.track('User Profile Updated');
                     $scope.$apply(function () {
                         $scope.submitInProgress = false;
-                        $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
+                        $scope.showNotification('PERSONAL_INFO', 'update', true); 
                     });
                 }, function (error) {
                     $scope.handleResponseErrors(error.responseJSON, "profile", "save");

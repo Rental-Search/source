@@ -5,6 +5,7 @@ define([
     "angular-cookie",
     "angular-resource",
     "angular-translate",
+    "angular-translate-interpolation-messageformat",
     "datejs",
     "chosen",
     "bootstrap-datepicker",

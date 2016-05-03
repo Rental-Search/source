@@ -31,6 +31,8 @@ require.config(
                 "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
                 "angular-i18n": "../../bower_components/angular-i18n/angular-locale_fr-fr",
                 "angular-translate": "../../bower_components/angular-translate/angular-translate",
+                "angular-translate-interpolation-messageformat": "../../bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat",
+                "messageformat": "../../bower_components/messageformat/messageformat",
                 "moment": "../../bower_components/moment/moment",
                 "angular-moment": "../../bower_components/angular-moment/angular-moment",
                 "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
@@ -59,6 +61,12 @@ require.config(
                 "angular-sanitize": ["angular"],
                 "angular-i18n": ["angular"],
                 "angular-translate": ["angular"],
+                "angular-translate-interpolation-messageformat": {
+                    deps: ["angular-translate", "messageformat"],
+                    init: function (angular, MessageFormat) {
+                        this.MessageFormat = MessageFormat;
+                    }
+                },
                 "angular-resource": ["angular"],
                 "angular-moment": ["angular"],
                 "angular-mocks": {

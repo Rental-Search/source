@@ -4,6 +4,7 @@ define([
     "angular-cookies",
     "angular-resource",
     "angular-translate",
+    "angular-translate-interpolation-messageformat",
     "angular-i18n",
     "../../common/eloue/commonApp"
 ], function (angular) {

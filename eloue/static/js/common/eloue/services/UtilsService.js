@@ -15,8 +15,8 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
          * @param msgKey message key for eloue/static/js/common/eloue/i18n.js
          * @returns Translation
          */
-        utilsService.translate = function (msgKey) {
-            return $filter("translate")(msgKey);
+        utilsService.translate = function (msgKey, params, ip) {
+            return $filter("translate")(msgKey, params, ip);
         };
 
         utilsService.formatMessageDate = function (dateString, shortFormat, fullFormat) {

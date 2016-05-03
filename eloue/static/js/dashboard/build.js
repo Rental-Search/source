@@ -11,6 +11,8 @@
         "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
         "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router",
         "angular-translate": "../../bower_components/angular-translate/angular-translate",
+        "angular-translate-interpolation-messageformat": "../../bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat",
+        "messageformat": "../../bower_components/messageformat/messageformat",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
         "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
@@ -35,6 +37,12 @@
         "angular-resource": ["angular"],
         "angular-ui-router": ["angular"],
         "angular-translate": ["angular"],
+        "angular-translate-interpolation-messageformat": {
+            deps: ["angular-translate", "messageformat"],
+            init: function (angular, MessageFormat) {
+                this.MessageFormat = MessageFormat;
+            }
+        },
         "angular-mocks": {
             deps: ["angular"],
             "exports": "angular.mock"
