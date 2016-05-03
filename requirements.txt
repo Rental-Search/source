@@ -82,3 +82,4 @@ sendgrid
 django-import-export==0.4.2
 openpyxl==2.3.2
 https://cdn.mysql.com/Downloads/Connector-Python/mysql-connector-python-2.0.4.tar.gz
+
