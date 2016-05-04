@@ -635,7 +635,7 @@ class ProAgency(models.Model):
     name = models.CharField(max_length=255)
 
     #phone number
-    phone_number = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255, blank=True, null=True)
 
     #address
     address1 = models.CharField(_(u'Adresse'), max_length=255)
