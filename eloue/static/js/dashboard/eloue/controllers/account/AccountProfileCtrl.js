@@ -12,15 +12,16 @@ define([
     EloueDashboardApp.controller("AccountProfileCtrl", [
         "$scope",
         "$timeout",
+        "$translate",
         "UsersService",
         "AddressesService",
         "PhoneNumbersService",
         "Endpoints",
         "CivilityChoices",
         "UtilsService",
-        function ($scope, $timeout, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices,
+        function ($scope, $timeout, $translate, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices,
                   UtilsService) {
-            $scope.civilityOptions = CivilityChoices;
+            $scope.civilityOptions = CivilityChoices[$translate.use()];
             $scope.addressesBaseUrl = Endpoints.api_url + "addresses/";
             $scope.phonesBaseUrl = Endpoints.api_url + "phones/";
             $scope.usersBaseUrl = Endpoints.api_url + "users/";

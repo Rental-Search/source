@@ -124,7 +124,7 @@ LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
-DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14, 15])
+DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

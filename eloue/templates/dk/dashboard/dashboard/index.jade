@@ -11,7 +11,7 @@ block content-view
           .col-exposition
             h2.small.text-black.indent-xs-b {% verbatim %}{{currentUser.username}}{% endverbatim %}
             +average-rate("userStats.average_rating")
-            p.indent-sm-v {% trans "Membre depuis le" %} {% verbatim %}{{currentUser.date_joined | date:'dd.MM.yyyy'}}{% endverbatim %}
+            p.indent-sm-v {% trans "Membre depuis le" %} {% verbatim %}{{ 'DATE' | translate:{date:currentUser.date_joined} }}{% endverbatim %}
             a(ui-sref="account.profile").btn.bg-success-hover.text-white {% trans "Mettre à jour mes infos" %}
 
       li.tab-vertical

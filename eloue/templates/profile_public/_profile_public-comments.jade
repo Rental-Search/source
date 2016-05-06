@@ -24,7 +24,7 @@ ul.list-group
           include ../jade/_rate
           {% endwith %}
         p {{ comment.comment|truncatechars:145 }}
-        small {% trans "Le" %} {{ comment.created_at|date:"d F Y" }}
+        small {% trans "Le" %} {{ comment.created_at|date:'DATE_FORMAT' }}
     {% endwith %}
 {% endif %}
 {% endwith %}

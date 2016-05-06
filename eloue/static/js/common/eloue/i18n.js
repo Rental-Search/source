@@ -1,12 +1,24 @@
 "use strict";
 define(["eloue/app",
         "angular-translate-interpolation-messageformat"], function (EloueApp) {
-
+    
     EloueApp.config(["$translateProvider", function ($translateProvider) {
         
         // French
         $translateProvider.translations("fr", {
-
+            
+            // Date formats
+            DATE:"{{date|date:'dd/MM/yyyy'}}",
+            DATETIME:"{{date|date:\"dd/MM/yyyy HH'h'mm\"}}",
+            DATE_LONG:"{{date|date:'d/m/Y'}}",
+            DATE_LONG_SPACED:"{{date|date:'d F Y'}}",
+            
+            // Money
+            MONEY: "{{value+'€'}}",
+            
+            // Distance
+            DISTANCE: "{{value+' km'}}",
+            
             // Days of week
             Sunday: "Dimanche",
             Monday: "Lundi",
@@ -16,7 +28,7 @@ define(["eloue/app",
             Friday: "Vendredi",
             Saturday: "Samedi",
 
-            // Monthes
+            // Months
             January: "Janvier",
             February: "Février",
             March: "Mars",
@@ -35,7 +47,7 @@ define(["eloue/app",
             Since: "Du",
             to: "au",
 
-            //Booking status
+            // Booking status
             unpaid: "Impayé",
             authorized: "En attente",
             rejected: "Rejeté",
@@ -48,16 +60,41 @@ define(["eloue/app",
             refunded: "Remboursé",
             outdated: "Dépassée",
 
-            //Validation errors
+            // Validation errors
             required_field: "Ce champ est obligatoire",
             zipcode_invalid: "Code postal invalide",
             email_invalid: "E-mail invalide",
             maxLength10: "Max length is 10 characters",
+            
+            // submit statuses
+            success: "succeed",
+            fail: "failed",
 
+            // No addresses added yet notification
+            noAddressTitle: "Pas encore d'adresse renseignée",
+            noAddressInfo: "Donner votre adresse rassure le locataire ou le propriétaire et augmente vos chances de louer",
+            noAddressButton: "Mettre à jour vos infos",
+
+            loadMore: "Charger plus d'éléments",
+            getAllMessages: "Afficher les anciens messages",
+            
+            
             /**
-             * Dashboard form submit messages
+             * MessageFormat templates
              * 
              * ICU Message Format : http://site.icu-project.org/design/formatting/select
+             */
+            
+            // Durations
+            DAYS: 
+            "{NUM, plural, "+
+                "one {1 jour}"+
+                "other {# jours}"+
+            "}",
+            
+            
+            /**
+             * Dashboard form submit messages
              */
             
             // A message with action and object, successful or not
@@ -122,28 +159,61 @@ define(["eloue/app",
             'REDIRECT': '{GENDER, select, f{redirigée} fv{redirigée} other{redirigé}}',
             'SEND': '{GENDER, select, f{envoyée} fv{envoyée} other{envoyé}}',
             'UPLOAD': '{GENDER, select, f{téléchargée} fv{téléchargée} other{téléchargé}}',
-                
-            // submit statuses
-            success: "succeed",
-            fail: "failed",
-
-            // No addresses added yet notification
-            noAddressTitle: "Pas encore d'adresse renseignée",
-            noAddressInfo: "Donner votre adresse rassure le locataire ou le propriétaire et augmente vos chances de louer",
-            noAddressButton: "Mettre à jour vos infos",
-
-            loadMore: "Charger plus d'éléments",
-            getAllMessages: "Afficher les anciens messages"
+            
+            // Maps
+            REGION: "FR"
+            
         });
         
         // US English
-        $translateProvider.translations("en", {
+        $translateProvider.translations("en-US", {
             
-            //Validation errors
+            // Date formats
+            DATE:"{{date|date:'mediumDate'}}",
+            DATETIME:"{{date|date:'medium'}}",
+            DATE_LONG:"{{date|date:'m/d/Y'}}",
+            DATE_LONG_SPACED:"{{date|date:'F d Y'}}",
+            
+            // Money
+            MONEY: "{{'$'+value}}",
+            
+            // Distance
+            DISTANCE: "{{value+' mi'}}",
+            
+            // Validation errors
             required_field: "This field is required.",
             zipcode_invalid: "Invalid zipcode",
             email_invalid: "Invalid e-mail",
             maxLength10: "Max length is 10 characters",
+            
+            // No addresses added yet notification
+            noAddressTitle: "No address has been added yet",
+            //noAddressInfo: "Donner votre adresse rassure le locataire ou le propriétaire et augmente vos chances de louer",
+            noAddressButton: "Update your profile",
+
+            loadMore: "Load more",
+            getAllMessages: "Show older messages",
+            
+            // Hour values // TODO replace with format
+            '00h':'0 AM', '01h':'1 AM', '02h':'2 AM','03h':'3 AM','04h':'4 AM','05h':'5 AM',
+            '06h':'6 AM', '07h':'7 AM', '08h':'8 AM','09h':'9 AM','10h':'10 AM','11h':'11 AM', 
+            '12h':'12 AM', '13h':'1 PM', '14h':'2 PM','15h':'3 PM','16h':'4 PM','17h':'5 PM',
+            '18h':'6 PM', '19h':'7 PM', '20h':'8 PM','21h':'9 PM','22h':'10 PM','23h':'11 PM',
+            
+            // Honorifics
+            "Mr":"Mr", "Mme":"Ms", "Mlle":"Ms", 
+            
+            /**
+             * MessageFormat templates
+             * 
+             * ICU Message Format : http://site.icu-project.org/design/formatting/select
+             *  */
+            
+            DAYS: 
+            "{NUM, plural, "+
+                "one {1 day}"+
+                "other {# days}"+
+            "}",
             
             // Message
             DASHBOARD_SUBMIT:
@@ -188,23 +258,23 @@ define(["eloue/app",
             'POST': 'saved',
             'REDIRECT': 'redirected',
             'SEND': 'sent',
-            'UPLOAD': 'uploaded',
-            
-            // No addresses added yet notification
-            noAddressTitle: "No address has been added yet",
-            //noAddressInfo: "Donner votre adresse rassure le locataire ou le propriétaire et augmente vos chances de louer",
-            noAddressButton: "Update your profile",
-
-            loadMore: "Load more",
-            getAllMessages: "Show older messages"
+            'UPLOAD': 'uploaded'
             
         });
         
-        
-        $translateProvider.preferredLanguage("fr");
+        $translateProvider.preferredLanguage('fr');
         
         $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
         
     }]);
+    
+    EloueApp.constant('MAP_CONFIG', {
+        'fr':{
+            region: 'FR'
+        },
+        'en-US':{
+            region: 'US'
+        }
+    });
 
 });

@@ -13,7 +13,7 @@
       p: i {{ patron.about }}
   {% else %}
   .part
-    p: b {% trans "Membre depuis le" %} {{ patron.date_joined|date:"d F Y" }}
+    p: b {% trans "Membre depuis le" %} {{ patron.date_joined|date:'DATE_FORMAT' }}
     if patron.about
       p.indent-b-sm: i {{ patron.about }}
     //-

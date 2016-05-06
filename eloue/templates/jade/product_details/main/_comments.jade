@@ -11,5 +11,5 @@ ul.list-group
           include ../../_rate
           {% endwith %}
         p {{ comment.comment }}
-        small {{ comment.created_at|date:"l d F Y" }}
+        small {{ comment.created_at|date:'COMPLETE_DATE_FORMAT' }}
       {% endwith %}

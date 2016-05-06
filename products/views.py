@@ -57,6 +57,8 @@ from .search import product_search
 from .serializers import get_root_category
 from . import serializers, models, filters as product_filters
 import simplejson
+import products
+from django.utils.formats import get_format
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_PERIODS_BY', 31)
@@ -230,7 +232,8 @@ SEARCH_DEFAULTS = {
      'range': {
              'max':settings.DEFAULT_LOCATION['country_radius'],
              'floor':1,
-             'ceil':settings.DEFAULT_LOCATION['country_radius']},
+             'ceil':settings.DEFAULT_LOCATION['country_radius'],
+             'from_metric': get_optional_format('DISTANCE_FROM_METRIC')},
      'location':settings.DEFAULT_LOCATION['country'],
      'center':settings.DEFAULT_LOCATION['country_coordinates'],
      'site': settings.SITE_ID,}

@@ -3,8 +3,10 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
     /**
      * Utils service.
      */
-    EloueCommon.factory("UtilsService", ["$filter", "AuthService", function ($filter, AuthService) {
+    EloueCommon.factory("UtilsService", ["$filter", "AuthService", "$document", '$translate', function ($filter, AuthService, $document, $translate) {
         var utilsService = {};
+        
+        $translate.use($document[0].documentElement.lang);
 
         utilsService.formatDate = function (date, format) {
             return $filter("date")(date, format);

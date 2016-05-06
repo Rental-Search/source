@@ -11,7 +11,7 @@ define([
      * Controller for the registration form.
      */
     EloueCommon.controller("RegisterCtrl", [
-        "$scope", "$rootScope", "$http", "$window", "$document",
+        "$scope", "$rootScope", "$http", "$window", "$document", "$translate",
         "AuthService",
         "CivilityChoices",
         "UsersService",
@@ -19,14 +19,14 @@ define([
         "RedirectAfterLogin",
         "ToDashboardRedirectService",
         "ServerValidationService",
-        function ($scope, $rootScope, $http, $window, $document, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService, ServerValidationService) {
+        function ($scope, $rootScope, $http, $window, $document, $translate, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService, ServerValidationService) {
 
             /**
              * New user account data.
              */
             $scope.account = {};
 
-            $scope.civilityOptions = CivilityChoices;
+            $scope.civilityOptions = CivilityChoices[$translate.use()];
 
             /**
              * Register new user in the system.

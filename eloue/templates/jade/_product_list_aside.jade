@@ -31,9 +31,12 @@ script(type="text/ng-template" id="_category_tree_item.html").
           idKey="'markerId'", events="marker_event_handlers", type="'cluster'", typeOptions="search.map.clustererOptions", options="'markerOptions'")
 
   //- .slider
-  label.caption(for="range-slider") {% trans "rayon" %}
-  rzslider#range-slider(ng-if="search.range", ng-model="search.range.max", rz-slider-model="search.range.max", 
-    rz-slider-options="search.range.options", ng-change="perform_search()")
+  //-label.caption(for="range-slider") {% trans "rayon" %}
+  //-rzslider#range-slider(ng-if="search.range", ng-model="search.range.max", rz-slider-model="search.range.max", 
+  //-  rz-slider-options="search.range.options", ng-change="perform_search()")
+    
+  eloue-slider-filter(ng-model="search.range", label="{% trans 'rayon' %}", 
+    i18n="DISTANCE", ng-change="refineRange()")
     
   //- input#range(type="hidden", name="r", ng-value="{{ form.cleaned_data.r|floatformat:'0' }}", ng-model='range_slider.max', disabled)
   //- input#range-slider(type="hidden", max-value="{{ form.max_range|floatformat:'0' }}", solo)
@@ -49,22 +52,24 @@ script(type="text/ng-template" id="_category_tree_item.html").
   //-.date-picker
   //-
     //-.table-cell.main-cell
-      //-input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}").form-control.date
+      //-input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'DATE_FORMAT' }}").form-control.date
       //-i(style="right: 1em;").flaticon.stroke.calendar-3
 
   //-label.caption(for="end-date") date de fin
   //-.date-picker
   //-
     //-.table-cell.main-cell
-      //-input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
+      //-input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'DATE_FORMAT' }}").form-control.date
       //-i(style="right: 1em;").flaticon.stroke.calendar-3
 
   
-  label#price-label.caption(for="price-slider") prix
-  rzslider#price-slider(ng-if="search.price", rz-slider-model="search.price.min", rz-slider-high="search.price.max", 
-    ng-model="search.price.min", rz-slider-options="search.price.options", ng-change="perform_search()")
+  //-label#price-label.caption(for="price-slider") prix
+  //-rzslider#price-slider(ng-if="search.price", rz-slider-model="search.price.min", rz-slider-high="search.price.max", 
+  //-  ng-model="search.price.min", rz-slider-options="search.price.options", ng-change="perform_search()")
 
-  
+  eloue-slider-filter(ng-model="search.price", label="{% trans 'prix' %}", 
+    i18n="MONEY", ng-change="refinePrices()")
+    
   //-input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
   //-input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
   //-input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
