@@ -643,7 +643,7 @@ msgstr "First name"
 #: eloue/templates/jade/_sign_in.jade:32 eloue/templates/jade/_sign_in.jade:48
 #: eloue/templates/jade/pop_up_sections/_personal_information_form.jade:13
 msgid "Nom"
-msgstr "Name"
+msgstr "Last name"
 
 #: accounts/forms.py:215
 msgid "Vous devez entrer le nom de l'entreprise"
@@ -667,7 +667,7 @@ msgstr "Company name"
 #: eloue/templates/jade/_sign_in.jade:35 eloue/templates/jade/_sign_in.jade:59
 #: eloue/templates/landing_pages/_sign_in_content.jade:40
 msgid "Pseudo"
-msgstr "User Name"
+msgstr "Username"
 
 #: accounts/forms.py:320
 msgid "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
@@ -822,7 +822,7 @@ msgstr "Your passwords don't match"
 
 #: accounts/forms.py:513
 msgid "Permis de conduire"
-msgstr "Driver's licence."
+msgstr "Driver's licence"
 
 #: accounts/models.py:66 eloue/templates/dashboard/account/profil.jade:50
 #: eloue/templates/dk/dashboard/account/profil.jade:50
@@ -838,7 +838,7 @@ msgstr "Company Name"
 
 #: accounts/models.py:71
 msgid "newsletter"
-msgstr "NEWSLETTER"
+msgstr "newsletter"
 
 #: accounts/models.py:71
 msgid "Précise si l'utilisateur est abonné à la newsletter"
@@ -1997,7 +1997,7 @@ msgstr "What do you want to rent?"
 #: eloue/templates/autovoisin/jade/_header_site.jade:70
 #: eloue/templates/dk/jade/_header_site.jade:75
 msgid "Déposez une annonce"
-msgstr "Add advertisements"
+msgstr "Post a rental"
 
 #: eloue/templates/autovoisin/jade/_log_in.jade:8
 #: eloue/templates/autovoisin/jade/_log_in.jade:35
@@ -2007,7 +2007,7 @@ msgstr "Add advertisements"
 #: eloue/templates/landing_pages/_sign_in_content.jade:65
 #: eloue/templates/us/jade/_header_site.jade:23
 msgid "Connexion"
-msgstr "Connection"
+msgstr "Sign In"
 
 #: eloue/templates/autovoisin/jade/_log_in.jade:11
 #: eloue/templates/jade/_log_in.jade:11
@@ -2034,7 +2034,7 @@ msgstr "Not yet a member of AutoVoisin?"
 #: eloue/templates/landing_pages/_sign_in_content.jade:12
 #: eloue/templates/us/jade/_header_site.jade:23
 msgid "Inscription"
-msgstr "Registration"
+msgstr "Register"
 
 #: eloue/templates/autovoisin/jade/_product_list.jade:7
 #: eloue/templates/dk/jade/_product_list.jade:7
@@ -2146,7 +2146,7 @@ msgstr "Technical problem"
 #: eloue/templates/contact_us/_new_contact_form.html:44
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:44
 msgid "Inscription / Connexion"
-msgstr "Register/Login"
+msgstr "Register / Sign In"
 
 #: eloue/templates/contact_us/_new_contact_form.html:45
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:45
@@ -2156,7 +2156,7 @@ msgstr "Dashboard / customer area"
 #: eloue/templates/contact_us/_new_contact_form.html:46
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:46
 msgid "Recherche"
-msgstr "Seeking"
+msgstr "Search"
 
 #: eloue/templates/contact_us/_new_contact_form.html:47
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:47
@@ -2316,7 +2316,7 @@ msgstr "Save"
 #: eloue/templates/dashboard/account/_address_detail.jade:41
 #: eloue/templates/dk/dashboard/account/_address_detail.jade:41
 msgid "Annonces associées à cette adresse"
-msgstr "Ads associated with this address"
+msgstr "Rentals at this address"
 
 #: eloue/templates/dashboard/account/_address_detail.jade:51
 #: eloue/templates/dashboard/booking/_bookings_list.jade:38
@@ -2334,7 +2334,7 @@ msgstr "Ads associated with this address"
 #: eloue/templates/products/product_list.jade:12
 #: eloue/templates/products/subcategory_list.jade:22
 msgid "Location"
-msgstr "Renting"
+msgstr "Rental"
 
 #: eloue/templates/dashboard/account/_address_detail.jade:54
 #: eloue/templates/dashboard/items/_items_list.jade:25
@@ -2440,7 +2440,7 @@ msgstr "Change my picture"
 #: eloue/templates/dk/dashboard/account/profil.jade:26
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:26
 msgid "Je suis un professionnel ?"
-msgstr "I am a professional?"
+msgstr "Are you a professional renter?"
 
 #: eloue/templates/dashboard/account/profil.jade:29
 #: eloue/templates/dashboard/account/profil.jade:106
@@ -2505,7 +2505,7 @@ msgstr "Default phone"
 #: eloue/templates/dk/dashboard/account/profil.jade:97
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:97
 msgid "quelques mots sur vous"
-msgstr "some words for you"
+msgstr "About You"
 
 #: eloue/templates/dashboard/account/profil.jade:98
 #: eloue/templates/dk/dashboard/account/profil.jade:98
@@ -2516,25 +2516,25 @@ msgstr "About You"
 #: eloue/templates/dashboard/account/profil.jade:103
 #: eloue/templates/dk/dashboard/account/profil.jade:103
 msgid "J’accepte de recevoir la newsletter e-loue"
-msgstr "I agree to receive the newsletter e - rent"
+msgstr "Subscribe to the RentalComapare newsletter"
 
 #: eloue/templates/dashboard/account/profil.jade:117
 #: eloue/templates/dk/dashboard/account/profil.jade:117
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:117
 msgid "Informations sur le permis"
-msgstr "Information on the licences"
+msgstr "Drivers licence"
 
 #: eloue/templates/dashboard/account/profil.jade:120
 #: eloue/templates/dk/dashboard/account/profil.jade:120
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:120
 msgid "Jour"
-msgstr "DAYTIME"
+msgstr "Day"
 
 #: eloue/templates/dashboard/account/profil.jade:149
 #: eloue/templates/dk/dashboard/account/profil.jade:149
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:149
 msgid "Enregistrez les informations"
-msgstr "Save the information"
+msgstr "Save"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:34
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:34
@@ -2766,7 +2766,7 @@ msgstr "How was your reservation?"
 #: eloue/templates/dashboard/booking/_notification_empty_booking.jade:5
 #: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:5
 msgid "Pas encore de réservation"
-msgstr "I don't have an account"
+msgstr "You haven't made any rental requests yet"
 
 #: eloue/templates/dashboard/booking/_notification_empty_booking.jade:6
 #: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:6
@@ -2774,13 +2774,13 @@ msgid ""
 "A tout moment vous pouvez faire une demande de réservation auprès d'un "
 "propriétaire si son objet vous intéresse"
 msgstr ""
-"At any time you can make a reservation from owner request if you are "
+"Here you can make a reservation request "
 "interested in its purpose"
 
 #: eloue/templates/dashboard/booking/_notification_empty_booking.jade:7
 #: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:7
 msgid "Commencez à rechercher un objet"
-msgstr "Start to search for an item"
+msgstr "Search rentals"
 
 #: eloue/templates/dashboard/booking/_notification_not_selected_booking.jade:5
 #: eloue/templates/dk/dashboard/booking/_notification_not_selected_booking.jade:5
@@ -2806,7 +2806,7 @@ msgstr "Member since"
 #: eloue/templates/dk/dashboard/dashboard/index.jade:12
 #: eloue/templates/dressbooking/dashboard/dashboard/index.jade:12
 msgid "Mettre à jour mes infos"
-msgstr "Update my information/profile"
+msgstr "Update my profile"
 
 #: eloue/templates/dashboard/dashboard/index.jade:18
 #: eloue/templates/dk/dashboard/dashboard/index.jade:18
@@ -2819,7 +2819,7 @@ msgstr "Statistics"
 #: eloue/templates/dressbooking/dashboard/dashboard/index.jade:21
 #: eloue/templates/jade/_patron_stats.jade:4
 msgid "annonces publiées"
-msgstr "Advertising published on"
+msgstr "ads published"
 
 #: eloue/templates/dashboard/dashboard/index.jade:24
 #: eloue/templates/dk/dashboard/dashboard/index.jade:24
@@ -3161,7 +3161,7 @@ msgstr "Place your first ad"
 #: eloue/templates/dashboard/items/_notification_not_selected_item.jade:5
 #: eloue/templates/dk/dashboard/items/_notification_not_selected_item.jade:5
 msgid "Aucune annonce sélectionnée"
-msgstr "No Ads selected."
+msgstr "No listing selected"
 
 #: eloue/templates/dashboard/items/add_period.jade:6
 #: eloue/templates/dashboard/items/calendar.jade:73
@@ -3272,7 +3272,7 @@ msgstr "Characteristics"
 #: eloue/templates/dk/dashboard/items/tarifs.jade:131
 #: eloue/templates/dressbooking/dashboard/items/index.jade:88
 msgid "Enregistrez les modifications"
-msgstr "save the changes"
+msgstr "Save"
 
 #: eloue/templates/dashboard/items/index.jade:96
 #: eloue/templates/dk/dashboard/items/index.jade:96
@@ -3357,7 +3357,7 @@ msgstr "Prices"
 #: eloue/templates/dashboard/items/tabs.jade:17
 #: eloue/templates/dk/dashboard/items/tabs.jade:17
 msgid "Calendrier"
-msgstr "Calender"
+msgstr "Calendar"
 
 #: eloue/templates/dashboard/items/tabs.jade:22
 #: eloue/templates/dk/dashboard/items/tabs.jade:22
@@ -3482,12 +3482,12 @@ msgstr "15 nights"
 #: eloue/templates/jade/_pop_up_publish_item.jade:75
 #: eloue/templates/jade/_pop_up_publish_item.jade:103
 msgid "Caution demandée"
-msgstr "Deposit required"
+msgstr "Deposit"
 
 #: eloue/templates/dashboard/items/tarifs.jade:129
 #: eloue/templates/dk/dashboard/items/tarifs.jade:129
 msgid "Tarif obligatoire"
-msgstr "Compulsory price"
+msgstr "Required"
 
 #: eloue/templates/dashboard/items/terms/car_terms.jade:1
 #: eloue/templates/dk/dashboard/items/terms/car_terms.jade:1
@@ -3569,7 +3569,7 @@ msgstr ""
 #: eloue/templates/dashboard/jade/_base_dashboard.jade:23
 #: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:23
 msgid "Tableau de board"
-msgstr "dashboard"
+msgstr "Dashboard"
 
 #: eloue/templates/dashboard/messages/_aside_product_detail.jade:4
 #: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:4
@@ -3643,7 +3643,7 @@ msgstr "Book"
 #: eloue/templates/dashboard/messages/_notification_empty_messages.jade:5
 #: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:5
 msgid "Pas encore de conversation"
-msgstr ""
+msgstr "You haven't got any conversations yet"
 
 #: eloue/templates/dashboard/messages/_notification_empty_messages.jade:6
 #: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:6
@@ -3651,12 +3651,12 @@ msgid ""
 "Avant de faire une demande réservation, il est possible d'envoyer un message "
 "au propriétaire"
 msgstr ""
-"Before making a reservation request, you can send a message to the owner"
+"Before making a rental request, you can send a message to the owner"
 
 #: eloue/templates/dashboard/messages/_notification_empty_messages.jade:7
 #: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:7
 msgid "Commencer à rechercher une annonce"
-msgstr "Start looking for an announcement"
+msgstr "Search rentals"
 
 #: eloue/templates/dashboard/messages/_notification_not_selected_dialog.jade:5
 #: eloue/templates/dk/dashboard/messages/_notification_not_selected_dialog.jade:5
@@ -3988,7 +3988,7 @@ msgstr ""
 
 #: eloue/templates/dk/jade/_product_list.jade:3
 msgid "annonces de location dans toute la France"
-msgstr "available throughout the U.S."
+msgstr "Available throughout the U.S."
 
 #: eloue/templates/dk/jade/_product_list.jade:25
 #: eloue/templates/dressbooking/jade/_product_list.jade:25
@@ -3996,7 +3996,7 @@ msgstr "available throughout the U.S."
 #: eloue/templates/jade/_product_list.jade:25
 #: eloue/templates/products/subcategory_list.jade:34
 msgid "Explorez toutes les annonces de location"
-msgstr "View all items"
+msgstr "Explore all rental offers"
 
 #: eloue/templates/dk/jade/product_details/_booking_form.jade:3
 #: eloue/templates/dressbooking/jade/product_details/aside/_owner_information.jade:34
@@ -5497,11 +5497,11 @@ msgstr "Where?"
 #: eloue/templates/jade/_header_site.jade:81
 #: eloue/templates/us/jade/_header_site.jade:81
 msgid "Déposer mes annonces"
-msgstr "Publish an item"
+msgstr "Post a rental"
 
 #: eloue/templates/jade/_homepage_carousel_banner.jade:4
 msgid "Trouvez toutes les annonces de location près de chez vous"
-msgstr "Find all renting items near you"
+msgstr "Find rentals near you"
 
 #: eloue/templates/jade/_insurances.jade:8
 msgid "Louez en toute sécurité"
@@ -5591,7 +5591,7 @@ msgstr "Ad Listing"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:12
 msgid "Publiez votre annonce en 1 minute"
-msgstr "Post your ad in 1 minute"
+msgstr "Post your rental in 1 minute"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:13
 msgid ""
@@ -5625,7 +5625,7 @@ msgstr "miles included"
 #: eloue/templates/jade/_pop_up_publish_item.jade:85
 #: eloue/templates/jade/_pop_up_publish_item.jade:118
 msgid "Publiez votre annonce"
-msgstr "post your ad"
+msgstr "Post your rental"
 
 #: eloue/templates/jade/_pop_up_publish_item.jade:88
 msgid "Prix km supp"
@@ -5717,11 +5717,11 @@ msgstr "Closest"
 
 #: eloue/templates/jade/_product_list_article_head.jade:15
 msgid "Les prix les plus bas"
-msgstr "The lowest prices"
+msgstr "Lowest prices"
 
 #: eloue/templates/jade/_product_list_article_head.jade:16
 msgid "Les prix les plus haut"
-msgstr "The highest price"
+msgstr "Highest prices"
 
 #: eloue/templates/jade/_product_list_aside.jade:3
 msgid "quoi"
@@ -5814,7 +5814,7 @@ msgstr "Choose a category for your ad"
 
 #: eloue/templates/jade/_publish_items_categories.jade:6
 msgid "Bricolage"
-msgstr "Housing"
+msgstr "DIY"
 
 #: eloue/templates/jade/_publish_items_categories.jade:10
 msgid "Jardinage"
@@ -5822,23 +5822,23 @@ msgstr "Gardening"
 
 #: eloue/templates/jade/_publish_items_categories.jade:14
 msgid "High-tech"
-msgstr "High tech"
+msgstr "High Tech"
 
 #: eloue/templates/jade/_publish_items_categories.jade:18
 msgid "Réception"
-msgstr "receipt"
+msgstr "Reception"
 
 #: eloue/templates/jade/_publish_items_categories.jade:24
 msgid "Véhicule"
-msgstr "Vehicle"
+msgstr "Vehicles"
 
 #: eloue/templates/jade/_publish_items_categories.jade:28
 msgid "Mode et accessoires"
-msgstr "fashion accessories"
+msgstr "Clothes&nbsp&&nbspAccessories"
 
 #: eloue/templates/jade/_publish_items_categories.jade:32
 msgid "Santé et bien-etre"
-msgstr "Health and welfare"
+msgstr "Health&nbsp&&nbspWelfare"
 
 #: eloue/templates/jade/_reset_password.jade:8
 msgid "Réinitialisation du mot de passe"
@@ -5905,7 +5905,7 @@ msgstr "Sign up in 2 seconds"
 #: eloue/templates/jade/_sign_in.jade:12
 #: eloue/templates/landing_pages/_sign_in_content.jade:4
 msgid "Inscription via Facebook"
-msgstr "Registration via Facebook"
+msgstr "Register with Facebook"
 
 #: eloue/templates/jade/_sign_in.jade:15
 #: eloue/templates/landing_pages/_sign_in_content.jade:7
@@ -5920,7 +5920,7 @@ msgstr "Sign up in 30 seconds"
 #: eloue/templates/jade/_sign_in.jade:19 eloue/templates/jade/_sign_in.jade:76
 #: eloue/templates/landing_pages/_sign_in_content.jade:59
 msgid "Inscription via Email"
-msgstr "Registration via Email"
+msgstr "Register with Email"
 
 #: eloue/templates/jade/_sign_in.jade:34
 msgid "Addresse email"
