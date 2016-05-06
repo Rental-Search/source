@@ -245,7 +245,7 @@ define([
                 });
                 CategoriesService.getCategory($scope.nodeCategory).then(function (nodeCategory) {
                     // $log.debug('node category:');
-                    $scope.updateFieldSet(nodeCategory);
+                    // $scope.updateFieldSet(nodeCategory);
                     $scope.properties = nodeCategory.properties;
                 });
             };
