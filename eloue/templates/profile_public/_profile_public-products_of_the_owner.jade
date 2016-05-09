@@ -10,15 +10,14 @@ ol.product-layout
       .section-body
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
-          if product.price
-            span.badge.price {{ product.price|currency }} /{% trans "jour" %}
-          else
-            span.badge.price {% trans "Sur devis" %}
-          //-span.badge-order {{ forloop.counter }}
-
           //- For fnac
           if product.owner == 'fnac'
             span.badge.price {{ product.price|currency }} /{% trans "mois" %}
+          else
+            if product.price
+              span.badge.price {{ product.price|currency }} /{% trans "jour" %}
+            else
+              span.badge.price {% trans "Sur devis" %}
         .info
           h6
             a(href="{{ product.url }}") {{ product.summary }}
