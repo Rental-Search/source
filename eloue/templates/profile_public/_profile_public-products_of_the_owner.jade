@@ -15,6 +15,10 @@ ol.product-layout
           else
             span.badge.price {% trans "Sur devis" %}
           //-span.badge-order {{ forloop.counter }}
+
+          //- For fnac
+          if product.owner == 'fnac'
+            span.badge.price {{ product.price|currency }} /{% trans "mois" %}
         .info
           h6
             a(href="{{ product.url }}") {{ product.summary }}
