@@ -116,7 +116,7 @@ class ContractGeneratorNormal(ContractGenerator):
         }
     else:
         templates = {
-            'fr-FR': local_path("contract/fr_template_normal.pdf"),
+            'fr-FR': local_path("contract/201401_contrat_objets_v2.pdf"),
             'da': local_path("contract/dk_contract_whitout_insurance.pdf")
         }
     
@@ -155,22 +155,24 @@ class ContractGeneratorNormal(ContractGenerator):
         canvas.drawString(380, 407, "{masked_number}".format(
             masked_number=booking.payment.creditcard.masked_number
         ))
-        canvas.drawString(355, 389, "{expires1}/{expires2}".format(
-            expires1=booking.payment.creditcard.expires[:2],
-            expires2=booking.payment.creditcard.expires[2:],
-        ))
+
+
+        # canvas.drawString(355, 389, "{expires1}/{expires2}".format(
+        #     expires1=booking.payment.creditcard.expires[:2],
+        #     expires2=booking.payment.creditcard.expires[2:],
+        # ))
 
         canvas.drawString(80, 615, u"{summary}".format(summary=booking.product.summary))
 
-        booking_total_amount = "%s %s" % (str(booking.total_amount), booking.currency)
-        booking_deposit_amount = "%s %s" % (str(booking.product.deposit_amount), booking.currency)
+        booking_total_amount = "%s" % (str(booking.total_amount))
+        booking_deposit_amount = "%s" % (str(booking.product.deposit_amount))
 
         canvas.drawString(81, 595, format(booking.started_at, _(u"d F Y à H\hi.")))
         canvas.drawString(81, 573, format(booking.ended_at, _(u"d F Y à H\hi.")))
-        canvas.drawString(389, 621, u"{booking_total_amount}".format(booking_total_amount=booking_total_amount))
-        canvas.drawString(156, 557 , u"{booking_total_amount}".format(booking_total_amount=booking_total_amount))
+        canvas.drawString(389, 610, u"{booking_total_amount}".format(booking_total_amount=booking_total_amount))
+        canvas.drawString(156, 556 , u"{booking_total_amount}".format(booking_total_amount=booking_total_amount))
         
-        canvas.drawString(156, 491, u"{booking_deposit_amount}".format(booking_deposit_amount=booking_deposit_amount))
+        canvas.drawString(156, 480, u"{booking_deposit_amount}".format(booking_deposit_amount=booking_deposit_amount))
 
 
         return canvas
