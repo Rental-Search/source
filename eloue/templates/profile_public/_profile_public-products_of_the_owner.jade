@@ -11,7 +11,7 @@ ol.product-layout
         .thumbnail-img
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
           //- For fnac
-          if product.owner == 'fnac'
+          if product.owner.slug == 'fnac'
             span.badge.price {{ product.price|currency }} /{% trans "mois" %}
           else
             if product.price
