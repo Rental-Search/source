@@ -7,7 +7,7 @@ form.form-inline.section-body.text-center(ng-submit="requestBooking()", ng-if="b
              select#fromHour(name="start_time", ng-model="newBooking.start_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen, data-ng-disabled="bookingSubmitInProgress")
           .table-cell
             input(type="text", name="fromDate", placeholder="dd/mm/yyyy", ng-model="newBooking.start_date", ng-change="updateNewBookingInfo()", data-ng-disabled="bookingSubmitInProgress", eloue-datepicker).date
-            i.flaticon.stroke.calendar-3
+            i.flaticon.stroke.calendar-3(style="padding-right: 80%;")
           .table-cell {% trans "Du" %}
         .row.date-picker.datepicker-center
             .table-cell
@@ -15,7 +15,7 @@ form.form-inline.section-body.text-center(ng-submit="requestBooking()", ng-if="b
                     select#toHour(name="end_time", ng-model="newBooking.end_time", ng-change="updateNewBookingInfo()", ng-options="hour as hour.label for hour in availableHours", eloue-chosen, data-ng-disabled="bookingSubmitInProgress")
             .table-cell
                 input(type="text", name="toDate", placeholder="dd/mm/yyyy", ng-model="newBooking.end_date", ng-change="updateNewBookingInfo()", data-ng-disabled="bookingSubmitInProgress", eloue-datepicker).date
-                i.flaticon.stroke.calendar-3
+                i.flaticon.stroke.calendar-3(style="padding-right: 80%;")
             .table-cell {% trans "Au" %}
         p(ng-show="available").ng-cloak.available {% trans "Cet article est disponible à ces dates" %}
         p(ng-show="!available").ng-cloak.available.unavailable {% trans "Cet article n'est pas disponible à ces dates" %}
