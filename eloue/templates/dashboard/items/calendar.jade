@@ -43,8 +43,8 @@ block details
                 td {% trans "Action" %}
             tbody
               tr(ng-repeat="period in productUnavailablePeriods track by period.uuid", ng-show="(showBookings && period.reason=='booked') || (showUnavailable && period.reason=='unavailable')")
-                td {% verbatim %}{{period.startDay | date:'dd/MM/yyyy'}}{%endverbatim %}
-                td {% verbatim %}{{period.endDay | date:'dd/MM/yyyy'}}{%endverbatim %}
+                td {% verbatim %}{{period.startDay | amDateFormat:'L'}}{%endverbatim %}
+                td {% verbatim %}{{period.endDay | amDateFormat:'L'}}{%endverbatim %}
                 td(ng-show="showBookings && period.reason=='booked'").text-success-light {% trans "Réservé" %}
                 td(ng-show="showUnavailable && period.reason=='unavailable'").text-danger-light {% trans "Indisponible" %}
                 td

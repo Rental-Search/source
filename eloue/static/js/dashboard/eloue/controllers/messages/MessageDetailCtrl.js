@@ -28,6 +28,8 @@ define([
 
             $scope.items = [];
 
+            var dr =  UtilsService.dateRepr, di = UtilsService.dateInternal;
+
             $scope.lazyLoadConfig = {
                 resultField: 'results',
                 // Inverse messages list.
@@ -98,11 +100,11 @@ define([
                                 $scope.getProductUrl();
 
                                 // Options for the select element
-                                $scope.availableHours = AvailableHours;
+                                $scope.availableHours = UtilsService.choicesHours();
 
                                 $scope.newBooking = {
-                                    start_date: Date.today().add(1).days().toString("dd/MM/yyyy"),
-                                    end_date: Date.today().add(2).days().toString("dd/MM/yyyy"),
+                                    start_date: dr(Date.today().add(1).days().toString("dd/MM/yyyy")),
+                                    end_date: dr(Date.today().add(2).days().toString("dd/MM/yyyy")),
                                     start_time: $scope.availableHours[8],
                                     end_time: $scope.availableHours[9]
                                 };
@@ -112,8 +114,8 @@ define([
                                     //Get product details
                                     ProductsService.getAbsoluteUrl($scope.messageThread.product.id).then(function (result) {
                                         var redirectUrl = result.url;
-                                        redirectUrl += '?date_from=' + $scope.newBooking.start_date;
-                                        redirectUrl += '&date_to=' + $scope.newBooking.end_date;
+                                        redirectUrl += '?date_from=' + di($scope.newBooking.start_date);
+                                        redirectUrl += '&date_to=' + di($scope.newBooking.end_date);
                                         redirectUrl += '&hour_from=' + $scope.newBooking.start_time.value;
                                         redirectUrl += '&hour_to=' + $scope.newBooking.end_time.value;
                                         redirectUrl += '&show_booking=true';
@@ -188,8 +190,8 @@ define([
             };
 
             $scope.updateNewBookingInfo = function () {
-                var fromDateTimeStr = $scope.newBooking.start_date + " " + $scope.newBooking.start_time.value,
-                    toDateTimeStr = $scope.newBooking.end_date + " " + $scope.newBooking.end_time.value,
+                var fromDateTimeStr = di($scope.newBooking.start_date) + " " + $scope.newBooking.start_time.value,
+                    toDateTimeStr = di($scope.newBooking.end_date) + " " + $scope.newBooking.end_time.value,
                     fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
                     toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
 
@@ -197,10 +199,10 @@ define([
                     //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
                     $scope.dateRangeError = "La date de début ne peut pas être après la date de fin";
                     if (fromDateTime.getHours() < 23) {
-                        $scope.newBooking.end_date = fromDateTime.toString("dd/MM/yyyy");
+                        $scope.newBooking.end_date = dr(fromDateTime.toString("dd/MM/yyyy"));
                         $scope.newBooking.end_time = $scope.findHour(fromDateTime.add(1).hours().toString("HH:mm:ss"));
                     } else {
-                        $scope.newBooking.end_date = fromDateTime.add(1).days().toString("dd/MM/yyyy");
+                        $scope.newBooking.end_date = dr(fromDateTime.add(1).days().toString("dd/MM/yyyy"));
                         $scope.newBooking.end_time = $scope.findHour(fromDateTime.add(1).hours().toString("HH:mm:ss"));
                     }
 

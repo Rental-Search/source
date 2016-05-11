@@ -3,7 +3,7 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Month+year datepicker component.
      */
-    EloueCommon.directive("eloueDatepickerMonth", ['$translate', function ($translate) {
+    EloueCommon.directive("eloueDatepickerMonth", ['UtilsService', function (UtilsService) {
         return {
             restrict: "A",
             replace: true,
@@ -14,8 +14,16 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
                     return;
                 }
                 element.datepicker({
-                    language: $translate.use(),
-                    format: "mm/yy",
+                    language: UtilsService.locale(),
+                    // format: "mm/yy",
+                    format:{
+                        toDisplay: function(date, format, lang){
+                            return UtilsService.date(date).format('MM/YY');
+                        },
+                        toValue: function(date, format, lang){
+                            return UtilsService.date(date, 'MM/YY').toDate();
+                        }
+                    },
                     viewMode: "months",
                     minViewMode: "months",
                     autoclose: true,

@@ -13,8 +13,13 @@
         "angular-translate": "../../bower_components/angular-translate/angular-translate",
         "angular-translate-interpolation-messageformat": "../../bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat",
         "messageformat": "../../bower_components/messageformat/messageformat",
-        "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
-        "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
+        "angular-moment": "../../bower_components/angular-moment/angular-moment",
+        "moment": "../../bower_components/moment/min/moment-with-locales",
+        "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker",
+        "bootstrap-datepicker-fr":[
+            "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr", 
+            "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min"
+        ],
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
         "datejs": "../../bower_components/datejs/build/date",
         "chosen": "../../bower_components/chosen/chosen.jquery",

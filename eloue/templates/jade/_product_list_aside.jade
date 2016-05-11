@@ -68,7 +68,7 @@ script(type="text/ng-template" id="_category_tree_item.html").
   //-  ng-model="search.price.min", rz-slider-options="search.price.options", ng-change="perform_search()")
 
   eloue-slider-filter(ng-model="search.price", label="{% trans 'prix' %}", 
-    i18n="MONEY", ng-change="refinePrices()")
+    i18n="MONEY_ROUND", ng-change="refinePrices()")
     
   //-input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
   //-input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)

@@ -20,7 +20,7 @@ ul.list-group
           include ../jade/_rate
           {% endwith %}
         p {{ comment.comment|truncatechars:145 }}
-        small Le {{ comment.created_at|date:'DATE_FORMAT' }}
+        small Le {{ comment.created_at|date:"d F Y" }}
     {% endwith %}
 {% endif %}
 {% endwith %}

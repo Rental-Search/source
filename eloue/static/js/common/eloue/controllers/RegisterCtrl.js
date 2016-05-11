@@ -19,14 +19,15 @@ define([
         "RedirectAfterLogin",
         "ToDashboardRedirectService",
         "ServerValidationService",
-        function ($scope, $rootScope, $http, $window, $document, $translate, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService, ServerValidationService) {
+        "UtilsService",
+        function ($scope, $rootScope, $http, $window, $document, $translate, AuthService, CivilityChoices, UsersService, ServiceErrors, RedirectAfterLogin, ToDashboardRedirectService, ServerValidationService, UtilsService) {
 
             /**
              * New user account data.
              */
             $scope.account = {};
 
-            $scope.civilityOptions = CivilityChoices[$translate.use()];
+            $scope.civilityOptions = UtilsService.choicesHonorific();
 
             /**
              * Register new user in the system.

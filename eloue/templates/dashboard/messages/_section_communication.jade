@@ -7,7 +7,7 @@ section.tabs-vertical-static.pull-nothing
                     img(style="background-image: url({% verbatim %}{{message.sender.avatar.thumbnail}}{% endverbatim %});")
             .col-exposition
                 h3: a(href="/loueur/{% verbatim %}{{message.sender.slug}}{% endverbatim %}").text-underline-hover {% verbatim %}{{message.sender.username}}{% endverbatim %}
-                p.small.text-gray-light {% verbatim %}{{ 'DATETIME' | translate:{date:message.sent_at} }}{% endverbatim %}
+                p.small.text-gray-light {% verbatim %}{{ message.sent_at | amDateFormat:'L LT' }}{% endverbatim %}
                 p.normal.text-gray.text-justify(style="white-space: pre-line;") {% verbatim %}{{message.body}}{% endverbatim %}
 
     form(ng-submit="postNewMessage()").send-dialog-message.clearfix

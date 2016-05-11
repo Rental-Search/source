@@ -114,7 +114,7 @@ block sections
                 option(ng-repeat="item in dayOptions", value="{% verbatim %}{{item}}{% endverbatim %}", ng-selected="item == licenceDay") {% verbatim %}{{item}}{% endverbatim %}
           .col-sm-4
             select#select-month(name="select-month", data-placeholder="{% trans 'Mois' %}", ng-model="licenceMonth", eloue-chosen, data-ng-disabled="submitInProgress")
-                option(ng-repeat="item in monthOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}", ng-selected="item.id == licenceMonth") {% verbatim %}{{item.value | translate}}{% endverbatim %}
+                option(ng-repeat="item in monthOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}", ng-selected="item.id == licenceMonth") {% verbatim %}{{item.value}}{% endverbatim %}
           .col-sm-3
             select#select-year(name="select-year", data-placeholder="{% trans 'Année' %}", ng-model="licenceYear", eloue-chosen, data-ng-disabled="submitInProgress")
                 option(ng-repeat="item in yearOptions", value="{% verbatim %}{{item}}{% endverbatim %}", ng-selected="item == licenceYear") {% verbatim %}{{item}}{% endverbatim %}

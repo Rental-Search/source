@@ -332,7 +332,7 @@ PIPELINE_CSS = {
             'fonts/flaticons_stoke/flaticons_stoke.css',
             'bower_components/chosen/chosen.min.css',
             'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
-            'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
             'bower_components/toastr/toastr.min.css',
         ),
         'output_filename': 'css/extra.css',
@@ -363,7 +363,7 @@ PIPELINE_CSS = {
             'css/jslider.css', # temporary use our own hacked version of jQuery-UI styles to get green sliders
             'sass/product_list_styles.sass',
             #'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css',
-            'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
             'bower_components/angularjs-slider/dist/rzslider.css',
         ),
         'output_filename': 'css/product_list_styles.css',

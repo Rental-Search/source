@@ -213,6 +213,14 @@ class CategoryDetailView(NavbarCategoryMixin, BreadcrumbsMixin, DetailView):
         return context
 
 
+def get_format_or_none(key):
+    try:
+        res = get_format(key)
+    except (NameError, AttributeError):
+        res = None
+    return res
+        
+
 SEARCH_DEFAULTS = {
      'query': u'',
      'order_by': u'',
@@ -233,7 +241,7 @@ SEARCH_DEFAULTS = {
              'max':settings.DEFAULT_LOCATION['country_radius'],
              'floor':1,
              'ceil':settings.DEFAULT_LOCATION['country_radius'],
-             'from_metric': get_optional_format('DISTANCE_FROM_METRIC')},
+             'from_metric': get_format_or_none('DISTANCE_FROM_METRIC')},
      'location':settings.DEFAULT_LOCATION['country'],
      'center':settings.DEFAULT_LOCATION['country_coordinates'],
      'site': settings.SITE_ID,}

@@ -55,14 +55,14 @@
   //-.date-picker
   //-
     .table-cell.main-cell
-      input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'DATE_FORMAT' }}").form-control.date
+      input#start-date(type="text", placeholder="", name="date_from", value="{{ form.cleaned_data.date_from|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   //-label.caption(for="end-date") date de fin
   //-.date-picker
   //-
     .table-cell.main-cell
-      input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'DATE_FORMAT' }}").form-control.date
+      input#end-date(type="text", placeholder="", name="date_to", value="{{ form.cleaned_data.date_to|date:'d/m/Y' }}").form-control.date
       i(style="right: 1em;").flaticon.stroke.calendar-3
 
   label#price-label.caption(for="price-slider") prix

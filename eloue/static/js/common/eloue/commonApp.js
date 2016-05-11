@@ -6,6 +6,7 @@ define([
     "angular-resource",
     "angular-translate",
     "angular-translate-interpolation-messageformat",
+    "angular-moment",
     "datejs",
     "chosen",
     "bootstrap-datepicker",

@@ -1,5 +1,6 @@
 "use strict";
 define(["eloue/app",
+        "angular-moment",
         "angular-translate-interpolation-messageformat"], function (EloueApp) {
     
     EloueApp.config(["$translateProvider", function ($translateProvider) {
@@ -13,8 +14,14 @@ define(["eloue/app",
             DATE_LONG:"{{date|date:'d/m/Y'}}",
             DATE_LONG_SPACED:"{{date|date:'d F Y'}}",
             
+            /**
+             * Messages
+             */
+            MESSAGE_SENT_AT: "Le {{date|amDateFormat:'L'}} à {{date:amDateFormat|'LT'}}",
+            
             // Money
-            MONEY: "{{value+'€'}}",
+            MONEY: "{{value|number:2}}€",
+            MONEY_ROUND: "{{value}}€",
             
             // Distance
             DISTANCE: "{{value+' km'}}",
@@ -91,6 +98,7 @@ define(["eloue/app",
                 "one {1 jour}"+
                 "other {# jours}"+
             "}",
+            
             
             
             /**
@@ -174,8 +182,12 @@ define(["eloue/app",
             DATE_LONG:"{{date|date:'m/d/Y'}}",
             DATE_LONG_SPACED:"{{date|date:'F d Y'}}",
             
+            // Messages
+            MESSAGE_SENT_AT: "On {{date|amDateFormat:'L'}} at {{date|amDateFormat:'LT'}}",
+            
             // Money
-            MONEY: "{{'$'+value}}",
+            MONEY: "${{value|number:2}}",
+            MONEY_ROUND: "${{value}}",
             
             // Distance
             DISTANCE: "{{value+' mi'}}",
@@ -275,6 +287,10 @@ define(["eloue/app",
         'en-US':{
             region: 'US'
         }
+    });
+    
+    EloueApp.constant("angularMomentConfig", {
+        
     });
 
 });

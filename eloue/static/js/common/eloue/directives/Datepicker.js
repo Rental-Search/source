@@ -3,7 +3,7 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
     /**
      * Datepicker directive.
      */
-    EloueCommon.directive("eloueDatepicker", ['$translate', function ($translate) {
+    EloueCommon.directive("eloueDatepicker", ['UtilsService', function (UtilsService) {
         return {
             restrict: "A",
             replace: true,
@@ -14,7 +14,16 @@ define(["../../../common/eloue/commonApp"], function (EloueCommon) {
                     return;
                 }
                 element.datepicker({
-                    language: $translate.use(),
+                    language: UtilsService.locale(),
+                    // format: "mm/yy",
+                    format:{
+                        toDisplay: function(date, format, lang){
+                            return UtilsService.date(date).format('L');
+                        },
+                        toValue: function(date, format, lang){
+                            return UtilsService.date(date, 'L').toDate();
+                        }
+                    },
                     autoclose: true,
                     todayHighlight: true,
                     startDate: Date.today()

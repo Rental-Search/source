@@ -10,3 +10,4 @@ CURRENCY = 'EUR'
 CURRENCY_SYMBOL = u'€'
 
 DISTANCE_UNIT = 'km'
+
