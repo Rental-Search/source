@@ -212,7 +212,8 @@ define([
                 } 
                 
                 function translate(value){
-                    return $filter("translate")(scope.i18n, {value:value});
+                    // return $filter("translate")(scope.i18n, {value:value});
+                    return value;
                 }
                 
                 scope.is_range = function(){
@@ -889,19 +890,21 @@ define([
                             if (cat){
                                 var catparts = cat.split(' > ');
                                 var categoryId = $scope.categoryId(catparts[catparts.length-1]);
-                                var facets = $scope.search_default_state.getQueryParameter('facets').slice(0);
-                                CategoriesService.getCategory(categoryId).then(function(cat){
-                                    $scope.search.category = cat;
-                                    for (var i=0; i<$scope.search.category.properties.length; i++){
-                                        facets.push($scope.search.category.properties[i].attr_name);
-                                    };
-                                }).finally(function(){
-                                    $scope.search.helper.setQueryParameter('facets', facets);
+                                if (categoryId==="number"){
+                                    var facets = $scope.search_default_state.getQueryParameter('facets').slice(0);
+                                    CategoriesService.getCategory(categoryId).then(function(cat){
+                                        $scope.search.category = cat;
+                                        for (var i=0; i<$scope.search.category.properties.length; i++){
+                                            facets.push($scope.search.category.properties[i].attr_name);
+                                        };
+                                    }).finally(function(){
+                                        $scope.search.helper.setQueryParameter('facets', facets);
+                                        
+                                        // Render properties when the category is available
+                                        $scope.renderProperties(result, state);
                                     
-                                    // Render properties when the category is available
-                                    $scope.renderProperties(result, state);
-                                  
-                                });
+                                    });   
+                                }
                             }   
                         }
                     }
