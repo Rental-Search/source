@@ -34,7 +34,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
             {
                 "list": {method: "GET", params: {product: ":productId"}},
                 "save": {method: "POST"},
-                "isThreadSeen": {method: "GET", url: Endpoints.api_url + "messagethreads/:id/seen"}
+                "isThreadSeen": {method: "GET", url: Endpoints.api_url + "messagethreads/:id/seen/?"}
             });
     }]);
 
@@ -46,7 +46,7 @@ define(["../../common/eloue/commonApp", "../../common/eloue/values"], function (
             {
                 "update": {method: "PUT"},
                 "seen": {method: "PUT", url: Endpoints.api_url + "productrelatedmessages/:id/seen/?"},
-                "seenBunch": {method: "PUT", url: Endpoints.api_url + "productrelatedmessages/seen/"}
+                "seenBunch": {method: "PUT", url: Endpoints.api_url + "productrelatedmessages/seen/?"}
             });
     }]);
 
