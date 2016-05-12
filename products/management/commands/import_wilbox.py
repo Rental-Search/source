@@ -11,6 +11,7 @@ class Command(BaseCommand):
     help = 'Imports Wilbox'
 
     #username = 'arclite'
+    username = 'Wilbox'
 
     base_url = 'http://www.wilbox.fr/locationjeux/svc_all.php?filterscount=0&groupscount=0&pagenum=0&pagesize=10&recordstartindex=0&recordendindex=8.666666666666668'
 
@@ -56,7 +57,7 @@ class Command(BaseCommand):
     			product = Product.objects.create(
     				summary=summary, description=description,
     				deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-    				category=Category.objects.get(slug=self.category), is_allowed=False
+    				category=Category.objects.get(slug=self.category)
     				)
     			try:
     				with closing(urlopen(image_url)) as image:
