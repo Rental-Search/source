@@ -117,7 +117,8 @@ def get_last_added_sqs(search_index, location, sort_by_date='-created_at_date'):
 
 
 def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
-    last_added = get_last_added_sqs(search_index, location, sort_by_date)
+    last_added = get_last_added_sqs(search_index, location, sort_by_date).filter(
+        is_allowed=True)
     return last_added[offset*limit:(offset+1)*limit]
 
 
