@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+	from django.core.management.base import BaseCommand, CommandError
 from django.core.files import uploadedfile
 from bs4 import BeautifulSoup
 from urllib2 import urlopen, quote, HTTPError
@@ -39,46 +39,48 @@ category_mapping = {
 	'/presentoir-35/': 'les-contenants-et-lutilitaire',
 	# Cuisine
 	# Materiel alimentaire
-	'/bouilloire-cafetiere-75/',
-	'/plancha-crepe-gauffre-raclette-76/',
-	'/friteuse-barbecue-77/',
-	'/cuisson-festive-gourmande-82/',
-	'/machine-boisson-glacon-84/',
-	'/mat-riel-a-viande-85/',
+	'/bouilloire-cafetiere-75/': 'cafetiere',
+	'/plancha-crepe-gauffre-raclette-76/': 'grill-pierrade',
+	'/friteuse-barbecue-77/': 'friteuse',
+	'/cuisson-festive-gourmande-82/': 'fontaine-chocolat',
+	'/machine-boisson-glacon-84/': 'machine-a-glace',
+	'/mat-riel-a-viande-85/': 'trancheur-de-jambon',
 	# Cuisson rechauffe
-	'/cuisson-rechauffe-12/',
+	'/cuisson-rechauffe-12/': 'cuiseur-vapeur',
 	# Refrigerateur
-	'/r-frig-rateur-congelateur-72/',
+	'/r-frig-rateur-congelateur-72/': 'congelateur',
 	# Materiel cuisine
-	'/mat-riel-de-cuisine-73/',
+	'/mat-riel-de-cuisine-73/': 'les-contenants-et-lutilitaire',
 	# Ustensile  de cuisine
-	'/ustensile-de-cuisine-74/'
+	'/ustensile-de-cuisine-74/': 'divers',
 	# Plat gastronomique
-	'/plat-bac-gastronomique-34/',
+	'/plat-bac-gastronomique-34/': 'bac-gastro',
 	# Consommables
-	'/consommables-11/',
+	'/consommables-11/': 'decoration',
 	# Evenementiel
-	'/mobilier-evenementiel-93/',
-	'/decors-evenementiel-50/',
-	'/prestations-evenementielles-58/',
-	'/structures-gonflables-89/',
-	'/stands-forains-90/',
-	'/jeux-de-bois-geant-91/',
+	'/mobilier-evenementiel-93/': 'meuble',
+	'/mobilier-evenementiel-93/page-2.html': 'meuble',
+	'/decors-evenementiel-50/': 'decoration',
+	'/prestations-evenementielles-58/': 'jeux-de-bistrot',
+	'/structures-gonflables-89/': 'jeux-dadresse',
+	'/stands-forains-90/': 'jeux/jeux-de-bistrot',
+	'/stands-forains-90/page-2.html': 'jeux/jeux-de-bistrot',
+	'/jeux-de-bois-geant-91/': 'jeux-de-societe',
 	# Mobilier-Chapiteaux
-	'/chaise-banc-salon-club-79/',
-	'/mange-debout-gueridon-tabouret-80/',
-	'/table-19/',
-	'/nappage-21/',
+	'/chaise-banc-salon-club-79/': 'chaises',
+	'/mange-debout-gueridon-tabouret-80/': 'tables-et-buffets',
+	'/table-19/': 'tables-et-buffets',
+	'/nappage-21/': 'nappes',
 	'/mobilier-lumineux-81/',
 	'/mobilier-evenementiel-66/',
-	'/divers-20/',
-	'/chapiteaux-barnum-78/',
+	'/mobilier-evenementiel-66/page-2.html',
+	'/divers-20/': 'divers',
+	'/chapiteaux-barnum-78/': 'chapiteau',
 	# Chapiteaux Barum
-	'/barnum-tente-pliante-94/',
-	'/toilette-95/',
-	'/chapiteaux-96/',
-	'/chauffage-8/',
-	'/livraison-10/',
+	'/barnum-tente-pliante-94/': 'chapiteau',
+	'/toilette-95/': 'toilette-bebe',
+	'/chapiteaux-96/': 'chapiteau',
+	'/chauffage-8/': 'chauffage',
 }
 
 class Command(BaseCommand):
@@ -283,6 +285,7 @@ class Command(BaseCommand):
 			'/prestations-evenementielles-58/',
 			'/structures-gonflables-89/',
 			'/stands-forains-90/',
+			'/stands-forains-90/page-2.html',
 			'/jeux-de-bois-geant-91/',
 			# Mobilier-Chapiteaux
 			'/chaise-banc-salon-club-79/',
@@ -291,6 +294,7 @@ class Command(BaseCommand):
 			'/nappage-21/',
 			'/mobilier-lumineux-81/',
 			'/mobilier-evenementiel-66/',
+			'/mobilier-evenementiel-66/page-2.html',
 			'/divers-20/',
 			'/chapiteaux-barnum-78/',
 			# Chapiteaux Barum
@@ -298,7 +302,6 @@ class Command(BaseCommand):
 			'/toilette-95/',
 			'/chapiteaux-96/',
 			'/chauffage-8/',
-			'/livraison-10/',
         ]
 
         # Get the user
