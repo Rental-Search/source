@@ -16,10 +16,7 @@
         "angular-moment": "../../bower_components/angular-moment/angular-moment",
         "moment": "../../bower_components/moment/min/moment-with-locales",
         "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker",
-        "bootstrap-datepicker-fr":[
-            "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr", 
-            "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min"
-        ],
+        "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr",
         "jquery-form": "../../bower_components/jquery-form/jquery.form",
         "datejs": "../../bower_components/datejs/build/date",
         "chosen": "../../bower_components/chosen/chosen.jquery",
