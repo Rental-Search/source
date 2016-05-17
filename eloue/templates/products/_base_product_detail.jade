@@ -145,19 +145,35 @@ block append content-body
 
 block append tail
   script
+    function send_tracklink(link, event) {
+      analytics.trackLink(link, event, {
+        'owner id': '{{product.object.owner_id}}',
+        'company name': '{{product.object.owner.company_name}}',
+        'product category': '{{product.object.category}}',
+        'product summary': '{{product.object.summary}}',
+        'product id': '{{product.object.id}}'
+      });
+    }
+
     var pro_popin_message_link = document.getElementById('pro-popin-message');
-    analytics.trackLink(pro_popin_message_link, "Pro Cost Request Modal");
+    send_tracklink(pro_popin_message_link, "Pro Cost Request Modal");
     var pro_popin_message_link = document.getElementById('pro-popin-phone');
-    analytics.trackLink(pro_popin_message_link, "Pro Phone Modal");
+    send_tracklink(pro_popin_message_link, "Pro Phone Modal");
     var pro_popin_message_link = document.getElementById('pro-popin-shop');
-    analytics.trackLink(pro_popin_message_link, "Pro Shop Modal");
+    send_tracklink(pro_popin_message_link, "Pro Shop Modal");
     var pro_popin_message_link = document.getElementById('pro-popin-website-link');
-    analytics.trackLink(pro_popin_message_link, "Pro Website Link Modal");
+    send_tracklink(pro_popin_message_link, "Pro Website Link Modal");
 
     var pro_message_form = document.getElementById('proMessageForm');
-    if (pro_message_form != 'undefined') {
-      analytics.trackForm(pro_message_form, 'Pro Cost Request Sended');
+    if (typeof pro_message_form !== 'undefined') {
+      analytics.trackForm(pro_message_form, 'Pro Cost Request Sended', {
+        'owner id': '{{product.object.owner_id}}',
+        'company name': '{{product.object.owner.company_name}}',
+        'product category': '{{product.object.category}}',
+        'product summary': '{{product.object.summary}}',
+        'product id': '{{product.object.id}}'
+      });
     }
 
     var websiteProLink = document.getElementById('websiteProLink');
-    analytics.trackLink(websiteProLink, "Pro Website Link Redirected");
+    send_tracklink(websiteProLink, "Pro Website Link Redirected");

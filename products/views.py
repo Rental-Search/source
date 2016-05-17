@@ -117,7 +117,8 @@ def get_last_added_sqs(search_index, location, sort_by_date='-created_at_date'):
 
 
 def last_added(search_index, location, offset=0, limit=PAGINATE_PRODUCTS_BY, sort_by_date='-created_at_date'):
-    last_added = get_last_added_sqs(search_index, location, sort_by_date)
+    last_added = get_last_added_sqs(search_index, location, sort_by_date).filter(
+        is_allowed=True)
     return last_added[offset*limit:(offset+1)*limit]
 
 
@@ -216,7 +217,7 @@ SEARCH_DEFAULTS = {
      'order_by': u'',
      'page': 0,
      'result_count': 0,
-     'category_path': u'',
+     'algolia_category_path': u'',
      'owner_type': {
              'pro': True,
              'part': True,
@@ -359,7 +360,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                  'order_by': self.form.cleaned_data.get('sort', u''),
                  'page': context['page_obj'].number-1 if context['is_paginated'] else 0,
                  'result_count': self.sqs.count(),
-                 'category_path': algolia_path if algolia_path else '', #TODO take from form
+                 'algolia_category_path': algolia_path if algolia_path else '', #TODO take from form
                  'owner_type': {
                          'pro': not renter or renter==u'professionnels',
                          'part': not renter or renter==u'particuliers',
@@ -520,6 +521,7 @@ class CategoryViewSet(viewsets.NonDeletableModelViewSet):
         serializer = self.get_serializer(obj.get_descendants(), many=True)
         return Response(serializer.data)
 
+    
 
 class ProductFilterSet(filters.FilterSet):
     category__isdescendant = filters.MPTTModelFilter(name='categories', lookup_type='descendants', queryset=Category.objects.all())

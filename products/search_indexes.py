@@ -65,7 +65,7 @@ class ProductPropertyFieldMixin(object):
                         'null':True,})
         super(ProductPropertyFieldMixin, self).__init__(*args, **kwargs)
         self.index_fieldname = self.instance = \
-                self.model_attr = self.property_type.attr_name 
+                self.model_attr = self.property_type.prefixed_attr_name 
         
 
 
@@ -209,9 +209,8 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
     def prepare_algolia_categories(self, obj):
         category = obj._get_category()
         if category:
-            cats = list(category\
-                        .get_ancestors(ascending=False, include_self=True)\
-                        .values_list('name', flat=True))
+            cats = list(c.name+'|'+str(c.id) for c in category\
+                        .get_ancestors(ascending=False, include_self=True).all())
             
             cats_dict = {}
             for i in range(len(cats)):

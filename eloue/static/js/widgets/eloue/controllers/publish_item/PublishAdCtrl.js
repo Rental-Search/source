@@ -229,8 +229,8 @@ define([
                 });
                 CategoriesService.getCategory($scope.rootCategory).then(function (rootCategory) {
                     $scope.updateFieldSet(rootCategory);
-                    $log.debug('root category:');
-                    $log.debug(rootCategory);
+                    //$log.debug('root category:');
+                    // $log.debug(rootCategory);
                     $scope.properties = rootCategory.properties;
                 });
             };
@@ -244,8 +244,7 @@ define([
                     $scope.leafCategories = categories;
                 });
                 CategoriesService.getCategory($scope.nodeCategory).then(function (nodeCategory) {
-                    $log.debug('node category:');
-                    $scope.updateFieldSet(nodeCategory);
+                    // $log.debug('node category:');
                     $scope.properties = nodeCategory.properties;
                 });
             };
@@ -255,10 +254,10 @@ define([
              * Update category properties from leaf category
              */
             $scope.updateProperties = function(){ $log.debug('updateProperties');
-                $log.debug($scope.product.category);
+                // $log.debug($scope.product.category);
                 CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).then(function (leafCategory) {
-                    $log.debug('leaf category:');
-                    $log.debug(leafCategory);
+                    // $log.debug('leaf category:');
+                    //$log.debug(leafCategory);
                     $scope.properties = leafCategory.properties;
                 });
             };

@@ -260,11 +260,11 @@ define([
                 });
             };
             
-            $scope.updateProperties = function(){ $log.debug('updateProperties');
-                $log.debug($scope.product.category);
+            $scope.updateProperties = function(){ //$log.debug('updateProperties');
+                //$log.debug($scope.product.category);
                 CategoriesService.getCategory(UtilsService.getIdFromUrl($scope.product.category)).then(function (leafCategory) {
-                    $log.debug('leaf category:');
-                    $log.debug(leafCategory);
+                    //$log.debug('leaf category:');
+                    //$log.debug(leafCategory);
                     $scope.properties = leafCategory.properties;
                 });
             };

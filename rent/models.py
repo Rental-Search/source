@@ -44,6 +44,7 @@ from shipping.models import ShippingPoint, Shipping
 from eloue.signals import post_save_sites
 from eloue.utils import create_alternative_email, itertools_accumulate
 
+from rent.segment import BookingSegment
 
 PAY_PROCESSORS = (NonPayments, AdaptivePapalPayments)
 
@@ -195,7 +196,7 @@ class Booking(models.Model):
         message = create_alternative_email('rent/emails/borrower_ask', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
         self.send_notification(message="Demande de réservation", receiver=self.owner, state="BOOKING_ASK")
-
+        BookingSegment(self).send_booking_requested_received_track()
     
     def send_acceptation_email(self):
         context = {'booking': self}
@@ -212,6 +213,7 @@ class Booking(models.Model):
             message.attach('contrat.pdf', contract_content, 'application/pdf')
         message.send()
         self.send_notification(message="Réservation acceptée", receiver=self.borrower, state="BOOKING_ACCEPT")
+        BookingSegment(self).send_booking_accepted_received_track()
     
     def send_borrower_receipt(self):
         context = {'booking': self}
@@ -228,6 +230,7 @@ class Booking(models.Model):
         message = create_alternative_email('rent/emails/borrower_rejection', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
         message.send()
         self.send_notification(message="Réservation refusée", receiver=self.borrower, state="BOOKING_REJECT")
+        BookingSegment(self).send_booking_rejected_received_track()
     
     def send_cancelation_email(self, source=None):
         context = {'booking': self}
@@ -243,6 +246,7 @@ class Booking(models.Model):
             message = create_alternative_email('rent/emails/borrower_cancelation_to_borrower', context, settings.DEFAULT_FROM_EMAIL, [self.borrower.email])
             message.send()
             self.send_notification(message="Réservation annulée", receiver=self.owner, state="BOOKING_CANCEL")
+        BookingSegment(self).send_booking_canceled_received_track()
         
     
     def send_incident_email(self, source, description):
@@ -352,6 +356,7 @@ class Booking(models.Model):
     
     @transition(field=state, source=BOOKING_STATE.AUTHORIZING, target=BOOKING_STATE.AUTHORIZED, conditions=[not_need_ipn])
     def preapproval(self, *args, **kwargs):
+        BookingSegment(self).send_booking_authorazing_track()
         self.payment.preapproval(self.pk, self.get_total_amount(), self.currency, *args, **kwargs) # 'cvv'
         self.payment.save()
         self.send_ask_email()
@@ -362,6 +367,7 @@ class Booking(models.Model):
     
     @transition(field=state, source=[BOOKING_STATE.AUTHORIZING, BOOKING_STATE.AUTHORIZED], target=BOOKING_STATE.OUTDATED, conditions=[is_expired])
     def expire(self):
+        BookingSegment(self).send_booking_noanswered_track()
         pass
     
     @transition(field=state, source=BOOKING_STATE.AUTHORIZED, target=BOOKING_STATE.PENDING)

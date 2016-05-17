@@ -56,7 +56,7 @@ define([
                 }
 
                 var unreadMessages = UtilsService.getUnreadMessagesIds ($scope.items, $scope.currentUser);
-                if (unreadMessages.length != 0) {
+                if (unreadMessages.length > 0) {
                     // If there are any unread messages.
 
                     // Mark messages as seen.

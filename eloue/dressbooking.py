@@ -27,5 +27,11 @@ PUBLISH_CATEGORIES = env('PUBLISH_CATEGORIES', (
 
 ALGOLIA_CREDENTIALS['PREFIX'] = 'dressbooking_'
 
+DEFAULT_RADIUS = 600
+
 
 #DASHBOARD_REDIRECT_DOMAIN = env('DASHBOARD_REDIRECT_DOMAIN', 'www.e-loue.com')
+
+ANALYTICS.update({
+                  'GOOGLE_ID': 'UA-77168089-1'
+                  })

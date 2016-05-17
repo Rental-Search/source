@@ -36,7 +36,7 @@ Configures all indices from the ALGOLIA_INDICES setting.
             # FIXME add generic attributes when there are many properties
             # Add all attribute names that can appear in indexed objects
             property_facets = Property.get_attr_names()
-            self.stdout.write('Adding {} property facets'.format(property_facets.count()))
+            self.stdout.write('Adding {} property facets'.format(len(property_facets)))
             masters['products.product']['attributesForFaceting']\
                     .extend(property_facets)
         
