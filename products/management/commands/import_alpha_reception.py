@@ -83,6 +83,7 @@ category_mapping = {
 	'/toilette-95/': 'toilette-bebe',
 	'/chapiteaux-96/': 'chapiteau',
 	'/chauffage-8/': 'chauffage',
+	'/livraison-10/': 'utilitaire-leger-2t',
 }
 
 class Command(BaseCommand):
@@ -318,6 +319,7 @@ class Command(BaseCommand):
 			'/toilette-95/',
 			'/chapiteaux-96/',
 			'/chauffage-8/',
+			'/livraison-10/',
         ]
 
         #Get the user
