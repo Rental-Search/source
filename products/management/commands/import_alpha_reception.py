@@ -196,8 +196,9 @@ class Command(BaseCommand):
 			try:
 				union_list_tmp = product_soup.find(self.description_tag["name"], self.description_tag["attrs"])
 				description_tmp = union_list_tmp.find("div")
-				price = description_tmp.find_next("div").text
+				price_tmp = description_tmp.find_next("div").text
 				description = description_tmp.text
+				price = _to_decimal(price_tmp.split(' ', 1)[0])
 				#print description_tmp
 				#print _to_decimal(price.split(' ', 1)[0])
 
