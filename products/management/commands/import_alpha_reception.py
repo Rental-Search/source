@@ -1,4 +1,5 @@
-	from django.core.management.base import BaseCommand, CommandError
+# coding=utf-8
+from django.core.management.base import BaseCommand, CommandError
 from django.core.files import uploadedfile
 from bs4 import BeautifulSoup
 from urllib2 import urlopen, quote, HTTPError
@@ -71,9 +72,9 @@ category_mapping = {
 	'/mange-debout-gueridon-tabouret-80/': 'tables-et-buffets',
 	'/table-19/': 'tables-et-buffets',
 	'/nappage-21/': 'nappes',
-	'/mobilier-lumineux-81/',
-	'/mobilier-evenementiel-66/',
-	'/mobilier-evenementiel-66/page-2.html',
+	'/mobilier-lumineux-81/': 'decoration',
+	'/mobilier-evenementiel-66/': 'decoration',
+	'/mobilier-evenementiel-66/page-2.html': 'decoration',
 	'/divers-20/': 'divers',
 	'/chapiteaux-barnum-78/': 'chapiteau',
 	# Chapiteaux Barum
@@ -93,7 +94,7 @@ class Command(BaseCommand):
     username = 'alphareception'
 
     # For Test
-    #username = 'benoit'
+    #username = 'askdj'
 
     product_list_tag = {
 		"name": "div",
@@ -112,7 +113,7 @@ class Command(BaseCommand):
     image_url_tag = {
     	"name": "img",
 		"attrs": {
-			"border": "0"
+			"vspace": "5"
             }
         }
 
@@ -149,10 +150,20 @@ class Command(BaseCommand):
     def _product_crawler(self):
     	from products.models import Product, Picture, Price
     	
+    	#Entry url : ../photos/articles/mediums/263.jpg
+    	#Out url : http://www.alpha-reception.com/photos/articles/mediums/263.jpg
+    	def get_right_img_url(img_url):
+    		return self.base_url + '/' + image_url[3:]
+
+    	def _to_decimal(str):
+    		from decimal import Decimal as D
+    		return D(str.strip().replace(u'€', '').replace(',', '.').replace(' ', ''))
+
+
     	while True:
 			try:
 				product_url, category = self.product_links.popitem()
-				print "product_url : %s" % product_url
+				#print "product_url : %s" % product_url
 			except KeyError:
 				break
 
@@ -165,7 +176,8 @@ class Command(BaseCommand):
 			#Get the image
 			try:
 				image_url = product_soup.find(self.image_url_tag["name"], self.image_url_tag["attrs"]).get('src')
-				print "image_url : %s" % image_url
+				image_url = get_right_img_url(image_url)
+				#print "image_url : %s" % image_url
 			except Exception, e:
 				print "pass image: %s" % str(e)
 				pass
@@ -173,7 +185,7 @@ class Command(BaseCommand):
 			#Get the title
 			try:
 				summary = product_soup.find(self.summary_tag["name"], self.summary_tag["attrs"]).text
-				print "summary : %s" % summary
+				#print "summary : %s" % summary
 			except Exception, e:
 				print "pass title: %s" % str(e)
 				pass
@@ -182,44 +194,45 @@ class Command(BaseCommand):
 			#Get the description and price
 			try:
 				union_list_tmp = product_soup.find(self.description_tag["name"], self.description_tag["attrs"])
-				description = union_list_tmp.find("div")
-				price = description.find_next("div").text
-				print description.text
-				print price.split(' ', 1)[0]
+				description_tmp = union_list_tmp.find("div")
+				price = description_tmp.find_next("div").text
+				description = description_tmp.text
+				#print description_tmp
+				#print _to_decimal(price.split(' ', 1)[0])
 
 				#print "description : %s" % description
 			except Exception, e:
 				description = " "
-				print "pass description: %s" % str(e)
+				print "pass description or price: %s" % str(e)
 				pass
 
 
-			# deposit_amount = 0.0
+			deposit_amount = 0.0
 
-			# from products.models import Category, Price
-			# from products.choices import UNIT
-			# print category_mapping[category]
-			# try:
-			# 	product = Product.objects.create(
-			# 		summary=summary, description=description,
-			# 		deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-			# 		category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
-			# 	)
+			from products.models import Category, Price
+			from products.choices import UNIT
+			print category_mapping[category]
+			try:
+				product = Product.objects.create(
+					summary=summary, description=description,
+					deposit_amount=deposit_amount, address=self.address, owner=self.patron,
+					category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
+				)
 
-			# 	try:
-			# 		with closing(urlopen(image_url)) as image:
-			# 			product.pictures.add(Picture.objects.create(
-			# 				image=uploadedfile.SimpleUploadedFile(
-			# 					name='img', content=image.read())
-			# 				)
-			# 			)
-			# 	except HTTPError as e:
-			# 		print '\nerror loading image for object at url:', self.base_url + product_url
+				try:
+					with closing(urlopen(image_url)) as image:
+						product.pictures.add(Picture.objects.create(
+							image=uploadedfile.SimpleUploadedFile(
+								name='img', content=image.read())
+							)
+						)
+				except HTTPError as e:
+					print '\nerror loading image for object at url:', self.base_url + product_url
 
-			# except Exception, e:
-			# 	print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
-			# 	print 'error: %s' % str(e)
-			# 	pass
+			except Exception, e:
+				print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
+				print 'error: %s' % str(e)
+				pass
 
 
     def handle(self, *args, **options):
@@ -304,26 +317,26 @@ class Command(BaseCommand):
 			'/chauffage-8/',
         ]
 
-        # Get the user
-   #      try:
-   #      	self.patron = Patron.objects.get(username=self.username)
-   #      except Patron.DoesNotExist:
-			# print "Can't find user 'clownmont'"
-			# return
+        #Get the user
+        try:
+        	self.patron = Patron.objects.get(username=self.username)
+        except Patron.DoesNotExist:
+			print "Can't find user 'alphareception'"
+			return
 
-   #      self.address = self.patron.default_address or self.patron.addresses.all()[0]
+        self.address = self.patron.default_address or self.patron.addresses.all()[0]
 
-        self._subpage_crawler()
-        self._product_crawler()
-  #       for i in xrange(self.thread_num):
-  #       	threading.Thread(target=self._subpage_crawler).start()
-  #       for thread in threading.enumerate():
-  #       	if thread is not threading.currentThread():
-  #       		thread.join()
+        # self._subpage_crawler()
+        # self._product_crawler()
+        for i in xrange(self.thread_num):
+        	threading.Thread(target=self._subpage_crawler).start()
+        for thread in threading.enumerate():
+        	if thread is not threading.currentThread():
+        		thread.join()
 
-		# # Create the products in the database
-		# for i in xrange(self.thread_num):
-		# 	threading.Thread(target=self._product_crawler).start()
-		# for thread in threading.enumerate():
-		# 	if thread is not threading.currentThread():
-		# 		thread.join()
+		# Create the products in the database
+		for i in xrange(self.thread_num):
+			threading.Thread(target=self._product_crawler).start()
+		for thread in threading.enumerate():
+			if thread is not threading.currentThread():
+				thread.join()
