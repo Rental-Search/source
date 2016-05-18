@@ -58,6 +58,7 @@ category_mapping = {
 	'/plat-bac-gastronomique-34/': 'bac-gastro',
 	# Consommables
 	'/consommables-11/': 'decoration',
+	'/consommables-11/page-2.html': 'decoration',
 	# Evenementiel
 	'/mobilier-evenementiel-93/': 'meuble',
 	'/mobilier-evenementiel-93/page-2.html': 'meuble',
@@ -292,6 +293,7 @@ class Command(BaseCommand):
 			'/plat-bac-gastronomique-34/',
 			# Consommables
 			'/consommables-11/',
+			'/consommables-11/page-2.html',
 			# Evenementiel
 			'/mobilier-evenementiel-93/',
 			'/decors-evenementiel-50/',
