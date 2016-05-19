@@ -62,10 +62,10 @@ class Command(BaseCommand):
 
     thread_num = 1
 
-    #username = 'alphalocation'
+    username = 'alphalocation'
 
     # For Test
-    username = 'arclite'
+    #username = 'arclite'
 
     product_list_tag = {
 		"name": "div",
@@ -146,7 +146,7 @@ class Command(BaseCommand):
 			try:
 				image_url = product_soup.find(self.image_url_tag["name"], self.image_url_tag["attrs"]).get('src')
 				image_url = get_right_img_url(image_url)
-				#print "image_url : %s" % image_url
+				print "image_url : %s" % image_url
 			except Exception, e:
 				print "pass image: %s" % str(e)
 				pass
@@ -211,7 +211,7 @@ class Command(BaseCommand):
         self.product_links = {}
 
         self.product_families = [
-        	'/sablage-hydrogommage-115/',
+        	# '/sablage-hydrogommage-115/',
         	# '/consommables-116/',
         	# '/consommables-116/page-2.html',
         	# '/betonnieres-92/',
@@ -227,7 +227,7 @@ class Command(BaseCommand):
         	# '/peinture-83/',
         	# '/decoration-84/',
         	# '/travail-du-bois-85/',
-        	# '/demenagement-80/',
+        	 '/demenagement-80/',
         	# '/camion-110/',
         	# '/nacelle-fleches-articulees-111/',
         	# '/plateforme-ciseaux-113/',
@@ -261,22 +261,22 @@ class Command(BaseCommand):
         try:
         	self.patron = Patron.objects.get(username=self.username)
         except Patron.DoesNotExist:
-			print "Can't find user 'clownmont'"
+			print "Can't find user 'alpha location"
 			return
 
         self.address = self.patron.default_address or self.patron.addresses.all()[0]
 
-        self._subpage_crawler()
-        self._product_crawler()
-  #       for i in xrange(self.thread_num):
-  #       	threading.Thread(target=self._subpage_crawler).start()
-  #       for thread in threading.enumerate():
-  #       	if thread is not threading.currentThread():
-  #       		thread.join()
+        # self._subpage_crawler()
+        # self._product_crawler()
+        for i in xrange(self.thread_num):
+        	threading.Thread(target=self._subpage_crawler).start()
+        for thread in threading.enumerate():
+        	if thread is not threading.currentThread():
+        		thread.join()
 
-		# # Create the products in the database
-		# for i in xrange(self.thread_num):
-		# 	threading.Thread(target=self._product_crawler).start()
-		# for thread in threading.enumerate():
-		# 	if thread is not threading.currentThread():
-		# 		thread.join()
+		# Create the products in the database
+		for i in xrange(self.thread_num):
+			threading.Thread(target=self._product_crawler).start()
+		for thread in threading.enumerate():
+			if thread is not threading.currentThread():
+				thread.join()
