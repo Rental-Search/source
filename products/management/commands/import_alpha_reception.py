@@ -65,8 +65,8 @@ category_mapping = {
 	'/decors-evenementiel-50/': 'decoration',
 	'/prestations-evenementielles-58/': 'jeux-de-bistrot',
 	'/structures-gonflables-89/': 'jeux-dadresse',
-	'/stands-forains-90/': 'jeux/jeux-de-bistrot',
-	'/stands-forains-90/page-2.html': 'jeux/jeux-de-bistrot',
+	'/stands-forains-90/': 'jeux-de-bistrot',
+	'/stands-forains-90/page-2.html': 'jeux-de-bistrot',
 	'/jeux-de-bois-geant-91/': 'jeux-de-societe',
 	# Mobilier-Chapiteaux
 	'/chaise-banc-salon-club-79/': 'chaises',
