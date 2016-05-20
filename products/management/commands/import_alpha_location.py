@@ -173,6 +173,7 @@ class Command(BaseCommand):
 				#print "description : %s" % description
 			except Exception, e:
 				description = " "
+				price = " "
 				print "pass description: %s" % str(e)
 				pass
 
@@ -198,6 +199,14 @@ class Command(BaseCommand):
 						)
 				except HTTPError as e:
 					print '\nerror loading image for object at url:', self.base_url + product_url
+
+				# Add the price to the product
+				try:
+					if price:
+						product.prices.add(Price(amount=price, unit=UNIT.DAY))
+				except Exception, e:
+					print 'PRICE ERROR: %s' % str(e)
+					pass
 
 			except Exception, e:
 				print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
