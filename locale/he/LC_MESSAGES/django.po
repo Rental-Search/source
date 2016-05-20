@@ -45,7 +45,6 @@ msgstr ""
 #: accounts/admin.py:125
 #: eloue/templates/dashboard/account/_base_account.jade:3
 #: eloue/templates/dk/dashboard/account/_base_account.jade:3
-#, fuzzy
 msgid "Profil"
 msgstr "פרופיל"
 
