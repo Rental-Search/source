@@ -24,6 +24,10 @@ h2 {% trans "Vos informations personnelles" %}
     .col-sm-6
       input(type="text", name="city", placeholder="{% trans 'Ville' %} *", ng-model="currentUser.default_address.city", required).form-control
       span.text-danger(ng-show="bookingForm.city.$error.required && bookingSubmitted", translate="required_field")
+.row(ng-if="!addShipping || (addShipping && !noPhone)")
+    .col-sm-12
+      input(type="text", name="phoneNumber", placeholder="{% trans 'Téléphone' %} *", required, ng-model="currentUser.default_number.number").form-control
+      span.text-danger(ng-show="bookingForm.phoneNumber.$error.required && bookingSubmitted", translate="required_field")
 .row: .col-xs-12
     .shipping-option(ng-show="shippingAllowed")
       include _pickup_info

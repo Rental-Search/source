@@ -63,5 +63,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 ANALYTICS.update({
-                  'GOOGLE_ID': 'UA-58724631-1'
+                  'GOOGLE_ID': 'UA-58724631-1',
+                  'SEGMENT_ID': 'i88y9ipduvQyXRW63WiC9XeAWORuTxTa',
                   })
