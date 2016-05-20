@@ -2461,7 +2461,6 @@ msgstr "יום"
 
 #: eloue/templates/dashboard/account/_base_account.jade:3
 #: eloue/templates/dk/dashboard/account/_base_account.jade:3
-#, fuzzy
 msgid "Adresses"
 msgstr "כתובת"
 
