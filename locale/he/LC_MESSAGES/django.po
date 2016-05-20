@@ -2504,7 +2504,6 @@ msgstr "בוטל"
 #: eloue/templates/dashboard/account/profil.jade:5
 #: eloue/templates/dk/dashboard/account/profil.jade:5
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:5
-#, fuzzy
 msgid "Informations personnelles"
 msgstr "פרטים שלי "
 
@@ -2517,7 +2516,6 @@ msgstr ""
 #: eloue/templates/dashboard/account/profil.jade:26
 #: eloue/templates/dk/dashboard/account/profil.jade:26
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:26
-#, fuzzy
 msgid "Je suis un professionnel ?"
 msgstr "הצעות מעוסקים בהשכרות באופן מקצועי"
 
@@ -2547,7 +2545,6 @@ msgstr ""
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:34
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:111
 #: eloue/templates/dressbooking/dashboard/items/index.jade:105
-#, fuzzy
 msgid "Non"
 msgstr "שם משפחה"
 
@@ -2566,7 +2563,6 @@ msgstr ""
 #: eloue/templates/dashboard/account/profil.jade:71
 #: eloue/templates/dk/dashboard/account/profil.jade:71
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:71
-#, fuzzy
 msgid "Modifier une adresse"
 msgstr "עלך למסור כתובת"
 
@@ -2574,12 +2570,11 @@ msgstr "עלך למסור כתובת"
 #: eloue/templates/dk/dashboard/account/profil.jade:88
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:88
 msgid "téléphone par défaut"
-msgstr ""
+msgstr "טלפון"
 
 #: eloue/templates/dashboard/account/profil.jade:90
 #: eloue/templates/dk/dashboard/account/profil.jade:90
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:90
-#, fuzzy
 msgid "Téléphone par défaut"
 msgstr "טלפון"
 
@@ -2603,7 +2598,6 @@ msgstr ""
 #: eloue/templates/dashboard/account/profil.jade:117
 #: eloue/templates/dk/dashboard/account/profil.jade:117
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:117
-#, fuzzy
 msgid "Informations sur le permis"
 msgstr "מידע על בעל המנוי "
 
@@ -2616,7 +2610,6 @@ msgstr ""
 #: eloue/templates/dashboard/account/profil.jade:149
 #: eloue/templates/dk/dashboard/account/profil.jade:149
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:149
-#, fuzzy
 msgid "Enregistrez les informations"
 msgstr "פרטי המנהל "
 
@@ -2909,7 +2902,6 @@ msgstr ""
 #: eloue/templates/dashboard/dashboard/index.jade:18
 #: eloue/templates/dk/dashboard/dashboard/index.jade:18
 #: eloue/templates/dressbooking/dashboard/dashboard/index.jade:18
-#, fuzzy
 msgid "Statistiques"
 msgstr "הסטטיסטיקה שלך "
 
@@ -4170,10 +4162,6 @@ msgstr ""
 "\n"
 " התקשר אלינו-0544998859\n"
 
-#: eloue/templates/dk/jade/_product_list.jade:3
-msgid "annonces de location dans toute la France"
-msgstr "השכרות בכל ישראל "
-
 #: eloue/templates/dk/jade/_product_list.jade:25
 #: eloue/templates/dressbooking/jade/_product_list.jade:25
 #: eloue/templates/dressbooking/products/subcategory_list.jade:34
@@ -4181,6 +4169,10 @@ msgstr "השכרות בכל ישראל "
 #: eloue/templates/products/subcategory_list.jade:34
 msgid "Explorez toutes les annonces de location"
 msgstr "לגלות  את כל המודעות ההשכרות"
+
+#: eloue/templates/jade/_product_list.jade:4
+msgid "Annonces de location dans toute la France"
+msgstr "השכרות בכל ישראל"
 
 #: eloue/templates/dk/jade/product_details/_booking_form.jade:3
 #: eloue/templates/dressbooking/jade/product_details/aside/_owner_information.jade:34
@@ -6100,11 +6092,6 @@ msgstr "אנשים "
 #: eloue/templates/jade/product_details/main/_description.jade:73
 msgid "chambres"
 msgstr "חדרים"
-
-#: eloue/templates/jade/_product_list.jade:3
-#, fuzzy
-msgid "Annonces de location dans toute la France"
-msgstr "השכרות בכל ישראל "
 
 #: eloue/templates/jade/_product_list_article_head.jade:2
 #, python-format
