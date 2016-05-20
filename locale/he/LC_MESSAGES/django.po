@@ -2471,7 +2471,6 @@ msgstr ""
 
 #: eloue/templates/dashboard/account/password.jade:4
 #: eloue/templates/dk/dashboard/account/password.jade:4
-#, fuzzy
 msgid "Ancien mot de passe"
 msgstr "סיסמה "
 
@@ -2483,7 +2482,6 @@ msgstr "סיסמא החדשה  "
 
 #: eloue/templates/dashboard/account/password.jade:6
 #: eloue/templates/dk/dashboard/account/password.jade:6
-#, fuzzy
 msgid "Modification de votre mot de passe"
 msgstr "אישור סיסמא "
 
@@ -2495,7 +2493,6 @@ msgstr "אישור סיסמא "
 #: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:12
 #: eloue/templates/dk/dashboard/booking/_report_incendent.jade:15
 #: eloue/templates/dk/dashboard/items/add_period.jade:23
-#, fuzzy
 msgid "Annuler"
 msgstr "בוטל"
 
