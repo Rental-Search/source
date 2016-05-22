@@ -2388,7 +2388,7 @@ msgstr "להרשמם "
 #: eloue/templates/dashboard/account/_address_detail.jade:41
 #: eloue/templates/dk/dashboard/account/_address_detail.jade:41
 msgid "Annonces associées à cette adresse"
-msgstr ""
+msgstr "מודעות הקשורות לכתובת ז"
 
 #: eloue/templates/dashboard/account/_address_detail.jade:51
 #: eloue/templates/dashboard/booking/_bookings_list.jade:38
@@ -2506,7 +2506,7 @@ msgstr "פרטים שלי "
 #: eloue/templates/dk/dashboard/account/profil.jade:13
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:13
 msgid "Modifiez mon image"
-msgstr ""
+msgstr "שנה תמונה פרופיל"
 
 #: eloue/templates/dashboard/account/profil.jade:26
 #: eloue/templates/dk/dashboard/account/profil.jade:26
@@ -2547,13 +2547,13 @@ msgstr "שם משפחה"
 #: eloue/templates/dk/dashboard/account/profil.jade:64
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:64
 msgid "adresse par défaut"
-msgstr ""
+msgstr "כתובת ברירת מחדל"
 
 #: eloue/templates/dashboard/account/profil.jade:66
 #: eloue/templates/dk/dashboard/account/profil.jade:66
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:66
 msgid "Adresse par défaut"
-msgstr ""
+msgstr "כתובת ברירת מחדל"
 
 #: eloue/templates/dashboard/account/profil.jade:71
 #: eloue/templates/dk/dashboard/account/profil.jade:71
@@ -2577,7 +2577,7 @@ msgstr "טלפון"
 #: eloue/templates/dk/dashboard/account/profil.jade:97
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:97
 msgid "quelques mots sur vous"
-msgstr ""
+msgstr "כמה מילים על עצמך"
 
 #: eloue/templates/dashboard/account/profil.jade:98
 #: eloue/templates/dk/dashboard/account/profil.jade:98
@@ -2588,7 +2588,7 @@ msgstr ""
 #: eloue/templates/dashboard/account/profil.jade:103
 #: eloue/templates/dk/dashboard/account/profil.jade:103
 msgid "J’accepte de recevoir la newsletter e-loue"
-msgstr ""
+msgstr "אני מסכים לקבל עדכונים ומבצעים מאי-לו השכרות"
 
 #: eloue/templates/dashboard/account/profil.jade:117
 #: eloue/templates/dk/dashboard/account/profil.jade:117
@@ -2645,37 +2645,31 @@ msgstr ""
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:48
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:48
-#, fuzzy
 msgid "Réservation annulée"
 msgstr "ההזמנה"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:50
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:50
-#, fuzzy
 msgid "Réservation acceptée par"
 msgstr "ההזמנה"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:52
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:52
-#, fuzzy
 msgid "Réservation rejetée par"
 msgstr "ההזמנה"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:54
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:54
-#, fuzzy
 msgid "Réservation terminée"
 msgstr "ההזמנה"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:56
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:56
-#, fuzzy
 msgid "Réservation dépassée"
 msgstr "ההזמנות "
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:58
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:58
-#, fuzzy
 msgid "Réservation en cours"
 msgstr "ההזמנות "
 
@@ -2690,7 +2684,6 @@ msgstr ""
 #: eloue/templates/dashboard/messages/_details_reservation.jade:9
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:67
 #: eloue/templates/dk/dashboard/messages/_details_reservation.jade:9
-#, fuzzy
 msgid "Début"
 msgstr "תאריך התחלה "
 
@@ -2892,7 +2885,7 @@ msgstr "חבר/ה מאז"
 #: eloue/templates/dk/dashboard/dashboard/index.jade:12
 #: eloue/templates/dressbooking/dashboard/dashboard/index.jade:12
 msgid "Mettre à jour mes infos"
-msgstr ""
+msgstr "עדכון פרטים אישיים "
 
 #: eloue/templates/dashboard/dashboard/index.jade:18
 #: eloue/templates/dk/dashboard/dashboard/index.jade:18
@@ -2937,7 +2930,6 @@ msgstr "זמן התגובה הממוצע"
 
 #: eloue/templates/dashboard/dashboard/index.jade:53
 #: eloue/templates/dk/dashboard/dashboard/index.jade:53
-#, fuzzy
 msgid "Votre activité sur e-loue"
 msgstr "מזמין אותך  לאי-לו "
 
@@ -3264,7 +3256,6 @@ msgstr "מחשב עם אינטרנט"
 #: eloue/templates/dk/dashboard/items/_items_list.jade:8
 #: eloue/templates/dk/dashboard/items/index.jade:5
 #: eloue/templates/dressbooking/dashboard/items/index.jade:5
-#, fuzzy
 msgid "Catégories"
 msgstr "קטגוריה "
 
@@ -3409,7 +3400,6 @@ msgstr "הסטטיסטיקה שלך "
 #: eloue/templates/dk/dashboard/items/index.jade:86
 #: eloue/templates/dk/dashboard/items/tarifs.jade:131
 #: eloue/templates/dressbooking/dashboard/items/index.jade:88
-#, fuzzy
 msgid "Enregistrez les modifications"
 msgstr "תאריך שינוי"
 
@@ -3488,7 +3478,6 @@ msgstr "שוכר "
 
 #: eloue/templates/dashboard/items/tabs.jade:7
 #: eloue/templates/dk/dashboard/items/tabs.jade:7
-#, fuzzy
 msgid "Photos et infos"
 msgstr "תמונות ומיקום "
 
@@ -3502,11 +3491,10 @@ msgstr "מחירון "
 #: eloue/templates/dashboard/items/tabs.jade:17
 #: eloue/templates/dk/dashboard/items/tabs.jade:17
 msgid "Calendrier"
-msgstr ""
+msgstr "לוח שנה"
 
 #: eloue/templates/dashboard/items/tabs.jade:22
 #: eloue/templates/dk/dashboard/items/tabs.jade:22
-#, fuzzy
 msgid "Conditions"
 msgstr "השכרות "
 
@@ -3720,7 +3708,6 @@ msgstr ""
 
 #: eloue/templates/dashboard/jade/_base_dashboard.jade:23
 #: eloue/templates/dk/dashboard/jade/_base_dashboard.jade:23
-#, fuzzy
 msgid "Tableau de board"
 msgstr "דך הבית "
 
@@ -9209,3 +9196,36 @@ msgstr "Latitude\\longitude or address are required"
 
 #~ msgid "L’équipe e-loue"
 #~ msgstr "צוות אי-לו "
+
+#: eloue/templates/how_it_works/_top_content.jade:3
+msgid "e-loue, vous pouvez gagner de l’argent et économiser de l’argent !"
+msgstr "עם אי-לו אתם יכולים לחסוך או להרוויח כסף !"
+
+#: eloue/templates/how_it_works/_top_content.jade:7
+msgid "c’est pratique, c’est simple, et c’est 100% sécurisé"
+msgstr "זה שימושי , פשוט, וזה בטוח ב-100%"
+
+#: eloue/templates/how_it_works/_bottom_content.jade:18
+msgid "Déposez vos annonces"
+msgstr "תכניסות מודעות"
+
+#: eloue/templates/how_it_works/_bottom_content.jade:20
+msgid "Cherchez des biens à louer"
+msgstr "חפשו מוצרים להשכרה "
+
+#: eloue/templates/how_it_works/_bottom_content.jade:8
+msgid "Je gagne de l’argent"
+msgstr "הרווחתי כסף"
+
+#: eloue/templates/how_it_works/_bottom_content.jade:13
+msgid "J’économise de l’argent"
+msgstr "נמעתי מקניה אז חסרתי כסף"
+
+#: eloue/templates/how_it_works/_bottom_content.jade:10
+#: eloue/templates/how_it_works/_bottom_content.jade:15
+msgid "grâce à e-loue"
+msgstr "בזכות אי-לו השכרות"
+
+#: eloue/templates/jade/_homepage_caroussel_baaner.jade:2
+msgid "Trouvez toutes les annonces de location près de chez vous"
+msgstr "העולם להשכרה !  חפשו את המודעות להשכרות  שבסביבתך ! "
