@@ -146,8 +146,9 @@ class Command(BaseCommand):
 			try:
 				image_url = product_soup.find(self.image_url_tag["name"], self.image_url_tag["attrs"]).get('src')
 				image_url = get_right_img_url(image_url)
-				print "image_url : %s" % image_url
+				#print "image_url : %s" % image_url
 			except Exception, e:
+				image_url = None
 				print "pass image: %s" % str(e)
 				pass
 
@@ -156,6 +157,7 @@ class Command(BaseCommand):
 				summary = product_soup.find(self.summary_tag["name"], self.summary_tag["attrs"]).text
 				#print "summary : %s" % summary
 			except Exception, e:
+				summary = " "
 				print "pass title: %s" % str(e)
 				pass
 
@@ -190,15 +192,16 @@ class Command(BaseCommand):
 					category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
 				)
 
-				try:
-					with closing(urlopen(image_url)) as image:
-						product.pictures.add(Picture.objects.create(
-							image=uploadedfile.SimpleUploadedFile(
-								name='img', content=image.read())
+				if image_url:
+					try:
+						with closing(urlopen(image_url)) as image:
+							product.pictures.add(Picture.objects.create(
+								image=uploadedfile.SimpleUploadedFile(
+									name='img', content=image.read())
+								)
 							)
-						)
-				except HTTPError as e:
-					print '\nerror loading image for object at url:', self.base_url + product_url
+					except HTTPError as e:
+						print '\nerror loading image for object at url:', self.base_url + product_url
 
 				# Add the price to the product
 				try:
@@ -275,17 +278,17 @@ class Command(BaseCommand):
 
         self.address = self.patron.default_address or self.patron.addresses.all()[0]
 
-        # self._subpage_crawler()
-        # self._product_crawler()
-        for i in xrange(self.thread_num):
-        	threading.Thread(target=self._subpage_crawler).start()
-        for thread in threading.enumerate():
-        	if thread is not threading.currentThread():
-        		thread.join()
+        self._subpage_crawler()
+        self._product_crawler()
+  #       for i in xrange(self.thread_num):
+  #       	threading.Thread(target=self._subpage_crawler).start()
+  #       for thread in threading.enumerate():
+  #       	if thread is not threading.currentThread():
+  #       		thread.join()
 
-		# Create the products in the database
-		for i in xrange(self.thread_num):
-			threading.Thread(target=self._product_crawler).start()
-		for thread in threading.enumerate():
-			if thread is not threading.currentThread():
-				thread.join()
+		# # Create the products in the database
+		# for i in xrange(self.thread_num):
+		# 	threading.Thread(target=self._product_crawler).start()
+		# for thread in threading.enumerate():
+		# 	if thread is not threading.currentThread():
+		# 		thread.join()
