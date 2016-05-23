@@ -243,10 +243,8 @@ class ContactProView(View):
             phone_number = form.cleaned_data['phone_number']
             activity_field = form.cleaned_data['activity_field']
             
-
             new_form = self.form_class()
             recipients = ['contact@e-loue.com']
-
 
             if activity_field and name and sender:
                 try:

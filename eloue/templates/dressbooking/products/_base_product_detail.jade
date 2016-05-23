@@ -74,24 +74,27 @@ block append content-body
                   include ../jade/product_details/main/_comments
                   {% endwith %}
         aside(data-ng-controller="BookingCtrl").col-sm-4
-          {% if is_pro %}
+          {% if is_pro %}         
           section.owner-information
             include ../jade/product_details/aside/_owner_information
+          {% if pro_online_booking %}
+          section.booking-form
+            include  ../jade/product_details/aside/_booking_form.jade
+          {% endif %}  
           {% else %}
           section.booking-form
             include  ../jade/product_details/aside/_booking_form.jade
           {% endif %}
           //-section.add-to-wishlist
           //-  include ../jade/product_details/aside/_add_to_wishlist
-          {% if is_pro %}
-          section.booking-form
-            include  ../jade/product_details/aside/_booking_form.jade
-          {% else %}
+          {% if not is_pro %}
           section.owner-information
             include ../jade/product_details/aside/_owner_information
           {% endif %}
+          {% if product_list %}
           section.similar-listing
             include ../jade/product_details/aside/_similar_listing
+          {% endif %}
           //-section.connected-with-owner
           //-  include ../jade/product_details/aside/_connected_with_owner
           include ../jade/_pop_up_reserve.jade
