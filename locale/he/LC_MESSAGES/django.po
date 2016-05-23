@@ -1575,7 +1575,6 @@ msgid "Demande du client :"
 msgstr "הבקשה להשכרה "
 
 #: eloue/templates/accounts/emails/contact_pro_email_subject.txt:1
-#, fuzzy
 msgid "e-loue : demande de devis"
 msgstr "בקשה להצעת מחיר  "
 
@@ -2354,7 +2353,6 @@ msgstr "כתובת ברירת מחדל "
 #: eloue/templates/dashboard/items/calendar.jade:64
 #: eloue/templates/dk/dashboard/account/_address_detail.jade:33
 #: eloue/templates/dk/dashboard/items/calendar.jade:64
-#, fuzzy
 msgid "Supprimer"
 msgstr "מחוק"
 
@@ -2621,7 +2619,6 @@ msgstr "שלח הודעה"
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:44
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:44
-#, fuzzy
 msgid "Demande de réservation par"
 msgstr "בקשה להזמנה "
 
@@ -2772,7 +2769,6 @@ msgstr "דיווח על תקלה "
 
 #: eloue/templates/dashboard/booking/_bookings_detaild.jade:157
 #: eloue/templates/dk/dashboard/booking/_bookings_detaild.jade:157
-#, fuzzy
 msgid "Note et commentaires"
 msgstr "השותף שלנו "
 
@@ -2817,19 +2813,16 @@ msgstr ""
 
 #: eloue/templates/dashboard/booking/_comment_and_rank.jade:6
 #: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:6
-#, fuzzy
 msgid "Noter et commenter votre réservation"
 msgstr "הודעה חדשה על ההזמנה שלך "
 
 #: eloue/templates/dashboard/booking/_comment_and_rank.jade:9
 #: eloue/templates/dk/dashboard/booking/_comment_and_rank.jade:9
-#, fuzzy
 msgid "Comment s’est passé votre réservation ?"
 msgstr "הודעה חדשה על ההזמנה שלך "
 
 #: eloue/templates/dashboard/booking/_notification_empty_booking.jade:5
 #: eloue/templates/dk/dashboard/booking/_notification_empty_booking.jade:5
-#, fuzzy
 msgid "Pas encore de réservation"
 msgstr "בקשה להזמנה "
 
@@ -6174,7 +6167,6 @@ msgstr ""
 "נוספים</a>"
 
 #: eloue/templates/jade/_publish_items_categories.jade:3
-#, fuzzy
 msgid "Choisissez une catégorie pour votre annonce"
 msgstr "בחר כתובת : "
 
@@ -6191,7 +6183,6 @@ msgid "High-tech"
 msgstr ""
 
 #: eloue/templates/jade/_publish_items_categories.jade:18
-#, fuzzy
 msgid "Réception"
 msgstr "ההזמנה"
 
@@ -6408,7 +6399,6 @@ msgid "Demande de devis envoyé"
 msgstr "בקשה להצעת מחיר "
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:6
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -6445,12 +6435,10 @@ msgstr ""
 "</p>\n"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:26
-#, fuzzy
 msgid "N’hésitez pas à nous demander un devis "
 msgstr " אל תהססו לכתוב לנו"
 
 #: eloue/templates/jade/pop_up_sections/_message_form.jade:26
-#, fuzzy
 msgid ""
 "via le formulaire ci‐dessous, nous nous ferons un plaisir de vous répondre "
 "le plus rapidement possible."
