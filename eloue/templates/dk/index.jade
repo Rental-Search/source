@@ -25,16 +25,13 @@ block append content-body
         section.banner
           include ./jade/_homepage_carousel_banner
         {% endcache %}
-        {% cache 43200 'homepage_insurance_static' LANGUAGE_CODE %}
-        section.insurances.framing
-          include ./jade/_insurances
-        {% endcache %}
         section.product-list
           include ./jade/_product_list
       main
         {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
-        section.watch-video: include ./jade/_watch_video
         section.professional-renter-content.framing: include ./jade/_professional_renter_content
+        section.float-comments.framing
+          include ./jade/_comments
         section.talk-about-us: include ./jade/_talk_about_us
         {% endcache %}
 

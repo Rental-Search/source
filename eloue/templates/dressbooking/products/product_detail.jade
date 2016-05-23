@@ -1,0 +1,33 @@
+.carousel-conteiner#tabs-photos
+    .col-md-7
+      {% with product_object.pictures.all as pictures %}
+      {% if pictures.count %}
+      #carousel-product.carousel.slide(data-ride="carousel")
+        .carousel-inner
+          {% for picture in pictures %}
+          .item(style="{% if picture.db_display.url %}background-image: url({{ picture.db_display.url }}){% endif %}", class="{% if forloop.first %}active{% endif %}")
+          {% endfor %}
+        a(href="#carousel-product", role="button", data-slide="prev").left.carousel-control
+          i.flaticon.solid.left-2
+        a(href="#carousel-product", role="button", data-slide="next").right.carousel-control
+          i.flaticon.solid.right-2
+      .items-thumbnail-inner
+        each picture, index in product_object.pictures.all
+            div: a.items-thumbnail(href="#carousel-product", data-slide-to="{{ index }}"): img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}")
+      {% else %}
+      .carousel
+        .carousel-inner
+          .item
+      {% endif %}
+      {% endwith %}
+    {% if not is_pro %}
+    .col-md-5
+      .map-container
+        .map-inner
+          span.whirly
+          .map#map-canvas-small(locationY="{{ product.location.y|stringformat:'f' }}", locationX="{{ product.location.x|stringformat:'f' }}")
+      .location-title-inner
+        .location-title
+          i.flaticon.solid.loca.location-pin-3.icon-li.icon-lg
+          small {{ product.city|title }}{% if product.zipcode %}, {{ product.zipcode }}{% endif %}
+    {% endif %}

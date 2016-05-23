@@ -152,7 +152,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                 h3
                     b {% trans "Description de l'incident" %}
                 p(ng-bind="sinister.description")
-        .block-with-thumbnail.notification.indent-md-v(ng-show="commentList")
+        .block-with-thumbnail.notification.indent-md-v(ng-show="commentList", ng-repeat="comment in commentList")
             .col-thumbnail
                 .thumbnail: .icon-action: i.icon-lg.flaticon.stroke.mail
             .col-exposition.text-action

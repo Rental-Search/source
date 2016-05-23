@@ -45,7 +45,7 @@
   border: px(1) solid lighten($gray-medium, 10%)
   &:hover
     background-color: $gray-lighter
-  
+
 .btn
   font-size: $font-size-base
   display: table-cell
@@ -229,6 +229,7 @@ label.check-btn
     margin: 0
     overflow: hidden
     max-height: none !important
+    text-align: right
     li
       color: $gray-medium
       &.highlighted
@@ -288,7 +289,7 @@ input[type="email"],
   +placeholder($placeholder_color)
   background: white
   font-family: inherit !important
-  font-weight: $fw-semibold 
+  font-weight: $fw-semibold
   color: $gray-dark
   min-height: $form-height
   padding: 0 1em
@@ -298,6 +299,7 @@ input[type="email"],
   transition: border-color $trns-fast
   overflow: visible
   +border-radius($bdrs)
+  text-align: right
   &.table-form
     background-color: transparent
     text-align: right
@@ -356,4 +358,3 @@ textarea
   textarea
     border: none
     padding: 0
-
