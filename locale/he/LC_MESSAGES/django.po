@@ -2160,7 +2160,6 @@ msgstr "פרטים נוספים "
 
 #: eloue/templates/contact_us/_breadcrumbs.jade:7
 #: eloue/templates/dressbooking/contact_us/_breadcrumbs.jade:7
-#, fuzzy
 msgid "Contactez‐nous"
 msgstr "צור קשר"
 
@@ -2185,7 +2184,6 @@ msgstr ""
 
 #: eloue/templates/contact_us/_new_contact_form.html:24
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:24
-#, fuzzy
 msgid "Votre e‐mail"
 msgstr "דואר אלקטרוני שלך "
 
@@ -2196,7 +2194,6 @@ msgstr ""
 
 #: eloue/templates/contact_us/_new_contact_form.html:42
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:42
-#, fuzzy
 msgid "Demande d'information"
 msgstr "הבקשה להשכרה "
 
@@ -2207,13 +2204,11 @@ msgstr ""
 
 #: eloue/templates/contact_us/_new_contact_form.html:44
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:44
-#, fuzzy
 msgid "Inscription / Connexion"
 msgstr "הרשמה "
 
 #: eloue/templates/contact_us/_new_contact_form.html:45
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:45
-#, fuzzy
 msgid "Tableau de bord / Espace client"
 msgstr "דך הבית "
 
@@ -2224,37 +2219,31 @@ msgstr ""
 
 #: eloue/templates/contact_us/_new_contact_form.html:47
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:47
-#, fuzzy
 msgid "Réservations / Locations"
 msgstr "ההזמנות "
 
 #: eloue/templates/contact_us/_new_contact_form.html:48
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:48
-#, fuzzy
 msgid "Paiement / Caution"
 msgstr "דירה/בית "
 
 #: eloue/templates/contact_us/_new_contact_form.html:49
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:49
-#, fuzzy
 msgid "Assurance"
 msgstr "ביטוח כלול"
 
 #: eloue/templates/contact_us/_new_contact_form.html:50
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:50
-#, fuzzy
 msgid "Suggestions"
 msgstr "הרשמה"
 
 #: eloue/templates/contact_us/_new_contact_form.html:51
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:51
-#, fuzzy
 msgid "Félicitations"
 msgstr "הערכות"
 
 #: eloue/templates/contact_us/_new_contact_form.html:52
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:52
-#, fuzzy
 msgid "Relation presse"
 msgstr "שולמו דמי קדימה "
 
@@ -2277,13 +2266,11 @@ msgstr ""
 
 #: eloue/templates/contact_us/_new_contact_form.html:88
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:88
-#, fuzzy
 msgid "champs obligatoires"
-msgstr "* = שדה חובה"
+msgstr "= שדה חובה"
 
 #: eloue/templates/contact_us/_new_contact_form.html:94
 #: eloue/templates/dressbooking/contact_us/_new_contact_form.html:94
-#, fuzzy
 msgid "Envoyer le message"
 msgstr "שלח הודעה"
 
@@ -2361,7 +2348,7 @@ msgstr "להמשיך  "
 #: eloue/templates/dashboard/account/_address_detail.jade:27
 #: eloue/templates/dk/dashboard/account/_address_detail.jade:27
 msgid "Addresse par défaut"
-msgstr ""
+msgstr "כתובת ברירת מחדל "
 
 #: eloue/templates/dashboard/account/_address_detail.jade:33
 #: eloue/templates/dashboard/items/calendar.jade:64
@@ -2528,7 +2515,7 @@ msgstr "הצעות מעוסקים בהשכרות באופן מקצועי"
 #: eloue/templates/dressbooking/dashboard/account/profil.jade:106
 #: eloue/templates/dressbooking/dashboard/items/index.jade:101
 msgid "Oui"
-msgstr ""
+msgstr "כן"
 
 #: eloue/templates/dashboard/account/profil.jade:34
 #: eloue/templates/dashboard/account/profil.jade:111
@@ -2803,13 +2790,11 @@ msgstr ""
 
 #: eloue/templates/dashboard/booking/_bookings_list.jade:13
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:13
-#, fuzzy
 msgid "Propriétaires"
 msgstr "בעלים "
 
 #: eloue/templates/dashboard/booking/_bookings_list.jade:17
 #: eloue/templates/dk/dashboard/booking/_bookings_list.jade:17
-#, fuzzy
 msgid "Locataires"
 msgstr "שוכר "
 
@@ -2903,7 +2888,6 @@ msgstr "מודעות שפורסמו "
 #: eloue/templates/dashboard/dashboard/index.jade:24
 #: eloue/templates/dk/dashboard/dashboard/index.jade:24
 #: eloue/templates/dressbooking/dashboard/dashboard/index.jade:24
-#, fuzzy
 msgid "locations effectuées"
 msgstr "השכרות שבוצעו "
 
@@ -3713,7 +3697,6 @@ msgstr "דך הבית "
 
 #: eloue/templates/dashboard/messages/_aside_product_detail.jade:4
 #: eloue/templates/dk/dashboard/messages/_aside_product_detail.jade:4
-#, fuzzy
 msgid "Réservation associée à"
 msgstr "ההזמנות "
 
@@ -3764,7 +3747,6 @@ msgstr "אורך  ההשכרה שלך  "
 
 #: eloue/templates/dashboard/messages/_form_reservation.jade:32
 #: eloue/templates/dk/dashboard/messages/_form_reservation.jade:32
-#, fuzzy
 msgid "Prix de la location"
 msgstr "של ההשכרה "
 
@@ -3786,7 +3768,6 @@ msgstr "הזמן "
 
 #: eloue/templates/dashboard/messages/_notification_empty_messages.jade:5
 #: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:5
-#, fuzzy
 msgid "Pas encore de conversation"
 msgstr "אימות סיסמה חדשה"
 
@@ -3799,7 +3780,6 @@ msgstr ""
 
 #: eloue/templates/dashboard/messages/_notification_empty_messages.jade:7
 #: eloue/templates/dk/dashboard/messages/_notification_empty_messages.jade:7
-#, fuzzy
 msgid "Commencer à rechercher une annonce"
 msgstr "הערות הקשורות  למודעה הזו"
 
@@ -5990,7 +5970,6 @@ msgid "Assurance incluse et automatique.<br>Aucun échange d’argent."
 msgstr "ביטוח כלול, אוטומטי .<br>אין חילופי כסף."
 
 #: eloue/templates/jade/_location_list.jade:3
-#, fuzzy
 msgid "Location partout en France"
 msgstr "השכרות בכל ישראל "
 
@@ -6018,7 +5997,6 @@ msgid "mot de passe"
 msgstr "סיסמה "
 
 #: eloue/templates/jade/_log_in.jade:47
-#, fuzzy
 msgid "Vous n'êtes pas encore membre e-loue ?"
 msgstr "? אתה עדיין לא חבר באי-לו  - להשכרה"
 
@@ -6183,9 +6161,17 @@ msgid ""
 "professionnels. Nos membres viennent chercher tout type de produit à louer, "
 "dans toute la France. Les plus grands loueurs nous font déjà confiance, "
 "alors pourquoi pas vous ? \n"
-"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">en "
+"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">En "
 "savoir plus</a>"
 msgstr ""
+"\n"
+"\n"
+"      <p> אי-לו השכרות הוא האתר הראשון  בישראל המתמחה בנושא "
+"השכרות מכל הסוגים  שמתאים  לבעלי עסקים , הקהילה , "
+"שלנו מחפשת  על בסיס יום יומי מוצרים להשכרה בכל ישראל, "
+"ומחוץ לה. חברות גדולות ומוכרות כבר הצטרפו , מה אתכם ? \n"
+"      </p><a href=\"%(subscription_url)s\" class=\"link-success-color\">פרטים"
+"נוספים</a>"
 
 #: eloue/templates/jade/_publish_items_categories.jade:3
 #, fuzzy
