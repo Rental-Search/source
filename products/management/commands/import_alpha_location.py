@@ -278,17 +278,17 @@ class Command(BaseCommand):
 
         self.address = self.patron.default_address or self.patron.addresses.all()[0]
 
-        self._subpage_crawler()
-        self._product_crawler()
-  #       for i in xrange(self.thread_num):
-  #       	threading.Thread(target=self._subpage_crawler).start()
-  #       for thread in threading.enumerate():
-  #       	if thread is not threading.currentThread():
-  #       		thread.join()
+        # self._subpage_crawler()
+        # self._product_crawler()
+        for i in xrange(self.thread_num):
+        	threading.Thread(target=self._subpage_crawler).start()
+        for thread in threading.enumerate():
+        	if thread is not threading.currentThread():
+        		thread.join()
 
-		# # Create the products in the database
-		# for i in xrange(self.thread_num):
-		# 	threading.Thread(target=self._product_crawler).start()
-		# for thread in threading.enumerate():
-		# 	if thread is not threading.currentThread():
-		# 		thread.join()
+		# Create the products in the database
+		for i in xrange(self.thread_num):
+			threading.Thread(target=self._product_crawler).start()
+		for thread in threading.enumerate():
+			if thread is not threading.currentThread():
+				thread.join()
