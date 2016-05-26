@@ -13,7 +13,7 @@ require.config(
             paths: {
                 "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
                 "underscore": "../../bower_components/lodash/lodash",
-                "jQuery": "../../bower_components/jquery/dist/jquery",
+                "jquery": "../../bower_components/jquery/dist/jquery",
                 "angular": "../../bower_components/angular/angular",
                 "angular-resource": "../../bower_components/angular-resource/angular-resource",
                 "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
@@ -25,10 +25,10 @@ require.config(
                 "angular-moment": "../../bower_components/angular-moment/angular-moment",
                 "moment": "../../bower_components/moment/min/moment-with-locales",
                 "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker",
-                "bootstrap-datepicker-fr":[
-                    "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr", 
-                    "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min"
-                ],
+                // "bootstrap-datepicker-fr":[
+                //     "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr", 
+                //     "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min"
+                // ],
                 "jquery-form": "../../bower_components/jquery-form/jquery.form",
                 "datejs": "../../bower_components/datejs/build/date",
                 "chosen": "../../bower_components/chosen/chosen.jquery",
@@ -43,7 +43,7 @@ require.config(
             },
             shim: {
                 "angular": {
-                    deps: ["jQuery"],
+                    deps: ["jquery"],
                     "exports": "angular"
                 },
                 "angular-cookies": ["angular"],
@@ -61,18 +61,17 @@ require.config(
                     deps: ["angular"],
                     "exports": "angular.mock"
                 },
-                "jQuery": {exports: "jQuery"},
-                "bootstrap": ["jQuery"],
-                "jquery-form": ["jQuery"],
-                "selectivizr": ["jQuery"],
-                "jquery-mousewheel": ["jQuery"],
-                "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
-                "jquery-autosize": ["jQuery"],
-                "bootstrap-datepicker": ["jQuery"],
-                "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
-                "chosen": ["jQuery"],
-                "toastr": ["jQuery"],
-                "formmapper": ["jQuery"],
+                // "bootstrap-datepicker-fr":["jquery", "bootstrap-datepicker"],
+                "jquery": {exports: "jquery"},
+                "bootstrap": ["jquery"],
+                "jquery-form": ["jquery"],
+                "selectivizr": ["jquery"],
+                "jquery-mousewheel": ["jquery"],
+                "custom-scrollbar": ["jquery", "jquery-mousewheel"],
+                "jquery-autosize": ["jquery"],
+                "chosen": ["jquery"],
+                "toastr": ["jquery"],
+                "formmapper": ["jquery"],
                 "angular-cookie": ["angular"]
             }
         };
@@ -80,14 +79,14 @@ require.config(
 );
 
 require([
-    "jQuery",
+    "jquery",
     "underscore",
     "angular",
     "bootstrap",
     "datejs",
     "chosen",
     "bootstrap-datepicker",
-    "bootstrap-datepicker-fr",
+    // "bootstrap-datepicker-fr",
     "formmapper",
     "filesaver",
     "jquery-mousewheel",

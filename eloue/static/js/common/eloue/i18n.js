@@ -5,6 +5,24 @@ define(["eloue/app",
     
     EloueApp.config(["$translateProvider", function ($translateProvider) {
         
+        // Datepicker locales from 
+        // https://github.com/eternicode/bootstrap-datepicker/tree/master/js/locales
+        // TODO remove and use locale files instead
+        
+        $.fn.datepicker.dates['fr'] = {
+            days: ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"],
+            daysShort: ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."],
+            daysMin: ["d", "l", "ma", "me", "j", "v", "s"],
+            months: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+            monthsShort: ["janv.", "févr.", "mars", "avril", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
+            today: "Aujourd'hui",
+            monthsTitle: "Mois",
+            clear: "Effacer",
+            weekStart: 1,
+            format: "dd/mm/yyyy"
+        };
+        
+        
         // French
         $translateProvider.translations("fr", {
             

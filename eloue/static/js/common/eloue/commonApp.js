@@ -10,7 +10,7 @@ define([
     "datejs",
     "chosen",
     "bootstrap-datepicker",
-    "bootstrap-datepicker-fr",
+    // "bootstrap-datepicker-fr",
     "jquery-mousewheel",
     "custom-scrollbar",
     "filesaver"

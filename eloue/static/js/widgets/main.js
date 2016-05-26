@@ -36,10 +36,10 @@ require.config(
                 "angular-moment": "../../bower_components/angular-moment/angular-moment",
                 "moment": "../../bower_components/moment/min/moment-with-locales",
                 "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker",
-                "bootstrap-datepicker-fr":[
-                    "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr", 
-                    "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min"
-                ],
+                // "bootstrap-datepicker-fr":[
+                //     "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr", 
+                //     "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min"
+                // ],
                 "jquery-form": "../../bower_components/jquery-form/jquery.form",
                 "datejs": "../../bower_components/datejs/build/date",
                 "chosen": "../../bower_components/chosen/chosen.jquery",
@@ -102,8 +102,7 @@ require.config(
                 "bootstrap": ["jquery"],
                 "jquery-form": ["jquery"],
                 "moment": ["jquery"],
-                "bootstrap-datepicker": ["jquery"],
-                "bootstrap-datepicker-fr": ["jquery", "bootstrap-datepicker"],
+                // "bootstrap-datepicker-fr":["jquery", "bootstrap-datepicker"],
                 "chosen": ["jquery"],
                 "placeholders-jquery": ["jquery"],
                 "formmapper": ["jquery"],
@@ -157,7 +156,7 @@ require([
     "mouse",
     "widget",
     "bootstrap-datepicker",
-    "bootstrap-datepicker-fr",
+    // "bootstrap-datepicker-fr",
     "../common/eloue/commonApp",
     "../common/eloue/i18n",
     "eloue/config",
