@@ -2,13 +2,11 @@
 
 .section-header
     {% trans "Contactez-nous" as contactez_nous %}
-    {% trans "Contactez-moi" as contactez_moi %}
     {% if is_pro %}
     span.badge-pro.pull-right pro
     h4 {{contactez_nous}}
     {% else %}
-    h4 {{contact_moi}}
-    h4 Particulier
+    h4 {% trans "Particulier" %}
     {% endif %}
 .section-body
     .part
