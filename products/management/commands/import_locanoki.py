@@ -113,7 +113,7 @@ class Command(BaseCommand):
     	while True:
 			try:
 				product_url, category = self.product_links.popitem()
-				print "product_url : %s" % product_url
+				#print "product_url : %s" % product_url
 			except KeyError:
 				break
 
@@ -161,7 +161,7 @@ class Command(BaseCommand):
 			else:
 				price = description[get_price_range(description, 0, price_pos):price_pos]
 				price = (price.strip().replace(u'€', '').replace(',', '.').replace(' ', ''))
-				print price
+				#print price
 
 
 			deposit_amount = 0.0
