@@ -4,6 +4,7 @@ from django.core.files import uploadedfile
 from bs4 import BeautifulSoup
 from urllib2 import urlopen, quote, HTTPError
 from contextlib import closing
+from decimal import Decimal as D
 
 import threading
 
@@ -99,10 +100,20 @@ class Command(BaseCommand):
     def _product_crawler(self):
     	from products.models import Product, Picture, Price
     	
+
+    	def get_price_range(str, begin, end):
+    		while True:
+    			end -= 1
+    			if str[end].isdigit() == True or str[end] == ',':
+    				continue
+    			else:
+    				begin = end
+    				return begin
+
     	while True:
 			try:
 				product_url, category = self.product_links.popitem()
-				#print "product_url : %s" % product_url
+				print "product_url : %s" % product_url
 			except KeyError:
 				break
 
@@ -148,7 +159,9 @@ class Command(BaseCommand):
 			if price_pos == -1:
 				price = None
 			else:
-				price = description[price_pos-2:price_pos]
+				price = description[get_price_range(description, 0, price_pos):price_pos]
+				price = (price.strip().replace(u'€', '').replace(',', '.').replace(' ', ''))
+				print price
 
 
 			deposit_amount = 0.0
