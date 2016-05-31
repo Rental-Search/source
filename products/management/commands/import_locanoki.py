@@ -10,7 +10,6 @@ import threading
 
 category_mapping = {
 	# Construction/Renovation
-	'location-materiel-construction-amenagement-renovation-lille/gros-oeuvre.html': 'travaux',
 	'location-materiel-construction-amenagement-renovation-lille/menuiserie-travail-du-bois.html': 'travaux',
 	'location-materiel-construction-amenagement-renovation-lille/renovation.html': 'travaux',
 	'location-materiel-construction-amenagement-renovation-lille/nettoyage.html': 'aspirateur',
@@ -22,7 +21,7 @@ category_mapping = {
 	'location-materiel-energie-et-air-lille/location-groupes-electrogenes.html': 'groupe-electrogene',
 	'location-materiel-energie-et-air-lille/location-eclairage-lille.html': 'spot',
 	# Transport / Manutention
-	'location-transport-et-manutention-lille/remorques.html': 'emorque-utilitaire',
+	'location-transport-et-manutention-lille/remorques.html': 'remorque-utilitaire',
 	'location-transport-et-manutention-lille/materiel-de-manutention.html': 'travaux',
 	# Evenement / Reception
 	'location-materiel-evenement-et-reception-lille/location-tables-et-chaises.html': 'meuble',
@@ -46,7 +45,7 @@ class Command(BaseCommand):
     username = 'locanoki'
 
     # For Test
-    #username = 'arclite'
+    #username = 'test123'
 
     product_list_tag = {
 		"name": "div",
@@ -128,6 +127,7 @@ class Command(BaseCommand):
 			#Get the title
 			try:
 				summary = product_soup.find(self.summary_tag["name"], self.summary_tag["attrs"]).text
+				summary = summary.strip(' ')
 				#print "summary : %s" % summary.strip(' ')
 			except Exception, e:
 				summary = " "
@@ -160,7 +160,7 @@ class Command(BaseCommand):
 				price = None
 			else:
 				price = description[get_price_range(description, 0, price_pos):price_pos]
-				price = (price.strip().replace(u'€', '').replace(',', '.').replace(' ', ''))
+				price = (price.strip().replace(u'€', '').replace(',', '.').replace(' ', '').replace(':', ''))
 				#print price
 
 
@@ -195,6 +195,7 @@ class Command(BaseCommand):
 						product.prices.add(Price(amount=price, unit=UNIT.DAY))
 				except:
 					print 'PRICE ERROR'
+					print product_url
 					pass
 
 			except Exception, e:
@@ -210,7 +211,6 @@ class Command(BaseCommand):
 
         self.product_families = [
         	# Construction/Renovation
-        	'location-materiel-construction-amenagement-renovation-lille/gros-oeuvre.html'
         	'location-materiel-construction-amenagement-renovation-lille/menuiserie-travail-du-bois.html',
         	'location-materiel-construction-amenagement-renovation-lille/renovation.html',
         	'location-materiel-construction-amenagement-renovation-lille/nettoyage.html',
@@ -218,8 +218,8 @@ class Command(BaseCommand):
         	'location-materiel-construction-amenagement-renovation-lille/travail-en-hauteur.html',
         	'location-materiel-construction-amenagement-renovation-lille/bricolage-jardin.html',
         	# Energie et air
-        	'location-materiel-energie-et-air-lille/location-compresseurs.html',
-        	'location-materiel-energie-et-air-lille/location-groupes-electrogenes.html',
+        	  'location-materiel-energie-et-air-lille/location-compresseurs.html',
+        	 'location-materiel-energie-et-air-lille/location-groupes-electrogenes.html',
         	'location-materiel-energie-et-air-lille/location-eclairage-lille.html',
         	# Transport / Manutention
         	'location-transport-et-manutention-lille/remorques.html',
