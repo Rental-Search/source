@@ -269,9 +269,9 @@ class Command(BaseCommand):
 			# Compacter 
 			'85-terrassement',
 			'86-mesurer',
-			consommables
+			# consommables
 			'77-consommables?id_category=77&n=50',
-			Decorer - Entretenir - Souder
+			# Decorer - Entretenir - Souder
 			'87-souder',
 			'83-decouper',
 			'123-decoration',
