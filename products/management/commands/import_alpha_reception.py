@@ -206,6 +206,7 @@ class Command(BaseCommand):
 				#print "description : %s" % description
 			except Exception, e:
 				description = " "
+				price = " "
 				print "pass description or price: %s" % str(e)
 				pass
 
@@ -232,6 +233,12 @@ class Command(BaseCommand):
 				except HTTPError as e:
 					print '\nerror loading image for object at url:', self.base_url + product_url
 
+				try:
+					product.prices.add(Price(amount=price, unit=UNIT.DAY))
+				except Exception, e:
+					print 'PRICE ERROR'
+					pass
+
 			except Exception, e:
 				print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
 				print 'error: %s' % str(e)
@@ -244,7 +251,6 @@ class Command(BaseCommand):
         self.product_links = {}
 
         self.product_families = [
-        	# Art de la table
         	# Les forfait vaiselle
 			'/les-forfaits-vaiselle-48/',
 			# Verre/Verrie
@@ -290,7 +296,7 @@ class Command(BaseCommand):
 			# Materiel cuisine
 			'/mat-riel-de-cuisine-73/',
 			# Ustensile  de cuisine
-			'/ustensile-de-cuisine-74/'
+			'/ustensile-de-cuisine-74/',
 			# Plat gastronomique
 			'/plat-bac-gastronomique-34/',
 			# Consommables
