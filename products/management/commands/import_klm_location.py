@@ -4,6 +4,7 @@ from django.core.files import uploadedfile
 from bs4 import BeautifulSoup
 from urllib2 import urlopen, quote, HTTPError
 from contextlib import closing
+from decimal import Decimal
 
 import threading
 
@@ -11,13 +12,13 @@ category_mapping = {
 	# Alimenter - Stocker 
 	'78-alimenter-en-electricite': 'outillage-depannage',
 	'79-cuve-fioul': 'groupe-electrogene',
-	'121-alimenter-en-air': '/arrosoir-de-jardin-seau',
+	'121-alimenter-en-air': 'arrosoir-de-jardin-seau',
 	# Chauffer - Assecher 
 	'81-assecher': 'chauffage',
 	'82-ventiler': 'ventilateur',
 	'84-chauffer': 'chauffage',
 	# Compacter 
-	'85-terrassement'; 'pelle-pioche-et-tariere',
+	'85-terrassement': 'pelle-pioche-et-tariere',
 	'86-mesurer': 'laser-de-mesure',
 	# consommables
 	'77-consommables?id_category=77&n=50': 'divers',
@@ -30,7 +31,7 @@ category_mapping = {
 	'89-minipelle?id_category=89&n=20': 'travaux',
 	'90-minichargeur': 'travaux',
 	'91-dumper': 'travaux',
-	'92-rouleau-vibrant',
+	'92-rouleau-vibrant': 'travaux',
 	'93-plaque-vibrante': 'travaux',
 	'130-accessoires-engins-de-travaux-publics?id_category=130&n=20': 'travaux',
 	# evenementiel
@@ -86,10 +87,10 @@ class Command(BaseCommand):
 
     thread_num = 1
 
-    username = 'klmlocation'
+    #username = 'klmlocation'
 
     # For Test
-    #username = 'askdj'
+    username = 'test123'
 
     product_list_tag = {
 		"name": "li",
@@ -123,6 +124,13 @@ class Command(BaseCommand):
 		"name": "title",
 		"attrs": {
 			"class": "navigation-pipe"
+		}
+	}
+
+    price_tag = {
+		"name": "td",
+		"attrs": {
+			"width": "78"
 		}
 	}
 
@@ -171,9 +179,10 @@ class Command(BaseCommand):
 			#Get the image
 			try:
 				image_url = product_soup.find(self.image_url_tag["name"], self.image_url_tag["attrs"]).get('src')
-				image_url = get_right_img_url(image_url)
+				#image_url = get_right_img_url(image_url)
 				#print "image_url : %s" % image_url
 			except Exception, e:
+				image_url = None
 				print "pass image: %s" % str(e)
 				pass
 
@@ -182,6 +191,7 @@ class Command(BaseCommand):
 				summary = product_soup.find(self.summary_tag["name"]).text
 				#print "summary : %s" % summary
 			except Exception, e:
+				summary = None
 				print "pass title: %s" % str(e)
 				pass
 
@@ -191,43 +201,55 @@ class Command(BaseCommand):
 				description = product_soup.find(self.description_tag["name"], self.description_tag["attrs"]).text
 				#print "description : %s" % description
 			except Exception, e:
-				description = " "
+				description = None
 				print "pass description: %s" % str(e)
+				pass
+
+
+			# Get the price
+			try:
+				price = product_soup.find(self.price_tag["name"], self.price_tag["attrs"]).text
+				price = Decimal(price.strip().replace(u'€', '').replace(',', '.').replace(' ', ''))
+				#print 'price : %s' % price
+			except:
+				price = None
+				print "price error %s" % product_url
 				pass
 
 
 			deposit_amount = 0.0
 
-			# from products.models import Category, Price
-			# from products.choices import UNIT
-			# print category_mapping[category]
-			# try:
-			# 	product = Product.objects.create(
-			# 		summary=summary, description=description,
-			# 		deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-			# 		category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
-			# 	)
+			from products.models import Category, Price
+			from products.choices import UNIT
+			#print category_mapping[category]
+			try:
+				product = Product.objects.create(
+					summary=summary, description=description,
+					deposit_amount=deposit_amount, address=self.address, owner=self.patron,
+					category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
+				)
 
-			# 	try:
-			# 		with closing(urlopen(image_url)) as image:
-			# 			product.pictures.add(Picture.objects.create(
-			# 				image=uploadedfile.SimpleUploadedFile(
-			# 					name='img', content=image.read())
-			# 				)
-			# 			)
-			# 	except HTTPError as e:
-			# 		print '\nerror loading image for object at url:', self.base_url + product_url
+				try:
+					with closing(urlopen(image_url)) as image:
+						product.pictures.add(Picture.objects.create(
+							image=uploadedfile.SimpleUploadedFile(
+								name='img', content=image.read())
+							)
+						)
+				except HTTPError as e:
+					print '\nerror loading image for object at url:', self.base_url + product_url
 
-			# 	try:
-			# 		product.prices.add(Price(amount=price, unit=UNIT.DAY))
-			# 	except Exception, e:
-			# 		print 'PRICE ERROR'
-			# 		pass
+				if price:
+					try:
+						product.prices.add(Price(amount=price, unit=UNIT.DAY))
+					except Exception, e:
+						print 'PRICE ERROR'
+						pass
 
-			# except Exception, e:
-			# 	print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
-			# 	print 'error: %s' % str(e)
-			# 	pass
+			except Exception, e:
+				print 'CANNOT CREATE THE PRODUCT %s \n %s' % (summary, product_url)
+				print 'error: %s' % str(e)
+				pass
 
 
     def handle(self, *args, **options):
@@ -237,77 +259,77 @@ class Command(BaseCommand):
 
         self.product_families = [
         	# Alimenter - Stocker 
-			'78-alimenter-en-electricite',
-			'79-cuve-fioul',
-			'121-alimenter-en-air',
-			# Chauffer - Assecher 
-			'81-assecher',
-			'82-ventiler',
-			'84-chauffer',
-			# Compacter 
-			'85-terrassement',
-			'86-mesurer',
+			# '78-alimenter-en-electricite',
+			# '79-cuve-fioul',
+			# '121-alimenter-en-air',
+			# # Chauffer - Assecher 
+			# '81-assecher',
+			# '82-ventiler',
+			# '84-chauffer',
+			# # Compacter 
+			# '85-terrassement',
+			# '86-mesurer',
 			# consommables
 			'77-consommables?id_category=77&n=50',
-			# Decorer - Entretenir - Souder
-			'87-souder',
-			'83-decouper',
-			'123-decoration',
-			'124-entretien',
-			# engins-batiment-travaux-publique
-			'89-minipelle?id_category=89&n=20',
-			'90-minichargeur',
-			'91-dumper',
-			'92-rouleau-vibrant',
-			'93-plaque-vibrante',
-			'130-accessoires-engins-de-travaux-publics?id_category=130&n=20',
-			# evenementiel
-			'76-evenementiel',
-			# Jardiner
-			'94-nettoyer',
-			'95-entretien?id_category=95&n=20',
-			'96-tailler',
-			'97-decouper',
-			'98-preparer-la-terre',
-			'132-accessoires-d-engins-de-travaux-public-et-terrassement',
-			# Nettoyer-Decaper-Pomper
-			'99-nettoyer?id_category=99&n=20',
-			'100-pomper',
-			'118-aspirer-souffler',
-			'125-decaper',
-			# Signaler-Securiser-Eclairer
-			'101-securiser?id_category=101&n=20',
-			'102-eclairer',
-			'103-communiquer',
-			'104-signaler',
-			# Traiter le beton
-			'143-casser?id_category=143&n=50',
-			'133-decouper',
-			'88-perforer',
-			'134-poncer',
-			'135-preparer-le-beton?id_category=135&n=50',
-			'136-vibrer',
-			'144-forer',
-			# Traiter le bois
-			'137-decouper',
-			'138-fixer',
-			'139-perforer',
-			'140-poncer',
-			'141-visser-devisser',
-			# Transport - Lever - Manutentionner
-			'105-manutentionner',
-			'106-lever',
-			'108-remorquer',
-			'126-tirer',
-			'145-accesoires-de-levage',
-			#  Travailler en equipe
-			'109-echafaudage',
-			'110-pir',
-			'111-echelle',
-			'/112-tretaux',
+			# # Decorer - Entretenir - Souder
+			# '87-souder',
+			# '83-decouper',
+			# '123-decoration',
+			# '124-entretien',
+			# # engins-batiment-travaux-publique
+			#  '89-minipelle?id_category=89&n=20',
+			# '90-minichargeur',
+			# '91-dumper',
+			# '92-rouleau-vibrant',
+			# '93-plaque-vibrante',
+			# '130-accessoires-engins-de-travaux-publics?id_category=130&n=20',
+			# # evenementiel
+			# '76-evenementiel',
+			# # Jardiner
+			# '94-nettoyer',
+			# '95-entretien?id_category=95&n=20',
+			# '96-tailler',
+			# '97-decouper',
+			# '98-preparer-la-terre',
+			# '132-accessoires-d-engins-de-travaux-public-et-terrassement',
+			# # Nettoyer-Decaper-Pomper
+			# '99-nettoyer?id_category=99&n=20',
+			# '100-pomper',
+			# '118-aspirer-souffler',
+			# '125-decaper',
+			# # Signaler-Securiser-Eclairer
+			# '101-securiser?id_category=101&n=20',
+			# '102-eclairer',
+			# '103-communiquer',
+			# '104-signaler?id_category=104&n=20',
+			# # Traiter le beton
+			# '143-casser?id_category=143&n=50',
+			# '133-decouper',
+			# '88-perforer',
+			# '134-poncer',
+			# '135-preparer-le-beton?id_category=135&n=50',
+			# '136-vibrer',
+			# '144-forer',
+			# # Traiter le bois
+			# '137-decouper',
+			# '138-fixer',
+			# '139-perforer',
+			# '140-poncer',
+			# '141-visser-devisser',
+			# # Transport - Lever - Manutentionner
+			# '105-manutentionner',
+			# '106-lever',
+			# '108-remorquer',
+			# '126-tirer',
+			# '145-accesoires-de-levage',
+			# #  Travailler en equipe
+			# '109-echafaudage',
+			# '110-pir',
+			# '111-echelle',
+			# '112-tretaux',
         ]
 
-        Get the user
+        #Get the user
         try:
         	self.patron = Patron.objects.get(username=self.username)
         except Patron.DoesNotExist:
