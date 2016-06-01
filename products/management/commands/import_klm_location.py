@@ -87,10 +87,10 @@ class Command(BaseCommand):
 
     thread_num = 1
 
-    #username = 'klmlocation'
+    username = 'klmlocation'
 
     # For Test
-    username = 'test123'
+    #username = 'test123'
 
     product_list_tag = {
 		"name": "li",
@@ -259,81 +259,81 @@ class Command(BaseCommand):
 
         self.product_families = [
         	# Alimenter - Stocker 
-			# '78-alimenter-en-electricite',
-			# '79-cuve-fioul',
-			# '121-alimenter-en-air',
-			# # Chauffer - Assecher 
-			# '81-assecher',
-			# '82-ventiler',
-			# '84-chauffer',
-			# # Compacter 
-			# '85-terrassement',
-			# '86-mesurer',
-			# consommables
+			'78-alimenter-en-electricite',
+			'79-cuve-fioul',
+			'121-alimenter-en-air',
+			# Chauffer - Assecher 
+			'81-assecher',
+			'82-ventiler',
+			'84-chauffer',
+			# Compacter 
+			'85-terrassement',
+			'86-mesurer',
+			consommables
 			'77-consommables?id_category=77&n=50',
-			# # Decorer - Entretenir - Souder
-			# '87-souder',
-			# '83-decouper',
-			# '123-decoration',
-			# '124-entretien',
-			# # engins-batiment-travaux-publique
-			#  '89-minipelle?id_category=89&n=20',
-			# '90-minichargeur',
-			# '91-dumper',
-			# '92-rouleau-vibrant',
-			# '93-plaque-vibrante',
-			# '130-accessoires-engins-de-travaux-publics?id_category=130&n=20',
-			# # evenementiel
-			# '76-evenementiel',
-			# # Jardiner
-			# '94-nettoyer',
-			# '95-entretien?id_category=95&n=20',
-			# '96-tailler',
-			# '97-decouper',
-			# '98-preparer-la-terre',
-			# '132-accessoires-d-engins-de-travaux-public-et-terrassement',
-			# # Nettoyer-Decaper-Pomper
-			# '99-nettoyer?id_category=99&n=20',
-			# '100-pomper',
-			# '118-aspirer-souffler',
-			# '125-decaper',
-			# # Signaler-Securiser-Eclairer
-			# '101-securiser?id_category=101&n=20',
-			# '102-eclairer',
-			# '103-communiquer',
-			# '104-signaler?id_category=104&n=20',
-			# # Traiter le beton
-			# '143-casser?id_category=143&n=50',
-			# '133-decouper',
-			# '88-perforer',
-			# '134-poncer',
-			# '135-preparer-le-beton?id_category=135&n=50',
-			# '136-vibrer',
-			# '144-forer',
-			# # Traiter le bois
-			# '137-decouper',
-			# '138-fixer',
-			# '139-perforer',
-			# '140-poncer',
-			# '141-visser-devisser',
-			# # Transport - Lever - Manutentionner
-			# '105-manutentionner',
-			# '106-lever',
-			# '108-remorquer',
-			# '126-tirer',
-			# '145-accesoires-de-levage',
-			# #  Travailler en equipe
-			# '109-echafaudage',
-			# '110-pir',
-			# '111-echelle',
-			# '112-tretaux',
+			Decorer - Entretenir - Souder
+			'87-souder',
+			'83-decouper',
+			'123-decoration',
+			'124-entretien',
+			# engins-batiment-travaux-publique
+			 '89-minipelle?id_category=89&n=20',
+			'90-minichargeur',
+			'91-dumper',
+			'92-rouleau-vibrant',
+			'93-plaque-vibrante',
+			'130-accessoires-engins-de-travaux-publics?id_category=130&n=20',
+			# evenementiel
+			'76-evenementiel',
+			# Jardiner
+			'94-nettoyer',
+			'95-entretien?id_category=95&n=20',
+			'96-tailler',
+			'97-decouper',
+			'98-preparer-la-terre',
+			'132-accessoires-d-engins-de-travaux-public-et-terrassement',
+			# Nettoyer-Decaper-Pomper
+			'99-nettoyer?id_category=99&n=20',
+			'100-pomper',
+			'118-aspirer-souffler',
+			'125-decaper',
+			# Signaler-Securiser-Eclairer
+			'101-securiser?id_category=101&n=20',
+			'102-eclairer',
+			'103-communiquer',
+			'104-signaler?id_category=104&n=20',
+			# Traiter le beton
+			'143-casser?id_category=143&n=50',
+			'133-decouper',
+			'88-perforer',
+			'134-poncer',
+			'135-preparer-le-beton?id_category=135&n=50',
+			'136-vibrer',
+			'144-forer',
+			# Traiter le bois
+			'137-decouper',
+			'138-fixer',
+			'139-perforer',
+			'140-poncer',
+			'141-visser-devisser',
+			# Transport - Lever - Manutentionner
+			'105-manutentionner',
+			'106-lever',
+			'108-remorquer',
+			'126-tirer',
+			'145-accesoires-de-levage',
+			#  Travailler en equipe
+			'109-echafaudage',
+			'110-pir',
+			'111-echelle',
+			'112-tretaux',
         ]
 
         #Get the user
         try:
         	self.patron = Patron.objects.get(username=self.username)
         except Patron.DoesNotExist:
-			print "Can't find user 'alphareception'"
+			print "Can't find user 'Klm Location'"
 			return
 
         self.address = self.patron.default_address or self.patron.addresses.all()[0]
