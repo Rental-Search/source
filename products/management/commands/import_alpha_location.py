@@ -146,8 +146,9 @@ class Command(BaseCommand):
 			try:
 				image_url = product_soup.find(self.image_url_tag["name"], self.image_url_tag["attrs"]).get('src')
 				image_url = get_right_img_url(image_url)
-				print "image_url : %s" % image_url
+				#print "image_url : %s" % image_url
 			except Exception, e:
+				image_url = None
 				print "pass image: %s" % str(e)
 				pass
 
@@ -156,6 +157,7 @@ class Command(BaseCommand):
 				summary = product_soup.find(self.summary_tag["name"], self.summary_tag["attrs"]).text
 				#print "summary : %s" % summary
 			except Exception, e:
+				summary = " "
 				print "pass title: %s" % str(e)
 				pass
 
@@ -190,15 +192,16 @@ class Command(BaseCommand):
 					category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
 				)
 
-				try:
-					with closing(urlopen(image_url)) as image:
-						product.pictures.add(Picture.objects.create(
-							image=uploadedfile.SimpleUploadedFile(
-								name='img', content=image.read())
+				if image_url:
+					try:
+						with closing(urlopen(image_url)) as image:
+							product.pictures.add(Picture.objects.create(
+								image=uploadedfile.SimpleUploadedFile(
+									name='img', content=image.read())
+								)
 							)
-						)
-				except HTTPError as e:
-					print '\nerror loading image for object at url:', self.base_url + product_url
+					except HTTPError as e:
+						print '\nerror loading image for object at url:', self.base_url + product_url
 
 				# Add the price to the product
 				try:
