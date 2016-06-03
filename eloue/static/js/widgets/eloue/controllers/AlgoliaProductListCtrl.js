@@ -163,11 +163,6 @@ define([
                     
                         scope.attr_name = attrs.attrName;
                         
-                        scope.render = function(result, state){ 
-                            $log.debug("Rendering "+scope.attr_name);
-                        };
-                        scope.$on("render", scope.render);
-                        
                         scope.clean = function(){
                             return !scope.search.helper.hasRefinements(attrs.attrName);
                         };
@@ -645,6 +640,8 @@ define([
                 
                 $scope.search = $.extend(true, {}, search_params.defaults, search_params.init);
                 
+                $scope.search.debounce_delay = 150;
+                
 //                $log.debug('Initial parameters:');
 //                $log.debug($scope.search);
                 
@@ -910,9 +907,16 @@ define([
                     
                 };
                 
-                $scope.refineQuery = function(){
-                    $scope.search.page = 0;
-                    $scope.perform_search();  
+                $scope.debouncePromise = null;
+                $scope.refineQuery = function() {
+                    if ($scope.debouncePromise){
+                        $timeout.cancel(debouncePromise);
+                        $scope.debouncePromise = null;
+                    }
+                    $scope.debouncePromise = $timeout(function() {
+                        $scope.search.page = 0;
+                        $scope.perform_search();
+                    }, $scope.search.debounce_delay);
                 };
                 
                 $scope.refinePrices = function(sliderId){ //$log.debug('refinePrices');
@@ -1087,35 +1091,6 @@ define([
                     //     $scope.$broadcast('rzSliderForceRender');
                     // });
                 };
-                
-                // $scope.renderSearchCategories = function(result, state){ //$log.debug('renderSearchCategories');
-                //     if (result.hierarchicalFacets && result.hierarchicalFacets[0]) {
-                //         $scope.search.algolia_category = result.hierarchicalFacets[0];
-                //         var catFacet = state.hierarchicalFacetsRefinements.category;
-                //         if (catFacet){
-                //             var cat = catFacet[0];
-                //             if (cat){
-                //                 var catparts = cat.split(' > ');
-                //                 var categoryId = $scope.categoryId(catparts[catparts.length-1]);
-                //                 if (categoryId==="number"){
-                //                     var facets = $scope.search_default_state.getQueryParameter('facets').slice(0);
-                //                     CategoriesService.getCategory(categoryId).then(function(cat){
-                //                         $scope.search.category = cat;
-                //                         for (var i=0; i<$scope.search.category.properties.length; i++){
-                //                             facets.push($scope.search.category.properties[i].attr_name);
-                //                         };
-                //                     }).finally(function(){
-                //                         $scope.search.helper.setQueryParameter('facets', facets);
-                                        
-                //                         // Render properties when the category is available
-                //                         $scope.renderProperties(result, state);
-                                    
-                //                     });   
-                //                 }
-                //             }   
-                //         }
-                //     }
-                // };
                            
                 $scope.renderBreadcrumbs = function(state) { //$log.debug('renderBreadcrumbs');
                     if ("category" in state.hierarchicalFacetsRefinements){
