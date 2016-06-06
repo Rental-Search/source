@@ -37,7 +37,7 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
 
         .bg-success-light.text-success.text-right.bd-rad
             span(ng-if="bookingDetails.state !='canceled' && bookingDetails.state !='authorized' && bookingDetails.state !='outdated'" ng-show="!!phoneNumber" ).indent-sm-h
-                i.icon-lg.flaticon.stroke.phone.indent-xs-l
+                i.icon-lg.flaticon.stroke.phone.indent-xs-l &nbsp;
                 | {% trans "Joignable au" %} &nbsp;
                 b {% verbatim %}{{phoneNumber}}{% endverbatim %}
                 | {% trans "ou" %}
