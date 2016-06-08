@@ -201,7 +201,22 @@ define([
         }
     }]);
 
-
+    
+    EloueWidgetsApp.directive('eloueFilterWrapperTextfield', ['$filter', '$log', function($filter, $log){
+        return {
+            restrict: 'A',
+            templateUrl:"_filter_wrapper_textfield.html",
+            scope: true,
+            transclude: true,
+            priority: -1,
+            link: function(scope, element, attrs, ctrl, transclude){
+                transclude(scope, function(clone, scope){
+                    element.prepend(clone);
+                });                
+            }
+        }
+    }]);
+    
     
     EloueWidgetsApp.directive('eloueSlider',  ['$filter', '$log', function($filter, $log){
         return {
@@ -392,18 +407,19 @@ define([
                     
                     var autocomplete_head = new maps.places.Autocomplete(placeInputHead,ac_params);
                     
-                    $scope.setLatLongRadiusFromPlace = function(place){
+                    $scope.$parent.setLatLongRadiusFromPlace = function(place){
                         if (!place){
                             $scope.search.location = $scope.search.location_geocoded = $scope.defaults.location;
-                            $scope.search.range.max = $scope.defaults.range.max;
-                            $scope.search.center = Point($scope.search.center[0],$scope.search.center[1]);
+                            $scope.search.range.options.ceil = $scope.search.range.max = $scope.defaults.range.max;
+                            $scope.search.center = $scope.defaults.center;
                             return;
                         }
                         $scope.search.location = $scope.search.location_geocoded = place.formatted_address;
                         if ("viewport" in place.geometry){
-                            $scope.search.range.max = Math.ceil(maps.geometry.spherical.computeDistanceBetween(
-                                    place.geometry.viewport.getNorthEast(),
-                                    place.geometry.viewport.getSouthWest())/2000);
+                            $scope.search.range.options.ceil = $scope.search.range.max = 
+                                Math.ceil(maps.geometry.spherical.computeDistanceBetween(
+                                        place.geometry.viewport.getNorthEast(),
+                                        place.geometry.viewport.getSouthWest())/2000);
                         } 
                         $scope.search.center = gmapToGeoJson(place.geometry.location);
                     };
@@ -518,7 +534,7 @@ define([
             link: function ($scope, $element, $attrs, $ctrls) {
                 
                 $scope.$on('render', function(e, result, state){ $log.debug('renderSearchCategories');
-                    if (result.hierarchicalFacets && result.hierarchicalFacets[0]) {
+                    // if (result.nbHits) {
                         $scope.category = result.hierarchicalFacets[0];
                         var catFacet = state.hierarchicalFacetsRefinements.category;
                         if (catFacet){
@@ -543,7 +559,7 @@ define([
                                 }
                             }   
                         }
-                    }
+                    // }
                 });
                 
                 var superClean = $scope.clean;
@@ -571,11 +587,11 @@ define([
             link: function ($scope, $element, $attrs, $ctrls) {
                 
                 $scope.clean = function(){
-                    return $scope.value.max == $scope.defaults.range.max;
+                    return $scope.value.max == $scope.value.options.ceil;
                 };
                 
                 $scope.reset = function(){
-                    $scope.search.range.max = $scope.defaults.range.max;
+                    $scope.search.range.max = $scope.value.options.ceil;
                     $scope.perform_search();
                 };
                 
@@ -637,8 +653,10 @@ define([
                 unsubscribe();
                 
                 $scope.defaults = search_params.defaults;
+                $scope.defaults.center = Point($scope.defaults.center[0], $scope.defaults.center[1]);
                 
                 $scope.search = $.extend(true, {}, search_params.defaults, search_params.init);
+                $scope.search.center = Point($scope.search.center[0], $scope.search.center[1])
                 
                 $scope.search.debounce_delay = 150;
                 
@@ -709,8 +727,8 @@ define([
 
                 $scope.search.map = {
                     loaded: false,
-                    zoom: UtilsService.zoom($scope.search.center),
-                    center: Point($scope.search.center[0],$scope.search.center[1]),
+                    zoom: UtilsService.zoom($scope.search.range.max),
+                    center: $scope.search.center,
                     options:{
                         disableDefaultUI: true,
                         zoomControl: true,
@@ -1048,6 +1066,9 @@ define([
 //                    $log.debug($scope.search.helper.getState());
 //                    $scope.search.query = "";
                     $scope.search.location = $scope.search.location_geocoded = search_params.defaults.location;
+                    $scope.setLatLongRadiusFromPlace();
+                    $scope.search.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia($scope.search.center))
+                    $scope.search.helper.setQueryParameter('aroundRadius', $scope.search.range.max * 1000)
                     $scope.search.helper.search();
                 };
                 
@@ -1084,29 +1105,12 @@ define([
                     
                 };
 
-                $scope.renderRangeSlider = function(result, state){ //$log.debug('renderRangeSlider');          
-                    var radius = state.aroundRadius/1000 || UtilsService.zoom(search_params.defaults.range.ceil);
+                $scope.renderRangeSlider = function(result, state){ //$log.debug('renderRangeSlider');
+                    var radius = state.aroundRadius/1000 || search_params.defaults.range.ceil;
                     $scope.search.range = $.extend(true, {}, $scope.search.range, {max:radius});    
                     // $timeout(function () {
                     //     $scope.$broadcast('rzSliderForceRender');
                     // });
-                };
-                           
-                $scope.renderBreadcrumbs = function(state) { //$log.debug('renderBreadcrumbs');
-                    if ("category" in state.hierarchicalFacetsRefinements){
-                        $scope.search.breadcrumbs = [];
-                        var cat = state.hierarchicalFacetsRefinements.category[0];
-                        if (cat){
-                            var catparts = cat.split(' > ');
-                            $scope.search.leaf_category = $scope.categoryName(catparts[catparts.length-1]);
-                            for (var i=0; i< catparts.length; i++){
-                                $scope.search.breadcrumbs.push(
-                                        {short: catparts[i], long: catparts.slice(0,i+1).join(' > ')});
-                            }
-                        } else {
-                            $scope.search.leaf_category = "";
-                        }
-                    }
                 };
                 
                 $scope.renderRenterTypes = function(result, state){ //$log.debug('renderRenterTypes');
@@ -1205,7 +1209,6 @@ define([
                             $scope.search.page = result.page;
                             $scope.search.pages_count = result.nbPages;
                             $scope.renderPagination(result);
-                            // $scope.renderSearchCategories(result, state);
                             $scope.renderPriceSlider(result, state);
                             $scope.renderRenterTypes(result, state);
                         } else {
@@ -1213,7 +1216,7 @@ define([
                         }      
                         // $scope.renderQueryText(result);
                         $scope.renderOrdering(result);
-                        $scope.renderBreadcrumbs(state);
+                        // $scope.renderBreadcrumbs(state);
                         $scope.renderRangeSlider(result, state);
                         if ($scope.search.map.loaded){
                             $scope.renderMap(result, state);
@@ -1367,11 +1370,11 @@ define([
                     //$log.debug($scope.search);
                     
                     $scope.search.helper.setQuery($scope.search.query)
-                        .setQueryParameter('aroundLatLng', geoJsonToAlgolia($scope.search.center))
-                        .setQueryParameter('aroundRadius', $scope.search.range.max * 1000)
-                        .setCurrentPage($scope.search.page)
-                        .setIndex($scope.get_index())
-                        .search();
+                    $scope.search.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia($scope.search.center))
+                    $scope.search.helper.setQueryParameter('aroundRadius', $scope.search.range.max * 1000)
+                    $scope.search.helper.setCurrentPage($scope.search.page)
+                    $scope.search.helper.setIndex($scope.get_index())
+                    $scope.search.helper.search();
                 };
 
                 $scope.newSearch = function(){ //$log.debug('newSearch');

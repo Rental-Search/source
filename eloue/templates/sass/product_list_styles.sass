@@ -116,3 +116,27 @@ aside
   +border-top-radius($bd-rad)
   +border-bottom-radius($bd-rad)
   background: #ffffff
+
+
+$btn-clear-filter-radius: 1.5em
+
+span.btn-clear-filter
+  &:before
+    content: "\2716"
+  color: white
+  background-color: #9d9d9d
+  width: $btn-clear-filter-radius
+  height: $btn-clear-filter-radius
+  line-height: $btn-clear-filter-radius
+  border-radius: 50% 
+  position: absolute 
+  text-align: center 
+  cursor: pointer
+  right: 0em 
+  float:right
+
+span.btn-clear-filter-text-input
+  @extend span.btn-clear-filter
+  z-index: 20
+  top: 0.75em 
+  right: 0.75em

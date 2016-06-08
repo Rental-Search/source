@@ -6,7 +6,7 @@ style.
 
 {% verbatim %}
 
-script(type="text/ng-template" id="_category_tree_item.html")
+script(type="text/ng-template", id="_category_tree_item.html")
   ul(class="category_tree" ng-if="category.isRefined")
     li(ng-repeat="category in category.data track by category.path")
       a(ng-click="refineCategory(category.path)" ng-style="category.isRefined ? {'font-weight':'bold'} : {}")
@@ -14,9 +14,10 @@ script(type="text/ng-template" id="_category_tree_item.html")
       div(ng-if="category.isRefined", ng-include="'_category_tree_item.html'")
 
 script(type="text/ng-template" id="_filter_wrapper.html")
-  div(ng-cloak)
-    label(class="caption", for="{{label}}-slider", style="width:100%;")
-      span(title="{{ 'Réinitialiser' | translate }}", ng-click="reset()", ng-show="!clean()", style="float:right; font-weight:bolder; cursor:pointer;") &#10006;
+  div(ng-cloak, class="filter-wrapper")
+    label(class="caption", for="{{label}}-slider", style="width:100%; position:relative; height:1.5em; line-height:1.5em;")
+      span(ng-cloak, title="{{ 'Réinitialiser' | translate }}", class="btn-clear-filter",
+            ng-click="reset()", ng-show="!clean()")
       {{label}}
       
 {% endverbatim %}
@@ -25,9 +26,10 @@ script(type="text/ng-template" id="_filter_wrapper.html")
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
 
-  eloue-filter-wrapper(eloue-filter, attr-name="category", eloue-categories, ng-if="search.result_count", label="{% trans 'catégories' %}")
+  eloue-filter-wrapper(eloue-filter, attr-name="category", eloue-categories, label="{% trans 'catégories' %}")
     div(ng-include="'_category_tree_item.html'")
-
+  
+  
   label.caption(for="where") {% trans "carte" %}
   .map-container
     .whirly(ng-if='!search.map.loaded')
@@ -37,13 +39,13 @@ script(type="text/ng-template" id="_filter_wrapper.html")
           idKey="'markerId'", events="marker_event_handlers", type="'cluster'", typeOptions="search.map.clustererOptions", options="'markerOptions'")
     
     
-  eloue-filter-wrapper(eloue-filter, eloue-slider, eloue-distance, label="{% trans 'rayon' %}", attr-name='aroundRadius', 
+  eloue-filter-wrapper(label="{% trans 'rayon' %}", eloue-filter, attr-name='aroundRadius', eloue-slider, units="DISTANCE", eloue-distance, 
                         ng-model="search.range", ng-change="refineRange()")
     rzslider(id="{% trans 'rayon' %}-slider", ng-if="ready()", rz-slider-model="value.max",
       rz-slider-options="value.options")
   
   
-  eloue-filter-wrapper(eloue-filter, eloue-slider, label="{% trans 'prix' %}", attr-name='price',
+  eloue-filter-wrapper(label="{% trans 'prix' %}", eloue-filter, attr-name='price', eloue-slider, units="MONEY",
                         ng-model="search.price", ng-change="refinePrices()")
     rzslider(id="{% trans 'prix' %}-slider", ng-if="ready()", rz-slider-model="value.min", rz-slider-high="value.max",
       rz-slider-options="value.options")
