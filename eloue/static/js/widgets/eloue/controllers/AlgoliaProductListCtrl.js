@@ -916,6 +916,9 @@ define([
                             prefixForParameters: search_params.config.ALGOLIA_PREFIX
                         });
                         
+                        $scope.search.order_by = other_params.order_by;
+                        $scope.search.helper.setIndex($scope.get_index());
+                        
                         $scope.search.location_geocoded = $scope.search.location = 
                             other_params.location_name || search_params.defaults.location;
                         
@@ -1144,13 +1147,21 @@ define([
                 $scope.cooldown_duration = 1000;
                 
                 $scope.get_query_string_options = function() { //$log.debug('get_query_string_options');
-                    return {
+                    
+                    var res = {
                         filters: search_params.config.URL_PARAMETERS, 
                         prefix: search_params.config.ALGOLIA_PREFIX,
                         moreAttributes: {
                             location_name: $scope.search.location
                         }
                     };
+                    
+                    if ($scope.search.order_by){
+                        res.moreAttributes.order_by = $scope.search.order_by;    
+                    }
+                    
+                    return res;
+                    
                 };
                 
                 $scope.resetCooldown = function(){ //$log.debug('resetCooldown');
@@ -1372,11 +1383,11 @@ define([
                     
                     //$log.debug($scope.search);
                     
-                    $scope.search.helper.setQuery($scope.search.query)
-                    $scope.search.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia($scope.search.center))
-                    $scope.search.helper.setQueryParameter('aroundRadius', $scope.search.range.max * 1000)
-                    $scope.search.helper.setCurrentPage($scope.search.page)
-                    $scope.search.helper.setIndex($scope.get_index())
+                    $scope.search.helper.setQuery($scope.search.query);
+                    $scope.search.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia($scope.search.center));
+                    $scope.search.helper.setQueryParameter('aroundRadius', $scope.search.range.max * 1000);
+                    $scope.search.helper.setCurrentPage($scope.search.page);
+                    $scope.search.helper.setIndex($scope.get_index());
                     $scope.search.helper.search();
                 };
 
