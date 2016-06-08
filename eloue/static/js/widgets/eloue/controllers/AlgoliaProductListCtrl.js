@@ -657,7 +657,7 @@ define([
                 $scope.search = $.extend(true, {}, search_params.defaults, search_params.init);
                 $scope.search.center = Point($scope.search.center[0], $scope.search.center[1])
                 
-                $scope.search.debounce_delay = 150;
+                $scope.search.typing_debounce_delay = 100;
                 
 //                $log.debug('Initial parameters:');
 //                $log.debug($scope.search);
@@ -928,16 +928,16 @@ define([
                     
                 };
                 
-                $scope.debouncePromise = null;
+                var debouncePromise = null;
                 $scope.refineQuery = function() {
-                    if ($scope.debouncePromise){
+                    if (debouncePromise){
                         $timeout.cancel(debouncePromise);
-                        $scope.debouncePromise = null;
                     }
-                    $scope.debouncePromise = $timeout(function() {
+                    debouncePromise = $timeout(function() {
+                        debouncePromise = null;
                         $scope.search.page = 0;
                         $scope.perform_search();
-                    }, $scope.search.debounce_delay);
+                    }, $scope.search.typing_debounce_delay);
                 };
                 
                 $scope.refinePrices = function(sliderId){ //$log.debug('refinePrices');
