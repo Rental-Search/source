@@ -56,7 +56,7 @@ block details
                             i.icon-3x.flaticon.solid.plus
                             input(type="file", name="image", file-chooser, on-change="onPictureAdded()")#image
                             input(type="hidden", name="product", value="{% verbatim %}{{productsBaseUrl}}{% endverbatim %}{% verbatim %}{{product.id}}{% endverbatim %}/")#product
-                    li(ng-repeat="picture in product.pictures track by picture.id", style="padding-top: 0;").block-with-thumbnail
+                    li(ng-repeat="picture in product.pictures.slice().reverse() track by picture.id", style="padding-top: 0;").block-with-thumbnail
                          .col-thumbnail
                            .thumbnail: span.lg-p
                              img(style="background-image: url({% verbatim %}{{picture.image.thumbnail}}{% endverbatim %});")

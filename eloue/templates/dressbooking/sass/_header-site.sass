@@ -48,7 +48,7 @@
       padding: 0 6em
     .what-field
       color: $brand-success
-      border-right-width: 0
+      //border-right-width: 0
       border-color: $gray-medium
       +placeholder($brand-success)
     .where-field
@@ -66,10 +66,14 @@
         width: 100%
         padding-left: 2.5em
         border-radius: 0
-        color: $gray-strong
+        color: $brand-success
         border-color: $gray-medium $gray-lighter
         font-weight: $fw-semibold
-        +placeholder($gray-strong)
+        +placeholder($brand-success)
+      input.nobtn
+        border-bottom-right-radius: 4px
+        border-top-right-radius: 4px
+        border-right: 1px solid #ccc
     .btn-search
       border-left-width: 0
       .zoom-2

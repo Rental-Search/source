@@ -20,9 +20,9 @@
             h6: a(href="{{ product.url }}") {{ product.summary }}
             p {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
           .product-owner
-            a(href="{{ product.owner_url }}"): div(style="{% if product.owner_avatar %}background-image: url({{ product.owner_avatar }}){% endif %}")
+            a(href="{{ product.owner_url }}"): div(style="{% if product.owner_avatar %}background-image: url({{ product.owner_avatar }}){% endif %}").bg-image
   .row.text-center.indent-v-lg
     //- TODO: should use AJAX to fetch and insert next 8 items
-    button(type="button", onclick="location.href='{% facet_url breadcrumbs 'sort' '' %}';").btn.bg-primary.btn-explore.btn-lg
+    button(type="button", onclick="location.href='{% facet_url breadcrumbs 'sort' '' 'l' '' %}';").btn.bg-primary.btn-explore.btn-lg
       i.flaticon.stroke.zoom-2.indent-r-xs
       | {% trans "Explorez toutes les annonces de location" %}
