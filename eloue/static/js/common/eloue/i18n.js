@@ -4,7 +4,7 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
     EloueApp.config(["$translateProvider", function ($translateProvider) {
         // French
         $translateProvider.translations("fr", {
-
+            
             // Days of week
             Sunday: "Dimanche",
             Monday: "Lundi",

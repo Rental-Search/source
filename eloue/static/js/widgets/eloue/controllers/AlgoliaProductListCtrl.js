@@ -699,6 +699,10 @@ define([
                  * Algolia config 
                  */
                 var client = algolia.Client(search_params.config.ALGOLIA_APP_ID, search_params.config.ALGOLIA_KEY);
+                search_params.config.PARAMETERS.attributesToRetrieve = ["summary", "django_id", "username", 
+                    "location", "locations", "city", "zipcode", "owner_url", "owner_avatar", "url", "price", "profile", 
+                    "vertical_profile", "thumbnail", "comment_count", "average_rate"];
+                search_params.config.PARAMETERS.snippetEllipsisText = "&hellip;";
                 $scope.search.helper = algoliasearchHelper(client, $scope.get_index(), search_params.config.PARAMETERS);
                 $scope.search.helper.addDisjunctiveFacetRefinement("pro_owner", true);
                 $scope.search.helper.addDisjunctiveFacetRefinement("pro_owner", false);
@@ -1197,9 +1201,9 @@ define([
                         
                         for (var ri=0; ri<$scope.search.product_list.length; ri++){
                             var res = $scope.search.product_list[ri];
-                            for (var k in res['_highlightResult']){
+                            for (var k in res._snippetResult){
                                 res["plain_"+k] = res[k];
-                                res[k] = res['_highlightResult'][k]['value'];
+                                res[k] = res._snippetResult[k]['value'];
                             }
                         }
                         
