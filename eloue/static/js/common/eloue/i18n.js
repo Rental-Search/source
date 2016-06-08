@@ -93,7 +93,11 @@ define(["eloue/app", "angular-translate"], function (EloueApp) {
             informationHasBeenUpdated: "Vous informations ont été mises à jour",
 
             loadMore: "Charger plus d'éléments",
-            getAllMessages: "Afficher les anciens messages"
+            getAllMessages: "Afficher les anciens messages",
+            
+            DISTANCE: "{{value}} km",
+            MONEY: "{{value}}€"
+            
         });
 
         $translateProvider.preferredLanguage("fr");

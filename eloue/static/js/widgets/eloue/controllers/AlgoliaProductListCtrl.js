@@ -237,8 +237,7 @@ define([
                 } 
                 
                 function translate(value){
-                    // return $filter("translate")(scope.i18n, {value:value});
-                    return value;
+                    return $filter("translate")(attrs.units, {value:value});
                 }
                 
                 scope.is_range = function(){
