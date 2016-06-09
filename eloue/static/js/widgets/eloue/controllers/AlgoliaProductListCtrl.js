@@ -308,8 +308,6 @@ define([
             $scope.perform_search();
         };
         
-        
-        
         $scope.refineRenterPart = function(newVal){ //$log.debug('refineRenterPart');
             var state = $scope.search.helper.getState();
             if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
@@ -922,7 +920,7 @@ define([
                 
                 $scope.onLocationChangeStart = function(event, current, next) { //$log.debug('onLocationChangeStart');
                     
-                    if (!$scope.search.location_ui_changed){    
+                    if (!$scope.search.location_ui_changed){
                         
                         var qs = UtilsService.urlEncodeObject($location.search());
                             
@@ -1232,9 +1230,13 @@ define([
                         $scope.searchDuringCooldown = true;
                     } else {
                         $scope.cooldown = true;
+                        
                         $location.search($scope.search.helper.getStateAsQueryString(
                             $scope.get_query_string_options()));
+                            
                         $timeout($scope.resetCooldown, $scope.cooldown_duration);
+                        
+                        ga('send', 'pageview', $location.url());
                     }
                 };
                 
