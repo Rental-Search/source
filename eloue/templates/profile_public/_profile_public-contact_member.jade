@@ -5,6 +5,7 @@
 .section-body: .part
   {% if patron.slug != "loxam" %}
   {% if patron.slug != "carrefourlocation" %}
+  {% if patron.slug != "zipcar" %}
   a(href="#/message", data-toggle="modal", data-target="#pro-popin-message").btn.bg-success
     i.flaticon.stroke.mail-2
     {% trans "Demandez un devis" %}
