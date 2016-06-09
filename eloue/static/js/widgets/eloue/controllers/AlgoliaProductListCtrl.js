@@ -470,10 +470,11 @@ define([
                             if ($scope.search.location) {
                                 
                                 var actual_loc = $q.defer(), default_loc = $q.defer();
+                                
                                 geoc.geocode({address:$scope.search.location}, function(results, status){
                                     $scope.$apply(function(){
                                         if (status==maps.GeocoderStatus.OK){
-                                            $scope.$parent.setLatLongRadiusFromPlace(results[0]);
+                                            $scope.setLatLongRadiusFromPlace(results[0]);
                                             actual_loc.resolve();
                                         } else {
                                             actual_loc.reject();
@@ -481,30 +482,26 @@ define([
                                     });
                                 }); 
                                 
-                                if ($scope.search.location !== $scope.defaults.location){
-                                    geoc.geocode({address:$scope.defaults.location}, function(results, status){
-                                        $scope.$apply(function(){
-                                            if (status==maps.GeocoderStatus.OK){
-                                                $scope.defaults.location = $scope.defaults.location_geocoded = results[0].formatted_address;
-                                                if ("viewport" in results[0].geometry){
-                                                    $scope.defaults.range.ceil = $scope.defaults.range.max = 
-                                                        Math.ceil(maps.geometry.spherical.computeDistanceBetween(
-                                                                results[0].geometry.viewport.getNorthEast(),
-                                                                results[0].geometry.viewport.getSouthWest())/2000);
-                                                } 
-                                                $scope.defaults.center = gmapToGeoJson(results[0].geometry.location);
-                                                default_loc.resolve();
-                                            } else {
-                                                default_loc.reject();
-                                            }
-                                        });
-                                    });    
-                                    $q.all([default_loc.promise, actual_loc.promise])
-                                        .finally($scope.search.location_geocoded_deferred.resolve);
-                                } else {
-                                    actual_loc.promise
-                                        .finally($scope.search.location_geocoded_deferred.resolve);
-                                }
+                                geoc.geocode({address:$scope.defaults.location}, function(results, status){
+                                    $scope.$apply(function(){
+                                        if (status==maps.GeocoderStatus.OK){
+                                            $scope.defaults.location = $scope.defaults.location_geocoded = results[0].formatted_address;
+                                            if ("viewport" in results[0].geometry){
+                                                $scope.defaults.range.ceil = $scope.defaults.range.max = 
+                                                    Math.ceil(maps.geometry.spherical.computeDistanceBetween(
+                                                            results[0].geometry.viewport.getNorthEast(),
+                                                            results[0].geometry.viewport.getSouthWest())/2000);
+                                            } 
+                                            $scope.defaults.center = gmapToGeoJson(results[0].geometry.location);
+                                            default_loc.resolve();
+                                        } else {
+                                            default_loc.reject();
+                                        }
+                                    });
+                                });    
+                                
+                                $q.all([default_loc.promise, actual_loc.promise])
+                                    .finally($scope.search.location_geocoded_deferred.resolve);
                                 
                             } else {
                                 
