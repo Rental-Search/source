@@ -63,6 +63,9 @@ class Command(BaseCommand):
 
     image_url_tag = {
     	"name": "div",
+    	"attrs_second":{
+    		"id" : "djc_mainimage"
+    	},
 		"attrs": {
 			"class":"djc_thumbnail"
             }
@@ -138,8 +141,11 @@ class Command(BaseCommand):
 			#Get the image
 			try:
 				image_urls = product_soup.find_all(self.image_url_tag["name"], self.image_url_tag["attrs"])
+				if not image_urls:
+					main_image_url = product_soup.find('img', self.image_url_tag["attrs_second"]).get('src')
 			except Exception, e:
 				image_urls = None
+				main_image_url = None
 				print "pass image: %s" % str(e)
 				pass
 
@@ -188,6 +194,18 @@ class Command(BaseCommand):
 							)
 					except HTTPError as e:
 						print '\nerror loading image for object at url:', self.base_url + product_url
+				elif main_image_url:
+					try:
+						#print main_image_url
+						with closing(urlopen(main_image_url)) as image:
+							product.pictures.add(Picture.objects.create(
+								image=uploadedfile.SimpleUploadedFile(
+									name='img', content=image.read())
+								)
+							)
+					except HTTPError as e:
+						print '\nerror loading image for object at url:', self.base_url + product_url
+
 
 				# Add the price to the product
 				try:
