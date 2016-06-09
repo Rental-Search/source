@@ -668,7 +668,7 @@ ALGOLIA_CLIENT_CONFIG = {
     'ALGOLIA_PREFIX': "sp_",
     'ALGOLIA_APP_ID': ALGOLIA_CREDENTIALS['APP_ID'],
     'ALGOLIA_KEY': ALGOLIA_CREDENTIALS['API_KEY_SEARCH'],
-    'URL_PARAMETERS': ['query', 'page', 'aroundLatLng', 'aroundRadius', 
+    'URL_PARAMETERS': ['query', 'page', 'aroundRadius', 
                        'attribute:pro_owner', 'attribute:price', 'attribute:category'],
     'URL_PARAMETERS_EXCLUDE': ['is_archved', 
                              'is_good', 

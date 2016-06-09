@@ -387,7 +387,7 @@ define([
 
 
     
-    EloueWidgetsApp.directive('eloueLocation',  ['uiGmapGoogleMapApi', 'uiGmapIsReady', '$log', function(uiGmapGoogleMapApi, uiGmapIsReady, $log){
+    EloueWidgetsApp.directive('eloueLocation',  ['uiGmapGoogleMapApi', 'uiGmapIsReady', "$q", '$log', function(uiGmapGoogleMapApi, uiGmapIsReady, $q, $log){
         return {
             restrict: 'A',
             scope: true,
@@ -470,21 +470,48 @@ define([
                             autocomplete_head.addListener('place_changed', autocompleteChangeListener(autocomplete_head));
                             
                             if ($scope.search.location) {
+                                
+                                var actual_loc = $q.defer(), default_loc = $q.defer();
                                 geoc.geocode({address:$scope.search.location}, function(results, status){
                                     $scope.$apply(function(){
                                         if (status==maps.GeocoderStatus.OK){
-                                            //$log.debug("geocoded");
-                                            $scope.setOrderByDistance();
-                                            $scope.search.center = gmapToGeoJson(results[0].geometry.location);
-                                            $scope.search.location_geocoded_deferred.resolve(results, status);
+                                            $scope.$parent.setLatLongRadiusFromPlace(results[0]);
+                                            actual_loc.resolve();
                                         } else {
-                                            //$log.debug("GEOCODER ERROR: "+status);
-                                            $scope.search.location_geocoded_deferred.reject(results, status);
+                                            actual_loc.reject();
                                         }
                                     });
-                                });
+                                }); 
+                                
+                                if ($scope.search.location !== $scope.defaults.location){
+                                    geoc.geocode({address:$scope.defaults.location}, function(results, status){
+                                        $scope.$apply(function(){
+                                            if (status==maps.GeocoderStatus.OK){
+                                                $scope.defaults.location = $scope.defaults.location_geocoded = results[0].formatted_address;
+                                                if ("viewport" in results[0].geometry){
+                                                    $scope.defaults.range.ceil = $scope.defaults.range.max = 
+                                                        Math.ceil(maps.geometry.spherical.computeDistanceBetween(
+                                                                results[0].geometry.viewport.getNorthEast(),
+                                                                results[0].geometry.viewport.getSouthWest())/2000);
+                                                } 
+                                                $scope.defaults.center = gmapToGeoJson(results[0].geometry.location);
+                                                default_loc.resolve();
+                                            } else {
+                                                default_loc.reject();
+                                            }
+                                        });
+                                    });    
+                                    $q.all([default_loc.promise, actual_loc.promise])
+                                        .finally($scope.search.location_geocoded_deferred.resolve);
+                                } else {
+                                    actual_loc.promise
+                                        .finally($scope.search.location_geocoded_deferred.resolve);
+                                }
+                                
                             } else {
+                                
                                 $scope.search.location_geocoded_deferred.resolve();
+                            
                             }
                                         
                         });                        
@@ -895,36 +922,59 @@ define([
                 
                 $scope.onLocationChangeStart = function(event, current, next) { //$log.debug('onLocationChangeStart');
                     
-//                    if (!$scope.orig_params_present()) return;
-                    
                     if (!$scope.search.location_ui_changed){    
                         
                         var qs = UtilsService.urlEncodeObject($location.search());
                             
                         $scope.search.helper.setState($scope.search_default_state);
-                       
+                        
                         if ($scope.ui_pristine) {
+                            
                             $scope.search.location_geocoded_promise.finally($scope.perform_search);
-                            return;
+                            
+                        } else {
+                                                    
+                            $scope.search.helper.setStateFromQueryString(qs, {
+                                prefix: search_params.config.ALGOLIA_PREFIX
+                            });
+                            
+                            var other_params = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs, {
+                                prefixForParameters: search_params.config.ALGOLIA_PREFIX
+                            });
+                            
+                            if (other_params.order_by){
+                                /*
+                                 * accept both Algolia's idx and new order_by param,
+                                 * order_by overrides idx
+                                 */ 
+                                $scope.search.order_by = other_params.order_by;
+                                $scope.search.helper.setIndex($scope.get_index());   
+                            }
+                            
+                            var address = other_params.location_name || search_params.defaults.location;
+                                
+                            uiGmapGoogleMapApi.then(function(maps){
+                                 var geoc = new maps.Geocoder();
+                                 var d = $q.defer();
+                                 geoc.geocode({address:address}, function(results, status){
+                                    if (status==maps.GeocoderStatus.OK){
+                                        d.resolve(results[0]);
+                                    } else {
+                                        d.reject();
+                                    }
+                                });
+                                return d.promise;
+                            }).then($scope.setLatLongRadiusFromPlace
+                            ).catch($scope.setLatLongRadiusFromPlace
+                            ).finally(function(){
+                                $scope.search.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia($scope.search.center));
+                                $scope.search.helper.setQueryParameter('aroundRadius', $scope.search.range.max * 1000);
+                                $scope.search.helper.search();
+                            });
+                            
+                            //$log.debug($scope.search.helper.getState());                                         
                         }
                         
-                        $scope.search.helper.setStateFromQueryString(qs, {
-                            prefix: search_params.config.ALGOLIA_PREFIX
-                        });
-                        
-                        var other_params = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs, {
-                            prefixForParameters: search_params.config.ALGOLIA_PREFIX
-                        });
-                        
-                        $scope.search.order_by = other_params.order_by;
-                        $scope.search.helper.setIndex($scope.get_index());
-                        
-                        $scope.search.location_geocoded = $scope.search.location = 
-                            other_params.location_name || search_params.defaults.location;
-                        
-                        //$log.debug($scope.search.helper.getState());
-                        
-                        $scope.search.helper.search();
                     } else {
                         $scope.search.location_ui_changed = false;
                     }
