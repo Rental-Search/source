@@ -5,4 +5,12 @@ h4
   b N’hésitez pas à venir sur notre site internet.
   | vous devriez y trouver les réponses à toutes vos questions.
   {% endblocktrans %}
-a(href="{{ patron.url }}", target="_blank")#websiteProLink.btn.btn-lg.bg-primary.btn-inline: b {{ patron.url|hostname }}
+  {% if patron.slug == "carrefourlocation" %}
+  {% if product %}
+  a(href="{{ patron.url }}?utm_source=eloue&utm_medium=annonce&utm_content={{product.object.slug}}&utm_campaign=eloue_redirection_annonce", target="_blank")#websiteProLink.btn.btn-lg.bg-primary.btn-inline: b {{ patron.url|hostname }}
+  {% else %}
+  a(href="{{ patron.url }}?utm_source=eloue&utm_medium=annonce&utm_content=boutique&utm_campaign=eloue_redirection_annonce", target="_blank")#websiteProLink.btn.btn-lg.bg-primary.btn-inline: b {{ patron.url|hostname }}
+  {% endif %}
+  {% else %}
+  a(href="{{ patron.url }}", target="_blank")#websiteProLink.btn.btn-lg.bg-primary.btn-inline: b {{ patron.url|hostname }}
+  {% endif %}
