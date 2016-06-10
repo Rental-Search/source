@@ -45,13 +45,13 @@ script(type="text/ng-template" id="_filter_wrapper.html")
       rz-slider-options="value.options")
   
   
-  eloue-filter-wrapper(label="{% trans 'prix' %}", eloue-filter, attr-name='price', eloue-slider, units="MONEY",
+  eloue-filter-wrapper(label="{% trans 'prix' %}", eloue-filter, attr-name='price', eloue-slider, units="MONEY", eloue-price
                         ng-model="search.price", ng-change="refinePrices()")
     rzslider(id="{% trans 'prix' %}-slider", ng-if="ready()", rz-slider-model="value.min", rz-slider-high="value.max",
       rz-slider-options="value.options")
       
   
-  eloue-filter-wrapper(ng-controller="CheckBoxesController", label="{% trans 'loueurs' %}")
+  eloue-filter-wrapper(label="{% trans 'loueurs' %}", eloue-filter, attr-name='pro_owner', eloue-propart)
     .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.part_count", ng-cloak)
       label(for="particular")
         {% trans "particuliers" as particular %}

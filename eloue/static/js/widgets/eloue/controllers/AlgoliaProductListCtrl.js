@@ -152,7 +152,7 @@ define([
     }]);
    
         
-    EloueWidgetsApp.directive('eloueFilter', ['$filter', '$log', function($filter, $log){
+    EloueWidgetsApp.directive('eloueFilter', ['$filter', '$timeout', '$log', function($filter, $timeout, $log){
         return {
             restrict: 'A',
             scope: true,
@@ -162,6 +162,10 @@ define([
                     pre: function (scope, element, attrs, ngModel) {
                     
                         scope.attr_name = attrs.attrName;
+                        
+                        scope.$on('render', function(e, result, state){
+                            scope.render(e, result, state);
+                        });
                         
                         scope.clean = function(){
                             return !scope.search.helper.hasRefinements(attrs.attrName);
@@ -293,56 +297,129 @@ define([
             } 
         };
     }]);
-
     
     
-    function CheckBoxesController($scope){
-        
-        $scope.clean = function(){
-            return $scope.search.owner_type.pro && $scope.search.owner_type.part;
-        };
-        
-        $scope.reset = function(){ //$log.debug("Reset "+scope.label);
-            $scope.search.helper.removeDisjunctiveFacetRefinement("pro_owner");
-            $scope.perform_search();
-        };
-        
-        $scope.refineRenterPart = function(newVal){ //$log.debug('refineRenterPart');
-            var state = $scope.search.helper.getState();
-            
-            $scope.search.helper.removeDisjunctiveFacetRefinement("pro_owner");
-            if (!newVal) {
-                $scope.search.helper.addDisjunctiveFacetRefinement("pro_owner", true);
-            }
-            
-            $scope.search.page = 0;
-            
-            $scope.perform_search();
-        };
-        
-        $scope.refineRenterPro = function(newVal){ //$log.debug('refineRenterPro');
-            var state = $scope.search.helper.getState();
-            
-            $scope.search.helper.removeDisjunctiveFacetRefinement("pro_owner");
-            if (!newVal) {                
-                $scope.search.helper.addDisjunctiveFacetRefinement("pro_owner", false);
-            }
-            
-            $scope.search.page = 0;
-            
-            $scope.perform_search();
-        };
-        
-        $scope.noProPartChoice = function(){ //$log.debug('noProPartChoice');
-            return $scope.search.owner_type.pro_count==0 || $scope.search.owner_type.part_count==0;
-        };
+    EloueWidgetsApp.directive('elouePrice', ['$log', function($log){
+        return {
+            restrict: 'A',
+            scope: true,
+            priority: -2,
+            link: function($scope, $element, $attrs, $ctrl){
                 
-    };
+                $scope.render = function(e, result, state){
+                    
+                    var facetResult = result.getFacetByName("price");
+                    
+                    if (facetResult){
+                        var ref;
+                        var statsMin = facetResult.stats.min, statsMax = facetResult.stats.max;
+                        
+                        $scope.search.price.options.floor = $scope.search.price.min = statsMin;
+                        if (state.isNumericRefined("price", '>')){
+                            ref = state.getNumericRefinement("price", '>')[0] + 1;
+                            $scope.search.price.min = Math.max(statsMin, ref);
+                        }
+                        
+                        $scope.search.price.options.ceil = $scope.search.price.max = statsMax;
+                        if (state.isNumericRefined("price", '<')){
+                            ref = state.getNumericRefinement("price", '<')[0] - 1;
+                            $scope.search.price.max = Math.min(statsMax, ref);
+                        }
+                        
+                        $scope.value = $.extend(true, $scope.value, $scope.search.price);      
+                    }
+                    
+                };
+                
+            }
+        };
+    }]);
     
-    CheckBoxesController.prototype.$inject = ['$scope'];
     
-    EloueWidgetsApp.controller('CheckBoxesController', CheckBoxesController);
+    EloueWidgetsApp.directive('eloueDistance',  ['$log', function($log){
+        return {
+            restrict: 'A',
+            scope: true,
+            priority: -2,
+            link: function ($scope, $element, $attrs, $ctrls) {
+                
+                $scope.render = function(e, result, state){ //$log.debug('renderRangeSlider');
+                    var radius = state.aroundRadius/1000 || $scope.defaults.range.ceil;
+                    $scope.value = $.extend(true, {}, $scope.value, {max:radius});    
+                    // $timeout(function () {
+                    //     $scope.$broadcast('rzSliderForceRender');
+                    // });
+                };
+                
+                $scope.clean = function(){
+                    return $scope.value.max == $scope.value.options.ceil;
+                };
+                
+                $scope.reset = function(){
+                    $scope.search.range.max = $scope.value.options.ceil;
+                    $scope.perform_search();
+                };
+                
+            }
+        };
+    }]);
+
+
+    EloueWidgetsApp.directive('elouePropart',  ['$log', function($log){
+        return {
+            restrict: 'A',
+            scope: true,
+            priority: -2,
+            link: function($scope, $element, $attrs, $ctrls){
+        
+                $scope.clean = function(){
+                    return $scope.search.owner_type.pro && $scope.search.owner_type.part;
+                };
+                
+                $scope.render = function(e, result, state){ //$log.debug('renderRenterTypes');
+                    var facetResult = result.getFacetByName("pro_owner");
+                    $scope.search.owner_type.pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
+                    $scope.search.owner_type.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
+                    $scope.search.owner_type.pro = !state.isDisjunctiveFacetRefined("pro_owner") 
+                        || state.isDisjunctiveFacetRefined("pro_owner", true);
+                    $scope.search.owner_type.part = !state.isDisjunctiveFacetRefined("pro_owner") 
+                        || state.isDisjunctiveFacetRefined("pro_owner", false);
+                };
+                
+                $scope.refineRenterPart = function(newVal){ //$log.debug('refineRenterPart');
+                    var state = $scope.search.helper.getState();
+                    
+                    $scope.search.helper.removeDisjunctiveFacetRefinement("pro_owner");
+                    if (!newVal) {
+                        $scope.search.helper.addDisjunctiveFacetRefinement("pro_owner", true);
+                    }
+                    
+                    $scope.search.page = 0;
+                    
+                    $scope.perform_search();
+                };
+                
+                $scope.refineRenterPro = function(newVal){ //$log.debug('refineRenterPro');
+                    var state = $scope.search.helper.getState();
+                    
+                    $scope.search.helper.removeDisjunctiveFacetRefinement("pro_owner");
+                    if (!newVal) {                
+                        $scope.search.helper.addDisjunctiveFacetRefinement("pro_owner", false);
+                    }
+                    
+                    $scope.search.page = 0;
+                    
+                    $scope.perform_search();
+                };
+                
+                $scope.noProPartChoice = function(){ //$log.debug('noProPartChoice');
+                    return $scope.search.owner_type.pro_count==0 || $scope.search.owner_type.part_count==0;
+                };
+                        
+            }
     
+        };
+    }]);
     
   
     EloueWidgetsApp.directive('eloueQuery',  ['$log', function($log){
@@ -371,7 +448,6 @@ define([
             }
         };
     }]);
-
 
     
     EloueWidgetsApp.directive('eloueLocation',  ['uiGmapGoogleMapApi', 'uiGmapIsReady', "$q", '$log', function(uiGmapGoogleMapApi, uiGmapIsReady, $q, $log){
@@ -543,7 +619,7 @@ define([
             priority: -2,
             link: function ($scope, $element, $attrs, $ctrls) {
                 
-                $scope.$on('render', function(e, result, state){ $log.debug('renderSearchCategories');
+                $scope.render = function(e, result, state){ $log.debug('renderSearchCategories');
                     // if (result.nbHits) {
                         $scope.category = result.hierarchicalFacets[0];
                         var catFacet = state.hierarchicalFacetsRefinements.category;
@@ -570,7 +646,7 @@ define([
                             }   
                         }
                     // }
-                });
+                };
                 
                 var superClean = $scope.clean;
                 $scope.clean = function(){
@@ -581,27 +657,6 @@ define([
                 $scope.reset = function(){
                     $scope.search.helper.clearRefinements($attrs.attrName);
                     $scope.search.leaf_category = "";
-                    $scope.perform_search();
-                };
-                
-            }
-        };
-    }]);
-
-
-    EloueWidgetsApp.directive('eloueDistance',  ['$log', function($log){
-        return {
-            restrict: 'A',
-            scope: true,
-            priority: -2,
-            link: function ($scope, $element, $attrs, $ctrls) {
-                
-                $scope.clean = function(){
-                    return $scope.value.max == $scope.value.options.ceil;
-                };
-                
-                $scope.reset = function(){
-                    $scope.search.range.max = $scope.value.options.ceil;
                     $scope.perform_search();
                 };
                 
@@ -964,40 +1019,6 @@ define([
                     }, $scope.search.typing_debounce_delay);
                 };
                 
-                $scope.refinePrices = function(sliderId){ //$log.debug('refinePrices');
-                    
-                    var state = $scope.search.helper.getState();
-                    var newVal, oldVal;
-                    
-                    // TODO -1 and '>' are because $location.search() gets confused by '='. Fix this
-                    newVal = $scope.search.price.min - 1;
-                    if (state.isNumericRefined("price", '>')){
-                        oldVal = state.getNumericRefinement("price", '>')[0];
-                        if (oldVal != newVal) {
-                            $scope.search.helper.removeNumericRefinement("price", '>');
-                            $scope.search.helper.addNumericRefinement("price", '>', newVal);
-                        }
-                    } else {
-                        $scope.search.helper.addNumericRefinement("price", '>', newVal);
-                    }
-                    
-                    newVal = $scope.search.price.max + 1;
-                    if (state.isNumericRefined("price", '<')){
-                        oldVal = state.getNumericRefinement("price", '<')[0];
-                        if (oldVal != newVal) {
-                            $scope.search.helper.removeNumericRefinement("price", '<');
-                            $scope.search.helper.addNumericRefinement("price", '<', newVal);
-                        }
-                    } else {
-                        $scope.search.helper.addNumericRefinement("price", '<', newVal);
-                    }
-                    
-                    $scope.search.page = 0;
-                    
-                    $scope.perform_search();
-                    
-                };
-                
                 $scope.categoryName = function(categoryStr){
                     return categoryStr.split('|')[0];
                 };
@@ -1031,6 +1052,40 @@ define([
                     $scope.search.query = '';
                     $scope.search.page = 0;
                     $scope.refineLocation();
+                };
+                
+                $scope.refinePrices = function(sliderId){ //$log.debug('refinePrices');
+                    
+                    var state = $scope.search.helper.getState();
+                    var newVal, oldVal;
+                    
+                    // TODO -1 and '>' are because $location.search() gets confused by '='. Fix this
+                    newVal = $scope.search.price.min - 1;
+                    if (state.isNumericRefined("price", '>')){
+                        oldVal = state.getNumericRefinement("price", '>')[0];
+                        if (oldVal != newVal) {
+                            $scope.search.helper.removeNumericRefinement("price", '>');
+                            $scope.search.helper.addNumericRefinement("price", '>', newVal);
+                        }
+                    } else {
+                        $scope.search.helper.addNumericRefinement("price", '>', newVal);
+                    }
+                    
+                    newVal = $scope.search.price.max + 1;
+                    if (state.isNumericRefined("price", '<')){
+                        oldVal = state.getNumericRefinement("price", '<')[0];
+                        if (oldVal != newVal) {
+                            $scope.search.helper.removeNumericRefinement("price", '<');
+                            $scope.search.helper.addNumericRefinement("price", '<', newVal);
+                        }
+                    } else {
+                        $scope.search.helper.addNumericRefinement("price", '<', newVal);
+                    }
+                    
+                    $scope.search.page = 0;
+                    
+                    $scope.perform_search();
+                    
                 };
                 
                 $scope.refineProperty = function(prop){
@@ -1103,49 +1158,8 @@ define([
                 
                 $scope.renderPagination = function(result){ //$log.debug('renderPagination');
                     $scope.makePaginationModel(result.nbPages, result.page);
-                };
-                
-                $scope.renderPriceSlider = function(result, state){ //$log.debug('renderPriceSlider');
-                    
-                    var facetResult = result.getFacetByName("price");
-                    if (facetResult){
-                        var ref;
-                        var statsMin = facetResult.stats.min, statsMax = facetResult.stats.max;
-                        
-                        $scope.search.price.options.floor = $scope.search.price.min = statsMin;
-                        if (state.isNumericRefined("price", '>')){
-                            ref = state.getNumericRefinement("price", '>')[0] + 1;
-                            $scope.search.price.min = Math.max(statsMin, ref);
-                        }
-                        
-                        $scope.search.price.options.ceil = $scope.search.price.max = statsMax;
-                        if (state.isNumericRefined("price", '<')){
-                            ref = state.getNumericRefinement("price", '<')[0] - 1;
-                            $scope.search.price.max = Math.min(statsMax, ref);
-                        }
-                        
-                        $scope.search.price = $.extend(true, {}, $scope.search.price);        
-                    }
-                    
-                };
+                };                
 
-                $scope.renderRangeSlider = function(result, state){ //$log.debug('renderRangeSlider');
-                    var radius = state.aroundRadius/1000 || search_params.defaults.range.ceil;
-                    $scope.search.range = $.extend(true, {}, $scope.search.range, {max:radius});    
-                    // $timeout(function () {
-                    //     $scope.$broadcast('rzSliderForceRender');
-                    // });
-                };
-                
-                $scope.renderRenterTypes = function(result, state){ //$log.debug('renderRenterTypes');
-                    var facetResult = result.getFacetByName("pro_owner");
-                    $scope.search.owner_type.pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
-                    $scope.search.owner_type.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
-                    $scope.search.owner_type.pro = !state.isDisjunctiveFacetRefined("pro_owner") 
-                        || state.isDisjunctiveFacetRefined("pro_owner", true);
-                    $scope.search.owner_type.part = !state.isDisjunctiveFacetRefined("pro_owner") 
-                        || state.isDisjunctiveFacetRefined("pro_owner", false);
-                };
                 
                 $scope.renderProperties = function(result, state){
                     if ($scope.search.category && 
@@ -1247,15 +1261,10 @@ define([
                             $scope.search.page = result.page;
                             $scope.search.pages_count = result.nbPages;
                             $scope.renderPagination(result);
-                            $scope.renderPriceSlider(result, state);
-                            $scope.renderRenterTypes(result, state);
                         } else {
                             //$log.debug("No results");
                         }      
-                        // $scope.renderQueryText(result);
                         $scope.renderOrdering(result);
-                        // $scope.renderBreadcrumbs(state);
-                        $scope.renderRangeSlider(result, state);
                         if ($scope.search.map.loaded){
                             $scope.renderMap(result, state);
                         } else {
