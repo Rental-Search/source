@@ -43,8 +43,8 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 # Email configuration
 EMAIL_BACKEND = env('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
-SERVER_EMAIL = env('SERVER_EMAIL', 'contact@e-loue.com')
-DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', 'contact@e-loue.com')
+SERVER_EMAIL = 'contact@e-loue.com'
+DEFAULT_FROM_EMAIL = 'contact@e-loue.com'
 EMAIL_HOST = env('EMAIL_HOST', 'smtp.postmarkapp.com')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS', True)
 EMAIL_PORT = env('EMAIL_PORT', 2525)
@@ -60,6 +60,8 @@ DATABASES['default'].update({
     'OPTIONS': {'autocommit': env('DATABASE_OPTIONS_AUTOCOMMIT', True)},
     'ENGINE': 'django.contrib.gis.db.backends.postgis',
 })
+
+POSTGIS_VERSION = (2, 1, 2)
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -114,14 +116,15 @@ ugettext = lambda s: s
 LANGUAGES = (
     ('fr', ugettext('Francais')),
     ('en', ugettext('English')),
-    ('da', ugettext('Danish'))
+    ('da', ugettext('Danish')),
+    ('en-US', ugettext('English (United States)'))
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )
 
 
 SITE_ID = 1
-DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14, 15])
+DEFAULT_SITES = env("DEFAULT_SITES", [1, 3, 4, 13, 14])
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -329,7 +332,7 @@ PIPELINE_CSS = {
             'fonts/flaticons_stoke/flaticons_stoke.css',
             'bower_components/chosen/chosen.min.css',
             'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
-            'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
             'bower_components/toastr/toastr.min.css',
         ),
         'output_filename': 'css/extra.css',
@@ -360,7 +363,7 @@ PIPELINE_CSS = {
             'css/jslider.css', # temporary use our own hacked version of jQuery-UI styles to get green sliders
             'sass/product_list_styles.sass',
             #'bower_components/jqueryui/themes/smoothness/jquery-ui.min.css',
-            'bower_components/bootstrap-datepicker/css/datepicker3.css',
+            'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
             'bower_components/angularjs-slider/dist/rzslider.css',
         ),
         'output_filename': 'css/product_list_styles.css',

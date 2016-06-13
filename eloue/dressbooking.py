@@ -3,6 +3,9 @@ from eloue.settings import *
 
 SITE_ID = 15
 
+SERVER_EMAIL = 'contact@dressbooking.com'
+DEFAULT_FROM_EMAIL = 'contact@dressbooking.com'
+
 CACHE_MIDDLEWARE_KEY_PREFIX = 'dressbooking'
 
 for key in PIPELINE_CSS:
