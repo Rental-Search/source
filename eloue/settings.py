@@ -43,8 +43,8 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 # Email configuration
 EMAIL_BACKEND = env('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
-SERVER_EMAIL = 'contact@e-loue.com'
-DEFAULT_FROM_EMAIL = 'contact@e-loue.com'
+SERVER_EMAIL = env('SERVER_EMAIL', 'contact@e-loue.com')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', 'contact@e-loue.com')
 EMAIL_HOST = env('EMAIL_HOST', 'smtp.postmarkapp.com')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS', True)
 EMAIL_PORT = env('EMAIL_PORT', 2525)
