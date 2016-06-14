@@ -112,6 +112,7 @@ class Product(models.Model):
 
     source = models.ForeignKey(Site, null=True, blank=True)
 
+    redirect_url = models.URLField(_(u"Site internet"), blank=True)
 
     class Meta:
         verbose_name = _('product')
@@ -124,6 +125,8 @@ class Product(models.Model):
             self.phone = self.owner.default_number
         self.summary = strip_tags(self.summary)
         self.description = strip_tags(self.description)
+        if not self.redirect_url and self.owner.url:
+            self.redirect_url = self.owner.url
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
             self.source = Site.objects.get_current()
