@@ -21,7 +21,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
     });
 
     EloueCommon.constant("ServiceErrors", {
-        "invalid_grant": "Bad credentials provided",
+        "invalid_grant": "Les identifiants entrés sont incorrects. Veuillez essayer à nouveau.",
         "invalid_request": "Bad request",
         "invalid_scope": "Invalid scope",
         "invalid_client": "Wrong client app",
@@ -35,7 +35,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         "ITEM": {id: "3", name: "Items"},
         "ACCOUNT": {id: "4", name: "Accounts"}
     });
-
+    
     EloueCommon.constant("CivilityChoices",{ 
         'fr':{
             "MME": {id: "0", name: "Mme"},
