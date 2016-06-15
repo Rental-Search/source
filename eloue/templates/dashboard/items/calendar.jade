@@ -42,7 +42,7 @@ block details
                 td {% trans "Motifs" %}
                 td {% trans "Action" %}
             tbody
-              tr(ng-repeat="period in productUnavailablePeriods track by period.uuid", ng-show="(showBookings && period.reason=='booked') || (showUnavailable && period.reason=='unavailable')")
+              tr(ng-repeat="period in productUnavailablePeriods track by $index", ng-show="(showBookings && period.reason=='booked') || (showUnavailable && period.reason=='unavailable')")
                 td {% verbatim %}{{period.startDay | amDateFormat:'L'}}{%endverbatim %}
                 td {% verbatim %}{{period.endDay | amDateFormat:'L'}}{%endverbatim %}
                 td(ng-show="showBookings && period.reason=='booked'").text-success-light {% trans "Réservé" %}
