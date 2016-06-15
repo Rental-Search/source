@@ -121,14 +121,15 @@ class Product(models.Model):
     def __unicode__(self):
         return smart_unicode(self.summary)
 
-    def save(self, *args, **kwargs):
-        if not self.phone and self.owner.default_number:
-            self.phone = self.owner.default_number
+    def prepare_for_save(self):
         self.summary = strip_tags(self.summary)
         self.description = strip_tags(self.description)
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
             self.source = Site.objects.get_current()
+        
+    def save(self, *args, **kwargs):
+        self.prepare_for_save()
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
