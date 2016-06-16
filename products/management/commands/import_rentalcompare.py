@@ -648,6 +648,7 @@ Weight: {{ weight }} lbs.
                         resp.raise_for_status()
                         pat.avatar.save('', ContentFile(resp.content))
                     except HTTPError, e:
+                        pat.avatar.delete()
                         with skip_lock:
                             self.skip_logo(pat, str(e))
         
@@ -703,6 +704,7 @@ Weight: {{ weight }} lbs.
                         resp.raise_for_status()
                         pic.image.save('', ContentFile(resp.content))
                     except Exception, e:
+                        pic.delete()
                         with skip_lock:
                             self.skip_picture(pic, str(e))
         
