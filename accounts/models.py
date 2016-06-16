@@ -113,8 +113,8 @@ class Patron(AbstractUser):
 
     source = models.ForeignKey(Site, null=True, blank=True)
 
-    import_record = models.ForeignKey('accounts.ImportRecord', related_name='patrons', null=True)
-    original_id = models.BigIntegerField(null=True)
+    import_record = models.ForeignKey('accounts.ImportRecord', related_name='patrons', null=True, blank=True)
+    original_id = models.BigIntegerField(null=True, blank=True)
 
     thumbnail = ImageSpecField(
         source='avatar',
