@@ -699,7 +699,7 @@ Weight: {{ weight }} lbs.
                         if storage.exists(pic.image.name):
                             with skip_lock:
                                 self.skip_picture(pic, str('already exists'))
-                        name = name if name.startswith('http') else self.PICTURES_URL + name
+                        name = name if name.startswith('http') else (self.PICTURES_URL + name)
                         resp = requests.get(name)
                         resp.raise_for_status()
                         pic.image.save('', ContentFile(resp.content))
