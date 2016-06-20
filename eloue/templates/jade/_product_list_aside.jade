@@ -7,67 +7,77 @@ style.
 {% verbatim %}
 
 script(type="text/ng-template", id="_category_tree_item.html")
-  ul(class="category_tree" ng-if="category.isRefined")
-    li(ng-repeat="category in category.data track by category.path")
-      a(ng-click="refineCategory(category.path)" ng-style="category.isRefined ? {'font-weight':'bold'} : {}")
-        {{ categoryName(category.name) + "&nbsp(" + category.count + ")" }} 
+  ul(class="category_tree" ng-if="(category || vm.value).isRefined")
+    li(ng-repeat="category in (category || vm.value).data track by category.path")
+      a(ng-click="vm.refine(category.path)" ng-style="category.isRefined ? {'font-weight':'bold'} : {}")
+        {{ vm.categoryName(category.name) + "&nbsp(" + category.count + ")" }} 
       div(ng-if="category.isRefined", ng-include="'_category_tree_item.html'")
 
 script(type="text/ng-template" id="_filter_wrapper.html")
   div(ng-cloak, class="filter-wrapper")
-    label(class="caption", for="{{label}}-slider", style="width:100%; position:relative; height:1.5em; line-height:1.5em;")
+    label(class="caption", for="{{vm.label}}-slider", style="width:100%; position:relative; height:1.5em; line-height:1.5em;")
       span(ng-cloak, title="{{ 'Réinitialiser' | translate }}", class="btn-clear-filter",
-            ng-click="reset()", ng-show="!clean()")
-      {{label}}
-      
+            ng-click="vm.reset()", ng-show="!vm.clean()")
+      {{ vm.label }}
+    .whirly(ng-hide='vm.ready()')
+    div(ng-show='vm.ready()')
 {% endverbatim %}
 
 
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
-
-  eloue-filter-wrapper(eloue-filter, attr-name="category", eloue-categories, label="{% trans 'catégories' %}")
-    div(ng-include="'_category_tree_item.html'")
   
   
-  label.caption(for="where") {% trans "carte" %}
-  .map-container
-    .whirly(ng-if='!search.map.loaded')
-    ui-gmap-google-map(ng-if='search.map.loaded', center='search.map.center', zoom='search.map.zoom', 
-        options='search.map.options', control='search.map.control', events='search.map.events', pan="true")
-      ui-gmap-markers(ng-show="search.result_count", models="search.product_list", coords="'location_obj'", 
-          idKey="'markerId'", events="marker_event_handlers", type="'cluster'", typeOptions="search.map.clustererOptions", options="'markerOptions'")
+  eloue-filter-wrapper(ng-if="search", label="{% trans 'catégories' %}", attr-name="category",
+                        value="search.category",  defaults="defaults.category",
+                        eloue-categories)
+    div(ng-hide="vm.empty", ng-include="'_category_tree_item.html'")
+    div(ng-show="vm.empty") {% trans "Aucune categorie" %}
+  
+  
+  eloue-filter-wrapper(ng-if="search", label="{% trans 'carte' %}", 
+                        value="search.map",  defaults="defaults.map",
+                        eloue-map)
+      ui-gmap-google-map(center='vm.value.center', zoom='vm.value.zoom', 
+          options='vm.value.options', control='vm.value.control', events='vm.value.events', pan="true")
+        ui-gmap-markers(ng-show="vm.resultCount", models="vm.results", coords="'location_obj'", 
+            idKey="'markerId'", events="marker_event_handlers", type="'cluster'", 
+            typeOptions="vm.value.clustererOptions", options="'markerOptions'")
     
     
-  eloue-filter-wrapper(label="{% trans 'rayon' %}", eloue-filter, attr-name='aroundRadius', eloue-slider, units="DISTANCE", eloue-distance, 
-                        ng-model="search.range", ng-change="refineRange()")
-    rzslider(id="{% trans 'rayon' %}-slider", ng-if="ready()", rz-slider-model="value.max",
-      rz-slider-options="value.options")
+  eloue-filter-wrapper(ng-if="search", label="{% trans 'rayon' %}", attr-name='aroundRadius', 
+                        value="search.range",  defaults="search.range", 
+                        eloue-slider, units="DISTANCE", eloue-distance)
+    rzslider(id="{% trans 'rayon' %}-slider", rz-slider-model="vm.value.max",
+      rz-slider-options="vm.value.options")
   
   
-  eloue-filter-wrapper(label="{% trans 'prix' %}", eloue-filter, attr-name='price', eloue-slider, units="MONEY", eloue-price
-                        ng-model="search.price", ng-change="refinePrices()")
-    rzslider(id="{% trans 'prix' %}-slider", ng-if="ready()", rz-slider-model="value.min", rz-slider-high="value.max",
-      rz-slider-options="value.options")
+  eloue-filter-wrapper(ng-if="search", label="{% trans 'prix' %}", attr-name='price', 
+                        value="search.price",  defaults="defaults.price", 
+                        eloue-slider, units="MONEY", eloue-price)
+    rzslider(id="{% trans 'prix' %}-slider", rz-slider-model="vm.value.min", rz-slider-high="vm.value.max",
+      rz-slider-options="vm.value.options")
       
   
-  eloue-filter-wrapper(label="{% trans 'loueurs' %}", eloue-filter, attr-name='pro_owner', eloue-propart)
-    .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.part_count", ng-cloak)
+  eloue-filter-wrapper(ng-if="search", label="{% trans 'loueurs' %}", attr-name='pro_owner',
+                        value="search.owner_type",  defaults="defaults.owner_type",
+                        eloue-propart)
+    .checkbox(ng-show="vm.value.part_count", ng-cloak)
       label(for="particular")
         {% trans "particuliers" as particular %}
-        input(type="checkbox", name="renter", ng-change="refineRenterPart(search.owner_type.part)", 
-                ng-model="search.owner_type.part", ng-disabled="noProPartChoice()")#particular
+        input(type="checkbox", name="renter", ng-change="vm.refineRenterPart(vm.value.part)", 
+                ng-model="vm.value.part", ng-disabled="vm.noProPartChoice()")#particular
         span.flaticon.stroke.checkmark-1
-      {% trans " Particuliers" %} {% verbatim %} {{ " ("+search.owner_type.part_count+")" }} {% endverbatim %}
-    .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.pro_count", ng-cloak)
+      {% trans " Particuliers" %} {% verbatim %} {{ " ("+vm.value.part_count+")" }} {% endverbatim %}
+    .checkbox(ng-show="vm.value.pro_count", ng-cloak)
       label(for="professional")
-        input(type="checkbox", name="renter", ng-change="refineRenterPro(search.owner_type.pro)", 
-                ng-model="search.owner_type.pro", ng-disabled="noProPartChoice()")#professional
+        input(type="checkbox", name="renter", ng-change="vm.refineRenterPro(vm.value.pro)",
+                ng-model="vm.value.pro", ng-disabled="vm.noProPartChoice()")#professional
         span.flaticon.stroke.checkmark-1
-      {% trans " Professionnels" %} {% verbatim %} {{ " ("+search.owner_type.pro_count+")" }} {% endverbatim %}
+      {% trans " Professionnels" %} {% verbatim %} {{ " ("+vm.value.pro_count+")" }} {% endverbatim %}
   
   
-  div(eloue-property-dropdown-filter, ng-repeat="prop in search.category.properties | is_facet", 
-        property-type="prop", ng-model="search[prop.attr_name]", ng-change="refineProperty(prop)")
+  //-div(eloue-property-dropdown-filter, ng-repeat="prop in search.category.properties | is_facet", 
+  //-      property-type="prop", ng-model="search[prop.attr_name]", ng-change="refineProperty(prop)")
 
 
