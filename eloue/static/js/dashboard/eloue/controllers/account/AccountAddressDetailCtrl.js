@@ -64,7 +64,7 @@ define([
 
             $scope.finaliseAddressUpdate = function () {
                 $scope.submitInProgress = false;
-                $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
+                $scope.showNotification('PERSONAL_INFO', 'update', true); 
                 $state.transitionTo($state.current, $stateParams, {reload: true});
             };
 
@@ -73,7 +73,7 @@ define([
                 $scope.submitInProgress = true;
                 AddressesService.deleteAddress($scope.address.id).then(function () {
                     $scope.submitInProgress = false;
-                    $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
+                    $scope.showNotification('PERSONAL_INFO', 'update', true); 
                     $state.transitionTo("account.addresses", $stateParams, {reload: true});
                 }, function (error) {
                     $scope.handleResponseErrors(error, "address", "delete");

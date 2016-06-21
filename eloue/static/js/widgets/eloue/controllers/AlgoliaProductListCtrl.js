@@ -4,7 +4,8 @@ define([
     "../../../common/eloue/services/CategoriesService",
     "algoliasearch-helper",
     "stacktrace",
-    "js-cookie"
+    "js-cookie",
+    "../i18n"
 ], function (EloueWidgetsApp, UtilsService, CategoriesService, algoliasearchHelper, StackTrace, Cookies) {
     "use strict";
     
@@ -103,7 +104,7 @@ define([
     } else {
         cleanup();
     }
-
+    
     EloueWidgetsApp.filter('safe', [
       '$sce',
       function($sce) {
@@ -142,13 +143,18 @@ define([
     }]);
                                      
     
-    EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
-        uiGmapGoogleMapApiProvider.configure({
+    EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', 'MAP_CONFIG', function(uiGmapGoogleMapApiProvider, MAP_COFNIG) {
+        
+        // TODO a hack to get the language 
+        var lang = angular.element(document)[0].documentElement.lang;
+        
+        var conf = $.extend({
             v: '3.exp',
             libraries: ['places', 'geometry'],
-            language: 'fr-FR',
-            region: 'FR'
-        });
+        }, MAP_COFNIG[lang]);
+        
+        uiGmapGoogleMapApiProvider.configure(conf);
+
     }]);
    
    
@@ -177,6 +183,118 @@ define([
           }
         };
     });
+    
+    
+    EloueWidgetsApp.directive('eloueSliderFilter', ['$filter', '$log', function($filter, $log){
+        return {
+            template:
+                '<div ng-if="ready()">'+   
+                    '<label class="caption" '+
+                        'for="{{label}}-slider">{{label}}</label>'+
+                    '<rzslider ng-if="!is_range()" id="{{label}}-slider" '+
+                        'ng-model="value.max", rz-slider-model="value.max" '+
+                        'rz-slider-options="value.options"/>'+
+                    '<rzslider ng-if="is_range()" id="{{label}}-slider" '+
+                        'rz-slider-model="value.min" rz-slider-high="value.max" '+
+                        'ng-model="value.min" rz-slider-options="value.options"/>'+
+                '</div>',
+            restrict: 'E',
+            require: 'ngModel',
+            scope: {
+                proto: '=propertyType',
+                label: '@',
+                i18n: '@'
+            },
+            link: function (scope, element, attrs, ngModel) {
+                
+                var onEnd;
+                
+                function toMetric(val, k){
+                    return Math.round(val*k);
+                } 
+                
+                function fromMetric(val, k){
+                    return Math.round(val/k);
+                } 
+                
+                function translate(value){
+                    return $filter("translate")(scope.i18n, {value:value});
+                }
+                
+                scope.is_range = function(){
+                    return 'min' in scope.value;
+                };
+                
+                scope.ready = function(){
+                    return 'max' in scope.value && 
+                        'ceil' in scope.value.options && 
+                        'floor' in scope.value.options;
+                };
+                
+                ngModel.$formatters.push(function(val){//$log.debug('format');
+                    var value = $.extend(true, {}, val);
+                    var k = value.from_metric;
+                    if (k){
+                        value.options.ceil = fromMetric(value.options.ceil, k);
+                        value.options.floor = fromMetric(value.options.floor, k);
+                        value.max = fromMetric(value.max, k);
+                        if (scope.is_range()){
+                            value.min = fromMetric(value.min, k);   
+                        }   
+                    }
+                    // $log.debug(value);
+                    return value;
+                });
+                
+                ngModel.$parsers.push(function(val){//$log.debug('parse');
+                    var value = $.extend(true, {}, val);
+                    var k = value.to_metric;
+                    if (k){
+                        value.options.ceil = toMetric(value.options.ceil);
+                        value.options.floor = toMetric(value.options.floor);
+                        value.max = toMetric(value.max);
+                        if (scope.is_range()){
+                            value.min = toMetric(value.min);   
+                        }   
+                    }
+                    // $log.debug(value);
+                    return value;
+                });
+                
+                onEnd = function (){//$log.debug('onEnd');
+                        
+                    // Create a new object to trigger ng-model change
+                    var val = {
+                        max: scope.value.max,
+                        options:{
+                            ceil: scope.value.options.ceil,
+                            floor: scope.value.options.floor
+                        }
+                    };
+                    if (scope.is_range()){
+                        val.min = scope.value.min;   
+                    }
+                    // $log.debug(val);
+                    ngModel.$setViewValue(val);
+                    
+                };
+                
+                ngModel.$render = function(){ //$log.debug('render');
+                    scope.value = $.extend(true, scope.value, ngModel.$viewValue);
+                    // $log.debug(scope.value);
+                };
+                
+                scope.value = {
+                    options:{
+                        translate: translate,
+                        onEnd: onEnd
+                    }
+                };
+                
+          }
+        };
+    }]);
+    
    
     
     /**
@@ -739,29 +857,33 @@ define([
                 $scope.renderPriceSlider = function(result, state){ //$log.debug('renderPriceSlider');
                     
                     var facetResult = result.getFacetByName("price");
-                    var ref;
-                    var statsMin = facetResult.stats.min, statsMax = facetResult.stats.max;
-                    
-                    $scope.search.price.options.floor = $scope.search.price.min = statsMin;
-                    if (state.isNumericRefined("price", '>')){
-                        ref = state.getNumericRefinement("price", '>')[0] + 1;
-                        $scope.search.price.min = Math.max(statsMin, ref);
-                    }
-                    
-                    $scope.search.price.options.ceil = $scope.search.price.max = statsMax;
-                    if (state.isNumericRefined("price", '<')){
-                        ref = state.getNumericRefinement("price", '<')[0] - 1;
-                        $scope.search.price.max = Math.min(statsMax, ref);
+                    if (facetResult){
+                        var ref;
+                        var statsMin = facetResult.stats.min, statsMax = facetResult.stats.max;
+                        
+                        $scope.search.price.options.floor = $scope.search.price.min = statsMin;
+                        if (state.isNumericRefined("price", '>')){
+                            ref = state.getNumericRefinement("price", '>')[0] + 1;
+                            $scope.search.price.min = Math.max(statsMin, ref);
+                        }
+                        
+                        $scope.search.price.options.ceil = $scope.search.price.max = statsMax;
+                        if (state.isNumericRefined("price", '<')){
+                            ref = state.getNumericRefinement("price", '<')[0] - 1;
+                            $scope.search.price.max = Math.min(statsMax, ref);
+                        }
+                        
+                        $scope.search.price = $.extend(true, {}, $scope.search.price);        
                     }
                     
                 };
 
                 $scope.renderRangeSlider = function(result, state){ //$log.debug('renderRangeSlider');          
                     var radius = state.aroundRadius/1000 || UtilsService.zoom(search_params.defaults.range.ceil);
-                    $scope.search.range.max = radius;    
-                    $timeout(function () {
-                        $scope.$broadcast('rzSliderForceRender');
-                    });
+                    $scope.search.range = $.extend(true, {}, $scope.search.range, {max:radius});    
+                    // $timeout(function () {
+                    //     $scope.$broadcast('rzSliderForceRender');
+                    // });
                 };
                 
                 $scope.renderSearchCategories = function(result, state){ //$log.debug('renderSearchCategories');
@@ -994,25 +1116,35 @@ define([
 //                        }
 //                    }
 //                };
-                
+
 
                 $scope.search.range.options = {
                     floor: $scope.search.range.floor,
-                    ceil: $scope.search.range.ceil,
-                    onEnd: $scope.refineRange,
-                    translate: function(value) {
-                        return value + " km";
-                    }
+                    ceil: $scope.search.range.ceil//,
+                    // onEnd: $scope.refineRange//,
+                    // translate: function(value){
+                    //     return $filter("translate")('DISTANCE', {value:value});
+                    // }
+                    // translate: function(value){
+                    //     var koef = search_params.defaults['range'].from_metric;
+                    //     return Math.ceil(koef ? (1/koef)*value : value) + 
+                    //         ' ' + search_params.defaults['range'].unit;
+                    // }
                 };      
                 
                 
                 $scope.search.price.options = {
                     floor: $scope.search.price.floor,
-                    ceil: $scope.search.price.ceil,
-                    onEnd: $scope.refinePrices,
-                    translate: function(value) {
-                        return value + " €";
-                    }
+                    ceil: $scope.search.price.ceil
+                    // onEnd: $scope.refinePrices,
+                    // translate: function(value){
+                    //     return $filter("translate")('MONEY', {value:value});
+                    // }
+                    // translate: function(value){
+                    //     var koef = search_params.defaults['price'].from_metric;
+                    //     return Math.ceil(koef ? (1/koef)*value : value) + 
+                    //         ' ' + Currency[search_params.defaults['price'].unit].symbol;
+                    // }
                 };
 
                 //$log.debug("Added callback:");
