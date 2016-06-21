@@ -59,5 +59,13 @@ define(["eloue/app",
             if (csrftoken && csrftoken.length > 0) {
                 $http.defaults.headers.common["X-CSRFToken"] = csrftoken;
             }
+            
         }]);
+        
+        EloueApp.run(["$translate", "$document", "amMoment", "UtilsService", function($translate, $document, amMoment, UtilsService){
+            var locale = UtilsService.locale();
+            $translate.use(locale);
+            amMoment.changeLocale(locale);
+        }]);
+        
     });

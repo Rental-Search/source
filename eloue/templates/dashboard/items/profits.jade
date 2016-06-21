@@ -1,7 +1,7 @@
 -load i18n
 block details
   .section-content
-    h2.pull-right.clear-both {% trans "Total des revenus générés" %} : {% verbatim %}{{totalProfit}}{% endverbatim %}{% trans "€" %}
+    h2.pull-right.clear-both {% trans "Total des revenus générés" %} : {% verbatim %}{{ 'MONEY' | translate:{value:totalProfit} }}{% endverbatim %}
     h3.pull-right.clear-both.indent-sm-b {% trans "Nombre de réservation" %} : {% verbatim %}{{numberOfBookings}}{% endverbatim %} {% trans "en" %}
       span(ng-show="durationYears > 0")
        | {% verbatim %}{{durationYears}}{% endverbatim %} {% trans "ans" %} {% trans "et" %}

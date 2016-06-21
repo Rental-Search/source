@@ -9,6 +9,6 @@
                 .thumbnail-frame
                     h4 {% verbatim %}{{message.sender.username}}{% endverbatim %}
                     p(style="white-space: pre-line;", ng-bind="message.body")
-                p(ng-bind="message.sent_at | date : 'Le dd.MM.yyyy à HH:mm'").time
+                p.time {% verbatim %} {{ 'MESSAGE_SENT_AT' | translate:{date:message.sent_at} }} {% endverbatim %}
             div(ng-if="product.owner.id != message.sender.id").thumbnail-img
                 a(href="{% verbatim %}{{message.sender.url}}{% endverbatim %}"): img(style="background-image: url({% verbatim %}{{ message.sender.avatar.thumbnail }}{% endverbatim %})").bg-image

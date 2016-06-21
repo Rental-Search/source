@@ -4,6 +4,8 @@ define([
     "angular-cookies",
     "angular-resource",
     "angular-translate",
+    "angular-translate-interpolation-messageformat",
+    "angular-moment",
     "angular-i18n",
     "angularjs-slider",
     "js-cookie",
@@ -19,6 +21,7 @@ define([
         "pascalprecht.translate",
         "algoliasearch",
         "rzModule",
-        "uiGmapgoogle-maps"
+        "uiGmapgoogle-maps",
+        "angularMoment"
     ]);
 });
