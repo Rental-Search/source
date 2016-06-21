@@ -1,0 +1,27 @@
++block-with-thumbnail(px(120), 0)
+>.thumbnail-img a
+	height: px(80)
+	+default-product
+>.thumbnail-content
+	white-space: nowrap
+	text-align: left
+	.location-pin-3
+		display: inline-block
+		margin-right: .5em
+	h3
+		font-size: inherit
+		font-weight: $fw-bold
+		white-space: normal
+	p
+		font-weight: $fw-semibold
+		font-size: inherit
+		margin: 0 0 .5em
+	.writing-comment
+		display: inline-block
+		margin: 0 .5em 0 1em
+	.declarer
+		+block-with-thumbnail(60px, 50%)
+		margin-top: 0
+		.thumbnail-content
+			vertical-align: middle
+			font-size: px(13)

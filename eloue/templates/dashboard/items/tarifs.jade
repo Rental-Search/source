@@ -96,7 +96,7 @@ block details
                                 td {% trans "Caution" %}
                                 td
                                     input(type="text", name="caution", placeholder="{% trans 'Caution demandée' %} *", ng-model="product.deposit_amount", required).table-form
-                                    | €
+                                    | {% trans "€" %}
             | * : {% trans "Tarif obligatoire" %}
             .row
                 button(type="submit", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").btn.text-white.bg-success-hover.col-xs-8.col-xs-offset-2 {% trans "Enregistrez les modifications" %}

@@ -117,7 +117,7 @@ define([
             };
             $scope.productId = $scope.getProductIdFromUrl();
 
-            $scope.hours = AvailableHours;
+            $scope.hours = UtilsService.choicesHours();
 
             $scope.findHour = function(hourValue) {
                 for (var i = 0; i < $scope.hours.length; i++) {
@@ -128,29 +128,49 @@ define([
             };
 
             var queryParams = UtilsService.getQueryParams();
-
+            
+            
+            var dr =  UtilsService.dateRepr, di = UtilsService.dateInternal;
+            
             /**
              * Initial booking dates are 1 nad 2 days after todat, 8a.m.
              */
             var currentDate = new Date();
             var currentHours = (currentDate.getHours() + 1) % 24;
             $scope.bookingDetails = {
-                "fromDate": queryParams.date_from ? queryParams.date_from : Date.today().add(0).days().toString("dd/MM/yyyy"),
+                "fromDate": dr(queryParams.date_from ? queryParams.date_from : Date.today().add(0).days().toString("dd/MM/yyyy")),
                 "fromHour": queryParams.hour_from ? $scope.findHour(queryParams.hour_from) : $scope.hours[currentHours],
-                "toDate": queryParams.date_to ? queryParams.date_to : Date.today().add(1).days().toString("dd/MM/yyyy"),
+                "toDate": dr(queryParams.date_to ? queryParams.date_to : Date.today().add(1).days().toString("dd/MM/yyyy")),
                 "toHour": queryParams.hour_to ? $scope.findHour(queryParams.hour_to) :  $scope.hours[currentHours]
             };
 
+            // TODO refactor into a directive
             var fromDateSelector = $("input[name='fromDate']"), toDateSelector = $("input[name='toDate']");
             fromDateSelector.val($scope.bookingDetails.fromDate).datepicker({
-                language: "fr",
+                language: UtilsService.locale(),
+                format:{
+                    toDisplay: function(date, format, lang){
+                        return UtilsService.date(date).format('L');
+                    },
+                    toValue: function(date, format, lang){
+                        return UtilsService.date(date, "L").toDate();
+                    }
+                },
                 autoclose: true,
-                startDate: Date.today().add(0).days().toString("dd/MM/yyyy")
+                startDate: UtilsService.date(Date.today().add(0).days()).format("L")
             });
             toDateSelector.val($scope.bookingDetails.toDate).datepicker({
-                language: "fr",
+                language: UtilsService.locale(),
+                format:{
+                    toDisplay: function(date, format, lang){
+                        return UtilsService.date(date).format('L');
+                    },
+                    toValue: function(date, format, lang){
+                        return UtilsService.date(date, "L").toDate();
+                    }
+                },
                 autoclose: true,
-                startDate: Date.today().add(1).days().toString("dd/MM/yyyy")
+                startDate: UtilsService.date(Date.today().add(1).days()).format("L")
             });
             $scope.duration = "0 jour";
             $scope.bookingPriceCurrency = "";
@@ -165,7 +185,7 @@ define([
             $scope.available = true;
             $scope.newMessage = {};
             $scope.threadId = null;
-            $scope.civilityOptions = CivilityChoices;
+            $scope.civilityOptions = UtilsService.choicesHonorific();
 
             /**
              * Show response errors on booking form under appropriate field.
@@ -181,13 +201,13 @@ define([
             ProductsService.getProduct($scope.productId, false, false).then(function (result) {
                 $scope.product = result;
             });
-
+            
             /**
              * Update the product booking price based on selected duration.
              */
             $scope.updatePrice = function updatePrice() {
-                var fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value,
-                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value,
+                var fromDateTimeStr = di($scope.bookingDetails.fromDate) + " " + $scope.bookingDetails.fromHour.value,
+                    toDateTimeStr = di($scope.bookingDetails.toDate) + " " + $scope.bookingDetails.toHour.value,
                     fromDateTime = Date.parseExact(fromDateTimeStr, "dd/MM/yyyy HH:mm:ss"),
                     toDateTime = Date.parseExact(toDateTimeStr, "dd/MM/yyyy HH:mm:ss");
                 toDateSelector.datepicker("setStartDate", fromDateTime);
@@ -199,10 +219,10 @@ define([
                     //When the user change the value of the "from date" and that this new date is after the "to date" so the "to date" should be update and the value should be the same of the "from date".
                     $scope.dateRangeError = "La date de début ne peut pas être après la date de fin";
                     if (fromDateTime.getHours() < 23) {
-                        $scope.bookingDetails.toDate = fromDateTime.toString("dd/MM/yyyy");
+                        $scope.bookingDetails.toDate = dr(fromDateTime.toString("dd/MM/yyyy"));
                         $scope.bookingDetails.toHour = $scope.findHour(fromDateTime.add(1).hours().toString("HH:mm:ss"));
                     } else {
-                        $scope.bookingDetails.toDate = fromDateTime.add(1).days().toString("dd/MM/yyyy");
+                        $scope.bookingDetails.toDate = dr(fromDateTime.add(1).days().toString("dd/MM/yyyy"));
                         $scope.bookingDetails.toHour = $scope.findHour(fromDateTime.add(1).hours().toString("HH:mm:ss"));
                     }
 
@@ -212,12 +232,12 @@ define([
                         $("[id=toHour]").trigger("chosen:updated");
                     }, 0);
 
-                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
-                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
+                    fromDateTimeStr = di($scope.bookingDetails.fromDate) + " " + $scope.bookingDetails.fromHour.value;
+                    toDateTimeStr = di($scope.bookingDetails.toDate) + " " + $scope.bookingDetails.toHour.value;
                 }
 
                 if (fromDateTime.valueOf() === toDateTime.valueOf()) {
-                    $scope.bookingDetails.toDate = fromDateTime.toString("dd/MM/yyyy");
+                    $scope.bookingDetails.toDate = dr(fromDateTime.toString("dd/MM/yyyy"));
                     $scope.bookingDetails.toHour = $scope.findHour(toDateTime.add(1).hours().toString("HH:mm:ss"));
 
                     // Fix for very strange eloueChosen directive behaviour. Sometimes directive doesn't get fired and
@@ -226,8 +246,8 @@ define([
                         $("[id=toHour]").trigger("chosen:updated");
                     }, 0);
 
-                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
-                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
+                    fromDateTimeStr = di($scope.bookingDetails.fromDate) + " " + $scope.bookingDetails.fromHour.value;
+                    toDateTimeStr = di($scope.bookingDetails.toDate) + " " + $scope.bookingDetails.toHour.value;
                 }
 
 
@@ -235,7 +255,7 @@ define([
                 if (fromDateTime.valueOf() < now.valueOf()) {
 
                     var currentHours = (now.getHours() + 1) % 24;
-                    $scope.bookingDetails.fromDate = fromDateTime.toString("dd/MM/yyyy");
+                    $scope.bookingDetails.fromDate = dr(fromDateTime.toString("dd/MM/yyyy"));
                     $scope.bookingDetails.fromHour = $scope.hours[currentHours];
 
                     // Fix for very strange eloueChosen directive behaviour. Sometimes directive doesn't get fired and
@@ -244,8 +264,8 @@ define([
                         $("[id=fromHour]").trigger("chosen:updated");
                     }, 0);
 
-                    fromDateTimeStr = $scope.bookingDetails.fromDate + " " + $scope.bookingDetails.fromHour.value;
-                    toDateTimeStr = $scope.bookingDetails.toDate + " " + $scope.bookingDetails.toHour.value;
+                    fromDateTimeStr = di($scope.bookingDetails.fromDate) + " " + $scope.bookingDetails.fromHour.value;
+                    toDateTimeStr = di($scope.bookingDetails.toDate) + " " + $scope.bookingDetails.toHour.value;
                 }
 
                 $scope.dateRangeError = null;
@@ -266,7 +286,8 @@ define([
              */
             $scope.parseProductAvailabilityResponse = function (result) {
                 var price = result.total_price;
-                price = price.replace("€", "").replace("\u20ac", "").replace("Eu", "").replace(",", ".").replace(" ", "").replace("kr", "");
+                // price = price.replace("€", "").replace("\u20ac", "").replace("Eu", "").replace(",", ".").replace(" ", "").replace("kr", "");
+                price = price.replace(/[^0-9.]/, "");
                 price = Number(price);
                 $scope.bookingPriceCurrency = result.total_price;
                 $scope.duration = result.duration;
@@ -336,7 +357,7 @@ define([
                     var patchPromises = {};
 
                     if ($scope.noAddress){
-                        $scope.currentUser.default_address.country = "FR";
+                        $scope.currentUser.default_address.country = UtilsService.country();
                         patchPromises.default_address = AddressesService
                                 .saveAddress($scope.currentUser.default_address)
                                 .then(function(result){
@@ -836,11 +857,18 @@ define([
 
             $scope.applyDatePicker = function (fieldId) {
                 $("#" + fieldId).datepicker({
-                    language: "fr",
+                    language: UtilsService.locale(),
                     autoclose: true,
                     startView: 2,
                     todayHighlight: true,
-                    dateFormat: "yyyy-MM-dd"
+                    format:{
+                        toDisplay: function(date, format, lang){
+                            return UtilsService.date(date).format('L');
+                        },
+                        toValue: function(date, format, lang){
+                            return UtilsService.date(date, 'L').toDate();
+                        }
+                    }
                 });
             };
 

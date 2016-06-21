@@ -19,7 +19,7 @@ section.tabs-vertical-active.lg(ng-show="items && (items.length > 0 || !!selecte
             | {% trans "Location" %}&nbsp;
             a(ui-sref="items.info({id: item.id})", id="item-title-link-{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.summary}}{% endverbatim %}
           p.normal.text-gray
-            big(id="item-title-price-{% verbatim %}{{item.id}}{% endverbatim %}").text-primary {% verbatim %}{{item.pricePerDay}}{% endverbatim %}{% trans "€" %} / {% trans "jour" %}
+            big(id="item-title-price-{% verbatim %}{{item.id}}{% endverbatim %}").text-primary {% verbatim %}{{ 'MONEY'|translate:{value:item.pricePerDay} }}{% endverbatim %} / {% trans "jour" %}
             br
             span(ng-hide="item.stats.booking_comments_count == 0 && item.stats.bookings_count == 0")
              +average-rate("item.stats.average_rating")

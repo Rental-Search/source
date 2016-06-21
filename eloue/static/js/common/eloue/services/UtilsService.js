@@ -3,20 +3,56 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/services/AuthS
     /**
      * Utils service.
      */
-    EloueCommon.factory("UtilsService", ["$filter", "AuthService", function ($filter, AuthService) {
+    EloueCommon.factory("UtilsService", ["$filter", "AuthService", "$document", '$translate', 'moment', 'MAP_CONFIG', 'CivilityChoices', function ($filter, AuthService, $document, $translate, moment ,MAP_CONFIG, CivilityChoices) {
         var utilsService = {};
-
+                
+        
+        utilsService.date = moment;
+                
+        utilsService.locale = function(){
+            return $document[0].documentElement.lang;      
+        };
+        
+        utilsService.country = function(){
+            return MAP_CONFIG[utilsService.locale()];
+        };
+        
+        utilsService.choicesHonorific = function(){
+            return CivilityChoices[utilsService.locale()];
+        };
+        
+        utilsService.choicesHours = function(){
+            var choices = [];
+            for (var i=0; i<24; i++){
+                var time = moment({hour:i});
+                choices.push({
+                    label:time.format("LT"),
+                    value:time.format("HH:mm:ss")
+                });
+            }  
+            return choices;
+        };
+                  
+        utilsService.dateInternal = function(dateStr){
+            return moment(dateStr, "L").format('DD/MM/YYYY');
+        };
+        
+        utilsService.dateRepr = function(dateStr){
+            return moment(dateStr, 'DD/MM/YYYY').format("L");
+        };
+        
         utilsService.formatDate = function (date, format) {
             return $filter("date")(date, format);
         };
+        
 
         /**
          * Translates message using provided key.
          * @param msgKey message key for eloue/static/js/common/eloue/i18n.js
          * @returns Translation
          */
-        utilsService.translate = function (msgKey) {
-            return $filter("translate")(msgKey);
+        utilsService.translate = function (msgKey, params, ip) {
+            return $filter("translate")(msgKey, params, ip);
         };
 
         utilsService.formatMessageDate = function (dateString, shortFormat, fullFormat) {

@@ -10,19 +10,19 @@ table.calendar.bd-wrap.indent-t-md.indent-b-md
         tr
             td {% trans "Prix" %}
             td
-                b.text-success {% verbatim %}{{bookingPrice | number}}{% endverbatim %}&nbsp;{% trans "€" %}
+                b.text-success {% verbatim %}{{ 'MONEY' | translate:{value:bookingPrice} }}{% endverbatim %}
         tr(ng-show="shippingPrice > 0")
             td {% trans "Livraison" %}
             td
-                b.text-success {% verbatim %}{{shippingPrice | number: 2}}{% endverbatim %}&nbsp;{% trans "€" %}
+                b.text-success {% verbatim %}{{ 'MONEY' | translate:{value:shippingPrice} }}{% endverbatim %}
         tr(ng-show="shippingPrice > 0")
             td {% trans "Total" %}
             td
-                b.text-success {% verbatim %}{{bookingPrice + shippingPrice | number}}{% endverbatim %}&nbsp;{% trans "€" %}
+                b.text-success {% verbatim %}{{ 'MONEY' | translate:{value:(bookingPrice + shippingPrice)} }}{% endverbatim %}
         tr
             td {% trans "Caution" %}
             td
-                b {% verbatim %}{{product.deposit_amount}}{% endverbatim %}&nbsp;{% trans "€" %}
+                b {% verbatim %}{{ 'MONEY' | translate:{value:product.deposit_amount} }}{% endverbatim %}
 {% blocktrans %}
 p En cliquant sur "Réservez", vous enverrez une demande de location au propriétaire. Vous serez débité du montant de la location dès qu'il  acceptera votre demande. La caution ne sera pas débitée de votre compte (e-loue prendra simplement une empreinte de votre carte bancaire en cas de problème pendant la location).
 {% endblocktrans %}
