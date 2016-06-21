@@ -14,14 +14,12 @@ h3(ng-show="ui_pristine").col-md-7
       {{ breadcrumbs.categorie.pretty_value|safe }}
   else
     {% trans "Aucune annonce trouvée" %}
-{% angularjs %}
 h3(ng-hide="ui_pristine", ng-cloak).col-md-7
-  span(ng-if="search.query && search.result_count")
-    span(ng-if="search.result_count==1") 1 annonce correspondant à vos critères
-    span(ng-if="search.result_count!=1") {{ search.result_count }} annonces correspondant à vos critères
+  span(ng-if="search.query || !search.result_count")
+    {% verbatim %}
+    span(translate="AD_COUNT", translate-values="{count:{{search.result_count}}}", translate-interpolation="messageformat")
+    {% endverbatim %}
   span(ng-if="!search.query && search.result_count") {% trans "Location" %} {{ search.leaf_category }}
-  span(ng-if="!search.result_count") {% trans "Aucune annonce trouvée" %} 
-{% endangularjs %}
 .col-xs-5.layout-switcher
   i.flaticon.stroke.menu-list-4.list
   i.flaticon.stroke.window-1.grid

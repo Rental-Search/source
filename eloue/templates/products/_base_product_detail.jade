@@ -50,7 +50,8 @@ block append content-body
     include ../jade/_pro_popin_website_link
     include ../jade/_pro_popin_shop
     {% endwith %}
-  .container-flex
+  //- Inherit HomePage controller to activate geolocation search
+  .container-flex(data-ng-controller="HomePageCtrl")
     header.header-site
       include ../jade/_header_site
     nav.bd-b

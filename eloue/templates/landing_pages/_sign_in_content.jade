@@ -29,7 +29,7 @@
             .form-group: .row
                 .col-xs-5.clear-selector
                     select(ng-model="account.civility", data-placeholder="Civilité", eloue-chosen).form-control
-                        option(ng-repeat="item in civilityOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
+                        option(ng-repeat="item in civilityOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name|translate}}{% endverbatim %}
                 .col-xs-7
                     input(type="text", placeholder="{% trans 'Nom *' %}", name="last_name", ng-model="account.last_name", required).form-control
                     span.text-danger(ng-show="registrationForm.last_name.$error.required && registrationSubmitted", translate="required_field")

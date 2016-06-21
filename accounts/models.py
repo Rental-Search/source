@@ -43,6 +43,7 @@ from payments import paypal_payment
 from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites, pre_delete_creditcard
 from eloue.utils import create_alternative_email, json
+from django.db.models.fields.related import ForeignKey
 
 
 DEFAULT_CURRENCY = get_format('CURRENCY')
@@ -58,6 +59,7 @@ class Language(models.Model):
 
     def __unicode__(self):
         return ugettext(self.lang)
+
     
 class Patron(AbstractUser):
     """A member"""
@@ -111,6 +113,9 @@ class Patron(AbstractUser):
 
     source = models.ForeignKey(Site, null=True, blank=True)
 
+    import_record = models.ForeignKey('accounts.ImportRecord', related_name='patrons', null=True, blank=True)
+    original_id = models.BigIntegerField(null=True, blank=True)
+
     thumbnail = ImageSpecField(
         source='avatar',
         processors=[
@@ -143,13 +148,16 @@ class Patron(AbstractUser):
             processors.Adjust(contrast=1.2, sharpness=1.1),
         ],
     )
-
-    def save(self, *args, **kwargs):
+    
+    def init_slug(self):
         if not self.slug:
             if self.is_professional:
                 self.slug = slugify(self.company_name)
             else:
                 self.slug = slugify(self.username)
+    
+    def save(self, *args, **kwargs):
+        self.init_slug()
         if not self.source:
             self.source = Site.objects.get_current()
         super(Patron, self).save(*args, **kwargs)
@@ -562,9 +570,10 @@ class Address(models.Model):
     patron = models.ForeignKey(Patron, related_name='addresses')
     address1 = models.CharField(_(u'Adresse'), max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
-    zipcode = models.CharField(max_length=9)
+    zipcode = models.CharField(max_length=15)
     city = models.CharField(_(u'Ville'), max_length=255)
     country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES)
+    state = models.CharField(_(u'État'), max_length=50, null=True, blank=True) #TODO Add choices
     position = models.PointField(null=True, blank=True)
     objects = models.GeoManager()
 
@@ -640,8 +649,9 @@ class ProAgency(models.Model):
     #address
     address1 = models.CharField(_(u'Adresse'), max_length=255)
     address2 = models.CharField(max_length=255, null=True, blank=True)
-    zipcode = models.CharField(max_length=9)
+    zipcode = models.CharField(max_length=15)
     city = models.CharField(_(u'Ville'), max_length=255)
+    state = models.CharField(_(u'État'), max_length=50, null=True, blank=True) #TODO Add choices
     country = models.CharField(_(u'Pays'), max_length=2, choices=COUNTRY_CHOICES, default='FR')
     position = models.PointField(null=True, blank=True)
 
@@ -920,6 +930,20 @@ class BillingHistory(models.Model):
 
     class Meta:
         ordering = ['date']
+    
+    
+class ImportRecord(models.Model):
+    
+    # The company the object was imported from
+    origin = models.URLField(_(u"source"), editable=False)
+    # File or database name
+    file_name = models.CharField(_(u"nom du fichier"), max_length=255, editable=False, blank=True, null=True)
+    
+    imported_at = models.DateTimeField(_(u"importé à"), auto_now_add=True, editable=False)
+    imported_by = models.ForeignKey("Patron", related_name='import_records', editable=False, null=True, verbose_name=_(u"importé par"))
+    
+    class Meta:
+        verbose_name = _("importation")
 
 
 signals.post_save.connect(post_save_sites, sender=Patron)

@@ -80,7 +80,8 @@ class ProCampaignInline(admin.TabularInline):
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
-    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link', 'products_count')
+    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 
+                       'bookings_link', 'messages_link', 'products_count', 'import_record', 'original_id')
     fieldsets = (
         (_('Liens'), {'fields': (('profil_link'),
                                  ('owner_products','owner_car_products','owner_realestate_products', 'products_count'),
