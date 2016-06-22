@@ -31,10 +31,15 @@ require.config(
                 "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
                 "angular-i18n": "../../bower_components/angular-i18n/angular-locale_fr-fr",
                 "angular-translate": "../../bower_components/angular-translate/angular-translate",
-                "moment": "../../bower_components/moment/moment",
+                "angular-translate-interpolation-messageformat": "../../bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat",
+                "messageformat": "../../bower_components/messageformat/messageformat",
                 "angular-moment": "../../bower_components/angular-moment/angular-moment",
-                "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
-                "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
+                "moment": "../../bower_components/moment/min/moment-with-locales",
+                "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker",
+                // "bootstrap-datepicker-fr":[
+                //     "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr", 
+                //     "../../bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.fr.min"
+                // ],
                 "jquery-form": "../../bower_components/jquery-form/jquery.form",
                 "datejs": "../../bower_components/datejs/build/date",
                 "chosen": "../../bower_components/chosen/chosen.jquery",
@@ -71,8 +76,13 @@ require.config(
                 "angular-sanitize": ["angular"],
                 "angular-i18n": ["angular"],
                 "angular-translate": ["angular"],
+                "angular-translate-interpolation-messageformat": {
+                    deps: ["angular-translate", "messageformat"],
+                    init: function (angular, MessageFormat) {
+                        this.MessageFormat = MessageFormat;
+                    }
+                },
                 "angular-resource": ["angular"],
-                "angular-moment": ["angular"],
                 "angular-mocks": {
                     deps: ["angular"],
                     "exports": "angular.mock"
@@ -92,8 +102,7 @@ require.config(
                 "bootstrap": ["jquery"],
                 "jquery-form": ["jquery"],
                 "moment": ["jquery"],
-                "bootstrap-datepicker": ["jquery"],
-                "bootstrap-datepicker-fr": ["jquery", "bootstrap-datepicker"],
+                // "bootstrap-datepicker-fr":["jquery", "bootstrap-datepicker"],
                 "chosen": ["jquery"],
                 "placeholders-jquery": ["jquery"],
                 "formmapper": ["jquery"],
@@ -147,7 +156,7 @@ require([
     "mouse",
     "widget",
     "bootstrap-datepicker",
-    "bootstrap-datepicker-fr",
+    // "bootstrap-datepicker-fr",
     "../common/eloue/commonApp",
     "../common/eloue/i18n",
     "eloue/config",

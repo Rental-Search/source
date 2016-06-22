@@ -5,10 +5,12 @@ define([
     "angular-cookie",
     "angular-resource",
     "angular-translate",
+    "angular-translate-interpolation-messageformat",
+    "angular-moment",
     "datejs",
     "chosen",
     "bootstrap-datepicker",
-    "bootstrap-datepicker-fr",
+    // "bootstrap-datepicker-fr",
     "jquery-mousewheel",
     "custom-scrollbar",
     "filesaver"

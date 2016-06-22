@@ -1,0 +1,36 @@
+main
+	padding-top: $section-pad
+	color: lighten($gray-dark, 13%)
+	p
+		line-height: 1.7em
+	.part
+		border-top: none !important
+
+	.picture-tab ul a
+		color: $gray-dark
+		font-weight: $fw-semibold
+		background-color: $gray-lighter
+		+border-top-radius($bd-rad)
+		+border-bottom-radius($bd-rad)
+		border: 1px solid darken($gray-lighter, 10%)
+		padding: .75em 1.5em !important
+		text-decoration: none
+		&:hover,&.current
+			background-color: $brand-primary
+			border-color: $brand-primary
+			color: white
+
+	.comments
+		.thumbnail
+			background-color: white
+			border: px(1) solid $gray-lighter
+			padding: $section-pad
+			+border-top-radius(0)
+			+border-bottom-radius(0)
+			+block-with-thumbnail($thumbnail-md, 50%)
+			.thumbnail-img a
+				+default-user
+			small
+				font-size: px(12, $section-fz)
+				font-weight: $fw-semibold
+				color: $gray-strong

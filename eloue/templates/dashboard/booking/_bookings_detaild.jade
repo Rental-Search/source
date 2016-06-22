@@ -36,8 +36,8 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                                         
 
         .bg-success-light.text-success.text-right.bd-rad
-            i(ng-show="!!phoneNumber").icon-lg.flaticon.stroke.phone.indent-xs-l
-            span(ng-show="!!phoneNumber").indent-sm-h
+            span(ng-if="bookingDetails.state !='canceled' && bookingDetails.state !='authorized' && bookingDetails.state !='outdated'" ng-show="!!phoneNumber" ).indent-sm-h
+                i.icon-lg.flaticon.stroke.phone.indent-xs-l &nbsp;
                 | {% trans "Joignable au" %} &nbsp;
                 b {% verbatim %}{{phoneNumber}}{% endverbatim %}
                 | {% trans "ou" %}
@@ -77,42 +77,26 @@ aside.booking-detail.scrollbar-custom(ng-show="!!bookingDetails")
                     li.clearfix
                         .col-xs-3 {% trans "Début" %}
                         .col-xs-9
-                            span(translate="{% verbatim %}{{bookingDetails.start_date.week_day}}{% endverbatim %}")
-                            span
-                                | {% verbatim %}{{bookingDetails.start_date.day}}{% endverbatim %} &nbsp;
-                            span(translate="{% verbatim %}{{bookingDetails.start_date.month}}{% endverbatim %}")
-                            span
-                                | {% verbatim %}{{bookingDetails.start_date.year}}{% endverbatim %} &nbsp;
-                            span(translate="at")
-                            span
-                                | {% verbatim %}{{bookingDetails.start_time}}{% endverbatim %}
+                            span(translate="{% verbatim %}{{ bookingDetails.started_at | amDateFormat:'LLLL' }}{% endverbatim %}")
                     li.clearfix
                         .col-xs-3 {% trans "Fin" %}
                         .col-xs-9
-                            span(translate="{% verbatim %}{{bookingDetails.end_date.week_day}}{% endverbatim %}")
-                            span
-                                | {% verbatim %}{{bookingDetails.end_date.day}}{% endverbatim %} &nbsp;
-                            span(translate="{% verbatim %}{{bookingDetails.end_date.month}}{% endverbatim %}")
-                            span
-                                | {% verbatim %}{{bookingDetails.end_date.year}}{% endverbatim %} &nbsp;
-                            span(translate="at")
-                            span
-                                | {% verbatim %}{{bookingDetails.end_time}}{% endverbatim %}
+                            span(translate="{% verbatim %}{{ bookingDetails.ended_at | amDateFormat:'LLLL' }}{% endverbatim %}")
                     li.clearfix
                         .col-xs-3 {% trans "Période" %}
-                        .col-xs-9 {% verbatim %}{{bookingDetails.period_days}}{% endverbatim %} jours et {% verbatim %}{{bookingDetails.period_hours}}{% endverbatim %} heures
+                        .col-xs-9 {% verbatim %}{{bookingDetails.period_days}}{% endverbatim %} {% trans "jours et" %} {% verbatim %}{{bookingDetails.period_hours}}{% endverbatim %} {% trans "heures" %}
                     li.clearfix
                         .col-xs-3 {% trans "Prix" %}
-                        .col-xs-9.text-primary {% verbatim %}{{bookingDetails.total_amount}}{% endverbatim %}€
+                        .col-xs-9.text-primary {% verbatim %}{{ 'MONEY' | translate:{value:bookingDetails.total_amount} }}{% endverbatim %}
                     li(ng-show="bookingDetails.shipping.enabled").clearfix
                         .col-xs-3 {% trans "Livraison" %}
-                        .col-xs-9.text-primary {% verbatim %}{{bookingDetails.shipping.price | number: 2}}{% endverbatim %}€
+                        .col-xs-9.text-primary {% verbatim %}{{ 'MONEY' | translate:{value:bookingDetails.shipping.price} }}{% endverbatim %}
                     li(ng-show="bookingDetails.shipping.enabled").clearfix
                         .col-xs-3 {% trans "Total" %}
-                        .col-xs-9.text-primary {% verbatim %}{{totalBookingPrice}}{% endverbatim %}€
+                        .col-xs-9.text-primary {% verbatim %}{{ 'MONEY' | translate:{value:totalBookingPrice} }}{% endverbatim %}
                     li.clearfix
                         .col-xs-3 {% trans "Caution" %}
-                        .col-xs-9 {% verbatim %}{{bookingDetails.deposit_amount}}{% endverbatim %}€
+                        .col-xs-9 {% verbatim %}{{ 'MONEY' | translate:{value:bookingDetails.deposit_amount} }}{% endverbatim %}
                     li.clearfix(ng-show="allowDownloadContract")
                         .col-xs-3 {% trans "Contrat" %}
                         .col-xs-9

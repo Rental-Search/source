@@ -5,6 +5,10 @@ SITE_ID = 15
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'dressbooking'
 
+
+SERVER_EMAIL = 'contact@dressbooking.com'
+DEFAULT_FROM_EMAIL = 'contact@dressbooking.com'
+
 for key in PIPELINE_CSS:
     output_filename = PIPELINE_CSS[key]['output_filename'].replace('.css', '_dressbooking.css')
     PIPELINE_CSS[key]['output_filename'] = output_filename

@@ -12,7 +12,7 @@
         {% endwith %}
         p.text {{ comment.comment }}
         p.info
-          | Par
+          | Par 
           b.autor-name {{ comment.author.username }} 
           span.time {{ comment.created_at|naturaltime }} 
         {{ product.summary|capfirst }} - {{ product.address.city|title }}{% if product.address.zipcode %}, {{ product.address.zipcode }}{%endif %}
