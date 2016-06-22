@@ -57,6 +57,8 @@ from .search import product_search
 from .serializers import get_root_category
 from . import serializers, models, filters as product_filters
 import simplejson
+import products
+from django.utils.formats import get_format
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_PERIODS_BY', 31)
@@ -212,6 +214,14 @@ class CategoryDetailView(NavbarCategoryMixin, BreadcrumbsMixin, DetailView):
         return context
 
 
+def get_format_or_none(key):
+    try:
+        res = get_format(key)
+    except (NameError, AttributeError):
+        res = None
+    return res
+        
+
 SEARCH_DEFAULTS = {
      'query': u'',
      'order_by': u'',
@@ -231,7 +241,8 @@ SEARCH_DEFAULTS = {
      'range': {
              'max':settings.DEFAULT_LOCATION['country_radius'],
              'floor':1,
-             'ceil':settings.DEFAULT_LOCATION['country_radius']},
+             'ceil':settings.DEFAULT_LOCATION['country_radius'],
+             'from_metric': get_format_or_none('DISTANCE_FROM_METRIC')},
      'location':settings.DEFAULT_LOCATION['country'],
      'center':settings.DEFAULT_LOCATION['country_coordinates'],
      'site': settings.SITE_ID,}

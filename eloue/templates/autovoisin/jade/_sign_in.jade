@@ -37,7 +37,7 @@
                             .col-xs-5.clear-selector
                                 {% verbatim %}
                                 select(ng-model="account.civility", data-placeholder="Civilité", eloue-chosen).form-control
-                                    option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name}}
+                                    option(ng-repeat="item in civilityOptions", value="{{item.id}}") {{item.name|translate}}
                                 {% endverbatim %}
                             .col-xs-7
                                 input(type="text", placeholder="Nom *", name="last_name", ng-model="account.last_name", required).form-control

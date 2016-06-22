@@ -4,6 +4,8 @@ define(["angular",
         "angular-resource",
         "angular-ui-router",
         "angular-translate",
+        "angular-translate-interpolation-messageformat",
+        "angular-moment",
         "toastr",
         "formmapper",
         "filesaver",
@@ -18,5 +20,5 @@ define(["angular",
         "use strict";
         // Create dashboard application
         return angular.module("EloueDashboardApp", ["EloueCommon", "ngCookies", "ipCookie", "ngResource", "ui.router",
-            "pascalprecht.translate"]);
+            "pascalprecht.translate", "angularMoment"]);
     });

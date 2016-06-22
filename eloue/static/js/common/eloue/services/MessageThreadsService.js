@@ -143,9 +143,9 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     // if the creation date of the last message is the current day display only the hour
                     // if the creation date of the last message is before the current day display the date and not the hour
                     if (UtilsService.isToday(lastMessageData.sent_at)) {
-                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "HH'h'mm");
+                        messageThreadResult.last_message.sent_at = UtilsService.date(lastMessageData.sent_at).format("LT");
                     } else {
-                        messageThreadResult.last_message.sent_at = UtilsService.formatDate(lastMessageData.sent_at, "dd.MM.yyyy");
+                        messageThreadResult.last_message.sent_at = UtilsService.date(lastMessageData.sent_at).format("lll");
                     }
                 }
                 return messageThreadResult;
@@ -160,7 +160,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
                     messageKeysToRemove = [];
                     angular.forEach(messageThreadResult.messages, function (message, key) {
                         if (message) {
-                            message.sent_at = UtilsService.formatDate(message.sent_at, "dd.MM.yyyy HH'h'mm");
+                            message.sent_at = UtilsService.date(message.sent_at).format("L LT");
                         } else {
                             messageKeysToRemove.push(key);
                         }

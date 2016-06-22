@@ -1,0 +1,78 @@
+.product-list
+  list-style-type: none
+  padding-left: 0
+  margin-bottom: 0
+  > li
+    margin: ($grid-gutter-width / 2) 0
+
+  .product-item
+    border: px(1) solid $gray-lighter
+    border-radius: px(5)
+    overflow: hidden
+    box-shadow: 0 px(1) 0 rgba(0,0,0,0.1)
+
+
+  .badge-pro
+    position: absolute
+    top: 2.5em
+    left: 0
+
+  img
+    top: 0
+    left: 0
+    height: 100%
+    width: 100%
+    position: absolute
+    background-position: center center
+    background-size: cover
+    background-repeat: no-repeat
+
+  .product-image
+    padding-top: (60%)
+    +default-product
+    position: relative
+    display: block
+    .price
+      position: absolute
+      top: 0
+      right: 0
+      margin: $indent-xs
+
+  .product-info
+    display: table
+    border-top: px(1) solid $gray-lighter
+
+  .product-owner,
+  .product-description
+    display: table-cell
+    vertical-align: middle
+
+  .product-description
+    max-width: 0
+    width: 100%
+    padding: $indent-xs
+    p,
+    h6
+      +text-overflow()
+      +empty-element()
+      font-weight: $fw-semibold
+    p
+      color: $gray-medium
+      font-size: px(11)
+      margin-bottom: 0
+    h6
+      font-size: px(13)
+      margin: 0 0 .25em
+
+  .product-owner
+    padding: $indent-xs
+    bottom: 0
+    a
+      +default-user
+      width: $thumbnail-sm
+      height: $thumbnail-sm
+      overflow: hidden
+      display: block
+      border-radius: 50%
+      position: relative
+

@@ -145,7 +145,7 @@ class ProductAdmin(ImportMixin, ProductCurrentSiteAdmin):
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email', 'owner__pk']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address", "phone")
-    readonly_fields = ('is_pro', 'user_link')
+    readonly_fields = ('is_pro', 'user_link', 'import_record', 'original_id')
     list_display = ('summary', 'is_pro','user_link', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
     list_filter = ('shipping', 'is_archived', 'is_allowed', 'category')
     list_editable = ('category',)
