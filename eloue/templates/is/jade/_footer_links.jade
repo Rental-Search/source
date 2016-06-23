@@ -1,0 +1,27 @@
+-load i18n
+.container
+  ul.nav.nav-justified
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "Le concept e-loue" %}
+      ul.nav
+        li.link-wrapper: a(href="/comment-ca-marche/") {% trans "Comment ça marche ?" %}
+        li.link-wrapper: a(href="/securite/") {% trans "e-loue et la sécurité" %}
+        li.link-wrapper: a(href="/offre-professionnel/") {% trans "L'offre e-loue Pro" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "Pourquoi choisir e-loue ?" %}
+      ul.nav
+        li.link-wrapper: a(href="/conditions-generales-particuliers/") {% trans "Conditions générales particuliers" %}
+        li.link-wrapper: a(href="/conditions-generales-professionnels/") {% trans "Conditions générales professionnels" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "L’entreprise e-loue" %}
+      ul.nav
+        li.link-wrapper: a(href="/qui-sommes-nous/") {% trans "Qui sommes-nous ?" %}
+    li.divide
+    li.ul-wrapper: .centering
+      h4.text-nowrap {% trans "En savoir plus" %}
+      ul.nav
+        li.link-wrapper: a(href="/contactez-nous/") {% trans "Contactez-nous" %}
+        li.link-wrapper: a(href="/mentions-legales/") {% trans "Mentions légales" %}

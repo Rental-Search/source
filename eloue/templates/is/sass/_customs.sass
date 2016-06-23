@@ -1,0 +1,82 @@
+.chosen-container
+  padding: 0
+  font-size: inherit
+  text-align: center
+  display: block
+  font-weight: $fw-semibold
+  color: $gray-strong
+  +placeholder($gray-strong)
+
+  .chosen-choices,
+  .chosen-single
+    border: 1px solid $gray-medium !important
+    background: transparent
+    overflow-x: visible
+
+  &.chosen-with-drop
+    .chosen-choices,
+    .chosen-single
+      background: transparent
+      border-color: $gray-strong !important
+
+  .chosen-single
+    display: table
+    width: 100%
+    padding: 0 !important
+
+    color: inherit
+    height: 2.5em
+    span,
+    div
+      vertical-align: middle
+      display: table-cell
+    span
+      margin: 0
+      padding: 0 0.5em
+    div
+      position: relative
+      b
+        display: inline-block
+        width: 15px
+        height: 15px
+
+  .chosen-drop
+    background-color: white
+    border-color: $gray-medium
+    border-width: px(1)
+    border-top-width: 0
+    max-height: 240px
+    margin-top: px(-1)
+    border: px(1) solid
+    text-align: center
+    width: 100%
+
+  .chosen-search
+    padding: 0
+    margin: 0
+    input
+      border-width: 0 0 1px !important
+      font-weight: $fw-regular
+
+  .chosen-results
+    padding: 0
+    margin: 0
+    li
+      color: $gray-medium
+      &.highlighted
+        background: $gray-lighter
+        &:hover
+          color: $gray-medium
+      &.result-selected
+        background: $gray-light
+        &:hover
+          color: white
+
+  &.chosen-container-multi
+    height: auto
+    .chosen-choices
+      padding: 0
+      min-height: 0 !important
+      height: auto !important
+      padding: .5em
+      +clearfix()
