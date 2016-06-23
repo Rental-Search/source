@@ -934,7 +934,6 @@ class Property(models.Model):
         verbose_name_plural = _('properties')
         unique_together = (('category', 'attr_name'), ('category', 'name'))
         
-    
     def __unicode__(self):
         """
         >>> property = Property(name="Marque")

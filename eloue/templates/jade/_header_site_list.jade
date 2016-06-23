@@ -97,7 +97,7 @@ section(ng-controller="AuthCtrl").container.signs-links
       {% trans "Que voulez-vous louer ?" as what %}
       {% trans "Où ça ?" as where %}
       form(action="{% url 'product_list' %}")#searh-form.input-group
-        input(ng-model="search.query", ng-change="perform_search()", type="text", name="q", autocomplete="off", 
+        input(ng-model="search.query", ng-change="refineQuery()", type="text", name="q", autocomplete="off", 
             spellcheck="false", autocorrect="off", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", 
             title="{% if form.cleaned_data.q %}{{ what }}{% endif %}").table-cell.main-cell.form-control.what-field
         .table-cell.input-group.where-field

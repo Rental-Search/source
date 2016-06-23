@@ -17,6 +17,23 @@ def product_with_properties(settings, transactional_db):
     prod = Product.objects.get(pk=1)
     return prod
 
+
+@pytest.fixture()
+def categories_with_products(settings, transactional_db):
+    from accounts.models import Patron
+    from products.models import Product
+    settings.SITE_ID = 1
+    settings.DEFAULT_SITES = [1,]
+#     settings.INSTALLED_APPS = (k for k in settings.INSTALLED_APPS if k!='modeltranslation')
+    
+    call_command('loaddata', 'categories.yaml')
+    for p in Patron.objects.all(): 
+        p.set_password(p.username)
+        p.save()
+    prod = Product.objects.get(pk=1)
+    return prod
+
+
 @pytest.fixture()
 def api_client(monkeypatch):
     from rest_framework.test import APIClient
