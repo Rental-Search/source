@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ -*- coding: utf-8 -*-
 import uuid
 from decimal import Decimal as D
 
@@ -114,6 +114,7 @@ class Product(models.Model):
 
     import_record = models.ForeignKey('accounts.ImportRecord', related_name='products', null=True, blank=True)
     original_id = models.BigIntegerField(null=True, blank=True)
+    redirect_url = models.URLField(_(u"Site internet"), blank=True)
 
     class Meta:
         verbose_name = _('product')
@@ -124,6 +125,8 @@ class Product(models.Model):
     def prepare_for_save(self):
         self.summary = strip_tags(self.summary)
         self.description = strip_tags(self.description)
+        if not self.redirect_url and self.owner.url:
+            self.redirect_url = self.owner.url
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
             self.source = Site.objects.get_current()
