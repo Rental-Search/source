@@ -153,6 +153,11 @@ Weight: {{ weight }} lbs.
             dest='level',
             default=None,
             help='User type: user, administrator, editor, vendor'),   
+        make_option('--owner',
+            action='store',
+            dest='owner',
+            default=None,
+            help='User type: user, administrator, editor, vendor'),   
         )
 
     def __init__(self):
@@ -258,6 +263,7 @@ Weight: {{ weight }} lbs.
         lu = int(options['limit-users'])
         cat_id = int(options['category'])
         level = options['level']
+        owner = options['owner']
         
         user_prg = 0
         prod_prg = 0
@@ -297,13 +303,26 @@ Weight: {{ weight }} lbs.
             imported_users_ids = self.get_imported_users_qs().values_list('original_id', flat=True)
             imported_products_ids = self.get_imported_products_qs().values_list('original_id', flat=True)
             
-            where = ("where level='%s'" % level) if level else ""
+            filters = []
             
-            c.execute("select count(*) from ob_users "+where)
+            if level:
+                filters.append("level='%s'" % level)
+                
+            if owner:
+                filters.append("username='%s'" % owner)
+            
+            where = ("where " + " ".join(filters)) if filters else ""
+            
+            c.execute("select count(*) from ob_users " + where)
             (user_count, ) = c.fetchone()
             user_count = min(user_count, lu)
             
-            self.stdout.write("Importing %s users (type=%s)" % (user_count, level if level else "*", ))
+            if user_count == 1:
+                self.stdout.write("Importing user " + owner)
+            elif user_count > 1:
+                self.stdout.write("Importing %s users (type=%s)" % (user_count, level if level else "*", ))
+            else:
+                raise Exception("No users correspond to your criteria")
             
             c.execute("select * from ob_users "+where+" order by registered desc limit %s", (lu,))
             RcUser = self.get_user_type(c.column_names)
