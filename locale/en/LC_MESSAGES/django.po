@@ -1921,7 +1921,7 @@ msgstr "Legal Notices"
 #: eloue/templates/insurances/index.jade:1
 #: eloue/templates/jade/_footer_links.jade:25
 msgid "Assurance tranquilité"
-msgstr "insurance"
+msgstr "Insurance"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:25
 #: eloue/templates/django_messages/compose.html:9
@@ -2076,7 +2076,7 @@ msgstr "professional quote"
 #: eloue/templates/autovoisin/terms/_text_content.jade:1
 #: eloue/templates/terms/index.jade:1
 msgid "Conditions Générales Particuliers"
-msgstr "general terms for individuals"
+msgstr "General terms for individuals"
 
 #: eloue/templates/autovoisin/who_are_we/_static_content.jade:1
 #: eloue/templates/dk/who_are_we/_breadcrumbs.jade:7
@@ -2412,6 +2412,11 @@ msgstr "New password"
 #: eloue/templates/dk/dashboard/account/password.jade:6
 msgid "Modification de votre mot de passe"
 msgstr "Changing your password"
+
+
+#: eloue/templates/dashboard/account/password.jade:6
+msgid "Confirmer le mot de passe"
+msgstr "Confirm password"
 
 #: eloue/templates/dashboard/account/password.jade:14
 #: eloue/templates/dashboard/booking/_comment_and_rank.jade:12
@@ -4265,7 +4270,7 @@ msgstr "RentalCompare enterprise"
 #: eloue/templates/dressbooking/jade/_footer_links.jade:39
 #: eloue/templates/jade/_footer_links.jade:27
 msgid "Conditions générales particuliers"
-msgstr "general terms for individuals"
+msgstr "General terms for individuals"
 
 #: eloue/templates/dressbooking/jade/_in_paris.jade:12
 msgid ""
@@ -5410,7 +5415,7 @@ msgstr "Our partner"
 #: eloue/templates/enroll/index.jade:1
 #: eloue/templates/jade/_footer_links.jade:43
 msgid "Nous recrutons"
-msgstr "we are hiring"
+msgstr "We are hiring"
 
 #: eloue/templates/gosport/admin/base_site.html:4
 #: eloue/templates/gosport/admin/base_site.html:7
