@@ -411,6 +411,7 @@ Weight: {{ weight }} lbs.
 #                         self.skip_user(rc_user, "email exists")
 #                         continue
                     
+                    # TODO handle unallowed characters
                     if not email_exists:
                         username_counts[rc_user.username] = 0
                         username_base = rc_user.username if len(rc_user.username)<=27 else rc_user.username[:27]
