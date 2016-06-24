@@ -5943,12 +5943,15 @@ msgstr "Keep me informed of news and special offers"
 #: eloue/templates/jade/_sign_in.jade:79
 msgid ""
 " \n"
-" En créant un compte e-loue, vous acceptez les &nbsp;<a href=\"tems_url"
-"\">Conditions Générales</a><br> et la &nbsp;<a href=\"/respect-vie-privee/"
-"\">Politique de Confidentialité</a> de notre site\n"
+" En créant un compte e-loue, vous acceptez les &nbsp;<a target=\"_blank\" href=\"conditions-generales-particuliers"
+"\">Conditions Générales Particuliers</a><br> et la &nbsp;<a target=\"_blank\" href=\"/conditions-generales-professionnels/"
+"\">Conditions Générales professionnels</a> de notre site\n"
 msgstr ""
-"By creating a RentalCompare account, you agree to the terms and conditions "
-"of our site.  Please read our Privacy Policy section.\n"
+" \n"
+" By creating a RentalCompare account, you agree to the &nbsp;<a target=\"_blank\" href=\"general-terms-individuals"
+"\">General terms for individuals</a><br> et la &nbsp;<a target=\"_blank\" href=\"/general-terms-professionals/"
+"\">Terms and Conditions</a> of our site\n"
+
 
 #: eloue/templates/jade/_sign_in.jade:86
 #: eloue/templates/landing_pages/_sign_in_content.jade:65
