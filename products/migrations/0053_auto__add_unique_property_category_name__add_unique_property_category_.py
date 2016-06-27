@@ -8,23 +8,19 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Product.import_record'
-        db.add_column(u'products_product', 'import_record',
-                      self.gf('django.db.models.fields.related.ForeignKey')(related_name='products', null=True, to=orm['accounts.ImportRecord']),
-                      keep_default=False)
+        # Adding unique constraint on 'Property', fields ['category', 'name']
+        db.create_unique(u'products_property', ['category_id', 'name'])
 
-        # Adding field 'Product.original_id'
-        db.add_column(u'products_product', 'original_id',
-                      self.gf('django.db.models.fields.BigIntegerField')(null=True),
-                      keep_default=False)
+        # Adding unique constraint on 'Property', fields ['category', 'attr_name']
+        db.create_unique(u'products_property', ['category_id', 'attr_name'])
 
 
     def backwards(self, orm):
-        # Deleting field 'Product.import_record'
-        db.delete_column(u'products_product', 'import_record_id')
+        # Removing unique constraint on 'Property', fields ['category', 'attr_name']
+        db.delete_unique(u'products_property', ['category_id', 'attr_name'])
 
-        # Deleting field 'Product.original_id'
-        db.delete_column(u'products_product', 'original_id')
+        # Removing unique constraint on 'Property', fields ['category', 'name']
+        db.delete_unique(u'products_property', ['category_id', 'name'])
 
 
     models = {
@@ -76,7 +72,7 @@ class Migration(SchemaMigration):
             'hobby': ('django.db.models.fields.CharField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'iban': ('django_iban.fields.IBANField', [], {'max_length': '34', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'import_record': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'patrons'", 'null': 'True', 'to': u"orm['accounts.ImportRecord']"}),
+            'import_record': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'patrons'", 'null': 'True', 'to': u"orm['accounts.ImportRecord']"}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_professional': ('django.db.models.fields.NullBooleanField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -88,7 +84,7 @@ class Migration(SchemaMigration):
             'login_count': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'new_messages_alerted': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'original_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True'}),
+            'original_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'paypal_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'place_of_birth': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -120,7 +116,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'patron': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'pro_agencies'", 'to': u"orm['accounts.Patron']"}),
-            'phone_number': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'phone_number': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'position': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
             'state': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'zipcode': ('django.db.models.fields.CharField', [], {'max_length': '15'})
@@ -236,25 +232,30 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'description_da': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'description_en': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'description_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'description_fr': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'footer': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'footer_da': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'footer_en': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'footer_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'footer_fr': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'header': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'header_da': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'header_en': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'header_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'header_fr': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'image_da': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'image_en': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'image_en_US': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'image_fr': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             u'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             u'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'name_da': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'name_en': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'name_en_US': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'name_fr': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'need_insurance': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'childrens'", 'null': 'True', 'to': u"orm['products.Category']"}),
@@ -264,10 +265,12 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
             'slug_da': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'slug_en': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'slug_en_US': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'slug_fr': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '150', 'blank': 'True'}),
             'title_da': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
             'title_en': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'title_en_US': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
             'title_fr': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
             u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
@@ -310,7 +313,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Picture'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'pictures'", 'null': 'True', 'to': u"orm['products.Product']"})
         },
         u'products.price': {
@@ -334,11 +337,11 @@ class Migration(SchemaMigration):
             'deposit_amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '10', 'decimal_places': '2'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'import_record': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'null': 'True', 'to': u"orm['accounts.ImportRecord']"}),
+            'import_record': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'products'", 'null': 'True', 'to': u"orm['accounts.ImportRecord']"}),
             'is_allowed': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'db_index': 'True'}),
             'is_archived': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
-            'original_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True'}),
+            'original_id': ('django.db.models.fields.BigIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'to': u"orm['accounts.Patron']"}),
             'payment_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
             'phone': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'products'", 'null': 'True', 'on_delete': 'models.PROTECT', 'to': u"orm['accounts.PhoneNumber']"}),
@@ -388,17 +391,24 @@ class Migration(SchemaMigration):
             'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'})
         },
         u'products.property': {
-            'Meta': {'object_name': 'Property'},
+            'Meta': {'unique_together': "(('category', 'attr_name'), ('category', 'name'))", 'object_name': 'Property'},
+            'attr_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'properties'", 'to': u"orm['products.Category']"}),
+            'choices_str': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'default_str': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'faceted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'max_str': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'min_str': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'value_type': ('django.db.models.fields.CharField', [], {'default': "'str'", 'max_length': '255'})
         },
         u'products.propertyvalue': {
-            'Meta': {'unique_together': "(('property', 'product'),)", 'object_name': 'PropertyValue'},
+            'Meta': {'unique_together': "(('property_type', 'product'),)", 'object_name': 'PropertyValue'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'properties'", 'to': u"orm['products.Product']"}),
-            'property': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'values'", 'to': u"orm['products.Property']"}),
-            'value': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'property_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'values'", 'to': u"orm['products.Property']"}),
+            'value_str': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         u'products.question': {
             'Meta': {'ordering': "('modified_at', 'created_at')", 'object_name': 'Question'},
