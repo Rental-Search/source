@@ -327,7 +327,14 @@ class Migration(SchemaMigration):
             'name_en_US': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'slug_en_US': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'title_en_US': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
-            'description_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
+            'description_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'description_he': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'header_he': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'image_he': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'name_he': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'slug_he': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'title_he': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'footer_he': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
         },
         u'products.categoryconformity': {
             'Meta': {'object_name': 'CategoryConformity'},
