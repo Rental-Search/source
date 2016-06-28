@@ -2,6 +2,8 @@
 import pytest
 from django.core.management import call_command
 
+# TODO mock SearchQuerySet
+
 @pytest.fixture()
 def product_with_properties(settings, transactional_db):
     from accounts.models import Patron
@@ -19,14 +21,14 @@ def product_with_properties(settings, transactional_db):
 
 
 @pytest.fixture()
-def categories_with_products(settings, transactional_db):
+def imported_product(settings, transactional_db):
     from accounts.models import Patron
     from products.models import Product
     settings.SITE_ID = 1
     settings.DEFAULT_SITES = [1,]
 #     settings.INSTALLED_APPS = (k for k in settings.INSTALLED_APPS if k!='modeltranslation')
     
-    call_command('loaddata', 'categories.yaml')
+    call_command('loaddata', 'imported_objects.yaml')
     for p in Patron.objects.all(): 
         p.set_password(p.username)
         p.save()

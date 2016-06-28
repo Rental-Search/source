@@ -47,6 +47,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites
 from eloue import signals as eloue_signals
 from eloue.utils import currency, create_alternative_email, itertools_accumulate, convert
+from accounts.models import ImportedObjectMixin
 
 
 import copy
@@ -83,7 +84,7 @@ def setup_postgres_intarray(sender, **kwargs):
         class_prepared.disconnect(dispatch_uid='products_product_setup_postgres_intarray_class_prepared')
 
 
-class Product(models.Model):
+class Product(ImportedObjectMixin):
     """A product"""
     summary = models.CharField(_(u'Titre'), max_length=255)
     deposit_amount = models.DecimalField(_(u'Dépôt de garantie'), max_digits=10, decimal_places=2)
@@ -111,10 +112,6 @@ class Product(models.Model):
     pro_agencies = models.ManyToManyField(ProAgency, related_name='products', blank=True, null=True)
 
     source = models.ForeignKey(Site, null=True, blank=True)
-
-    import_record = models.ForeignKey('accounts.ImportRecord', related_name='products', null=True, blank=True)
-    original_id = models.BigIntegerField(null=True, blank=True)
-    redirect_url = models.URLField(_(u"Site internet"), blank=True)
 
     class Meta:
         verbose_name = _('product')

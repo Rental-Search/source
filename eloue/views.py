@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
@@ -14,6 +15,8 @@ from products.forms import FacetedSearchForm
 from eloue.http import JsonResponse
 from products.search import product_search
 from eloue.search_backends import is_algolia
+from django.views.generic.base import RedirectView
+from django.core.urlresolvers import reverse
 
 
 class LoginRequiredMixin(View):
@@ -124,3 +127,26 @@ class BreadcrumbsMixin(object):
         }
         context.update(super(BreadcrumbsMixin, self).get_context_data(**kwargs))
         return context
+    
+    
+class ImportedObjectRedirectView(RedirectView):
+    
+    permanent = True
+    
+    model = None
+    origin = None
+    fallback_pattern_name = None
+    filter_key = 'original_id'
+    convert = lambda self,x:x
+    
+    def get_redirect_url(self, *args, **kwargs):
+        field_name = self.filter_key.split('__', 1)[0]
+        get_kwargs = {'import_record__origin__iexact':self.origin, 
+                      self.filter_key:self.convert(kwargs[field_name])}
+        try:
+            obj = self.model.objects.get(**get_kwargs)
+            return obj.get_absolute_url()
+        except self.model.DoesNotExist:
+            return reverse(self.fallback_pattern_name)
+            
+

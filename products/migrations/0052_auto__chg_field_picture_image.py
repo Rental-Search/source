@@ -8,24 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Product.import_record'
-        db.add_column(u'products_product', 'import_record',
-                      self.gf('django.db.models.fields.related.ForeignKey')(related_name='products', null=True, to=orm['accounts.ImportRecord']),
-                      keep_default=False)
 
-        # Adding field 'Product.original_id'
-        db.add_column(u'products_product', 'original_id',
-                      self.gf('django.db.models.fields.BigIntegerField')(null=True),
-                      keep_default=False)
-
+        # Changing field 'Picture.image'
+        db.alter_column(u'products_picture', 'image', self.gf('django.db.models.fields.files.ImageField')(max_length=200, null=True))
 
     def backwards(self, orm):
-        # Deleting field 'Product.import_record'
-        db.delete_column(u'products_product', 'import_record_id')
 
-        # Deleting field 'Product.original_id'
-        db.delete_column(u'products_product', 'original_id')
-
+        # Changing field 'Picture.image'
+        db.alter_column(u'products_picture', 'image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True))
 
     models = {
         u'accounts.address': {
@@ -269,7 +259,15 @@ class Migration(SchemaMigration):
             'title_da': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
             'title_en': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
             'title_fr': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
-            u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
+            u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'description_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'footer_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'header_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'image_en_US': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'name_en_US': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'slug_en_US': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'title_en_US': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'description_en_US': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
         u'products.categoryconformity': {
             'Meta': {'object_name': 'CategoryConformity'},
@@ -310,7 +308,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Picture'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'pictures'", 'null': 'True', 'to': u"orm['products.Product']"})
         },
         u'products.price': {
@@ -389,16 +387,23 @@ class Migration(SchemaMigration):
         },
         u'products.property': {
             'Meta': {'object_name': 'Property'},
+            'attr_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'properties'", 'to': u"orm['products.Category']"}),
+            'choices_str': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'default_str': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'faceted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'max_str': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'min_str': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'value_type': ('django.db.models.fields.CharField', [], {'default': "'str'", 'max_length': '255'})
         },
         u'products.propertyvalue': {
-            'Meta': {'unique_together': "(('property', 'product'),)", 'object_name': 'PropertyValue'},
+            'Meta': {'unique_together': "(('property_type', 'product'),)", 'object_name': 'PropertyValue'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'properties'", 'to': u"orm['products.Product']"}),
-            'property': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'values'", 'to': u"orm['products.Property']"}),
-            'value': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'property_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'values'", 'to': u"orm['products.Property']"}),
+            'value_str': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         u'products.question': {
             'Meta': {'ordering': "('modified_at', 'created_at')", 'object_name': 'Question'},

@@ -411,6 +411,7 @@ Weight: {{ weight }} lbs.
 #                         self.skip_user(rc_user, "email exists")
 #                         continue
                     
+                    # TODO handle unallowed characters
                     if not email_exists:
                         username_counts[rc_user.username] = 0
                         username_base = rc_user.username if len(rc_user.username)<=27 else rc_user.username[:27]
@@ -634,6 +635,7 @@ Weight: {{ weight }} lbs.
         self.progress = 0
    
         def worker(part):
+            storage = Patron._meta.get_field('avatar').storage
             irs = self.get_record_queryset()        
             for ir in irs:
                 pats = ir.patrons.exclude(avatar__isnull=True).exclude(avatar__exact='')
@@ -644,10 +646,24 @@ Weight: {{ weight }} lbs.
                         with progress_lock:
                             self.progress = self.progress + 1
                             self.stdout.write("Logo %5s out of %5s" % (self.progress, count), ending='\r')
-                        resp = requests.get(self.LOGOS_URL + pat.avatar.name)
+                            
+                        if pat.avatar.name.startswith('http'):
+                            url = pat.avatar.name
+                        else:
+                            url = self.PICTURES_URL + pat.avatar.name
+                            if storage.exists(url):
+                                with skip_lock:
+                                    self.skip_logo(pat.avatar, str('already exists'))
+                        resp = requests.get(url)
                         resp.raise_for_status()
                         pat.avatar.save('', ContentFile(resp.content))
                     except HTTPError, e:
+                        pat.avatar.delete()
+                        try:
+                            pat.avatar.delete()
+                        except:
+                            pat.avatar = None
+                            pat.save()
                         with skip_lock:
                             self.skip_logo(pat, str(e))
         
@@ -695,14 +711,23 @@ Weight: {{ weight }} lbs.
                         with progress_lock:
                             self.progress = self.progress + 1
                             self.stdout.write("Picture %7s out of %7s: %50s" % (self.progress, count, name), ending='\r')
-                        if storage.exists(pic.image.name):
-                            with skip_lock:
-                                self.skip_picture(pic, str('already exists'))
-                        name = name if name.startswith('http') else self.PICTURES_URL + name
-                        resp = requests.get(name)
+                        if name.startswith('http'):
+                            url = name
+                        else:
+                            url = self.PICTURES_URL + name
+                            if storage.exists(url):
+                                with skip_lock:
+                                    self.skip_picture(pic, str('already exists'))
+                        resp = requests.get(url)
                         resp.raise_for_status()
                         pic.image.save('', ContentFile(resp.content))
                     except Exception, e:
+                        try:
+                            pic.image.delete()
+                        except:
+                            pic.image = None
+                            pic.save()
+                        super(Picture, pic).delete()
                         with skip_lock:
                             self.skip_picture(pic, str(e))
         
