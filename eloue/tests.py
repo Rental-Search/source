@@ -306,4 +306,6 @@ class TestEloueAlgoliaEngine(object):
         assert search_params.index.index_name == prefix + patron_label
         assert search_params.params['filters'] == 'sites=%s' % (settings.SITE_ID, )
         assert set(search_params.params['facets']) == set(['sites_exact'])
-                
+        
+        
+    

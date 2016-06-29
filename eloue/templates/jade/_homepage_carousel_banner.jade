@@ -1,10 +1,10 @@
--load staticfiles
+-load staticfiles i18n
 
 .top-content
 #homepage-carousel-banner.carousel.slide(data-ride="carousel")
-	h1.banner-title Trouvez toutes les annonces de location près de chez vous
+	h1.banner-title {% trans "Trouvez toutes les annonces de location près de chez vous" %}
 	.carousel-inner
 		.item.active(style="background-image: url({% static 'img/banniere-hightech.jpg' %});")
-		.item(style="background-image: url({% static 'img/reception-banner.jpg' %});")
+		.item(style="background-image: url({% static 'img/mariage-banner.jpg' %});")
 		.item(style="background-image: url({% static 'img/engins_TP-banner.jpg' %});")
-		.item(style="background-image: url({% static 'img/car-banner.jpg' %});")
+		.item(style="background-image: url({% static 'img/surf-banner.jpg' %});")

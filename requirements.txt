@@ -64,7 +64,7 @@ djangorestframework==2.3.14
 djangorestframework-gis==0.2
 django-filter==0.7
 django-oauth2-provider
-requests>=0.10.0
+requests>=2.9.1
 pyjade==2.2.0
 wsgiref==0.1.2
 static==1.0.2
@@ -81,6 +81,7 @@ django-modeltranslation
 sendgrid
 django-import-export==0.4.2
 openpyxl==2.3.2
+https://cdn.mysql.com/Downloads/Connector-Python/mysql-connector-python-2.0.4.tar.gz
 algoliasearch==1.8.0
 -e git+https://github.com/matagus/haystack-algolia.git#egg=haystack_algolia
 django-angular==0.7.15
@@ -89,3 +90,4 @@ pytest-django==2.9.1
 fake-factory==0.5.7
 factory_boy==2.6.1
 analytics-python==1.2.3
+winpdb

@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 DECIMAL_SEPARATOR = ','
 
+SHORT_DATE_FORMAT = "d/m/Y"
+DATE_FORMAT = "d F Y"
+COMPLETE_DATE_FORMAT = "l d F Y"
+
 CURRENCY = 'EUR'
 
 CURRENCY_SYMBOL = u'€'
+
+DISTANCE_UNIT = 'km'
+

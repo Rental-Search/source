@@ -1,0 +1,7 @@
+@each $name, $var in "pickup-logo-short-grey" $s-pickup_logo_short_grey, "pickup-logo" $s-pickup_logo, "pickup-logo-full" $s-pickup_logo_full, "pickup-logo-short-black" $s-pickup_logo_short_black, "pickup-logo-short-green" $s-pickup_logo_short_green, "calendar" $s-calendar, "euro" $s-euro
+  .sprite-#{$name}
+    +sprite($var)
+
+[class *= "sprite-"]
+  display: inline-block
+  vertical-align: middle
