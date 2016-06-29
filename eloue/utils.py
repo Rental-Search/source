@@ -146,7 +146,9 @@ def convert(value, base_currency, currency):
         'EUR:XPF': D("119.24"),
         'XPF:EUR': D("0.0084"),
         'ILS:EUR': D("0.24"),
-        'EUR:ILS': D("4.26")
+        'EUR:ILS': D("4.26"),
+        'USD:EUR': D("0.9"),
+        'EUR:USD': D("1.11"),
     }
 
     rate = "%s:%s" % (currency, base_currency)
