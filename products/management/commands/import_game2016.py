@@ -11,17 +11,28 @@ class Command(BaseCommand):
 
 	isUserExist  = False
 	newuser_count = 0
+	usernameExist_count = 0
+	userlist = set()
+
 	def handle(self, *args, **options):
 
 		if len(args) > 0:
 			# Read file data
 			content = xlrd.open_workbook(args[0])
 			sh = content.sheet_by_index(0)
-			for x in range(1160, sh.nrows):
+
+			# Create output.txt for existing email list
+			file = open("output.txt", "w+")
+
+			for x in range(1, sh.nrows):
 				firstname = sh.row(x)[2].value
 				lastname = sh.row(x)[3].value
 				email = sh.row(x)[4].value
-				phonenumber =  str(int(sh.row(x)[5].value))
+				try:
+					phonenumber =  str(int(sh.row(x)[5].value))
+				except Exception, e:
+					phonenumber = "0000000000"
+				
 				try:
 					zipcode = str(int(sh.row(x)[6].value))
 				except Exception, e:
@@ -37,14 +48,24 @@ class Command(BaseCommand):
 				# Remove French Accents
 				username = unicodedata.normalize('NFKD', username).encode('ASCII', 'ignore')
 				
+				#print username
 				# Add 0 to phonenumber
 				phonenumber = '0' +  phonenumber
 				# Check User exist
 				try:
 					a = Patron.objects.get(email=email)
 					self.isUserExist = True
+					file.write(email + '\n')
 				except Exception, e:
 					self.isUserExist = False
+					
+				if username in self.userlist:
+					self.usernameExist_count += 1
+					username = username + '_' + str(self.usernameExist_count)
+					self.userlist.add(username)
+				else:
+					self.usernameExist_count = 0
+					self.userlist.add(username)
 
 				if (self.isUserExist == False):
 					try:
@@ -52,15 +73,19 @@ class Command(BaseCommand):
 							last_name=lastname, first_name=firstname)
 						newuser.set_password(Password)
 
+						# Add phone number
 						newphone = PhoneNumber()
 						newphone.id = newuser.id
 						newphone.number = phonenumber
 						newphone.kind = 2
 						newuser.phones.add(newphone)
+
 						newuser.save()
 						self.newuser_count += 1
 					except Exception, e:
 						print e
+						pass
+
 			print "Total new user added : %d" % self.newuser_count
 
 		else:
