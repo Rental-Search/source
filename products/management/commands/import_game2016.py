@@ -55,9 +55,9 @@ class Command(BaseCommand):
 				try:
 					a = Patron.objects.get(email=email)
 					self.isUserExist = True
-					file.write(email + '\n')
 				except Exception, e:
 					self.isUserExist = False
+					file.write(email + '\n')
 					
 				if username in self.userlist:
 					self.usernameExist_count += 1
