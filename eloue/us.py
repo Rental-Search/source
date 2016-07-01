@@ -8,6 +8,11 @@ LANGUAGE_CODE = 'en-US'
 
 VERTICAL_SITE_NAME = 'us'
 
+for key in PIPELINE_JS:
+    output_filename = PIPELINE_JS[key]['output_filename'].replace(
+            '.js', '_%s.js' % VERTICAL_SITE_NAME)
+    PIPELINE_JS[key]['output_filename'] = output_filename
+
 for key in PIPELINE_CSS:
     output_filename = PIPELINE_CSS[key]['output_filename'].replace(
             '.css', '_%s.css' % VERTICAL_SITE_NAME)
