@@ -10,7 +10,7 @@ category_mapping = {
 # Gonflables
 '/les-gonflables/location-chateau-gonflable-parcours-piscine-a-balles-toboggan/': 'jeux-gonflables',
 '/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/': 'jeux-gonflables',
-	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-sports-extremes/': 'jeux-gonflables',
+'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-sports-extremes/': 'jeux-gonflables',
 	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-foot/': 'jeux-gonflables',
 	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-rugby/': 'jeux-gonflables',
 
@@ -33,8 +33,6 @@ category_mapping = {
 
 	#Pack sportifs
 	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/packs-jeux-intervillages/': 'jeux-gonflables',
-	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-foot/': 'jeux-gonflables',
-	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-rugby/': 'jeux-gonflables',
 	}
 
 class Command(BaseCommand):
@@ -110,7 +108,7 @@ class Command(BaseCommand):
 		'/materiel-de-reception/machines/',
 		'/materiel-de-reception/pack-reception/',
 
-		#Evénementiel publicitaire
+		# Evénementiel publicitaire
 		'/autres-jeux/location-rosalie/',
 		'/les-gonflables/gonflable-publicitaire-arche-sky-dancer-père-noël-gonflable/',
 
@@ -124,13 +122,12 @@ class Command(BaseCommand):
 
 		#Pack sportifs
 		'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/packs-jeux-intervillages/',
-		'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-foot/',
-		'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-rugby/',
 
 		]
 
 
-		supp_delivery = ' LIVRAISON: 20km de DAUX (31) gratuit + 20km= 1€/km (Aller et Retour compris)'
+		delivery_info = u'\nLIVRAISON: 20km de DAUX (31) gratuit + 20km = 1€/km (Aller et Retour compris)'
+		deposit_info = u'\nCaution: 1000€'
 
 		while True:
 			try:
@@ -146,67 +143,40 @@ class Command(BaseCommand):
 			product_url = product_soup.find_all(self.product_tag['name'], self.product_tag['attrs'])
 
 			for product in product_url:
-				short_description = " "
+				short_description = None
 				summary = None
 				image_url = None
 				get_summary = False
-	
+				
 				# Get image url of product
 				try:
 					image_url = product.find(self.image_tag['second_name'], self.image_tag['second_attrs']).get('src')
 				except Exception, e:
 					pass
 
-				# Get description
-				description_block = product.find_all(self.description_tag['name'], self.description_tag['attrs'])
-
-				for description in description_block:
-					try:
-						if get_summary == False:
-							#summary = description.find('strong').text
-							summary = description.text
-							get_summary = True
-						else:
-							#short_description = short_description + description.find('strong').text
-							short_description = short_description + description.text
-					except Exception, e:
-						pass
-
-				# time.sleep(1)
-				self.nb_product += 1
-
-				# Second Check to find product image, description
-				if summary == None:
-					get_summary = False
-					try:
-						for description in description_block:
-							if get_summary == False:
-								summary =  description.text
-								get_summary = True
-							
-							if short_description == " ":
-								short_description = short_description + description.text
-							else:
-								break
-					except Exception, e:
-						pass
-		
-				short_description = short_description + supp_delivery
-
+				short_description = product.text + delivery_info + deposit_info
+				short_description = short_description.strip()
+				# if summary:
+				#print "Summary : %s " % summary
+				
+				# if short_description and short_description.strip() and image_url:
+				# 	print "Description %s" % short_description
+				# 	print "Summary %s" % short_description.split('\n', 1)[0]
 				from products.models import Category, Price
 				from products.choices import UNIT
 				from products.models import Product, Picture, Price
 
 				deposit_amount = 1000.0
 
-				try:
-					product = Product.objects.create(
-						summary=summary, description=short_description,
-						deposit_amount=deposit_amount, address=self.address, owner=self.patron,
-						category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
-					)
+				if short_description and short_description.strip() and image_url:
+					summary = short_description.split('\n', 1)[0]
+					try:
+						product = Product.objects.create(
+							summary=summary, description=short_description,
+							deposit_amount=deposit_amount, address=self.address, owner=self.patron,
+							category=Category.objects.get(slug=category_mapping[category]), is_allowed=False
+							)
 
-					if image_url:
 						try:
 							with closing(urlopen(image_url)) as image:
 								product.pictures.add(Picture.objects.create(
@@ -216,9 +186,9 @@ class Command(BaseCommand):
 								)
 						except Exception, e:
 							print str(e)
+							print image_url
 							print 'Error loading image'
-				except Exception, e:
-					print str(e)
-					pass
+					except Exception, e:
+						print str(e)
+						pass
 
-		print "Total number of products %d" % self.nb_product
