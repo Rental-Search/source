@@ -11,7 +11,7 @@ DEFAULT_FROM_EMAIL = 'contact@dressbooking.com'
 
 for key in PIPELINE_JS:
 	output_filename = PIPELINE_JS[key]['output_filename'].replace(
-            '.js', '_%s.js' % VERTICAL_SITE_NAME)
+            '.js', '_%s.js' % "dressbooking")
 	PIPELINE_JS[key]['output_filename'] = output_filename
 
 for key in PIPELINE_CSS:
