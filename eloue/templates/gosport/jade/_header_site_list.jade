@@ -39,7 +39,7 @@ section(ng-controller="AuthCtrl").container.signs-links
         | (numéro gratuit)
       {% endblocktrans %}
     li.spacer
-    li.guest-veiw
+    li.guest-veiw(style="color: black;")
         .dropdown
           span.dropdown-img: a(href="#"): img(data-ng-src="{% verbatim %}{{currentUser.avatar.profil}}{% endverbatim %}").bg-image
           span(data-toggle="dropdown").dropdown-toggle.text-success {% verbatim %}{{currentUser.username}}{% endverbatim %}
