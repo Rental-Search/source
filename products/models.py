@@ -113,7 +113,7 @@ class Product(ImportedObjectMixin):
 
     source = models.ForeignKey(Site, null=True, blank=True)
 
-    redirect_url = models.URLField(_(u"Site internet"), blank=True)
+    redirect_url = models.URLField(_(u"Site internet"), blank=True, null=True)
 
     class Meta:
         verbose_name = _('product')
