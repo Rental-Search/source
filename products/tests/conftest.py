@@ -35,6 +35,7 @@ def imported_product(settings, transactional_db):
     prod = Product.objects.get(pk=1)
     return prod
 
+
 @pytest.fixture()
 def api_client(monkeypatch):
     from rest_framework.test import APIClient

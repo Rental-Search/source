@@ -112,6 +112,41 @@ class Migration(SchemaMigration):
         db.add_column(u'products_category', 'image_da',
                       self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True),
                       keep_default=False)
+        
+        # Adding field 'Category.name_he'
+        db.add_column(u'products_category', 'name_he',
+                      self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Category.slug_he'
+        db.add_column(u'products_category', 'slug_he',
+                      self.gf('django.db.models.fields.SlugField')(max_length=50, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Category.title_he'
+        db.add_column(u'products_category', 'title_he',
+                      self.gf('django.db.models.fields.CharField')(max_length=150, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Category.description_he'
+        db.add_column(u'products_category', 'description_he',
+                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Category.header_he'
+        db.add_column(u'products_category', 'header_he',
+                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Category.footer_he'
+        db.add_column(u'products_category', 'footer_he',
+                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Category.image_he'
+        db.add_column(u'products_category', 'image_he',
+                      self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True),
+                      keep_default=False)
 
 
     def backwards(self, orm):
@@ -178,6 +213,27 @@ class Migration(SchemaMigration):
         # Deleting field 'Category.image_da'
         db.delete_column(u'products_category', 'image_da')
 
+        # Deleting field 'Category.name_he'
+        db.delete_column(u'products_category', 'name_he')
+
+        # Deleting field 'Category.slug_he'
+        db.delete_column(u'products_category', 'slug_he')
+
+        # Deleting field 'Category.title_he'
+        db.delete_column(u'products_category', 'title_he')
+
+        # Deleting field 'Category.description_he'
+        db.delete_column(u'products_category', 'description_he')
+
+        # Deleting field 'Category.header_he'
+        db.delete_column(u'products_category', 'header_he')
+
+        # Deleting field 'Category.footer_he'
+        db.delete_column(u'products_category', 'footer_he')
+
+        # Deleting field 'Category.image_he'
+        db.delete_column(u'products_category', 'image_he')
+        
 
     models = {
         u'accounts.address': {
@@ -404,6 +460,13 @@ class Migration(SchemaMigration):
             'title_da': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
             'title_en': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
             'title_fr': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'description_he': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'header_he': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'image_he': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'name_he': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'slug_he': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'title_he': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'footer_he': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
         u'products.categoryconformity': {

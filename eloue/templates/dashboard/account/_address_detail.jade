@@ -28,7 +28,8 @@ block section-content
               | {% trans "Addresse par défaut" %}
         .row
           .col-xs-12.text-right
-            button(type="reset", data-ng-click="deleteAddress()", onclick="return false;", ng-hide="productList.length > 0 || isDefaultAddress", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").text.text-danger.text-underline-hover.indent-sm-h {% trans "Supprimer" %}
+            span(ng-if="productList.length <= 0")
+              button(type="reset", data-ng-click="deleteAddress()", onclick="return false;", ng-if="!isDefaultAddress", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").text.text-danger.text-underline-hover.indent-sm-h {% trans "Supprimer" %}
             button(type="submit", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").btn-inline.bg-success-hover.text-white {% trans "Enregistrer" %}
         input(type="hidden", name="country", value="{% verbatim %}{{address.country}}{% endverbatim %}")
         input(type="hidden", name="_method", value="PUT")

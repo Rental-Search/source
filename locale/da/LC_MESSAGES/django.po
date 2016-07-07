@@ -3882,7 +3882,7 @@ msgstr "Kommentarer i forbindelse med denne annonce"
 
 #: eloue/templates/dk/products/_base_product_detail.jade:76
 #: eloue/templates/products/_base_product_detail.jade:79
-msgid "Commentaire liés au propriétaire"
+msgid "Commentaires liés au propriétaire"
 msgstr "Kommentarer i forbindelse med ejer"
 
 #: eloue/templates/dk/subscription/index.jade:1
