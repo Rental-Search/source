@@ -561,7 +561,8 @@ ALGOLIA_INDICES = {
     "products.product":{
         'attributesToSnippet': ['summary',
                                 'description',],
-        'customRanking': ['desc(average_rate)', 
+        'customRanking': ['desc(featured)',
+                          'desc(average_rate)', 
                           'desc(comment_count)'],
         'attributesToIndex': ['categories', 
                               'summary',
