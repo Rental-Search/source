@@ -8,31 +8,31 @@ from django.core.files import uploadedfile
 
 category_mapping = {
 # Gonflables
-'/les-gonflables/location-chateau-gonflable-parcours-piscine-a-balles-toboggan/': 'jeux-gonflables',
-'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/': 'jeux-gonflables',
-'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-sports-extremes/': 'jeux-gonflables',
-	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-foot/': 'jeux-gonflables',
-	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-rugby/': 'jeux-gonflables',
+'/les-gonflables/location-chateau-gonflable-parcours-piscine-a-balles-toboggan/': 'inflatable-games',
+'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/': 'inflatable-games',
+'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-sports-extremes/': 'inflatable-games',
+	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-foot/': 'inflatable-games',
+	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/jeux-thème-rugby/': 'inflatable-games',
 
 	# Materiel de reception
-	'/materiel-de-reception/tentes-tables-chaises/': 'jeux-gonflables',
-	'/materiel-de-reception/machines/': 'jeux-gonflables',
-	'/materiel-de-reception/pack-reception/': 'jeux-gonflables',
+	'/materiel-de-reception/tentes-tables-chaises/': 'inflatable-games',
+	'/materiel-de-reception/machines/': 'inflatable-games',
+	'/materiel-de-reception/pack-reception/': 'inflatable-games',
 
 	#Evénementiel publicitaire
-	'/autres-jeux/location-rosalie/': 'jeux',
-	'/les-gonflables/gonflable-publicitaire-arche-sky-dancer-père-noël-gonflable/': 'jeux-gonflables',
+	'/autres-jeux/location-rosalie/': 'games',
+	'/les-gonflables/gonflable-publicitaire-arche-sky-dancer-père-noël-gonflable/': 'inflatable-games',
 
 	# Animations
-	'/animations/discomobile/': 'jeux',
-	'/animations/animation-mariage/': 'jeux',
-	'/animations/location-chateau-gonflable-lion/karaoké-pro/': 'jeux',
+	'/animations/discomobile/': 'games',
+	'/animations/animation-mariage/': 'games',
+	'/animations/location-chateau-gonflable-lion/karaoké-pro/': 'games',
 
 	#Autres jeux
-	'/autres-jeux/': 'jeux',
+	'/autres-jeux/': 'games',
 
 	#Pack sportifs
-	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/packs-jeux-intervillages/': 'jeux-gonflables',
+	'/les-gonflables/jeux-gonflable-sportif-sumos-joutes-baby-foot-parcours-géant/packs-jeux-intervillages/': 'inflatable-games',
 	}
 
 class Command(BaseCommand):
