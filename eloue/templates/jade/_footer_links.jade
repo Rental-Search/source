@@ -20,9 +20,9 @@
     li.ul-wrapper: .centering
       h4.text-nowrap {% trans "L’entreprise e-loue" %}
       ul.nav
-        li.link-wrapper: a(href="/qui-sommes-nous/") {% trans "Qui sommes-nous ?" %}
-        li.link-wrapper: a(href="/nos-partenaires/") {% trans "Nos partenaires" %}
-        li.link-wrapper: a(href="/nous-recrutons/") {% trans "Nous recrutons" %}
+        li.link-wrapper: a(href="/{% trans 'qui-sommes-nous' %}/") {% trans "Qui sommes-nous ?" %}
+        li.link-wrapper: a(href="/{% trans 'nos-partenaires' %}/") {% trans "Nos partenaires" %}
+        li.link-wrapper: a(href="/{% trans 'nous-recrutons' %}/") {% trans "Nous recrutons" %}
         li.link-wrapper: a(href="http://eloue.s3.amazonaws.com/cp/dossier_de_presse.pdf") {% trans "Presse" %}
     li.divide
     li.ul-wrapper: .centering

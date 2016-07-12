@@ -1,0 +1,25 @@
+extends ../base
+-load compressed staticfiles i18n
+
+block append title
+  {% trans "Offre Professionnel" %}
+
+block append styles
+    {% compressed_css "bootstrap" %}
+    {% compressed_css "subscription_styles" %}
+
+block append content-body
+  .container-flex
+    header.header-site:              include ../jade/_header_site
+
+    //dirction = "rigth to left"
+    article(dir="rtl").insurance-pro
+      section.text_content:          include _text_content
+      section.introduction:          include _introduction
+      section.pricing-table.framing: include _pricing_table
+      section.process:               include _process
+      section.contact-form:          include _contact_form.html
+
+    footer
+      section.footer-links.framing:  include ../jade/_footer_links
+      section.rss:                   include ../jade/_rss

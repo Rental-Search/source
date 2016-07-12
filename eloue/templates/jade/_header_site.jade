@@ -13,7 +13,7 @@ section(ng-controller="AuthCtrl").container.signs-links
         {% blocktrans %}
         span
         b 01 85 08 99 77 
-        | (numéro gratuit)
+        | (service clients)
         {% endblocktrans %}
         li.divide
     li: span
@@ -21,7 +21,7 @@ section(ng-controller="AuthCtrl").container.signs-links
         {% blocktrans %}
         b Louez tous types d'objets auprès de particuliers et professionnels 
         {% endblocktrans %}
-        a(href="{% url 'howto' %}"): b {% blocktrans %}(en savoir plus){% endblocktrans %}
+        a(href="{% url 'howto' %}"): b {% blocktrans %}(comment ça marche){% endblocktrans %}
     li.divide
     li: span
       a#registration-link(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b {% trans "Inscription" %} 
@@ -34,7 +34,7 @@ section(ng-controller="AuthCtrl").container.signs-links
         {% blocktrans %}
         span
         b 01 85 08 99 77 
-        | (numéro gratuit)
+        | (service clients)
       {% endblocktrans %}
     li.spacer
     li.guest-veiw

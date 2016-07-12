@@ -675,8 +675,13 @@ define([
                     } else {
                         $scope.search.location_ui_changed = false;
                     }
+                    
                 };
                 
+                $scope.refineQuery = function(){
+                    $scope.search.page = 0;
+                    $scope.perform_search();  
+                };
                 
                 $scope.refinePrices = function(sliderId){ //$log.debug('refinePrices');
                     
@@ -812,6 +817,7 @@ define([
                 $scope.setPage = function(page){ //$log.debug('setPage');
                     $scope.search.page = page;
                     $scope.perform_search();
+                    $window.scrollTo(0, 0);
                 };
                 
                 $scope.setOrdering = function(ordering){ //$log.debug('setOrdering');

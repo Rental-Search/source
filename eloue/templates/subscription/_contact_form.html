@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <style>
   .indent-v-lg {
     margin-top: 0px;}
@@ -25,7 +27,7 @@
         Notre équipe commerciale vous recontactera sous 24h pour vous présenter les détails de nos partenariats et répondre à toutes vos questions.
       </p>
 
-      <form action="/offre-professionnel/" method="POST" class="form-wrapper ng-pristine ng-valid">
+      <form action="/{% trans 'offre-professionnel' %}/" method="POST" class="form-wrapper ng-pristine ng-valid">
       {% csrf_token %}
       {% if messages %}
       {% for message in messages %}

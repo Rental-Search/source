@@ -1,0 +1,9 @@
+-load i18n
+section.pull-nothing(ng-hide="(messageThreadList && messageThreadList.length > 0) || showMessages")
+  .notification-empty
+    .notification-container(style="text-align: center;")
+      i(class="{% verbatim %}{{routeChangeInProgress ? 'loading' : ''}}{% endverbatim %}").icon-5x.indent-sm-b.flaticon.stroke.mail
+      h2(style="text-align: center;" ng-show="!routeChangeInProgress") {% trans "Pas encore de conversation" %}
+      p(style="text-align: center;" ng-show="!routeChangeInProgress").indent-md-v.text-black
+        | {% trans "Avant de faire une demande réservation, il est possible d'envoyer un message au propriétaire" %}
+      a(ng-show="!routeChangeInProgress", href="#").btn-inline.bg-success-hover.text-white {% trans "Commencer à rechercher une annonce" %}

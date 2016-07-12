@@ -1,0 +1,22 @@
+extends ../base
+-load compressed
+-load compressed staticfiles i18n
+
+block append title
+  {% trans "Qui sommes nous ?" %}
+  
+block append styles
+    {% compressed_css "bootstrap" %}
+    {% compressed_css "contact_us_styles" %}
+
+block append content-body
+  .container-flex
+    header.header-site:               include ../jade/_header_site
+    nav.bd-b:                         include _breadcrumbs
+
+    article(dir="rtl").text-gray-strong
+      section:                        include _static_content
+
+    footer
+      section.footer-links.framing:   include ../jade/_footer_links
+      section.rss:                    include ../jade/_rss

@@ -12,7 +12,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
         var mapsURL = 'https://maps.googleapis.com/maps/api/js?'+
                         'sensor=false&libraries=places'+
                         '&language='+lang+
-                        '&region='+region+
+                        '&region='+region.region+
                         '&callback=googleMapsLoaded';
         
         mapsService.loadGoogleMaps = function () {
