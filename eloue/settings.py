@@ -117,7 +117,8 @@ LANGUAGES = (
     ('fr', ugettext('Francais')),
     ('en', ugettext('English')),
     ('da', ugettext('Danish')),
-    ('en-US', ugettext('English (United States)'))
+    ('en-US', ugettext('English (United States)')),
+    ('he', ugettext('Hebrews'))
 )
 
 LOCALE_PATHS = (local_path(os.path.join(os.path.pardir, 'locale/')), )

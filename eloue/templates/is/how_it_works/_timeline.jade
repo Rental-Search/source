@@ -1,0 +1,16 @@
+.container
+  -var sections = [["לפני ההשכרה", [["owner-column",  [["אני נרשם בחינם באי-לו השכרות ", "en quelques secondes"], ["אני מכניס מודעות", "en toute simplicité"], ["אני עונה לשאלות", "des locataires <br> intéressés  par mes annonces <br> (par téléphone ou par messagerie)"], ["אני מאשר את ההשכרה", "afin d’être couvert par l’assurance <br> et d’éviter les échanges d’argent"]]], ["tenant-column", [["אני נרשם בחינם באי-לו השכרות ", "en quelques secondes"], ["אני מחפש חפץ לשכור", "parmi plus de  100 000 annonces"], ["אני שואל שאלות", "au propriétaire <br> de l’objet qui m’intéresse <br> (par téléphone ou par messagerie)"], ["אני משלם עבור השכרה", "via un serveur sécurisé <br> (Société Générale)"]]]]], ["אחרי ההשכרה", [["owner-column",  [["אני מקבל חוזה השכרה", "pré-rempli <br> que je présenterai au locataire <br> lors de la transaction"], ["אני נפגש עם המשכיר", "pour lui confier le bien loué"], ["אנ י מקבל תשלום", "48h après le début de la location"], ["אני מקבל את המוצר בחזרה", "en rencontrant le locataire"]]], ["tenant-column", [["אני מקבל חוזה שכירות", "pré-rempli <br> que je présenterai au propriétaire <br> lors de la transaction"], ["אני נפגש עם הבעלים", "pour récupérer le bien loué"], ["אני משתמש במוצר", "en toute sécurité car il est assuré"], ["אני מחזיר את המוצר", "en rencontrant son propriétaire"]]]]], ["אחרי ההשכרה", [["owner-column",  [["אני חווה את דעתי על השוכר ", "pour aider les autres loueurs"]]], ["tenant-column", [["אני חווה את דעתי על המשכיר ", "pour aider les autres loueurs"]]]]]]
+
+  {% autoescape off %}
+  each section, columns in sections
+    section.row
+      .col-xs-12: h4: != section
+      each style, items in columns
+        .col-xs-6: ul.timeline-steps(class="{{ style }}")
+          each title, content in items
+            li
+              h5: != title
+              p.content: != content
+              span.toggle-content &#149;&nbsp;&#149;&nbsp;&#149;
+              .addons: i: b
+  {% endautoescape %}
