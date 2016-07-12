@@ -1,4 +1,5 @@
 {% load i18n %}
+
 <style>
   .text-red{
   color: #a94442;}
@@ -11,7 +12,7 @@
 </script>
 
 <div class="container indent-v-lg">
-	<form action="/contactez-nous/" method="POST" class="form-wrapper ng-pristine ng-valid">
+	<form action="{% trans '/contactez-nous/' %}" method="POST" class="form-wrapper ng-pristine ng-valid">
 	{% csrf_token %}
 
 	{% if messages %}

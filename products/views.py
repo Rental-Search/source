@@ -59,6 +59,7 @@ from . import serializers, models, filters as product_filters
 import simplejson
 import products
 from django.utils.formats import get_format
+from django.views.generic.base import RedirectView
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_PERIODS_BY', 31)

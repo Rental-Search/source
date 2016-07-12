@@ -47,7 +47,7 @@ style
       position: relative;
       color: #FFF;
       width: 100%;
-      height: 250px;
+      height: 500px;
       opacity: 0.9;
       margin-bottom: 50px;
   }
@@ -65,28 +65,25 @@ style
   }
 
   
-div#intro(style="background-image: url('#{STATIC_URL}img/banner-4.png')")
-    p(style="margin-left: 200px; margin-right: 200px; margin: 0 200px; padding: 90px 0; text-align: center; vertical-align: middle; color: #EEE; font-size: 45px") Nous Recrutons
+div#intro(style="background-image: url('#{STATIC_URL}img/team.jpg')")
+    p(style="margin-left: 200px; margin-right: 200px; margin: 0 200px; padding: 195px 0; text-align: center; vertical-align: middle; color: #EEE; font-size: 60px") Nous Recrutons
 
 .container(style="color:#777; text-align: justify;")
   div#intro-text
-    p &#8220; Vous avez toujours voulu exprimer votre passion et votre talent dans une start-up ambitieuse ?
-    p Participez vous aussi à l’essor de la 
-      span 
-        em Sharing Economy 
-        | en rejoignant nos équipes &#8221;
+    p Vous avez toujours voulu exprimer votre passion et votre talent dans une start-up ambitieuse ?
+    p Participez vous aussi à l’essor de l’économie collaborative en rejoignant e-loue !
     div#quote-border
   div(style="margin: 0 5%;")
-    h3 Nos Offres
+    h3(style="text-align: center; font-weight:bold;") Nos offres
     ul(id="tabs", style="border-bottom: none;", class="nav nav-tabs orange", data-tabs="tabs")
       li.active
-        a(href="#technical-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Ingénierie&nbsp;&nbsp;&nbsp;
+        a(href="#technical-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Ingénieurs&nbsp;&nbsp;&nbsp;
       li
-        a(href="#customer-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Relation Client&nbsp;&nbsp;&nbsp;
+        a(href="#customer-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Opérations&nbsp;&nbsp;&nbsp;
       li
-        a(href="#sales-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Service Commercial&nbsp;&nbsp;&nbsp;
+        a(href="#sales-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Business Development&nbsp;&nbsp;&nbsp;
       li
-        a(href="#marketing-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Marketing et Communication&nbsp;&nbsp;&nbsp;
+        a(href="#marketing-department", data-toggle="tab") &nbsp;&nbsp;&nbsp;Marketing / Communication&nbsp;&nbsp;&nbsp;
 
 div(id="content")
   .container
@@ -101,17 +98,10 @@ div(id="content")
         include marketing_department
 
 .container
-  div(style="margin: 5% 5% 5%;")
-    h3 {% trans "Vous n'avez pas trouvé le job idéal ?" %}
-    p Vous pouvez aussi, bien entendu, nous envoyer une candidature spontanée par mail à 
+  div(align="center" style="margin: 5% 5% 5%;")
+    h3(style="font-weight: bold;") {% trans "Vous n'avez pas trouvé le job idéal ?" %}
+    p Envoyez-nous une candidature spontanée à  
       a(href="mailto:recrutement@e-loue.com") recrutement@e-loue.com
-
-    h3 {% trans "Notre partenaire" %}
-    p
-      | N'hésite pas à visiter le site de notre partenaire Meteojob.com, 
-      | avec plus de 50 000 offres d'emploi : 
-      a(href="https://www.meteojob.com", target="_blank", style="color: #24bd77") https://www.meteojob.com
-
 
     script(type="text/javascript")
       jQuery(document).ready(function ($) {

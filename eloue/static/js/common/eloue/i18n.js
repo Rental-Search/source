@@ -126,7 +126,7 @@ define(["eloue/app",
             // A message with action and object, successful or not
             DASHBOARD_SUBMIT: 
             '{NUM, plural, '+
-                'one {{GENDER, select, m{Le } f{La } p{Votre } other{L\'\'}}'+
+                'one {{GENDER, select, m{Le } f{La } p{Votre } other{L\'\}}'+
                     '{OBJECT} '+
                     '{SUCCESS, select, true{a été } other{n\'\'a pas été }}'+
                     '{ACTION}'+

@@ -1,0 +1,22 @@
+-load humanize product prefixed_cache
+
+{% cache 600 'comment_list' LANGUAGE_CODE %}
+.float-comments-wrapper.container
+  {% for columns in comment_list|takeby_transposed:"2:10" %}
+  ul.row.col-sm-6
+    for comment in columns
+      {% with comment.booking.product as product %}
+      li: a(href="{{ product.get_absolute_url }}")
+        {% with product.pictures.all|first as picture %}
+        span.img-wrapper: img(style="{% if picture.thumbnail.url %}background-image: url({{ picture.thumbnail.url }}){% endif %}").bg-image
+        {% endwith %}
+        p.text {{ comment.comment }}
+        p.info
+          | Par
+          b.autor-name {{ comment.author.username }} 
+          span.time {{ comment.created_at|naturaltime }} 
+        {{ product.summary|capfirst }} - {{ product.address.city|title }}{% if product.address.zipcode %}, {{ product.address.zipcode }}{%endif %}
+      {% endwith %}
+  {% endfor %}
+{% endcache %}
+.decorated-houses

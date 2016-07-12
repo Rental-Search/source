@@ -47,6 +47,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites
 from eloue import signals as eloue_signals
 from eloue.utils import currency, create_alternative_email, itertools_accumulate, convert
+from accounts.models import ImportedObjectMixin
 
 
 import copy
@@ -83,7 +84,7 @@ def setup_postgres_intarray(sender, **kwargs):
         class_prepared.disconnect(dispatch_uid='products_product_setup_postgres_intarray_class_prepared')
 
 
-class Product(models.Model):
+class Product(ImportedObjectMixin):
     """A product"""
     summary = models.CharField(_(u'Titre'), max_length=255)
     deposit_amount = models.DecimalField(_(u'Dépôt de garantie'), max_digits=10, decimal_places=2)
@@ -112,8 +113,7 @@ class Product(models.Model):
 
     source = models.ForeignKey(Site, null=True, blank=True)
 
-    import_record = models.ForeignKey('accounts.ImportRecord', related_name='products', null=True, blank=True)
-    original_id = models.BigIntegerField(null=True, blank=True)
+    redirect_url = models.URLField(_(u"Site internet"), blank=True, null=True)
 
     class Meta:
         verbose_name = _('product')
@@ -124,6 +124,8 @@ class Product(models.Model):
     def prepare_for_save(self):
         self.summary = strip_tags(self.summary)
         self.description = strip_tags(self.description)
+        if not self.redirect_url and self.owner.url:
+            self.redirect_url = self.owner.url
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
             self.source = Site.objects.get_current()
@@ -934,7 +936,6 @@ class Property(models.Model):
         verbose_name_plural = _('properties')
         unique_together = (('category', 'attr_name'), ('category', 'name'))
         
-    
     def __unicode__(self):
         """
         >>> property = Property(name="Marque")
