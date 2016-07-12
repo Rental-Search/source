@@ -62,7 +62,8 @@ CURRENCY = Enum([
     ('USD', 'USD', _(u'$')),
     ('GBP', 'GPB', _(u'£')),
     ('JPY', 'YEN', _(u'¥')),
-    ('XPF', 'XPF', _(u'F'))
+    ('XPF', 'XPF', _(u'F')),
+    ('ILS', 'ILS', _(u'₪'))
 ])
 
 STATUS = Enum([
