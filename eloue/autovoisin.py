@@ -8,6 +8,11 @@ CACHE_MIDDLEWARE_KEY_PREFIX = VERTICAL_SITE_NAME
 
 SECRET_KEY = 'j$(so*u7+=^@64&(skv1qc%avh04lib*)vih_wi7h(bcfx@753'
 
+for key in PIPELINE_JS:
+    output_filename = PIPELINE_JS[key]['output_filename'].replace(
+            '.js', '_%s.js' % VERTICAL_SITE_NAME)
+    PIPELINE_JS[key]['output_filename'] = output_filename
+
 for key in PIPELINE_CSS:
     output_filename = PIPELINE_CSS[key]['output_filename'].replace(
             '.css', '_%s.css' % VERTICAL_SITE_NAME)

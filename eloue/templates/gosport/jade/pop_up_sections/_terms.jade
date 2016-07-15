@@ -10,15 +10,7 @@ table.calendar.bd-wrap.indent-t-md.indent-b-md
         tr
             td Prix
             td
-                b.text-success {{bookingPrice | number}}&nbsp;€
-        tr(ng-show="shippingPrice > 0")
-            td Livraison
-            td
-                b.text-success {{shippingPrice | number: 2}}&nbsp;€
-        tr(ng-show="shippingPrice > 0")
-            td Total
-            td
-                b.text-success {{bookingPrice + shippingPrice | number}}&nbsp;€
+                b {{bookingPriceCurrency}}&nbsp;€
         tr
             td Caution
             td

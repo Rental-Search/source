@@ -1,0 +1,41 @@
+// Core variables and mixins
+@import bootstrap/variables
+@import bootstrap/mixins
+@import variables
+@import sprites
+@import mixins
+@import src
+
+@import header-site
+@import nav-home
+@import banner
+@import insurances
+@import product-list
+@import comments
+@import text-info
+@import category-menu
+@import subcategory
+@import location-list
+@import download-mobile-apps
+@import watch-video
+@import professional-renter-content
+@import footer-links
+@import rss
+@import modal
+
+section
+  h3
+    font-size: px(26)
+    font-weight: $fw-light
+    color: $gray-dark
+    margin: 0 0 .5em
+  p
+    line-height: 2em
+    text-align: right
+
+.talk-about-us a
+  display: inline-block
+  +sprite($s-talk-about-us-gray)
+  &:hover
+    +sprite($s-talk-about-us)
+

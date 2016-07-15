@@ -35,7 +35,7 @@ define(["../../common/eloue/commonApp"], function (EloueCommon) {
         "ITEM": {id: "3", name: "Items"},
         "ACCOUNT": {id: "4", name: "Accounts"}
     });
-    
+
     EloueCommon.constant("CivilityChoices",{ 
         'fr':{
             "MME": {id: "0", name: "Mme"},

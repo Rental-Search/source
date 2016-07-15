@@ -48,7 +48,7 @@
             i.flaticon.stroke.shop-1
             | {% trans "Venez en magasin" %}
         {% endif %}
-        {% if patron.url %}
+        {% if patron.url or product.redirect_url %}
         a(href="#/website", data-toggle="modal", data-target="#pro-popin-website-link")#pro-popin-website-link.btn.bg-success
             i.flaticon.stroke.imac-1
             {% trans "Visitez notre site web" %}

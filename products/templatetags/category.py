@@ -6,6 +6,7 @@ from django.utils.itercompat import is_iterable
 from products.models import Category
 from eloue.decorators import split_args_dict, cached
 from eloue.utils import simple_cache_key
+from django.db.models.aggregates import Count
 
 register = Library()
 
@@ -47,8 +48,11 @@ class FakeCategory(object):
 @register.assignment_tag
 def arrange_categories(categories_map, root_id):
     ids = categories_map.get(root_id, [])
-    category_dict = dict(((x.id, x) for x in Category.on_site.filter(
-        id__in=[i for i in ids if isinstance(i, int)])))
+    category_dict = dict(((x.id, x) for x in Category.on_site
+                          .filter(id__in=[i for i in ids if isinstance(i, int)])
+                          .annotate(products_count=Count('product_categories'))
+                          .filter(products_count__gt=0)
+                          ))
 
     categories = []
     for item in ids:
