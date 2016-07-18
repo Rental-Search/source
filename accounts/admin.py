@@ -316,10 +316,71 @@ class ProAgencyAdmin(admin.ModelAdmin):
         else:
             return obj.patron.username
 
+class SellerFilter(admin.SimpleListFilter):
+    title = _('Vendeur')
+
+    parameter_name = 'seller'
+
+    def lookups(self, request, model_admin):
+        list_of_seller = []
+        queryset = Pro.objects.exclude(subscriptions=None)
+        for x in queryset:
+            a = x.subscription_set.all()[0]
+            try:
+                b = a.seller.all()[0]
+                seller = b.first_name + ' ' + b.last_name
+                list_of_seller.append((b.id, seller.title()))
+            except Exception, e:
+                pass
+
+        list_of_seller.append((('Unkown'), 'Unkown'))
+        return list(set(list_of_seller))
+
+    def queryset(self, request, queryset):
+        if self.value() == 'Unkown':
+            return queryset.exclude(subscription_set__seller__id__isnull=False)
+        if self.value():
+            return queryset.filter(subscription_set__seller__id=self.value())
+
+class TicketFilter(admin.SimpleListFilter):
+    title = _('Ticket')
+
+    parameter_name = 'ticket_solved'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('True', _(u"Tickets résolus")),
+            ('False', _(u"Tickets non résolus")),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'True':
+            return queryset.exclude(tickets__is_closed=False)
+        if self.value() == 'False':
+            return queryset.filter(tickets__is_closed=False)
+
+class PaymentTypeFilter(admin.SimpleListFilter):
+    title = _('Type de paiement')
+    
+    parameter_name = 'payement_type'
+
+    def lookups(self, request, model_admin):
+        return (
+            (0, _(u'Carte de crédit')),
+            (1, _(u'Chèque')),
+            (2, _(u'IBAN')),
+        )
+    def queryset(self, request, queryset):
+        if self.value() == '0':
+            return queryset.filter(subscription_set__payment_type=0)
+        if self.value() == '1':
+            return queryset.filter(subscription_set__payment_type=1)
+        if self.value() == '2':
+            return queryset.filter(subscription_set__payment_type=2)
 
 class ProAdmin(PatronAdmin):
-    list_display = ('company_name', 'last_subscription', 'last_subscription_signed_at', 'last_subscription_started_date', 'last_subscription_ended_date', 'last_subscription_comment', 'last_subscription_seller', 'closed_ticket', 'last_report_date')
-    list_filter = ()
+    list_display = ('company_name', 'last_subscription', 'last_subscription_signed_at', 'last_subscription_started_date', 'last_subscription_ended_date', 'payment_type', 'last_subscription_comment', 'last_subscription_seller', 'closed_ticket', 'last_report_date')
+    list_filter = (PaymentTypeFilter, TicketFilter, SellerFilter)
     inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
 #     readonly_fields = ('import_products_link', 'store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
     readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket', 'regular_expression_filter',)
@@ -386,6 +447,14 @@ class ProAdmin(PatronAdmin):
             return "%s : %s" % (last_subscription.propackage.name, last_subscription.amount)
     last_subscription.short_description = _(u"Souscription")
 
+    def payment_type(self, obj):
+         return {
+            0: _(u'Carte de crédit'),
+            1: _(u'Chèque'),
+            2: _(u'IBAN'),
+        }.get(obj.subscription_set.all().order_by('-subscription_started')[0].payment_type)
+    payment_type.short_description = _(u'Type de paiement')
+
     def last_subscription_started_date(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_started
     last_subscription_started_date.short_description = _(u"mise en lignes")
@@ -399,6 +468,10 @@ class ProAdmin(PatronAdmin):
     last_subscription_signed_at.short_description = _(u"Date de signature")
 
     def last_subscription_comment(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].comment
+    last_subscription_comment.short_description = _(u"Commentaire")
+
+    def last_subscription_p(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].comment
     last_subscription_comment.short_description = _(u"Commentaire")
 
