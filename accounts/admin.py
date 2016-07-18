@@ -389,14 +389,17 @@ class ProAdmin(PatronAdmin):
     def last_subscription_started_date(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_started
     last_subscription_started_date.short_description = _(u"mise en lignes")
+    last_subscription_started_date.admin_order_field = 'subscription_set__subscription_started'
 
     def last_subscription_ended_date(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_ended
     last_subscription_ended_date.short_description = _(u"fin de souscription")
+    last_subscription_ended_date.admin_order_field = 'subscription_set__subscription_ended'
 
     def last_subscription_signed_at(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].signed_at
     last_subscription_signed_at.short_description = _(u"Date de signature")
+    last_subscription_signed_at.admin_order_field = 'subscription_set__signed_at'
 
     def last_subscription_comment(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].comment
@@ -414,6 +417,7 @@ class ProAdmin(PatronAdmin):
         last_report = obj.reports.latest('created_at')
         return last_report.created_at
     last_report_date.short_description = _(u"dernier rapport")
+    last_report_date.admin_order_field= 'reports__created_at'
 
     def closed_ticket(self, obj):
         tickets = obj.tickets.filter(is_closed=False)
