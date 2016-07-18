@@ -98,7 +98,7 @@ define([
             $scope.dataFormSubmit = function () {
                 $scope.submitInProgress = true;
                 if ($scope.noAddress) {
-                    $scope.currentUser.default_address.country = UtilsService.country();
+                    $scope.currentUser.default_address.country = UtilsService.country().region;
                     AddressesService.saveAddress($scope.currentUser.default_address).then(
                         $scope.processAddressSaveResponse,
                         function (error) {
