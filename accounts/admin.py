@@ -322,18 +322,11 @@ class SellerFilter(admin.SimpleListFilter):
     parameter_name = 'seller'
 
     def lookups(self, request, model_admin):
-        list_of_seller = []
-        queryset = Subscription.objects.all().values('seller__first_name', 'seller__id', 'seller__last_name').exclude(seller__id__isnull=True).distinct()
-
-        for x in queryset:
-            fullname = x['seller__first_name'] + ' ' + x['seller__last_name']
-            list_of_seller.append((x['seller__id'], fullname.title()))
-
-        list_of_seller.append((('Unkown'), 'Unkown'))
+        list_of_seller = Subscription.objects.all().values_list('seller__id', 'seller__last_name').distinct()
         return list_of_seller
 
     def queryset(self, request, queryset):
-        if self.value() == 'Unkown':
+        if self.value() == None:
             return queryset.exclude(subscription_set__seller__id__isnull=False)
         if self.value():
             return queryset.filter(subscription_set__seller__id=self.value())
