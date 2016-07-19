@@ -1210,11 +1210,6 @@ msgstr "our-partners"
 msgid "contactez-nous"
 msgstr "contact-us"
 
-#: eloue/urls.py:221 eloue/templates/dk/jade/_footer_links.jade:33
-#: eloue/templates/jade/_footer_links.jade:39
-msgid "qui-sommes-nous"
-msgstr "who-we-are"
-
 #: eloue/urls.py:222 eloue/templates/dk/jade/_footer_links.jade:13
 #: eloue/templates/jade/_footer_links.jade:11
 msgid "securite"
@@ -2856,7 +2851,7 @@ msgstr "average response time"
 #: eloue/templates/dashboard/dashboard/index.jade:53
 #: eloue/templates/dk/dashboard/dashboard/index.jade:53
 msgid "Votre activité sur e-loue"
-msgstr "Your activity on EL"
+msgstr "Your activity on rentalcompare"
 
 #: eloue/templates/dashboard/items/_item_characteristics.jade:6
 #: eloue/templates/dashboard/items/_item_characteristics.jade:8
@@ -5472,7 +5467,7 @@ msgid ""
 "<span></span><b>01 85 08 99 77 </b> (numéro gratuit)\n"
 msgstr ""
 "\n"
-"<span></span><b>01 85 08 99 77 </b> (free call)\n"
+"<span></span><b>01 85 08 99 77 </b> (customer services)\n"
 
 #: eloue/templates/jade/_header_site.jade:18
 #: eloue/templates/us/jade/_header_site.jade:18
@@ -5496,7 +5491,7 @@ msgid ""
 "        </li>\n"
 msgstr ""
 "\n"
-"<span></span><b>+331 85 08 99 77 </b> (free call)\n"
+"<span></span><b>+331 85 08 99 77 </b> (customer services)\n"
 "        </li>\n"
 
 #: eloue/templates/jade/_header_site.jade:67
@@ -5520,7 +5515,7 @@ msgstr "Rent safely"
 #: eloue/templates/jade/_insurances.jade:9
 msgid "Paiement en ligne sécurisé.<br>Dépôt de garantie en ligne."
 msgstr ""
-"Secure online payment.\n"
+"Secure online payment.<br>"
 "Deposit online."
 
 #: eloue/templates/jade/_insurances.jade:18
@@ -5530,7 +5525,7 @@ msgstr "Rent safely"
 #: eloue/templates/jade/_insurances.jade:19
 msgid "Contrat de location pré-rempli.<br>Service client dédié 7j/7"
 msgstr ""
-"Rental contract pre-filled.\n"
+"Rental contract pre-filled.<br>"
 "Dedicated customer service 7days"
 
 #: eloue/templates/jade/_insurances.jade:28
@@ -5540,7 +5535,7 @@ msgstr "Rent with confidence"
 #: eloue/templates/jade/_insurances.jade:29
 msgid "Identité des membres vérifiée.<br>Notes et commentaires."
 msgstr ""
-"Member identity verified.\n"
+"Member identity verified.<br>"
 "Notes and comments."
 
 #: eloue/templates/jade/_insurances.jade:38
@@ -5550,7 +5545,7 @@ msgstr "Rent with confidence"
 #: eloue/templates/jade/_insurances.jade:39
 msgid "Assurance incluse et automatique.<br>Aucun échange d’argent."
 msgstr ""
-"auto insurance included.\n"
+"auto insurance included.<br>"
 "No exchange of money."
 
 #: eloue/templates/jade/_location_list.jade:3
