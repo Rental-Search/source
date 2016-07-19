@@ -1210,11 +1210,6 @@ msgstr "our-partners"
 msgid "contactez-nous"
 msgstr "contact-us"
 
-#: eloue/urls.py:221 eloue/templates/dk/jade/_footer_links.jade:33
-#: eloue/templates/jade/_footer_links.jade:39
-msgid "qui-sommes-nous"
-msgstr "who-we-are"
-
 #: eloue/urls.py:222 eloue/templates/dk/jade/_footer_links.jade:13
 #: eloue/templates/jade/_footer_links.jade:11
 msgid "securite"
@@ -1921,7 +1916,7 @@ msgstr "Legal Notices"
 #: eloue/templates/insurances/index.jade:1
 #: eloue/templates/jade/_footer_links.jade:25
 msgid "Assurance tranquilité"
-msgstr "insurance"
+msgstr "Insurance"
 
 #: eloue/templates/autovoisin/jade/_header_site.jade:25
 #: eloue/templates/django_messages/compose.html:9
@@ -2076,7 +2071,7 @@ msgstr "professional quote"
 #: eloue/templates/autovoisin/terms/_text_content.jade:1
 #: eloue/templates/terms/index.jade:1
 msgid "Conditions Générales Particuliers"
-msgstr "general terms for individuals"
+msgstr "General terms for individuals"
 
 #: eloue/templates/autovoisin/who_are_we/_static_content.jade:1
 #: eloue/templates/dk/who_are_we/_breadcrumbs.jade:7
@@ -2412,6 +2407,11 @@ msgstr "New password"
 #: eloue/templates/dk/dashboard/account/password.jade:6
 msgid "Modification de votre mot de passe"
 msgstr "Changing your password"
+
+
+#: eloue/templates/dashboard/account/password.jade:6
+msgid "Confirmer le mot de passe"
+msgstr "Confirm password"
 
 #: eloue/templates/dashboard/account/password.jade:14
 #: eloue/templates/dashboard/booking/_comment_and_rank.jade:12
@@ -2851,7 +2851,7 @@ msgstr "average response time"
 #: eloue/templates/dashboard/dashboard/index.jade:53
 #: eloue/templates/dk/dashboard/dashboard/index.jade:53
 msgid "Votre activité sur e-loue"
-msgstr "Your activity on EL"
+msgstr "Your activity on rentalcompare"
 
 #: eloue/templates/dashboard/items/_item_characteristics.jade:6
 #: eloue/templates/dashboard/items/_item_characteristics.jade:8
@@ -4269,7 +4269,7 @@ msgstr "RentalCompare enterprise"
 #: eloue/templates/dressbooking/jade/_footer_links.jade:39
 #: eloue/templates/jade/_footer_links.jade:27
 msgid "Conditions générales particuliers"
-msgstr "general terms for individuals"
+msgstr "General terms for individuals"
 
 #: eloue/templates/dressbooking/jade/_in_paris.jade:12
 msgid ""
@@ -5414,7 +5414,7 @@ msgstr "Our partner"
 #: eloue/templates/enroll/index.jade:1
 #: eloue/templates/jade/_footer_links.jade:43
 msgid "Nous recrutons"
-msgstr "we are hiring"
+msgstr "We are hiring"
 
 
 #: eloue/templates/gosport/admin/base_site.html:4
@@ -5467,7 +5467,7 @@ msgid ""
 "<span></span><b>01 85 08 99 77 </b> (numéro gratuit)\n"
 msgstr ""
 "\n"
-"<span></span><b>01 85 08 99 77 </b> (free call)\n"
+"<span></span><b>01 85 08 99 77 </b> (customer services)\n"
 
 #: eloue/templates/jade/_header_site.jade:18
 #: eloue/templates/us/jade/_header_site.jade:18
@@ -5491,7 +5491,7 @@ msgid ""
 "        </li>\n"
 msgstr ""
 "\n"
-"<span></span><b>+331 85 08 99 77 </b> (free call)\n"
+"<span></span><b>+331 85 08 99 77 </b> (customer services)\n"
 "        </li>\n"
 
 #: eloue/templates/jade/_header_site.jade:67
@@ -5515,7 +5515,7 @@ msgstr "Rent safely"
 #: eloue/templates/jade/_insurances.jade:9
 msgid "Paiement en ligne sécurisé.<br>Dépôt de garantie en ligne."
 msgstr ""
-"Secure online payment.\n"
+"Secure online payment.<br>"
 "Deposit online."
 
 #: eloue/templates/jade/_insurances.jade:18
@@ -5525,7 +5525,7 @@ msgstr "Rent safely"
 #: eloue/templates/jade/_insurances.jade:19
 msgid "Contrat de location pré-rempli.<br>Service client dédié 7j/7"
 msgstr ""
-"Rental contract pre-filled.\n"
+"Rental contract pre-filled.<br>"
 "Dedicated customer service 7days"
 
 #: eloue/templates/jade/_insurances.jade:28
@@ -5535,7 +5535,7 @@ msgstr "Rent with confidence"
 #: eloue/templates/jade/_insurances.jade:29
 msgid "Identité des membres vérifiée.<br>Notes et commentaires."
 msgstr ""
-"Member identity verified.\n"
+"Member identity verified.<br>"
 "Notes and comments."
 
 #: eloue/templates/jade/_insurances.jade:38
@@ -5545,7 +5545,7 @@ msgstr "Rent with confidence"
 #: eloue/templates/jade/_insurances.jade:39
 msgid "Assurance incluse et automatique.<br>Aucun échange d’argent."
 msgstr ""
-"auto insurance included.\n"
+"auto insurance included.<br>"
 "No exchange of money."
 
 #: eloue/templates/jade/_location_list.jade:3
@@ -5943,12 +5943,15 @@ msgstr "Keep me informed of news and special offers"
 #: eloue/templates/jade/_sign_in.jade:79
 msgid ""
 " \n"
-" En créant un compte e-loue, vous acceptez les &nbsp;<a href=\"tems_url"
-"\">Conditions Générales</a><br> et la &nbsp;<a href=\"/respect-vie-privee/"
-"\">Politique de Confidentialité</a> de notre site\n"
+" En créant un compte e-loue, vous acceptez les &nbsp;<a target=\"_blank\" href=\"conditions-generales-particuliers"
+"\">Conditions Générales Particuliers</a><br> et la &nbsp;<a target=\"_blank\" href=\"/conditions-generales-professionnels/"
+"\">Conditions Générales professionnels</a> de notre site\n"
 msgstr ""
-"By creating a RentalCompare account, you agree to the terms and conditions "
-"of our site.  Please read our Privacy Policy section.\n"
+" \n"
+" By creating a RentalCompare account, you agree to the &nbsp;<a target=\"_blank\" href=\"general-terms-individuals"
+"\">General terms for individuals</a><br> et la &nbsp;<a target=\"_blank\" href=\"/general-terms-professionals/"
+"\">Terms and Conditions</a> of our site\n"
+
 
 #: eloue/templates/jade/_sign_in.jade:86
 #: eloue/templates/landing_pages/_sign_in_content.jade:65
