@@ -5,9 +5,11 @@
 .section-body: .part
   {% if patron.slug != "loxam" %}
   {% if patron.slug != "carrefourlocation" %}
+  {% if patron.slug != "zipcar" %}
   a(href="#/message", data-toggle="modal", data-target="#pro-popin-message").btn.bg-success
     i.flaticon.stroke.mail-2
     {% trans "Demandez un devis" %}
+  {% endif %}
   {% endif %}
   {% if patron.default_number %}
   a(href="#/phone", data-toggle="modal", data-target="#pro-popin-phone").btn.bg-success

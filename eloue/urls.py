@@ -11,10 +11,11 @@ from sitemaps import CategorySitemap, FlatPageSitemap, PatronSitemap, ProductSit
 
 from eloue.api.urls import router
 
-from products.views import HomepageView, PublishItemView
+from products.views import HomepageView
 
 from accounts.views import PasswordResetView, PasswordResetConfirmView, ActivationView, LoginAndRedirectView, LoginFacebookView, SignUpLandingView, ContactView, ContactProView
 from client_logging.views import ClientLogViewSet
+from eloue.rentalcompare_urls import urlpatterns as rentalcompare_urlpatterns 
 
 
 admin.autodiscover()
@@ -241,6 +242,9 @@ urlpatterns = patterns('',
 
     # API 2.0
     url(r'^', include(api2_urlpatterns)),
+    
+    # Redirects for imported sites
+    url(r'^', include(rentalcompare_urlpatterns)),
     
     # Client exception logging
     url(r'^logs/$', ClientLogViewSet.as_view({'post':'log'})),

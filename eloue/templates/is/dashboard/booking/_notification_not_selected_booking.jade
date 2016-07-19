@@ -1,0 +1,6 @@
+-load i18n
+section.pull-nothing
+  .notification-empty
+    .notification-container(style="text-align: center;")
+      i(class="{% verbatim %}{{routeChangeInProgress ? 'loading' : ''}}{% endverbatim %}").icon-5x.indent-sm-b.flaticon.stroke.calendar-5
+      h2(style="text-align: center" ng-show="!routeChangeInProgress") {% trans "Aucune réservation sélectionnée" %}

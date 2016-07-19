@@ -69,7 +69,7 @@ block append content-body
                   {% endwith %}
               if owner_comments and not is_pro
                 .part.comments.comments-owner
-                  h3 Commentaire liés au propriétaire
+                  h3 Commentaires liés au propriétaire
                   {% with owner_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}

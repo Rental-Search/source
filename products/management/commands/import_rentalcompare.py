@@ -153,6 +153,11 @@ Weight: {{ weight }} lbs.
             dest='level',
             default=None,
             help='User type: user, administrator, editor, vendor'),   
+        make_option('--owner',
+            action='store',
+            dest='owner',
+            default=None,
+            help='User type: user, administrator, editor, vendor'),   
         )
 
     def __init__(self):
@@ -258,12 +263,14 @@ Weight: {{ weight }} lbs.
         lu = int(options['limit-users'])
         cat_id = int(options['category'])
         level = options['level']
+        owner = options['owner']
         
         user_prg = 0
         prod_prg = 0
         
         user_total = 0
         prod_total = 0
+        skipped_total = 0
         
         slug_attempt = 0
         
@@ -297,13 +304,26 @@ Weight: {{ weight }} lbs.
             imported_users_ids = self.get_imported_users_qs().values_list('original_id', flat=True)
             imported_products_ids = self.get_imported_products_qs().values_list('original_id', flat=True)
             
-            where = ("where level='%s'" % level) if level else ""
+            filters = []
             
-            c.execute("select count(*) from ob_users "+where)
+            if level:
+                filters.append("level='%s'" % level)
+                
+            if owner:
+                filters.append("username='%s'" % owner)
+            
+            where = ("where " + " ".join(filters)) if filters else ""
+            
+            c.execute("select count(*) from ob_users " + where)
             (user_count, ) = c.fetchone()
             user_count = min(user_count, lu)
             
-            self.stdout.write("Importing %s users (type=%s)" % (user_count, level if level else "*", ))
+            if user_count == 1:
+                self.stdout.write("Importing user " + owner)
+            elif user_count > 1:
+                self.stdout.write("Importing %s users (type=%s)" % (user_count, level if level else "*", ))
+            else:
+                raise Exception("No users correspond to your criteria")
             
             c.execute("select * from ob_users "+where+" order by registered desc limit %s", (lu,))
             RcUser = self.get_user_type(c.column_names)
@@ -318,8 +338,8 @@ Weight: {{ weight }} lbs.
                     
                     user_prg = user_prg + 1
                     
-                    if rc_user.id in imported_users_ids:
-                        continue
+#                     if rc_user.id in imported_users_ids:
+#                         continue
                     
                     email_exists = Patron.objects.exists(email=rc_user.email)
                     
@@ -392,6 +412,7 @@ Weight: {{ weight }} lbs.
 #                         self.skip_user(rc_user, "email exists")
 #                         continue
                     
+                    # TODO handle unallowed characters
                     if not email_exists:
                         username_counts[rc_user.username] = 0
                         username_base = rc_user.username if len(rc_user.username)<=27 else rc_user.username[:27]
@@ -414,36 +435,46 @@ Weight: {{ weight }} lbs.
                         user = Patron.objects.get(email=rc_user.email)
                         
                     
-                    if rc_user.phonenumber is not None:
-                        user.default_number = PhoneNumber(patron=user,
-                                       number=rc_user.phonenumber,
-                                       kind=PHONE_TYPES.OTHER)
+           
                     
-                    user.save()
-                    
-                    # user address
-                    if rc_user.has_address:
-                        # TODO refactor condition
-                        addr = rc_user.make_address(user)
-                        addr.save()
+                    if rc_user.id not in imported_users_ids:
+                        if rc_user.phonenumber is not None:
+                            user.default_number = PhoneNumber(patron=user,
+                                           number=rc_user.phonenumber,
+                                           kind=PHONE_TYPES.OTHER)
+                        
+                        user.save()
+                        
+                        # user address
+                        if rc_user.has_address:
+                            # TODO refactor condition
+                            addr = rc_user.make_address(user)
+                            addr.save()
+                            user.default_address = addr
+                            
+                        user.save()
                     
                     if rc_user.level == "vendor":
 
                         # boutique(s)
                         # TODO refactor into User.build_boutique
-                        agency = ProAgency.objects.create(patron=user,
-                                                 name=rc_user.company,
-                                                 phone_number=user.default_number,
-                                                 address1=addr.address1,
-                                                 address2=addr.address2,
-                                                 zipcode=addr.zipcode,
-                                                 city=addr.city,
-                                                 state=addr.state,
-                                                 country=addr.country)
-                        
-                        Subscription.objects.create(patron=user,
-                                                    propackage=propack)
-                        
+                        if rc_user.id not in imported_users_ids:
+                            agency = ProAgency.objects.create(patron=user,
+                                                     name=rc_user.company,
+                                                     phone_number=user.default_number,
+                                                     address1=addr.address1,
+                                                     address2=addr.address2,
+                                                     zipcode=addr.zipcode,
+                                                     city=addr.city,
+                                                     state=addr.state,
+                                                     country=addr.country)
+                            
+                            Subscription.objects.create(patron=user,
+                                                        propackage=propack)
+                            
+                        else:
+                            agency = ProAgency.objects.filter(patron=user).first()
+                            
                         # products
                         c.execute("select count(*) from ob_products where vendor_id=%(user_id)s limit %(quantity)s;", 
                                   {'user_id':rc_user.id,
@@ -463,6 +494,7 @@ Weight: {{ weight }} lbs.
                         pictures = []
                         prod_cat = []
                         prod_prg = 0
+                        prod_skipped = 0
                         
                         while(len(prod_chunk)>0):
                             
@@ -474,6 +506,7 @@ Weight: {{ weight }} lbs.
                             for (rc_product, (alloc_id, )) in izip(imap(RcProduct._make, prod_chunk), el_c):
                                 
                                 if rc_product.id in imported_products_ids:
+                                    prod_skipped = prod_skipped + 1
                                     continue
                                 
                                 p = {
@@ -489,7 +522,7 @@ Weight: {{ weight }} lbs.
                                     # currency
                                     "currency": rc_user.currency, #TODO handle 0
                                     # addresse =
-                                    "address": addr,
+                                    "address": user.default_address,
                                     # phone =
                                     "phone": user.default_number,
                                     # qty
@@ -539,14 +572,15 @@ Weight: {{ weight }} lbs.
                             # get next chunk of products
                             
                             prod_prg = prod_prg + len(prod_chunk)
+                            skipped_total = skipped_total + prod_skipped 
                             
                             prod_chunk = c.fetchmany(size=min(self.PRODUCTS_CHUNK_SIZE, lp))
                             products = []
                             prod_cat = []
                             prices = []
                             pictures = []
-                            self.stdout.write("\rImporting products for user %s: %s / %s" % 
-                                              (rc_user.username, prod_prg, prod_count, ), 
+                            self.stdout.write("\rImporting products for user %s: %s / %s (%s skipped)" % 
+                                              (rc_user.username, prod_prg, prod_count, prod_skipped, ), 
                                               ending='\r')
                         
                         prod_total = prod_total + prod_prg
@@ -564,7 +598,13 @@ Weight: {{ weight }} lbs.
               (user_total, ), ending='\n')
                 
             self.stdout.write("\rTotal products imported: %s" % 
-              (prod_total, ), ending='\n')
+              (prod_total-skipped_total, ), ending='\n')
+            
+            self.stdout.write("\rTotal products skipped: %s" % 
+              (skipped_total, ), ending='\n')
+            
+            
+            
             
             if dry_run:
                 self.stdout.write(self.style.NOTICE("Dry run was enabled, rolling back."), ending='\n')
@@ -615,6 +655,7 @@ Weight: {{ weight }} lbs.
         self.progress = 0
    
         def worker(part):
+            storage = Patron._meta.get_field('avatar').storage
             irs = self.get_record_queryset()        
             for ir in irs:
                 pats = ir.patrons.exclude(avatar__isnull=True).exclude(avatar__exact='')
@@ -625,10 +666,24 @@ Weight: {{ weight }} lbs.
                         with progress_lock:
                             self.progress = self.progress + 1
                             self.stdout.write("Logo %5s out of %5s" % (self.progress, count), ending='\r')
-                        resp = requests.get(self.LOGOS_URL + pat.avatar.name)
+                            
+                        if pat.avatar.name.startswith('http'):
+                            url = pat.avatar.name
+                        else:
+                            url = self.PICTURES_URL + pat.avatar.name
+                            if storage.exists(url):
+                                with skip_lock:
+                                    self.skip_logo(pat.avatar, str('already exists'))
+                        resp = requests.get(url)
                         resp.raise_for_status()
                         pat.avatar.save('', ContentFile(resp.content))
                     except HTTPError, e:
+                        pat.avatar.delete()
+                        try:
+                            pat.avatar.delete()
+                        except:
+                            pat.avatar = None
+                            pat.save()
                         with skip_lock:
                             self.skip_logo(pat, str(e))
         
@@ -676,14 +731,23 @@ Weight: {{ weight }} lbs.
                         with progress_lock:
                             self.progress = self.progress + 1
                             self.stdout.write("Picture %7s out of %7s: %50s" % (self.progress, count, name), ending='\r')
-                        if storage.exists(pic.image.name):
-                            with skip_lock:
-                                self.skip_picture(pic, str('already exists'))
-                        name = name if name.startswith('http') else self.PICTURES_URL + name
-                        resp = requests.get(name)
+                        if name.startswith('http'):
+                            url = name
+                        else:
+                            url = self.PICTURES_URL + name
+                            if storage.exists(url):
+                                with skip_lock:
+                                    self.skip_picture(pic, str('already exists'))
+                        resp = requests.get(url)
                         resp.raise_for_status()
                         pic.image.save('', ContentFile(resp.content))
                     except Exception, e:
+                        try:
+                            pic.image.delete()
+                        except:
+                            pic.image = None
+                            pic.save()
+                        super(Picture, pic).delete()
                         with skip_lock:
                             self.skip_picture(pic, str(e))
         

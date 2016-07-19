@@ -50,7 +50,8 @@ block append content-body
     include ../jade/_pro_popin_website_link
     include ../jade/_pro_popin_shop
     {% endwith %}
-  .container-flex
+  //- Inherit HomePage controller to activate geolocation search
+  .container-flex(data-ng-controller="HomePageCtrl")
     header.header-site
       include ../jade/_header_site
     nav.bd-b
@@ -107,7 +108,7 @@ block append content-body
                   {% endwith %}
               if owner_comments and not is_pro
                 .part.comments.comments-owner
-                  h3 {% trans "Commentaire liés au propriétaire" %}
+                  h3 {% trans "Commentaires liés au propriétaire" %}
                   {% with owner_comments as comment_list %}
                   include ../jade/product_details/main/_comments
                   {% endwith %}

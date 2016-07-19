@@ -80,7 +80,8 @@ class ProCampaignInline(admin.TabularInline):
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
-    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link', 'products_count')
+    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 
+                       'bookings_link', 'messages_link', 'products_count', 'import_record', 'original_id')
     fieldsets = (
         (_('Liens'), {'fields': (('profil_link'),
                                  ('owner_products','owner_car_products','owner_realestate_products', 'products_count'),
@@ -317,7 +318,7 @@ class ProAgencyAdmin(admin.ModelAdmin):
 
 
 class ProAdmin(PatronAdmin):
-    list_display = ('company_name', 'closed_ticket', 'last_report_date', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
+    list_display = ('company_name', 'last_subscription', 'last_subscription_signed_at', 'last_subscription_started_date', 'last_subscription_ended_date', 'last_subscription_comment', 'last_subscription_seller', 'closed_ticket', 'last_report_date')
     list_filter = ()
     inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
 #     readonly_fields = ('import_products_link', 'store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
@@ -392,6 +393,22 @@ class ProAdmin(PatronAdmin):
     def last_subscription_ended_date(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_ended
     last_subscription_ended_date.short_description = _(u"fin de souscription")
+
+    def last_subscription_signed_at(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].signed_at
+    last_subscription_signed_at.short_description = _(u"Date de signature")
+
+    def last_subscription_comment(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].comment
+    last_subscription_comment.short_description = _(u"Commentaire")
+
+    def last_subscription_seller(self, obj):
+        try:
+            seller = obj.subscription_set.all().order_by('-subscription_started')[0].seller.all()[0]
+            return "%s %s" % (seller.first_name, seller.last_name)
+        except:
+            return "unknown"
+    last_subscription_seller.short_description = _(u"Vendeur")
 
     def last_report_date(self, obj):
         last_report = obj.reports.latest('created_at')

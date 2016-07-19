@@ -3926,6 +3926,10 @@ msgstr "RentalCompare enterprise"
 msgid "Qui sommes-nous ?"
 msgstr "Who are we?"
 
+#: eloue/templates/jade/_footer_links.jade:23
+msgid "qui-sommes-nous"
+msgstr "who-we-are"
+
 #: eloue/templates/dk/jade/_footer_links.jade:45
 #: eloue/templates/dressbooking/jade/_footer_links.jade:51
 #: eloue/templates/dressbooking/jade/product_details/aside/_owner_information.jade:2
@@ -5416,6 +5420,7 @@ msgstr "Our partner"
 #: eloue/templates/jade/_footer_links.jade:43
 msgid "Nous recrutons"
 msgstr "We are hiring"
+
 
 #: eloue/templates/gosport/admin/base_site.html:4
 #: eloue/templates/gosport/admin/base_site.html:7

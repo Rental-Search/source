@@ -60,8 +60,33 @@ class Language(models.Model):
     def __unicode__(self):
         return ugettext(self.lang)
 
+
+class ImportedObjectMixin(models.Model):
     
-class Patron(AbstractUser):
+    import_record = models.ForeignKey('ImportRecord', 
+                                      related_name='%(class)ss', 
+                                      null=True, blank=True)
+    original_id = models.BigIntegerField(null=True, blank=True)
+    
+#     @property
+#     def is_imported(self):
+#         return self.import_record and self.original_id 
+
+#     def validate_unique(self, exclude=None):
+#         if self.is_imported:
+#             n = self.__class__.objects.filter(original_id=self.original_id,
+#                                           import_record__origin__iexact=self.import_record.origin).count()
+#             if n>1:
+#                 raise ValidationError("A(n) %s with original_id=%d was already imported from %s" 
+#                                       % (self._meta.model_name, self.original_id, self.import_record.origin))
+#         super().validate_unique(self, exclude=exclude)
+        
+    class Meta:
+        abstract = True
+#         unique_together = ('import_record', 'original_id')
+        
+    
+class Patron(AbstractUser, ImportedObjectMixin):
     """A member"""
     civility = models.PositiveSmallIntegerField(_(u"Civilité"), null=True, blank=True, choices=CIVILITY_CHOICES)
     company_name = models.CharField(_(u"Nom de l'entreprise"), null=True, blank=True, max_length=255)
@@ -112,9 +137,6 @@ class Patron(AbstractUser):
     url = models.URLField(_(u"Site internet"), blank=True)
 
     source = models.ForeignKey(Site, null=True, blank=True)
-
-    import_record = models.ForeignKey('accounts.ImportRecord', related_name='patrons', null=True)
-    original_id = models.BigIntegerField(null=True)
 
     thumbnail = ImageSpecField(
         source='avatar',
