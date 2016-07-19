@@ -13,9 +13,9 @@ ol.product-layout
           //- For fnac
           if product.price
             if product.owner.slug == 'fnac'
-              span.badge.price {{ product.price|currency }} /{% trans "jour" %}
-            else
               span.badge.price {{ product.price|currency }} /{% trans "mois" %}
+            else
+              span.badge.price {{ product.price|currency }} /{% trans "jour" %}
           else
             span.badge.price {% trans "Sur devis" %}
         .info

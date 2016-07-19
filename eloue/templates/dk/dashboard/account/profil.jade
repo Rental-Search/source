@@ -34,10 +34,10 @@ block sections
         //- nackname & email
         .row
           .col-md-12.col-lg-6
-            input#username.form-control(type="text", name="username", placeholder="{% trans 'Pseudo' %} *", required, autofocus, ng-model="currentUser.username")
+            input#username.form-control(type="text", name="username", placeholder="{% trans 'Pseudo' %} *", required, autofocus, ng-model="currentUser.username", readonly)
             span.text-danger(ng-show="profileInformation.username.$error.required && profileSubmitted", translate="required_field")
           .col-md-12.col-lg-6
-            input#email.form-control(type="email", name="email", placeholder="{% trans 'Email' %} *", required, ng-model="currentUser.email")
+            input#email.form-control(type="email", name="email", placeholder="{% trans 'Email' %} *", required, ng-model="currentUser.email", readonly)
             span.text-danger(ng-show="profileInformation.email.$error.required && profileSubmitted", translate="required_field")
         //- gender, first-name, name
         .row
