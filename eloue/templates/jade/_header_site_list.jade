@@ -108,6 +108,7 @@ section(ng-controller="AuthCtrl").container.signs-links
                         style="position:relative;")
           input(ng-model="vm.value", ng-change="vm.refine()", ng-focus="vm.focus=true", ng-blur="vm.focus=false",
               type="text", name="q", autocomplete="off", style="padding-right:3em;",
+              ng-keyup="vm.onKeyup($event)", tabindex='1',
               spellcheck="false", autocorrect="off", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", 
               title="{% if form.cleaned_data.q %}{{ what }}{% endif %}").table-cell.main-cell.form-control.what-field
         .table-cell.input-group.where-field
@@ -115,7 +116,9 @@ section(ng-controller="AuthCtrl").container.signs-links
           div(ng-if="search", eloue-filter-wrapper-textfield, attr-name="location", eloue-location,
 	            value="search.location",  defaults="defaults.location", helper="search.helper",
 	            style="position:relative;")
-            input(class="nobtn", ng-model="vm.value", type="text", name="l", style="padding-right:3em;", 
+            input(class="nobtn", ng-model="vm.value", type="text", name="l", style="padding-right:3em;",
+                ng-focus="vm.onFocus()", ng-blur="vm.onBlur()",
+                ng-keyup="vm.onKeyup($event)", tabindex='2',
                 value="{{ form.cleaned_data.l }}", placeholder="{{ where }}", title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
     .table-cell
       button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-primary.btn-advertise {% trans "Déposez une annonce" %}

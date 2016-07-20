@@ -5,8 +5,12 @@ define([
     "algoliasearch-helper",
     "stacktrace",
     "js-cookie"
-], function (EloueWidgetsApp, UtilsService, CategoriesService, algoliasearchHelper, StackTrace, Cookies) {
+], function (EloueWidgetsApp, UtilsService, CategoriesService, algoliasearchHelper, 
+                StackTrace, Cookies) {
     "use strict";
+    
+    var KEY_ENTER = 13;
+    var KEY_ESC = 27;
     
     var Point = function(lat, lng){
         return {
@@ -171,114 +175,156 @@ define([
         
     }]);
     
-    
+    /**
+     * Handles the URL bar like filter
+     */
     EloueWidgetsApp.factory('SearchLocationService', 
-    ["$rootScope", "$location", "$q", "uiGmapGoogleMapApi", "UtilsService", "GeoService", "SearchService",
-    function($rootScope, $location, $q, uiGmapGoogleMapApi, UtilsService, GeoService, ss){
+    ["$rootScope", "$location", "$window", "$q", "uiGmapGoogleMapApi", 
+    "UtilsService", "GeoService", "SearchService", "$log",
+    function($rootScope, $location, $window, $q, uiGmapGoogleMapApi, 
+    UtilsService, GeoService, SearchService, $log){
         
-        var s = {
-            locationChange: true,
-            init: function (search, defaults){
-                
-                GeoService.then(function(gs){
-                
-                    $rootScope.$on('$locationChangeStart', function(event, current, next) { //$log.debug('onLocationChangeStart');
-                        
-                        if (!s.locationChange){
-                            s.locationChange = true;
-                            return;
-                        }
-                            
-                        var qs = UtilsService.urlEncodeObject($location.search());
-                            
-                        ss.helper.setState(ss.default_state);
-                        
-                        if (ss.ui_pristine()) {
-                            
-                            gs.config_geocoded.then(function(){
-                                ss.search();
-                            });
-                            
-                        } else {
-                                                    
-                            ss.helper.setStateFromQueryString(qs, {
-                                prefix: ss.config.ALGOLIA_PREFIX
-                            });
-                            
-                            var other_params = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs, {
-                                prefixForParameters: ss.config.ALGOLIA_PREFIX
-                            });
-                            
-                            if (other_params.order_by){
-                                /*
-                                    * accept both Algolia's idx and new order_by param,
-                                    * order_by overrides idx
-                                    */ 
-                                ss.helper.setIndex(other_params.order_by);   
-                            }
-                            
-                            var address = other_params.location_name || ss.defaults.location;
-                            
-                            gs.setAddress(address);
-                                                                    
-                        }
-                        
-                    });
-                    
-                    s.get_query_string_options = function() { //$log.debug('get_query_string_options');
-                        
-                        var res = {
-                            filters: ss.config.URL_PARAMETERS, 
-                            prefix: ss.config.ALGOLIA_PREFIX,
-                            moreAttributes: {
-                                location_name: gs.search.location
-                            }
-                        };
-                        
-                        if (ss.order_by){
-                            res.moreAttributes.order_by = ss.order_by;    
-                        }
-                        
-                        return res;
-                        
-                    };
-                    
-                    $rootScope.$on('render', function(e, result, state) { //$log.debug('renderLocation');
-                        
-                        var qs = ss.helper.getStateAsQueryString(
-                                s.get_query_string_options());
-                        
-                        s.locationChange = false;
-                        
-                        $location.search(qs);
-                        
-                        if (ss.ui_pristine){
-                            $location.replace();
-                        }
-                        
-                        ga('send', 'pageview', $location.url());
-                        
-                    });
-                   
-                        
-                });
-                
-
-                       
-            }
+        return $q.all({
+            ss: SearchService,
+            gs: GeoService
+        }).then(function(services){
+        
+            var ss = services.ss, gs = services.gs; 
             
-        };
+            var s = {
+                dontRequest: false
+            };
+            
+            function searchToObject(search){
+                return algoliasearchHelper.url
+                    .getUnrecognizedParametersInQueryString(search);
+            };
+            
+            $rootScope.$on('$locationChangeStart', function(event, next, current) { //$log.debug('onLocationChangeStart');
                 
-        return s;
+                if (s.dontRequest){
+                    s.dontRequest = false;
+                    return;
+                }
+                
+                /**
+                 * In case a url is being encoded, replace the
+                 * original (unencoded) url with its encoded
+                 * version in history
+                 */
+                if (encodeURI(current) == next){
+                    event.preventDefault();
+                    ss.replaceLocation = false;
+                    s.dontRequest = true;
+                    $location.search($location.search());
+                    $location.replace();
+                    return;
+                }
+                
+                if (ss.replaceLocation){
+                    ss.replaceLocation = false;
+                    return;
+                }
+                
+                var qs = UtilsService.urlEncodeObject($location.search());
+                // Reset helper to defaults
+                ss.helper.setState(ss.default_state);
+                
+                if (ss.ui_pristine()) {
+                    
+                    ss.search();
+                    
+                } else {
+                    
+                    // Restore state
+                    ss.helper.setStateFromQueryString(qs, s.get_query_string_options());
+                    
+                    // Restore custom parameters:
+                    var other_params = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs, {
+                        prefixForParameters: ss.config.ALGOLIA_PREFIX
+                    });
+                    
+                    // - index
+                    if (other_params.order_by){
+                        /*
+                            * accept both Algolia's idx and new order_by param,
+                            * order_by overrides idx
+                            */ 
+                        ss.helper.setIndex(other_params.order_by);   
+                    }
+                    
+                    // - address
+                    var address = other_params.location_name || ss.defaults.location;
+                    
+                    gs.setAddress(address).then(function(gs){
+                        ss.page = 0;
+                        ss.setPlace(gs.search);
+                        ss.search(true);
+                    });
+                                                         
+                }
+                
+            });
+            
+            s.get_query_string_options = function(state) { //$log.debug('get_query_string_options');
+                
+                var res = {
+                    filters: ss.config.URL_PARAMETERS, 
+                    prefix: ss.config.ALGOLIA_PREFIX,
+                    moreAttributes: {
+                        location_name: gs.search.location
+                    }
+                };
+                
+                var ordering = ss.getOrdering();
+                
+                if (ordering){
+                    res.moreAttributes.order_by = ordering;    
+                }
+                
+                return res;
+                
+            };
+            
+            $rootScope.$on('render', function(e, result, state) { //$log.debug('renderLocation');
+                
+                var qs = ss.helper.getStateAsQueryString(
+                        s.get_query_string_options());
+                                
+                if (!_.isEqual(searchToObject(qs), searchToObject($window.location.hash.substring(2)))){
+                    s.dontRequest = !ss.replaceLocation;
+                    if (ss.replaceLocation || ss.ui_pristine()){
+                        $location.replace();
+                    }
+                    $location.search(qs);
+                } else {
+                    ss.replaceLocation = false;
+                }
+                
+                ga('send', 'pageview', $location.url());
+                
+            });
+            
+            return s;
+                    
+        }).catch(function(){
+            
+            $log.error("Failed to init SearchLocationService");
+            
+        });;
         
     }]);
     
-    
     EloueWidgetsApp.factory('GeoService', 
     ["$rootScope", "$location", "$q", "uiGmapGoogleMapApi", "UtilsService", "SearchService",
-    function($rootScope, $location, $q, uiGmapGoogleMapApi, UtilsService, ss){
+    function($rootScope, $location, $q, uiGmapGoogleMapApi, UtilsService, SearchService){
         
-        return uiGmapGoogleMapApi.then(function(maps) {
+        return $q.all({
+            ss: SearchService,
+            maps: uiGmapGoogleMapApi
+        }).then(function(services){
+            
+            var maps = services.maps, ss = services.ss;
             
             var config_geocoded_df = $q.defer();
             
@@ -287,40 +333,29 @@ define([
                 maps: maps,
                 
                 geoc: new maps.Geocoder(),
-                
-                init: function (search, defaults){
-                    
-                    s.search = ss;
-                    s.defaults = ss.defaults;
-                    
-                    $q.all([
-                        s.addressToModel(s.location),
-                        s.addressToModel(s.defaults.location)
-                    ]).then(function(models){
-                        s.search = models[0];
-                        s.defaults = models[1];
-                        $rootScope.$broadcast("place_changed", s);
-                        config_geocoded_df.resolve(s);
-                    }); 
-                
-                },
-                
+                                
                 config_geocoded: config_geocoded_df.promise,
                 
                 search: null,
                 defaults: null,
                 
+                isLocationDefault: function(){
+                    return s.search.location == s.defaults.location;
+                },
+                
                 setAddress: function(address){
-                    s.addressToModel(address).then(function(model){
+                    return s.addressToModel(address).then(function(model){
                         model.user_address = address;
                         s.search = model;
                         $rootScope.$broadcast("place_changed", s);
+                        return s;
                     });
                 },
                 
                 setPlace: function(place){
                     s.search = s.placeToModel(place);
                     $rootScope.$broadcast("place_changed", s);
+                    return $q.when(s);
                 },
                 
                 placeToModel: function(place){
@@ -385,25 +420,37 @@ define([
                 
             };
             
-            return s;
+            s.search = ss;
+            s.defaults = ss.defaults;
+            
+            return $q.all([
+                s.addressToModel(s.search.location),
+                s.addressToModel(s.defaults.location)
+            ]).then(function(models){
+                s.search = models[0];
+                s.defaults = models[1];
+                $rootScope.$broadcast("place_changed", s);
+                config_geocoded_df.resolve(s);
+                return s;
+            });
         
+        }).catch(function(){
+            
+            $log.error("Failed to init GeoService");
+            
         });
             
     }]);
     
-    
-    
     var EloueFilterController = 
-    ["$scope", "$rootScope", '$attrs', '$filter', '$timeout', '$log', 'SearchService',
-    function ($scope, $rootScope, $attrs, $filter, $timeout, $log, ss) {
+    ["$q", "$scope", "$rootScope", '$attrs', '$filter', '$timeout', '$log', 'SearchService', 'SearchLocationService',
+    function ($q, $scope, $rootScope, $attrs, $filter, $timeout, $log, SearchService, SearchLocationService) {
         
         var vm = this;
-                                
+                            
         vm.value = $scope.value();
         vm.defaults = $scope.defaults();
         vm.attrName = $attrs.attrName;
-        
-        vm.helper = ss.helper;
         
         vm.apply = function(arg){
             $scope.$apply(arg);
@@ -424,30 +471,56 @@ define([
             });
         });
         
-        vm.search = function(){
-            ss.page = 0;
-            ss.search();
-        };
-        
         vm.refine = vm.search;
-        
-        vm.clean = function(){
-            return !vm.helper.hasRefinements(vm.attrName);
-        };
         
         vm.ready = function(){ 
             return false; 
         };
         
-        vm.reset = function(){
-            vm.helper.clearRefinements(vm.attrName);
-            vm.search();
+        vm.onKeyup = function($event){
+            if ($event.which in vm.hotkeys){
+                vm.hotkeys[$event.which]();
+            }
         };
         
+        vm.hotkeys = {};
+        vm.hotkeys[KEY_ESC] = function(){
+            vm.reset();
+        };
+        
+        vm.filterControllerSetup = $q.all({
+            sls:SearchLocationService,
+            ss:SearchService
+        }).then(function(services){
+            
+            var sls = services.sls, ss = services.ss;
+            
+            vm.search = function(){
+                ss.setOrdering("");
+                ss.page = 0;
+                // sls.dontRequest = true;
+                ss.search();
+            };
+            
+            vm.clean = function(){
+                return !ss.helper.hasRefinements(vm.attrName);
+            };
+            
+            vm.reset = function(){
+                ss.helper.clearRefinements(vm.attrName);
+                vm.search();
+            };
+            
+            return services;
+            
+        });
+        
+
     }];
     
-    // OK
-    EloueWidgetsApp.directive('eloueFilterWrapper', ['$filter', '$log', function($filter, $log){
+    EloueWidgetsApp.directive('eloueFilterWrapper', 
+    ['$filter', '$log', 
+    function($filter, $log){
         return {
             restrict: 'AE',
             templateUrl:"_filter_wrapper.html",
@@ -469,8 +542,9 @@ define([
             
     }]);
 
-    
-    EloueWidgetsApp.directive('eloueFilterWrapperTextfield', ['$filter', '$log', function($filter, $log){
+    EloueWidgetsApp.directive('eloueFilterWrapperTextfield', 
+    ['$filter', '$log', 
+    function($filter, $log){
         return {
             restrict: 'A',
             templateUrl:"_filter_wrapper_textfield.html",
@@ -490,242 +564,281 @@ define([
         }
     }]);
     
-    // OK
-    EloueWidgetsApp.directive('eloueSlider',  ['$filter', '$log', function($filter, $log){
+    EloueWidgetsApp.directive('eloueSlider',  
+    ['$filter', '$log', 
+    function($filter, $log){
         return {
             restrict: 'A',
             require: "eloueFilterWrapper",
-            link: function(scope, element, attrs, c){
+            link: function(scope, element, attrs, vm){
+                   
+                vm.sliderSetup = vm.filterControllerSetup.then(function(services){
+                    
+                    var ss = services.ss;
                 
-                var onEnd;
-                
-                function toMetric(val) {
-                    return val===undefined ? val : Math.round(val*(c.value.from_metric || 1));
-                }
-                
-                function fromMetric(val) {
-                    return val===undefined ? val : Math.round(val/(c.value.from_metric || 1));
-                } 
-                
-                c.is_range = function(){
-                    return 'min' in c.value;
-                };
-                
-                c.ready = function(){
-                    return 'max' in c.value && 
-                        'ceil' in c.value.options && 
-                        'floor' in c.value.options;
-                };
-                
-                c.setValue = function(value, key){
-                    var k = key ? key : 'value';
-                    if (value !== undefined){
-                        $.extend(true, c[k], {
-                            max: fromMetric(value.max),
-                            options: {
-                                ceil: fromMetric(value.options.ceil),
-                                floor: fromMetric(value.options.floor)
-                            }
-                        });
-                        if (c.is_range()){
-                            c[k].min = fromMetric(value.min);
-                        }   
+                    var onEnd;
+                    
+                    function toMetric(val) {
+                        return val===undefined ? val : Math.round(val*(vm.value.from_metric || 1));
                     }
-                }
-                
-                c.getValue = function (value, key) {
-                    var k = key ? key : 'value';
-                    var res = {
-                        max: toMetric(c[k].max),
-                        options: {
-                            ceil: toMetric(c[k].options.ceil),
-                            floor: toMetric(c[k].options.floor)
+                    
+                    function fromMetric(val) {
+                        return val===undefined ? val : Math.round(val/(vm.value.from_metric || 1));
+                    } 
+                    
+                    vm.is_range = function(){
+                        return 'min' in vm.value;
+                    };
+                    
+                    vm.ready = function(){
+                        return 'max' in vm.value && 
+                            'ceil' in vm.value.options && 
+                            'floor' in vm.value.options;
+                    };
+                    
+                    vm.setValue = function(value, key){
+                        var k = key ? key : 'value';
+                        if (value !== undefined){
+                            $.extend(true, vm[k], {
+                                max: fromMetric(value.max),
+                                options: {
+                                    ceil: fromMetric(value.options.ceil),
+                                    floor: fromMetric(value.options.floor)
+                                }
+                            });
+                            if (vm.is_range()){
+                                vm[k].min = fromMetric(value.min);
+                            }   
                         }
                     };
-                    if (c.is_range()){
-                        res.min = toMetric(c[k].min);   
-                    }   
-                    return res;
-                }
-                
-                $.extend(true, c.value, {
-                    options:{
-                        translate: function (value){
-                            return $filter("translate")(attrs.units, {value:value});
-                        },
-                        onEnd: function (){
-                            c.refine(c.getValue());
+                    
+                    vm.getValue = function (value, key) {
+                        var k = key ? key : 'value';
+                        var res = {
+                            max: toMetric(vm[k].max),
+                            options: {
+                                ceil: toMetric(vm[k].options.ceil),
+                                floor: toMetric(vm[k].options.floor)
+                            }
+                        };
+                        if (vm.is_range()){
+                            res.min = toMetric(vm[k].min);   
+                        }   
+                        return res;
+                    };
+                    
+                    $.extend(true, vm.value, {
+                        options:{
+                            translate: function (value){
+                                return $filter("translate")(attrs.units, {value:value});
+                            },
+                            onEnd: function (){
+                                vm.refine(vm.getValue());
+                            }
                         }
-                    }
+                    });
+                    
+                    return services;
+                    
                 });
-                
             }
         };
     }]);
     
-    // OK
-    EloueWidgetsApp.directive('elouePrice', ['$log', function($log){
+    EloueWidgetsApp.directive('elouePrice', 
+    ['SearchService', '$log', 
+    function(SearchService, $log){
         return {
             restrict: 'A',
             'require': "eloueFilterWrapper",
-            link: function(scope, element, attrs, c){
+            link: function(scope, element, attrs, vm){
                 
-                c.render = function(e, result, state){
+                vm.sliderSetup.then(function(services){
                     
-                    if (!result.nbHits){
-                        return;
-                    }
+                    var ss = services.ss;
                     
-                    var facetResult = result.getFacetByName("price");
+                    vm.render = function(e, result, state){
                     
-                    if (facetResult){
-                        var ref;
-                        var statsMin = facetResult.stats.min, statsMax = facetResult.stats.max;
-                        var value = c.getValue();
+                        if (!result.nbHits){
+                            return;
+                        }
                         
-                        value.options.floor = value.min = statsMin;
+                        var facetResult = result.getFacetByName("price");
+                        
+                        if (facetResult){
+                            var ref;
+                            var statsMin = facetResult.stats.min, statsMax = facetResult.stats.max;
+                            var value = vm.getValue();
+                            
+                            value.options.floor = value.min = statsMin;
+                            if (state.isNumericRefined("price", '>')){
+                                ref = state.getNumericRefinement("price", '>')[0] + 1;
+                                value.min = Math.max(statsMin, ref);
+                            }
+                            
+                            value.options.ceil = value.max = statsMax;
+                            if (state.isNumericRefined("price", '<')){
+                                ref = state.getNumericRefinement("price", '<')[0] - 1;
+                                value.max = Math.min(statsMax, ref);
+                            }
+                            
+                            vm.setValue(value);
+    
+                        }
+                        
+                    };
+                
+                    vm.refine = function(value){ //$log.debug('refinePrices');
+                        
+                        var state = ss.helper.getState();
+                        var newVal, oldVal;
+                        
+                        // TODO -1 and '>' are because $location.search() gets confused by '='. Fix this
+                        newVal = value.min - 1;
                         if (state.isNumericRefined("price", '>')){
-                            ref = state.getNumericRefinement("price", '>')[0] + 1;
-                            value.min = Math.max(statsMin, ref);
+                            oldVal = state.getNumericRefinement("price", '>')[0];
+                            if (oldVal != newVal) {
+                                ss.helper.removeNumericRefinement("price", '>');
+                                ss.helper.addNumericRefinement("price", '>', newVal);
+                            }
+                        } else {
+                            ss.helper.addNumericRefinement("price", '>', newVal);
                         }
                         
-                        value.options.ceil = value.max = statsMax;
+                        newVal = value.max + 1;
                         if (state.isNumericRefined("price", '<')){
-                            ref = state.getNumericRefinement("price", '<')[0] - 1;
-                            value.max = Math.min(statsMax, ref);
+                            oldVal = state.getNumericRefinement("price", '<')[0];
+                            if (oldVal != newVal) {
+                                ss.helper.removeNumericRefinement("price", '<');
+                                ss.helper.addNumericRefinement("price", '<', newVal);
+                            }
+                        } else {
+                            ss.helper.addNumericRefinement("price", '<', newVal);
                         }
                         
-                        c.setValue(value);
- 
-                    }
-                    
-                };
-                
-                                
-                c.refine = function(value){ //$log.debug('refinePrices');
-                    
-                    var state = c.helper.getState();
-                    var newVal, oldVal;
-                    
-                    // TODO -1 and '>' are because $location.search() gets confused by '='. Fix this
-                    newVal = value.min - 1;
-                    if (state.isNumericRefined("price", '>')){
-                        oldVal = state.getNumericRefinement("price", '>')[0];
-                        if (oldVal != newVal) {
-                            c.helper.removeNumericRefinement("price", '>');
-                            c.helper.addNumericRefinement("price", '>', newVal);
-                        }
-                    } else {
-                        c.helper.addNumericRefinement("price", '>', newVal);
-                    }
-                    
-                    newVal = value.max + 1;
-                    if (state.isNumericRefined("price", '<')){
-                        oldVal = state.getNumericRefinement("price", '<')[0];
-                        if (oldVal != newVal) {
-                            c.helper.removeNumericRefinement("price", '<');
-                            c.helper.addNumericRefinement("price", '<', newVal);
-                        }
-                    } else {
-                        c.helper.addNumericRefinement("price", '<', newVal);
-                    }
-                    
-                    c.helper.setCurrentPage(0)
-                    
-                    c.search();
-                    
-                };
+                        ss.helper.setCurrentPage(0)
+                        
+                        vm.search();
+                        
+                    };
+                     
+                });
+               
             }
         };
     }]);
     
-    // OK
-    EloueWidgetsApp.directive('eloueDistance',  ['$log', function($log){
+    EloueWidgetsApp.directive('eloueDistance',  
+    ['$q', 'SearchService', 'GeoService', '$log', 
+    function($q, SearchService, GeoService, $log){
         return {
             restrict: 'A',
             'require': "eloueFilterWrapper",
             link: function ($scope, $element, $attrs, vm) {
-                     
-                $scope.$on('place_changed', function(e, gs){
-                    vm.setValue(gs.search.range);  
-                    vm.setValue(gs.search.defaults, 'defaults');
+                
+                $q.all({
+                    gs:GeoService,
+                    sliderSetup:vm.sliderSetup
+                }).then(function(services){
+                    
+                    var ss = services.sliderSetup.ss, gs = services.gs;
+                    
+                    vm.refine = function(value){ //$log.debug('refineDistance')
+                        ss.helper.setQueryParameter('aroundRadius', value.max * 1000);
+                        vm.search();
+                    };
+                                  
+                    vm.reset = function(){
+                        ss.helper.setQueryParameter('aroundRadius', 
+                            (vm.value.options.ceil || vm.defaults.max) * 1000);
+                        vm.search();
+                    };
+                    
+                    $scope.$on('place_changed', function(e, gs){
+                        vm.setValue(gs.search.range);  
+                        vm.setValue(gs.search.defaults, 'defaults');
+                    });
+                
+                    vm.render = function(e, result, state){ //$log.debug('renderRangeSlider');
+                        if (!result.nbHits){
+                            return;
+                        }
+                        var val = vm.getValue();
+                        val.max = state.aroundRadius/1000 || vm.value.options.ceil || vm.defaults.max;  
+                        vm.setValue(val);  
+                    };
+                    
+                    vm.clean = function(){
+                        return vm.value.max == vm.value.options.ceil;
+                    };
+                    
+                    vm.setValue(gs.search.range);
+                    
+                    return services;
+                    
                 });
-                
-                vm.refine = function(value){ //$log.debug('refineDistance')
-                    vm.helper.setQueryParameter('aroundRadius', value.max * 1000);
-                    vm.search();
-                };
-                
-                vm.render = function(e, result, state){ //$log.debug('renderRangeSlider');
-                    if (!result.nbHits){
-                        return;
-                    }
-                    vm.value.max = state.aroundRadius/1000 || vm.value.options.ceil || vm.defaults.max;    
-                };
-                
-                vm.reset = function(){
-                    vm.helper.setQueryParameter('aroundRadius', (vm.value.options.ceil || vm.defaults.max) * 1000);
-                    vm.search();
-                };
-                
-                vm.clean = function(){
-                    return vm.value.max == vm.value.options.ceil;
-                }
                 
             }
         };
     }]);
     
-    // OK
-    EloueWidgetsApp.directive('elouePropart',  ['$log', function($log){
+    EloueWidgetsApp.directive('elouePropart',  
+    ['SearchService', '$log', 
+    function(SearchService, $log){
         return {
             restrict: 'A',
             'require': 'eloueFilterWrapper',
             link: function($scope, $element, $attrs, vm){
                 
-                vm.render = function(e, result, state){ //$log.debug('renderRenterTypes');
-                    if (!result.nbHits){
-                        return;
-                    }
-                    var facetResult = result.getFacetByName("pro_owner");
-                    vm.value.pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
-                    vm.value.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
-                    vm.value.pro = !state.isDisjunctiveFacetRefined("pro_owner") 
-                        || state.isDisjunctiveFacetRefined("pro_owner", true);
-                    vm.value.part = !state.isDisjunctiveFacetRefined("pro_owner") 
-                        || state.isDisjunctiveFacetRefined("pro_owner", false);
-                };
-                
-                vm.refineRenterPart = function(newVal){ //$log.debug('refineRenterPart');
-                    var state = vm.helper.getState();
+                vm.filterControllerSetup.then(function(services){
                     
-                    vm.helper.removeDisjunctiveFacetRefinement("pro_owner");
-                    if (!newVal) {
-                        vm.helper.addDisjunctiveFacetRefinement("pro_owner", true);
-                    }
+                    var ss = services.ss;
+
+                    vm.render = function(e, result, state){ //$log.debug('renderRenterTypes');
+                        if (!result.nbHits){
+                            return;
+                        }
+                        var facetResult = result.getFacetByName("pro_owner");
+                        vm.value.pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
+                        vm.value.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
+                        vm.value.pro = !state.isDisjunctiveFacetRefined("pro_owner") 
+                            || state.isDisjunctiveFacetRefined("pro_owner", true);
+                        vm.value.part = !state.isDisjunctiveFacetRefined("pro_owner") 
+                            || state.isDisjunctiveFacetRefined("pro_owner", false);
+                    };
                     
-                    vm.search();
-                };
-                
-                vm.refineRenterPro = function(newVal){ //$log.debug('refineRenterPro');
-                    var state = vm.helper.getState();
-                    
-                    vm.helper.removeDisjunctiveFacetRefinement("pro_owner");
-                    if (!newVal) {                
-                        vm.helper.addDisjunctiveFacetRefinement("pro_owner", false);
-                    }
-                    
-                    vm.search();
-                };
-                
-                vm.ready = function(){
-                    return true;
-                };
-                
-                vm.noProPartChoice = function(){ //$log.debug('noProPartChoice');
-                    return vm.value.pro_count==0 || vm.value.part_count==0;
-                };
+                    vm.refineRenterPart = function(newVal){ //$log.debug('refineRenterPart');
+                        var state = ss.helper.getState();
                         
+                        ss.helper.removeDisjunctiveFacetRefinement("pro_owner");
+                        if (!newVal) {
+                            ss.helper.addDisjunctiveFacetRefinement("pro_owner", true);
+                        }
+                        
+                        vm.search();
+                    };
+                    
+                    vm.refineRenterPro = function(newVal){ //$log.debug('refineRenterPro');
+                        var state = ss.helper.getState();
+                        
+                        ss.helper.removeDisjunctiveFacetRefinement("pro_owner");
+                        if (!newVal) {                
+                            ss.helper.addDisjunctiveFacetRefinement("pro_owner", false);
+                        }
+                        
+                        vm.search();
+                    };
+                    
+                    vm.ready = function(){
+                        return true;
+                    };
+                    
+                    vm.noProPartChoice = function(){ //$log.debug('noProPartChoice');
+                        return vm.value.pro_count==0 || vm.value.part_count==0;
+                    };
+ 
+                });
+  
             }
     
         };
@@ -733,8 +846,8 @@ define([
     
   
     EloueWidgetsApp.directive('eloueQuery',  
-    ['SearchLocationService', '$timeout', '$log', 
-    function(SearchLocationService, $timeout, $log){
+    ['SearchService', '$timeout', '$log', 
+    function(SearchService, $timeout, $log){
         
         return {
             restrict: 'A',
@@ -752,21 +865,39 @@ define([
                 
                 // TODO don't render if focused
                 
+                vm.filterControllerSetup.then(function(services){
+                    
+                    var ss = services.ss;
+                    
+                    vm.refine = function() {
+                        if (vm.debouncePromise){
+                            $timeout.cancel(vm.debouncePromise);
+                        }
+                        vm.debouncePromise = $timeout(function() {
+                            vm.debouncePromise = null;
+                            ss.helper.setQuery(vm.value);
+                            ss.page = 0;
+                            ss.search();
+                        }, vm.debounceDelay);
+                    };
+                                 
+                    vm.clean = function(){
+                        return !(ss.helper.state.query || vm.value);
+                    };
+                    
+                    vm.reset = function() {
+                        vm.value = vm.default;
+                        $element.children('input')[0].focus();
+                        ss.helper.setQuery(vm.default);
+                        vm.search();
+                    };
+                            
+                });
+
                 vm.focused = true;
                 
                 vm.debouncePromise = null;
                 vm.debounceDelay = parseInt($attrs.debounceDelay);
-                
-                vm.refine = function() {
-                    if (vm.debouncePromise){
-                        $timeout.cancel(vm.debouncePromise);
-                    }
-                    vm.debouncePromise = $timeout(function() {
-                        vm.debouncePromise = null;
-                        vm.helper.setQuery(vm.value);
-                        vm.search();
-                    }, vm.debounceDelay);
-                };
                 
                 vm.render = function(e, result, state) { //$log.debug('renderQueryText');
                     if (!vm.focus){
@@ -774,17 +905,7 @@ define([
                         // TODO fix reset
                     }
                 };
-                
-                vm.clean = function() {
-                    return !(vm.helper.state.query || vm.value);
-                };
-                
-                vm.reset = function() {
-                    vm.value = vm.default;
-                    $element.children('input')[0].focus();
-                    vm.helper.setQuery(vm.default);
-                    vm.search();
-                };
+
                 
             }
         };
@@ -792,16 +913,21 @@ define([
 
     
     EloueWidgetsApp.directive('eloueLocation',  
-    ['GeoService', "$q", "SearchService", '$log', 
-    function(GeoService, $q, ss, $log){
+    ["$q", 'GeoService', "SearchService", '$log', 
+    function($q, GeoService, SearchService, $log){
         return {
             restrict: 'A',
             'require': 'eloueFilterWrapperTextfield',
             link:  function ($scope, $element, $attrs, vm) {                
                 
-                // On map loaded
-                GeoService.then(function(gs) {
+                
+                $q.all({
+                    ss:SearchService,
+                    gs:GeoService
+                }).then(function(services){
                     
+                    var gs = services.gs, ss = services.ss;
+
                     var maps = gs.maps;
                     
                     var placeInputHead = $element.children('input')[0];
@@ -818,125 +944,137 @@ define([
                             
                             var place = ac.getPlace();
                             
-                            if ('geometry' in place && 'location' in place.geometry){
-                                gs.setPlace(place);
-                            } else {
-                                gs.setAddress(place.formatted_address);
-                            }
-                            
+                            ('geometry' in place && 'location' in place.geometry ? 
+                                gs.setPlace(place):
+                                gs.setAddress(place.formatted_address)).then(vm.placeChanged);
+                                
                         });
                         
                     });
                     
-                    vm.on('place_changed', function(e, gs){
-                        vm.refine(gs.search);
-                    });
-                    
                     vm.refine = function(model){ //$log.debug('refineLocation');
                         
-                        if (model.location !== ss.defaults.location){
-                            ss.order_by = "distance";
-                        }
+                        ss.setPlace(model);
+
+                        ss.page = 0;
+                        ss.search();
                         
-                        vm.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia(model.center));
-                        vm.helper.setQueryParameter('aroundRadius', model.range.max * 1000);
-                        
-                        vm.search();
-                        
-                        // TODO set ordering
-                        // $scope.setOrderByDistance();
-                        // $scope.setOrdering();
                     };
                     
                     vm.render = function(e, result, status) {
-                        vm.value = gs.search.location;
+                        vm.value = vm.focus ? "" : gs.search.location;
                     };
                     
                     vm.reset = function() {
-                        gs.setAddress(vm.defaults);
-                        $element.children('input')[0].focus();
-                        vm.refine(vm.search);
+                        gs.setAddress(vm.defaults)
+                            .then(vm.placeChanged);
+                        // $element.children('input')[0].focus();
+                        // vm.refine(gs.search);
                     };
                     
                     vm.clean = function() {
-                        return vm.value === vm.defaults;
+                        return gs.search.location === vm.defaults;
                     };
                     
+                    vm.onFocus = function(){
+                        vm.value = "";
+                        vm.focus = true;
+                    };
+                    
+                    vm.onBlur = function(){
+                        vm.value = gs.search.location;
+                        vm.focus = false;
+                    };
+                    
+                    vm.placeChanged = function(gs){
+                        vm.refine(gs.search);
+                    };
+                    
+                    // TODO select on enter
+                    // vm.hotkeys[KEY_ENTER] = function(){
+                    //     gs.setAddress(vm.value);  
+                    // };
                     
                 });
-                
-                
                 
             }
         };
     }]);
 
-    // OK
-    EloueWidgetsApp.directive('eloueCategories',  ['$log', 'CategoriesService', function($log){
+    EloueWidgetsApp.directive('eloueCategories',  
+    ['SearchService', '$log', 
+    function(SearchService, $log){
         return {
             restrict: 'A',
             'require': 'eloueFilterWrapper',
             link: function ($scope, $element, $attrs, vm) {
                 
-                vm.categoryName = categoryName;
-                
-                vm.refine = function(path) { //$log.debug('refineCategory');
-                    vm.value.algolia_category_path = path;
-                    if (!vm.value.algolia_category_path){
-                        vm.helper.clearRefinements("category");
-                    } else {
-                        vm.helper.toggleRefinement("category", vm.value.algolia_category_path);
-                    }
-                    // $scope.clearPropertyRefinements();
-                    vm.search();
-                };
-                
-                vm.render = function(e, result, state){ //$log.debug('renderSearchCategories');
-                    if (!result.nbHits){
-                        return;
-                    }
-                    // if (result.nbHits) {
-                    vm.value = result.hierarchicalFacets[0];
-                        // var catFacet = state.hierarchicalFacetsRefinements.category;
-                        // if (catFacet){
-                        //     var cat = catFacet[0];
-                        //     if (cat){
-                        //         var catparts = cat.split(' > ');
-                        //         var categoryId = $scope.categoryId(catparts[catparts.length-1]);
-                        //         if (categoryId==="number"){
-                        //             var facets = $scope.search.default_state.getQueryParameter('facets').slice(0);
-                        //             CategoriesService.getCategory(categoryId).then(function(cat){
-                        //                 $scope.search.category = cat;
-                        //                 for (var i=0; i<$scope.search.category.properties.length; i++){
-                        //                     facets.push($scope.search.category.properties[i].attr_name);
-                        //                 };
-                        //             }).finally(function(){
-                        //                 $scope.search.helper.setQueryParameter('facets', facets);
+                vm.filterControllerSetup.then(function(services){
+                    
+                    var ss = services.ss;
+                    
+                    vm.categoryName = categoryName;
+                    
+                    vm.refine = function(path) { //$log.debug('refineCategory');
+                        vm.value.algolia_category_path = path;
+                        if (!vm.value.algolia_category_path){
+                            ss.helper.clearRefinements("category");
+                        } else {
+                            ss.helper.toggleRefinement("category", vm.value.algolia_category_path);
+                        }
+                        // $scope.clearPropertyRefinements();
+                        vm.search();
+                    };
+                    
+                    vm.render = function(e, result, state){ //$log.debug('renderSearchCategories');
+                        if (!result.nbHits){
+                            return;
+                        }
+                        // if (result.nbHits) {
+                        vm.value = result.hierarchicalFacets[0];
+                            // var catFacet = state.hierarchicalFacetsRefinements.category;
+                            // if (catFacet){
+                            //     var cat = catFacet[0];
+                            //     if (cat){
+                            //         var catparts = cat.split(' > ');
+                            //         var categoryId = $scope.categoryId(catparts[catparts.length-1]);
+                            //         if (categoryId==="number"){
+                            //             var facets = $scope.search.default_state.getQueryParameter('facets').slice(0);
+                            //             CategoriesService.getCategory(categoryId).then(function(cat){
+                            //                 $scope.search.category = cat;
+                            //                 for (var i=0; i<$scope.search.category.properties.length; i++){
+                            //                     facets.push($scope.search.category.properties[i].attr_name);
+                            //                 };
+                            //             }).finally(function(){
+                            //                 $scope.search.helper.setQueryParameter('facets', facets);
+                                            
+                            //                 // Render properties when the category is available
+                            //                 $scope.renderProperties(result, state);
                                         
-                        //                 // Render properties when the category is available
-                        //                 $scope.renderProperties(result, state);
-                                    
-                        //             });   
-                        //         }
-                        //     }   
+                            //             });   
+                            //         }
+                            //     }   
+                            // }
                         // }
-                    // }
-                };
-                
-                var superClean = vm.clean;
-                vm.clean = function(){
-                    return superClean() || !vm.helper.state.hierarchicalFacetsRefinements[$attrs.attrName][0];
-                };
-                
-                vm.ready = function(){
-                    return true;
-                };
-                
-                vm.reset = function(){
-                    vm.helper.clearRefinements($attrs.attrName);
-                    vm.leaf_category = "";
-                    vm.search();
-                };
+                    };
+                    
+                    var superClean = vm.clean;
+                    vm.clean = function(){
+                        return superClean() || !ss.helper.state.hierarchicalFacetsRefinements[$attrs.attrName][0];
+                    };
+                    
+                    vm.ready = function(){
+                        return true;
+                    };
+                    
+                    vm.reset = function(){
+                        ss.helper.clearRefinements($attrs.attrName);
+                        vm.leaf_category = "";
+                        vm.search();
+                    };
+                    
+                     
+                });
                 
             }
         };
@@ -945,7 +1083,7 @@ define([
     
     EloueWidgetsApp.directive('eloueMap',  
     ['UtilsService', 'GeoService', 'SearchService', "$q", '$document', '$log', 
-    function(UtilsService, GeoService, ss, $q, $document, $log){
+    function(UtilsService, GeoService, SearchService, $q, $document, $log){
                                
         var staticUrl = "/static/", scripts = $document[0].getElementsByTagName("script"), i, j, l,
             product, image, imageHover, myLatLng, marker;
@@ -961,8 +1099,14 @@ define([
             'require': 'eloueFilterWrapper',
             link:  function ($scope, $element, $attrs, vm) {    
                 
-                GeoService.then(function(gs) {
+                $q.all({
+                    ss:SearchService,
+                    gs:GeoService
+                }).then(function(services){
                     
+                    var ss = services.ss;
+                    
+                    var gs = services.gs, ss = services.ss;
                     var maps = gs.maps;
                     
                     function getMarkerImages(){ //$log.debug('get_marker_images');
@@ -1099,7 +1243,8 @@ define([
     }]);
     
     
-    EloueWidgetsApp.directive('elouePropertyDropdownFilter', function(){
+    EloueWidgetsApp.directive('elouePropertyDropdownFilter', 
+    function(){
         return {
             template: '<label class="caption", for="{{proto.attr_name+proto.id}}">{{proto.name}}</label>'+
                     '<select id="{{proto.attr_name+proto.id}}" ng-model="value" '+
@@ -1128,153 +1273,189 @@ define([
     
     EloueWidgetsApp.controller('elouePaginationController', 
     ['$scope', '$window', 'SearchService',
-    function($scope, $window, ss){
+    function($scope, $window, SearchService){
         
-        // $scope.search = {};
-        
-        $scope.makePaginationModel = function(nbPages, page){
-            $scope.page = Math.min(nbPages-1, Math.max(0, page));
-            var PAGINATION_WINDOW_SIZE = ss.config.PAGINATION_WINDOW_SIZE;
-            if (nbPages < PAGINATION_WINDOW_SIZE){
-                $scope.pages_range = new Array(nbPages);
-                for (var i=0; i<nbPages; i++){
-                    $scope.pages_range[i] = i;
-                }
-            } else {
-                if ($scope.page > nbPages/2){
-                    var last = Math.min(page+Math.ceil(PAGINATION_WINDOW_SIZE/2+1), nbPages-1);    
-                    var first = Math.max(0, last-PAGINATION_WINDOW_SIZE);
+        SearchService.then(function(ss){
+            
+            $scope.makePaginationModel = function(nbPages, page){
+                $scope.page = Math.min(nbPages-1, Math.max(0, page));
+                var PAGINATION_WINDOW_SIZE = ss.config.PAGINATION_WINDOW_SIZE;
+                if (nbPages < PAGINATION_WINDOW_SIZE){
+                    $scope.pages_range = new Array(nbPages);
+                    for (var i=0; i<nbPages; i++){
+                        $scope.pages_range[i] = i;
+                    }
                 } else {
-                    var first = Math.max(0, page-Math.floor(PAGINATION_WINDOW_SIZE/2+1));
+                    if ($scope.page > nbPages/2){
+                        var last = Math.min(page+Math.ceil(PAGINATION_WINDOW_SIZE/2+1), nbPages-1);    
+                        var first = Math.max(0, last-PAGINATION_WINDOW_SIZE);
+                    } else {
+                        var first = Math.max(0, page-Math.floor(PAGINATION_WINDOW_SIZE/2+1));
+                    }
+                    $scope.pages_range = new Array(PAGINATION_WINDOW_SIZE);
+                    for (var i=0; i<PAGINATION_WINDOW_SIZE; i++){
+                        $scope.pages_range[i] = first+i;
+                    }
                 }
-                $scope.pages_range = new Array(PAGINATION_WINDOW_SIZE);
-                for (var i=0; i<PAGINATION_WINDOW_SIZE; i++){
-                    $scope.pages_range[i] = first+i;
-                }
-            }
-        };
-        
-        $scope.setPage = function(page){ //$log.debug('setPage');
-            ss.page = page;
-            ss.search();
-            $window.scrollTo(0, 0);
-        };
-                        
-        $scope.nextPage = function(){ //$log.debug('nextPage');
-            $scope.setPage(Math.min($scope.page+1, $scope.pages_count-1));
-        };
+            };
+            
+            $scope.setPage = function(page){ //$log.debug('setPage');
+                ss.page = page;
+                ss.search();
+                $window.scrollTo(0, 0);
+            };
+                            
+            $scope.nextPage = function(){ //$log.debug('nextPage');
+                $scope.setPage(Math.min($scope.page+1, $scope.pages_count-1));
+            };
 
-        $scope.prevPage = function(){ //$log.debug('prevPage');
-            $scope.setPage(Math.max(0, $scope.page-1));
-        };
-        
-        $scope.$on('render', function(e, result){ //$log.debug('renderPagination');
-            $scope.pages_count = result.nbPages;
-            $scope.page = result.page;
-            $scope.makePaginationModel(result.nbPages, result.page);
-        });       
+            $scope.prevPage = function(){ //$log.debug('prevPage');
+                $scope.setPage(Math.max(0, $scope.page-1));
+            };
+            
+            $scope.$on('render', function(e, result){ //$log.debug('renderPagination');
+                $scope.pages_count = result.nbPages;
+                $scope.page = result.page;
+                $scope.makePaginationModel(result.nbPages, result.page);
+            });    
+               
+        });
         
     }]);
     
     EloueWidgetsApp.service('SearchService', 
-    ['$rootScope', '$window', '$location', 'algolia', 
-    function($rootScope, $window, $location, algolia){
+    ['$q', '$rootScope', '$window', '$location', 'algolia', '$log',
+    function($q, $rootScope, $window, $location, algolia, $log){
         
-        var s = {
+        var sd = $q.defer();
+        
+        $rootScope.$on('config', function(e, config){
             
-            init: function(sp){
-                
-                // Patch parameters
-                
-                // TODO move to settings.py
-                sp.config.PARAMETERS.attributesToRetrieve = ["summary", "django_id", "username", 
-                    "location", "locations", "city", "zipcode", "owner_url", "owner_avatar", "url", "price", "profile", 
-                    "vertical_profile", "thumbnail", "comment_count", "average_rate"];
-                sp.config.PARAMETERS.snippetEllipsisText = "&hellip;";
-                    
-                sp.init.center = tupleToGeoJson(sp.init.center);
-                sp.defaults.center = tupleToGeoJson(sp.defaults.center);
-                
-                $.extend(true, s, sp.defaults, sp.init, {config:sp.config});
-                s.defaults = sp.defaults;
-                
-                s.index = sp.config.MASTER_INDEX;
-                s.range.options = {
-                    floor: s.range.floor,
-                    ceil: s.range.ceil,
-                };      
-                s.price.options = {
-                    floor: s.price.floor,
-                    ceil: s.price.ceil
-                };
-                                    
-                // Init client
-                var client = algolia.Client(sp.config.ALGOLIA_APP_ID, sp.config.ALGOLIA_KEY);
-                s.client = client;
-                
-                // Init helper
-                s.setOrdering(s.ordering);
-                var helper = algoliasearchHelper(client, s.orderedIndex, sp.config.PARAMETERS)
-                                .on('result', s.processResult)
-                                .on('error', s.processError);
-                s.helper = helper;
-                
-                // Preset filters
-                //TODO remove by not indexing
-                helper.addDisjunctiveFacetRefinement("sites", s.site);
-                helper.addFacetRefinement("is_archived", false);
-                helper.addFacetRefinement("is_allowed", true);
-                
-                s.setArea(s);
-                
-                // Save default helper state
-                s.default_state = helper.getState();
-                
-            },
+            if (!config){
+                sd.reject();    
+            } else {
+                sd.resolve(config);
+            };
             
-            setArea: function(model){
-                s.helper.setQueryParameter('aroundRadius', model.range.max * 1000);
-                s.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia(model.center));
-            },
+        });
+        
+        return sd.promise.then(function(sp){
             
-            setOrdering: function(ordering){
-                s.order_by = ordering;
-                s.orderedIndex = !!ordering ? s.index+"_"+ordering : s.index;
-            },
-            
-            reset: function (){
-                s.helper.setState(s.default_state);
-            },
-            
-            processResult: function(result, state){
-                for (var ri=0; ri<result.hits.length; ri++){
-                    var res = result.hits[ri];
-                    for (var k in res._snippetResult){
-                        res["plain_"+k] = res[k];
-                        res[k] = res._snippetResult[k]['value'];
+            var s = {
+                
+                result: {ordering:""},
+                
+                setArea: function(model){
+                    s.helper.setQueryParameter('aroundRadius', model.range.max * 1000);
+                    s.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia(model.center));
+                },
+                
+                setOrdering: function(ordering){
+                    s.helper.setIndex(!!ordering ? s.index+"_"+ordering : s.index);
+                },
+                
+                getOrdering: function(){
+                    return s.result.index.slice(s.index.length+1, s.result.index.length);
+                },
+                
+                reset: function (){
+                    s.helper.setState(s.default_state);
+                },
+                
+                processResult: function(result, state){
+                    s.result = result;
+                    for (var ri=0; ri<result.hits.length; ri++){
+                        var res = result.hits[ri];
+                        for (var k in res._snippetResult){
+                            res["plain_"+k] = res[k];
+                            res[k] = res._snippetResult[k]['value'];
+                        }
                     }
-                }
-                $rootScope.$broadcast('render', result, state);
-            },
-            
-            processError: function(){
+                    $rootScope.$broadcast('render', result, state);
+                },
                 
-            }, 
+                processError: function(){
+                    
+                }, 
+                
+                search: function(replaceLocation){
+                    s.replaceLocation = replaceLocation || false;
+                    s.helper.setCurrentPage(s.page);
+                    s.helper.search();
+                },
+                
+                ui_pristine: function(){
+                    var orig_params = $location.search();
+                    return !orig_params || Object.keys(orig_params).length == 0;
+                },
+                
+                setPlace: function(model){ //$log.debug('refineLocation');
+                    
+                    if (model.location !== s.defaults.location){
+                        s.setOrdering("distance");
+                    } else if (s.getOrdering()=="distance"){
+                        s.setOrdering("");
+                    };
+                    
+                    s.helper.setQueryParameter('aroundLatLng', geoJsonToAlgolia(model.center));
+                    s.helper.setQueryParameter('aroundRadius', model.range.max * 1000);
+                    
+                },
+                
+            };
+                
+            // Patch parameters
+            // TODO move to settings.py
+            sp.config.PARAMETERS.attributesToRetrieve = ["summary", "django_id", "username", 
+                "location", "locations", "city", "zipcode", "owner_url", "owner_avatar", "url", "price", "profile", 
+                "vertical_profile", "thumbnail", "comment_count", "average_rate"];
+            sp.config.PARAMETERS.snippetEllipsisText = "&hellip;";
+                
+            sp.init.center = tupleToGeoJson(sp.init.center);
+            sp.defaults.center = tupleToGeoJson(sp.defaults.center);
             
-            search: function(){
-                s.helper.setCurrentPage(s.page);
-                s.helper.setIndex(s.orderedIndex);
-                s.helper.search();
-            },
+            $.extend(true, s, sp.defaults, sp.init, {config:sp.config});
+            s.defaults = sp.defaults;
             
-            ui_pristine: function(){
-                var orig_params = $location.search();
-                return !orig_params || Object.keys(orig_params).length == 0;
-            },
+            s.index = sp.config.MASTER_INDEX;
+            s.range.options = {
+                floor: s.range.floor,
+                ceil: s.range.ceil,
+            };      
+            s.price.options = {
+                floor: s.price.floor,
+                ceil: s.price.ceil
+            };
+                                
+            // Init client
+            var client = algolia.Client(sp.config.ALGOLIA_APP_ID, sp.config.ALGOLIA_KEY);
+            s.client = client;
             
-        };
-        
-        return s;
+            // Init helper
+            var helper = algoliasearchHelper(client, s.orderedIndex, sp.config.PARAMETERS)
+                            .on('result', s.processResult)
+                            .on('error', s.processError);
+            s.helper = helper;
+            s.setOrdering(s.ordering);
+            
+            // Preset filters
+            //TODO remove by not indexing
+            helper.addDisjunctiveFacetRefinement("sites", s.site);
+            helper.addFacetRefinement("is_archived", false);
+            helper.addFacetRefinement("is_allowed", true);
+            
+            s.setArea(s);
+            
+            // Save default helper state
+            s.default_state = helper.getState();
+            
+            return s;
+            
+        }).catch(function(){
+            
+            $log.error("Failed to init SearchService");
+            
+        });
         
     }]);
     
@@ -1288,36 +1469,29 @@ define([
         "$window",
         "$timeout",
         "$document",
-        "$location",
-        "$filter",
         "$q",
         "$log",
-        "UtilsService",
-        "CategoriesService",
-        "uiGmapGoogleMapApi",
-        "uiGmapIsReady",
-        "algolia",
         "SearchLocationService",
         "GeoService",
         "SearchService",
-        function ($scope, $rootScope, $window, $timeout, $document, $location, $filter, $q, $log, 
-                UtilsService, CategoriesService, uiGmapGoogleMapApi, uiGmapIsReady, algolia,
+        function ($scope, $rootScope, $window, $timeout, $document, $q, $log, 
                 SearchLocationService, GeoService, SearchService) {
-            
+
             var unsubscribe = $scope.$watch('search_params', function(search_params){
-                
-                unsubscribe();
-                
-                SearchService.init(search_params);
-                
-                $scope.search = SearchService;
-                $scope.defaults = SearchService.defaults;
-                $scope.ui_pristine = SearchService.ui_pristine();
-                
-                SearchLocationService.init($scope.search, $scope.defaults);
-                GeoService.then(function(gs){
-                    gs.init($scope.search, $scope.defaults);
-                });
+                unsubscribe();  
+                $rootScope.$broadcast('config', search_params);
+            });
+            
+            $q.all({
+                ss: SearchService,
+                gs: GeoService
+            }).then(function(services){
+                 
+                var gs = services.gs, ss = services.ss;
+                 
+                $scope.search = ss;
+                $scope.defaults = ss.defaults;
+                $scope.ui_pristine = ss.ui_pristine();
                 
                 $scope.refineProperty = function(prop){
                     // $log.debug("refineProperty");
@@ -1334,13 +1508,13 @@ define([
                 };
                 
                 /*
-                 * Pagination & ordering 
-                 */
+                    * Pagination & ordering 
+                    */
                 
                 $scope.ordering = "";
                 $scope.setOrdering = function(ordering){ //$log.debug('setOrdering');
-                    SearchService.setOrdering(ordering);
-                    SearchService.search();
+                    ss.setOrdering(ordering);
+                    ss.search();
                 };
                 
                 
@@ -1372,10 +1546,11 @@ define([
                 
                 
                 $scope.$on('render',  function(e, result) { //$log.debug('renderOrdering');
-                    $scope.ordering = result.index.substr(SearchService.index.length+1);
+                    $scope.enableDistance = !gs.isLocationDefault();
+                    $scope.ordering = ss.getOrdering();
+                    $scope.location = gs.location;
                     $scope.result_count = result.nbHits;
                     $scope.query = result.query;
-                    // $scope.location = gs
                     $scope.product_list = result.hits;
                     $scope.results_per_page = result.hitsPerPage;
                     $scope.ui_pristine = false;
@@ -1398,7 +1573,7 @@ define([
                     }
                 };
                 
-                $scope.$on('perform_search', SearchService.search());
+                $scope.$on('perform_search', ss.search());
 
                 $scope.newSearch = function(){ //$log.debug('newSearch');
                     $scope.search.page = 0;
@@ -1416,10 +1591,10 @@ define([
 
                 $scope.activateLayoutSwitcher();
                 
-                
+        
+        
             });
-            
-            
+                    
         }]);
     
 });
