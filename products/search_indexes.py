@@ -17,6 +17,8 @@ from django.utils.six import with_metaclass
 from products.models import PropertyValue
 from django.db.models import F
 
+from django.template import defaultfilters
+
 __all__ = ['ProductIndex']
 
 
@@ -54,6 +56,12 @@ class AlgoliaTagsField(indexes.MultiValueField):
             return tuple(qs.values_list('slug', flat=True))
         
         return tuple()
+
+
+class TitleField(indexes.CharField):
+    
+    def prepare(self, obj):
+        return defaultfilters.title(super(TitleField, self).prepare(obj))
 
 
 class ProductPropertyFieldMixin(object):
@@ -99,7 +107,7 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
     created_at_timestamp = indexes.DateTimeField(model_attr='created_at')
     created_at_date = indexes.DateField(model_attr='created_at__date')
     description = indexes.EdgeNgramField(model_attr='description')
-    city = indexes.CharField(model_attr='address__city', indexed=False)
+    city = TitleField(model_attr='address__city', indexed=False)
     zipcode = indexes.CharField(model_attr='address__zipcode', indexed=False)
     owner = indexes.CharField(model_attr='owner__username', faceted=True)
     owner_url = indexes.CharField(model_attr='owner__get_absolute_url', indexed=False)
@@ -107,7 +115,7 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
     owner_avatar_medium = indexes.CharField(null=True)
     price = indexes.FloatField(faceted=True, null=True)
     sites = indexes.MultiValueField(faceted=True)
-    summary = indexes.EdgeNgramField(model_attr='summary')
+    summary = TitleField(model_attr='summary')
     url = indexes.CharField(model_attr='get_absolute_url', indexed=False)
     thumbnail = indexes.CharField(indexed=False, null=True)
     thumbnail_medium = indexes.CharField(indexed=False, null=True)
@@ -166,6 +174,7 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
     
     def get_updated_field(self):
         return "created_at"
+        
     
     def prepare_locations(self, obj):
         agencies = obj.owner.pro_agencies.all()

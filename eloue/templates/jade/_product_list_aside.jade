@@ -31,7 +31,7 @@ script(type="text/ng-template" id="_filter_wrapper.html")
   eloue-filter-wrapper(ng-if="search", label="{% trans 'catégories' %}", attr-name="category",
                         value="search.category",  defaults="defaults.category",
                         eloue-categories)
-    div(ng-hide="vm.empty", ng-include="'_category_tree_item.html'")
+    div(ng-hide="vm.empty", ng-include="'_category_tree_item.html'", eloue-suspendable)
     div(ng-show="vm.empty") {% trans "Aucune categorie" %}
   
   

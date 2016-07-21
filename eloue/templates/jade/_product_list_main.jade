@@ -9,7 +9,7 @@ ol(ng-show="ui_pristine").product-layout
     {% endfor %}
   else
     button(type="button", ng-click="clearRefinements()", class="btn bg-success btn-advertise") {% trans "Reinitialiser les critères de la recherche"  %}
-ol(ng-hide="ui_pristine || !search.result_count", ng-cloak).product-layout
+ol(ng-hide="ui_pristine || !search.result_count", ng-cloak, eloue-suspendable).product-layout
   {% with ng=1 %}
   include ./_product_list_item
   {% endwith %}

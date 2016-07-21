@@ -121,19 +121,7 @@ define([
         }
       }
     ]);
-    
-    EloueWidgetsApp.filter('title', [
-    function() {
-        return function(text) {
-            if (text) {
-                return text.replace(/(?:<em>)?([^\s]+)/g, function(txt, gr1){
-                    return txt.replace(gr1, gr1.charAt(0).toUpperCase() 
-                            + gr1.slice(1).toLowerCase());});
-            } else {
-                return "";
-            }
-        }
-    }]);
+
                 
     EloueWidgetsApp.filter('is_facet', [
     function() {
@@ -176,12 +164,14 @@ define([
     }]);
     
     /**
-     * Handles the URL bar like filter
+     * Handles the URL bar like other filters:
+     *  * changing the URL triggers requests,
+     *  * search responses trigger url rendering
      */
     EloueWidgetsApp.factory('SearchLocationService', 
-    ["$rootScope", "$location", "$window", "$q", "uiGmapGoogleMapApi", 
+    ["$q", "$rootScope", "$location", "$window", "$timeout", "uiGmapGoogleMapApi", 
     "UtilsService", "GeoService", "SearchService", "$log",
-    function($rootScope, $location, $window, $q, uiGmapGoogleMapApi, 
+    function($q, $rootScope, $location, $window, $timeout, uiGmapGoogleMapApi, 
     UtilsService, GeoService, SearchService, $log){
         
         return $q.all({
@@ -192,7 +182,10 @@ define([
             var ss = services.ss, gs = services.gs; 
             
             var s = {
-                dontRequest: false
+                dontRequest: false,
+                getQueryString: function(){
+                    return decodeURI($window.location.hash.substring(2));
+                }
             };
             
             function searchToObject(search){
@@ -202,71 +195,83 @@ define([
             
             $rootScope.$on('$locationChangeStart', function(event, next, current) { //$log.debug('onLocationChangeStart');
                 
-                if (s.dontRequest){
-                    s.dontRequest = false;
+                if (s.rendering){
+                    s.rendering = false;
+                    ss.working = false;
                     return;
                 }
                 
-                /**
-                 * In case a url is being encoded, replace the
-                 * original (unencoded) url with its encoded
-                 * version in history
-                 */
-                if (encodeURI(current) == next){
+                if (s.normalized){
+                    s.normalized = false;
+                    ss.helper.search();
+                    return;
+                }
+                
+                if (ss.working){
                     event.preventDefault();
-                    ss.replaceLocation = false;
-                    s.dontRequest = true;
-                    $location.search($location.search());
-                    $location.replace();
                     return;
-                }
+                } 
                 
-                if (ss.replaceLocation){
-                    ss.replaceLocation = false;
-                    return;
-                }
+                ss.working = true;
                 
-                var qs = UtilsService.urlEncodeObject($location.search());
-                // Reset helper to defaults
-                ss.helper.setState(ss.default_state);
+                var qs = s.getQueryString();
                 
                 if (ss.ui_pristine()) {
                     
+                    // Reset helper to defaults
+                    ss.reset();
                     ss.search();
                     
                 } else {
-                    
-                    // Restore state
-                    ss.helper.setStateFromQueryString(qs, s.get_query_string_options());
-                    
+
                     // Restore custom parameters:
                     var other_params = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs, {
                         prefixForParameters: ss.config.ALGOLIA_PREFIX
                     });
                     
-                    // - index
-                    if (other_params.order_by){
-                        /*
-                            * accept both Algolia's idx and new order_by param,
-                            * order_by overrides idx
-                            */ 
-                        ss.helper.setIndex(other_params.order_by);   
-                    }
-                    
                     // - address
                     var address = other_params.location_name || ss.defaults.location;
                     
-                    gs.setAddress(address).then(function(gs){
-                        ss.page = 0;
+                    // event.preventDefault();
+                    
+                    gs.addressToModel(address).then(function(model){
+                        
+                        gs.search = model;
+                        
+                        // Reset helper to defaults
+                        ss.reset();
+                        
+                        // Restore state
+                        ss.helper.setStateFromQueryString(qs, s.getQueryOptions());
+                        
+                        // - index
+                        if (other_params.order_by){
+                            /*
+                             * accept both Algolia's idx and new order_by param,
+                             * order_by overrides idx
+                             */ 
+                            ss.setOrdering(other_params.order_by); 
+                        }
+                        
                         ss.setPlace(gs.search);
-                        ss.search(true);
+                        
+                        var newqs = ss.helper.getStateAsQueryString(s.getQueryOptions());
+                        
+                        if (decodeURI(newqs) != qs){
+                            s.normalized = true;
+                            $location.replace();
+                            $location.search(newqs);
+                        } else {
+                            ss.helper.search();
+                        }
+                        
                     });
                                                          
                 }
                 
             });
             
-            s.get_query_string_options = function(state) { //$log.debug('get_query_string_options');
+            s.getQueryOptions = function(state) { //$log.debug('getQueryOptions');
                 
                 var res = {
                     filters: ss.config.URL_PARAMETERS, 
@@ -288,21 +293,23 @@ define([
             
             $rootScope.$on('render', function(e, result, state) { //$log.debug('renderLocation');
                 
-                var qs = ss.helper.getStateAsQueryString(
-                        s.get_query_string_options());
-                                
-                if (!_.isEqual(searchToObject(qs), searchToObject($window.location.hash.substring(2)))){
-                    s.dontRequest = !ss.replaceLocation;
-                    if (ss.replaceLocation || ss.ui_pristine()){
-                        $location.replace();
+                $timeout(function(){
+                
+                    var newqs = ss.helper.getStateAsQueryString(s.getQueryOptions());
+                    var qs = s.getQueryString();
+                    
+                    if (qs === decodeURI(newqs)){
+                        ss.working = false;
+                        return;
                     }
-                    $location.search(qs);
-                } else {
-                    ss.replaceLocation = false;
-                }
+                    
+                    s.rendering = true;
+                    $location.search(newqs);
+                    
+                    ga('send', 'pageview', $location.url());
                 
-                ga('send', 'pageview', $location.url());
-                
+                }, 0, false);
+                 
             });
             
             return s;
@@ -315,6 +322,11 @@ define([
         
     }]);
     
+    
+    /**
+     * Manages maps and geocoding, 
+     * stores current geogaraphical location
+     */
     EloueWidgetsApp.factory('GeoService', 
     ["$rootScope", "$location", "$q", "uiGmapGoogleMapApi", "UtilsService", "SearchService",
     function($rootScope, $location, $q, uiGmapGoogleMapApi, UtilsService, SearchService){
@@ -326,15 +338,11 @@ define([
             
             var maps = services.maps, ss = services.ss;
             
-            var config_geocoded_df = $q.defer();
-            
             var s = {
                 
                 maps: maps,
                 
                 geoc: new maps.Geocoder(),
-                                
-                config_geocoded: config_geocoded_df.promise,
                 
                 search: null,
                 defaults: null,
@@ -430,7 +438,6 @@ define([
                 s.search = models[0];
                 s.defaults = models[1];
                 $rootScope.$broadcast("place_changed", s);
-                config_geocoded_df.resolve(s);
                 return s;
             });
         
@@ -442,47 +449,62 @@ define([
             
     }]);
     
+    
+    /**
+     * A base for all filter controllers.
+     * Declares some of the common methods used by
+     * filters.
+     */
     var EloueFilterController = 
     ["$q", "$scope", "$rootScope", '$attrs', '$filter', '$timeout', '$log', 'SearchService', 'SearchLocationService',
     function ($q, $scope, $rootScope, $attrs, $filter, $timeout, $log, SearchService, SearchLocationService) {
         
         var vm = this;
-                            
+        
+        // Filter model
         vm.value = $scope.value();
+        // Default values 
         vm.defaults = $scope.defaults();
+        // Algolia attribute name
         vm.attrName = $attrs.attrName;
         
         vm.apply = function(arg){
             $scope.$apply(arg);
         }
         
-        vm.on = function(event, cb){
-            $scope.$on(event, cb);
-        };
-        
+        // Called after each Algolia response to set the vm.value
         vm.render = function(e, result, state){};
-                            
-        $scope.$on('render', function(e, result, state){
-            $scope.$apply(function(){
+        
+        // Set some common values on the controller, and call
+        // render. This is deferred to avoid big long frames
+        vm.renderListener = $scope.$on('render', function(e, result, state){
+            $timeout(function(){
                 vm.empty = !result.nbHits;
                 vm.resultCount = result.nbHits;
                 vm.results = result.hits;
-                vm.render(e, result, state);   
-            });
+                vm.render(e, result, state);
+                $scope.$digest();       
+            }, 0, false);
         });
         
+        // Called when a filter has changed
+        // Must trigger a request to Algolia
         vm.refine = vm.search;
         
+        // Check if filter can be displayed
         vm.ready = function(){ 
             return false; 
         };
         
+        // Keyboard event dispatcher
+        // for filter hotkeys
         vm.onKeyup = function($event){
             if ($event.which in vm.hotkeys){
                 vm.hotkeys[$event.which]();
             }
         };
         
+        // Hotkey table
         vm.hotkeys = {};
         vm.hotkeys[KEY_ESC] = function(){
             vm.reset();
@@ -495,6 +517,7 @@ define([
             
             var sls = services.sls, ss = services.ss;
             
+            // Sends a search request
             vm.search = function(){
                 ss.setOrdering("");
                 ss.page = 0;
@@ -502,10 +525,12 @@ define([
                 ss.search();
             };
             
+            // Condition to display the reset button
             vm.clean = function(){
                 return !ss.helper.hasRefinements(vm.attrName);
             };
             
+            // Called when reset button is pressed
             vm.reset = function(){
                 ss.helper.clearRefinements(vm.attrName);
                 vm.search();
@@ -518,6 +543,55 @@ define([
 
     }];
     
+    
+    EloueWidgetsApp.directive('eloueSuspendable', function(){
+        return {
+            link: function($scope){
+                
+                var watchers;
+                
+                $scope.$on('suspend', function(){
+                    watchers = $scope.$$watchers;
+                    $scope.$$watchers = [];
+                });
+                
+                $scope.$on('resume', function(){
+                    if (watchers){
+                        $scope.$$watchers = watchers;
+                    }
+                    watchers = void 0;
+                });
+                
+            }
+        };
+    });
+
+    
+    EloueWidgetsApp.directive('starRating', function(){
+        return {
+            scope:false,
+            restrict:"E",
+            link: function(scope, element, attrs){
+                scope.$watch(attrs.value, function(value){
+                    var html = "";
+                    for (var i=0; i<5; i++){
+                        html += (i==parseInt(value)-1 ? 
+                            "<span class='flaticon solid star-2 current-rate'></span>":
+                            "<span class='flaticon solid star-2'></span>");
+                    }
+                    element.html(html);
+                });
+            }
+        };
+    });
+    
+    /**
+     * Provides the header for aside titles 
+     * with a title and a reset button.
+     * 
+     * Modifies default transclude behavior by creating an isolate scope 
+     * and providing it to the transclude function instead of the parent scope. 
+     */
     EloueWidgetsApp.directive('eloueFilterWrapper', 
     ['$filter', '$log', 
     function($filter, $log){
@@ -541,7 +615,10 @@ define([
         }
             
     }]);
-
+    
+    /**
+     * Same as eloueFilterWrapper but for text fields
+     */
     EloueWidgetsApp.directive('eloueFilterWrapperTextfield', 
     ['$filter', '$log', 
     function($filter, $log){
@@ -564,6 +641,10 @@ define([
         }
     }]);
     
+    /**
+     * A wrapper for rzSlider. Provides conversion 
+     * between metric and local units
+     */
     EloueWidgetsApp.directive('eloueSlider',  
     ['$filter', '$log', 
     function($filter, $log){
@@ -645,6 +726,9 @@ define([
         };
     }]);
     
+    /**
+     * Price slider
+     */
     EloueWidgetsApp.directive('elouePrice', 
     ['SearchService', '$log', 
     function(SearchService, $log){
@@ -728,6 +812,9 @@ define([
         };
     }]);
     
+    /**
+     * Distance slider
+     */
     EloueWidgetsApp.directive('eloueDistance',  
     ['$q', 'SearchService', 'GeoService', '$log', 
     function($q, SearchService, GeoService, $log){
@@ -756,7 +843,7 @@ define([
                     
                     $scope.$on('place_changed', function(e, gs){
                         vm.setValue(gs.search.range);  
-                        vm.setValue(gs.search.defaults, 'defaults');
+                        // vm.setValue(gs.search.defaults, 'defaults');
                     });
                 
                     vm.render = function(e, result, state){ //$log.debug('renderRangeSlider');
@@ -782,6 +869,10 @@ define([
         };
     }]);
     
+    
+    /**
+     * TODO
+     */
     EloueWidgetsApp.directive('elouePropart',  
     ['SearchService', '$log', 
     function(SearchService, $log){
@@ -844,7 +935,10 @@ define([
         };
     }]);
     
-  
+    
+    /**
+     * Search query text field
+     */
     EloueWidgetsApp.directive('eloueQuery',  
     ['SearchService', '$timeout', '$log', 
     function(SearchService, $timeout, $log){
@@ -911,7 +1005,10 @@ define([
         };
     }]);
 
-    
+    /**
+     * Geographical location field. 
+     * Wraps google places autocomplete.
+     */
     EloueWidgetsApp.directive('eloueLocation',  
     ["$q", 'GeoService', "SearchService", '$log', 
     function($q, GeoService, SearchService, $log){
@@ -1001,6 +1098,9 @@ define([
         };
     }]);
 
+    /**
+     * Category tree filter
+     */
     EloueWidgetsApp.directive('eloueCategories',  
     ['SearchService', '$log', 
     function(SearchService, $log){
@@ -1025,38 +1125,21 @@ define([
                         // $scope.clearPropertyRefinements();
                         vm.search();
                     };
-                    
-                    vm.render = function(e, result, state){ //$log.debug('renderSearchCategories');
-                        if (!result.nbHits){
-                            return;
-                        }
-                        // if (result.nbHits) {
+                                
+                    vm.render = function(e, result, state){
+                        
+                        vm.empty = !result.nbHits;
+                        vm.resultCount = result.nbHits;
+                        vm.results = result.hits;
+                        
                         vm.value = result.hierarchicalFacets[0];
-                            // var catFacet = state.hierarchicalFacetsRefinements.category;
-                            // if (catFacet){
-                            //     var cat = catFacet[0];
-                            //     if (cat){
-                            //         var catparts = cat.split(' > ');
-                            //         var categoryId = $scope.categoryId(catparts[catparts.length-1]);
-                            //         if (categoryId==="number"){
-                            //             var facets = $scope.search.default_state.getQueryParameter('facets').slice(0);
-                            //             CategoriesService.getCategory(categoryId).then(function(cat){
-                            //                 $scope.search.category = cat;
-                            //                 for (var i=0; i<$scope.search.category.properties.length; i++){
-                            //                     facets.push($scope.search.category.properties[i].attr_name);
-                            //                 };
-                            //             }).finally(function(){
-                            //                 $scope.search.helper.setQueryParameter('facets', facets);
-                                            
-                            //                 // Render properties when the category is available
-                            //                 $scope.renderProperties(result, state);
-                                        
-                            //             });   
-                            //         }
-                            //     }   
-                            // }
-                        // }
+                        
+                        // $scope.$broadcast('suspend');
+                        // $scope.$digest();
+                        // $scope.$broadcast('resume');
+                        
                     };
+
                     
                     var superClean = vm.clean;
                     vm.clean = function(){
@@ -1080,7 +1163,11 @@ define([
         };
     }]);    
     
-    
+    /**
+     * Map
+     * This is not a filter, but it uses eloueFilterWrapper to
+     * show a header and respond to render events 
+     */
     EloueWidgetsApp.directive('eloueMap',  
     ['UtilsService', 'GeoService', 'SearchService', "$q", '$document', '$log', 
     function(UtilsService, GeoService, SearchService, $q, $document, $log){
@@ -1271,64 +1358,88 @@ define([
     });
     
     
-    EloueWidgetsApp.controller('elouePaginationController', 
-    ['$scope', '$window', 'SearchService',
-    function($scope, $window, SearchService){
+    /**
+     * Pagination
+     */
+    EloueWidgetsApp.directive('elouePagination', 
+    ['$rootScope', '$window', '$timeout', 'SearchService',
+    function($rootScope, $window, $timeout, SearchService){
         
-        SearchService.then(function(ss){
-            
-            $scope.makePaginationModel = function(nbPages, page){
-                $scope.page = Math.min(nbPages-1, Math.max(0, page));
-                var PAGINATION_WINDOW_SIZE = ss.config.PAGINATION_WINDOW_SIZE;
-                if (nbPages < PAGINATION_WINDOW_SIZE){
-                    $scope.pages_range = new Array(nbPages);
-                    for (var i=0; i<nbPages; i++){
-                        $scope.pages_range[i] = i;
-                    }
-                } else {
-                    if ($scope.page > nbPages/2){
-                        var last = Math.min(page+Math.ceil(PAGINATION_WINDOW_SIZE/2+1), nbPages-1);    
-                        var first = Math.max(0, last-PAGINATION_WINDOW_SIZE);
-                    } else {
-                        var first = Math.max(0, page-Math.floor(PAGINATION_WINDOW_SIZE/2+1));
-                    }
-                    $scope.pages_range = new Array(PAGINATION_WINDOW_SIZE);
-                    for (var i=0; i<PAGINATION_WINDOW_SIZE; i++){
-                        $scope.pages_range[i] = first+i;
-                    }
-                }
-            };
-            
-            $scope.setPage = function(page){ //$log.debug('setPage');
-                ss.page = page;
-                ss.search();
-                $window.scrollTo(0, 0);
-            };
-                            
-            $scope.nextPage = function(){ //$log.debug('nextPage');
-                $scope.setPage(Math.min($scope.page+1, $scope.pages_count-1));
-            };
+        return {
+            scope:{},
+            restrict:'E',
+            templateUrl:'_pagination.html',
+            link:function($scope, $element, $attrs){
+                
+                SearchService.then(function(ss){
+                    
+                    $scope.makePaginationModel = function(nbPages, page){
+                        $scope.page = Math.min(nbPages-1, Math.max(0, page));
+                        var PAGINATION_WINDOW_SIZE = ss.config.PAGINATION_WINDOW_SIZE;
+                        if (nbPages < PAGINATION_WINDOW_SIZE){
+                            $scope.pages_range = new Array(nbPages);
+                            for (var i=0; i<nbPages; i++){
+                                $scope.pages_range[i] = i;
+                            }
+                        } else {
+                            if ($scope.page > nbPages/2){
+                                var last = Math.min(page+Math.ceil(PAGINATION_WINDOW_SIZE/2+1), nbPages-1);    
+                                var first = Math.max(0, last-PAGINATION_WINDOW_SIZE);
+                            } else {
+                                var first = Math.max(0, page-Math.floor(PAGINATION_WINDOW_SIZE/2+1));
+                            }
+                            $scope.pages_range = new Array(PAGINATION_WINDOW_SIZE);
+                            for (var i=0; i<PAGINATION_WINDOW_SIZE; i++){
+                                $scope.pages_range[i] = first+i;
+                            }
+                        }
+                    };
+                    
+                    $scope.setPage = function(page){ //$log.debug('setPage');
+                        ss.page = page;
+                        ss.search();
+                        $window.scrollTo(0, 0);
+                    };
+                                    
+                    $scope.nextPage = function(){ //$log.debug('nextPage');
+                        $scope.setPage(Math.min($scope.page+1, $scope.pages_count-1));
+                    };
 
-            $scope.prevPage = function(){ //$log.debug('prevPage');
-                $scope.setPage(Math.max(0, $scope.page-1));
-            };
-            
-            $scope.$on('render', function(e, result){ //$log.debug('renderPagination');
-                $scope.pages_count = result.nbPages;
-                $scope.page = result.page;
-                $scope.makePaginationModel(result.nbPages, result.page);
-            });    
-               
-        });
+                    $scope.prevPage = function(){ //$log.debug('prevPage');
+                        $scope.setPage(Math.max(0, $scope.page-1));
+                    };
+                    
+                    $scope.$on('render', function(e, result){ //$log.debug('renderPagination');
+                        $timeout(function(){
+                            $scope.ui_pristine = false;//TODO ss.ui_pristine();
+                            $scope.pages_count = result.nbPages;
+                            $scope.result_count = result.nbHits;
+                            $scope.page = result.page;
+                            $scope.makePaginationModel(result.nbPages, result.page);
+                            $scope.$digest();
+                        }, 0, false);
+                    });    
+                    
+                    
+                });
+                
+            }
+        };
         
     }]);
     
+    /**
+     * Wraps the Algolia helper and stores additional search state.
+     * Configures the helper and sets default search parameters from
+     * JSON search_config attribute on the application root element.
+     */
     EloueWidgetsApp.service('SearchService', 
-    ['$q', '$rootScope', '$window', '$location', 'algolia', '$log',
-    function($q, $rootScope, $window, $location, algolia, $log){
+    ['$q', '$rootScope', '$window', '$location', 'algolia', '$log', '$sce',
+    function($q, $rootScope, $window, $location, algolia, $log, $sce){
         
         var sd = $q.defer();
         
+        // Receive the search_config
         $rootScope.$on('config', function(e, config){
             
             if (!config){
@@ -1338,6 +1449,41 @@ define([
             };
             
         });
+        
+        $rootScope.$on('category_changed', function(){
+             
+        });
+                // vm.render = function(e, result, state){ //$log.debug('renderSearchCategories');
+            // if (!result.nbHits){
+                // return;
+            // }
+            // if (result.nbHits) {
+
+                // var catFacet = state.hierarchicalFacetsRefinements.category;
+                // if (catFacet){
+                //     var cat = catFacet[0];
+                //     if (cat){
+                //         var catparts = cat.split(' > ');
+                //         var categoryId = $scope.categoryId(catparts[catparts.length-1]);
+                //         if (categoryId==="number"){
+                //             var facets = $scope.search.default_state.getQueryParameter('facets').slice(0);
+                //             CategoriesService.getCategory(categoryId).then(function(cat){
+                //                 $scope.search.category = cat;
+                //                 for (var i=0; i<$scope.search.category.properties.length; i++){
+                //                     facets.push($scope.search.category.properties[i].attr_name);
+                //                 };
+                //             }).finally(function(){
+                //                 $scope.search.helper.setQueryParameter('facets', facets);
+                                
+                //                 // Render properties when the category is available
+                //                 $scope.renderProperties(result, state);
+                            
+                //             });   
+                //         }
+                //     }   
+                // }
+            // }
+        // };
         
         return sd.promise.then(function(sp){
             
@@ -1355,7 +1501,7 @@ define([
                 },
                 
                 getOrdering: function(){
-                    return s.result.index.slice(s.index.length+1, s.result.index.length);
+                    return s.helper.state.index.slice(s.index.length+1);
                 },
                 
                 reset: function (){
@@ -1363,22 +1509,28 @@ define([
                 },
                 
                 processResult: function(result, state){
-                    s.result = result;
-                    for (var ri=0; ri<result.hits.length; ri++){
-                        var res = result.hits[ri];
-                        for (var k in res._snippetResult){
-                            res["plain_"+k] = res[k];
-                            res[k] = res._snippetResult[k]['value'];
+                    // $scope.$apply(function(){
+                        s.result = result;
+                        for (var ri=0; ri<result.hits.length; ri++){
+                            var res = result.hits[ri];
+                            for (var k in res._snippetResult){
+                                res["plain_"+k] = res[k];
+                                res[k] = $sce.trustAsHtml(res._snippetResult[k]['value']);
+                            }
                         }
-                    }
-                    $rootScope.$broadcast('render', result, state);
+                        $rootScope.$broadcast('render', result, state);
+                    // });
                 },
                 
                 processError: function(){
                     
-                }, 
+                },
                 
                 search: function(replaceLocation){
+                    if (s.working){
+                        return;
+                    }
+                    s.working = true;
                     s.replaceLocation = replaceLocation || false;
                     s.helper.setCurrentPage(s.page);
                     s.helper.search();
@@ -1436,6 +1588,8 @@ define([
                             .on('result', s.processResult)
                             .on('error', s.processError);
             s.helper = helper;
+            s.getQuery = helper.getStateAsQueryString,
+
             s.setOrdering(s.ordering);
             
             // Preset filters
@@ -1546,16 +1700,18 @@ define([
                 
                 
                 $scope.$on('render',  function(e, result) { //$log.debug('renderOrdering');
-                    $scope.enableDistance = !gs.isLocationDefault();
-                    $scope.ordering = ss.getOrdering();
-                    $scope.location = gs.location;
-                    $scope.result_count = result.nbHits;
-                    $scope.query = result.query;
-                    $scope.product_list = result.hits;
-                    $scope.results_per_page = result.hitsPerPage;
-                    $scope.ui_pristine = false;
+                    $timeout(function(){
+                        $scope.enableDistance = !gs.isLocationDefault();
+                        $scope.ordering = ss.getOrdering();
+                        $scope.location = gs.location;
+                        $scope.result_count = result.nbHits;
+                        $scope.query = result.query;
+                        $scope.product_list = result.hits;
+                        $scope.results_per_page = result.hitsPerPage;
+                        $scope.ui_pristine = false;
+                        $scope.$digest();
+                    }, 0, false);
                 });
-                
                 
                 $scope.activateLayoutSwitcher = function () { //$log.debug('activateLayoutSwitcher');
                     var layoutSwitcher = $(".layout-switcher"), article = $("article");
