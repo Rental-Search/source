@@ -26,6 +26,9 @@ from import_export import resources, widgets, fields
 from import_export.admin import ImportMixin
 from products.choices import UNIT
 from import_export.formats import base_formats
+from django.core.management import call_command
+from django.contrib.admin.models import LogEntry, CHANGE
+from django.contrib.contenttypes.models import ContentType
 
 log = logbook.Logger('eloue')
 
@@ -139,7 +142,8 @@ class ProductResource(resources.ModelResource):
         if not dry_run and len(self._prices)>0:
             instance.prices = self._prices
         
-    
+        
+        
 class ProductAdmin(ImportMixin, ProductCurrentSiteAdmin):
     date_hierarchy = 'created_at'
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email', 'owner__pk']
@@ -152,12 +156,30 @@ class ProductAdmin(ImportMixin, ProductCurrentSiteAdmin):
     ordering = ['-created_at']
     list_per_page = 20
     form = ProductAdminForm
-    actions = [convert_to_carproduct, convert_to_realestateproduct]
+    actions = [convert_to_carproduct, convert_to_realestateproduct, 'update_index']
     resource_class = ProductResource
     formats = (
         base_formats.XLSX,
         base_formats.XLS,
     )
+
+    
+    def update_index(self, request, queryset):
+            
+        call_command("process_search_queue")
+        self.message_user(request, _("Les indices ont étés mis à jour"), 
+                          level=messages.SUCCESS)
+        LogEntry.objects.log_action(
+            user_id = request.user.id,
+            content_type_id = ContentType.objects.get_for_model(Product),
+            object_id = None,
+            object_repr = None,
+            action_flag = CHANGE, 
+            change_message = 'Products were reindexed')
+
+
+    update_index.short_description = _("Mettre à jour les indices")
+    
 
     def is_pro(self, obj):
         if obj.owner.current_subscription != None:
