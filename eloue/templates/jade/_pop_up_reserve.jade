@@ -14,10 +14,6 @@
                         include ./pop_up_sections/_product_info.jade
                     section.terms
                         include ./pop_up_sections/_terms
-                        a(href="", ng-click="openModal('message')").btn.bg-gray
-                            {% trans "Envoyez un message" %}
-                        //a(href="", ng-click="openModal('phone')").btn.bg-gray
-                            {% trans "Appelez" %}
                 form(id="bookingForm", name="bookingForm", role="form", ng-submit="bookingSubmitted=true; bookingForm.$valid && sendBookingRequest()", ng-class="{'submitted': bookingSubmitted}", ng-model="bookingDetails", novalidate, eloue-form-field-error-manager).input-group.change-part.table-cell.top
                   fieldset(data-ng-disabled="submitInProgress || shippingPointsRequestInProgress || loadingProductShippingPoint")
                     section.table.form-wrapper.personal-information

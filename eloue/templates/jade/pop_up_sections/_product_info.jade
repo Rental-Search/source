@@ -1,5 +1,14 @@
 include ../../jade/_mixins
 
+
+// User Information Block
+.declarer(style="margin-bottom: 10px;")
+    .thumbnail-img
+        a(href="#" style="width: 60px; height: 60px;border-radius: 50%;"): img(style="background-image: url({% verbatim %}{{product.owner.avatar.thumbnail}}{% endverbatim %})").bg-image
+    .thumbnail-content(style="vertical-align: middle;")
+        p {% verbatim %}{{product.owner.slug}}{% endverbatim %}
+
+// Product Infomration Block
 .thumbnail-img
     a(href="#"): img(style="background-image: url({% verbatim %}{{product.picture}}{% endverbatim %})").bg-image
 .thumbnail-content
@@ -7,12 +16,3 @@ include ../../jade/_mixins
     p.location
         i.flaticon.stroke.location-pin-3
         | {% verbatim %}{{product.address.city}}{% endverbatim %}, {% verbatim %}{{product.address.zipcode}}{% endverbatim %}
-    p.stats
-        +average-rate("product.stats.average_rating")
-        +rate-counter("product.stats.ratings_count")
-        +number-of-comments("product.stats.booking_comments_count")
-    .declarer
-        .thumbnail-img
-            a(href="#"): img(style="background-image: url({% verbatim %}{{product.owner.avatar.thumbnail}}{% endverbatim %})").bg-image
-        .thumbnail-content
-            p {% verbatim %}{{product.owner.first_name}}{% endverbatim %} {% verbatim %}{{product.owner.last_name}}{% endverbatim %}
