@@ -81,12 +81,12 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
     readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 
-                       'bookings_link', 'messages_link', 'products_count', 'import_record', 'original_id')
+                       'bookings_link', 'messages_link', 'products_count', 'import_record', 'original_id', 'has_iban')
     fieldsets = (
         (_('Liens'), {'fields': (('profil_link'),
                                  ('owner_products','owner_car_products','owner_realestate_products', 'products_count'),
                                  'messages_link','bookings_link',)}),
-        (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
+        (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password', 'has_iban')}),
         (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
         (_('Permissions'), {
@@ -111,6 +111,15 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     actions = ['export_as_csv', 'send_activation_email', 'index_user_products', 'unindex_user_products']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
 
+
+    def has_iban(slef, obj):
+        has_iban = False
+        if obj.iban:
+            has_iban = True
+        return has_iban
+    has_iban.allow_tags = True
+    has_iban.boolean = True
+    has_iban.short_description = _(u"Existence de l'iban")
 
     def bookings_link(self, obj):
         email = obj.email
