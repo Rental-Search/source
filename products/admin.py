@@ -29,6 +29,10 @@ from import_export.formats import base_formats
 from django.core.management import call_command
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.admin.views.decorators import staff_member_required
+from django.conf.urls import patterns, url
+from queued_search.utils import get_queue_name
+from queues import queues
 
 log = logbook.Logger('eloue')
 
@@ -156,29 +160,61 @@ class ProductAdmin(ImportMixin, ProductCurrentSiteAdmin):
     ordering = ['-created_at']
     list_per_page = 20
     form = ProductAdminForm
-    actions = [convert_to_carproduct, convert_to_realestateproduct, 'update_index']
+    actions = [convert_to_carproduct, convert_to_realestateproduct]
     resource_class = ProductResource
+    change_list_template = "admin/products/change_list.html"
     formats = (
         base_formats.XLSX,
         base_formats.XLS,
     )
 
+    MESSAGE_REINDEX_SUCCESS = _("Index updated")
     
-    def update_index(self, request, queryset):
+    def get_urls(self):
+        urls = super(ProductAdmin, self).get_urls()    
+        custom_urls = patterns("",
+                               url(r"^update_index/$", 
+                               self.admin_site.admin_view(self.update_index), 
+                               name="update_product_index")) 
+        custom_urls += urls
+        return custom_urls
+    
+    
+    def update_index(self, request):
+        
+        queue = queues.Queue(get_queue_name())
+        
+        init_len = len(queue)
+        
+        if not init_len:
+            self.message_user(request, "Nothing to re-index",
+                  level=messages.WARNING)
+            return redirect("admin:products_product_changelist")
+        
+        try:
+            call_command("process_search_queue")
+                    
+            final_len = len(queue)
             
-        call_command("process_search_queue")
-        self.message_user(request, _("Les indices ont étés mis à jour"), 
-                          level=messages.SUCCESS)
-        LogEntry.objects.log_action(
-            user_id = request.user.id,
-            content_type_id = ContentType.objects.get_for_model(Product),
-            object_id = None,
-            object_repr = None,
-            action_flag = CHANGE, 
-            change_message = 'Products were reindexed')
-
-
-    update_index.short_description = _("Mettre à jour les indices")
+            if init_len == final_len:
+                raise Exception("No objects were re-indexed" % final_len)
+            
+            self.message_user(request, self.MESSAGE_REINDEX_SUCCESS,
+                              level=messages.SUCCESS)
+            
+            LogEntry.objects.log_action(
+                user_id = request.user.id,
+                content_type_id = ContentType.objects.get_for_model(Product).pk,
+                object_id = None,
+                object_repr = "Re-indexed %d objects" % (init_len - final_len),
+                action_flag = CHANGE,
+                change_message = 'Objects re-indexed')
+        
+        except Exception as e:
+            self.message_user(request, str(e),
+                          level=messages.ERROR)
+            
+        return redirect("admin:products_product_changelist")
     
 
     def is_pro(self, obj):
