@@ -12,6 +12,8 @@ from django.conf import settings
 from decimal import Decimal, InvalidOperation
 
 import haystack_algolia
+from django.db.models.base import ModelBase
+from haystack.utils import get_identifier
 haystack_algolia.algolia_backend.UPDATE_CHUNK_SIZE = 1000 # FIXME do not monkeypatch
 
 EQ_NUMERIC = '%s=%s'
@@ -69,12 +71,20 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
         self.setup_complete = True
         
     
-    def _get_index_for(self, model, orderby=''):
-        index_name = "{}{}".format(self.index_name_prefix, model_label(model))
+    def _get_index_for(self, obj, orderby=''):
+        
+        if isinstance(obj, ModelBase):
+            label = model_label(obj)
+        elif isinstance(obj, (str, unicode)):
+            label = obj.rsplit('.',1)[0]
+        
+        index_name = self.index_name_prefix + label
+        
         if orderby:
             index_name = index_name + '_' + orderby
+            
         return self.conn.initIndex(index_name)
-    
+            
 
     def client_args(self, query_string, **kwargs):
         
@@ -189,6 +199,16 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
                              }
         
         return results
+    
+        
+    def remove(self, obj, commit=True):
+
+        if not self.setup_complete:
+            self.setup()
+
+        index = self._get_index_for(obj)
+        index.deleteObject(get_identifier(obj))
+        
         
     
 class EloueAlgoliaSearchQuery(BaseSearchQuery):
@@ -301,7 +321,8 @@ class EloueAlgoliaSearchQuery(BaseSearchQuery):
         kwargs = BaseSearchQuery.build_params(self, spelling_query=spelling_query)
         kwargs['search_terms'] = self.search_terms
         return kwargs
-        
+    
+
 
 #TODO remove dependencies on other eloue apps 
 #TODO separate into an app
