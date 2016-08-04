@@ -12,7 +12,7 @@ ol.product-layout
           a(href="{{ product.url }}").img-wrapper: img(style="{% if product.profile %}background-image: url({{ product.profile }}){% endif %}").bg-image
           //- For fnac
           if product.price
-            if product.owner.slug == 'fnac'
+            if product.object.owner.slug == 'fnac'
               span.badge.price {{ product.price|currency }} /{% trans "mois" %}
             else
               span.badge.price {{ product.price|currency }} /{% trans "jour" %}

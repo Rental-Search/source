@@ -10,15 +10,7 @@ table.calendar.bd-wrap.indent-t-md.indent-b-md
         tr
             td {% trans "Prix" %}
             td
-                b.text-success {% verbatim %}{{ 'MONEY' | translate:{value:bookingPrice} }}{% endverbatim %}
-        tr(ng-show="shippingPrice > 0")
-            td {% trans "Livraison" %}
-            td
-                b.text-success {% verbatim %}{{ 'MONEY' | translate:{value:shippingPrice} }}{% endverbatim %}
-        tr(ng-show="shippingPrice > 0")
-            td {% trans "Total" %}
-            td
-                b.text-success {% verbatim %}{{ 'MONEY' | translate:{value:(bookingPrice + shippingPrice)} }}{% endverbatim %}
+                b {% verbatim %}{{bookingPriceCurrency}}{% endverbatim %}&nbsp;
         tr
             td {% trans "Caution" %}
             td
