@@ -374,7 +374,7 @@ class PaymentTypeFilter(admin.SimpleListFilter):
             return queryset.filter(subscription_set__payment_type=2)
 
 class ProAdmin(PatronAdmin):
-    list_display = ('company_name', 'last_subscription', 'last_subscription_signed_at', 'last_subscription_started_date', 'last_subscription_ended_date', 'payment_type', 'last_subscription_comment', 'last_subscription_seller', 'closed_ticket', 'last_report_date')
+    list_display = ('company_name', 'date_joined', 'last_subscription', 'last_subscription_signed_at', 'last_subscription_started_date', 'last_subscription_ended_date', 'payment_type', 'last_subscription_comment', 'last_subscription_seller', 'closed_ticket', 'last_report_date')
     list_filter = (PaymentTypeFilter, TicketFilter, SellerFilter)
     inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
 #     readonly_fields = ('import_products_link', 'store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
