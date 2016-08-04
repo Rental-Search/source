@@ -322,7 +322,8 @@ class SellerFilter(admin.SimpleListFilter):
     parameter_name = 'seller'
 
     def lookups(self, request, model_admin):
-        return Subscription.objects.all().values_list('seller__id', 'seller__last_name').distinct()
+        sellers = Subscription.objects.all().values_list('seller__id', 'seller__last_name', 'seller__first_name').distinct()
+        return [(seller[0], "%s %s" % (seller[2].title(), seller[1].title()) if seller[1] != None else "Inconnu") for seller in sellers]
 
     def queryset(self, request, queryset):
         if self.value() == None:
