@@ -113,13 +113,10 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
 
 
     def has_iban(slef, obj):
-        has_iban = False
-        if obj.iban:
-            has_iban = True
-        return has_iban
+        return True if obj.iban else False
     has_iban.allow_tags = True
     has_iban.boolean = True
-    has_iban.short_description = _(u"Existence de l'iban")
+    has_iban.short_description = _(u"IBAN enregistré")
 
     def bookings_link(self, obj):
         email = obj.email
