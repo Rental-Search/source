@@ -329,13 +329,17 @@ class SellerFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         sellers = Subscription.objects.all().values_list('seller__id', 'seller__last_name', 'seller__first_name').distinct()
-        return [(seller[0], "%s %s" % (seller[2].title(), seller[1].title()) if seller[1] != None else "Inconnu") for seller in sellers]
+        return [(seller[0] if seller[0] != None else 0, "%s %s" % (seller[2].title(), seller[1].title()) if seller[1] != None else "Inconnu" ) for seller in sellers]
 
     def queryset(self, request, queryset):
-        if self.value() == None:
+        # 0 mean don't have seller for the pro
+        if self.value() == '0':
             return queryset.exclude(subscription_set__seller__id__isnull=False)
         if self.value():
+            print self.value()
             return queryset.filter(subscription_set__seller__id=self.value())
+
+
 
 class TicketFilter(admin.SimpleListFilter):
     title = _('Ticket')
