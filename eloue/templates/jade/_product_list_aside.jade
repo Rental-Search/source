@@ -43,7 +43,7 @@ script(type="text/ng-template" id="_filter_wrapper.html")
         ui-gmap-markers(ng-show="vm.resultCount", models="vm.results", coords="'location_obj'", 
             idKey="'markerId'", events="marker_event_handlers", type="'cluster'", 
             typeOptions="vm.value.clustererOptions", options="'markerOptions'")
-    
+            
     
   eloue-filter-wrapper(ng-if="search", label="{% trans 'rayon' %}", attr-name='aroundRadius', 
                         value="search.range",  defaults="search.range", 
@@ -77,7 +77,11 @@ script(type="text/ng-template" id="_filter_wrapper.html")
       {% trans " Professionnels" %} {% verbatim %} {{ " ("+vm.value.pro_count+")" }} {% endverbatim %}
   
   
-  //-div(eloue-property-dropdown-filter, ng-repeat="prop in search.category.properties | is_facet", 
-  //-      property-type="prop", ng-model="search[prop.attr_name]", ng-change="refineProperty(prop)")
-
+//-  div(ng-if="search", ng-controller="DynamicPropertiesController")
+//-    eloue-filter-wrapper(ng-repeat="prop in properties track by prop.id | is_facet",
+//-                          eloue-dynamic-property, ng-model="prop")
+//-      {% verbatim %}
+//-      select(id="{{ vm.label + proto.id }}", ng-options="choice for choice in vm.choices",
+//-              data-placeholder="{{ vm.proto.name }}", class="form-control", eloue-chosen)
+//-      {% endverbatim %}
 

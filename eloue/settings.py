@@ -649,6 +649,10 @@ ALGOLIA_INDICES = {
 ALGOLIA_CLIENT_CONFIG = {
     'MASTER_INDEX': ALGOLIA_CREDENTIALS['PREFIX'] + 'products.product',
     'PARAMETERS': {
+        'attributesToRetrieve':["summary", "django_id", "username", 
+                "location", "locations", "city", "zipcode", "owner_url", 
+                "owner_avatar", "url", "price", "profile", "vertical_profile", 
+                "thumbnail", "comment_count", "average_rate"],
         'hierarchicalFacets': [{
             'name': 'category',
             'attributes': ['algolia_categories.lvl0',
@@ -663,17 +667,15 @@ ALGOLIA_CLIENT_CONFIG = {
                  'is_good',
                  'is_allowed'],
         'hitsPerPage': 12,
-        'query':""
+        'query':"",
+        'snippetEllipsisText': "&hellip;",
     },
     'ALGOLIA_PREFIX': "sp_",
     'ALGOLIA_APP_ID': ALGOLIA_CREDENTIALS['APP_ID'],
     'ALGOLIA_KEY': ALGOLIA_CREDENTIALS['API_KEY_SEARCH'],
     'URL_PARAMETERS': ['query', 'page', 'aroundRadius', 
                        'attribute:pro_owner', 'attribute:price',
-                       'attribute:category'], 
-                    #    'attribute:algolia_categories.lvl0',
-                    #    'attribute:algolia_categories.lvl1',
-                    #    'attribute:algolia_categories.lvl2'],
+                       'attribute:category'],
     'URL_PARAMETERS_EXCLUDE': ['is_archved', 
                              'is_good', 
                              'sites',
