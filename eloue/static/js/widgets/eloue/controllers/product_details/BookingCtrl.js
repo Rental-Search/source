@@ -405,11 +405,11 @@ define([
                 if ($scope.isAuto) {
                     userPatch.drivers_license_number = $scope.currentUser.drivers_license_number;
                     if ($scope.currentUser.drivers_license_date) {
-                        userPatch.drivers_license_date = UtilsService.formatDate($scope.currentUser.drivers_license_date.replace(/\//g, ''), "yyyy-MM-dd'T'HH:mm");
+                        userPatch.drivers_license_date = UtilsService.formatDate(new Date($scope.currentUser.drivers_license_date).getTime(), "yyyy-MM-dd'T'HH:mm");
                     }
                     userPatch.place_of_birth = $scope.currentUser.place_of_birth;
                     if ($scope.currentUser.date_of_birth) {
-                        userPatch.date_of_birth = UtilsService.formatDate($scope.currentUser.date_of_birth.replace(/\//g, ''), "yyyy-MM-dd'T'HH:mm");
+                        userPatch.date_of_birth = UtilsService.formatDate(new Date($scope.currentUser.date_of_birth).getTime(), "yyyy-MM-dd'T'HH:mm");
                     }
                 }
 
