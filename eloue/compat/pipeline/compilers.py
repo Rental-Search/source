@@ -7,8 +7,10 @@ from django.dispatch.dispatcher import receiver
 from django.contrib.staticfiles import finders
 
 from eloue.compat.pipeline.conf import settings
-from pipeline.compilers import sass, SubProcessCompiler
+from pipeline.compilers import sass, CompilerBase
 from pipeline.signals import js_compressed
+from django.utils.encoding import smart_bytes
+from pipeline.exceptions import CompilerError
 
 
 class OutputPathMixin(object):
@@ -43,7 +45,7 @@ class AutoprefixerMixin(object):
 class AutoprefixerSASSCompiler(OutputPathMixin, AutoprefixerMixin, sass.SASSCompiler):
     pass
 
-class RequireJsCompiler(SubProcessCompiler):
+class RequireJsCompiler(CompilerBase):
     output_extension = 'js'
 
     def match_file(self, filename):
@@ -57,6 +59,25 @@ class RequireJsCompiler(SubProcessCompiler):
             outfile,
         )
         return self.execute_command(command, cwd=dirname(outfile))
+    
+    def execute_command(self, command, content=None, cwd=None):
+        import subprocess
+        pipe = subprocess.Popen(command, shell=True, cwd=cwd,
+                                stdout=subprocess.PIPE, stdin=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        if content:
+            content = smart_bytes(content)
+        stdout, stderr = pipe.communicate(content)
+        if pipe.returncode != 0:
+            if stderr.strip():
+                raise CompilerError(stderr)
+            elif stdout.strip():
+                raise CompilerError(stdout)
+            else:
+                raise CompilerError("Command failed with no output")
+        if self.verbose:
+            print(stderr)
+        return stdout
 
 @receiver(js_compressed, dispatch_uid='pipeline_requirejs_build')
 def requirejs_build(sender, package, **kwargs):
