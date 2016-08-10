@@ -15,7 +15,7 @@ script(type="text/ng-template", id="_category_tree_item.html")
 
 script(type="text/ng-template" id="_filter_wrapper.html")
   div(ng-cloak, class="filter-wrapper")
-    label(class="caption", for="{{vm.label}}-slider", style="width:100%; position:relative; height:1.5em; line-height:1.5em;")
+    label(class="caption", for="{{vm.attrName}}", style="width:100%; position:relative; height:1.5em; line-height:1.5em;")
       span(ng-cloak, title="{{ 'Réinitialiser' | translate }}", class="btn-clear-filter",
             ng-click="vm.reset()", ng-show="!vm.clean()")
       {{ vm.label }}
@@ -29,7 +29,7 @@ script(type="text/ng-template" id="_filter_wrapper.html")
   
   
   eloue-filter-wrapper(ng-if="search", label="{% trans 'catégories' %}", attr-name="category",
-                        value="search.category",  defaults="defaults.category",
+                        value="search.algolia_category_path",  defaults="defaults.category",
                         eloue-categories)
     div(ng-hide="vm.empty", ng-include="'_category_tree_item.html'", eloue-suspendable)
     div(ng-show="vm.empty") {% trans "Aucune categorie" %}
@@ -77,11 +77,12 @@ script(type="text/ng-template" id="_filter_wrapper.html")
       {% trans " Professionnels" %} {% verbatim %} {{ " ("+vm.value.pro_count+")" }} {% endverbatim %}
   
   
-//-  div(ng-if="search", ng-controller="DynamicPropertiesController")
-//-    eloue-filter-wrapper(ng-repeat="prop in properties track by prop.id | is_facet",
-//-                          eloue-dynamic-property, ng-model="prop")
-//-      {% verbatim %}
-//-      select(id="{{ vm.label + proto.id }}", ng-options="choice for choice in vm.choices",
-//-              data-placeholder="{{ vm.proto.name }}", class="form-control", eloue-chosen)
-//-      {% endverbatim %}
+  div(ng-if="search", ng-controller="DynamicPropertiesController")
+    eloue-filter-wrapper(ng-repeat="prop in properties track by prop.id | is_facet",
+                          eloue-dynamic-property, ng-model="prop")
+      {% verbatim %}
+      select(id="{{ vm.label + vm.prop_id }}", ng-options="choice for choice in vm.choices",
+              data-placeholder="{{ vm.label }}", class="form-control", ng-model="vm.value", 
+              ng-change="vm.refine()", eloue-chosen, ng-cloak)
+      {% endverbatim %}
 
