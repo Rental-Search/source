@@ -120,6 +120,9 @@ class Command(BaseCommand):
 			image_url = image_url.replace(' ', '%20')
 			image_url = image_url.encode('utf-8')
 
+			if image_url.find('é') != -1:
+				image_url = image_url.replace('é', '%C3%A9')
+
 			redirect_url = self.base_url + product_url
 
 			self.nb_product += 1
