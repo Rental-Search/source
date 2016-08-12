@@ -1,4 +1,5 @@
 -load i18n
+
 section.pull-nothing(ng-hide="items && (items.length > 0 || !!selectedCategory)")
   .notification-empty
     .notification-container
@@ -6,4 +7,4 @@ section.pull-nothing(ng-hide="items && (items.length > 0 || !!selectedCategory)"
       h2(ng-show="!routeChangeInProgress") {% trans "Pas encore d'annonce déposée" %}
       p(ng-show="!routeChangeInProgress").indent-md-v.text-black
         | {% trans "Vos objets peuvent vous rapporter de l'argent : karcher, appareil photo, caméra ..." %}
-      a(ng-show="!routeChangeInProgress", href="/location/ajouter/").btn-inline.bg-success-hover.text-white {% trans "Déposez votre première annonce" %}
+      a(ng-show="!routeChangeInProgress", href="{% url 'publish_item' %}").btn-inline.bg-success-hover.text-white {% trans "Déposez votre première annonce" %}

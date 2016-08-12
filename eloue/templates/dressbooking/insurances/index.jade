@@ -10,7 +10,8 @@ block append styles
 
 style
 block append content-body
-  .container-flex
+  //- Inherit HomePage controller to activate geolocation search
+  .container-flex(data-ng-controller="HomePageCtrl")  
     header.header-site
       include ../jade/_header_site
     nav.bd-b

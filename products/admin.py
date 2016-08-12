@@ -26,6 +26,13 @@ from import_export import resources, widgets, fields
 from import_export.admin import ImportMixin
 from products.choices import UNIT
 from import_export.formats import base_formats
+from django.core.management import call_command
+from django.contrib.admin.models import LogEntry, CHANGE
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.admin.views.decorators import staff_member_required
+from django.conf.urls import patterns, url
+from queued_search.utils import get_queue_name
+from queues import queues
 
 log = logbook.Logger('eloue')
 
@@ -139,13 +146,14 @@ class ProductResource(resources.ModelResource):
         if not dry_run and len(self._prices)>0:
             instance.prices = self._prices
         
-    
+        
+        
 class ProductAdmin(ImportMixin, ProductCurrentSiteAdmin):
     date_hierarchy = 'created_at'
     search_fields = ['summary', 'description', 'category__name', 'owner__username', 'owner__email', 'owner__pk']
     inlines = [PictureInline, PropertyValueInline, PriceInline]
     raw_id_fields = ("owner", "address", "phone")
-    readonly_fields = ('is_pro', 'user_link')
+    readonly_fields = ('is_pro', 'user_link', 'import_record', 'original_id')
     list_display = ('summary', 'is_pro','user_link', 'category', 'deposit_amount', 'quantity', 'is_archived', 'shipping', 'created_at', 'modified_at')
     list_filter = ('shipping', 'is_archived', 'is_allowed', 'category')
     list_editable = ('category',)
@@ -154,10 +162,60 @@ class ProductAdmin(ImportMixin, ProductCurrentSiteAdmin):
     form = ProductAdminForm
     actions = [convert_to_carproduct, convert_to_realestateproduct]
     resource_class = ProductResource
+    change_list_template = "admin/products/change_list.html"
     formats = (
         base_formats.XLSX,
         base_formats.XLS,
     )
+
+    MESSAGE_REINDEX_SUCCESS = _("Index updated")
+    
+    def get_urls(self):
+        urls = super(ProductAdmin, self).get_urls()    
+        custom_urls = patterns("",
+                               url(r"^update_index/$", 
+                               self.admin_site.admin_view(self.update_index), 
+                               name="update_product_index")) 
+        custom_urls += urls
+        return custom_urls
+    
+    
+    def update_index(self, request):
+        
+        queue = queues.Queue(get_queue_name())
+        
+        init_len = len(queue)
+        
+        if not init_len:
+            self.message_user(request, "Nothing to re-index",
+                  level=messages.WARNING)
+            return redirect("admin:products_product_changelist")
+        
+        try:
+            call_command("process_search_queue")
+                    
+            final_len = len(queue)
+            
+            if init_len == final_len:
+                raise Exception("No objects were re-indexed" % final_len)
+            
+            self.message_user(request, self.MESSAGE_REINDEX_SUCCESS,
+                              level=messages.SUCCESS)
+            
+            LogEntry.objects.log_action(
+                user_id = request.user.id,
+                content_type_id = ContentType.objects.get_for_model(Product).pk,
+                object_id = None,
+                object_repr = "Re-indexed %d objects" % (init_len - final_len),
+                action_flag = CHANGE,
+                change_message = 'Objects re-indexed')
+        
+        except Exception as e:
+            self.message_user(request, str(e),
+                          level=messages.ERROR)
+            
+        return redirect("admin:products_product_changelist")
+    
 
     def is_pro(self, obj):
         if obj.owner.current_subscription != None:

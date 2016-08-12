@@ -12,33 +12,25 @@ define([
     EloueDashboardApp.controller("AccountProfileCtrl", [
         "$scope",
         "$timeout",
+        "$translate",
         "UsersService",
         "AddressesService",
         "PhoneNumbersService",
         "Endpoints",
         "CivilityChoices",
         "UtilsService",
-        function ($scope, $timeout, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices,
+        function ($scope, $timeout, $translate, UsersService, AddressesService, PhoneNumbersService, Endpoints, CivilityChoices,
                   UtilsService) {
-            $scope.civilityOptions = CivilityChoices;
+            $scope.civilityOptions = UtilsService.choicesHonorific();
             $scope.addressesBaseUrl = Endpoints.api_url + "addresses/";
             $scope.phonesBaseUrl = Endpoints.api_url + "phones/";
             $scope.usersBaseUrl = Endpoints.api_url + "users/";
             $scope.dayOptions = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
-            $scope.monthOptions = [
-                {id: 0, value: "January"},
-                {id: 1, value: "February"},
-                {id: 2, value: "March"},
-                {id: 3, value: "April"},
-                {id: 4, value: "May"},
-                {id: 5, value: "June"},
-                {id: 6, value: "July"},
-                {id: 7, value: "August"},
-                {id: 8, value: "September"},
-                {id: 9, value: "October"},
-                {id: 10, value: "November"},
-                {id: 11, value: "December"}
-            ];
+            $scope.monthOptions = [];
+            var months = UtilsService.date.months();
+            for (var i=0; i<months.length; i++){
+                $scope.monthOptions.push({id:i, value:months[i]});
+            }
             $scope.yearOptions = [];
             var currentYear = Date.today().getFullYear(), i;
             for (i = 0; i < 99; i += 1) {
@@ -106,7 +98,7 @@ define([
             $scope.dataFormSubmit = function () {
                 $scope.submitInProgress = true;
                 if ($scope.noAddress) {
-                    $scope.currentUser.default_address.country = "FR";
+                    $scope.currentUser.default_address.country = UtilsService.country().region;
                     AddressesService.saveAddress($scope.currentUser.default_address).then(
                         $scope.processAddressSaveResponse,
                         function (error) {
@@ -135,11 +127,10 @@ define([
 
             $scope.saveProfile = function () {
                 if (!!$scope.licenceDay && !!$scope.licenceMonth && !!$scope.licenceYear) {
-                    var date = new Date();
-                    date.setDate($scope.licenceDay);
-                    date.setMonth($scope.licenceMonth);
-                    date.setFullYear($scope.licenceYear);
-                    $scope.currentUser.drivers_license_date = date.toString("yyyy-MM-ddTHH:mm");
+                    var date = new Date($scope.licenceYear, 
+                        $scope.licenceMonth, 
+                        $scope.licenceDay);
+                    $scope.currentUser.drivers_license_date = UtilsService.date(date).toISOString();
                     $("#drivers_license_date").val($scope.currentUser.drivers_license_date);
                 }
                 var initialNumber = $scope.currentUser.default_number ? ($scope.currentUser.default_number.number.numero || $scope.currentUser.default_number.number) : null;
@@ -189,7 +180,7 @@ define([
                     analytics.track('User Profile Updated');
                     $scope.$apply(function () {
                         $scope.submitInProgress = false;
-                        $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
+                        $scope.showNotification('PERSONAL_INFO', 'update', true); 
                     });
                 }, function (error) {
                     $scope.handleResponseErrors(error.responseJSON, "profile", "save");

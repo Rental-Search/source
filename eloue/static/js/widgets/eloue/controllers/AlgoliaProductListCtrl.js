@@ -4,9 +4,10 @@ define([
     "../../../common/eloue/services/CategoriesService",
     "algoliasearch-helper",
     "stacktrace",
+    "../i18n",
     "js-cookie"
 ], function (EloueWidgetsApp, UtilsService, CategoriesService, algoliasearchHelper, 
-                StackTrace, Cookies) {
+                StackTrace){ //,Cookies) {
     "use strict";
     
     var KEY_ENTER = 13;
@@ -42,77 +43,78 @@ define([
         return point.coordinates[1]+','+point.coordinates[0];
     };
     
-    var el = Cookies.get("eloue_el");
     
-    function hasStorage(){
-        return typeof(Storage) !== 'undefined';
-    };
+    // var el = Cookies.get("eloue_el");
     
-    function cleanup(){
-        if (hasStorage()){
-            var i = sessionStorage.length;
-            while (i--){
-                var key = sessionStorage.key(i);
-                if (key.match(/^eloue_err_.*/g)){
-                    sessionStorage.removeItem(key);
-                }
-            }
-        } 
-    };
+    // function hasStorage(){
+    //     return typeof(Storage) !== 'undefined';
+    // };
     
-    if (el){
-        EloueWidgetsApp.factory('$exceptionHandler', function() {
-            
-            function frameKey(f) {
-                return f.functionName+'@'+f.fileName+':'+f.lineNumber+':'+f.columnNumber;
-            };
-            
-            var ec = parseInt(Cookies.get('eloue_ec')) || 0;
-            
-            if (!ec){
-                cleanup();
-            }
-            
-            var log;
-            
-            if (hasStorage()){
-                log = function(trace){
-                    var topFrame = trace[0];
-                    var key = 'eloue_err_'+frameKey(topFrame);
-                    var exceptionCount = parseInt(Cookies.get('eloue_ec')) || 0;
-                    if (exceptionCount<parseInt(el) && !(sessionStorage.getItem(key))){
-                        Cookies.set('eloue_ec', exceptionCount+1);
-                        sessionStorage.setItem(key,1);
-                        StackTrace.report(trace, "/logs/").then(function(resp){
-                        }).catch(function(resp){
-                        });
-                    };
-                };
-            } else {
-                log = function(trace){
-                    var topFrame = trace[0];
-                    var key = 'eloue_err_'+frameKey(topFrame);
-                    var exceptionCount = Cookies.get('eloue_ec');
-                    if (!exceptionCount){
-                        Cookies.set('eloue_ec', 1);
-                        StackTrace.report(trace, "/logs/").then(function(resp){
-                        }).catch(function(resp){
-                        });
-                    };
-                };
-            }
-            
-            return function(exception, cause) {                
-                StackTrace.fromError(exception, {offline:false})
-                    .then(log).catch(function(trace){});
-            };
-            
-        });    
-    } else {
-        cleanup();
-    }
+    // function cleanup(){
+    //     if (hasStorage()){
+    //         var i = sessionStorage.length;
+    //         while (i--){
+    //             var key = sessionStorage.key(i);
+    //             if (key.match(/^eloue_err_.*/g)){
+    //                 sessionStorage.removeItem(key);
+    //             }
+    //         }
+    //     } 
+    // };
     
+    // if (el){
+    //     EloueWidgetsApp.factory('$exceptionHandler', function() {
+            
+    //         function frameKey(f) {
+    //             return f.functionName+'@'+f.fileName+':'+f.lineNumber+':'+f.columnNumber;
+    //         };
+            
+    //         var ec = parseInt(Cookies.get('eloue_ec')) || 0;
+            
+    //         if (!ec){
+    //             cleanup();
+    //         }
+            
+    //         var log;
+            
+    //         if (hasStorage()){
+    //             log = function(trace){
+    //                 var topFrame = trace[0];
+    //                 var key = 'eloue_err_'+frameKey(topFrame);
+    //                 var exceptionCount = parseInt(Cookies.get('eloue_ec')) || 0;
+    //                 if (exceptionCount<parseInt(el) && !(sessionStorage.getItem(key))){
+    //                     Cookies.set('eloue_ec', exceptionCount+1);
+    //                     sessionStorage.setItem(key,1);
+    //                     StackTrace.report(trace, "/logs/").then(function(resp){
+    //                     }).catch(function(resp){
+    //                     });
+    //                 };
+    //             };
+    //         } else {
+    //             log = function(trace){
+    //                 var topFrame = trace[0];
+    //                 var key = 'eloue_err_'+frameKey(topFrame);
+    //                 var exceptionCount = Cookies.get('eloue_ec');
+    //                 if (!exceptionCount){
+    //                     Cookies.set('eloue_ec', 1);
+    //                     StackTrace.report(trace, "/logs/").then(function(resp){
+    //                     }).catch(function(resp){
+    //                     });
+    //                 };
+    //             };
+    //         }
+            
+    //         return function(exception, cause) {                
+    //             StackTrace.fromError(exception, {offline:false})
+    //                 .then(log).catch(function(trace){});
+    //         };
+            
+    //     });    
+    // } else {
+    //     cleanup();
+    // }
     
+ 
     EloueWidgetsApp.filter('safe', [
       '$sce',
       function($sce) {
@@ -139,13 +141,18 @@ define([
     }]);
                                      
     
-    EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
-        uiGmapGoogleMapApiProvider.configure({
+    EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', 'MAP_CONFIG', function(uiGmapGoogleMapApiProvider, MAP_COFNIG) {
+        
+        // TODO a hack to get the language 
+        var lang = angular.element(document)[0].documentElement.lang;
+        
+        var conf = $.extend({
             v: '3.exp',
             libraries: ['places', 'geometry'],
-            language: 'fr-FR',
-            region: 'FR'
-        });
+        }, MAP_COFNIG[lang]);
+        
+        uiGmapGoogleMapApiProvider.configure(conf);
+
     }]);
     
     
@@ -157,13 +164,7 @@ define([
         return parseInt(categoryStr.split('|')[1]);
     };
     
-    
-    EloueWidgetsApp.factory("CategoryService", ["CategoriesService", 
-    function(CategoriesService){
-        
-    }]);
-    
-    
+   
     /**
      * Wraps the Algolia helper and stores additional search state.
      * Configures the helper and sets default search parameters from
@@ -1329,6 +1330,7 @@ define([
                         vm.value.algolia_category_path = path;
                         if (!vm.value.algolia_category_path){
                             ss.helper.clearRefinements("category");
+
                         } else {
                             ss.helper.toggleRefinement("category", vm.value.algolia_category_path);
                         }

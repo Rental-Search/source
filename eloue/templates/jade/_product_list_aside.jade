@@ -23,7 +23,6 @@ script(type="text/ng-template" id="_filter_wrapper.html")
     div(ng-show='vm.ready()')
 {% endverbatim %}
 
-
 //- {% facet_url breadcrumbs -breadcrumbs.categorie.label category.get_ancertors_slug category.slug %}
 .section-body
   
@@ -54,7 +53,7 @@ script(type="text/ng-template" id="_filter_wrapper.html")
   
   eloue-filter-wrapper(ng-if="search", label="{% trans 'prix' %}", attr-name='price', 
                         value="search.price",  defaults="defaults.price", 
-                        eloue-slider, units="MONEY", eloue-price)
+                        eloue-slider, units="MONEY_ROUND", eloue-price)
     rzslider(id="{% trans 'prix' %}-slider", rz-slider-model="vm.value.min", rz-slider-high="vm.value.max",
       rz-slider-options="vm.value.options")
       
@@ -76,7 +75,7 @@ script(type="text/ng-template" id="_filter_wrapper.html")
         span.flaticon.stroke.checkmark-1
       {% trans " Professionnels" %} {% verbatim %} {{ " ("+vm.value.pro_count+")" }} {% endverbatim %}
   
-  
+ 
   div(ng-if="search", ng-controller="DynamicPropertiesController")
     eloue-filter-wrapper(ng-repeat="prop in properties track by prop.id | is_facet",
                           eloue-dynamic-property, ng-model="prop")

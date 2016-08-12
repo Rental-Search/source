@@ -47,6 +47,7 @@ from eloue.geocoder import GoogleGeocoder
 from eloue.signals import post_save_sites
 from eloue import signals as eloue_signals
 from eloue.utils import currency, create_alternative_email, itertools_accumulate, convert
+from accounts.models import ImportedObjectMixin
 
 
 import copy
@@ -83,7 +84,7 @@ def setup_postgres_intarray(sender, **kwargs):
         class_prepared.disconnect(dispatch_uid='products_product_setup_postgres_intarray_class_prepared')
 
 
-class Product(models.Model):
+class Product(ImportedObjectMixin):
     """A product"""
     summary = models.CharField(_(u'Titre'), max_length=255)
     deposit_amount = models.DecimalField(_(u'Dépôt de garantie'), max_digits=10, decimal_places=2)
@@ -112,6 +113,7 @@ class Product(models.Model):
 
     source = models.ForeignKey(Site, null=True, blank=True)
 
+    redirect_url = models.URLField(_(u"Site internet"), blank=True, null=True)
 
     class Meta:
         verbose_name = _('product')
@@ -119,14 +121,17 @@ class Product(models.Model):
     def __unicode__(self):
         return smart_unicode(self.summary)
 
-    def save(self, *args, **kwargs):
-        if not self.phone and self.owner.default_number:
-            self.phone = self.owner.default_number
+    def prepare_for_save(self):
         self.summary = strip_tags(self.summary)
         self.description = strip_tags(self.description)
+        if not self.redirect_url and self.owner.url:
+            self.redirect_url = self.owner.url
         if not self.created_at: # FIXME: created_at should be declared with auto_now_add=True
             self.created_at = datetime.now()
             self.source = Site.objects.get_current()
+        
+    def save(self, *args, **kwargs):
+        self.prepare_for_save()
         super(Product, self).save(*args, **kwargs)
 
     def _get_category(self):
@@ -614,7 +619,7 @@ def upload_to(instance, filename):
 class Picture(models.Model):
     """A picture"""
     product = models.ForeignKey(Product, related_name='pictures', blank=True, null=True)
-    image = models.ImageField(null=True, blank=True, upload_to=upload_to)
+    image = models.ImageField(null=True, blank=True, upload_to=upload_to, max_length=200)
     created_at = models.DateTimeField(blank=True, editable=False)
 
     thumbnail = ImageSpecField(

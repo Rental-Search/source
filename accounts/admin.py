@@ -80,12 +80,13 @@ class ProCampaignInline(admin.TabularInline):
 class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     form = PatronChangeForm
     add_form = PatronCreationForm
-    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 'bookings_link', 'messages_link', 'products_count')
+    readonly_fields = ('profil_link', 'owner_products', 'owner_car_products', 'owner_realestate_products', 
+                       'bookings_link', 'messages_link', 'products_count', 'import_record', 'original_id', 'has_iban')
     fieldsets = (
         (_('Liens'), {'fields': (('profil_link'),
                                  ('owner_products','owner_car_products','owner_realestate_products', 'products_count'),
                                  'messages_link','bookings_link',)}),
-        (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password')}),
+        (_('Personal info'), {'fields': ('email', 'civility', 'first_name', 'last_name','last_login', 'date_joined','password', 'has_iban')}),
         (_('Profile'), {'fields': ('username', 'slug', 'avatar',  'about', 'sites')}),
         (_('Company info'), {'fields': ('is_professional', 'company_name', 'url')}),
         (_('Permissions'), {
@@ -110,6 +111,12 @@ class PatronAdmin(UserAdmin, CurrentSiteAdmin):
     actions = ['export_as_csv', 'send_activation_email', 'index_user_products', 'unindex_user_products']
     search_fields = ('username', 'first_name', 'last_name', 'email', 'phones__number', 'addresses__city', 'company_name')
 
+
+    def has_iban(slef, obj):
+        return True if obj.iban else False
+    has_iban.allow_tags = True
+    has_iban.boolean = True
+    has_iban.short_description = _(u"IBAN enregistré")
 
     def bookings_link(self, obj):
         email = obj.email
@@ -315,10 +322,64 @@ class ProAgencyAdmin(admin.ModelAdmin):
         else:
             return obj.patron.username
 
+class SellerFilter(admin.SimpleListFilter):
+    title = _('Vendeur')
+
+    parameter_name = 'seller'
+
+    def lookups(self, request, model_admin):
+        sellers = Subscription.objects.all().values_list('seller__id', 'seller__last_name', 'seller__first_name').distinct()
+        return [(seller[0] if seller[0] != None else 0, "%s %s" % (seller[2].title(), seller[1].title()) if seller[1] != None else "Inconnu" ) for seller in sellers]
+
+    def queryset(self, request, queryset):
+        # 0 mean don't have seller for the pro
+        if self.value() == '0':
+            return queryset.exclude(subscription_set__seller__id__isnull=False)
+        if self.value():
+            print self.value()
+            return queryset.filter(subscription_set__seller__id=self.value())
+
+
+
+class TicketFilter(admin.SimpleListFilter):
+    title = _('Ticket')
+
+    parameter_name = 'ticket_solved'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('True', _(u"Tickets résolus")),
+            ('False', _(u"Tickets non résolus")),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'True':
+            return queryset.exclude(tickets__is_closed=False)
+        if self.value() == 'False':
+            return queryset.filter(tickets__is_closed=False)
+
+class PaymentTypeFilter(admin.SimpleListFilter):
+    title = _('Type de paiement')
+    
+    parameter_name = 'payement_type'
+
+    def lookups(self, request, model_admin):
+        return (
+            (0, _(u'Carte de crédit')),
+            (1, _(u'Chèque')),
+            (2, _(u'IBAN')),
+        )
+    def queryset(self, request, queryset):
+        if self.value() == '0':
+            return queryset.filter(subscription_set__payment_type=0)
+        if self.value() == '1':
+            return queryset.filter(subscription_set__payment_type=1)
+        if self.value() == '2':
+            return queryset.filter(subscription_set__payment_type=2)
 
 class ProAdmin(PatronAdmin):
-    list_display = ('company_name', 'closed_ticket', 'last_report_date', 'last_subscription', 'last_subscription_started_date', 'last_subscription_ended_date',)
-    list_filter = ()
+    list_display = ('company_name', 'date_joined', 'last_subscription', 'last_subscription_signed_at', 'last_subscription_started_date', 'last_subscription_ended_date', 'payment_type', 'last_subscription_comment', 'last_subscription_seller', 'closed_ticket', 'last_report_date')
+    list_filter = (PaymentTypeFilter, TicketFilter, SellerFilter)
     inlines = [SubscriptionInline, ProReportInline, ProTicketInline, ProCampaignInline, OpeningTimesInline, PhoneNumberInline, AddressInline,]
 #     readonly_fields = ('import_products_link', 'store_link', 'products_count', 'edit_product_link', 'closed_ticket',)
     readonly_fields = ('store_link', 'products_count', 'edit_product_link', 'closed_ticket', 'regular_expression_filter',)
@@ -385,18 +446,50 @@ class ProAdmin(PatronAdmin):
             return "%s : %s" % (last_subscription.propackage.name, last_subscription.amount)
     last_subscription.short_description = _(u"Souscription")
 
+    def payment_type(self, obj):
+         return {
+            0: _(u'Carte de crédit'),
+            1: _(u'Chèque'),
+            2: _(u'IBAN'),
+        }.get(obj.subscription_set.all().order_by('-subscription_started')[0].payment_type)
+    payment_type.short_description = _(u'Type de paiement')
+
     def last_subscription_started_date(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_started
     last_subscription_started_date.short_description = _(u"mise en lignes")
+    last_subscription_started_date.admin_order_field = 'subscription_set__subscription_started'
 
     def last_subscription_ended_date(self, obj):
         return obj.subscription_set.all().order_by('-subscription_started')[0].subscription_ended
     last_subscription_ended_date.short_description = _(u"fin de souscription")
+    last_subscription_ended_date.admin_order_field = 'subscription_set__subscription_ended'
+
+    def last_subscription_signed_at(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].signed_at
+    last_subscription_signed_at.short_description = _(u"Date de signature")
+    last_subscription_signed_at.admin_order_field = 'subscription_set__signed_at'
+
+    def last_subscription_comment(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].comment
+    last_subscription_comment.short_description = _(u"Commentaire")
+
+    def last_subscription_p(self, obj):
+        return obj.subscription_set.all().order_by('-subscription_started')[0].comment
+    last_subscription_comment.short_description = _(u"Commentaire")
+
+    def last_subscription_seller(self, obj):
+        try:
+            seller = obj.subscription_set.all().order_by('-subscription_started')[0].seller.all()[0]
+            return "%s %s" % (seller.first_name, seller.last_name)
+        except:
+            return "unknown"
+    last_subscription_seller.short_description = _(u"Vendeur")
 
     def last_report_date(self, obj):
         last_report = obj.reports.latest('created_at')
         return last_report.created_at
     last_report_date.short_description = _(u"dernier rapport")
+    last_report_date.admin_order_field= 'reports__created_at'
 
     def closed_ticket(self, obj):
         tickets = obj.tickets.filter(is_closed=False)

@@ -5,32 +5,22 @@ ul.zebra-list.indent-md-b(ng-if="!!booking")
         .col-xs-9: span(class="{% verbatim %}{{booking.state}}{% endverbatim %}")
             span(translate="{% verbatim %}{{booking.state}}{% endverbatim %}").booking-bage
     li.clearfix
-      .col-xs-3 {% trans "Début" %}
-      .col-xs-9.text
-        span(translate="{% verbatim %}{{booking.start_date.week_day}}{% endverbatim %}")
-        |  {% verbatim %}{{booking.start_date.day}}{% endverbatim %} 
-        span(translate="{% verbatim %}{{booking.start_date.month}}{% endverbatim %}")
-        |  {% verbatim %}{{booking.start_date.year}}{% endverbatim %} 
-        span(translate="at")
-        |  {% verbatim %}{{booking.start_time}}{% endverbatim %}
+        .col-xs-3 {% trans "Début" %}
+        .col-xs-9
+            span(translate="{% verbatim %}{{ booking.started_at | amDateFormat:'LLLL' }}{% endverbatim %}")
     li.clearfix
-      .col-xs-3 {% trans "Fin" %}
-      .col-xs-9.text
-        span(translate="{% verbatim %}{{booking.end_date.week_day}}{% endverbatim %}")
-        |  {% verbatim %}{{booking.end_date.day}}{% endverbatim %} 
-        span(translate="{% verbatim %}{{booking.end_date.month}}{% endverbatim %}")
-        |  {% verbatim %}{{booking.end_date.year}}{% endverbatim %} 
-        span(translate="at")
-        |  {% verbatim %}{{booking.end_time}}{% endverbatim %}
+        .col-xs-3 {% trans "Fin" %}
+        .col-xs-9
+            span(translate="{% verbatim %}{{ booking.ended_at | amDateFormat:'LLLL' }}{% endverbatim %}")
     li.clearfix
       .col-xs-3 {% trans "Période" %}
       .col-xs-9.text {% verbatim %}{{booking.period_days}}{% endverbatim %} {% trans "jours et" %} {% verbatim %}{{booking.period_hours}}{% endverbatim %} {% trans "heures" %}
     li.clearfix
       .col-xs-3 {% trans "Prix" %}
-      .col-xs-9.text-primary {% verbatim %}{{booking.total_amount}}{% endverbatim %}{% trans "€" %}
+      .col-xs-9.text-primary {% verbatim %}{{ 'MONEY' | translate:{value:booking.total_amount} }}{% endverbatim %}
     li.clearfix
       .col-xs-3 {% trans "Caution" %}
-      .col-xs-9.text {% verbatim %}{{booking.deposit_amount}}{% endverbatim %}€
+      .col-xs-9.text {% verbatim %}{{ 'MONEY' | translate:{value:booking.deposit_amount} }}{% endverbatim %}
     li.clearfix(ng-show="allowDownloadContract")
         .col-xs-3 {% trans "Contrat" %}
         .col-xs-9

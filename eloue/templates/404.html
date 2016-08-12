@@ -1,23 +1,30 @@
 {% load i18n %}
+{% load staticfiles %}
 
 <!doctype html>
 <html lang="fr">
- <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>{% trans "e-loue - La page demandée est introuvable" %}</title>
-  <meta name="description" content="{% spaceless %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endspaceless %}">
-  <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico">
- <body>
-	<div class="container-main">
-		<div class="one-content">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>{% trans "e-loue - La page demandée est introuvable" %}</title>
+	<meta name="description" content="{% spaceless %}{% block description %}Plateforme pour louer ou mettre en location tout type d'objet : materiel, reception, mariage, sono, utilitaires, ski{% endblock %}{% if is_paginated and page_obj.has_previous %} Page {{ page_obj.number }}{% endif %}{% endspaceless %}">
+	<link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+	<body>
+		<div align="center" style="padding: 200px;font-size: 150%">
+			<a href="/">
+				<img src="{% static 'img/logo.png' %}">
+			</a>
 			<h1>{% trans "La page est introuvable" %}</h1>
 			<p style="margin-bottom: 20px;">
-	        	{% blocktrans %}
-	         		Si l'erreur persiste, merci de nous <a href="emailTo:contact@e-loue.com">contacter</a>.
-	        	{% endblocktrans %}
-			</p>
-		</div>
+				{% blocktrans %}
+				Si l'erreur persiste, merci de nous <a href="mailto:contact@e-loue.com">contacter.
+				<hr style="width: 25%; height: 1px; border: 0px; background: #000;">
+			</a>Revenons à la page <a href="/"> d'accueil</a>.
+			{% endblocktrans %}
+
+		</p>
 	</div>
- </body>
+</body>
+</head>	
 </html>
+

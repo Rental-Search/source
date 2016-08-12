@@ -13,15 +13,19 @@ require.config(
             paths: {
                 "bootstrap": "../../bower_components/bootstrap/dist/js/bootstrap",
                 "underscore": "../../bower_components/lodash/lodash",
-                "jQuery": "../../bower_components/jquery/dist/jquery",
+                "jquery": "../../bower_components/jquery/dist/jquery",
                 "angular": "../../bower_components/angular/angular",
                 "angular-resource": "../../bower_components/angular-resource/angular-resource",
                 "angular-cookies": "../../bower_components/angular-cookies/angular-cookies",
                 "angular-sanitize": "../../bower_components/angular-sanitize/angular-sanitize",
                 "angular-ui-router": "../../bower_components/angular-ui-router/release/angular-ui-router",
                 "angular-translate": "../../bower_components/angular-translate/angular-translate",
-                "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/js/bootstrap-datepicker",
-                "bootstrap-datepicker-fr": "../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
+                "angular-translate-interpolation-messageformat": "../../bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat",
+                "messageformat": "../../bower_components/messageformat/messageformat",
+                "angular-moment": "../../bower_components/angular-moment/angular-moment",
+                "moment": "../../bower_components/moment/min/moment-with-locales",
+                "bootstrap-datepicker": "../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker",
+                "bootstrap-datepicker-fr":"../../bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fr",
                 "jquery-form": "../../bower_components/jquery-form/jquery.form",
                 "datejs": "../../bower_components/datejs/build/date",
                 "chosen": "../../bower_components/chosen/chosen.jquery",
@@ -36,7 +40,7 @@ require.config(
             },
             shim: {
                 "angular": {
-                    deps: ["jQuery"],
+                    deps: ["jquery"],
                     "exports": "angular"
                 },
                 "angular-cookies": ["angular"],
@@ -44,22 +48,27 @@ require.config(
                 "angular-resource": ["angular"],
                 "angular-ui-router": ["angular"],
                 "angular-translate": ["angular"],
+                "angular-translate-interpolation-messageformat": {
+                    deps: ["angular-translate", "messageformat"],
+                    init: function (angular, MessageFormat) {
+                        this.MessageFormat = MessageFormat;
+                    }
+                },
                 "angular-mocks": {
                     deps: ["angular"],
                     "exports": "angular.mock"
                 },
-                "jQuery": {exports: "jQuery"},
-                "bootstrap": ["jQuery"],
-                "jquery-form": ["jQuery"],
-                "selectivizr": ["jQuery"],
-                "jquery-mousewheel": ["jQuery"],
-                "custom-scrollbar": ["jQuery", "jquery-mousewheel"],
-                "jquery-autosize": ["jQuery"],
-                "bootstrap-datepicker": ["jQuery"],
-                "bootstrap-datepicker-fr": ["jQuery", "bootstrap-datepicker"],
-                "chosen": ["jQuery"],
-                "toastr": ["jQuery"],
-                "formmapper": ["jQuery"],
+                // "bootstrap-datepicker-fr":["jquery", "bootstrap-datepicker"],
+                "jquery": {exports: "jquery"},
+                "bootstrap": ["jquery"],
+                "jquery-form": ["jquery"],
+                "selectivizr": ["jquery"],
+                "jquery-mousewheel": ["jquery"],
+                "custom-scrollbar": ["jquery", "jquery-mousewheel"],
+                "jquery-autosize": ["jquery"],
+                "chosen": ["jquery"],
+                "toastr": ["jquery"],
+                "formmapper": ["jquery"],
                 "angular-cookie": ["angular"]
             }
         };
@@ -67,14 +76,14 @@ require.config(
 );
 
 require([
-    "jQuery",
+    "jquery",
     "underscore",
     "angular",
     "bootstrap",
     "datejs",
     "chosen",
     "bootstrap-datepicker",
-    "bootstrap-datepicker-fr",
+    // "bootstrap-datepicker-fr",
     "formmapper",
     "filesaver",
     "jquery-mousewheel",
@@ -82,6 +91,7 @@ require([
     "toastr",
     "../common/eloue/commonApp",
     "../common/eloue/i18n",
+    "eloue/config",
     "eloue/route",
     "angular-cookie"
 ], function ($, _, angular, bootstrap, route) {

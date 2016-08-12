@@ -17,7 +17,7 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
           img(style=('background-image: url("'+product.profile+'");' if product.profile else None)).bg-image 
         if ng
           //-TODO currency angular filter, remove verbatim
-          span(ng-if="product.price").badge.price {% verbatim %} {{ product.price | currency }} {% endverbatim %} /{{ by_day }} 
+          span(ng-if="product.price").badge.price {% verbatim %} {{ 'MONEY_ROUND' | translate:{value:product.price} }} {% endverbatim %} /{{ by_day }} 
           span(ng-if="!product.price").badge.price {% trans "Sur devis" %}
         else
           //-TODO currency angular filter

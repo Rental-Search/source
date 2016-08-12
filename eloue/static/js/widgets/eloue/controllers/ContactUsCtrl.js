@@ -26,7 +26,7 @@ define([
                 if ($scope.currentUser) {
                     UsersService.resetPassword($scope.currentUser.id, $("#reset-password-form")).then(function () {
                         $scope.submitInProgress = false;
-                        $scope.showNotificationMessage(UtilsService.translate("informationHasBeenUpdated"), true);
+                        $scope.showNotification('PERSONAL_INFO', 'update', true); 
                         $state.transitionTo($state.current, $stateParams, {reload: true});
                     }, function (error) {
                         if (!!error.responseJSON && !!error.responseJSON.errors) {

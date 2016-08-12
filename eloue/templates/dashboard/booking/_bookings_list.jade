@@ -28,11 +28,10 @@ section.tabs-vertical-active.lg(ng-show="(bookingList && bookingList.length > 0)
             | {% trans "Location" %}
             a(ui-sref="bookings.detail({uuid: booking.uuid})") {% verbatim %}{{booking.product.summary}}{% endverbatim %}
           p.normal.text-gray
-            big.text-primary {% verbatim %}{{booking.total_amount}}{% endverbatim %}€
+            big.text-primary {% verbatim %}{{ 'MONEY' | translate:{value:booking.total_amount} }}{% endverbatim %}
             br
-            | {% trans "Du" %} {% verbatim %}{{booking.start_date.day}}{% endverbatim %} &nbsp;
-            span(translate="{% verbatim %}{{booking.start_date.month}}{% endverbatim %}")
-            | {% verbatim %}{{booking.start_date.year}}{% endverbatim %}
-            | {% trans "au" %} {% verbatim %}{{booking.end_date.day}}{% endverbatim %} &nbsp;
-            span(translate="{% verbatim %}{{booking.end_date.month}}{% endverbatim %}")
-            | {% verbatim %}{{booking.end_date.year}}{% endverbatim %}
+            | {% trans "Du" %}&nbsp;
+            span(translate="{% verbatim %}{{ booking.started_at | amDateFormat:'L' }}{% endverbatim %}")
+            | {% trans "au" %}&nbsp;
+            span(translate="{% verbatim %}{{ booking.ended_at | amDateFormat:'L' }}{% endverbatim %}")
+

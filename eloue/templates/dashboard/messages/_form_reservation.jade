@@ -27,7 +27,7 @@ form.form-inline.section-body.text-center(ng-submit="requestBooking()", ng-if="b
             b.period-days.ng-cloak {% verbatim %}{{duration}}{% endverbatim %}
         p.price
             | {% trans "Prix de la location" %} &nbsp;:
-            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{% verbatim %}{{bookingPrice | number}}{% endverbatim %}&nbsp;{% trans "€" %}
+            big(ng-show="!!pricePerDay").text-primary.ng-cloak &nbsp;{% verbatim %}{{ 'MONEY' | translate:{value:bookingPrice} }}{% endverbatim %}
         p.text-gray.text-center {% trans "Assurance incluse" %}
 
     .part

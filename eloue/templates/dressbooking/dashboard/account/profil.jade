@@ -34,17 +34,17 @@ block sections
         //- nackname & email
         .row
           .col-md-12.col-lg-6
-            input#username.form-control(type="text", name="username", placeholder="{% trans 'Pseudo' %} *", required, autofocus, ng-model="currentUser.username")
+            input#username.form-control(type="text", name="username", placeholder="{% trans 'Pseudo' %} *", required, autofocus, ng-model="currentUser.username", readonly)
             span.text-danger(ng-show="profileInformation.username.$error.required && profileSubmitted", translate="required_field")
           .col-md-12.col-lg-6
-            input#email.form-control(type="email", name="email", placeholder="{% trans 'Email' %} *", required, ng-model="currentUser.email")
+            input#email.form-control(type="email", name="email", placeholder="{% trans 'Email' %} *", required, ng-model="currentUser.email", readonly)
             span.text-danger(ng-show="profileInformation.email.$error.required && profileSubmitted", translate="required_field")
         //- gender, first-name, name
         .row
           .col-sm-2.without-search
             .form-control
               select(eloue-chosen, data-placeholder="{% trans 'Civilité' %}", data-ng-disabled="submitInProgress", ng-model="currentUser.civility")
-                option(ng-repeat="item in civilityOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name}}{% endverbatim %}
+                option(ng-repeat="item in civilityOptions", value="{% verbatim %}{{item.id}}{% endverbatim %}") {% verbatim %}{{item.name|translate}}{% endverbatim %}
           .col-sm-5
             input#first_name.form-control(type="text", name="first_name", placeholder="{% trans 'Prénom' %} *", required, ng-model="currentUser.first_name")
             span.text-danger(ng-show="profileInformation.first_name.$error.required && profileSubmitted", translate="required_field")

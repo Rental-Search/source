@@ -15,8 +15,11 @@ define([
         "Endpoints",
         "BookingsService",
         "UnavailabilityPeriodsService",
-        function ($scope, $timeout, $stateParams, Endpoints, BookingsService, UnavailabilityPeriodsService) {
-
+        "UtilsService",
+        function ($scope, $timeout, $stateParams, Endpoints, BookingsService, UnavailabilityPeriodsService, UtilsService) {
+            
+            var dr =  UtilsService.dateRepr, di = UtilsService.dateInternal;
+            
             $scope.showUnavailable = true;
             $scope.showBookings = true;
             $scope.bookings = [];
@@ -25,8 +28,8 @@ define([
             $scope.newUnavailabilityPeriod = {quantity: 1};
             $scope.unavailabilityPeriodValidationError = "";
 
-            var months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-
+            var months = UtilsService.date.months();
+            
             $scope.monthOptions = [
                 {
                     name: months[Date.today().add(-1).months().getMonth()] + " " + Date.today().add(-1).months().getFullYear(),
@@ -173,8 +176,8 @@ define([
 
             $scope.showUpdatePeriodForm = function (period) {
                 $scope.newUnavailabilityPeriod.id = period.id;
-                $scope.newUnavailabilityPeriod.started_at = Date.parseExact(period.started_at, "yyyy-MM-ddTHH:mm:ss").toString("dd/MM/yyyy");
-                $scope.newUnavailabilityPeriod.ended_at = Date.parseExact(period.ended_at, "yyyy-MM-ddTHH:mm:ss").toString("dd/MM/yyyy");
+                $scope.newUnavailabilityPeriod.started_at = dr(Date.parseExact(period.started_at, "yyyy-MM-ddTHH:mm:ss").toString("dd/MM/yyyy"));
+                $scope.newUnavailabilityPeriod.ended_at = dr(Date.parseExact(period.ended_at, "yyyy-MM-ddTHH:mm:ss").toString("dd/MM/yyyy"));
                 $scope.newUnavailabilityPeriod.quantity = period.quantity;
                 $("#add-period").modal();
             };
@@ -185,8 +188,8 @@ define([
             };
 
             $scope.saveUnavailabilityPeriod = function () {
-                var initialStartDateStr = angular.copy($scope.newUnavailabilityPeriod.started_at), startDate = Date.parseExact(initialStartDateStr, "dd/MM/yyyy"),
-                    initialEndDateStr = angular.copy($scope.newUnavailabilityPeriod.ended_at), endDate = Date.parseExact(initialEndDateStr, "dd/MM/yyyy");
+                var initialStartDateStr = di(angular.copy($scope.newUnavailabilityPeriod.started_at)), startDate = Date.parseExact(initialStartDateStr, "dd/MM/yyyy"),
+                    initialEndDateStr = di(angular.copy($scope.newUnavailabilityPeriod.ended_at)), endDate = Date.parseExact(initialEndDateStr, "dd/MM/yyyy");
                 if ($scope.validateUnavailabilityPeriod(startDate, endDate)) {
                     $scope.submitInProgress = true;
                     $scope.newUnavailabilityPeriod.started_at = startDate.toString("yyyy-MM-dd HH:mm:ss");

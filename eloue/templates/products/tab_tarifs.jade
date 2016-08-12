@@ -30,6 +30,16 @@
             td {{ product_object.costs_per_km|price:"&euro;" }}
       {% endif %}
       {% else %}
+      {% if product_object.owner.slug == "fnac" %}
+      table.calendar.text-center
+        thead: tr
+          td {% trans "Durée" %}
+          td {% trans "Prix" %}
+        tbody
+          tr
+            td {% trans "1 mois*" %}
+            td {{ product.price|price:"&euro;" }}
+      {% else %}
       table.calendar.text-center
         thead: tr
           td {% trans "Durée" %}
@@ -38,6 +48,7 @@
           tr
             td {{ price.get_prefixed_unit_display }}{% if price.unit == 1 %}*{% endif %}
             td {{ price.local_currency_amount|currency }}
+      {% endif %}
       {% endif %}
       .indent-b-md
       table.calendar.text-center

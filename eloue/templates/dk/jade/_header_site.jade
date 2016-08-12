@@ -9,10 +9,11 @@ section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span
-      | {% trans "Bonjour" %}, 
-      a#registration-link(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b {% trans "inscrivez-vous" %}
-      | {% trans "ou" %} 
-      a#login-link(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b {% trans "connectez-vous" %}
+      {% blocktrans %}
+      | Appelez-nous au 
+      b 01 85 08 99 77 
+      | (numéro gratuit)
+      {% endblocktrans %}
     li.divide
     li: span
         {% url 'subscription' as subscription_url %}
@@ -22,11 +23,10 @@ section(ng-controller="AuthCtrl").container.signs-links
         {% endblocktrans %}
     li.divide
     li: span
-      {% blocktrans %}
-      | Appelez-nous au 
-      b 01 85 08 99 77 
-      | (numéro gratuit)
-      {% endblocktrans %}
+      | {% trans "Bonjour" %}, 
+      a#registration-link(href="#inscrivez-vous", data-toggle="modal", data-target="#registrationModal"): b {% trans "inscrivez-vous" %}
+      | {% trans "ou" %} 
+      a#login-link(href="#connectez-vous", data-toggle="modal", data-target="#loginModal"): b {% trans "connectez-vous" %}
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser", style="display: none;").without-spaces
     li: span
@@ -103,4 +103,4 @@ section(ng-controller="AuthCtrl").container.signs-links
         .table-cell.input-group-btn
           button(type="submit", default).btn.bg-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
     .table-cell
-      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-success.btn-advertise {% trans "Déposez une annonce" %}
+      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-primary.btn-advertise {% trans "Déposez une annonce" %}

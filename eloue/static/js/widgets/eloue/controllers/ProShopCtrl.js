@@ -29,6 +29,9 @@ define([
             });
 
             $window.googleMapsLoaded = function () {
+                $("#geolocate").formmapper({
+                    details: "form"
+                    });
                 $scope.googleMapsLoaded();
             };
 

@@ -3,15 +3,24 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
     /**
      * Service for uploading forms.
      */
-    EloueCommon.factory("MapsService", ["$document", function ($document) {
+    EloueCommon.factory("MapsService", ["$document", 'MAP_CONFIG', function ($document, MAP_CONFIG) {
         var mapsService = {};
 
+        var lang = $document[0].documentElement.lang;
+        var region = MAP_CONFIG[lang];
+        
+        var mapsURL = 'https://maps.googleapis.com/maps/api/js?'+
+                        'sensor=false&libraries=places'+
+                        '&language='+lang+
+                        '&region='+region.region+
+                        '&callback=googleMapsLoaded';
+        
         mapsService.loadGoogleMaps = function () {
             
             var mapsLoaded = false;
             angular.forEach($document[0].body.childNodes, function(value) {
                 if (value && value.src) {
-                    if (value.src == 'https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded') {
+                    if (value.src == mapsURL) {
                         mapsLoaded = true;
                     }
                 }
@@ -22,7 +31,7 @@ define(["../../../common/eloue/commonApp", "../../../common/eloue/resources", ".
 
             var script = $document[0].createElement("script");
             script.type = "text/javascript";
-            script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=fr&callback=googleMapsLoaded";
+            script.src = mapsURL;
             $document[0].body.appendChild(script);
         };
         
