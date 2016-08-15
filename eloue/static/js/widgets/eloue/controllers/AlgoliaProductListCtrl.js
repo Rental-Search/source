@@ -4,10 +4,11 @@ define([
     "../../../common/eloue/services/CategoriesService",
     "algoliasearch-helper",
     "stacktrace",
+    "nprogress",
     "../i18n",
-    "js-cookie"
+    "js-cookie",
 ], function (EloueWidgetsApp, UtilsService, CategoriesService, algoliasearchHelper, 
-                StackTrace){ //,Cookies) {
+                StackTrace, NProgress){ //,Cookies) {
     "use strict";
     
     var KEY_ENTER = 13;
@@ -668,6 +669,7 @@ define([
                 s.search = models[0];
                 s.defaults = models[1];
                 // $rootScope.$broadcast("place_changed", s);
+                NProgress.inc(0.3);
                 return s;
             });
         

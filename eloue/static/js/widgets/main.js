@@ -62,7 +62,8 @@ require.config(
                 "stackframe": "../../bower_components/stackframe/stackframe",
                 "error-stack-parser": "../../bower_components/error-stack-parser/error-stack-parser",
                 "stacktrace-gps": "../../bower_components/stacktrace-gps/stacktrace-gps",
-                "source-map": "../../bower_components/source-map/dist/source-map"
+                "source-map": "../../bower_components/source-map/dist/source-map",
+                "nprogress": "../../bower_components/nprogress/nprogress"
             },
             shim: {
                 "angular": {
@@ -125,6 +126,7 @@ require([
     "jquery",
     "lodash",
     "angular",
+    "nprogress",
     "bootstrap",
     "moment",
     "angular-moment",
@@ -164,9 +166,11 @@ require([
     "nemSimpleLogger",
     "uiGmapgoogle-maps",
     "js-cookie",
-    "stacktrace"
-], function ($, _, angular) {
+    "stacktrace",
+    "autocomplete",
+], function ($, _, angular, NProgress) {
     "use strict";
+    NProgress.start();
     $(function () {
         $(".signs-links").find("ul.without-spaces").show();
         angular.bootstrap(document, ["EloueWidgetsApp"]);
