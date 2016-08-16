@@ -53,7 +53,4 @@ h2 {% trans "Vos informations personnelles" %}
       {% blocktrans %}
       input#drivers_license_date(type="text", name="drivers_license_date", data-date-format="yyyy-mm-dd", ng-model="currentUser.drivers_license_date", placeholder="Date d’obtention du permis").form-control
       {% endblocktrans %}
-  //.col-sm-6: label(for="photo").table-cell.btn.bg-gray Photo scan de votre permis
-  //  input(type="file", ng-model="bookingDetails.photo")#photo.form-control
-p.info(ng-hide="shippingAllowed") {% trans "Vous devrez présenter votre pièce d'identité, au propriétaire, avant le début de la location. Si les coordonnées que vous saisissez ici ne sont pas les mêmes que celles de votre pièce d'identité,  le propriétaire pourra refuser la transaction. Les champs marqués d'une étoile (*) sont obligatoires." %}
 p.info(ng-show="shippingAllowed") {% trans "Les champs marqués d'une étoile (*) sont obligatoires." %}
