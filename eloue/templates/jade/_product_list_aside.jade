@@ -73,19 +73,6 @@ script(type="text/ng-template" id="_category_tree_item.html").
   //-input#price-min(type="hidden", name="price_from", value="{{ form.cleaned_data.price_from|stringformat:'.2f' }}", disabled)
   //-input#price-max(type="hidden", name="price_to", value="{{ form.cleaned_data.price_to|stringformat:'.2f' }}", disabled)
   //-input#price-slider(type="hidden", min-value="{{ price_min|stringformat:'.2f' }}", max-value="{{ price_max|stringformat:'.2f' }}")
-
-  p.caption {% trans "loueurs" %}
-  .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.part_count", ng-cloak)
-    label(for="particular")
-      {% trans "particuliers" as particular %}
-      input(type="checkbox", name="renter", ng-change="refineRenterPart(search.owner_type.part)", ng-model="search.owner_type.part", ng-disabled="noProPartChoice()")#particular
-      span.flaticon.stroke.checkmark-1
-    {% trans " Particuliers" %} {% verbatim %} {{ " ("+search.owner_type.part_count+")" }} {% endverbatim %}
-  .checkbox(ng-if="search.owner_type", ng-show="search.owner_type.pro_count", ng-cloak)
-    label(for="professional")
-      input(type="checkbox", name="renter", ng-change="refineRenterPro(search.owner_type.pro)", ng-model="search.owner_type.pro", ng-disabled="noProPartChoice()")#professional
-      span.flaticon.stroke.checkmark-1
-    {% trans " Professionnels" %} {% verbatim %} {{ " ("+search.owner_type.pro_count+")" }} {% endverbatim %}
   
   div(eloue-property-dropdown-filter, ng-repeat="prop in search.category.properties | is_facet", 
         property-type="prop", ng-model="search[prop.attr_name]", ng-change="refineProperty(prop)")

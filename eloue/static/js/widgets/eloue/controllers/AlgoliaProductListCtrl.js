@@ -318,17 +318,19 @@ define([
                 UtilsService, CategoriesService, uiGmapGoogleMapApi, uiGmapIsReady, algolia) {
             
             var unsubscribe = $scope.$watch('search_params', function(search_params){
+
                 
                 unsubscribe();
                 
                 $scope.search = $.extend(true, {}, search_params.defaults, search_params.init);
                 
+
 //                $log.debug('Initial parameters:');
 //                $log.debug($scope.search);
                 
                 $scope.search.index = search_params.config.MASTER_INDEX;
                 $scope.search.pages_count = Math.ceil($scope.search.result_count/search_params.config.PARAMETERS.hitsPerPage);
-                
+
                 $scope.get_index = function(){
                     return !!$scope.search.order_by ? 
                             $scope.search.index+"_"+$scope.search.order_by : $scope.search.index;
@@ -716,7 +718,14 @@ define([
                     $scope.perform_search();
                     
                 };
-                            
+
+                $scope.resetrefineRenter = function(){
+                    if (!$scope.search.owner_type.pro)
+                        $scope.refineRenterPro(true);
+                    if (!$scope.search.owner_type.part)
+                        $scope.refineRenterPart(true);
+                };
+
                 $scope.refineRenterPart = function(newVal){ //$log.debug('refineRenterPart');
                     var state = $scope.search.helper.getState();
                     if (newVal && !state.isDisjunctiveFacetRefined("pro_owner", false)){
