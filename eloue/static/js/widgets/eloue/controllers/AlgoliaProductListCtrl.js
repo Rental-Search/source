@@ -324,7 +324,6 @@ define([
                 
                 $scope.search = $.extend(true, {}, search_params.defaults, search_params.init);
                 
-
 //                $log.debug('Initial parameters:');
 //                $log.debug($scope.search);
                 

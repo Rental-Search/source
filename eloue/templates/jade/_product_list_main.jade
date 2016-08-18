@@ -1,13 +1,13 @@
 -load product i18n
 
-.container(style="width: 100%")
+.container(style="width: 100%;font-size: larger;")
   ul.nav.nav-tabs
     li.active
       a(href='#', data-toggle="tab", ng-click="resetrefineRenter()") {% trans "Toutes" %}
     li
-      a(href='#', data-toggle="tab", ng-click="refineRenterPro(false)", ng-disabled="noProPartChoice()") {% trans "Pariticuliers" %}
+      a(href='#', data-toggle="tab", ng-click="refineRenterPro(false)", ng-disabled="noProPartChoice()") {% trans "Particuliers" %}
     li
-      a(href='#', data-toggle="tab", ng-click="refineRenterPart(false)", ng-disabled="noProPartChoice()") {% trans "Professionels" %}
+      a(href='#', data-toggle="tab", ng-click="refineRenterPart(false)", ng-disabled="noProPartChoice()") {% trans "Professionnels" %}
 
   .tab-content
     ol(ng-show="ui_pristine").product-layout
