@@ -12,12 +12,8 @@
                 .static-part
                     section.product-info
                         include ./pop_up_sections/_product_info.jade
-                    section.terms
-                        include ./pop_up_sections/_terms
-                        a(href="", ng-click="openModal('booking')", ng-disabled="!available").btn.bg-success
-                            {% trans "Réservez" %}
-                        //a(href="", ng-click="openModal('phone')").btn.bg-gray
-                            {% trans "Appelez" %}
+                    section.terms(style="padding-bottom: 100px")
+                        p  {% trans "Pour rappel, l'échange des données personelles sur notre messagerie est interdit et peut entraîner une suppression de compte" %}
                 .change-part
                     section.dialogs
                         include ./pop_up_sections/_dialogs
