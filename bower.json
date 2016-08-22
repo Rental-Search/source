@@ -41,7 +41,7 @@
     "angular-simple-logger": "~0.1.5",
     "js-cookie": "2.1.0",
     "stacktrace-js": "1.0.4",
-    "angular-inview": "1.5.7"
+    "angular-inview": "1.5.7",
     "nprogress": "0.2.0"
   },
   "devDependencies": {

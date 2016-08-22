@@ -126,7 +126,7 @@ require([
     "jquery",
     "lodash",
     "angular",
-    "nprogress",
+    // "nprogress",
     "bootstrap",
     "moment",
     "angular-moment",
@@ -166,11 +166,10 @@ require([
     "nemSimpleLogger",
     "uiGmapgoogle-maps",
     "js-cookie",
-    "stacktrace",
-    "autocomplete",
-], function ($, _, angular, NProgress) {
+    "stacktrace"
+], function ($, _, angular) {
     "use strict";
-    NProgress.start();
+    // NProgress.start();
     $(function () {
         $(".signs-links").find("ul.without-spaces").show();
         angular.bootstrap(document, ["EloueWidgetsApp"]);

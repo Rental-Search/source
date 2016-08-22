@@ -4,11 +4,10 @@ define([
     "../../../common/eloue/services/CategoriesService",
     "algoliasearch-helper",
     "stacktrace",
-    "nprogress",
     "../i18n",
     "js-cookie",
 ], function (EloueWidgetsApp, UtilsService, CategoriesService, algoliasearchHelper, 
-                StackTrace, NProgress){ //,Cookies) {
+                StackTrace){ //,Cookies) {
     "use strict";
     
     var KEY_ENTER = 13;
@@ -218,7 +217,7 @@ define([
                 },
                 
                 processResult: function(result, state){
-                    // $scope.$apply(function(){
+                    try {
                         s.result = result;
                         for (var ri=0; ri<result.hits.length; ri++){
                             var res = result.hits[ri];
@@ -227,15 +226,20 @@ define([
                                 res[k] = $sce.trustAsHtml(res._snippetResult[k]['value']);
                             }
                         }
-                        $rootScope.$broadcast('render', result, state);
-                    // });
+                        $rootScope.$broadcast('render', result, state);        
+                    } finally {
+                        NProgress.completeLoad();   
+                    }
                 },
                 
                 processError: function(){
                     
                 },
                 
-                search: function(replaceLocation){
+                search: function(noProgress){
+                    if (!noProgress) {
+                        NProgress.start()
+                    };
                     s.helper.setCurrentPage(s.page);
                     s.helper.search();
                 },
@@ -446,6 +450,8 @@ define([
                 //  - after user modifies URL/navigates by back/forward, on
                 //    first page load with hash - validate URL
                 } else {
+                    
+                    NProgress.start();
                     
                     var qs = s.getQueryString();
                     var address = other_params.location_name || ss.defaults.location;
@@ -669,7 +675,6 @@ define([
                 s.search = models[0];
                 s.defaults = models[1];
                 // $rootScope.$broadcast("place_changed", s);
-                NProgress.inc(0.3);
                 return s;
             });
         
@@ -1181,7 +1186,7 @@ define([
                             vm.debouncePromise = null;
                             ss.helper.setQuery(vm.value);
                             ss.page = 0;
-                            ss.search();
+                            ss.search(true);
                         }, vm.debounceDelay);
                     };
                                  
@@ -1193,7 +1198,7 @@ define([
                         vm.value = vm.default;
                         $element.children('input')[0].focus();
                         ss.helper.setQuery(vm.default);
-                        vm.search();
+                        ss.search();
                     };
                             
                 });

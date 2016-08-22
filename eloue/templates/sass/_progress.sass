@@ -1,0 +1,55 @@
+$progress-bar-color: $brand-success
+$progress-bar-zindex: 99999
+$progress-spinner-size: 20
+$overlay-background: #fbfbfb // Same as background
+$overlay-zindex: 99998
+
+// Progress bar
+#nprogress .bar
+  background: $progress-bar-color
+  z-index: $progress-bar-zindex
+
+#nprogress .peg
+  box-shadow: 0 0 10px $progress-bar-color, 0 0 5px $progress-bar-color
+
+#nprogress .spinner
+  width: $progress-spinner-size
+  height: $progress-spinner-size
+  z-index: $progress-bar-zindex
+  top: 15px
+  right: 15px
+  
+#nprogress .spinner-icon
+  border-top-color: $progress-bar-color
+  border-left-color: $progress-bar-color
+
+// Cover
+div#overlay
+  
+  z-index: $overlay-zindex
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  
+  user-drag: none
+  user-select: none
+  -moz-user-select: none
+  -webkit-user-drag: none
+  -webkit-user-select: none
+  -ms-user-select: none
+  
+  background: $overlay-background
+  background-position: center
+  background-repeat: no-repeat
+  background-size: 15%
+  
+  // FIXME: fade-out
+  transition: opacity 3s ease-out
+  -moz-transition: opacity 3s ease-out
+  -webkit-transition: opacity 3s ease-out
+  -ms-transition: opacity 3s ease-out
+
+body.overlay-covered
+  overflow: hidden
