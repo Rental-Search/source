@@ -117,7 +117,8 @@ section(ng-controller="AuthCtrl").container.signs-links
             input(class="nobtn", ng-model="vm.value", type="text", name="l", style="padding-right:3em;",
                 ng-focus="vm.onFocus()", ng-blur="vm.onBlur()",
                 ng-keyup="vm.onKeyup($event)", tabindex='2',
-                value="{{ form.cleaned_data.l }}", placeholder="{{ where }}", title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
+                value="{{ form.cleaned_data.l }}", placeholder="{{ where }}", 
+                title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
     .table-cell
       button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-primary.btn-advertise {% trans "Déposez une annonce" %}
       

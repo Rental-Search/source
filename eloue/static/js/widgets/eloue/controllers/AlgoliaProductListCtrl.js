@@ -43,7 +43,6 @@ define([
         return point.coordinates[1]+','+point.coordinates[0];
     };
     
-    
     // var el = Cookies.get("eloue_el");
     
     // function hasStorage(){
@@ -141,7 +140,9 @@ define([
     }]);
                                      
     
-    EloueWidgetsApp.config(['uiGmapGoogleMapApiProvider', 'MAP_CONFIG', function(uiGmapGoogleMapApiProvider, MAP_COFNIG) {
+    EloueWidgetsApp.config(
+    ['uiGmapGoogleMapApiProvider', 'MAP_CONFIG', 
+    function(uiGmapGoogleMapApiProvider, MAP_COFNIG) {
         
         // TODO a hack to get the language 
         var lang = angular.element(document)[0].documentElement.lang;
@@ -217,19 +218,15 @@ define([
                 },
                 
                 processResult: function(result, state){
-                    try {
-                        s.result = result;
-                        for (var ri=0; ri<result.hits.length; ri++){
-                            var res = result.hits[ri];
-                            for (var k in res._snippetResult){
-                                res["plain_"+k] = res[k];
-                                res[k] = $sce.trustAsHtml(res._snippetResult[k]['value']);
-                            }
+                    s.result = result;
+                    for (var ri=0; ri<result.hits.length; ri++){
+                        var res = result.hits[ri];
+                        for (var k in res._snippetResult){
+                            res["plain_"+k] = res[k];
+                            res[k] = $sce.trustAsHtml(res._snippetResult[k]['value']);
                         }
-                        $rootScope.$broadcast('render', result, state);        
-                    } finally {
-                        NProgress.completeLoad();   
                     }
+                    $rootScope.$broadcast('render', result, state);
                 },
                 
                 processError: function(){
@@ -238,7 +235,7 @@ define([
                 
                 search: function(noProgress){
                     if (!noProgress) {
-                        NProgress.start()
+                        NProgress.begin();
                     };
                     s.helper.setCurrentPage(s.page);
                     s.helper.search();
@@ -340,6 +337,7 @@ define([
             s.getQuery = helper.getStateAsQueryString;
 
             s.setOrdering(s.ordering);
+            s.helper.setQuery(s.query);
             
             // Preset filters
             //TODO remove by not indexing
@@ -354,6 +352,8 @@ define([
             
             return s.updateCategoryFromPath(s.algolia_category_path).then(function(){
                 return s;
+            }).finally(function(){
+                NProgress.move(0.3);   
             });
             
         }).catch(function(){
@@ -451,7 +451,7 @@ define([
                 //    first page load with hash - validate URL
                 } else {
                     
-                    NProgress.start();
+                    NProgress.begin();
                     
                     var qs = s.getQueryString();
                     var address = other_params.location_name || ss.defaults.location;
@@ -464,6 +464,8 @@ define([
                             ss.retreiveCategoryByPath(path) : 
                             $q.when(null))
                     }).then(function(res){
+                        
+                        NProgress.move(0.6);
                         
                         var place = res.place.place, category = res.category;
                         
@@ -676,6 +678,8 @@ define([
                 s.defaults = models[1];
                 // $rootScope.$broadcast("place_changed", s);
                 return s;
+            }).finally(function(){
+                NProgress.move(0.3);   
             });
         
         }).catch(function(){
@@ -722,9 +726,13 @@ define([
                 vm.resultCount = result.nbHits;
                 vm.results = result.hits;
                 vm.render(e, result, state);
-                $scope.$digest();       
-            }, 0, false);
+                $scope.$digest();
+            }, 0, false)
+            .finally(NProgress.advance);
         });
+        
+        // Count in progress bar
+        NProgress.register();
         
         // Called when a filter has changed
         // Must trigger a request to Algolia
@@ -1214,7 +1222,6 @@ define([
                         // TODO fix reset
                     }
                 };
-
                 
             }
         };
@@ -1231,7 +1238,6 @@ define([
             restrict: 'A',
             'require': 'eloueFilterWrapperTextfield',
             link:  function ($scope, $element, $attrs, vm) {                
-                
                 
                 $q.all({
                     ss:SearchService,
@@ -1343,7 +1349,9 @@ define([
                         }
                         
                         if (ss.helper.state.isHierarchicalFacetRefined("category")){
-                            ss.updateCategoryFromPath(ss.helper.state.hierarchicalFacetsRefinements.category[0]);   
+                            ss.updateCategoryFromPath(ss.helper.state.hierarchicalFacetsRefinements.category[0]).finally(function(){
+                                NProgress.move(0.5);
+                            });   
                         }
                         
                         // $scope.clearPropertyRefinements();
@@ -1696,7 +1704,9 @@ define([
                             $scope.result_count = result.nbHits;
                             $scope.page = result.page;
                             $scope.makePaginationModel(result.nbPages, result.page);
-                            $scope.$digest();
+                            NProgress.advance(function(){
+                                $scope.$digest();
+                            });
                         }, 0, false);
                     });    
                     
@@ -1791,7 +1801,7 @@ define([
                 }
                 ss.setPlace(gs.search);
                 
-                ss.search();    
+                ss.search(true);    
                 
             });
                     
