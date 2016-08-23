@@ -113,17 +113,6 @@ define([
     // } else {
     //     cleanup();
     // }
-    
- 
-    EloueWidgetsApp.filter('safe', [
-      '$sce',
-      function($sce) {
-        return function(text, type) {
-          return $sce.trustAs(type || 'html', text);
-        }
-      }
-    ]);
-
                 
     EloueWidgetsApp.filter('is_facet', [
     function() {
@@ -217,17 +206,25 @@ define([
                 },
                 
                 processResult: function(result, state){
-                    // $scope.$apply(function(){
-                        s.result = result;
-                        for (var ri=0; ri<result.hits.length; ri++){
-                            var res = result.hits[ri];
-                            for (var k in res._snippetResult){
-                                res["plain_"+k] = res[k];
-                                res[k] = $sce.trustAsHtml(res._snippetResult[k]['value']);
+                    s.result = result;
+                    for (var ri=0; ri<result.hits.length; ri++){
+                        var res = result.hits[ri];
+                        for (var k in res._snippetResult){
+                            if (res[k]){
+                                res[k+"_plain"] = res[k];  
                             }
+                            res[k] = $sce.trustAsHtml(
+                                res._snippetResult[k].value);
                         }
-                        $rootScope.$broadcast('render', result, state);
-                    // });
+                        for (var k in res._highlightResult){
+                            if (res[k]){
+                                res[k+"_plain"] = res[k];  
+                            }
+                            res[k] = $sce.trustAsHtml(
+                                res._highlightResult[k].value);
+                        }   
+                    }
+                    $rootScope.$broadcast('render', result, state);
                 },
                 
                 processError: function(){

@@ -36,7 +36,9 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
       h6
         //- TODO check if this is really safe
         a(ng-href="{{ product.url }}", href=(product.url if not ng else None), 
-          ng-bind-html="product.summary") {{ product.summary }}
+          ng-bind-html="product.summary") 
+          if not ng 
+            {{ product.summary | safe }}
         if ng
           span(ng-if="product.pro_owner").badge-pro pro
         else
@@ -73,6 +75,6 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
         p(ng-if='product.description', ng-bind-html="product.description").full_description
         p(ng-if='!product.description').full_description &nbsp;
       else
-        p.full_description {% if product.description %} {{ product.description }} {% else %} &nbsp; {% endif %}
+        p.full_description {% if product.description %} {{ product.description | safe }} {% else %} &nbsp; {% endif %}
 
 {% endangularjs %}

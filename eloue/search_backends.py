@@ -166,10 +166,11 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
     
     def _process_results(self, raw_results, result_class, **kwargs): #TODO tests
         
-        # highlighting
+        # highlighting & snippets
         
         for hit in raw_results['hits']:
             hit.update({k:v['value'] for k,v in hit["_highlightResult"].items()})
+            hit.update({k:v['value'] for k,v in hit["_snippetResult"].items()})
         
         # main processing
         

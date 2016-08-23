@@ -559,8 +559,6 @@ ALGOLIA_INDICES = {
                               'date_joined_date',],
     },
     "products.product":{
-        'attributesToSnippet': ['summary',
-                                'description:50',],
         'customRanking': ['desc(featured)',
                           'desc(average_rate)', 
                           'desc(comment_count)'],
@@ -586,6 +584,7 @@ ALGOLIA_INDICES = {
             u'created_at_timestamp',
             u'is_allowed'],
         'attributesToHighlight': ['summary'],
+        'attributesToSnippet': ['description:50',],
         'highlightPreTag': '<em>',
         'highlightPostTag': '</em>',
         'removeStopWords':True,
