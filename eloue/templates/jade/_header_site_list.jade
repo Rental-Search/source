@@ -104,7 +104,7 @@ section(ng-controller="AuthCtrl").container.signs-links
         div(ng-if="search", eloue-filter-wrapper-textfield, attr-name="query", eloue-query, debounce-delay="100",
             value="search.query",  defaults="defaults.query", helper="search.helper",
                         style="position:relative;")
-          input(ng-model="vm.value", ng-change="vm.refine()", ng-focus="vm.focus=true", ng-blur="vm.focus=false",
+          input(ng-model="vm.value", ng-change="vm.refine()", ng-focus="vm.onFocus()", ng-blur="vm.onBlur()",
               type="text", name="q", autocomplete="off", style="padding-right:3em;",
               ng-keyup="vm.onKeyup($event)", tabindex='1',
               spellcheck="false", autocorrect="off", value="{{ form.cleaned_data.q }}", placeholder="{{ what }}", 

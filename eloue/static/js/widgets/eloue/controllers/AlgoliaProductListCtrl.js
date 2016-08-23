@@ -1193,8 +1193,14 @@ define([
                     };
                             
                 });
-
-                vm.focused = true;
+                
+                vm.onFocus = function(){
+                    vm.focus = true;    
+                };
+                
+                vm.onBlur = function(){
+                    vm.focus = false;
+                };
                 
                 vm.debouncePromise = null;
                 vm.debounceDelay = parseInt($attrs.debounceDelay);
