@@ -619,7 +619,8 @@ define([
                             },
                             location: place.formatted_address,
                             location_geocoded: place.formatted_address,
-                            center: gmapToGeoJson(place.geometry.location)
+                            center: gmapToGeoJson(place.geometry.location),
+                            place: place
                         }
                     }
                     
@@ -1741,6 +1742,8 @@ define([
                 $scope.clearRefinements = function(){
                     ss.reset();
                     ss.setCategory(null);
+                    gs.setPlace(gs.defaults.place);
+                    ss.setPlace(gs.defaults);
                     ss.search();
                 };                
                 
