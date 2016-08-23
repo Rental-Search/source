@@ -1766,7 +1766,8 @@ define([
                 
                 $scope.clearRefinements = function(){
                     ss.reset();
-                    ss.setCategory(null);
+                    ss.helper.setQuery("");
+                    ss.setCategory(null);;
                     gs.setPlace(gs.defaults.place);
                     ss.setPlace(gs.defaults);
                     ss.search();
