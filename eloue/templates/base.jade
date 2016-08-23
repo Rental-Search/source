@@ -10,7 +10,7 @@ html(lang="fr", ng-strict-di)
     style [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide { display: none !important; }
     block variables
       include jade/variables
-
+      
     block head
       title {% filter striplinebreak %}{% block title %}{% endblock %}{% if is_paginated and page_obj.has_previous %} - {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}
       meta(charset="UTF-8")
@@ -22,6 +22,76 @@ html(lang="fr", ng-strict-di)
       {% compressed_css "extrastyles" %}
       {% compressed_css "smartbanner_styles" %}
     block scripts
+      //- Load progress bar
+      script(type="text/javascript", src="{% static 'bower_components/nprogress/nprogress.js' %}")
+      script(type="text/javascript")
+        
+        document.covered = true;
+        
+        document.removeCover = function() {
+          document.covered = false;
+          document.body.className = "";
+          document.getElementById("overlay").style.display = "none";
+        };
+        
+        function startPageLoadProgress(){
+          NProgress && NProgress.show && NProgress.begin();
+          setTimeout(function(){
+            NProgress.completeLoad();
+          }, 15000);
+        };
+        
+        NProgress.work = 0;
+        NProgress.totalWork = 0;
+        NProgress.working = false;
+        
+        NProgress.completeLoad = function(){
+          NProgress.done();
+          NProgress.working = false;
+          if (document.covered){
+            document.removeCover();
+            document.covered = false;
+          }
+        };
+         
+        NProgress.begin = function(){
+          // TODO add timeout
+          if (NProgress.working){
+            return;
+          }
+          NProgress.working = true;
+          NProgress.work = 0;
+          NProgress.start();
+        };
+        
+        NProgress.register = function(work){
+          NProgress.totalWork += work ? work : 1;
+        };
+        
+        NProgress.move = function(p){
+          if (NProgress.working){
+            NProgress.inc(p); 
+          }
+        };
+        
+        NProgress.advance = function (job, work, dontInc){
+          try {
+              if (job){
+                job(); 
+              }
+          } finally {
+              NProgress.work += work;
+              if (NProgress.work<NProgress.totalWork){
+                if (!dontInc){
+                  NProgress.move(NProgress.work/NProgress.totalWork); 
+                }
+              } else {
+                NProgress.completeLoad();
+              }
+          }
+        };
+    
+      //- Load everything else
       {% compressed_js "public_js" %}
 
     script    
@@ -40,7 +110,10 @@ html(lang="fr", ng-strict-di)
         analytics.page()
       }}();
 
-  body
+  body(class='overlay-covered')
+    script(type="text/javascript")
+      startPageLoadProgress();
+      
     input(id="eloue_url_redirect_facebook", value="{% url 'login_facebook' %}", type="hidden")
     block content-body
     block tail
