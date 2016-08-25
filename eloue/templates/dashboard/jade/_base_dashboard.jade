@@ -90,7 +90,7 @@ block scripts
     {% endspaceless %}    
 
 block append content-body
-  div(id="overlay", style="background-image: url({% static 'img/logo.svg' %});")
+  include ../../jade/_cover
   .container-full-screen(data-ng-controller="DashboardRootCtrl", style="display: none;")
     header.header-site
       include ../../jade/_header_site

@@ -42,7 +42,7 @@ block append styles
   {% compressed_css "product_list_styles" %}
 
 block append content-body
-  div(id="overlay", style="background-image: url({% static 'img/logo.svg' %});")
+  include ../jade/_cover
   .container-flex(data-ng-controller="AlgoliaProductListCtrl", 
       ng-init="search_params={{search_params}}")
     header.header-site
