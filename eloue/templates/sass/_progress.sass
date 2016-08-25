@@ -1,8 +1,11 @@
 $progress-bar-color: $brand-success
 $progress-bar-zindex: 99999
-$progress-spinner-size: 20
-$overlay-background: #fbfbfb // Same as background
+$progress-spinner-size: 20px
+
+$overlay-background-color: #fbfbfb // Same as background
 $overlay-zindex: 99998
+$overlay-fade-t: 0.3s
+
 
 // Progress bar
 #nprogress .bar
@@ -23,6 +26,7 @@ $overlay-zindex: 99998
   border-top-color: $progress-bar-color
   border-left-color: $progress-bar-color
 
+
 // Cover
 div#overlay
   
@@ -40,16 +44,20 @@ div#overlay
   -webkit-user-select: none
   -ms-user-select: none
   
-  background: $overlay-background
+  background: $overlay-background-color
   background-position: center
   background-repeat: no-repeat
   background-size: 15%
   
-  // FIXME: fade-out
-  transition: opacity 3s ease-out
-  -moz-transition: opacity 3s ease-out
-  -webkit-transition: opacity 3s ease-out
-  -ms-transition: opacity 3s ease-out
+  transition: opacity $overlay-fade-t ease-out, visibility 0s $overlay-fade-t
+  -moz-transition: opacity $overlay-fade-t ease-out, visibility 0s $overlay-fade-t
+  -webkit-transition: opacity $overlay-fade-t ease-out, visibility 0s $overlay-fade-t
+  -ms-transition: opacity $overlay-fade-t ease-out, visibility 0s $overlay-fade-t
+  
+div#overlay.overlay-uncovered
+  opacity: 0
+  visibility: hidden
 
 body.overlay-covered
   overflow: hidden
+  

@@ -23,7 +23,8 @@ html(lang="fr", ng-strict-di)
       {% compressed_css "smartbanner_styles" %}
     block scripts
       //- Load progress bar
-      script(type="text/javascript", src="{% static 'bower_components/nprogress/nprogress.js' %}")
+      script(type="text/javascript", 
+            src="{% static 'bower_components/nprogress/nprogress.js' %}")
       script(type="text/javascript")
         
         document.covered = true;
@@ -31,26 +32,22 @@ html(lang="fr", ng-strict-di)
         document.removeCover = function() {
           document.covered = false;
           document.body.className = "";
-          document.getElementById("overlay").style.display = "none";
-        };
-        
-        function startPageLoadProgress(){
-          NProgress && NProgress.show && NProgress.begin();
-          setTimeout(function(){
-            NProgress.completeLoad();
-          }, 15000);
+          document.getElementById("overlay").className = "overlay-uncovered";
         };
         
         NProgress.work = 0;
         NProgress.totalWork = 0;
         NProgress.working = false;
         
-        NProgress.completeLoad = function(){
-          NProgress.done();
-          NProgress.working = false;
-          if (document.covered){
-            document.removeCover();
-            document.covered = false;
+        function completePageLoad(){
+          try {
+            NProgress.done();
+            NProgress.working = false;
+          } finally {
+            if (document.covered){
+              document.removeCover();
+              document.covered = false;
+            }  
           }
         };
          
@@ -86,11 +83,22 @@ html(lang="fr", ng-strict-di)
                   NProgress.move(NProgress.work/NProgress.totalWork); 
                 }
               } else {
-                NProgress.completeLoad();
+                completePageLoad();
               }
           }
         };
-    
+              
+        function startPageLoadProgress(){
+          try {
+            NProgress && NProgress.show && NProgress.begin();
+          } finally {
+            // In case something goes wrong, at least show the page
+            setTimeout(function(){
+              completePageLoad();
+            }, 15000); 
+          }
+        };
+        
       //- Load everything else
       {% compressed_js "public_js" %}
 
