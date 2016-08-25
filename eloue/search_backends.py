@@ -169,8 +169,10 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
         # highlighting & snippets
         
         for hit in raw_results['hits']:
-            hit.update({k:v['value'] for k,v in hit["_highlightResult"].items()})
-            hit.update({k:v['value'] for k,v in hit["_snippetResult"].items()})
+            if "_highlightResult" in hit:
+                hit.update({k:v['value'] for k,v in hit["_highlightResult"].items()})
+            if "_snippetResult" in hit:
+                hit.update({k:v['value'] for k,v in hit["_snippetResult"].items()})
         
         # main processing
         

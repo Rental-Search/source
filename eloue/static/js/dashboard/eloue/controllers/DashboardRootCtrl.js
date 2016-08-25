@@ -214,7 +214,7 @@ define([
             };
             
             $scope.loadedPromise.finally(function(){
-                NProgress.completeLoad();
+                completePageLoad();
             });
             
             MapsService.loadGoogleMaps();
