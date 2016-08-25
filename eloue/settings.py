@@ -505,6 +505,15 @@ PIPELINE_JS = {
             #'async': False,
         },
     },
+    # Scripts to be loaded before everything else
+    # (e.g. progress bar or loading screen js)
+    'priority_js': {
+        'source_filenames': (
+            'bower_components/nprogress/nprogress.js',
+            'js/priority/*.js',
+        ),
+        'output_filename': 'js/priority.js',
+    },
 }
 
 # South configuration

@@ -7,75 +7,9 @@ block append styles
 block scripts
 
   //- Load progress bar
-  script(type="text/javascript", src="{% static 'bower_components/nprogress/nprogress.js' %}")      
-  script(type="text/javascript")
-      
-    document.covered = true;
-    
-    document.removeCover = function() {
-      document.covered = false;
-      document.body.className = "";
-      document.getElementById("overlay").style.display = "none";
-    };
-    
-    function startPageLoadProgress(){
-      NProgress && NProgress.show && NProgress.begin();
-    };
-    
-    NProgress.work = 0;
-    NProgress.totalWork = 0;
-    NProgress.working = false;
-    
-    NProgress.completeLoad = function(){
-      NProgress.done();
-      NProgress.working = false;
-      if (document.covered){
-        document.removeCover();
-        document.covered = false;
-      }
-    };
-      
-    NProgress.begin = function(){
-      // TODO add timeout
-      if (NProgress.working){
-        return;
-      }
-      NProgress.working = true;
-      NProgress.work = 0;
-      NProgress.start();
-    };
-    
-    NProgress.register = function(work){
-      NProgress.totalWork += work ? work : 1;
-    };
-    
-    NProgress.move = function(p){
-      if (NProgress.working){
-        NProgress.inc(p); 
-      }
-    };
-    
-    NProgress.advance = function (job, work, dontInc){
-      try {
-          if (job){
-            job(); 
-          }
-      } finally {
-          NProgress.work += work;
-          if (NProgress.work<NProgress.totalWork){
-            if (!dontInc){
-              NProgress.move(NProgress.work/NProgress.totalWork); 
-            }
-          } else {
-            NProgress.completeLoad();
-          }
-      }
-    };
-    
-    NProgress.show = true;
-
-  //- Load everything else
+  {% compressed_js "priority_js" %}
   {% compressed_js "dashboard_js" %}
+  
   script
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', '{{ANALYTICS_GOOGLE_ID}}']);
@@ -87,7 +21,10 @@ block scripts
     {% else %}
     _gaq.push(['_setVar', 'anonymous']);
     {% endif %}
-    {% endspaceless %}    
+    {% endspaceless %}
+  
+  script
+    NProgress.show = true;
 
 block append content-body
   include ../../jade/_cover
