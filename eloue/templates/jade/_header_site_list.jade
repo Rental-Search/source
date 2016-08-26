@@ -13,14 +13,6 @@ section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
   ul.ng-hide(role="tablist", ng-show="!currentUser", style="display: none;").without-spaces
     li: span
-      li: <img  src="{% static 'images/phone-grey.png' %}", style="width: 17px;height: 16px; margin-right: 8px;vertical-align: top"/>
-        {% blocktrans %}
-        span
-        b 01 85 08 99 77 
-        | (service clients)
-        {% endblocktrans %}
-        li.divide
-    li: span
         {% url 'subscription' as subscription_url %}
         {% blocktrans %}
         b Louez tous types d'objets auprès de particuliers et professionnels 
@@ -34,12 +26,6 @@ section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for authorized user
   ul.ng-hide(role="tablist", ng-show="!!currentUser", style="display: none;").without-spaces
     li: span
-      li: <img  src="{% static 'images/phone-grey.png' %}", style="width: 17px;height: 16px; margin-right: 8px;vertical-align: top"/>
-        {% blocktrans %}
-        span
-        b 01 85 08 99 77 
-        | (service clients)
-      {% endblocktrans %}
     li.spacer
     li.guest-veiw
         .dropdown
