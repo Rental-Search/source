@@ -5,24 +5,19 @@
 
 {% trans "jour" as by_day %}
 
-//-TODO marker indices
-//-TODO rate
 
 li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
-    ng-repeat=("product in search.product_list track by product.django_id" if ng else None),
-    locationY="{{ product.locations.0 }}",
-    locationX="{{ product.locations.1 }}",
-    name="{{ product.summary|title }}")
+    ng-repeat=("product in product_list track by product.django_id" if ng else None))
   .section-body
     .thumbnail-img
       a(ng-href="{{ product.url }}", href=(product.url if not ng else None)).img-wrapper 
         if ng
-          img(ng-style="product.vertical_profile && {'background-image':'url('+product.vertical_profile+')'}").bg-image
+          img(ng-style="product.profile && {'background-image':'url('+product.profile+')'}").bg-image
         else
-          img(style=('background-image: url("'+product.vertical_profile+'");' if product.vertical_profile else None)).bg-image 
+          img(style=('background-image: url("'+product.profile+'");' if product.profile else None)).bg-image 
         if ng
           //-TODO currency angular filter, remove verbatim
-          span(ng-if="product.price").badge.price {% verbatim %} {{ product.price | currency }} {% endverbatim %} /{{ by_day }} 
+          span(ng-if="product.price").badge.price {% verbatim %} {{ 'MONEY_ROUND' | translate:{value:product.price} }} {% endverbatim %} /{{ by_day }} 
           span(ng-if="!product.price").badge.price {% trans "Sur devis" %}
         else
           //-TODO currency angular filter
@@ -40,7 +35,10 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
     .info
       h6
         //- TODO check if this is really safe
-        a(ng-href="{{ product.url }}", href=(product.url if not ng else None), ng-bind-html="product.summary|title|safe") {{ product.summary|title|safe }}
+        a(ng-href="{{ product.url }}", href=(product.url if not ng else None), 
+          ng-bind-html="product.summary") 
+          if not ng 
+            {{ product.summary | safe }}
         if ng
           span(ng-if="product.pro_owner").badge-pro pro
         else
@@ -51,14 +49,14 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
           span(ng-if='product.agencies') &nbsp;
           //- TODO title filter
           {% verbatim %}
-          span(ng-if='!product.agencies') {{ product.city|title }}
+          span(ng-if='!product.agencies') {{ product.city }}
             span(ng-if='product.city && product.zipcode'), {{ product.zipcode }}
           {% endverbatim %}
         else
           if product.agencies
             &nbsp;
           else
-            {{ product.city|title }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
+            {{ product.city }}{% if product.city and product.zipcode %}, {{ product.zipcode }}{% endif %}
       if not ng and product.comment_count
         {% with product.average_rate as rate %}
         include ./_rate
@@ -66,18 +64,17 @@ li(id=("marker-{{ $index }}" if ng else "marker-{{ index }}"),
         span.sprite-comment
           i.flaticon.stroke.writing-comment
           != product.comment_count
-      else        
-        .rate(ng-if="product.comment_count")
-          span(ng-repeat="i in [1,2,3,4,5]").flaticon.solid.star-2(ng-class="i==product.average_rate && 'current-rate'")
+      else
+        star-rating.rate(ng-if="product.comment_count", value="product.average_rate")
         span(ng-if="product.comment_count", ng-cloak).sprite-comment
           i.flaticon.stroke.writing-comment
           {% verbatim %}{{ product.comment_count }}{% endverbatim %} 
       if ng
         //- TODO remove verbatim
         //- TODO check if this is really safe
-        p(ng-if='product.description', ng-bind-html="product.description|safe").full_description
+        p(ng-if='product.description', ng-bind-html="product.description").full_description
         p(ng-if='!product.description').full_description &nbsp;
       else
-        p.full_description {% if product.description %} {{ product.description|safe }} {% else %} &nbsp; {% endif %}
+        p.full_description {% if product.description %} {{ product.description | safe }} {% else %} &nbsp; {% endif %}
 
 {% endangularjs %}
