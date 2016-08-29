@@ -20,6 +20,7 @@ html(lang="fr", ng-strict-di)
       {% compressed_css "extrastyles" %}
 
     block scripts
+      {% compressed_js "priority_js" %}
       {% compressed_js "public_js" %}
     script
       var _gaq = _gaq || [];
@@ -38,7 +39,11 @@ html(lang="fr", ng-strict-di)
         analytics.load("{{ ANALYTICS_SEGMENT_ID }}");
         analytics.page()
       }}();
-  body
+      
+  body(class='overlay-covered')
+    script(type="text/javascript")
+      startPageLoadProgress();
+    {% include 'jade/_cover.jade' with logo_url='img/logo_dressbooking.svg' %}
     
     block content-body
     script

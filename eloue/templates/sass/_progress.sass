@@ -1,19 +1,21 @@
-$progress-bar-color: $brand-success
-$progress-bar-zindex: 99999
-$progress-spinner-size: 20px
+$progress-indicator-color: $brand-success !default
+$progress-bar-zindex: 99999 !default
+$progress-spinner-size: 20px !default
 
-$overlay-background-color: #fbfbfb // Same as background
-$overlay-zindex: 99998
-$overlay-fade-t: 0.3s
+// Same color as background
+$overlay-background-color: #fbfbfb !default
+
+$overlay-zindex: 99998 !default
+$overlay-fade-t: 0.3s !default
 
 
 // Progress bar
 #nprogress .bar
-  background: $progress-bar-color
+  background: $progress-indicator-color
   z-index: $progress-bar-zindex
 
 #nprogress .peg
-  box-shadow: 0 0 10px $progress-bar-color, 0 0 5px $progress-bar-color
+  box-shadow: 0 0 10px $progress-indicator-color, 0 0 5px $progress-indicator-color
 
 #nprogress .spinner
   width: $progress-spinner-size
@@ -23,8 +25,8 @@ $overlay-fade-t: 0.3s
   right: 15px
   
 #nprogress .spinner-icon
-  border-top-color: $progress-bar-color
-  border-left-color: $progress-bar-color
+  border-top-color: $progress-indicator-color
+  border-left-color: $progress-indicator-color
 
 
 // Cover
