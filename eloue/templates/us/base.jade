@@ -24,6 +24,7 @@ html(lang="en-US")
       {% compressed_css "extrastyles" %}
       {% compressed_css "smartbanner_styles" %}
     block scripts
+      {% compressed_js "priority_js" %}
       {% compressed_js "public_js" %}
     script
       var _gaq = _gaq || [];
@@ -43,7 +44,11 @@ html(lang="en-US")
         analytics.page()
       }}();
 
-  body
+  body(class='overlay-covered')
+    script(type="text/javascript")
+      startPageLoadProgress();
+    {% include 'jade/_cover.jade' with logo_url='img/logo_rental_compare.png' %}
+    
     input(id="eloue_url_redirect_facebook", value="{% url 'login_facebook' %}", type="hidden")
     block content-body
     block tail

@@ -103,7 +103,6 @@ define(["eloue/app",
             loadMore: "Charger plus d'éléments",
             getAllMessages: "Afficher les anciens messages",
             
-            
             /**
              * MessageFormat templates
              * 

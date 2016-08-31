@@ -3,19 +3,25 @@
 
 {% trans "page" as page %}
 
+{% verbatim %}
+
+script(type="text/ng-template", id="_pagination.html")
+  .text-center(ng-show="result_count && !ui_pristine", ng-cloak): ul.pagination
+    li(ng-if="pages_count>1")
+      button( type="button", ng-if="page > 0", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
+      button( type="button", ng-if="page == 0").chevron.active: i.flaticon.stroke.left-2
+    li(ng-if="pages_count>1", ng-repeat="page_num in pages_range track by page_num")
+      button( type="button", ng-if="page == page_num").active {{ page_num+1 }}
+      button( type="button", ng-if="page != page_num", ng-click="setPage(page_num)") {{ page_num+1 }}
+    li(ng-if="pages_count>1")
+      button( type="button", ng-if="page < pages_count-1", ng-click="nextPage()", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
+      button( type="button", ng-if="page == pages_count-1").chevron.active: i.flaticon.stroke.right-2
+    
+{% endverbatim %}
+
+
 {% angularjs %}
-.text-center(ng-if="search.pages_range", ng-show="search.result_count && !ui_pristine", ng-cloak): ul.pagination
-  li
-    button( type="button", ng-if="search.page > 0", ng-click="prevPage()", title="{% trans 'Page précédente' %}").chevron: i.flaticon.stroke.left-2
-    button( type="button", ng-if="search.page == 0").chevron.active: i.flaticon.stroke.left-2
-  {% verbatim %}
-  li(ng-repeat="page_num in search.pages_range track by page_num")
-    button( type="button", ng-if="search.page == page_num").active {{ page_num+1 }}
-    button( type="button", ng-if="search.page != page_num", ng-click="setPage(page_num)") {{ page_num+1 }}
-  {% endverbatim %}
-  li
-    button( type="button", ng-if="search.page < search.pages_count-1", ng-click="nextPage()", title="{% trans 'Page suivante' %}").chevron: i.flaticon.stroke.right-2
-    button( type="button", ng-if="search.page == search.pages_count-1").chevron.active: i.flaticon.stroke.right-2   
+eloue-pagination
 {% endangularjs %}
 
 {% angularjs 0 %}

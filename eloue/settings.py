@@ -334,6 +334,7 @@ PIPELINE_CSS = {
             'bower_components/chosen/chosen.min.css',
             'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
             'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
+            'bower_components/nprogress/nprogress.css',
             'bower_components/toastr/toastr.min.css',
         ),
         'output_filename': 'css/extra.css',
@@ -504,6 +505,15 @@ PIPELINE_JS = {
             #'async': False,
         },
     },
+    # Scripts to be loaded before everything else
+    # (e.g. progress bar or loading screen js)
+    'priority_js': {
+        'source_filenames': (
+            'bower_components/nprogress/nprogress.js',
+            'js/priority/*.js',
+        ),
+        'output_filename': 'js/priority.js',
+    },
 }
 
 # South configuration
@@ -559,8 +569,6 @@ ALGOLIA_INDICES = {
                               'date_joined_date',],
     },
     "products.product":{
-        'attributesToSnippet': ['summary',
-                                'description',],
         'customRanking': ['desc(featured)',
                           'desc(average_rate)', 
                           'desc(comment_count)'],
@@ -585,8 +593,8 @@ ALGOLIA_INDICES = {
             u'owner_exact',
             u'created_at_timestamp',
             u'is_allowed'],
-        'attributesToHighlight': ['summary',
-                                  'description',],
+        'attributesToHighlight': ['summary'],
+        'attributesToSnippet': ['description:50',],
         'highlightPreTag': '<em>',
         'highlightPostTag': '</em>',
         'removeStopWords':True,
@@ -656,6 +664,10 @@ ALGOLIA_INDICES = {
 ALGOLIA_CLIENT_CONFIG = {
     'MASTER_INDEX': ALGOLIA_CREDENTIALS['PREFIX'] + 'products.product',
     'PARAMETERS': {
+        'attributesToRetrieve':["summary", "django_id", "username", 
+                "location", "locations", "city", "zipcode", "owner_url", 
+                "owner_avatar", "url", "price", "profile", "vertical_profile", 
+                "thumbnail", "comment_count", "average_rate"],
         'hierarchicalFacets': [{
             'name': 'category',
             'attributes': ['algolia_categories.lvl0',
@@ -670,13 +682,15 @@ ALGOLIA_CLIENT_CONFIG = {
                  'is_good',
                  'is_allowed'],
         'hitsPerPage': 12,
-        'query':""
+        'query':"",
+        'snippetEllipsisText': "&hellip;",
     },
     'ALGOLIA_PREFIX': "sp_",
     'ALGOLIA_APP_ID': ALGOLIA_CREDENTIALS['APP_ID'],
     'ALGOLIA_KEY': ALGOLIA_CREDENTIALS['API_KEY_SEARCH'],
-    'URL_PARAMETERS': ['query', 'attribute:*', 'index', 'page', 
-                     'hitsPerPage', 'aroundLatLng', 'aroundRadius', 'facets'],
+    'URL_PARAMETERS': ['query', 'page', 'aroundRadius', 
+                       'attribute:pro_owner', 'attribute:price',
+                       'attribute:category'],
     'URL_PARAMETERS_EXCLUDE': ['is_archved', 
                              'is_good', 
                              'sites',
