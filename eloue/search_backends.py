@@ -170,8 +170,10 @@ class EloueAlgoliaSearchBackend(AlgoliaSearchBackend):
         
         for hit in raw_results['hits']:
             if "_highlightResult" in hit:
+                hit.update({k+'_plain':hit[k] for k in hit["_highlightResult"].keys()})
                 hit.update({k:v['value'] for k,v in hit["_highlightResult"].items()})
             if "_snippetResult" in hit:
+                hit.update({k+'_plain':hit[k] for k in hit["_snippetResult"].keys()})
                 hit.update({k:v['value'] for k,v in hit["_snippetResult"].items()})
         
         # main processing
