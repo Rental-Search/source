@@ -151,6 +151,7 @@ class Command(BaseCommand):
 			try:
 				description = (product_soup.find(self.description_tag["name"], self.description_tag["attrs"])).find(self.description_tag["name"], self.description_tag["second_attrs"]).text
 				description = description.encode('latin-1')
+				description = description.decode('utf-8')
 			except Exception, e:
 				description = ' '
 
