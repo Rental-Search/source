@@ -664,7 +664,7 @@ ALGOLIA_INDICES = {
 ALGOLIA_CLIENT_CONFIG = {
     'MASTER_INDEX': ALGOLIA_CREDENTIALS['PREFIX'] + 'products.product',
     'PARAMETERS': {
-        'attributesToRetrieve':["summary", "django_id", "username", 
+        'attributesToRetrieve':["summary", "django_id", "username", "description"
                 "location", "locations", "city", "zipcode", "owner_url", 
                 "owner_avatar", "url", "price", "profile", "vertical_profile", 
                 "thumbnail", "comment_count", "average_rate"],
