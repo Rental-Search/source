@@ -150,7 +150,7 @@ class Command(BaseCommand):
 			# Get description of product
 			try:
 				description = (product_soup.find(self.description_tag["name"], self.description_tag["attrs"])).find(self.description_tag["name"], self.description_tag["second_attrs"]).text
-				description = description.decode('latin-1')
+				description = description.encode('latin-1')
 			except Exception, e:
 				description = ' '
 
@@ -228,7 +228,7 @@ class Command(BaseCommand):
 
 	 	# Get the Pro
 	 	try:
-	 		self.patron = Patron.objects.get(username='dvttoulouse')
+	 		self.patron = Patron.objects.get(slug='dvttoulouse')
 
 	 	except Exception, e:
 	 		print "Can't find Trait de lumiere"
