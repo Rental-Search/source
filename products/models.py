@@ -790,14 +790,30 @@ class Category(MPTTModel):
                 return conformity_category
             else:
                 return None
+    
 
     def get_ancertors_slug(self):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
 
 
+
     def get_algolia_path(self):
         return " > ".join([cat.name+'|'+str(cat.id)\
                            for cat in self.get_ancestors(include_self=True)])
+    
+    
+    algolia_path = property(get_algolia_path)
+    
+        
+    @classmethod
+    def get_default_category(clazz):
+        site = Site.objects.get_current()
+        lvl1 = site.categories.filter(level=0)
+        if lvl1.count() == 1:
+            category  = lvl1.last()
+            return category
+        return None
+    
     
     @classmethod
     def from_algolia_path(clazz, path):

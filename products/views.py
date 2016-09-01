@@ -60,6 +60,8 @@ import simplejson
 import products
 from django.utils.formats import get_format
 from django.views.generic.base import RedirectView
+from django.contrib.sites.models import Site
+from products.serializers import CategorySerializer
 
 PAGINATE_PRODUCTS_BY = getattr(settings, 'PAGINATE_PRODUCTS_BY', 12) # UI v3: changed from 10 to 12
 PAGINATE_UNAVAILABILITY_PERIODS_BY = getattr(settings, 'PAGINATE_UNAVAILABILITY_PERIODS_BY', 31)
@@ -221,14 +223,21 @@ def get_format_or_none(key):
     except (NameError, AttributeError):
         res = None
     return res
-        
+
+
+def get_default_category_data(category):
+    if category:
+        return CategorySerializer(category).data
+    return None
+
 
 SEARCH_DEFAULTS = {
      'query': u'',
      'order_by': u'',
      'page': 0,
      'result_count': 0,
-     'algolia_category_path': u'',
+     'category': get_default_category_data(
+                   Category.get_default_category()),
      'owner_type': {
              'pro': True,
              'part': True,
@@ -357,7 +366,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         renter = self.form.cleaned_data.get('renter')
         category = self.breadcrumbs['categorie'].get('value','')
         algolia_path = self.breadcrumbs['categorie']['algolia_path'] if category else None
-
+        
         context.update({'search_params': simplejson.dumps({
 
             # Configuration for algolia js client and helper
@@ -365,14 +374,14 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
 
             # Default values for filters
             'defaults':SEARCH_DEFAULTS,
-
+            
             # Initial values for filters
             'init':{
                  'query':self.form.cleaned_data.get('q', u''),
                  'order_by': self.form.cleaned_data.get('sort', u''),
                  'page': context['page_obj'].number-1 if context['is_paginated'] else 0,
                  'result_count': self.sqs.count(),
-                 'algolia_category_path': algolia_path if algolia_path else '', #TODO take from form
+                 'category': get_default_category_data(category),
                  'owner_type': {
                          'pro': not renter or renter==u'professionnels',
                          'part': not renter or renter==u'particuliers',

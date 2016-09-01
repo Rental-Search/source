@@ -86,15 +86,22 @@ class CategorySerializer(ModelSerializer):
     
     properties = PropertySerializer(many=True, source='inherited_properties')
     
+    def get_algolia_path(self, obj):
+        return obj.algolia_path
+    algolia_path = SerializerMethodField('get_algolia_path')
+    
+    
     class Meta:
         model = models.Category
         fields = ('id', 'parent', 'name', 'need_insurance', 'slug',
                   'title', 'description', 'header', 'footer',
-                  'is_child_node', 'is_leaf_node', 'is_root_node', 'properties', )
+                  'is_child_node', 'is_leaf_node', 'is_root_node', 'properties', #)
+                  'algolia_path', )
         public_fields = (
             'id', 'parent', 'name', 'need_insurance', 'slug',
             'title', 'description', 'header', 'footer',
-            'is_child_node', 'is_leaf_node', 'is_root_node', 'properties', )
+            'is_child_node', 'is_leaf_node', 'is_root_node', 'properties', #)
+             'algolia_path', )
         read_only_fields = ('slug', )
         immutable_fields = ('parent',)
 

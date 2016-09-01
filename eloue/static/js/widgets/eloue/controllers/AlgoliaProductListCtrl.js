@@ -179,10 +179,6 @@ define([
             
         });
         
-        $rootScope.$on('category_changed', function(){
-            
-        });
-        
         return sd.promise.then(function(sp){
             
             var s = {
@@ -262,6 +258,10 @@ define([
                     return s.default_state.getQueryParameter('facets').slice(0);
                 },
                 
+                categoryHasProperties: function(){
+                    return s.category.properties && s.category.properties.length;    
+                },
+                             
                 clearCategoryRefinements: function(){
                     for (var i=0; i<s.category.properties.length; i++){
                         var attr_name = s.category.properties[i].attr_name;
@@ -271,6 +271,7 @@ define([
                             }      
                         } catch(e) {}
                     }
+                
                 },
                 
                 retreiveCategoryByPath: function(path){
@@ -282,14 +283,14 @@ define([
                 setCategory: function(category){
                     
                     // Remove old category
-                    if (s.category){
+                    if (s.category && s.categoryHasProperties()) {
                         s.clearCategoryRefinements();
                     }
                     s.category = category;
                     
                     // Set facets for the new category
                     var facets = s.getDefaultFacetsList();
-                    if (category){
+                    if (s.category && s.categoryHasProperties()){
                         for (var i=0; i<category.properties.length; i++){
                             facets.push(category.properties[i].attr_name);
                         };      
@@ -328,6 +329,12 @@ define([
             var client = algolia.Client(sp.config.ALGOLIA_APP_ID, sp.config.ALGOLIA_KEY);
             s.client = client;
             
+            // Add a rootPath if there is a single root category
+            if (s.defaults.category) {
+                sp.config.PARAMETERS.hierarchicalFacets[0].rootPath = 
+                    s.defaults.category.algolia_path;
+            }
+            
             // Init helper
             var helper = algoliasearchHelper(client, s.orderedIndex, sp.config.PARAMETERS)
                             .on('result', s.processResult)
@@ -349,11 +356,11 @@ define([
             // Save default helper state
             s.default_state = helper.getState();
             
-            return s.updateCategoryFromPath(s.algolia_category_path).then(function(){
-                return s;
-            }).finally(function(){
-                NProgress.move(0.3);   
-            });
+            s.setCategory(s.category);
+            
+            NProgress.move(0.3);
+            
+            return s;
             
         }).catch(function(){
             
@@ -402,10 +409,17 @@ define([
             }
             
             function getFilters(category){
-                var moreFilters = [];
-                for (var i=0; i<category.properties.length; i++){
-                    moreFilters.push('attribute:'
-                        +category.properties[i].attr_name);
+                var moreFilters = ss.config.URL_PARAMETERS.slice(0);
+                // Don't show parameter default category
+                if (!category || category.algolia_path == ss.defaults.category.algolia_path){
+                    moreFilters.splice(moreFilters.indexOf("attribute:category"),1);
+                }
+                // Add parameters for properties
+                if (category && category.properties) {
+                    for (var i=0; i<category.properties.length; i++){
+                        moreFilters.push('attribute:'
+                            +category.properties[i].attr_name);
+                    }   
                 }
                 return moreFilters;
             }
@@ -423,8 +437,7 @@ define([
                 if (other_params.action){
                     
                     var newqs = ss.helper.getStateAsQueryString(
-                        s.getQueryOptions(null, (ss.category ? 
-                            getFilters(ss.category) : null)));
+                        s.getQueryOptions(null, getFilters(ss.category)));
                     
                 //  - after URL validation - set URL and search
                     if (other_params.action == s.action.VALIDATE){
@@ -471,8 +484,7 @@ define([
                         // Validate algolia parameters
                         ss.reset();
                         ss.helper.setStateFromQueryString(qs, 
-                            s.getQueryOptions(null, 
-                                (category ? getFilters(category) : null)));
+                            s.getQueryOptions(null, getFilters(category)));
                         
                         // Set validated place and category
                         ss.setCategory(category);
@@ -493,8 +505,7 @@ define([
                         
                         // Replace user URL with validated URL
                         var newqs = ss.helper.getStateAsQueryString(
-                            s.getQueryOptions(s.action.VALIDATE, 
-                                (category ? getFilters(ss.category) : null)));
+                            s.getQueryOptions(s.action.VALIDATE, getFilters(ss.category)));
                                 
                         $location.replace();
                         $location.search(newqs);
@@ -512,9 +523,7 @@ define([
             s.getQueryOptions = function(action, moreFilters) { //$log.debug('getQueryOptions');
                 
                 var res = {
-                    filters: (moreFilters ? 
-                        ss.config.URL_PARAMETERS.concat(moreFilters) 
-                        : ss.config.URL_PARAMETERS), 
+                    filters: moreFilters, 
                     prefix: ss.config.ALGOLIA_PREFIX,
                     moreAttributes: {
                         location_name: gs.search.location
@@ -1346,16 +1355,16 @@ define([
                     
                     vm.refine = function(path) { //$log.debug('refineCategory');
                     
-                        vm.value.algolia_category_path = path;
-                        if (!vm.value.algolia_category_path){
+                        if (!path){
                             ss.helper.clearRefinements("category");
-
                         } else {
-                            ss.helper.toggleRefinement("category", vm.value.algolia_category_path);
+                            ss.helper.toggleRefinement("category", path);
                         }
                         
                         if (ss.helper.state.isHierarchicalFacetRefined("category")){
-                            ss.updateCategoryFromPath(ss.helper.state.hierarchicalFacetsRefinements.category[0]).finally(function(){
+                            ss.updateCategoryFromPath(
+                                ss.helper.state.hierarchicalFacetsRefinements.category[0])
+                            .finally(function(){
                                 NProgress.move(0.5);
                             });   
                         }
@@ -1370,25 +1379,38 @@ define([
                         vm.resultCount = result.nbHits;
                         vm.results = result.hits;
                         
-                        vm.value = result.hierarchicalFacets[0];
+                        vm.value = result.hierarchicalFacets.length ? 
+                            result.hierarchicalFacets[0] : null;
                         
                     };
-
                     
                     var superClean = vm.clean;
-                    vm.clean = function(){
-                        return superClean() || !ss.helper.state.hierarchicalFacetsRefinements[$attrs.attrName][0];
-                    };
+                    
+                    if (ss.defaults.category) {
+                        vm.clean = function(){
+                            return !superClean() && 
+                                (ss.helper.state.hierarchicalFacetsRefinements.category[0] == 
+                                    ss.defaults.category.algolia_path);
+                        };
+                    } else {
+                        vm.clean = function(){
+                            return superClean() || !vm.value;
+                        };   
+                    }
                     
                     vm.ready = function(){
                         return true;
                     };
                     
                     vm.reset = function(){
-                        ss.helper.clearRefinements($attrs.attrName);
-                        ss.setCategory(null);
+                        ss.helper.clearRefinements(vm.attrName);
+                        if (ss.defaults.category) {
+                            ss.helper.toggleRefinement(vm.attrName, 
+                                ss.defaults.category.algolia_path);
+                        }
+                        ss.setCategory(ss.defaults.category);
                         vm.leaf_category = "";
-                        vm.search();
+                        vm.search(); 
                     };
                     
                      
@@ -1805,8 +1827,9 @@ define([
                 
                 $scope.activateLayoutSwitcher();
                 
-                if (ss.algolia_category_path){
-                    ss.helper.toggleRefinement("category", ss.algolia_category_path);   
+                if (ss.category && ss.category.algolia_path != 
+                        ss.defaults.category.algolia_path){
+                    ss.helper.toggleRefinement("category", ss.category.algolia_path);   
                 }
                 ss.setPlace(gs.search);
                 
