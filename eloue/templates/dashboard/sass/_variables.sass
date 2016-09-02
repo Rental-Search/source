@@ -1,13 +1,12 @@
+@import "../../sass/variables"
+
 @function px($size, $ratio: $font-size-base)
   @return $size/$ratio*($ratio*0+1) * 1em
 
-$fa-css-prefix: icon
+$fa-css-prefix: "icon"
 $fa-li-width: (30em / 14)
 
 $thumbnail-smx: 30px
-$thumbnail-sm: 40px
-$thumbnail-md: 86px
-$thumbnail-lg: 120px
 
 $default-user-picture: "../../img/profile_img.png"
 $default-product-picture: "../../img/product_img.png"
@@ -15,25 +14,25 @@ $default-product-picture: "../../img/product_img.png"
 /////////////
 // indents //
 /////////////
-$indent-vertical: 0.75
-$indent-md: 30px
-$indent-lg: 2*$indent-md
-$indent-sm: 2/3*$indent-md
-$indent-xs: 1/3*$indent-md
+
+
+
+
+
 
 /////////////////
 // font-weight //
 /////////////////
-$fw-light: 300
-$fw-regular: 400
-$fw-semibold: 500
-$fw-bold: 600
+
+
+
+
 
 ///////////
 // font  //
 ///////////
-$font-family-base: 'Open Sans'
-$line-height-base: 20/14
+
+
 
 $font-size-base: 14px
 
@@ -48,20 +47,22 @@ $font-size-large: ($font-size-base*2 )-2
 ///////////
 // color //
 ///////////
-$brand-primary: rgb(242,126,54)
-$brand-success: rgb(36,189,119)
-$brand-danger: rgb(228,86,71)
-$brand-info: rgb(57,89,168)
-$brand-gold: rgb(255,200,83)
-$brand-blue: rgb(0,123,182)
 
-$gray-dark: rgb(44,44,44)
+
+
+
+
+
+
+
 $gray-stronger: rgb(105,105,105)
 $gray-strong: rgb(135,135,135)
 $gray-medium: rgb(172,172,172)
 $gray-light: rgb(211,211,211)
 $gray-lighter: rgb(234,234,234)
 $gray-lite: rgb(252,252,252)
+
+$brand-blue: rgb(0,123,182)
 
 $input-invalid-color: rgb(220, 140, 150)
 
@@ -70,8 +71,8 @@ $placeholder_color: rgb(157, 157, 157)
 //////////
 // grid //
 //////////
-// $grid-columns:              12 !default;
 $grid-gutter-width: $indent-sm
+// $grid-columns:              12 !default;
 
 ///////////////////
 // tabs vertical //
