@@ -10,7 +10,7 @@ html(lang="fr", ng-strict-di)
     style [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide { display: none !important; }
     block variables
       include jade/variables
-
+      
     block head
       title {% filter striplinebreak %}{% block title %}{% endblock %}{% if is_paginated and page_obj.has_previous %} - {% trans "Page" %} {{ page_obj.number }}{% endif %} - {% trans "e-loue" %}{% endfilter %}
       meta(charset="UTF-8")
@@ -22,6 +22,7 @@ html(lang="fr", ng-strict-di)
       {% compressed_css "extrastyles" %}
       {% compressed_css "smartbanner_styles" %}
     block scripts
+      {% compressed_js "priority_js" %}
       {% compressed_js "public_js" %}
 
     script    
@@ -40,7 +41,11 @@ html(lang="fr", ng-strict-di)
         analytics.page()
       }}();
 
-  body
+  body(class='overlay-covered')
+    script(type="text/javascript")
+      startPageLoadProgress();
+    {% include 'jade/_cover.jade' with logo_url='img/logo.svg' %}
+      
     input(id="eloue_url_redirect_facebook", value="{% url 'login_facebook' %}", type="hidden")
     block content-body
     block tail

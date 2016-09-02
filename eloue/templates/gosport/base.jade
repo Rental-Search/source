@@ -19,6 +19,7 @@ html(lang="fr")
       {% compressed_css "extrastyles" %}
 
     block scripts
+      {% compressed_js "priority_js" %}
       {% compressed_js "public_js" %}
     script
       var _gaq = _gaq || [];
@@ -37,7 +38,12 @@ html(lang="fr")
         analytics.load("{{ ANALYTICS_SEGMENT_ID }}");
         analytics.page()
       }}();
-  body
+      
+  body(class='overlay-covered')
+    script(type="text/javascript")
+      startPageLoadProgress();
+    {% include 'jade/_cover.jade' with logo_url='img/logo_gosport.png' %}
+      
     input(id="eloue_url_redirect", value="{% eloue_url 'redirect' %}", type="hidden")
     block content-body
       include jade/_pop_up_redirect

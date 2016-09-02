@@ -3,7 +3,7 @@
 h3 {% trans "Description" %}
 .row
   {% if product_type != 'product' or product.comment_count %}
-  .col-sm-6.text {{ product.description|linebreaksp }}
+  .col-sm-6.text {{ product.description_plain|linebreaksp }}
   .col-sm-6.properties
     table.calendar.bd-clear: tbody
       {% if product.comment_count %}
@@ -64,5 +64,5 @@ h3 {% trans "Description" %}
         td: b {{ property.value }}&nbsp;&nbsp;
       {% endfor %}
   {% else %}
-  .col-sm-12.text {{ product.description|linebreaksp }}
+  .col-sm-12.text {{ product.description_plain|linebreaksp }}
   {% endif %}

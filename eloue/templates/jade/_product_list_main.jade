@@ -9,20 +9,22 @@
     li
       a(href='#', data-toggle="tab", ng-click="refineRenterPart(false)", ng-disabled="noProPartChoice()") {% trans "Professionnels" %}
 
-  .tab-content
-    ol(ng-show="ui_pristine").product-layout
-      if product_list
-        {% for product in product_list %}
-        {% with ng=0 index=forloop.counter %}
-        include ./_product_list_item
-        {% endwith %}
-        {% endfor %}
-      else
-        button(type="button", ng-click="clearRefinements()", class="btn bg-success btn-advertise") {% trans "Reinitialiser les critères de la recherche"  %}
-    ol(ng-hide="ui_pristine || !search.result_count", ng-cloak).product-layout
-      {% with ng=1 %}
-      include ./_product_list_item
-      {% endwith %}
-    button(type="button", ng-show="!ui_pristine && !search.result_count", ng-click="clearRefinements()", class="btn bg-success btn-advertise", ng-cloak, hidden) {% trans "Reinitialiser les critères de la recherche"  %}
-      
-    include ./_product_list_pagination
+ol(ng-show="ui_pristine").product-layout
+  if product_list
+    {% for product in product_list %}
+    {% with ng=0 index=forloop.counter %}
+    include ./_product_list_item
+    {% endwith %}
+    {% endfor %}
+  else
+    button(type="button", ng-click="clearRefinements()", 
+      class="btn bg-success btn-advertise") {% trans "Reinitialiser les critères de la recherche"  %}
+ol(ng-hide="ui_pristine || !result_count", ng-cloak, eloue-suspendable).product-layout
+  {% with ng=1 %}
+  include ./_product_list_item
+  {% endwith %}
+button(type="button", ng-show="!ui_pristine && !result_count", 
+  ng-click="clearRefinements()", class="btn bg-success btn-advertise", 
+  ng-cloak, hidden) {% trans "Reinitialiser les critères de la recherche"  %}
+  
+include ./_product_list_pagination

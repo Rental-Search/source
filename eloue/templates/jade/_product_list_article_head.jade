@@ -14,18 +14,20 @@ h3(ng-show="ui_pristine").col-md-7
       {{ breadcrumbs.categorie.pretty_value|safe }}
   else
     {% trans "Aucune annonce trouvée" %}
+{% angularjs %}
 h3(ng-hide="ui_pristine", ng-cloak).col-md-7
-  span(ng-if="search.query || !search.result_count")
-    {% verbatim %}
-    span(translate="AD_COUNT", translate-values="{count:{{search.result_count}}}", translate-interpolation="messageformat")
-    {% endverbatim %}
-  span(ng-if="!search.query && search.result_count") {% trans "Location" %} {{ search.leaf_category }}
+  span(ng-if="query && result_count")
+    span(ng-if="result_count==1") 1 annonce correspondant à vos critères
+    span(ng-if="result_count!=1") {{ result_count }} annonces correspondant à vos critères
+  span(ng-if="!query && result_count") {% trans "Location" %} {{ leaf_category }}
+  span(ng-if="!result_count") {% trans "Aucune annonce trouvée" %} 
+{% endangularjs %}
 .col-xs-5.layout-switcher
   i.flaticon.stroke.menu-list-4.list
   i.flaticon.stroke.window-1.grid
-  .clear-selector: select#sort-selector.form-control(name="sort", form="detail-search", ng-model="search.order_by", ng-change="setOrdering(search.order_by)", ng-cloak)
+  .clear-selector: select#sort-selector.form-control(name="sort", form="detail-search", ng-model="ordering", ng-change="setOrdering(ordering)", ng-cloak)
     <option value="" {% if form.sort.data ==  "" %}selected {% endif %} /> {% trans "Les plus pertinents" %}
     <option value="-created_at" {% if form.sort.data ==  "-created_at" %}selected {% endif %} /> {% trans "Les plus récents" %}
-    <option ng-show="search.location" value="distance" {% if form.sort.data == "distance" and form.l != defaults.country %}selected {% endif %} /> {% trans "Les plus proches" %}
+    <option ng-show="enableDistance" value="distance" {% if form.sort.data == "distance" and form.l != defaults.country %}selected {% endif %} /> {% trans "Les plus proches" %}
     <option value="price" {% if form.sort.data ==  "price" %}selected {% endif %} /> {% trans "Les prix les plus bas" %}
     <option value="-price" {% if form.sort.data ==  "-price" %}selected {% endif %} /> {% trans "Les prix les plus haut" %}

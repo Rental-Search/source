@@ -11,6 +11,7 @@ define([
      * Root controller for the dashboard app.
      */
     EloueDashboardApp.controller("DashboardRootCtrl", [
+        "$q",
         "$scope",
         "$window",
         "$document",
@@ -18,14 +19,16 @@ define([
         "AuthService",
         "UtilsService",
         "MapsService",
-        function ($scope, $window, $document, UsersService, AuthService, UtilsService, MapsService) {
+        function ($q, $scope, $window, $document, UsersService, AuthService, UtilsService, MapsService) {
             // Read authorization token
             $scope.currentUserToken = AuthService.getUserToken();
             $scope.unreadMessageThreadsCount = 0;
             $scope.newBookingRequestsCount = 0;
             $scope.submitInProgress = false;
             $scope.selectedItem = {};
-
+            
+            $scope.loadedPromise = $q.when();
+            
             $scope.dashboardTabs = [
                 {title: "Tableau de bord", icon: "stroke home", sref: "dashboard", badge: 0},
                 {title: "Messages", icon: "stroke mail", sref: "messages", badge: 0},
@@ -37,15 +40,19 @@ define([
             if ($scope.currentUserToken) {
                 // Get current user
                 $scope.currentUserPromise = UsersService.getMe();
-                $scope.currentUserPromise.then(function (currentUser) {
+                $scope.loadedPromise = $scope.currentUserPromise
+                .then(function (currentUser) {
                     // Save current user in the scope
                     $scope.currentUser = currentUser;
                     $scope.updateStatistics();
+                }).then(function(){
+                    NProgress.move(0.3);
                 });
             }
 
             $scope.updateStatistics = function () {
-                UsersService.getStatistics($scope.currentUser.id).then($scope.applyUserStats);
+                UsersService.getStatistics($scope.currentUser.id)
+                .then($scope.applyUserStats);
             };
 
             $scope.applyUserStats = function (stats) {
@@ -200,10 +207,18 @@ define([
                 $("#geolocate").formmapper({
                     details: "form"
                 });
+                $scope.loadedPromise = $scope.loadedPromise
+                .then(function(){
+                    NProgress.move(0.3); 
+                });
             };
-
+            
+            $scope.loadedPromise.finally(function(){
+                completePageLoad();
+            });
+            
             MapsService.loadGoogleMaps();
-
+            
             (function (d, s, id) {
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) {

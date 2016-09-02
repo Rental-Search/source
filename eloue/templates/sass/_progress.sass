@@ -1,0 +1,65 @@
+$progress-indicator-color: $brand-success !default
+$progress-bar-zindex: 99999 !default
+$progress-spinner-size: 20px !default
+
+// Same color as background
+$overlay-background-color: #fbfbfb !default
+
+$overlay-zindex: 99998 !default
+$overlay-fade-t: 0.3s !default
+
+
+// Progress bar
+#nprogress .bar
+  background: $progress-indicator-color
+  z-index: $progress-bar-zindex
+
+#nprogress .peg
+  box-shadow: 0 0 10px $progress-indicator-color, 0 0 5px $progress-indicator-color
+
+#nprogress .spinner
+  width: $progress-spinner-size
+  height: $progress-spinner-size
+  z-index: $progress-bar-zindex
+  top: 15px
+  right: 15px
+  
+#nprogress .spinner-icon
+  border-top-color: $progress-indicator-color
+  border-left-color: $progress-indicator-color
+
+
+// Cover
+div#overlay
+  
+  z-index: $overlay-zindex
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  
+  user-drag: none
+  user-select: none
+  -moz-user-select: none
+  -webkit-user-drag: none
+  -webkit-user-select: none
+  -ms-user-select: none
+  
+  background: $overlay-background-color
+  background-position: center
+  background-repeat: no-repeat
+  background-size: 15%
+  
+  transition: opacity $overlay-fade-t ease-out, visibility 0s $overlay-fade-t
+  -moz-transition: opacity $overlay-fade-t ease-out, visibility 0s $overlay-fade-t
+  -webkit-transition: opacity $overlay-fade-t ease-out, visibility 0s $overlay-fade-t
+  -ms-transition: opacity $overlay-fade-t ease-out, visibility 0s $overlay-fade-t
+  
+div#overlay.overlay-uncovered
+  opacity: 0
+  visibility: hidden
+
+body.overlay-covered
+  overflow: hidden
+  

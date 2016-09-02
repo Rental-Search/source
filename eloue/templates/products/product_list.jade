@@ -1,5 +1,5 @@
 extends ../base
--load compressed paginator i18n facets
+-load compressed paginator i18n facets staticfiles
 
 {% block title %}
 {% if breadcrumbs.categorie.object.title %}
@@ -26,6 +26,17 @@ extends ../base
 {% endif %}
 {% endblock %}
 
+block append scripts
+  // Google Analytics
+  script
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', '{{ ANALYTICS_GOOGLE_ID }}', 'auto');
+  script(async, src='https://www.google-analytics.com/analytics.js')
+  // End Google Analytics
+  
+  script(type="text/javascript")
+    NProgress.show = true;
+  
 block append styles
   {% compressed_css "bootstrap" %}
   {% compressed_css "product_list_styles" %}
