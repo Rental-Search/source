@@ -58,22 +58,22 @@ script(type="text/ng-template" id="_filter_wrapper.html")
       rz-slider-options="vm.value.options")
       
   
-  eloue-filter-wrapper(ng-if="search", label="{% trans 'loueurs' %}", attr-name='pro_owner',
-                        value="search.owner_type",  defaults="defaults.owner_type",
-                        eloue-propart)
-    .checkbox(ng-show="vm.value.part_count", ng-cloak)
-      label(for="particular")
-        {% trans "particuliers" as particular %}
-        input(type="checkbox", name="renter", ng-change="vm.refineRenterPart(vm.value.part)", 
-                ng-model="vm.value.part", ng-disabled="vm.noProPartChoice()")#particular
-        span.flaticon.stroke.checkmark-1
-      {% trans " Particuliers" %} {% verbatim %} {{ " ("+vm.value.part_count+")" }} {% endverbatim %}
-    .checkbox(ng-show="vm.value.pro_count", ng-cloak)
-      label(for="professional")
-        input(type="checkbox", name="renter", ng-change="vm.refineRenterPro(vm.value.pro)",
-                ng-model="vm.value.pro", ng-disabled="vm.noProPartChoice()")#professional
-        span.flaticon.stroke.checkmark-1
-      {% trans " Professionnels" %} {% verbatim %} {{ " ("+vm.value.pro_count+")" }} {% endverbatim %}
+  // eloue-filter-wrapper(ng-if="search", label="{% trans 'loueurs' %}", attr-name='pro_owner',
+  //                       value="search.owner_type",  defaults="defaults.owner_type",
+  //                       eloue-propart)
+  //   .checkbox(ng-show="vm.value.part_count", ng-cloak)
+  //     label(for="particular")
+  //       {% trans "particuliers" as particular %}
+  //       input(type="checkbox", name="renter", ng-change="vm.refineRenterPart(vm.value.part)", 
+  //               ng-model="vm.value.part", ng-disabled="vm.noProPartChoice()")#particular
+  //       span.flaticon.stroke.checkmark-1
+  //     {% trans " Particuliers" %} {% verbatim %} {{ " ("+vm.value.part_count+")" }} {% endverbatim %}
+  //   .checkbox(ng-show="vm.value.pro_count", ng-cloak)
+  //     label(for="professional")
+  //       input(type="checkbox", name="renter", ng-change="vm.refineRenterPro(vm.value.pro)",
+  //               ng-model="vm.value.pro", ng-disabled="vm.noProPartChoice()")#professional
+  //       span.flaticon.stroke.checkmark-1
+  //     {% trans " Professionnels" %} {% verbatim %} {{ " ("+vm.value.pro_count+")" }} {% endverbatim %}
   
  
   div(ng-if="search", ng-controller="DynamicPropertiesController")

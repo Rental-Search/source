@@ -1,13 +1,22 @@
 -load product i18n
 
-.container(style="width: 100%;font-size: larger;")
-  ul.nav.nav-tabs
-    li.active
-      a(href='#', data-toggle="tab", ng-click="resetrefineRenter()") {% trans "Toutes" %}
-    li
-      a(href='#', data-toggle="tab", ng-click="refineRenterPro(false)", ng-disabled="noProPartChoice()") {% trans "Particuliers" %}
-    li
-      a(href='#', data-toggle="tab", ng-click="refineRenterPart(false)", ng-disabled="noProPartChoice()") {% trans "Professionnels" %}
+div(attr-name='pro_owner',                       
+    value="search.owner_type", defaults="defaults.owner_type",
+    eloue-propart)
+  .container(style="width: 100%;font-size: larger; padding-left:0px;")
+    ul.nav.nav-tabs
+      li
+        a
+          {% trans "Toutes" %}
+          span.count
+      li
+        a
+          {% trans "Particuliers" %}
+          span.count
+      li
+        a
+          {% trans "Professionnels" %}
+          span.count
 
 ol(ng-show="ui_pristine").product-layout
   if product_list

@@ -704,13 +704,6 @@ define([
         
         var vm = this;
         
-        // Filter model
-        vm.value = $scope.value();
-        // Default values 
-        vm.defaults = $scope.defaults();
-        // Algolia attribute name
-        vm.attrName = $attrs.attrName;
-        
         vm.apply = function(arg){
             $scope.$apply(arg);
         }
@@ -764,6 +757,14 @@ define([
             
             var sls = services.sls, ss = services.ss;
             
+            // FIXME Service init order
+            // Filter model
+            vm.value = $scope.value();
+            // Default values 
+            vm.defaults = $scope.defaults();
+            // Algolia attribute name
+            vm.attrName = $attrs.attrName;
+            
             // Sends a search request
             vm.search = function(){
                 ss.setOrdering("");
@@ -808,9 +809,10 @@ define([
         };
     });
     
+    
     /**
      * Provides the header for aside titles 
-     * with a title and a reset button.
+     * with filter name and reset button.
      * 
      * Modifies default transclude behavior by creating an isolate scope 
      * and providing it to the transclude function instead of the parent scope. 
@@ -838,6 +840,7 @@ define([
         }
             
     }]);
+    
     
     /**
      * Same as eloueFilterWrapper but for text fields
@@ -1101,45 +1104,86 @@ define([
     function(SearchService, $log){
         return {
             restrict: 'A',
-            'require': 'eloueFilterWrapper',
+            controller: EloueFilterController,
+            controllerAs: 'vm',
+            scope:{
+                value:"&",
+                defaults:"&",
+                helper:"&"
+            },
             link: function($scope, $element, $attrs, vm){
                 
                 vm.filterControllerSetup.then(function(services){
                     
-                    var ss = services.ss;
+                    // TODO rewrite with angular
+                    
+                    var ss = services.ss,
+                        allTab = $element.find("ul > li:nth-child(1) > a"),
+                        partTab = $element.find("ul > li:nth-child(2) > a"),
+                        proTab = $element.find("ul > li:nth-child(3) > a");
 
                     vm.render = function(e, result, state){ //$log.debug('renderRenterTypes');
-                        if (!result.nbHits){
+                        
+                        var facetResult = result.getFacetByName("pro_owner");
+                        
+                        if (!facetResult){
                             return;
                         }
-                        var facetResult = result.getFacetByName("pro_owner");
+                                                
+                        // if (!facetResult){
+                        //     $element.hide();
+                        //     return;
+                        // } else {
+                        //     $element.show();
+                        // }
+                        
                         vm.value.pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
                         vm.value.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
                         vm.value.pro = !state.isDisjunctiveFacetRefined("pro_owner") 
                             || state.isDisjunctiveFacetRefined("pro_owner", true);
                         vm.value.part = !state.isDisjunctiveFacetRefined("pro_owner") 
                             || state.isDisjunctiveFacetRefined("pro_owner", false);
-                    };
-                    
-                    vm.refineRenterPart = function(newVal){ //$log.debug('refineRenterPart');
-                        var state = ss.helper.getState();
+                        vm.value.total_count = vm.value.pro_count+vm.value.part_count;
                         
-                        ss.helper.removeDisjunctiveFacetRefinement("pro_owner");
-                        if (!newVal) {
-                            ss.helper.addDisjunctiveFacetRefinement("pro_owner", true);
+                        if (vm.value.pro_count && vm.value.part_count){
+                            allTab.find('.count').text(vm.value.total_count);
+                            allTab.parent('li').show();    
+                        } else {
+                            allTab.parent('li').hide();
+                        }
+                        if (vm.value.pro_count){
+                            proTab.find('.count').text(vm.value.pro_count);
+                            proTab.parent('li').show();    
+                        } else {
+                            proTab.parent('li').hide();
+                        }
+                        if (vm.value.part_count){
+                            partTab.find('.count').text(vm.value.part_count);
+                            partTab.parent('li').show();    
+                        } else {
+                            partTab.parent('li').hide();
                         }
                         
+                        if ((vm.value.pro && vm.value.part || !vm.value.pro && !vm.value.part) 
+                                && vm.value.pro_count && vm.value.part_count){
+                            allTab.tab('show');
+                        } else if (vm.value.part || vm.value.pro_count && !vm.value.part_count) {
+                            partTab.tab('show');
+                        } else if (vm.value.pro || vm.value.part_count && !vm.value.pro_count) {
+                            proTab.tab('show');
+                        }
+                                     
+                    };
+                    
+                    vm.refinePro = function(){
+                        ss.helper.removeDisjunctiveFacetRefinement("pro_owner");
+                        ss.helper.addDisjunctiveFacetRefinement("pro_owner", true);
                         vm.search();
                     };
                     
-                    vm.refineRenterPro = function(newVal){ //$log.debug('refineRenterPro');
-                        var state = ss.helper.getState();
-                        
+                    vm.refinePart = function(){
                         ss.helper.removeDisjunctiveFacetRefinement("pro_owner");
-                        if (!newVal) {                
-                            ss.helper.addDisjunctiveFacetRefinement("pro_owner", false);
-                        }
-                        
+                        ss.helper.addDisjunctiveFacetRefinement("pro_owner", false);
                         vm.search();
                     };
                     
@@ -1148,15 +1192,52 @@ define([
                     };
                     
                     vm.noProPartChoice = function(){ //$log.debug('noProPartChoice');
-                        return vm.value.pro_count==0 || vm.value.part_count==0;
+                        return vm.value.part_count && !vm.value.pro_count 
+                            || vm.value.pro_count && !vm.value.part_count;
                     };
- 
+                    
+                    vm.onlyPartsAvail = function(){
+                        return vm.value.part_count && !vm.value.pro_count;
+                    };
+                    
+                    vm.onlyProsAvail = function(){
+                        return vm.value.pro_count && !vm.value.part_count;
+                    };
+                    
+                    vm.allAvail = function(){
+                        return vm.value.pro_count && vm.value.part_count;
+                    };
+                    
+                    allTab.click(function (e) {
+                        e.preventDefault();
+                        if (vm.noProPartChoice()){
+                            return false;
+                        }
+                        vm.reset();
+                    });
+                    
+                    partTab.click(function (e) {
+                        e.preventDefault();
+                        if (vm.noProPartChoice()){
+                            return false;
+                        }
+                        vm.refinePart();
+                    });
+                    
+                    proTab.click(function (e) {
+                        e.preventDefault();
+                        if (vm.noProPartChoice()){
+                            return false;
+                        }
+                        vm.refinePro();
+                    });
+                    
                 });
   
             }
     
         };
-    }]);
+    }]);  
     
     
     /**
