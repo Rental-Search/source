@@ -48,8 +48,8 @@ class Command(BaseCommand):
 			try:
 				newAgency = ProAgency.objects.create(name=name, address1=address, city=city, zipcode=zipcode, phone_number=phone_number, patron_id=patron_id)
 				nb_proagency += 1
-			except Exception, e:
-				raise e
+			except:
+				print "error: %s" % name
 
 		print 'Total proagency added : %s' % str(nb_proagency)
 			# print 'Name: %s' % name
