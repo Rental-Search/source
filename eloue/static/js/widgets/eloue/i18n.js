@@ -12,7 +12,17 @@ define(["eloue/app",
                     'one {1 annonce trouvée} '+
                     'other {# annonces trouvées}'+
                 '}',
-            
+                
+            SUGGEST_PRO: "Voir {pro_count, plural, "+
+                            "one {une annonce d'un professionnel} "+
+                            "other {# annonces de professionnels}"+
+                        "}",
+                                              
+            SUGGEST_PART: "Voir {part_count, plural, "+
+                            "one {une annonce d'un particulier} "+
+                            "other {# annonces de particuliers}"+
+                        "}"   
+                      
         });
         
         // US English
@@ -24,11 +34,13 @@ define(["eloue/app",
                     'other {# ads}'+
                 '} found',
             
+            //SEE_PROPART: TODO
+            
         });
         
         $translateProvider.preferredLanguage('fr');
-        
         $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
+        // $translateProvider.useMessageFormatInterpolation();
         
     }]);
 

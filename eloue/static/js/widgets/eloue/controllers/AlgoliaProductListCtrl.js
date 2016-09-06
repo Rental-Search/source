@@ -708,6 +708,13 @@ define([
             $scope.$apply(arg);
         }
         
+        // Filter model
+        vm.value = $scope.value();
+        // Default values 
+        vm.defaults = $scope.defaults();
+        // Algolia attribute name
+        vm.attrName = $attrs.attrName;
+        
         // Called after each Algolia response to set the vm.value
         vm.render = function(e, result, state){};
         
@@ -757,14 +764,6 @@ define([
             
             var sls = services.sls, ss = services.ss;
             
-            // FIXME Service init order
-            // Filter model
-            vm.value = $scope.value();
-            // Default values 
-            vm.defaults = $scope.defaults();
-            // Algolia attribute name
-            vm.attrName = $attrs.attrName;
-            
             // Sends a search request
             vm.search = function(){
                 ss.setOrdering("");
@@ -808,6 +807,28 @@ define([
             }
         };
     });
+    
+    
+    EloueWidgetsApp.directive('eloueFilter', 
+    ['$filter', '$log', 
+    function($filter, $log){
+        return {
+            restrict: 'AE',
+            scope:{
+                value:"&",
+                defaults:"&",
+                helper:"&"
+            },
+            transclude: true,
+            controller: EloueFilterController,
+            controllerAs: "vm",
+            link: function(scope, element, attrs, vm, transclude){
+                transclude(scope, function(clone, scope){
+                    element.append(clone);
+                });                
+            }
+        }    
+    }]);
     
     
     /**
@@ -1100,91 +1121,59 @@ define([
      * Professional/private renter filter
      */
     EloueWidgetsApp.directive('elouePropart',  
-    ['SearchService', '$log', 
-    function(SearchService, $log){
+    ['SearchService', '$log', '$rootScope',
+    function(SearchService, $log, $rootScope){
         return {
             restrict: 'A',
-            controller: EloueFilterController,
-            controllerAs: 'vm',
-            scope:{
-                value:"&",
-                defaults:"&",
-                helper:"&"
-            },
+            'require': 'eloueFilter',
             link: function($scope, $element, $attrs, vm){
                 
                 vm.filterControllerSetup.then(function(services){
                     
-                    // TODO rewrite with angular
-                    
-                    var ss = services.ss,
-                        allTab = $element.find("ul > li:nth-child(1) > a"),
-                        partTab = $element.find("ul > li:nth-child(2) > a"),
-                        proTab = $element.find("ul > li:nth-child(3) > a");
+                    var ss = services.ss;
 
                     vm.render = function(e, result, state){ //$log.debug('renderRenterTypes');
-                        
                         var facetResult = result.getFacetByName("pro_owner");
-                        
-                        if (!facetResult){
+                        if (!facetResult) {
+                            vm.value.pro_count = 
+                            vm.value.part_count = 
+                            vm.value.count = 
+                            vm.value.total_count = 0;
                             return;
                         }
-                                                
-                        // if (!facetResult){
-                        //     $element.hide();
-                        //     return;
-                        // } else {
-                        //     $element.show();
-                        // }
-                        
-                        vm.value.pro_count = ('true' in facetResult.data ? facetResult.data.true : 0);
-                        vm.value.part_count = ('false' in facetResult.data ? facetResult.data.false : 0);
-                        vm.value.pro = !state.isDisjunctiveFacetRefined("pro_owner") 
-                            || state.isDisjunctiveFacetRefined("pro_owner", true);
-                        vm.value.part = !state.isDisjunctiveFacetRefined("pro_owner") 
-                            || state.isDisjunctiveFacetRefined("pro_owner", false);
-                        vm.value.total_count = vm.value.pro_count+vm.value.part_count;
-                        
-                        if (vm.value.pro_count && vm.value.part_count){
-                            allTab.find('.count').text(vm.value.total_count);
-                            allTab.parent('li').show();    
-                        } else {
-                            allTab.parent('li').hide();
-                        }
-                        if (vm.value.pro_count){
-                            proTab.find('.count').text(vm.value.pro_count);
-                            proTab.parent('li').show();    
-                        } else {
-                            proTab.parent('li').hide();
-                        }
-                        if (vm.value.part_count){
-                            partTab.find('.count').text(vm.value.part_count);
-                            partTab.parent('li').show();    
-                        } else {
-                            partTab.parent('li').hide();
-                        }
-                        
-                        if ((vm.value.pro && vm.value.part || !vm.value.pro && !vm.value.part) 
-                                && vm.value.pro_count && vm.value.part_count){
-                            allTab.tab('show');
-                        } else if (vm.value.part || vm.value.pro_count && !vm.value.part_count) {
-                            partTab.tab('show');
-                        } else if (vm.value.pro || vm.value.part_count && !vm.value.pro_count) {
-                            proTab.tab('show');
-                        }
-                                     
+                        vm.value.count = result.nbHits;
+                        vm.value.pro_count = ('true' in facetResult.data ? 
+                                                facetResult.data.true : 0);
+                        vm.value.part_count = ('false' in facetResult.data ? 
+                                                facetResult.data.false : 0);
+                        vm.value.total_count = vm.value.pro_count + vm.value.part_count;
+                        vm.value.pro = state.isDisjunctiveFacetRefined("pro_owner", true);
+                        vm.value.part = state.isDisjunctiveFacetRefined("pro_owner", false);
+                        vm.value.onlyProsAvail = vm.value.pro_count && !vm.value.part_count;
+                        vm.value.onlyPartsAvail = !vm.value.pro_count && vm.value.part_count;
+                        vm.value.bothAvail = vm.value.pro_count && vm.value.part_count;
                     };
                     
-                    vm.refinePro = function(){
-                        ss.helper.removeDisjunctiveFacetRefinement("pro_owner");
-                        ss.helper.addDisjunctiveFacetRefinement("pro_owner", true);
-                        vm.search();
-                    };
-                    
-                    vm.refinePart = function(){
+                    vm.refineRenterPart = function(){ //$log.debug('refineRenterPart');
+                        if (!vm.value.part_count || vm.value.part){
+                            return;
+                        }
                         ss.helper.removeDisjunctiveFacetRefinement("pro_owner");
                         ss.helper.addDisjunctiveFacetRefinement("pro_owner", false);
                         vm.search();
+                    };
+                    
+                    vm.refineRenterPro = function(){ //$log.debug('refineRenterPro');
+                        if (!vm.value.pro_count || vm.value.pro){
+                            return;
+                        }
+                        ss.helper.removeDisjunctiveFacetRefinement("pro_owner");
+                        ss.helper.addDisjunctiveFacetRefinement("pro_owner", true);                        
+                        vm.search();
+                    };
+                    
+                    vm.resetAll = function(){
+                        $rootScope.$broadcast('reset');
                     };
                     
                     vm.ready = function(){
@@ -1192,52 +1181,15 @@ define([
                     };
                     
                     vm.noProPartChoice = function(){ //$log.debug('noProPartChoice');
-                        return vm.value.part_count && !vm.value.pro_count 
-                            || vm.value.pro_count && !vm.value.part_count;
+                        return vm.value.pro_count==0 || vm.value.part_count==0;
                     };
-                    
-                    vm.onlyPartsAvail = function(){
-                        return vm.value.part_count && !vm.value.pro_count;
-                    };
-                    
-                    vm.onlyProsAvail = function(){
-                        return vm.value.pro_count && !vm.value.part_count;
-                    };
-                    
-                    vm.allAvail = function(){
-                        return vm.value.pro_count && vm.value.part_count;
-                    };
-                    
-                    allTab.click(function (e) {
-                        e.preventDefault();
-                        if (vm.noProPartChoice()){
-                            return false;
-                        }
-                        vm.reset();
-                    });
-                    
-                    partTab.click(function (e) {
-                        e.preventDefault();
-                        if (vm.noProPartChoice()){
-                            return false;
-                        }
-                        vm.refinePart();
-                    });
-                    
-                    proTab.click(function (e) {
-                        e.preventDefault();
-                        if (vm.noProPartChoice()){
-                            return false;
-                        }
-                        vm.refinePro();
-                    });
-                    
+ 
                 });
   
             }
     
         };
-    }]);  
+    }]);
     
     
     /**
@@ -1849,13 +1801,15 @@ define([
                 $scope.clearRefinements = function(){
                     ss.reset();
                     ss.helper.setQuery("");
-                    ss.setCategory(null);;
+                    ss.setCategory(null);
                     gs.setPlace(gs.defaults.place);
                     ss.setPlace(gs.defaults);
                     ss.search();
                 };                
                 
-                $scope.$on('render',  function(e, result) { //$log.debug('renderOrdering');
+                $scope.$on('reset', $scope.clearRefinements);
+                
+                $scope.$on('render',  function(e, result, state) { //$log.debug('renderOrdering');
                     $timeout(function(){
                         $scope.enableDistance = !gs.isLocationDefault();
                         $scope.ordering = ss.getOrdering();
@@ -1865,6 +1819,23 @@ define([
                         $scope.product_list = result.hits;
                         $scope.results_per_page = result.hitsPerPage;
                         $scope.ui_pristine = false;
+                        // TODO refactor
+                        var facetResult = result.getFacetByName("pro_owner");
+                        if (facetResult){
+                            $scope.pro_count = ('true' in facetResult.data ? 
+                                                    facetResult.data.true : 0);
+                            $scope.part_count = ('false' in facetResult.data ? 
+                                                    facetResult.data.false : 0);    
+                        } else {
+                            $scope.part_count = $scope.pro_count = 0;
+                        }
+                        if (state.isDisjunctiveFacetRefined("pro_owner", true)){
+                            $scope.owner_type = "pro";        
+                        } else if (state.isDisjunctiveFacetRefined("pro_owner", false)){
+                            $scope.owner_type = "part";
+                        } else if (!state.isDisjunctiveFacetRefined("pro_owner")) {
+                            $scope.owner_type = null;
+                        };
                         $scope.$digest();
                     }, 0, false);
                 });
