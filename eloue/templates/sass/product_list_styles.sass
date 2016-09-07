@@ -22,6 +22,7 @@
 @import js-slider
 @import clear-button
 @import progress
+@import propart_tabs
 
 article
   h3
@@ -118,45 +119,3 @@ aside
   +border-top-radius($bd-rad)
   +border-bottom-radius($bd-rad)
   background: #ffffff
-
-#propart_tabs
-  button 
-    span.btn-clear-filter
-      color: $brand-success
-      background-color: white
-  button:hover
-    span.btn-clear-filter
-      color: darken($brand-success, 5%)
-  div
-    width: 100% 
-    font-size: larger 
-    padding-left: 0px
-    
-    ul.nav.nav-tabs
-      border-bottom-color: $brand-success
-      border: none
-      li, li.active
-        border: none
-        a
-          border: none
-      li
-        a  
-          cursor: pointer
-          user-select: none
-          -moz-user-select: none
-          -webkit-user-select: none
-          -ms-user-select: none
-      li.active
-        a
-          background-color: $brand-success
-          color: white
-          cursor: default
-          // border: px(1) solid $gray-lighter
-          // border-top-width: px(1)
-          // border-top-radius: ($bd-rad)
-          // box-shadow: 1px 1px 1px 0px
-          
-  span.count::before
-    content: "("
-  span.count::after
-    content: ")"
