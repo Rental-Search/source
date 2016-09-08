@@ -20,7 +20,13 @@ h3(ng-hide="ui_pristine", ng-cloak).col-md-7
     span(ng-if="result_count==1") 1 annonce correspondant à vos critères
     span(ng-if="result_count!=1") {{ result_count }} annonces correspondant à vos critères
   span(ng-if="!query && result_count") {% trans "Location" %} {{ leaf_category }}
-  span(ng-if="!result_count") {% trans "Aucune annonce trouvée" %} 
+  span(ng-if="!result_count") 
+    span(ng-if="owner_type=='pro' && part_count")
+      {% trans "Aucune annonce de professionnels trouvée" %}
+    span(ng-if="owner_type=='part' && pro_count")
+      {% trans "Aucune annonce de particuliers trouvée" %}
+    span(ng-if="!owner_type || !part_count && !pro_count")
+      {% trans "Aucune annonce trouvée" %}
 {% endangularjs %}
 .col-xs-5.layout-switcher
   i.flaticon.stroke.menu-list-4.list
