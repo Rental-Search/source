@@ -542,7 +542,7 @@ define([
                     var newqs = ss.helper.getStateAsQueryString(s.getQueryOptions(s.action.RENDER));
                     $location.search(newqs);
                     
-                    ga('send', 'pageview', $location.url());
+                    ga('send', 'pageview', $location.absUrl());
                 
                 }, 0, false);
                  
