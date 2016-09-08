@@ -6,18 +6,21 @@
   button:hover
     span.btn-clear-filter
       color: darken($brand-success, 5%)
+
   div
     width: 100% 
     font-size: larger 
     padding-left: 0px
+    padding-right: 0px
     
     ul.nav.nav-tabs
-      border-bottom-color: $brand-success
-      border: none
+      //border-bottom-color: $brand-success
+      //border: none
+      margin-bottom: 20px
       li, li.active
-        border: none
+        //border: none
         a
-          border: none
+          //border: none
       li
         a  
           cursor: pointer
@@ -27,9 +30,9 @@
           -ms-user-select: none
       li.active
         a
-          background-color: $brand-success
-          color: white
-          cursor: default
+          background-color: $gray-lite
+          //color: white
+          //cursor: default
           // border: px(1) solid $gray-lighter
           // border-top-width: px(1)
           // border-top-radius: ($bd-rad)
