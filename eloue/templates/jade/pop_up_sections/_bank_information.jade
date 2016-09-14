@@ -42,6 +42,6 @@ p {% trans "Vous devrez présenter une carte de paiement à votre nom, au propri
     .col-sm-7
         a(href="#", ng-click="clearCreditCard()").text-success.pull-right {% trans "Modifier mes coordonnées bancaires" %}
 p.info {% trans "En cliquant sur Réservez, vous enverrez une demande de location au propriétaire. Vous serez débité du montant des lors qu'il accepte votre demande." %}
-span.text-danger(eloue-form-field-message, field-name="product") {% verbatim %}{{value}}{% enverbatim %}
+span.text-danger(eloue-form-field-message, field-name="product") {% verbatim %}{{value}}{% endverbatim %}
 span.text-danger.payment-error(eloue-general-form-message)
-.col-sm-8.col-sm-offset-2: button(type="submit", ng-disabled="shippingPointsRequestInProgress", class="{% verbatim %}{{submitInProgress ? 'loading' : ''}}{% endverbatim %}").btn.bg-success.indent-t {% trans "Réservez" %}
+.col-sm-8.col-sm-offset-2: button(type="submit", ng-disabled="shippingPointsRequestInProgress", ng-class="submitInProgress && 'loading'").btn.bg-success.indent-t {% trans "Réservez" %}
