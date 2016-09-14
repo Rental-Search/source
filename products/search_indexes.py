@@ -1,11 +1,16 @@
 #-*- coding: utf-8 -*-
 from __future__ import absolute_import
+
+from itertools import takewhile
+
+import modeltranslation
 from datetime import datetime
 
 from django.core.mail import mail_admins
 from django.template.loader import render_to_string
 
 from haystack import indexes
+from modeltranslation.utils import get_translation_fields, build_localized_fieldname
 
 from .models import Product
 from .choices import UNIT
@@ -18,6 +23,8 @@ from products.models import PropertyValue
 from django.db.models import F
 
 from django.template import defaultfilters
+
+from django.conf import settings
 
 __all__ = ['ProductIndex']
 
@@ -94,6 +101,7 @@ TYPE_FIELD_MAP = {'int':type('IntegerField', (ProductPropertyFieldMixin, indexes
                   'float':type('FloatField', (ProductPropertyFieldMixin, indexes.FloatField), {}),
                   'bool':type('BooleanField', (ProductPropertyFieldMixin, indexes.BooleanField), {}),
                   'choice':type('CharField', (ProductPropertyFieldMixin, indexes.CharField), {}),}
+
 
 
 class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass, 
@@ -216,16 +224,23 @@ class ProductIndex(with_metaclass(DynamicFieldsDeclarativeMetaClass,
             return tuple(qs.values_list('slug', flat=True))
     
     def prepare_algolia_categories(self, obj):
+        """
+        gets longest translated directory chain for every locale
+        :param obj:
+        :return: dict with locales as keys and paths as values
+        """
         category = obj._get_category()
         if category:
-            cats = list(c.name+'|'+str(c.id) for c in category\
-                        .get_ancestors(ascending=False, include_self=True).all())
-            
-            cats_dict = {}
-            for i in range(len(cats)):
-                cats_dict['lvl'+str(i)] = " > ".join(cats[:i+1])
-            
-            return cats_dict
+            langs_dict = {}
+            for lang in modeltranslation.settings.AVAILABLE_LANGUAGES:
+                name = build_localized_fieldname('name', lang)
+                ancs = category.get_ancestors(ascending=False, include_self=True)
+                longest_path = takewhile(lambda anc:getattr(anc, name), ancs)
+                cats_dict = dict()
+                for i, cat in enumerate(longest_path):
+                    cats_dict['lvl'+str(i)] = cat.get_algolia_path(lang)
+                langs_dict[lang] = cats_dict
+            return langs_dict
         
     def prepare_created_at_timestamp(self, obj):
         return (obj.created_at-datetime(1970,1,1)).total_seconds()

@@ -153,7 +153,13 @@ define([
     function categoryId(categoryStr){
         return parseInt(categoryStr.split('|')[1]);
     };
-    
+
+    function categoryAttributeName(){
+        var lang = angular.element(document)[0].documentElement.lang;
+        return "category."+lang;
+    }
+
+
    
     /**
      * Wraps the Algolia helper and stores additional search state.
@@ -380,8 +386,8 @@ define([
             gs: GeoService
         }).then(function(services){
         
-            var ss = services.ss, gs = services.gs; 
-            
+            var ss = services.ss, gs = services.gs;
+
             var s = {
                 getQueryString: function(){
                     return decodeURI($window.location.hash.substring(2));
@@ -392,13 +398,13 @@ define([
                 }
             };
             
-            function searchToObject(search){
+            function searchToObject(search){1
                 return algoliasearchHelper.url
                     .getUnrecognizedParametersInQueryString(search);
             }
             
             function categoryPathFromParams(params){
-                return ('sp_hFR' in params) ? params.sp_hFR.category[0] : null;
+                return ('sp_hFR' in params) ? params.sp_hFR[categoryAttributeName()][0] : null;
             }
             
             function getFilters(category){
@@ -713,7 +719,7 @@ define([
         
         vm.apply = function(arg){
             $scope.$apply(arg);
-        }
+        };
         
         // Called after each Algolia response to set the vm.value
         vm.render = function(e, result, state){};
@@ -1339,25 +1345,28 @@ define([
             link: function ($scope, $element, $attrs, vm) {
                 
                 vm.filterControllerSetup.then(function(services){
-                    
+
                     var ss = services.ss;
-                    
+
+                    vm.attrName = categoryAttributeName();
                     vm.categoryName = categoryName;
                     
                     vm.refine = function(path) { //$log.debug('refineCategory');
                     
                         vm.value.algolia_category_path = path;
                         if (!vm.value.algolia_category_path){
-                            ss.helper.clearRefinements("category");
+                            ss.helper.clearRefinements(vm.attrName);
 
                         } else {
-                            ss.helper.toggleRefinement("category", vm.value.algolia_category_path);
+                            ss.helper.toggleRefinement(vm.attrName, vm.value.algolia_category_path);
                         }
                         
-                        if (ss.helper.state.isHierarchicalFacetRefined("category")){
-                            ss.updateCategoryFromPath(ss.helper.state.hierarchicalFacetsRefinements.category[0]).finally(function(){
+                        if (ss.helper.state.isHierarchicalFacetRefined(vm.attrName)){
+                            ss.updateCategoryFromPath(
+                                ss.helper.state.hierarchicalFacetsRefinements[vm.attrName][0])
+                            .finally(function(){
                                 NProgress.move(0.5);
-                            });   
+                            });
                         }
                         
                         // $scope.clearPropertyRefinements();
@@ -1370,14 +1379,14 @@ define([
                         vm.resultCount = result.nbHits;
                         vm.results = result.hits;
                         
-                        vm.value = result.hierarchicalFacets[0];
+                        vm.value = result.getFacetByName(vm.attrName);
                         
                     };
 
                     
                     var superClean = vm.clean;
                     vm.clean = function(){
-                        return superClean() || !ss.helper.state.hierarchicalFacetsRefinements[$attrs.attrName][0];
+                        return superClean() || !ss.helper.state.hierarchicalFacetsRefinements[vm.attrName][0];
                     };
                     
                     vm.ready = function(){
@@ -1385,7 +1394,7 @@ define([
                     };
                     
                     vm.reset = function(){
-                        ss.helper.clearRefinements($attrs.attrName);
+                        ss.helper.clearRefinements(vm.attrName);
                         ss.setCategory(null);
                         vm.leaf_category = "";
                         vm.search();
@@ -1806,7 +1815,7 @@ define([
                 $scope.activateLayoutSwitcher();
                 
                 if (ss.algolia_category_path){
-                    ss.helper.toggleRefinement("category", ss.algolia_category_path);   
+                    ss.helper.toggleRefinement(categoryAttributeName(), ss.algolia_category_path);
                 }
                 ss.setPlace(gs.search);
                 

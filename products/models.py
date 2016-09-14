@@ -9,8 +9,10 @@ import operator
 import itertools
 from django.core.exceptions import ValidationError
 from django.db.models.deletion import PROTECT
+from django.utils.functional import cached_property
 
 from imagekit.models import ImageSpecField
+from modeltranslation.utils import build_localized_fieldname
 from pilkit import processors
 
 from django.conf import settings
@@ -785,7 +787,10 @@ class Category(MPTTModel):
         if not conformity:
             return None
         else:
-            conformity_category = conformity.eloue_category if site_id == eloue_site_id else conformity.gosport_category if site_id == gosport_site_id else conformity.gosport_category if site_id == dressbooking_site_id else None
+            conformity_category = conformity.eloue_category if site_id == eloue_site_id \
+                else conformity.gosport_category if site_id == gosport_site_id \
+                else conformity.gosport_category if site_id == dressbooking_site_id \
+                else None
             if conformity_category and conformity_category.sites.filter(pk=site_id):
                 return conformity_category
             else:
@@ -795,14 +800,13 @@ class Category(MPTTModel):
         return '/'.join(el.slug for el in self.get_ancestors()).replace(' ', '')
 
 
-    def get_algolia_path(self):
-        return " > ".join([cat.name+'|'+str(cat.id)\
+    def get_algolia_path(self, lang=None):
+        return " > ".join([(getattr(cat, build_localized_fieldname('name', lang)) if lang
+                                else cat.name)+'|'+str(cat.id)\
                            for cat in self.get_ancestors(include_self=True)])
-    
-    @classmethod
-    def from_algolia_path(clazz, path):
-        parts = path.split()
-        
+
+    algolia_path = cached_property(get_algolia_path)
+
     def get_absolute_url(self):
         ancestors_slug = self.get_ancertors_slug()
         if ancestors_slug:
