@@ -349,10 +349,10 @@ define([
 
                 var publishPromise = $q.defer().promise;
 
+                $scope.submitInProgress = true;
+
                 // Add required user info
                 if ($scope.noAddress || $scope.noPhone) {
-
-                    $scope.submitInProgress = true;
 
                     var patchPromises = {};
 
