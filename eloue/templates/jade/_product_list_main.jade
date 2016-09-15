@@ -1,5 +1,52 @@
 -load product i18n
 
+div#propart_tabs(ng-if="search && defaults", eloue-filter, attr-name='pro_owner',                       
+      value="search.owner_type", defaults="defaults.owner_type",
+      eloue-propart)
+  
+  //- Owner type selection tabs
+  div(ng-show="vm.value.count").container
+    ul.nav.nav-tabs
+      li(ng-class="vm.clean() ? 'active' : ''", 
+          ng-show="vm.value.bothAvail") 
+        a(ng-click="vm.reset()") 
+          {% trans "Toutes" %}
+          span(ng-bind="vm.value.total_count").count
+      li(ng-class="vm.value.part || vm.value.onlyPartsAvail ? 'active' : ''", 
+          ng-show="vm.value.part_count")
+        a(ng-click="vm.refineRenterPart()")
+          {% trans "Particuliers" %}
+          span(ng-bind="vm.value.part_count").count
+      li(ng-class="vm.value.pro || vm.value.onlyProsAvail ? 'active' : ''", 
+          ng-show="vm.value.pro_count")
+        a(ng-click="vm.refineRenterPro()")
+          {% trans "Professionnels" %}
+          span(ng-bind="vm.value.pro_count").count
+  
+  //- Switch owner type buttons
+  span(ng-if="!vm.value.count && vm.value.total_count")
+    //- | {% trans "Vous pouvez" %}
+    button(type="button", class="btn bg-success btn-advertise",
+        translate='SUGGEST_PART', translate-values='vm.value', 
+        translate-interpolation="messageformat",
+        ng-if="vm.value.onlyPartsAvail",
+        ng-click="vm.refineRenterPart()")  
+    button(type="button", class="btn bg-success btn-advertise",
+        translate='SUGGEST_PRO', translate-values='vm.value', 
+        translate-interpolation="messageformat",
+        ng-if="vm.value.onlyProsAvail",
+        ng-click="vm.refineRenterPro()")
+    | {% trans "ou" %} 
+  
+  //- Reset all filters button
+  button(type="button", class="btn bg-success btn-advertise",
+      ng-click="vm.resetAll()", 
+      ng-if="!vm.value.count",
+      ng-cloak, hidden,
+      style="position:relative; padding-right:2.5em;") 
+    span(style="right:0.5em;").btn-clear-filter
+    {% trans "Reinitialiser la recherche"  %}
+      
 ol(ng-show="ui_pristine").product-layout
   if product_list
     {% for product in product_list %}
@@ -14,8 +61,5 @@ ol(ng-hide="ui_pristine || !result_count", ng-cloak, eloue-suspendable).product-
   {% with ng=1 %}
   include ./_product_list_item
   {% endwith %}
-button(type="button", ng-show="!ui_pristine && !result_count", 
-  ng-click="clearRefinements()", class="btn bg-success btn-advertise", 
-  ng-cloak, hidden) {% trans "Reinitialiser les critères de la recherche"  %}
   
 include ./_product_list_pagination
