@@ -1,0 +1,25 @@
+-load patron i18n
+
+{% if not product.object.redirect_url %}
+- var product_link = patron.url
+{% else %}
+- var product_link = product.object.redirect_url
+{% endif %}
+
+{% if patron.slug == "carrefourlocation" %}
+{% if product %}
+a(href="{{ product_link }}?utm_source=eloue&utm_medium=annonce&utm_content={{product.object.slug}}" +
+    "&utm_campaign=eloue_redirection_annonce", target="_blank")#pro-popin-website-link.btn.bg-success
+  i.flaticon.stroke.imac-1
+  {% trans "Visitez notre site web" %}
+{% else %}
+a(href="{{product_link}}?utm_source=eloue&utm_medium=annonce&utm_content=boutique&" +
+    "utm_campaign=eloue_redirection_annonce", target="_blank")#pro-popin-website-link.btn.bg-success
+  i.flaticon.stroke.imac-1
+  {% trans "Visitez notre site web" %}
+{% endif %}
+{% else %}
+a(href="{{ product_link }}", target="_blank")#pro-popin-website-link.btn.bg-success
+  i.flaticon.stroke.imac-1
+  {% trans "Visitez notre site web" %}
+{% endif %}
