@@ -668,7 +668,7 @@ ALGOLIA_CLIENT_CONFIG = {
         'attributesToRetrieve':["summary", "django_id", "username", "description"
                 "location", "locations", "city", "zipcode", "owner_url", 
                 "owner_avatar", "url", "price", "profile", "vertical_profile", 
-                "thumbnail", "comment_count", "average_rate"],
+                "thumbnail", "comment_count", "average_rate", "pro_owner"],
         'hierarchicalFacets': [{
             'name': 'category',
             'attributes': ['algolia_categories.lvl0',
