@@ -9,6 +9,13 @@ from django.utils.functional import cached_property
 from eloue.compat.pipeline.conf import settings
 
 
+from django.contrib.staticfiles.finders import BaseStorageFinder
+from django.contrib.staticfiles.storage import staticfiles_storage
+
+class FixedPipelineFinder(BaseStorageFinder):
+    storage = staticfiles_storage
+
+
 class TemplatesFileSystemFinder(FileSystemFinder):
     loader_class = filesystem.Loader
 

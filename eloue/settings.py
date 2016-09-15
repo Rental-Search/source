@@ -302,6 +302,7 @@ STATICFILES_STORAGE = env('STATICFILES_STORAGE', 'eloue.compat.pipeline.storage.
 STATICFILES_FINDERS = (
     #'django.contrib.staticfiles.finders.FileSystemFinder',
     #'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    #'eloue.compat.pipeline.finders.FixedPipelineFinder',
     'eloue.compat.pipeline.finders.FileSystemFinder',
     'eloue.compat.pipeline.finders.AppDirectoriesFinder',
     'eloue.compat.pipeline.finders.TemplatesFileSystemFinder',
