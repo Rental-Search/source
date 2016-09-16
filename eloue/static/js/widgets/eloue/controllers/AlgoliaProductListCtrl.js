@@ -411,7 +411,7 @@ define([
             function getFilters(category){
                 var moreFilters = ss.config.URL_PARAMETERS.slice(0);
                 // Don't show parameter default category
-                if (!category || category.algolia_path == ss.defaults.category.algolia_path){
+                if (!category || ss.defaults.category && category.algolia_path == ss.defaults.category.algolia_path){
                     moreFilters.splice(moreFilters.indexOf("attribute:category"),1);
                 }
                 // Add parameters for properties
@@ -1880,8 +1880,8 @@ define([
                 
                 $scope.activateLayoutSwitcher();
                 
-                if (ss.category && ss.category.algolia_path != 
-                        ss.defaults.category.algolia_path){
+                if (ss.category && (!ss.defaults.category || ss.category.algolia_path !=
+                        ss.defaults.category.algolia_path)){
                     ss.helper.toggleRefinement("category", ss.category.algolia_path);   
                 }
                 ss.setPlace(gs.search);

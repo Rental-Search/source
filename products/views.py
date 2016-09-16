@@ -225,10 +225,16 @@ def get_format_or_none(key):
     return res
 
 
-def get_default_category_data(category):
+def get_category_data(category):
+    res = None
     if category:
-        return CategorySerializer(category).data
-    return None
+        s = CategorySerializer(category)
+        res = s.data
+        # TODO filter out instead of deleting
+        for k in ('description', 'header', 'footer'):
+            del res[k]
+    return res
+
 
 
 SEARCH_DEFAULTS = {
@@ -236,7 +242,7 @@ SEARCH_DEFAULTS = {
      'order_by': u'',
      'page': 0,
      'result_count': 0,
-     'category': get_default_category_data(
+     'category': get_category_data(
                    Category.get_default_category()),
      'owner_type': {
              'pro': True,
@@ -364,7 +370,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
         context.update(super(ProductListView, self).get_context_data(**kwargs))
 
         renter = self.form.cleaned_data.get('renter')
-        category = self.breadcrumbs['categorie'].get('value','')
+        category = self.breadcrumbs['categorie'].get('object', None)
         algolia_path = self.breadcrumbs['categorie']['algolia_path'] if category else None
         
         context.update({'search_params': simplejson.dumps({
@@ -381,7 +387,7 @@ class ProductListView(SearchQuerySetMixin, BreadcrumbsMixin, ListView):
                  'order_by': self.form.cleaned_data.get('sort', u''),
                  'page': context['page_obj'].number-1 if context['is_paginated'] else 0,
                  'result_count': self.sqs.count(),
-                 'category': get_default_category_data(category),
+                 'category': get_category_data(category),
                  'owner_type': {
                          'pro': not renter or renter==u'professionnels',
                          'part': not renter or renter==u'particuliers',
