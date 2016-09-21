@@ -11,17 +11,17 @@ div#propart_tabs(ng-if="search && defaults", eloue-filter, attr-name='pro_owner'
           ng-show="vm.value.bothAvail") 
         a(ng-click="vm.reset()") 
           {% trans "Toutes" %}
-          span(ng-bind="vm.value.total_count").count
+          span(ng-bind="vm.value.total_count|number").count
       li(ng-class="vm.value.part || vm.value.onlyPartsAvail ? 'active' : ''", 
           ng-show="vm.value.part_count")
         a(ng-click="vm.refineRenterPart()")
           {% trans "Particuliers" %}
-          span(ng-bind="vm.value.part_count").count
+          span(ng-bind="vm.value.part_count|number").count
       li(ng-class="vm.value.pro || vm.value.onlyProsAvail ? 'active' : ''", 
           ng-show="vm.value.pro_count")
         a(ng-click="vm.refineRenterPro()")
           {% trans "Professionnels" %}
-          span(ng-bind="vm.value.pro_count").count
+          span(ng-bind="vm.value.pro_count|number").count
   
   //- Switch owner type buttons
   span(ng-if="!vm.value.count && vm.value.total_count")

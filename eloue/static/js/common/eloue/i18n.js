@@ -38,8 +38,8 @@ define(["eloue/app",
             MESSAGE_SENT_AT: "Le {{date|amDateFormat:'L'}} à {{date:amDateFormat|'LT'}}",
             
             // Money
-            MONEY: "{{value|number:2}}€",
-            MONEY_ROUND: "{{value}}€",
+            MONEY: "{{value|number:2}} €",
+            MONEY_ROUND: "{{value|number}} €",
             
             // Distance
             DISTANCE: "{{value+' km'}}",
@@ -204,7 +204,7 @@ define(["eloue/app",
             
             // Money
             MONEY: "${{value|number:2}}",
-            MONEY_ROUND: "${{value}}",
+            MONEY_ROUND: "${{value|number}}",
             
             // Distance
             DISTANCE: "{{value+' mi'}}",
