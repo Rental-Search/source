@@ -672,13 +672,6 @@ ALGOLIA_CLIENT_CONFIG = {
                 "location", "locations", "city", "zipcode", "owner_url", 
                 "owner_avatar", "url", "price", "profile", "vertical_profile",
                 "thumbnail", "comment_count", "average_rate", "pro_owner"],
-        'hierarchicalFacets': [{
-            'name': 'category',
-            'attributes': ['algolia_categories.lvl0',
-                         'algolia_categories.lvl1',
-                         'algolia_categories.lvl2'],
-            'sortBy': ['name:asc']
-        }],
         'hierarchicalFacets': algolia_category_facets(LANGUAGES),
         'disjunctiveFacets': ["pro_owner",
                             "price",
