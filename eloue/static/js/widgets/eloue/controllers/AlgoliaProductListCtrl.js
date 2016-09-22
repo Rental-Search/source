@@ -337,8 +337,13 @@ define([
             
             // Add a rootPath if there is a single root category
             if (s.defaults.category) {
-                sp.config.PARAMETERS.hierarchicalFacets[0].rootPath = 
-                    s.defaults.category.algolia_path;
+                for (var i=0; i<sp.config.PARAMETERS.hierarchicalFacets.length; i++){
+                    if (categoryAttributeName()==sp.config.PARAMETERS.hierarchicalFacets[i].name) {
+                        sp.config.PARAMETERS.hierarchicalFacets[i].rootPath =
+                            s.defaults.category.algolia_path;
+                        break;
+                    }
+                }
             }
             
             // Init helper
