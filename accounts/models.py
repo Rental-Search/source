@@ -660,6 +660,7 @@ class PhoneNumber(models.Model):
     def __unicode__(self):
         return smart_unicode(self.number)
 
+
 class ProAgency(models.Model):
     """Agency of a pro"""
     patron = models.ForeignKey(Patron, related_name='pro_agencies')
@@ -681,7 +682,6 @@ class ProAgency(models.Model):
     def __unicode__(self):
         return smart_unicode(self.name)
 
-    
     def save(self, *args, **kwargs):
         self.position = self.geocode()
         super(ProAgency, self).save(*args, **kwargs)

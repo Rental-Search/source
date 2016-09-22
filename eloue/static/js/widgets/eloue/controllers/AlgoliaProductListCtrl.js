@@ -153,7 +153,13 @@ define([
     function categoryId(categoryStr){
         return parseInt(categoryStr.split('|')[1]);
     };
-    
+
+    function categoryAttributeName(){
+        var lang = angular.element(document)[0].documentElement.lang;
+        return "category."+lang;
+    }
+
+
    
     /**
      * Wraps the Algolia helper and stores additional search state.
@@ -387,8 +393,8 @@ define([
             gs: GeoService
         }).then(function(services){
         
-            var ss = services.ss, gs = services.gs; 
-            
+            var ss = services.ss, gs = services.gs;
+
             var s = {
                 getQueryString: function(){
                     return decodeURI($window.location.hash.substring(2));
@@ -399,13 +405,13 @@ define([
                 }
             };
             
-            function searchToObject(search){
+            function searchToObject(search){1
                 return algoliasearchHelper.url
                     .getUnrecognizedParametersInQueryString(search);
             }
             
             function categoryPathFromParams(params){
-                return ('sp_hFR' in params) ? params.sp_hFR.category[0] : null;
+                return ('sp_hFR' in params) ? params.sp_hFR[categoryAttributeName()][0] : null;
             }
             
             function getFilters(category){
@@ -724,6 +730,10 @@ define([
         // Algolia attribute name
         vm.attrName = $attrs.attrName;
         
+        vm.apply = function(arg){
+            $scope.$apply(arg);
+        };
+
         // Called after each Algolia response to set the vm.value
         vm.render = function(e, result, state){};
         
@@ -1381,25 +1391,28 @@ define([
             link: function ($scope, $element, $attrs, vm) {
                 
                 vm.filterControllerSetup.then(function(services){
-                    
+
                     var ss = services.ss;
-                    
+
+                    vm.attrName = categoryAttributeName();
                     vm.categoryName = categoryName;
                     
                     vm.refine = function(path) { //$log.debug('refineCategory');
-                    
-                        if (!path){
-                            ss.helper.clearRefinements("category");
+
+                        vm.value.algolia_category_path = path;
+                        if (!vm.value.algolia_category_path){
+                            ss.helper.clearRefinements(vm.attrName);
+
                         } else {
-                            ss.helper.toggleRefinement("category", path);
+                            ss.helper.toggleRefinement(vm.attrName, vm.value.algolia_category_path);
                         }
                         
-                        if (ss.helper.state.isHierarchicalFacetRefined("category")){
+                        if (ss.helper.state.isHierarchicalFacetRefined(vm.attrName)){
                             ss.updateCategoryFromPath(
-                                ss.helper.state.hierarchicalFacetsRefinements.category[0])
+                                ss.helper.state.hierarchicalFacetsRefinements[vm.attrName][0])
                             .finally(function(){
                                 NProgress.move(0.5);
-                            });   
+                            });
                         }
                         
                         // $scope.clearPropertyRefinements();
@@ -1411,9 +1424,8 @@ define([
                         vm.empty = !result.nbHits;
                         vm.resultCount = result.nbHits;
                         vm.results = result.hits;
-                        
-                        vm.value = result.hierarchicalFacets.length ? 
-                            result.hierarchicalFacets[0] : null;
+
+                        vm.value = result.getFacetByName(vm.attrName);
                         
                     };
                     
@@ -1422,7 +1434,7 @@ define([
                     if (ss.defaults.category) {
                         vm.clean = function(){
                             return !superClean() && 
-                                (ss.helper.state.hierarchicalFacetsRefinements.category[0] == 
+                                (ss.helper.state.hierarchicalFacetsRefinements[vm.attrName][0] ==
                                     ss.defaults.category.algolia_path);
                         };
                     } else {
@@ -1442,6 +1454,7 @@ define([
                                 ss.defaults.category.algolia_path);
                         }
                         ss.setCategory(ss.defaults.category);
+
                         vm.leaf_category = "";
                         vm.search(); 
                     };
@@ -1879,10 +1892,10 @@ define([
                 };
                 
                 $scope.activateLayoutSwitcher();
-                
+
                 if (ss.category && (!ss.defaults.category || ss.category.algolia_path !=
                         ss.defaults.category.algolia_path)){
-                    ss.helper.toggleRefinement("category", ss.category.algolia_path);   
+                    ss.helper.toggleRefinement(categoryAttributeName(), ss.category.algolia_path);
                 }
                 ss.setPlace(gs.search);
                 

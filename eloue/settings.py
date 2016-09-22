@@ -5,6 +5,9 @@ import decimal
 import analytics
 from getenv import env
 
+from eloue.settings_utils import algolia_category_facets, \
+    algolia_category_attributes_for_faceting, agolia_category_facet_name
+
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
 DEBUG = env('DEBUG', False)
@@ -593,7 +596,7 @@ ALGOLIA_INDICES = {
             u'owner',
             u'owner_exact',
             u'created_at_timestamp',
-            u'is_allowed'],
+            u'is_allowed'] + algolia_category_attributes_for_faceting(LANGUAGES),
         'attributesToHighlight': ['summary'],
         'attributesToSnippet': ['description:50',],
         'highlightPreTag': '<em>',
@@ -667,7 +670,7 @@ ALGOLIA_CLIENT_CONFIG = {
     'PARAMETERS': {
         'attributesToRetrieve':["summary", "django_id", "username", "description"
                 "location", "locations", "city", "zipcode", "owner_url", 
-                "owner_avatar", "url", "price", "profile", "vertical_profile", 
+                "owner_avatar", "url", "price", "profile", "vertical_profile",
                 "thumbnail", "comment_count", "average_rate", "pro_owner"],
         'hierarchicalFacets': [{
             'name': 'category',
@@ -676,6 +679,7 @@ ALGOLIA_CLIENT_CONFIG = {
                          'algolia_categories.lvl2'],
             'sortBy': ['name:asc']
         }],
+        'hierarchicalFacets': algolia_category_facets(LANGUAGES),
         'disjunctiveFacets': ["pro_owner",
                             "price",
                             "sites"],
@@ -691,7 +695,7 @@ ALGOLIA_CLIENT_CONFIG = {
     'ALGOLIA_KEY': ALGOLIA_CREDENTIALS['API_KEY_SEARCH'],
     'URL_PARAMETERS': ['query', 'page', 'aroundRadius', 
                        'attribute:pro_owner', 'attribute:price',
-                       'attribute:category'],
+                       'attribute:'+agolia_category_facet_name(LANGUAGE_CODE)],
     'URL_PARAMETERS_EXCLUDE': ['is_archved', 
                              'is_good', 
                              'sites',
