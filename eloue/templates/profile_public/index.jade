@@ -47,15 +47,11 @@ block append content-body
               .part.list-layout
                 include ./_profile_public-products_of_the_owner
       aside.col-sm-4
-        section.owner-information
-          include ./_profile_public-owner_information
         if is_pro
           section.contact-member
             include ./_profile_public-contact_member
-        else
-          section.verify-status
-          //-
-            include ./_profile_public-verify_status
+        section.owner-information
+          include ./_profile_public-owner_information
     footer
       section.row-fluid.insurances.framing
         include ../jade/_insurances

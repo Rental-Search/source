@@ -9,26 +9,8 @@
     h4 {% trans "Particulier" %}
     {% endif %}
 .section-body
+    {% if is_pro %}
     .part
-        .block-thumbnail
-            .thumbnail-img
-                a(href="{{ product.owner_url }}"): div(style="{% if product.owner_avatar_medium %}background-image: url({{ product.owner_avatar_medium }}){% endif %}").bg-image
-            .thumbnail-content
-                h5: a(href="{{ product.owner_url }}") {% if is_pro %} {{ patron.company_name  }} {% else %} {{ product.owner }}{% endif %}
-                {% if is_pro %}
-                if patron.about
-                  p: i {{ patron.about }}
-                {% else %}
-                {% with product.owner.average_note as rate %}
-                include ../../_rate
-                {% endwith %}
-                p
-                    {% trans "Membre depuis le" %}
-                    br
-                    span {{ product_object.owner.date_joined|date:"d F Y" }}
-                {% endif %}
-    .part
-        {% if is_pro %}
         {% if patron.slug != "loxam" %}
         {% if patron.slug != "carrefourlocation" %}
         {% if patron.slug != "zipcar" %}
@@ -55,7 +37,27 @@
         {% if patron.url or product.redirect_url %}
         include ../../pop_up_sections/_website_link
         {% endif %}
-        {% else %}
+    {% endif %}
+    .part
+        .block-thumbnail
+            .thumbnail-img
+                a(href="{{ product.owner_url }}"): div(style="{% if product.owner_avatar_medium %}background-image: url({{ product.owner_avatar_medium }}){% endif %}").bg-image
+            .thumbnail-content
+                h5: a(href="{{ product.owner_url }}") {% if is_pro %} {{ patron.company_name  }} {% else %} {{ product.owner }}{% endif %}
+                {% if is_pro %}
+                if patron.about
+                  p: i {{ patron.about }}
+                {% else %}
+                {% with product.owner.average_note as rate %}
+                include ../../_rate
+                {% endwith %}
+                p
+                    {% trans "Membre depuis le" %}
+                    br
+                    span {{ product_object.owner.date_joined|date:"d F Y" }}
+                {% endif %}
+    {% if not is_pro %}
+    .part
         a.ng-hide(href="", data-dismiss="modal", ng-click="openModal('message')", ng-show="currentUser.id != product.owner.id").btn.bg-success.send-message
             i.flaticon.stroke.mail-2
             {% trans "Envoyez un message" %}
@@ -66,7 +68,8 @@
             {% with product_object.owner.stats as stats %}
             include ../../_patron_stats
             {% endwith %}
-        {% endif %}
+    {% endif %}
+
 //-
     .part.connection.clearfix
         .col-sm-4
