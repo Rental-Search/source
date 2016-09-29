@@ -134,12 +134,9 @@ block append tail
     var pro_popin_message_link = document.getElementById('pro-popin-shop');
     analytics.trackLink(pro_popin_message_link, "Pro Shop Modal");
     var pro_popin_message_link = document.getElementById('pro-popin-website-link');
-    analytics.trackLink(pro_popin_message_link, "Pro Website Link Modal");
+    analytics.trackLink(pro_popin_message_link, "Pro Website Link Redirected");
 
     var pro_message_form = document.getElementById('proMessageForm');
     if (pro_message_form != 'undefined') {
       analytics.trackForm(pro_message_form, 'Pro Cost Request Sended');
     }
-
-    var websiteProLink = document.getElementById('websiteProLink');
-    analytics.trackLink(websiteProLink, "Pro Website Link Redirected");
