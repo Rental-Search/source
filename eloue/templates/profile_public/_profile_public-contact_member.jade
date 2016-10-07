@@ -8,7 +8,7 @@
   {% if patron.slug != "zipcar" %}
   {% if patron.slug != "ucar" %}
   {% if patron.slug != "intersport" %}
-  a(href="#/message", data-toggle="modal", data-target="#pro-popin-message").btn.bg-success
+  a(href="#/message", data-toggle="modal", data-target="#pro-popin-message")#pro-popin-message-link.btn.bg-success
     i.flaticon.stroke.mail-2
     {% trans "Demandez un devis" %}
   {% endif %}
@@ -16,13 +16,13 @@
   {% endif %}
   {% endif %}
   {% if patron.default_number %}
-  a(href="#/phone", data-toggle="modal", data-target="#pro-popin-phone").btn.bg-success
+  a(href="#/phone", data-toggle="modal", data-target="#pro-popin-phone")#pro-popin-phone-link.btn.bg-success
     i.flaticon.stroke.phone-3
     {% trans "Appelez" %}
   {% endif %}
   {% endif %}
   {% if patron.default_address %}
-  a(href="#/shop", data-toggle="modal", data-target="#pro-popin-shop").btn.bg-success
+  a(href="#/shop", data-toggle="modal", data-target="#pro-popin-shop")#pro-popin-shop-link.btn.bg-success
     i.flaticon.stroke.shop-1
     {% trans "Venez en magasin" %}
   {% endif %}

@@ -127,16 +127,28 @@ block append content-body
 
 block append tail
   script
-    var pro_popin_message_link = document.getElementById('pro-popin-message');
-    analytics.trackLink(pro_popin_message_link, "Pro Cost Request Modal");
-    var pro_popin_message_link = document.getElementById('pro-popin-phone');
-    analytics.trackLink(pro_popin_message_link, "Pro Phone Modal");
-    var pro_popin_message_link = document.getElementById('pro-popin-shop');
-    analytics.trackLink(pro_popin_message_link, "Pro Shop Modal");
-    var pro_popin_message_link = document.getElementById('pro-popin-website-link');
-    analytics.trackLink(pro_popin_message_link, "Pro Website Link Redirected");
+    function send_tracklink(link, event) {
+      analytics.trackLink(link, event, {
+        'owner id': '{{product.object.owner_id}}',
+        'company name': '{{product.object.owner.company_name}}',
+        'product category': '{{product.object.category}}',
+        'product summary': '{{product.object.summary}}',
+        'product id': '{{product.object.id}}'
+      });
+    }
+
+    send_tracklink(document.getElementById('pro-popin-message-link'), "Pro Cost Request Modal");
+    send_tracklink(document.getElementById('pro-popin-phone-link'), "Pro Phone Modal");
+    send_tracklink(document.getElementById('pro-popin-shop-link'), "Pro Shop Modal");
+    send_tracklink(document.getElementById('pro-popin-website-link'), "Pro Website Link Redirected");
 
     var pro_message_form = document.getElementById('proMessageForm');
-    if (pro_message_form != 'undefined') {
-      analytics.trackForm(pro_message_form, 'Pro Cost Request Sended');
+    if (typeof pro_message_form !== 'undefined') {
+      analytics.trackForm(pro_message_form, 'Pro Cost Request Sended', {
+        'owner id': '{{product.object.owner_id}}',
+        'company name': '{{product.object.owner.company_name}}',
+        'product category': '{{product.object.category}}',
+        'product summary': '{{product.object.summary}}',
+        'product id': '{{product.object.id}}'
+      });
     }

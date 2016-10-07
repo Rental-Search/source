@@ -156,14 +156,10 @@ block append tail
       });
     }
 
-    var pro_popin_message_link = document.getElementById('pro-popin-message');
-    send_tracklink(pro_popin_message_link, "Pro Cost Request Modal");
-    var pro_popin_message_link = document.getElementById('pro-popin-phone');
-    send_tracklink(pro_popin_message_link, "Pro Phone Modal");
-    var pro_popin_message_link = document.getElementById('pro-popin-shop');
-    send_tracklink(pro_popin_message_link, "Pro Shop Modal");
-    var pro_popin_message_link = document.getElementById('pro-popin-website-link');
-    send_tracklink(pro_popin_message_link, "Pro Website Link Redirected");
+    send_tracklink(document.getElementById('pro-popin-message-link'), "Pro Cost Request Modal");
+    send_tracklink(document.getElementById('pro-popin-phone-link'), "Pro Phone Modal");
+    send_tracklink(document.getElementById('pro-popin-shop-link'), "Pro Shop Modal");
+    send_tracklink(document.getElementById('pro-popin-website-link'), "Pro Website Link Redirected");
 
     var pro_message_form = document.getElementById('proMessageForm');
     if (typeof pro_message_form !== 'undefined') {
