@@ -378,7 +378,7 @@ Weight: {{ weight }} lbs.
                          'email': rc_user.email,
                          'first_name': rc_user.display_name[:30],
                          'last_name': rc_user.lastname[:30],
-                         'url': rc_user.website if rc_user.website is not None else "",
+                         'url': "http://%s" % rc_user.website if rc_user.website is not None else "",
                          'about': rc_user.about_me,
                          'import_record': ir,
                          'original_id': rc_user.id,
